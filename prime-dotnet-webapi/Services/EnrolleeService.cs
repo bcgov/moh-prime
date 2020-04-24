@@ -50,6 +50,12 @@ namespace Prime.Services
                 .AnyAsync(e => e.UserId == userId);
         }
 
+        public async Task<bool> EnrolleeGpidExistsAsync(string gpid)
+        {
+            return await _context.Enrollees
+                .AnyAsync(e => e.GPID == gpid);
+        }
+
         public async Task<Enrollee> GetEnrolleeAsync(Guid userId)
         {
             var entity = await this.GetBaseEnrolleeQuery()
@@ -102,7 +108,7 @@ namespace Prime.Services
             return items;
         }
 
-        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId)
+        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, Boolean excludeDecline = false)
         {
             Enrollee enrollee = await this.GetBaseEnrolleeQuery()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
@@ -110,6 +116,11 @@ namespace Prime.Services
             if (enrollee != null)
             {
                 enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
+
+                if (excludeDecline && enrollee.CurrentStatus.IsType(StatusType.Declined))
+                {
+                    return null;
+                }
             }
 
             return enrollee;
@@ -142,15 +153,15 @@ namespace Prime.Services
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
+                .Include(e => e.EnrolleeOrganizationTypes)
                 .SingleAsync(e => e.Id == enrolleeId);
 
             _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile);
 
-            UpdateMailingAddress(enrollee.MailingAddress, enrolleeProfile.MailingAddress, enrolleeId);
+            UpdateMailingAddress(enrollee, enrolleeProfile.MailingAddress);
             ReplaceExistingItems(enrollee.Certifications, enrolleeProfile.Certifications, enrolleeId);
             ReplaceExistingItems(enrollee.Jobs, enrolleeProfile.Jobs, enrolleeId);
-            ReplaceExistingItems(enrollee.Organizations, enrolleeProfile.Organizations, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeOrganizationTypes, enrolleeProfile.EnrolleeOrganizationTypes, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -170,21 +181,14 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateMailingAddress(MailingAddress dbAddress, MailingAddress newAddress, int enrolleeId)
+        private void UpdateMailingAddress(Enrollee dbEnrollee, MailingAddress newAddress)
         {
-            // Remove existing addresses
-            if (dbAddress != null)
+            if (dbEnrollee.MailingAddress != null)
             {
-                _context.Addresses.Remove(dbAddress);
+                _context.Addresses.Remove(dbEnrollee.MailingAddress);
             }
 
-            // Create the new addresses, if they exist
-            if (newAddress != null)
-            {
-                // Prevent the ID from being changed by the incoming changes
-                newAddress.EnrolleeId = enrolleeId;
-                _context.Entry(newAddress).State = EntityState.Added;
-            }
+            dbEnrollee.MailingAddress = newAddress;
         }
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
@@ -258,7 +262,7 @@ namespace Prime.Services
                     .ThenInclude(c => c.License)
                         .ThenInclude(l => l.DefaultPrivileges)
                 .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
+                .Include(e => e.EnrolleeOrganizationTypes)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.Status)
                 .Include(e => e.EnrolmentStatuses)
@@ -285,6 +289,8 @@ namespace Prime.Services
             if (entity != null)
             {
                 entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
+                // Attach to the enrollee if they have signed the most recent ToA
+                entity.HasMostRecentAccessTermSigned = await _accessTermService.IsCurrentByEnrolleeAsync(entity);
             }
 
             return entity;
@@ -433,6 +439,7 @@ namespace Prime.Services
             return await _context.Enrollees
                 .Include(e => e.AccessTerms)
                 .Where(e => hpdids.Contains(e.HPDID))
+                .Where(e => !e.CurrentStatus.IsType(StatusType.Declined))
                 .Select(e => HpdidLookup.FromEnrollee(e))
                 .ToListAsync();
         }

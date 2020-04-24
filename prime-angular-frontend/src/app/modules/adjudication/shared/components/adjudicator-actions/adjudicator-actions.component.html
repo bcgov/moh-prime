@@ -37,6 +37,20 @@
       <span>Unlock Enrollee</span>
     </button>
     <button mat-menu-item
+            *ngIf="enrollee.currentStatus.statusCode === EnrolmentStatus.DECLINED"
+            [disabled]="!canEdit"
+            (click)="onEnableEnrollee()">
+      <mat-icon>lock_open</mat-icon>
+      <span>Enable Enrollee</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="enrollee.currentStatus.statusCode !== EnrolmentStatus.DECLINED"
+            [disabled]="!canEdit"
+            (click)="onDeclineEnrollee()">
+      <mat-icon>lock_open</mat-icon>
+      <span>Decline Enrollee</span>
+    </button>
+    <button mat-menu-item
             *ngIf="canDelete"
             (click)="onDelete()">
       <mat-icon>delete</mat-icon>

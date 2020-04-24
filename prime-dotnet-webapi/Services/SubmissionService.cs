@@ -1,10 +1,11 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Appccelerate.StateMachine;
 using Appccelerate.StateMachine.AsyncMachine;
-using SimpleBase;
 
 using Prime.Models;
 using Prime.ViewModels;
@@ -47,7 +48,7 @@ namespace Prime.Services
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
-                .Include(e => e.Organizations)
+                .Include(e => e.EnrolleeOrganizationTypes)
                 .Include(e => e.AccessTerms)
                     .ThenInclude(at => at.UserClause)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
@@ -133,7 +134,7 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
         private async Task ProcessToaAsync(Enrollee enrollee, bool accept)
@@ -142,7 +143,7 @@ namespace Prime.Services
 
             if (accept)
             {
-                SetGPID(enrollee);
+                await SetGpid(enrollee);
                 await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
@@ -166,7 +167,7 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled Editing");
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
         private async Task LockProfileAsync(Enrollee enrollee)
@@ -175,15 +176,47 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Locked");
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving manual adjudication");
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
-        private void SetGPID(Enrollee enrollee)
+        private async Task DeclineProfileAsync(Enrollee enrollee)
+        {
+            enrollee.AddEnrolmentStatus(StatusType.Declined);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
+            await _context.SaveChangesAsync();
+            await _accessTermService.ExpireCurrentAccessTermAsync(enrollee);
+        }
+
+        private async Task EnableProfileAsync(Enrollee enrollee)
+        {
+            enrollee.AddEnrolmentStatus(StatusType.Editable);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled");
+            await _context.SaveChangesAsync();
+            await _emailService.SendReminderEmailAsync(enrollee);
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving the declined status");
+        }
+
+        private async Task SetGpid(Enrollee enrollee)
         {
             if (string.IsNullOrWhiteSpace(enrollee.GPID))
             {
-                enrollee.GPID = Base85.Ascii85.Encode(Guid.NewGuid().ToByteArray());
+                do
+                {
+                    enrollee.GPID = GenerateGpid();
+                }
+                while (await _enrolleeService.EnrolleeGpidExistsAsync(enrollee.GPID));
             }
+        }
+
+        private static string GenerateGpid()
+        {
+            Random r = new Random();
+            int length = 20;
+            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
+
+            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
+
+            return new string(chars.ToArray());
         }
 
         public class InvalidActionException : Exception
@@ -204,6 +237,8 @@ namespace Prime.Services
             private async Task HandleDeclineToa() { await _submissionService.ProcessToaAsync(_enrollee, false); }
             private async Task HandleEnableEditing() { await _submissionService.EnableEditingAsync(_enrollee); }
             private async Task HandleLockProfile() { await _submissionService.LockProfileAsync(_enrollee); }
+            private async Task HandleDeclineProfile() { await _submissionService.DeclineProfileAsync(_enrollee); }
+            private async Task HandleEnableProfile() { await _submissionService.EnableProfileAsync(_enrollee); }
 
             public SubmissionStateMachine(Enrollee enrollee, SubmissionService submissionService)
             {
@@ -229,7 +264,8 @@ namespace Prime.Services
                 Editable,
                 UnderReview,
                 RequiresToa,
-                Locked
+                Locked,
+                Declined,
             }
 
             private StateMachineDefinitionBuilder<EnrolleeState, SubmissionAction> InitBuilder()
@@ -237,21 +273,28 @@ namespace Prime.Services
                 var builder = new StateMachineDefinitionBuilder<EnrolleeState, SubmissionAction>();
 
                 builder.In(EnrolleeState.Editable)
-                    .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile);
+                    .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile)
+                    .On(SubmissionAction.DeclineProfile).If<bool>(isAdmin => isAdmin).Execute(HandleDeclineProfile);
 
                 builder.In(EnrolleeState.UnderReview)
                     .On(SubmissionAction.Approve).If<bool>(isAdmin => isAdmin).Execute(HandleApprove)
                     .On(SubmissionAction.EnableEditing).If<bool>(isAdmin => isAdmin).Execute(HandleEnableEditing)
-                    .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile);
+                    .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile)
+                    .On(SubmissionAction.DeclineProfile).If<bool>(isAdmin => isAdmin).Execute(HandleDeclineProfile);
 
                 builder.In(EnrolleeState.RequiresToa)
                     .On(SubmissionAction.AcceptToa).If<bool>(isAdmin => !isAdmin).Execute(HandleAcceptToa)
                     .On(SubmissionAction.DeclineToa).If<bool>(isAdmin => !isAdmin).Execute(HandleDeclineToa)
                     .On(SubmissionAction.EnableEditing).If<bool>(isAdmin => isAdmin).Execute(HandleEnableEditing)
-                    .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile);
+                    .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile)
+                    .On(SubmissionAction.DeclineProfile).If<bool>(isAdmin => isAdmin).Execute(HandleDeclineProfile);
 
                 builder.In(EnrolleeState.Locked)
-                    .On(SubmissionAction.EnableEditing).If<bool>(isAdmin => isAdmin).Execute(HandleEnableEditing);
+                    .On(SubmissionAction.EnableEditing).If<bool>(isAdmin => isAdmin).Execute(HandleEnableEditing)
+                    .On(SubmissionAction.DeclineProfile).If<bool>(isAdmin => isAdmin).Execute(HandleDeclineProfile);
+
+                builder.In(EnrolleeState.Declined)
+                    .On(SubmissionAction.EnableProfile).If<bool>(isAdmin => isAdmin).Execute(HandleEnableEditing);
 
                 return builder;
             }
@@ -273,6 +316,8 @@ namespace Prime.Services
                         return EnrolleeState.RequiresToa;
                     case (int)StatusType.Locked:
                         return EnrolleeState.Locked;
+                    case (int)StatusType.Declined:
+                        return EnrolleeState.Declined;
                     default:
                         throw new ArgumentException($"State machine cannot recognize status code {enrollee.CurrentStatus.StatusCode}");
                 }

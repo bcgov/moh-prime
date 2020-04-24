@@ -106,6 +106,11 @@ namespace PrimeTests.Services
             profile = enrollee.ToViewModel();
             profile.MailingAddress.City = "Flavortown, USA";
             await AssertAllowableChanges(false, enrollee, profile);
+
+            // Add child object
+            profile = enrollee.ToViewModel();
+            enrollee.MailingAddress = null;
+            await AssertAllowableChanges(false, enrollee, profile);
         }
 
         [Fact]
@@ -170,23 +175,23 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async void testAllowableChangesRule_Organizations()
+        public async void testAllowableChangesRule_EnrolleeOrganizationTypes()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
             // New org
             EnrolleeProfileViewModel profile = enrollee.ToViewModel();
-            profile.Organizations.Add(new Organization { OrganizationTypeCode = 1 });
+            profile.EnrolleeOrganizationTypes.Add(new EnrolleeOrganizationType { OrganizationTypeCode = 1 });
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Edit org
             profile = enrollee.ToViewModel();
-            profile.Organizations.First().OrganizationTypeCode++;
+            profile.EnrolleeOrganizationTypes.First().OrganizationTypeCode++;
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Remove org
             profile = enrollee.ToViewModel();
-            profile.Organizations = profile.Organizations.Skip(1).ToList();
+            profile.EnrolleeOrganizationTypes = profile.EnrolleeOrganizationTypes.Skip(1).ToList();
             await AssertAllowableChanges(false, enrollee, profile);
         }
 
@@ -201,7 +206,7 @@ namespace PrimeTests.Services
                 typeof(MailingAddress),
                 typeof(ICollection<Certification>),
                 typeof(ICollection<Job>),
-                typeof(ICollection<Organization>),
+                typeof(ICollection<EnrolleeOrganizationType>),
             };
 
             var unknownTypes = typeof(EnrolleeProfileViewModel)

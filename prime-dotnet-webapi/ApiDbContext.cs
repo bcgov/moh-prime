@@ -55,7 +55,7 @@ namespace Prime
 
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Job> Jobs { get; set; }
-        public DbSet<Organization> Organizations { get; set; }
+        public DbSet<EnrolleeOrganizationType> EnrolleeOrganizationTypes { get; set; }
         public DbSet<OrganizationType> OrganizationTypes { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Admin> Admins { get; set; }
@@ -78,6 +78,12 @@ namespace Prime
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
+        // Site Registration
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Party> Parties { get; set; }
+        public DbSet<Site> Sites { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
         public DbSet<PHSA> PHSA { get; set; }
 
         public override int SaveChanges()
@@ -175,21 +181,6 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new BusinessEventTypeConfiguration());
 
             #region Indexes
-            modelBuilder.Entity<MailingAddress>()
-                .HasIndex(a => a.EnrolleeId)
-                .HasName("IX_Address_EnrolleeId")
-                .IsUnique(false);
-
-            modelBuilder.Entity<PhysicalAddress>()
-                .HasIndex(a => a.EnrolleeId)
-                .HasName("IX_Address_EnrolleeId")
-                .IsUnique(false);
-
-            modelBuilder.Entity<Address>()
-                .HasIndex("EnrolleeId", "AddressType")
-                .HasName("IX_EnrolleeId_AddressType")
-                .IsUnique();
-
             modelBuilder.Entity<Admin>()
                 .HasIndex("UserId")
                 .IsUnique();
@@ -239,6 +230,23 @@ namespace Prime
                 .HasOne(be => be.BusinessEventType)
                 .WithMany(t => t.BusinessEvents)
                 .HasForeignKey(be => be.BusinessEventTypeCode);
+
+            // Site Registration
+            modelBuilder.Entity<Location>()
+                .HasOne(l => l.Organization)
+                .WithMany(t => t.Locations)
+                .HasForeignKey(be => be.OrganizationId);
+
+            modelBuilder.Entity<Site>()
+                .HasOne(l => l.Location)
+                .WithMany(t => t.Sites)
+                .HasForeignKey(be => be.LocationId);
+
+            modelBuilder.Entity<Site>()
+                .HasOne(l => l.Vendor)
+                .WithMany(t => t.Sites)
+                .HasForeignKey(be => be.VendorId);
+
             #endregion
         }
 

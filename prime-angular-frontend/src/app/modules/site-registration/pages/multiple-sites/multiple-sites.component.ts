@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
+import { Subscription } from 'rxjs';
+
 import { ToastService } from '@core/services/toast.service';
 import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { FormUtilsService } from '@common/services/form-utils.service';
@@ -14,6 +16,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
   styleUrls: ['./multiple-sites.component.scss']
 })
 export class MultipleSitesComponent implements OnInit {
+  public busy: Subscription;
   public form: FormGroup;
   public decisions: { code: boolean, name: string }[];
   public SiteRoutes = SiteRoutes;
@@ -42,7 +45,7 @@ export class MultipleSitesComponent implements OnInit {
   public onSubmit() {
     this.toastService.openSuccessToast('Enrolment information has been saved');
     this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.SITE_INFORMATION], { relativeTo: this.route.parent });
+    this.router.navigate([SiteRoutes.ORGANIZATION_INFORMATION], { relativeTo: this.route.parent });
   }
 
   public ngOnInit() {
@@ -52,7 +55,7 @@ export class MultipleSitesComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.formBuilder.group({
-      hasMultipleSites: [null, [FormControlValidators.requiredBoolean]],
+      hasMultipleSites: [false, [FormControlValidators.requiredBoolean]],
       organizationNumber: [null, []],
     });
   }

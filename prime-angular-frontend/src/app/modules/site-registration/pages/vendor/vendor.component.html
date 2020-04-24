@@ -1,34 +1,27 @@
 <app-page>
   <app-page-header>PharmaNet Site Registration</app-page-header>
 
-  <app-site-progress-indicator [currentRoute]="SiteRoutes.VENDOR"></app-site-progress-indicator>
+  <app-site-progress-indicator [currentRoute]="SiteRoutes.VENDORS"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
         novalidate>
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>What vendor does this site use?</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Software that will be used to access PharmaNet at this site.
+      </ng-container>
+    </app-page-subheader>
 
-    <section class="mb-3">
-
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>What Vendor does your organization use?</ng-container>
-        <ng-container appPageSubheaderSummary>
-          Software that will be used to access PharmaNet at this site.
-        </ng-container>
-      </app-page-subheader>
-
-      <div class="mb-3">
-
-        <div class="row"
-             *ngFor="let vendor of vendorsData">
-          <mat-checkbox class="mr-4"
-                        (change)="onChangeEventFunc(vendor.name, $event)">
-            {{ vendor.name }}
-          </mat-checkbox>
-        </div>
+    <div class="mb-4">
+      <div *ngFor="let vendor of vendorsData"
+           class="mb-2">
+        <mat-checkbox class="mr-4"
+                      (change)="onChangeEventFunc(vendor.name, $event)">
+          {{ vendor.name }}
+        </mat-checkbox>
       </div>
-
-    </section>
-
+    </div>
   </form>
 
   <app-page-footer [isInitialEnrolment]="true"

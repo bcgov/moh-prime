@@ -1,31 +1,35 @@
 @import 'bootstrap/bootstrap-imports';
 
 .pill-container {
-  // Using the background pill asset and centering with no repeat
-  background-image: url('/assets/pill-1.svg');
-  background-repeat: no-repeat;
-  background-position: center;
-
-  // Using the height from the asset
-  min-height: 608px;
-  width: 100%;
-
-  // Center the content
   display: flex;
-  justify-content: center;
   align-items: center;
-  text-align: center;
+  justify-content: center;
 
-  // Margin spacing
-  @include media-breakpoint-down(sm) {
-    margin-bottom: 4rem;
-  }
-  @include media-breakpoint-up(md) {
-    margin-bottom: 8rem;
-  }
-}
+  position: relative;
 
-.yellow-blue {
-  // Variant of pill-2 : yellow-blue
-  background-image: url('/assets/pill-2.svg');
+  .content {
+    display: flex;
+    align-self: stretch;
+    text-align: center;
+    padding: 3rem;
+  }
+
+  .background {
+    background-image: url('/assets/pill.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    // Remove from flexbox calculation
+    position: absolute;
+    z-index: 0;
+    // Stretch to fill parent
+    top: 0;
+    bottom: 0;
+    width: 100%;
+
+    &.mirror {
+      // Invert the background
+      transform: scaleX(-1);
+    }
+  }
 }

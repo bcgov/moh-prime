@@ -1,0 +1,29 @@
+@using Prime.Services
+@model EmailParams
+
+@{
+  var provisionerName = Model.ProvisionerName;
+  var enrolleeName = $"{Model.FirstName} {Model.LastName}";
+  var tokenUrl = Model.TokenUrl;
+  var maxViews = Model.MaxViews;
+  var expiryDays = Model.ExpiryDays;
+}
+
+To: @provisionerName
+
+<br>
+<br>
+
+@enrolleeName
+has been approved for <strong>PharmaNet</strong> access. Please see <strong>PRIME enrolment information</strong> in URL below.
+
+<br>
+<br>
+
+<a href="@tokenUrl">@tokenUrl</a>
+<strong>This link will expire after @maxViews views or @expiryDays days</strong>.
+
+<br>
+<br>
+
+Thank you.

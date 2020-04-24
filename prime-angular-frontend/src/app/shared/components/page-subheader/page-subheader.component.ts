@@ -19,9 +19,15 @@ export class PageSubheaderComponent implements OnInit {
   public contextualTitleChildren: QueryList<ContextualTitleDirective>;
   @ContentChildren(ContextualContentDirective, { descendants: true })
   public contextualContentChildren: QueryList<ContextualContentDirective>;
+  // Mode where verbose summaries that exceed the use of contextual tips can
+  // be viewed using more information icon, but aren't initial displayed
+  @Input() public summaryAsInfo: boolean;
   @Input() public divider: boolean;
 
+  public showSummary: boolean;
+
   constructor() {
+    this.summaryAsInfo = false;
     this.divider = true;
   }
 
@@ -41,5 +47,12 @@ export class PageSubheaderComponent implements OnInit {
     return !!this.contextualContentChildren.length;
   }
 
-  public ngOnInit() { }
+  public toggleSummary(): boolean {
+    return this.showSummary = !this.showSummary;
+  }
+
+  public ngOnInit() {
+    // Default always show the summary
+    this.showSummary = !this.summaryAsInfo;
+  }
 }

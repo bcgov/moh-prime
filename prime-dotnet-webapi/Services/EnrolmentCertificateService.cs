@@ -11,9 +11,9 @@ namespace Prime.Services
 {
     public class EnrolmentCertificateService : BaseService, IEnrolmentCertificateService
     {
-        private const int EXPIRY_DAYS = 7;
+        public static int EXPIRY_DAYS { get => 7; }
+        public static int MAX_VIEWS { get => 3; }
         private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(EXPIRY_DAYS);
-        private const int MAX_VIEWS = 3;
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
 
@@ -42,7 +42,7 @@ namespace Prime.Services
             var token = await _context.EnrolmentCertificateAccessTokens
                 .Where(t => t.Id == accessTokenId)
                 .Include(t => t.Enrollee)
-                    .ThenInclude(e => e.Organizations)
+                    .ThenInclude(e => e.EnrolleeOrganizationTypes)
                         .ThenInclude(org => org.OrganizationType)
                 .SingleOrDefaultAsync();
 
@@ -68,7 +68,7 @@ namespace Prime.Services
                         var enrolleeHistory = enrolleeProfileHistory.ProfileSnapshot.ToObject<Enrollee>();
 
                         // Add the organization type to each organization from JSON profile history
-                        foreach (var org in enrolleeHistory.Organizations)
+                        foreach (var org in enrolleeHistory.EnrolleeOrganizationTypes)
                         {
                             org.OrganizationType = await _context.OrganizationTypes.SingleAsync(o => o.Code == org.OrganizationTypeCode);
                         }

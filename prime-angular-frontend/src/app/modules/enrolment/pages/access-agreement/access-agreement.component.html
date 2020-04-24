@@ -1,12 +1,13 @@
 <app-enrollee-page [busy]="busy">
 
-  <app-collection-notice-alert></app-collection-notice-alert>
+  <app-enrolment-collection-notice></app-enrolment-collection-notice>
 
   <app-page-header>Terms of Access</app-page-header>
 
-  <app-progress-indicator *ngIf="isInitialEnrolment"
-                          [inProgress]="isInitialEnrolment"
-                          [currentRoute]="EnrolmentRoutes.PENDING_ACCESS_TERM"></app-progress-indicator>
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    [inProgress]="isInitialEnrolment"
+                                    [currentRoute]="EnrolmentRoutes.PENDING_ACCESS_TERM">
+  </app-enrolment-progress-indicator>
 
   <ng-container *ngIf="currentPage > 0; else preamble">
     <app-access-term [accessTerms]="accessTerm"></app-access-term>

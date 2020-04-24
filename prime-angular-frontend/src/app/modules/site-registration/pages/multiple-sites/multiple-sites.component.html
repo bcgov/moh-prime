@@ -1,7 +1,5 @@
-<app-page>
-
+<app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-
   <app-site-progress-indicator [currentRoute]="SiteRoutes.MULTIPLE_SITES"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
@@ -11,7 +9,15 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Multiple Sites</ng-container>
       <ng-container appPageSubheaderSummary>
-        Does your organization have more than one PharmaNet site?
+        <strong>
+          Does your organization have more than one PharmaNet site?
+        </strong>
+
+        <br>
+
+        <em>
+          A site constitutes more than one physical location for your organization, or using more than one PharmaNet Vendor
+        </em>
       </ng-container>
     </app-page-subheader>
 

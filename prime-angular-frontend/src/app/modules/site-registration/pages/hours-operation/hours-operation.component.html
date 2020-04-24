@@ -1,6 +1,7 @@
 <app-page>
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [currentRoute]="SiteRoutes.HOURS_OPERATION"></app-site-progress-indicator>
+
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
         novalidate>
@@ -9,49 +10,29 @@
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Hours of Operation</ng-container>
-        <ng-container appPageSubheaderSummary>
-          Normal Operating Hours (please specify for every day of the week your site is open or functioning)
-        </ng-container>
       </app-page-subheader>
 
-      <div class="mb-3">
-        <ng-container *ngFor="let day of days">
-          <div class="row">
-            <div class="col col-sm-3">
-              <mat-label class="w-100">{{ day | capitalize }}</mat-label>
-            </div>
-            <div class="col col-sm-3">
-              <mat-form-field class="w-100">
-                <mat-select [formControlName]="day+'AM'">
-                  <mat-option *ngFor="let hour of amHours"
-                              [value]="hour">
-                    {{ hour }}
-                  </mat-option>
-                </mat-select>
-                <mat-error>Required</mat-error>
-              </mat-form-field>
-            </div>
-            <div class="col col-sm-1">
-              <mat-label class="w-100">to</mat-label>
-            </div>
-            <div class="col col-sm-3">
-              <mat-form-field class="w-100">
-                <mat-select [formControlName]="day+'PM'">
-                  <mat-option *ngFor="let hour of pmHours"
-                              [value]="hour">
-                    {{ hour }}
-                  </mat-option>
-                </mat-select>
-                <mat-error>Required</mat-error>
-              </mat-form-field>
-
-            </div>
-
-          </div>
-
-        </ng-container>
-
+      <div class="mb-2">
+        <mat-checkbox class="mr-4">
+          Does this site operate on weekends?
+        </mat-checkbox>
       </div>
+
+      <div class="mb-3">
+        <mat-checkbox class="mr-4">
+          Does this site operate 24 hours?
+        </mat-checkbox>
+      </div>
+
+      <div class="mb-2">
+        <mat-form-field class="w-100">
+          <textarea matInput
+                    placeholder="Any special hours of operations that we should be aware of?"
+                    rows="10"
+                    formControlName="specialHours"></textarea>
+        </mat-form-field>
+      </div>
+
     </section>
 
   </form>
