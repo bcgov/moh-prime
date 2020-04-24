@@ -25,7 +25,8 @@ import { HelpComponent } from '@common/components/help/help.component';
     PageNotFoundComponent,
     AccessDeniedComponent,
     MaintenanceComponent,
-    HelpComponent
+    HelpComponent,
+    PageSimpleComponent
   ]
 })
 export class CommonModule { }
