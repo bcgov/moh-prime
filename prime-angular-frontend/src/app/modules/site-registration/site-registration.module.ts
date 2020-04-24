@@ -8,6 +8,7 @@ import { RegistrantProfileFormComponent } from './shared/components/registrant-p
 import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 import { SiteCollectionNoticeComponent } from './shared/components/site-collection-notice/site-collection-notice.component';
+import { SameAsComponent } from './shared/components/same-as/same-as.component';
 
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -41,7 +42,8 @@ import { OrganizationAgreementComponent } from './pages/organization-agreement/o
     SiteProgressIndicatorComponent,
     SiteCollectionNoticeComponent,
     SiteAddressComponent,
-    OrganizationAgreementComponent
+    OrganizationAgreementComponent,
+    SameAsComponent
   ],
   imports: [
     SharedModule,

@@ -6,6 +6,9 @@
   <app-registrant-profile-form [title]="title"
                                [form]="form"
                                (submit)="onSubmit()">
+
+    <app-same-as selectFor="technicalSupport"></app-same-as>
+
     <ng-container appPageSubheaderSummary>
       This individual may be either a staff person at the site or an independent IT contractor. They will be contacted
       in the event of a technology-related issue (e.g. malware, problematic network traffic).

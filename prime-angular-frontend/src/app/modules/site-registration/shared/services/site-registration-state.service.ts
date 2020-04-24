@@ -232,6 +232,8 @@ export class SiteRegistrationStateService {
 
   private patchSite(site: Site) {
     if (site) {
+      console.log('PATCH_SITE');
+
       this.organizationInformationForm.patchValue(site.location.organization);
       if (site.location.physicalAddress) {
         this.siteAddressForm.patchValue(site.location.physicalAddress);
@@ -256,6 +258,8 @@ export class SiteRegistrationStateService {
         this.privacyOfficerForm.patchValue(remainder);
       }
       if (site.location.technicalSupport) {
+        console.log('PATCH');
+
         // TODO ignore physical address for now
         const { physicalAddress, ...remainder } = site.location.technicalSupport;
         this.technicalSupportForm.patchValue(remainder);
