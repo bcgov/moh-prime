@@ -72,33 +72,33 @@ objects:
                 - name: MONGODB_USER
                   valueFrom:
                     secretKeyRef:
-                      key: database-user
-                      name: postgresql-secret
+                      key: MONGODB_USER
+                      name: mongodb-secret
                 - name: MONGODB_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: database-password
-                      name: postgresql-secret
+                      key: MONGODB_PASSWORD
+                      name: mongodb-secret
                 - name: MONGODB_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: database-admin-password
-                      name: postgresql-secret
+                      key: MONGODB_ADMIN_PASSWORD
+                      name: mongodb-secret
                 - name: MONGODB_DATABASE
                   valueFrom:
                     secretKeyRef:
-                      key: database-name
-                      name: postgresql-secret
+                      key: MONGODB_DATABASE
+                      name: mongodb-secret
                 - name: MONGO_INITDB_ROOT_USERNAME
                   valueFrom:
                     secretKeyRef:
-                      key: database-user
-                      name: postgresql-secret
+                      key: MONGODB_USER
+                      name: mongodb-secret
                 - name: MONGO_INITDB_ROOT_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: database-admin-password
-                      name: postgresql-secret
+                      key: MONGODB_ADMIN_PASSWORD
+                      name: mongodb-secret
               image: >-
                 docker-registry.default.svc:5000/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
               imagePullPolicy: IfNotPresent

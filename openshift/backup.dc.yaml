@@ -102,24 +102,37 @@ objects:
                     key: username
                     name: metabase-database-credentials
               - name: MONGO_HOST
-                value: ${MONGO_HOST}
-              - name: MONGO_USER
+                value: mongo${SUFFIX}
+              - name: MONGODB_USER
                 valueFrom:
                   secretKeyRef:
-                    key: database-user
-                    name: postgresql-secret
-              - name: MONGO_PASSWORD
+                    key: MONGODB_USER
+                    name: mongodb-secret
+              - name: MONGODB_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    key: database-password
-                    name: postgresql-secret
-              - name: MONGO_ADMIN_PASSWORD
+                    key: MONGODB_PASSWORD
+                    name: mongodb-secret
+              - name: MONGODB_ADMIN_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    key: database-admin-password
-                    name: postgresql-secret
-              - name: MONGO_DATABASE
-                value: prime
+                    key: MONGODB_ADMIN_PASSWORD
+                    name: mongodb-secret
+              - name: MONGODB_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    key: MONGODB_DATABASE
+                    name: mongodb-secret
+              - name: MONGO_INITDB_ROOT_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    key: MONGODB_USER
+                    name: mongodb-secret
+              - name: MONGO_INITDB_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: MONGODB_ADMIN_PASSWORD
+                    name: mongodb-secret
             image: ' '
             name: backup
             ports:

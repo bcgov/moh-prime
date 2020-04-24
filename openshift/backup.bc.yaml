@@ -76,6 +76,36 @@ objects:
               secretKeyRef:
                 key: database-name
                 name: "postgresql-secret"
+          - name: MONGODB_USER
+            valueFrom:
+              secretKeyRef:
+                key: MONGODB_USER
+                name: mongodb-secret
+          - name: MONGODB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: MONGODB_PASSWORD
+                name: mongodb-secret
+          - name: MONGODB_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: MONGODB_ADMIN_PASSWORD
+                name: mongodb-secret
+          - name: MONGODB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: MONGODB_DATABASE
+                name: mongodb-secret
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: MONGODB_USER
+                name: mongodb-secret
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: MONGODB_ADMIN_PASSWORD
+                name: mongodb-secret
           volumeMounts:
           - mountPath: /opt/backup
             name: backup-data
