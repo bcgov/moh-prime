@@ -32,7 +32,7 @@ function databaseBackup() {
         tar czf ${logfile}.${timestamp}.tgz ${logfile}
         touch ${logfile}
     fi
-    
+
     # Backup PostGRES
     PGPASSWORD=${POSTGRES_PASSWORD}
     /usr/bin/vacuumdb -z -h ${PGHOST} -U ${PGUSERNAME} ${PGDATABASE} >/dev/null 2>&1
@@ -44,7 +44,7 @@ function databaseBackup() {
     echo "Starting backup of metabase" >> ${logfile}
 
     # Backup Mongo
-    mongodump --host=${MONGO_HOST} --port=27017 --username=root --password="${POSTGRES_PASSWORD}" --out=${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup
+    mongodump --host=${MONGO_HOST} --port=27017 --username=root --password="${POSTGRES_PASSWORD}" --out=${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup --authenticationDatabase admin
     echo "${dateinfo} - Backup and Vacuum complete on ${dateinfo} for mongo database: ${PGDATABASE} " >> ${logfile}
     tar czf ${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup.tgz ${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup 
     rm -f ${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup
