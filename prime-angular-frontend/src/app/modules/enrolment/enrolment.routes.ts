@@ -17,6 +17,7 @@ export class EnrolmentRoutes {
   public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
   public static PENDING_ACCESS_TERM = 'pending-access-term';
   public static ACCESS_LOCKED = 'access-locked';
+  public static ACCESS_DECLINED = 'access-declined';
   // Enrollee history and PharmaNet:
   // Replaces terms of access after accepting the terms of access (TOA)
   public static CURRENT_ACCESS_TERM = 'current-access-term';

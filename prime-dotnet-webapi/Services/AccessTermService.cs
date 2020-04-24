@@ -129,12 +129,25 @@ namespace Prime.Services
         {
             var accessTerm = await _context.AccessTerms
                 .Where(at => at.EnrolleeId == enrollee.Id)
-                .OrderByDescending(at => at.AcceptedDate)
+                .OrderByDescending(at => at.CreatedDate)
                 .FirstAsync();
 
             accessTerm.AcceptedDate = DateTimeOffset.Now;
             // Add an Expiry Date of one year in the future.
             accessTerm.ExpiryDate = DateTimeOffset.Now.Add(ACCESS_TERM_EXPIRY);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ExpireCurrentAccessTermAsync(Enrollee enrollee)
+        {
+            var accessTerm = await _context.AccessTerms
+                .Where(at => at.EnrolleeId == enrollee.Id)
+                .OrderByDescending(at => at.CreatedDate)
+                .FirstAsync();
+
+            // Set expiry date to now, sudo expirying an access term.
+            accessTerm.ExpiryDate = DateTimeOffset.Now;
 
             await _context.SaveChangesAsync();
         }

@@ -16,5 +16,10 @@ namespace Prime.Models.Api
         EnableEditing,
         [EnumMember(Value = "lock-profile")]
         LockProfile,
+        [EnumMember(Value = "decline-profile")]
+        DeclineProfile,
+        [EnumMember(Value = "enable-profile")]
+        EnableProfile,
+
     }
 }
