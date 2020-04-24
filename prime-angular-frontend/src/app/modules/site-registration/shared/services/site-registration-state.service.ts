@@ -95,11 +95,8 @@ export class SiteRegistrationStateService {
     const physicalAddress = this.siteAddressForm.getRawValue();
     const hoursOperation = this.hoursOperationForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
-    const signingAuthority = this.signingAuthorityForm.getRawValue();
-    let administratorPharmaNet = this.administratorPharmaNetForm.getRawValue();
-    let privacyOfficer = this.privacyOfficerForm.getRawValue();
-    let technicalSupport = this.technicalSupportForm.getRawValue();
 
+    // Adapt data for backend consumption
     if (!organizationInformation.id) {
       organizationInformation.id = 0;
     }
@@ -109,42 +106,31 @@ export class SiteRegistrationStateService {
     if (!vendor.id) {
       vendor.id = 0;
     }
-    if (!administratorPharmaNet.id) {
-      administratorPharmaNet.id = 0;
-    }
-    if (!privacyOfficer.id) {
-      privacyOfficer.id = 0;
-    }
-    if (!technicalSupport.id) {
-      technicalSupport.id = 0;
-    }
 
-    if (!signingAuthority.physicalAddress.street) {
-      signingAuthority.physicalAddress = null;
-    } else if (!signingAuthority.physicalAddress.id) {
-      signingAuthority.physicalAddress.id = 0;
-    }
-    if (!administratorPharmaNet.firstName) {
-      administratorPharmaNet = null;
-    } else if (!administratorPharmaNet.physicalAddress.street) {
-      administratorPharmaNet.physicalAddress = null;
-    } else if (!technicalSupport.physicalAddress.id) {
-      administratorPharmaNet.physicalAddress.id = 0;
-    }
-    if (!privacyOfficer.firstName) {
-      privacyOfficer = null;
-    } else if (!privacyOfficer.physicalAddress.street) {
-      privacyOfficer.physicalAddress = null;
-    } else if (!technicalSupport.physicalAddress.id) {
-      privacyOfficer.physicalAddress.id = 0;
-    }
-    if (!technicalSupport.firstName) {
-      technicalSupport = null;
-    } else if (!technicalSupport.physicalAddress.street) {
-      technicalSupport.physicalAddress = null;
-    } else if (!technicalSupport.physicalAddress.id) {
-      technicalSupport.physicalAddress.id = 0;
-    }
+    const [
+      signingAuthority,
+      administratorPharmaNet,
+      privacyOfficer,
+      technicalSupport
+    ] = [
+      this.signingAuthorityForm.getRawValue(),
+      this.administratorPharmaNetForm.getRawValue(),
+      this.privacyOfficerForm.getRawValue(),
+      this.technicalSupportForm.getRawValue()
+    ].map((party: Party) => {
+      if (!party.id) {
+        party.id = 0;
+      }
+      if (!party.firstName) {
+        party = null;
+      } else if (!party.physicalAddress.street) {
+        party.physicalAddress = null;
+      } else if (!party.physicalAddress.id) {
+        party.physicalAddress.id = 0;
+      }
+
+      return party;
+    });
 
     return {
       id: this.siteId,
@@ -232,8 +218,6 @@ export class SiteRegistrationStateService {
 
   private patchSite(site: Site) {
     if (site) {
-      console.log('PATCH_SITE');
-
       this.organizationInformationForm.patchValue(site.location.organization);
       if (site.location.physicalAddress) {
         this.siteAddressForm.patchValue(site.location.physicalAddress);
@@ -242,28 +226,21 @@ export class SiteRegistrationStateService {
         this.vendorForm.patchValue(site.vendor);
       }
       this.hoursOperationForm.patchValue(site.location);
-      if (site.location.organization.signingAuthority) {
-        // TODO ignore physical address for now
-        const { physicalAddress, ...remainder } = site.location.organization.signingAuthority;
-        this.signingAuthorityForm.patchValue(remainder);
-      }
-      if (site.location.administratorPharmaNet) {
-        // TODO ignore physical address for now
-        const { physicalAddress, ...remainder } = site.location.administratorPharmaNet;
-        this.administratorPharmaNetForm.patchValue(remainder);
-      }
-      if (site.location.privacyOfficer) {
-        // TODO ignore physical address for now
-        const { physicalAddress, ...remainder } = site.location.privacyOfficer;
-        this.privacyOfficerForm.patchValue(remainder);
-      }
-      if (site.location.technicalSupport) {
-        console.log('PATCH');
 
-        // TODO ignore physical address for now
-        const { physicalAddress, ...remainder } = site.location.technicalSupport;
-        this.technicalSupportForm.patchValue(remainder);
-      }
+      [
+        [this.signingAuthorityForm, site.location.organization.signingAuthority],
+        [this.administratorPharmaNetForm, site.location.administratorPharmaNet],
+        [this.privacyOfficerForm, site.location.privacyOfficer],
+        [this.technicalSupportForm, site.location.technicalSupport],
+      ].forEach(([formGroup, data]: [FormGroup, Party]) => {
+        const { physicalAddress, ...party } = data;
+        formGroup.patchValue(party);
+
+        const physicalAddressFormGroup = formGroup.get('physicalAddress');
+        (physicalAddress)
+          ? physicalAddressFormGroup.patchValue(physicalAddress)
+          : physicalAddressFormGroup.reset();
+      });
     }
   }
 
@@ -353,6 +330,7 @@ export class SiteRegistrationStateService {
   }
 
   private buildSigningAuthorityForm(): FormGroup {
+    // Prevent BCSC information from being changed
     return this.partyFormGroup(true);
   }
 

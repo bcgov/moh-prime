@@ -1,4 +1,5 @@
 export class Address {
+  id?: number = null;
   countryCode: string = null;
   provinceCode: string = null;
   street: string = null;

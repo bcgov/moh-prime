@@ -12,7 +12,7 @@
     <ng-container *ngFor="let party of parties">
       <button mat-menu-item
               type="button"
-              (click)="onSelect(party.key, party.data)">
+              (click)="onSelect(party.data)">
         <span>{{ party.display }}</span>
       </button>
     </ng-container>

@@ -19,12 +19,9 @@ export class SameAsComponent implements OnInit {
     private siteRegistrationStateService: SiteRegistrationStateService
   ) { }
 
-  public onSelect(key: string, party: Party) {
+  public onSelect(party: Party) {
     const site = this.siteRegistrationService.site;
-    site.location[key] = party;
-
-    console.log(key, site, party);
-
+    site.location[this.selectFor] = party;
     this.siteRegistrationStateService.setSite(site, true);
   }
 
