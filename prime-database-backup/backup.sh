@@ -44,11 +44,11 @@ function databaseBackup() {
     echo "Starting backup of metabase" >> ${logfile}
 
     # Backup Mongo
-    mongodump --host=${MONGO_HOST} --port=27017 --username=root --password="${POSTGRES_PASSWORD}" --out=${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup --authenticationDatabase admin
-    echo "${dateinfo} - Backup and Vacuum complete on ${dateinfo} for mongo database: ${PGDATABASE} " >> ${logfile}
-    tar czf ${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup.tgz ${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup 
-    rm -f ${backup_dir}/mongodump-${MONGO_DATABASE}-${timestamp}.backup
-    echo "${dateinfo} - Backup compressed for mongo database: ${PGDATABASE} " >> ${logfile}
+    mongodump --host=${MONGO_HOST} --port=27017 --username=root --password="${MONGODB_ADMIN_PASSWORD}" --out=${backup_dir}/mongodump-${MONGODB_DATABASE}-${timestamp}.backup --authenticationDatabase admin
+    echo "${dateinfo} - Backup and Vacuum complete on ${dateinfo} for mongo database: ${MONGODB_DATABASE} " >> ${logfile}
+    tar czf ${backup_dir}/mongodump-${MONGODB_DATABASE}-${timestamp}.backup.tgz ${backup_dir}/mongodump-${MONGODB_DATABASE}-${timestamp}.backup 
+    rm -f ${backup_dir}/mongodump-${MONGODB_DATABASE}-${timestamp}.backup
+    echo "${dateinfo} - Backup compressed for mongo database: ${MONGODB_DATABASE} " >> ${logfile}
     
     # Backup Metabase
     PGPASSWORD=${METABASE_PASSWORD}
