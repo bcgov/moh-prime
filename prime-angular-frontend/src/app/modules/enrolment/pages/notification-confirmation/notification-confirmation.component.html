@@ -1,13 +1,6 @@
 <app-enrollee-page [busy]="busy">
-
-  <app-enrolment-collection-notice></app-enrolment-collection-notice>
-
   <app-page-header>Notification Confirmation</app-page-header>
-
-  <app-enrolment-progress-indicator message="Enrolment Paused"
-                                    [inProgress]="false"
-                                    [currentRoute]="EnrolmentRoutes.SUBMISSION_CONFIRMATION">
-  </app-enrolment-progress-indicator>
+  <app-enrolment-progress-indicator></app-enrolment-progress-indicator>
 
   <div class="mb-4">
     <app-alert type="info"

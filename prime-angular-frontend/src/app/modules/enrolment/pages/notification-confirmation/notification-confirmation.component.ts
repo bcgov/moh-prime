@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { EMPTY, Subscription } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -13,6 +13,7 @@ import { FeedbackResourceService } from '@shared/services/feedback-resource.serv
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { DialogContentOutput } from '@shared/components/dialogs/dialog-output.model';
 
 @Component({
   selector: 'app-notification-confirmation',
@@ -33,7 +34,7 @@ export class NotificationConfirmationComponent implements OnInit {
 
   public feedback() {
     const data: DialogOptions = {
-      title: 'Feedback?',
+      title: 'Feedback',
       message: 'Are you satisfied with the information provided to you?',
       actionText: 'Submit',
       component: FeedbackComponent
@@ -41,20 +42,19 @@ export class NotificationConfirmationComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: Feedback }) => {
-          if (result) {
-            if (result.output?.satisfied && result.output?.comment) {
-              this.toastService.openSuccessToast('No Feedback entered.');
-              return EMPTY;
-            }
-            result.output.enrolleeId = this.enrolmentService.enrolment.id;
-            result.output.route = this.router.url;
-            return this.feedbackResource.createFeedback(result.output);
+        map((result: DialogContentOutput<Feedback>) => result?.output),
+        exhaustMap((feedback: Feedback) => {
+          if (feedback && Object.keys(feedback).length) {
+            const enrolleeId = this.enrolmentService.enrolment.id;
+            const route = this.router.url;
+            feedback = { ...feedback, enrolleeId, route };
+            return this.feedbackResource.createFeedback(feedback);
           }
+
+          this.toastService.openSuccessToast('No feedback was provided');
           return EMPTY;
-        }),
-      )
-      .subscribe();
+        })
+      ).subscribe();
   }
 
   public ngOnInit(): void { }

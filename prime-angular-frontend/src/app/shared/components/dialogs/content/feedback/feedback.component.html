@@ -4,7 +4,7 @@
 
       <button mat-flat-button
               class="w-100"
-              color="{{ (feedback.satisfied) ? 'primary' : '' }}"
+              [color]="(feedback.satisfied === true) ? 'primary' : ''"
               (click)="onSatisfiedChange(true)">Yes</button>
 
     </div>
@@ -12,7 +12,7 @@
 
       <button mat-flat-button
               class="w-100"
-              color="{{ (feedback.satisfied || feedback.satisfied == null) ? '' : 'primary' }}"
+              [color]="(feedback.satisfied === false) ? 'primary' : ''"
               (click)="onSatisfiedChange(false)">No</button>
 
     </div>
