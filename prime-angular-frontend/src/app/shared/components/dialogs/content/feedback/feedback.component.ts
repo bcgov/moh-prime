@@ -16,8 +16,8 @@ export class Feedback {
 })
 export class FeedbackComponent implements OnInit {
   public form: FormGroup;
-  @Output() output = new EventEmitter<Feedback>();
   public feedback: Feedback;
+  @Output() output = new EventEmitter<Feedback>();
 
   constructor(
     private fb: FormBuilder,
@@ -39,10 +39,7 @@ export class FeedbackComponent implements OnInit {
   protected createFormInstance() {
     this.form = this.fb.group({
       comment: [
-        {
-          value: '',
-          disabled: false,
-        },
+        '',
         []
       ]
     });
@@ -51,11 +48,10 @@ export class FeedbackComponent implements OnInit {
   protected initForm() {
     this.feedback = new Feedback();
 
-    this.comment.valueChanges.pipe(
-      debounceTime(250)
-    ).subscribe((comment: string) => this.feedback.comment = comment);
+    this.comment.valueChanges
+      .pipe(debounceTime(250))
+      .subscribe((comment: string) => this.feedback.comment = comment);
 
     this.output.emit(this.feedback);
   }
-
 }

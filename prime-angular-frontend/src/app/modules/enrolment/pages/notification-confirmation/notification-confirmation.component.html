@@ -4,9 +4,8 @@
 
   <app-page-header>Notification Confirmation</app-page-header>
 
-  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
-                                    message="Enrolment Paused"
-                                    [inProgress]="isInitialEnrolment"
+  <app-enrolment-progress-indicator message="Enrolment Paused"
+                                    [inProgress]="false"
                                     [currentRoute]="EnrolmentRoutes.SUBMISSION_CONFIRMATION">
   </app-enrolment-progress-indicator>
 
@@ -48,3 +47,11 @@
   <app-prime-support-email></app-prime-support-email>
 
 </app-enrollee-page>
+
+<button class="feedback"
+        mat-raised-button
+        color="primary"
+        (click)="feedback()">
+  <mat-icon class="mr-2">message</mat-icon>
+  Feedback
+</button>
