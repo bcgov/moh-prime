@@ -4,6 +4,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
@@ -26,11 +28,11 @@ describe('OrganizationComponent', () => {
         imports: [
           BrowserAnimationsModule,
           HttpClientTestingModule,
+          RouterTestingModule,
           NgxBusyModule,
           NgxContextualHelpModule,
           NgxMaterialModule,
           ReactiveFormsModule,
-          RouterTestingModule,
           EnrolmentModule
         ],
         providers: [
@@ -45,7 +47,8 @@ describe('OrganizationComponent', () => {
           {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          }
+          },
+          KeycloakService
         ]
       }
     ).compileComponents();
