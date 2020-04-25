@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200423225833_AssuranceLevel")]
+    [Migration("20200425002523_AssuranceLevel")]
     partial class AssuranceLevel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
