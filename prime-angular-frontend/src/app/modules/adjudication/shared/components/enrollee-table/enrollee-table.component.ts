@@ -13,6 +13,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class EnrolleeTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<HttpEnrollee>;
+  @Output() public notify: EventEmitter<number>;
   @Output() public claim: EventEmitter<number>;
   @Output() public disclaim: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
@@ -24,6 +25,7 @@ export class EnrolleeTableComponent implements OnInit {
   constructor(
     private authService: AuthService
   ) {
+    this.notify = new EventEmitter<number>();
     this.claim = new EventEmitter<number>();
     this.disclaim = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
@@ -43,6 +45,12 @@ export class EnrolleeTableComponent implements OnInit {
 
   public get canEdit(): boolean {
     return this.authService.isAdmin();
+  }
+
+  public onNotify(enrolleeId: number) {
+    console.log('1');
+
+    this.notify.emit(enrolleeId);
   }
 
   public onClaim(enrolleeId: number) {

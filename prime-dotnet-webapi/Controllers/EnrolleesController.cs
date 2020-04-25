@@ -24,19 +24,22 @@ namespace Prime.Controllers
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IEmailService _emailService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IAdminService adminService,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IEmailService emailService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
             _adminService = adminService;
             _businessEventService = businessEventService;
+            _emailService = emailService;
         }
 
         // GET: api/Enrollees
@@ -458,6 +461,32 @@ namespace Prime.Controllers
             var events = await _enrolleeService.GetEnrolleeBusinessEvents(enrolleeId);
 
             return Ok(ApiResponse.Result(events));
+        }
+
+        // GET: api/Enrollees/5/reminder
+        /// <summary>
+        /// Send an enrollee a reminder email.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/reminder", Name = nameof(sendEnrolleeReminderEmail))]
+        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> sendEnrolleeReminderEmail(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            await _emailService.SendReminderEmailAsync(enrollee);
+
+            return NoContent();
         }
     }
 }
