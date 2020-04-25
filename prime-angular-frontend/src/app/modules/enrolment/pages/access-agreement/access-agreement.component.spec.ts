@@ -10,7 +10,6 @@ import { AccessAgreementComponent } from './access-agreement.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
-import { SharedModule } from '@shared/shared.module';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
