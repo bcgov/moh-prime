@@ -10,16 +10,11 @@ namespace Prime.Services
 {
     public class PartyService : BaseService, IPartyService
     {
-        private readonly IBusinessEventService _businessEventService;
-
         public PartyService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IBusinessEventService businessEventService)
+            IHttpContextAccessor httpContext)
             : base(context, httpContext)
-        {
-            _businessEventService = businessEventService;
-        }
+        { }
 
         public async Task<bool> PartyExistsAsync(int partyId)
         {
@@ -36,11 +31,9 @@ namespace Prime.Services
 
         public async Task<Party> GetPartyForUserIdAsync(Guid userId)
         {
-            var entity = await _context.Parties
+            return await _context.Parties
                 .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.UserId == userId);
-
-            return entity;
         }
 
         public async Task<int> CreatePartyAsync(Party party)
@@ -68,6 +61,8 @@ namespace Prime.Services
 
             _context.Entry(party).CurrentValues.SetValues(party);
 
+            UpdatePartyAddress(currentParty, party);
+
             try
             {
                 return await _context.SaveChangesAsync();
@@ -77,6 +72,22 @@ namespace Prime.Services
                 return 0;
             }
         }
+
+        public void UpdatePartyAddress(Party current, Party updated)
+        {
+            if (updated.PhysicalAddress != null)
+            {
+                if (current.PhysicalAddress == null)
+                {
+                    current.PhysicalAddress = updated.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                }
+            }
+        }
+
 
         public async Task DeletePartyAsync(int partyId)
         {
@@ -92,21 +103,16 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-
         private IQueryable<Party> GetBasePartyQuery()
         {
-            return _context.Parties;
+            return _context.Parties
+                .Include(p => p.PhysicalAddress);
         }
 
         public async Task<Party> GetPartyAsync(int partyId)
         {
-            IQueryable<Party> query = this.GetBasePartyQuery();
-
-            var entity = await query
-                .SingleOrDefaultAsync(e => e.Id == partyId);
-
-            return entity;
+            return await this.GetBasePartyQuery()
+            .SingleOrDefaultAsync(e => e.Id == partyId);
         }
-
     }
 }

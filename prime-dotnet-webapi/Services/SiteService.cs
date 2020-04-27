@@ -178,7 +178,7 @@ namespace Prime.Services
                     this._context.Entry(current.AdministratorPharmaNet).CurrentValues.SetValues(updated.AdministratorPharmaNet);
                 }
 
-                UpdatePartyAddress(current.AdministratorPharmaNet, updated.AdministratorPharmaNet);
+                _partyService.UpdatePartyAddress(current.AdministratorPharmaNet, updated.AdministratorPharmaNet);
             }
 
             if (updated?.PrivacyOfficer != null)
@@ -192,7 +192,7 @@ namespace Prime.Services
                     this._context.Entry(current.PrivacyOfficer).CurrentValues.SetValues(updated.PrivacyOfficer);
                 }
 
-                UpdatePartyAddress(current.PrivacyOfficer, updated.PrivacyOfficer);
+                _partyService.UpdatePartyAddress(current.PrivacyOfficer, updated.PrivacyOfficer);
             }
 
             if (updated?.TechnicalSupport != null)
@@ -206,24 +206,7 @@ namespace Prime.Services
                     this._context.Entry(current.TechnicalSupport).CurrentValues.SetValues(updated.TechnicalSupport);
                 }
 
-                UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
-            }
-
-
-        }
-
-        private void UpdatePartyAddress(Party current, Party updated)
-        {
-            if (updated.PhysicalAddress != null)
-            {
-                if (current.PhysicalAddress == null)
-                {
-                    current.PhysicalAddress = updated.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
-                }
+                _partyService.UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
             }
         }
 
