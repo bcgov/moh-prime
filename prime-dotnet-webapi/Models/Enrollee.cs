@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("Enrollee")]
-    public class Enrollee : BaseAuditable, IValidatableObject
+    public class Enrollee : BaseAuditable, IValidatableObject, IUserBoundModel
     {
         public const int DISPLAY_OFFSET = 1000;
 

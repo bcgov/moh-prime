@@ -65,7 +65,7 @@ namespace Prime.Controllers
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
-            if (!User.PartyCanEdit(site.Provisioner))
+            if (!User.CanEdit(site.Provisioner))
             {
                 return Forbid();
             }
@@ -124,7 +124,7 @@ namespace Prime.Controllers
 
             var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
 
-            if (!User.PartyCanEdit(party))
+            if (!User.CanEdit(party))
             {
                 return Forbid();
             }
@@ -153,7 +153,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.PartyCanEdit(site.Provisioner))
+            if (!User.CanEdit(site.Provisioner))
             {
                 return Forbid();
             }
@@ -200,7 +200,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.PartyCanEdit(site.Provisioner))
+            if (!User.CanEdit(site.Provisioner))
             {
                 return Forbid();
             }
@@ -229,7 +229,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.PartyCanEdit(site.Provisioner))
+            if (!User.CanEdit(site.Provisioner))
             {
                 return Forbid();
             }
