@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Reflection;
+using System.ServiceModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Serilog;
+using SoapCore;
 
 using Prime.Auth;
 using Prime.Services;
@@ -56,6 +58,7 @@ namespace Prime
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
+            services.AddScoped<IExampleService, ExampleService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -95,6 +98,7 @@ namespace Prime
 
             services.AddHttpContextAccessor();
             services.AddRazorPages();
+            services.AddSoapCore();
 
             this.ConfigureDatabase(services);
 
@@ -111,9 +115,6 @@ namespace Prime
             }
 
             this.ConfigureHealthCheck(app);
-
-            // TODO Turn on when there is an actual cert
-            // app.UseHttpsRedirection();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
@@ -138,6 +139,7 @@ namespace Prime
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
+                endpoints.UseSoapEndpoint<IExampleService>("/Service.asmx", new BasicHttpBinding()); // , SoapSerializer.XmlSerializer
             });
         }
 
