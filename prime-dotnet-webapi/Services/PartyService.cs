@@ -18,20 +18,20 @@ namespace Prime.Services
 
         public async Task<bool> PartyExistsAsync(int partyId)
         {
-            return await _context.Parties
+            return await GetBasePartyQuery()
                 .AnyAsync(e => e.Id == partyId);
         }
 
         public async Task<bool> PartyUserIdExistsAsync(Guid userId)
         {
-            return await _context.Parties
+            return await GetBasePartyQuery()
                 .AnyAsync(e => e.UserId == userId);
         }
 
 
         public async Task<Party> GetPartyForUserIdAsync(Guid userId)
         {
-            return await _context.Parties
+            return await GetBasePartyQuery()
                 .AsNoTracking()
                 .FirstOrDefaultAsync(e => e.UserId == userId);
         }
@@ -56,7 +56,7 @@ namespace Prime.Services
 
         public async Task<int> UpdatePartyAsync(int partyId, Party party)
         {
-            var currentParty = await _context.Parties
+            var currentParty = await GetBasePartyQuery()
                 .SingleAsync(e => e.Id == partyId);
 
             _context.Entry(party).CurrentValues.SetValues(party);
@@ -91,7 +91,7 @@ namespace Prime.Services
 
         public async Task DeletePartyAsync(int partyId)
         {
-            var party = await _context.Parties
+            var party = await GetBasePartyQuery()
                 .SingleOrDefaultAsync(e => e.Id == partyId);
 
             if (party == null)
