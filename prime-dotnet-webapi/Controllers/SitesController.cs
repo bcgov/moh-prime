@@ -14,7 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = AuthConstants.USER_POLICY)]
+    [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
     public class SitesController : ControllerBase
     {
         private readonly ISiteService _siteService;
@@ -41,11 +41,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Site>>> GetSites()
         {
-            if (!User.HasSiteRegistrationFeature())
-            {
-                return Forbid();
-            }
-
             var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
 
             IEnumerable<Site> sites = (party != null)
@@ -70,7 +65,7 @@ namespace Prime.Controllers
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
-            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Provisioner))
+            if (!User.PartyCanEdit(site.Provisioner))
             {
                 return Forbid();
             }
@@ -93,11 +88,6 @@ namespace Prime.Controllers
             {
                 this.ModelState.AddModelError("Party", "Could not create an site, the passed in Party cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
-            }
-
-            if (!User.HasSiteRegistrationFeature())
-            {
-                return Forbid();
             }
 
             var createdSiteId = await _siteService.CreateSiteAsync(party);
@@ -134,7 +124,7 @@ namespace Prime.Controllers
 
             var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
 
-            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(party))
+            if (!User.PartyCanEdit(party))
             {
                 return Forbid();
             }
@@ -163,7 +153,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Provisioner))
+            if (!User.PartyCanEdit(site.Provisioner))
             {
                 return Forbid();
             }
@@ -210,7 +200,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Provisioner))
+            if (!User.PartyCanEdit(site.Provisioner))
             {
                 return Forbid();
             }
@@ -239,7 +229,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.HasSiteRegistrationFeature() || !User.PartyCanEdit(site.Provisioner))
+            if (!User.PartyCanEdit(site.Provisioner))
             {
                 return Forbid();
             }
