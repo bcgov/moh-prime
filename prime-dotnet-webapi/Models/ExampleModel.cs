@@ -11,9 +11,6 @@ namespace Prime.Models
         public int Id { get; set; }
 
         [DataMember]
-        public string Name { get; set; }
-
-        [DataMember]
         public string Email { get; set; }
     }
 }

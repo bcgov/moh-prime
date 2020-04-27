@@ -12,14 +12,33 @@ namespace Prime.Services
             return s;
         }
 
+        public ExampleModel GetModel()
+        {
+            var exampleModel = new ExampleModel
+            {
+                Id = 1,
+                Email = "test@example.com"
+            };
+
+            Console.WriteLine("Id: {0}, Name: {1}", exampleModel.Id, exampleModel.Email);
+
+            return exampleModel;
+        }
+
+        public ExampleModel SetModel(int id, string email)
+        {
+            Console.WriteLine("Id: {0}, Name: {1}", id, email);
+
+            return new ExampleModel
+            {
+                Id = id,
+                Email = email
+            };
+        }
+
         public void XmlMethod(XElement xml)
         {
             Console.WriteLine(xml.ToString());
-        }
-
-        public ExampleModel TestExampleModel(ExampleModel exampleModel)
-        {
-            return exampleModel;
         }
     }
 }

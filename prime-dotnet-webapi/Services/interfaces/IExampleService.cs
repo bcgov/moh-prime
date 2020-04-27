@@ -10,9 +10,12 @@ namespace Prime.Services
         string Test(string s);
 
         [OperationContract]
-        void XmlMethod(System.Xml.Linq.XElement xml);
+        ExampleModel GetModel();
 
         [OperationContract]
-        ExampleModel TestExampleModel(ExampleModel model);
+        ExampleModel SetModel(int id, string email);
+
+        [OperationContract]
+        void XmlMethod(System.Xml.Linq.XElement xml);
     }
 }

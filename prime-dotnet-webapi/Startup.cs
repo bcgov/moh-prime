@@ -139,7 +139,7 @@ namespace Prime
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
-                endpoints.UseSoapEndpoint<IExampleService>("/Service.asmx", new BasicHttpBinding()); // , SoapSerializer.XmlSerializer
+                endpoints.UseSoapEndpoint<IExampleService>("/Service.asmx", new BasicHttpBinding(), SoapSerializer.XmlSerializer);
             });
         }
 
