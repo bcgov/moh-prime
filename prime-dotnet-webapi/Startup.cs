@@ -64,7 +64,6 @@ namespace Prime
                 {
                     options.SerializerSettings.Converters.Add(new StringEnumConverter(new KebabCaseNamingStrategy(), false));
                     options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
 
             services.Configure<RouteOptions>(options =>

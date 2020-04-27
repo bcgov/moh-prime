@@ -26,8 +26,6 @@ namespace Prime.Models
 
         public string JobRoleTitle { get; set; }
 
-        public int? PhysicalAddressId { get; set; }
-
         public PhysicalAddress PhysicalAddress { get; set; }
 
         public string Email { get; set; }

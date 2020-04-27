@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Prime.Models
 {
@@ -19,8 +19,6 @@ namespace Prime.Models
 
         public string DoingBusinessAs { get; set; }
 
-        public int? PhysicalAddressId { get; set; }
-
         public PhysicalAddress PhysicalAddress { get; set; }
 
         public int? AdministratorPharmaNetId { get; set; }
@@ -37,7 +35,6 @@ namespace Prime.Models
 
         public int? OrganizationId { get; set; }
 
-        [JsonIgnore]
         public Organization Organization { get; set; }
 
         [JsonIgnore]
