@@ -231,16 +231,19 @@ export class SiteRegistrationStateService {
         [this.signingAuthorityForm, site.location.organization.signingAuthority],
         [this.administratorPharmaNetForm, site.location.administratorPharmaNet],
         [this.privacyOfficerForm, site.location.privacyOfficer],
-        [this.technicalSupportForm, site.location.technicalSupport],
-      ].forEach(([formGroup, data]: [FormGroup, Party]) => {
-        const { physicalAddress, ...party } = data;
-        formGroup.patchValue(party);
+        [this.technicalSupportForm, site.location.technicalSupport]
+      ]
+        .filter(([formGroup, data]: [FormGroup, Party]) => data)
+        .forEach(([formGroup, data]: [FormGroup, Party]) => {
+          const { physicalAddress, ...party } = data;
 
-        const physicalAddressFormGroup = formGroup.get('physicalAddress');
-        (physicalAddress)
-          ? physicalAddressFormGroup.patchValue(physicalAddress)
-          : physicalAddressFormGroup.reset();
-      });
+          formGroup.patchValue(party);
+
+          const physicalAddressFormGroup = formGroup.get('physicalAddress');
+          (physicalAddress)
+            ? physicalAddressFormGroup.patchValue(physicalAddress)
+            : physicalAddressFormGroup.reset();
+        });
     }
   }
 
