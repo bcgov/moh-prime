@@ -17,7 +17,7 @@ namespace Prime.Infrastructure
 
             if (context.User.HasAdminView()
                 || (context.User.IsInRole(AuthConstants.PRIME_ENROLLEE_ROLE)
-                    && context.User.HasAssuranceLevel(3)))
+                    && context.User.GetIdentityAssuranceLevel() >= 2))
             {
                 context.Succeed(requirement);
             }

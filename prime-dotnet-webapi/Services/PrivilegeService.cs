@@ -85,7 +85,6 @@ namespace Prime.Services
         {
             ICollection<Privilege> privileges = new List<Privilege>();
             var results = await this.GetPrivilegesForEnrolleeQueryAsync(enrollee.Id);
-            var currentUser = _httpContext?.HttpContext?.User;
 
             foreach (var item in results)
             {

@@ -87,29 +87,42 @@ namespace PrimeTests.Services
         }
 
         [Fact]
-        public async void testAllowableChangesRule_SimpleDissallowedChange()
+        public async void testAllowableChangesRule_SimpleDissallowedChange_SimpleProperty()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeProfileViewModel profile;
-
-            // Simple property
-            profile = enrollee.ToViewModel();
+            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
             profile.PreferredFirstName = "BIG CHANGES";
-            await AssertAllowableChanges(false, enrollee, profile);
 
-            // Remove child object
-            profile = enrollee.ToViewModel();
+            await AssertAllowableChanges(false, enrollee, profile);
+        }
+
+        [Fact]
+        public async void testAllowableChangesRule_SimpleDissallowedChange_RemoveChildObject()
+        {
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
             profile.MailingAddress = null;
-            await AssertAllowableChanges(false, enrollee, profile);
 
-            // Property on child object
-            profile = enrollee.ToViewModel();
+            await AssertAllowableChanges(false, enrollee, profile);
+        }
+
+        [Fact]
+        public async void testAllowableChangesRule_SimpleDissallowedChange_PropertyOnChildObject()
+        {
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
             profile.MailingAddress.City = "Flavortown, USA";
-            await AssertAllowableChanges(false, enrollee, profile);
 
-            // Add child object
-            profile = enrollee.ToViewModel();
+            await AssertAllowableChanges(false, enrollee, profile);
+        }
+
+        [Fact]
+        public async void testAllowableChangesRule_SimpleDissallowedChange_AddChildObject()
+        {
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
             enrollee.MailingAddress = null;
+
             await AssertAllowableChanges(false, enrollee, profile);
         }
 
@@ -201,6 +214,7 @@ namespace PrimeTests.Services
             // Make sure there are no new types we don't know how to compare
             var knownTypes = new[]
             {
+                typeof(int),
                 typeof(string),
                 typeof(bool?),
                 typeof(MailingAddress),
