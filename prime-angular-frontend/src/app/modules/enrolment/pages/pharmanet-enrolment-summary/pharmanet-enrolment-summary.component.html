@@ -18,20 +18,21 @@
       Get your access to PharmaNet set up.
     </p>
     <p class="mb-4">
-      Use the email option below to notify your PharmaNet administrator of your completed enrolment.
-      Select your type of PharmaNet software for specific instructions on how to send the notification.
-      Select 'Other' to send to a different administrator.
+      Use the email option below to notify your PharmaNet administrator of your completed enrolment. Enter in the email
+      address of your PharmaNet administrator who may be your Pharmacy Manager, Office Manager or Medical Office
+      Assistant
     </p>
 
     <form [formGroup]="form">
-      <div class="mb-2">
+      <!-- TODO temporary removed and may be removed permanently -->
+      <!-- <div class="mb-2">
         <mat-checkbox #careconnect>CareConnect</mat-checkbox>
         <div *ngIf="careconnect.checked"
              class="pt-2">
           <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'CareConnect' }"></ng-container>
 
           <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-xl-7">
 
               <mat-form-field class="w-100 mb-3">
                 <input matInput
@@ -43,7 +44,7 @@
               </mat-form-field>
 
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-xl-3">
 
               <button mat-flat-button
                       type="button"
@@ -66,7 +67,7 @@
           <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'Excelleris' }"></ng-container>
 
           <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-xl-7">
 
               <mat-form-field class="w-100 mb-3">
                 <input matInput
@@ -77,7 +78,7 @@
               </mat-form-field>
 
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-xl-3">
 
               <button mat-flat-button
                       type="button"
@@ -99,12 +100,12 @@
              class="pt-2">
 
           <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-xl-7">
 
               <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'iClinic' }"></ng-container>
 
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-xl-3">
 
               <button mat-flat-button
                       type="button"
@@ -126,12 +127,12 @@
              class="pt-2">
 
           <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-xl-7">
 
               <ng-container *ngTemplateOutlet="concise; context: { provisioner: 'MediNet' }"></ng-container>
 
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-xl-3">
 
               <button mat-flat-button
                       type="button"
@@ -154,7 +155,7 @@
           <ng-container *ngTemplateOutlet="verbose; context: { provisioner: 'Plexia' }"></ng-container>
 
           <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-xl-7">
 
               <mat-form-field class="w-100 mb-3">
                 <input matInput
@@ -165,7 +166,7 @@
               </mat-form-field>
 
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-xl-3">
 
               <button mat-flat-button
                       type="button"
@@ -190,7 +191,7 @@
           </p>
 
           <div class="row">
-            <div class="col-sm-8">
+            <div class="col-sm-8 col-xl-7">
 
               <mat-form-field class="w-100 mb-3">
                 <input matInput
@@ -201,7 +202,7 @@
               </mat-form-field>
 
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-xl-3">
 
               <button mat-flat-button
                       type="button"
@@ -213,6 +214,36 @@
 
             </div>
           </div>
+
+        </div>
+      </div> -->
+
+      <p class="mb-4">
+        Enter the email address of your PharmaNet administrator. If you work at more than one site, enter the email
+        addresses of all PharmaNet administrators separated by a comma.
+      </p>
+
+      <div class="row">
+        <div class="col-sm-8 col-xl-7">
+
+          <mat-form-field class="w-100 mb-3">
+            <input matInput
+                   placeholder="Email"
+                   formControlName="administratorRecipients">
+            <mat-error *ngIf="administratorRecipients.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="administratorRecipients.hasError('email')">Must be a valid email address</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-sm-4 col-xl-3">
+
+          <button mat-flat-button
+                  type="button"
+                  color="primary"
+                  class="w-100 mb-4"
+                  (click)="sendProvisionerAccessLinkTo('Administrator')">
+            Send
+          </button>
 
         </div>
       </div>
