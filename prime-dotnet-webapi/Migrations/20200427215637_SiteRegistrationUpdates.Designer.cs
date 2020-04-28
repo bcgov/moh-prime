@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200422050228_PartyAddressOptional")]
-    partial class PartyAddressOptional
+    [Migration("20200427215637_SiteRegistrationUpdates")]
+    partial class SiteRegistrationUpdates
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -7850,6 +7850,9 @@ namespace Prime.Migrations
                     b.Property<int?>("ProvisionerId")
                         .HasColumnType("integer");
 
+                    b.Property<DateTimeOffset?>("SubmittedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -7930,6 +7933,15 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Locked",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = 5,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Declined",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -10499,7 +10511,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "CareConnect@phsa.ca",
-                            Name = "Care Connect",
+                            Name = "CareConnect",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
