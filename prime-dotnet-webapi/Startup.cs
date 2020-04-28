@@ -24,6 +24,7 @@ using Prime.Auth;
 using Prime.Services;
 using Prime.Models.Api;
 using Prime.Infrastructure;
+using System.ServiceModel.Channels;
 
 namespace Prime
 {
@@ -135,11 +136,24 @@ namespace Prime
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // Configure security settings on a basic HTTP binding
+            Binding binding = new BasicHttpBinding
+            {
+                Security = new BasicHttpSecurity
+                {
+                    Mode = BasicHttpSecurityMode.TransportCredentialOnly,
+                    Transport = new HttpTransportSecurity
+                    {
+                        ClientCredentialType = HttpClientCredentialType.Basic
+                    }
+                }
+            };
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
-                endpoints.UseSoapEndpoint<IExampleService>("/Service.asmx", new BasicHttpBinding(), SoapSerializer.XmlSerializer);
+                endpoints.UseSoapEndpoint<IExampleService>("/Service.asmx", binding, SoapSerializer.XmlSerializer);
             });
         }
 
