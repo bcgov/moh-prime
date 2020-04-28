@@ -79,7 +79,6 @@ export class FormUtilsService {
   /**
    * @description
    * Get all the errors contained within a form.
-   *
    */
   public getFormErrors(form: FormGroup | FormArray): { [key: string]: any; } | null {
     let hasError = false;
