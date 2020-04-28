@@ -284,5 +284,28 @@ namespace PrimeTests.Services
                 AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.LicenceClass);
             }
         }
+
+        [Theory]
+        [InlineData(0, false)]
+        [InlineData(1, false)]
+        [InlineData(2, false)]
+        [InlineData(3, true)]
+        public async void testIdentityAssuranceLevelRule(int assuranceLevel, bool expected)
+        {
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            enrollee.IdentityAssuranceLevel = assuranceLevel;
+
+            var rule = new IdentityAssuranceLevelRule();
+
+            Assert.Equal(expected, await rule.ProcessRule(enrollee));
+            if (expected)
+            {
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons);
+            }
+            else
+            {
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.AssuranceLevel);
+            }
+        }
     }
 }
