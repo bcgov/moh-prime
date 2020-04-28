@@ -89,11 +89,6 @@ objects:
                     secretKeyRef:
                       key: MONGODB_DATABASE
                       name: mongodb-secret
-                - name: MONGO_INITDB_ROOT_USERNAME
-                  valueFrom:
-                    secretKeyRef:
-                      key: MONGODB_USER
-                      name: mongodb-secret
                 - name: MONGO_INITDB_ROOT_PASSWORD
                   valueFrom:
                     secretKeyRef:
