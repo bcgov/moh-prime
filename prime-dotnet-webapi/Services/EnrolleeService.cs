@@ -113,16 +113,13 @@ namespace Prime.Services
             Enrollee enrollee = await this.GetBaseEnrolleeQuery()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
 
-            if (excludeDecline && enrollee.CurrentStatus.IsType(StatusType.Declined))
+            if (enrollee == null
+                || (excludeDecline && enrollee.CurrentStatus.IsType(StatusType.Declined)))
             {
                 return null;
             }
 
-            if (enrollee != null)
-            {
-                enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
-            }
-
+            enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             return enrollee;
         }
 
