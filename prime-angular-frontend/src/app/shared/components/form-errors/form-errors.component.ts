@@ -16,8 +16,6 @@ export class FormErrorsComponent implements OnInit {
   ) { }
 
   public get errors(): { [key: string]: any } {
-    console.log('TEST');
-
     return this.formUtilsService.getFormErrors(this.form);
   }
 
