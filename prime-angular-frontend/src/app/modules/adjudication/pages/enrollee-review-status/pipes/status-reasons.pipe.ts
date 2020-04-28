@@ -84,7 +84,7 @@ export class StatusReasonsPipe implements PipeTransform {
       pharmaNetSuspended.question = this.pharmanetQ;
       results.push(pharmaNetSuspended);
     }
-    console.log(results);
+
     return results;
   }
 
