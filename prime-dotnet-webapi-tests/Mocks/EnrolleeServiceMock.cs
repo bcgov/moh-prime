@@ -27,7 +27,7 @@ namespace PrimeTests.Mocks
             }
         }
 
-        public Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId)
+        public Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool includeDeclined)
         {
             return Task.FromResult(this.GetHolder<int, Enrollee>().Values?.SingleOrDefault(e => e.UserId == userId));
         }
