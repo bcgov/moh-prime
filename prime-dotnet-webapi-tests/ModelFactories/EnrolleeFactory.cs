@@ -32,7 +32,9 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.DeviceProviderNumber, f => null);
             RuleFor(x => x.IsInsulinPumpProvider, f => null);
             RuleFor(x => x.GPID, f => null);
+            RuleFor(x => x.HPDID, f => null);
             RuleFor(x => x.ProfileCompleted, f => false);
+            RuleFor(x => x.IdentityAssuranceLevel, 3);
 
             RuleFor(x => x.HasConviction, false);
             RuleFor(x => x.HasConvictionDetails, f => null);
@@ -54,7 +56,12 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.Privileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
-            Ignore(x => x.AccessTerms); // Awaiting finialization of access terms
+            Ignore(x => x.HasMostRecentAccessTermSigned);
+            // TODO: fix these ignores
+            Ignore(x => x.AccessTerms);
+            Ignore(x => x.Adjudicator);
+            Ignore(x => x.AdjudicatorId);
+            Ignore(x => x.AlwaysManual);
 
             RuleSet("status.submitted", (set) =>
             {
@@ -90,7 +97,7 @@ namespace PrimeTests.ModelFactories
             {
                 x.ProfileCompleted = x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool();
 
-                if (x.CurrentStatus.IsType(StatusType.Editable) && x.PreviousStatus.IsType(StatusType.RequiresToa))
+                if (x.CurrentStatus.IsType(StatusType.Editable) && x.PreviousStatus?.IsType(StatusType.RequiresToa) == true)
                 {
                     x.GPID = f.Random.AlphaNumeric(20);
 
