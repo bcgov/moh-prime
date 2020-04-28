@@ -122,6 +122,7 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
+            enrollee.IdentityAssuranceLevel = User.GetIdentityAssuranceLevel();
             var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(enrollee);
 
             return CreatedAtAction(

@@ -16,7 +16,7 @@ namespace Prime.Services
     public class SubmissionService : BaseService, ISubmissionService
     {
         private readonly IAccessTermService _accessTermService;
-        private readonly ISubmissionRulesService _automaticAdjudicationService;
+        private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
         private readonly IEnrolleeService _enrolleeService;
@@ -25,7 +25,7 @@ namespace Prime.Services
 
         public SubmissionService(ApiDbContext context, IHttpContextAccessor httpContext,
             IAccessTermService accessTermService,
-            ISubmissionRulesService automaticAdjudicationService,
+            ISubmissionRulesService submissionRulesService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
             IEnrolleeService enrolleeService,
@@ -34,7 +34,7 @@ namespace Prime.Services
             : base(context, httpContext)
         {
             _accessTermService = accessTermService;
-            _automaticAdjudicationService = automaticAdjudicationService;
+            _submissionRulesService = submissionRulesService;
             _businessEventService = businessEventService;
             _emailService = emailService;
             _enrolleeService = enrolleeService;
@@ -53,7 +53,7 @@ namespace Prime.Services
                     .ThenInclude(at => at.UserClause)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            bool minorUpdate = await _automaticAdjudicationService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
+            bool minorUpdate = await _submissionRulesService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
             await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, updatedProfile);
 
             if (minorUpdate)
@@ -78,7 +78,7 @@ namespace Prime.Services
                         .ThenInclude(l => l.DefaultPrivileges)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            if (await _automaticAdjudicationService.QualifiesForAutomaticAdjudicationAsync(enrollee))
+            if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
             {
                 var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
                 newStatus.AddStatusReason(StatusReasonType.Automatic);
