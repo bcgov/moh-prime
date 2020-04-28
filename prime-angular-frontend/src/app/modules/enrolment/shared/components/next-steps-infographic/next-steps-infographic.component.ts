@@ -6,10 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./next-steps-infographic.component.scss']
 })
 export class NextStepsInfographicComponent implements OnInit {
-
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() { }
 }
