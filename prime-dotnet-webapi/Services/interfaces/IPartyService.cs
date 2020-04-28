@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using Prime.Models;
 
-
 namespace Prime.Services
 {
     public interface IPartyService
@@ -22,6 +21,5 @@ namespace Prime.Services
         void UpdatePartyAddress(Party current, Party updated);
 
         Task DeletePartyAsync(int partyId);
-
     }
 }
