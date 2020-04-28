@@ -107,6 +107,9 @@ namespace Prime.Models
 
         public bool AlwaysManual { get; set; }
 
+        [JsonIgnore]
+        public int IdentityAssuranceLevel { get; set; }
+
         [NotMapped]
         public EnrolmentStatus CurrentStatus
         {

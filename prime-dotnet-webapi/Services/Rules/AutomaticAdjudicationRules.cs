@@ -154,4 +154,18 @@ namespace Prime.Services.Rules
             return Task.FromResult(!enrollee.AlwaysManual);
         }
     }
+
+    public class IdentityAssuranceLevelRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.IdentityAssuranceLevel < 3)
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.AssuranceLevel);
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
+    }
 }

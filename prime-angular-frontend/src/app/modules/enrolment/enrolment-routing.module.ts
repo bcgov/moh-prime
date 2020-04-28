@@ -61,7 +61,7 @@ const routes: Routes = [
         path: EnrolmentRoutes.OVERVIEW,
         component: OverviewComponent,
         canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PharmaNet Enrolment' }
+        data: { title: 'PRIME Enrolment' }
       },
       //
       // Enrollee profile:
@@ -70,38 +70,38 @@ const routes: Routes = [
         path: EnrolmentRoutes.DEMOGRAPHIC,
         component: DemographicComponent,
         canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PharmaNet Enrolment' }
+        data: { title: 'PRIME Enrolment' }
       },
       {
         path: EnrolmentRoutes.REGULATORY,
         component: RegulatoryComponent,
         canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PharmaNet Enrolment' }
+        data: { title: 'PRIME Enrolment' }
       },
       // TODO Temporary removal of device provider for Community Practice
       // {
       //   path: EnrolmentRoutes.DEVICE_PROVIDER,
       //   component: DeviceProviderComponent,
       //   canDeactivate: [CanDeactivateFormGuard],
-      //   data: { title: 'PharmaNet Enrolment' }
+      //   data: { title: 'PRIME Enrolment' }
       // },
       {
         path: EnrolmentRoutes.JOB,
         component: JobComponent,
         canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PharmaNet Enrolment' }
+        data: { title: 'PRIME Enrolment' }
       },
       {
         path: EnrolmentRoutes.ORGANIZATION,
         component: OrganizationComponent,
         canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PharmaNet Enrolment' }
+        data: { title: 'PRIME Enrolment' }
       },
       {
         path: EnrolmentRoutes.SELF_DECLARATION,
         component: SelfDeclarationComponent,
         canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PharmaNet Enrolment' }
+        data: { title: 'PRIME Enrolment' }
       },
       //
       // Enrolment submission:
@@ -109,12 +109,12 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.CHANGES_SAVED,
         component: MinorUpdateConfirmationComponent,
-        data: { title: 'PharmaNet Enrolment' }
+        data: { title: 'PRIME Enrolment' }
       },
       {
         path: EnrolmentRoutes.SUBMISSION_CONFIRMATION,
         component: SubmissionConfirmationComponent,
-        data: { title: 'PharmaNet Enrolment' }
+        data: { title: 'PRIME Enrolment' }
       },
       {
         path: EnrolmentRoutes.ACCESS_LOCKED,
@@ -129,7 +129,7 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.PENDING_ACCESS_TERM,
         component: AccessAgreementComponent,
-        data: { title: 'Enrolment Terms of Access' }
+        data: { title: 'Terms of Access' }
       },
       //
       // Enrollee history and PharmaNet:
