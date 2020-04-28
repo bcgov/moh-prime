@@ -71,6 +71,7 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
+            updatedProfile.IdentityAssuranceLevel = User.GetIdentityAssuranceLevel();
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
             enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             return Ok(ApiResponse.Result(enrollee));
