@@ -83,8 +83,10 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string provisionerName, FromBodyText providedEmails)
         {
-            var provisionerNames = _certificateService.GetPharmaNetProvisionerNames();
-            if (!provisionerNames.Contains(provisionerName) && provisionerName != "Other")
+            // TODO temporary removed and may be removed permanently
+            // var provisionerNames = _certificateService.GetPharmaNetProvisionerNames();
+            // if (!provisionerNames.Contains(provisionerName) && provisionerName != "Other")
+            if (provisionerName != "Administrator")
             {
                 this.ModelState.AddModelError("Provisioner", "The provisioner provided is not valid.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
@@ -135,7 +137,9 @@ namespace Prime.Controllers
                 provisionerName = null;
             }
 
-            await _emailService.SendProvisionerLinkAsync(emails, createdToken, provisionerName);
+            // TODO temporary removed and may be removed permanently
+            // await _emailService.SendProvisionerLinkAsync(emails, createdToken, provisionerName);
+            await _emailService.SendProvisionerLinkAsync(emails, createdToken);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to email(s): " + string.Join(",", emails));
 
             return CreatedAtAction(
