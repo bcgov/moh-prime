@@ -14,5 +14,6 @@ namespace Prime.Models
         SelfDeclaration = 10,
         Address = 11,
         AlwaysManual = 12,
+        AssuranceLevel = 13,
     }
 }
