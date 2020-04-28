@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace Prime.Models
 {
     [StartUpVersion("0.0.2")]
-    [CollectionLocation("Locations", "MongoDb")]
+    [CollectionLocation("Locations", "prime")]
     public class Locations : IDocument
     {
         [BsonId]
