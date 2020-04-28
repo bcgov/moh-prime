@@ -42,10 +42,11 @@ RUN apt-get update && \
   chmod 777 entrypoint.sh && \
   chmod -R 777 /opt/app-root && \
   chmod -R 777 /opt/app-root/.*
-RUN wget -qO - http://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
-    echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
+
+RUN wget --quiet -O - https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
+    echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
     apt-get update && \
-    apt-get install -y mongodb-org-tools
+    apt-get install -y mongodb-org-shell
 
 EXPOSE 8080 5001 1025
 
