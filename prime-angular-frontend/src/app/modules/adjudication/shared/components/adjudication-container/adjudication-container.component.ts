@@ -76,7 +76,6 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
   }
 
   public onNotify(enrolleeId: number) {
-    console.log('2');
     this.adjudicationResource
       .sendEnrolleeReminderEmail(enrolleeId)
       .subscribe();
