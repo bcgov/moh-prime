@@ -17,6 +17,7 @@ import { FormControlValidators } from '@shared/validators/form-control.validator
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
@@ -109,7 +110,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       message: `Are you sure you want to send your PharmaNet certificate to ${provisionerName}?`,
       actionText: 'Send',
     };
-    this.dialog.open(ConfirmDialogComponent, { data })
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
@@ -124,6 +125,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
           if (formControl) {
             formControl.reset();
           }
+          this.router.navigate([EnrolmentRoutes.NOTIFICATION_CONFIRMATION], { relativeTo: this.route.parent });
         },
         (error: any) => {
           this.logger.error('[Enrolment] Error occurred sending email', error);

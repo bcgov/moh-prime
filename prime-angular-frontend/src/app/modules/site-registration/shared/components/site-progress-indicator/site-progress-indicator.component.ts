@@ -12,6 +12,7 @@ import { SiteRoutes } from 'app/modules/site-registration/site-registration.rout
 export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public currentRoute: string;
   @Input() public inProgress: boolean;
+  @Input() public message: string;
   public routes: string[];
   public prefix: string;
 
