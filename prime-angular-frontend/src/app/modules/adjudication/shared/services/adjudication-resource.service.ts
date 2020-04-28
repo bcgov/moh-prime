@@ -191,8 +191,7 @@ export class AdjudicationResource {
   }
 
   public sendEnrolleeReminderEmail(enrolleeId: number): NoContent {
-    console.log('3');
-    return this.apiResource.get<NoContent>(`enrollees/${enrolleeId}/reminder`)
+    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/reminder`)
       .pipe(
         map(() => {
           this.toastService.openErrorToast('Enrollee reminder has been sent');

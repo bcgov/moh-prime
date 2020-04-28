@@ -463,12 +463,12 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(events));
         }
 
-        // GET: api/Enrollees/5/reminder
+        // POST: api/Enrollees/5/reminder
         /// <summary>
         /// Send an enrollee a reminder email.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/reminder", Name = nameof(sendEnrolleeReminderEmail))]
+        [HttpPost("{enrolleeId}/reminder", Name = nameof(sendEnrolleeReminderEmail))]
         [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

@@ -48,8 +48,6 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   public onNotify(enrolleeId: number) {
-    console.log('1');
-
     this.notify.emit(enrolleeId);
   }
 
