@@ -59,7 +59,7 @@ namespace Prime.Services
             var currentParty = await GetBasePartyQuery()
                 .SingleAsync(e => e.Id == partyId);
 
-            _context.Entry(party).CurrentValues.SetValues(party);
+            _context.Entry(currentParty).CurrentValues.SetValues(party);
 
             UpdatePartyAddress(currentParty, party);
 

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("Admin")]
-    public class Admin : BaseAuditable, IValidatableObject
+    public class Admin : BaseAuditable, IValidatableObject, IUserBoundModel
     {
         [Key]
         public int Id { get; set; }
