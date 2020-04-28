@@ -58,7 +58,7 @@ COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configurati
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 
 RUN apt-get update && \
-    apt-get install -yqq gpgv gnupg2 wget && \
+    apt-get install -yqq gpgv gnupg2 wget dirmngr gnupg apt-transport-https software-properties-common ca-certificates curl apt-utils && \
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
@@ -69,8 +69,8 @@ RUN apt-get update && \
     chmod -R 777 /opt/app-root && \
     chmod -R 777 /opt/app-root/.*
 
-RUN wget -qO - http://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
-    echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
+RUN wget --quiet -O - https://www.mongodb.org/static/pgp/server-4.2.asc | apt-key add - && \
+    echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.2 main" | tee /etc/apt/sources.list.d/mongodb-org-4.2.list && \
     apt-get update && \
     apt-get install -y mongodb-org-shell
     
