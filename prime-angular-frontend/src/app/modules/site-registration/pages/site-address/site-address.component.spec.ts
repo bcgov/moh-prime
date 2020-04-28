@@ -8,6 +8,8 @@ import { SiteAddressComponent } from './site-address.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from '@shared/shared.module';
 
 describe('SiteAddressComponent', () => {
   let component: SiteAddressComponent;
@@ -16,9 +18,11 @@ describe('SiteAddressComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        BrowserAnimationsModule,
         RouterTestingModule,
         HttpClientTestingModule,
-        SiteRegistrationModule
+        SiteRegistrationModule,
+        SharedModule
       ],
       providers: [
         {
@@ -27,7 +31,7 @@ describe('SiteAddressComponent', () => {
         },
         {
           provide: ConfigService,
-          useValue: MockConfigService
+          useClass: MockConfigService
         }
       ]
     })
