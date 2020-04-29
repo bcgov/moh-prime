@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Prime.Models;
+using Prime.Models.MongoModels;
 using Prime.Services;
 
 namespace Prime.Controllers

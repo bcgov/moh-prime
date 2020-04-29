@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using Prime.Models;
-using Prime.Services;
+using Prime.Models.MongoModels;
 
 namespace Prime.Services
 {

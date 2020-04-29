@@ -1,6 +1,6 @@
 using Mongo.Migration.Migrations;
 using MongoDB.Bson;
-using Prime.Models;
+using Prime.Models.MongoModels;
 
 namespace Prime.Migrations
 {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Prime.Models;
+using Prime.Models.MongoModels;
 
 namespace Prime.Services
 {

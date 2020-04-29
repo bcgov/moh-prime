@@ -3,7 +3,7 @@ using Mongo.Migration.Documents.Attributes;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Prime.Models
+namespace Prime.Models.MongoModels
 {
     [StartUpVersion("0.0.2")]
     [CollectionLocation("Locations", "prime")]
