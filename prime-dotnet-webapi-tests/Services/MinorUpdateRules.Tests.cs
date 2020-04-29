@@ -7,18 +7,13 @@ using Xunit;
 using Prime;
 using Prime.Models;
 using Prime.ViewModels;
-using Prime.Services;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
-using PrimeTests.Mocks;
-using System.Collections;
 
 namespace PrimeTests.Services
 {
-    public class MinorUpdateRulesTests : IClassFixture<CustomWebApplicationFactory<TestStartup>>
+    public class MinorUpdateRulesTests
     {
-        public MinorUpdateRulesTests() : base() { }
-
         /// <summary>
         /// Minor update rules should not add any staus reasons
         /// </summary>

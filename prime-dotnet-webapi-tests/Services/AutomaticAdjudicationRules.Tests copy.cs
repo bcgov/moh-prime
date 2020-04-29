@@ -13,11 +13,8 @@ using PrimeTests.ModelFactories;
 
 namespace PrimeTests.Services
 {
-    public class AutomaticAdjudicationRulesTests : BaseServiceTests<SubmissionRulesService>
+    public class AutomaticAdjudicationRulesTests
     {
-        public AutomaticAdjudicationRulesTests() : base(new object[] { new PharmanetApiServiceMock(), new AccessTermServiceMock() })
-        { }
-
         private void UpdateCertifications(Enrollee enrollee, int certCount = 0, bool manual = false)
         {
             if (manual)
@@ -91,16 +88,6 @@ namespace PrimeTests.Services
                 var actualCodes = enrolmentStatusReasons.Select(r => r.StatusReasonCode);
                 Assert.Equal(expectedReasons.Cast<int>().OrderBy(c => c), actualCodes.OrderBy(c => c));
             }
-        }
-
-        [Fact]
-        public async void testQualifiesForAutomaticAdjudication_NoCerts()
-        {
-            Enrollee enrollee = new EnrolleeFactory().Generate();
-            enrollee.Certifications = new List<Certification>();
-
-            Assert.True(await _service.QualifiesForAutomaticAdjudicationAsync(enrollee));
-            AssertReasons(enrollee.CurrentStatus?.EnrolmentStatusReasons);
         }
 
         [Theory]
