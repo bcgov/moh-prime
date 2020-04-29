@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("Party")]
-    public class Party : BaseAuditable
+    public class Party : BaseAuditable, IUserBoundModel
     {
         [Key]
         public int Id { get; set; }
@@ -26,10 +26,7 @@ namespace Prime.Models
 
         public string JobRoleTitle { get; set; }
 
-        public int AddressId { get; set; }
-
-        [Required]
-        public Address Address { get; set; }
+        public PhysicalAddress PhysicalAddress { get; set; }
 
         public string Email { get; set; }
 

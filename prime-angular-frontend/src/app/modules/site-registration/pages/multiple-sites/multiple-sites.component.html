@@ -1,6 +1,7 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [currentRoute]="SiteRoutes.MULTIPLE_SITES"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isCompleted"
+                               [currentRoute]="SiteRoutes.MULTIPLE_SITES"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
