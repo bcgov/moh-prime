@@ -21,7 +21,7 @@ namespace Prime
         /// <summary>
         /// Returns true if the logged in user is an admin, or if the user has the same UserId as the record
         /// </summary>
-        public static bool CanEdit(this ClaimsPrincipal User, Enrollee enrollee)
+        public static bool CanEdit(this ClaimsPrincipal User, IUserBoundModel party)
         {
             if (User.IsAdmin())
             {
@@ -29,7 +29,7 @@ namespace Prime
             }
 
             Guid PrimeUserId = User.GetPrimeUserId();
-            return !PrimeUserId.Equals(Guid.Empty) && PrimeUserId.Equals(enrollee.UserId);
+            return !PrimeUserId.Equals(Guid.Empty) && PrimeUserId.Equals(party.UserId);
         }
 
         /// <summary>
@@ -59,5 +59,6 @@ namespace Prime
 
             return assuranceLevel;
         }
+
     }
 }

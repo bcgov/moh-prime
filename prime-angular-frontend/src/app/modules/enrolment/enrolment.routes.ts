@@ -44,7 +44,7 @@ export class EnrolmentRoutes {
   }
 
   // Enrollee profile routes are ordered from the perspective of an
-  // "initial" enrolment.The order is important for directing the
+  // "initial" enrolment. The order is important for directing the
   // enrollee incrementally through creating their profile
   public static enrolmentProfileRoutes(): string[] {
     return [

@@ -1,0 +1,21 @@
+<div *ngIf="selectFor"
+     class="mb-4">
+
+  <button mat-flat-button
+          color="primary"
+          type="button"
+          [matMenuTriggerFor]="menu">
+    Same as: <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
+
+  <mat-menu #menu>
+    <ng-container *ngFor="let party of parties">
+      <button mat-menu-item
+              type="button"
+              (click)="onSelect(party.data)">
+        <span>{{ party.display }}</span>
+      </button>
+    </ng-container>
+  </mat-menu>
+
+</div>

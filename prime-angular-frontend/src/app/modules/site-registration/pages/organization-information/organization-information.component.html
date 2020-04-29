@@ -1,6 +1,7 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [currentRoute]="SiteRoutes.ORGANIZATION_INFORMATION"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isCompleted"
+                               [currentRoute]="SiteRoutes.ORGANIZATION_INFORMATION"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -22,12 +23,11 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Organization Name (Legal Entity Operating Site)"
-                   formControlName="siteName">
+                   formControlName="name">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
         </div>
-
       </div>
 
     </section>
@@ -48,7 +48,7 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="Doing Business As"
+                   placeholder="Doing Business As (Optional)"
                    formControlName="doingBusinessAs">
             <mat-error>Required</mat-error>
           </mat-form-field>
@@ -60,7 +60,7 @@
 
   </form>
 
-  <app-page-footer [isInitialEnrolment]="true"
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>
