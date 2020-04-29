@@ -36,7 +36,6 @@ namespace Prime.Services
     {
         private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
 
-
         private readonly IRazorConverterService _razorConverterService;
 
         public EmailService(
