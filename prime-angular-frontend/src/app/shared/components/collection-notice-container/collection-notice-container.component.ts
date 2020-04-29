@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 
-export abstract class ICollectionNoticeAlert {
+export abstract class AbstractCollectionNoticeAlert {
   @Input() public isFull: boolean;
   @Output() public accepted: EventEmitter<void>;
 
@@ -18,7 +18,7 @@ export abstract class ICollectionNoticeAlert {
   templateUrl: './collection-notice-container.component.html',
   styleUrls: ['./collection-notice-container.component.scss']
 })
-export class CollectionNoticeContainerComponent extends ICollectionNoticeAlert implements OnInit {
+export class CollectionNoticeContainerComponent extends AbstractCollectionNoticeAlert implements OnInit {
   public title: string;
 
   constructor(

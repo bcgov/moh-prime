@@ -14,11 +14,13 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   @Input() public inProgress: boolean;
   @Input() public message: string;
   public routes: string[];
+  public prefix: string;
 
   public SiteRoutes = SiteRoutes;
 
   constructor() {
     this.routes = SiteRoutes.initialRegistrationRouteOrder();
+    this.prefix = 'Registration';
   }
 
   public ngOnInit() { }

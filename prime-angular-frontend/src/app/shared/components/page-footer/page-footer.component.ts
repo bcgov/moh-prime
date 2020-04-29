@@ -1,18 +1,19 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-
+// TODO footer is too stringent make it more generic and wrap to apply logic
 @Component({
   selector: 'app-page-footer',
   templateUrl: './page-footer.component.html',
   styleUrls: ['./page-footer.component.scss']
 })
 export class PageFooterComponent implements OnInit {
-  @Input() isInitialEnrolment: boolean;
-  @Input() hasSecondaryAction: boolean;
-  @Input() disableSave: boolean;
-  @Output() save: EventEmitter<void>;
-  @Output() continue: EventEmitter<void>;
-  @Output() back: EventEmitter<void>;
+  // TODO update not to use the word enrolment
+  @Input() public isInitialEnrolment: boolean;
+  @Input() public hasSecondaryAction: boolean;
+  @Input() public disableSave: boolean;
+  @Output() public save: EventEmitter<void>;
+  @Output() public continue: EventEmitter<void>;
+  @Output() public back: EventEmitter<void>;
 
   public saveButtonLabel: string;
   public secondaryActionButtonLabel: string;

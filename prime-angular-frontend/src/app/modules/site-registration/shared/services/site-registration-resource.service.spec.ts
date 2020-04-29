@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RegistrantResource } from './registrant-resource.service';
+import { SiteRegistrationResource } from './site-registration-resource.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('RegistrantResourceService', () => {
+describe('SiteRegistrationResource', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       HttpClientTestingModule
@@ -18,7 +18,7 @@ describe('RegistrantResourceService', () => {
   }));
 
   it('should be created', () => {
-    const service: RegistrantResource = TestBed.inject(RegistrantResource);
+    const service: SiteRegistrationResource = TestBed.inject(SiteRegistrationResource);
     expect(service).toBeTruthy();
   });
 });
