@@ -87,7 +87,8 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.HasPharmaNetSuspended, f => f.Random.Bool())
             .RuleFor(e => e.HasPharmaNetSuspendedDetails, f => f.Lorem.Paragraphs(2))
             .RuleFor(e => e.EnrolleeOrganizationTypes, f => EnrolleeOrganizationTypeFaker.Generate(2))
-            .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1));
+            .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
+            .RuleFor(e => e.IdentityAssuranceLevel, f => 3);
 
         public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()
             .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))

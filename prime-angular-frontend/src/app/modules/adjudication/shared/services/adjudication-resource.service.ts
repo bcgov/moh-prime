@@ -190,6 +190,20 @@ export class AdjudicationResource {
       );
   }
 
+  public sendEnrolleeReminderEmail(enrolleeId: number): NoContent {
+    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/reminder`)
+      .pipe(
+        map(() => {
+          this.toastService.openErrorToast('Enrollee reminder has been sent');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee reminder could not be sent');
+          this.logger.error('[Enrolment] EnrolmentResource::sendReminderEmail error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getAdjudicatorNotes(enrolleeId: number): Observable<AdjudicationNote[]> {
     return this.apiResource.get(`enrollees/${enrolleeId}/adjudicator-notes`)
       .pipe(

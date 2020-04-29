@@ -1,32 +1,45 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
-import { ToastService } from '@core/services/toast.service';
-import { Country } from '@shared/enums/country.enum';
-import { Province } from '@shared/enums/province.enum';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { FormUtilsService } from '@common/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
+import { IPage } from '@registration/shared/interfaces/page.interface';
+import { IForm } from '@registration/shared/interfaces/form.interface';
+import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
+import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
+import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
 @Component({
   selector: 'app-site-address',
   templateUrl: './site-address.component.html',
   styleUrls: ['./site-address.component.scss']
 })
-export class SiteAddressComponent implements OnInit {
+export class SiteAddressComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public routeUtils: RouteUtils;
   public formControlNames: string[];
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
-    private toastService: ToastService,
+    private siteRegistrationResource: SiteRegistrationResource,
+    private siteRegistrationService: SiteRegistrationService,
+    private siteRegistrationStateService: SiteRegistrationStateService,
+    private formUtilsService: FormUtilsService,
+    private dialog: MatDialog
   ) {
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+
     this.formControlNames = [
       'street',
       'city',
@@ -36,43 +49,48 @@ export class SiteAddressComponent implements OnInit {
   }
 
   public onSubmit() {
-    // TODO proper submission when backend payload known
-    // if (this.form.valid) { }
-    this.toastService.openSuccessToast('Enrolment information has been saved');
-    this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.ORGANIZATION_AGREEMENT], { relativeTo: this.route.parent });
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteRegistrationStateService.site;
+      this.siteRegistrationResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    }
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.ORGANIZATION_INFORMATION], { relativeTo: this.route.parent });
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_INFORMATION);
+  }
+
+  public nextRoute() {
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
+    }
+  }
+
+  public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
+    return (this.form.dirty)
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      : true;
   }
 
   public ngOnInit() {
     this.createFormInstance();
+    this.initForm();
   }
 
   private createFormInstance() {
-    this.form = this.fb.group({
-      street: [
-        { value: null, disabled: false },
-        [Validators.required]
-      ],
-      city: [
-        { value: null, disabled: false },
-        [Validators.required]
-      ],
-      provinceCode: [
-        { value: Province.BRITISH_COLUMBIA, disabled: true },
-        [Validators.required]
-      ],
-      postal: [
-        { value: null, disabled: false },
-        [Validators.required]
-      ],
-      countryCode: [
-        { value: Country.CANADA, disabled: true },
-        [Validators.required]
-      ],
-    });
+    this.form = this.siteRegistrationStateService.siteAddressForm;
+  }
+
+  private initForm() {
+    const site = this.siteRegistrationService.site;
+    this.isCompleted = site.completed;
+    this.siteRegistrationStateService.setSite(site, true);
   }
 }

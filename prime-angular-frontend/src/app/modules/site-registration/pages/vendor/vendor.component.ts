@@ -1,60 +1,113 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
-import { ToastService } from '@core/services/toast.service';
+import { Subscription, Observable } from 'rxjs';
+
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { FormUtilsService } from '@common/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
+import { IPage } from '@registration/shared/interfaces/page.interface';
+import { IForm } from '@registration/shared/interfaces/form.interface';
+import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
+import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
+import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
 @Component({
   selector: 'app-vendor',
   templateUrl: './vendor.component.html',
   styleUrls: ['./vendor.component.scss']
 })
-export class VendorComponent implements OnInit {
+export class VendorComponent implements OnInit, IPage, IForm {
+  public busy: Subscription;
   public form: FormGroup;
-  public vendorsData = [];
+  public routeUtils: RouteUtils;
+  // TODO supply through config
+  public vendorConfig: { id: number, name: string }[];
+  public isCompleted: boolean;
+  public hasNoVendorError: boolean;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private toastService: ToastService,
-    private formBuilder: FormBuilder
+    private fb: FormBuilder,
+    private siteRegistrationResource: SiteRegistrationResource,
+    private siteRegistrationService: SiteRegistrationService,
+    private siteRegistrationStateService: SiteRegistrationStateService,
+    private formUtilsService: FormUtilsService,
+    private dialog: MatDialog
   ) {
-    this.vendorsData = [
-      { id: 0, name: 'Excelleris' },
-      { id: 1, name: 'iClinic Inc.' },
-      { id: 2, name: 'Medinet' },
-      { id: 3, name: 'Plexia Electronic Medical Systems' },
-      { id: 4, name: 'CareConnect' }
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+
+    // TODO supply through config using lookups
+    this.vendorConfig = [
+      { id: 1, name: 'Care Connect' },
+      { id: 2, name: 'Excelleris' },
+      { id: 3, name: 'iClinic' },
+      { id: 4, name: 'MediNet' },
+      { id: 5, name: 'Plexia' }
     ];
+    // TODO should be a autocomplete instead of radio buttons to scale
+    this.hasNoVendorError = false;
   }
 
-  public onChangeEventFunc(name: string, isChecked: boolean) {
-    const vendors = (this.form.controls.vendors as FormArray);
-
-    if (isChecked) {
-      vendors.push(new FormControl(name));
-    } else {
-      const index = vendors.controls.findIndex(x => x.value === name);
-      vendors.removeAt(index);
-    }
+  public get vendorId(): FormControl {
+    return this.form.get('id') as FormControl;
   }
 
   public onSubmit() {
-    this.toastService.openSuccessToast('Enrolment information has been saved');
-    this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.HOURS_OPERATION], { relativeTo: this.route.parent });
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteRegistrationStateService.site;
+      this.siteRegistrationResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    } else {
+      this.hasNoVendorError = true;
+    }
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.ORGANIZATION_AGREEMENT], { relativeTo: this.route.parent });
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
+  }
+
+  public onChange() {
+    this.hasNoVendorError = false;
+  }
+
+  public nextRoute() {
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+    }
+  }
+
+  public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
+    return (this.form.dirty)
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      : true;
   }
 
   public ngOnInit() {
-    this.form = this.formBuilder.group({
-      vendors: new FormArray([])
-    });
+    this.createFormInstance();
+    this.initForm();
+  }
+
+  private createFormInstance() {
+    this.form = this.siteRegistrationStateService.vendorForm;
+  }
+
+  private initForm() {
+    const site = this.siteRegistrationService.site;
+    this.isCompleted = site.completed;
+    this.siteRegistrationStateService.setSite(site, true);
   }
 }

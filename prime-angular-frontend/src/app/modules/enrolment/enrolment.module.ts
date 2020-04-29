@@ -29,7 +29,11 @@ import { JobFormComponent } from './shared/components/job-form/job-form.componen
 import { EnrolleePageComponent } from './shared/components/enrollee-page/enrollee-page.component';
 import { NextStepsInfographicComponent } from './shared/components/next-steps-infographic/next-steps-infographic.component';
 import { EnrolmentCollectionNoticeComponent } from './shared/components/enrolment-collection-notice/enrolment-collection-notice.component';
-import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
+import {
+  EnrolmentProgressIndicatorComponent
+} from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
+import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
+import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +60,9 @@ import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolme
     EnrolleePageComponent,
     NextStepsInfographicComponent,
     EnrolmentCollectionNoticeComponent,
-    EnrolmentProgressIndicatorComponent
+    EnrolmentProgressIndicatorComponent,
+    AccessDeclinedComponent,
+    NotificationConfirmationComponent
   ],
   imports: [
     SharedModule,

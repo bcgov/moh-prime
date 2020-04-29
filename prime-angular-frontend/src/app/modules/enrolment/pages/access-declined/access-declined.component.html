@@ -1,0 +1,29 @@
+<app-enrollee-page [busy]="busy">
+
+  <app-page-header>PRIME Enrolment</app-page-header>
+
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    message="Enrolment Declined"
+                                    [currentRoute]="EnrolmentRoutes.ACCESS_DECLINED"></app-enrolment-progress-indicator>
+
+  <div class="mb-5">
+    <app-alert type="danger">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Your PRIME enrolment has been declined
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        Your application for PharmaNet access had not been approved.
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <p class="mb-5">
+    If you have questions regarding your application, please contact us.
+  </p>
+
+  <app-prime-phone></app-prime-phone><br>
+  <app-prime-support-email></app-prime-support-email>
+
+</app-enrollee-page>

@@ -1,0 +1,73 @@
+
+
+/// Provides decimal incrementor for lists (ie. 1.1, 1.2, 2.1, etc), which
+/// only affects direct child lists of the same type.
+///
+/// @param {number} $count
+///   Length of the lists parent counter (default: 1)
+///   NOTE: Only needed to allow lists to be separated by markup that doesn't
+///   display the list item unconventionally and splits parent lists, see
+///   example
+///
+/// @example
+/// <h1>ARTICLE 2 – INTERPRETATION</h1> // Unconventional list start
+///
+/// <ol type="1" // Parent counter
+///     start="2" // Optional start for counter
+///     class="decimal">
+///   <li> // NOTE: List style type not displayed
+///     <ol type="1"> // Child counter
+///       <li> // 1.1
+///         <p>...</p>
+///
+///         <ol type="a">
+///           <li> // a.
+///             <p>...</p>
+///           </li>
+///           ...
+///         </ol>
+///       </li>
+///     </ol>
+///   </li>
+/// </ol>
+@mixin list-decimal($count: 1) {
+  ol[type="1"].decimal {
+    // Remove list defaults
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    // Allow [start] attribute to dictate the initial counter value
+    @for $i from 1 through $count {
+      &[start="#{$i}"] {
+        counter-reset: section $i - 1;
+      }
+    }
+
+    & > li,
+    ol[type="1"] > li {
+      // Increment for each in parent and children
+      counter-increment: section;
+
+      // Allow the first element to be a paragraph without line wrapping the
+      // content, and avoid display: inline issues with spacing
+      & > p:first-child {
+        margin-top: -1.5rem;
+      }
+    }
+
+    ol[type="1"] {
+      // Reset decimal counts
+      counter-reset: section;
+      // Remove list defaults
+      list-style-type: none;
+
+      & > li::before {
+        // Only display list counts in children
+        content: counters(section,".") " ";
+        // Re-align with default list counters
+        margin-left: -26px;
+      }
+    }
+  }
+}

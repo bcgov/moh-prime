@@ -33,6 +33,7 @@
 
   <app-enrollee-table *ngIf="busy.closed || dataSource.data.length"
                       [dataSource]="dataSource"
+                      (notify)="onNotify($event)"
                       (claim)="onClaim($event)"
                       (disclaim)="onDisclaim($event)"
                       (route)="onRoute($event)"></app-enrollee-table>
@@ -55,7 +56,9 @@
                                  (lock)="onLock($event)"
                                  (unlock)="onUnlock($event)"
                                  (delete)="onDelete($event)"
-                                 (route)="onRoute($event)"></app-adjudicator-actions>
+                                 (route)="onRoute($event)"
+                                 (declineEnrollee)="onDeclineEnrollee($event)"
+                                 (enableEnrollee)="onEnableEnrollee($event)"></app-adjudicator-actions>
 
       </div>
     </div>

@@ -19,6 +19,8 @@ namespace Prime.Services
 
         Task AcceptCurrentAccessTermAsync(Enrollee enrollee);
 
+        Task ExpireCurrentAccessTermAsync(Enrollee enrollee);
+
         Task<bool> AccessTermExistsOnEnrolleeAsync(int accessTermId, int enrolleeId);
 
         Task<bool> IsCurrentByEnrolleeAsync(Enrollee enrollee);
