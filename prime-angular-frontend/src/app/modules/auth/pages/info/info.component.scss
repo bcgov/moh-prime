@@ -169,6 +169,7 @@ a {
   .steps {
     &.step-1 {
       background-image: url('/assets/step_1.svg');
+      background-position-x: 86%;
     }
     &.step-2 {
       background-image: url('/assets/step_2.svg');
@@ -185,10 +186,6 @@ a {
 
 @include media-breakpoint-only(lg) {
   .steps {
-    &.step-1 {
-      background-position-x: 86%;
-    }
-
     .info-graphic {
       padding-bottom: 3rem;
 
