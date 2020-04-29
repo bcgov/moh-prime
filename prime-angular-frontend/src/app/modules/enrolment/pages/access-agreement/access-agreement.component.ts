@@ -9,6 +9,9 @@ import { EMPTY } from 'rxjs';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
+import { ViewportService } from '@core/services/viewport.service';
+import { AccessTerm } from '@shared/models/access-term.model';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -18,9 +21,6 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { AccessTerm } from '@shared/models/access-term.model';
-import { ViewportService } from '@core/services/viewport.service';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
 
 @Component({
   selector: 'app-access-agreement',
