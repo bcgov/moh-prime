@@ -9,6 +9,7 @@ using Prime.Services.Rules;
 using PrimeTests.Utils;
 using PrimeTests.Mocks;
 using static PrimeTests.Mocks.PharmanetApiServiceMock;
+using PrimeTests.ModelFactories;
 
 namespace PrimeTests.Services
 {
@@ -17,20 +18,8 @@ namespace PrimeTests.Services
         public AutomaticAdjudicationRulesTests() : base(new object[] { new PharmanetApiServiceMock(), new AccessTermServiceMock() })
         { }
 
-        private void QualifyEnrolleeForAuto(Enrollee enrollee)
-        {
-            this.UpdateAddresses(enrollee);
-            this.UpdateCertifications(enrollee);
-            this.UpdateDeviceProvider(enrollee);
-            this.UpdateSelfDeclaration(enrollee);
-        }
-
         private void UpdateCertifications(Enrollee enrollee, int certCount = 0, bool manual = false)
         {
-            if (certCount == 0)
-            {
-                enrollee.Certifications.Clear();
-            }
             if (manual)
             {
                 enrollee.Certifications = TestUtils.ManualCertificationFaker.Generate(certCount);
@@ -67,7 +56,7 @@ namespace PrimeTests.Services
             PHARMANET_SUSPENDED = 4,
             REGISTRATION_SUSPENDED = 8
         }
-        private void UpdateSelfDeclaration(Enrollee enrollee, SelfDeclaration declarations = SelfDeclaration.NONE)
+        private void UpdateSelfDeclaration(Enrollee enrollee, SelfDeclaration declarations)
         {
             enrollee.HasConviction = declarations.HasFlag(SelfDeclaration.CONVICTION);
             enrollee.HasDisciplinaryAction = declarations.HasFlag(SelfDeclaration.DISCIPLINARY);
@@ -75,16 +64,19 @@ namespace PrimeTests.Services
             enrollee.HasRegistrationSuspended = declarations.HasFlag(SelfDeclaration.REGISTRATION_SUSPENDED);
         }
 
-        private void UpdateAddresses(Enrollee enrollee, bool inBC = true)
+        private void UpdateAddresses(Enrollee enrollee, bool physInBc, bool? mailInBc)
         {
-            // update all addresses to 'BC', or a random province outside BC
-            if (enrollee.PhysicalAddress != null)
+            string withRulesFor(bool inBc) => inBc ? null : "default,notBC";
+
+            enrollee.PhysicalAddress = new PhysicalAddressFactory().Generate(withRulesFor(physInBc));
+
+            if (mailInBc.HasValue)
             {
-                enrollee.PhysicalAddress.ProvinceCode = inBC ? Province.BRITISH_COLUMBIA_CODE : TestUtils.RandomProvinceCode(Province.BRITISH_COLUMBIA_CODE);
+                enrollee.MailingAddress = new MailingAddressFactory().Generate(withRulesFor(mailInBc.Value));
             }
-            if (enrollee.MailingAddress != null)
+            else
             {
-                enrollee.MailingAddress.ProvinceCode = inBC ? Province.BRITISH_COLUMBIA_CODE : TestUtils.RandomProvinceCode(Province.BRITISH_COLUMBIA_CODE);
+                enrollee.MailingAddress = null;
             }
         }
 
@@ -104,8 +96,8 @@ namespace PrimeTests.Services
         [Fact]
         public async void testQualifiesForAutomaticAdjudication_NoCerts()
         {
-            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            QualifyEnrolleeForAuto(enrollee);
+            Enrollee enrollee = new EnrolleeFactory().Generate();
+            enrollee.Certifications = new List<Certification>();
 
             Assert.True(await _service.QualifiesForAutomaticAdjudicationAsync(enrollee));
             AssertReasons(enrollee.CurrentStatus?.EnrolmentStatusReasons);
@@ -120,7 +112,7 @@ namespace PrimeTests.Services
         [InlineData((SelfDeclaration.CONVICTION | SelfDeclaration.DISCIPLINARY | SelfDeclaration.PHARMANET_SUSPENDED | SelfDeclaration.REGISTRATION_SUSPENDED), false)]
         public async void testSelfDeclarationRule(SelfDeclaration declaration, bool expected)
         {
-            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateSelfDeclaration(enrollee, declaration);
             var rule = new SelfDeclarationRule();
 
@@ -135,26 +127,35 @@ namespace PrimeTests.Services
             }
         }
 
-        [Fact]
-        public async void testAddressRule()
+        [Theory]
+        [InlineData(true, null, true)]
+        [InlineData(false, null, false)]
+        [InlineData(true, true, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, false)]
+        public async void testAddressRule(bool physInBc, bool? mailInBc, bool expected)
         {
-            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            Enrollee enrollee = new EnrolleeFactory().Generate();
+            UpdateAddresses(enrollee, physInBc, mailInBc);
             var rule = new AddressRule();
 
-            UpdateAddresses(enrollee);
-            Assert.True(await rule.ProcessRule(enrollee));
-            AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons);
-
-            UpdateAddresses(enrollee, false);
-            Assert.False(await rule.ProcessRule(enrollee));
-            AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.Address);
+            Assert.Equal(expected, await rule.ProcessRule(enrollee));
+            if (expected)
+            {
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons);
+            }
+            else
+            {
+                AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, StatusReasonType.Address);
+            }
         }
 
         [Theory]
         [MemberData(nameof(CertificationRuleData))]
         public async void testCertificationRule(OperationMode[] apiModes, bool expected, StatusReasonType[] expectedReasons)
         {
-            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateCertifications(enrollee, apiModes.Length);
             var rule = new PharmanetValidationRule(new PharmanetApiServiceMock(enrollee, apiModes));
 
@@ -246,7 +247,7 @@ namespace PrimeTests.Services
         [InlineData(true, true, false)]
         public async void testPumpProviderRule(bool isProvider, bool isPumpProvider, bool expected)
         {
-            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateDeviceProvider(enrollee, isProvider, isPumpProvider);
 
             var rule = new DeviceProviderRule();
@@ -269,7 +270,7 @@ namespace PrimeTests.Services
         // [InlineData(1, true, false)]
         public async void testLicenceClassRule(int licenseCount, bool isManual, bool expected)
         {
-            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateCertifications(enrollee, licenseCount, isManual);
 
             var rule = new LicenceClassRule();

@@ -1,3 +1,4 @@
+using System.Linq;
 using Bogus;
 using Prime.Models;
 
@@ -23,6 +24,15 @@ namespace PrimeTests.ModelFactories
 
             Ignore(x => x.License);
             Ignore(x => x.Practice);
+
+            RuleSet("licence.manual", (set) =>
+            {
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.Manual)).Code);
+            });
+            RuleSet("licence.auto", (set) =>
+            {
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.Manual)).Code);
+            });
 
             FinishWith((f, x) =>
             {
