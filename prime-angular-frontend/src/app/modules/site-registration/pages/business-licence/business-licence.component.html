@@ -1,0 +1,38 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"
+                               [currentRoute]="SiteRoutes.BUSINESS_LICENCE"></app-site-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Submit a copy of the Business Licence</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Scan and upload your physical licence or use OrgBook BC to look up and attach your Business Licence.
+      </ng-container>
+    </app-page-subheader>
+
+    <!-- <div class="row"> -->
+    <!-- <div class="col"> -->
+
+    <file-pond #myPond
+               [options]="pondOptions"
+               [files]="pondFiles"
+               (oninit)="pondHandleInit()"
+               (onaddfile)="pondHandleAddFile($event)">
+    </file-pond>
+
+    <!-- </div> -->
+    <!-- </div> -->
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

@@ -23,6 +23,13 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
+// import filepond module
+import { FilePondModule, registerPlugin } from 'ngx-filepond';
+
+// import and register filepond file type validation plugin
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+registerPlugin(FilePondPluginFileValidateType);
 
 @NgModule({
   declarations: [
@@ -43,11 +50,13 @@ import { OrganizationAgreementComponent } from './pages/organization-agreement/o
     SiteCollectionNoticeComponent,
     SiteAddressComponent,
     OrganizationAgreementComponent,
-    SameAsComponent
+    SameAsComponent,
+    BusinessLicenceComponent
   ],
   imports: [
     SharedModule,
-    SiteRegistrationRoutingModule
+    SiteRegistrationRoutingModule,
+    FilePondModule
   ]
 })
 export class SiteRegistrationModule { }

@@ -4,6 +4,7 @@ export class SiteRoutes {
   public static COLLECTION_NOTICE = 'collection-notice';
   public static MULTIPLE_SITES = 'multiple-sites';
   public static ORGANIZATION_INFORMATION = 'organization-information';
+  public static BUSINESS_LICENCE = 'business-licence';
   public static SITE_ADDRESS = 'site-address';
   public static ORGANIZATION_AGREEMENT = 'access-agreement';
   public static VENDOR = 'vendor';
@@ -50,6 +51,7 @@ export class SiteRoutes {
     return [
       SiteRoutes.MULTIPLE_SITES,
       SiteRoutes.ORGANIZATION_INFORMATION,
+      SiteRoutes.BUSINESS_LICENCE,
       SiteRoutes.SITE_ADDRESS,
       SiteRoutes.ORGANIZATION_AGREEMENT,
     ];
