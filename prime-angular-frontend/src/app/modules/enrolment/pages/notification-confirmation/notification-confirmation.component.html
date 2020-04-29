@@ -1,0 +1,50 @@
+<app-enrollee-page [busy]="busy">
+  <app-page-header>Notification Confirmation</app-page-header>
+  <app-enrolment-progress-indicator></app-enrolment-progress-indicator>
+
+  <div class="mb-4">
+    <app-alert type="info"
+               icon="schedule">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Notification Submitted
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        Your PharmaNet administrator(s) have been notified of your approval.
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+  </app-page-subheader>
+
+  <p>
+    You can return to PRIME at anytime to update your information, review your Terms of Access and renew your enrolment.
+  </p>
+
+  <p class="font-weight-bold">
+    Your PRIME help reference number is:
+  </p>
+
+  <p class="font-weight-bold">
+    1022 - 814317
+  </p>
+
+  <p class="mb-4">
+    Questions about your enrolment should be directed to:
+  </p>
+
+  <app-prime-phone></app-prime-phone><br />
+  <app-prime-support-email></app-prime-support-email>
+
+</app-enrollee-page>
+
+<button class="feedback"
+        mat-raised-button
+        color="primary"
+        (click)="feedback()">
+  <mat-icon class="mr-2">message</mat-icon>
+  Feedback
+</button>

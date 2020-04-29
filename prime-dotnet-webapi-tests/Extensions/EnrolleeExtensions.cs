@@ -12,7 +12,9 @@ namespace PrimeTests
         public static EnrolleeProfileViewModel ToViewModel(this Enrollee enrollee)
         {
             var serialized = JsonConvert.SerializeObject(enrollee);
-            return JsonConvert.DeserializeObject<EnrolleeProfileViewModel>(serialized);
+            EnrolleeProfileViewModel profile = JsonConvert.DeserializeObject<EnrolleeProfileViewModel>(serialized);
+            profile.IdentityAssuranceLevel = enrollee.IdentityAssuranceLevel;
+            return profile;
         }
     }
 }

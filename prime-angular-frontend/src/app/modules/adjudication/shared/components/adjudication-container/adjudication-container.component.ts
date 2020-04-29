@@ -75,6 +75,12 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
     this.getDataset(this.route.snapshot.queryParams);
   }
 
+  public onNotify(enrolleeId: number) {
+    this.adjudicationResource
+      .sendEnrolleeReminderEmail(enrolleeId)
+      .subscribe();
+  }
+
   public onClaim(enrolleeId: number) {
     this.adjudicationResource
       .setEnrolleeAdjudicator(enrolleeId)

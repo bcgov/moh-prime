@@ -13,6 +13,8 @@ namespace Prime.Models
 
         public string Name { get; set; }
 
+        public string Email { get; set; }
+
         [JsonIgnore]
         public IEnumerable<Site> Sites { get; set; }
 

@@ -11,7 +11,7 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        public int EnrolleeId { get; set; }
+        public int? EnrolleeId { get; set; }
 
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
@@ -26,6 +26,16 @@ namespace Prime.Models
 
         [JsonIgnore]
         public Admin Admin { get; set; }
+
+        public int? PartyId { get; set; }
+
+        [JsonIgnore]
+        public Party Party { get; set; }
+
+        public int? SiteId { get; set; }
+
+        [JsonIgnore]
+        public Site Site { get; set; }
 
         public int BusinessEventTypeCode { get; set; }
 

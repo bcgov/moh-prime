@@ -108,21 +108,18 @@ namespace Prime.Services
             return items;
         }
 
-        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, Boolean excludeDecline = false)
+        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
             Enrollee enrollee = await this.GetBaseEnrolleeQuery()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
 
-            if (enrollee != null)
+            if (enrollee == null
+                || (excludeDecline && enrollee.CurrentStatus.IsType(StatusType.Declined)))
             {
-                enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
-
-                if (excludeDecline && enrollee.CurrentStatus.IsType(StatusType.Declined))
-                {
-                    return null;
-                }
+                return null;
             }
 
+            enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             return enrollee;
         }
 

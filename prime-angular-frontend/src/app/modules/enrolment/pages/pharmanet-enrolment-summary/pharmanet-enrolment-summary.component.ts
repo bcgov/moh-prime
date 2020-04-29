@@ -17,6 +17,7 @@ import { FormControlValidators } from '@shared/validators/form-control.validator
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
@@ -67,20 +68,25 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       : null;
   }
 
-  public get careconnectRecipients(): FormControl {
-    return this.form.get('careconnectRecipients') as FormControl;
-  }
+  // TODO temporary removed and may be removed permanently
+  // public get careconnectRecipients(): FormControl {
+  //   return this.form.get('careconnectRecipients') as FormControl;
+  // }
 
-  public get excellerisRecipients(): FormControl {
-    return this.form.get('excellerisRecipients') as FormControl;
-  }
+  // public get excellerisRecipients(): FormControl {
+  //   return this.form.get('excellerisRecipients') as FormControl;
+  // }
 
-  public get plexiaRecipients(): FormControl {
-    return this.form.get('plexiaRecipients') as FormControl;
-  }
+  // public get plexiaRecipients(): FormControl {
+  //   return this.form.get('plexiaRecipients') as FormControl;
+  // }
 
-  public get otherRecipients(): FormControl {
-    return this.form.get('otherRecipients') as FormControl;
+  // public get otherRecipients(): FormControl {
+  //   return this.form.get('otherRecipients') as FormControl;
+  // }
+
+  public get administratorRecipients(): FormControl {
+    return this.form.get('administratorRecipients') as FormControl;
   }
 
   public getTokenUrl(tokenId: string): string {
@@ -104,7 +110,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       message: `Are you sure you want to send your PharmaNet certificate to ${provisionerName}?`,
       actionText: 'Send',
     };
-    this.dialog.open(ConfirmDialogComponent, { data })
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
@@ -119,6 +125,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
           if (formControl) {
             formControl.reset();
           }
+          this.router.navigate([EnrolmentRoutes.NOTIFICATION_CONFIRMATION], { relativeTo: this.route.parent });
         },
         (error: any) => {
           this.logger.error('[Enrolment] Error occurred sending email', error);
@@ -140,10 +147,12 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   private buildVendorEmailGroup(): FormGroup {
     return this.fb.group({
-      careconnectRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      excellerisRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      plexiaRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
-      otherRecipients: [null, [Validators.required, FormControlValidators.email]]
+      // TODO temporary removed and may be removed permanently
+      // careconnectRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      // excellerisRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      // plexiaRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      // otherRecipients: [null, [Validators.required, FormControlValidators.email]],
+      administratorRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]]
     });
   }
 }
