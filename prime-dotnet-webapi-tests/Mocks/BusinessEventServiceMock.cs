@@ -81,5 +81,17 @@ namespace PrimeTests.Mocks
             return Task.FromResult(businessEvent);
         }
 
+        public Task<BusinessEvent> CreateSiteEventAsync(int siteId, int partyId, string description)
+        {
+            var businessEvent = new BusinessEvent
+            {
+                SiteId = siteId,
+                PartyId = partyId,
+                BusinessEventTypeCode = BusinessEventType.SITE_CODE,
+                Description = description,
+                EventDate = DateTime.Now
+            };
+            return Task.FromResult(businessEvent);
+        }
     }
 }

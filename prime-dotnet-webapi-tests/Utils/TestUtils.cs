@@ -16,7 +16,6 @@ using System.Security.Claims;
 using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json.Linq;
-using Prime.Auth;
 
 namespace PrimeTests.Utils
 {
