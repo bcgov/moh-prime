@@ -127,7 +127,7 @@ namespace Prime.Controllers
             if (provisionerName == "iClinic" || provisionerName == "MediNet" || provisionerName == "Other")
             {
                 var provisionerEmail = (provisionerName != "Other")
-                    ? _certificateService.GetPharmaNetProvisionerEmail(provisionerName)
+                    ? await _emailService.GetPharmaNetProvisionerEmail(provisionerName)
                     : emails[0];
 
                 emails = new[] { provisionerEmail };

@@ -9,6 +9,11 @@ namespace PrimeTests.Mocks
         public EmailServiceMock() : base()
         { }
 
+        public Task<string> GetPharmaNetProvisionerEmail(string pharmaNetVendor)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void SeedData()
         {
             // no data to seed, as it is done in the base class

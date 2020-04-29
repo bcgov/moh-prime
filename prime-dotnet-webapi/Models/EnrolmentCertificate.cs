@@ -9,6 +9,9 @@ namespace Prime.Models
     [NotMapped]
     public sealed class EnrolmentCertificate
     {
+        public static int MaxViews { get => 3; }
+        public static TimeSpan Lifespan { get => TimeSpan.FromDays(7); }
+
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }

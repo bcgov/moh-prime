@@ -8,5 +8,7 @@ namespace Prime.Services
         Task SendReminderEmailAsync(Enrollee enrollee);
 
         Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null);
+
+        Task<string> GetPharmaNetProvisionerEmail(string pharmaNetVendor);
     }
 }
