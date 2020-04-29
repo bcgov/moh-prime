@@ -10,7 +10,11 @@ namespace PrimeTests.ModelFactories
 
     public class AdjudicatorNoteFactory : NoteFactory<AdjudicatorNote>
     {
-        public AdjudicatorNoteFactory(Enrollee owner) : base(owner) { }
+        public AdjudicatorNoteFactory(Enrollee owner) : base(owner)
+        {
+            Ignore(x => x.Adjudicator);
+            Ignore(x => x.AdjudicatorId);
+        }
     }
 
     public abstract class NoteFactory<T> : Faker<T> where T : BaseAuditable, IEnrolleeNote

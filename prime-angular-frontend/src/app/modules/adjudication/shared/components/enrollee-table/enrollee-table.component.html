@@ -129,6 +129,11 @@
         <mat-divider></mat-divider>
 
         <button mat-menu-item
+                (click)="onNotify(row.id)">
+          <mat-icon>email</mat-icon>
+          <span>Send Reminder</span>
+        </button>
+        <button mat-menu-item
                 *ngIf="!row?.adjudicatorId"
                 [disabled]="!canEdit"
                 (click)="onClaim(row.id)">

@@ -85,5 +85,10 @@ namespace PrimeTests.Mocks
         {
             return Task.FromResult(true);
         }
+
+        public Task ExpireCurrentAccessTermAsync(Enrollee enrollee)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

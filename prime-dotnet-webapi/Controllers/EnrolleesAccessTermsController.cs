@@ -99,7 +99,7 @@ namespace Prime.Controllers
             }
 
             AccessTerm accessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
-            accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/AccessTerm/TermsOfAccess.cshtml", accessTerm);
+            accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", accessTerm);
 
             return Ok(ApiResponse.Result(accessTerm));
         }
@@ -133,7 +133,7 @@ namespace Prime.Controllers
             AccessTerm accessTerm = (signed)
                 ? await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId)
                 : await _accessTermService.GetMostRecentNotAcceptedEnrolleesAccessTermAsync(enrolleeId);
-            accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/AccessTerm/TermsOfAccess.cshtml", accessTerm);
+            accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", accessTerm);
 
             return Ok(ApiResponse.Result(accessTerm));
         }

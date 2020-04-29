@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 export interface IProgressIndicator {
   currentRoute: string;
@@ -16,12 +15,14 @@ export class ProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public currentRoute: string;
   @Input() public inProgress: boolean;
   @Input() public routes: string[];
+  @Input() public prefix: string;
   @Input() public message: string;
 
   public percentComplete: number;
 
   constructor() {
     this.routes = [];
+    this.prefix = '';
   }
 
   public ngOnInit() {

@@ -1,14 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { OrganizationAgreementComponent } from './organization-agreement.component';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
 
-describe('AccessAgreementComponent', () => {
+describe('OrganizationAgreementComponent', () => {
   let component: OrganizationAgreementComponent;
   let fixture: ComponentFixture<OrganizationAgreementComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [OrganizationAgreementComponent]
+      imports: [
+        RouterTestingModule,
+        SiteRegistrationModule
+      ]
     })
       .compileComponents();
   }));
