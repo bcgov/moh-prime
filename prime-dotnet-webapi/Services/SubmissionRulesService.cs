@@ -39,7 +39,8 @@ namespace Prime.Services
                 // TODO removed until after Community Practice
                 // new DeviceProviderRule(),
                 new LicenceClassRule(),
-                new AlwaysManualRule()
+                new AlwaysManualRule(),
+                new IdentityAssuranceLevelRule()
             };
 
             return await ProcessRules(rules, enrollee);

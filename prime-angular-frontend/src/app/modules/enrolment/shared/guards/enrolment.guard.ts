@@ -64,9 +64,9 @@ export class EnrolmentGuard extends BaseGuard {
     return this.enrolmentResource.enrollee()
       .pipe(
         exhaustMap((enrolment: Enrolment) =>
-          (!enrolment)
-            ? createEnrollee$
-            : of([enrolment, false])
+          (enrolment)
+            ? of([enrolment, false])
+            : createEnrollee$
         ),
         map(([enrolment, isNewEnrolment]: [Enrolment, boolean]) => {
           // Store the enrolment for access throughout enrolment, which
@@ -93,10 +93,12 @@ export class EnrolmentGuard extends BaseGuard {
     if (routePath.includes(EnrolmentRoutes.COLLECTION_NOTICE)) {
       return true;
     } else if (isNewEnrolment) {
+      // TODO needs to be refactored, why would a new enrolment go to OVERVIEW?
       this.navigate(routePath, EnrolmentRoutes.OVERVIEW);
     }
 
     // Otherwise, routes are directed based on enrolment status
+    //  TODO should never happen and should redirect to an error if it does
     if (!enrolment) {
       return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
     } else if (enrolment) {
@@ -109,6 +111,8 @@ export class EnrolmentGuard extends BaseGuard {
           return this.manageRequiresToaRouting(routePath, enrolment);
         case EnrolmentStatus.LOCKED:
           return this.navigate(routePath, EnrolmentRoutes.ACCESS_LOCKED);
+        case EnrolmentStatus.DECLINED:
+          return this.navigate(routePath, EnrolmentRoutes.ACCESS_DECLINED);
       }
     }
 
@@ -155,7 +159,7 @@ export class EnrolmentGuard extends BaseGuard {
 
   private manageRouting(routePath: string, defaultRoute: string, enrolment: Enrolment): boolean {
     const route = this.route(routePath);
-    // Allow access to an extend set of routes if the enrollee
+    // Allow access to an extended set of routes if the enrollee
     // has accepted at least one TOA
     const whiteListedRoutes = (!!enrolment.expiryDate)
       ? [

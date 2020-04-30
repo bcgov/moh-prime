@@ -7,6 +7,12 @@
            'col-md-10': mode === 'full'
          }">
 
+      <!--
+        NOTE: used to elevate generic content using ngProjectAs:
+        <ng-container ngProjectAs="top">...</ng-container>
+      -->
+      <ng-content select="top"></ng-content>
+
       <ng-content select="app-page-header"></ng-content>
 
       <ng-content select="app-progress-indicator"></ng-content>

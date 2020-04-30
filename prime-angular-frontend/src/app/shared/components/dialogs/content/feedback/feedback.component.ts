@@ -16,8 +16,8 @@ export class Feedback {
 })
 export class FeedbackComponent implements OnInit {
   public form: FormGroup;
-  @Output() output = new EventEmitter<Feedback>();
   public feedback: Feedback;
+  @Output() output = new EventEmitter<Feedback>();
 
   constructor(
     private fb: FormBuilder,
@@ -29,33 +29,36 @@ export class FeedbackComponent implements OnInit {
 
   public onSatisfiedChange(satisfied: boolean): void {
     this.feedback.satisfied = satisfied;
+    this.updateDialogContentOutput(this.feedback);
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.createFormInstance();
     this.initForm();
   }
 
-  protected createFormInstance() {
+  private createFormInstance() {
     this.form = this.fb.group({
       comment: [
-        {
-          value: '',
-          disabled: false,
-        },
+        '',
         []
       ]
     });
   }
 
-  protected initForm() {
+  private initForm() {
     this.feedback = new Feedback();
+    this.updateDialogContentOutput(this.feedback);
 
-    this.comment.valueChanges.pipe(
-      debounceTime(250)
-    ).subscribe((comment: string) => this.feedback.comment = comment);
-
-    this.output.emit(this.feedback);
+    this.comment.valueChanges
+      .pipe(debounceTime(250))
+      .subscribe((comment: string) => {
+        this.feedback.comment = comment;
+        this.updateDialogContentOutput(this.feedback);
+      });
   }
 
+  private updateDialogContentOutput(feedback: Feedback) {
+    this.output.emit(feedback);
+  }
 }

@@ -19,13 +19,6 @@
             *matCellDef="let row;"> {{ row.lastName }}, {{ row.firstName }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="approvedDate">
-        <th mat-header-cell
-            *matHeaderCellDef> Approval Date </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.approvedDate | formatDate | default }} </td>
-      </ng-container>
-
       <ng-container matColumnDef="appliedDate">
         <th mat-header-cell
             *matHeaderCellDef> Submission Date </th>
@@ -135,6 +128,11 @@
 
         <mat-divider></mat-divider>
 
+        <button mat-menu-item
+                (click)="onNotify(row.id)">
+          <mat-icon>email</mat-icon>
+          <span>Send Reminder</span>
+        </button>
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorId"
                 [disabled]="!canEdit"

@@ -17,6 +17,11 @@ namespace Prime.Services
         public int ExpiryDays { get => EnrolmentCertificateService.EXPIRY_DAYS; }
         public string ProvisionerName { get; set; }
 
+        public EmailParams()
+        {
+
+        }
+
         public EmailParams(EnrolmentCertificateAccessToken token, string provisionerName = null)
         {
             FirstName = token.Enrollee.FirstName;
@@ -67,8 +72,7 @@ namespace Prime.Services
             }
 
             string subject = "PRIME Requires your Attention";
-            string body = $"Your PRIME application status has changed since you last viewed it. Please click <a href=\"{PrimeConstants.FRONTEND_URL}\">here</a> to log into PRIME and view your status.";
-
+            string body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/ReminderEmail.cshtml", new EmailParams());
             await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
         }
 

@@ -6,6 +6,7 @@ import { IDialogContent } from '../dialog-content.model';
 import { DialogOptions } from '../dialog-options.model';
 import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 import { DialogContentDirective } from '../dialog-content.directive';
+import { DialogContentOutput } from '../dialog-output.model';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -15,7 +16,7 @@ import { DialogContentDirective } from '../dialog-content.directive';
 })
 export class ConfirmDialogComponent implements OnInit {
   public options: DialogOptions;
-  public dialogContentOutput: any;
+  public dialogContentOutput: DialogContentOutput<any>;
 
   @ViewChild(DialogContentDirective, { static: true }) public dialogContentHost: DialogContentDirective;
 

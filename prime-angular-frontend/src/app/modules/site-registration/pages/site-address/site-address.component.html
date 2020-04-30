@@ -1,6 +1,7 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [currentRoute]="SiteRoutes.SITE_ADDRESS"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isCompleted"
+                               [currentRoute]="SiteRoutes.SITE_ADDRESS"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -22,7 +23,7 @@
 
   </form>
 
-  <app-page-footer [isInitialEnrolment]="true"
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>

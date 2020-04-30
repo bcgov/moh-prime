@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { RouterEvent } from '@angular/router';
 
 import { LoggerService } from '@core/services/logger.service';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
-import { Enrolment } from '@shared/models/enrolment.model';
-import { Job } from '../models/job.model';
-import { Organization } from '../models/organization.model';
-import { CollegeCertification } from '../models/college-certification.model';
 import { RouteStateService } from '@core/services/route-state.service';
-import { RouterEvent } from '@angular/router';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { FormControlValidators } from '@shared/validators/form-control.validators';
+
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { Job } from '@enrolment/shared/models/job.model';
+import { Organization } from '@enrolment/shared/models/organization.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 // TODO refactor into enrolment service and enrolment form service
 @Injectable({

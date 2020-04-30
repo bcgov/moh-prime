@@ -1,19 +1,15 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
-
-import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { AuthService } from '@auth/shared/services/auth.service';
-
-import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SiteRegistrationGuard extends BaseGuard {
-
+export class RegistrantGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
     protected logger: LoggerService,
@@ -25,20 +21,24 @@ export class SiteRegistrationGuard extends BaseGuard {
 
   /**
    * @description
-   * Check an enrollee enrolment status, and attempt to redirect
-   * to an appropriate destination based on its existence or
-   * status.
+   * Check the user is authenticated, otherwise redirect
+   * them to an appropriate destination.
    */
   protected canAccess(authenticated: boolean, routePath: string): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
-      const currentBaseRoute = this.router.url.slice(1).split('/')[0];
-      const currentRoute = this.router.url.slice(1).split('/')[1];
+      let destinationRoute = this.config.routes.denied;
 
-      if (this.authService.isRegistrant()) {
+      if (!authenticated) {
+        destinationRoute = this.config.routes.auth;
+      } else if (this.authService.isRegistrant()) {
+        // Allow route to resolve
         return resolve(true);
-      } else if (this.authService.isEnrollee()) {
-        this.router.navigate([this.config.routes.enrolment]);
+      } else if (this.authService.hasEnrollee()) {
+        destinationRoute = this.config.routes.enrolment;
       }
+
+      // Otherwise, redirect to an appropriate destination
+      this.router.navigate([destinationRoute]);
       return reject(false);
     });
   }

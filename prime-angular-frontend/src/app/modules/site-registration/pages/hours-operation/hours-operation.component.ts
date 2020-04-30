@@ -1,64 +1,101 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
-import { ToastService } from '@core/services/toast.service';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { FormUtilsService } from '@common/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
+import { IPage } from '@registration/shared/interfaces/page.interface';
+import { IForm } from '@registration/shared/interfaces/form.interface';
+import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
+import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
+import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
 @Component({
   selector: 'app-hours-operation',
   templateUrl: './hours-operation.component.html',
   styleUrls: ['./hours-operation.component.scss']
 })
-export class HoursOperationComponent implements OnInit {
+export class HoursOperationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public routeUtils: RouteUtils;
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private toastService: ToastService,
-    private formBuilder: FormBuilder
-  ) { }
-
-  public get weekends(): FormControl {
-    return this.form.get('weekends') as FormControl;
+    private fb: FormBuilder,
+    private siteRegistrationResource: SiteRegistrationResource,
+    private siteRegistrationService: SiteRegistrationService,
+    private siteRegistrationStateService: SiteRegistrationStateService,
+    private formUtilsService: FormUtilsService,
+    private dialog: MatDialog
+  ) {
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public get allDay(): FormControl {
-    return this.form.get('allDay') as FormControl;
+  public get hoursWeekend(): FormControl {
+    return this.form.get('hoursWeekend') as FormControl;
   }
 
-  public get specialHours(): FormControl {
-    return this.form.get('specialHours') as FormControl;
+  public get hours24(): FormControl {
+    return this.form.get('hours24') as FormControl;
+  }
+
+  public get hoursSpecial(): FormControl {
+    return this.form.get('hoursSpecial') as FormControl;
   }
 
   public onSubmit() {
-    // TODO proper submission when backend payload known
-    // if (this.form.valid) { }
-    this.toastService.openSuccessToast('Enrolment information has been saved');
-    this.form.markAsPristine();
-    this.router.navigate([SiteRoutes.SIGNING_AUTHORITY], { relativeTo: this.route.parent });
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteRegistrationStateService.site;
+      this.siteRegistrationResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    }
   }
 
   public onBack() {
-    this.router.navigate([SiteRoutes.VENDORS], { relativeTo: this.route.parent });
+    this.routeUtils.routeRelativeTo(SiteRoutes.VENDOR);
+  }
+
+  public nextRoute() {
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SIGNING_AUTHORITY);
+    }
+  }
+
+  public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
+    return (this.form.dirty)
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      : true;
   }
 
   public ngOnInit() {
     this.createFormInstance();
+    this.initForm();
   }
 
   private createFormInstance() {
-    // TODO proper naming when backend payload known
-    this.form = this.formBuilder.group({
-      weekends: [null, []],
-      allDay: [null, []],
-      specialHours: [null, []]
-    });
+    this.form = this.siteRegistrationStateService.hoursOperationForm;
+  }
+
+  private initForm() {
+    const site = this.siteRegistrationService.site;
+    this.isCompleted = site.completed;
+    this.siteRegistrationStateService.setSite(site, true);
   }
 }
