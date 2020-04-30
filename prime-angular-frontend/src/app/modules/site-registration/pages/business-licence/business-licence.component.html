@@ -15,18 +15,12 @@
       </ng-container>
     </app-page-subheader>
 
-    <!-- <div class="row"> -->
-    <!-- <div class="col"> -->
-
     <file-pond #myPond
                [options]="pondOptions"
                [files]="pondFiles"
                (oninit)="pondHandleInit()"
                (onaddfile)="pondHandleAddFile($event)">
     </file-pond>
-
-    <!-- </div> -->
-    <!-- </div> -->
 
   </form>
 

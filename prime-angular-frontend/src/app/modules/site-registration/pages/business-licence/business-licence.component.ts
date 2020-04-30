@@ -13,6 +13,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import tus from 'tus-js-client';
 import { FilePond } from 'filepond';
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
+import { ToastService } from '@core/services/toast.service';
 
 @Component({
   selector: 'app-business-licence',
@@ -47,7 +48,8 @@ export class BusinessLicenceComponent implements OnInit {
     private siteRegistrationService: SiteRegistrationService,
     private siteRegistrationStateService: SiteRegistrationStateService,
     private formUtilsService: FormUtilsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private toastService: ToastService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
@@ -65,41 +67,26 @@ export class BusinessLicenceComponent implements OnInit {
   }
 
   public pondHandleAddFile(event: any) {
-    console.log('A file was added', event);
-    console.log('What si this event type', typeof (event));
-
     // Get the selected file from the input element
-    const file = event;
-
-    // const file = this.myPond.getFile();
-    const filename = file.filename;
-    const filetype = file.fileType;
-
-
-    console.log('THE FILE: ', file);
-
-    console.log('IS THIS A FILE', file instanceof File);
-
-    console.log('What si this', typeof (file));
-
+    const file = event.file.file;
 
     // Create a new tus upload
     const upload = new tus.Upload(file, {
-      endpoint: 'http://localhost:1080/files/',
+      endpoint: '/upload',
       retryDelays: [0, 3000, 5000, 10000, 20000],
       metadata: {
-        filename,
-        filetype
+        filename: file.name,
+        filetype: file.type
       },
       onError: async (error: Error) => {
-        console.log('Failed because: ' + error);
+        this.toastService.openErrorToast(error.message);
       },
-      onProgress: async (bytesUploaded, bytesTotal) => {
-        const percentage = (bytesUploaded / bytesTotal * 100).toFixed(2);
-        console.log(bytesUploaded, bytesTotal, percentage + '%');
+      onProgress: async (bytesUploaded: number, bytesTotal: number) => {
+        this.uploadProgress = (bytesUploaded / bytesTotal * 100);
       },
       onSuccess: async () => {
-        console.log('Download %s from %s', upload.file.name, upload.url);
+        this.uploadProgress = 100;
+        this.toastService.openSuccessToast('Upload Successful');
       }
     });
 
