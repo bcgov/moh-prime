@@ -102,12 +102,19 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody);
         }
 
-        public async Task<string> GetPharmaNetProvisionerEmail(string provisionerName)
+        public async Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName)
         {
             var vendor = await _context.Vendors
                 .SingleOrDefaultAsync(v => v.Name == provisionerName);
 
             return vendor?.Email;
+        }
+
+        public async Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync()
+        {
+            return await _context.Vendors
+                .Select(v => v.Name)
+                .ToListAsync();
         }
 
         private async Task Send(string from, string to, string subject, string body)

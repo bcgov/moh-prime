@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Prime.Models;
 using Prime.Services;
@@ -8,11 +9,6 @@ namespace PrimeTests.Mocks
     {
         public EmailServiceMock() : base()
         { }
-
-        public Task<string> GetPharmaNetProvisionerEmail(string pharmaNetVendor)
-        {
-            throw new System.NotImplementedException();
-        }
 
         public override void SeedData()
         {
@@ -25,6 +21,16 @@ namespace PrimeTests.Mocks
         }
 
         public Task SendReminderEmailAsync(Enrollee enrollee)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<string> GetPharmaNetProvisionerEmailAsync(string pharmaNetVendor)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync()
         {
             throw new System.NotImplementedException();
         }
