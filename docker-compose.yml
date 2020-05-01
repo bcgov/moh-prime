@@ -44,7 +44,7 @@ services:
       ASPNETCORE_URLS: "http://+:8080"
       DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
     ports:
-      - "5000:8080"
+      - "6000:8080"
       - "5001:5001"
     networks:
       - primenet
@@ -86,7 +86,7 @@ services:
     image: openjdk:jre-alpine
     ports:
       - "8069:8069"
-      - "80:8069"
+    # - "80:8069"
     depends_on:
       - postgres
     networks:
