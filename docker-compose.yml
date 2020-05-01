@@ -59,10 +59,8 @@ services:
     restart: always
     ports:
        - 8000:8080
-       - 80:8080
     expose:
-       - "8080"
-       - "4200"
+       - "8000"
     networks:
       - primenet
     depends_on:
