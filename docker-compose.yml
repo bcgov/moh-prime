@@ -11,7 +11,7 @@ services:
       POSTGRES_USERNAME: postgres
       POSTGRES_DB: postgres
     ports:
-      - "5432:5432"
+      - 6432:5432
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
@@ -25,7 +25,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: prime
     ports:
-      - 8081:8081
+      - 27017:27017
     volumes:
       - local_mongodb_data:/var/lib/mongodb/data
     networks:
