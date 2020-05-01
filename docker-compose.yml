@@ -58,8 +58,8 @@ services:
     command: "nginx -g 'daemon off;'"
     restart: always
     ports:
-       - "8080:8080"
-       - "4200:8080"
+       - 8000:8080
+       - 4200:8080
     expose:
        - "8080"
        - "4200"
@@ -96,9 +96,6 @@ services:
     container_name: backup
     build:
       context: prime-database-backup
-    ports:
-      - 6432:5432
-      - 9081:8081
     depends_on:
       - postgres
       - mongo
