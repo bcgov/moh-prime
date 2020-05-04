@@ -14,8 +14,8 @@ namespace Prime.Services
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string TokenUrl { get; set; }
-        public int MaxViews { get => EnrolmentCertificate.MaxViews; }
-        public int ExpiryDays { get => EnrolmentCertificate.Lifespan.Days; }
+        public int MaxViews { get => EnrolmentCertificateAccessToken.MaxViews; }
+        public int ExpiryDays { get => EnrolmentCertificateAccessToken.Lifespan.Days; }
         public string ProvisionerName { get; set; }
 
         public EmailParams()

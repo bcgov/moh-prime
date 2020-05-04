@@ -75,7 +75,7 @@ namespace Prime.Services
             {
                 Enrollee = enrollee,
                 ViewCount = 0,
-                Expires = DateTimeOffset.Now.Add(EnrolmentCertificate.Lifespan),
+                Expires = DateTimeOffset.Now.Add(EnrolmentCertificateAccessToken.Lifespan),
                 Active = true
             };
             _context.EnrolmentCertificateAccessTokens.Add(token);
