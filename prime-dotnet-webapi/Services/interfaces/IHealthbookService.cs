@@ -7,6 +7,8 @@ namespace Prime.Services
     {
         Task PushBcscInfoAsync(Enrollee enrollee);
 
-        Task PushGpidAsync(Enrollee enrollee);
+        Task PushGpidInfoAsync(Enrollee enrollee);
+
+        Task PushCpbcInfoAsync(Enrollee enrollee);
     }
 }

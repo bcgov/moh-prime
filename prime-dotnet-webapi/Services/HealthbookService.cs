@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -11,8 +12,7 @@ namespace Prime.Services
     {
         private static HttpClient Client = new HttpClient()
         {
-            // TODO: URL
-            BaseAddress = new Uri("")
+            BaseAddress = new Uri("http://thehealthbook.ca/")
         };
 
         public HealthbookService(
@@ -23,28 +23,17 @@ namespace Prime.Services
 
         public async Task PushBcscInfoAsync(Enrollee enrollee)
         {
-            var parameters = new
-            {
-                userId = enrollee.UserId.ToString(),
-                firstName = enrollee.FirstName,
-                lastName = enrollee.LastName,
-                hpdid = enrollee.HPDID
-            };
-
-            // TODO: URL
-            await SendInfoToHealthbook("/", parameters);
+            await new BcscInfo().PushDataToHealthbook(enrollee);
         }
 
-        public async Task PushGpidAsync(Enrollee enrollee)
+        public async Task PushGpidInfoAsync(Enrollee enrollee)
         {
-            var parameters = new
-            {
-                userId = enrollee.UserId.ToString(),
-                gpid = enrollee.GPID
-            };
+            await new GpidInfo().PushDataToHealthbook(enrollee);
+        }
 
-            // TODO: URL
-            await SendInfoToHealthbook("/", parameters);
+        public async Task PushCpbcInfoAsync(Enrollee enrollee)
+        {
+            await new CpbcInfo().PushDataToHealthbook(enrollee);
         }
 
         public class HealthbookApiException : Exception
@@ -54,23 +43,96 @@ namespace Prime.Services
             public HealthbookApiException(string message, Exception inner) : base(message, inner) { }
         }
 
-        private async Task SendInfoToHealthbook(string endpointUrl, object parameters)
+        private abstract class HealthbookRequest
         {
-            var content = new StringContent(JsonConvert.SerializeObject(parameters));
+            public abstract string Url { get; }
+            public abstract string Schema { get; }
+            public abstract string Version { get; }
 
-            HttpResponseMessage response = null;
-            try
-            {
-                response = await Client.PostAsync(endpointUrl, content);
-            }
-            catch (Exception ex)
-            {
-                throw new HealthbookApiException("Error occurred when calling Healthbook API.", ex);
-            }
+            public abstract Task PushDataToHealthbook(Enrollee enrollee);
 
-            if (!response.IsSuccessStatusCode)
+            protected async Task SendInfoToHealthbook(object attributes)
             {
-                throw new HealthbookApiException($"Error code {response.StatusCode} was returned when calling Healthbook API.");
+                var parameters = new
+                {
+                    schema = Schema,
+                    version = Version,
+                    attributes = attributes
+                };
+                var content = new StringContent(JsonConvert.SerializeObject(new[] { parameters }));
+
+                HttpResponseMessage response = null;
+                try
+                {
+                    response = await Client.PostAsync(Url, content);
+                }
+                catch (Exception ex)
+                {
+                    throw new HealthbookApiException("Error occurred when calling Healthbook API.", ex);
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HealthbookApiException($"Error code {response.StatusCode} was returned when calling Healthbook API.");
+                }
+            }
+        }
+
+        private class BcscInfo : HealthbookRequest
+        {
+            public override string Url { get => "bcsc/issue-credential"; }
+            public override string Schema { get => "BCSC Information"; }
+            public override string Version { get => "1.0.7"; }
+
+            public override async Task PushDataToHealthbook(Enrollee enrollee)
+            {
+                var attributes = new
+                {
+                    user_id = enrollee.UserId.ToString(),
+                    first_name = enrollee.FirstName,
+                    last_name = enrollee.LastName,
+                    hpdid = enrollee.HPDID
+                };
+
+                await SendInfoToHealthbook(attributes);
+            }
+        }
+
+        private class GpidInfo : HealthbookRequest
+        {
+            public override string Url { get => "gpid/issue-credential"; }
+            public override string Schema { get => "General Practitioner ID"; }
+            public override string Version { get => "1.0.1"; }
+
+            public override async Task PushDataToHealthbook(Enrollee enrollee)
+            {
+                var attributes = new
+                {
+                    hpdid = enrollee.HPDID,
+                    gpid = enrollee.GPID
+                };
+
+                await SendInfoToHealthbook(attributes);
+            }
+        }
+
+        private class CpbcInfo : HealthbookRequest
+        {
+            public override string Url { get => "cpbc/issue-credential"; }
+            public override string Schema { get => "Registered Pharmacist"; }
+            public override string Version { get => "1.0.1"; }
+
+            public override async Task PushDataToHealthbook(Enrollee enrollee)
+            {
+                var cert = enrollee.Certifications.First();
+                var attributes = new
+                {
+                    hpid = enrollee.HPDID,
+                    licence_num = cert.LicenseNumber,
+                    licence_class = cert.License.Name
+                };
+
+                await SendInfoToHealthbook(attributes);
             }
         }
     }
