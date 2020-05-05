@@ -12,7 +12,7 @@ namespace Prime.Services
     {
         private static HttpClient Client = new HttpClient()
         {
-            BaseAddress = new Uri("http://thehealthbook.ca/")
+            BaseAddress = new Uri("localhost:5000/")
         };
 
         public HealthbookService(
@@ -59,7 +59,9 @@ namespace Prime.Services
                     version = Version,
                     attributes = attributes
                 };
-                var content = new StringContent(JsonConvert.SerializeObject(new[] { parameters }));
+                string serialized = JsonConvert.SerializeObject(new[] { parameters });
+                System.Console.WriteLine($"Calling Healthbook API with these parmeters: {serialized}");
+                var content = new StringContent(serialized);
 
                 HttpResponseMessage response = null;
                 try
