@@ -23,17 +23,17 @@ namespace Prime.Services
 
         public async Task PushBcscInfoAsync(Enrollee enrollee)
         {
-            await new BcscInfo().PushToHealthbook(enrollee);
+            await new BcscInfo().PushToHealthbookAsync(enrollee);
         }
 
         public async Task PushGpidInfoAsync(Enrollee enrollee)
         {
-            await new GpidInfo().PushToHealthbook(enrollee);
+            await new GpidInfo().PushToHealthbookAsync(enrollee);
         }
 
         public async Task PushCpbcInfoAsync(Enrollee enrollee)
         {
-            await new CpbcInfo().PushToHealthbook(enrollee);
+            await new CpbcInfo().PushToHealthbookAsync(enrollee);
         }
 
         public class HealthbookApiException : Exception
@@ -49,7 +49,7 @@ namespace Prime.Services
             public abstract string Schema { get; }
             public abstract string Version { get; }
 
-            public abstract Task PushToHealthbook(Enrollee enrollee);
+            public abstract Task PushToHealthbookAsync(Enrollee enrollee);
 
             protected async Task CallHealthbookApiAsync(object attributes)
             {
@@ -84,7 +84,7 @@ namespace Prime.Services
             public override string Schema { get => "BCSC Information"; }
             public override string Version { get => "1.0.7"; }
 
-            public override async Task PushToHealthbook(Enrollee enrollee)
+            public override async Task PushToHealthbookAsync(Enrollee enrollee)
             {
                 var attributes = new
                 {
@@ -104,7 +104,7 @@ namespace Prime.Services
             public override string Schema { get => "General Practitioner ID"; }
             public override string Version { get => "1.0.1"; }
 
-            public override async Task PushToHealthbook(Enrollee enrollee)
+            public override async Task PushToHealthbookAsync(Enrollee enrollee)
             {
                 var attributes = new
                 {
@@ -122,7 +122,7 @@ namespace Prime.Services
             public override string Schema { get => "Registered Pharmacist"; }
             public override string Version { get => "1.0.1"; }
 
-            public override async Task PushToHealthbook(Enrollee enrollee)
+            public override async Task PushToHealthbookAsync(Enrollee enrollee)
             {
                 var cert = enrollee.Certifications.First();
                 var attributes = new
