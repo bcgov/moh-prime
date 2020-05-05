@@ -22,6 +22,7 @@ namespace Prime.Services
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IPrivilegeService _privilegeService;
+        private readonly IHealthbookService _healthbookService;
 
         public SubmissionService(ApiDbContext context, IHttpContextAccessor httpContext,
             IAccessTermService accessTermService,
@@ -30,7 +31,8 @@ namespace Prime.Services
             IEmailService emailService,
             IEnrolleeService enrolleeService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
-            IPrivilegeService privilegeService)
+            IPrivilegeService privilegeService,
+            IHealthbookService healthbookService)
             : base(context, httpContext)
         {
             _accessTermService = accessTermService;
@@ -40,6 +42,7 @@ namespace Prime.Services
             _enrolleeService = enrolleeService;
             _enroleeProfileVersionService = enrolleeProfileVersionService;
             _privilegeService = privilegeService;
+            _healthbookService = healthbookService;
         }
 
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeProfileViewModel updatedProfile)
@@ -80,6 +83,11 @@ namespace Prime.Services
 
             if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
             {
+                if (enrollee.Certifications.Any())
+                {
+                    await _healthbookService.PushCpbcInfoAsync(enrollee);
+                }
+
                 var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
                 newStatus.AddStatusReason(StatusReasonType.Automatic);
 
@@ -144,6 +152,7 @@ namespace Prime.Services
             if (accept)
             {
                 await SetGpid(enrollee);
+                await _healthbookService.PushGpidInfoAsync(enrollee);
                 await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");

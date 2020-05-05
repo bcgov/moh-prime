@@ -18,6 +18,7 @@ namespace Prime.Services
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IHealthbookService _healthbookService;
 
         public EnrolleeService(
             ApiDbContext context,
@@ -27,7 +28,8 @@ namespace Prime.Services
             IPrivilegeService privilegeService,
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enroleeProfileVersionService,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IHealthbookService healthbookService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
@@ -36,6 +38,7 @@ namespace Prime.Services
             _accessTermService = accessTermService;
             _enroleeProfileVersionService = enroleeProfileVersionService;
             _businessEventService = businessEventService;
+            _healthbookService = healthbookService;
         }
 
         public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
@@ -140,7 +143,7 @@ namespace Prime.Services
             }
 
             await this._businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Created");
-
+            await _healthbookService.PushBcscInfoAsync(enrollee);
             return enrollee.Id;
         }
 
