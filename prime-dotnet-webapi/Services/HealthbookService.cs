@@ -23,17 +23,17 @@ namespace Prime.Services
 
         public async Task PushBcscInfoAsync(Enrollee enrollee)
         {
-            await new BcscInfo().PushDataToHealthbook(enrollee);
+            await new BcscInfo().PushToHealthbook(enrollee);
         }
 
         public async Task PushGpidInfoAsync(Enrollee enrollee)
         {
-            await new GpidInfo().PushDataToHealthbook(enrollee);
+            await new GpidInfo().PushToHealthbook(enrollee);
         }
 
         public async Task PushCpbcInfoAsync(Enrollee enrollee)
         {
-            await new CpbcInfo().PushDataToHealthbook(enrollee);
+            await new CpbcInfo().PushToHealthbook(enrollee);
         }
 
         public class HealthbookApiException : Exception
@@ -49,9 +49,9 @@ namespace Prime.Services
             public abstract string Schema { get; }
             public abstract string Version { get; }
 
-            public abstract Task PushDataToHealthbook(Enrollee enrollee);
+            public abstract Task PushToHealthbook(Enrollee enrollee);
 
-            protected async Task SendInfoToHealthbook(object attributes)
+            protected async Task CallHealthbookApiAsync(object attributes)
             {
                 var parameters = new
                 {
@@ -84,7 +84,7 @@ namespace Prime.Services
             public override string Schema { get => "BCSC Information"; }
             public override string Version { get => "1.0.7"; }
 
-            public override async Task PushDataToHealthbook(Enrollee enrollee)
+            public override async Task PushToHealthbook(Enrollee enrollee)
             {
                 var attributes = new
                 {
@@ -94,7 +94,7 @@ namespace Prime.Services
                     hpdid = enrollee.HPDID
                 };
 
-                await SendInfoToHealthbook(attributes);
+                await CallHealthbookApiAsync(attributes);
             }
         }
 
@@ -104,7 +104,7 @@ namespace Prime.Services
             public override string Schema { get => "General Practitioner ID"; }
             public override string Version { get => "1.0.1"; }
 
-            public override async Task PushDataToHealthbook(Enrollee enrollee)
+            public override async Task PushToHealthbook(Enrollee enrollee)
             {
                 var attributes = new
                 {
@@ -112,7 +112,7 @@ namespace Prime.Services
                     gpid = enrollee.GPID
                 };
 
-                await SendInfoToHealthbook(attributes);
+                await CallHealthbookApiAsync(attributes);
             }
         }
 
@@ -122,7 +122,7 @@ namespace Prime.Services
             public override string Schema { get => "Registered Pharmacist"; }
             public override string Version { get => "1.0.1"; }
 
-            public override async Task PushDataToHealthbook(Enrollee enrollee)
+            public override async Task PushToHealthbook(Enrollee enrollee)
             {
                 var cert = enrollee.Certifications.First();
                 var attributes = new
@@ -132,7 +132,7 @@ namespace Prime.Services
                     licence_class = cert.License.Name
                 };
 
-                await SendInfoToHealthbook(attributes);
+                await CallHealthbookApiAsync(attributes);
             }
         }
     }
