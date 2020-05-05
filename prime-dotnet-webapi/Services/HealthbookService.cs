@@ -12,7 +12,7 @@ namespace Prime.Services
     {
         private static HttpClient Client = new HttpClient()
         {
-            BaseAddress = new Uri("localhost:6000/")
+            BaseAddress = new Uri("localhost:5000/")
         };
 
         public HealthbookService(
