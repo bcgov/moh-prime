@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   version: '1.0.0',
-  apiEndpoint: 'http://localhost:5000/api',
+  apiEndpoint: 'http://localhost:7777/api',
   loginRedirectUrl: 'http://localhost:4200',
   prime: {
     displayPhone: '1-844-39PRIME',

@@ -44,7 +44,7 @@ services:
       ASPNETCORE_URLS: "http://+:8080"
       DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
     ports:
-      - "6000:8080"
+      - "7777:8080"
       - "5001:5001"
     networks:
       - primenet
