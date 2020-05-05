@@ -83,16 +83,16 @@ namespace Prime.Services
 
             if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
             {
-                if (enrollee.Certifications.Any())
-                {
-                    await _healthbookService.PushCpbcInfoAsync(enrollee);
-                }
-
                 var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
                 newStatus.AddStatusReason(StatusReasonType.Automatic);
 
                 await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
+
+                if (enrollee.Certifications.Any())
+                {
+                    await _healthbookService.PushCpbcInfoAsync(enrollee);
+                }
             }
 
             await _context.SaveChangesAsync();
@@ -152,7 +152,6 @@ namespace Prime.Services
             if (accept)
             {
                 await SetGpid(enrollee);
-                await _healthbookService.PushGpidInfoAsync(enrollee);
                 await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
@@ -162,6 +161,7 @@ namespace Prime.Services
                     await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
                     await _businessEventService.CreateAdminClaimEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
                 }
+                await _healthbookService.PushGpidInfoAsync(enrollee);
             }
             else
             {
