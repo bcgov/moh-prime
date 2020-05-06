@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Prime.Models
 {
@@ -17,6 +17,12 @@ namespace Prime.Models
         public Enrollee Enrollee { get; set; }
 
         public int? AdminId { get; set; }
+
+        [NotMapped]
+        public string AdminIDIR
+        {
+            get => this.Admin?.IDIR;
+        }
 
         [JsonIgnore]
         public Admin Admin { get; set; }

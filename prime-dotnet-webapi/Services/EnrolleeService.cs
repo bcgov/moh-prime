@@ -419,6 +419,7 @@ namespace Prime.Services
         public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId)
         {
             return await _context.BusinessEvents
+                .Include(e => e.Admin)
                 .Where(e => e.EnrolleeId == enrolleeId)
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
