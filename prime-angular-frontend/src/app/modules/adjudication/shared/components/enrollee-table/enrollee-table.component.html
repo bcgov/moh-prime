@@ -115,7 +115,7 @@
           <span>Events</span>
         </button>
         <button mat-menu-item
-                *ngIf="row.currentStatus.enrolmentStatusReasons.length"
+                *ngIf="canReviewStatusReasons(row)"
                 (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_REVIEW_STATUS])">
           <mat-icon>rate_review</mat-icon>
           <span>Review Status Reasons</span>
