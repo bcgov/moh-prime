@@ -1,13 +1,42 @@
-// using System;
-// using System.Collections.Generic;
-// using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+using Xunit;
+using FakeItEasy;
 
-// using Prime.Models;
-// using Prime.Models.Api;
-// using Prime.ViewModels;
+using Prime;
+using Prime.Models;
+using Prime.Services;
+using PrimeTests.Utils;
 
-// namespace Prime.Services
-// {
+namespace PrimeTests.Services
+{
+    public class EnrolleeServiceTests2
+    {
+        public static EnrolleeService CreateService(
+            ApiDbContext context = null,
+            IHttpContextAccessor httpContext = null,
+            ISubmissionRulesService automaticAdjudicationService = null,
+            IEmailService emailService = null,
+            IPrivilegeService privilegeService = null,
+            IAccessTermService accessTermService = null,
+            IEnrolleeProfileVersionService enroleeProfileVersionService = null,
+            IBusinessEventService businessEventService = null)
+        {
+            return new EnrolleeService(
+                context ?? A.Fake<ApiDbContext>(),
+                httpContext ?? A.Fake<IHttpContextAccessor>(),
+                automaticAdjudicationService ?? A.Fake<ISubmissionRulesService>(),
+                emailService ?? A.Fake<IEmailService>(),
+                privilegeService ?? A.Fake<IPrivilegeService>(),
+                accessTermService ?? A.Fake<IAccessTermService>(),
+                enroleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>(),
+                businessEventService ?? A.Fake<IBusinessEventService>()
+            );
+        }
+    }
+}
+
 //     public interface IEnrolleeService
 //     {
 //         Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false);
@@ -48,4 +77,3 @@
 
 //         Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids);
 //     }
-// }

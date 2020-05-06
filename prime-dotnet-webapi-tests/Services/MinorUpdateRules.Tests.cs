@@ -9,6 +9,7 @@ using Prime.Models;
 using Prime.ViewModels;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
+using FakeItEasy;
 
 namespace PrimeTests.Services
 {
@@ -33,6 +34,7 @@ namespace PrimeTests.Services
         [MemberData(nameof(DateRuleData))]
         public async void testDateRule(DateTimeOffset? expiryDate, bool expected)
         {
+            var t = A.Fake<IUserBoundModel>();
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             enrollee.AccessTerms = new[]
             {
