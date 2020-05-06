@@ -9,7 +9,7 @@ using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
 
-namespace PrimeTests.Services
+namespace PrimeTests.UnitTests
 {
     public class FeedbackServiceTests
     {

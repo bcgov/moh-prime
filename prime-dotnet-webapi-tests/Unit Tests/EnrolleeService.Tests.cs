@@ -9,9 +9,9 @@ using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
 
-namespace PrimeTests.Services
+namespace PrimeTests.UnitTests
 {
-    public class EnrolleeServiceTests2
+    public class EnrolleeServiceTests
     {
         public static EnrolleeService CreateService(
             ApiDbContext context = null,

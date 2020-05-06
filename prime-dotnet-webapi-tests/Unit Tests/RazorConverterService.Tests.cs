@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
 
-namespace PrimeTests.Services
+namespace PrimeTests.UnitTests
 {
     public class RazorConverterServiceTests
     {
