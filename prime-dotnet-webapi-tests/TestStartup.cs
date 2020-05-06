@@ -34,6 +34,11 @@ namespace PrimeTests
                 .AddHealthChecks();
         }
 
+        // TODO Configure mongo DB for tests
+        // protected override void ConfigureMongoDatabase(IServiceCollection services)
+        // {
+        // }
+
         protected override void ConfigureHealthCheck(IApplicationBuilder app)
         {
             // Noop, since health checks aren't needed in tests
