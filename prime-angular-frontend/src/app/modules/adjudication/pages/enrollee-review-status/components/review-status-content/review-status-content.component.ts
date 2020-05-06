@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+
 import { Reason } from '../../pipes/status-reasons.pipe';
 
 @Component({
