@@ -58,7 +58,7 @@ services:
     command: "nginx -g 'daemon off;'"
     restart: always
     ports:
-       - 8888:8080
+       - 8888:8888
     expose:
        - "8888"
     networks:
@@ -66,42 +66,42 @@ services:
     depends_on:
       - dotnet-webapi
 ################################################ Local SMTP Server #
-  mailhog:
-    container_name: mailhog
-    restart: always
-    image: mailhog/mailhog:latest
-    ports:
-      - 25:1025
-      - 1025:1025
-      - 8025:8025 # visit localhost:8025 to see the list of captured emails
-    networks:
-      - primenet
+#  mailhog:
+#    container_name: mailhog
+#    restart: always
+#    image: mailhog/mailhog:latest
+#    ports:
+#      - 25:1025
+#      - 1025:1025
+#      - 8025:8025 # visit localhost:8025 to see the list of captured emails
+#    networks:
+#      - primenet
 ############################################## Database Inspection #
-  schema-spy:
-    container_name: schema-spy
-    build:
-      context: schemaspy/
-    image: openjdk:jre-alpine
-    ports:
-      - "8069:8069"
-    # - "80:8069"
-    depends_on:
-      - postgres
-    networks:
-      - primenet
+#  schema-spy:
+#    container_name: schema-spy
+#    build:
+#      context: schemaspy/
+#    image: openjdk:jre-alpine
+#    ports:
+#      - "8069:8069"
+#      - "80:8069"
+#    depends_on:
+#      - postgres
+#    networks:
+#      - primenet
 ########################################################### Backup #
-  backup:
-    container_name: backup
-    build:
-      context: prime-database-backup
-    depends_on:
-      - postgres
-      - mongo
-    volumes:
-      - db_backup_data:/opt/backup
-      - local_postgres_data:/var/lib/postgresql/data
-    networks:
-      - primenet
+#  backup:
+#    container_name: backup
+#    build:
+#      context: prime-database-backup
+#    depends_on:
+#      - postgres
+#      - mongo
+#    volumes:
+#      - db_backup_data:/opt/backup
+#      - local_postgres_data:/var/lib/postgresql/data
+#    networks:
+#      - primenet
 ####################### DOCUMENT_MANAGER_BACKEND Definition #######################
   document_manager_backend:
     restart: always
