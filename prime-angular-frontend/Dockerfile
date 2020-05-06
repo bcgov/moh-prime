@@ -26,7 +26,7 @@ RUN apt-get update && \
     chmod -R 777 /var/cache/nginx && \
     chmod -R 777 /var/run
 COPY nginx.conf /etc/nginx/
-COPY nginx.template.conf /etc/nginx/nginx.template.conf
+COPY nginx.template.conf /etc/nginx/conf.d/nginx.template.conf
 COPY entrypoint.sh /
 RUN echo "Populating environment..." && \
     (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
@@ -55,7 +55,7 @@ RUN chmod +x /entrypoint.sh && \
 COPY ./entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
-EXPOSE 80 8080 4200:8080
+EXPOSE 80 8080 8888 4200:8080
 
 #CMD /etc/nginx/entrypoint.sh
 CMD /entrypoint.sh
