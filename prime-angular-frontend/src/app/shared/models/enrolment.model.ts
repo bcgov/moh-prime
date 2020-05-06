@@ -33,6 +33,7 @@ export interface HttpEnrollee extends Enrollee {
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
+  previousStatus: EnrolmentStatus;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: AdjudicationNote;
   accessAgreementNote: AdjudicationNote;
@@ -73,6 +74,7 @@ export interface Enrolment {
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
+  previousStatus: EnrolmentStatus;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: AdjudicationNote;
   accessAgreementNote: AdjudicationNote;
