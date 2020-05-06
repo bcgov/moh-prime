@@ -86,19 +86,18 @@ namespace Prime.Controllers
             // TODO temporary removed and may be removed permanently
             // var provisionerNames = _certificateService.GetPharmaNetProvisionerNames();
             // if (!provisionerNames.Contains(provisionerName) && provisionerName != "Other")
-            if (provisionerName != "Administrator")
+            if (provisionerName != "Administrator" || string.IsNullOrWhiteSpace(providedEmails))
             {
                 this.ModelState.AddModelError("Provisioner", "The provisioner provided is not valid.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            string providedEmailsTemp = (string)providedEmails;
-            string[] emails = (!string.IsNullOrEmpty(providedEmailsTemp))
-                ? (providedEmailsTemp).Split(",")
-                : new string[] { };
+            string[] emails = string.IsNullOrWhiteSpace(providedEmails)
+                ? new string[0]
+                : ((string)providedEmails).Split(",");
 
             // Emails are either "Other" provisioners, or office manager(s)
-            if (emails.Count() > 0 && !EmailService.AreValidEmails(emails))
+            if (emails.Any() && !EmailService.AreValidEmails(emails))
             {
                 this.ModelState.AddModelError("Email(s)", "The email(s) provided are not valid.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
@@ -127,7 +126,7 @@ namespace Prime.Controllers
             if (provisionerName == "iClinic" || provisionerName == "MediNet" || provisionerName == "Other")
             {
                 var provisionerEmail = (provisionerName != "Other")
-                    ? _certificateService.GetPharmaNetProvisionerEmail(provisionerName)
+                    ? await _emailService.GetPharmaNetProvisionerEmailAsync(provisionerName)
                     : emails[0];
 
                 emails = new[] { provisionerEmail };

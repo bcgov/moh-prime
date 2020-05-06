@@ -29,7 +29,7 @@ namespace PrimeTests.Services
             Assert.Equal(enrollee.GPID, cert.GPID);
         }
 
-        [Fact]
+        [Fact(Skip = "Max views are temporarily disabled in the app")]
         public async void testMaxViews()
         {
             int tokenMaxViews = 3;

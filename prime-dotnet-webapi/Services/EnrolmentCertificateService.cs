@@ -11,20 +11,8 @@ namespace Prime.Services
 {
     public class EnrolmentCertificateService : BaseService, IEnrolmentCertificateService
     {
-        public static int EXPIRY_DAYS { get => 7; }
-        public static int MAX_VIEWS { get => 3; }
-        private static readonly TimeSpan TOKEN_LIFESPAN = TimeSpan.FromDays(EXPIRY_DAYS);
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
-
-        private ImmutableDictionary<string, string> PharmaNetProvisioners = new Dictionary<string, string>()
-        {
-            { "CareConnect", "CareConnect@phsa.ca" },
-            { "Excelleris", "support@excelleris.com" },
-            { "iClinic", "help@iclinicemr.com" },
-            { "MediNet", "prime@medinet.ca" },
-            { "Plexia", "service@plexia.ca" }
-        }.ToImmutableDictionary();
 
         public EnrolmentCertificateService(
             ApiDbContext context,
@@ -87,7 +75,7 @@ namespace Prime.Services
             {
                 Enrollee = enrollee,
                 ViewCount = 0,
-                Expires = DateTimeOffset.Now.Add(TOKEN_LIFESPAN),
+                Expires = DateTimeOffset.Now.Add(EnrolmentCertificateAccessToken.Lifespan),
                 Active = true
             };
             _context.EnrolmentCertificateAccessTokens.Add(token);
@@ -107,30 +95,6 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public string[] GetPharmaNetProvisionerNames()
-        {
-            return PharmaNetProvisioners.Keys.ToArray();
-        }
-
-        public string GetPharmaNetProvisionerEmail(string provisionerName)
-        {
-            string recipientEmail;
-
-            PharmaNetProvisioners.TryGetValue(provisionerName, out recipientEmail);
-
-            return recipientEmail;
-        }
-
-        public int GetMaxViews()
-        {
-            return MAX_VIEWS;
-        }
-
-        public int GetExpiryDays()
-        {
-            return EXPIRY_DAYS;
-        }
-
         private async Task UpdateTokenMetadataAsync(EnrolmentCertificateAccessToken token)
         {
             if (!token.Active)
@@ -138,7 +102,8 @@ namespace Prime.Services
                 return;
             }
 
-            if (token.ViewCount >= MAX_VIEWS || DateTimeOffset.Now > token.Expires)
+            // TODO: View limit has been removed temporarily
+            if (/*token.ViewCount >= MAX_VIEWS ||*/ DateTimeOffset.Now > token.Expires)
             {
                 token.Active = false;
             }

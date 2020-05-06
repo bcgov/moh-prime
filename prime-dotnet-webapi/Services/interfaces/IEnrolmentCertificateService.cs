@@ -12,13 +12,5 @@ namespace Prime.Services
         Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee);
 
         Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUserIdAsync(Guid userId);
-
-        string[] GetPharmaNetProvisionerNames();
-
-        string GetPharmaNetProvisionerEmail(string pharmaNetVendor);
-
-        int GetMaxViews();
-
-        int GetExpiryDays();
     }
 }

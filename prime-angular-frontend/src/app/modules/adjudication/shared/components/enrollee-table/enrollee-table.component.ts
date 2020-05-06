@@ -34,7 +34,6 @@ export class EnrolleeTableComponent implements OnInit {
       'name',
       'appliedDate',
       'status',
-      'approvedDate',
       'renewalDate',
       'hasMostRecentAccessTermSigned',
       'adjudicator',
