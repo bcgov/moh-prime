@@ -39,7 +39,7 @@ RUN npm install @angular/cli -g && \
 
 # RUN npm audit fix && \
 # FROM nginx:1.15-alpine
-# COPY --from=buildDeps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
+RUN cp -R /usr/src/app/dist/angular-frontend/* /usr/share/nginx/html
 # RUN rm -f /etc/nginx/conf.d/default.conf
 # COPY --from=buildDeps /usr/src/app/nginx.conf /etc/nginx/
 # COPY --from=buildDeps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
