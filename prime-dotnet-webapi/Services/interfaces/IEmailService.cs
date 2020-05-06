@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Prime.Models;
 
 namespace Prime.Services
@@ -8,5 +9,9 @@ namespace Prime.Services
         Task SendReminderEmailAsync(Enrollee enrollee);
 
         Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null);
+
+        Task<string> GetPharmaNetProvisionerEmailAsync(string pharmaNetVendor);
+
+        Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync();
     }
 }

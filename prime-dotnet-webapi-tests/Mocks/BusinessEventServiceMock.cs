@@ -81,5 +81,9 @@ namespace PrimeTests.Mocks
             return Task.FromResult(businessEvent);
         }
 
+        public Task<BusinessEvent> CreateSiteEventAsync(int siteId, int partyId, string description)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
