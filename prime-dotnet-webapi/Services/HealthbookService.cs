@@ -91,8 +91,7 @@ namespace Prime.Services
                 var attributes = new
                 {
                     user_id = enrollee.UserId.ToString(),
-                    first_name = enrollee.FirstName,
-                    last_name = enrollee.LastName,
+                    legal_name = $"{enrollee.FirstName} {enrollee.LastName}",
                     hpdid = enrollee.HPDID
                 };
 
