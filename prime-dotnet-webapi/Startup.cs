@@ -79,7 +79,8 @@ namespace Prime
                         builder
                             .AllowAnyOrigin()
                             .AllowAnyMethod()
-                            .AllowAnyHeader();
+                            .AllowAnyHeader()
+                            .WithExposedHeaders("Location");
                     });
             });
 

@@ -72,12 +72,13 @@ export class BusinessLicenceComponent implements OnInit {
 
     // Create a new tus upload
     const upload = new tus.Upload(file, {
-      endpoint: '/upload',
+      endpoint: 'http://localhost:5000/api/document',
       retryDelays: [0, 3000, 5000, 10000, 20000],
       metadata: {
         filename: file.name,
         filetype: file.type
       },
+      filename: file.name,
       onError: async (error: Error) => {
         this.toastService.openErrorToast(error.message);
       },
