@@ -49,8 +49,8 @@ export class EnrolleeTableComponent implements OnInit {
 
   public canReviewStatusReasons(enrollee: HttpEnrollee): boolean {
     return (
-      enrollee.currentStatus.statusCode === EnrolmentStatus.UNDER_REVIEW ||
-      enrollee.previousStatus.statusCode === EnrolmentStatus.UNDER_REVIEW
+      enrollee.currentStatus?.statusCode === EnrolmentStatus.UNDER_REVIEW ||
+      enrollee.previousStatus?.statusCode === EnrolmentStatus.UNDER_REVIEW
     );
   }
 
