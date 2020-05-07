@@ -57,6 +57,11 @@ services:
          context: prime-angular-frontend/
     command: "nginx -g 'daemon off;'"
     restart: always
+    environment:
+      REDIRECT_URL: "http://thehealthbook.ca:8888"
+      KEYCLOAK_URL: "https://sso-dev.pathfinder.gov.bc.ca/auth"
+      KEYCLOAK_REALM: "v4mbqqas"
+      KEYCLOAK_CLIENT_ID: "prime-application-dev"
     ports:
        - 8888:8888
     expose:
