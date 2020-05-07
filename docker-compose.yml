@@ -58,9 +58,9 @@ services:
     command: "nginx -g 'daemon off;'"
     restart: always
     ports:
-       - 8080:8080
+       - 8888:8888
     expose:
-       - "8080"
+       - "8888"
     networks:
       - primenet
     depends_on:
