@@ -13,9 +13,9 @@ WORKDIR /usr/src/app
 
 COPY . .
 ENV REDIRECT_URL "http://thehealthbook.ca:8888"
-ENV KEYCLOAK_URL: "https://sso-dev.pathfinder.gov.bc.ca/auth"
-ENV KEYCLOAK_REALM: "v4mbqqas"
-ENV KEYCLOAK_CLIENT_ID: "prime-application-dev"
+ENV KEYCLOAK_URL "https://sso-dev.pathfinder.gov.bc.ca/auth"
+ENV KEYCLOAK_REALM "v4mbqqas"
+ENV KEYCLOAK_CLIENT_ID "prime-application-dev"
 
 RUN apt-get update && \
     apt-get install -y nginx gettext-base && \
