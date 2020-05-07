@@ -4,7 +4,6 @@ FROM node:10.16 as buildDeps
 # set working directory
 USER 0
 ENV NODE_ROOT /usr/src/app
-ENV REDIRECT_URL $REDIRECT_URL
 RUN mkdir -p /usr/src/app
 
 RUN printenv && \
@@ -13,10 +12,11 @@ RUN printenv && \
 WORKDIR /usr/src/app
 
 COPY . .
-ENV KEYCLOAK_URL $KEYCLOAK_URL
-ENV KEYCLOAK_REALM $KEYCLOAK_REALM
-ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
-ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
+ENV REDIRECT_URL "http://thehealthbook.ca:8888"
+ENV KEYCLOAK_URL: "https://sso-dev.pathfinder.gov.bc.ca/auth"
+ENV KEYCLOAK_REALM: "v4mbqqas"
+ENV KEYCLOAK_CLIENT_ID: "prime-application-dev"
+
 RUN apt-get update && \
     apt-get install -y nginx gettext-base && \
     mkdir -p /var/cache/nginx && \
