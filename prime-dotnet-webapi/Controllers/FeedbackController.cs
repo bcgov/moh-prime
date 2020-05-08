@@ -30,7 +30,7 @@ namespace Prime.Controllers
 
         // POST: api/Feedback
         /// <summary>
-        /// Creates a new Feedback.
+        /// Creates a Feedback.
         /// </summary>
         [HttpPost(Name = nameof(CreateFeedback))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -59,7 +59,6 @@ namespace Prime.Controllers
                 new { enrolleeId = feedback.EnrolleeId },
                 ApiResponse.Result(createFeedback)
             );
-
         }
     }
 }
