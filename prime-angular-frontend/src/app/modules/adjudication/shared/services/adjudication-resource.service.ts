@@ -364,4 +364,5 @@ export class AdjudicationResource {
       createdDate
     });
   }
+
 }
