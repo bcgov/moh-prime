@@ -15,9 +15,6 @@ namespace Prime.Models
         public int EnrolleeId { get; set; }
 
         [Required]
-        public Boolean Satisfied { get; set; }
-
-        [Required]
         public string route { get; set; }
 
         public string Comment { get; set; }
