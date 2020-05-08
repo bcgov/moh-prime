@@ -8,6 +8,9 @@ namespace Prime.Models
     [Table("EnrolmentCertificateAccessToken")]
     public sealed class EnrolmentCertificateAccessToken : BaseAuditable
     {
+        public static int MaxViews { get => 3; }
+        public static TimeSpan Lifespan { get => TimeSpan.FromDays(7); }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }

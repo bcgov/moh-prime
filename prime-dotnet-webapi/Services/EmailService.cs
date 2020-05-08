@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using Prime.Models;
 
@@ -13,8 +14,8 @@ namespace Prime.Services
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string TokenUrl { get; set; }
-        public int MaxViews { get => EnrolmentCertificateService.MAX_VIEWS; }
-        public int ExpiryDays { get => EnrolmentCertificateService.EXPIRY_DAYS; }
+        public int MaxViews { get => EnrolmentCertificateAccessToken.MaxViews; }
+        public int ExpiryDays { get => EnrolmentCertificateAccessToken.Lifespan.Days; }
         public string ProvisionerName { get; set; }
 
         public EmailParams()
@@ -34,6 +35,7 @@ namespace Prime.Services
     public class EmailService : BaseService, IEmailService
     {
         private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
+
         private readonly IRazorConverterService _razorConverterService;
 
         public EmailService(
@@ -60,7 +62,7 @@ namespace Prime.Services
 
         public static bool AreValidEmails(string[] emails)
         {
-            return emails.Select(e => IsValidEmail(e)).All(x => x);
+            return emails.All(e => IsValidEmail(e));
         }
 
         public async Task SendReminderEmailAsync(Enrollee enrollee)
@@ -93,11 +95,26 @@ namespace Prime.Services
             var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
 
             string subject = "New Access Request";
-            string viewName = (string.IsNullOrEmpty(provisionerName))
+            string viewName = string.IsNullOrEmpty(provisionerName)
                 ? "/Views/Emails/OfficeManagerEmail.cshtml"
                 : "/Views/Emails/VendorEmail.cshtml";
             string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token, provisionerName));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody);
+        }
+
+        public async Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName)
+        {
+            var vendor = await _context.Vendors
+                .SingleOrDefaultAsync(v => v.Name == provisionerName);
+
+            return vendor?.Email;
+        }
+
+        public async Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync()
+        {
+            return await _context.Vendors
+                .Select(v => v.Name)
+                .ToListAsync();
         }
 
         private async Task Send(string from, string to, string subject, string body)

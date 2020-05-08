@@ -40,7 +40,8 @@ export class EnrolleeEventsComponent implements OnInit {
           businessEvents.map((businessEvent: BusinessEvent) => {
             return {
               date: businessEvent.eventDate,
-              content: businessEvent.description
+              content: businessEvent.description,
+              name: businessEvent.adminIDIR,
             };
           })
         )

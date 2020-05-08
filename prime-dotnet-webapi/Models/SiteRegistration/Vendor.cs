@@ -17,6 +17,5 @@ namespace Prime.Models
 
         [JsonIgnore]
         public IEnumerable<Site> Sites { get; set; }
-
     }
 }

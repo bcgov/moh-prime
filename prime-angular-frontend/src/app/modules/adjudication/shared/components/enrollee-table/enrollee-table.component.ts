@@ -5,6 +5,7 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-enrollee-table',
@@ -44,6 +45,13 @@ export class EnrolleeTableComponent implements OnInit {
 
   public get canEdit(): boolean {
     return this.authService.isAdmin();
+  }
+
+  public canReviewStatusReasons(enrollee: HttpEnrollee): boolean {
+    return (
+      enrollee.currentStatus?.statusCode === EnrolmentStatus.UNDER_REVIEW ||
+      enrollee.previousStatus?.statusCode === EnrolmentStatus.UNDER_REVIEW
+    );
   }
 
   public onNotify(enrolleeId: number) {
