@@ -13,8 +13,6 @@ import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
-import { EnrolleeProfileVersionsComponent } from './pages/enrollee-profile-versions/enrollee-profile-versions.component';
-import { EnrolleeProfileVersionComponent } from './pages/enrollee-profile-version/enrollee-profile-version.component';
 import { EnrolleeAccessTermsComponent } from './pages/enrollee-access-terms/enrollee-access-terms.component';
 import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
 import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
@@ -81,21 +79,6 @@ const routes: Routes = [
                     ]
                   },
                 ],
-              },
-              {
-                path: AdjudicationRoutes.ENROLLEE_PROFILE_HISTORY,
-                children: [
-                  {
-                    path: '',
-                    component: EnrolleeProfileVersionsComponent,
-                    data: { title: 'Enrolment Histories' }
-                  },
-                  {
-                    path: ':hid',
-                    component: EnrolleeProfileVersionComponent,
-                    data: { title: 'Enrolment History' }
-                  }
-                ]
               },
               {
                 path: AdjudicationRoutes.ENROLLEE_EVENTS,
