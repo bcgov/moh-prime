@@ -46,22 +46,12 @@ const routes: Routes = [
                 data: { title: 'Enrollee' }
               },
               {
-                path: AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES,
-                component: AdjudicatorNotesComponent,
-                data: { title: 'Adjudicator Notes' }
-              },
-              {
-                path: AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS,
-                component: LimitsConditionsClausesComponent,
-                data: { title: 'Limits and Conditions Clauses' }
-              },
-              {
-                path: AdjudicationRoutes.ENROLLEE_TERMS_HISTORY,
+                path: AdjudicationRoutes.ENROLLEE_ENROLMENTS,
                 children: [
                   {
                     path: '',
                     component: EnrolleeAccessTermsComponent,
-                    data: { title: 'Terms of Access History' }
+                    data: { title: 'Enrolments' }
                   },
                   {
                     path: ':hid',
@@ -75,7 +65,7 @@ const routes: Routes = [
                         path: AdjudicationRoutes.ENROLLEE,
                         component: EnrolleeAccessTermEnrolmentComponent,
                         data: { title: 'Enrolment' }
-                      },
+                      }
                     ]
                   },
                 ],
@@ -86,7 +76,7 @@ const routes: Routes = [
                   {
                     path: '',
                     component: EnrolleeEventsComponent,
-                    data: { title: 'Enrolment Events' }
+                    data: { title: 'Event Log' }
                   }
                 ]
               },
@@ -96,9 +86,19 @@ const routes: Routes = [
                   {
                     path: '',
                     component: EnrolleeReviewStatusComponent,
-                    data: { title: 'Enrolment Review Status' }
+                    data: { title: 'Adjudication' }
                   }
                 ]
+              },
+              {
+                path: AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES,
+                component: AdjudicatorNotesComponent,
+                data: { title: 'Adjudicator Notes' }
+              },
+              {
+                path: AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS,
+                component: LimitsConditionsClausesComponent,
+                data: { title: 'Limits and Conditions Clauses' }
               }
             ]
           }
