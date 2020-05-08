@@ -298,10 +298,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
 
   public onDelete(enrolleeId: number) {
     const data: DialogOptions = {
-      title: 'Delete Enrolment',
+      title: 'Delete Enrollee',
       message: 'Are you sure you want to delete this enrolment?',
       actionType: 'warn',
-      actionText: 'Delete Enrolment',
+      actionText: 'Delete Enrollee',
       component: NoteComponent,
     };
 
