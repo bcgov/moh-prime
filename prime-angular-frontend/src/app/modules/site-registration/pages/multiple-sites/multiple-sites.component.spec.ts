@@ -3,6 +3,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { MultipleSitesComponent } from './multiple-sites.component';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('MultipleSitesComponent', () => {
   let component: MultipleSitesComponent;
@@ -12,7 +14,14 @@ describe('MultipleSitesComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        SiteRegistrationModule
+        SiteRegistrationModule,
+        HttpClientTestingModule
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
       ]
     })
       .compileComponents();
