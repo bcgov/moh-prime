@@ -29,7 +29,7 @@ namespace Prime.Controllers
 
         // POST: api/Feedback
         /// <summary>
-        /// Creates a Feedback.
+        /// Creates user Feedback.
         /// </summary>
         [HttpPost(Name = nameof(CreateFeedback))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
