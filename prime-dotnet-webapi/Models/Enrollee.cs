@@ -79,7 +79,7 @@ namespace Prime.Models
         public string HasPharmaNetSuspendedDetails { get; set; }
 
         [NotMapped]
-        public bool HasMostRecentAccessTermSigned { get; set; }
+        public string CurrentTOAStatus { get; set; }
 
         [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
@@ -87,6 +87,7 @@ namespace Prime.Models
         [NotMapped]
         public ICollection<Privilege> Privileges { get; set; }
 
+        [JsonIgnore]
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         public int? AdjudicatorId { get; set; }
