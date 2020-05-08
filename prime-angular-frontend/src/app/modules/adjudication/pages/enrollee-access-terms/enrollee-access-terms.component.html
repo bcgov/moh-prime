@@ -1,16 +1,17 @@
-<app-adjudication-container [content]="content">
+<app-adjudication-container [content]="content"
+                            [hasActions]="hasActions"
+                            (action)="onAction()">
 
-  <app-page-header>PRIME History</app-page-header>
+  <app-page-header>Enrolments</app-page-header>
 
 </app-adjudication-container>
 
 <ng-template #content>
 
-  <p>View the history of the signed TOA's and the Enrolment associated with the each signed TOA</p>
-
   <mat-form-field (selectionChange)="onChange($event)">
     <mat-label>Filter By Year</mat-label>
-    <mat-select [value]="currentYear">
+    <mat-select [value]="selectedYear"
+                (selectionChange)="onChange($event)">
       <mat-option *ngFor="let year of years"
                   [value]="year">
         {{ year }}
@@ -18,13 +19,36 @@
     </mat-select>
   </mat-form-field>
 
+  <mat-card class="card-width mb-4">
+    <mat-card-content class="mb-0">
+      <!-- Used instead of mat-card-header with mat-card-title since flexbox doesn't work within these components -->
+      <div class="card-title">
+        <small>Submitted {{ currentEnrolment?.appliedDate | formatDate: 'MMMM Do YYYY' }}</small>
+        <small>CURRENT</small>
+      </div>
+
+      <p class="text-muted">
+        Enrollee edited their Enrolment, but has no associated Terms of Access
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button
+              class="mb-2 mr-1"
+              color="primary"
+              [disabled]="true">View Terms of Access</button>
+      <button mat-button
+              class="mb-2 mx-0"
+              color="primary"
+              [routerLink]="[currentEnrolment?.id, AdjudicationRoutes.ENROLLEE]">View Enrolment</button>
+    </mat-card-actions>
+  </mat-card>
+
   <ng-container *ngFor="let accessTerm of accessTerms">
 
     <mat-card class="card-width mb-4">
       <mat-card-header>
         <mat-card-title class="no-avatar">
-          <small class="d-block">Applied {{ accessTerm.createdDate | formatDate: 'MMMM Do YYYY' }}</small>
-          {{ accessTerm.createdDate | formatDate: 'YYYY' }} Enrolment
+          <small>Applied {{ accessTerm.createdDate | formatDate: 'MMMM Do YYYY' }}</small>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content class="mb-0">

@@ -18,7 +18,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
-  // TODO replace when Enrolemnt is refactored out of the EnrolmentModule
+  // TODO replace when Enrolment is refactored out of the EnrolmentModule
   // public enrolleeProfileVersion: HttpEnrolleeProfileVersion;
   public enrolmentProfileHistory: EnrolmentProfileVersion;
 
