@@ -212,7 +212,6 @@ namespace Prime.Services
         public async Task<string> GetCurrentTOAStatusAsync(Enrollee enrollee)
         {
             var currentStatus = enrollee.CurrentStatus;
-            var isCurrent = await this.IsCurrentByEnrolleeAsync(enrollee);
 
             if (currentStatus.IsType(StatusType.RequiresToa))
             {
@@ -221,6 +220,7 @@ namespace Prime.Services
             else if (currentStatus.IsType(StatusType.Editable))
             {
                 var accessTerm = await GetMostRecentAcceptedEnrolleesAccessTermAsync(enrollee.Id);
+                var isCurrent = await this.IsCurrentByEnrolleeAsync(enrollee);
 
                 return (accessTerm != null && isCurrent && accessTerm.ExpiryDate > DateTimeOffset.Now)
                 ? "Yes"
