@@ -211,14 +211,14 @@ namespace Prime.Services
         /// </summary>
         public async Task<string> GetCurrentTOAStatusAsync(Enrollee enrollee)
         {
-            var currentStatus = enrollee.CurrentStatus.StatusCode;
+            var currentStatus = enrollee.CurrentStatus;
             var isCurrent = await this.IsCurrentByEnrolleeAsync(enrollee);
 
-            if (currentStatus == (int)StatusType.RequiresToa)
+            if (currentStatus.IsType(StatusType.RequiresToa))
             {
                 return "Pending";
             }
-            else if (currentStatus == (int)StatusType.Editable)
+            else if (currentStatus.IsType(StatusType.Editable))
             {
                 var accessTerm = await GetMostRecentAcceptedEnrolleesAccessTermAsync(enrollee.Id);
 
