@@ -4,6 +4,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
 import { SharedModule } from '@shared/shared.module';
 
 import { AdjudicationRoutingModule } from './adjudication-routing.module';
+
 import { AdjudicationContainerComponent } from './shared/components/adjudication-container/adjudication-container.component';
 import { AdjudicatorActionsComponent } from './shared/components/adjudicator-actions/adjudicator-actions.component';
 import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
@@ -18,10 +19,11 @@ import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/en
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
+
+import { StatusReasonsPipe } from './shared/pipes/status-reasons.pipe';
 import {
   ReviewStatusContentComponent
-} from './pages/enrollee-review-status/components/review-status-content/review-status-content.component';
-import { StatusReasonsPipe } from './pages/enrollee-review-status/pipes/status-reasons.pipe';
+} from './shared/components/review-status-content/review-status-content.component';
 
 @NgModule({
   declarations: [
