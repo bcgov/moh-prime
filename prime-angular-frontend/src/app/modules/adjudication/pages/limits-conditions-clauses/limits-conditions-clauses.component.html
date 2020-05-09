@@ -14,18 +14,11 @@
       <div class="col-sm-12 col-lg-9 col-xl-5 pb-4">
 
         <editor class="mb-4"
+                [init]="editorConfig"
                 [disabled]="!canEdit"
-                formControlName="note"
                 (onKeyUp)="onUpdate($event)"
                 (onChange)="onUpdate($event)"
-                [init]="{
-                height: '25rem',
-                base_url: '/tinymce',
-                suffix: '.min',
-                plugins: 'lists advlist',
-                toolbar: 'undo redo | bold italic underline | bullist numlist outdent indent | removeformat',
-                menubar: 'false'
-              }">
+                formControlName="note">
         </editor>
 
         <div class="text-right">
