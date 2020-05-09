@@ -6,7 +6,8 @@
 
 </app-adjudication-container>
 
-<ng-template #content>
+<ng-template #content
+             let-enrollee="enrollee">
 
   <mat-form-field (selectionChange)="onChange($event)">
     <mat-label>Filter By Year</mat-label>
@@ -19,52 +20,57 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-card class="card-width mb-4">
+  <mat-card *ngIf="isUnderAdjudication(enrollee)"
+            class="card-width mb-4">
     <mat-card-content class="mb-0">
       <!-- Used instead of mat-card-header with mat-card-title since flexbox doesn't work within these components -->
       <div class="card-title">
-        <small>Submitted {{ currentEnrolment?.appliedDate | formatDate: 'MMMM Do YYYY' }}</small>
+        <!-- TODO what is the submitted date for a enrolment submission? -->
+        <small>Submitted {{ enrollee?.currentStatus.statusDate | formatDate: 'MMMM Do YYYY' }}</small>
         <small>CURRENT</small>
       </div>
 
       <p class="text-muted">
-        Enrollee edited their Enrolment, but has no associated Terms of Access
+        <!-- TODO would be a pending submission waiting on adjudication so mock text has been changed -->
+        Enrollee edited and submitted an Enrolment, but has not signed the Terms of Access
       </p>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button
+              class="mb-2 mx-0"
+              color="primary"
+              [routerLink]="[AdjudicationRoutes.ENROLLEE_CURRENT]">View Enrolment</button>
+      <button mat-button
               class="mb-2 mr-1"
               color="primary"
               [disabled]="true">View Terms of Access</button>
-      <button mat-button
-              class="mb-2 mx-0"
-              color="primary"
-              [routerLink]="[currentEnrolment?.id, AdjudicationRoutes.ENROLLEE]">View Enrolment</button>
     </mat-card-actions>
   </mat-card>
 
-  <ng-container *ngFor="let accessTerm of accessTerms">
+  <ng-container *ngFor="let accessTerm of accessTerms; let first = first">
 
     <mat-card class="card-width mb-4">
-      <mat-card-header>
-        <mat-card-title class="no-avatar">
-          <small>Applied {{ accessTerm.createdDate | formatDate: 'MMMM Do YYYY' }}</small>
-        </mat-card-title>
-      </mat-card-header>
       <mat-card-content class="mb-0">
+        <!-- Used instead of mat-card-header with mat-card-title since flexbox doesn't work within these components -->
+        <div class="card-title">
+          <!-- TODO created date is for the access term, but should it be now... doesn't seem like it -->
+          <small>Submitted {{ accessTerm.createdDate | formatDate: 'MMMM Do YYYY' }}</small>
+          <small *ngIf="first && !isUnderAdjudication(enrollee)">CURRENT</small>
+        </div>
+
         <p class="text-muted">
-          This PharmaNet enrolment was approved on {{ accessTerm.acceptedDate | formatDate: 'MMMM Do YYYY' }}
+          This PRIME enrolment was approved on {{ accessTerm.acceptedDate | formatDate: 'MMMM Do YYYY' }}
         </p>
       </mat-card-content>
       <mat-card-actions>
         <button mat-button
-                class="mb-2 mr-1"
-                color="primary"
-                [routerLink]="[accessTerm.id]">View Terms of Access</button>
-        <button mat-button
                 class="mb-2 mx-0"
                 color="primary"
                 [routerLink]="[accessTerm.id, AdjudicationRoutes.ENROLLEE]">View Enrolment</button>
+        <button mat-button
+                class="mb-2 mr-1"
+                color="primary"
+                [routerLink]="[accessTerm.id]">View Terms of Access</button>
       </mat-card-actions>
     </mat-card>
 
