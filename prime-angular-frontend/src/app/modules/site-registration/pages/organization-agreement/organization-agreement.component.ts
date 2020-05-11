@@ -47,7 +47,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       const data: DialogOptions = {
         title: 'Organization Agreement',
         message: 'Are you sure you want to accept the Organization Agreement?',
-        actionText: 'Accept Agreement'
+        actionText: 'Accept Organization Agreement'
       };
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()

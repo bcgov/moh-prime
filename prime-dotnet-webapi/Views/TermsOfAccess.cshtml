@@ -2,22 +2,20 @@
 @model AccessTerm
 
 @{
-  var userClauseClause = Model.UserClause.Clause.Split("{$lcPlaceholder}");
+  var userClauseClause = Model.UserClause.Clause;
   var limitsAndConditions = Model.LimitsConditionsClause?.Clause;
   @* var licenceClassClauses = Model.LicenseClassClauses.Select(lcc => lcc.Clause); *@
 }
 
-@Html.Raw(userClauseClause[0])
+@Html.Raw(userClauseClause)
 
 @if(!string.IsNullOrEmpty(limitsAndConditions))
 {
   <li>
-    <p class="bold underline">Additional Limits and Conditions</p>
+    <p class="bold underline">Additional Clauses that Apply to You</p>
     <p>@Html.Raw(limitsAndConditions)</p>
   </li>
 }
-
-@Html.Raw(@userClauseClause[1])
 
 @* @if(licenceClassClauses.Any())
 {
