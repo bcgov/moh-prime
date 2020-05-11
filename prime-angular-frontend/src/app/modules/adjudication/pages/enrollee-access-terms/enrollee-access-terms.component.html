@@ -20,59 +20,61 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-card *ngIf="isUnderAdjudication(enrollee)"
-            class="card-width mb-4">
+  <ng-container *ngIf="isUnderAdjudication(enrollee)"
+                [ngTemplateOutlet]="card"
+                [ngTemplateOutletContext]="{
+                  isCurrent: true,
+                  submittedDate: enrollee?.appliedDate,
+                  enrolmentRoute: [AdjudicationRoutes.ENROLLEE_CURRENT]
+                }">
+  </ng-container>
+
+  <ng-container *ngFor="let accessTerm of accessTerms; let first = first">
+    <ng-container [ngTemplateOutlet]="card"
+                  [ngTemplateOutletContext]="{
+                    isCurrent: first && !isUnderAdjudication(enrollee),
+                    submittedDate: enrollee?.appliedDate,
+                    acceptedDate: accessTerm.acceptedDate,
+                    enrolmentRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE],
+                    toaRoute: [accessTerm.id]
+                  }">
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #card
+             let-isCurrent="isCurrent"
+             let-submittedDate="submittedDate"
+             let-acceptedDate="acceptedDate"
+             let-enrolmentRoute="enrolmentRoute"
+             let-toaRoute="toaRoute">
+  <mat-card class="card-width mb-4">
     <mat-card-content class="mb-0">
       <!-- Used instead of mat-card-header with mat-card-title since flexbox doesn't work within these components -->
       <div class="card-title">
-        <!-- TODO what is the submitted date for a enrolment submission? -->
-        <small>Submitted {{ enrollee?.currentStatus.statusDate | formatDate: 'MMMM Do YYYY' }}</small>
-        <small>CURRENT</small>
+        <small>Submitted {{ submittedDate | formatDate: 'MMMM Do YYYY' }}</small>
+        <small *ngIf="isCurrent">CURRENT</small>
       </div>
 
       <p class="text-muted">
-        <!-- TODO would be a pending submission waiting on adjudication so mock text has been changed -->
-        Enrollee edited and submitted an Enrolment, but has not signed the Terms of Access
+        <ng-container *ngIf="toaRoute; else current">
+          This PRIME enrolment was approved on {{ acceptedDate | formatDate: 'MMMM Do YYYY' }}
+        </ng-container>
+        <ng-template #current>
+          Enrollee edited and submitted an Enrolment, but has not signed the Terms of Access
+        </ng-template>
       </p>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button
               class="mb-2 mx-0"
               color="primary"
-              [routerLink]="[AdjudicationRoutes.ENROLLEE_CURRENT]">View Enrolment</button>
+              [routerLink]="enrolmentRoute">View Enrolment</button>
       <button mat-button
               class="mb-2 mr-1"
               color="primary"
-              [disabled]="true">View Terms of Access</button>
+              [disabled]="!acceptedDate"
+              [routerLink]="toaRoute">View Terms of Access</button>
     </mat-card-actions>
   </mat-card>
-
-  <ng-container *ngFor="let accessTerm of accessTerms; let first = first">
-
-    <mat-card class="card-width mb-4">
-      <mat-card-content class="mb-0">
-        <!-- Used instead of mat-card-header with mat-card-title since flexbox doesn't work within these components -->
-        <div class="card-title">
-          <!-- TODO created date is for the access term, but should it be now... doesn't seem like it -->
-          <small>Submitted {{ accessTerm.createdDate | formatDate: 'MMMM Do YYYY' }}</small>
-          <small *ngIf="first && !isUnderAdjudication(enrollee)">CURRENT</small>
-        </div>
-
-        <p class="text-muted">
-          This PRIME enrolment was approved on {{ accessTerm.acceptedDate | formatDate: 'MMMM Do YYYY' }}
-        </p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button
-                class="mb-2 mx-0"
-                color="primary"
-                [routerLink]="[accessTerm.id, AdjudicationRoutes.ENROLLEE]">View Enrolment</button>
-        <button mat-button
-                class="mb-2 mr-1"
-                color="primary"
-                [routerLink]="[accessTerm.id]">View Terms of Access</button>
-      </mat-card-actions>
-    </mat-card>
-
-  </ng-container>
 </ng-template>

@@ -37,7 +37,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       .pipe(
         map((enrolmentProfileVersion: HttpEnrolleeProfileVersion) => this.enrolleeVersionAdapterResponse(enrolmentProfileVersion))
       )
-      // TODO replace when Enrolemnt is refactored out of the EnrolmentModule
+      // TODO replace when Enrolment is refactored out of the EnrolmentModule
       // .subscribe((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
       //   this.enrolleeProfileVersion = enrolleeProfileVersion
       // );
