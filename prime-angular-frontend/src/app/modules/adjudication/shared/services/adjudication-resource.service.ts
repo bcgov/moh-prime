@@ -272,8 +272,9 @@ export class AdjudicationResource {
       );
   }
 
-  public getAccessTerm(enrolleeId: number, accessTermsId: number): Observable<AccessTerm> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermsId}`)
+  public getAccessTerm(enrolleeId: number, accessTermsId: number, businessEvent?: boolean): Observable<AccessTerm> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ businessEvent });
+    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermsId}`, params)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm>) => response.result),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm)),

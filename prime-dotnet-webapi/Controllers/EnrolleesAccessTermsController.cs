@@ -82,13 +82,14 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="accessTermId"></param>
+        /// <param name="businessEvent"></param>
         [HttpGet("{enrolleeId}/access-terms/{accessTermId}", Name = nameof(GetAccessTerm))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<AccessTerm>> GetAccessTerm(int enrolleeId, int accessTermId)
+        public async Task<ActionResult<AccessTerm>> GetAccessTerm(int enrolleeId, int accessTermId, [FromQuery] bool businessEvent)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -109,6 +110,11 @@ namespace Prime.Controllers
 
             AccessTerm accessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
             accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", accessTerm);
+
+            if (businessEvent)
+            {
+                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing Terms of Access");
+            }
 
             return Ok(ApiResponse.Result(accessTerm));
         }
