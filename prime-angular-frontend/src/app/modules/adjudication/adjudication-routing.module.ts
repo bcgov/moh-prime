@@ -35,7 +35,8 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: EnrolmentsComponent
+            component: EnrolmentsComponent,
+            data: { title: 'PRIME Enrollees' }
           },
           {
             path: ':id',
@@ -64,31 +65,21 @@ const routes: Routes = [
                       {
                         path: AdjudicationRoutes.ENROLLEE,
                         component: EnrolleeAccessTermEnrolmentComponent,
-                        data: { title: 'Enrolment' }
+                        data: { title: 'Enrollee' }
                       }
                     ]
-                  },
-                ],
-              },
-              {
-                path: AdjudicationRoutes.ENROLLEE_EVENTS,
-                children: [
-                  {
-                    path: '',
-                    component: EnrolleeEventsComponent,
-                    data: { title: 'Event Log' }
                   }
                 ]
               },
               {
-                path: AdjudicationRoutes.ENROLLEE_REVIEW_STATUS,
-                children: [
-                  {
-                    path: '',
-                    component: EnrolleeReviewStatusComponent,
-                    data: { title: 'Adjudication' }
-                  }
-                ]
+                path: AdjudicationRoutes.ENROLLEE_REVIEW,
+                component: EnrolleeReviewStatusComponent,
+                data: { title: 'Adjudication' }
+              },
+              {
+                path: AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS,
+                component: LimitsConditionsClausesComponent,
+                data: { title: 'Limits and Conditions Clauses' }
               },
               {
                 path: AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES,
@@ -96,16 +87,16 @@ const routes: Routes = [
                 data: { title: 'Adjudicator Notes' }
               },
               {
-                path: AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS,
-                component: LimitsConditionsClausesComponent,
-                data: { title: 'Limits and Conditions Clauses' }
+                path: AdjudicationRoutes.ENROLLEE_EVENT_LOG,
+                component: EnrolleeEventsComponent,
+                data: { title: 'Event Log' }
               }
             ]
           }
         ]
       },
       {
-        path: '', // Equivalent to `/` and alias for `enrolments`
+        path: '', // Equivalent to `/` and alias for `enrollees`
         redirectTo: AdjudicationRoutes.ENROLLEES,
         pathMatch: 'full'
       }
