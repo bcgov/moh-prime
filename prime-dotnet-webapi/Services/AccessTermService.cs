@@ -205,28 +205,38 @@ namespace Prime.Services
 
         /// <summary>
         /// Enrollee’s that are:
-        /// Under Review, Locked, Declined -> Current TOA status will read: NA
+        /// Under Review ->  -> Current TOA status: --
+        /// Locked, Declined -> Current TOA status: NA
         /// Required TOA -> Current TOA status: Pending
-        /// Editable -> Current TOA status: Is their signed TOA the most current version and not expired
+        /// Editable (AND before their renewal date) -> Current TOA status: Is their signed TOA the most current version
+        /// Editable (AND on/after their renewal date) -> Current TOA status: --
         /// </summary>
         public async Task<string> GetCurrentTOAStatusAsync(Enrollee enrollee)
         {
             var currentStatus = enrollee.CurrentStatus;
+            var toaStatus = "--";
 
-            if (currentStatus.IsType(StatusType.RequiresToa))
+            if (currentStatus.IsType(StatusType.Locked) || currentStatus.IsType(StatusType.Declined))
             {
-                return "Pending";
+                return "NA";
+            }
+            else if (currentStatus.IsType(StatusType.RequiresToa))
+            {
+                toaStatus = "Pending";
             }
             else if (currentStatus.IsType(StatusType.Editable))
             {
                 var accessTerm = await GetMostRecentAcceptedEnrolleesAccessTermAsync(enrollee.Id);
                 var isCurrent = await this.IsCurrentByEnrolleeAsync(enrollee);
 
-                return (accessTerm != null && isCurrent && accessTerm.ExpiryDate > DateTimeOffset.Now)
-                ? "Yes"
-                : "No";
+                if (accessTerm?.ExpiryDate > DateTimeOffset.Now)
+                {
+                    toaStatus = (accessTerm != null && isCurrent )
+                        ? "Yes"
+                        : "No";
+                }
             }
-            return "NA";
+            return toaStatus;
         }
 
         /**
