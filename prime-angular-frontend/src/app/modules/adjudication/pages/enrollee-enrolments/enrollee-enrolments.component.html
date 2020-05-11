@@ -25,7 +25,7 @@
                 [ngTemplateOutletContext]="{
                   isCurrent: true,
                   submittedDate: enrollee?.appliedDate,
-                  enrolmentRoute: [AdjudicationRoutes.ENROLLEE_CURRENT]
+                  enrolmentRoute: [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT]
                 }">
   </ng-container>
 
@@ -35,8 +35,8 @@
                     isCurrent: first && !isUnderAdjudication(enrollee),
                     submittedDate: enrollee?.appliedDate,
                     acceptedDate: accessTerm.acceptedDate,
-                    enrolmentRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE],
-                    toaRoute: [accessTerm.id]
+                    enrolmentRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT],
+                    toaRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM]
                   }">
     </ng-container>
   </ng-container>

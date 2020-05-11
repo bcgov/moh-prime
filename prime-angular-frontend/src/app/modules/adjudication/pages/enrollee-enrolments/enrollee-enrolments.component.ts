@@ -7,11 +7,11 @@ import { Subscription } from 'rxjs';
 import moment from 'moment';
 
 import { AccessTerm } from '@shared/models/access-term.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-enrollee-enrolments',
