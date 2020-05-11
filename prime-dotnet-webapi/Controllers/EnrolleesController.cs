@@ -73,6 +73,7 @@ namespace Prime.Controllers
         /// Gets a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
+        /// <param name="businessEvent"></param>
         [HttpGet("{enrolleeId}", Name = nameof(GetEnrolleeById))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -93,7 +94,10 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing the current Enrolment");
+            if (businessEvent)
+            {
+                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing the current Enrolment");
+            }
 
             return Ok(ApiResponse.Result(enrollee));
         }
