@@ -14,11 +14,11 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 @Component({
-  selector: 'app-enrollee-access-terms',
-  templateUrl: './enrollee-access-terms.component.html',
-  styleUrls: ['./enrollee-access-terms.component.scss']
+  selector: 'app-enrollee-enrolments',
+  templateUrl: './enrollee-enrolments.component.html',
+  styleUrls: ['./enrollee-enrolments.component.scss']
 })
-export class EnrolleeAccessTermsComponent implements OnInit {
+export class EnrolleeEnrolmentsComponent implements OnInit {
   public busy: Subscription;
   public accessTerms: AccessTerm[];
   public years: number[];

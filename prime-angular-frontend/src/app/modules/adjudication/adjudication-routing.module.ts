@@ -9,11 +9,11 @@ import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 import { AdjudicationRoutes } from './adjudication.routes';
 import { AdjudicationGuard } from './shared/guards/adjudication.guard';
 
-import { EnrolmentsComponent } from './pages/enrolments/enrolments.component';
+import { EnrolleesComponent } from './pages/enrollees/enrollees.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
-import { EnrolleeAccessTermsComponent } from './pages/enrollee-access-terms/enrollee-access-terms.component';
+import { EnrolleeEnrolmentsComponent } from './pages/enrollee-enrolments/enrollee-enrolments.component';
 import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
 import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
@@ -35,37 +35,37 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: EnrolmentsComponent,
+            component: EnrolleesComponent,
             data: { title: 'PRIME Enrollees' }
           },
           {
             path: ':id',
             children: [
               {
-                path: '',
-                component: EnrolmentComponent,
-                data: { title: 'Enrollee' }
-              },
-              {
                 path: AdjudicationRoutes.ENROLLEE_ENROLMENTS,
                 children: [
                   {
                     path: '',
-                    component: EnrolleeAccessTermsComponent,
+                    component: EnrolleeEnrolmentsComponent,
                     data: { title: 'Enrolments' }
                   },
                   {
-                    path: ':hid',
+                    path: AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT,
+                    component: EnrolmentComponent,
+                    data: { title: 'Enrolment' }
+                  },
+                  {
+                    path: ':aid',
                     children: [
                       {
-                        path: '',
+                        path: AdjudicationRoutes.ENROLLEE_ACCESS_TERM,
                         component: EnrolleeAccessTermComponent,
-                        data: { title: 'Terms of Access' }
+                        data: { title: 'Enrolment Profile' }
                       },
                       {
-                        path: AdjudicationRoutes.ENROLLEE,
+                        path: AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT,
                         component: EnrolleeAccessTermEnrolmentComponent,
-                        data: { title: 'Enrollee' }
+                        data: { title: 'Enrolment Terms of Access' }
                       }
                     ]
                   }

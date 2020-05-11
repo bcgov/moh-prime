@@ -4,13 +4,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { EnrolmentsComponent } from './enrolments.component';
+import { EnrolleesComponent } from './enrollees.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
-describe('EnrolmentsComponent', () => {
-  let component: EnrolmentsComponent;
-  let fixture: ComponentFixture<EnrolmentsComponent>;
+describe('EnrolleesComponent', () => {
+  let component: EnrolleesComponent;
+  let fixture: ComponentFixture<EnrolleesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
@@ -33,7 +33,7 @@ describe('EnrolmentsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EnrolmentsComponent);
+    fixture = TestBed.createComponent(EnrolleesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
