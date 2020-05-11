@@ -3,10 +3,11 @@ export class AdjudicationRoutes {
   public static ENROLLEES = 'enrollees';
   public static ENROLLEE_ENROLMENTS = 'enrolments';
   public static ENROLLEE = 'enrollee';
-  public static ENROLLEE_EVENTS = 'events';
-  public static ENROLLEE_REVIEW_STATUS = 'review-status';
+  public static ENROLLEE_CURRENT = 'current';
+  public static ENROLLEE_REVIEW = 'review';
   public static ENROLLEE_LIMITS_CONDITIONS = 'limits-and-conditions';
   public static ENROLLEE_ADJUDICATOR_NOTES = 'notes';
+  public static ENROLLEE_EVENT_LOG = 'event-log';
 
   public static MODULE_PATH = AdjudicationRoutes.ADJUDICATION;
 
