@@ -153,13 +153,14 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="accessTermId"></param>
+        /// <param name="businessEvent"></param>
         [HttpGet("{enrolleeId}/access-terms/{accessTermId}/enrolment", Name = nameof(GetEnrolmentForAccessTerm))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAccessTerm(int enrolleeId, int accessTermId)
+        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAccessTerm(int enrolleeId, int accessTermId, [FromQuery] bool businessEvent)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -185,6 +186,11 @@ namespace Prime.Controllers
             if (enrolleeProfileHistory == null)
             {
                 return NotFound(ApiResponse.Message($"No enrolment profile history found for Access Term with id {accessTermId} for enrollee with id {enrolleeId}."));
+            }
+
+            if (businessEvent)
+            {
+                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing Enrolment in PRIME History");
             }
 
             return Ok(ApiResponse.Result(enrolleeProfileHistory));
