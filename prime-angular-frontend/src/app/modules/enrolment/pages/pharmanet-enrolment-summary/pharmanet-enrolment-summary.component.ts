@@ -107,7 +107,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public sendProvisionerAccessLink(provisionerName: string, emails: string = null, formControl: FormControl = null) {
     const data: DialogOptions = {
       title: 'Confirm Email',
-      message: `Are you sure you want to send your PharmaNet certificate to ${provisionerName}?`,
+      message: `Are you sure you want to send your Approval Notification to ${provisionerName}?`,
       actionText: 'Send',
     };
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })

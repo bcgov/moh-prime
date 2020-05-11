@@ -75,7 +75,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
       const data: DialogOptions = {
         title: 'Terms of Access',
         message: `Are you sure you want to ${status.verb.toLowerCase()} the terms of access?`,
-        actionText: `${status.verb} Agreement`,
+        actionText: `${status.verb} Terms of Access`,
         actionType: (!isAcceptingToa) ? 'warn' : 'primary'
       };
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
