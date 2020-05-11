@@ -79,6 +79,7 @@ export class MockEnrolmentService implements IEnrolmentService {
           }
         ]
       },
+      previousStatus: null,
       enrolleeClassification: EnrolleeClassification.OBO,
       enrolmentCertificateNote: null,
       accessAgreementNote: null,
