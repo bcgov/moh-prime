@@ -77,9 +77,9 @@ export class SiteRegistrationStateService {
       // Indicate that the form is patched, and may contain unsaved information
       this.patched = true;
 
-      this.siteId = site.id;
-      this.provisionerId = site.provisionerId;
-      this.locationId = site.locationId;
+      this.siteId = site?.id;
+      this.provisionerId = site?.provisionerId;
+      this.locationId = site?.locationId;
 
       this.patchSite(site);
     }
