@@ -33,7 +33,7 @@ export class CollectionNoticeComponent implements OnInit {
 
   public ngOnInit() {
     this.authService.hasJustLoggedIn = true;
-    this.isCompleted = this.siteRegistrationService.site.completed;
+    this.isCompleted = this.siteRegistrationService.site?.completed;
 
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
