@@ -79,7 +79,26 @@ export class MockEnrolmentService implements IEnrolmentService {
           }
         ]
       },
-      previousStatus: null,
+      previousStatus: {
+        enrolmentId,
+        statusCode: null,
+        status: {
+          code: EnrolmentStatus.EDITABLE,
+          name: null
+        },
+        statusDate: null,
+        enrolmentStatusReasons: [
+          {
+            enrolmentId,
+            statusReasonCode: null,
+            statusReason: {
+              code: null,
+              name: faker.lorem.sentence(6)
+            },
+            reasonNote: null
+          }
+        ]
+      },
       enrolleeClassification: EnrolleeClassification.OBO,
       enrolmentCertificateNote: null,
       accessAgreementNote: null,

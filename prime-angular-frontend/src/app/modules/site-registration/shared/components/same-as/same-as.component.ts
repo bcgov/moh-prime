@@ -31,22 +31,22 @@ export class SameAsComponent implements OnInit {
       {
         key: 'signingAuthority',
         display: 'Signing Authority',
-        data: site.location.organization.signingAuthority
+        data: site?.location?.organization?.signingAuthority
       },
       {
         key: 'administratorPharmaNet',
         display: 'Administrator of PharmaNet Onboarding',
-        data: site.location.administratorPharmaNet
+        data: site?.location?.administratorPharmaNet
       },
       {
         key: 'privacyOfficer',
         display: 'Privacy Officer',
-        data: site.location.privacyOfficer
+        data: site?.location?.privacyOfficer
       },
       {
         key: 'technicalSupport',
         display: 'Technical Support',
-        data: site.location.technicalSupport
+        data: site?.location?.technicalSupport
       }
     ];
 
