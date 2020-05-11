@@ -47,8 +47,8 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolleeById(enrolleeId: number, statusCode?: number): Observable<HttpEnrollee> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
+  public getEnrolleeById(enrolleeId: number, statusCode?: number, businessEvent?: boolean): Observable<HttpEnrollee> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode, businessEvent });
     return this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
