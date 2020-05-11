@@ -96,7 +96,7 @@
       <mat-menu #menu="matMenu">
         <button mat-menu-item
                 *ngIf="canReviewStatusReasons(row)"
-                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_REVIEW_STATUS])">
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_REVIEW])">
           <mat-icon>rate_review</mat-icon>
           <span>Adjudication</span>
         </button>
@@ -106,7 +106,7 @@
           <span>Enrolments</span>
         </button>
         <button mat-menu-item
-                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_EVENTS])">
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_EVENT_LOG])">
           <mat-icon>list_alt</mat-icon>
           <span>Event Log</span>
         </button>
