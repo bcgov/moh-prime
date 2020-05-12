@@ -72,6 +72,20 @@ namespace Prime.Services
             return businessEvent;
         }
 
+        public async Task<BusinessEvent> CreateAdminViewEventAsync(int enrolleeId, string description)
+        {
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.ADMIN_VIEW_CODE, enrolleeId, description);
+            _context.BusinessEvents.Add(businessEvent);
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create admin claim business event.");
+            };
+
+            return businessEvent;
+        }
+
         public async Task<BusinessEvent> CreateEnrolleeEventAsync(int enrolleeId, string description)
         {
             var businessEvent = await this.CreateBusinessEvent(BusinessEventType.ENROLLEE_CODE, enrolleeId, description);
