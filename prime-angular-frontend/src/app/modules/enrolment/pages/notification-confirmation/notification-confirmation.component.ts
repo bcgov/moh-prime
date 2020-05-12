@@ -35,8 +35,14 @@ export class NotificationConfirmationComponent implements OnInit {
   public feedback() {
     const data: DialogOptions = {
       title: 'Feedback',
-      message: 'Are you satisfied with the information provided to you?',
+      icon: 'feedback',
+      message: 'How could we improve PRIME? If you could change something, what would it be?',
       actionText: 'Submit',
+      actionLink: {
+        href: 'https://prime245042.typeform.com/to/mUn5V0',
+        text: 'Take 5 Minute Survey',
+        target: '_blank'
+      },
       component: FeedbackComponent
     };
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })

@@ -75,8 +75,11 @@ namespace Prime.Services
                 .OrderByDescending(at => at.CreatedDate)
                 .FirstOrDefaultAsync();
 
-            accessTerm.LicenseClassClauses = accessTerm.AccessTermLicenseClassClauses
-                .Select(talc => talc.LicenseClassClause).ToList();
+            if (accessTerm != null)
+            {
+                accessTerm.LicenseClassClauses = accessTerm?.AccessTermLicenseClassClauses
+                    .Select(talc => talc.LicenseClassClause).ToList();
+            }
 
             return accessTerm;
         }
@@ -198,6 +201,32 @@ namespace Prime.Services
             }
 
             return current;
+        }
+
+        /// <summary>
+        /// Enrollee’s that are:
+        /// Under Review, Locked, Declined -> Current TOA status will read: NA
+        /// Required TOA -> Current TOA status: Pending
+        /// Editable -> Current TOA status: Is their signed TOA the most current version and not expired
+        /// </summary>
+        public async Task<string> GetCurrentTOAStatusAsync(Enrollee enrollee)
+        {
+            var currentStatus = enrollee.CurrentStatus;
+
+            if (currentStatus.IsType(StatusType.RequiresToa))
+            {
+                return "Pending";
+            }
+            else if (currentStatus.IsType(StatusType.Editable))
+            {
+                var accessTerm = await GetMostRecentAcceptedEnrolleesAccessTermAsync(enrollee.Id);
+                var isCurrent = await this.IsCurrentByEnrolleeAsync(enrollee);
+
+                return (accessTerm != null && isCurrent && accessTerm.ExpiryDate > DateTimeOffset.Now)
+                ? "Yes"
+                : "No";
+            }
+            return "NA";
         }
 
         /**
