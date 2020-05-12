@@ -45,14 +45,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="year"></param>
-        /// <param name="businessEvent"></param>
         [HttpGet("{enrolleeId}/access-terms", Name = nameof(GetAccessTerms))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId, [FromQuery] int year, [FromQuery] bool businessEvent)
+        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId, [FromQuery] int year)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -68,7 +67,7 @@ namespace Prime.Controllers
 
             var accessTerms = await _accessTermService.GetAcceptedAccessTerms(enrolleeId, year);
 
-            if (businessEvent)
+            if (User.IsAdmin())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing PRIME History");
             }
@@ -82,14 +81,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="accessTermId"></param>
-        /// <param name="businessEvent"></param>
         [HttpGet("{enrolleeId}/access-terms/{accessTermId}", Name = nameof(GetAccessTerm))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<AccessTerm>> GetAccessTerm(int enrolleeId, int accessTermId, [FromQuery] bool businessEvent)
+        public async Task<ActionResult<AccessTerm>> GetAccessTerm(int enrolleeId, int accessTermId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -111,7 +109,7 @@ namespace Prime.Controllers
             AccessTerm accessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
             accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", accessTerm);
 
-            if (businessEvent)
+            if (User.IsAdmin())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing Terms of Access");
             }
@@ -159,14 +157,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="accessTermId"></param>
-        /// <param name="businessEvent"></param>
         [HttpGet("{enrolleeId}/access-terms/{accessTermId}/enrolment", Name = nameof(GetEnrolmentForAccessTerm))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAccessTerm(int enrolleeId, int accessTermId, [FromQuery] bool businessEvent)
+        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAccessTerm(int enrolleeId, int accessTermId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -194,7 +191,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"No enrolment profile history found for Access Term with id {accessTermId} for enrollee with id {enrolleeId}."));
             }
 
-            if (businessEvent)
+            if (User.IsAdmin())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing Enrolment in PRIME History");
             }

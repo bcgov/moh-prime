@@ -47,8 +47,8 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolleeById(enrolleeId: number, statusCode?: number, businessEvent?: boolean): Observable<HttpEnrollee> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode, businessEvent });
+  public getEnrolleeById(enrolleeId: number, statusCode?: number): Observable<HttpEnrollee> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
     return this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
@@ -258,8 +258,8 @@ export class AdjudicationResource {
   // Access Terms
   // ---
 
-  public getAccessTerms(enrolleeId: number, year: number, businessEvent?: boolean): Observable<AccessTerm[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ year, businessEvent });
+  public getAccessTerms(enrolleeId: number, year: number): Observable<AccessTerm[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ year });
     return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
@@ -272,9 +272,8 @@ export class AdjudicationResource {
       );
   }
 
-  public getAccessTerm(enrolleeId: number, accessTermsId: number, businessEvent?: boolean): Observable<AccessTerm> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ businessEvent });
-    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermsId}`, params)
+  public getAccessTerm(enrolleeId: number, accessTermsId: number): Observable<AccessTerm> {
+    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermsId}`)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm>) => response.result),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm)),
@@ -285,10 +284,9 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number, businessEvent?: boolean)
+  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number)
     : Observable<HttpEnrolleeProfileVersion> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ businessEvent });
-    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`, params)
+    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
         tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>

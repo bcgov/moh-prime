@@ -33,7 +33,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
   public ngOnInit() {
     const enrolleeId = this.route.snapshot.params.id;
     const accessTermId = this.route.snapshot.params.hid;
-    this.busy = this.adjudicationResource.getEnrolmentForAccessTerm(enrolleeId, accessTermId, true)
+    this.busy = this.adjudicationResource.getEnrolmentForAccessTerm(enrolleeId, accessTermId)
       .pipe(
         map((enrolmentProfileVersion: HttpEnrolleeProfileVersion) => this.enrolleeVersionAdapterResponse(enrolmentProfileVersion))
       )

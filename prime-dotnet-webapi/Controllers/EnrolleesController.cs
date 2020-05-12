@@ -73,14 +73,13 @@ namespace Prime.Controllers
         /// Gets a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="businessEvent"></param>
         [HttpGet("{enrolleeId}", Name = nameof(GetEnrolleeById))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> GetEnrolleeById(int enrolleeId, [FromQuery] bool businessEvent)
+        public async Task<ActionResult<Enrollee>> GetEnrolleeById(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.HasAdminView());
 
@@ -94,7 +93,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (businessEvent)
+            if (User.IsAdmin())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing the current Enrolment");
             }

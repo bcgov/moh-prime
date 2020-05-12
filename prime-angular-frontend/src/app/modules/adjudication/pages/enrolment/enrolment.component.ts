@@ -32,7 +32,7 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
   }
 
   private getEnrollee(enrolleeId: number, statusCode?: number) {
-    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId, statusCode, true)
+    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId, statusCode)
       .pipe(
         map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
       )
