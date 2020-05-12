@@ -214,11 +214,11 @@ namespace Prime.Services
         public async Task<string> GetCurrentTOAStatusAsync(Enrollee enrollee)
         {
             var currentStatus = enrollee.CurrentStatus;
-            var toaStatus = "--";
+            var toaStatus = "";
 
             if (currentStatus.IsType(StatusType.Locked) || currentStatus.IsType(StatusType.Declined))
             {
-                return "NA";
+                toaStatus = "N/A";
             }
             else if (currentStatus.IsType(StatusType.RequiresToa))
             {
@@ -231,7 +231,7 @@ namespace Prime.Services
 
                 if (accessTerm?.ExpiryDate > DateTimeOffset.Now)
                 {
-                    toaStatus = (accessTerm != null && isCurrent )
+                    toaStatus = (accessTerm != null && isCurrent)
                         ? "Yes"
                         : "No";
                 }
