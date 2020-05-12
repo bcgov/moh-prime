@@ -13,6 +13,7 @@ namespace Prime.Models
         public int Id { get; set; }
 
         [JsonIgnore]
+        [Required]
         public Location Location { get; set; }
 
         public DayOfWeek Day { get; set; }
