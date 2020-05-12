@@ -1,6 +1,6 @@
 <div>
   <h3 class="mb-4">This Enrollee was manually adjudicated for the following reasons:</h3>
-  <div class="pl-2"
+  <div class="pl-2 mb-4"
        *ngFor="let reason of reasons">
     <span class="mb-4 font-weight-bolder">{{ reason.name }}</span>
     <div class="mb-3">
@@ -10,6 +10,32 @@
         <span class="mb-2 font-weight-bolder" *ngIf="reason.isSelfDeclaration">User's Explanation:</span>
         <p class="pl-2">{{ reason.note }}</p>
       </div>
+    </div>
+  </div>
+  <div class="col-6 pl-0">
+    <h3 class="mb-4">Status History:</h3>
+    <div class="table-responsive">
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let status of statuses">
+            <th class="">
+              <div class="text-nowrap">
+                {{ status.date | formatDate }}
+              </div>
+              <small class="d-block text-mute font-weight-normal mb-2">
+              {{ status.date | formatDate: 'h:mm a' }}
+            </small>
+            </th>
+            <td>
+              <mat-chip-list [selectable]="false">
+                <mat-chip selected
+                          color="primary"
+                          [disableRipple]="true">{{ status.name }}</mat-chip>
+              </mat-chip-list>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

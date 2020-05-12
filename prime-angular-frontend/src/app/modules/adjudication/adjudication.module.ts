@@ -24,6 +24,7 @@ import {
   ReviewStatusContentComponent
 } from './pages/enrollee-review-status/components/review-status-content/review-status-content.component';
 import { StatusReasonsPipe } from './pages/enrollee-review-status/pipes/status-reasons.pipe';
+import { StatusesPipe } from './pages/enrollee-review-status/pipes/statuses.pipe';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { StatusReasonsPipe } from './pages/enrollee-review-status/pipes/status-r
     SearchFormComponent,
     DatedContentTableComponent,
     ReviewStatusContentComponent,
-    StatusReasonsPipe
+    StatusReasonsPipe,
+    StatusesPipe
   ],
   imports: [
     SharedModule,

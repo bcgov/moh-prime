@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Reason } from '../../pipes/status-reasons.pipe';
+import { Status } from '../../pipes/statuses.pipe';
 
 @Component({
   selector: 'app-review-status-content',
@@ -9,8 +10,10 @@ import { Reason } from '../../pipes/status-reasons.pipe';
 })
 export class ReviewStatusContentComponent implements OnInit {
   @Input() public reasons: Reason[];
+  @Input() public statuses: Status[];
 
   constructor() { }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+  }
 }
