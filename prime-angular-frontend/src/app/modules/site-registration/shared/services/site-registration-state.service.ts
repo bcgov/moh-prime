@@ -266,6 +266,10 @@ export class SiteRegistrationStateService {
         null,
         []
       ],
+      bn15: [
+        null,
+        []
+      ],
       name: [
         null,
         [Validators.required]
