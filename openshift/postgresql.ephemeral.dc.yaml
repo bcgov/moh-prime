@@ -67,7 +67,7 @@ parameters:
     value: ReadWriteOnce
     required: true
   - name: SERVICE_ACCOUNT
-    value: default
+    value:
 objects:
 - apiVersion: v1
   kind: Service
@@ -260,7 +260,7 @@ objects:
         - ReadWriteOnce
         resources:
           requests:
-            storage: ${PVC_SIZE}
+            storage: ${VOLUME_CAPACITY}
 - apiVersion: v1
   kind: Endpoints
   metadata:
