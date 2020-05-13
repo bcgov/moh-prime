@@ -93,6 +93,11 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
+            if (User.IsAdmin())
+            {
+                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing the current Enrolment");
+            }
+
             return Ok(ApiResponse.Result(enrollee));
         }
 

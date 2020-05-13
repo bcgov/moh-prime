@@ -23,17 +23,20 @@ namespace Prime.Controllers
         private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IBusinessEventService _businessEventService;
 
         public EnrolleesAccessTermsController(
             IEnrolleeService enrolleeService,
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
+            IBusinessEventService businessEventService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
             _razorConverterService = razorConverterService;
+            _businessEventService = businessEventService;
         }
 
         // GET: api/Enrollees/access-terms
@@ -48,7 +51,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId, [FromQuery]int year)
+        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId, [FromQuery] int year)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -63,6 +66,11 @@ namespace Prime.Controllers
             }
 
             var accessTerms = await _accessTermService.GetAcceptedAccessTerms(enrolleeId, year);
+
+            if (User.IsAdmin())
+            {
+                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing PRIME History");
+            }
 
             return Ok(ApiResponse.Result(accessTerms));
         }
@@ -100,6 +108,11 @@ namespace Prime.Controllers
 
             AccessTerm accessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
             accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", accessTerm);
+
+            if (User.IsAdmin())
+            {
+                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing Terms of Access");
+            }
 
             return Ok(ApiResponse.Result(accessTerm));
         }
@@ -176,6 +189,11 @@ namespace Prime.Controllers
             if (enrolleeProfileHistory == null)
             {
                 return NotFound(ApiResponse.Message($"No enrolment profile history found for Access Term with id {accessTermId} for enrollee with id {enrolleeId}."));
+            }
+
+            if (User.IsAdmin())
+            {
+                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing Enrolment in PRIME History");
             }
 
             return Ok(ApiResponse.Result(enrolleeProfileHistory));
