@@ -421,7 +421,6 @@ objects:
             kind: ImageStreamTag
             name: 'postgresql-10:latest'
             namespace: dqszvc-tools
-          lastTriggeredImage: ''
         type: ImageChange
       - type: ConfigChange
   status: {}
