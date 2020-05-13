@@ -1,29 +1,26 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { EnrolleeProfileVersionsComponent } from './enrollee-profile-versions.component';
+import { EnrolleesComponent } from './enrollees.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
-describe('EnrolleeProfileVersionsComponent', () => {
-  let component: EnrolleeProfileVersionsComponent;
-  let fixture: ComponentFixture<EnrolleeProfileVersionsComponent>;
+describe('EnrolleesComponent', () => {
+  let component: EnrolleesComponent;
+  let fixture: ComponentFixture<EnrolleesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
       {
         imports: [
-          NgxBusyModule,
-          NgxMaterialModule,
-          RouterTestingModule,
           HttpClientTestingModule,
+          RouterTestingModule,
           AdjudicationModule
         ],
+        declarations: [],
         providers: [
           {
             provide: APP_CONFIG,
@@ -36,7 +33,7 @@ describe('EnrolleeProfileVersionsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EnrolleeProfileVersionsComponent);
+    fixture = TestBed.createComponent(EnrolleesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
