@@ -66,6 +66,8 @@ parameters:
   - name: STORAGE_MODE
     value: ReadWriteOnce
     required: true
+  - name: SERVICE_ACCOUNT
+    value: default
 objects:
 - apiVersion: v1
   kind: Service
@@ -187,6 +189,7 @@ objects:
               secretKeyRef:
                 key: database-user
                 name: '${NAME}-secret'
+
           - name: PATRONI_SUPERUSER_PASSWORD
             valueFrom:
               secretKeyRef:
