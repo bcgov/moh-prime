@@ -23,6 +23,7 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+import { BusinessHoursComponent } from './shared/components/business-hours/business-hours.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { OrganizationAgreementComponent } from './pages/organization-agreement/o
     SiteCollectionNoticeComponent,
     SiteAddressComponent,
     OrganizationAgreementComponent,
-    SameAsComponent
+    SameAsComponent,
+    BusinessHoursComponent
   ],
   imports: [
     SharedModule,
