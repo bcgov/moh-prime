@@ -14,7 +14,8 @@ namespace Prime.Models
         public const int NOTE_CODE = 3;
         public const int ADMIN_CLAIM_CODE = 4;
         public const int ENROLLEE_CODE = 5;
-        public const int SITE_CODE = 5;
+        public const int SITE_CODE = 6;
+        public const int ADMIN_VIEW_CODE = 7;
 
         [Key]
         public int Code { get; set; }

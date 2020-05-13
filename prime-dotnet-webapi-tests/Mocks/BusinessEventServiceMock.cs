@@ -83,7 +83,29 @@ namespace PrimeTests.Mocks
 
         public Task<BusinessEvent> CreateSiteEventAsync(int siteId, int partyId, string description)
         {
-            throw new NotImplementedException();
+            var businessEvent = new BusinessEvent
+            {
+                SiteId = siteId,
+                PartyId = partyId,
+                AdminId = 0,
+                BusinessEventTypeCode = BusinessEventType.SITE_CODE,
+                Description = description,
+                EventDate = DateTime.Now
+            };
+            return Task.FromResult(businessEvent);
+        }
+
+        public Task<BusinessEvent> CreateAdminViewEventAsync(int enrolleeId, string description)
+        {
+            var businessEvent = new BusinessEvent
+            {
+                EnrolleeId = enrolleeId,
+                AdminId = 0,
+                BusinessEventTypeCode = BusinessEventType.ADMIN_VIEW_CODE,
+                Description = description,
+                EventDate = DateTime.Now
+            };
+            return Task.FromResult(businessEvent);
         }
     }
 }
