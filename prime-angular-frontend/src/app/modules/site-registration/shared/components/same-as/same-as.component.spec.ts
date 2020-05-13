@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ReactiveFormsModule } from '@angular/forms';
 import { SameAsComponent } from './same-as.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
 
 describe('SameAsComponent', () => {
   let component: SameAsComponent;
@@ -8,9 +10,15 @@ describe('SameAsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SameAsComponent ]
+      imports: [
+        ReactiveFormsModule,
+        RouterTestingModule,
+        SiteRegistrationModule
+      ],
+      declarations: [SameAsComponent]
+
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

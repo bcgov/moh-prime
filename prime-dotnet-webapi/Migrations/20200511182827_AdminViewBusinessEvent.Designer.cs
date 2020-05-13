@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200511182827_AdminViewBusinessEvent")]
+    partial class AdminViewBusinessEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -299,44 +301,6 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.ToTable("AssignedPrivilege");
-                });
-
-            modelBuilder.Entity("Prime.Models.BusinessDay", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Day")
-                        .HasColumnType("integer");
-
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("interval");
-
-                    b.Property<int>("LocationId")
-                        .HasColumnType("integer");
-
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("BusinessDay");
                 });
 
             modelBuilder.Entity("Prime.Models.BusinessEvent", b =>
@@ -5404,6 +5368,9 @@ namespace Prime.Migrations
                     b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("Satisfied")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -6490,6 +6457,15 @@ namespace Prime.Migrations
 
                     b.Property<string>("DoingBusinessAs")
                         .HasColumnType("text");
+
+                    b.Property<bool>("Hours24")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("HoursSpecial")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("HoursWeekend")
+                        .HasColumnType("boolean");
 
                     b.Property<int?>("OrganizationId")
                         .HasColumnType("integer");
@@ -11696,15 +11672,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Privilege", "Privilege")
                         .WithMany("AssignedPrivileges")
                         .HasForeignKey("PrivilegeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.BusinessDay", b =>
-                {
-                    b.HasOne("Prime.Models.Location", "Location")
-                        .WithMany("BusinessHours")
-                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
