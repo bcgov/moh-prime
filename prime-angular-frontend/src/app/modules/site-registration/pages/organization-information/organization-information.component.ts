@@ -15,6 +15,7 @@ import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 
 @Component({
   selector: 'app-organization-information',
@@ -25,6 +26,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
   public routeUtils: RouteUtils;
+  public organizations: any;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
@@ -34,10 +36,19 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     private siteRegistrationResource: SiteRegistrationResource,
     private siteRegistrationService: SiteRegistrationService,
     private siteRegistrationStateService: SiteRegistrationStateService,
+    private orgBookResource: OrgBookResource,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+  }
+
+  public get name(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+
+  public get doingBusinessAs(): FormControl {
+    return this.form.get('doingBusinessAs') as FormControl;
   }
 
   public onSubmit() {
