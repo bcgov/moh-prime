@@ -40,14 +40,17 @@ namespace Prime.Services
         private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
 
         private readonly IRazorConverterService _razorConverterService;
+        private readonly ICHESApiService _chesApiService;
 
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
+            ICHESApiService chesApiService)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
+            _chesApiService = chesApiService;
         }
 
         public static bool IsValidEmail(string email)
@@ -181,6 +184,8 @@ namespace Prime.Services
                 smtp.Dispose();
                 mail.Dispose();
             }
+
+            _chesApiService.SendAsync(from, to, cc, subject, body);
         }
 
 
