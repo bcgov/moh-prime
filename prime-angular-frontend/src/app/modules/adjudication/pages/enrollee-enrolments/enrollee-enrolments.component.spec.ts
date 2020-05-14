@@ -5,13 +5,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { EnrolleeAccessTermsComponent } from './enrollee-access-terms.component';
+import { EnrolleeEnrolmentsComponent } from './enrollee-enrolments.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
-describe('EnrolleeAccessTermsComponent', () => {
-  let component: EnrolleeAccessTermsComponent;
-  let fixture: ComponentFixture<EnrolleeAccessTermsComponent>;
+describe('EnrolleeEnrolmentsComponent', () => {
+  let component: EnrolleeEnrolmentsComponent;
+  let fixture: ComponentFixture<EnrolleeEnrolmentsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -33,7 +33,7 @@ describe('EnrolleeAccessTermsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EnrolleeAccessTermsComponent);
+    fixture = TestBed.createComponent(EnrolleeEnrolmentsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

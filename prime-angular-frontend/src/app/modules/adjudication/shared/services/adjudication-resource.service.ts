@@ -284,7 +284,8 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number): Observable<HttpEnrolleeProfileVersion> {
+  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number)
+    : Observable<HttpEnrolleeProfileVersion> {
     return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
