@@ -2,6 +2,7 @@ import { Address } from '@shared/models/address.model';
 
 import { Party } from './party.model';
 import { Organization } from './organization.model';
+import { BusinessDay } from './businessDay.model';
 
 export interface Location {
   id?: number;
@@ -15,8 +16,6 @@ export interface Location {
   organization: Organization;
   physicalAddressId?: number;
   physicalAddress: Address;
-  hoursWeekend: boolean;
-  hours24: boolean;
-  hoursSpecial: boolean;
+  businessHours: BusinessDay[];
   doingBusinessAs?: string;
 }
