@@ -25,6 +25,9 @@ namespace Prime.Models
 
         public ICollection<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
 
+
+        public EnrolmentStatusAdjudicatorNote EnrolmentStatusAdjudicatorNote { get; set; }
+
         public void AddStatusReason(StatusReasonType type, string reasonNote = null)
         {
             if (EnrolmentStatusReasons == null)

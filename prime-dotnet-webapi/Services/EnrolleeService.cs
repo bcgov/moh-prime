@@ -277,7 +277,10 @@ namespace Prime.Services
 
             if (isAdmin)
             {
-                query = query.Include(e => e.Adjudicator);
+                query = query.Include(e => e.Adjudicator)
+                    .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.EnrolmentStatusAdjudicatorNote)
+                            .ThenInclude(esan => esan.AdjudicatorNote);
             }
 
             var entity = await query
@@ -288,6 +291,11 @@ namespace Prime.Services
                 entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
                 // Attach to the enrollee if they have signed the most recent ToA
                 entity.CurrentTOAStatus = await _accessTermService.GetCurrentTOAStatusAsync(entity);
+                // TODO: This is an interm fix for making a different view model for enrollee based on isAdmin
+                if (isAdmin)
+                {
+                    entity.isAdminView = true;
+                }
             }
 
             return entity;

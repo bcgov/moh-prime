@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { Reason } from '../../pipes/status-reasons.pipe';
-import { Status } from '../../pipes/statuses.pipe';
+import { Status } from '@adjudication/pages/enrollee-review-status/pipes/statuses.pipe';
 
 @Component({
   selector: 'app-review-status-content',
