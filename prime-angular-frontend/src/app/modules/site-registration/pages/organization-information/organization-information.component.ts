@@ -40,14 +40,6 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public get name(): FormControl {
-    return this.form.get('name') as FormControl;
-  }
-
-  public get doingBusinessAs(): FormControl {
-    return this.form.get('doingBusinessAs') as FormControl;
-  }
-
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteRegistrationStateService.site;

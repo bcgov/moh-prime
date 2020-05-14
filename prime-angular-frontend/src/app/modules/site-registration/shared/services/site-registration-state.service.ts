@@ -266,7 +266,7 @@ export class SiteRegistrationStateService {
         null,
         []
       ],
-      bn15: [
+      regId: [
         null,
         []
       ],

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
-import { Config } from '@config/config.model';
+import { NoContent } from '@core/resources/abstract-resource';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
@@ -13,12 +13,11 @@ import { Address } from '@shared/models/address.model';
 import { AccessTerm } from '@shared/models/access-term.model';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 
 import { Admin } from '@auth/shared/models/admin.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { NoContent } from '@core/resources/abstract-resource';
 
 @Injectable({
   providedIn: 'root'
@@ -57,40 +56,6 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeById error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getEnrolleeProfileVersions(enrolleeId: number): Observable<HttpEnrolleeProfileVersion[]> {
-    return this.apiResource.get<HttpEnrolleeProfileVersion[]>(`enrollees/${enrolleeId}/versions`)
-      .pipe(
-        map((response: ApiHttpResponse<HttpEnrolleeProfileVersion[]>) => response.result),
-        tap((enrolleeProfileVersions: HttpEnrolleeProfileVersion[]) =>
-          this.logger.info('ENROLLEE_PROFILE_VERSIONS', enrolleeProfileVersions)
-        ),
-        map((enrolleeProfileVersions: HttpEnrolleeProfileVersion[]) =>
-          enrolleeProfileVersions.map(this.enrolleeVersionAdapterResponse())
-        ),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee profile history could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeProfileVersions error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getEnrolleeProfileVersion(enrolleeId: number, enrolleeProfileVersionId: number): Observable<HttpEnrolleeProfileVersion> {
-    return this.apiResource.get<HttpEnrolleeProfileVersion>(`enrollees/${enrolleeId}/versions/${enrolleeProfileVersionId}`)
-      .pipe(
-        map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
-        tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
-          this.logger.info('ENROLLEE_PROFILE_VERSION', enrolleeProfileVersion)
-        ),
-        map(this.enrolleeVersionAdapterResponse()),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee profile history could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeProfileVersion error has occurred: ', error);
           throw error;
         })
       );
