@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 import { RouterEvent } from '@angular/router';
 
 import { LoggerService } from '@core/services/logger.service';
@@ -19,7 +19,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 export class SiteRegistrationStateService {
   public organizationInformationForm: FormGroup;
   public siteAddressForm: FormGroup;
-  public hoursOperationForm: FormGroup;
+  public hoursOperationForm: FormArray;
   public vendorForm: FormGroup;
   public signingAuthorityForm: FormGroup;
   public privacyOfficerForm: FormGroup;
@@ -151,7 +151,7 @@ export class SiteRegistrationStateService {
         },
         physicalAddressId: physicalAddress?.id,
         physicalAddress,
-        ...hoursOperation
+        hoursOperation
       },
       vendorId: vendor?.id,
       vendor,
@@ -225,7 +225,7 @@ export class SiteRegistrationStateService {
       if (site.vendor) {
         this.vendorForm.patchValue(site.vendor);
       }
-      this.hoursOperationForm.patchValue(site.location);
+      this.hoursOperationForm.patchValue(site.location.businessHours);
 
       [
         [this.signingAuthorityForm, site.location.organization.signingAuthority],
@@ -247,7 +247,7 @@ export class SiteRegistrationStateService {
     }
   }
 
-  private get forms(): FormGroup[] {
+  private get forms(): AbstractControl[] {
     return [
       this.organizationInformationForm,
       this.siteAddressForm,
@@ -306,21 +306,8 @@ export class SiteRegistrationStateService {
     });
   }
 
-  private buildHoursOperationForm(): FormGroup {
-    return this.fb.group({
-      hoursWeekend: [
-        false,
-        []
-      ],
-      hours24: [
-        false,
-        []
-      ],
-      hoursSpecial: [
-        null,
-        []
-      ]
-    });
+  private buildHoursOperationForm(): FormArray {
+    return this.fb.array([]);
   }
 
   private buildVendorForm(): FormGroup {
