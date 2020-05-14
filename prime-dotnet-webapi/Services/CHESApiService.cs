@@ -15,7 +15,7 @@ namespace Prime.Services
     public class CHESApiService : BaseService, ICHESApiService
     {
         private static HttpClient Client;
-        private String accessToken = "";
+        private static String accessToken = "";
 
         public CHESApiService(
             ApiDbContext context,
@@ -32,31 +32,35 @@ namespace Prime.Services
 
             HttpClient client = new HttpClient();
 
-            var values = new List<KeyValuePair<string, string>>();
-            values.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
-            values.Add(new KeyValuePair<string, string>("client_id", "PRIME_SERVICE_CLIENT"));
-            values.Add(new KeyValuePair<string, string>("client_secret", PrimeConstants.PRIME_SERVICE_CLIENT));
-            var content = new FormUrlEncodedContent(values);
-
-            HttpResponseMessage response = null;
-            try
+            if (accessToken == "")
             {
-                response = await client.PostAsync("https://sso-dev.pathfinder.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token", content);
+                var values = new List<KeyValuePair<string, string>>();
+                values.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
+                values.Add(new KeyValuePair<string, string>("client_id", "PRIME_SERVICE_CLIENT"));
+                values.Add(new KeyValuePair<string, string>("client_secret", PrimeConstants.PRIME_SERVICE_CLIENT));
+                var content = new FormUrlEncodedContent(values);
 
-                if (response.IsSuccessStatusCode)
+                HttpResponseMessage response = null;
+                try
                 {
-                    var responseJsonString = await response.Content.ReadAsStringAsync();
-                    var successResponse = JsonConvert.DeserializeObject<SuccessResponse>(responseJsonString);
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-                        "Bearer",
-                        successResponse.access_token
-                    );
-                }
+                    response = await client.PostAsync("https://sso-dev.pathfinder.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token", content);
 
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var responseJsonString = await response.Content.ReadAsStringAsync();
+                        var successResponse = JsonConvert.DeserializeObject<OpenIdSuccessResponse>(responseJsonString);
+                        accessToken = successResponse.access_token;
+
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                            "Bearer",
+                            accessToken
+                        );
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
+                }
             }
 
             return client;
@@ -66,28 +70,50 @@ namespace Prime.Services
         {
             Client = await InitHttpClientAsync();
             var requestParams = new CHESEmailRequestParams(from, to, subject, body);
-            var requestContent = new StringContent(JsonConvert.SerializeObject(requestParams));
+            var requestContent = new StringContent(JsonConvert.SerializeObject(requestParams), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = null;
             try
             {
                 response = await Client.PostAsync(PrimeConstants.CHES_API_URL + "/email", requestContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseJsonString = await response.Content.ReadAsStringAsync();
+                    var successResponse = JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
+                }
             }
             catch (Exception ex)
             {
                 throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
             }
         }
+
+        public async Task<bool> HealthCheckAsync()
+        {
+            Client = await InitHttpClientAsync();
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await Client.GetAsync(PrimeConstants.CHES_API_URL + "/health");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
+            }
+
+        }
     }
 
     public class CHESEmailRequestParams
     {
         public IEnumerable<Attachment> attachments { get; set; }
-        public string bcc { get; set; }
+        public IEnumerable<string> bcc { get; set; }
         public string bodyType { get; set; }
         public string body { get; set; }
         public IEnumerable<string> cc { get; set; }
-        public int delayTS { get; set; }
+        public int? delayTS { get; set; }
         public string encoding { get; set; }
         public string from { get; set; }
         public string priority { get; set; }
@@ -97,15 +123,18 @@ namespace Prime.Services
 
         public CHESEmailRequestParams(string from, IEnumerable<string> to, string subject, string body)
         {
-            this.from = from;
-            this.to = to;
-            this.subject = subject;
-            this.body = body;
+            attachments = new List<Attachment>();
+            bcc = new List<string>();
             bodyType = "html";
+            this.body = body;
+            cc = new List<string>();
             delayTS = 1570000000;
             encoding = "utf-8";
+            this.from = from;
             priority = "normal";
+            this.subject = subject;
             tag = "tag";
+            this.to = to;
         }
     }
 
@@ -117,7 +146,7 @@ namespace Prime.Services
         public string filename { get; set; }
     }
 
-    public class SuccessResponse
+    public class OpenIdSuccessResponse
     {
         public string access_token { get; set; }
         public string expires_in { get; set; }
@@ -127,5 +156,18 @@ namespace Prime.Services
         public string not_before_policy { get; set; }
         public string session_state { get; set; }
         public string scope { get; set; }
+    }
+
+    public class EmailSuccessResponse
+    {
+        public IEnumerable<Message> messages { get; set; }
+        public Guid txId { get; set; }
+    }
+
+    public class Message
+    {
+        public Guid msgId { get; set; }
+        public string tag { get; set; }
+        public IEnumerable<string> to { get; set; }
     }
 }

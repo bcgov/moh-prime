@@ -144,48 +144,55 @@ namespace Prime.Services
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }
 
-            MailMessage mail = new MailMessage()
+            // If CHES Email Service is running and ENV == prod, else send through smtp
+            // PrimeConstants.ENVIRONMENT_NAME == "prod"
+            if (await _chesApiService.HealthCheckAsync())
             {
-                From = fromAddress,
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true,
-            };
-
-            foreach (var address in toAddresses)
-            {
-                mail.To.Add(address);
+                await _chesApiService.SendAsync(from, to, cc, subject, body);
             }
-
-            foreach (var address in ccAddresses)
+            else
             {
-                mail.CC.Add(address);
-            }
-
-            SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL, PrimeConstants.MAIL_SERVER_PORT);
-            try
-            {
-                await smtp.SendMailAsync(mail);
-            }
-            catch (Exception ex)
-            {
-                if (ex is InvalidOperationException
-                    || ex is SmtpException
-                    || ex is SmtpFailedRecipientException
-                    || ex is SmtpFailedRecipientsException)
+                MailMessage mail = new MailMessage()
                 {
-                    // TODO log mail exception
+                    From = fromAddress,
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = true,
+                };
+
+                foreach (var address in toAddresses)
+                {
+                    mail.To.Add(address);
                 }
 
-                throw;
-            }
-            finally
-            {
-                smtp.Dispose();
-                mail.Dispose();
-            }
+                foreach (var address in ccAddresses)
+                {
+                    mail.CC.Add(address);
+                }
 
-            _chesApiService.SendAsync(from, to, cc, subject, body);
+                SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL, PrimeConstants.MAIL_SERVER_PORT);
+                try
+                {
+                    await smtp.SendMailAsync(mail);
+                }
+                catch (Exception ex)
+                {
+                    if (ex is InvalidOperationException
+                        || ex is SmtpException
+                        || ex is SmtpFailedRecipientException
+                        || ex is SmtpFailedRecipientsException)
+                    {
+                        // TODO log mail exception
+                    }
+
+                    throw;
+                }
+                finally
+                {
+                    smtp.Dispose();
+                    mail.Dispose();
+                }
+            }
         }
 
 
