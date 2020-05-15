@@ -266,11 +266,11 @@ export class SiteRegistrationStateService {
         null,
         []
       ],
-      regId: [
-        null,
-        []
-      ],
       name: [
+        null,
+        [Validators.required]
+      ],
+      regId: [
         null,
         [Validators.required]
       ],

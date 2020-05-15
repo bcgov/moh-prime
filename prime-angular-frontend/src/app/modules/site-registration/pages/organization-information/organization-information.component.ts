@@ -16,6 +16,7 @@ import { SiteRegistrationResource } from '@registration/shared/services/site-reg
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
+import { debounceTime, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-organization-information',
@@ -45,6 +46,10 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
 
   public get name(): FormControl {
     return this.form.get('name') as FormControl;
+  }
+
+  public get orgId(): FormControl {
+    return this.form.get('orgId') as FormControl;
   }
 
   public get doingBusinessAs(): FormControl {
@@ -95,5 +100,14 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     const site = this.siteRegistrationService.site;
     this.isCompleted = site?.completed;
     this.siteRegistrationStateService.setSite(site, true);
+
+    this.name.valueChanges
+      .pipe(
+        debounceTime(400),
+        switchMap((value: string) => this.orgBookResource.autocomplete(value))
+      )
+      .subscribe((response: any) => {
+        console.log(response);
+      });
   }
 }

@@ -20,18 +20,17 @@
       <div class="row">
         <div class="col">
 
-          <mat-form-field>
+          <mat-form-field class="w-100">
             <input type="text"
-                   placeholder="Organization Name (Legal Entity Operating Site)"
-                   aria-label="Number"
                    matInput
-                   formControl="name"
+                   placeholder="Organization Name (Legal Entity Operating Site)"
+                   formControlName="name"
                    [matAutocomplete]="auto">
             <mat-autocomplete autoActiveFirstOption
                               #auto="matAutocomplete">
               <mat-option *ngFor="let organization of organizations | async"
-                          [value]="organization">
-                {{ organization | json }}
+                          [value]="'test'">
+                {{ 'test' }}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
