@@ -25,6 +25,12 @@ namespace Prime.Services
             _partyService = partyService;
         }
 
+        public async Task<IEnumerable<Site>> GetSitesAsync()
+        {
+            return await this.GetBaseSiteQuery()
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Site>> GetSitesAsync(int partyId)
         {
             return await this.GetBaseSiteQuery()
