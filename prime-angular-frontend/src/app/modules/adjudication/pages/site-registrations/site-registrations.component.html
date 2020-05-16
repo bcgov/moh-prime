@@ -1,5 +1,65 @@
-<app-adjudication-container>
+<app-page [busy]="busy"
+          mode="full">
 
   <app-page-header>Site Registrations</app-page-header>
 
-</app-adjudication-container>
+
+
+  <div *ngIf="showSearchFilter"
+       class="row justify-content-end">
+    <div class="col text-right">
+      <div class="row">
+        <div class="col text-right pr-0">
+
+          <app-search-form (search)="onSearch($event)"></app-search-form>
+
+        </div>
+        <div class="col-auto">
+
+          <div class="d-flex align-items-center pb-3 refresh">
+            <button class=""
+                    mat-icon-button
+                    matTooltip="Refresh the list of registrations"
+                    (click)="onRefresh()">
+              <mat-icon>refresh</mat-icon>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-site-table *ngIf="busy.closed || dataSource.data.length"
+                  [dataSource]="dataSource"
+                  (delete)="onDelete($event)"
+                  (route)="onRoute($event)"></app-site-table>
+
+  <ng-container *ngIf="content">
+
+    <div class="row">
+      <div class="col py-5">
+
+        <ng-container [ngTemplateOutlet]="content"
+                      [ngTemplateOutletContext]="{ enrollee: dataSource?.data[0] }"></ng-container>
+
+      </div>
+      <!-- <div *ngIf="hasActions"
+           class="col-auto py-5">
+
+        <app-adjudicator-actions [enrollee]="dataSource?.data[0]"
+                                 (approve)="onApprove($event)"
+                                 (decline)="onDecline($event)"
+                                 (lock)="onLock($event)"
+                                 (unlock)="onUnlock($event)"
+                                 (delete)="onDelete($event)"
+                                 (route)="onRoute($event)"
+                                 (declineEnrollee)="onDeclineEnrollee($event)"
+                                 (enableEnrollee)="onEnableEnrollee($event)"></app-adjudicator-actions>
+
+      </div> -->
+    </div>
+
+  </ng-container>
+
+</app-page>
