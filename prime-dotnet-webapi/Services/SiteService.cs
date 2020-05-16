@@ -218,7 +218,7 @@ namespace Prime.Services
 
         public async Task DeleteSiteAsync(int siteId)
         {
-            var site = await _context.Sites
+            var site = await this.GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             if (site == null)
@@ -226,6 +226,12 @@ namespace Prime.Services
                 return;
             }
 
+            _context.Parties.Remove(site.Location.Organization.SigningAuthority);
+            _context.Organizations.Remove(site.Location.Organization);
+            _context.Parties.Remove(site.Location.AdministratorPharmaNet);
+            _context.Parties.Remove(site.Location.PrivacyOfficer);
+            _context.Parties.Remove(site.Location.TechnicalSupport);
+            _context.Locations.Remove(site.Location);
             _context.Sites.Remove(site);
 
             await _businessEventService.CreateSiteEventAsync(site.Id, (int)site.ProvisionerId, "Site Deleted");
