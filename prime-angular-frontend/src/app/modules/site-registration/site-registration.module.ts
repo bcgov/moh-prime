@@ -9,6 +9,9 @@ import { RegistrantProfileReviewComponent } from './shared/components/registrant
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 import { SiteCollectionNoticeComponent } from './shared/components/site-collection-notice/site-collection-notice.component';
 import { SameAsComponent } from './shared/components/same-as/same-as.component';
+import { BusinessHoursComponent } from './shared/components/business-hours/business-hours.component';
+import { BusinessHoursPickerComponent } from './shared/components/business-hours-picker/business-hours-picker.component';
+import { BusinessHoursViewComponent } from './shared/components/business-hours-view/business-hours-view.component';
 
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -23,7 +26,6 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
-import { BusinessHoursComponent } from './shared/components/business-hours/business-hours.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { BusinessHoursComponent } from './shared/components/business-hours/busin
     SiteAddressComponent,
     OrganizationAgreementComponent,
     SameAsComponent,
-    BusinessHoursComponent
+    BusinessHoursComponent,
+    BusinessHoursPickerComponent,
+    BusinessHoursViewComponent
   ],
   imports: [
     SharedModule,
