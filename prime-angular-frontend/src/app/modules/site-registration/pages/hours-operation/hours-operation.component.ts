@@ -48,18 +48,14 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // TODO handle validations
-    console.log('SUBMIT', this.form.getRawValue());
-
     if (this.formUtilsService.checkValidity(this.businessDays)) {
-      console.log('VALID');
-      //   const payload = this.siteRegistrationStateService.site;
-      //   this.siteRegistrationResource
-      //     .updateSite(payload)
-      //     .subscribe(() => {
-      //       this.form.markAsPristine();
-      //       this.nextRoute();
-      //     });
+        const payload = this.siteRegistrationStateService.site;
+        this.siteRegistrationResource
+          .updateSite(payload)
+          .subscribe(() => {
+            this.form.markAsPristine();
+            this.nextRoute();
+          });
     }
   }
 
