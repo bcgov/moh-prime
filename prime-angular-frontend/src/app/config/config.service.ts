@@ -10,6 +10,7 @@ import {
 } from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
+import { UtilsService, SortWeight } from '@core/services/utils.service';
 
 export interface IConfigService {
   practices: PracticeConfig[];
@@ -25,8 +26,6 @@ export interface IConfigService {
   load(): Observable<Configuration>;
 }
 
-export type SortWeight = -1 | 0 | 1;
-
 @Injectable({
   providedIn: 'root'
 })
@@ -35,7 +34,8 @@ export class ConfigService implements IConfigService {
 
   constructor(
     @Inject(APP_CONFIG) protected config: AppConfig,
-    protected apiResource: ApiResource
+    protected apiResource: ApiResource,
+    protected utilsService: UtilsService
   ) { }
 
   public get practices(): PracticeConfig[] {
@@ -135,7 +135,7 @@ export class ConfigService implements IConfigService {
    */
   private sortConfigByName(): (a: Config<number | string>, b: Config<number | string>) => SortWeight {
     return (a: Config<number | string>, b: Config<number | string>) =>
-      this.sortConfig<Config<number | string>>(a, b, 'name');
+      this.utilsService.sort<Config<number | string>>(a, b, 'name');
   }
 
   /**
@@ -144,16 +144,6 @@ export class ConfigService implements IConfigService {
    */
   private sortConfigByWeight(): (a: LicenseWeightedConfig, b: LicenseWeightedConfig) => SortWeight {
     return (a: LicenseWeightedConfig, b: LicenseWeightedConfig) =>
-      this.sortConfig<LicenseWeightedConfig>(a, b, 'weight');
-  }
-
-  /**
-   * @description
-   * Generic sorting of a JSON object by key.
-   */
-  private sortConfig<T>(a: T, b: T, key: string): SortWeight {
-    return (a[key] > b[key])
-      ? 1 : (a[key] < b[key])
-        ? -1 : 0;
+      this.utilsService.sort<LicenseWeightedConfig>(a, b, 'weight');
   }
 }
