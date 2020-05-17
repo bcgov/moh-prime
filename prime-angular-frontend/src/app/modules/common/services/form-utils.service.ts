@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup, FormControl, ValidatorFn, FormArray } from '@angular/forms';
+import { AbstractControl, FormGroup, FormControl, ValidatorFn, FormArray, FormBuilder } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormUtilsService {
+  constructor(
+    private fb: FormBuilder
+  ) { }
+
   /**
    * @description
    * Checks the validity of a form, and triggers validation messages when invalid.
    */
-  public checkValidity(form: FormGroup): boolean {
+  public checkValidity(form: AbstractControl): boolean {
     if (form.valid) {
       return true;
     } else {
@@ -78,9 +82,20 @@ export class FormUtilsService {
 
   /**
    * @description
+   * Push model(s) as abstract controls onto a form array.
+   */
+  public formArrayPush(array: FormArray, models: any | any[], type: 'group' | 'control' = 'group') {
+    const push = (control: AbstractControl) => array.push(control);
+    (Array.isArray(models))
+      ? models.forEach(m => push(this.fb[type](m)))
+      : push(this.fb[type](models));
+  }
+
+  /**
+   * @description
    * Get all the errors contained within a form.
    */
-  public getFormErrors(form: FormGroup | FormArray): { [key: string]: any; } | null {
+  public getFormErrors(form: FormGroup | FormArray): { [key: string]: any } | null {
     let hasError = false;
     const result = Object.keys(form?.controls).reduce((acc, key) => {
       const control = form.get(key);
