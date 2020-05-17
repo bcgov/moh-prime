@@ -13,10 +13,10 @@
         <ng-container appPageSubheaderTitle>Hours of Operation</ng-container>
       </app-page-subheader>
 
-      <div class="mb-2">
-        <app-business-hours>
-        </app-business-hours>
-      </div>
+      <!-- TODO this.businessDays.valueChanges | async -->
+      <app-business-hours [form]="form"
+                          (add)="onAdd($event)"
+                          (remove)="onRemove($event)"></app-business-hours>
 
     </section>
 

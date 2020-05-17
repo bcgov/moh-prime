@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
@@ -12,9 +12,11 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
+import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { UtilsService, SortWeight } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-hours-operation',
@@ -31,38 +33,44 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
     private siteRegistrationResource: SiteRegistrationResource,
     private siteRegistrationService: SiteRegistrationService,
     private siteRegistrationStateService: SiteRegistrationStateService,
     private formUtilsService: FormUtilsService,
+    private utilsService: UtilsService,
     private dialog: MatDialog
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public get hoursWeekend(): FormControl {
-    return this.form.get('hoursWeekend') as FormControl;
-  }
-
-  public get hours24(): FormControl {
-    return this.form.get('hours24') as FormControl;
-  }
-
-  public get hoursSpecial(): FormControl {
-    return this.form.get('hoursSpecial') as FormControl;
+  public get businessDays(): FormArray {
+    return this.form.get('businessDays') as FormArray;
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
+    // TODO handle validations
+    console.log('SUBMIT', this.form.getRawValue());
+
+    if (this.formUtilsService.checkValidity(this.businessDays)) {
+      console.log('VALID');
+      //   const payload = this.siteRegistrationStateService.site;
+      //   this.siteRegistrationResource
+      //     .updateSite(payload)
+      //     .subscribe(() => {
+      //       this.form.markAsPristine();
+      //       this.nextRoute();
+      //     });
     }
+  }
+
+  public onAdd(businessDay: BusinessDay[]) {
+    this.formUtilsService.formArrayPush(this.businessDays, businessDay);
+    const sorted = this.businessDays.value.sort(this.sortConfigByDay());
+    this.businessDays.patchValue(sorted);
+  }
+
+  public onRemove(index: number) {
+    this.businessDays.removeAt(index);
   }
 
   public onBack() {
@@ -97,5 +105,14 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     const site = this.siteRegistrationService.site;
     this.isCompleted = site?.completed;
     this.siteRegistrationStateService.setSite(site, true);
+  }
+
+  /**
+   * @description
+   * Sort by day of the week.
+   */
+  private sortConfigByDay(): (a: BusinessDay, b: BusinessDay) => SortWeight {
+    return (a: BusinessDay, b: BusinessDay) =>
+      this.utilsService.sort<BusinessDay>(a, b, 'day');
   }
 }
