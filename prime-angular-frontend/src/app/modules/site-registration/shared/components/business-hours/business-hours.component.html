@@ -1,1 +1,7 @@
-<p>business-hours works!</p>
+<section>
+  <app-business-hours-picker [businessDays]="businessDays.value"
+                             (add)="onAdd($event)"></app-business-hours-picker>
+  <!-- TODO [businessDays]="businessDays.value" -->
+  <app-business-hours-view [form]="form"
+                           (remove)="onRemove($event)"></app-business-hours-view>
+</section>

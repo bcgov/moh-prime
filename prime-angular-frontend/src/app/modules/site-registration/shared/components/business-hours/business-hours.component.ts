@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { BusinessDay } from '@registration/shared/models/businessDay.model';
+import { FormGroup, FormArray } from '@angular/forms';
+
+import { BusinessDay } from '@registration/shared/models/business-day.model';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-business-hours',
@@ -7,11 +10,28 @@ import { BusinessDay } from '@registration/shared/models/businessDay.model';
   styleUrls: ['./business-hours.component.scss']
 })
 export class BusinessHoursComponent implements OnInit {
-  @Input() public businessHours: BusinessDay[];
-  @Output() public newBusinessHours: EventEmitter<BusinessDay[]>;
-  constructor() { }
+  @Input() public form: FormGroup;
+  // TODO use json instead of passing in form to reduce dependencies
+  // @Input() public businessDays: BusinessDay[];
+  @Output() public add: EventEmitter<BusinessDay>;
+  @Output() public remove: EventEmitter<number>;
 
-  ngOnInit(): void {
+  constructor() {
+    this.add = new EventEmitter<BusinessDay>();
+    this.remove = new EventEmitter<number>();
   }
 
+  public get businessDays(): FormArray {
+    return this.form.get('businessDays') as FormArray;
+  }
+
+  public onAdd(businessDay: BusinessDay) {
+    this.add.emit(businessDay);
+  }
+
+  public onRemove(index: number) {
+    this.remove.emit(index);
+  }
+
+  public ngOnInit(): void { }
 }
