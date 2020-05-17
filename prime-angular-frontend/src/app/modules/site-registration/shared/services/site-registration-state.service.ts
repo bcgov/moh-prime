@@ -4,6 +4,7 @@ import { RouterEvent } from '@angular/router';
 
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
+import { FormUtilsService } from '@common/services/form-utils.service';
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
 import { Address } from '@shared/models/address.model';
@@ -19,7 +20,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 export class SiteRegistrationStateService {
   public organizationInformationForm: FormGroup;
   public siteAddressForm: FormGroup;
-  public hoursOperationForm: FormArray;
+  public hoursOperationForm: FormGroup;
   public vendorForm: FormGroup;
   public signingAuthorityForm: FormGroup;
   public privacyOfficerForm: FormGroup;
@@ -33,6 +34,7 @@ export class SiteRegistrationStateService {
 
   constructor(
     private fb: FormBuilder,
+    private formUtilsService: FormUtilsService,
     private routeStateService: RouteStateService,
     private logger: LoggerService
   ) {
@@ -93,7 +95,7 @@ export class SiteRegistrationStateService {
   public get site(): Site {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const physicalAddress = this.siteAddressForm.getRawValue();
-    const hoursOperation = this.hoursOperationForm.getRawValue();
+    const businessDays = this.hoursOperationForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
 
     // Adapt data for backend consumption
@@ -151,7 +153,7 @@ export class SiteRegistrationStateService {
         },
         physicalAddressId: physicalAddress?.id,
         physicalAddress,
-        hoursOperation
+        businessDays
       },
       vendorId: vendor?.id,
       vendor,
@@ -225,7 +227,12 @@ export class SiteRegistrationStateService {
       if (site.vendor) {
         this.vendorForm.patchValue(site.vendor);
       }
-      this.hoursOperationForm.patchValue(site.location.businessHours);
+
+      if (site.location.businessDays?.length) {
+        const array = this.hoursOperationForm.get('businessDays') as FormArray;
+        array.reset(); // Clear out existing indices
+        this.formUtilsService.formArrayPush(array, site.location.businessDays);
+      }
 
       [
         [this.signingAuthorityForm, site.location.organization.signingAuthority],
@@ -306,8 +313,12 @@ export class SiteRegistrationStateService {
     });
   }
 
-  private buildHoursOperationForm(): FormArray {
-    return this.fb.array([]);
+  private buildHoursOperationForm(): FormGroup {
+    return this.fb.group({
+      businessDays: this.fb.array(
+        [],
+        [Validators.required])
+    });
   }
 
   private buildVendorForm(): FormGroup {
