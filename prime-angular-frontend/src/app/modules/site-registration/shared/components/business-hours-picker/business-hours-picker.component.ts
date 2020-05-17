@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 import { FormUtilsService } from '@common/services/form-utils.service';
 
@@ -94,7 +94,8 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
         false,
         []
       ]
-    });
+      // TODO test this works as expected
+    }, [this.timeRange('startTime', 'endTime', 'timeRange')]);
   }
 
   private initForm() {
@@ -131,5 +132,21 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
   private updateAvailableBusinessDays() {
     this.weekdays.patchValue(this.unavailableBusinessDays);
     this.weekdays.controls.forEach(c => (c.value) ? c.disable() : c.enable());
+  }
+
+  /**
+   * @description
+   * Compares time range start and end.
+   */
+  private timeRange(rangeStartKey: string, rangeEndKey: string, rangeName: string): ValidatorFn {
+    return (group: FormGroup): ValidationErrors | null => {
+      const start = +group.controls[rangeStartKey].value;
+      const end = +group.controls[rangeEndKey].value;
+
+      if (!start || !end) { return null; }
+
+      const valid = (start < end);
+      return (valid) ? null : { [rangeName]: true };
+    };
   }
 }

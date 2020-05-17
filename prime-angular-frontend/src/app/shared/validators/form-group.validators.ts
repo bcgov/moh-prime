@@ -8,7 +8,7 @@ export class FormGroupValidators {
    * @description
    * Checks two form control values are equal within a form group.
    */
-  static match(inputKey: string, confirmInputKey: string): ValidatorFn {
+  public static match(inputKey: string, confirmInputKey: string): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
       const input = group.controls[inputKey];
       const confirmInput = group.controls[confirmInputKey];
@@ -22,7 +22,7 @@ export class FormGroupValidators {
    * @description
    * Checks that at least one field has been chosen within a form group.
    */
-  static atLeastOne(validator: ValidatorFn, whitelist: string[] = []): ValidatorFn {
+  public static atLeastOne(validator: ValidatorFn, whitelist: string[] = []): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
       const atLeastOne = group && group.controls &&
         Object.keys(group.controls)
@@ -36,7 +36,7 @@ export class FormGroupValidators {
    * @description
    * Compares date range start and end.
    */
-  static dateRange(rangeStartKey: string, rangeEndKey: string, rangeName: string): ValidatorFn {
+  public static dateRange(rangeStartKey: string, rangeEndKey: string, rangeName: string): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
       const start = group.controls[rangeStartKey];
       const end = group.controls[rangeEndKey];
