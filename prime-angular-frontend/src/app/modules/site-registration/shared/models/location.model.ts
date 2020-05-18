@@ -1,8 +1,8 @@
+import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 import { Address } from '@shared/models/address.model';
 
 import { Party } from './party.model';
 import { Organization } from './organization.model';
-import { BusinessDay } from './business-day.model';
 
 export interface Location {
   id?: number;

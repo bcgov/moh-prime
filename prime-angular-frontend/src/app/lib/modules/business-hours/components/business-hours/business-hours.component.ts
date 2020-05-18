@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 
-import { BusinessDay } from '@registration/shared/models/business-day.model';
-import { map } from 'rxjs/operators';
+import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
 @Component({
   selector: 'app-business-hours',

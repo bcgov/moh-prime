@@ -3,9 +3,11 @@ import { FormGroup, FormBuilder, FormControl, Validators, FormArray, ValidatorFn
 
 import { FormUtilsService } from '@common/services/form-utils.service';
 
-import { BusinessDay, BusinessDayHours } from '@registration/shared/models/business-day.model';
 import { FormArrayValidators } from '@shared/validators/form-array.validators';
 import { FormGroupValidators } from '@shared/validators/form-group.validators';
+
+import { BusinessDay } from '../../models/business-day.model';
+import { BusinessDayHours } from '../../models/business-day-hours.model';
 
 @Component({
   selector: 'app-business-hours-picker',

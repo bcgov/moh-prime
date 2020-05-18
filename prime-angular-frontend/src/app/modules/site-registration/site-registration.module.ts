@@ -4,14 +4,13 @@ import { SharedModule } from '@shared/shared.module';
 
 import { SiteRegistrationRoutingModule } from './site-registration-routing.module';
 
+import { BusinessHoursModule } from '@lib/modules/business-hours/business-hours.module';
+
 import { RegistrantProfileFormComponent } from './shared/components/registrant-profile-form/registrant-profile-form.component';
 import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 import { SiteCollectionNoticeComponent } from './shared/components/site-collection-notice/site-collection-notice.component';
 import { SameAsComponent } from './shared/components/same-as/same-as.component';
-import { BusinessHoursComponent } from './shared/components/business-hours/business-hours.component';
-import { BusinessHoursPickerComponent } from './shared/components/business-hours-picker/business-hours-picker.component';
-import { BusinessHoursViewComponent } from './shared/components/business-hours-view/business-hours-view.component';
 
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -46,13 +45,11 @@ import { OrganizationAgreementComponent } from './pages/organization-agreement/o
     SiteCollectionNoticeComponent,
     SiteAddressComponent,
     OrganizationAgreementComponent,
-    SameAsComponent,
-    BusinessHoursComponent,
-    BusinessHoursPickerComponent,
-    BusinessHoursViewComponent
+    SameAsComponent
   ],
   imports: [
     SharedModule,
+    BusinessHoursModule,
     SiteRegistrationRoutingModule
   ]
 })

@@ -26,7 +26,6 @@ import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
-import { WeekdayPipe } from './pipes/weekday.pipe';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageComponent } from '@shared/components/page/page.component';
@@ -71,7 +70,6 @@ import { FormErrorsComponent } from './components/form-errors/form-errors.compon
     PostalPipe,
     ReplacePipe,
     YesNoPipe,
-    WeekdayPipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -138,7 +136,6 @@ import { FormErrorsComponent } from './components/form-errors/form-errors.compon
     PostalPipe,
     ReplacePipe,
     YesNoPipe,
-    WeekdayPipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,

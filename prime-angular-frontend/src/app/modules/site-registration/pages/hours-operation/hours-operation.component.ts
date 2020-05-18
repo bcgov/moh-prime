@@ -5,6 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
 
+import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
+import { UtilsService, SortWeight } from '@core/services/utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { FormUtilsService } from '@common/services/form-utils.service';
 
@@ -12,11 +14,9 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
-import { UtilsService, SortWeight } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-hours-operation',
@@ -49,13 +49,13 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.businessDays)) {
-        const payload = this.siteRegistrationStateService.site;
-        this.siteRegistrationResource
-          .updateSite(payload)
-          .subscribe(() => {
-            this.form.markAsPristine();
-            this.nextRoute();
-          });
+      const payload = this.siteRegistrationStateService.site;
+      this.siteRegistrationResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
     }
   }
 
