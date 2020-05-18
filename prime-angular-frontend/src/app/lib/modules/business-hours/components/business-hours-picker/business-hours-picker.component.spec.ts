@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { BusinessHoursPickerComponent } from './business-hours-picker.component';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
 
 describe('BusinessHoursPickerComponent', () => {
   let component: BusinessHoursPickerComponent;
@@ -8,7 +10,10 @@ describe('BusinessHoursPickerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [BusinessHoursPickerComponent]
+      imports: [
+        SiteRegistrationModule,
+        ReactiveFormsModule
+      ]
     })
       .compileComponents();
   }));
