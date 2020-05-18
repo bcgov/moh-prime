@@ -4,6 +4,8 @@ import { FormGroup, FormBuilder, FormControl, Validators, FormArray, ValidatorFn
 import { FormUtilsService } from '@common/services/form-utils.service';
 
 import { BusinessDay, BusinessDayHours } from '@registration/shared/models/business-day.model';
+import { FormArrayValidators } from '@shared/validators/form-array.validators';
+import { FormGroupValidators } from '@shared/validators/form-group.validators';
 
 @Component({
   selector: 'app-business-hours-picker',
@@ -50,6 +52,7 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const { weekdays, startTime, endTime } = this.form.getRawValue();
+      console.log(startTime, endTime);
       const newBusinessDays = weekdays
         .map((weekday: boolean, weekdayIndex: number) =>
           // Isolate changes to be added to hours of operation
@@ -80,7 +83,7 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
     this.form = this.fb.group({
       weekdays: this.fb.array(
         [],
-        [Validators.required]
+        [FormArrayValidators.atLeast(1)]
       ),
       startTime: [
         '',
@@ -94,8 +97,7 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
         false,
         []
       ]
-      // TODO test this works as expected
-    }, [this.timeRange('startTime', 'endTime', 'timeRange')]);
+    }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') });
   }
 
   private initForm() {
@@ -132,21 +134,5 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
   private updateAvailableBusinessDays() {
     this.weekdays.patchValue(this.unavailableBusinessDays);
     this.weekdays.controls.forEach(c => (c.value) ? c.disable() : c.enable());
-  }
-
-  /**
-   * @description
-   * Compares time range start and end.
-   */
-  private timeRange(rangeStartKey: string, rangeEndKey: string, rangeName: string): ValidatorFn {
-    return (group: FormGroup): ValidationErrors | null => {
-      const start = +group.controls[rangeStartKey].value;
-      const end = +group.controls[rangeEndKey].value;
-
-      if (!start || !end) { return null; }
-
-      const valid = (start < end);
-      return (valid) ? null : { [rangeName]: true };
-    };
   }
 }
