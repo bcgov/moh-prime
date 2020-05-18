@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+
 import { HelpResource } from './services/help-resource.service';
 
 @Component({
@@ -9,18 +9,16 @@ import { HelpResource } from './services/help-resource.service';
 })
 export class HelpComponent implements OnInit {
   public helpIdentifier: string;
+
   constructor(
     private helpResource: HelpResource,
-  ) {
-  }
+  ) { }
 
-  async ngOnInit() {
-    await this.helpResource.enrolleeDisplayId().subscribe(
-      (help) => {
+  public ngOnInit() {
+    this.helpResource.enrolleeDisplayId()
+      .subscribe((help: number) => {
         const num = Math.floor(Math.random() * 1000000);
         this.helpIdentifier = `${help}-${num}`;
-      }
-    );
+      });
   }
-
 }

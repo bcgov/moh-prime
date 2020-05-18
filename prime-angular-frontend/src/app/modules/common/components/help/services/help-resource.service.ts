@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
+
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+
+import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { ApiResource } from '@core/resources/api-resource.service';
-import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { Observable } from 'rxjs';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
-import { map, tap } from 'rxjs/operators';
-import { ApiHttpResponse } from '@core/models/api-http-response.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HelpResource {
-
   constructor(
     private apiResource: ApiResource,
-    private apiResourceUtilsService: ApiResourceUtilsService,
     private logger: LoggerService
   ) { }
 
@@ -26,7 +25,7 @@ export class HelpResource {
         map((enrollees: HttpEnrollee[]) =>
           // Only a single enrollee will be provided
           (enrollees.length) ? enrollees.pop().displayId : null
-        ),
+        )
       );
   }
 }
