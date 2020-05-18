@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RootRoutesModule } from '../../root-routes.module';
 import { MaintenanceComponent } from './maintenance.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { CommonModule } from '@common/common.module';
 
 describe('MaintenanceComponent', () => {
   let component: MaintenanceComponent;
@@ -12,7 +12,7 @@ describe('MaintenanceComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          CommonModule
+          RootRoutesModule
         ],
         declarations: [],
         providers: [

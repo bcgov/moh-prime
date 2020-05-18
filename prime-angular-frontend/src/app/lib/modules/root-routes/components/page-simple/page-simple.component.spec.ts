@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RootRoutesModule } from '../../root-routes.module';
 import { PageSimpleComponent } from './page-simple.component';
-import { CommonModule } from '@common/common.module';
 
 describe('PageSimpleComponent', () => {
   let component: PageSimpleComponent;
@@ -11,7 +11,7 @@ describe('PageSimpleComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          CommonModule
+          RootRoutesModule
         ],
         declarations: []
       }

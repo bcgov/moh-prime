@@ -1,8 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { RootRoutesModule } from '../../root-routes.module';
 import { UnsupportedComponent } from './unsupported.component';
-import { SharedModule } from '@shared/shared.module';
-import { CommonModule } from '@common/common.module';
 
 describe('UnsupportedComponent', () => {
   let component: UnsupportedComponent;
@@ -12,8 +11,7 @@ describe('UnsupportedComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          SharedModule,
-          CommonModule
+          RootRoutesModule
         ],
         declarations: []
       }
