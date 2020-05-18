@@ -16,6 +16,6 @@ export interface Location {
   organization: Organization;
   physicalAddressId?: number;
   physicalAddress: Address;
-  businessDays: BusinessDay[];
+  businessHours: BusinessDay[];
   doingBusinessAs?: string;
 }

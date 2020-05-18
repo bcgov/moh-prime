@@ -95,7 +95,7 @@ export class SiteRegistrationStateService {
   public get site(): Site {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const physicalAddress = this.siteAddressForm.getRawValue();
-    const businessDays = this.hoursOperationForm.getRawValue();
+    const businessHours = this.hoursOperationForm.getRawValue().businessDays;
     const vendor = this.vendorForm.getRawValue();
 
     // Adapt data for backend consumption
@@ -153,7 +153,7 @@ export class SiteRegistrationStateService {
         },
         physicalAddressId: physicalAddress?.id,
         physicalAddress,
-        businessDays
+        businessHours
       },
       vendorId: vendor?.id,
       vendor,
@@ -228,11 +228,11 @@ export class SiteRegistrationStateService {
         this.vendorForm.patchValue(site.vendor);
       }
 
-      if (site.location.businessDays?.length) {
+      if (site.location.businessHours?.length) {
         const array = this.hoursOperationForm.get('businessDays') as FormArray;
         // TODO may not be necessary depending on usage
         array.reset(); // Clear out existing indices
-        this.formUtilsService.formArrayPush(array, site.location.businessDays);
+        this.formUtilsService.formArrayPush(array, site.location.businessHours);
       }
 
       [

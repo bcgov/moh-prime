@@ -36,7 +36,7 @@ namespace Prime.Models
         [JsonIgnore]
         public IEnumerable<Site> Sites { get; set; }
 
-        public ICollection<BusinessDay> BusinessDays { get; set; }
+        public ICollection<BusinessDay> BusinessHours { get; set; }
 
         /// <summary>
         /// Days in which the business has any business hours.
@@ -44,7 +44,7 @@ namespace Prime.Models
         /// </summary>
         public IEnumerable<DayOfWeek> DaysOpen(DateTimeOffset? atTime = null)
         {
-            return BusinessDays
+            return BusinessHours
                 .Where(h => atTime == null || h.IsOpen(atTime.Value))
                 .Select(b => b.Day)
                 .Distinct();
