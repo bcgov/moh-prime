@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 import { RouterEvent } from '@angular/router';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@common/services/form-utils.service';
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
 import { Address } from '@shared/models/address.model';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
 
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';

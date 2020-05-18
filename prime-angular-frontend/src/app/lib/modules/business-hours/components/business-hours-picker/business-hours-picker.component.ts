@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
 
 import { FormUtilsService } from '@common/services/form-utils.service';
 
-import { FormArrayValidators } from '@shared/validators/form-array.validators';
-import { FormGroupValidators } from '@shared/validators/form-group.validators';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
+import { FormGroupValidators } from '@lib/validators/form-group.validators';
 
 import { BusinessDay } from '../../models/business-day.model';
 import { BusinessDayHours } from '../../models/business-day-hours.model';
