@@ -54,7 +54,6 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const { weekdays, startTime, endTime } = this.form.getRawValue();
-      console.log(startTime, endTime);
       const newBusinessDays = weekdays
         .map((weekday: boolean, weekdayIndex: number) =>
           // Isolate changes to be added to hours of operation
@@ -111,6 +110,7 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
     this.form.get('hours24').valueChanges
       .subscribe((is24Hours: boolean) => {
         const hours = (is24Hours)
+          // TODO what should this be 0, 0
           ? new BusinessDayHours(null, null) // 24 hours
           : this.defaultBusinesDayHours;
 
