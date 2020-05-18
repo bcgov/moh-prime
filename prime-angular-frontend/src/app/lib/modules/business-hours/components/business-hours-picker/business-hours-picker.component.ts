@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
 
-import { FormUtilsService } from '@common/services/form-utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';

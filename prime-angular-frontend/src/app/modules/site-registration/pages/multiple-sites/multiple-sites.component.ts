@@ -8,7 +8,7 @@ import { Subscription, Observable } from 'rxjs';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ToastService } from '@core/services/toast.service';
-import { FormUtilsService } from '@common/services/form-utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
