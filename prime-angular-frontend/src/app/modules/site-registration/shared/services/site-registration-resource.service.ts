@@ -84,8 +84,8 @@ export class SiteRegistrationResource {
     site.location.businessHours = site.location.businessHours
       .map((businessDay: BusinessDay) => {
         // TODO find out why duration is return PT0D and not PT1H for start and end times
-        // moment.duration(businessDay.startTime, 'hours');
-        // moment.duration(businessDay.endTime, 'hours');
+        // businessDay.startTime = moment.duration(businessDay.startTime, 'hours');
+        // businessDay.endTime = moment.duration(businessDay.endTime, 'hours');
         businessDay.startTime = `${businessDay.startTime}:00:00`;
         businessDay.endTime = `${businessDay.endTime}:00:00`;
         return businessDay;
