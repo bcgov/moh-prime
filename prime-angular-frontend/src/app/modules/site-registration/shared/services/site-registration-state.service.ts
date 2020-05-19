@@ -230,8 +230,7 @@ export class SiteRegistrationStateService {
 
       if (site.location.businessHours?.length) {
         const array = this.hoursOperationForm.get('businessDays') as FormArray;
-        // TODO may not be necessary depending on usage
-        array.reset(); // Clear out existing indices
+        array.clear(); // Clear out existing indices
         this.formUtilsService.formArrayPush(array, site.location.businessHours);
       }
 
