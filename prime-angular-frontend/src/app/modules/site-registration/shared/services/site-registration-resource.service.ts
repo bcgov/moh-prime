@@ -34,6 +34,17 @@ export class SiteRegistrationResource {
     return this.apiResource.get<Site[]>('sites')
       .pipe(
         map((response: ApiHttpResponse<Site[]>) => response.result),
+        // TODO split out into proper adapter
+        map((sites: Site[]) => {
+          sites.map((site: Site) => {
+            site.location.businessHours = site.location.businessHours.map((businessDay: BusinessDay) => {
+              businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
+              businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
+              return businessDay;
+            });
+          });
+          return sites;
+        }),
         tap((sites: Site[]) => this.logger.info('SITES', sites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
@@ -47,10 +58,11 @@ export class SiteRegistrationResource {
     return this.apiResource.get<Site>(`sites/${siteId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
+        // TODO split out into proper adapter
         map((site: Site) => {
           site.location.businessHours = site.location.businessHours.map((businessDay: BusinessDay) => {
-            businessDay.startTime = `${moment.duration(businessDay.startTime).as('hours')}`;
-            businessDay.endTime = `${moment.duration(businessDay.endTime).as('hours')}`;
+            businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
+            businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
             return businessDay;
           });
           return site;
@@ -81,15 +93,21 @@ export class SiteRegistrationResource {
   }
 
   public updateSite(site: Site, isCompleted?: boolean): NoContent {
-    site.location.businessHours = site.location.businessHours
-      .map((businessDay: BusinessDay) => {
-        // TODO find out why duration is return PT0D and not PT1H for start and end times
-        // businessDay.startTime = moment.duration(businessDay.startTime, 'hours');
-        // businessDay.endTime = moment.duration(businessDay.endTime, 'hours');
-        businessDay.startTime = `${businessDay.startTime}:00:00`;
-        businessDay.endTime = `${businessDay.endTime}:00:00`;
-        return businessDay;
-      });
+    // TODO separate this out into a proper adapter
+    if (site.location.businessHours?.length) {
+      site.location.businessHours = site.location.businessHours
+        .map((businessDay: BusinessDay) => {
+          if (businessDay.startTime === null && businessDay.endTime === null) {
+            businessDay.startTime = '0';
+            businessDay.endTime = '24';
+          }
+          businessDay.startTime = `${businessDay.startTime}:00:00`;
+          businessDay.endTime = `${businessDay.endTime}:00:00`;
+          return businessDay;
+        });
+    } else {
+      site.location.businessHours = null;
+    }
 
     const params = this.apiResourceUtilsService.makeHttpParams({ isCompleted });
     return this.apiResource.put<NoContent>(`sites/${site.id}`, site, params)
