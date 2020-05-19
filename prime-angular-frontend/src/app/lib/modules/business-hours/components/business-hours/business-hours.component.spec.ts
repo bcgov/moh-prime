@@ -22,8 +22,7 @@ describe('BusinessHoursComponent', () => {
       providers: [
         SiteRegistrationStateService
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(inject([SiteRegistrationStateService], (siteRegistrationStateService: SiteRegistrationStateService) => {
