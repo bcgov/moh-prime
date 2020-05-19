@@ -228,17 +228,40 @@ namespace Prime.Services
                 return;
             }
 
+            _context.Addresses.Remove(site.Location.Organization.SigningAuthority.PhysicalAddress);
             _context.Parties.Remove(site.Location.Organization.SigningAuthority);
             _context.Organizations.Remove(site.Location.Organization);
-            _context.Locations.Remove(site.Location);
-            _context.Parties.Remove(site.Location.AdministratorPharmaNet);
-            _context.Parties.Remove(site.Location.PrivacyOfficer);
-            _context.Parties.Remove(site.Location.TechnicalSupport);
+
+            // Check if relation exists before delete to allow delete of incomplete registrations
+            if (site.Location != null)
+            {
+                if (site.Location.PhysicalAddress != null)
+                {
+                    _context.Addresses.Remove(site.Location.PhysicalAddress);
+                }
+                _context.Locations.Remove(site.Location);
+
+                DeletePartyFromLocation(site.Location.AdministratorPharmaNet);
+                DeletePartyFromLocation(site.Location.PrivacyOfficer);
+                DeletePartyFromLocation(site.Location.PrivacyOfficer);
+            }
             _context.Sites.Remove(site);
 
             await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
 
             await _context.SaveChangesAsync();
+        }
+
+        private void DeletePartyFromLocation(Party party)
+        {
+            if (party != null)
+            {
+                if (party.PhysicalAddress != null)
+                {
+                    _context.Addresses.Remove(party.PhysicalAddress);
+                }
+                _context.Parties.Remove(party);
+            }
         }
 
         public async Task<Site> SubmitRegistrationAsync(int siteId)
