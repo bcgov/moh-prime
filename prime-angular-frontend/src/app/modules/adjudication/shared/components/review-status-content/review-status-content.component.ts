@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Enrolment } from '@shared/models/enrolment.model';
+
 import { Reason } from '../../pipes/status-reasons.pipe';
 
 @Component({
@@ -9,9 +9,8 @@ import { Reason } from '../../pipes/status-reasons.pipe';
 })
 export class ReviewStatusContentComponent implements OnInit {
   @Input() public reasons: Reason[];
+
   constructor() { }
 
-  ngOnInit() {
-  }
-
+  public ngOnInit() { }
 }

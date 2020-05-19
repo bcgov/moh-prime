@@ -102,7 +102,7 @@ namespace Prime.Services
             {
                 item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
                 // Attach to the enrollee if they have signed the most recent ToA
-                item.HasMostRecentAccessTermSigned = await _accessTermService.IsCurrentByEnrolleeAsync(item);
+                item.CurrentTOAStatus = await _accessTermService.GetCurrentTOAStatusAsync(item);
             }
 
             return items;
@@ -287,7 +287,7 @@ namespace Prime.Services
             {
                 entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
                 // Attach to the enrollee if they have signed the most recent ToA
-                entity.HasMostRecentAccessTermSigned = await _accessTermService.IsCurrentByEnrolleeAsync(entity);
+                entity.CurrentTOAStatus = await _accessTermService.GetCurrentTOAStatusAsync(entity);
             }
 
             return entity;
@@ -419,6 +419,7 @@ namespace Prime.Services
         public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId)
         {
             return await _context.BusinessEvents
+                .Include(e => e.Admin)
                 .Where(e => e.EnrolleeId == enrolleeId)
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();

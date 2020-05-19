@@ -19,13 +19,6 @@
             *matCellDef="let row;"> {{ row.lastName }}, {{ row.firstName }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="approvedDate">
-        <th mat-header-cell
-            *matHeaderCellDef> Approval Date </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.approvedDate | formatDate | default }} </td>
-      </ng-container>
-
       <ng-container matColumnDef="appliedDate">
         <th mat-header-cell
             *matHeaderCellDef> Submission Date </th>
@@ -40,13 +33,13 @@
             *matCellDef="let row;"> {{ row.expiryDate | formatDate }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="hasMostRecentAccessTermSigned">
+      <ng-container matColumnDef="currentTOAStatus">
         <th mat-header-cell
             *matHeaderCellDef> Current ToA </th>
         <td mat-cell
             *matCellDef="let row;">
           <mat-chip-list [selectable]="false">
-            <mat-chip [disableRipple]="true">{{ (row.hasMostRecentAccessTermSigned) ? 'Yes' : 'No' }}</mat-chip>
+            <mat-chip [disableRipple]="true">{{ row.currentTOAStatus | default }}</mat-chip>
           </mat-chip-list>
         </td>
       </ng-container>
@@ -102,35 +95,25 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="onRoute([row.id])">
-          <mat-icon>assignment</mat-icon>
-          <span>Enrolment</span>
-        </button>
-        <!-- <button mat-menu-item
-                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_PROFILE_HISTORY])">
-          <mat-icon>history</mat-icon>
-          <span>Enrolment History</span>
-        </button> -->
-        <button mat-menu-item
-                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_TERMS_HISTORY])">
-          <mat-icon>history</mat-icon>
-          <span>PRIME History</span>
-        </button>
-        <button mat-menu-item
-                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_EVENTS])">
-          <mat-icon>list_alt</mat-icon>
-          <span>Events</span>
-        </button>
-        <button mat-menu-item
-                *ngIf="row.currentStatus.enrolmentStatusReasons.length"
-                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_REVIEW_STATUS])">
+                *ngIf="canReviewStatusReasons(row)"
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_REVIEW])">
           <mat-icon>rate_review</mat-icon>
-          <span>Review Status Reasons</span>
+          <span>Adjudication</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_ENROLMENTS])">
+          <mat-icon>history</mat-icon>
+          <span>Enrolments</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_EVENT_LOG])">
+          <mat-icon>list_alt</mat-icon>
+          <span>Event Log</span>
         </button>
         <button mat-menu-item
                 (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES])">
           <mat-icon>message</mat-icon>
-          <span>Add & View Notes</span>
+          <span>Add and View Notes</span>
         </button>
 
         <mat-divider></mat-divider>

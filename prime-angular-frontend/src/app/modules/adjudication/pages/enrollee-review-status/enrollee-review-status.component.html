@@ -5,6 +5,9 @@
 
   <ng-template #content
                let-enrollee="enrollee">
+    <!-- TODO temporary and should go back into review status content eventually -->
+    <h3 class="mb-4">Status: {{ enrollee?.currentStatus.status.name }}</h3>
+
     <app-review-status-content [reasons]="enrollee | statusReasons"></app-review-status-content>
   </ng-template>
 

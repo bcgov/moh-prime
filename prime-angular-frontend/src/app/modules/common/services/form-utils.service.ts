@@ -82,7 +82,7 @@ export class FormUtilsService {
    */
   public getFormErrors(form: FormGroup | FormArray): { [key: string]: any; } | null {
     let hasError = false;
-    const result = Object.keys(form.controls).reduce((acc, key) => {
+    const result = Object.keys(form?.controls).reduce((acc, key) => {
       const control = form.get(key);
       const errors = (control instanceof FormGroup || control instanceof FormArray)
         ? this.getFormErrors(control)

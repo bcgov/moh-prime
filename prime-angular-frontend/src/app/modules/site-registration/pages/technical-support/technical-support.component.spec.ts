@@ -4,6 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { TechnicalSupportComponent } from './technical-support.component';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('TechnicalSupportComponent', () => {
   let component: TechnicalSupportComponent;
@@ -14,7 +16,14 @@ describe('TechnicalSupportComponent', () => {
       imports: [
         BrowserAnimationsModule,
         RouterTestingModule,
+        HttpClientTestingModule,
         SiteRegistrationModule
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
       ]
     })
       .compileComponents();

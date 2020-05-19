@@ -18,3 +18,12 @@ h2 {
     line-height: 3rem;
   }
 }
+
+p {
+  color: theme-palette(blue);
+}
+
+a {
+  color: theme-palette(blue, light);
+  text-decoration: underline;
+}

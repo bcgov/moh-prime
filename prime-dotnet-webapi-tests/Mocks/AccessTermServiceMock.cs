@@ -90,5 +90,10 @@ namespace PrimeTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task<string> GetCurrentTOAStatusAsync(Enrollee enrollee)
+        {
+            return Task.FromResult("Yes");
+        }
     }
 }

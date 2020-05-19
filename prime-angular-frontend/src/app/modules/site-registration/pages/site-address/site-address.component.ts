@@ -90,7 +90,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
 
   private initForm() {
     const site = this.siteRegistrationService.site;
-    this.isCompleted = site.completed;
+    this.isCompleted = site?.completed;
     this.siteRegistrationStateService.setSite(site, true);
   }
 }
