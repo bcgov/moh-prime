@@ -62,8 +62,6 @@ namespace Prime
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
-                    //TOOD: this breaks submission actions probably
-                    //options.SerializerSettings.Converters.Add(new StringEnumConverter(new KebabCaseNamingStrategy(), true));
                     options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
                 });
 
