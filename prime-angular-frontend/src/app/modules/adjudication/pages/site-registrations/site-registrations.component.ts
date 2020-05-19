@@ -77,7 +77,7 @@ export class SiteRegistrationsComponent extends AbstractComponent implements OnI
           }),
           exhaustMap(() => this.adjudicationResource.deleteSite(siteId)),
         )
-        .subscribe((site: Site) => this.routeTo(this.baseRoutePath));
+        .subscribe((site: Site) => this.getDataset(this.route.snapshot.queryParams));
     }
   }
 
