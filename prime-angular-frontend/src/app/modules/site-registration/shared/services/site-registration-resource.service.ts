@@ -40,6 +40,11 @@ export class SiteRegistrationResource {
             site.location.businessHours = site.location.businessHours.map((businessDay: BusinessDay) => {
               businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
               businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
+
+              if (businessDay.endTime === '24') {
+                businessDay.startTime = null;
+                businessDay.endTime = null;
+              }
               return businessDay;
             });
           });
@@ -63,6 +68,11 @@ export class SiteRegistrationResource {
           site.location.businessHours = site.location.businessHours.map((businessDay: BusinessDay) => {
             businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
             businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
+
+            if (businessDay.endTime === '24') {
+              businessDay.startTime = null;
+              businessDay.endTime = null;
+            }
             return businessDay;
           });
           return site;
