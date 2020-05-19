@@ -9,7 +9,7 @@
         <th mat-header-cell
             *matHeaderCellDef> Organization Name </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.location?.organization?.name }} </td>
+            *matCellDef="let row;"> {{ row.location?.organization?.name | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="signingAuthority">
@@ -24,7 +24,7 @@
         <th mat-header-cell
             *matHeaderCellDef> Submission Date </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.submittedDate | formatDate }} </td>
+            *matCellDef="let row;"> {{ row.submittedDate | formatDate | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
