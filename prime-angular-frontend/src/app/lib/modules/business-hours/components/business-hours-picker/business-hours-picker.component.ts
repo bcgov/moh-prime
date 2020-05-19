@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray, FormGroupDirective } from '@angular/forms';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 
@@ -8,6 +9,16 @@ import { FormGroupValidators } from '@lib/validators/form-group.validators';
 
 import { BusinessDay } from '../../models/business-day.model';
 import { BusinessDayHours } from '../../models/business-day-hours.model';
+
+export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
+  public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
+    const invalidCtrl = super.isErrorState(control, form);
+    // Apply custom validation from parent form group
+    const dirtyOrSubmitted = (control?.dirty || form?.submitted);
+    const invalidParent = !!(control?.parent && control?.parent.hasError('lessthan') && dirtyOrSubmitted);
+    return (invalidCtrl || invalidParent);
+  }
+}
 
 @Component({
   selector: 'app-business-hours-picker',
@@ -20,6 +31,7 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
   public form: FormGroup;
   public days: number[];
   public hours: number[];
+  public busDayHoursErrStateMatcher: BusinessDayHoursErrorStateMatcher;
 
   private readonly defaultBusinesDayHours: BusinessDayHours;
 
@@ -99,6 +111,8 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
         []
       ]
     }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') });
+
+    this.busDayHoursErrStateMatcher = new BusinessDayHoursErrorStateMatcher();
   }
 
   private initForm() {
@@ -110,7 +124,6 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
     this.form.get('hours24').valueChanges
       .subscribe((is24Hours: boolean) => {
         const hours = (is24Hours)
-          // TODO what should this be 0, 0
           ? new BusinessDayHours(null, null) // 24 hours
           : this.defaultBusinesDayHours;
 
@@ -127,7 +140,8 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
   }
 
   private resetHours() {
-    this.form.patchValue({
+    this.form.reset({
+      weekdays: this.weekdays.getRawValue(),
       ...this.defaultBusinesDayHours,
       hours24: false
     });

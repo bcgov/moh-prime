@@ -9,10 +9,10 @@ export class FormArrayValidators {
    */
   public static atLeast(minLength: number): ValidatorFn {
     return (array: FormArray): ValidationErrors | null => {
-      const atLeastOne = array &&
+      const atLeast = array &&
         array.controls?.length &&
         array.controls.filter(c => c.value).length >= minLength;
-      return (atLeastOne) ? null : { atleastone: true };
+      return (atLeast) ? null : { atleast: true };
     };
   }
 }

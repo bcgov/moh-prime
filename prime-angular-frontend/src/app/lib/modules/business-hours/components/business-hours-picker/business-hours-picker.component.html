@@ -9,6 +9,7 @@
                     formArrayName="weekdays">
         <mat-checkbox [formControlName]="i">{{ i | weekday: 'short' }}</mat-checkbox>
       </ng-container>
+      <!-- TODO create mat-error that works for checkboxes, and uses the default styles and transforms -->
     </div>
 
     <!-- TODO mobile would benefit from multiselect -->
@@ -18,19 +19,31 @@
         <mat-option *ngFor="let weekday of weekdays.controls; let i = index"
                     [value]="i">{{ i | weekday }}</mat-option>
       </mat-select>
+      <mat-error *ngIf="weekdays.hasError('atleast')">
+        Required
+      </mat-error>
     </mat-form-field> -->
 
     <div class="form-container">
-      <ng-container *ngFor="let controlName of ['startTime', 'endTime']; let first = first">
+      <ng-container *ngFor="let control of [startTime, endTime]; let first = first">
         <mat-form-field>
-          <mat-select [formControlName]="controlName">
+          <mat-select [formControl]="control"
+                      [errorStateMatcher]="busDayHoursErrStateMatcher">
             <mat-option *ngFor="let hour of hours"
                         [value]="hour.toString()">{{ hour }}:00</mat-option>
           </mat-select>
-          <mat-error>Required</mat-error>
+          <mat-error *ngIf="form.hasError('lessthan')">
+            Invalid
+            <!-- TODO need better error message, but width makes messaging hard due to wrapping -->
+            <!-- Opening hours must be earlier than closing hours -->
+          </mat-error>
+          <mat-error *ngIf="control.hasError('required')">
+            Required
+          </mat-error>
         </mat-form-field>
 
-        <!-- TODO remove on mobile and stack fields -->
+        <!-- TODO remove to and add proper labels for automatic aria, or -->
+        <!-- TODO at least remove on mobile and stack fields -->
         <span *ngIf="first" class="px-3">to</span>
       </ng-container>
 
