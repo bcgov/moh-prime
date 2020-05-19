@@ -18,7 +18,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
-  // TODO replace when Enrolemnt is refactored out of the EnrolmentModule
+  // TODO replace when Enrolment is refactored out of the EnrolmentModule
   // public enrolleeProfileVersion: HttpEnrolleeProfileVersion;
   public enrolmentProfileHistory: EnrolmentProfileVersion;
 
@@ -32,12 +32,12 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
 
   public ngOnInit() {
     const enrolleeId = this.route.snapshot.params.id;
-    const accessTermId = this.route.snapshot.params.hid;
+    const accessTermId = this.route.snapshot.params.aid;
     this.busy = this.adjudicationResource.getEnrolmentForAccessTerm(enrolleeId, accessTermId)
       .pipe(
         map((enrolmentProfileVersion: HttpEnrolleeProfileVersion) => this.enrolleeVersionAdapterResponse(enrolmentProfileVersion))
       )
-      // TODO replace when Enrolemnt is refactored out of the EnrolmentModule
+      // TODO replace when Enrolment is refactored out of the EnrolmentModule
       // .subscribe((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
       //   this.enrolleeProfileVersion = enrolleeProfileVersion
       // );

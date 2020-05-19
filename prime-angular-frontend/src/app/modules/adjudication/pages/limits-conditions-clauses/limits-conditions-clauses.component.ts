@@ -21,6 +21,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
   public enrollee: HttpEnrollee;
   public preview: string;
   public hasActions: boolean;
+  public editorConfig: Record<string, string>;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +30,14 @@ export class LimitsConditionsClausesComponent implements OnInit {
     private authService: AuthService
   ) {
     this.hasActions = false;
+    this.editorConfig = {
+      height: '25rem',
+      base_url: '/tinymce',
+      suffix: '.min',
+      plugins: 'lists advlist',
+      toolbar: 'undo redo | bold italic underline | bullist numlist outdent indent | removeformat',
+      menubar: 'false'
+    };
   }
 
   public get canEdit(): boolean {

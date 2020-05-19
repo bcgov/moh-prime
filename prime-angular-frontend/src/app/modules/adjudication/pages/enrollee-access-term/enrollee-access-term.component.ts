@@ -31,7 +31,7 @@ export class EnrolleeAccessTermComponent extends AbstractComponent implements On
 
   private getAccessTerm() {
     const enrolleeId = this.route.snapshot.params.id;
-    const accessTermId = this.route.snapshot.params.hid;
+    const accessTermId = this.route.snapshot.params.aid;
     this.busy = this.adjudicationResource.getAccessTerm(enrolleeId, accessTermId)
       .subscribe((accessTerm: AccessTerm) => this.accessTerm = accessTerm);
   }
