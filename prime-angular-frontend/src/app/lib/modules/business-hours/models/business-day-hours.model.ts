@@ -1,4 +1,3 @@
-
 export class BusinessDayHours {
   public startTime: string;
   public endTime: string;

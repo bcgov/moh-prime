@@ -42,7 +42,6 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
     this.add = new EventEmitter<BusinessDay[]>();
     this.days = [...Array(7).keys()]; // Sunday through Saturday
     this.hours = [...Array(24).keys()];
-
     this.defaultBusinesDayHours = new BusinessDayHours('9', '17'); // Default 9 to 5
   }
 

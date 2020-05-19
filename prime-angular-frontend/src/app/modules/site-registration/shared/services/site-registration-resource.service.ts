@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 
+
 import { Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
+
+import * as moment from 'moment';
 
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
@@ -9,6 +12,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
+import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
@@ -43,6 +47,14 @@ export class SiteRegistrationResource {
     return this.apiResource.get<Site>(`sites/${siteId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
+        map((site: Site) => {
+          site.location.businessHours = site.location.businessHours.map((businessDay: BusinessDay) => {
+            businessDay.startTime = `${moment.duration(businessDay.startTime).as('hours')}`;
+            businessDay.endTime = `${moment.duration(businessDay.endTime).as('hours')}`;
+            return businessDay;
+          });
+          return site;
+        }),
         tap((site: Site) => this.logger.info('SITE', site)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be retrieved');
@@ -69,6 +81,16 @@ export class SiteRegistrationResource {
   }
 
   public updateSite(site: Site, isCompleted?: boolean): NoContent {
+    site.location.businessHours = site.location.businessHours
+      .map((businessDay: BusinessDay) => {
+        // TODO find out why duration is return PT0D and not PT1H for start and end times
+        // moment.duration(businessDay.startTime, 'hours');
+        // moment.duration(businessDay.endTime, 'hours');
+        businessDay.startTime = `${businessDay.startTime}:00:00`;
+        businessDay.endTime = `${businessDay.endTime}:00:00`;
+        return businessDay;
+      });
+
     const params = this.apiResourceUtilsService.makeHttpParams({ isCompleted });
     return this.apiResource.put<NoContent>(`sites/${site.id}`, site, params)
       // TODO remove pipe when ApiResource handles NoContent
