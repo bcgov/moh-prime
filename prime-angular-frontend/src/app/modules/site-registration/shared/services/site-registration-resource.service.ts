@@ -99,7 +99,7 @@ export class SiteRegistrationResource {
         .map((businessDay: BusinessDay) => {
           if (businessDay.startTime === null && businessDay.endTime === null) {
             businessDay.startTime = '0';
-            businessDay.endTime = '24';
+            businessDay.endTime = '1.00';
           }
           businessDay.startTime = `${businessDay.startTime}:00:00`;
           businessDay.endTime = `${businessDay.endTime}:00:00`;
