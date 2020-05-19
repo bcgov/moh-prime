@@ -3,8 +3,6 @@
 
   <app-page-header>Site Registrations</app-page-header>
 
-
-
   <div *ngIf="showSearchFilter"
        class="row justify-content-end">
     <div class="col text-right">
@@ -39,7 +37,7 @@
       <div class="col py-5">
 
         <ng-container [ngTemplateOutlet]="content"
-                      [ngTemplateOutletContext]="{ enrollee: dataSource?.data[0] }"></ng-container>
+                      [ngTemplateOutletContext]="{ site: dataSource?.data[0] }"></ng-container>
 
       </div>
 
