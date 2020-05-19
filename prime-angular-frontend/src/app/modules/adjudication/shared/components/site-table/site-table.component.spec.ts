@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SiteTableComponent } from './site-table.component';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('SiteTableComponent', () => {
   let component: SiteTableComponent;
@@ -8,9 +10,14 @@ describe('SiteTableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SiteTableComponent]
-    })
-      .compileComponents();
+      imports: [
+        AdjudicationModule
+      ],
+      declarations: [],
+      providers: [
+        KeycloakService
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
