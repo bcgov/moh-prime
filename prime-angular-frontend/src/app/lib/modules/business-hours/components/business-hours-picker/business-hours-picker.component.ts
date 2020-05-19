@@ -58,7 +58,12 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
   }
 
   public get unavailableBusinessDays(): boolean[] {
+    console.log('BUS_DAYS', this.businessDays);
+
     const businessDays = this.businessDays.map(b => b.day);
+
+    console.log('UNAVAILABLE', this.days.map((day: number) => businessDays.includes(day)));
+
     return this.days.map((day: number) => businessDays.includes(day));
   }
 
@@ -136,6 +141,7 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
 
         this.form.patchValue(hours);
       });
+    this.updateAvailableBusinessDays();
   }
 
   private resetHours() {
