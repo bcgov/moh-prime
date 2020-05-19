@@ -29,6 +29,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public hasNoHours: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +50,8 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.businessDays)) {
+      this.hasNoHours = false;
+
       const payload = this.siteRegistrationStateService.site;
       this.siteRegistrationResource
         .updateSite(payload)
@@ -56,10 +59,14 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
           this.form.markAsPristine();
           this.nextRoute();
         });
+    } else {
+      this.hasNoHours = true;
     }
   }
 
   public onAdd(businessDay: BusinessDay[]) {
+    this.hasNoHours = false;
+
     this.formUtilsService.formArrayPush(this.businessDays, businessDay);
     const sorted = this.businessDays.value.sort(this.sortConfigByDay());
     this.businessDays.patchValue(sorted);

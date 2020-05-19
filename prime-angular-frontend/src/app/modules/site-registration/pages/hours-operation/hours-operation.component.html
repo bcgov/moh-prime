@@ -18,6 +18,15 @@
                           (add)="onAdd($event)"
                           (remove)="onRemove($event)"></app-business-hours>
 
+      <app-alert *ngIf="hasNoHours"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          No hours of operation have been added.
+        </ng-container>
+      </app-alert>
+
     </section>
 
   </form>
