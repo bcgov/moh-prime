@@ -309,18 +309,20 @@ namespace Prime.Services
                 .Include(s => s.Location)
                     .ThenInclude(l => l.Organization)
                         .ThenInclude(o => o.SigningAuthority)
-                .ThenInclude(p => p.PhysicalAddress)
+                            .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PrivacyOfficer)
-                .ThenInclude(p => p.PhysicalAddress)
+                        .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.AdministratorPharmaNet)
-                .ThenInclude(p => p.PhysicalAddress)
+                        .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.TechnicalSupport)
-                        .ThenInclude(p => p.PhysicalAddress);
+                        .ThenInclude(p => p.PhysicalAddress)
+                .Include(s => s.Location)
+                    .ThenInclude(l => l.BusinessHours);
         }
     }
 }
