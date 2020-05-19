@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { BusinessHoursPickerComponent } from './business-hours-picker.component';
@@ -12,6 +13,7 @@ describe('BusinessHoursPickerComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         SiteRegistrationModule,
+        BrowserAnimationsModule,
         ReactiveFormsModule
       ]
     })
