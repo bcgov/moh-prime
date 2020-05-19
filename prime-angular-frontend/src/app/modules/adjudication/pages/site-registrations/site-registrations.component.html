@@ -3,11 +3,15 @@
 
   <app-page-header>Site Registrations</app-page-header>
 
+
+
   <div *ngIf="showSearchFilter"
        class="row justify-content-end">
     <div class="col text-right">
       <div class="row">
         <div class="col text-right pr-0">
+
+          <app-search-form (search)="onSearch($event)"></app-search-form>
 
         </div>
         <div class="col-auto">
@@ -40,6 +44,7 @@
                       [ngTemplateOutletContext]="{ enrollee: dataSource?.data[0] }"></ng-container>
 
       </div>
+
     </div>
 
   </ng-container>

@@ -69,6 +69,12 @@ export class SiteRegistrationsComponent extends AbstractComponent implements OnI
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
+          exhaustMap((result: { output: string }) => {
+            if (result) {
+              return of(noop);
+            }
+            return EMPTY;
+          }),
           exhaustMap(() => this.adjudicationResource.deleteSite(siteId)),
         )
         .subscribe((site: Site) => this.routeTo(this.baseRoutePath));
@@ -110,7 +116,7 @@ export class SiteRegistrationsComponent extends AbstractComponent implements OnI
   private getSites({ search, status }: { search?: string, status?: number }) {
     return this.adjudicationResource.getSites(search, status)
       .pipe(
-        tap(() => this.showSearchFilter = true)
+        tap(() => this.showSearchFilter = false)
       );
   }
 
