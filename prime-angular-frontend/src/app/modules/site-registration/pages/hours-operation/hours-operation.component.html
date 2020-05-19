@@ -13,10 +13,12 @@
         <ng-container appPageSubheaderTitle>Hours of Operation</ng-container>
       </app-page-subheader>
 
-      <!-- TODO this.businessDays.valueChanges | async -->
       <app-business-hours [form]="form"
                           (add)="onAdd($event)"
                           (remove)="onRemove($event)"></app-business-hours>
+      <!-- <app-business-hours [businessDays]="businessDays.valueChanges | async"
+                          (add)="onAdd($event)"
+                          (remove)="onRemove($event)"></app-business-hours> -->
 
       <app-alert *ngIf="hasNoHours"
                  type="danger"
