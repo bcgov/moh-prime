@@ -116,7 +116,7 @@ export class SiteRegistrationsComponent extends AbstractComponent implements OnI
   private getSites({ search, status }: { search?: string, status?: number }) {
     return this.adjudicationResource.getSites(search, status)
       .pipe(
-        tap(() => this.showSearchFilter = false)
+        tap(() => this.showSearchFilter = true)
       );
   }
 
