@@ -96,6 +96,10 @@ export class FormUtilsService {
    * Get all the errors contained within a form.
    */
   public getFormErrors(form: FormGroup | FormArray): { [key: string]: any } | null {
+    if (!form) {
+      return null;
+    }
+
     let hasError = false;
     const result = Object.keys(form?.controls).reduce((acc, key) => {
       const control = form.get(key);
