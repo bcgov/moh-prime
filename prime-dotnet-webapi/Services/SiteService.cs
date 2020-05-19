@@ -208,6 +208,23 @@ namespace Prime.Services
 
                 _partyService.UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
             }
+
+            if (updated?.BusinessHours != null)
+            {
+                if (current.BusinessHours != null)
+                {
+                    foreach (var businessHour in current.BusinessHours)
+                    {
+                        _context.Remove(businessHour);
+                    }
+                }
+
+                foreach (var businessHour in updated.BusinessHours)
+                {
+                    businessHour.LocationId = current.Id;
+                    _context.Entry(businessHour).State = EntityState.Added;
+                }
+            }
         }
 
         public async Task DeleteSiteAsync(int siteId)
