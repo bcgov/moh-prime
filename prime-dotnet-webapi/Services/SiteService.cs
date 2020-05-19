@@ -221,6 +221,8 @@ namespace Prime.Services
             var site = await this.GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
+            var provisionerId = site.ProvisionerId;
+
             if (site == null)
             {
                 return;
@@ -228,13 +230,13 @@ namespace Prime.Services
 
             _context.Parties.Remove(site.Location.Organization.SigningAuthority);
             _context.Organizations.Remove(site.Location.Organization);
+            _context.Locations.Remove(site.Location);
             _context.Parties.Remove(site.Location.AdministratorPharmaNet);
             _context.Parties.Remove(site.Location.PrivacyOfficer);
             _context.Parties.Remove(site.Location.TechnicalSupport);
-            _context.Locations.Remove(site.Location);
             _context.Sites.Remove(site);
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, (int)site.ProvisionerId, "Site Deleted");
+            await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
 
             await _context.SaveChangesAsync();
         }
