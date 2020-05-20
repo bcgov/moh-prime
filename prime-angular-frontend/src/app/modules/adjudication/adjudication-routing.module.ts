@@ -19,6 +19,8 @@ import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-te
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 
+import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
+
 const routes: Routes = [
   {
     path: AdjudicationRoutes.MODULE_PATH,
@@ -94,6 +96,11 @@ const routes: Routes = [
             ]
           }
         ]
+      },
+      {
+        path: AdjudicationRoutes.SITE_REGISTRATIONS,
+        component: SiteRegistrationsComponent,
+        data: { title: 'Site Registrations' }
       },
       {
         path: '', // Equivalent to `/` and alias for `enrollees`

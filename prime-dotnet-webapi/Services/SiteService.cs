@@ -25,6 +25,12 @@ namespace Prime.Services
             _partyService = partyService;
         }
 
+        public async Task<IEnumerable<Site>> GetSitesAsync()
+        {
+            return await this.GetBaseSiteQuery()
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Site>> GetSitesAsync(int partyId)
         {
             return await this.GetBaseSiteQuery()
@@ -229,19 +235,50 @@ namespace Prime.Services
 
         public async Task DeleteSiteAsync(int siteId)
         {
-            var site = await _context.Sites
+            var site = await this.GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            var provisionerId = site.ProvisionerId;
 
             if (site == null)
             {
                 return;
             }
 
+            _context.Addresses.Remove(site.Location.Organization.SigningAuthority.PhysicalAddress);
+            _context.Parties.Remove(site.Location.Organization.SigningAuthority);
+            _context.Organizations.Remove(site.Location.Organization);
+
+            // Check if relation exists before delete to allow delete of incomplete registrations
+            if (site.Location != null)
+            {
+                if (site.Location.PhysicalAddress != null)
+                {
+                    _context.Addresses.Remove(site.Location.PhysicalAddress);
+                }
+                _context.Locations.Remove(site.Location);
+
+                DeletePartyFromLocation(site.Location.AdministratorPharmaNet);
+                DeletePartyFromLocation(site.Location.PrivacyOfficer);
+                DeletePartyFromLocation(site.Location.PrivacyOfficer);
+            }
             _context.Sites.Remove(site);
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, (int)site.ProvisionerId, "Site Deleted");
+            await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
 
             await _context.SaveChangesAsync();
+        }
+
+        private void DeletePartyFromLocation(Party party)
+        {
+            if (party != null)
+            {
+                if (party.PhysicalAddress != null)
+                {
+                    _context.Addresses.Remove(party.PhysicalAddress);
+                }
+                _context.Parties.Remove(party);
+            }
         }
 
         public async Task<Site> SubmitRegistrationAsync(int siteId)

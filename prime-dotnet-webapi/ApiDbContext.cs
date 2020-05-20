@@ -236,12 +236,14 @@ namespace Prime
             modelBuilder.Entity<Location>()
                 .HasOne(l => l.Organization)
                 .WithMany(t => t.Locations)
-                .HasForeignKey(be => be.OrganizationId);
+                .HasForeignKey(be => be.OrganizationId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Site>()
                 .HasOne(l => l.Location)
                 .WithMany(t => t.Sites)
-                .HasForeignKey(be => be.LocationId);
+                .HasForeignKey(be => be.LocationId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Site>()
                 .HasOne(l => l.Vendor)
