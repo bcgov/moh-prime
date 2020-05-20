@@ -5310,41 +5310,6 @@ namespace Prime.Migrations
                     b.ToTable("EnrolmentStatus");
                 });
 
-            modelBuilder.Entity("Prime.Models.EnrolmentStatusAdjudicatorNote", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("AdjudicatorNoteId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolmentStatusId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdjudicatorNoteId");
-
-                    b.HasIndex("EnrolmentStatusId")
-                        .IsUnique();
-
-                    b.ToTable("EnrolmentStatusAdjudicatorNote");
-                });
-
             modelBuilder.Entity("Prime.Models.EnrolmentStatusReason", b =>
                 {
                     b.Property<int>("Id")
@@ -5380,6 +5345,47 @@ namespace Prime.Migrations
                     b.HasIndex("StatusReasonCode");
 
                     b.ToTable("EnrolmentStatusReason");
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolmentStatusReference", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("AdjudicatorNoteId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("AdminId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolmentStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdjudicatorNoteId")
+                        .IsUnique();
+
+                    b.HasIndex("AdminId");
+
+                    b.HasIndex("EnrolmentStatusId")
+                        .IsUnique();
+
+                    b.ToTable("EnrolmentStatusReference");
                 });
 
             modelBuilder.Entity("Prime.Models.Feedback", b =>
@@ -11866,21 +11872,6 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.EnrolmentStatusAdjudicatorNote", b =>
-                {
-                    b.HasOne("Prime.Models.AdjudicatorNote", "AdjudicatorNote")
-                        .WithMany()
-                        .HasForeignKey("AdjudicatorNoteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.EnrolmentStatus", "EnrolmentStatus")
-                        .WithOne("EnrolmentStatusAdjudicatorNote")
-                        .HasForeignKey("Prime.Models.EnrolmentStatusAdjudicatorNote", "EnrolmentStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Prime.Models.EnrolmentStatusReason", b =>
                 {
                     b.HasOne("Prime.Models.EnrolmentStatus", "EnrolmentStatus")
@@ -11892,6 +11883,23 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.StatusReason", "StatusReason")
                         .WithMany("EnrolmentStatusReasons")
                         .HasForeignKey("StatusReasonCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolmentStatusReference", b =>
+                {
+                    b.HasOne("Prime.Models.AdjudicatorNote", null)
+                        .WithOne("EnrolmentStatusReference")
+                        .HasForeignKey("Prime.Models.EnrolmentStatusReference", "AdjudicatorNoteId");
+
+                    b.HasOne("Prime.Models.Admin", null)
+                        .WithMany("EnrolmentStatusReference")
+                        .HasForeignKey("AdminId");
+
+                    b.HasOne("Prime.Models.EnrolmentStatus", null)
+                        .WithOne("EnrolmentStatusReference")
+                        .HasForeignKey("Prime.Models.EnrolmentStatusReference", "EnrolmentStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

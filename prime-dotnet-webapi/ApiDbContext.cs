@@ -85,6 +85,8 @@ namespace Prime
         public DbSet<Site> Sites { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
 
+        public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
+
         public override int SaveChanges()
         {
             this.ApplyAudits();

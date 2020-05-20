@@ -279,8 +279,11 @@ namespace Prime.Services
             {
                 query = query.Include(e => e.Adjudicator)
                     .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.EnrolmentStatusAdjudicatorNote)
-                            .ThenInclude(esan => esan.AdjudicatorNote);
+                        .ThenInclude(es => es.EnrolmentStatusReference)
+                            .ThenInclude(esan => esan.AdjudicatorNote)
+                    .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.EnrolmentStatusReference)
+                            .ThenInclude(esr => esr.Adjudicator);
             }
 
             var entity = await query
@@ -347,6 +350,34 @@ namespace Prime.Services
             }
 
             return adjudicatorNote;
+        }
+
+        public async Task<EnrolmentStatusReference> CreateEnrolmentStatusReferenceAsync(int statusId, int adminId)
+        {
+            var reference = new EnrolmentStatusReference
+            {
+                EnrolmentStatusId = statusId,
+                AdminId = adminId,
+            };
+
+            _context.EnrolmentStatusReference.Add(reference);
+
+            await _context.SaveChangesAsync();
+
+            return reference;
+        }
+
+        public async Task<EnrolmentStatusReference> AddAdjudicatorNoteToReferenceIdAsync(int statusId, int noteId)
+        {
+            var reference = await _context.EnrolmentStatusReference.Where(esr => esr.EnrolmentStatusId == statusId).SingleAsync();
+
+            reference.AdjudicatorNoteId = noteId;
+
+            _context.EnrolmentStatusReference.Update(reference);
+
+            await _context.SaveChangesAsync();
+
+            return reference;
         }
 
         public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
@@ -449,5 +480,6 @@ namespace Prime.Services
                 .Select(e => HpdidLookup.FromEnrollee(e))
                 .ToListAsync();
         }
+
     }
 }
