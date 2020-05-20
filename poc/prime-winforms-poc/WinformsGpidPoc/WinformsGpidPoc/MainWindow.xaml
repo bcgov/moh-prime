@@ -1,12 +1,17 @@
-﻿<Window x:Class="WinformsGpidPoc.MainWindow"
+<Window x:Class="WinformsGpidPoc.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WinformsGpidPoc"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" Height="450" Width="800" FontSize="14">
+  <Grid>
+    <Button Content="Click to log into PRIME" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,139,0
+            ,0" Click="Button_Click"/>
+    <TextBox x:Name="textBox" HorizontalAlignment="Center" Height="23" Margin="0,178,0,0" TextWrapping="Wrap" Text="--Please Log In--
+             " VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+    <Label Content="GPID:" HorizontalAlignment="Left" Margin="288,178,0,0" VerticalAlignment="Top"/>
+
+  </Grid>
 </Window>
