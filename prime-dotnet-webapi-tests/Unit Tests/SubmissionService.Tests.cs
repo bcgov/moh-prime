@@ -14,7 +14,6 @@ namespace PrimeTests.UnitTests
     public class SubmissionServiceTests : InMemoryDbTest
     {
         public SubmissionService CreateService(
-            ApiDbContext context = null,
             IHttpContextAccessor httpContext = null,
             IAccessTermService accessTermService = null,
             ISubmissionRulesService submissionRulesService = null,
