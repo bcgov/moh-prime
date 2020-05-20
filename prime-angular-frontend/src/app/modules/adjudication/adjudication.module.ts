@@ -19,8 +19,6 @@ import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/en
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
-
-import { StatusReasonsPipe } from './shared/pipes/status-reasons.pipe';
 import {
   ReviewStatusContentComponent
 } from './shared/components/review-status-content/review-status-content.component';
@@ -44,7 +42,6 @@ import { SiteTableComponent } from './shared/components/site-table/site-table.co
     SearchFormComponent,
     DatedContentTableComponent,
     ReviewStatusContentComponent,
-    StatusReasonsPipe,
     SiteRegistrationsComponent,
     SiteTableComponent
   ],

@@ -19,6 +19,8 @@ import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { NoContent } from '@core/resources/abstract-resource';
+import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
+import { HttpParams } from '@angular/common/http';
 import { Site } from '@registration/shared/models/site.model';
 
 @Injectable({
@@ -218,9 +220,13 @@ export class AdjudicationResource {
       );
   }
 
-  public createAdjudicatorNote(enrolleeId: number, note: string): Observable<AdjudicationNote> {
+  public createAdjudicatorNote(enrolleeId: number, note: string, link?: boolean): Observable<AdjudicationNote> {
     const payload = { data: note };
-    return this.apiResource.post(`enrollees/${enrolleeId}/adjudicator-notes`, payload)
+    let params = new HttpParams();
+    if (link) {
+      params = params.append('link', 'true');
+    }
+    return this.apiResource.post(`enrollees/${enrolleeId}/adjudicator-notes`, payload, params)
       .pipe(
         map((response: ApiHttpResponse<AdjudicationNote>) => response.result),
         tap((adjudicatorNote: AdjudicationNote) => {
@@ -324,6 +330,17 @@ export class AdjudicationResource {
         tap((admins: Admin[]) => this.logger.info('ADMINS', admins)),
         catchError((error: any) => {
           this.logger.error('[Adjudication] AdjudicationResource::getAdjudicators error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createStatusAdjudicatorReference(enrolleeId: number): Observable<EnrolmentStatusReference> {
+    return this.apiResource.post(`enrollees/${enrolleeId}/status-reference`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolmentStatusReference>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::createStatusAdjudicatorReference error has occurred: ', error);
           throw error;
         })
       );
