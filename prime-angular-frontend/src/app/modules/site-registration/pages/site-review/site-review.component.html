@@ -30,6 +30,10 @@
       {{ site.location.organization.name | default }}
     </app-enrollee-property>
 
+    <app-enrollee-property title="Organization Registration ID">
+      {{ site.location.organization.registrationId | default }}
+    </app-enrollee-property>
+
     <app-enrollee-property title="Doing Business As">
       {{ site.location.organization.doingBusinessAs | default }}
     </app-enrollee-property>
@@ -74,16 +78,8 @@
                 (click)="onRoute(SiteRoutes.VENDOR)">edit</mat-icon>
     </app-page-subheader>
 
-    <ng-container *ngFor="let vendor of []">
-
-      <app-enrollee-property>
-        {{ site.vendor.name | default }}
-      </app-enrollee-property>
-
-    </ng-container>
-
-    <app-enrollee-property *ngIf="!null">
-      None
+    <app-enrollee-property>
+      {{ site.vendor.name | default }}
     </app-enrollee-property>
 
   </section>
