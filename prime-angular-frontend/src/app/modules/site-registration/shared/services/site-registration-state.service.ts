@@ -277,7 +277,7 @@ export class SiteRegistrationStateService {
         null,
         [Validators.required]
       ],
-      regId: [
+      registrationId: [
         null,
         [Validators.required]
       ],

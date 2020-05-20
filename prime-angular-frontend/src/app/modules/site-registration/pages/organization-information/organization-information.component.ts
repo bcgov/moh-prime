@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
+import { debounceTime, switchMap, map } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -15,8 +17,9 @@ import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
-import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
-import { debounceTime, switchMap } from 'rxjs/operators';
+import {
+  OrgBookResource, OrgBookAutocompleteResult, OrgBookFacetHttpResponse
+} from '@registration/shared/services/org-book-resource.service';
 
 @Component({
   selector: 'app-organization-information',
@@ -27,7 +30,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
   public routeUtils: RouteUtils;
-  public organizations: any;
+  public organizations: string[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
@@ -68,6 +71,21 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     }
   }
 
+  public onSelect({ option }: MatAutocompleteSelectedEvent) {
+    const orgName = option.value;
+    this.orgBookResource.getOrganizationFacet(orgName)
+      .pipe(
+        map((organization: OrgBookFacetHttpResponse) => {
+          // TODO assumed only a single source ID for now even though there can be multiple results for a single organization
+          const organizationId = organization.objects.results[0].topic.source_id;
+          this.form.get('registrationId').patchValue(organizationId);
+          return organizationId;
+        }),
+        switchMap((sourceId: string) => this.orgBookResource.getOrganizationDetail(sourceId))
+      )
+      .subscribe();
+  }
+
   public onBack() {
     this.routeUtils.routeRelativeTo(SiteRoutes.MULTIPLE_SITES);
   }
@@ -106,8 +124,9 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
         debounceTime(400),
         switchMap((value: string) => this.orgBookResource.autocomplete(value))
       )
-      .subscribe((response: any) => {
-        console.log(response);
+      .subscribe((organizations: OrgBookAutocompleteResult[]) => {
+        // TODO assumed only a single name until result found with more than one
+        this.organizations = organizations.map(o => o.names[0].text);
       });
   }
 }
