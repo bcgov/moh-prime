@@ -14,6 +14,7 @@ namespace PrimeTests.ModelFactories
         {
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
+            Ignore(x => x.EnrolmentStatusReference);
         }
     }
 
