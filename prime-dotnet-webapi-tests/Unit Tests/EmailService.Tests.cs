@@ -19,7 +19,7 @@ namespace PrimeTests.UnitTests
         )
         {
             return new EmailService(
-                 TestDb,
+                TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 razorConverterService ?? A.Fake<IRazorConverterService>()
             );
