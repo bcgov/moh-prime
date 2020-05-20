@@ -79,26 +79,25 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     this.orgBookResource.getOrganizationFacet(orgName)
       .pipe(
         map((response: OrgBookFacetHttpResponse) => {
-          // TODO assumed only a single source ID for now even though there can be multiple results for a single organization
+          // Assumed that only a single source ID will exist based on a
+          // specific selection being made in autocomplete
           const sourceId = response.objects.results[0].topic.source_id;
           this.form.get('registrationId').patchValue(sourceId);
           return sourceId;
         }),
         switchMap((sourceId: string) => this.orgBookResource.getOrganizationDetail(sourceId)),
         map((response: OrgBookDetailHttpResponse) => response.id),
-        // TODO must be an easier way to access a list of `Does Business As` results
         switchMap((topicId: number) => this.orgBookResource.getOrganizationRelatedTo(topicId))
       )
       .subscribe((response: OrgBookRelatedHttpResponse[]) => {
-        // TODO refactor the filtering and mapping
         const doingBusinessAs = response
           .map((relation: OrgBookRelatedHttpResponse) => {
+            // Assumed only a single name per organization is relavent
             const businessName = relation.related_topic.names[0].text;
             const isDoingBusinessAs = relation.attributes.some(a => a.value === 'Does Business As');
             return (isDoingBusinessAs) ? businessName : null;
-          })
-          .filter(r => r);
-
+          });
+        // Remove duplicates since only names are persisted
         this.doingBusinessAsNames = [...new Set(doingBusinessAs)]
           .sort(this.sortDoingBusinessAsNames());
       });
@@ -143,7 +142,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
         switchMap((value: string) => this.orgBookResource.autocomplete(value))
       )
       .subscribe((organizations: OrgBookAutocompleteResult[]) => {
-        // TODO assumed only a single name until result found with more than one
+        // Assumed only a single name per organization is relavent
         this.organizations = organizations.map(o => o.names[0].text);
       });
   }
