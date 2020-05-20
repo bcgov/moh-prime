@@ -7,13 +7,13 @@ import { exhaustMap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { WindowRefService } from '@core/services/window-ref.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
@@ -107,7 +107,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public sendProvisionerAccessLink(provisionerName: string, emails: string = null, formControl: FormControl = null) {
     const data: DialogOptions = {
       title: 'Confirm Email',
-      message: `Are you sure you want to send your PharmaNet certificate to ${provisionerName}?`,
+      message: `Are you sure you want to send your Approval Notification to ${provisionerName}?`,
       actionText: 'Send',
     };
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })

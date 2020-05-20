@@ -19,6 +19,7 @@ import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { NoContent } from '@core/resources/abstract-resource';
+import { Site } from '@registration/shared/models/site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -284,7 +285,8 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number): Observable<HttpEnrolleeProfileVersion> {
+  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number)
+    : Observable<HttpEnrolleeProfileVersion> {
     return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
@@ -328,6 +330,55 @@ export class AdjudicationResource {
   }
 
   // ---
+  // Site Registration
+  // ---
+  public getSites(textSearch?: string, statusCode?: number): Observable<Site[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode });
+    return this.apiResource.get<Site[]>('sites', params)
+      .pipe(
+        map((response: ApiHttpResponse<Site[]>) => response.result),
+        tap((sites: Site[]) => this.logger.info('SITES', sites)),
+        map((sites: Site[]) => sites),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Sites could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getSites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
+    return this.apiResource.get<Site>(`sites/${siteId}`, params)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        tap((site: Site) => this.logger.info('SITE', site)),
+        map((site: Site) => site),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getSiteById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteSite(siteId: number): Observable<Site> {
+    return this.apiResource.delete<Site>(`sites/${siteId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        tap((site: Site) => {
+          this.toastService.openSuccessToast('Site has been deleted');
+          this.logger.info('DELETED_SITE', site);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site could not be deleted');
+          this.logger.error('[Adjudication] AdjudicationResource::deleteSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  // ---
   // Enrollee and Enrolment Adapters
   // ---
 
@@ -364,4 +415,5 @@ export class AdjudicationResource {
       createdDate
     });
   }
+
 }

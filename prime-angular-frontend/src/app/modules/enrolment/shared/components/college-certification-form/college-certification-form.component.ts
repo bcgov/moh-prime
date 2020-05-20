@@ -3,11 +3,11 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import * as moment from 'moment';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
-import { FormUtilsService } from '@common/services/form-utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 @Component({
   selector: 'app-college-certification-form',

@@ -4,6 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { SigningAuthorityComponent } from './signing-authority.component';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('SigningAuthorityComponent', () => {
   let component: SigningAuthorityComponent;
@@ -14,7 +16,14 @@ describe('SigningAuthorityComponent', () => {
       imports: [
         RouterTestingModule,
         BrowserAnimationsModule,
-        SiteRegistrationModule
+        SiteRegistrationModule,
+        HttpClientTestingModule
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
       ]
     })
       .compileComponents();

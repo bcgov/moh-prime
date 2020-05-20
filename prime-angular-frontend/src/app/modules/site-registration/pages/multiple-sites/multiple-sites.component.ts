@@ -6,9 +6,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
 
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ToastService } from '@core/services/toast.service';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
-import { FormUtilsService } from '@common/services/form-utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -92,7 +92,7 @@ export class MultipleSitesComponent implements OnInit, IPage, IForm {
 
   private initForm() {
     const site = this.siteRegistrationService.site;
-    this.isCompleted = site.completed;
+    this.isCompleted = site?.completed;
     // this.siteRegistrationStateService.setSite(site, true);
     this.hasMultipleSites.valueChanges
       .subscribe((value: boolean) => this.toggleOrganizationValidators(value, this.organizationNumber));

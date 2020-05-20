@@ -75,8 +75,11 @@ namespace Prime.Services
                 .OrderByDescending(at => at.CreatedDate)
                 .FirstOrDefaultAsync();
 
-            accessTerm.LicenseClassClauses = accessTerm.AccessTermLicenseClassClauses
-                .Select(talc => talc.LicenseClassClause).ToList();
+            if (accessTerm != null)
+            {
+                accessTerm.LicenseClassClauses = accessTerm?.AccessTermLicenseClassClauses
+                    .Select(talc => talc.LicenseClassClause).ToList();
+            }
 
             return accessTerm;
         }
@@ -198,6 +201,42 @@ namespace Prime.Services
             }
 
             return current;
+        }
+
+        /// <summary>
+        /// Enrollee’s that are:
+        /// Under Review ->  -> Current TOA status: --
+        /// Locked, Declined -> Current TOA status: NA
+        /// Required TOA -> Current TOA status: Pending
+        /// Editable (AND before their renewal date) -> Current TOA status: Is their signed TOA the most current version
+        /// Editable (AND on/after their renewal date) -> Current TOA status: --
+        /// </summary>
+        public async Task<string> GetCurrentTOAStatusAsync(Enrollee enrollee)
+        {
+            var currentStatus = enrollee.CurrentStatus;
+            var toaStatus = "";
+
+            if (currentStatus.IsType(StatusType.Locked) || currentStatus.IsType(StatusType.Declined))
+            {
+                toaStatus = "N/A";
+            }
+            else if (currentStatus.IsType(StatusType.RequiresToa))
+            {
+                toaStatus = "Pending";
+            }
+            else if (currentStatus.IsType(StatusType.Editable))
+            {
+                var accessTerm = await GetMostRecentAcceptedEnrolleesAccessTermAsync(enrollee.Id);
+                var isCurrent = await this.IsCurrentByEnrolleeAsync(enrollee);
+
+                if (accessTerm?.ExpiryDate > DateTimeOffset.Now)
+                {
+                    toaStatus = (accessTerm != null && isCurrent)
+                        ? "Yes"
+                        : "No";
+                }
+            }
+            return toaStatus;
         }
 
         /**
