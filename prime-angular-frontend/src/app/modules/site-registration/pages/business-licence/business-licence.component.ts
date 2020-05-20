@@ -7,12 +7,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
-import { FormUtilsService } from '@common/services/form-utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import tus from 'tus-js-client';
-import { FilePond } from 'filepond';
-import { FilePondComponent } from 'ngx-filepond/filepond.component';
 import { ToastService } from '@core/services/toast.service';
 
 @Component({

@@ -58,7 +58,7 @@ registerPlugin(FilePondPluginFileValidateType);
   imports: [
     SharedModule,
     SiteRegistrationRoutingModule,
-    FilePondModule
+    FilePondModule,
     BusinessHoursModule,
     SiteRegistrationRoutingModule
   ]
