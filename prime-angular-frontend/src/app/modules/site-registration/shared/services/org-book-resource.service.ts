@@ -192,8 +192,8 @@ export class OrgBookResource {
       );
   }
 
-  public getOrganizationRelatedTo(id: number) {
-    return this.http.get<OrgBookRelatedHttpResponse[]>(`${this.ORGBOOK_API_URL}/topic_relationship/${id}/related_to_relations`)
+  public getOrganizationRelatedTo(topicId: number) {
+    return this.http.get<OrgBookRelatedHttpResponse[]>(`${this.ORGBOOK_API_URL}/topic_relationship/${topicId}/related_to_relations`)
       .pipe(
         map((response: OrgBookRelatedHttpResponse[]) => response),
         tap((response: OrgBookRelatedHttpResponse[]) => this.logger.info('ORGBOOK_RELATED_TO', response)),
