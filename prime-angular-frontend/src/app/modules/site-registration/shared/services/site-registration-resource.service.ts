@@ -200,4 +200,23 @@ export class SiteRegistrationResource {
         })
       );
   }
+
+  /**
+   * @description
+   * Get the organization information from OrgBook based on a business number.
+   *
+   * @param businessNumber Registered business number (BN15) assigned to the organization.
+   */
+  public getOrganizationInfo(businessNumber: string): Observable<any> {
+    return this.apiResource.get<any>(`sites/organization/${businessNumber}`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Organization information has been applied to site registration')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization information could not be found');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getOrganizationInfo error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }

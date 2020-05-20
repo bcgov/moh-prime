@@ -277,6 +277,10 @@ export class SiteRegistrationStateService {
         null,
         [Validators.required]
       ],
+      registrationId: [
+        null,
+        [Validators.required]
+      ],
       doingBusinessAs: [
         null,
         []

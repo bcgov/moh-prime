@@ -116,6 +116,6 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
    */
   private sortConfigByDay(): (a: BusinessDay, b: BusinessDay) => SortWeight {
     return (a: BusinessDay, b: BusinessDay) =>
-      this.utilsService.sort<BusinessDay>(a, b, 'day');
+      this.utilsService.sortByKey<BusinessDay>(a, b, 'day');
   }
 }

@@ -135,7 +135,7 @@ export class ConfigService implements IConfigService {
    */
   private sortConfigByName(): (a: Config<number | string>, b: Config<number | string>) => SortWeight {
     return (a: Config<number | string>, b: Config<number | string>) =>
-      this.utilsService.sort<Config<number | string>>(a, b, 'name');
+      this.utilsService.sortByKey<Config<number | string>>(a, b, 'name');
   }
 
   /**
@@ -144,6 +144,6 @@ export class ConfigService implements IConfigService {
    */
   private sortConfigByWeight(): (a: LicenseWeightedConfig, b: LicenseWeightedConfig) => SortWeight {
     return (a: LicenseWeightedConfig, b: LicenseWeightedConfig) =>
-      this.utilsService.sort<LicenseWeightedConfig>(a, b, 'weight');
+      this.utilsService.sortByKey<LicenseWeightedConfig>(a, b, 'weight');
   }
 }
