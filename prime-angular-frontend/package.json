@@ -32,6 +32,7 @@
     "@auth0/angular-jwt": "^3.0.1",
     "@tinymce/tinymce-angular": "^3.3.1",
     "@types/smoothscroll-polyfill": "^0.3.1",
+    "@types/tus-js-client": "^1.8.0",
     "bootstrap": "^4.4.1",
     "classlist.js": "^1.1.20150312",
     "core-js": "^3.6.4",

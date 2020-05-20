@@ -31,8 +31,12 @@ export class KeycloakTokenService implements Token {
     this.jwtHelper = new JwtHelperService();
   }
 
+  public async token(): Promise<string> {
+    return await this.keycloakService.getToken();
+  }
+
   public async decodeToken(): Promise<Keycloak.KeycloakTokenParsed | null> {
-    const token = await this.keycloakService.getToken();
+    const token = await this.token();
     return (token) ? this.jwtHelper.decodeToken(token) : null;
   }
 
