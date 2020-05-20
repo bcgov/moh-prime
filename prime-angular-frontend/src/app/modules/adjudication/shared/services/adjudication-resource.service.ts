@@ -14,15 +14,12 @@ import { AccessTerm } from '@shared/models/access-term.model';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
-
+import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { Admin } from '@auth/shared/models/admin.model';
+import { Site } from '@registration/shared/models/site.model';
+
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { NoContent } from '@core/resources/abstract-resource';
-import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
-import { HttpParams } from '@angular/common/http';
-import { Site } from '@registration/shared/models/site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -187,12 +184,9 @@ export class AdjudicationResource {
       );
   }
 
-  public createAdjudicatorNote(enrolleeId: number, note: string, link?: boolean): Observable<AdjudicationNote> {
+  public createAdjudicatorNote(enrolleeId: number, note: string, link: boolean = false): Observable<AdjudicationNote> {
     const payload = { data: note };
-    let params = new HttpParams();
-    if (link) {
-      params = params.append('link', 'true');
-    }
+    const params = this.apiResourceUtilsService.makeHttpParams({ link });
     return this.apiResource.post(`enrollees/${enrolleeId}/adjudicator-notes`, payload, params)
       .pipe(
         map((response: ApiHttpResponse<AdjudicationNote>) => response.result),
@@ -399,5 +393,4 @@ export class AdjudicationResource {
       createdDate
     });
   }
-
 }
