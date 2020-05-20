@@ -28,6 +28,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.EnrolmentStatusReasons, f => null);
 
             Ignore(x => x.Status);
+            Ignore(x => x.EnrolmentStatusReference);
 
             RuleSet("inProgress", (set) =>
             {
