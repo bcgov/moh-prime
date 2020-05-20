@@ -27,10 +27,11 @@
                    formControlName="name"
                    [matAutocomplete]="auto">
             <mat-autocomplete autoActiveFirstOption
-                              #auto="matAutocomplete">
-              <mat-option *ngFor="let organization of organizations | async"
-                          [value]="'test'">
-                {{ 'test' }}
+                              #auto="matAutocomplete"
+                              (optionSelected)="onSelect($event)">
+              <mat-option *ngFor="let organization of organizations"
+                          [value]="organization">
+                {{ organization }}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
@@ -38,26 +39,13 @@
         </div>
       </div>
 
-      <!-- <div class="row">
-        <div class="col">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Organization Name (Legal Entity Operating Site)"
-                   formControlName="name">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div> -->
-
       <div class="row">
         <div class="col">
 
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Organization Registration ID"
-                   formControlName="regId">
+                   formControlName="registrationId">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
