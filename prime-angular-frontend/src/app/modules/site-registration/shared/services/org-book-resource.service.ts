@@ -38,6 +38,7 @@ export interface OrgBookFacetHttpResponse {
       {
         // TODO much more in this object
         topic: {
+          id: number;
           // TODO much more in this object literal than source_id
           source_id: string; // Registration ID
         };
@@ -48,7 +49,7 @@ export interface OrgBookFacetHttpResponse {
 }
 
 export interface OrgBookDetailHttpResponse {
-  id: number;
+  id: number; // topic ID URL param for API requests
   create_timestamp: string;
   source_id: string;
   type: string; // URL param: `registration`
@@ -76,7 +77,52 @@ export interface OrgBookDetailHttpResponse {
 }
 
 // TODO fill in with interface when needed
-// export interface OrgBookRelatedHttpResponse { }
+export interface OrgBookRelatedHttpResponse {
+  topic_id: number;
+  relation_id: number;
+  credential: any;
+  topic: {
+    id: number;
+    source_id: string;
+    type: string;
+    names: {
+      id: number;
+      credential_id: number;
+      last_updated: string;
+      inactive: boolean;
+      text: string;
+      language: any;
+      issuer: any;
+      type: string;
+    }[];
+  };
+  related_topic: {
+    id: number;
+    type: string; // URL param: registration
+    names: {
+      id: number;
+      text: string; // Name parameter
+    }[];
+    addresses: any[];
+    attributes: {
+      id: number;
+      credential_id: number;
+      credential_type_id: number;
+      last_updated: string;
+      inactive: boolean;
+      type: string; // Possible type: relationship_description
+      format: string;
+      value: string;
+    }[]
+  };
+  attributes: {
+    id: number;
+    type: string; // Possible type: relationship_description
+    format: string;
+    value: string; // Possible value: `Does Business As`
+    credential_id: number;
+  }[];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -146,17 +192,17 @@ export class OrgBookResource {
       );
   }
 
-  // public getOrganizationRelatedTo(sourceId: string) {
-  //   return this.http.get<OrgBookRelatedHttpResponse>(`${this.ORGBOOK_API_URL}/topic/${sourceId}/related_to`)
-  //     .pipe(
-  //       map((response: OrgBookRelatedHttpResponse) => response),
-  //       tap((response: OrgBookRelatedHttpResponse) => this.logger.info('ORGBOOK_RELATED_TO', response)),
-  //       catchError((error: any) => {
-  //         // TODO should this even have a toast message?
-  //         // this.toastService.openErrorToast('');
-  //         this.logger.error('[Adjudication] OrgBookResource::getOrganizationRelated error has occurred: ', error);
-  //         throw error;
-  //       })
-  //     );
-  // }
+  public getOrganizationRelatedTo(id: number) {
+    return this.http.get<OrgBookRelatedHttpResponse[]>(`${this.ORGBOOK_API_URL}/topic_relationship/${id}/related_to_relations`)
+      .pipe(
+        map((response: OrgBookRelatedHttpResponse[]) => response),
+        tap((response: OrgBookRelatedHttpResponse[]) => this.logger.info('ORGBOOK_RELATED_TO', response)),
+        catchError((error: any) => {
+          // TODO should this even have a toast message?
+          // this.toastService.openErrorToast('');
+          this.logger.error('[Adjudication] OrgBookResource::getOrganizationRelated error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }
