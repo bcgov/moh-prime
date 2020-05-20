@@ -11,9 +11,3 @@ BuildReports/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-
-poc/prime-winforms-poc/WinformsGpidPoc/packages/
-
-poc/prime-winforms-poc/WinformsGpidPoc/WinformsGpidPoc/bin/
-
-poc/prime-winforms-poc/WinformsGpidPoc/WinformsGpidPoc/obj/
