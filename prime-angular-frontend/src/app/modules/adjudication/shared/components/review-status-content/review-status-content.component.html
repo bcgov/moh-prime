@@ -1,6 +1,7 @@
 <div>
-  <h3 class="mb-4">This Enrollee was manually adjudicated for the following reasons:</h3>
-  <div class="pl-2"
+  <h3 class="mb-4"
+      *ngIf="reasons.length > 0">This Enrollee was manually adjudicated for the following reasons:</h3>
+  <div class="pl-2 mb-4"
        *ngFor="let reason of reasons">
     <span class="mb-4 font-weight-bolder">{{ reason.name }}</span>
     <div class="mb-3">
@@ -10,6 +11,52 @@
         <span class="mb-2 font-weight-bolder" *ngIf="reason.isSelfDeclaration">User's Explanation:</span>
         <p class="pl-2">{{ reason.note }}</p>
       </div>
+    </div>
+  </div>
+  <div class="col-6 pl-0">
+    <h3 class="mb-4">Status History:</h3>
+    <div class="table-responsive">
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let status of previousStatuses">
+            <th class="">
+              <div class="text-nowrap">
+                {{ status.date | formatDate }}
+              </div>
+              <small class="d-block text-mute font-weight-normal mb-2">
+              {{ status.date | formatDate: 'h:mm a' }}
+            </small>
+            </th>
+            <td>
+              <div class="mb-4">
+                <p class="">The enrollee status changed to
+                  <strong>{{status.name}}{{ (status.adjudicator) ? ', by ' + status.adjudicator : '.'}}</strong>
+                </p>
+                <p class="pl-2"
+                   *ngIf="status.note">
+                  {{status.note}}
+                </p>
+              </div>
+              <div *ngIf="status.reasons.length > 0">
+                <p class="mb-4 font-weight-bold">This Enrollee was manually adjudicated for the following reasons:
+                </p>
+                <div class="pl-2 mb-4"
+                     *ngFor="let reason of status.reasons">
+                  <span class="mb-4 font-weight-bolder">{{ reason.name }}</span>
+                  <div class="mb-3">
+                    <p class="pl-2"
+                       *ngIf="reason.isSelfDeclaration">{{ reason.question }}</p>
+                    <div *ngIf="reason.note">
+                      <span class="mb-2 font-weight-bolder" *ngIf="reason.isSelfDeclaration">User's Explanation:</span>
+                      <p class="pl-2">{{ reason.note }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

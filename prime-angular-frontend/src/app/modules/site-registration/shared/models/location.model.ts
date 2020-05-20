@@ -1,3 +1,4 @@
+import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 import { Address } from '@shared/models/address.model';
 
 import { Party } from './party.model';
@@ -15,8 +16,6 @@ export interface Location {
   organization: Organization;
   physicalAddressId?: number;
   physicalAddress: Address;
-  hoursWeekend: boolean;
-  hours24: boolean;
-  hoursSpecial: boolean;
+  businessHours: BusinessDay[];
   doingBusinessAs?: string;
 }

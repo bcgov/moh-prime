@@ -315,6 +315,12 @@ export class DashboardComponent implements OnInit {
             icon: 'format_list_bulleted',
             route: AdjudicationRoutes.ENROLLEES,
             showItem: true
+          },
+          {
+            name: 'Site Registrations',
+            icon: 'format_list_bulleted',
+            route: AdjudicationRoutes.SITE_REGISTRATIONS,
+            showItem: true
           }
         ]
       }
