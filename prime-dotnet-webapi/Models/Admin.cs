@@ -32,6 +32,9 @@ namespace Prime.Models
         [JsonIgnore]
         public IEnumerable<AdjudicatorNote> AdjudicatorNotes { get; set; }
 
+        [JsonIgnore]
+        public IEnumerable<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Guid.Empty.Equals(this.UserId))
