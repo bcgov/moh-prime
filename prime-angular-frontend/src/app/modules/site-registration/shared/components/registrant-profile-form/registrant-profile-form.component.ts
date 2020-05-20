@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 
-import { FormUtilsService } from '@common/services/form-utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 // TODO rename and make it party instead of registrant
 @Component({

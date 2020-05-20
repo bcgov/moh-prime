@@ -24,6 +24,8 @@ import { StatusReasonsPipe } from './shared/pipes/status-reasons.pipe';
 import {
   ReviewStatusContentComponent
 } from './shared/components/review-status-content/review-status-content.component';
+import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
+import { SiteTableComponent } from './shared/components/site-table/site-table.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import {
     DatedContentTableComponent,
     ReviewStatusContentComponent,
     StatusReasonsPipe,
+    SiteRegistrationsComponent,
+    SiteTableComponent
   ],
   imports: [
     SharedModule,
