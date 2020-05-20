@@ -270,6 +270,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="note"></param>
+        /// <param name="link"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -277,7 +278,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, FromBodyText note)
+        public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, FromBodyText note, [FromQuery] bool link)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
@@ -293,10 +294,48 @@ namespace Prime.Controllers
             var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
             var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note, admin.Id);
 
+            if (link)
+            {
+                // Link Adjudicator note to most recent status change on an enrollee if request
+                var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+                await _enrolleeService.AddAdjudicatorNoteToReferenceIdAsync(enrollee.CurrentStatus.Id, createdAdjudicatorNote.Id);
+            }
+
             return CreatedAtAction(
-                nameof(GetAdjudicatorNotes),
+                nameof(CreateAdjudicatorNote),
                 new { enrolleeId = enrolleeId },
                 ApiResponse.Result(createdAdjudicatorNote)
+            );
+        }
+
+        // POST: api/Enrollees/5/status-reference
+        /// <summary>
+        /// Creates a new Enrolment Status Reference on the enrollee's current status.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/status-reference", Name = nameof(CreateEnrolmentReference))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<AdjudicatorNote>> CreateEnrolmentReference(int enrolleeId)
+        {
+
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            var createdEnrolmentStatusReference = await _enrolleeService.CreateEnrolmentStatusReferenceAsync(enrollee.CurrentStatus.Id, admin.Id);
+
+            return CreatedAtAction(
+                nameof(CreateEnrolmentReference),
+                new { enrolleeId = enrolleeId },
+                ApiResponse.Result(createdEnrolmentStatusReference)
             );
         }
 

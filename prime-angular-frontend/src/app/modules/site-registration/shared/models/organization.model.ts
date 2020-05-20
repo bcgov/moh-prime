@@ -5,6 +5,7 @@ export interface Organization {
   signingAuthorityId?: number;
   signingAuthority: Party;
   name: string;
+  registrationId: number;
   doingBusinessAs?: string;
   acceptedAgreementDate: string;
 }

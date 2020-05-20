@@ -56,6 +56,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.Privileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
+            RuleFor(x => x.isAdminView, f => true);
             Ignore(x => x.CurrentTOAStatus);
             // TODO: fix these ignores
             Ignore(x => x.AccessTerms);
