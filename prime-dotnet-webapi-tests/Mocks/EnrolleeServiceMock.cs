@@ -180,5 +180,15 @@ namespace PrimeTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task<EnrolmentStatusReference> CreateEnrolmentStatusReferenceAsync(int statusId, int adminId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<EnrolmentStatusReference> AddAdjudicatorNoteToReferenceIdAsync(int statusId, int noteId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
