@@ -1,6 +1,9 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
+
 using Xunit;
 using FakeItEasy;
 
@@ -8,90 +11,94 @@ using Prime;
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
+using System.Threading.Tasks;
 
 namespace PrimeTests.UnitTests
 {
-    public class EnrolmentCertificateServiceTests
+    public class EnrolmentCertificateServiceTests : InMemoryDbTest
     {
-        public static EnrolmentCertificateService CreateService(
-            ApiDbContext context = null,
+        public EnrolmentCertificateService CreateService(
             IHttpContextAccessor httpContext = null,
             IAccessTermService accessTermService = null,
             IEnrolleeProfileVersionService enroleeProfileVersionService = null)
         {
             return new EnrolmentCertificateService(
-                context ?? A.Fake<ApiDbContext>(),
+                TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 accessTermService ?? A.Fake<IAccessTermService>(),
                 enroleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>()
             );
         }
 
-        [Fact]
-        public async void TestCertificateCreate()
+        public EnrolmentCertificateService CreateWithMocks(Enrollee enrollee)
         {
-            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            var fakeDb = AFake.Db()
-                .WithEnrollees(new[] { enrollee });
+            var accessTermServiceFake = A.Fake<IAccessTermService>();
+            A.CallTo(() => accessTermServiceFake.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrollee.Id))
+                .Returns(new AccessTerm
+                {
+                    AcceptedDate = DateTimeOffset.Now
+                });
 
-            // EnrolmentCertificateAccessToken token = await _service.CreateCertificateAccessTokenAsync(enrollee);
-            // Assert.NotNull(token);
+            var versionServiceFake = A.Fake<IEnrolleeProfileVersionService>();
+            A.CallTo(() => versionServiceFake.GetEnrolleeProfileVersionBeforeDateAsync(enrollee.Id, A<DateTimeOffset>.Ignored))
+                .Returns(new EnrolleeProfileVersion
+                {
+                    ProfileSnapshot = JObject.FromObject(enrollee),
+                });
 
-            // EnrolmentCertificate cert = await _service.GetEnrolmentCertificateAsync(token.Id);
-            // Assert.NotNull(cert);
-            // Assert.Equal(enrollee.GPID, cert.GPID);
+
+            return CreateService(null, accessTermServiceFake, versionServiceFake);
         }
 
-        // [Fact(Skip = "Max views are temporarily disabled in the app")]
-        // public async void testMaxViews()
-        // {
-        //     int tokenMaxViews = 3;
-        //     Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+        [Fact]
+        public async void testHappyPathCertificateAccess()
+        {
+            Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
+            var service = CreateWithMocks(enrollee);
 
-        //     EnrolmentCertificateAccessToken token = await _service.CreateCertificateAccessTokenAsync(enrollee);
-        //     Assert.NotNull(token);
-        //     Assert.Equal(0, token.ViewCount);
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
+            Assert.NotNull(token);
 
-        //     for (int view = 1; view <= tokenMaxViews; view++)
-        //     {
-        //         Assert.NotNull(await _service.GetEnrolmentCertificateAsync(token.Id));
-        //         Assert.Equal(view, token.ViewCount);
-        //     }
+            EnrolmentCertificate cert = await service.GetEnrolmentCertificateAsync(token.Id);
+            Assert.NotNull(cert);
+            Assert.Equal(enrollee.GPID, cert.GPID);
+        }
 
-        //     Assert.Null(await _service.GetEnrolmentCertificateAsync(token.Id));
-        // }
+        [Fact(Skip = "Max views are temporarily disabled in the app")]
+        public async void testMaxViews()
+        {
+            int tokenMaxViews = 3;
+            Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
+            var service = CreateService();
 
-        // [Fact]
-        // public async void testExpiryDate()
-        // {
-        //     TimeSpan tokenLifespan = TimeSpan.FromDays(7);
-        //     TimeSpan tolerance = TimeSpan.FromSeconds(1);
-        //     Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
+            Assert.NotNull(token);
+            Assert.Equal(0, token.ViewCount);
 
-        //     EnrolmentCertificateAccessToken token = await _service.CreateCertificateAccessTokenAsync(enrollee);
-        //     Assert.NotNull(token);
-        //     // Assert that the difference between the computed and actual expiry date is less than some tolerance.
-        //     Assert.True((DateTimeOffset.Now.Add(tokenLifespan) - token.Expires).Duration() < tolerance);
+            for (int view = 1; view <= tokenMaxViews; view++)
+            {
+                Assert.NotNull(await service.GetEnrolmentCertificateAsync(token.Id));
+                Assert.Equal(view, token.ViewCount);
+            }
 
-        //     token.Expires = DateTimeOffset.Now.AddHours(-1);
-        //     Assert.Null(await _service.GetEnrolmentCertificateAsync(token.Id));
-        // }
+            Assert.Null(await service.GetEnrolmentCertificateAsync(token.Id));
+        }
+
+        [Fact]
+        public async void testExpiryDate()
+        {
+            TimeSpan tokenLifespan = TimeSpan.FromDays(7);
+            TimeSpan tolerance = TimeSpan.FromSeconds(1);
+            Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
+            var service = CreateWithMocks(enrollee);
+
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
+            Assert.NotNull(token);
+            // Assert that the difference between the computed and actual expiry date is less than some tolerance.
+            Assert.True((DateTimeOffset.Now.Add(tokenLifespan) - token.Expires).Duration() < tolerance);
+
+            token.Expires = DateTimeOffset.Now.AddHours(-1);
+            Assert.Null(await service.GetEnrolmentCertificateAsync(token.Id));
+        }
     }
 }
-
-//     public interface IEnrolmentCertificateService
-//     {
-//         Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId);
-
-//         Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee);
-
-//         Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUserIdAsync(Guid userId);
-
-//         string[] GetPharmaNetProvisionerNames();
-
-//         string GetPharmaNetProvisionerEmail(string pharmaNetVendor);
-
-//         int GetMaxViews();
-
-//         int GetExpiryDays();
-//     }

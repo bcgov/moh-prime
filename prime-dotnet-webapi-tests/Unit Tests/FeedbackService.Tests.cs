@@ -11,14 +11,13 @@ using PrimeTests.Utils;
 
 namespace PrimeTests.UnitTests
 {
-    public class FeedbackServiceTests
+    public class FeedbackServiceTests : InMemoryDbTest
     {
-        public static FeedbackService CreateService(
-            ApiDbContext context = null,
+        public FeedbackService CreateService(
             IHttpContextAccessor httpContext = null)
         {
             return new FeedbackService(
-                context ?? A.Fake<ApiDbContext>(),
+                TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>()
             );
         }

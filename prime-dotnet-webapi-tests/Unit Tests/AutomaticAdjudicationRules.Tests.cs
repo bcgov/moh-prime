@@ -11,7 +11,7 @@ using PrimeTests.Mocks;
 using static PrimeTests.Mocks.PharmanetApiServiceMock;
 using PrimeTests.ModelFactories;
 
-namespace PrimeTests.Services
+namespace PrimeTests.UnitTests
 {
     public class AutomaticAdjudicationRulesTests
     {

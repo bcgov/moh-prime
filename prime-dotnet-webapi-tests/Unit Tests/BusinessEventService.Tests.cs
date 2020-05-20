@@ -11,15 +11,14 @@ using PrimeTests.Utils;
 
 namespace PrimeTests.UnitTests
 {
-    public class BusinessEventServiceTests
+    public class BusinessEventServiceTests : InMemoryDbTest
     {
-        public static BusinessEventService CreateService(
-            ApiDbContext context = null,
+        public BusinessEventService CreateService(
             IHttpContextAccessor httpContext = null,
             IAdminService adminService = null)
         {
             return new BusinessEventService(
-                context ?? A.Fake<ApiDbContext>(),
+                TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 adminService ?? A.Fake<IAdminService>()
             );

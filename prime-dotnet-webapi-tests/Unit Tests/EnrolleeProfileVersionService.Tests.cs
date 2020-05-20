@@ -11,14 +11,13 @@ using PrimeTests.Utils;
 
 namespace PrimeTests.UnitTests
 {
-    public class EnrolleeProfileVersionServiceTests
+    public class EnrolleeProfileVersionServiceTests : InMemoryDbTest
     {
-        public static EnrolleeProfileVersionService CreateService(
-            ApiDbContext context = null,
+        public EnrolleeProfileVersionService CreateService(
             IHttpContextAccessor httpContext = null)
         {
             return new EnrolleeProfileVersionService(
-                context ?? A.Fake<ApiDbContext>(),
+                TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>()
             );
         }

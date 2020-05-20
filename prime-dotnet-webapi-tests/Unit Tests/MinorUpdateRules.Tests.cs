@@ -11,7 +11,7 @@ using Prime.Services.Rules;
 using PrimeTests.Utils;
 using FakeItEasy;
 
-namespace PrimeTests.Services
+namespace PrimeTests.UnitTests
 {
     public class MinorUpdateRulesTests
     {

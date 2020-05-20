@@ -11,9 +11,9 @@ using PrimeTests.Utils;
 
 namespace PrimeTests.UnitTests
 {
-    public class SubmissionServiceTests
+    public class SubmissionServiceTests : InMemoryDbTest
     {
-        public static SubmissionService CreateService(
+        public SubmissionService CreateService(
             ApiDbContext context = null,
             IHttpContextAccessor httpContext = null,
             IAccessTermService accessTermService = null,
@@ -25,7 +25,7 @@ namespace PrimeTests.UnitTests
             IPrivilegeService privilegeService = null)
         {
             return new SubmissionService(
-                context ?? A.Fake<ApiDbContext>(),
+                TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 accessTermService ?? A.Fake<IAccessTermService>(),
                 submissionRulesService ?? A.Fake<ISubmissionRulesService>(),

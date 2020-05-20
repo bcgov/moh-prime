@@ -11,16 +11,15 @@ using PrimeTests.Utils;
 
 namespace PrimeTests.UnitTests
 {
-    public class EmailServiceTests
+    public class EmailServiceTests : InMemoryDbTest
     {
-        public static EmailService CreateService(
-            ApiDbContext context = null,
+        public EmailService CreateService(
             IHttpContextAccessor httpContext = null,
             IRazorConverterService razorConverterService = null
         )
         {
             return new EmailService(
-                context ?? A.Fake<ApiDbContext>(),
+                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 razorConverterService ?? A.Fake<IRazorConverterService>()
             );

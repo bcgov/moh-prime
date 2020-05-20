@@ -11,14 +11,13 @@ using PrimeTests.Utils;
 
 namespace PrimeTests.UnitTests
 {
-    public class PharmanetApiServiceTests
+    public class PharmanetApiServiceTests : InMemoryDbTest
     {
-        public static PharmanetApiService CreateService(
-            ApiDbContext context = null,
+        public PharmanetApiService CreateService(
             IHttpContextAccessor httpContext = null)
         {
             return new PharmanetApiService(
-                context ?? A.Fake<ApiDbContext>(),
+                TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>()
             );
         }

@@ -11,10 +11,9 @@ using PrimeTests.Utils;
 
 namespace PrimeTests.UnitTests
 {
-    public class EnrolleeServiceTests
+    public class EnrolleeServiceTests : InMemoryDbTest
     {
-        public static EnrolleeService CreateService(
-            ApiDbContext context = null,
+        public EnrolleeService CreateService(
             IHttpContextAccessor httpContext = null,
             ISubmissionRulesService automaticAdjudicationService = null,
             IEmailService emailService = null,
@@ -24,7 +23,7 @@ namespace PrimeTests.UnitTests
             IBusinessEventService businessEventService = null)
         {
             return new EnrolleeService(
-                context ?? A.Fake<ApiDbContext>(),
+                TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 automaticAdjudicationService ?? A.Fake<ISubmissionRulesService>(),
                 emailService ?? A.Fake<IEmailService>(),
