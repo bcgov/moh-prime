@@ -1,60 +1,60 @@
 <app-enrollee-property title="First Name">
-  {{ party.firstName | default }}
+  {{ party?.firstName | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="Last Name">
-  {{ party.lastName | default }}
+  {{ party?.lastName | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="Job or Role Title">
-  {{ party.jobRoleTitle | default }}
+  {{ party?.jobRoleTitle | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="Phone">
-  {{ party.phone | phone | default }}
+  {{ party?.phone | phone | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="Fax">
-  {{ party.fax | default }}
+  {{ party?.fax | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="SMS Phone">
-  {{ party.smsPhone | phone | default }}
+  {{ party?.smsPhone | phone | default }}
 </app-enrollee-property>
 
 <app-enrollee-property title="Email">
-  {{ party.email | default }}
+  {{ party?.email | default }}
 </app-enrollee-property>
 
-<ng-container *ngIf="party.physicalAddress">
+<ng-container *ngIf="party?.physicalAddress">
 
   <div class="my-3">
     <strong>Address</strong>
   </div>
 
   <app-enrollee-property title="Country">
-    {{ party.physicalAddress?.countryCode | configCode: 'countries' | default }}
+    {{ party?.physicalAddress?.countryCode | configCode: 'countries' | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Province">
-    {{ party.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+    {{ party?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Street Address">
-    {{ party.physicalAddress?.street | default }}
+    {{ party?.physicalAddress?.street | default }}
   </app-enrollee-property>
 
-  <app-enrollee-property *ngIf="party.physicalAddress?.street2"
+  <app-enrollee-property *ngIf="party?.physicalAddress?.street2"
                          title="Street Address 2">
-    {{ party.physicalAddress?.street2 | default }}
+    {{ party?.physicalAddress?.street2 | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="City">
-    {{ party.physicalAddress?.city | default }}
+    {{ party?.physicalAddress?.city | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Postal Code">
-    {{ party.physicalAddress?.postal | postal | default }}
+    {{ party?.physicalAddress?.postal | postal | default }}
   </app-enrollee-property>
 
 </ng-container>
