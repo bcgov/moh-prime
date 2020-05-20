@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { RouterEvent } from '@angular/router';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';

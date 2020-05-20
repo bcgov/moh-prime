@@ -1,14 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockSiteRegistrationService } from 'test/mocks/mock-site-registration.service';
+
 import { SiteReviewComponent } from './site-review.component';
-import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
-import { MockConfigService } from 'test/mocks/mock-config.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 
 describe('SiteReviewComponent', () => {
   let component: SiteReviewComponent;
@@ -31,12 +34,15 @@ describe('SiteReviewComponent', () => {
           useClass: MockConfigService
         },
         {
+          provide: SiteRegistrationService,
+          useClass: MockSiteRegistrationService
+        },
+        {
           provide: AuthService,
           useClass: MockAuthService
         }
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

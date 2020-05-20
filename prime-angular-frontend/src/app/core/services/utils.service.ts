@@ -3,6 +3,8 @@ import { DOCUMENT } from '@angular/common';
 
 import { WindowRefService } from './window-ref.service';
 
+export type SortWeight = -1 | 0 | 1;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -61,5 +63,15 @@ export class UtilsService {
   public isIE(): boolean {
     const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
     return isIE;
+  }
+
+  /**
+   * @description
+   * Generic sorting of a JSON object by key.
+   */
+  public sort<T>(a: T, b: T, key: string): SortWeight {
+    return (a[key] > b[key])
+      ? 1 : (a[key] < b[key])
+        ? -1 : 0;
   }
 }

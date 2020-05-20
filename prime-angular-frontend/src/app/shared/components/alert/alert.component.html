@@ -4,7 +4,8 @@
 
   <div class="d-flex">
     <ng-container *ngIf="hasIcon()">
-      <mat-icon [ngClass]="{ 'large mr-3': hasTitle(), 'mr-2': !hasTitle() }"
+      <mat-icon class="mr-3"
+                [ngClass]="{ 'large': hasTitle() }"
                 [inline]="hasTitle()">{{ icon }}</mat-icon>
     </ng-container>
 

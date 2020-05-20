@@ -214,6 +214,23 @@ namespace Prime.Services
 
                 _partyService.UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
             }
+
+            if (updated?.BusinessHours != null)
+            {
+                if (current.BusinessHours != null)
+                {
+                    foreach (var businessHour in current.BusinessHours)
+                    {
+                        _context.Remove(businessHour);
+                    }
+                }
+
+                foreach (var businessHour in updated.BusinessHours)
+                {
+                    businessHour.LocationId = current.Id;
+                    _context.Entry(businessHour).State = EntityState.Added;
+                }
+            }
         }
 
         public async Task DeleteSiteAsync(int siteId)
@@ -346,18 +363,20 @@ namespace Prime.Services
                 .Include(s => s.Location)
                     .ThenInclude(l => l.Organization)
                         .ThenInclude(o => o.SigningAuthority)
-                .ThenInclude(p => p.PhysicalAddress)
+                            .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PrivacyOfficer)
-                .ThenInclude(p => p.PhysicalAddress)
+                        .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.AdministratorPharmaNet)
-                .ThenInclude(p => p.PhysicalAddress)
+                        .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.TechnicalSupport)
-                        .ThenInclude(p => p.PhysicalAddress);
+                        .ThenInclude(p => p.PhysicalAddress)
+                .Include(s => s.Location)
+                    .ThenInclude(l => l.BusinessHours);
         }
     }
 }
