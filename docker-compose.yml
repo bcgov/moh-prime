@@ -114,7 +114,7 @@ services:
     build:
       context: document-manager/backend
     ports:
-      - 6001:5001
+      - 6001:6001
     volumes:
       - ./document-manager/backend/:/app/
     env_file: ./document-manager/backend/.env-prime
