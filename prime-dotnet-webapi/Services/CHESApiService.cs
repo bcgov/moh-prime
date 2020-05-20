@@ -32,35 +32,32 @@ namespace Prime.Services
 
             HttpClient client = new HttpClient();
 
-            if (accessToken == "")
+            var values = new List<KeyValuePair<string, string>>();
+            values.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
+            values.Add(new KeyValuePair<string, string>("client_id", "PRIME_SERVICE_CLIENT"));
+            values.Add(new KeyValuePair<string, string>("client_secret", PrimeConstants.PRIME_SERVICE_CLIENT));
+            var content = new FormUrlEncodedContent(values);
+
+            HttpResponseMessage response = null;
+            try
             {
-                var values = new List<KeyValuePair<string, string>>();
-                values.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
-                values.Add(new KeyValuePair<string, string>("client_id", "PRIME_SERVICE_CLIENT"));
-                values.Add(new KeyValuePair<string, string>("client_secret", PrimeConstants.PRIME_SERVICE_CLIENT));
-                var content = new FormUrlEncodedContent(values);
+                response = await client.PostAsync("https://sso-dev.pathfinder.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token", content);
 
-                HttpResponseMessage response = null;
-                try
+                if (response.IsSuccessStatusCode)
                 {
-                    response = await client.PostAsync("https://sso-dev.pathfinder.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token", content);
+                    var responseJsonString = await response.Content.ReadAsStringAsync();
+                    var successResponse = JsonConvert.DeserializeObject<OpenIdSuccessResponse>(responseJsonString);
+                    accessToken = successResponse.access_token;
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var responseJsonString = await response.Content.ReadAsStringAsync();
-                        var successResponse = JsonConvert.DeserializeObject<OpenIdSuccessResponse>(responseJsonString);
-                        accessToken = successResponse.access_token;
-
-                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-                            "Bearer",
-                            accessToken
-                        );
-                    }
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                        "Bearer",
+                        accessToken
+                    );
                 }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
             }
 
             return client;
