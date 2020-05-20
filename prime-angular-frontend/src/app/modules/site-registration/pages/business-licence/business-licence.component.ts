@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
 
 import tus from 'tus-js-client';
+import { FilePondComponent } from 'ngx-filepond/filepond.component';
 
 import { environment } from '@env/environment';
 import { ToastService } from '@core/services/toast.service';
@@ -20,28 +21,23 @@ import { SiteRegistrationResource } from '@registration/shared/services/site-reg
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
+
 @Component({
   selector: 'app-business-licence',
   templateUrl: './business-licence.component.html',
   styleUrls: ['./business-licence.component.scss']
 })
 export class BusinessLicenceComponent implements OnInit {
-  @ViewChild('myPond') myPond: any;
-
   public busy: Subscription;
   public form: FormGroup;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
-  public uploadProgress = 0;
-  public pondOptions = {
-    class: 'prime-filepond',
-    multiple: true,
-    labelIdle: 'Drop files here',
-    acceptedFileTypes: 'image/jpeg, image/png'
-  };
-  public pondFiles = [];
+  @ViewChild('filePond') public filePondComponent: FilePondComponent;
+  public filePondOptions: { [key: string]: any };
+  public filePondUploadProgress = 0;
+  public filePondFiles = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -56,6 +52,12 @@ export class BusinessLicenceComponent implements OnInit {
     private logger: LoggerService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.filePondOptions = {
+      class: 'prime-filepond',
+      multiple: true,
+      labelIdle: 'Drop files here',
+      acceptedFileTypes: 'image/jpeg, image/png'
+    };
   }
 
   public onSubmit() {
@@ -70,11 +72,11 @@ export class BusinessLicenceComponent implements OnInit {
     }
   }
 
-  public pondHandleInit() {
-    this.logger.info('FilePond has initialised', this.myPond);
+  public onFilePondInit() {
+    this.logger.info('FilePond has initialised', this.filePondComponent);
   }
 
-  public async pondHandleAddFile(event: any) {
+  public async onFilePondAddFile(event: any) {
     const token = await this.keycloakTokenService.token();
     const file = event.file.file; // File for uploading
     const { name: filename, type: filetype } = file;
@@ -89,9 +91,9 @@ export class BusinessLicenceComponent implements OnInit {
       onError: async (error: Error) =>
         this.toastService.openErrorToast(error.message),
       onProgress: async (bytesUploaded: number, bytesTotal: number) =>
-        this.uploadProgress = (bytesUploaded / bytesTotal * 100),
+        this.filePondUploadProgress = (bytesUploaded / bytesTotal * 100),
       onSuccess: async () => {
-        this.uploadProgress = 100;
+        this.filePondUploadProgress = 100;
         this.toastService.openSuccessToast('File(s) have been uploaded');
       }
     });
@@ -131,6 +133,4 @@ export class BusinessLicenceComponent implements OnInit {
     this.isCompleted = site.completed;
     this.siteRegistrationStateService.setSite(site, true);
   }
-
-
 }
