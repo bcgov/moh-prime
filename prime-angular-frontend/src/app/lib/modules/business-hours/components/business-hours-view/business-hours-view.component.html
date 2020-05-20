@@ -1,0 +1,25 @@
+<ng-container *ngFor="let businessDay of businessDays; let i = index">
+  <mat-card>
+    <mat-card-header>
+      <button type="button"
+              mat-icon-button
+              color="primary"
+              matTooltip="Remove Hours of Operation"
+              (click)="onRemove(i)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content>
+      <h3>{{ businessDay.day | weekday }}</h3>
+      Hours of Operation
+      <div *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
+        {{ businessDay.startTime | default: '0' }}:00 to {{ businessDay.endTime | default: '0' }}:00
+      </div>
+      <ng-template #open24Hours>
+        <div>
+          Open 24 hours
+        </div>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</ng-container>

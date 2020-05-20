@@ -1,0 +1,31 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+.mat-card {
+  border-bottom: 4px solid transparent;
+  margin-bottom: .5rem;
+
+  @include media-breakpoint-up(lg) {
+    max-width: 300px;
+  }
+
+  &:hover,
+  &.highlight {
+    border-bottom-color: theme-palette(yellow);
+  }
+
+  .mat-icon-button {
+    // Position the icon or menu trigger button for aesthetics
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    // Position over content for use with menus
+    z-index: 100;
+  }
+
+  .mat-card-content {
+    div {
+      font-size: 1.25rem;
+    }
+  }
+}
