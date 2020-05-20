@@ -69,9 +69,18 @@
         <div class="col">
 
           <mat-form-field class="w-100">
-            <input matInput
+            <input type="text"
+                   matInput
                    placeholder="Doing Business As (Optional)"
-                   formControlName="doingBusinessAs">
+                   formControlName="doingBusinessAs"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete autoActiveFirstOption
+                              #auto="matAutocomplete">
+              <mat-option *ngFor="let doingBusinessAsName of doingBusinessAsNames"
+                          [value]="doingBusinessAsName">
+                {{ doingBusinessAsName }}
+              </mat-option>
+            </mat-autocomplete>
             <mat-error>Required</mat-error>
           </mat-form-field>
 

@@ -8,6 +8,7 @@ import { Subscription, Observable } from 'rxjs';
 import { debounceTime, switchMap, map } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { UtilsService, SortWeight } from '@core/services/utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -18,7 +19,7 @@ import { SiteRegistrationResource } from '@registration/shared/services/site-reg
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 import {
-  OrgBookResource, OrgBookAutocompleteResult, OrgBookFacetHttpResponse
+  OrgBookResource, OrgBookAutocompleteResult, OrgBookFacetHttpResponse, OrgBookDetailHttpResponse, OrgBookRelatedHttpResponse
 } from '@registration/shared/services/org-book-resource.service';
 
 @Component({
@@ -31,6 +32,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public form: FormGroup;
   public routeUtils: RouteUtils;
   public organizations: string[];
+  public doingBusinessAsNames: string[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
@@ -42,6 +44,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     private siteRegistrationStateService: SiteRegistrationStateService,
     private orgBookResource: OrgBookResource,
     private formUtilsService: FormUtilsService,
+    private utilsService: UtilsService,
     private dialog: MatDialog
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -75,15 +78,30 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     const orgName = option.value;
     this.orgBookResource.getOrganizationFacet(orgName)
       .pipe(
-        map((organization: OrgBookFacetHttpResponse) => {
+        map((response: OrgBookFacetHttpResponse) => {
           // TODO assumed only a single source ID for now even though there can be multiple results for a single organization
-          const organizationId = organization.objects.results[0].topic.source_id;
-          this.form.get('registrationId').patchValue(organizationId);
-          return organizationId;
+          const sourceId = response.objects.results[0].topic.source_id;
+          this.form.get('registrationId').patchValue(sourceId);
+          return sourceId;
         }),
-        switchMap((sourceId: string) => this.orgBookResource.getOrganizationDetail(sourceId))
+        switchMap((sourceId: string) => this.orgBookResource.getOrganizationDetail(sourceId)),
+        map((response: OrgBookDetailHttpResponse) => response.id),
+        // TODO must be an easier way to access a list of `Does Business As` results
+        switchMap((topicId: number) => this.orgBookResource.getOrganizationRelatedTo(topicId))
       )
-      .subscribe();
+      .subscribe((response: OrgBookRelatedHttpResponse[]) => {
+        // TODO refactor the filtering and mapping
+        const doingBusinessAs = response
+          .map((relation: OrgBookRelatedHttpResponse) => {
+            const businessName = relation.related_topic.names[0].text;
+            const isDoingBusinessAs = relation.attributes.some(a => a.value === 'Does Business As');
+            return (isDoingBusinessAs) ? businessName : null;
+          })
+          .filter(r => r);
+
+        this.doingBusinessAsNames = [...new Set(doingBusinessAs)]
+          .sort(this.sortDoingBusinessAsNames());
+      });
   }
 
   public onBack() {
@@ -128,5 +146,14 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
         // TODO assumed only a single name until result found with more than one
         this.organizations = organizations.map(o => o.names[0].text);
       });
+  }
+
+  /**
+   * @description
+   * Sort by day of the week.
+   */
+  private sortDoingBusinessAsNames(): (a: string, b: string) => SortWeight {
+    return (a: string, b: string) =>
+      this.utilsService.sort<string>(a, b);
   }
 }
