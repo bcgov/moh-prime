@@ -34,7 +34,7 @@ namespace WinformsGpidPoc
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             // The application needs to catch the response from Keycloak at some known URL.
-            // This could be done by adding a custom URL in the system registry, but the easeir and less intrusive method is to listen on the computer's loopback adaptor.
+            // This could be done by adding a custom URL in the system registry, but the easier and less intrusive method is to listen on the computer's loopback adaptor.
             string redirectUri = $"http://{IPAddress.Loopback}:{GetRandomUnusedPort()}/";
 
             var redirectListener = new HttpListener();
@@ -54,7 +54,7 @@ namespace WinformsGpidPoc
             };
             var oidcClient = new OidcClient(options);
 
-            // Specifying the idp_hint bypasses an unnessisary screen in keycloak and takes the user directly to the BC Services Card login page.
+            // Specifying the idp_hint bypasses an unnecessary screen in keycloak and takes the user directly to the BC Services Card login page.
             var extraParameter = new Dictionary<string, string> { { "kc_idp_hint", "bcsc" } };
             var state = await oidcClient.PrepareLoginAsync(extraParameter);
 
