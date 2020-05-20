@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,12 +12,6 @@ namespace Prime.Models
     {
         [Key]
         public int Id { get; set; }
-
-        public bool HoursWeekend { get; set; }
-
-        public bool Hours24 { get; set; }
-
-        public string HoursSpecial { get; set; }
 
         public string DoingBusinessAs { get; set; }
 
@@ -40,5 +36,18 @@ namespace Prime.Models
         [JsonIgnore]
         public IEnumerable<Site> Sites { get; set; }
 
+        public ICollection<BusinessDay> BusinessHours { get; set; }
+
+        /// <summary>
+        /// Days in which the business has any business hours.
+        /// Only the time portion of the input parameter is considered.
+        /// </summary>
+        public IEnumerable<DayOfWeek> DaysOpen(DateTimeOffset? atTime = null)
+        {
+            return BusinessHours
+                .Where(h => atTime == null || h.IsOpen(atTime.Value))
+                .Select(b => b.Day)
+                .Distinct();
+        }
     }
 }
