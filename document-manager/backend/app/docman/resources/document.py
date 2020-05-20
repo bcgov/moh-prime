@@ -189,14 +189,14 @@ class DocumentResource(Resource):
     def options(self, document_guid):
         response = make_response('', 200)
 
-        if request.headers.get('Access-Control-Request-Method', None) is not None:
-            # CORS request, return 200
-            return response
+        # if request.headers.get('Access-Control-Request-Method', None) is not None:
+        #     # CORS request, return 200
+        #     return response
 
-        response.headers['Tus-Resumable'] = self.tus_api_version
-        response.headers['Tus-Version'] = self.tus_api_supported_versions
+        response.headers['Tus-Resumable'] = TUS_API_VERSION
+        response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
         response.headers['Tus-Extension'] = "creation"
-        response.headers['Tus-Max-Size'] = self.max_file_size
+        response.headers['Tus-Max-Size'] = current_app.config["MAX_CONTENT_LENGTH"]
         response.headers[
             'Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Tus-Extension,Tus-Max-Size"
         response.status_code = 204
