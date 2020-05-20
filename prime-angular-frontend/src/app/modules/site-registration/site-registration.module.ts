@@ -4,6 +4,8 @@ import { SharedModule } from '@shared/shared.module';
 
 import { SiteRegistrationRoutingModule } from './site-registration-routing.module';
 
+import { BusinessHoursModule } from '@lib/modules/business-hours/business-hours.module';
+
 import { RegistrantProfileFormComponent } from './shared/components/registrant-profile-form/registrant-profile-form.component';
 import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
@@ -57,6 +59,8 @@ registerPlugin(FilePondPluginFileValidateType);
     SharedModule,
     SiteRegistrationRoutingModule,
     FilePondModule
+    BusinessHoursModule,
+    SiteRegistrationRoutingModule
   ]
 })
 export class SiteRegistrationModule { }

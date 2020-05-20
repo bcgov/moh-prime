@@ -8,7 +8,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
-import moment from 'moment';
 
 @Component({
   selector: 'app-access-agreement-history-enrolment',

@@ -97,6 +97,10 @@ export class MockAuthService implements IAuthService {
     return this._role === Role.FEATURE_SITE_REGISTRATION;
   }
 
+  public isCommunityPharmacist(): boolean {
+    return this._role === Role.FEATURE_COMMUNITY_PHARMACIST;
+  }
+
   public decodeToken(): Promise<KeycloakTokenParsed> {
     throw new Error('Method not implemented.');
   }

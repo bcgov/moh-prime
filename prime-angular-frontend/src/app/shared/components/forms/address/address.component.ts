@@ -1,12 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
+import { pairwise, distinctUntilChanged, startWith } from 'rxjs/operators';
+
 import { Config, ProvinceConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 
-import { FormUtilsService } from '@common/services/form-utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
-import { pairwise, distinctUntilChanged, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-address',
