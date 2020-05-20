@@ -25,9 +25,9 @@
                    matInput
                    placeholder="Organization Name (Legal Entity Operating Site)"
                    formControlName="name"
-                   [matAutocomplete]="auto">
+                   [matAutocomplete]="nameAuto">
             <mat-autocomplete autoActiveFirstOption
-                              #auto="matAutocomplete"
+                              #nameAuto="matAutocomplete"
                               (optionSelected)="onSelect($event)">
               <mat-option *ngFor="let organization of organizations"
                           [value]="organization">
@@ -73,9 +73,9 @@
                    matInput
                    placeholder="Doing Business As (Optional)"
                    formControlName="doingBusinessAs"
-                   [matAutocomplete]="auto">
+                   [matAutocomplete]="doingBusinessAsAuto">
             <mat-autocomplete autoActiveFirstOption
-                              #auto="matAutocomplete">
+                              #doingBusinessAsAuto="matAutocomplete">
               <mat-option *ngFor="let doingBusinessAsName of doingBusinessAsNames"
                           [value]="doingBusinessAsName">
                 {{ doingBusinessAsName }}
