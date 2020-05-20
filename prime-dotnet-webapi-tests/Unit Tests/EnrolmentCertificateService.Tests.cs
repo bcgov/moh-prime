@@ -46,7 +46,6 @@ namespace PrimeTests.UnitTests
                     ProfileSnapshot = JObject.FromObject(enrollee),
                 });
 
-
             return CreateService(null, accessTermServiceFake, versionServiceFake);
         }
 
