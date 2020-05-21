@@ -84,10 +84,8 @@ namespace Prime
         public DbSet<Party> Parties { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
-
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
-
-        public DbSet<ResourceDocument> ResourceDocuments { get; set; }
+        public DbSet<BusinessLicence> BusinessLicences { get; set; }
 
         public override int SaveChanges()
         {
@@ -184,7 +182,6 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new BusinessEventTypeConfiguration());
 
             modelBuilder.ApplyConfiguration(new VendorConfiguration());
-            modelBuilder.ApplyConfiguration(new ResourceTypeConfiguration());
 
             #region Indexes
             modelBuilder.Entity<Admin>()
@@ -255,10 +252,10 @@ namespace Prime
                 .WithMany(t => t.Sites)
                 .HasForeignKey(be => be.VendorId);
 
-            modelBuilder.Entity<ResourceDocument>()
-                .HasOne(d => d.ResourceType)
-                .WithMany(t => t.ResourceDocuments)
-                .HasForeignKey(d => d.ResourceTypeCode);
+            modelBuilder.Entity<BusinessLicence>()
+                .HasOne(bl => bl.Site)
+                .WithMany(s => s.BusinessLicences)
+                .HasForeignKey(bl => bl.SiteId);
 
             #endregion
         }

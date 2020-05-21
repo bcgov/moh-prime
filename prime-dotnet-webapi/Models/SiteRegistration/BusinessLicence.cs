@@ -5,19 +5,17 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("ResourceDocument")]
-    public class ResourceDocument : BaseAuditable
+    [Table("BusinessLicence")]
+    public class BusinessLicence : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
 
         public Guid DocumentGuid { get; set; }
 
-        public int ResourceId { get; set; }
-
-        public int ResourceTypeCode { get; set; }
+        public int SiteId { get; set; }
 
         [JsonIgnore]
-        public ResourceType ResourceType { get; set; }
+        public Site Site { get; set; }
     }
 }

@@ -33,6 +33,6 @@ namespace Prime.Models
         public Vendor Vendor { get; set; }
 
         [JsonIgnore]
-        public ICollection<ResourceDocument> BusinessLicences { get; set; }
+        public ICollection<BusinessLicence> BusinessLicences { get; set; }
     }
 }

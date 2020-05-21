@@ -334,16 +334,15 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(s => s.Id == vendorId);
         }
 
-        public async Task<ResourceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid)
+        public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid)
         {
-            var businessLicence = new ResourceDocument
+            var businessLicence = new BusinessLicence
             {
                 DocumentGuid = documentGuid,
-                ResourceId = siteId,
-                ResourceTypeCode = ResourceType.SITE
+                SiteId = siteId
             };
 
-            _context.ResourceDocuments.Add(businessLicence);
+            _context.BusinessLicences.Add(businessLicence);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
