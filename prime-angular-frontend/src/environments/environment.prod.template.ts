@@ -4,7 +4,7 @@ export const environment = {
   apiEndpoint: '/api/v1',
   loginRedirectUrl: '$REDIRECT_URL',
   prime: {
-    displayPhone: '1-844-39PRIME',
+    displayPhone: '1-844-397-7463',
     phone: '1-844-397-7463',
     email: 'prime@gov.bc.ca',
     supportEmail: 'primesupport@gov.bc.ca',
