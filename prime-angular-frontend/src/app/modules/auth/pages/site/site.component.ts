@@ -1,28 +1,39 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Inject } from '@angular/core';
+
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { UtilsService } from '@core/services/utils.service';
+import { ViewportService } from '@core/services/viewport.service';
 import { AuthProvider } from '@auth/shared/enum/auth-provider.enum';
-import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
   selector: 'app-site',
   templateUrl: './site.component.html',
   styleUrls: ['./site.component.scss']
 })
-export class SiteComponent implements OnInit {
-  public isIE: boolean;
+export class SiteComponent implements OnInit, OnDestroy {
+  private unsubscribe$: Subject<void>;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
-    private utilsService: UtilsService
+    private viewportService: ViewportService
   ) {
-    this.isIE = this.utilsService.isIE();
+    this.unsubscribe$ = new Subject<void>();
+  }
+
+  public get isMobile(): boolean {
+    return this.viewportService.isMobile;
   }
 
   public loginUsingBCSC() {
-    const redirectUri = `${this.config.loginRedirectUrl}${SiteRoutes.routePath(SiteRoutes.COLLECTION_NOTICE)}`;
+    // Send the user to COLLECTION_NOTICE which determines the direction of routing
+    const redirectRoute = SiteRoutes.routePath(SiteRoutes.COLLECTION_NOTICE);
+    const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
       idpHint: AuthProvider.BCSC,
@@ -30,5 +41,14 @@ export class SiteComponent implements OnInit {
     });
   }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+    this.viewportService.onResize()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe();
+  }
+
+  public ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 }

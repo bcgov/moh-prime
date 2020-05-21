@@ -1,26 +1,115 @@
 <div class="container">
-
   <div class="row">
-    <div class="col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4 align-self-center">
+    <div class="col-sm-12 logo">
 
-      <div class="text-center">
+      <app-prime-logo label="right"
+                      [size]="(isMobile) ? 'small' : 'medium'"></app-prime-logo>
 
-        <img src="/assets/prime_logo.svg"
-             class="logo mb-4"
-             alt="PRIME Logo">
+    </div>
+    <div class="col-sm-12 header">
 
-        <br>
-        <br>
+      <h1>Site Registration to access PharmaNet</h1>
+      <!-- <p></p> -->
 
-        <div class="button-container">
+    </div>
+    <div class="col-sm-12">
+
+      <div class="row actions">
+        <div class="col col-md-auto">
+
           <button mat-flat-button
                   color="primary"
-                  [disabled]="isIE"
-                  (click)="loginUsingBCSC()">Site Registration Login</button>
+                  class="large"
+                  (click)="loginUsingBCSC()">Begin Site Form</button>
+
         </div>
       </div>
 
     </div>
-  </div>
+    <div class="col-sm-12 col-md-4 steps step-1">
 
+      <div class="step-container">
+        <section class="content">
+          <h2>Signing Authority</h2>
+
+          <p>
+            The Signing Authority must complete this site registration. They are the authorized representative of the
+            organization with authority to sign the Organization Agreement for PharmaNet use. They must be legally able
+            to bind the corporation to the terms of this document.
+          </p>
+        </section>
+
+        <div class="info-graphic">
+          <img src="/assets/signing_authority.svg"
+               alt="Signing Authority Icon">
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-md-4 steps step-2">
+
+      <div class="step-container">
+        <section class="content">
+          <h2>BC Services Card</h2>
+
+          <p>
+            Set up your BC Services Card on your mobile device if you haven’t done so already (this is a one time
+            process). Once finished come back to Site Registration and complete the online form.
+
+            <br>
+            <br>
+
+            <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/log-in-with-card/mobile-card/set-up-mobile-card"
+               target="_blank"
+               rel="noopener noreferrer">
+              How to set up a Mobile Card
+            </a>
+          </p>
+        </section>
+
+        <div class="info-graphic">
+          <img src="/assets/bc_services_card.svg"
+               alt="BC Services Card Icon">
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-md-4 steps step-3">
+
+      <div class="step-container">
+        <section class="content">
+          <h2>Site Registration</h2>
+
+          <p>
+            This online form will ask for the organization's information like: Organization name, hours of operation,
+            vendors in use and the user's information for the Signing Authority, Administrator of PharmaNet Onboarding,
+            Privacy Officer, and Technical Support Contact.
+          </p>
+        </section>
+
+        <div class="info-graphic">
+          <img src="/assets/site_registration.svg"
+               alt="Site Registration Icon">
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 support">
+
+      <app-pill>
+        <section>
+          <h2>Get Support</h2>
+
+          <p>
+            Questions about PRIME should be directed to:
+            <br>
+            <app-prime-phone></app-prime-phone> (<app-prime-phone mode="normal"></app-prime-phone>)
+            <br>
+            <app-prime-support-email></app-prime-support-email>
+          </p>
+        </section>
+      </app-pill>
+
+    </div>
+  </div>
 </div>

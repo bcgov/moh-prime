@@ -1,9 +1,229 @@
-.container {
-  .row:first-child {
-    min-height: 500px;
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+div.container {
+  margin-top: 1.5rem;
+
+  @include media-breakpoint-up(sm) {
+    margin-top: 2rem;
+  }
+
+  @include media-breakpoint-up(md) {
+    margin-bottom: 4rem;
   }
 }
 
 .logo {
-  max-width: 100px;
+  padding-bottom: 1.25rem;
+
+  @include media-breakpoint-up(sm) {
+    padding-bottom: 1.5rem;
+  }
+}
+
+.header {
+  h1 {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+
+    @include media-breakpoint-up(sm) {
+      font-size: 1.5rem;
+    }
+    @include media-breakpoint-up(md) {
+      font-size: 2rem;
+    }
+    &:only-child {
+      margin-bottom: 2.25rem;
+    }
+  }
+
+  p {
+    font-style: italic;
+    margin-bottom: 2.25rem;
+
+    @include media-breakpoint-up(md) {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.actions {
+  margin-bottom: 1.5rem;
+}
+
+.mat-flat-button {
+  width: 100%;
+  min-width: 220px;
+
+  @include media-breakpoint-up(md) {
+    width: 300px;
+  }
+
+  &.large {
+    height: 46px;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  &.light {
+    background-color: theme-palette(blue, light);
+    color: white;
+  }
+}
+
+a {
+  color: theme-palette(blue);
+}
+
+.steps {
+  background-repeat: no-repeat;
+  background-position-y: 20px;
+
+  .step-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &.step-1 {
+    background-image: url('/assets/step_1.mobile.svg');
+    background-position-x: 14px;
+    background-size: 36px auto;
+
+    .content {
+      // Force anchor to be on separate line
+      a {
+        display: block;
+      }
+    }
+  }
+  &.step-2 {
+    background-image: url('/assets/step_2.mobile.svg');
+    background-position-x: 11px;
+    background-size: 50px auto;
+  }
+  &.step-3 {
+    background-image: url('/assets/step_3.mobile.svg');
+    background-position-x: 13px;
+    background-size: 45px auto;
+  }
+
+  .content {
+    line-height: 1.75rem;
+    // Provide space for background image of step #
+    padding-left: 3.75rem;
+    padding-right: 1.25rem;
+
+    h2 {
+      color: theme-palette(blue, light);
+    }
+
+    a {
+      font-weight: bold;
+      text-decoration: underline;
+      white-space: nowrap;
+    }
+  }
+
+  .info-graphic {
+    padding-top: 1.2rem;
+    padding-bottom: 2.7rem;
+    text-align: center;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .steps {
+    background-position-y: 100px;
+
+    .step-container {
+      flex-direction: column-reverse;
+    }
+
+    &.step-1,
+    &.step-2,
+    &.step-3 {
+      background-position-x: 95%;
+    }
+
+    .content {
+      padding-left: 0;
+      padding-right: 0;
+
+      h2 {
+        // Decrease slightly to reduce line wrapping
+        font-size: 1.25rem;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-only(md) {
+  .steps .info-graphic {
+    padding-bottom: 4rem;
+
+    img {
+      width: 125px;
+      height: auto;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .steps {
+    &.step-1 {
+      background-image: url('/assets/step_1.svg');
+      background-position-x: 86%;
+    }
+    &.step-2 {
+      background-image: url('/assets/step_2.svg');
+    }
+    &.step-3 {
+      background-image: url('/assets/step_3.svg');
+    }
+    &.step-2,
+    &.step-3 {
+      background-size: 65px auto;
+    }
+  }
+}
+
+@include media-breakpoint-only(lg) {
+  .steps {
+    .info-graphic {
+      padding-bottom: 3rem;
+
+      img {
+        width: 145px;
+        height: auto;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .steps {
+    &.step-1 {
+      background-size: 46px auto;
+    }
+    &.step-2,
+    &.step-3 {
+      background-size: 85px auto;
+    }
+  }
+}
+
+.support {
+  padding-bottom: 2rem;
+
+  @include media-breakpoint-up(sm) {
+    padding-top: 1rem;
+  }
+  @include media-breakpoint-up(md) {
+    padding-top: 3rem;
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+  }
 }
