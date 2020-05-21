@@ -100,8 +100,6 @@ const routes: Routes = [
       },
       {
         path: AdjudicationRoutes.SITE_REGISTRATIONS,
-
-
         children: [
           {
             path: '',
@@ -119,10 +117,7 @@ const routes: Routes = [
             ]
           },
         ]
-
-
       },
-
       {
         path: '', // Equivalent to `/` and alias for `enrollees`
         redirectTo: AdjudicationRoutes.ENROLLEES,
