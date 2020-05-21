@@ -11,6 +11,7 @@ export class AdjudicationRoutes {
   public static ENROLLEE_EVENT_LOG = 'event-log';
 
   public static SITE_REGISTRATIONS = 'site-registrations';
+  public static SITE_REGISTRATION = 'site-registration';
 
   public static MODULE_PATH = AdjudicationRoutes.ADJUDICATION;
 
