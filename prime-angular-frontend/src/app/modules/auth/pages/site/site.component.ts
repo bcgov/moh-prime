@@ -13,7 +13,10 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 @Component({
   selector: 'app-site',
   templateUrl: './site.component.html',
-  styleUrls: ['./site.component.scss']
+  styleUrls: [
+    './site.component.scss',
+    '../../shared/styles/landing-page.scss'
+  ]
 })
 export class SiteComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void>;

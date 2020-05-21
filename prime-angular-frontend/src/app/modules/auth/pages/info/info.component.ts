@@ -13,7 +13,10 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 @Component({
   selector: 'app-info',
   templateUrl: './info.component.html',
-  styleUrls: ['./info.component.scss']
+  styleUrls: [
+    './info.component.scss',
+    '../../shared/styles/landing-page.scss'
+  ]
 })
 export class InfoComponent implements OnInit, OnDestroy {
   private unsubscribe$: Subject<void>;
