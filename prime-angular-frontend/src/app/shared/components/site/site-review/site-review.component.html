@@ -2,7 +2,8 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Organization Information</ng-container>
-    <mat-icon matTooltip="Edit Organization Information"
+    <mat-icon *ngIf="showEditRedirect"
+              matTooltip="Edit Organization Information"
               (click)="onRoute(SiteRoutes.ORGANIZATION_INFORMATION)">edit</mat-icon>
   </app-page-subheader>
 
@@ -24,7 +25,8 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Site Address</ng-container>
-    <mat-icon matTooltip="Edit Site Address"
+    <mat-icon *ngIf="showEditRedirect"
+              matTooltip="Edit Site Address"
               (click)="onRoute(SiteRoutes.SITE_ADDRESS)">edit</mat-icon>
   </app-page-subheader>
 
@@ -54,7 +56,8 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Vendors</ng-container>
-    <mat-icon matTooltip="Edit Vendors"
+    <mat-icon *ngIf="showEditRedirect"
+              matTooltip="Edit Vendors"
               (click)="onRoute(SiteRoutes.VENDOR)">edit</mat-icon>
   </app-page-subheader>
 
@@ -68,7 +71,8 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Hours of Operation</ng-container>
-    <mat-icon matTooltip="Edit Hours of Operation"
+    <mat-icon *ngIf="showEditRedirect"
+              matTooltip="Edit Hours of Operation"
               (click)="onRoute(SiteRoutes.HOURS_OPERATION)">edit</mat-icon>
   </app-page-subheader>
 
@@ -89,7 +93,8 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Signing Authority</ng-container>
-    <mat-icon matTooltip="Edit Signing Authority"
+    <mat-icon *ngIf="showEditRedirect"
+              matTooltip="Edit Signing Authority"
               (click)="onRoute(SiteRoutes.SIGNING_AUTHORITY)">edit</mat-icon>
   </app-page-subheader>
 
@@ -102,7 +107,8 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Administrator of PharmaNet Onboarding</ng-container>
-    <mat-icon matTooltip="Edit Administrator"
+    <mat-icon *ngIf="showEditRedirect"
+              matTooltip="Edit Administrator"
               (click)="onRoute(SiteRoutes.ADMINISTRATOR)">edit</mat-icon>
   </app-page-subheader>
 
@@ -115,7 +121,8 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Privacy Officer</ng-container>
-    <mat-icon matTooltip="Edit Privacy Officer"
+    <mat-icon *ngIf="showEditRedirect"
+              matTooltip="Edit Privacy Officer"
               (click)="onRoute(SiteRoutes.PRIVACY_OFFICER)">edit</mat-icon>
   </app-page-subheader>
 
@@ -128,7 +135,8 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Technical Support</ng-container>
-    <mat-icon matTooltip="Edit Technical Support Contact"
+    <mat-icon *ngIf="showEditRedirect"
+              matTooltip="Edit Technical Support Contact"
               (click)="onRoute(SiteRoutes.TECHNICAL_SUPPORT)">edit</mat-icon>
   </app-page-subheader>
 
