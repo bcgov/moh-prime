@@ -1,0 +1,138 @@
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+    <mat-icon matTooltip="Edit Organization Information"
+              (click)="onRoute(SiteRoutes.ORGANIZATION_INFORMATION)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Organization Number (Legal Entity Operating Site)">
+    {{ site.location.organization.name | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Organization Registration ID">
+    {{ site.location.organization.registrationId | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Doing Business As">
+    {{ site.location.organization.doingBusinessAs | default }}
+  </app-enrollee-property>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Site Address</ng-container>
+    <mat-icon matTooltip="Edit Site Address"
+              (click)="onRoute(SiteRoutes.SITE_ADDRESS)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Address">
+    {{ site.location?.physicalAddress.street | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="City">
+    {{ site.location?.physicalAddress.city | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Province">
+    {{ site.location?.physicalAddress.provinceCode | configCode: 'provinces' | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Postal Code">
+    {{ site.location?.physicalAddress.postal | postal | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Country">
+    {{ site.location?.physicalAddress.countryCode | configCode: 'countries' | default }}
+  </app-enrollee-property>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Vendors</ng-container>
+    <mat-icon matTooltip="Edit Vendors"
+              (click)="onRoute(SiteRoutes.VENDOR)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-enrollee-property>
+    {{ site.vendor.name | default }}
+  </app-enrollee-property>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Hours of Operation</ng-container>
+    <mat-icon matTooltip="Edit Hours of Operation"
+              (click)="onRoute(SiteRoutes.HOURS_OPERATION)">edit</mat-icon>
+  </app-page-subheader>
+
+  <ng-container *ngFor="let businessDay of site.location.businessHours">
+    <app-enrollee-property [title]="businessDay.day | weekday">
+      <ng-container *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
+        {{ businessDay.startTime }}:00 to {{ businessDay.endTime }}:00
+      </ng-container>
+      <ng-template #open24Hours>
+        24 hours
+      </ng-template>
+    </app-enrollee-property>
+  </ng-container>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Signing Authority</ng-container>
+    <mat-icon matTooltip="Edit Signing Authority"
+              (click)="onRoute(SiteRoutes.SIGNING_AUTHORITY)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-registrant-profile-review [party]="site.location.organization.signingAuthority">
+  </app-registrant-profile-review>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Administrator of PharmaNet Onboarding</ng-container>
+    <mat-icon matTooltip="Edit Administrator"
+              (click)="onRoute(SiteRoutes.ADMINISTRATOR)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-registrant-profile-review [party]="site.location.administratorPharmaNet">
+  </app-registrant-profile-review>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Privacy Officer</ng-container>
+    <mat-icon matTooltip="Edit Privacy Officer"
+              (click)="onRoute(SiteRoutes.PRIVACY_OFFICER)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-registrant-profile-review [party]="site.location.privacyOfficer">
+  </app-registrant-profile-review>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Technical Support</ng-container>
+    <mat-icon matTooltip="Edit Technical Support Contact"
+              (click)="onRoute(SiteRoutes.TECHNICAL_SUPPORT)">edit</mat-icon>
+  </app-page-subheader>
+
+  <app-registrant-profile-review [party]="site.location.technicalSupport">
+  </app-registrant-profile-review>
+
+</section>

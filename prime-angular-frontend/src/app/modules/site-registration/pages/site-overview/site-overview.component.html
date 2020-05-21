@@ -1,0 +1,63 @@
+<app-page [busy]="busy">
+  <ng-container ngProjectAs="top">
+    <app-site-collection-notice></app-site-collection-notice>
+  </ng-container>
+
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!site?.completed"
+                               [currentRoute]="SiteRoutes.SITE_REVIEW"></app-site-progress-indicator>
+
+  <div class="mb-5">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Site Registration Review</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Review all the information to ensure it is accurate, you will not get approved if any of your information is
+        incorrect. If you need to edit your information use the pencil icon to navigate to that section of the
+        registration to make changes.
+      </ng-container>
+    </app-page-subheader>
+  </div>
+
+  <app-site-review *ngIf="site"
+                   [showEditRedirect]="true"
+                   [siteInput]="site"
+                   (route)="onRoute($event)"></app-site-review>
+
+  <div class="footer mb-4">
+    <app-alert *ngIf="!!site.submittedDate"
+               type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Site Registration Submitted
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        Your registration has already been submitted. If you have questions please
+        contact us at <app-prime-phone></app-prime-phone> or <app-prime-support-email></app-prime-support-email>.
+      </ng-container>
+    </app-alert>
+
+    <mat-checkbox #accept
+                  [checked]="!!site.submittedDate"
+                  [disabled]="!!site.submittedDate">
+      <div class="pl-3">
+        By submitting this form, I hereby certify that all information provided on this form is true and I understand
+        that the Ministry of Health and/or Health Insurance BC (HIBC) may verify this information with my regulatory
+        body, software vendor, and others as required.
+      </div>
+    </mat-checkbox>
+  </div>
+
+  <div class="row justify-content-end">
+    <div class="col text-right">
+
+      <button mat-flat-button
+              color="primary"
+              [disabled]="!accept.checked || !!site.submittedDate"
+              (click)="onSubmit()">Submit Registration</button>
+
+    </div>
+  </div>
+
+</app-page>

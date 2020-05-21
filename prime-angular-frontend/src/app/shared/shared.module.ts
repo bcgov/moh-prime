@@ -48,15 +48,18 @@ import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
-import { AccessTermsTableComponent } from '@shared/components/access-terms-table/access-terms-table.component';
-import { AccessTermComponent } from '@shared/components/access-term/access-term.component';
-import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
-import { ClaimEnrolleeComponent } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
-import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
-import { FeedbackComponent } from '@shared/components/dialogs/content/feedback/feedback.component';
-import { CollectionNoticeContainerComponent } from '@shared/components/collection-notice-container/collection-notice-container.component';
-import { PageFooterComponent } from '@shared/components/page-footer/page-footer.component';
-import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.component';
+import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
+import { AccessTermComponent } from './components/access-term/access-term.component';
+import { NoteComponent } from './components/dialogs/content/note/note.component';
+import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
+import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
+import { PageFooterComponent } from './components/page-footer/page-footer.component';
+import { FormErrorsComponent } from './components/form-errors/form-errors.component';
+import { SiteReviewComponent } from './components/site/site-review/site-review.component';
+import { RegistrantProfileReviewComponent } from './components/site/registrant-profile-review/registrant-profile-review.component';
+
 
 @NgModule({
   declarations: [
@@ -104,7 +107,9 @@ import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.
     FeedbackComponent,
     CollectionNoticeContainerComponent,
     PageFooterComponent,
-    FormErrorsComponent
+    FormErrorsComponent,
+    SiteReviewComponent,
+    RegistrantProfileReviewComponent
   ],
   imports: [
     CommonModule,
@@ -163,7 +168,8 @@ import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.
     AccessTermComponent,
     CollectionNoticeContainerComponent,
     PageFooterComponent,
-    FormErrorsComponent
+    FormErrorsComponent,
+    SiteReviewComponent
   ]
 })
 export class SharedModule { }
