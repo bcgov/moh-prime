@@ -60,6 +60,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       privileges: [],
       enrolmentStatuses: null,
       currentStatus: {
+        id: faker.random.number(),
         enrolmentId,
         statusCode: null,
         status: {
@@ -77,9 +78,13 @@ export class MockEnrolmentService implements IEnrolmentService {
             },
             reasonNote: null
           }
-        ]
+        ],
+        adjudicator: null,
+        enrolmentStatusReference: null
+
       },
       previousStatus: {
+        id: faker.random.number(),
         enrolmentId,
         statusCode: null,
         status: {
@@ -97,7 +102,9 @@ export class MockEnrolmentService implements IEnrolmentService {
             },
             reasonNote: null
           }
-        ]
+        ],
+        adjudicator: null,
+        enrolmentStatusReference: null
       },
       enrolleeClassification: EnrolleeClassification.OBO,
       enrolmentCertificateNote: null,
