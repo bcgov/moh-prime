@@ -23,6 +23,7 @@ import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
+import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import {
@@ -59,8 +60,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { SiteReviewComponent } from './components/site/site-review/site-review.component';
 import { RegistrantProfileReviewComponent } from './components/site/registrant-profile-review/registrant-profile-review.component';
-import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
-
 
 @NgModule({
   declarations: [
@@ -75,6 +74,7 @@ import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
     PostalPipe,
     ReplacePipe,
     YesNoPipe,
+    WeekdayPipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -110,8 +110,7 @@ import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
     PageFooterComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    RegistrantProfileReviewComponent,
-    WeekdayPipe
+    RegistrantProfileReviewComponent
   ],
   imports: [
     CommonModule,
@@ -144,6 +143,7 @@ import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
     PostalPipe,
     ReplacePipe,
     YesNoPipe,
+    WeekdayPipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
@@ -171,8 +171,7 @@ import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
     CollectionNoticeContainerComponent,
     PageFooterComponent,
     FormErrorsComponent,
-    SiteReviewComponent,
-    WeekdayPipe
+    SiteReviewComponent
   ]
 })
 export class SharedModule { }
