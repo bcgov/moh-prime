@@ -73,12 +73,19 @@ namespace Prime.Controllers
                     {"Upload-Length", uploadLength},
                 }
             };
-
-            var response = await _client.SendAsync(request);
-
-            foreach (KeyValuePair<string, IEnumerable<string>> entry in response.Headers)
+            var response = new HttpResponseMessage();
+            try
             {
-                Response.Headers.Add(entry.Key, new StringValues(entry.Value.ToArray()));
+                response = await _client.SendAsync(request);
+
+                foreach (KeyValuePair<string, IEnumerable<string>> entry in response.Headers)
+                {
+                    Response.Headers.Add(entry.Key, new StringValues(entry.Value.ToArray()));
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                throw new Exception("ERROR: " + e);
             }
 
             return Ok();

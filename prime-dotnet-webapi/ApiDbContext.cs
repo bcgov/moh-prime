@@ -87,6 +87,8 @@ namespace Prime
 
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
 
+        public DbSet<ResourceDocument> ResourceDocuments { get; set; }
+
         public override int SaveChanges()
         {
             this.ApplyAudits();
@@ -182,6 +184,7 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new BusinessEventTypeConfiguration());
 
             modelBuilder.ApplyConfiguration(new VendorConfiguration());
+            modelBuilder.ApplyConfiguration(new ResourceTypeConfiguration());
 
             #region Indexes
             modelBuilder.Entity<Admin>()
@@ -251,6 +254,11 @@ namespace Prime
                 .HasOne(l => l.Vendor)
                 .WithMany(t => t.Sites)
                 .HasForeignKey(be => be.VendorId);
+
+            modelBuilder.Entity<ResourceDocument>()
+                .HasOne(d => d.ResourceType)
+                .WithMany(t => t.ResourceDocuments)
+                .HasForeignKey(d => d.ResourceTypeCode);
 
             #endregion
         }

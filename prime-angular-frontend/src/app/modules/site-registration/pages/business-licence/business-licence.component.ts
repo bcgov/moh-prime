@@ -93,6 +93,15 @@ export class BusinessLicenceComponent implements OnInit {
       onSuccess: async () => {
         this.uploadProgress = 100;
         this.toastService.openSuccessToast('File(s) have been uploaded');
+
+        const documentGuid = upload.url.split('/').pop();
+        console.log(documentGuid);
+
+        this.siteRegistrationResource
+          .createBusinessLicence(this.siteRegistrationStateService.site.id, documentGuid)
+          .subscribe(() => {
+            this.toastService.openSuccessToast('Business Licence has been added');
+          });
       }
     });
     upload.start();

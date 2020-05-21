@@ -201,6 +201,20 @@ export class SiteRegistrationResource {
       );
   }
 
+  public createBusinessLicence(siteId: number, documentGuid: string): Observable<string> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this.apiResource.post<string>(`sites/${siteId}/business-licence`, params)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Business licence has been added')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Business Licence could not be added');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::createBusinessLicence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   /**
    * @description
    * Get the organization information from OrgBook based on a business number.

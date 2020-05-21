@@ -334,6 +334,26 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(s => s.Id == vendorId);
         }
 
+        public async Task<ResourceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid)
+        {
+            var businessLicence = new ResourceDocument
+            {
+                DocumentGuid = documentGuid,
+                ResourceId = siteId,
+                ResourceTypeCode = ResourceType.SITE
+            };
+
+            _context.ResourceDocuments.Add(businessLicence);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not add business licence.");
+            }
+
+            return businessLicence;
+        }
+
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
         {
             // Remove existing items

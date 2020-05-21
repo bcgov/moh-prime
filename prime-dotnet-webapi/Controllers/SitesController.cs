@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -244,6 +245,34 @@ namespace Prime.Controllers
             }
 
             site = await _siteService.SubmitRegistrationAsync(siteId);
+            return Ok(ApiResponse.Result(site));
+        }
+
+        // POST: api/sites/5/business-licence
+        /// <summary>
+        /// Creates a new Business Licence for a site.
+        /// </summary>
+        [HttpPost("{siteId}/business-licence", Name = nameof(CreateBusinessLicence))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<Site>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            if (!User.CanEdit(site.Provisioner))
+            {
+                return Forbid();
+            }
+
+            await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid);
+
             return Ok(ApiResponse.Result(site));
         }
     }
