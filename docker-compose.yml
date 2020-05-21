@@ -51,22 +51,22 @@ services:
     depends_on:
       - postgres
 ##################################################### Web Frontend #
-  # nginx-angular:
-  #   container_name: primeweb
-  #   build:
-  #        context: prime-angular-frontend/
-  #   command: "nginx -g 'daemon off;'"
-  #   restart: always
-  #   ports:
-  #      - "8080:8080"
-  #      - "4200:8080"
-  #   expose:
-  #      - "8080"
-  #      - "4200"
-  #   networks:
-  #     - primenet
-  #   depends_on:
-  #     - dotnet-webapi
+  nginx-angular:
+    container_name: primeweb
+    build:
+         context: prime-angular-frontend/
+    command: "nginx -g 'daemon off;'"
+    restart: always
+    ports:
+       - "8080:8080"
+       - "4200:8080"
+    expose:
+       - "8080"
+       - "4200"
+    networks:
+      - primenet
+    depends_on:
+      - dotnet-webapi
 ################################################ Local SMTP Server #
   mailhog:
     container_name: mailhog
@@ -79,18 +79,18 @@ services:
     networks:
       - primenet
 ############################################## Database Inspection #
-  # schema-spy:
-  #   container_name: schema-spy
-  #   build:
-  #     context: schemaspy/
-  #   image: openjdk:jre-alpine
-  #   ports:
-  #     - "8069:8069"
-  #     - "80:8069"
-  #   depends_on:
-  #     - postgres
-  #   networks:
-  #     - primenet
+  schema-spy:
+    container_name: schema-spy
+    build:
+      context: schemaspy/
+    image: openjdk:jre-alpine
+    ports:
+      - "8069:8069"
+      - "80:8069"
+    depends_on:
+      - postgres
+    networks:
+      - primenet
 ########################################################### Backup #
   backup:
     container_name: backup
