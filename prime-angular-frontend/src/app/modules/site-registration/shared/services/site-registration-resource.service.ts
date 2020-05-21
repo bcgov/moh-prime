@@ -203,7 +203,7 @@ export class SiteRegistrationResource {
 
   public createBusinessLicence(siteId: number, documentGuid: string): Observable<string> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<string>(`sites/${siteId}/business-licence`, params)
+    return this.apiResource.post<string>(`sites/${siteId}/business-licence`, { siteId }, params)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap(() => this.toastService.openSuccessToast('Business licence has been added')),
