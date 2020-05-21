@@ -14,8 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Serilog;
 
 using Prime.Auth;
@@ -58,6 +56,7 @@ namespace Prime
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<IPartyService, PartyService>();
+            services.AddScoped<IPdfService, PdfService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
