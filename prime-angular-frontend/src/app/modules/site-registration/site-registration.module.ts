@@ -7,7 +7,6 @@ import { SiteRegistrationRoutingModule } from './site-registration-routing.modul
 import { BusinessHoursModule } from '@lib/modules/business-hours/business-hours.module';
 
 import { RegistrantProfileFormComponent } from './shared/components/registrant-profile-form/registrant-profile-form.component';
-import { RegistrantProfileReviewComponent } from './shared/components/registrant-profile-review/registrant-profile-review.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 import { SiteCollectionNoticeComponent } from './shared/components/site-collection-notice/site-collection-notice.component';
 import { SameAsComponent } from './shared/components/same-as/same-as.component';
@@ -18,7 +17,7 @@ import { SigningAuthorityComponent } from './pages/signing-authority/signing-aut
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
-import { SiteReviewComponent } from './pages/site-review/site-review.component';
+import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
@@ -34,13 +33,12 @@ import { OrganizationAgreementComponent } from './pages/organization-agreement/o
     AdministratorComponent,
     MultipleSitesComponent,
     TechnicalSupportComponent,
-    SiteReviewComponent,
+    SiteOverviewComponent,
     OrganizationInformationComponent,
     HoursOperationComponent,
     PrivacyOfficerComponent,
     RegistrantProfileFormComponent,
     ConfirmationComponent,
-    RegistrantProfileReviewComponent,
     SiteProgressIndicatorComponent,
     SiteCollectionNoticeComponent,
     SiteAddressComponent,
