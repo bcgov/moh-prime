@@ -79,7 +79,7 @@ namespace Prime.Models
         public string HasPharmaNetSuspendedDetails { get; set; }
 
         [NotMapped]
-        public bool HasMostRecentAccessTermSigned { get; set; }
+        public string CurrentTOAStatus { get; set; }
 
         [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
@@ -88,6 +88,15 @@ namespace Prime.Models
         public ICollection<Privilege> Privileges { get; set; }
 
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
+
+        public bool ShouldSerializeEnrolmentStatuses()
+        {
+            return (isAdminView != null && (bool)isAdminView);
+        }
+
+        [NotMapped]
+        [JsonIgnore]
+        public bool? isAdminView { get; set; }
 
         public int? AdjudicatorId { get; set; }
 

@@ -4,7 +4,7 @@
   </ng-container>
 
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!site.completed"
+  <app-site-progress-indicator [inProgress]="!site?.completed"
                                [currentRoute]="SiteRoutes.SITE_REVIEW"></app-site-progress-indicator>
 
   <div class="mb-5">
@@ -28,6 +28,10 @@
 
     <app-enrollee-property title="Organization Number (Legal Entity Operating Site)">
       {{ site.location.organization.name | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Organization Registration ID">
+      {{ site.location.organization.registrationId | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Doing Business As">
@@ -74,16 +78,8 @@
                 (click)="onRoute(SiteRoutes.VENDOR)">edit</mat-icon>
     </app-page-subheader>
 
-    <ng-container *ngFor="let vendor of []">
-
-      <app-enrollee-property>
-        {{ site.vendor.name | default }}
-      </app-enrollee-property>
-
-    </ng-container>
-
-    <app-enrollee-property *ngIf="!null">
-      None
+    <app-enrollee-property>
+      {{ site.vendor.name | default }}
     </app-enrollee-property>
 
   </section>
@@ -96,24 +92,16 @@
                 (click)="onRoute(SiteRoutes.HOURS_OPERATION)">edit</mat-icon>
     </app-page-subheader>
 
-    <app-enrollee-property title="Does this site operate on weekends?">
-      {{ site.location.hoursWeekend | yesNo: true }}
-    </app-enrollee-property>
-
-    <app-enrollee-property title="Does this site operate 24 hours?">
-      {{ site.location.hours24 | yesNo: true }}
-    </app-enrollee-property>
-
-    <app-enrollee-property title="Any special hours of operation that we should be aware of?"
-                           [makeBold]="false">
-      {{ site.location.hoursSpecial | yesNo: true }}
-    </app-enrollee-property>
-
-    <app-enrollee-property *ngIf="false"
-                           title="Description"
-                           [makeBold]="false">
-      {{ site.location.hoursSpecial }}
-    </app-enrollee-property>
+    <ng-container *ngFor="let businessDay of site.location.businessHours">
+      <app-enrollee-property [title]="businessDay.day | weekday">
+        <ng-container *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
+          {{ businessDay.startTime }}:00 to {{ businessDay.endTime }}:00
+        </ng-container>
+        <ng-template #open24Hours>
+          24 hours
+        </ng-template>
+      </app-enrollee-property>
+    </ng-container>
 
   </section>
 

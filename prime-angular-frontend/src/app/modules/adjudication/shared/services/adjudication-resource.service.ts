@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
-import { Config } from '@config/config.model';
+import { NoContent } from '@core/resources/abstract-resource';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
@@ -13,12 +13,13 @@ import { Address } from '@shared/models/address.model';
 import { AccessTerm } from '@shared/models/access-term.model';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
-
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { Admin } from '@auth/shared/models/admin.model';
+import { Site } from '@registration/shared/models/site.model';
+
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { NoContent } from '@core/resources/abstract-resource';
 
 @Injectable({
   providedIn: 'root'
@@ -57,40 +58,6 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeById error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getEnrolleeProfileVersions(enrolleeId: number): Observable<HttpEnrolleeProfileVersion[]> {
-    return this.apiResource.get<HttpEnrolleeProfileVersion[]>(`enrollees/${enrolleeId}/versions`)
-      .pipe(
-        map((response: ApiHttpResponse<HttpEnrolleeProfileVersion[]>) => response.result),
-        tap((enrolleeProfileVersions: HttpEnrolleeProfileVersion[]) =>
-          this.logger.info('ENROLLEE_PROFILE_VERSIONS', enrolleeProfileVersions)
-        ),
-        map((enrolleeProfileVersions: HttpEnrolleeProfileVersion[]) =>
-          enrolleeProfileVersions.map(this.enrolleeVersionAdapterResponse())
-        ),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee profile history could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeProfileVersions error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getEnrolleeProfileVersion(enrolleeId: number, enrolleeProfileVersionId: number): Observable<HttpEnrolleeProfileVersion> {
-    return this.apiResource.get<HttpEnrolleeProfileVersion>(`enrollees/${enrolleeId}/versions/${enrolleeProfileVersionId}`)
-      .pipe(
-        map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
-        tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
-          this.logger.info('ENROLLEE_PROFILE_VERSION', enrolleeProfileVersion)
-        ),
-        map(this.enrolleeVersionAdapterResponse()),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee profile history could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeProfileVersion error has occurred: ', error);
           throw error;
         })
       );
@@ -217,9 +184,10 @@ export class AdjudicationResource {
       );
   }
 
-  public createAdjudicatorNote(enrolleeId: number, note: string): Observable<AdjudicationNote> {
+  public createAdjudicatorNote(enrolleeId: number, note: string, link: boolean = false): Observable<AdjudicationNote> {
     const payload = { data: note };
-    return this.apiResource.post(`enrollees/${enrolleeId}/adjudicator-notes`, payload)
+    const params = this.apiResourceUtilsService.makeHttpParams({ link });
+    return this.apiResource.post(`enrollees/${enrolleeId}/adjudicator-notes`, payload, params)
       .pipe(
         map((response: ApiHttpResponse<AdjudicationNote>) => response.result),
         tap((adjudicatorNote: AdjudicationNote) => {
@@ -284,7 +252,8 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number): Observable<HttpEnrolleeProfileVersion> {
+  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number)
+    : Observable<HttpEnrolleeProfileVersion> {
     return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
@@ -322,6 +291,66 @@ export class AdjudicationResource {
         tap((admins: Admin[]) => this.logger.info('ADMINS', admins)),
         catchError((error: any) => {
           this.logger.error('[Adjudication] AdjudicationResource::getAdjudicators error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createStatusAdjudicatorReference(enrolleeId: number): Observable<EnrolmentStatusReference> {
+    return this.apiResource.post(`enrollees/${enrolleeId}/status-reference`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolmentStatusReference>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::createStatusAdjudicatorReference error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  // ---
+  // Site Registration
+  // ---
+  public getSites(textSearch?: string, statusCode?: number): Observable<Site[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode });
+    return this.apiResource.get<Site[]>('sites', params)
+      .pipe(
+        map((response: ApiHttpResponse<Site[]>) => response.result),
+        tap((sites: Site[]) => this.logger.info('SITES', sites)),
+        map((sites: Site[]) => sites),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Sites could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getSites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
+    return this.apiResource.get<Site>(`sites/${siteId}`, params)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        tap((site: Site) => this.logger.info('SITE', site)),
+        map((site: Site) => site),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getSiteById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteSite(siteId: number): Observable<Site> {
+    return this.apiResource.delete<Site>(`sites/${siteId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        tap((site: Site) => {
+          this.toastService.openSuccessToast('Site has been deleted');
+          this.logger.info('DELETED_SITE', site);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site could not be deleted');
+          this.logger.error('[Adjudication] AdjudicationResource::deleteSite error has occurred: ', error);
           throw error;
         })
       );

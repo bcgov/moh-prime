@@ -4,18 +4,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgxMaskModule } from 'ngx-mask';
-import { NgxBusyModule } from './modules/ngx-busy/ngx-busy.module';
 
 import { ConfigModule } from '@config/config.module';
-import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
+import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxProgressModule } from '@shared/modules/ngx-progress/ngx-progress.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
+
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
-import { AddressComponent } from '@shared/components/forms/address/address.component';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import {
-  EnrolmentStatusReasonsComponent
-} from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
@@ -26,6 +22,12 @@ import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
+import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
+import { AddressComponent } from '@shared/components/forms/address/address.component';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import {
+  EnrolmentStatusReasonsComponent
+} from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageComponent } from '@shared/components/page/page.component';
@@ -45,17 +47,16 @@ import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
-import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
-import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
-import { AccessTermComponent } from './components/access-term/access-term.component';
-import { NoteComponent } from './components/dialogs/content/note/note.component';
-import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
-import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
-import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
-import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
-import { PageFooterComponent } from './components/page-footer/page-footer.component';
-import { FormErrorsComponent } from './components/form-errors/form-errors.component';
+import { AccessTermsTableComponent } from '@shared/components/access-terms-table/access-terms-table.component';
+import { AccessTermComponent } from '@shared/components/access-term/access-term.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { ClaimEnrolleeComponent } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { FeedbackComponent } from '@shared/components/dialogs/content/feedback/feedback.component';
+import { CollectionNoticeContainerComponent } from '@shared/components/collection-notice-container/collection-notice-container.component';
+import { PageFooterComponent } from '@shared/components/page-footer/page-footer.component';
+import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.component';
 
 @NgModule({
   declarations: [

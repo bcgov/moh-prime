@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from '@shared/shared.module';
 
 describe('FeedbackComponent', () => {
   let component: FeedbackComponent;
@@ -20,6 +21,7 @@ describe('FeedbackComponent', () => {
         RouterTestingModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
+        SharedModule
       ],
       declarations: [FeedbackComponent],
       providers: [

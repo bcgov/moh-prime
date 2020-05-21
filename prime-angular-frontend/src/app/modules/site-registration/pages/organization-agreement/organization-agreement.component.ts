@@ -43,11 +43,11 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   public onSubmit() {
     if (this.accepted.checked) {
-      const siteId = this.siteRegistrationService.site.id;
+      const siteId = this.siteRegistrationService.site?.id;
       const data: DialogOptions = {
         title: 'Organization Agreement',
         message: 'Are you sure you want to accept the Organization Agreement?',
-        actionText: 'Accept Agreement'
+        actionText: 'Accept Organization Agreement'
       };
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
@@ -71,7 +71,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public ngOnInit(): void {
-    this.hasAcceptedAgreement = !!this.siteRegistrationService.site.location.organization.acceptedAgreementDate;
+    this.hasAcceptedAgreement = !!this.siteRegistrationService.site?.location?.organization.acceptedAgreementDate;
     this.siteRegistrationResource
       .getOrganizationAgreement()
       .subscribe((organizationAgreement: string) => this.organizationAgreement = organizationAgreement);

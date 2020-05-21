@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 export class Feedback {
-  public satisfied: boolean;
   public comment: string;
   public enrolleeId: number;
   public route: string;
@@ -25,11 +24,6 @@ export class FeedbackComponent implements OnInit {
 
   public get comment(): FormControl {
     return this.form.get('comment') as FormControl;
-  }
-
-  public onSatisfiedChange(satisfied: boolean): void {
-    this.feedback.satisfied = satisfied;
-    this.updateDialogContentOutput(this.feedback);
   }
 
   public ngOnInit() {

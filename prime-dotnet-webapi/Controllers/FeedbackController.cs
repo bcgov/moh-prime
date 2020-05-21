@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -30,7 +29,7 @@ namespace Prime.Controllers
 
         // POST: api/Feedback
         /// <summary>
-        /// Creates a new Feedback.
+        /// Creates user Feedback.
         /// </summary>
         [HttpPost(Name = nameof(CreateFeedback))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -59,7 +58,6 @@ namespace Prime.Controllers
                 new { enrolleeId = feedback.EnrolleeId },
                 ApiResponse.Result(createFeedback)
             );
-
         }
     }
 }

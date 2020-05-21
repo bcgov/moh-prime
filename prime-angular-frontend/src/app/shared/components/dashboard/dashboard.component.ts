@@ -307,13 +307,19 @@ export class DashboardComponent implements OnInit {
   private getAdjudicationSideNavSections(): DashboardNavSection[] {
     return [
       {
-        header: 'Enrolments',
+        header: 'Adjudication',
         showHeader: false,
         items: [
           {
-            name: 'Enrolments',
+            name: 'PRIME Enrollees',
             icon: 'format_list_bulleted',
             route: AdjudicationRoutes.ENROLLEES,
+            showItem: true
+          },
+          {
+            name: 'Site Registrations',
+            icon: 'format_list_bulleted',
+            route: AdjudicationRoutes.SITE_REGISTRATIONS,
             showItem: true
           }
         ]

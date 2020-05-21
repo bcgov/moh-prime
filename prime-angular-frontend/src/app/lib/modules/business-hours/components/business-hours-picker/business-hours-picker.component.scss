@@ -1,0 +1,23 @@
+section {
+  .weekdays-container,
+  .form-container {
+    display: flex;
+    flex-flow: row wrap;
+  }
+
+  .weekdays-container {
+    mat-checkbox {
+      flex-basis: 65px;
+      margin-right: .5rem;
+    }
+  }
+
+  .form-container {
+    align-items: center;
+
+    mat-form-field {
+      width: 140px;
+    }
+  }
+}
+
