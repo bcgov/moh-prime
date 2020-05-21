@@ -59,6 +59,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { SiteReviewComponent } from './components/site/site-review/site-review.component';
 import { RegistrantProfileReviewComponent } from './components/site/registrant-profile-review/registrant-profile-review.component';
+import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 
 
 @NgModule({
@@ -109,7 +110,8 @@ import { RegistrantProfileReviewComponent } from './components/site/registrant-p
     PageFooterComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    RegistrantProfileReviewComponent
+    RegistrantProfileReviewComponent,
+    WeekdayPipe
   ],
   imports: [
     CommonModule,
@@ -169,7 +171,8 @@ import { RegistrantProfileReviewComponent } from './components/site/registrant-p
     CollectionNoticeContainerComponent,
     PageFooterComponent,
     FormErrorsComponent,
-    SiteReviewComponent
+    SiteReviewComponent,
+    WeekdayPipe
   ]
 })
 export class SharedModule { }
