@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Wkhtmltopdf.NetCore;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -92,6 +93,7 @@ namespace Prime
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddSwaggerGenNewtonsoftSupport();
+            services.AddWkhtmltopdf("./Resources/wkhtmltopdf");
 
             services.AddHttpContextAccessor();
             services.AddRazorPages();
