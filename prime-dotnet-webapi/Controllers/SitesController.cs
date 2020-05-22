@@ -20,15 +20,18 @@ namespace Prime.Controllers
         private readonly ISiteService _siteService;
         private readonly IPartyService _partyService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IEmailService _emailService;
 
         public SitesController(
             ISiteService siteService,
             IPartyService partyService,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
+            IEmailService emailService)
         {
             _siteService = siteService;
             _partyService = partyService;
             _razorConverterService = razorConverterService;
+            _emailService = emailService;
         }
 
         // GET: api/Sites
@@ -244,6 +247,7 @@ namespace Prime.Controllers
             }
 
             site = await _siteService.SubmitRegistrationAsync(siteId);
+            await _emailService.SendSiteRegistrationAsync(site);
             return Ok(ApiResponse.Result(site));
         }
     }

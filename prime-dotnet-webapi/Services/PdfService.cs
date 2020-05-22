@@ -1,4 +1,3 @@
-using System.IO;
 using Wkhtmltopdf.NetCore;
 
 namespace Prime.Services
