@@ -21,7 +21,7 @@ import { HoursOperationComponent } from './pages/hours-operation/hours-operation
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
-import { SiteReviewComponent } from './pages/site-review/site-review.component';
+import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
@@ -113,7 +113,7 @@ const routes: Routes = [
       },
       {
         path: SiteRoutes.SITE_REVIEW,
-        component: SiteReviewComponent,
+        component: SiteOverviewComponent,
         data: { title: 'Site Registration Review' }
       },
       {

@@ -1,0 +1,18 @@
+{
+  "name": "prime-gpid",
+  "version": "1.0.0",
+  "description": "Authenticating with PRIME and requesting a GPID",
+  "main": "server.js",
+  "scripts": {
+    "serve": "cd src && http-server"
+  },
+  "keywords": [
+    "PRIME",
+    "GPID",
+    "Keycloak"
+  ],
+  "author": "PRIME",
+  "dependencies": {
+    "http-server": "^0.12.3"
+  }
+}
