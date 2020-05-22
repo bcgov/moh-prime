@@ -64,7 +64,7 @@ namespace Prime.Controllers
 
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri("http://localhost:6001/documents"),
+                RequestUri = new Uri(PrimeConstants.DOCUMENT_MANAGER_URL),
                 Method = HttpMethod.Post,
                 Content = content,
                 Headers = {
