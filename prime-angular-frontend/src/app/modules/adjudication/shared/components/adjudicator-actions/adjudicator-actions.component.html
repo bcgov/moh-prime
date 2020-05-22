@@ -51,6 +51,13 @@
       <span>Decline Enrollee</span>
     </button>
     <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="toggleFlagEnrollee()">
+      <mat-icon>flag</mat-icon>
+      <span *ngIf="enrollee.alwaysManual">Unflag Enrollee</span>
+      <span *ngIf="!enrollee.alwaysManual">Flag Enrollee</span>
+    </button>
+    <button mat-menu-item
             *ngIf="canDelete"
             (click)="onDelete()">
       <mat-icon>delete</mat-icon>
