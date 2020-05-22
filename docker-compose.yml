@@ -126,6 +126,8 @@ services:
     container_name: document_manager_migrate
     build:
       context: document-manager/backend
+    depends_on:
+      - postgres
     volumes:
       - ./document-manager/backend/:/app/
     command: flask db upgrade

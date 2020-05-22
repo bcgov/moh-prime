@@ -334,12 +334,13 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(s => s.Id == vendorId);
         }
 
-        public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid)
+        public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)
         {
             var businessLicence = new BusinessLicence
             {
                 DocumentGuid = documentGuid,
-                SiteId = siteId
+                SiteId = siteId,
+                FileName = filename,
             };
 
             _context.BusinessLicences.Add(businessLicence);
@@ -351,6 +352,11 @@ namespace Prime.Services
             }
 
             return businessLicence;
+        }
+
+        public async Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId)
+        {
+            return await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).ToListAsync();
         }
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty

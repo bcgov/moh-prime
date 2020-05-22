@@ -18,6 +18,7 @@ namespace Prime.Services
         Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId);
         Task AcceptCurrentOrganizationAgreementAsync(int signingAuthorityId);
         Task<Organization> GetOrganizationByPartyIdAsync(int partyId);
-        Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid);
+        Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename);
+        Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId);
     }
 }

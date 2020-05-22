@@ -1,43 +1,10 @@
 from functools import wraps
 from app.extensions import jwt
 
-VIEW_ALL = "core_view_all"
-MINE_EDIT = "core_edit_mines"
-MINE_ADMIN = "core_admin"
-EDIT_PARTY = "core_edit_parties"
-EDIT_PERMIT = "core_edit_permits"
-CLOSE_PERMIT = "core_close_permits"
-EDIT_DO = "core_edit_do"
-EDIT_VARIANCE = "core_edit_variances"
-MINESPACE_PROPONENT = "mds_minespace_proponents"
-
+PRIME_DOC = "prime_document_manager"
 
 def requires_role_view_all(func):
-    return _inner_wrapper(func, VIEW_ALL)
-
-
-def requires_role_mine_edit(func):
-    return _inner_wrapper(func, MINE_EDIT)
-
-
-def requires_role_mine_admin(func):
-    return _inner_wrapper(func, MINE_ADMIN)
-
-
-def requires_role_edit_party(func):
-    return _inner_wrapper(func, EDIT_PARTY)
-
-
-def requires_role_edit_permit(func):
-    return _inner_wrapper(func, EDIT_PERMIT)
-
-
-def requires_role_edit_do(func):
-    return _inner_wrapper(func, EDIT_DO)
-
-
-def requires_role_close_permit(func):
-    return _inner_wrapper(func, CLOSE_PERMIT)
+    return _inner_wrapper(func, PRIME_DOC)
 
 
 def requires_any_of(roles):

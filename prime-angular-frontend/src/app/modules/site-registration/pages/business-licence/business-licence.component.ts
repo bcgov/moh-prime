@@ -20,6 +20,8 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { exhaustMap, map } from 'rxjs/operators';
 
 
 @Component({
@@ -33,6 +35,7 @@ export class BusinessLicenceComponent implements OnInit {
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public businessLicences: BusinessLicence[];
 
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
   public filePondOptions: { [key: string]: any };
@@ -97,10 +100,9 @@ export class BusinessLicenceComponent implements OnInit {
         this.toastService.openSuccessToast('File(s) have been uploaded');
 
         const documentGuid = upload.url.split('/').pop();
-        console.log(documentGuid);
 
         this.siteRegistrationResource
-          .createBusinessLicence(this.siteRegistrationStateService.site.id, documentGuid)
+          .createBusinessLicence(this.siteRegistrationStateService.site.id, documentGuid, filename)
           .subscribe(() => {
             this.toastService.openSuccessToast('Business Licence has been added');
           });
@@ -131,6 +133,7 @@ export class BusinessLicenceComponent implements OnInit {
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
+    // this.getBusinessLicences();
   }
 
   private createFormInstance() {
@@ -141,5 +144,12 @@ export class BusinessLicenceComponent implements OnInit {
     const site = this.siteRegistrationService.site;
     this.isCompleted = site.completed;
     this.siteRegistrationStateService.setSite(site, true);
+  }
+
+  private getBusinessLicences() {
+    const siteId = this.siteRegistrationService.site.id;
+    return this.siteRegistrationResource.getBusinesssLicences(siteId).subscribe(
+      (bl: BusinessLicence[]) => this.businessLicences = bl
+    );
   }
 }

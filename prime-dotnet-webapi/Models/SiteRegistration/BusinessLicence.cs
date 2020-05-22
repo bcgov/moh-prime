@@ -13,6 +13,8 @@ namespace Prime.Models
 
         public Guid DocumentGuid { get; set; }
 
+        public string FileName { get; set; }
+
         public int SiteId { get; set; }
 
         [JsonIgnore]
