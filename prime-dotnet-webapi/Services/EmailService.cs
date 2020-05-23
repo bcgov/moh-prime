@@ -120,7 +120,9 @@ namespace Prime.Services
             var subject = "PRIME Site Registration Submission";
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
 
-            // TODO Get a document from the manager
+            // TODO Get the business licence document for the site from the document manager
+
+            // TODO Option 1: Create HTML content for document, if it works add to PDF service
             // var image =
             // var imgSrc = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image));
             // var htmlContent = $"<img src='" + imgSrc + "' />";
@@ -128,9 +130,8 @@ namespace Prime.Services
             var pdfContents = new[]
             {
                 await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", new Site()),
-                // TODO Create razor template markup for the review
                 await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site),
-                // TODO Does a view actually need to be used? see above solution to avoid using razor
+                // TODO Option 2: Create HTML content for document, less ideal implementation
                 // await _razorConverterService.RenderViewToStringAsync("/Views/Emails/Image.cshtml", new EmailParams())
             };
             var pdfs = pdfContents.Select(content => _pdfService.Generate(content));
