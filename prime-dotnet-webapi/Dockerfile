@@ -1,7 +1,5 @@
-#FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
 FROM  mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-#FROM registry.redhat.io/rhel8/dotnet-30 as build
-#FROM registry.redhat.io/dotnet/dotnet-31-rhel7
+
 USER 0
 ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
 WORKDIR /opt/app-root/app
@@ -10,10 +8,11 @@ ENV PATH="$PATH:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
 ENV API_PORT 8080
 RUN mkdir -p /opt/app-root/app
 COPY *.csproj /opt/app-root/app
+
 RUN dotnet restore
 COPY . /opt/app-root/app
+COPY ./Resources /opt/app-root/app/Resources
 
-#RUN dotnet publish -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet publish -c Release -o /opt/app-root/app/out/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet tool install --global dotnet-ef --version 3.1.1 && \
     dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
@@ -45,8 +44,5 @@ RUN apt-get update && \
     chmod -R 777 /opt/app-root/.*
 
 EXPOSE 8080 5001 1025
-#COPY entrypoint.sh .
-
-#USER 10000
 
 ENTRYPOINT [ "./entrypoint.sh" ]
