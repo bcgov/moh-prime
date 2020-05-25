@@ -28,7 +28,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage('Deploy Branch') {
             options {
                 timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
@@ -47,7 +46,6 @@ pipeline {
                 }
             }
         }
-        */
         stage('Deploy Develop') {
             options {
                 timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
@@ -66,7 +64,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage('Quality Check') {
             options {
                 timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
@@ -95,7 +92,6 @@ pipeline {
                     }
                 }
             }
-            */
         }
     }
 }
