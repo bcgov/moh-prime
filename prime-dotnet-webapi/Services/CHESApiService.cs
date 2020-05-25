@@ -41,7 +41,7 @@ namespace Prime.Services
             HttpResponseMessage response = null;
             try
             {
-                response = await client.PostAsync("https://sso-dev.pathfinder.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token", content);
+                response = await client.PostAsync(PrimeConstants.MAIL_SERVER_URL + "/token", content);
 
                 if (response.IsSuccessStatusCode)
                 {
