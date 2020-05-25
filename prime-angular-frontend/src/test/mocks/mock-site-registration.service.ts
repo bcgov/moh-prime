@@ -46,6 +46,7 @@ export class MockSiteRegistrationService implements ISiteRegistrationService {
           signingAuthorityId: faker.random.number(),
           signingAuthority: user,
           name: faker.company.companyName(),
+          registrationId: null,
           doingBusinessAs: null,
           acceptedAgreementDate: faker.date.past(2).toDateString()
         },

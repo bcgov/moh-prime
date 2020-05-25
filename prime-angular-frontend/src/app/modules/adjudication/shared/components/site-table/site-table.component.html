@@ -61,6 +61,12 @@
       <mat-menu #menu="matMenu">
 
         <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.SITE_REGISTRATION])">
+          <mat-icon>rate_review</mat-icon>
+          <span>View</span>
+        </button>
+
+        <button mat-menu-item
                 *ngIf="canDelete"
                 (click)="onDelete(row.id)">
           <mat-icon>delete</mat-icon>
