@@ -99,6 +99,21 @@ objects:
                   value: "prime-web-api"
                 - name: DB_HOST
                   value: "postgresql${SUFFIX}"
+                - name: OPENID_API_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: OPENID_API_URL
+                      name: "ches-secrets"
+                - name: PRIME_SERVICE_CLIENT
+                  valueFrom:
+                    secretKeyRef:
+                      key: PRIME_SERVICE_CLIENT
+                      name: "ches-secrets"
+                - name: CHES_API_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: CHES_API_URL
+                      name: "ches-secrets"
                 - name: PHARMANET_API_URL
                   valueFrom:
                     secretKeyRef:
