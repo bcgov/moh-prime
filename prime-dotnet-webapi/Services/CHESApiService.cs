@@ -38,10 +38,12 @@ namespace Prime.Services
             values.Add(new KeyValuePair<string, string>("client_secret", PrimeConstants.PRIME_SERVICE_CLIENT));
             var content = new FormUrlEncodedContent(values);
 
+            var requestUri = new Uri(PrimeConstants.MAIL_SERVER_URL + "/token");
+
             HttpResponseMessage response = null;
             try
             {
-                response = await client.PostAsync(PrimeConstants.MAIL_SERVER_URL + "/token", content);
+                response = await client.PostAsync(requestUri, content);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -57,7 +59,7 @@ namespace Prime.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
+                throw new Exception("Error occurred when calling CHES Email API. Try again later." + requestUri, ex);
             }
 
             return client;
