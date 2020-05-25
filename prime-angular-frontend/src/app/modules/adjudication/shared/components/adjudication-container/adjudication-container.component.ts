@@ -117,30 +117,26 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       title: 'Approve Enrolment',
       message: 'Are you sure you want to approve this enrolment?',
       actionText: 'Approve Enrolment',
-      data: { enrollee },
-      component: ManualFlagNoteComponent
+      component: NoteComponent
     };
 
-    let manualFlagNote: ManualFlagNoteOutput;
+    let note: string;
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: ManualFlagNoteOutput }) => {
+        exhaustMap((result: { output: string }) => {
           if (result && result.output) {
-            manualFlagNote = result.output;
+            note = result.output;
             return of(noop);
           }
           return EMPTY;
         }),
-        exhaustMap(() =>
-          this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, manualFlagNote.alwaysManual)
-        ),
         exhaustMap(() => this.adjudicationResource.submissionAction(enrollee.id, SubmissionAction.APPROVE)),
         exhaustMap(() => this.adjudicationResource.createStatusAdjudicatorReference(enrollee.id)),
         exhaustMap(() =>
-          (manualFlagNote.note)
-            ? this.adjudicationResource.createAdjudicatorNote(enrollee.id, manualFlagNote.note, true)
+          (note)
+            ? this.adjudicationResource.createAdjudicatorNote(enrollee.id, note, true)
             : of(noop)
         ),
         exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrollee.id))
@@ -357,6 +353,34 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
         )
         .subscribe((enrollee: HttpEnrollee) => this.routeTo(this.baseRoutePath));
     }
+  }
+
+  public onToggleFlag(enrollee: HttpEnrollee) {
+    const flagText = enrollee.alwaysManual ? 'Unflag' : 'Flag';
+    const data: DialogOptions = {
+      title: `${flagText} Enrollee`,
+      message: `Are you sure you want to ${flagText} this enrollee for manual adjudication?`,
+      actionText: `${flagText} Enrollee`,
+      data: { enrollee }
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result) => {
+          return result
+            ? of(noop)
+            : EMPTY;
+        }),
+        exhaustMap(() =>
+          this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, !enrollee.alwaysManual)
+        ),
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrollee.id))
+      )
+      .subscribe((flaggedEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(flaggedEnrollee);
+        this.action.emit();
+      });
   }
 
   public onRoute(routePath: string | (string | number)[]) {
