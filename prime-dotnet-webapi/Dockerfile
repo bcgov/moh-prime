@@ -11,7 +11,6 @@ COPY *.csproj /opt/app-root/app
 
 RUN dotnet restore
 COPY . /opt/app-root/app
-COPY ./Resources /opt/app-root/app/Resources
 
 RUN dotnet publish -c Release -o /opt/app-root/app/out/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet tool install --global dotnet-ef --version 3.1.1 && \
@@ -43,6 +42,6 @@ RUN apt-get update && \
     chmod -R 777 /opt/app-root && \
     chmod -R 777 /opt/app-root/.*
 
-EXPOSE 8080 5001 1025
+EXPOSE 8080 5001
 
 ENTRYPOINT [ "./entrypoint.sh" ]
