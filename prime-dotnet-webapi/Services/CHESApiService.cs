@@ -38,6 +38,8 @@ namespace Prime.Services
             values.Add(new KeyValuePair<string, string>("client_secret", PrimeConstants.PRIME_SERVICE_CLIENT));
             var content = new FormUrlEncodedContent(values);
 
+            Console.WriteLine("rimeConstants.MAIL_SERVER_URL: " + PrimeConstants.MAIL_SERVER_URL);
+
             var requestUri = new Uri(PrimeConstants.MAIL_SERVER_URL + "/token");
 
             HttpResponseMessage response = null;
