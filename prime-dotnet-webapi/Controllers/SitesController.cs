@@ -246,7 +246,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            // site = await _siteService.SubmitRegistrationAsync(siteId);
+            site = await _siteService.SubmitRegistrationAsync(siteId);
             await _emailService.SendSiteRegistrationAsync(site);
 
             return Ok(ApiResponse.Result(site));
