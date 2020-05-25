@@ -1,0 +1,80 @@
+<app-adjudication-container [content]="content"
+                            [hasActions]="hasActions"
+                            (action)="onAction()">
+
+  <app-page-header>Enrolments</app-page-header>
+
+</app-adjudication-container>
+
+<ng-template #content
+             let-enrollee="enrollee">
+
+  <mat-form-field (selectionChange)="onChange($event)">
+    <mat-label>Filter By Year</mat-label>
+    <mat-select [value]="selectedYear"
+                (selectionChange)="onChange($event)">
+      <mat-option *ngFor="let year of years"
+                  [value]="year">
+        {{ year }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <ng-container *ngIf="isUnderAdjudication(enrollee)"
+                [ngTemplateOutlet]="card"
+                [ngTemplateOutletContext]="{
+                  isCurrent: true,
+                  submittedDate: enrollee?.appliedDate,
+                  enrolmentRoute: [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT]
+                }">
+  </ng-container>
+
+  <ng-container *ngFor="let accessTerm of accessTerms; let first = first">
+    <ng-container [ngTemplateOutlet]="card"
+                  [ngTemplateOutletContext]="{
+                    isCurrent: first && !isUnderAdjudication(enrollee),
+                    submittedDate: enrollee?.appliedDate,
+                    acceptedDate: accessTerm.acceptedDate,
+                    enrolmentRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT],
+                    toaRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM]
+                  }">
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #card
+             let-isCurrent="isCurrent"
+             let-submittedDate="submittedDate"
+             let-acceptedDate="acceptedDate"
+             let-enrolmentRoute="enrolmentRoute"
+             let-toaRoute="toaRoute">
+  <mat-card class="card-width mb-4">
+    <mat-card-content class="mb-0">
+      <!-- Used instead of mat-card-header with mat-card-title since flexbox doesn't work within these components -->
+      <div class="card-title">
+        <small>Submitted {{ submittedDate | formatDate: 'MMMM Do YYYY' }}</small>
+        <small *ngIf="isCurrent">CURRENT</small>
+      </div>
+
+      <p class="text-muted">
+        <ng-container *ngIf="toaRoute; else current">
+          This PRIME enrolment was approved on {{ acceptedDate | formatDate: 'MMMM Do YYYY' }}
+        </ng-container>
+        <ng-template #current>
+          Enrollee edited and submitted an Enrolment, but has not signed the Terms of Access
+        </ng-template>
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button
+              class="mb-2 mx-0"
+              color="primary"
+              [routerLink]="enrolmentRoute">View Enrolment</button>
+      <button mat-button
+              class="mb-2 mr-1"
+              color="primary"
+              [disabled]="!acceptedDate"
+              [routerLink]="toaRoute">View Terms of Access</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
