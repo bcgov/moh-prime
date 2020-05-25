@@ -38,9 +38,9 @@ namespace Prime.Services
             values.Add(new KeyValuePair<string, string>("client_secret", PrimeConstants.PRIME_SERVICE_CLIENT));
             var content = new FormUrlEncodedContent(values);
 
-            Console.WriteLine("rimeConstants.MAIL_SERVER_URL: " + PrimeConstants.MAIL_SERVER_URL);
+            Console.WriteLine("rimeConstants.OPEN_ID_URL: " + PrimeConstants.OPENID_API_URL);
 
-            var requestUri = new Uri(PrimeConstants.MAIL_SERVER_URL + "/token");
+            var requestUri = new Uri(PrimeConstants.OPENID_API_URL + "/token");
 
             HttpResponseMessage response = null;
             try
