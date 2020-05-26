@@ -94,9 +94,11 @@ namespace Prime.Services
         {
             Client = await InitHttpClientAsync();
             HttpResponseMessage response = null;
+            Console.WriteLine("rimeConstants.CHES_API_URL: " + PrimeConstants.CHES_API_URL);
+
             try
             {
-                response = await Client.GetAsync(PrimeConstants.CHES_API_URL + "/health");
+                response = await Client.GetAsync(new Uri(PrimeConstants.CHES_API_URL + "/health"));
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
