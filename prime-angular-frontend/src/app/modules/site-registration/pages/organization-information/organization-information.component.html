@@ -21,9 +21,31 @@
         <div class="col">
 
           <mat-form-field class="w-100">
-            <input matInput
+            <input type="text"
+                   matInput
                    placeholder="Organization Name (Legal Entity Operating Site)"
-                   formControlName="name">
+                   formControlName="name"
+                   [matAutocomplete]="nameAuto">
+            <mat-autocomplete autoActiveFirstOption
+                              #nameAuto="matAutocomplete"
+                              (optionSelected)="onSelect($event)">
+              <mat-option *ngFor="let organization of organizations"
+                          [value]="organization">
+                {{ organization }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Organization Registration ID"
+                   formControlName="registrationId">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -47,9 +69,18 @@
         <div class="col">
 
           <mat-form-field class="w-100">
-            <input matInput
+            <input type="text"
+                   matInput
                    placeholder="Doing Business As (Optional)"
-                   formControlName="doingBusinessAs">
+                   formControlName="doingBusinessAs"
+                   [matAutocomplete]="doingBusinessAsAuto">
+            <mat-autocomplete autoActiveFirstOption
+                              #doingBusinessAsAuto="matAutocomplete">
+              <mat-option *ngFor="let doingBusinessAsName of doingBusinessAsNames"
+                          [value]="doingBusinessAsName">
+                {{ doingBusinessAsName }}
+              </mat-option>
+            </mat-autocomplete>
             <mat-error>Required</mat-error>
           </mat-form-field>
 

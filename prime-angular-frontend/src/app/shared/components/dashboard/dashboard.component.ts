@@ -82,7 +82,6 @@ export class DashboardComponent implements OnInit {
   }
 
   public async ngOnInit() {
-
     // Initialize the sidenav with properties based on current viewport
     this.setSideNavProps(this.viewportService.device);
 
@@ -119,13 +118,11 @@ export class DashboardComponent implements OnInit {
   }
 
   private getSideNavSections(): DashboardNavSection[] {
-
     const currentBaseRoute = this.router.url.slice(1).split('/')[0];
-
     if (this.authService.hasAdminView()) {
       return this.getAdjudicationSideNavSections();
       // TODO use of routes creates coupling between modules
-    } else if (this.authService.isRegistrant() && currentBaseRoute === AuthRoutes.SITE) {
+    } else if (this.authService.isRegistrant() && currentBaseRoute === SiteRoutes.MODULE_PATH) {
       return this.getRegistrantSideNavSections();
     } else {
       return this.getEnrolleeSideNavSections();
@@ -315,6 +312,12 @@ export class DashboardComponent implements OnInit {
             icon: 'format_list_bulleted',
             route: AdjudicationRoutes.ENROLLEES,
             showItem: true
+          },
+          {
+            name: 'Site Registrations',
+            icon: 'format_list_bulleted',
+            route: AdjudicationRoutes.SITE_REGISTRATIONS,
+            showItem: true
           }
         ]
       }
@@ -329,9 +332,16 @@ export class DashboardComponent implements OnInit {
         items: [
           {
             name: 'Site Registration',
-            icon: 'format_list_bulleted',
+            icon: 'location_city',
             route: SiteRoutes.MULTIPLE_SITES,
             showItem: true
+          },
+          {
+            name: 'Organization Agreement',
+            icon: 'lock',
+            route: SiteRoutes.ORGANIZATION_AGREEMENT,
+            showItem: true,
+            disabled: true
           }
         ]
       }

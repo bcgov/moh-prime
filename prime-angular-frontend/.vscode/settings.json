@@ -14,5 +14,7 @@
   "html.format.wrapAttributes": "force-aligned",
   "html.format.unformatted": "wbr,small,span,a,strong,em,br",
   "git.ignoreLimitWarning": true,
-  "typescript.tsserver.experimental.enableProjectDiagnostics": true
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.quoteStyle": "single",
+  // "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

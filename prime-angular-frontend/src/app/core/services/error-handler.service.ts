@@ -24,7 +24,7 @@ export class ErrorHandlerService implements ErrorHandler {
     if (error instanceof HttpErrorResponse) {
       // Server or connection error occurred
       if (!navigator.onLine) {
-        // HTTP error has occurred
+        // HTTP error intercept has occurred
         return toastService.openErrorToast('No Internet Connection');
       } else {
         // HTTP error has occurred (error.status = 403, 404, 500...)

@@ -1,9 +1,11 @@
-import { FormGroup } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 
-export interface IForm {
-  form: FormGroup;
-  onSubmit(): void;
-  canDeactivate(): Observable<boolean> | boolean;
+export abstract class IForm {
+  public form: AbstractControl;
+  public abstract onSubmit(): void;
+  public canDeactivate(): Observable<boolean> | boolean {
+    return true;
+  }
 }

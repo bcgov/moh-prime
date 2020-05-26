@@ -33,7 +33,7 @@ namespace Prime.Controllers
 
         // GET: api/Sites
         /// <summary>
-        /// Gets all of the Sites for a user.
+        /// Gets all of the Sites for a user, or all sites if user has ADMIN role
         /// </summary>
         [HttpGet(Name = nameof(GetSites))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -41,11 +41,20 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Site>>> GetSites()
         {
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+            IEnumerable<Site> sites = null;
 
-            IEnumerable<Site> sites = (party != null)
-                ? await _siteService.GetSitesAsync(party.Id)
-                : new List<Site>();
+            if (User.IsAdmin() || User.HasAdminView())
+            {
+                sites = await _siteService.GetSitesAsync();
+            }
+            else
+            {
+                var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+
+                sites = (party != null)
+                    ? await _siteService.GetSitesAsync(party.Id)
+                    : new List<Site>();
+            }
 
             return Ok(ApiResponse.Result(sites));
         }
@@ -114,7 +123,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateSite(int siteId, Site updatedSite, [FromQuery]bool isCompleted)
+        public async Task<IActionResult> UpdateSite(int siteId, Site updatedSite, [FromQuery] bool isCompleted)
         {
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)

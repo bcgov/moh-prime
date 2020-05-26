@@ -19,6 +19,9 @@ import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-te
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 
+import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
+import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
+
 const routes: Routes = [
   {
     path: AdjudicationRoutes.MODULE_PATH,
@@ -93,6 +96,26 @@ const routes: Routes = [
               }
             ]
           }
+        ]
+      },
+      {
+        path: AdjudicationRoutes.SITE_REGISTRATIONS,
+        children: [
+          {
+            path: '',
+            component: SiteRegistrationsComponent,
+            data: { title: 'Site Registrations' }
+          },
+          {
+            path: ':id',
+            children: [
+              {
+                path: AdjudicationRoutes.SITE_REGISTRATION,
+                component: SiteRegistrationComponent,
+                data: { title: 'Site Reigstration' }
+              }
+            ]
+          },
         ]
       },
       {

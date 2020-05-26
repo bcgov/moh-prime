@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnrolmentProgressIndicatorComponent } from './enrolment-progress-indicator.component';
+import { EnrolmentModule } from '@enrolment/enrolment.module';
 
 describe('EnrolmentProgressIndicatorComponent', () => {
   let component: EnrolmentProgressIndicatorComponent;
@@ -8,9 +9,11 @@ describe('EnrolmentProgressIndicatorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnrolmentProgressIndicatorComponent ]
+      imports: [
+        EnrolmentModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
