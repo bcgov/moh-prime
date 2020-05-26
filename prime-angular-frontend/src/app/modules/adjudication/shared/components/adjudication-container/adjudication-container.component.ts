@@ -355,7 +355,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
     }
   }
 
-  public onToggleFlag(enrollee: HttpEnrollee) {
+  public onToggleManualAdj(enrollee: HttpEnrollee) {
     const flagText = enrollee.alwaysManual ? 'Unflag' : 'Flag';
     const data: DialogOptions = {
       title: `${flagText} Enrollee`,

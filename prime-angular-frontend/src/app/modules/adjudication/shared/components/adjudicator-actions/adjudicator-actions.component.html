@@ -52,7 +52,7 @@
     </button>
     <button mat-menu-item
             [disabled]="!canEdit"
-            (click)="onToggleFlag()">
+            (click)="onToggleManualAdj()">
       <mat-icon>flag</mat-icon>
       <span *ngIf="enrollee.alwaysManual">Unflag Enrollee</span>
       <span *ngIf="!enrollee.alwaysManual">Flag Enrollee</span>
