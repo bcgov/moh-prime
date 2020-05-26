@@ -19,7 +19,7 @@ namespace Prime.Services.Clients
             int parsed;
             if (!Int32.TryParse(cert.LicenseNumber, out parsed) || parsed < 1 || parsed > 11)
             {
-                return null;
+                return Task.FromResult<PharmanetCollegeRecord>(null);
             }
 
             var lookup = new[]
