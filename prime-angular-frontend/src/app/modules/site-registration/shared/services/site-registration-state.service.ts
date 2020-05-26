@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 import { RouterEvent } from '@angular/router';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
 import { Address } from '@shared/models/address.model';
-import { FormControlValidators } from '@shared/validators/form-control.validators';
 
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
@@ -33,6 +34,7 @@ export class SiteRegistrationStateService {
 
   constructor(
     private fb: FormBuilder,
+    private formUtilsService: FormUtilsService,
     private routeStateService: RouteStateService,
     private logger: LoggerService
   ) {
@@ -93,7 +95,7 @@ export class SiteRegistrationStateService {
   public get site(): Site {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const physicalAddress = this.siteAddressForm.getRawValue();
-    const hoursOperation = this.hoursOperationForm.getRawValue();
+    const businessHours = this.hoursOperationForm.getRawValue().businessDays;
     const vendor = this.vendorForm.getRawValue();
 
     // Adapt data for backend consumption
@@ -151,7 +153,7 @@ export class SiteRegistrationStateService {
         },
         physicalAddressId: physicalAddress?.id,
         physicalAddress,
-        ...hoursOperation
+        businessHours
       },
       vendorId: vendor?.id,
       vendor,
@@ -225,7 +227,12 @@ export class SiteRegistrationStateService {
       if (site.vendor) {
         this.vendorForm.patchValue(site.vendor);
       }
-      this.hoursOperationForm.patchValue(site.location);
+
+      if (site.location.businessHours?.length) {
+        const array = this.hoursOperationForm.get('businessDays') as FormArray;
+        array.clear(); // Clear out existing indices
+        this.formUtilsService.formArrayPush(array, site.location.businessHours);
+      }
 
       [
         [this.signingAuthorityForm, site.location.organization.signingAuthority],
@@ -247,7 +254,7 @@ export class SiteRegistrationStateService {
     }
   }
 
-  private get forms(): FormGroup[] {
+  private get forms(): AbstractControl[] {
     return [
       this.organizationInformationForm,
       this.siteAddressForm,
@@ -267,6 +274,10 @@ export class SiteRegistrationStateService {
         []
       ],
       name: [
+        null,
+        [Validators.required]
+      ],
+      registrationId: [
         null,
         [Validators.required]
       ],
@@ -308,18 +319,9 @@ export class SiteRegistrationStateService {
 
   private buildHoursOperationForm(): FormGroup {
     return this.fb.group({
-      hoursWeekend: [
-        false,
-        []
-      ],
-      hours24: [
-        false,
-        []
-      ],
-      hoursSpecial: [
-        null,
-        []
-      ]
+      businessDays: this.fb.array(
+        [],
+        [Validators.required])
     });
   }
 

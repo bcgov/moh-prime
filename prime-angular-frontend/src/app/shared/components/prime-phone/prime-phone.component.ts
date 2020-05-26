@@ -12,7 +12,7 @@ export class PrimePhoneComponent {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig
   ) {
-    this.mode = 'vanity';
+    this.mode = 'normal';
   }
 
   public get primePhoneHref() {

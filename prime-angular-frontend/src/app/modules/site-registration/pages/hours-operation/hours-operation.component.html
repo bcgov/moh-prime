@@ -13,28 +13,21 @@
         <ng-container appPageSubheaderTitle>Hours of Operation</ng-container>
       </app-page-subheader>
 
-      <div class="mb-2">
-        <mat-checkbox class="mr-4"
-                      formControlName="hoursWeekend">
-          Does this site operate on weekends?
-        </mat-checkbox>
-      </div>
+      <app-business-hours [form]="form"
+                          (add)="onAdd($event)"
+                          (remove)="onRemove($event)"></app-business-hours>
+      <!-- <app-business-hours [businessDays]="businessDays.valueChanges | async"
+                          (add)="onAdd($event)"
+                          (remove)="onRemove($event)"></app-business-hours> -->
 
-      <div class="mb-3">
-        <mat-checkbox class="mr-4"
-                      formControlName="hours24">
-          Does this site operate 24 hours?
-        </mat-checkbox>
-      </div>
-
-      <div class="mb-2">
-        <mat-form-field class="w-100">
-          <textarea matInput
-                    placeholder="Any special hours of operations that we should be aware of?"
-                    rows="10"
-                    formControlName="hoursSpecial"></textarea>
-        </mat-form-field>
-      </div>
+      <app-alert *ngIf="hasNoHours"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          No hours of operation have been added.
+        </ng-container>
+      </app-alert>
 
     </section>
 

@@ -87,8 +87,16 @@ namespace Prime.Models
         [NotMapped]
         public ICollection<Privilege> Privileges { get; set; }
 
-        [JsonIgnore]
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
+
+        public bool ShouldSerializeEnrolmentStatuses()
+        {
+            return (isAdminView != null && (bool)isAdminView);
+        }
+
+        [NotMapped]
+        [JsonIgnore]
+        public bool? isAdminView { get; set; }
 
         public int? AdjudicatorId { get; set; }
 
