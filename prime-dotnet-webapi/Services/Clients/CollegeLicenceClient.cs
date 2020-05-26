@@ -18,17 +18,15 @@ namespace Prime.Services.Clients
 
         public CollegeLicenceClient(HttpClient client)
         {
-            var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.PHARMANET_API_USERNAME}:{PrimeConstants.PHARMANET_API_PASSWORD}");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
-
+            // Auth header and cert are injected in Startup.cs
             _client = client;
         }
 
         public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
-            if (certification.College == null)
+            if (certification?.College?.Prefix == null)
             {
-                throw new ArgumentNullException(nameof(certification.College));
+                throw new ArgumentNullException();
             }
 
             var requestParams = new CollegeRecordRequestParams(certification.LicenseNumber, certification.College.Prefix);

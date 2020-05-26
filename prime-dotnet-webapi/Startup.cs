@@ -45,8 +45,7 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddScoped<ILookupService, LookupService>()
+            services.AddScoped<ILookupService, LookupService>()
                 .AddScoped<IEnrolleeService, EnrolleeService>()
                 .AddScoped<ISubmissionRulesService, SubmissionRulesService>()
                 .AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>()
@@ -68,8 +67,12 @@ namespace Prime
             }
             else
             {
-                services.AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>()
-                    .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
+                services.AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
+                {
+                    var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.PHARMANET_API_USERNAME}:{PrimeConstants.PHARMANET_API_PASSWORD}");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
+                })
+                .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
             }
 
             services.AddControllers()
