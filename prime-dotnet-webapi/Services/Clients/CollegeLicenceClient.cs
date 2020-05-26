@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
-using System.Text;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -24,18 +22,17 @@ namespace Prime.Services.Clients
 
         public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
-            if (certification?.College?.Prefix == null)
+            if (certification == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(certification));
             }
 
-            var requestParams = new CollegeRecordRequestParams(certification.LicenseNumber, certification.College.Prefix);
-            var requestContent = new StringContent(JsonConvert.SerializeObject(requestParams));
+            var requestParams = new CollegeRecordRequestParams(certification);
 
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.PostAsync(PrimeConstants.PHARMANET_API_URL, requestContent);
+                response = await _client.PostAsync(PrimeConstants.PHARMANET_API_URL, requestParams.ToRequestContent());
             }
             catch (Exception ex)
             {
@@ -89,12 +86,17 @@ namespace Prime.Services.Clients
             public string licenceNumber { get; set; }
             public string collegeReferenceId { get; set; }
 
-            public CollegeRecordRequestParams(string licenceNumber, string collegeReferenceId)
+            public CollegeRecordRequestParams(Certification cert)
             {
                 applicationUUID = Guid.NewGuid().ToString();
                 programArea = "PRIME";
-                this.licenceNumber = licenceNumber;
-                this.collegeReferenceId = collegeReferenceId;
+                licenceNumber = cert.LicenseNumber ?? throw new ArgumentNullException(nameof(licenceNumber));
+                collegeReferenceId = cert.College?.Prefix ?? throw new ArgumentNullException(nameof(collegeReferenceId));
+            }
+
+            public StringContent ToRequestContent()
+            {
+                return new StringContent(JsonConvert.SerializeObject(this));
             }
         }
     }
