@@ -17,11 +17,11 @@ import { SiteRegistrationService } from '@registration/shared/services/site-regi
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 
 @Component({
-  selector: 'app-site-review',
-  templateUrl: './site-review.component.html',
-  styleUrls: ['./site-review.component.scss']
+  selector: 'app-site-overview',
+  templateUrl: './site-overview.component.html',
+  styleUrls: ['./site-overview.component.scss']
 })
-export class SiteReviewComponent implements OnInit, IPage {
+export class SiteOverviewComponent implements OnInit, IPage {
   public busy: Subscription;
   public routeUtils: RouteUtils;
   public site: Site;
