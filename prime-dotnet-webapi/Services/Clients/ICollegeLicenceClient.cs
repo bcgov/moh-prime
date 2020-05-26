@@ -5,6 +5,6 @@ namespace Prime.Services.Clients
 {
     public interface ICollegeLicenceClient
     {
-        Task<PharmanetCollegeRecord> GetPharmanetCollegeRecordAsync(Certification certification);
+        Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification);
     }
 }

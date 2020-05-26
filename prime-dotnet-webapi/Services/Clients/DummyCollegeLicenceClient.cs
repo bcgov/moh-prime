@@ -9,7 +9,7 @@ namespace Prime.Services.Clients
     /// </summary>
     public class DummyCollegeLicenceClient : ICollegeLicenceClient
     {
-        public Task<PharmanetCollegeRecord> GetPharmanetCollegeRecordAsync(Certification cert)
+        public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification cert)
         {
             if (cert.LicenseNumber == "error")
             {

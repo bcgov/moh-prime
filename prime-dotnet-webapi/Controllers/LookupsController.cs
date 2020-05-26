@@ -57,7 +57,7 @@ namespace Prime.Controllers
                 }
             };
 
-            var record = await _collegeLicenceClient.GetPharmanetCollegeRecordAsync(cert);
+            var record = await _collegeLicenceClient.GetCollegeRecordAsync(cert);
 
             return Ok(ApiResponse.Result(record));
         }

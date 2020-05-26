@@ -24,7 +24,7 @@ namespace Prime.Services.Clients
             _client = client;
         }
 
-        public async Task<PharmanetCollegeRecord> GetPharmanetCollegeRecordAsync(Certification certification)
+        public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
             if (certification.College == null)
             {

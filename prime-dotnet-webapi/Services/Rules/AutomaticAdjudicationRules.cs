@@ -74,7 +74,7 @@ namespace Prime.Services.Rules
                 PharmanetCollegeRecord record = null;
                 try
                 {
-                    record = await _collegeLicenceClient.GetPharmanetCollegeRecordAsync(cert);
+                    record = await _collegeLicenceClient.GetCollegeRecordAsync(cert);
                 }
                 catch (PharmanetCollegeApiException)
                 {
