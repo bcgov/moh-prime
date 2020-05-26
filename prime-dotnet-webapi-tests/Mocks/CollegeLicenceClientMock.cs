@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Prime.Models;
-using Prime.Services;
+using Prime.Services.Clients;
 
 namespace PrimeTests.Mocks
 {
-    public class PharmanetApiServiceMock : IPharmanetApiService
+    public class CollegeLicenceClientMock : ICollegeLicenceClient
     {
         [Flags]
         public enum OperationMode
@@ -24,19 +24,19 @@ namespace PrimeTests.Mocks
         private Enrollee _expectedEnrollee;
         private IEnumerator<OperationMode> _modeEnumerator;
 
-        public PharmanetApiServiceMock(Enrollee expectedEnrollee = null, params OperationMode[] modes)
+        public CollegeLicenceClientMock(Enrollee expectedEnrollee = null, params OperationMode[] modes)
         {
             _modeEnumerator = modes.AsEnumerable().GetEnumerator();
             _expectedEnrollee = expectedEnrollee;
         }
 
-        public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
+        public Task<PharmanetCollegeRecord> GetPharmanetCollegeRecordAsync(Certification certification)
         {
             OperationMode mode = GetNextMode();
 
             if (mode == OperationMode.Error)
             {
-                throw new PharmanetApiService.PharmanetCollegeApiException("PharmaNet Mock is in error mode.");
+                throw new PharmanetCollegeApiException("PharmaNet Mock is in error mode.");
             }
             if (mode.HasFlag(OperationMode.NoRecord))
             {
