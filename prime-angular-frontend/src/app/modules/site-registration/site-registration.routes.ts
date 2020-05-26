@@ -8,6 +8,7 @@ export class SiteRoutes {
   public static ORGANIZATION_AGREEMENT = 'access-agreement';
   public static VENDOR = 'vendor';
   public static HOURS_OPERATION = 'hours-operation';
+  public static REMOTE_USERS = 'remote-users';
   public static SIGNING_AUTHORITY = 'signing-authority';
   public static ADMINISTRATOR = 'administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
@@ -35,8 +36,9 @@ export class SiteRoutes {
   public static registrationRoutes(): string[] {
     return [
       ...SiteRoutes.noOrganizationAgreementRoutes(),
-      SiteRoutes.HOURS_OPERATION,
       SiteRoutes.VENDOR,
+      SiteRoutes.HOURS_OPERATION,
+      SiteRoutes.REMOTE_USERS,
       SiteRoutes.SIGNING_AUTHORITY,
       SiteRoutes.ADMINISTRATOR,
       SiteRoutes.PRIVACY_OFFICER,

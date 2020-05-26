@@ -24,6 +24,8 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
+import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { OrganizationAgreementComponent } from './pages/organization-agreement/o
     SiteCollectionNoticeComponent,
     SiteAddressComponent,
     OrganizationAgreementComponent,
-    SameAsComponent
+    SameAsComponent,
+    RemoteUsersComponent,
+    RemoteUserComponent
   ],
   imports: [
     SharedModule,

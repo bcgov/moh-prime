@@ -84,7 +84,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SIGNING_AUTHORITY);
+      this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
     }
   }
 

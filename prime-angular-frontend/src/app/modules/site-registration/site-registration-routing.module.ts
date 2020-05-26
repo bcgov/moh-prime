@@ -24,6 +24,8 @@ import { TechnicalSupportComponent } from './pages/technical-support/technical-s
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
+import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 
 const routes: Routes = [
   {
@@ -79,6 +81,19 @@ const routes: Routes = [
         component: HoursOperationComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Hours of Operation' }
+      },
+      {
+        path: SiteRoutes.REMOTE_USERS,
+        component: RemoteUsersComponent,
+        data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
+        children: [
+          {
+            path: ':id',
+            component: RemoteUserComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'Practitioner Requiring Remote PharmaNet Access' }
+          }
+        ]
       },
       {
         path: SiteRoutes.SIGNING_AUTHORITY,

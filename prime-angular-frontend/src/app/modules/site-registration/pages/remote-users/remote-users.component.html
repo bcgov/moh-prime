@@ -1,0 +1,52 @@
+<app-page>
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"
+                               [currentRoute]="SiteRoutes.REMOTE_USERS"></app-site-progress-indicator>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle></ng-container>
+    <ng-container appPageSubheaderSummary>
+      <p>
+        List every physician, nurse practitioner or non-dispensing pharmacist associated with the site who will access
+        PharmaNet from a location outside the physical boundaries of the authorized community practice location (e.g.,
+        from their home).
+      </p>
+      <p>
+        All practitioners requiring remote access must enrol in PRIME and accept the PharmaNet Regulated
+        User Terms of Access. Note that users, such as MOAs, accessing PharmaNet on behalf of a physician, nurse
+        practitioner or nondispensing pharmacist, are not permitted to access PharmaNet remotely.
+      </p>
+    </ng-container>
+  </app-page-subheader>
+
+  <mat-slide-toggle *ngIf="!remoteUsers?.length"
+                    color="primary"
+                    [checked]="!remoteUsers?.length"
+                    class="mb-3">No Remote Users</mat-slide-toggle>
+
+  <ng-container *ngFor="let remoteUser of remoteUsers; let i = index">
+    <mat-card class="has-hover">
+      <mat-card-header class="no-avatar">
+        <mat-card-title>{{ remoteUser.name }}</mat-card-title>
+        <button type="button"
+                mat-icon-button
+                color="primary"
+                matTooltip="Remove Remote User"
+                (click)="onRemove(i)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-actions>
+        <button mat-button
+                color="primary"
+                [routerLink]="[1]">View or Edit User's Details</button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
+
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

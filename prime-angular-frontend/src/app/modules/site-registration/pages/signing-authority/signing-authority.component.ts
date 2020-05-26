@@ -55,7 +55,7 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+    this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
   }
 
   public nextRoute() {
