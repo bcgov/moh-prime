@@ -1,6 +1,8 @@
 <ng-container *ngFor="let businessDay of businessDays; let i = index">
-  <mat-card>
-    <mat-card-header>
+  <mat-card class="has-hover">
+    <mat-card-header class="no-avatar">
+      <mat-card-title>{{ businessDay.day | weekday }}</mat-card-title>
+      <mat-card-subtitle>Hours of Operation</mat-card-subtitle>
       <button type="button"
               mat-icon-button
               color="primary"
@@ -10,15 +12,11 @@
       </button>
     </mat-card-header>
     <mat-card-content>
-      <h3>{{ businessDay.day | weekday }}</h3>
-      Hours of Operation
-      <div *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
+      <ng-container *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
         {{ businessDay.startTime | default: '0' }}:00 to {{ businessDay.endTime | default: '0' }}:00
-      </div>
+      </ng-container>
       <ng-template #open24Hours>
-        <div>
-          Open 24 hours
-        </div>
+        Open 24 hours
       </ng-template>
     </mat-card-content>
   </mat-card>
