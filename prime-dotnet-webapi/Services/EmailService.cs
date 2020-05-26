@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
+using System.Net.Http;
 using Prime.Models;
 
 namespace Prime.Services

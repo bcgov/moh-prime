@@ -20,8 +20,11 @@ using Serilog;
 
 using Prime.Auth;
 using Prime.Services;
+using Prime.Services.Clients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
+using System.Text;
+using System.Net.Http.Headers;
 
 namespace Prime
 {
@@ -42,22 +45,32 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ILookupService, LookupService>();
-            services.AddScoped<IEnrolleeService, EnrolleeService>();
-            services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
-            services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IPharmanetApiService, PharmanetApiService>();
-            services.AddScoped<IPrivilegeService, PrivilegeService>();
-            services.AddScoped<IAccessTermService, AccessTermService>();
-            services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
-            services.AddScoped<IAdminService, AdminService>();
-            services.AddScoped<IFeedbackService, FeedbackService>();
-            services.AddScoped<IBusinessEventService, BusinessEventService>();
-            services.AddScoped<ISubmissionService, SubmissionService>();
-            services.AddScoped<IRazorConverterService, RazorConverterService>();
-            services.AddScoped<ISiteService, SiteService>();
-            services.AddScoped<IPartyService, PartyService>();
+            services
+                .AddScoped<ILookupService, LookupService>()
+                .AddScoped<IEnrolleeService, EnrolleeService>()
+                .AddScoped<ISubmissionRulesService, SubmissionRulesService>()
+                .AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>()
+                .AddScoped<IEmailService, EmailService>()
+                .AddScoped<IPrivilegeService, PrivilegeService>()
+                .AddScoped<IAccessTermService, AccessTermService>()
+                .AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>()
+                .AddScoped<IAdminService, AdminService>()
+                .AddScoped<IFeedbackService, FeedbackService>()
+                .AddScoped<IBusinessEventService, BusinessEventService>()
+                .AddScoped<ISubmissionService, SubmissionService>()
+                .AddScoped<IRazorConverterService, RazorConverterService>()
+                .AddScoped<ISiteService, SiteService>()
+                .AddScoped<IPartyService, PartyService>();
+
+            if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            {
+                services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
+            }
+            else
+            {
+                services.AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>()
+                    .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
+            }
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
