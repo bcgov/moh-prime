@@ -4,7 +4,9 @@
                                [currentRoute]="SiteRoutes.REMOTE_USERS"></app-site-progress-indicator>
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle></ng-container>
+    <ng-container appPageSubheaderTitle>
+      Practitioners Requiring Remote PharmaNet Access
+    </ng-container>
     <ng-container appPageSubheaderSummary>
       <p>
         List every physician, nurse practitioner or non-dispensing pharmacist associated with the site who will access
@@ -24,8 +26,9 @@
                     [checked]="!remoteUsers?.length"
                     class="mb-3">No Remote Users</mat-slide-toggle>
 
-  <ng-container *ngFor="let remoteUser of remoteUsers; let i = index">
-    <mat-card class="has-hover">
+  <ng-container *ngFor="let remoteUser of remoteUsers; let i = index; let last = last">
+    <mat-card class="has-hover"
+              [class.mb-3]="last">
       <mat-card-header class="no-avatar">
         <mat-card-title>{{ remoteUser.name }}</mat-card-title>
         <button type="button"
@@ -43,6 +46,15 @@
       </mat-card-actions>
     </mat-card>
   </ng-container>
+
+  <button mat-button
+          type="button"
+          color="primary"
+          class="mb-3"
+          [routerLink]="[0]">
+    <mat-icon>add</mat-icon>
+    Add Remote User
+  </button>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"

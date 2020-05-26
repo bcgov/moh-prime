@@ -1,4 +1,5 @@
 @import 'palette';
+@import 'bootstrap/bootstrap-imports';
 
 //
 // MATERIAL CARD
@@ -46,5 +47,24 @@
   // likely be implemented at the component-level
   .mat-card-content {
     color: theme-palette(blue);
+  }
+
+  .mat-card-actions {
+    // Responsiveness of mat-card component actions are not optimally
+    // aligned, and forces an approach that is not mobile-first through
+    // the use of media-breakpoint-down to patch
+    @include media-breakpoint-down(sm) {
+      button {
+        // Allow mat-buttons to left align when stacked on small viewports
+        margin: 0;
+        &:not(:last-child) {
+          // Adjust spacing for small viewports
+          margin-right: 1rem;
+          // Create spacing between stacked buttons to provide gap so
+          // buttons are not miss clicked
+          margin-bottom: .5rem;
+        }
+      }
+    }
   }
 }
