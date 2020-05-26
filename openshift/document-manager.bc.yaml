@@ -1,0 +1,154 @@
+kind: Template
+apiVersion: v1
+labels:
+  template: document-manager-template
+metadata:
+  name: document-manager-bc
+  creationTimestamp: null
+parameters:
+  - name: NAME
+    displayName: Name
+    description: A prefix appended to all objects
+    required: true
+    value: document-manager
+  - name: SUFFIX
+    displayName: Name Suffix
+    description: A suffix appended to all objects
+    required: false
+  - name: VERSION
+    required: false
+  - name: SOURCE_CONTEXT_DIR
+    value: prime-database-backup
+    required: true
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: https://github.com/bcgov/moh-prime
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+  - name: OC_NAMESPACE
+    required: true
+    value: dqszvc
+  - name: OC_APP
+    required: true
+    value: dev
+  - name: FLASK_ENV
+    value: "production"
+    required: true
+  - name: STORAGE_CLASS
+    value: netapp-block-standard
+    required: true
+  - name: STORAGE_MODE
+    value: ReadWriteOnce
+    required: true
+  - description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
+    displayName: Volume Capacity
+    name: VOLUME_CAPACITY
+    required: true
+    value: 5Gi
+objects:
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ${NAME}${SUFFIX}
+      name: ${NAME}${SUFFIX}
+    spec:
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: ${NAME}${SUFFIX}:latest
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial
+      source:
+        contextDir: document-manager/
+        git:
+          ref: feature/PRIME-676-business-licence-upload
+          uri: https://github.com/bcgov/moh-prime.git
+        type: Git
+      strategy:
+        dockerStrategy:
+          noCache: true
+          dockerfilePath: openshift.dockerfile
+          env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: "postgresql-secret"
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                key: database-admin-password
+                name: "postgresql-secret"
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: "postgresql-secret"
+          - name: CACHE_REDIS_PASS
+            valueFrom:
+              secretKeyRef:
+                key: database-admin-password
+                name: "postgresql-secret"
+          - name: DB_NAME_TEST
+            value: postgres_test
+          - name: DB_HOST
+            value: postgresql${SUFFIX}
+          - name: DB_PORT
+            value: "5432"
+          - name: KEYCLOAK_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_CLIENT_ID
+                name: "keycloak"
+          - name: KEYCLOAK_REALM
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_REALM
+                name: "keycloak"
+          - name: KEYCLOAK_URL
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_URL
+                name: "keycloak"
+          - name: JWT_OIDC_WELL_KNOWN_CONFIG
+            valueFrom:
+              secretKeyRef:
+                key: JWT_WELL_KNOWN_CONFIG
+                name: "keycloak"
+          - name: JWT_OIDC_AUDIENCE
+            valueFrom:
+              secretKeyRef:
+                key: JWT_WELL_KNOWN_CONFIG
+                name: "KEYCLOAK_CLIENT_ID"
+          - name: JWT_OIDC_ALGORITHMS
+            value: RS256
+        type: Docker
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+    status:
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ${NAME}${SUFFIX}-backend
+      name: ${NAME}${SUFFIX}-backend
+    spec:
+      tags:
+      - annotations: null
+        from:
+          kind: DockerImage
+          name: ${NAME}${SUFFIX}-backend
+        generation: null
+        importPolicy: {}
+        name: latest
+    status:
+      dockerImageRepository: ""

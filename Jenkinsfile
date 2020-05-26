@@ -25,6 +25,7 @@ pipeline {
                     echo "Building ..."
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh build document-manager dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
             }
         }
@@ -41,6 +42,7 @@ pipeline {
                     sh "printenv"
                     sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    sh "./player.sh deploy document-manager dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
