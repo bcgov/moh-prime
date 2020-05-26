@@ -1,5 +1,6 @@
-<ng-container *ngFor="let businessDay of businessDays; let i = index">
-  <mat-card class="has-hover">
+<ng-container *ngFor="let businessDay of businessDays; let i = index; let last = last">
+  <mat-card class="has-hover"
+            [class.mb-3]="last">
     <mat-card-header class="no-avatar">
       <mat-card-title>{{ businessDay.day | weekday }}</mat-card-title>
       <mat-card-subtitle>Hours of Operation</mat-card-subtitle>
