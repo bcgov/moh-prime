@@ -105,8 +105,7 @@ namespace Prime.Services.Clients
     {
         public CollegeLicenceClientHandler() : base()
         {
-            X509Certificate2 certificate = new X509Certificate2(PrimeConstants.PHARMANET_SSL_CERT_FILENAME, PrimeConstants.PHARMANET_SSL_CERT_PASSWORD);
-            ClientCertificates.Add(certificate);
+            ClientCertificates.Add(new X509Certificate2(PrimeConstants.PHARMANET_SSL_CERT_FILENAME, PrimeConstants.PHARMANET_SSL_CERT_PASSWORD));
             ClientCertificateOptions = ClientCertificateOption.Manual;
         }
     }

@@ -72,7 +72,7 @@ namespace Prime
                     var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.PHARMANET_API_USERNAME}:{PrimeConstants.PHARMANET_API_PASSWORD}");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
                 })
-                .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
+                .ConfigurePrimaryHttpMessageHandler(() => new CollegeLicenceClientHandler());
             }
 
             services.AddControllers()
