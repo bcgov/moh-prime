@@ -46,20 +46,20 @@ namespace Prime
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<ILookupService, LookupService>()
-                .AddScoped<IEnrolleeService, EnrolleeService>()
-                .AddScoped<ISubmissionRulesService, SubmissionRulesService>()
-                .AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>()
-                .AddScoped<IEmailService, EmailService>()
-                .AddScoped<IPrivilegeService, PrivilegeService>()
-                .AddScoped<IAccessTermService, AccessTermService>()
-                .AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>()
-                .AddScoped<IAdminService, AdminService>()
-                .AddScoped<IFeedbackService, FeedbackService>()
-                .AddScoped<IBusinessEventService, BusinessEventService>()
-                .AddScoped<ISubmissionService, SubmissionService>()
-                .AddScoped<IRazorConverterService, RazorConverterService>()
-                .AddScoped<ISiteService, SiteService>()
-                .AddScoped<IPartyService, PartyService>();
+            .AddScoped<IEnrolleeService, EnrolleeService>()
+            .AddScoped<ISubmissionRulesService, SubmissionRulesService>()
+            .AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>()
+            .AddScoped<IEmailService, EmailService>()
+            .AddScoped<IPrivilegeService, PrivilegeService>()
+            .AddScoped<IAccessTermService, AccessTermService>()
+            .AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>()
+            .AddScoped<IAdminService, AdminService>()
+            .AddScoped<IFeedbackService, FeedbackService>()
+            .AddScoped<IBusinessEventService, BusinessEventService>()
+            .AddScoped<ISubmissionService, SubmissionService>()
+            .AddScoped<IRazorConverterService, RazorConverterService>()
+            .AddScoped<ISiteService, SiteService>()
+            .AddScoped<IPartyService, PartyService>();
 
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
@@ -67,19 +67,20 @@ namespace Prime
             }
             else
             {
-                services.AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
+                services.AddTransient<CollegeLicenceClientHandler>()
+                .AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
                 {
                     var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.PHARMANET_API_USERNAME}:{PrimeConstants.PHARMANET_API_PASSWORD}");
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
                 })
-                .ConfigurePrimaryHttpMessageHandler(() => new CollegeLicenceClientHandler());
+                .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
             }
 
             services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
-                });
+            .AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
+            });
 
             services.Configure<RouteOptions>(options =>
             {
