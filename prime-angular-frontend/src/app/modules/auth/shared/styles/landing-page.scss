@@ -88,13 +88,6 @@ a {
     background-image: url('/assets/step_1.mobile.svg');
     background-position-x: 14px;
     background-size: 36px auto;
-
-    .content {
-      // Force anchor to be on separate line
-      a {
-        display: block;
-      }
-    }
   }
   &.step-2 {
     background-image: url('/assets/step_2.mobile.svg');
