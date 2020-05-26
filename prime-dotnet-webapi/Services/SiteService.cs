@@ -360,7 +360,6 @@ namespace Prime.Services
                 .Include(s => s.Provisioner)
                 // .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Vendor)
-                .Include(e => e.SiteOrganizationTypes)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.Organization)
                         .ThenInclude(o => o.SigningAuthority)

@@ -32,7 +32,9 @@ namespace Prime.Models
 
         public Vendor Vendor { get; set; }
 
-        public ICollection<SiteOrganizationType> SiteOrganizationTypes { get; set; }
+        public int? OrganizationTypeCode { get; set; }
 
+        [JsonIgnore]
+        public OrganizationType OrganizationType { get; set; }
     }
 }

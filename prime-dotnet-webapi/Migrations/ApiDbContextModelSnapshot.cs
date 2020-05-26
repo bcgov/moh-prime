@@ -7933,6 +7933,9 @@ namespace Prime.Migrations
                     b.Property<int?>("LocationId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("OrganizationTypeCode")
+                        .HasColumnType("integer");
+
                     b.Property<string>("PEC")
                         .HasColumnType("text");
 
@@ -7954,6 +7957,8 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LocationId");
+
+                    b.HasIndex("OrganizationTypeCode");
 
                     b.HasIndex("ProvisionerId");
 
@@ -12057,6 +12062,10 @@ namespace Prime.Migrations
                         .WithMany("Sites")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
+                        .WithMany()
+                        .HasForeignKey("OrganizationTypeCode");
 
                     b.HasOne("Prime.Models.Party", "Provisioner")
                         .WithMany()
