@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
 
 namespace Prime.Models
 {
@@ -30,5 +30,7 @@ namespace Prime.Models
         public int? VendorId { get; set; }
 
         public Vendor Vendor { get; set; }
+
+        public IEnumerable<RemoteUser> RemoteUsers { get; set; }
     }
 }
