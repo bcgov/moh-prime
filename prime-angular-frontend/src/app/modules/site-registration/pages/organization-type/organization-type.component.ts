@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { Subscription, Observable } from 'rxjs';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -58,10 +58,6 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
     return (organizationTypeCode !== OrganizationTypeEnum.COMMUNITY_PRACTICE);
   }
 
-  public filterOrganizationTypes(organization: FormGroup) {
-    return this.organizationTypes;
-  }
-
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteRegistrationStateService.site;
@@ -99,7 +95,7 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.organizationInformationForm;
+    this.form = this.siteRegistrationStateService.organizationTypeForm;
   }
 
   private initForm() {
@@ -107,5 +103,4 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
     this.isCompleted = site?.completed;
     this.siteRegistrationStateService.setSite(site, true);
   }
-
 }
