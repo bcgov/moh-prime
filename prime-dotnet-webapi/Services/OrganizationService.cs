@@ -133,8 +133,8 @@ namespace Prime.Services
                 return;
             }
 
-            _context.Addresses.Remove(organization.SigningAuthority.PhysicalAddress);
-            _context.Parties.Remove(organization.SigningAuthority);
+            // _context.Addresses.Remove(organization.SigningAuthority.PhysicalAddress);
+            // _context.Parties.Remove(organization.SigningAuthority);
             _context.Organizations.Remove(organization);
 
             await _context.SaveChangesAsync();
