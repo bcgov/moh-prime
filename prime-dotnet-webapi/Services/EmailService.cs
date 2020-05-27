@@ -183,7 +183,6 @@ namespace Prime.Services
             }
         }
 
-
         public class EmailServiceException : Exception
         {
             public EmailServiceException() { }
