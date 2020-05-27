@@ -77,10 +77,10 @@ namespace Prime
             }
 
             services.AddControllers()
-            .AddNewtonsoftJson(options =>
-            {
-                options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
-            });
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
+                });
 
             services.Configure<RouteOptions>(options =>
             {
