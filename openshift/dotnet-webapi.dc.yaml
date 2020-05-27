@@ -175,7 +175,7 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       key: JWT_WELL_KNOWN_CONFIG
-                      name: "keycloak"
+                      name: "keycloak" 
               image: " "
               name: primeapi
               ports:
