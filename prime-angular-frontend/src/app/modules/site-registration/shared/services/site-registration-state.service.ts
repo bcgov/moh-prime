@@ -152,7 +152,7 @@ export class SiteRegistrationStateService {
         organization: {
           signingAuthorityId: signingAuthority?.id,
           signingAuthority,
-          organizationTypeCode: organizationTypeCode,
+          organizationTypeCode,
           ...organizationInformation
         },
         physicalAddressId: physicalAddress?.id,
