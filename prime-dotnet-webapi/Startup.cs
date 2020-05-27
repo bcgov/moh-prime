@@ -58,7 +58,6 @@ namespace Prime
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<IPartyService, PartyService>();
-            services.AddScoped<ICHESApiService, CHESApiService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
