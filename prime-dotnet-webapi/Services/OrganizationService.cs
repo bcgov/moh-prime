@@ -51,22 +51,23 @@ namespace Prime.Services
                 throw new ArgumentNullException(nameof(signingAuthority), "Could not create a site, the passed in Party cannot be null.");
             }
 
-            var signingAuthorityId = await _partyService.CreatePartyAsync(signingAuthority);
+            var partyExists = await _partyService.PartyExistsAsync(signingAuthority.Id);
+            var signingAuthorityId = signingAuthority.Id;
 
-            var organization = await this.GetOrganizationByPartyIdAsync(signingAuthorityId);
-
-            if (organization == null)
+            if (!partyExists)
             {
-                organization = new Organization
-                { SigningAuthorityId = signingAuthorityId };
+                signingAuthorityId = await _partyService.CreatePartyAsync(signingAuthority);
+            }
 
-                _context.Organizations.Add(organization);
+            var organization = new Organization
+            { SigningAuthorityId = signingAuthorityId };
 
-                var created = await _context.SaveChangesAsync();
-                if (created < 1)
-                {
-                    throw new InvalidOperationException("Could not create Organization.");
-                }
+            _context.Organizations.Add(organization);
+
+            var created = await _context.SaveChangesAsync();
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create Organization.");
             }
 
             return organization.Id;
