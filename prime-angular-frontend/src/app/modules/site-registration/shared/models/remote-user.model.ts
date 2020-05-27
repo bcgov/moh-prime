@@ -4,5 +4,5 @@ export interface RemoteUser {
   id?: number;
   firstName: string;
   lastName: string;
-  RemoteUserLocations: RemoteUserLocation[];
+  remoteUserLocations: RemoteUserLocation[];
 }

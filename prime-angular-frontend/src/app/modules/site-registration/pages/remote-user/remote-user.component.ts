@@ -30,6 +30,8 @@ export class RemoteUserComponent implements OnInit {
   ) { }
 
   public onSubmit() {
+    // TODO check validity of the local form
+    // TODO update the global form with changes
     // TODO want to save from here not in remote users, but only once not again in remote users
     // TODO should we be saving remote users individually or as wholesale PUT?
     // TODO DO NOT update state service form directly when editing a remote user

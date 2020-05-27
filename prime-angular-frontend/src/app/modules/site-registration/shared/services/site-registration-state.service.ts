@@ -3,6 +3,7 @@ import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '
 import { RouterEvent } from '@angular/router';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -12,7 +13,9 @@ import { Address } from '@shared/models/address.model';
 
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
+import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { RemoteUserLocation } from '../models/remote-user-location.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +24,7 @@ export class SiteRegistrationStateService {
   public organizationInformationForm: FormGroup;
   public siteAddressForm: FormGroup;
   public hoursOperationForm: FormGroup;
+  public remoteUsersForm: FormGroup;
   public vendorForm: FormGroup;
   public signingAuthorityForm: FormGroup;
   public privacyOfficerForm: FormGroup;
@@ -41,6 +45,7 @@ export class SiteRegistrationStateService {
     this.organizationInformationForm = this.buildOrganizationInformationForm();
     this.siteAddressForm = this.buildSiteAddressForm();
     this.hoursOperationForm = this.buildHoursOperationForm();
+    this.remoteUsersForm = this.buildRemoteUsersForm();
     this.vendorForm = this.buildVendorForm();
     this.signingAuthorityForm = this.buildSigningAuthorityForm();
     this.privacyOfficerForm = this.buildPrivacyOfficerForm();
@@ -96,6 +101,7 @@ export class SiteRegistrationStateService {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const physicalAddress = this.siteAddressForm.getRawValue();
     const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
+    const { remoteUsers } = this.remoteUsersForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
 
     // Adapt data for backend consumption
@@ -158,6 +164,7 @@ export class SiteRegistrationStateService {
       vendorId: vendor?.id,
       vendor,
       provisionerId: this.provisionerId,
+      remoteUsers
       // TODO where is PEC coming from?
       // pec
     } as Site; // Force type definition
@@ -232,6 +239,34 @@ export class SiteRegistrationStateService {
         const array = this.hoursOperationForm.get('businessDays') as FormArray;
         array.clear(); // Clear out existing indices
         this.formUtilsService.formArrayPush(array, site.location.businessHours);
+      }
+
+      if (site.remoteUsers?.length) {
+        const form = this.remoteUsersForm;
+        const remoteUsersFormArray = form.get('remoteUsers') as FormArray;
+        remoteUsersFormArray.clear(); // Clear out existing indices
+
+        // Omitted from payload, but provided in the form to allow for
+        // validation to occur when "Have Remote Users" is toggled
+        // TODO component-level add control on init and remove control on submission to drop from state service
+        form.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
+
+        // Create and populate the remote user form structure
+        site.remoteUsers.forEach(({ id, firstName, lastName, remoteUserLocations }: RemoteUser) => {
+          const remoteUserFormGroup = this.remoteUserFormGroup() as FormGroup;
+          remoteUserFormGroup.patchValue({ id, firstName, lastName });
+          const remoteUserLocationsFormArray = remoteUserFormGroup.get('remoteUserLocations') as FormArray;
+          remoteUserLocations
+            .map((rul: RemoteUserLocation) => {
+              const formGroup = this.remoteUserLocationFormGroup();
+              formGroup.patchValue(rul);
+              return formGroup;
+            })
+            .forEach((remoteUserLocationFormGroup: FormGroup) => {
+              remoteUserLocationsFormArray.push(remoteUserLocationFormGroup);
+            });
+          remoteUsersFormArray.push(remoteUserFormGroup);
+        });
       }
 
       [
@@ -325,6 +360,53 @@ export class SiteRegistrationStateService {
     });
   }
 
+  public buildRemoteUsersForm(): FormGroup {
+    return this.fb.group({
+      // Omitted from payload, but provided in the form to allow for
+      // validation to occur when "Have Remote Users" is toggled
+      hasRemoteUsers: [
+        false,
+        []
+      ],
+      remoteUsers: this.fb.array(
+        [],
+        // TODO at least one if has remote users if hasRemoteUsers is checked validator
+        []
+      )
+    });
+  }
+
+  private remoteUserFormGroup(): FormGroup {
+    return this.fb.group({
+      id: [
+        null,
+        [Validators.required]
+      ],
+      firstName: [
+        null,
+        [Validators.required]
+      ],
+      lastName: [
+        null,
+        [Validators.required]
+      ],
+      remoteUserLocations: this.fb.array(
+        [],
+        [FormArrayValidators.atLeast(1)]
+      )
+    });
+  }
+
+  private remoteUserLocationFormGroup(): FormGroup {
+    return this.fb.group({
+      internetProvider: [
+        null,
+        [Validators.required]
+      ],
+      physicalAddress: this.physicalAddressFormGroup(true)
+    });
+  }
+
   private buildVendorForm(): FormGroup {
     return this.fb.group({
       id: [
@@ -397,37 +479,42 @@ export class SiteRegistrationStateService {
           FormControlValidators.email
         ]
       ],
-      physicalAddress: this.fb.group({
-        // TODO should this be null or 0?
-        id: [
-          0,
-          []
-        ],
-        countryCode: [
-          { value: null, disabled: false },
-          []
-        ],
-        provinceCode: [
-          { value: null, disabled: false },
-          []
-        ],
-        street: [
-          { value: null, disabled: false },
-          []
-        ],
-        street2: [
-          { value: null, disabled: false },
-          []
-        ],
-        city: [
-          { value: null, disabled: false },
-          []
-        ],
-        postal: [
-          { value: null, disabled: false },
-          []
-        ]
-      })
+      physicalAddress: this.physicalAddressFormGroup()
+    });
+  }
+
+  private physicalAddressFormGroup(isRequired: boolean = false): FormGroup {
+    const validators = (isRequired) ? [Validators.required] : [];
+
+    return this.fb.group({
+      id: [
+        0,
+        []
+      ],
+      countryCode: [
+        { value: null, disabled: false },
+        validators
+      ],
+      provinceCode: [
+        { value: null, disabled: false },
+        validators
+      ],
+      street: [
+        { value: null, disabled: false },
+        validators
+      ],
+      street2: [
+        { value: null, disabled: false },
+        validators
+      ],
+      city: [
+        { value: null, disabled: false },
+        validators
+      ],
+      postal: [
+        { value: null, disabled: false },
+        validators
+      ]
     });
   }
 }

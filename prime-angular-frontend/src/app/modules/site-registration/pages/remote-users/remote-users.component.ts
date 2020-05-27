@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Subscription } from 'rxjs';
+
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
@@ -9,7 +12,6 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-remote-users',
@@ -29,7 +31,8 @@ export class RemoteUsersComponent implements OnInit {
     private router: Router,
     private siteRegistrationResource: SiteRegistrationResource,
     private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService
+    private siteRegistrationStateService: SiteRegistrationStateService,
+    private formUtilsService: FormUtilsService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
@@ -37,12 +40,15 @@ export class RemoteUsersComponent implements OnInit {
   public onSubmit() {
     // TODO apply validation if remote users is on, but there are no remote users
     // TODO submit remote users
+
+    // if (this.formUtilsService.checkValidity(this.form)) {
     //   const payload = this.siteRegistrationStateService.site;
     //   this.siteRegistrationResource
     //     .updateSite(payload)
     //     .subscribe(() =>
     this.nextRoute();
     //     );
+    // }
   }
 
   public onRemove(index: number) {
@@ -55,32 +61,24 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.HOURS_OPERATION]);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SIGNING_AUTHORITY);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SIGNING_AUTHORITY]);
     }
   }
 
-  // TODO toggle on/off
-  // TODO toggle show if no users in list
-
   public ngOnInit(): void {
-    // TODO get a list of remote users
-    this.remoteUsers = [
-      {
-        firstName: 'Martin',
-        lastName: 'Pultz',
+    const site = this.siteRegistrationService.site;
+    this.isCompleted = site?.completed;
+    this.siteRegistrationStateService.setSite(site, true);
 
-      }
-    ];
-    // Automatically set based on results, but has to be
-    // manually toggled by the user to change it and
-    // avoid validations
-    this.hasRemoteUsers = !!this.remoteUsers.length;
+    const { hasRemoteUsers, remoteUsers } = this.siteRegistrationStateService.remoteUsersForm.getRawValue();
+    this.hasRemoteUsers = hasRemoteUsers;
+    this.remoteUsers = remoteUsers;
   }
 }
