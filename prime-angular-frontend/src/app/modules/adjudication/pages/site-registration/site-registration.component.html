@@ -1,0 +1,19 @@
+<app-page [busy]="busy">
+
+  <app-page-header>Site Registration</app-page-header>
+
+  <app-site-review *ngIf="site"
+                   [showEditRedirect]="false"
+                   [siteInput]="site"></app-site-review>
+
+  <div class="row justify-content-between">
+    <div class="col pt-4">
+
+      <button mat-stroked-button
+              type="button"
+              (click)="routeRelativeTo(['./../'])">Back</button>
+
+    </div>
+  </div>
+
+</app-page>

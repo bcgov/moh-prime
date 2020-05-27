@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using Xunit;
 
 using Prime.Models;
-using Prime.Services;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
 using PrimeTests.Mocks;
-using static PrimeTests.Mocks.PharmanetApiServiceMock;
+using static PrimeTests.Mocks.CollegeLicenceClientMock;
 using PrimeTests.ModelFactories;
 
 namespace PrimeTests.UnitTests
@@ -144,7 +143,7 @@ namespace PrimeTests.UnitTests
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateCertifications(enrollee, apiModes.Length);
-            var rule = new PharmanetValidationRule(new PharmanetApiServiceMock(enrollee, apiModes));
+            var rule = new PharmanetValidationRule(new CollegeLicenceClientMock(enrollee, apiModes));
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasons);

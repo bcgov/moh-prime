@@ -20,6 +20,7 @@ import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
+import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
 
 const routes: Routes = [
   {
@@ -99,8 +100,23 @@ const routes: Routes = [
       },
       {
         path: AdjudicationRoutes.SITE_REGISTRATIONS,
-        component: SiteRegistrationsComponent,
-        data: { title: 'Site Registrations' }
+        children: [
+          {
+            path: '',
+            component: SiteRegistrationsComponent,
+            data: { title: 'Site Registrations' }
+          },
+          {
+            path: ':id',
+            children: [
+              {
+                path: AdjudicationRoutes.SITE_REGISTRATION,
+                component: SiteRegistrationComponent,
+                data: { title: 'Site Reigstration' }
+              }
+            ]
+          },
+        ]
       },
       {
         path: '', // Equivalent to `/` and alias for `enrollees`

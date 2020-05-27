@@ -6587,6 +6587,9 @@ namespace Prime.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int?>("OrganizationTypeCode")
+                        .HasColumnType("integer");
+
                     b.Property<string>("RegistrationId")
                         .HasColumnType("text");
 
@@ -6600,6 +6603,8 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrganizationTypeCode");
 
                     b.HasIndex("SigningAuthorityId");
 
@@ -12010,6 +12015,10 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
+                    b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
+                        .WithMany()
+                        .HasForeignKey("OrganizationTypeCode");
+
                     b.HasOne("Prime.Models.Party", "SigningAuthority")
                         .WithMany()
                         .HasForeignKey("SigningAuthorityId")
