@@ -1,22 +1,25 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+
+import { Subscription, Observable } from 'rxjs';
+
+import { Config } from '@config/config.model';
+import { ConfigService } from '@config/config.service';
+import { UtilsService } from '@core/services/utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { Organization } from '@enrolment/shared/models/organization.model';
+
+import { SiteRoutes } from '@registration/site-registration.routes';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { Subscription, Observable } from 'rxjs';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { SiteRoutes } from '@registration/site-registration.routes';
-import { ActivatedRoute, Router } from '@angular/router';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { UtilsService } from '@core/services/utils.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Config } from '@config/config.model';
-import { ConfigService } from '@config/config.service';
-import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
-import { Organization } from '@enrolment/shared/models/organization.model';
 
 @Component({
   selector: 'app-organization-type',
