@@ -8,17 +8,17 @@ namespace Prime.Migrations
         {
             migrationBuilder.AddColumn<int>(
                 name: "OrganizationTypeCode",
-                table: "Site",
+                table: "Organization",
                 nullable: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Site_OrganizationTypeCode",
-                table: "Site",
+                name: "IX_Organization_OrganizationTypeCode",
+                table: "Organization",
                 column: "OrganizationTypeCode");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Site_OrganizationTypeLookup_OrganizationTypeCode",
-                table: "Site",
+                name: "FK_Organization_OrganizationTypeLookup_OrganizationTypeCode",
+                table: "Organization",
                 column: "OrganizationTypeCode",
                 principalTable: "OrganizationTypeLookup",
                 principalColumn: "Code",
@@ -28,16 +28,16 @@ namespace Prime.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Site_OrganizationTypeLookup_OrganizationTypeCode",
-                table: "Site");
+                name: "FK_Organization_OrganizationTypeLookup_OrganizationTypeCode",
+                table: "Organization");
 
             migrationBuilder.DropIndex(
-                name: "IX_Site_OrganizationTypeCode",
-                table: "Site");
+                name: "IX_Organization_OrganizationTypeCode",
+                table: "Organization");
 
             migrationBuilder.DropColumn(
                 name: "OrganizationTypeCode",
-                table: "Site");
+                table: "Organization");
         }
     }
 }

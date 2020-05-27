@@ -31,10 +31,5 @@ namespace Prime.Models
         public int? VendorId { get; set; }
 
         public Vendor Vendor { get; set; }
-
-        public int? OrganizationTypeCode { get; set; }
-
-        [JsonIgnore]
-        public OrganizationType OrganizationType { get; set; }
     }
 }
