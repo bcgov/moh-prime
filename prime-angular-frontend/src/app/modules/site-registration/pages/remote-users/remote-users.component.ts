@@ -4,10 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-remote-users',
@@ -18,7 +20,8 @@ export class RemoteUsersComponent implements OnInit {
   public busy: Subscription;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
-  public remoteUsers: RemoteUser;
+  public hasRemoteUsers: boolean;
+  public remoteUsers: RemoteUser[];
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -26,7 +29,7 @@ export class RemoteUsersComponent implements OnInit {
     private router: Router,
     private siteRegistrationResource: SiteRegistrationResource,
     private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private siteRegistrationStateService: SiteRegistrationStateService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
@@ -42,8 +45,13 @@ export class RemoteUsersComponent implements OnInit {
     //     );
   }
 
-  public onRemove() {
-    // TODO update
+  public onRemove(index: number) {
+    // TODO update and then remove the from the list locally
+    this.remoteUsers.splice(index, 1);
+  }
+
+  public onToggleRemoteUsers(change: MatSlideToggleChange) {
+    this.hasRemoteUsers = change.checked;
   }
 
   public onBack() {
@@ -65,11 +73,14 @@ export class RemoteUsersComponent implements OnInit {
     // TODO get a list of remote users
     this.remoteUsers = [
       {
-        name: 'Martin Pultz'
-      },
-      {
-        name: 'Jamie Dormaar'
+        firstName: 'Martin',
+        lastName: 'Pultz',
+
       }
     ];
+    // Automatically set based on results, but has to be
+    // manually toggled by the user to change it and
+    // avoid validations
+    this.hasRemoteUsers = !!this.remoteUsers.length;
   }
 }
