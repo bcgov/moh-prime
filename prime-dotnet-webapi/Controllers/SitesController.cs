@@ -172,23 +172,6 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(site));
         }
 
-        // GET: api/Sites/organization-agreement
-        /// <summary>
-        /// Get the organization agreement.
-        /// </summary>
-        [HttpGet("organization-agreement", Name = nameof(GetOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetOrganizationAgreement()
-        {
-            var agreement = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", new Site());
-
-            return Ok(ApiResponse.Result(agreement));
-        }
-
         // POST: api/sites/5/submission
         /// <summary>
         /// Submits the given site for adjudication.
