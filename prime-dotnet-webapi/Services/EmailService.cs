@@ -6,9 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using Prime.Models;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Prime.Services
 {
