@@ -71,7 +71,7 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.MULTIPLE_SITES);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_INFORMATION);
   }
 
   public nextRoute() {

@@ -98,7 +98,7 @@ export class SiteRegistrationStateService {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const physicalAddress = this.siteAddressForm.getRawValue();
     const businessHours = this.hoursOperationForm.getRawValue().businessDays;
-    const organizationType = this.organizationTypeForm.getRawValue();
+    const { organizationTypeCode } = this.organizationTypeForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
 
     // Adapt data for backend consumption
@@ -152,7 +152,7 @@ export class SiteRegistrationStateService {
         organization: {
           signingAuthorityId: signingAuthority?.id,
           signingAuthority,
-          organizationTypeCode: organizationType?.code,
+          organizationTypeCode: organizationTypeCode,
           ...organizationInformation
         },
         physicalAddressId: physicalAddress?.id,
@@ -230,6 +230,7 @@ export class SiteRegistrationStateService {
   private patchSite(site: Site) {
     if (site) {
       this.organizationInformationForm.patchValue(site.location.organization);
+      this.organizationTypeForm.patchValue(site.location.organization);
       if (site.location.physicalAddress) {
         this.siteAddressForm.patchValue(site.location.physicalAddress);
       }
