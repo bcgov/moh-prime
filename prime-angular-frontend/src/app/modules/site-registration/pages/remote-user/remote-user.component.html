@@ -1,1 +1,67 @@
-<p>remote-user works!</p>
+<app-page>
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"
+                               [currentRoute]="SiteRoutes.REMOTE_USERS"></app-site-progress-indicator>
+
+  <form [formGroup]="form"
+        (ngOnSubmit)="onSubmit()"
+        novalidate>
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>
+        Remote User
+      </ng-container>
+      <!-- <ng-container appPageSubheaderSummary></ng-container> -->
+    </app-page-subheader>
+
+    <section class="mb-3">
+      <div class="row">
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="First Name"
+                   formControlName="firstName">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Last Name"
+                   formControlName="lastName">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+    </section>
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>
+        Remote User
+      </ng-container>
+      <ng-container appPageSubheaderSummary>
+        The remote address is the location the practitioner will be accessing PharmaNet outside the physical boundaries
+        of the authorized community practice location (e.g., from their home.) The remote address cannot be another
+        healthcare practice setting.
+      </ng-container>
+    </app-page-subheader>
+
+
+    <!-- <ng-container *ngFor="let remoteUser of remoteUsers.controls"
+                  formArrayName="remoteUserLocations">
+
+    </ng-container> -->
+
+    <!-- TODO customize page footer to allow overriding the default labels: Back and Save Remote User -->
+    <!-- <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer> -->
+
+  </form>
+
+</app-page>

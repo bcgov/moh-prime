@@ -95,7 +95,7 @@ export class SiteRegistrationStateService {
   public get site(): Site {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const physicalAddress = this.siteAddressForm.getRawValue();
-    const businessHours = this.hoursOperationForm.getRawValue().businessDays;
+    const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
 
     // Adapt data for backend consumption
