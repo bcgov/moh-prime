@@ -84,9 +84,12 @@ const routes: Routes = [
       },
       {
         path: SiteRoutes.REMOTE_USERS,
-        component: RemoteUsersComponent,
-        data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
         children: [
+          {
+            path: '',
+            component: RemoteUsersComponent,
+            data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
+          },
           {
             path: ':id',
             component: RemoteUserComponent,
