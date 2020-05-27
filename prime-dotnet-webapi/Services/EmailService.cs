@@ -40,17 +40,14 @@ namespace Prime.Services
         private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
 
         private readonly IRazorConverterService _razorConverterService;
-        private readonly ICHESApiService _chesApiService;
 
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IRazorConverterService razorConverterService,
-            ICHESApiService chesApiService)
+            IRazorConverterService razorConverterService)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
-            _chesApiService = chesApiService;
         }
 
         public static bool IsValidEmail(string email)
@@ -144,54 +141,45 @@ namespace Prime.Services
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }
 
-            // If CHES Email Service is running and ENV == prod, else send through smtp
-            // PrimeConstants.ENVIRONMENT_NAME == "prod"
-            if (await _chesApiService.HealthCheckAsync())
+            MailMessage mail = new MailMessage()
             {
-                await _chesApiService.SendAsync(from, to, cc, subject, body);
+                From = fromAddress,
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true,
+            };
+
+            foreach (var address in toAddresses)
+            {
+                mail.To.Add(address);
             }
-            else
+
+            foreach (var address in ccAddresses)
             {
-                MailMessage mail = new MailMessage()
-                {
-                    From = fromAddress,
-                    Subject = subject,
-                    Body = body,
-                    IsBodyHtml = true,
-                };
+                mail.CC.Add(address);
+            }
 
-                foreach (var address in toAddresses)
+            SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL, PrimeConstants.MAIL_SERVER_PORT);
+            try
+            {
+                await smtp.SendMailAsync(mail);
+            }
+            catch (Exception ex)
+            {
+                if (ex is InvalidOperationException
+                    || ex is SmtpException
+                    || ex is SmtpFailedRecipientException
+                    || ex is SmtpFailedRecipientsException)
                 {
-                    mail.To.Add(address);
+                    // TODO log mail exception
                 }
 
-                foreach (var address in ccAddresses)
-                {
-                    mail.CC.Add(address);
-                }
-
-                SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL, PrimeConstants.MAIL_SERVER_PORT);
-                try
-                {
-                    await smtp.SendMailAsync(mail);
-                }
-                catch (Exception ex)
-                {
-                    if (ex is InvalidOperationException
-                        || ex is SmtpException
-                        || ex is SmtpFailedRecipientException
-                        || ex is SmtpFailedRecipientsException)
-                    {
-                        // TODO log mail exception
-                    }
-
-                    throw;
-                }
-                finally
-                {
-                    smtp.Dispose();
-                    mail.Dispose();
-                }
+                throw;
+            }
+            finally
+            {
+                smtp.Dispose();
+                mail.Dispose();
             }
         }
 
