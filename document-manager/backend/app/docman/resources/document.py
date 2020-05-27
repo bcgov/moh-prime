@@ -91,10 +91,10 @@ class DocumentListResource(Resource):
         return response
 
     def get(self):
-        token_guid = request.args.get('token', '')
+        doc_guid = request.args.get('token', '')
         attachment = request.args.get('as_attachment', None)
-        doc_guid = cache.get(DOWNLOAD_TOKEN(token_guid))
-        cache.delete(DOWNLOAD_TOKEN(token_guid))
+        # doc_guid = cache.get(DOWNLOAD_TOKEN(token_guid))
+        # cache.delete(DOWNLOAD_TOKEN(token_guid))
 
         if not doc_guid:
             raise BadRequest('Valid token required for download')

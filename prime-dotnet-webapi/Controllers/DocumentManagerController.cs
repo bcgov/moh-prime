@@ -91,5 +91,23 @@ namespace Prime.Controllers
             return Ok();
         }
 
+        // GET: api/Document/token?attachment=false
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="documentGuid"></param>
+        /// <param name="attachment"></param>
+        [HttpGet("{documentGuid}", Name = nameof(GetFileFromDocumentManager))]
+        [ProducesResponseType(StatusCodes.Status302Found)]
+        public Task<RedirectResult> GetFileFromDocumentManager(Guid documentGuid, [FromQuery] string attachment)
+        {
+            var suffix = "";
+            if (attachment != null)
+            {
+                suffix = $"&as_attachment={attachment}";
+            }
+            return Task.FromResult(Redirect($"{PrimeConstants.DOCUMENT_MANAGER_URL}?token={documentGuid}{suffix}"));
+        }
+
     }
 }
