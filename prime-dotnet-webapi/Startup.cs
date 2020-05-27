@@ -45,21 +45,21 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ILookupService, LookupService>()
-            .AddScoped<IEnrolleeService, EnrolleeService>()
-            .AddScoped<ISubmissionRulesService, SubmissionRulesService>()
-            .AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>()
-            .AddScoped<IEmailService, EmailService>()
-            .AddScoped<IPrivilegeService, PrivilegeService>()
-            .AddScoped<IAccessTermService, AccessTermService>()
-            .AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>()
-            .AddScoped<IAdminService, AdminService>()
-            .AddScoped<IFeedbackService, FeedbackService>()
-            .AddScoped<IBusinessEventService, BusinessEventService>()
-            .AddScoped<ISubmissionService, SubmissionService>()
-            .AddScoped<IRazorConverterService, RazorConverterService>()
-            .AddScoped<ISiteService, SiteService>()
-            .AddScoped<IPartyService, PartyService>();
+            services.AddScoped<ILookupService, LookupService>();
+            services.AddScoped<IEnrolleeService, EnrolleeService>();
+            services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
+            services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPrivilegeService, PrivilegeService>();
+            services.AddScoped<IAccessTermService, AccessTermService>();
+            services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IBusinessEventService, BusinessEventService>();
+            services.AddScoped<ISubmissionService, SubmissionService>();
+            services.AddScoped<IRazorConverterService, RazorConverterService>();
+            services.AddScoped<ISiteService, SiteService>();
+            services.AddScoped<IPartyService, PartyService>();
 
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
