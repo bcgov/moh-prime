@@ -111,7 +111,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
     }
   }
 
