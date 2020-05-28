@@ -85,21 +85,16 @@ namespace Prime.Controllers
         // POST: api/Sites
         /// <summary>
         /// Creates a new Site.
+        /// <param name="organizationId"></param>
         /// </summary>
         [HttpPost(Name = nameof(CreateSite))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Site>> CreateSite(Party party)
+        public async Task<ActionResult<Site>> CreateSite(int organizationId)
         {
-            if (party == null)
-            {
-                this.ModelState.AddModelError("Party", "Could not create an site, the passed in Party cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
-            }
-
-            var createdSiteId = await _siteService.CreateSiteAsync(party);
+            var createdSiteId = await _siteService.CreateSiteAsync(organizationId);
 
             var createdSite = await _siteService.GetSiteAsync(createdSiteId);
 

@@ -47,23 +47,21 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(s => s.Id == siteId);
         }
 
-        public async Task<int> CreateSiteAsync(Party provisioner)
+        public async Task<int> CreateSiteAsync(int organizationId)
         {
-            if (provisioner == null)
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+
+            if (organization == null)
             {
-                throw new ArgumentNullException(nameof(provisioner), "Could not create a site, the passed in Party cannot be null.");
+                throw new ArgumentNullException(nameof(organization), "Could not create a site, the passed in Organization doesnt exist.");
             }
-
-            var provsionerId = await _partyService.CreatePartyAsync(provisioner);
-
-            // Site provisionerId should be equal to organization signingAuthorityId
-            var organization = await _organizationService.GetOrganizationByPartyIdAsync(provsionerId);
 
             var location = new Location { OrganizationId = organization.Id };
 
+            // Site provisionerId should be equal to organization signingAuthorityId
             var site = new Site
             {
-                ProvisionerId = provsionerId,
+                ProvisionerId = organization.SigningAuthorityId,
                 Location = location
             };
 
@@ -75,7 +73,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create Site.");
             }
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, provsionerId, "Site Created");
+            await _businessEventService.CreateSiteEventAsync(site.Id, organization.SigningAuthorityId, "Site Created");
 
             return site.Id;
         }
