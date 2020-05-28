@@ -90,6 +90,7 @@ const routes: Routes = [
                 data: { title: 'Organization Review' }
               },
               {
+                // TODO need a guard/component redirect back to signing authority if not completed
                 path: '', // Equivalent to `/` and alias for `organizations`
                 redirectTo: SiteRoutes.ORGANIZATION_REVIEW,
                 pathMatch: 'full'

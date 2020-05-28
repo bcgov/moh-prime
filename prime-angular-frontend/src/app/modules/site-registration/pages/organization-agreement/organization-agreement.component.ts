@@ -42,24 +42,26 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public onSubmit() {
-    if (this.accepted.checked) {
-      const siteId = this.siteRegistrationService.site?.id;
-      const data: DialogOptions = {
-        title: 'Organization Agreement',
-        message: 'Are you sure you want to accept the Organization Agreement?',
-        actionText: 'Accept Organization Agreement'
-      };
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? this.siteRegistrationResource.acceptCurrentOrganizationAgreement(siteId)
-              : EMPTY
-          )
-        )
-        .subscribe(() => this.nextRoute());
-    }
+    // if (this.accepted.checked) {
+    //   const siteId = this.siteRegistrationService.site?.id;
+    //   const data: DialogOptions = {
+    //     title: 'Organization Agreement',
+    //     message: 'Are you sure you want to accept the Organization Agreement?',
+    //     actionText: 'Accept Organization Agreement'
+    //   };
+    //   this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+    //     .afterClosed()
+    //     .pipe(
+    //       exhaustMap((result: boolean) =>
+    //         (result)
+    //           ? this.siteRegistrationResource.acceptCurrentOrganizationAgreement(siteId)
+    //           : EMPTY
+    //       )
+    //     )
+    //     .subscribe(() =>
+    this.nextRoute()
+    //     );
+    // }
   }
 
   public onBack() {

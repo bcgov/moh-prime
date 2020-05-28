@@ -63,15 +63,15 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    //   const payload = this.siteRegistrationStateService.site;
+    //   this.siteRegistrationResource
+    //     .updateSite(payload)
+    //     .subscribe(() => {
+    //       this.form.markAsPristine();
+    this.nextRoute();
+    // });
+    // }
   }
 
   public onSelect({ option }: MatAutocompleteSelectedEvent) {
