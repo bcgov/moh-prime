@@ -1,6 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <!-- TODO allow base progress indicator to not have a message by default -->
+  <!-- TODO allow base progress indicator to not have a message by default instead of hacking in a space -->
   <app-site-progress-indicator [inProgress]="false"
                                message=" "></app-site-progress-indicator>
 
@@ -14,35 +14,48 @@
       </ng-container>
     </app-page-subheader>
 
+    <!-- TODO if you have no organization show a special mat-card to nudge them in the right direction -->
     <!-- TODO new design coming for organizations don't bother tightening up -->
-    <mat-card class="mb-3">
-      <mat-card-header class="no-avatar">
-        <mat-card-title>Organization Information</mat-card-title>
-        <!-- TODO remove icon added to top right, or -->
-        <!-- TODO more options icon added to top right -->
-      </mat-card-header>
-      <!-- <mat-card-content></mat-card-content> -->
-      <mat-card-actions>
-        <button mat-button
-                color="primary"
-                [routerLink]="[1, SiteRoutes.SIGNING_AUTHORITY]">Add Information</button>
-      </mat-card-actions>
-    </mat-card>
+    <ng-container *ngFor="let organization of organizations; let i = index">
+
+      <mat-card class="has-hover mb-3">
+        <mat-card-header class="no-avatar">
+          <mat-card-title>{{ organization.name | default: 'Organization Information' }}</mat-card-title>
+          <mat-card-subtitle>
+            Signing Authority:
+            {{ organization.signingAuthority.firstName }}
+            {{ organization.signingAuthority.lastName }}
+          </mat-card-subtitle>
+          <!-- TODO remove icon added to top right, or -->
+          <!-- TODO more options icon added to top right -->
+        </mat-card-header>
+        <mat-card-content>
+          Doing Business As: {{ organization.doingBusinessAs }}<br>
+              Accepted Agreement Date: {{ organization.acceptedAgreementDate }}<br>
+            </mat-card-content>
+        <mat-card-actions>
+          <button mat-button
+                  color="primary"
+                  [routerLink]="[organization.id, SiteRoutes.SIGNING_AUTHORITY]">Add Information</button>
+        </mat-card-actions>
+      </mat-card>
+
+    </ng-container>
 
     <!-- TODO removed in new design coming for organizations don't bother tightening up -->
     <!-- TODO replicate on multiple sites -->
-    <mat-card class="mb-3">
-      <mat-card-header class="no-avatar">
-        <mat-card-title>Site Information</mat-card-title>
-        <!-- TODO remove icon added to top right -->
-      </mat-card-header>
-      <!-- <mat-card-content></mat-card-content> -->
-      <mat-card-actions>
-        <button mat-button
-                color="primary"
-                [routerLink]="[1, SiteRoutes.SITES, 1, SiteRoutes.SITE_ADDRESS]">Add Information</button>
-      </mat-card-actions>
-    </mat-card>
+    <!-- TODO remove icon added to top right -->
+    <!-- <mat-card class="has-hover mb-3">
+          <mat-card-header class="no-avatar">
+            <mat-card-title>Site Information</mat-card-title>
+          </mat-card-header>
+          <mat-card-content></mat-card-content>
+          <mat-card-actions>
+            <button mat-button
+                    color="primary"
+                    [routerLink]="[1, SiteRoutes.SITES, 1, SiteRoutes.SITE_ADDRESS]">Add Information</button>
+          </mat-card-actions>
+        </mat-card> -->
 
     <button mat-button
             type="button"

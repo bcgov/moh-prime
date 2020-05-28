@@ -18,13 +18,10 @@ import { Party } from '@registration/shared/models/party.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
-/**
- * @deprecated
- */
 @Injectable({
   providedIn: 'root'
 })
-export class SiteRegistrationResource {
+export class SiteResourceService {
   constructor(
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
@@ -55,7 +52,7 @@ export class SiteRegistrationResource {
         tap((sites: Site[]) => this.logger.info('SITES', sites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::getSites error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);
           throw error;
         })
       );
@@ -82,7 +79,7 @@ export class SiteRegistrationResource {
         tap((site: Site) => this.logger.info('SITE', site)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be retrieved');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::getSiteById error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::getSiteById error has occurred: ', error);
           throw error;
         })
       );
@@ -98,7 +95,7 @@ export class SiteRegistrationResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be created');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::createSite error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::createSite error has occurred: ', error);
           throw error;
         })
       );
@@ -130,7 +127,7 @@ export class SiteRegistrationResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be updated');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::updateSite error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::updateSite error has occurred: ', error);
           throw error;
         })
       );
@@ -146,58 +143,20 @@ export class SiteRegistrationResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be deleted');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::deleteSite error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::deleteSite error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  public getOrganizationAgreement(): Observable<string> {
-    return this.apiResource.get<string>(`sites/organization-agreement`)
-      .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organization agreement could not be retrieved');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::getOrganizationAgreement error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getSignedOrganizationAgreement(siteId: number): Observable<string> {
-    return this.apiResource.get<string>(`sites/${siteId}/organization-agreement`)
-      .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organization agreement could not be retrieved');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::getCurrentOrganizationAgreement error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public acceptCurrentOrganizationAgreement(siteId: number): NoContent {
-    return this.apiResource.put<NoContent>(`sites/${siteId}/organization-agreement`)
-      .pipe(
-        map(() => {
-          this.toastService.openSuccessToast('Organization agreement has been accepted');
-        }),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organization agreement could not be accepted');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::acceptOrganizationAgreement error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public submitSiteRegistration(site: Site): Observable<string> {
+  public submitSite(site: Site): Observable<string> {
     return this.apiResource.post<string>(`sites/${site.id}/submission`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been submitted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration could not be submitted');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::submitSiteRegistration error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::submitSite error has occurred: ', error);
           throw error;
         })
       );
