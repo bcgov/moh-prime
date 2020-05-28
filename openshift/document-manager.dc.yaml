@@ -71,7 +71,26 @@ objects:
     - name: ${NAME}${SUFFIX}-migrate-pvc
       persistentVolumeClaim:
         claimName: ${NAME}${SUFFIX}-migrate-pvc
-status: {}
+    status: {}
+  -sapiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: redis
+      name: redis
+    spec:
+      ports:
+      - name: "6379"
+        port: 6379
+        targetPort: 6379
+      selector:
+        io.kompose.service: redis
+    status:
+      loadBalancer: {}
   - apiVersion: v1
     kind: Service
     metadata:

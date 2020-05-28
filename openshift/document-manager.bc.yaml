@@ -47,6 +47,17 @@ parameters:
     value: 5Gi
 objects:
   - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: redis
+      name: redis
+    spec: {}
+    status:
+      dockerImageRepository: ""
+
+  - apiVersion: v1
     kind: BuildConfig
     metadata:
       annotations:
