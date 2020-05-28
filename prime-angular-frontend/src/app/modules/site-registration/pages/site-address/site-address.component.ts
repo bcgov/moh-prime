@@ -61,7 +61,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_INFORMATION);
+    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
 
   public nextRoute() {

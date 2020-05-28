@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -250,6 +251,66 @@ namespace Prime.Controllers
             await _emailService.SendSiteRegistrationAsync(site);
 
             return Ok(ApiResponse.Result(site));
+        }
+
+        // POST: api/sites/5/business-licence
+        /// <summary>
+        /// Creates a new Business Licence for a site.
+        /// </summary>
+        /// <param name="documentGuid"></param>
+        /// <param name="filename"></param>
+        /// <param name="siteId"></param>
+        [HttpPost("{siteId}/business-licence", Name = nameof(CreateBusinessLicence))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<Site>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            if (!User.CanEdit(site.Provisioner))
+            {
+                return Forbid();
+            }
+
+            await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid, filename);
+
+            return Ok(ApiResponse.Result(site));
+        }
+
+        // Get: api/sites/5/business-licence
+        /// <summary>
+        /// Gets a new Business Licence for a site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/business-licence", Name = nameof(CreateBusinessLicence))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<IEnumerable<BusinessLicence>>> GetBusinessLicence(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            if (!User.CanEdit(site.Provisioner))
+            {
+                return Forbid();
+            }
+
+            var licences = await _siteService.GetBusinessLicencesAsync(site.Id);
+
+            return Ok(ApiResponse.Result(licences));
         }
     }
 }

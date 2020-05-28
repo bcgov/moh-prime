@@ -44,7 +44,8 @@
               }
             ],
             "styles": [
-              "src/scss/app.scss"
+              "src/scss/app.scss",
+              "node_modules/filepond/dist/filepond.min.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Xunit;
 using FakeItEasy;
 
-using Prime;
 using Prime.Models;
 using Prime.Services;
+using Prime.Services.Clients;
 using PrimeTests.Utils;
 using PrimeTests.ModelFactories;
 
@@ -16,13 +16,13 @@ namespace PrimeTests.UnitTests
     {
         public SubmissionRulesService CreateService(
             IHttpContextAccessor httpContext = null,
-            IPharmanetApiService pharmanetApiService = null,
+            ICollegeLicenceClient collegeLicenceClient = null,
             IAccessTermService accessTermService = null)
         {
             return new SubmissionRulesService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
-                pharmanetApiService ?? A.Fake<IPharmanetApiService>(),
+                collegeLicenceClient ?? A.Fake<ICollegeLicenceClient>(),
                 accessTermService ?? A.Fake<IAccessTermService>()
             );
         }

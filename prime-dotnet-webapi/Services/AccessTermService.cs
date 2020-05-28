@@ -147,10 +147,13 @@ namespace Prime.Services
             var accessTerm = await _context.AccessTerms
                 .Where(at => at.EnrolleeId == enrollee.Id)
                 .OrderByDescending(at => at.CreatedDate)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            // Set expiry date to now, sudo expirying an access term.
-            accessTerm.ExpiryDate = DateTimeOffset.Now;
+            if (accessTerm != null)
+            {
+                // Set expiry date to now, sudo expirying an access term.
+                accessTerm.ExpiryDate = DateTimeOffset.Now;
+            }
 
             await _context.SaveChangesAsync();
         }

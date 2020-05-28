@@ -5,6 +5,10 @@ import { SharedModule } from '@shared/shared.module';
 import { SiteRegistrationRoutingModule } from './site-registration-routing.module';
 
 import { BusinessHoursModule } from '@lib/modules/business-hours/business-hours.module';
+// TODO split out all related filepond files into a /lib module ie. config and components
+import { FilePondModule, registerPlugin } from 'ngx-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+registerPlugin(FilePondPluginFileValidateType);
 
 import { RegistrantProfileFormComponent } from './shared/components/registrant-profile-form/registrant-profile-form.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
@@ -24,6 +28,8 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
+import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 
 @NgModule({
   declarations: [
@@ -43,10 +49,14 @@ import { OrganizationAgreementComponent } from './pages/organization-agreement/o
     SiteCollectionNoticeComponent,
     SiteAddressComponent,
     OrganizationAgreementComponent,
-    SameAsComponent
+    SameAsComponent,
+    BusinessLicenceComponent,
+    OrganizationTypeComponent
   ],
   imports: [
     SharedModule,
+    SiteRegistrationRoutingModule,
+    FilePondModule,
     BusinessHoursModule,
     SiteRegistrationRoutingModule
   ]

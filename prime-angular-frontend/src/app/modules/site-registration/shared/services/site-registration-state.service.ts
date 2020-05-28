@@ -19,6 +19,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 })
 export class SiteRegistrationStateService {
   public organizationInformationForm: FormGroup;
+  public organizationTypeForm: FormGroup;
   public siteAddressForm: FormGroup;
   public hoursOperationForm: FormGroup;
   public vendorForm: FormGroup;
@@ -39,6 +40,7 @@ export class SiteRegistrationStateService {
     private logger: LoggerService
   ) {
     this.organizationInformationForm = this.buildOrganizationInformationForm();
+    this.organizationTypeForm = this.buildOrganizationTypeForm();
     this.siteAddressForm = this.buildSiteAddressForm();
     this.hoursOperationForm = this.buildHoursOperationForm();
     this.vendorForm = this.buildVendorForm();
@@ -96,6 +98,7 @@ export class SiteRegistrationStateService {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const physicalAddress = this.siteAddressForm.getRawValue();
     const businessHours = this.hoursOperationForm.getRawValue().businessDays;
+    const { organizationTypeCode } = this.organizationTypeForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
 
     // Adapt data for backend consumption
@@ -149,6 +152,7 @@ export class SiteRegistrationStateService {
         organization: {
           signingAuthorityId: signingAuthority?.id,
           signingAuthority,
+          organizationTypeCode,
           ...organizationInformation
         },
         physicalAddressId: physicalAddress?.id,
@@ -176,6 +180,7 @@ export class SiteRegistrationStateService {
   public isSiteValid(): boolean {
     return (
       this.isOrganizationInformationValid() &&
+      this.isOrganizationTypeValid() &&
       this.isSiteAddressValid() &&
       this.isHoursOperationValid() &&
       this.isVendorValid() &&
@@ -188,6 +193,10 @@ export class SiteRegistrationStateService {
 
   public isOrganizationInformationValid(): boolean {
     return this.organizationInformationForm.valid;
+  }
+
+  public isOrganizationTypeValid(): boolean {
+    return this.organizationTypeForm.valid;
   }
 
   public isSiteAddressValid(): boolean {
@@ -221,6 +230,7 @@ export class SiteRegistrationStateService {
   private patchSite(site: Site) {
     if (site) {
       this.organizationInformationForm.patchValue(site.location.organization);
+      this.organizationTypeForm.patchValue(site.location.organization);
       if (site.location.physicalAddress) {
         this.siteAddressForm.patchValue(site.location.physicalAddress);
       }
@@ -257,6 +267,7 @@ export class SiteRegistrationStateService {
   private get forms(): AbstractControl[] {
     return [
       this.organizationInformationForm,
+      this.organizationTypeForm,
       this.siteAddressForm,
       this.hoursOperationForm,
       this.vendorForm,
@@ -285,6 +296,12 @@ export class SiteRegistrationStateService {
         null,
         []
       ]
+    });
+  }
+
+  public buildOrganizationTypeForm(code: number = null): FormGroup {
+    return this.fb.group({
+      organizationTypeCode: [code, [Validators.required]]
     });
   }
 
