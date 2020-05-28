@@ -150,10 +150,11 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
 
   public onDecline(enrolleeId: number) {
     const data: DialogOptions = {
-      title: 'Decline Enrolment',
-      message: 'Are you sure you want to decline this enrolment?',
+      title: 'Decline Enrollee',
+      message: `When declined the enrollee will not have access to PRIME and their Terms of Access will be revoked,
+         Are you sure you want to lock this enrollee ?`,
       actionType: 'warn',
-      actionText: 'Decline Enrolment',
+      actionText: 'Decline Enrollee',
       component: NoteComponent,
     };
 

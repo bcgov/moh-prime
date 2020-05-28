@@ -17,7 +17,6 @@ export class AdjudicatorActionsComponent implements OnInit {
   @Output() public lock: EventEmitter<number>;
   @Output() public unlock: EventEmitter<number>;
   @Output() public enableEnrollee: EventEmitter<number>;
-  @Output() public declineEnrollee: EventEmitter<number>;
   @Output() public toggleManualAdj: EventEmitter<HttpEnrollee>;
   @Output() public enableEditing: EventEmitter<number>;
   @Output() public delete: EventEmitter<number>;
