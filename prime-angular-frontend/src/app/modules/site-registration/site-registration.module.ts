@@ -28,6 +28,7 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
 import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 
 @NgModule({
@@ -49,7 +50,8 @@ import { BusinessLicenceComponent } from './pages/business-licence/business-lice
     SiteAddressComponent,
     OrganizationAgreementComponent,
     SameAsComponent,
-    BusinessLicenceComponent
+    BusinessLicenceComponent,
+    OrganizationTypeComponent
   ],
   imports: [
     SharedModule,
