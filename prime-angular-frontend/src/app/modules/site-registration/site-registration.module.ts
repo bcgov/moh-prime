@@ -15,7 +15,6 @@ import { VendorComponent } from './pages/vendor/vendor.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
-import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
@@ -30,9 +29,7 @@ import { OrganizationTypeComponent } from './pages/organization-type/organizatio
   declarations: [
     CollectionNoticeComponent,
     VendorComponent,
-    SigningAuthorityComponent,
     AdministratorComponent,
-    MultipleSitesComponent,
     TechnicalSupportComponent,
     SiteOverviewComponent,
     OrganizationInformationComponent,

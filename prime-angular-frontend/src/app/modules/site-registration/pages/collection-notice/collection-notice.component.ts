@@ -28,15 +28,10 @@ export class CollectionNoticeComponent implements OnInit {
 
   public onAccept() {
     this.authService.hasJustLoggedIn = false;
-    this.routeUtils.routeRelativeTo(SiteRoutes.MULTIPLE_SITES);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATIONS);
   }
 
   public ngOnInit() {
     this.authService.hasJustLoggedIn = true;
-    this.isCompleted = this.siteRegistrationService.site?.completed;
-
-    if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
-    }
   }
 }

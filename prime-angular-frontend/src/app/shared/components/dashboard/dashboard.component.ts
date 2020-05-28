@@ -333,7 +333,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'Site Registration',
             icon: 'location_city',
-            route: SiteRoutes.MULTIPLE_SITES,
+            route: SiteRoutes.ORGANIZATIONS,
             showItem: true
           },
           {

@@ -104,12 +104,12 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.MULTIPLE_SITES);
+    this.routeUtils.routeRelativeTo(SiteRoutes.SIGNING_AUTHORITY);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
     } else {
       this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
     }

@@ -13,7 +13,6 @@ import { RegistrantGuard } from './shared/guards/registrant.guard';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { VendorComponent } from './pages/vendor/vendor.component';
-import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';

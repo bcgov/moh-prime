@@ -92,7 +92,8 @@ export class RegistrationGuard extends BaseGuard {
   }
 
   private manageIncompleteSiteRouting(routePath: string, site: Site) {
-    return this.manageRouting(routePath, SiteRoutes.MULTIPLE_SITES, site);
+    // TODO set to SITE_REVIEW to allow removal of MULTIPLE_SITES, but definitely the wrong route
+    return this.manageRouting(routePath, SiteRoutes.SITE_REVIEW, site);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, site: Site): boolean {
