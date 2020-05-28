@@ -126,9 +126,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       .afterClosed()
       .pipe(
         exhaustMap((result: { output: string }) => {
-          if (result && result.output) {
-            note = result.output;
-            return of(noop);
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrollee.id, result.output)
+              : of(noop);
           }
           return EMPTY;
         }),
@@ -149,10 +150,11 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
 
   public onDecline(enrolleeId: number) {
     const data: DialogOptions = {
-      title: 'Decline Enrolment',
-      message: 'Are you sure you want to decline this enrolment?',
+      title: 'Decline Enrollee',
+      message: `When declined the enrollee will not have access to PRIME and their Terms of Access will be revoked,
+         Are you sure you want to lock this enrollee ?`,
       actionType: 'warn',
-      actionText: 'Decline Enrolment',
+      actionText: 'Decline Enrollee',
       component: NoteComponent,
     };
 
@@ -162,13 +164,14 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       .afterClosed()
       .pipe(
         exhaustMap((result: { output: string }) => {
-          if (result && result.output) {
-            note = result.output;
-            return of(noop);
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+              : of(noop);
           }
           return EMPTY;
         }),
-        exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.LOCK_PROFILE)),
+        exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.DECLINE_PROFILE)),
         exhaustMap(() => this.adjudicationResource.createStatusAdjudicatorReference(enrolleeId)),
         exhaustMap(() =>
           (note)
@@ -198,9 +201,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       .afterClosed()
       .pipe(
         exhaustMap((result: { output: string }) => {
-          if (result && result.output) {
-            note = result.output;
-            return of(noop);
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+              : of(noop);
           }
           return EMPTY;
         }),
@@ -234,9 +238,10 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       .afterClosed()
       .pipe(
         exhaustMap((result: { output: string }) => {
-          if (result && result.output) {
-            note = result.output;
-            return of(noop);
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+              : of(noop);
           }
           return EMPTY;
         }),
@@ -251,43 +256,6 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(lockedEnrollee);
-        this.action.emit();
-      });
-  }
-
-  public onDeclineEnrollee(enrolleeId: number) {
-    const data: DialogOptions = {
-      title: 'Decline Enrollee',
-      message: `When declined the enrollee will not have access to PRIME and their Terms of Access will be revoked,
-         Are you sure you want to lock this enrollee ?`,
-      actionType: 'warn',
-      actionText: 'Decline Enrollee',
-      component: NoteComponent,
-    };
-
-    let note: string;
-
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: { output: string }) => {
-          if (result && result.output) {
-            note = result.output;
-            return of(noop);
-          }
-          return EMPTY;
-        }),
-        exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.DECLINE_PROFILE)),
-        exhaustMap(() => this.adjudicationResource.createStatusAdjudicatorReference(enrolleeId)),
-        exhaustMap(() =>
-          (note)
-            ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, note, true)
-            : of(noop)
-        ),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
-      )
-      .subscribe((declinedEnrollee: HttpEnrollee) => {
-        this.updateEnrollee(declinedEnrollee);
         this.action.emit();
       });
   }
@@ -307,13 +275,51 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       .afterClosed()
       .pipe(
         exhaustMap((result: { output: string }) => {
-          if (result && result.output) {
-            note = result.output;
-            return of(noop);
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+              : of(noop);
           }
           return EMPTY;
         }),
         exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.ENABLE_PROFILE)),
+        exhaustMap(() => this.adjudicationResource.createStatusAdjudicatorReference(enrolleeId)),
+        exhaustMap(() =>
+          (note)
+            ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, note, true)
+            : of(noop)
+        ),
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
+      )
+      .subscribe((enableEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(enableEnrollee);
+        this.action.emit();
+      });
+  }
+
+  public onEnableEditing(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Enable Editing',
+      message: 'Allow enrollee to edit their PRIME profile. Are you sure you want to enable editing for this enrollee?',
+      actionType: 'warn',
+      actionText: 'Enable Editing',
+      component: NoteComponent,
+    };
+
+    let note: string;
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => {
+          if (result) {
+            return (result.output)
+              ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, result.output)
+              : of(noop);
+          }
+          return EMPTY;
+        }),
+        exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, SubmissionAction.ENABLE_EDITING)),
         exhaustMap(() => this.adjudicationResource.createStatusAdjudicatorReference(enrolleeId)),
         exhaustMap(() =>
           (note)
