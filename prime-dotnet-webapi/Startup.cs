@@ -20,8 +20,11 @@ using Serilog;
 
 using Prime.Auth;
 using Prime.Services;
+using Prime.Services.Clients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
+using System.Text;
+using System.Net.Http.Headers;
 
 namespace Prime
 {
@@ -47,7 +50,6 @@ namespace Prime
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
             services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IPharmanetApiService, PharmanetApiService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IAccessTermService, AccessTermService>();
             services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
@@ -58,6 +60,21 @@ namespace Prime
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<IPartyService, PartyService>();
+
+            if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            {
+                services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
+            }
+            else
+            {
+                services.AddTransient<CollegeLicenceClientHandler>()
+                .AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
+                {
+                    var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.PHARMANET_API_USERNAME}:{PrimeConstants.PHARMANET_API_PASSWORD}");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
+                })
+                .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
+            }
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>

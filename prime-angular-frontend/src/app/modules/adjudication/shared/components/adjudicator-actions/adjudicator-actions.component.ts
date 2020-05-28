@@ -18,6 +18,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   @Output() public unlock: EventEmitter<number>;
   @Output() public enableEnrollee: EventEmitter<number>;
   @Output() public declineEnrollee: EventEmitter<number>;
+  @Output() public toggleManualAdj: EventEmitter<HttpEnrollee>;
   @Output() public delete: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
@@ -34,6 +35,7 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.enableEnrollee = new EventEmitter<number>();
     this.declineEnrollee = new EventEmitter<number>();
     this.delete = new EventEmitter<number>();
+    this.toggleManualAdj = new EventEmitter<HttpEnrollee>();
     this.route = new EventEmitter<string | (string | number)[]>();
   }
 
@@ -89,6 +91,12 @@ export class AdjudicatorActionsComponent implements OnInit {
   public onDeclineEnrollee() {
     if (this.canEdit) {
       this.declineEnrollee.emit(this.enrollee.id);
+    }
+  }
+
+  public onToggleManualAdj() {
+    if (this.canEdit) {
+      this.toggleManualAdj.emit(this.enrollee);
     }
   }
 

@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
-
 using Prime.Models;
 
-namespace Prime.Services
+namespace Prime.Services.Clients
 {
-    public interface IPharmanetApiService
+    public interface ICollegeLicenceClient
     {
         Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification);
     }

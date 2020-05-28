@@ -24,6 +24,7 @@ import { TechnicalSupportComponent } from './pages/technical-support/technical-s
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,12 @@ const routes: Routes = [
         component: OrganizationInformationComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Organization Information' }
+      },
+      {
+        path: SiteRoutes.ORGANIZATION_TYPE,
+        component: OrganizationTypeComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'Organization Type' }
       },
       {
         path: SiteRoutes.SITE_ADDRESS,
