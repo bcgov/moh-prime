@@ -18,7 +18,7 @@ parameters:
   - name: VERSION
     required: false
   - name: SOURCE_CONTEXT_DIR
-    value: prime-database-backup
+    value: document-manager
     required: true
   - name: SOURCE_REPOSITORY_URL
     required: true
@@ -56,7 +56,6 @@ objects:
     spec: {}
     status:
       dockerImageRepository: ""
-
   - apiVersion: v1
     kind: BuildConfig
     metadata:
