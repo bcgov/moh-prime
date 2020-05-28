@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Subscription } from 'rxjs';
@@ -20,10 +21,9 @@ import { SiteRegistrationStateService } from '@registration/shared/services/site
 })
 export class RemoteUsersComponent implements OnInit {
   public busy: Subscription;
+  public form: FormGroup;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
-  public hasRemoteUsers: boolean;
-  public remoteUsers: RemoteUser[];
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -37,27 +37,33 @@ export class RemoteUsersComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public onSubmit() {
-    // TODO apply validation if remote users is on, but there are no remote users
-    // TODO submit remote users
+  public get remoteUsers(): FormArray {
+    return this.form.get('remoteUsers') as FormArray;
+  }
 
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   const payload = this.siteRegistrationStateService.site;
-    //   this.siteRegistrationResource
-    //     .updateSite(payload)
-    //     .subscribe(() =>
-    this.nextRoute();
-    //     );
-    // }
+  public get hasRemoteUsers(): FormControl {
+    return this.form.get('hasRemoteUsers') as FormControl;
+  }
+
+  public onSubmit() {
+    // TODO show validation message if hasRemoteUsers and remoteUsers is empty
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteRegistrationStateService.site;
+      this.siteRegistrationResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    }
   }
 
   public onRemove(index: number) {
-    // TODO update and then remove the from the list locally
-    this.remoteUsers.splice(index, 1);
+    this.remoteUsers.removeAt(index);
   }
 
   public onToggleRemoteUsers(change: MatSlideToggleChange) {
-    this.hasRemoteUsers = change.checked;
+    this.hasRemoteUsers.patchValue(change.checked);
   }
 
   public onBack() {
@@ -73,12 +79,19 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.createFormInstance();
+    this.initForm();
+  }
+
+  private createFormInstance() {
+    this.form = this.siteRegistrationStateService.remoteUsersForm;
+
+    this.form.valueChanges.subscribe(value => console.log(value));
+  }
+
+  private initForm() {
     const site = this.siteRegistrationService.site;
     this.isCompleted = site?.completed;
     this.siteRegistrationStateService.setSite(site, true);
-
-    const { hasRemoteUsers, remoteUsers } = this.siteRegistrationStateService.remoteUsersForm.getRawValue();
-    this.hasRemoteUsers = hasRemoteUsers;
-    this.remoteUsers = remoteUsers;
   }
 }
