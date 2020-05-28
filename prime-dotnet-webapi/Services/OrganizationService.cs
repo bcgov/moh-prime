@@ -70,13 +70,14 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create Organization.");
             }
 
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, signingAuthorityId, "Organization Created");
+
             return organization.Id;
         }
 
         public async Task<int> UpdateOrganizationAsync(int organizationId, Organization updatedOrganization, bool isCompleted = false)
         {
             // TODO signing authority needs a partial update to non-BCSC fields
-            // TODO clean up and simplify update function
 
             var currentOrganization = await this.GetOrganizationAsync(organizationId);
             var acceptedAgreementDate = currentOrganization.AcceptedAgreementDate;
@@ -112,6 +113,8 @@ namespace Prime.Services
             currentOrganization.Completed = (isCompleted == true)
                 ? isCompleted
                 : currentIsCompleted;
+
+            await _businessEventService.CreateOrganizationEventAsync(currentOrganization.Id, currentOrganization.SigningAuthorityId, "Organization Updated");
 
             try
             {
