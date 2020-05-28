@@ -13,19 +13,20 @@ import { RegistrantGuard } from './shared/guards/registrant.guard';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { OrganizationsComponent } from './pages/organizations/organizations.component';
-import { VendorComponent } from './pages/vendor/vendor.component';
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
-import { SiteAddressComponent } from './pages/site-address/site-address.component';
-import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
-import { AdministratorComponent } from './pages/administrator/administrator.component';
-import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
-import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
-import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
-import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
-import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
+
+// import { VendorComponent } from './pages/vendor/vendor.component';
+// import { SiteAddressComponent } from './pages/site-address/site-address.component';
+// import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
+// import { AdministratorComponent } from './pages/administrator/administrator.component';
+// import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
+// import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
+// import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
+// import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
 const routes: Routes = [
   {

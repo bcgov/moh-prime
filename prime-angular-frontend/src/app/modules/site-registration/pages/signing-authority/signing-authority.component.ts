@@ -55,14 +55,14 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATIONS);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_INFORMATION);
     }
   }
 
