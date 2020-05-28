@@ -63,6 +63,7 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onToggleRemoteUsers(change: MatSlideToggleChange) {
+    // TODO now that it's in the form group refactor and add binding in template
     this.hasRemoteUsers.patchValue(change.checked);
   }
 
@@ -88,6 +89,7 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   private initForm() {
+    // TODO remove temporary route param to prevent setting the site
     const site = this.siteRegistrationService.site;
     this.isCompleted = site?.completed;
     this.siteRegistrationStateService.setSite(site, true);

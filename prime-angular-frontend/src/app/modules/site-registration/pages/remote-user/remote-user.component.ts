@@ -55,19 +55,21 @@ export class RemoteUserComponent implements OnInit {
       const remoteUsersFormGroup = this.parent.get('remoteUsers') as FormArray;
 
       if (remoteUserId) {
-        // Update the existing remote user
         const currentRemoteUsers = this.parent.get('remoteUsers').value as RemoteUser[];
         const index = currentRemoteUsers
           .findIndex((remoteUser: RemoteUser) =>
-            remoteUsersFormGroup.value.id === remoteUserId
+            remoteUser.id === remoteUserId
           );
         remoteUsersFormGroup.removeAt(index);
       }
 
+      // TODO won't work wipes out changes on route with the latest from the server!!!
+      // TODO set temporary route param to prevent setting the site
+      remoteUsersFormGroup.push(this.form);
+
       console.log('LOCAL_FORM', this.form.getRawValue());
       console.log('PARENT_FORM', remoteUsersFormGroup.getRawValue());
 
-      remoteUsersFormGroup.push(this.form);
       this.nextRoute();
     }
   }
