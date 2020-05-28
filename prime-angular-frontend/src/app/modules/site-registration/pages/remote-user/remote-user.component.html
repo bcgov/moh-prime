@@ -11,7 +11,6 @@
       <ng-container appPageSubheaderTitle>
         Remote User
       </ng-container>
-      <!-- <ng-container appPageSubheaderSummary></ng-container> -->
     </app-page-subheader>
 
     <section class="mb-3">
@@ -41,7 +40,7 @@
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>
-        Remote User
+        Remote Address
       </ng-container>
       <ng-container appPageSubheaderSummary>
         The remote address is the location the practitioner will be accessing PharmaNet outside the physical boundaries
@@ -50,17 +49,56 @@
       </ng-container>
     </app-page-subheader>
 
-
-    <!-- <ng-container *ngFor="let remoteUser of remoteUsers.controls"
+    <ng-container *ngFor="let remoteUserLocation of remoteUserLocations.controls; let i = index; let last = last"
                   formArrayName="remoteUserLocations">
+      <ng-container [formGroup]="remoteUserLocation">
 
-    </ng-container> -->
+        <app-form-icon-group [show]="true"
+                             (event)="onRemove(i)">
+          <app-form-icon-group>
 
-    <!-- TODO customize page footer to allow overriding the default labels: Back and Save Remote User -->
-    <!-- <app-page-footer [isInitialEnrolment]="!isCompleted"
-                   [hasSecondaryAction]="true"
-                   (save)="onSubmit()"
-                   (back)="onBack()"></app-page-footer> -->
+            <section [class.mb-4]="!last">
+              <div class="row">
+                <div class="col-12">
+
+                  <mat-form-field class="w-100">
+                    <input matInput
+                           placeholder="Internet Provider at this location (e.g., Shaw, Telus)"
+                           formControlName="internetProvider">
+                    <mat-error>Required</mat-error>
+                  </mat-form-field>
+
+                </div>
+              </div>
+
+              <app-address [form]="remoteUserLocation.get('physicalAddress')"
+                           [formControlNames]="formControlNames"></app-address>
+
+            </section>
+
+            <ng-container appContextualContent>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga possimus nostrum accusamus doloribus esse
+              itaque excepturi. Perferendis nihil.
+            </ng-container>
+          </app-form-icon-group>
+        </app-form-icon-group>
+
+      </ng-container>
+    </ng-container>
+
+    <button mat-button
+            type="button"
+            color="primary"
+            class="mb-3"
+            (click)="onAdd()">
+      <mat-icon class="add-icon">add</mat-icon>
+      Add Remote Address
+    </button>
+
+    <app-page-footer primaryActionLabel="Continue"
+                     [hasSecondaryAction]="true"
+                     (save)="onSubmit()"
+                     (back)="onBack()"></app-page-footer>
 
   </form>
 

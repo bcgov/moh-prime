@@ -225,6 +225,31 @@ export class SiteRegistrationStateService {
     return this.technicalSupportForm.valid;
   }
 
+  /**
+   * @description
+   * Create an empty remote user form group, and patch
+   * it with a remote user if provided.
+   */
+  public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
+    const group = this.remoteUserFormGroup() as FormGroup;
+    if (remoteUser) {
+      const { id, firstName, lastName, remoteUserLocations } = remoteUser;
+      group.patchValue({ id, firstName, lastName });
+      const array = group.get('remoteUserLocations') as FormArray;
+      remoteUserLocations
+        .map((rul: RemoteUserLocation) => {
+          const formGroup = this.remoteUserLocationFormGroup();
+          formGroup.patchValue(rul);
+          return formGroup;
+        })
+        .forEach((remoteUserLocationFormGroup: FormGroup) =>
+          array.push(remoteUserLocationFormGroup)
+        );
+    }
+
+    return group;
+  }
+
   private patchSite(site: Site) {
     if (site) {
       this.organizationInformationForm.patchValue(site.location.organization);
@@ -241,6 +266,38 @@ export class SiteRegistrationStateService {
         this.formUtilsService.formArrayPush(array, site.location.businessHours);
       }
 
+      site.remoteUsers = [
+        {
+          id: 1,
+          firstName: 'Martin',
+          lastName: 'Pultz',
+          remoteUserLocations: [
+            {
+              id: 1,
+              internetProvider: 'Shaw',
+              physicalAddress: {
+                street: '140 Beach Dr.',
+                city: 'Victoria',
+                provinceCode: 'BC',
+                countryCode: 'CA',
+                postal: 'V8S 2L5'
+              }
+            },
+            {
+              id: 2,
+              internetProvider: 'Telus',
+              physicalAddress: {
+                street: '140 Beach Dr.',
+                city: 'Victoria',
+                provinceCode: 'BC',
+                countryCode: 'CA',
+                postal: 'V8S 2L5'
+              }
+            }
+          ]
+        }
+      ];
+
       if (site.remoteUsers?.length) {
         const form = this.remoteUsersForm;
         const remoteUsersFormArray = form.get('remoteUsers') as FormArray;
@@ -251,21 +308,9 @@ export class SiteRegistrationStateService {
         // TODO component-level add control on init and remove control on submission to drop from state service
         form.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
 
-        // Create and populate the remote user form structure
-        site.remoteUsers.forEach(({ id, firstName, lastName, remoteUserLocations }: RemoteUser) => {
-          const remoteUserFormGroup = this.remoteUserFormGroup() as FormGroup;
-          remoteUserFormGroup.patchValue({ id, firstName, lastName });
-          const remoteUserLocationsFormArray = remoteUserFormGroup.get('remoteUserLocations') as FormArray;
-          remoteUserLocations
-            .map((rul: RemoteUserLocation) => {
-              const formGroup = this.remoteUserLocationFormGroup();
-              formGroup.patchValue(rul);
-              return formGroup;
-            })
-            .forEach((remoteUserLocationFormGroup: FormGroup) => {
-              remoteUserLocationsFormArray.push(remoteUserLocationFormGroup);
-            });
-          remoteUsersFormArray.push(remoteUserFormGroup);
+        site.remoteUsers.map((remoteUser: RemoteUser) => {
+          const group = this.createEmptyRemoteUserFormAndPatch(remoteUser);
+          remoteUsersFormArray.push(group);
         });
       }
 
@@ -360,7 +405,7 @@ export class SiteRegistrationStateService {
     });
   }
 
-  public buildRemoteUsersForm(): FormGroup {
+  private buildRemoteUsersForm(): FormGroup {
     return this.fb.group({
       // Omitted from payload, but provided in the form to allow for
       // validation to occur when "Have Remote Users" is toggled
@@ -380,7 +425,7 @@ export class SiteRegistrationStateService {
     return this.fb.group({
       id: [
         null,
-        [Validators.required]
+        []
       ],
       firstName: [
         null,
@@ -397,8 +442,12 @@ export class SiteRegistrationStateService {
     });
   }
 
-  private remoteUserLocationFormGroup(): FormGroup {
+  public remoteUserLocationFormGroup(): FormGroup {
     return this.fb.group({
+      id: [
+        null,
+        []
+      ],
       internetProvider: [
         null,
         [Validators.required]
@@ -483,7 +532,7 @@ export class SiteRegistrationStateService {
     });
   }
 
-  private physicalAddressFormGroup(isRequired: boolean = false): FormGroup {
+  private physicalAddressFormGroup(isRequired: boolean = false, disable: string[] = []): FormGroup {
     const validators = (isRequired) ? [Validators.required] : [];
 
     return this.fb.group({
@@ -492,27 +541,27 @@ export class SiteRegistrationStateService {
         []
       ],
       countryCode: [
-        { value: null, disabled: false },
+        { value: null, disabled: disable.includes('countryCode') },
         validators
       ],
       provinceCode: [
-        { value: null, disabled: false },
+        { value: null, disabled: disable.includes('provinceCode') },
         validators
       ],
       street: [
-        { value: null, disabled: false },
+        { value: null, disabled: disable.includes('street') },
         validators
       ],
       street2: [
-        { value: null, disabled: false },
+        { value: null, disabled: disable.includes('street2') },
         validators
       ],
       city: [
-        { value: null, disabled: false },
+        { value: null, disabled: disable.includes('city') },
         validators
       ],
       postal: [
-        { value: null, disabled: false },
+        { value: null, disabled: disable.includes('postal') },
         validators
       ]
     });

@@ -8,7 +8,6 @@ import { Subscription } from 'rxjs';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
@@ -46,6 +45,7 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onSubmit() {
+    // TODO should we be saving remote users individually or as wholesale PUT?
     // TODO show validation message if hasRemoteUsers and remoteUsers is empty
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteRegistrationStateService.site;
@@ -85,8 +85,6 @@ export class RemoteUsersComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.siteRegistrationStateService.remoteUsersForm;
-
-    this.form.valueChanges.subscribe(value => console.log(value));
   }
 
   private initForm() {
