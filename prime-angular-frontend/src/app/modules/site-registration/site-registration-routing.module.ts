@@ -50,9 +50,12 @@ const routes: Routes = [
       },
       {
         path: SiteRoutes.ORGANIZATIONS,
-        component: OrganizationsComponent,
-        data: { title: 'Organizations' },
         children: [
+          {
+            path: '',
+            component: OrganizationsComponent,
+            data: { title: 'Organizations' },
+          },
           {
             path: ':oid',
             children: [
