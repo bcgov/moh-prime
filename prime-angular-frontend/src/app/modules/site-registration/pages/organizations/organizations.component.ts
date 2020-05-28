@@ -28,6 +28,11 @@ export class OrganizationsComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
+  public addOrganization() {
+    // TODO create a new organization
+    // TODO redirect to signing authority to start filling it in
+  }
+
   public ngOnInit(): void {
     // TODO check for organizations
     // TODO list the organizations
