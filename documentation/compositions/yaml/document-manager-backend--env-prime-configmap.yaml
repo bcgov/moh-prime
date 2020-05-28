@@ -1,0 +1,29 @@
+apiVersion: v1
+data:
+  CACHE_REDIS_HOST: redis
+  CACHE_REDIS_PASS: redis-password
+  DB_HOST: primedb
+  DB_NAME: postgres
+  DB_NAME_TEST: postgres_test
+  DB_PASS: postgres
+  DB_PORT: "5432"
+  DB_USER: postgres
+  DOCUMENT_MANAGER_URL: http://localhost:6001
+  ELASTIC_ENABLED: "0"
+  ELASTIC_SECRET_TOKEN: abcdefg
+  ELASTIC_SERVER_URL: https://localhost:8200
+  ELASTIC_SERVICE_NAME: Local-Dev
+  FLASK_APP: app
+  FLASK_DEBUG: "1"
+  FLASK_ENV: development
+  FLASK_RUN_HOST: 0.0.0.0
+  FLASK_RUN_PORT: "6001"
+  JWT_OIDC_ALGORITHMS: RS256
+  JWT_OIDC_AUDIENCE: prime-application-dev
+  JWT_OIDC_WELL_KNOWN_CONFIG: https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: document-manager-backend-document-manager-backend--env-prime
+  name: document-manager-backend--env-prime

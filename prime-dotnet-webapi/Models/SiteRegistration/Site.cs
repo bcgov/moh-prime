@@ -31,5 +31,8 @@ namespace Prime.Models
         public int? VendorId { get; set; }
 
         public Vendor Vendor { get; set; }
+
+        [JsonIgnore]
+        public ICollection<BusinessLicence> BusinessLicences { get; set; }
     }
 }

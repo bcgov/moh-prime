@@ -60,6 +60,7 @@ namespace Prime
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<IPartyService, PartyService>();
+            services.AddScoped<IDocumentService, DocumentService>();
 
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
@@ -95,7 +96,8 @@ namespace Prime
                         builder
                             .AllowAnyOrigin()
                             .AllowAnyMethod()
-                            .AllowAnyHeader();
+                            .AllowAnyHeader()
+                            .WithExposedHeaders("Location");
                     });
             });
 

@@ -84,8 +84,8 @@ namespace Prime
         public DbSet<Party> Parties { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
-
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
+        public DbSet<BusinessLicence> BusinessLicences { get; set; }
 
         public override int SaveChanges()
         {
@@ -251,6 +251,11 @@ namespace Prime
                 .HasOne(l => l.Vendor)
                 .WithMany(t => t.Sites)
                 .HasForeignKey(be => be.VendorId);
+
+            modelBuilder.Entity<BusinessLicence>()
+                .HasOne(bl => bl.Site)
+                .WithMany(s => s.BusinessLicences)
+                .HasForeignKey(bl => bl.SiteId);
 
             #endregion
         }
