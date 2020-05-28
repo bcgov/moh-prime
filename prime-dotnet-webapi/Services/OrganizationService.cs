@@ -165,15 +165,13 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
-        public async Task AcceptCurrentOrganizationAgreementAsync(int signingAuthorityId)
+        public async Task<int> AcceptCurrentOrganizationAgreementAsync(int organizationId)
         {
-            var organization = await _context.Organizations
-                .Where(e => e.SigningAuthorityId == signingAuthorityId)
-                .FirstOrDefaultAsync();
+            var organization = await GetOrganizationAsync(organizationId);
 
             organization.AcceptedAgreementDate = DateTimeOffset.Now;
 
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<Organization> GetOrganizationByPartyIdAsync(int partyId)

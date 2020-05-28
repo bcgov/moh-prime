@@ -15,7 +15,7 @@ namespace Prime.Services
         Task DeleteOrganizationAsync(int organizationId);
         Task<Organization> SubmitRegistrationAsync(int organizationId);
         Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);
-        Task AcceptCurrentOrganizationAgreementAsync(int signingAuthorityId);
+        Task<int> AcceptCurrentOrganizationAgreementAsync(int organizationId);
         Task<Organization> GetOrganizationByPartyIdAsync(int partyId);
     }
 }
