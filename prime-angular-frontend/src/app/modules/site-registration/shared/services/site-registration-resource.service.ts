@@ -14,6 +14,7 @@ import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
+import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 
@@ -30,7 +31,110 @@ export class SiteRegistrationResource {
     private logger: LoggerService
   ) { }
 
-  public getSites() {
+  public getOrganizations(): Observable<Organization[]> {
+    return this.apiResource.get<Organization[]>('organizations')
+      .pipe(
+        map((response: ApiHttpResponse<Organization[]>) => response.result),
+        // TODO add adapter if needed
+        // map((organizations: Organization[]) => {
+        //   return organizations;
+        // }),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organizations could not be retrieved');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getOrganizations error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getOrganizationById(organizationId: number): Observable<Organization> {
+    return this.apiResource.get<Organization>(`organizations/${organizationId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization>) => response.result),
+        // TODO add adapter if needed
+        // map((organization: Organization) => {
+        //   return organization;
+        // }),
+        tap((site: Organization) => this.logger.info('ORGANIZATION', site)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be retrieved');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getOrganizationById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createOrganization(party: Party): Observable<Organization> {
+    return this.apiResource.post<Organization>('organizations', party)
+      .pipe(
+        map((response: ApiHttpResponse<Organization>) => response.result),
+        tap((newOrganization: Organization) => {
+          this.toastService.openSuccessToast('Organization has been created');
+          this.logger.info('NEW_ORGANIZATION', newOrganization);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be created');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::createOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateOrganization(organization: Organization, isCompleted?: boolean): NoContent {
+    const params = this.apiResourceUtilsService.makeHttpParams({ isCompleted });
+    return this.apiResource.put<NoContent>(`organizations/${organization.id}`, organization, params)
+      // TODO remove pipe when ApiResource handles NoContent
+      .pipe(
+        map(() => {
+          this.toastService.openSuccessToast('Organization has been updated');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be updated');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::updateOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteOrganization(organizationId: number): Observable<Organization> {
+    return this.apiResource.delete<Organization>(`organizations/${organizationId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization>) => response.result),
+        tap((organization: Organization) => {
+          this.toastService.openSuccessToast('Organization has been deleted');
+          this.logger.info('DELETED_ORGANIZATION', organization);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be deleted');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::deleteOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * @description
+   * Get the organization information from OrgBook based on a business number.
+   *
+   * @param businessNumber Registered business number (BN15) assigned to the organization.
+   */
+  public getOrganizationInfo(businessNumber: string): Observable<any> {
+    return this.apiResource.get<any>(`sites/organization/${businessNumber}`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Organization information has been applied to site registration')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization information could not be found');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getOrganizationInfo error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  // TODO refactor below this line after organization creation works
+
+  public getSites(): Observable<Site[]> {
     return this.apiResource.get<Site[]>('sites')
       .pipe(
         map((response: ApiHttpResponse<Site[]>) => response.result),
@@ -59,7 +163,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public getSiteById(siteId: number) {
+  public getSiteById(siteId: number): Observable<Site> {
     return this.apiResource.get<Site>(`sites/${siteId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
@@ -86,7 +190,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public createSite(party: Party) {
+  public createSite(party: Party): Observable<Site> {
     return this.apiResource.post<Site>('sites', party)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
@@ -134,7 +238,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public deleteSite(siteId: number) {
+  public deleteSite(siteId: number): Observable<Site> {
     return this.apiResource.delete<Site>(`sites/${siteId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
@@ -196,25 +300,6 @@ export class SiteRegistrationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration could not be submitted');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::submitSiteRegistration error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  /**
-   * @description
-   * Get the organization information from OrgBook based on a business number.
-   *
-   * @param businessNumber Registered business number (BN15) assigned to the organization.
-   */
-  public getOrganizationInfo(businessNumber: string): Observable<any> {
-    return this.apiResource.get<any>(`sites/organization/${businessNumber}`)
-      .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Organization information has been applied to site registration')),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organization information could not be found');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::getOrganizationInfo error has occurred: ', error);
           throw error;
         })
       );
