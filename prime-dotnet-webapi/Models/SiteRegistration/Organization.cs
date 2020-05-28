@@ -24,6 +24,8 @@ namespace Prime.Models
 
         public int SigningAuthorityId { get; set; }
 
+        public int? OrganizationTypeCode { get; set; }
+
         [JsonIgnore]
         public IEnumerable<Location> Locations { get; set; }
 

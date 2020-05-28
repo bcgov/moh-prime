@@ -7,6 +7,7 @@ using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
+using Prime.Services.Clients;
 
 namespace Prime.Controllers
 {
@@ -18,12 +19,12 @@ namespace Prime.Controllers
     public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;
-        private readonly IPharmanetApiService _pharmanetApiService;
+        private readonly ICollegeLicenceClient _collegeLicenceClient;
 
-        public LookupsController(ILookupService lookupService, IPharmanetApiService pharmanetApiService)
+        public LookupsController(ILookupService lookupService, ICollegeLicenceClient collegeLicenceClient)
         {
             _lookupService = lookupService;
-            _pharmanetApiService = pharmanetApiService;
+            _collegeLicenceClient = collegeLicenceClient;
         }
 
         //GET: /api/Lookup
@@ -56,7 +57,7 @@ namespace Prime.Controllers
                 }
             };
 
-            var record = await _pharmanetApiService.GetCollegeRecordAsync(cert);
+            var record = await _collegeLicenceClient.GetCollegeRecordAsync(cert);
 
             return Ok(ApiResponse.Result(record));
         }
