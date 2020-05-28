@@ -16,6 +16,7 @@ namespace Prime.Models
         public const int ENROLLEE_CODE = 5;
         public const int SITE_CODE = 6;
         public const int ADMIN_VIEW_CODE = 7;
+        public const int ORGANIZATION_CODE = 8;
 
         [Key]
         public int Code { get; set; }
