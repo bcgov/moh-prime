@@ -13,16 +13,19 @@ namespace Prime.Services
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly IPartyService _partyService;
+        private readonly IOrganizationService _organizationService;
 
         public SiteService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IBusinessEventService businessEventService,
-            IPartyService partyService)
+            IPartyService partyService,
+            IOrganizationService organizationService)
             : base(context, httpContext)
         {
             _businessEventService = businessEventService;
             _partyService = partyService;
+            _organizationService = organizationService;
         }
 
         public async Task<IEnumerable<Site>> GetSitesAsync()
@@ -53,17 +56,8 @@ namespace Prime.Services
 
             var provsionerId = await _partyService.CreatePartyAsync(provisioner);
 
-            var organization = await this.GetOrganizationByPartyIdAsync(provsionerId);
-
-            if (organization == null)
-            {
-                organization = new Organization
-                { SigningAuthorityId = provsionerId };
-
-                _context.Organizations.Add(organization);
-
-                await _context.SaveChangesAsync();
-            }
+            // Site provisionerId should be equal to organization signingAuthorityId
+            var organization = await _organizationService.GetOrganizationByPartyIdAsync(provsionerId);
 
             var location = new Location { OrganizationId = organization.Id };
 
@@ -88,15 +82,9 @@ namespace Prime.Services
 
         public async Task<int> UpdateSiteAsync(int siteId, Site updatedSite, bool isCompleted = false)
         {
-            // TODO signing authority needs a partial update to non-BCSC fields
-            // TODO clean up and simplify update function
-
             var currentSite = await this.GetSiteAsync(siteId);
-            var acceptedAgreementDate = currentSite.Location.Organization.AcceptedAgreementDate;
             var submittedDate = currentSite.SubmittedDate;
             var currentIsCompleted = currentSite.Completed;
-            // BCSC Fields
-            var userId = currentSite.Location.Organization.SigningAuthority.UserId;
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
@@ -107,18 +95,12 @@ namespace Prime.Services
 
             UpdateLocation(currentSite.Location, updatedSite.Location);
 
-            UpdateOrganization(currentSite.Location.Organization, updatedSite.Location.Organization);
-
-            // Keep userId the same from BCSC card, do not update
-            currentSite.Location.Organization.SigningAuthority.UserId = userId;
-
             // Update foreign key only if not null
             currentSite.VendorId = (updatedSite.VendorId != 0)
                 ? updatedSite.VendorId
                 : null;
 
             // Managed through separate API endpoint, and should never be updated
-            currentSite.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
             currentSite.SubmittedDate = submittedDate;
 
             // Registration has been completed
@@ -135,25 +117,6 @@ namespace Prime.Services
             catch (DbUpdateConcurrencyException)
             {
                 return 0;
-            }
-        }
-
-        private void UpdateOrganization(Organization current, Organization updated)
-        {
-            this._context.Entry(current).CurrentValues.SetValues(updated);
-
-            this._context.Entry(current.SigningAuthority).CurrentValues.SetValues(updated.SigningAuthority);
-
-            if (updated.SigningAuthority?.PhysicalAddress != null)
-            {
-                if (current.SigningAuthority?.PhysicalAddress == null)
-                {
-                    current.SigningAuthority.PhysicalAddress = updated.SigningAuthority.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(current.SigningAuthority.PhysicalAddress).CurrentValues.SetValues(updated.SigningAuthority.PhysicalAddress);
-                }
             }
         }
 
@@ -245,10 +208,6 @@ namespace Prime.Services
                 return;
             }
 
-            _context.Addresses.Remove(site.Location.Organization.SigningAuthority.PhysicalAddress);
-            _context.Parties.Remove(site.Location.Organization.SigningAuthority);
-            _context.Organizations.Remove(site.Location.Organization);
-
             // Check if relation exists before delete to allow delete of incomplete registrations
             if (site.Location != null)
             {
@@ -311,47 +270,10 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task AcceptCurrentOrganizationAgreementAsync(int signingAuthorityId)
-        {
-            var organization = await _context.Organizations
-                .Where(e => e.SigningAuthorityId == signingAuthorityId)
-                .FirstOrDefaultAsync();
-
-            organization.AcceptedAgreementDate = DateTimeOffset.Now;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<Organization> GetOrganizationByPartyIdAsync(int partyId)
-        {
-            return await _context.Organizations
-                .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
-        }
-
         public async Task<Vendor> GetVendorAsync(int vendorId)
         {
             return await _context.Vendors
                 .SingleOrDefaultAsync(s => s.Id == vendorId);
-        }
-
-        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
-        {
-            // Remove existing items
-            foreach (var item in dbCollection)
-            {
-                _context.Remove(item);
-            }
-
-            // Create new items
-            if (newCollection != null)
-            {
-                foreach (var item in newCollection)
-                {
-                    // Prevent the ID from being changed by the incoming changes
-                    item.EnrolleeId = enrolleeId;
-                    _context.Entry(item).State = EntityState.Added;
-                }
-            }
         }
 
         private IQueryable<Site> GetBaseSiteQuery()
@@ -360,10 +282,6 @@ namespace Prime.Services
                 .Include(s => s.Provisioner)
                 // .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Vendor)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.Organization)
-                        .ThenInclude(o => o.SigningAuthority)
-                            .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PhysicalAddress)
                 .Include(s => s.Location)

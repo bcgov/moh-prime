@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200527195207_OrganizationAddCompletedSubmittedDate")]
+    partial class OrganizationAddCompletedSubmittedDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -6590,9 +6592,6 @@ namespace Prime.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("OrganizationTypeCode")
-                        .HasColumnType("integer");
-
                     b.Property<string>("RegistrationId")
                         .HasColumnType("text");
 
@@ -6609,8 +6608,6 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationTypeCode");
 
                     b.HasIndex("SigningAuthorityId");
 
@@ -12021,10 +12018,6 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
-                    b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
-                        .WithMany()
-                        .HasForeignKey("OrganizationTypeCode");
-
                     b.HasOne("Prime.Models.Party", "SigningAuthority")
                         .WithMany()
                         .HasForeignKey("SigningAuthorityId")
