@@ -266,38 +266,6 @@ export class SiteRegistrationStateService {
         this.formUtilsService.formArrayPush(array, site.location.businessHours);
       }
 
-      site.remoteUsers = [
-        {
-          id: 1,
-          firstName: 'Martin',
-          lastName: 'Pultz',
-          remoteUserLocations: [
-            {
-              id: 1,
-              internetProvider: 'Shaw',
-              physicalAddress: {
-                street: '140 Beach Dr.',
-                city: 'Victoria',
-                provinceCode: 'BC',
-                countryCode: 'CA',
-                postal: 'V8S 2L5'
-              }
-            },
-            {
-              id: 2,
-              internetProvider: 'Telus',
-              physicalAddress: {
-                street: '140 Beach Dr.',
-                city: 'Victoria',
-                provinceCode: 'BC',
-                countryCode: 'CA',
-                postal: 'V8S 2L5'
-              }
-            }
-          ]
-        }
-      ];
-
       if (site.remoteUsers?.length) {
         const form = this.remoteUsersForm;
         const remoteUsersFormArray = form.get('remoteUsers') as FormArray;
