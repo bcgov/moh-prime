@@ -5,15 +5,14 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { Country } from '@shared/enums/country.enum';
+import { Province } from '@shared/enums/province.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
-import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
-import { Province } from '@shared/enums/province.enum';
-import { Country } from '@shared/enums/country.enum';
 
 @Component({
   selector: 'app-remote-user',
@@ -51,29 +50,37 @@ export class RemoteUserComponent implements OnInit {
   }
 
   public onSubmit() {
-    // TODO update the global form with changes only on submission
     if (this.formUtilsService.checkValidity(this.form)) {
       const remoteUserId = +this.route.snapshot.params.id;
+      const remoteUsersFormGroup = this.parent.get('remoteUsers') as FormArray;
+
+      if (remoteUserId) {
+        // Update the existing remote user
+        const currentRemoteUsers = this.parent.get('remoteUsers').value as RemoteUser[];
+        const index = currentRemoteUsers
+          .findIndex((remoteUser: RemoteUser) =>
+            remoteUsersFormGroup.value.id === remoteUserId
+          );
+        remoteUsersFormGroup.removeAt(index);
+      }
+
+      console.log('LOCAL_FORM', this.form.getRawValue());
+      console.log('PARENT_FORM', remoteUsersFormGroup.getRawValue());
+
+      remoteUsersFormGroup.push(this.form);
+      this.nextRoute();
     }
   }
 
   public onAdd() {
-    const remoteUserLocation = this.siteRegistrationStateService
-      .remoteUserLocationFormGroup();
-    const physicalAddress = remoteUserLocation.get('physicalAddress');
-    physicalAddress.patchValue({
-      countryCode: Country.CANADA,
-      provinceCode: Province.BRITISH_COLUMBIA
-    });
-    physicalAddress.get('provinceCode').disable();
-    this.remoteUserLocations.push(remoteUserLocation);
+    this.addRemoteUserLocation();
   }
 
   public onRemove(index: number) {
     this.remoteUserLocations.removeAt(index);
 
     if (!this.remoteUserLocations.controls.length) {
-      this.onAdd();
+      this.addRemoteUserLocation();
     }
   }
 
@@ -87,9 +94,6 @@ export class RemoteUserComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // TODO setup in site state service and maintain list
-    // TODO view the updates from the state service in remote users
-    // TODO DO NOT update state service form directly when editing... use a copy
     this.createFormInstance();
     this.initForm();
   }
@@ -105,7 +109,6 @@ export class RemoteUserComponent implements OnInit {
     this.isCompleted = site?.completed;
     this.siteRegistrationStateService.setSite(site, true);
 
-    // Indicates whether this is a create (id=0) or update (id>0)
     const remoteUserId = +this.route.snapshot.params.id;
     const remoteUser = this.parent.value.remoteUsers
       .find((r: RemoteUser) => r.id === remoteUserId);
@@ -113,9 +116,29 @@ export class RemoteUserComponent implements OnInit {
     this.form = this.siteRegistrationStateService
       .createEmptyRemoteUserFormAndPatch(remoteUser);
 
-    this.remoteUserLocations.controls
-      .forEach((remoteUserLocation: FormGroup) =>
-        remoteUserLocation.get('physicalAddress.provinceCode').disable()
-      );
+    if (remoteUserId) {
+      this.disableProvince(this.remoteUserLocations.controls as FormGroup[]);
+    } else {
+      this.addRemoteUserLocation();
+    }
+  }
+
+  private addRemoteUserLocation(): void {
+    const remoteUserLocation = this.siteRegistrationStateService
+      .remoteUserLocationFormGroup();
+    remoteUserLocation.get('physicalAddress')
+      .patchValue({
+        countryCode: Country.CANADA,
+        provinceCode: Province.BRITISH_COLUMBIA
+      });
+    this.disableProvince(remoteUserLocation);
+
+    this.remoteUserLocations.push(remoteUserLocation);
+  }
+
+  private disableProvince(remoteUserLocationFormGroups: FormGroup | FormGroup[]): void {
+    (Array.isArray(remoteUserLocationFormGroups))
+      ? remoteUserLocationFormGroups.forEach(group => this.disableProvince(group))
+      : remoteUserLocationFormGroups.get('physicalAddress.provinceCode').disable();
   }
 }

@@ -537,6 +537,7 @@ export class SiteRegistrationStateService {
 
     return this.fb.group({
       id: [
+        // TODO should this be 0, or null like everything else?
         0,
         []
       ],
@@ -554,7 +555,9 @@ export class SiteRegistrationStateService {
       ],
       street2: [
         { value: null, disabled: disable.includes('street2') },
-        validators
+        // NOTE: Never used so omitted from validations to reduce need
+        // to clear validators at the component-level
+        []
       ],
       city: [
         { value: null, disabled: disable.includes('city') },
