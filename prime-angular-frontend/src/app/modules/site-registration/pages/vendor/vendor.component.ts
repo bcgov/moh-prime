@@ -60,17 +60,17 @@ export class VendorComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    } else {
-      this.hasNoVendorError = true;
-    }
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    //   const payload = this.siteRegistrationStateService.site;
+    //   this.siteRegistrationResource
+    //     .updateSite(payload)
+    //     .subscribe(() => {
+    //       this.form.markAsPristine();
+    this.nextRoute();
+    //     });
+    // } else {
+    //   this.hasNoVendorError = true;
+    // }
   }
 
   public onBack() {
@@ -85,7 +85,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
     }
   }
 

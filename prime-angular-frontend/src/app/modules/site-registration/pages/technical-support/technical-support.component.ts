@@ -43,16 +43,16 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        // Update and mark the registration as completed
-        .updateSite(payload, true)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    //   const payload = this.siteRegistrationStateService.site;
+    //   this.siteRegistrationResource
+    //     // Update and mark the registration as completed
+    //     .updateSite(payload, true)
+    //     .subscribe(() => {
+    //       this.form.markAsPristine();
+    this.nextRoute();
+    //     });
+    // }
   }
 
   public onBack() {

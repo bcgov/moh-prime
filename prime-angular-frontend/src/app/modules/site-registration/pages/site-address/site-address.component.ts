@@ -38,7 +38,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
 
     this.formControlNames = [
       'street',
@@ -49,26 +49,26 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    //   const payload = this.siteRegistrationStateService.site;
+    //   this.siteRegistrationResource
+    //     .updateSite(payload)
+    //     .subscribe(() => {
+    //       this.form.markAsPristine();
+    this.nextRoute();
+    // });
+    // }
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATIONS);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
+      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
     }
   }
 

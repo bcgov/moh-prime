@@ -49,19 +49,19 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.businessDays)) {
-      this.hasNoHours = false;
+    // if (this.formUtilsService.checkValidity(this.businessDays)) {
+    //   this.hasNoHours = false;
 
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    } else {
-      this.hasNoHours = true;
-    }
+    //   const payload = this.siteRegistrationStateService.site;
+    //   this.siteRegistrationResource
+    //     .updateSite(payload)
+    //     .subscribe(() => {
+    //       this.form.markAsPristine();
+    this.nextRoute();
+    //     });
+    // } else {
+    //   this.hasNoHours = true;
+    // }
   }
 
   public onAdd(businessDay: BusinessDay[]) {
@@ -84,7 +84,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SIGNING_AUTHORITY);
+      this.routeUtils.routeRelativeTo(SiteRoutes.VENDOR);
     }
   }
 
