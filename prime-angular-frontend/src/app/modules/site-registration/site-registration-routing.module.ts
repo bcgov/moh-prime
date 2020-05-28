@@ -12,6 +12,7 @@ import { RegistrationGuard } from './shared/guards/registration.guard';
 import { RegistrantGuard } from './shared/guards/registrant.guard';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
+import { OrganizationsComponent } from './pages/organizations/organizations.component';
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
@@ -23,6 +24,7 @@ import { TechnicalSupportComponent } from './pages/technical-support/technical-s
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
 import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
 
 const routes: Routes = [
@@ -33,7 +35,8 @@ const routes: Routes = [
     canActivateChild: [
       AuthenticationGuard,
       RegistrantGuard,
-      RegistrationGuard
+      // TODO leaving the updates to the RegistrationGuard to the end
+      // RegistrationGuard
     ],
     // Ensure that the configuration is loaded, otherwise
     // if it already exists NOOP
@@ -45,84 +48,111 @@ const routes: Routes = [
         data: { title: 'Collection Notice' }
       },
       {
-        path: SiteRoutes.MULTIPLE_SITES,
-        component: MultipleSitesComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Multiple Sites' }
+        path: SiteRoutes.ORGANIZATIONS,
+        component: OrganizationsComponent,
+        data: { title: 'Organizations' },
+        children: [
+          {
+            path: ':oid',
+            children: [
+              {
+                path: SiteRoutes.SIGNING_AUTHORITY,
+                component: SigningAuthorityComponent,
+                canDeactivate: [CanDeactivateFormGuard],
+                data: { title: 'Signing Authority' }
+              },
+              {
+                path: SiteRoutes.ORGANIZATION_INFORMATION,
+                component: OrganizationInformationComponent,
+                canDeactivate: [CanDeactivateFormGuard],
+                data: { title: 'Organization Information' }
+              },
+              {
+                path: SiteRoutes.ORGANIZATION_TYPE,
+                component: OrganizationTypeComponent,
+                canDeactivate: [CanDeactivateFormGuard],
+                data: { title: 'Organization Type' }
+              },
+              {
+                path: SiteRoutes.ORGANIZATION_AGREEMENT,
+                component: OrganizationAgreementComponent,
+                canDeactivate: [CanDeactivateFormGuard],
+                data: { title: 'Access Agreement' }
+              },
+              {
+                path: SiteRoutes.ORGANIZATION_REVIEW,
+                component: OrganizationOverviewComponent,
+                canDeactivate: [CanDeactivateFormGuard],
+                data: { title: 'Organization Review' }
+              },
+              {
+                path: '', // Equivalent to `/` and alias for `organizations`
+                redirectTo: SiteRoutes.ORGANIZATION_REVIEW,
+                pathMatch: 'full'
+              },
+              // {
+              // TODO needs to be /sites
+              //   path: ':sid',
+              //   component: OrganizationComponent,
+              //   data: { title: 'Site' },
+              //   children: [
+              // TODO business licence
+              // TODO remote user(s)
+              //     {
+              //       path: SiteRoutes.SITE_ADDRESS,
+              //       component: SiteAddressComponent,
+              //       canDeactivate: [CanDeactivateFormGuard],
+              //       data: { title: 'Site Address' }
+              //     },
+              //     {
+              //       path: SiteRoutes.HOURS_OPERATION,
+              //       component: HoursOperationComponent,
+              //       canDeactivate: [CanDeactivateFormGuard],
+              //       data: { title: 'Hours of Operation' }
+              //     },
+              //     {
+              //       path: SiteRoutes.VENDOR,
+              //       component: VendorComponent,
+              //       canDeactivate: [CanDeactivateFormGuard],
+              //       data: { title: 'Vendor' }
+              //     },
+              //     {
+              //       path: SiteRoutes.ADMINISTRATOR,
+              //       component: AdministratorComponent,
+              //       canDeactivate: [CanDeactivateFormGuard],
+              //       data: { title: 'Administrator of PharmaNet' }
+              //     },
+              //     {
+              //       path: SiteRoutes.PRIVACY_OFFICER,
+              //       component: PrivacyOfficerComponent,
+              //       canDeactivate: [CanDeactivateFormGuard],
+              //       data: { title: 'Privacy Officer' }
+              //     },
+              //     {
+              //       path: SiteRoutes.TECHNICAL_SUPPORT,
+              //       component: TechnicalSupportComponent,
+              //       canDeactivate: [CanDeactivateFormGuard],
+              //       data: { title: 'Technical Support Contact' }
+              //     },
+              //     {
+              //       path: SiteRoutes.SITE_REVIEW,
+              //       component: SiteOverviewComponent,
+              //       data: { title: 'Site Registration Review' }
+              //     },
+              //     {
+              //       path: SiteRoutes.CONFIRMATION,
+              //       component: ConfirmationComponent,
+              //       data: { title: 'Submission Confirmation' }
+              //     }
+              //   ]
+              // }
+            ]
+          }
+        ]
       },
       {
-        path: SiteRoutes.ORGANIZATION_INFORMATION,
-        component: OrganizationInformationComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Organization Information' }
-      },
-      {
-        path: SiteRoutes.ORGANIZATION_TYPE,
-        component: OrganizationTypeComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Organization Type' }
-      },
-      {
-        path: SiteRoutes.SITE_ADDRESS,
-        component: SiteAddressComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Site Address' }
-      },
-      {
-        path: SiteRoutes.ORGANIZATION_AGREEMENT,
-        component: OrganizationAgreementComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Access Agreement' }
-      },
-      {
-        path: SiteRoutes.VENDOR,
-        component: VendorComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Vendor' }
-      },
-      {
-        path: SiteRoutes.HOURS_OPERATION,
-        component: HoursOperationComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Hours of Operation' }
-      },
-      {
-        path: SiteRoutes.SIGNING_AUTHORITY,
-        component: SigningAuthorityComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Signing Authority' }
-      },
-      {
-        path: SiteRoutes.ADMINISTRATOR,
-        component: AdministratorComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Administrator of PharmaNet' }
-      },
-      {
-        path: SiteRoutes.PRIVACY_OFFICER,
-        component: PrivacyOfficerComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Privacy Officer' }
-      },
-      {
-        path: SiteRoutes.TECHNICAL_SUPPORT,
-        component: TechnicalSupportComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'Technical Support Contact' }
-      },
-      {
-        path: SiteRoutes.SITE_REVIEW,
-        component: SiteOverviewComponent,
-        data: { title: 'Site Registration Review' }
-      },
-      {
-        path: SiteRoutes.CONFIRMATION,
-        component: ConfirmationComponent,
-        data: { title: 'Submission Confirmation' }
-      },
-      {
-        path: '', // Equivalent to `/` and alias for `site-review`
-        redirectTo: SiteRoutes.SITE_REVIEW,
+        path: '', // Equivalent to `/` and alias for `organizations`
+        redirectTo: SiteRoutes.ORGANIZATIONS,
         pathMatch: 'full'
       }
     ]
