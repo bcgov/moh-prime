@@ -176,7 +176,7 @@ namespace Prime.Services.Rules
         {
             if (enrollee.IdentityProvider != Auth.AuthConstants.BC_SERVICES_CARD)
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.IdentityProvider, enrollee.IdentityProvider);
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.IdentityProvider, $"Method used: {enrollee.IdentityProvider}");
                 return Task.FromResult(false);
             }
 
