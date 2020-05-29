@@ -10,7 +10,7 @@ export class SiteRoutes {
   public static ORGANIZATION_AGREEMENT = 'access-agreement';
   public static VENDOR = 'vendor';
   public static HOURS_OPERATION = 'hours-operation';
-  public static SIGNING_AUTHORITY = 'signing-authority';
+  public static SIGNING_AUTHORITY = 'organization-signing-authority';
   public static ADMINISTRATOR = 'administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
   public static TECHNICAL_SUPPORT = 'technical-support';

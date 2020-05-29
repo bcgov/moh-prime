@@ -26,6 +26,7 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
+import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 
 const routes: Routes = [
   {
@@ -96,7 +97,7 @@ const routes: Routes = [
       },
       {
         path: SiteRoutes.SIGNING_AUTHORITY,
-        component: SigningAuthorityComponent,
+        component: OrganizationSigningAuthorityComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Signing Authority' }
       },

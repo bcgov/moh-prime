@@ -353,7 +353,81 @@ export class SiteRegistrationStateService {
 
   private buildSigningAuthorityForm(): FormGroup {
     // Prevent BCSC information from being changed
-    return this.partyFormGroup(true);
+    const disabled = true;
+    return this.fb.group({
+      id: [null, []],
+      firstName: [
+        { value: null, disabled },
+        [Validators.required]
+      ],
+      lastName: [
+        { value: null, disabled },
+        [Validators.required]
+      ],
+      jobRoleTitle: [
+        null,
+        [Validators.required]
+      ],
+      phone: [
+        null,
+        [
+          Validators.required,
+          FormControlValidators.phone
+        ]
+      ],
+      fax: [
+        null,
+        [
+          Validators.required,
+          FormControlValidators.phone
+        ]
+      ],
+      smsPhone: [
+        null,
+        [
+          Validators.required,
+          FormControlValidators.phone
+        ]
+      ],
+      email: [
+        null,
+        [
+          Validators.required,
+          FormControlValidators.email
+        ]
+      ],
+      physicalAddress: this.fb.group({
+        // TODO should this be null or 0?
+        id: [
+          0,
+          []
+        ],
+        countryCode: [
+          { value: null, disabled: false },
+          []
+        ],
+        provinceCode: [
+          { value: null, disabled: false },
+          []
+        ],
+        street: [
+          { value: null, disabled: false },
+          []
+        ],
+        street2: [
+          { value: null, disabled: false },
+          []
+        ],
+        city: [
+          { value: null, disabled: false },
+          []
+        ],
+        postal: [
+          { value: null, disabled: false },
+          []
+        ]
+      })
+    });
   }
 
   private buildPrivacyOfficerForm(): FormGroup {
