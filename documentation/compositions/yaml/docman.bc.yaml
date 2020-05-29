@@ -11,23 +11,16 @@ parameters:
   - name: SUFFIX
     displayName: Name Suffix
     description: A suffix appended to all objects
-    required: false
+    required: true
   - name: VERSION
-    required: false
+    required: true
   - name: SOURCE_CONTEXT_DIR
-    value: prime-database-backup
     required: true
   - name: SOURCE_REPOSITORY_URL
     required: true
-    value: https://github.com/bcgov/moh-prime
   - name: SOURCE_REPOSITORY_REF
-    required: true
-  - name: OC_NAMESPACE
-    required: true
-    value: dqszvc
-  - name: OC_APP
-    required: true
-    value: dev
+    required: false
+    value: master
 objects:
   - kind: ImageStream
     apiVersion: v1
@@ -53,7 +46,7 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: '${NAME}{SUFFIX}-base'
+      name: '${NAME}-base'
       creationTimestamp: null
       annotations:
         description: Python Runtime Image
@@ -65,7 +58,7 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: '${NAME}{SUFFIX}'
+      name: '${NAME}'
       creationTimestamp: null
       labels:
         shared: 'true'
@@ -78,7 +71,7 @@ objects:
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: '${NAME}{SUFFIX}-base'
+      name: '${NAME}-base${SUFFIX}'
       creationTimestamp: null
       labels: {}
       annotations: {}
@@ -136,14 +129,14 @@ objects:
         sourceStrategy:
           from:
             kind: ImageStreamTag
-            name: '${NAME}{SUFFIX}-base:${VERSION}'
+            name: '${NAME}-base:${VERSION}'
           env:
             - name: BUILD_LOGLEVEL
               value: '2'
       output:
         to:
           kind: ImageStreamTag
-          name: '${NAME}{SUFFIX}:${VERSION}'
+          name: '${NAME}:${VERSION}'
       resources:
         limits:
           cpu: 200m
