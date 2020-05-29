@@ -6,14 +6,8 @@
     max-width: 400px;
   }
 
-  // TODO depends on what these cards need to do in the end
-  // .mat-card-title {
-  //   // Removed to tighten up space between title and button
-  //   // due to no subtitle or content
-  //   margin-bottom: 0;
-  // }
-}
-
-.add-icon {
-  margin-top: -3px;
+  .mat-card-content strong {
+    display: block;
+    margin-bottom: .4rem;
+  }
 }

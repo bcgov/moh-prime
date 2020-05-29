@@ -47,4 +47,11 @@
   .mat-card-content {
     color: theme-palette(blue);
   }
+
+  .mat-card-actions {
+    button[mat-stroked-button]:first-child {
+      // Provide spacing from edge of card to align with card title and subtitle
+      margin-left: .5rem;
+    }
+  }
 }

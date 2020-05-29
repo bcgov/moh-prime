@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription, from } from 'rxjs';
+import { Subscription, from, EMPTY } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
-import { FormUtilsService } from '@core/services/form-utils.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { User } from '@auth/shared/models/user.model';
 
@@ -24,7 +23,7 @@ import { SiteResource } from '@registration/shared/services/site-resource.servic
 export class OrganizationsComponent implements OnInit {
   public busy: Subscription;
   public organizations: Organization[];
-  // TODO only for single organization then remove for multiple organizations
+  // TODO only for single organization then remove
   public sites: Site[];
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
@@ -32,7 +31,6 @@ export class OrganizationsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private formUtilsService: FormUtilsService,
     private authService: AuthService,
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource
@@ -45,8 +43,11 @@ export class OrganizationsComponent implements OnInit {
   }
 
   public viewOrganization(organizationId: number) {
-    // TODO if completed send to overview
-    // TODO if not completed send to signing authority
+    const organization = this.organizations.find(o => o.id === organizationId);
+    const routePath = (organization.completed)
+      ? [SiteRoutes.ORGANIZATIONS, organizationId] // Defaults to overview
+      : [SiteRoutes.ORGANIZATIONS, organizationId, SiteRoutes.SIGNING_AUTHORITY];
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public removeOrganization(organizationId: number) {
@@ -57,35 +58,48 @@ export class OrganizationsComponent implements OnInit {
     this.createSite(organizationId);
   }
 
+  // TODO only for single organization then remove
   public viewSite(siteId: number) {
-
+    const site = this.sites.find(o => o.id === siteId);
+    const routePath = (site.completed)
+      ? [SiteRoutes.ORGANIZATIONS, siteId, SiteRoutes.SITES, site.id] // Defaults to overview
+      : [SiteRoutes.ORGANIZATIONS, siteId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
+  // TODO only for single organization then remove
   public removeSite(siteId: number) {
     this.siteResource.deleteSite(siteId);
   }
 
   public ngOnInit(): void {
     this.busy = this.organizationResource.getOrganizations()
-      .subscribe((organizations: Organization[]) => this.organizations = organizations);
+      .pipe(
+        map((organizations: Organization[]) => this.organizations = organizations),
+        // TODO only for single organization then remove
+        exhaustMap((organizations: Organization[]) =>
+          (organizations.length)
+            // TODO hardcoded organization for single organization then remove
+            ? this.siteResource.getSites(organizations[0].id)
+            : EMPTY
+        ),
+        // TODO only for single organization then remove
+        map((sites: Site[]) => this.sites = sites)
+      ).subscribe();
   }
 
   private createOrganization() {
-    // TODO if not completed go signing authority otherwise got to overview
     this.busy = from(this.authService.getUser())
       .pipe(
         map((user: User) => new Party(user)),
         exhaustMap((party: Party) => this.organizationResource.createOrganization(party)),
         map((organization: Organization) => organization.id),
-        map((organizationId: number) => this.routeUtils.routeRelativeTo(`${organizationId}`))
+        map((organizationId: number) => this.routeUtils.routeRelativeTo([`${organizationId}`, SiteRoutes.SIGNING_AUTHORITY]))
       ).subscribe();
   }
 
   private createSite(organizationId: number) {
-    // TODO if not completed go signing authority otherwise got to overview
     this.busy = this.siteResource.createSite(organizationId)
-      .subscribe((site: Site) => this.routeUtils.routeRelativeTo(
-        [SiteRoutes.ORGANIZATIONS, organizationId, SiteRoutes.SITES, site.id]
-      ));
+      .subscribe((site: Site) => this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATIONS, organizationId, SiteRoutes.SITES, site.id]));
   }
 }

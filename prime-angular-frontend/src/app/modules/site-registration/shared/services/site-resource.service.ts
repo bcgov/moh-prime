@@ -29,8 +29,9 @@ export class SiteResource {
     private logger: LoggerService
   ) { }
 
-  public getSites(): Observable<Site[]> {
-    return this.apiResource.get<Site[]>('sites')
+  public getSites(organizationId: number): Observable<Site[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ organizationId });
+    return this.apiResource.get<Site[]>('sites', params)
       .pipe(
         map((response: ApiHttpResponse<Site[]>) => response.result),
         // TODO split out into proper adapter

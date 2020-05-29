@@ -14,60 +14,35 @@
       </ng-container>
     </app-page-subheader>
 
-    <!-- TODO cards should contain metadata instead of a bunch of buttons, actions can go in a menu top right -->
     <ng-container *ngFor="let organization of organizations; let i = index; let last = last">
 
       <mat-card class="has-hover"
                 [class.mb-3]="last">
         <mat-card-header class="no-avatar">
           <mat-card-title>{{ organization.name | default: 'Organization Information' }}</mat-card-title>
-          <mat-card-subtitle>
-            Signing Authority:
-            {{ organization.signingAuthority.firstName }}
-            {{ organization.signingAuthority.lastName }}
-          </mat-card-subtitle>
 
           <ng-container [ngTemplateOutlet]="organizationMenu"
                         [ngTemplateOutletContext]="{ organization: organization }"></ng-container>
 
         </mat-card-header>
         <mat-card-content>
-          Doing Business As: {{ organization.doingBusinessAs }}<br>
-          Accepted Agreement Date: {{ organization.acceptedAgreementDate | formatDate }}<br>
+          Signing Authority:
+          <strong>{{ organization.signingAuthority.firstName }} {{ organization.signingAuthority.lastName }}</strong>
+
+          Accepted Agreement Date:
+          <strong>{{ organization.acceptedAgreementDate | formatDate | default: 'Not Signed' }}</strong>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button
-                  color="primary"
-                  disabled>View/Update Organization</button>
-          <button mat-button
+          <button mat-stroked-button
                   color="primary"
                   [disabled]="!organization?.completed"
-                  (click)="addSite(organization.id)">Add Site</button>
+                  (click)="addSite(organization.id)">
+            Add Site
+          </button>
         </mat-card-actions>
       </mat-card>
 
     </ng-container>
-
-
-    <!-- TODO title and button label are odd would be better to have: Create Organization -->
-    <!-- TODO buttons with long labels aren't mobile-friendly -->
-    <!-- <mat-card class="has-hover mb-3">
-      <mat-card-header class="no-avatar">
-        <mat-card-title>Organization Information</mat-card-title>
-
-        <ng-container [ngTemplateOutlet]="menu"
-                      [ngTemplateOutletContext]="{ organization: null }"></ng-container>
-
-      </mat-card-header>
-      <mat-card-actions>
-        <button mat-button
-                [disabled]="true"
-                color="primary">Add Site</button>
-        <button mat-button
-                color="primary"
-                (click)="addOrganization()">Enter Organization Information</button>
-      </mat-card-actions>
-    </mat-card> -->
 
     <mat-card *ngIf="!organizations?.length"
               class="has-hover mb-3">
@@ -78,16 +53,20 @@
                       [ngTemplateOutletContext]="{ organization: null }"></ng-container>
 
       </mat-card-header>
-      <mat-card-content></mat-card-content>
       <mat-card-actions>
-        <button mat-button
+        <button mat-stroked-button
                 color="primary"
-                (click)="addOrganization()">Create Organization</button>
+                (click)="addOrganization()">
+          Create Organization
+        </button>
       </mat-card-actions>
     </mat-card>
 
+  </section>
 
-    <!-- TODO most likely not on this page for multiple organizations - too busy -->
+  <section class="mb-3">
+
+    <!-- TODO only for single organization then remove -->
     <ng-container *ngFor="let site of sites; let i = index; let last = last">
       <mat-card class="has-hover mb-3">
         <mat-card-header class="no-avatar">
@@ -99,22 +78,25 @@
         </mat-card-header>
         <mat-card-content></mat-card-content>
         <mat-card-actions>
+          <!-- TODO hardcoded organization for single organization then remove -->
           <button mat-button
                   color="primary"
-                  [routerLink]="[site.id, SiteRoutes.SITES, 1, SiteRoutes.SITE_ADDRESS]">Add Information</button>
+                  [routerLink]="[organizations[0].id, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS]">
+            Add Information
+          </button>
         </mat-card-actions>
       </mat-card>
     </ng-container>
 
-    <!-- TODO only for use in multiple organizations -->
-    <!-- <button mat-button
+    <button mat-button
             type="button"
             color="primary"
             class="mb-3"
+            disabled
             (click)="addOrganization()">
-      <mat-icon class="add-icon">add</mat-icon>
+      <mat-icon>add</mat-icon>
       Add Organization
-    </button> -->
+    </button>
 
   </section>
 
@@ -135,7 +117,12 @@
         <span>Add Site</span>
       </button>
       <button mat-menu-item
-              disabled>
+              [disabled]="!!organization?.acceptedAgreementDate">
+        <mat-icon>visibility</mat-icon>
+        <span>View/Update Signing Authority</span>
+      </button>
+      <button mat-menu-item
+              [disabled]="!!organization?.acceptedAgreementDate">
         <mat-icon>visibility</mat-icon>
         <span>View/Update Organization</span>
       </button>
@@ -153,6 +140,7 @@
 
   </ng-template>
 
+  <!-- TODO only for single organization then remove -->
   <ng-template #siteMenu
                let-site="site">
     <button mat-icon-button

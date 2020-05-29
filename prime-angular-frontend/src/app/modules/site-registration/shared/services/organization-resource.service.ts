@@ -30,10 +30,6 @@ export class OrganizationResource {
     return this.apiResource.get<Organization[]>('organizations')
       .pipe(
         map((response: ApiHttpResponse<Organization[]>) => response.result),
-        // TODO add adapter if needed
-        // map((organizations: Organization[]) => {
-        //   return organizations;
-        // }),
         tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
@@ -47,10 +43,6 @@ export class OrganizationResource {
     return this.apiResource.get<Organization>(`organizations/${organizationId}`)
       .pipe(
         map((response: ApiHttpResponse<Organization>) => response.result),
-        // TODO add adapter if needed
-        // map((organization: Organization) => {
-        //   return organization;
-        // }),
         tap((organization: Organization) => this.logger.info('ORGANIZATION', organization)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be retrieved');
