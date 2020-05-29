@@ -35,9 +35,7 @@ export class SiteRegistrationStateService {
 
   constructor(
     private fb: FormBuilder,
-    private formUtilsService: FormUtilsService,
-    private routeStateService: RouteStateService,
-    private logger: LoggerService
+    private formUtilsService: FormUtilsService
   ) {
     this.organizationInformationForm = this.buildOrganizationInformationForm();
     this.organizationTypeForm = this.buildOrganizationTypeForm();
@@ -281,7 +279,7 @@ export class SiteRegistrationStateService {
   private buildOrganizationInformationForm(): FormGroup {
     return this.fb.group({
       id: [
-        null,
+        0,
         []
       ],
       name: [
@@ -299,7 +297,7 @@ export class SiteRegistrationStateService {
     });
   }
 
-  public buildOrganizationTypeForm(code: number = null): FormGroup {
+  private buildOrganizationTypeForm(code: number = null): FormGroup {
     return this.fb.group({
       organizationTypeCode: [code, [Validators.required]]
     });
@@ -308,7 +306,7 @@ export class SiteRegistrationStateService {
   private buildSiteAddressForm(): FormGroup {
     return this.fb.group({
       id: [
-        null,
+        0,
         []
       ],
       street: [
@@ -345,7 +343,7 @@ export class SiteRegistrationStateService {
   private buildVendorForm(): FormGroup {
     return this.fb.group({
       id: [
-        null,
+        0,
         [Validators.required]
       ]
     });
@@ -371,7 +369,7 @@ export class SiteRegistrationStateService {
   private partyFormGroup(disabled: boolean = false): FormGroup {
     return this.fb.group({
       id: [
-        null,
+        0,
         []
       ],
       firstName: [

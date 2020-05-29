@@ -21,7 +21,7 @@ import { Party } from '@registration/shared/models/party.model';
 @Injectable({
   providedIn: 'root'
 })
-export class SiteResourceService {
+export class SiteResource {
   constructor(
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
@@ -85,8 +85,8 @@ export class SiteResourceService {
       );
   }
 
-  public createSite(party: Party): Observable<Site> {
-    return this.apiResource.post<Site>('sites', party)
+  public createSite(organizationId: number): Observable<Site> {
+    return this.apiResource.post<Site>(`sites/${organizationId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         tap((newSite: Site) => {

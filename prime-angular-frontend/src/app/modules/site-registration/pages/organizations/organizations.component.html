@@ -37,6 +37,9 @@
           <button mat-button
                   color="primary"
                   [routerLink]="[organization.id, SiteRoutes.SIGNING_AUTHORITY]">Add Information</button>
+          <button mat-button
+                  color="primary"
+                  (click)="addSite(organization.id)">Add Site</button>
         </mat-card-actions>
       </mat-card>
 
