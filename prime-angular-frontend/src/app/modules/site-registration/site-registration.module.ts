@@ -28,6 +28,7 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
 import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 
@@ -51,7 +52,8 @@ import { BusinessLicenceComponent } from './pages/business-licence/business-lice
     OrganizationAgreementComponent,
     SameAsComponent,
     BusinessLicenceComponent,
-    OrganizationTypeComponent
+    OrganizationTypeComponent,
+    OrganizationSigningAuthorityComponent
   ],
   imports: [
     SharedModule,

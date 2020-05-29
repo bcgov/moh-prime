@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200529173116_PartySigningAuthorityFields")]
+    partial class PartySigningAuthorityFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,6 +369,9 @@ namespace Prime.Migrations
                     b.Property<DateTimeOffset?>("EventDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("PartyId")
                         .HasColumnType("integer");
 
@@ -386,6 +391,8 @@ namespace Prime.Migrations
                     b.HasIndex("BusinessEventTypeCode");
 
                     b.HasIndex("EnrolleeId");
+
+                    b.HasIndex("OrganizationId");
 
                     b.HasIndex("PartyId");
 
@@ -483,42 +490,16 @@ namespace Prime.Migrations
                             Name = "Admin View",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = 8,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Organization",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
-                });
-
-            modelBuilder.Entity("Prime.Models.BusinessLicence", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("DocumentGuid")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("text");
-
-                    b.Property<int>("SiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SiteId");
-
-                    b.ToTable("BusinessLicence");
                 });
 
             modelBuilder.Entity("Prime.Models.Certification", b =>
@@ -6610,6 +6591,9 @@ namespace Prime.Migrations
                     b.Property<DateTimeOffset?>("AcceptedAgreementDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("Completed")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -6622,14 +6606,14 @@ namespace Prime.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("OrganizationTypeCode")
-                        .HasColumnType("integer");
-
                     b.Property<string>("RegistrationId")
                         .HasColumnType("text");
 
                     b.Property<int>("SigningAuthorityId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("SubmittedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -6638,8 +6622,6 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationTypeCode");
 
                     b.HasIndex("SigningAuthorityId");
 
@@ -11826,6 +11808,10 @@ namespace Prime.Migrations
                         .WithMany()
                         .HasForeignKey("EnrolleeId");
 
+                    b.HasOne("Prime.Models.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId");
+
                     b.HasOne("Prime.Models.Party", "Party")
                         .WithMany()
                         .HasForeignKey("PartyId");
@@ -11833,15 +11819,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany()
                         .HasForeignKey("SiteId");
-                });
-
-            modelBuilder.Entity("Prime.Models.BusinessLicence", b =>
-                {
-                    b.HasOne("Prime.Models.Site", "Site")
-                        .WithMany("BusinessLicences")
-                        .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Certification", b =>
@@ -12076,10 +12053,6 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
-                    b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
-                        .WithMany()
-                        .HasForeignKey("OrganizationTypeCode");
-
                     b.HasOne("Prime.Models.Party", "SigningAuthority")
                         .WithMany()
                         .HasForeignKey("SigningAuthorityId")
