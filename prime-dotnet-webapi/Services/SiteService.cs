@@ -34,10 +34,10 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Site>> GetSitesAsync(int partyId)
+        public async Task<IEnumerable<Site>> GetSitesAsync(int organizationId)
         {
             return await this.GetBaseSiteQuery()
-                .Where(s => s.ProvisionerId == partyId)
+                .Where(s => s.Location.OrganizationId == organizationId)
                 .ToListAsync();
         }
 

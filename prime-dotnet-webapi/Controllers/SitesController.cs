@@ -14,7 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
+    // [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
     public class SitesController : ControllerBase
     {
         private readonly ISiteService _siteService;
@@ -33,13 +33,14 @@ namespace Prime.Controllers
 
         // GET: api/Sites
         /// <summary>
-        /// Gets all of the Sites for a user, or all sites if user has ADMIN role
+        /// Gets all of the Sites for an organization, or all sites if user has ADMIN role
         /// </summary>
+        /// <param name="organizationId"></param>
         [HttpGet(Name = nameof(GetSites))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSites()
+        public async Task<ActionResult<IEnumerable<Site>>> GetSites([FromQuery]int organizationId)
         {
             IEnumerable<Site> sites = null;
 
@@ -49,11 +50,7 @@ namespace Prime.Controllers
             }
             else
             {
-                var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-
-                sites = (party != null)
-                    ? await _siteService.GetSitesAsync(party.Id)
-                    : new List<Site>();
+                sites = await _siteService.GetSitesAsync(organizationId);
             }
 
             return Ok(ApiResponse.Result(sites));
