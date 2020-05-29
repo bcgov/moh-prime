@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: document-manager-bc
+  name: mds-python-docman-bc
   creationTimestamp: null
 parameters:
   - name: NAME
@@ -53,7 +53,7 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: '${NAME}${SUFFIX}-base'
+      name: '${NAME}{SUFFIX}-base'
       creationTimestamp: null
       annotations:
         description: Python Runtime Image
@@ -65,7 +65,7 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: '${NAME}'
+      name: '${NAME}{SUFFIX}'
       creationTimestamp: null
       labels:
         shared: 'true'
@@ -78,7 +78,7 @@ objects:
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: '${NAME}${SUFFIX}-base'
+      name: '${NAME}{SUFFIX}-base'
       creationTimestamp: null
       labels: {}
       annotations: {}
@@ -102,7 +102,7 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: '${NAME}${SUFFIX}-base:${VERSION}'
+          name: '${NAME}-base:${VERSION}'
       resources:
         limits:
           cpu: 500m
@@ -136,14 +136,14 @@ objects:
         sourceStrategy:
           from:
             kind: ImageStreamTag
-            name: '${NAME}${SUFFIX}-base:${VERSION}'
+            name: '${NAME}{SUFFIX}-base:${VERSION}'
           env:
             - name: BUILD_LOGLEVEL
               value: '2'
       output:
         to:
           kind: ImageStreamTag
-          name: '${NAME}${SUFFIX}:${VERSION}'
+          name: '${NAME}{SUFFIX}:${VERSION}'
       resources:
         limits:
           cpu: 200m

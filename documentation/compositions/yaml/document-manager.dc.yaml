@@ -1,9 +1,9 @@
 kind: Template
 apiVersion: v1
 labels:
-  template: database-backup-template
+  template: document-manager-template
 metadata:
-  name: document-manager-bc
+  name: document-manager-dc
   creationTimestamp: null
 parameters:
   - name: NAME
