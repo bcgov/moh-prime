@@ -24,6 +24,8 @@ import { SiteResource } from '@registration/shared/services/site-resource.servic
 export class OrganizationsComponent implements OnInit {
   public busy: Subscription;
   public organizations: Organization[];
+  // TODO only for single organization then remove for multiple organizations
+  public sites: Site[];
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
 
@@ -42,8 +44,25 @@ export class OrganizationsComponent implements OnInit {
     this.createOrganization();
   }
 
+  public viewOrganization(organizationId: number) {
+    // TODO if completed send to overview
+    // TODO if not completed send to signing authority
+  }
+
+  public removeOrganization(organizationId: number) {
+    this.organizationResource.deleteOrganization(organizationId);
+  }
+
   public addSite(organizationId: number) {
     this.createSite(organizationId);
+  }
+
+  public viewSite(siteId: number) {
+
+  }
+
+  public removeSite(siteId: number) {
+    this.siteResource.deleteSite(siteId);
   }
 
   public ngOnInit(): void {

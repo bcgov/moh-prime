@@ -1,45 +1,6 @@
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Organization Information</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Organization Information"
-              (click)="onRoute(SiteRoutes.ORGANIZATION_INFORMATION)">edit</mat-icon>
-  </app-page-subheader>
-
-  <app-enrollee-property title="Organization Number (Legal Entity Operating Site)">
-    {{ site?.location?.organization.name | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Organization Registration ID">
-    {{ site?.location?.organization.registrationId | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Doing Business As">
-    {{ site?.location?.organization.doingBusinessAs | default }}
-  </app-enrollee-property>
-
-</section>
-
-<section class="mb-4">
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Organization Type</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Organization Type"
-              (click)="onRoute(SiteRoutes.ORGANIZATION_TYPE)">edit</mat-icon>
-  </app-page-subheader>
-
-  <app-enrollee-property title="Organization Type"
-                         [makeBold]="true">
-    {{ site?.location?.organization.organizationTypeCode | configCode: 'organizationTypes' }}
-  </app-enrollee-property>
-
-</section>
-
-<section class="mb-4">
-
-  <app-page-subheader>
     <ng-container appPageSubheaderTitle>Site Address</ng-container>
     <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Site Address"
@@ -108,28 +69,13 @@
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Signing Authority</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Signing Authority"
-              (click)="onRoute(SiteRoutes.SIGNING_AUTHORITY)">edit</mat-icon>
-  </app-page-subheader>
-
-  <app-registrant-profile-review [party]="site?.location?.organization?.signingAuthority">
-  </app-registrant-profile-review>
-
-</section>
-
-<section class="mb-4">
-
-  <app-page-subheader>
     <ng-container appPageSubheaderTitle>Administrator of PharmaNet Onboarding</ng-container>
     <mat-icon *ngIf="showEditRedirect"
               matTooltip="Edit Administrator"
               (click)="onRoute(SiteRoutes.ADMINISTRATOR)">edit</mat-icon>
   </app-page-subheader>
 
-  <app-registrant-profile-review [party]="site?.location?.administratorPharmaNet">
-  </app-registrant-profile-review>
+  <app-party-review [party]="site?.location?.administratorPharmaNet"></app-party-review>
 
 </section>
 
@@ -142,8 +88,7 @@
               (click)="onRoute(SiteRoutes.PRIVACY_OFFICER)">edit</mat-icon>
   </app-page-subheader>
 
-  <app-registrant-profile-review [party]="site?.location?.privacyOfficer">
-  </app-registrant-profile-review>
+  <app-party-review [party]="site?.location?.privacyOfficer"></app-party-review>
 
 </section>
 
@@ -156,7 +101,6 @@
               (click)="onRoute(SiteRoutes.TECHNICAL_SUPPORT)">edit</mat-icon>
   </app-page-subheader>
 
-  <app-registrant-profile-review [party]="site?.location?.technicalSupport">
-  </app-registrant-profile-review>
+  <app-party-review [party]="site?.location?.technicalSupport"></app-party-review>
 
 </section>

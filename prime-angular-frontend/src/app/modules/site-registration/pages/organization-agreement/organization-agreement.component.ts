@@ -12,9 +12,10 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state-service';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -34,34 +35,34 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
+    // TODO setup guard to pull organization on each route in the loop
+    // private organizationService: OrganizationService,
+    private organizationResource: OrganizationResource,
+    private organizationFormStateService: OrganizationFormStateService,
     private dialog: MatDialog
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
   public onSubmit() {
-    // if (this.accepted.checked) {
-    //   const siteId = this.siteRegistrationService.site?.id;
-    //   const data: DialogOptions = {
-    //     title: 'Organization Agreement',
-    //     message: 'Are you sure you want to accept the Organization Agreement?',
-    //     actionText: 'Accept Organization Agreement'
-    //   };
-    //   this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-    //     .afterClosed()
-    //     .pipe(
-    //       exhaustMap((result: boolean) =>
-    //         (result)
-    //           ? this.siteRegistrationResource.acceptCurrentOrganizationAgreement(siteId)
-    //           : EMPTY
-    //       )
-    //     )
-    //     .subscribe(() =>
-    this.nextRoute()
-    //     );
-    // }
+    if (this.accepted.checked) {
+      const organizationid = this.route.snapshot.params.oid;
+      const data: DialogOptions = {
+        title: 'Organization Agreement',
+        message: 'Are you sure you want to accept the Organization Agreement?',
+        actionText: 'Accept Organization Agreement'
+      };
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
+              : EMPTY
+          )
+        )
+        .subscribe(() => this.nextRoute());
+    }
   }
 
   public onBack() {
@@ -69,12 +70,25 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
+    this.routeUtils.routeRelativeTo(['../../', SiteRoutes.ORGANIZATIONS]);
   }
 
   public ngOnInit(): void {
-    this.hasAcceptedAgreement = !!this.siteRegistrationService.site?.location?.organization.acceptedAgreementDate;
-    this.siteRegistrationResource
+    // TODO setup guard to pull organization on each route in the loop
+    // TODO structured to match in all organization views
+    const organizationId = this.route.snapshot.params.oid;
+    this.organizationResource
+      .getOrganizationById(organizationId)
+      .subscribe((organization: Organization) => {
+        this.isCompleted = organization?.completed;
+        this.organizationFormStateService.organization = organization;
+
+        // TODO different from other components
+        this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
+      });
+
+    // TODO chain multiple requests when tightening up components
+    this.organizationResource
       .getOrganizationAgreement()
       .subscribe((organizationAgreement: string) => this.organizationAgreement = organizationAgreement);
   }

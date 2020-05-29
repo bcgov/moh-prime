@@ -16,8 +16,8 @@ import { OrganizationsComponent } from './pages/organizations/organizations.comp
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
-import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
+import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
@@ -27,6 +27,7 @@ import { HoursOperationComponent } from './pages/hours-operation/hours-operation
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
+import { OrganizationReviewComponent } from './shared/components/organization-review/organization-review.component';
 
 @NgModule({
   declarations: [
@@ -35,8 +36,8 @@ import { SiteAddressComponent } from './pages/site-address/site-address.componen
     SigningAuthorityComponent,
     OrganizationInformationComponent,
     OrganizationTypeComponent,
-    OrganizationOverviewComponent,
     OrganizationAgreementComponent,
+    OrganizationOverviewComponent,
 
     VendorComponent,
     AdministratorComponent,
@@ -49,7 +50,8 @@ import { SiteAddressComponent } from './pages/site-address/site-address.componen
     SiteProgressIndicatorComponent,
     SiteCollectionNoticeComponent,
     SiteAddressComponent,
-    SameAsComponent
+    SameAsComponent,
+    OrganizationReviewComponent
   ],
   imports: [
     SharedModule,

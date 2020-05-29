@@ -7,8 +7,8 @@ export class SiteRoutes {
   public static SIGNING_AUTHORITY = 'signing-authority';
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static ORGANIZATION_TYPE = 'organization-type';
-  public static ORGANIZATION_AGREEMENT = 'access-agreement';
   public static ORGANIZATION_REVIEW = 'organization-review';
+  public static ORGANIZATION_AGREEMENT = 'access-agreement';
 
   public static SITES = 'sites';
   public static SITE_ADDRESS = 'site-address';

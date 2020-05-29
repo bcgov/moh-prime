@@ -12,9 +12,10 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state-service';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
   selector: 'app-signing-authority',
@@ -32,9 +33,10 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    // TODO setup guard to pull organization on each route in the loop
+    // private organizationService: OrganizationService,
+    private organizationResource: OrganizationResource,
+    private organizationFormStateService: OrganizationFormStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
@@ -43,19 +45,20 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   const payload = this.siteRegistrationStateService.site;
-    //   this.siteRegistrationResource
-    //     .updateSite(payload)
-    //     .subscribe(() => {
-    //       this.form.markAsPristine();
-    this.nextRoute();
-    // });
-    // }
+    // TODO structured to match in all organization views
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.organizationFormStateService.organization;
+      this.organizationResource
+        .updateOrganization(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    }
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATIONS);
+    this.routeUtils.routeRelativeTo(['../../', SiteRoutes.ORGANIZATIONS]);
   }
 
   public nextRoute() {
@@ -79,12 +82,18 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.signingAuthorityForm;
+    this.form = this.organizationFormStateService.signingAuthorityForm;
   }
 
   private initForm() {
-    const site = this.siteRegistrationService.site;
-    this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO setup guard to pull organization on each route in the loop
+    // TODO structured to match in all organization views
+    const organizationId = this.route.snapshot.params.oid;
+    this.organizationResource
+      .getOrganizationById(organizationId)
+      .subscribe((organization: Organization) => {
+        this.isCompleted = organization?.completed;
+        this.organizationFormStateService.organization = organization;
+      });
   }
 }

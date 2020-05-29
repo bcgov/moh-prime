@@ -27,6 +27,7 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
+import { OrganizationGuard } from './shared/guards/organization.guard';
 
 const routes: Routes = [
   {
@@ -62,6 +63,7 @@ const routes: Routes = [
               {
                 path: SiteRoutes.SIGNING_AUTHORITY,
                 component: SigningAuthorityComponent,
+                canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Signing Authority' }
               },
@@ -78,16 +80,16 @@ const routes: Routes = [
                 data: { title: 'Organization Type' }
               },
               {
-                path: SiteRoutes.ORGANIZATION_AGREEMENT,
-                component: OrganizationAgreementComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Access Agreement' }
-              },
-              {
                 path: SiteRoutes.ORGANIZATION_REVIEW,
                 component: OrganizationOverviewComponent,
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Review' }
+              },
+              {
+                path: SiteRoutes.ORGANIZATION_AGREEMENT,
+                component: OrganizationAgreementComponent,
+                canDeactivate: [CanDeactivateFormGuard],
+                data: { title: 'Organization Agreement' }
               },
               {
                 // TODO need a guard/component redirect back to signing authority if not completed

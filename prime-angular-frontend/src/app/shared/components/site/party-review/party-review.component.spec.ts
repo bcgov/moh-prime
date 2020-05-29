@@ -4,16 +4,16 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockSiteRegistrationService } from 'test/mocks/mock-site-registration.service';
 
-import { RegistrantProfileReviewComponent } from './registrant-profile-review.component';
+import { PartyReviewComponent } from './party-review.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SharedModule } from '@shared/shared.module';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 
-describe('RegistrantProfileReviewComponent', () => {
-  let component: RegistrantProfileReviewComponent;
-  let fixture: ComponentFixture<RegistrantProfileReviewComponent>;
+describe('PartyReviewComponent', () => {
+  let component: PartyReviewComponent;
+  let fixture: ComponentFixture<PartyReviewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -40,7 +40,7 @@ describe('RegistrantProfileReviewComponent', () => {
   }));
 
   beforeEach(inject([SiteRegistrationService], (siteRegistrationService: SiteRegistrationService) => {
-    fixture = TestBed.createComponent(RegistrantProfileReviewComponent);
+    fixture = TestBed.createComponent(PartyReviewComponent);
     component = fixture.componentInstance;
     component.party = siteRegistrationService.site.location.organization.signingAuthority;
     fixture.detectChanges();

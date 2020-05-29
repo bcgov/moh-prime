@@ -1,15 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Site } from '@registration/shared/models/site.model';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
-  selector: 'app-site-review',
-  templateUrl: './site-review.component.html',
-  styleUrls: ['./site-review.component.scss']
+  selector: 'app-organization-review',
+  templateUrl: './organization-review.component.html',
+  styleUrls: ['./organization-review.component.scss']
 })
-export class SiteReviewComponent {
-  @Input() public site: Site;
+export class OrganizationReviewComponent {
+  @Input() public organization: Organization;
   @Input() public showEditRedirect: boolean;
   @Output() public route: EventEmitter<string>;
 

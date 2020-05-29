@@ -19,8 +19,8 @@
   </div>
 
   <app-site-review *ngIf="site"
+                   [site]="site"
                    [showEditRedirect]="true"
-                   [siteInput]="site"
                    (route)="onRoute($event)"></app-site-review>
 
   <div class="footer mb-4">

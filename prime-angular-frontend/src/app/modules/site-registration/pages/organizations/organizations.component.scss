@@ -1,3 +1,19 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+.mat-card {
+  @include media-breakpoint-up(lg) {
+    max-width: 400px;
+  }
+
+  // TODO depends on what these cards need to do in the end
+  // .mat-card-title {
+  //   // Removed to tighten up space between title and button
+  //   // due to no subtitle or content
+  //   margin-bottom: 0;
+  // }
+}
+
 .add-icon {
   margin-top: -3px;
 }

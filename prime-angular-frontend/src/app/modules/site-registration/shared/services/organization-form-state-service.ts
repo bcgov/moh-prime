@@ -12,7 +12,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 @Injectable({
   providedIn: 'root'
 })
-export class OrganizationFormStateServiceService {
+export class OrganizationFormStateService {
   public signingAuthorityForm: FormGroup;
   public organizationInformationForm: FormGroup;
   public organizationTypeForm: FormGroup;

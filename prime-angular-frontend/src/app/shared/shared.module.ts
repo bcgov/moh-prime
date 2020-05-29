@@ -59,7 +59,7 @@ import { CollectionNoticeContainerComponent } from './components/collection-noti
 import { PageFooterComponent } from './components/page-footer/page-footer.component';
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { SiteReviewComponent } from './components/site/site-review/site-review.component';
-import { RegistrantProfileReviewComponent } from './components/site/registrant-profile-review/registrant-profile-review.component';
+import { PartyReviewComponent } from './components/site/party-review/party-review.component';
 
 @NgModule({
   declarations: [
@@ -110,7 +110,7 @@ import { RegistrantProfileReviewComponent } from './components/site/registrant-p
     PageFooterComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    RegistrantProfileReviewComponent
+    PartyReviewComponent
   ],
   imports: [
     CommonModule,
@@ -171,7 +171,8 @@ import { RegistrantProfileReviewComponent } from './components/site/registrant-p
     CollectionNoticeContainerComponent,
     PageFooterComponent,
     FormErrorsComponent,
-    SiteReviewComponent
+    SiteReviewComponent,
+    PartyReviewComponent
   ]
 })
 export class SharedModule { }

@@ -121,42 +121,41 @@ export class OrganizationResource {
       );
   }
 
-  // TODO uncomment and replace from OrganizationResource
-  // public getOrganizationAgreement(): Observable<string> {
-  //   return this.apiResource.get<string>(`sites/organization-agreement`)
-  //     .pipe(
-  //       map((response: ApiHttpResponse<string>) => response.result),
-  //       catchError((error: any) => {
-  //         this.toastService.openErrorToast('Organization agreement could not be retrieved');
-  //         this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationAgreement error has occurred: ', error);
-  //         throw error;
-  //       })
-  //     );
-  // }
+  public getOrganizationAgreement(): Observable<string> {
+    return this.apiResource.get<string>(`organizations/organization-agreement`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement could not be retrieved');
+          this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
-  // public getSignedOrganizationAgreement(siteId: number): Observable<string> {
-  //   return this.apiResource.get<string>(`sites/${siteId}/organization-agreement`)
-  //     .pipe(
-  //       map((response: ApiHttpResponse<string>) => response.result),
-  //       catchError((error: any) => {
-  //         this.toastService.openErrorToast('Organization agreement could not be retrieved');
-  //         this.logger.error('[SiteRegistration] OrganizationResource::getCurrentOrganizationAgreement error has occurred: ', error);
-  //         throw error;
-  //       })
-  //     );
-  // }
+  public acceptCurrentOrganizationAgreement(organizationId: number): NoContent {
+    return this.apiResource.put<NoContent>(`organizations/${organizationId}/organization-agreement`)
+      .pipe(
+        map(() => {
+          this.toastService.openSuccessToast('Organization agreement has been accepted');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement could not be accepted');
+          this.logger.error('[SiteRegistration] OrganizationResource::acceptOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
-  // public acceptCurrentOrganizationAgreement(siteId: number): NoContent {
-  //   return this.apiResource.put<NoContent>(`sites/${siteId}/organization-agreement`)
-  //     .pipe(
-  //       map(() => {
-  //         this.toastService.openSuccessToast('Organization agreement has been accepted');
-  //       }),
-  //       catchError((error: any) => {
-  //         this.toastService.openErrorToast('Organization agreement could not be accepted');
-  //         this.logger.error('[SiteRegistration] OrganizationResource::acceptOrganizationAgreement error has occurred: ', error);
-  //         throw error;
-  //       })
-  //     );
-  // }
+  public getSignedOrganizationAgreement(organizationId: number): Observable<string> {
+    return this.apiResource.get<string>(`organizations/${organizationId}/organization-agreement`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement could not be retrieved');
+          this.logger.error('[SiteRegistration] OrganizationResource::getCurrentOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }
