@@ -101,6 +101,7 @@ export class SiteRegistrationStateService {
     const { organizationTypeCode } = this.organizationTypeForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
 
+
     // Adapt data for backend consumption
     if (!organizationInformation.id) {
       organizationInformation.id = 0;
@@ -112,13 +113,25 @@ export class SiteRegistrationStateService {
       vendor.id = 0;
     }
 
+    let signingAuthority = this.signingAuthorityForm.getRawValue();
+    if (!signingAuthority.id) {
+      signingAuthority.id = 0;
+    }
+    // if (!signingAuthority.firstName) {
+    //   signingAuthority = null;
+    // } else
+    if (!signingAuthority.mailingAddress.street) {
+      signingAuthority.mailingAddress = null;
+    } else if (!signingAuthority.mailingAddress.id) {
+      signingAuthority.mailingAddress.id = 0;
+    }
+
+
     const [
-      signingAuthority,
       administratorPharmaNet,
       privacyOfficer,
       technicalSupport
     ] = [
-      this.signingAuthorityForm.getRawValue(),
       this.administratorPharmaNetForm.getRawValue(),
       this.privacyOfficerForm.getRawValue(),
       this.technicalSupportForm.getRawValue()
@@ -245,7 +258,6 @@ export class SiteRegistrationStateService {
       }
 
       [
-        [this.signingAuthorityForm, site.location.organization.signingAuthority],
         [this.administratorPharmaNetForm, site.location.administratorPharmaNet],
         [this.privacyOfficerForm, site.location.privacyOfficer],
         [this.technicalSupportForm, site.location.technicalSupport]
@@ -260,6 +272,19 @@ export class SiteRegistrationStateService {
           (physicalAddress)
             ? physicalAddressFormGroup.patchValue(physicalAddress)
             : physicalAddressFormGroup.reset();
+        });
+
+      [[this.signingAuthorityForm, site.location.organization.signingAuthority]]
+        .filter(([formGroup, data]: [FormGroup, Party]) => data)
+        .forEach(([formGroup, data]: [FormGroup, Party]) => {
+          const { mailingAddress, ...party } = data;
+
+          formGroup.patchValue(party);
+
+          const mailingAddressFormGroup = formGroup.get('mailingAddress');
+          (mailingAddress)
+            ? mailingAddressFormGroup.patchValue(mailingAddress)
+            : mailingAddressFormGroup.reset();
         });
     }
   }
@@ -364,69 +389,32 @@ export class SiteRegistrationStateService {
         { value: null, disabled },
         [Validators.required]
       ],
-      jobRoleTitle: [
-        null,
-        [Validators.required]
-      ],
-      phone: [
-        null,
-        [
-          Validators.required,
-          FormControlValidators.phone
-        ]
-      ],
-      fax: [
-        null,
-        [
-          Validators.required,
-          FormControlValidators.phone
-        ]
-      ],
-      smsPhone: [
-        null,
-        [
-          Validators.required,
-          FormControlValidators.phone
-        ]
-      ],
-      email: [
-        null,
-        [
-          Validators.required,
-          FormControlValidators.email
-        ]
-      ],
+      preferredFirstName: [null, []],
+      preferredMiddleName: [null, []],
+      preferredLastName: [null, []],
+      jobRoleTitle: [null, [Validators.required]],
+      phone: [null, [Validators.required, FormControlValidators.phone]],
+      fax: [null, [Validators.required, FormControlValidators.phone]],
+      smsPhone: [null, [Validators.required, FormControlValidators.phone]],
+      email: [null, [Validators.required, FormControlValidators.email]],
       physicalAddress: this.fb.group({
-        // TODO should this be null or 0?
-        id: [
-          0,
-          []
-        ],
-        countryCode: [
-          { value: null, disabled: false },
-          []
-        ],
-        provinceCode: [
-          { value: null, disabled: false },
-          []
-        ],
-        street: [
-          { value: null, disabled: false },
-          []
-        ],
-        street2: [
-          { value: null, disabled: false },
-          []
-        ],
-        city: [
-          { value: null, disabled: false },
-          []
-        ],
-        postal: [
-          { value: null, disabled: false },
-          []
-        ]
-      })
+        id: [null, []],
+        countryCode: [{ value: null, disabled }, []],
+        provinceCode: [{ value: null, disabled }, []],
+        street: [{ value: null, disabled }, []],
+        street2: [{ value: null, disabled }, []],
+        city: [{ value: null, disabled }, []],
+        postal: [{ value: null, disabled }, []]
+      }),
+      mailingAddress: this.fb.group({
+        id: [null, []],
+        countryCode: [{ value: null, disabled: false }, []],
+        provinceCode: [{ value: null, disabled: false }, []],
+        street: [{ value: null, disabled: false }, []],
+        street2: [{ value: null, disabled: false }, []],
+        city: [{ value: null, disabled: false }, []],
+        postal: [{ value: null, disabled: false }, []]
+      }),
     });
   }
 

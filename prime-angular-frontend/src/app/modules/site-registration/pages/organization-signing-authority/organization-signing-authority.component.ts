@@ -12,6 +12,7 @@ import { SiteRegistrationStateService } from '@registration/shared/services/site
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-organization-signing-authority',
@@ -28,6 +29,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   public SiteRoutes = SiteRoutes;
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
+  public site: Site;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,7 +40,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'Signing Authority';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -50,12 +51,30 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     return this.form.get('preferredLastName') as FormControl;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
+  public get physicalAddress() {
+    return (this.site && this.site.location.organization.signingAuthority.physicalAddress)
+      ? this.site.location.organization.signingAuthority.physicalAddress
+      : null;
   }
 
   public get mailingAddress(): FormGroup {
     return this.form.get('mailingAddress') as FormGroup;
+  }
+
+  public get phone(): FormControl {
+    return this.form.get('phone') as FormControl;
+  }
+
+  public get fax(): FormControl {
+    return this.form.get('fax') as FormControl;
+  }
+
+  public get smsPhone(): FormControl {
+    return this.form.get('smsPhone') as FormControl;
+  }
+
+  public get email(): FormControl {
+    return this.form.get('email') as FormControl;
   }
 
   public onPreferredNameChange() {
@@ -105,6 +124,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public ngOnInit() {
+    this.site = this.siteRegistrationService.site;
     this.createFormInstance();
     this.initForm();
   }
