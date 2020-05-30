@@ -76,10 +76,9 @@
                         [ngTemplateOutletContext]="{ site: site }"></ng-container>
 
         </mat-card-header>
-        <mat-card-content></mat-card-content>
         <mat-card-actions>
           <!-- TODO hardcoded organization for single organization then remove -->
-          <button mat-button
+          <button mat-stroked-button
                   color="primary"
                   [routerLink]="[organizations[0].id, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS]">
             Add Information
@@ -117,7 +116,7 @@
         <span>Add Site</span>
       </button>
       <button mat-menu-item
-              [disabled]="!!organization?.acceptedAgreementDate">
+              disabled>
         <mat-icon>visibility</mat-icon>
         <span>View/Update Signing Authority</span>
       </button>
@@ -131,6 +130,14 @@
         <mat-icon>article</mat-icon>
         <span>View Organization Agreement</span>
       </button>
+      <!-- TODO can't delete organizations due to relationship with business events -->
+      <!-- <button mat-menu-item
+              [disabled]="!!sites?.length"
+              (click)="removeOrganization(organization.id)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete Organization</span>
+      </button> -->
+      <!-- TODO placeholder until organization deletion works -->
       <button mat-menu-item
               disabled>
         <mat-icon>delete</mat-icon>
@@ -156,8 +163,7 @@
         <span>View/Update Site</span>
       </button>
       <button mat-menu-item
-              (click)="removeSite(site.id)"
-              disabled>
+              (click)="removeSite(site.id)">
         <mat-icon>delete</mat-icon>
         <span>Delete Site</span>
       </button>

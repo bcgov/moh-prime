@@ -51,7 +51,12 @@ export class OrganizationsComponent implements OnInit {
   }
 
   public removeOrganization(organizationId: number) {
-    this.organizationResource.deleteOrganization(organizationId);
+    this.organizationResource
+      .deleteOrganization(organizationId)
+      .subscribe(() => {
+        const index = this.sites.findIndex(o => o.id === organizationId);
+        this.organizations.splice(index, 1);
+      });
   }
 
   public addSite(organizationId: number) {
@@ -69,7 +74,12 @@ export class OrganizationsComponent implements OnInit {
 
   // TODO only for single organization then remove
   public removeSite(siteId: number) {
-    this.siteResource.deleteSite(siteId);
+    this.siteResource
+      .deleteSite(siteId)
+      .subscribe(() => {
+        const index = this.sites.findIndex(s => s.id === siteId);
+        this.sites.splice(index, 1);
+      });
   }
 
   public ngOnInit(): void {
@@ -100,6 +110,6 @@ export class OrganizationsComponent implements OnInit {
 
   private createSite(organizationId: number) {
     this.busy = this.siteResource.createSite(organizationId)
-      .subscribe((site: Site) => this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATIONS, organizationId, SiteRoutes.SITES, site.id]));
+      .subscribe((site: Site) => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS]));
   }
 }
