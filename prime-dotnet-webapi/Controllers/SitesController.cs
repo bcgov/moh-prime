@@ -19,15 +19,18 @@ namespace Prime.Controllers
     {
         private readonly ISiteService _siteService;
         private readonly IPartyService _partyService;
+        private readonly IOrganizationService _organizationService;
         private readonly IRazorConverterService _razorConverterService;
 
         public SitesController(
             ISiteService siteService,
             IPartyService partyService,
+            IOrganizationService organizationService,
             IRazorConverterService razorConverterService)
         {
             _siteService = siteService;
             _partyService = partyService;
+            _organizationService = organizationService;
             _razorConverterService = razorConverterService;
         }
 
@@ -36,12 +39,18 @@ namespace Prime.Controllers
         /// Gets all of the Sites for an organization, or all sites if user has ADMIN role
         /// </summary>
         /// <param name="organizationId"></param>
-        [HttpGet(Name = nameof(GetSites))]
+        [HttpGet("/api/organizations/{organizationId:int}/sites", Name = nameof(GetSites))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSites([FromQuery]int organizationId)
+        public async Task<ActionResult<IEnumerable<Site>>> GetSites(int organizationId)
         {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
             IEnumerable<Site> sites = null;
 
             if (User.IsAdmin() || User.HasAdminView())
@@ -84,13 +93,19 @@ namespace Prime.Controllers
         /// Creates a new Site.
         /// <param name="organizationId"></param>
         /// </summary>
-        [HttpPost(Name = nameof(CreateSite))]
+        [HttpPost("/api/organizations/{organizationId:int}/sites", Name = nameof(CreateSite))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Site>> CreateSite(int organizationId)
         {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
             var createdSiteId = await _siteService.CreateSiteAsync(organizationId);
 
             var createdSite = await _siteService.GetSiteAsync(createdSiteId);
