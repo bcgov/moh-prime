@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { OrganizationFormStateService } from './organization-form-state-service';
+import { OrganizationFormStateService } from './organization-form-state.service';
 
 describe('OrganizationFormStateService', () => {
   let service: OrganizationFormStateService;

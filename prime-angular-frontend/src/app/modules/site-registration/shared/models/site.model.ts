@@ -4,12 +4,12 @@ import { Party } from './party.model';
 
 export interface Site {
   id?: number;
+  provisionerId: number;
+  provisioner: Party;
   locationId: number;
   location: Location;
   vendorId: number;
   vendor: Vendor;
-  provisionerId: number;
-  provisioner: Party;
   pec: string;
   completed: boolean;
   approvedDate: string;

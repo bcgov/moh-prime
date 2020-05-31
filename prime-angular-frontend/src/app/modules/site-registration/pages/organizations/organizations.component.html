@@ -64,6 +64,16 @@
 
   </section>
 
+  <button mat-button
+          type="button"
+          color="primary"
+          class="mb-3"
+          disabled
+          (click)="addOrganization()">
+    <mat-icon>add</mat-icon>
+    Add Organization
+  </button>
+
   <section class="mb-3">
 
     <!-- TODO only for single organization then remove -->
@@ -87,16 +97,6 @@
       </mat-card>
     </ng-container>
 
-    <button mat-button
-            type="button"
-            color="primary"
-            class="mb-3"
-            disabled
-            (click)="addOrganization()">
-      <mat-icon>add</mat-icon>
-      Add Organization
-    </button>
-
   </section>
 
   <ng-template #organizationMenu
@@ -116,20 +116,32 @@
         <span>Add Site</span>
       </button>
       <button mat-menu-item
-              disabled>
+              (click)="viewOrganization(organization.id, SiteRoutes.SIGNING_AUTHORITY)">
         <mat-icon>visibility</mat-icon>
         <span>View/Update Signing Authority</span>
       </button>
       <button mat-menu-item
-              [disabled]="!!organization?.acceptedAgreementDate">
+              (click)="viewOrganization(organization.id)">
         <mat-icon>visibility</mat-icon>
         <span>View/Update Organization</span>
       </button>
+      <!-- TODO only for single organization with no updates then remove -->
+      <!-- <button mat-menu-item
+              [disabled]="!!organization?.acceptedAgreementDate">
+        <mat-icon>visibility</mat-icon>
+        <span>View/Update Organization</span>
+      </button> -->
       <button mat-menu-item
-              disabled>
+              (click)="viewOrganization(organization.id, SiteRoutes.ORGANIZATION_AGREEMENT)">
         <mat-icon>article</mat-icon>
         <span>View Organization Agreement</span>
       </button>
+      <!-- TODO only for single organization with no updates then remove -->
+      <!-- <button mat-menu-item
+              disabled>
+        <mat-icon>article</mat-icon>
+        <span>View Organization Agreement</span>
+      </button> -->
       <!-- TODO can't delete organizations due to relationship with business events -->
       <!-- <button mat-menu-item
               [disabled]="!!sites?.length"

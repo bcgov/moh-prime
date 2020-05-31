@@ -24,6 +24,10 @@ export class SiteRoutes {
 
   public static MODULE_PATH = SiteRoutes.SITE_REGISTRATION;
 
+  /**
+   * @description
+   * Useful for redirecting to module root-level routes.
+   */
   public static routePath(route: string): string {
     return `/${SiteRoutes.MODULE_PATH}/${route}`;
   }

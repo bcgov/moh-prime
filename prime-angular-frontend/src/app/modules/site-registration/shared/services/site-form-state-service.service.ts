@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
-import { RouterEvent } from '@angular/router';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -14,13 +13,18 @@ import { Site } from '@registration/shared/models/site.model';
 @Injectable({
   providedIn: 'root'
 })
-export class SiteFormStateServiceService {
+export class SiteFormStateService {
   public siteAddressForm: FormGroup;
   public hoursOperationForm: FormGroup;
   public vendorForm: FormGroup;
   public administratorPharmaNetForm: FormGroup;
   public privacyOfficerForm: FormGroup;
   public technicalSupportForm: FormGroup;
+
+  private siteId: number;
+  private locationId: number;
+  private organizationId: number;
+  private provisionerId: number;
 
   constructor(
     private fb: FormBuilder,
@@ -40,7 +44,12 @@ export class SiteFormStateServiceService {
    * Convert JSON into reactive form abstract controls.
    */
   public set site(site: Site) {
-    // TODO store IDs in the form groups
+    // Store required site identifiers not captured in forms
+    this.siteId = site.id;
+    this.locationId = site.location.id;
+    this.organizationId = site.location.organizationId;
+    this.provisionerId = site.provisionerId;
+
     this.patchForm(site);
   }
 
@@ -48,19 +57,12 @@ export class SiteFormStateServiceService {
    * @description
    * Convert reactive form abstract controls into JSON.
    */
+  // TODO method constructs the JSON, and attempts to adapt, should
+  // adapt in only one place
   public get site(): Site {
     const physicalAddress = this.siteAddressForm.getRawValue();
     const businessHours = this.hoursOperationForm.getRawValue().businessDays;
     const vendor = this.vendorForm.getRawValue();
-
-    // Adapt data for backend consumption
-    // TODO are these needed now?
-    // if (!physicalAddress.id) {
-    //   physicalAddress.id = 0;
-    // }
-    // if (!vendor.id) {
-    //   vendor.id = 0;
-    // }
 
     const [
       administratorPharmaNet,
@@ -71,40 +73,45 @@ export class SiteFormStateServiceService {
       this.privacyOfficerForm.getRawValue(),
       this.technicalSupportForm.getRawValue()
     ].map((party: Party) => {
-      if (!party.id) {
-        party.id = 0;
-      }
       if (!party.firstName) {
         party = null;
       } else if (!party.physicalAddress.street) {
         party.physicalAddress = null;
-      } else if (!party.physicalAddress.id) {
-        party.physicalAddress.id = 0;
       }
-
       return party;
     });
 
+    // Includes site and location related keys to uphold relationships, and
+    // allow for updates to a site. Keys not for update have been omitted
+    // and the type enforced
     return {
-      // id: this.siteId,
-      // locationId: this.locationId,
-      // location: {
-      //   id: this.locationId,
-      //   privacyOfficerId: privacyOfficer?.id,
-      //   privacyOfficer,
-      //   administratorPharmaNetId: administratorPharmaNet?.id,
-      //   administratorPharmaNet,
-      //   technicalSupportId: technicalSupport?.id,
-      //   technicalSupport,
-      //   organizationId: organizationInformation?.id,
-      //   physicalAddressId: physicalAddress?.id,
-      //   physicalAddress,
-      //   businessHours
-      // },
-      // vendorId: vendor?.id,
-      // vendor,
-      // provisionerId: this.provisionerId
-    } as Site; // TODO drop this after uncomment block
+      id: this.siteId,
+      provisionerId: this.provisionerId,
+      // provisioner
+      locationId: this.locationId,
+      location: {
+        id: this.locationId,
+        organizationId: this.organizationId,
+        // TODO set on organization and copied to location, but why?
+        // TODO not going to work as they expect regarding site name
+        // doingBusinessAs
+        physicalAddressId: physicalAddress?.id,
+        physicalAddress,
+        businessHours,
+        administratorPharmaNetId: administratorPharmaNet?.id,
+        administratorPharmaNet,
+        privacyOfficerId: privacyOfficer?.id,
+        privacyOfficer,
+        technicalSupportId: technicalSupport?.id,
+        technicalSupport
+      },
+      vendorId: vendor?.id,
+      vendor,
+      // TODO pec not implemented
+      // completed
+      // approvedDate
+      // submittedDate
+    } as Site; // Enforced type
   }
 
   public get isValid() {
@@ -182,7 +189,7 @@ export class SiteFormStateServiceService {
   private buildSiteAddressForm(): FormGroup {
     return this.fb.group({
       id: [
-        null,
+        0,
         []
       ],
       street: [
@@ -204,7 +211,7 @@ export class SiteFormStateServiceService {
       countryCode: [
         { value: Country.CANADA, disabled: true },
         [Validators.required]
-      ],
+      ]
     });
   }
 
@@ -219,7 +226,7 @@ export class SiteFormStateServiceService {
   private buildVendorForm(): FormGroup {
     return this.fb.group({
       id: [
-        null,
+        0,
         [Validators.required]
       ]
     });
@@ -284,13 +291,22 @@ export class SiteFormStateServiceService {
           FormControlValidators.email
         ]
       ],
+      // TODO duplication split out into reuseable address model
       physicalAddress: this.fb.group({
-        // TODO should this be null or 0?
         id: [
           0,
           []
         ],
-        countryCode: [
+        street: [
+          { value: null, disabled: false },
+          []
+        ],
+        // TODO ignored for now since only used in enrolments
+        // street2: [
+        //   { value: null, disabled: false },
+        //   []
+        // ],
+        city: [
           { value: null, disabled: false },
           []
         ],
@@ -298,15 +314,7 @@ export class SiteFormStateServiceService {
           { value: null, disabled: false },
           []
         ],
-        street: [
-          { value: null, disabled: false },
-          []
-        ],
-        street2: [
-          { value: null, disabled: false },
-          []
-        ],
-        city: [
+        countryCode: [
           { value: null, disabled: false },
           []
         ],
@@ -316,5 +324,72 @@ export class SiteFormStateServiceService {
         ]
       })
     });
+  }
+
+  /**
+   * @description
+   * Provide an address form group.
+   *
+   * @param options available for manipulating the form group
+   *  areRequired control names
+   *  areDisabled control names
+   *  useDefaults for province and country, otherwise empty
+   */
+  // TODO when everything is working then start sliding this into place
+  private buildAddressForm(options: {
+    areRequired: string[],
+    areDisabled: string[],
+    useDefaults: boolean
+  }): FormGroup {
+    const controlsConfig = {
+      id: [
+        0,
+        []
+      ],
+      street: [
+        { value: null, disabled: false },
+        []
+      ],
+      // TODO ignored for now since only used in enrolments
+      // street2: [
+      //   { value: null, disabled: false },
+      //   []
+      // ],
+      city: [
+        { value: null, disabled: false },
+        []
+      ],
+      provinceCode: [
+        { value: null, disabled: false },
+        []
+      ],
+      countryCode: [
+        { value: null, disabled: false },
+        []
+      ],
+      postal: [
+        { value: null, disabled: false },
+        []
+      ]
+    };
+
+    Object.keys(controlsConfig).map((key: string, index: number) => {
+      const control = controlsConfig[key];
+      if (options.areDisabled.includes(key)) {
+        control[0].disabled = true;
+      }
+      if (options.useDefaults) {
+        if (key === 'provinceCode') {
+          control[0].value = Province.BRITISH_COLUMBIA;
+        } else if (key === 'countryCode') {
+          control[0].value = Country.CANADA;
+        }
+      }
+      if (options.areRequired.includes(key)) {
+        control[1].push(Validators.required);
+      }
+    });
+
+    return this.fb.group(controlsConfig);
   }
 }

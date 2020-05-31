@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SiteFormStateServiceService } from './site-form-state-service.service';
+import { SiteFormStateService } from './site-form-state-service.service';
 
-describe('SiteFormStateServiceService', () => {
-  let service: SiteFormStateServiceService;
+describe('SiteFormStateService', () => {
+  let service: SiteFormStateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SiteFormStateServiceService);
+    service = TestBed.inject(SiteFormStateService);
   });
 
   it('should be created', () => {

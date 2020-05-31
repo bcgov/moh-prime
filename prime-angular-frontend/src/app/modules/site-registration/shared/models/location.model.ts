@@ -6,16 +6,16 @@ import { Organization } from './organization.model';
 
 export interface Location {
   id?: number;
+  organizationId?: number;
+  organization: Organization;
+  physicalAddressId?: number;
+  physicalAddress: Address;
   administratorPharmaNetId?: number;
   administratorPharmaNet: Party;
   privacyOfficerId?: number;
   privacyOfficer: Party;
   technicalSupportId?: number;
   technicalSupport: Party;
-  organizationId?: number;
-  organization: Organization;
-  physicalAddressId?: number;
-  physicalAddress: Address;
   businessHours: BusinessDay[];
   doingBusinessAs?: string;
 }

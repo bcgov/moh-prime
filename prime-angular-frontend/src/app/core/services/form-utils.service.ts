@@ -112,6 +112,6 @@ export class FormUtilsService {
       }
       return acc;
     }, {} as { [key: string]: any; });
-    return hasError ? result : null;
+    return (hasError) ? result : null;
   }
 }

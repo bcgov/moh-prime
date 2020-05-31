@@ -39,6 +39,8 @@ export class OrganizationFormStateService {
    * @description
    * Convert reactive form abstract controls into JSON.
    */
+  // TODO method constructs the JSON, and attempts to adapt, should
+  // adapt in only one place
   public get organization(): Organization {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const { organizationTypeCode } = this.organizationTypeForm.getRawValue();

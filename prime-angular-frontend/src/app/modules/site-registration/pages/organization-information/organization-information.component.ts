@@ -17,7 +17,7 @@ import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
-import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state-service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import {
   OrgBookResource, OrgBookAutocompleteResult, OrgBookFacetHttpResponse, OrgBookDetailHttpResponse, OrgBookRelatedHttpResponse

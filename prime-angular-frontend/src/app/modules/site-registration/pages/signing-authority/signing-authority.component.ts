@@ -14,7 +14,7 @@ import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
-import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state-service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
@@ -58,7 +58,7 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['../../', SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
   }
 
   public nextRoute() {

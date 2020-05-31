@@ -14,7 +14,7 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
-import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state-service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
@@ -70,7 +70,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(['../../', SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeRelativeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
   }
 
   public ngOnInit(): void {

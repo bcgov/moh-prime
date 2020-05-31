@@ -12,9 +12,10 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Site } from '@registration/shared/models/site.model';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
+import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-site-address',
@@ -24,6 +25,7 @@ import { SiteRegistrationStateService } from '@registration/shared/services/site
 export class SiteAddressComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public title: string;
   public routeUtils: RouteUtils;
   public formControlNames: string[];
   public isCompleted: boolean;
@@ -32,12 +34,14 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    // TODO setup guard to pull organization on each route in the loop
+    // private siteService: SiteService,
+    private siteResource: SiteResource,
+    private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
+    this.title = 'Site Address';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
 
     this.formControlNames = [
@@ -49,19 +53,22 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   const payload = this.siteRegistrationStateService.site;
-    //   this.siteRegistrationResource
-    //     .updateSite(payload)
-    //     .subscribe(() => {
-    //       this.form.markAsPristine();
-    this.nextRoute();
-    // });
-    // }
+    console.log(this.formUtilsService.getFormErrors(this.form));
+
+    // TODO structured to match in all site views
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteFormStateService.site;
+      this.siteResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    }
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['../../../../', SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
   }
 
   public nextRoute() {
@@ -85,12 +92,18 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.siteAddressForm;
+    this.form = this.siteFormStateService.siteAddressForm;
   }
 
   private initForm() {
-    const site = this.siteRegistrationService.site;
-    this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO setup guard to pull site on each route in the loop
+    // TODO structured to match in all site views
+    const siteId = this.route.snapshot.params.sid;
+    this.siteResource
+      .getSiteById(siteId)
+      .subscribe((site: Site) => {
+        this.isCompleted = site?.completed;
+        this.siteFormStateService.site = site;
+      });
   }
 }

@@ -42,12 +42,12 @@ export class OrganizationsComponent implements OnInit {
     this.createOrganization();
   }
 
-  public viewOrganization(organizationId: number) {
+  public viewOrganization(organizationId: number, optionalRoutePath: string = null) {
     const organization = this.organizations.find(o => o.id === organizationId);
-    const routePath = (organization.completed)
-      ? [SiteRoutes.ORGANIZATIONS, organizationId] // Defaults to overview
-      : [SiteRoutes.ORGANIZATIONS, organizationId, SiteRoutes.SIGNING_AUTHORITY];
-    this.routeUtils.routeRelativeTo(routePath);
+    const routePath = [optionalRoutePath] ?? (!organization.completed)
+      ? [SiteRoutes.SIGNING_AUTHORITY]
+      : []; // Defaults to overview
+    this.routeUtils.routeRelativeTo([organizationId, ...routePath]);
   }
 
   public removeOrganization(organizationId: number) {
@@ -67,8 +67,8 @@ export class OrganizationsComponent implements OnInit {
   public viewSite(siteId: number) {
     const site = this.sites.find(o => o.id === siteId);
     const routePath = (site.completed)
-      ? [SiteRoutes.ORGANIZATIONS, siteId, SiteRoutes.SITES, site.id] // Defaults to overview
-      : [SiteRoutes.ORGANIZATIONS, siteId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
+      ? [siteId, SiteRoutes.SITES, site.id] // Defaults to overview
+      : [siteId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
     this.routeUtils.routeRelativeTo(routePath);
   }
 
