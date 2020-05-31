@@ -24,7 +24,7 @@
     </p>
   </div>
   <div *ngIf="!hasContextualContent || (hasPageSubheaderSummary && summaryAsInfo)"
-       class="flex-shrink-1">
+       class="help flex-shrink-1">
     <ng-container *ngIf="hasPageSubheaderSummary && summaryAsInfo; then more else optional"></ng-container>
 
     <ng-template #more>
