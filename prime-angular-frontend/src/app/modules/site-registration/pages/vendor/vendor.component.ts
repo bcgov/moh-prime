@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
@@ -12,9 +12,10 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Site } from '@registration/shared/models/site.model';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
+import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-vendor',
@@ -24,24 +25,26 @@ import { SiteRegistrationStateService } from '@registration/shared/services/site
 export class VendorComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public title: string;
   public routeUtils: RouteUtils;
   // TODO supply through config
   public vendorConfig: { id: number, name: string }[];
-  public isCompleted: boolean;
   public hasNoVendorError: boolean;
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    // TODO setup guard to pull organization on each route in the loop
+    // private siteService: SiteService,
+    private siteResource: SiteResource,
+    private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.title = 'What vendor does this site use?';
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
 
     // TODO supply through config using lookups
     this.vendorConfig = [
@@ -60,21 +63,21 @@ export class VendorComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   const payload = this.siteRegistrationStateService.site;
-    //   this.siteRegistrationResource
-    //     .updateSite(payload)
-    //     .subscribe(() => {
-    //       this.form.markAsPristine();
-    this.nextRoute();
-    //     });
-    // } else {
-    //   this.hasNoVendorError = true;
-    // }
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteFormStateService.site;
+      this.siteResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    } else {
+      this.hasNoVendorError = true;
+    }
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
+    this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
   }
 
   public onChange() {
@@ -102,12 +105,18 @@ export class VendorComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.vendorForm;
+    this.form = this.siteFormStateService.vendorForm;
   }
 
   private initForm() {
-    const site = this.siteRegistrationService.site;
-    this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO setup guard to pull site on each route in the loop
+    // TODO structured to match in all site views
+    const siteId = this.route.snapshot.params.sid;
+    this.siteResource
+      .getSiteById(siteId)
+      .subscribe((site: Site) => {
+        this.isCompleted = site?.completed;
+        this.siteFormStateService.site = site;
+      });
   }
 }

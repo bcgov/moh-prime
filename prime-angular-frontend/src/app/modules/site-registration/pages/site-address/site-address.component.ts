@@ -53,8 +53,6 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    console.log(this.formUtilsService.getFormErrors(this.form));
-
     // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteFormStateService.site;

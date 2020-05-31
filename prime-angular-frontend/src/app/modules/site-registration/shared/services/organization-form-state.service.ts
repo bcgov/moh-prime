@@ -213,12 +213,22 @@ export class OrganizationFormStateService {
           FormControlValidators.email
         ]
       ],
+      // TODO duplication split out into reuseable address model
       physicalAddress: this.fb.group({
         id: [
           0,
           []
         ],
-        countryCode: [
+        street: [
+          { value: null, disabled: false },
+          []
+        ],
+        // TODO not needed and can likely be removed
+        street2: [
+          { value: null, disabled: false },
+          []
+        ],
+        city: [
           { value: null, disabled: false },
           []
         ],
@@ -226,15 +236,7 @@ export class OrganizationFormStateService {
           { value: null, disabled: false },
           []
         ],
-        street: [
-          { value: null, disabled: false },
-          []
-        ],
-        street2: [
-          { value: null, disabled: false },
-          []
-        ],
-        city: [
+        countryCode: [
           { value: null, disabled: false },
           []
         ],

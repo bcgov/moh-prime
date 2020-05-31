@@ -301,11 +301,11 @@ export class SiteFormStateService {
           { value: null, disabled: false },
           []
         ],
-        // TODO ignored for now since only used in enrolments
-        // street2: [
-        //   { value: null, disabled: false },
-        //   []
-        // ],
+        // TODO not needed and can likely be removed
+        street2: [
+          { value: null, disabled: false },
+          []
+        ],
         city: [
           { value: null, disabled: false },
           []
@@ -350,11 +350,11 @@ export class SiteFormStateService {
         { value: null, disabled: false },
         []
       ],
-      // TODO ignored for now since only used in enrolments
-      // street2: [
-      //   { value: null, disabled: false },
-      //   []
-      // ],
+      // TODO not needed and can likely be removed
+      street2: [
+        { value: null, disabled: false },
+        []
+      ],
       city: [
         { value: null, disabled: false },
         []

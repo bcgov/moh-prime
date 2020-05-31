@@ -72,6 +72,7 @@ export class OrganizationOverviewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    // TODO temporary until spoke routing
     const organizationId = this.route.snapshot.params.oid;
     this.organizationResource
       .getOrganizationById(organizationId)

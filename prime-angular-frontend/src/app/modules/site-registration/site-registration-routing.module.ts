@@ -8,8 +8,11 @@ import { DashboardComponent } from '@shared/components/dashboard/dashboard.compo
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
+// TODO drop registration guard
 import { RegistrationGuard } from './shared/guards/registration.guard';
 import { RegistrantGuard } from './shared/guards/registrant.guard';
+import { OrganizationGuard } from './shared/guards/organization.guard';
+import { SiteGuard } from './shared/guards/site.guard';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { OrganizationsComponent } from './pages/organizations/organizations.component';
@@ -27,7 +30,6 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
-import { OrganizationGuard } from './shared/guards/organization.guard';
 
 const routes: Routes = [
   {
@@ -70,24 +72,28 @@ const routes: Routes = [
               {
                 path: SiteRoutes.ORGANIZATION_INFORMATION,
                 component: OrganizationInformationComponent,
+                canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Information' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_TYPE,
                 component: OrganizationTypeComponent,
+                canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Type' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_REVIEW,
                 component: OrganizationOverviewComponent,
+                canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Review' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_AGREEMENT,
                 component: OrganizationAgreementComponent,
+                canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Agreement' }
               },
@@ -103,6 +109,7 @@ const routes: Routes = [
                   {
                     path: SiteRoutes.SITE_ADDRESS,
                     component: SiteAddressComponent,
+                    canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Site Address' }
                   },
@@ -110,12 +117,14 @@ const routes: Routes = [
                   {
                     path: SiteRoutes.HOURS_OPERATION,
                     component: HoursOperationComponent,
+                    canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Hours of Operation' }
                   },
                   {
                     path: SiteRoutes.VENDOR,
                     component: VendorComponent,
+                    canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Vendor' }
                   },
@@ -123,28 +132,33 @@ const routes: Routes = [
                   {
                     path: SiteRoutes.ADMINISTRATOR,
                     component: AdministratorComponent,
+                    canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Administrator of PharmaNet' }
                   },
                   {
                     path: SiteRoutes.PRIVACY_OFFICER,
                     component: PrivacyOfficerComponent,
+                    canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Privacy Officer' }
                   },
                   {
                     path: SiteRoutes.TECHNICAL_SUPPORT,
                     component: TechnicalSupportComponent,
+                    canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Technical Support Contact' }
                   },
                   {
                     path: SiteRoutes.SITE_REVIEW,
+                    canActivate: [SiteGuard],
                     component: SiteOverviewComponent,
                     data: { title: 'Site Registration Review' }
                   },
                   {
                     path: SiteRoutes.CONFIRMATION,
+                    canActivate: [SiteGuard],
                     component: ConfirmationComponent,
                     data: { title: 'Submission Confirmation' }
                   },

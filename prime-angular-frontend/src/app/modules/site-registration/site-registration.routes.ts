@@ -12,11 +12,11 @@ export class SiteRoutes {
 
   public static SITES = 'sites';
   public static SITE_ADDRESS = 'site-address';
-  public static HOURS_OPERATION = 'hours-operation';
   // TODO business licence
+  public static HOURS_OPERATION = 'hours-operation';
   public static VENDOR = 'vendor';
   // TODO remote user(s)
-  public static ADMINISTRATOR = 'administrator';
+  public static ADMINISTRATOR = 'site-administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
   public static TECHNICAL_SUPPORT = 'technical-support';
   public static SITE_REVIEW = 'site-review';
