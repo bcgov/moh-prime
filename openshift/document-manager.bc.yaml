@@ -23,6 +23,7 @@ parameters:
     value: https://github.com/bcgov/moh-prime
   - name: SOURCE_REPOSITORY_REF
     required: true
+    value: feature/PRIME-805-document-manager-template
   - name: OC_NAMESPACE
     required: true
     value: dqszvc
@@ -30,53 +31,126 @@ parameters:
     required: true
     value: dev
 objects:
-- apiVersion: v1
-  kind: ImageStream
+- kind: ImageStream
+  apiVersion: v1
   metadata:
+    name: rhscl-python-36-rhel7
     creationTimestamp: null
-    labels:
-      io.kompose.service: document-manager-backend
-    name: document-manager-backend
-  spec:
-    tags:
-    - annotations: null
-      from:
-        kind: DockerImage
-        name: document-manager-backend
-      generation: null
-      importPolicy: {}
-      name: latest
-  status:
-    dockerImageRepository: ""
-- apiVersion: v1
-  kind: BuildConfig
-  metadata:
     annotations:
-      kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
-      kompose.version: 1.21.0 (992df58d8)
+      description: Python Base Image
+    labels:
+      shared: 'true'
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+      - name: 3.6.1-36
+        annotations: null
+        from:
+          kind: DockerImage
+          name: 'registry.access.redhat.com/rhscl/python-36-rhel7:1-36'
+        importPolicy: {}
+        referencePolicy:
+          type: Local
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: '${NAME}-base'
+    creationTimestamp: null
+    annotations:
+      description: Python Runtime Image
+    labels:
+      shared: 'true'
+  spec:
+    lookupPolicy:
+      local: false
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: '${NAME}'
     creationTimestamp: null
     labels:
-      io.kompose.service: document-manager-backend
-    name: document-manager-backend
+      shared: 'true'
+    annotations:
+      description: Keeps track of changes in the application image
   spec:
-    nodeSelector: null
+    lookupPolicy:
+      local: false
+    tags: []
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    name: '${NAME}-base${SUFFIX}'
+    creationTimestamp: null
+    labels: {}
+    annotations: {}
+  spec:
+    completionDeadlineSeconds: 1440
+    triggers:
+      - type: ImageChange
+        imageChange: {}
+      - type: ConfigChange
+    runPolicy: SerialLatestOnly
+    source:
+      contextDir: openshift/docker-images/python-36-docman
+      type: Binary
+    strategy:
+      type: Docker
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: 'rhscl-python-36-rhel7:3.6.1-36'
+        env: []
     output:
       to:
         kind: ImageStreamTag
-        name: document-manager-backend:latest
+        name: '${NAME}-base:${VERSION}'
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 250m
+        memory: 1Gi
     postCommit: {}
-    resources: {}
-    runPolicy: Serial
-    source:
-      contextDir: document-manager/backend/
-      git:
-        ref: feature/PRIME-805-document-manager-template
-        uri: https://github.com/bcgov/moh-prime.git
-      type: Git
-    strategy:
-      dockerStrategy: {}
-      type: Docker
+    nodeSelector: null
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    name: '${NAME}${SUFFIX}'
+    creationTimestamp: null
+    annotations:
+      description: Defines how to build the application
+  spec:
+    completionDeadlineSeconds: 600
     triggers:
-    - type: ConfigChange
-  status:
-    lastVersion: 0
+      - type: ImageChange
+      - type: ConfigChange
+    runPolicy: SerialLatestOnly
+    source:
+      type: Git
+      git:
+        uri: '${SOURCE_REPOSITORY_URL}'
+        ref: '${SOURCE_REPOSITORY_REF}'
+      contextDir: '${SOURCE_CONTEXT_DIR}'
+    strategy:
+      type: Source
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: '${NAME}-base:${VERSION}'
+        env:
+          - name: BUILD_LOGLEVEL
+            value: '2'
+    output:
+      to:
+        kind: ImageStreamTag
+        name: '${NAME}:${VERSION}'
+    resources:
+      limits:
+        cpu: 200m
+        memory: 2Gi
+      requests:
+        cpu: 100m
+        memory: 1Gi
+    nodeSelector: null
