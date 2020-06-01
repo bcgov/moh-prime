@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Observable, from, of } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
-
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 
@@ -19,6 +18,7 @@ import { SiteRegistrationResource } from '@registration/shared/services/site-reg
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 
 // TODO duplication with enrolment.guard should be split out for reuse
+// TODO drop once organization and site guards are in place
 @Injectable({
   providedIn: 'root'
 })
@@ -60,12 +60,6 @@ export class RegistrationGuard extends BaseGuard {
           return this.routeDestination(routePath, site, isNewSite);
         })
       );
-  }
-
-  private route(routePath: string): string {
-    // Only care about the second parameter to determine route access, and
-    // assumes that all child routes are allowed
-    return routePath.slice(1).split('/')[1];
   }
 
   /**
