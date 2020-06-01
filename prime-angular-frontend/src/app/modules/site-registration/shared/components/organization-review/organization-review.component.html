@@ -2,9 +2,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Signing Authority</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Signing Authority"
-              (click)="onRoute(SiteRoutes.SIGNING_AUTHORITY)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Signing Authority"
+            (click)="onRoute(SiteRoutes.SIGNING_AUTHORITY)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <app-party-review [party]="organization?.signingAuthority"></app-party-review>
@@ -15,9 +19,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Organization Information</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Organization Information"
-              (click)="onRoute(SiteRoutes.ORGANIZATION_INFORMATION)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Organization Information"
+            (click)="onRoute(SiteRoutes.ORGANIZATION_INFORMATION)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Organization Number (Legal Entity Operating Site)">
@@ -38,9 +46,12 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Organization Type</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Organization Type"
-              (click)="onRoute(SiteRoutes.ORGANIZATION_TYPE)">edit</mat-icon>
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Organization Type"
+            (click)="onRoute(SiteRoutes.ORGANIZATION_TYPE)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Organization Type"

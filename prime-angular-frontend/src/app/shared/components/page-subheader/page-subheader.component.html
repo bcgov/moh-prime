@@ -24,21 +24,21 @@
     </p>
   </div>
   <div *ngIf="!hasContextualContent || (hasPageSubheaderSummary && summaryAsInfo)"
-       class="help flex-shrink-1">
+       class="action-icon flex-shrink-1">
     <ng-container *ngIf="hasPageSubheaderSummary && summaryAsInfo; then more else optional"></ng-container>
 
     <ng-template #more>
       <a mat-icon-button
-        color="primary"
-        aria-label="More Info"
-        (click)="toggleSummary()">
+              color="primary"
+              aria-label="More Info"
+              (click)="toggleSummary()">
         <mat-icon>info</mat-icon>
       </a>
     </ng-template>
 
     <ng-template #optional>
-      <!-- Optional icon for actions at the end of a subheading -->
-      <ng-content select="mat-icon"></ng-content>
+      <!-- Optional mat-icon-button for actions at the end of a subheading -->
+      <ng-content select="[mat-icon-button]"></ng-content>
     </ng-template>
   </div>
 </div>

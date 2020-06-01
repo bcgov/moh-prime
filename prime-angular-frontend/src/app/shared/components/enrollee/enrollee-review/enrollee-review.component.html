@@ -5,9 +5,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Preferred Name"
-              (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Preferred Name"
+            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Preferred First Name">
@@ -29,9 +33,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Mailing Address"
-              (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Mailing Address"
+            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Country">
@@ -65,9 +73,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Contact Information</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Contact Information"
-              (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Contact Information"
+            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Voice Phone">
@@ -84,9 +96,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Notification Information</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Notification Information"
-              (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Notification Information"
+            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Email Notification">
@@ -103,9 +119,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit College Licenses"
-              (click)="onRoute(EnrolmentRoutes.REGULATORY)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit College Licenses"
+            (click)="onRoute(EnrolmentRoutes.REGULATORY)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <ng-container *ngFor="let certification of certifications; let i = index;">
@@ -155,9 +175,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Device Provider</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Device Provider"
-              (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Device Provider"
+            (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Device Provider Number">
@@ -175,9 +199,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Job Information</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Job Information"
-              (click)="onRoute(EnrolmentRoutes.JOB)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Job Information"
+            (click)="onRoute(EnrolmentRoutes.JOB)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <ng-container *ngFor="let job of jobs">
@@ -201,9 +229,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Organization Information</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Organizations"
-              (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Organizations"
+            (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <ng-container *ngFor="let organization of organizations">
@@ -227,9 +259,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
-    <mat-icon *ngIf="showEditRedirect"
-              matTooltip="Edit Self Declaration"
-              (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">edit</mat-icon>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Self Declaration"
+            (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Are you, or have you ever been, subject to any limits, conditions or prohibitions imposed as a result of disciplinary actions taken by a governing body of a health profession in any jurisdiction, that involved improper access to, collection, use, or disclosure of personal information?"
