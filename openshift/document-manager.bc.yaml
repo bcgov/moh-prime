@@ -52,6 +52,31 @@ objects:
         importPolicy: {}
         referencePolicy:
           type: Local
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: '${NAME}-base'
+    creationTimestamp: null
+    annotations:
+      description: Python Runtime Image
+    labels:
+      shared: 'true'
+  spec:
+    lookupPolicy:
+      local: false
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: '${NAME}'
+    creationTimestamp: null
+    labels:
+      shared: 'true'
+    annotations:
+      description: Keeps track of changes in the application image
+  spec:
+    lookupPolicy:
+      local: false
+    tags: []
 - kind: BuildConfig
   apiVersion: v1
   metadata:
@@ -79,7 +104,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: '${NAME}-base:latest'
+        name: '${NAME}-base:${VERSION}'
     resources:
       limits:
         cpu: 500m
@@ -112,15 +137,15 @@ objects:
       type: Source
       sourceStrategy:
         from:
-          kind: ImageStreamTag
-          name: '${NAME}-base:latest'
+          kind: DockerImage
+          name: 'registry.access.redhat.com/rhscl/python-36-rhel7:1-36'
         env:
           - name: BUILD_LOGLEVEL
             value: '2'
     output:
       to:
         kind: ImageStreamTag
-        name: '${NAME}:latest'
+        name: '${NAME}:${VERSION}'
     resources:
       limits:
         cpu: 200m
