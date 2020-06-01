@@ -45,18 +45,20 @@ namespace Prime.Services
     {
         private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
         private const string MOH_EMAIL = "HLTH.HnetConnection@gov.bc.ca";
-
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IDocumentService _documentService;
         private readonly IPdfService _pdfService;
 
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IRazorConverterService razorConverterService,
+            IDocumentService documentService,
             IPdfService pdfService)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
+            _documentService = documentService;
             _pdfService = pdfService;
         }
 
@@ -120,18 +122,21 @@ namespace Prime.Services
             var subject = "PRIME Site Registration Submission";
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
 
-            // TODO Get the business licence document for the site from the document manager
+            var businessLicence = _documentService.GetBusinessLicenceDocumentsBySiteId(site.Id);
+            // TODO will there be multiple business licence documents?
+            // TODO get filename extension for the business licence document(s), something like:
+            // var fileExt = businessLicence.Filename.Split('.').Last();
 
             // TODO Option 1: Create HTML content for document, if it works add to PDF service
-            // var image =
-            // var imgSrc = String.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(image));
-            // var htmlContent = $"<img src='" + imgSrc + "' />";
+            // var base64 = String.Format($"data:image/{fileExt};base64,{0}", Convert.ToBase64String(businessLicence.Data));
+            // var htmlContent = $"<img src='" + base64 + "' />";
 
             var pdfContents = new[]
             {
                 await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", new Site()),
                 await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site),
-                // TODO Option 2: Create HTML content for document, less ideal implementation
+                // TODO Option 2: Create HTML content for document, less ideal implementation since need to pass in a model
+                // TODO might be okay if there are multiple documents
                 // await _razorConverterService.RenderViewToStringAsync("/Views/Emails/Image.cshtml", new EmailParams())
             };
             var pdfs = pdfContents.Select(content => _pdfService.Generate(content));
