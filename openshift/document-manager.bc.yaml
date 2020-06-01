@@ -14,6 +14,7 @@ parameters:
     required: false
   - name: VERSION
     required: false
+    value: latest
   - name: SOURCE_CONTEXT_DIR
     value: prime-database-backup
     required: true
