@@ -36,7 +36,7 @@ export class OrganizationsComponent implements OnInit {
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource
   ) {
-    this.title = 'Site Administration';
+    this.title = 'Administration';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -49,7 +49,7 @@ export class OrganizationsComponent implements OnInit {
     const routePath = (optionalRoutePath)
       ? [optionalRoutePath]
       : (!organization.completed)
-        ? [SiteRoutes.SIGNING_AUTHORITY]
+        ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
         : []; // Defaults to overview
     this.routeUtils.routeRelativeTo([organizationId, ...routePath]);
   }
@@ -108,7 +108,7 @@ export class OrganizationsComponent implements OnInit {
         map((user: User) => new Party(user)),
         exhaustMap((party: Party) => this.organizationResource.createOrganization(party)),
         map((organization: Organization) => organization.id),
-        map((organizationId: number) => this.routeUtils.routeRelativeTo([`${organizationId}`, SiteRoutes.SIGNING_AUTHORITY]))
+        map((organizationId: number) => this.routeUtils.routeRelativeTo([`${organizationId}`, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]))
       ).subscribe();
   }
 

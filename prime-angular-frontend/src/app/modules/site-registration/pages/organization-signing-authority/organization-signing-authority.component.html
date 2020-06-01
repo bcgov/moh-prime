@@ -1,7 +1,7 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"
-                               [currentRoute]="SiteRoutes.SIGNING_AUTHORITY"></app-site-progress-indicator>
+                               [currentRoute]="SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY"></app-site-progress-indicator>
 
   <form [formGroup]="form"
         novalidate>
@@ -10,43 +10,38 @@
       <app-page-subheader [summaryAsInfo]="true">
         <ng-container appPageSubheaderTitle>Signing Authority Information</ng-container>
         <!-- Work around for ngProjectAs not passing directive reference to subheader when applied to ng-content -->
-        <ng-container appPageSubheaderSummary>Only the Signing Authority can revise and sign the Organization Agreement.
-          This information comes
-          from our BC Services Card, provide a preferred name if necessary.</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Only the Signing Authority can revise and sign the Organization Agreement. This information comes from our BC
+          Services Card, provide a preferred name if necessary.
+        </ng-container>
         <ng-container appPageSubheaderSummary>
           The Signing Authority must be a duly authorized representative of the organization with authority to submit
-          the
-          site request on the organization’s behalf. This is the individual who will be designated as responsible for
-          PharmaNet activities at the location being set up for PharmaNet access (site). This person must be the same
-          individual who signs the Organization Agreement for PharmaNet Use. If the site is owned/leased and operated by
-          a
-          corporation, the Signing Authority must be legally able to bind the corporation to the terms of this document
-          and the Organization Agreement for PharmaNet Use. The Signing Authority must be the same individual for all
-          PharmaNet access sites operating under the same organization. The Signing Authority does not need to be a
-          PharmaNet user, a member of a regulated health profession, or providing direct patient care at the site. The
-          Signing Authority must sign Section 5 (Certification) of the PharmaNet Access Community Practice Site Request
-          for new PharmaNet access sites, updates to existing information for a PharmaNet access sites, discontinuing
-          current software vendors, or discontinuations of PharmaNet access at a site.
+          the site request on the organization’s behalf. This is the individual who will be designated as responsible
+          for PharmaNet activities at the location being set up for PharmaNet access (site). This person must be the
+          same individual who signs the Organization Agreement for PharmaNet Use. If the site is owned/leased and
+          operated by a corporation, the Signing Authority must be legally able to bind the corporation to the terms of
+          this document and the Organization Agreement for PharmaNet Use. The Signing Authority must be the same
+          individual for all PharmaNet access sites operating under the same organization. The Signing Authority does
+          not need to be a PharmaNet user, a member of a regulated health profession, or providing direct patient care
+          at the site. The Signing Authority must sign Section 5 (Certification) of the PharmaNet Access Community
+          Practice Site Request for new PharmaNet access sites, updates to existing information for a PharmaNet access
+          sites, discontinuing current software vendors, or discontinuations of PharmaNet access at a site.
           <ng-content select="[appPageSubheaderSummary]"></ng-content>
         </ng-container>
       </app-page-subheader>
 
       <div class="row mb-3">
-        <div class="col-6 mb-3 mat-body-2">
-          Name:
+        <div class="col-6 mb-3">
+          Name
+        </div>
+        <div class="col-6 text-right mb-3">
+          {{ organization?.signingAuthority | fullname | default }}
         </div>
         <div class="col-6 mb-3">
-          {{ site.location.organization.signingAuthority.firstName | default }}
-          {{ site.location.organization.signingAuthority.lastName | default }}
+          Date of Birth
         </div>
-
-      </div>
-      <div class="row mb-3">
-        <div class="col-4 mb-3 mat-body-2">
-          <span class="mat-body-2">Date of Birth:</span>
-        </div>
-        <div class="col-6">
-          {{ site.location.organization.signingAuthority?.dateOfBirth | formatDate | default }}
+        <div class="col-6 text-right">
+          {{ organization?.signingAuthority?.dateOfBirth | formatDate | default }}
         </div>
       </div>
 
@@ -121,46 +116,47 @@
 
       <div class="row mb-3">
 
-        <div class="col-6 mb-3 mat-body-2">
+        <div class="col-6 mb-3">
           Country
         </div>
         <div class="col-6 text-right mb-3">
           {{ physicalAddress?.countryCode | configCode: 'countries' | default }}
         </div>
 
-        <div class="col-6 mb-3 mat-body-2">
+        <div class="col-6 mb-3">
           Province
         </div>
         <div class="col-6 text-right mb-3">
           {{ physicalAddress?.provinceCode | configCode: 'provinces' | default }}
         </div>
 
-        <div class="col-6 mb-3 mat-body-2">
+        <div class="col-6 mb-3">
           Street Address
         </div>
         <div class="col-6 text-right mb-3">
           {{ physicalAddress?.street | default }}
         </div>
 
-        <ng-container *ngIf="physicalAddress?.street2">
+        <!-- TODO use param to not create this in the form group then uncomment for reuse -->
+        <!-- <ng-container *ngIf="physicalAddress?.street2">
 
-          <div class="col-6 mb-3 mat-body-2">
+          <div class="col-6 mb-3">
             Street Address 2
           </div>
           <div class="col-6 text-right mb-3">
             {{ physicalAddress?.street2 | default }}
           </div>
 
-        </ng-container>
+        </ng-container> -->
 
-        <div class="col-6 mb-3 mat-body-2">
+        <div class="col-6 mb-3">
           City
         </div>
         <div class="col-6 text-right mb-3">
           {{ physicalAddress?.city | default }}
         </div>
 
-        <div class="col-6 mb-3 mat-body-2">
+        <div class="col-6 mb-3">
           Postal Code
         </div>
         <div class="col-6 text-right mb-3">
@@ -173,7 +169,7 @@
                         color="primary"
                         (change)="onMailingAddressChange()"
                         [checked]="hasMailingAddress">
-        My mailing address is different
+        I have a preferred address
       </mat-slide-toggle>
     </section>
 

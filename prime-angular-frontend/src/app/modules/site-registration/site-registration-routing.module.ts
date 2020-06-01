@@ -14,7 +14,7 @@ import { SiteGuard } from './shared/guards/site.guard';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { OrganizationsComponent } from './pages/organizations/organizations.component';
-import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
+import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
@@ -62,8 +62,8 @@ const routes: Routes = [
             path: ':oid',
             children: [
               {
-                path: SiteRoutes.SIGNING_AUTHORITY,
-                component: SigningAuthorityComponent,
+                path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
+                component: OrganizationSigningAuthorityComponent,
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Signing Authority' }

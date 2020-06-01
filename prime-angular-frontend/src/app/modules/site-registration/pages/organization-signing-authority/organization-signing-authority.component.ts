@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+
+import { Subscription, Observable } from 'rxjs';
+
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+
+import { SiteRoutes } from '@registration/site-registration.routes';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { Subscription, Observable } from 'rxjs';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { SiteRoutes } from '@registration/site-registration.routes';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Site } from '@registration/shared/models/site.model';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
   selector: 'app-organization-signing-authority',
@@ -20,29 +23,28 @@ import { Site } from '@registration/shared/models/site.model';
   styleUrls: ['./organization-signing-authority.component.scss']
 })
 export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IForm {
-  // TODO Format uneditable fields to match prototype
-  // TODO Toggle preferred name + address if exists
   // TODO Show 2 subheaders (normal one and information button one)
   // TODO preferred middle name being filled without random field. GHOSTS!
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
   public routeUtils: RouteUtils;
-  public isCompleted: boolean;
-  public SiteRoutes = SiteRoutes;
+  public organization: Organization;
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
-  public site: Site;
+  public isCompleted: boolean;
+  public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private organizationService: OrganizationService,
+    private organizationResource: OrganizationResource,
+    private organizationFormStateService: OrganizationFormStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
+    this.title = 'Signing Authority';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -55,8 +57,8 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public get physicalAddress() {
-    return (this.site && this.site.location.organization.signingAuthority.physicalAddress)
-      ? this.site.location.organization.signingAuthority.physicalAddress
+    return (this.organization && this.organization.signingAuthority.physicalAddress)
+      ? this.organization.signingAuthority.physicalAddress
       : null;
   }
 
@@ -80,6 +82,23 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     return this.form.get('email') as FormControl;
   }
 
+  public onSubmit() {
+    console.log(this.formUtilsService.getFormErrors(this.form));
+
+
+    // TODO structured to match in all organization views
+    if (this.formUtilsService.checkValidity(this.form)) {
+      // TODO when spoking don't update
+      const payload = this.organizationFormStateService.organization;
+      this.organizationResource
+        .updateOrganization(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    }
+  }
+
   public onPreferredNameChange() {
     this.hasPreferredName = !this.hasPreferredName;
 
@@ -95,27 +114,15 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
   }
 
-  public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
-  }
-
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_INFORMATION);
     }
   }
 
@@ -127,19 +134,42 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public ngOnInit() {
-    this.site = this.siteRegistrationService.site;
     this.createFormInstance();
     this.initForm();
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.signingAuthorityForm;
+    this.form = this.organizationFormStateService.signingAuthorityForm;
   }
 
   private initForm() {
-    const site = this.siteRegistrationService.site;
-    this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO structured to match in all site views
+    const organization = this.organizationService.organization;
+    this.isCompleted = organization?.completed;
+    this.organizationFormStateService.setForm(organization);
+
+    this.organization = organization;
+
+    // Show preferred name if it exists
+    this.hasPreferredName = !!(
+      this.form.get('preferredFirstName').value ||
+      this.form.get('preferredMiddleName').value ||
+      this.form.get('preferredLastName').value
+    );
+
+    this.togglePreferredNameValidators(this.preferredFirstName, this.preferredLastName);
+
+    // Show mailing address if it exists
+    this.hasMailingAddress = !!(
+      this.mailingAddress.get('countryCode').value ||
+      this.mailingAddress.get('provinceCode').value ||
+      this.mailingAddress.get('street').value ||
+      this.mailingAddress.get('street2').value ||
+      this.mailingAddress.get('city').value ||
+      this.mailingAddress.get('postal').value
+    );
+
+    this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
   }
 
   private togglePreferredNameValidators(preferredFirstName: FormControl, preferredLastName: FormControl) {
@@ -159,5 +189,4 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
       this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
     }
   }
-
 }

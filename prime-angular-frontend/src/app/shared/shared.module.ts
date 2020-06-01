@@ -60,6 +60,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { SiteReviewComponent } from './components/site/site-review/site-review.component';
 import { PartyReviewComponent } from './components/site/party-review/party-review.component';
+import { FullnamePipe } from './pipes/fullname.pipe';
 
 @NgModule({
   declarations: [
@@ -110,7 +111,8 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     PageFooterComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    PartyReviewComponent
+    PartyReviewComponent,
+    FullnamePipe
   ],
   imports: [
     CommonModule,
@@ -172,7 +174,8 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     PageFooterComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    PartyReviewComponent
+    PartyReviewComponent,
+    FullnamePipe
   ]
 })
 export class SharedModule { }

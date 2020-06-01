@@ -4,7 +4,7 @@ export class SiteRoutes {
   public static COLLECTION_NOTICE = 'collection-notice';
 
   public static ORGANIZATIONS = 'organizations';
-  public static SIGNING_AUTHORITY = 'signing-authority';
+  public static ORGANIZATION_SIGNING_AUTHORITY = 'organization-signing-authority';
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static ORGANIZATION_TYPE = 'organization-type';
   public static ORGANIZATION_REVIEW = 'organization-review';

@@ -3,6 +3,8 @@ import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/fo
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { Province } from '@shared/enums/province.enum';
+import { Country } from '@shared/enums/country.enum';
 
 import { Party } from '@registration/shared/models/party.model';
 import { Organization } from '@registration/shared/models/organization.model';
@@ -54,7 +56,7 @@ export class OrganizationFormStateService {
    * Convert reactive form abstract controls into JSON.
    */
   // TODO method constructs the JSON, and attempts to adapt, should
-  // adapt in only one place
+  // adapt in only one place and separately in method
   public get organization(): Organization {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const { organizationTypeCode } = this.organizationTypeForm.getRawValue();
@@ -65,15 +67,10 @@ export class OrganizationFormStateService {
     ] = [
       this.signingAuthorityForm.getRawValue()
     ].map((party: Party) => {
-      if (!party.id) {
-        party.id = 0;
-      }
       if (!party.firstName) {
         party = null;
-      } else if (!party.physicalAddress.street) {
-        party.physicalAddress = null;
-      } else if (!party.physicalAddress.id) {
-        party.physicalAddress.id = 0;
+      } else if (!party.mailingAddress.street) {
+        party.mailingAddress = null;
       }
 
       return party;
@@ -135,20 +132,131 @@ export class OrganizationFormStateService {
     ]
       .filter(([formGroup, data]: [FormGroup, Party]) => data)
       .forEach(([formGroup, data]: [FormGroup, Party]) => {
-        const { physicalAddress, ...party } = data;
+        const { mailingAddress, physicalAddress, ...party } = data;
 
         formGroup.patchValue(party);
 
-        const physicalAddressFormGroup = formGroup.get('physicalAddress');
-        (physicalAddress)
-          ? physicalAddressFormGroup.patchValue(physicalAddress)
-          : physicalAddressFormGroup.reset();
+        // TODO may not be needed anymore
+        // const physicalAddressFormGroup = formGroup.get('physicalAddress');
+        // (physicalAddress)
+        //   ? physicalAddressFormGroup.patchValue(physicalAddress)
+        //   : physicalAddressFormGroup.reset({ id: 0 });
+
+        // const mailingAddressFormGroup = formGroup.get('mailingAddress');
+        // (mailingAddress)
+        //   ? mailingAddressFormGroup.patchValue(mailingAddress)
+        //   : mailingAddressFormGroup.reset({ id: 0 });
+
+        console.log(formGroup.getRawValue());
+
       });
   }
 
   private buildSigningAuthorityForm(): FormGroup {
     // Prevent BCSC information from being changed
-    return this.partyFormGroup(true);
+    return this.fb.group({
+      id: [
+        0,
+        []
+      ],
+      firstName: [
+        { value: null, disabled: true },
+        [Validators.required]
+      ],
+      lastName: [
+        { value: null, disabled: true },
+        [Validators.required]
+      ],
+      preferredFirstName: [
+        null, []
+      ],
+      preferredMiddleName: [
+        null, []
+      ],
+      preferredLastName: [
+        null, []
+      ],
+      jobRoleTitle: [
+        null,
+        [Validators.required]
+      ],
+      phone: [
+        null,
+        [Validators.required, FormControlValidators.phone]
+      ],
+      fax: [
+        null,
+        [Validators.required, FormControlValidators.phone]
+      ],
+      smsPhone: [
+        null,
+        [Validators.required, FormControlValidators.phone]
+      ],
+      email: [
+        null,
+        [Validators.required, FormControlValidators.email]
+      ],
+      physicalAddress: this.fb.group({
+        id: [
+          0,
+          []
+        ],
+        countryCode: [
+          { value: null, disabled: true },
+          []
+        ],
+        provinceCode: [
+          { value: null, disabled: true },
+          []
+        ],
+        street: [
+          { value: null, disabled: true },
+          []
+        ],
+        street2: [
+          { value: null, disabled: true },
+          []
+        ],
+        city: [
+          { value: null, disabled: true },
+          []
+        ],
+        postal: [
+          { value: null, disabled: true },
+          []
+        ]
+      }),
+      mailingAddress: this.fb.group({
+        id: [
+          0,
+          []
+        ],
+        countryCode: [
+          { value: null, disabled: false },
+          []
+        ],
+        provinceCode: [
+          { value: null, disabled: false },
+          []
+        ],
+        street: [
+          { value: null, disabled: false },
+          []
+        ],
+        street2: [
+          { value: null, disabled: false },
+          []
+        ],
+        city: [
+          { value: null, disabled: false },
+          []
+        ],
+        postal: [
+          { value: null, disabled: false },
+          []
+        ]
+      }),
+    });
   }
 
   private buildOrganizationInformationForm(): FormGroup {
@@ -180,7 +288,9 @@ export class OrganizationFormStateService {
     });
   }
 
-  // TODO duplicated until services are completely split apart
+  /**
+   * @deprecated no longer used in organizations
+   */
   private partyFormGroup(disabled: boolean = false): FormGroup {
     return this.fb.group({
       id: [
@@ -237,7 +347,6 @@ export class OrganizationFormStateService {
           { value: null, disabled: false },
           []
         ],
-        // TODO not needed and can likely be removed
         street2: [
           { value: null, disabled: false },
           []
@@ -260,5 +369,71 @@ export class OrganizationFormStateService {
         ]
       })
     });
+  }
+
+  /**
+   * @description
+   * Provide an address form group.
+   *
+   * @param options available for manipulating the form group
+   *  areRequired control names
+   *  areDisabled control names
+   *  useDefaults for province and country, otherwise empty
+   */
+  // TODO when everything is working then start sliding this into place
+  private buildAddressForm(options: {
+    areRequired: string[],
+    areDisabled: string[],
+    useDefaults: boolean
+  }): FormGroup {
+    const controlsConfig = {
+      id: [
+        0,
+        []
+      ],
+      street: [
+        { value: null, disabled: false },
+        []
+      ],
+      street2: [
+        { value: null, disabled: false },
+        []
+      ],
+      city: [
+        { value: null, disabled: false },
+        []
+      ],
+      provinceCode: [
+        { value: null, disabled: false },
+        []
+      ],
+      countryCode: [
+        { value: null, disabled: false },
+        []
+      ],
+      postal: [
+        { value: null, disabled: false },
+        []
+      ]
+    };
+
+    Object.keys(controlsConfig).map((key: string, index: number) => {
+      const control = controlsConfig[key];
+      if (options.areDisabled.includes(key)) {
+        control[0].disabled = true;
+      }
+      if (options.useDefaults) {
+        if (key === 'provinceCode') {
+          control[0].value = Province.BRITISH_COLUMBIA;
+        } else if (key === 'countryCode') {
+          control[0].value = Country.CANADA;
+        }
+      }
+      if (options.areRequired.includes(key)) {
+        control[1].push(Validators.required);
+      }
+    });
+
+    return this.fb.group(controlsConfig);
   }
 }

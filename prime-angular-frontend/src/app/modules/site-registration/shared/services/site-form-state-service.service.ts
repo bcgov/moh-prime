@@ -9,6 +9,8 @@ import { Country } from '@shared/enums/country.enum';
 import { Party } from '@registration/shared/models/party.model';
 import { Site } from '@registration/shared/models/site.model';
 
+// TODO add a form state service interface/abstract class for form state services
+// TODO should the forms built be stored in a different file or service
 @Injectable({
   providedIn: 'root'
 })
@@ -70,7 +72,7 @@ export class SiteFormStateService {
    * Convert reactive form abstract controls into JSON.
    */
   // TODO method constructs the JSON, and attempts to adapt, should
-  // adapt in only one place
+  // adapt in only one place and separately in method
   public get site(): Site {
     const physicalAddress = this.siteAddressForm.getRawValue();
     const businessHours = this.hoursOperationForm.getRawValue().businessDays;
@@ -348,7 +350,7 @@ export class SiteFormStateService {
    *  useDefaults for province and country, otherwise empty
    */
   // TODO when everything is working then start sliding this into place
-  private buildAddressForm(options: {
+  private buildAddressForm(options?: {
     areRequired: string[],
     areDisabled: string[],
     useDefaults: boolean
@@ -362,7 +364,6 @@ export class SiteFormStateService {
         { value: null, disabled: false },
         []
       ],
-      // TODO not needed and can likely be removed
       street2: [
         { value: null, disabled: false },
         []

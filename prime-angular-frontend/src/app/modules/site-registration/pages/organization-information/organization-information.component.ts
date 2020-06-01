@@ -109,7 +109,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SIGNING_AUTHORITY);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY);
   }
 
   public nextRoute() {
