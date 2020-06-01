@@ -23,7 +23,6 @@ parameters:
     value: https://github.com/bcgov/moh-prime
   - name: SOURCE_REPOSITORY_REF
     required: true
-    value: feature/PRIME-805-document-manager-template
   - name: OC_NAMESPACE
     required: true
     value: dqszvc
