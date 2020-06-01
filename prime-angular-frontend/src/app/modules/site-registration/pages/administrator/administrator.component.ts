@@ -12,6 +12,8 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
+import { Party } from '@registration/shared/models/party.model';
+import { Address } from '@shared/models/address.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
@@ -30,11 +32,12 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
+  private site: Site;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    // TODO setup guard to pull organization on each route in the loop
-    // private siteService: SiteService,
+    private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
@@ -46,6 +49,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
+      // TODO when spoking don't update
       const payload = this.siteFormStateService.site;
       this.siteResource
         .updateSite(payload)
@@ -56,15 +60,22 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
     }
   }
 
+  public onSelect(party: Party) {
+    if (!party.physicalAddress) {
+      party.physicalAddress = new Address();
+    }
+    this.form.patchValue(party);
+  }
+
   public onBack() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeTo(SiteRoutes.VENDOR);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+      this.routeUtils.routeRelativeTo(SiteRoutes.PRIVACY_OFFICER);
     }
   }
 
@@ -85,14 +96,9 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO setup guard to pull site on each route in the loop
     // TODO structured to match in all site views
-    const siteId = this.route.snapshot.params.sid;
-    this.siteResource
-      .getSiteById(siteId)
-      .subscribe((site: Site) => {
-        this.isCompleted = site?.completed;
-        this.siteFormStateService.site = site;
-      });
+    this.site = this.siteService.site;
+    this.isCompleted = this.site?.completed;
+    this.siteFormStateService.setForm(this.site);
   }
 }

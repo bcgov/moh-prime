@@ -5,7 +5,6 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
-import { Address } from '@shared/models/address.model';
 
 import { Party } from '@registration/shared/models/party.model';
 import { Site } from '@registration/shared/models/site.model';
@@ -21,6 +20,7 @@ export class SiteFormStateService {
   public privacyOfficerForm: FormGroup;
   public technicalSupportForm: FormGroup;
 
+  private patched: boolean;
   private siteId: number;
   private locationId: number;
   private organizationId: number;
@@ -30,6 +30,10 @@ export class SiteFormStateService {
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
   ) {
+    // Initial state of the form is unpatched and ready for
+    // enrolment information
+    this.patched = false;
+
     // Initialize and configure the forms
     this.siteAddressForm = this.buildSiteAddressForm();
     this.hoursOperationForm = this.buildHoursOperationForm();
@@ -41,9 +45,17 @@ export class SiteFormStateService {
 
   /**
    * @description
-   * Convert JSON into reactive form abstract controls.
+   * Convert JSON into reactive form abstract controls, which can
+   * only be set more than once when explicitly forced.
    */
-  public set site(site: Site) {
+  public setForm(site: Site, forcePatch: boolean = false) {
+    if (this.patched && !forcePatch) {
+      return;
+    }
+
+    // Indicate that the form is patched, and may contain unsaved information
+    this.patched = true;
+
     // Store required site identifiers not captured in forms
     this.siteId = site.id;
     this.locationId = site.location.id;
@@ -114,7 +126,7 @@ export class SiteFormStateService {
     } as Site; // Enforced type
   }
 
-  public get isValid() {
+  public get isValid(): boolean {
     return this.forms
       .reduce((valid: boolean, form: AbstractControl) => valid && form.valid, true);
   }

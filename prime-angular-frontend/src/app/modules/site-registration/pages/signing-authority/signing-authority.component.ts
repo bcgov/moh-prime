@@ -33,8 +33,7 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    // TODO setup guard to pull organization on each route in the loop
-    // private organizationService: OrganizationService,
+    private organizationService: OrganizationService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private formUtilsService: FormUtilsService,
@@ -47,6 +46,7 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
   public onSubmit() {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
+      // TODO when spoking don't update
       const payload = this.organizationFormStateService.organization;
       this.organizationResource
         .updateOrganization(payload)
@@ -86,14 +86,9 @@ export class SigningAuthorityComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO setup guard to pull organization on each route in the loop
-    // TODO structured to match in all organization views
-    const organizationId = this.route.snapshot.params.oid;
-    this.organizationResource
-      .getOrganizationById(organizationId)
-      .subscribe((organization: Organization) => {
-        this.isCompleted = organization?.completed;
-        this.organizationFormStateService.organization = organization;
-      });
+    // TODO structured to match in all site views
+    const organization = this.organizationService.organization;
+    this.isCompleted = organization?.completed;
+    this.organizationFormStateService.setForm(organization);
   }
 }

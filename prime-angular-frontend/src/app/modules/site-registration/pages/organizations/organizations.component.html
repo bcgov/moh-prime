@@ -115,43 +115,32 @@
         <mat-icon>add_location_alt</mat-icon>
         <span>Add Site</span>
       </button>
+      <!-- TODO disabled until multiple organizations -->
       <button mat-menu-item
+              [disabled]="true"
               (click)="viewOrganization(organization.id, SiteRoutes.SIGNING_AUTHORITY)">
         <mat-icon>visibility</mat-icon>
         <span>View/Update Signing Authority</span>
       </button>
+      <!-- TODO disabled until multiple organizations -->
       <button mat-menu-item
+              [disabled]="!!organization?.acceptedAgreementDate"
               (click)="viewOrganization(organization.id)">
         <mat-icon>visibility</mat-icon>
         <span>View/Update Organization</span>
       </button>
-      <!-- TODO only for single organization with no updates then remove -->
-      <!-- <button mat-menu-item
-              [disabled]="!!organization?.acceptedAgreementDate">
-        <mat-icon>visibility</mat-icon>
-        <span>View/Update Organization</span>
-      </button> -->
+      <!-- TODO disabled until multiple organizations -->
       <button mat-menu-item
+              [disabled]="true || !!organization?.acceptedAgreementDate"
               (click)="viewOrganization(organization.id, SiteRoutes.ORGANIZATION_AGREEMENT)">
         <mat-icon>article</mat-icon>
         <span>View Organization Agreement</span>
       </button>
-      <!-- TODO only for single organization with no updates then remove -->
-      <!-- <button mat-menu-item
-              disabled>
-        <mat-icon>article</mat-icon>
-        <span>View Organization Agreement</span>
-      </button> -->
-      <!-- TODO can't delete organizations due to relationship with business events -->
-      <!-- <button mat-menu-item
-              [disabled]="!!sites?.length"
-              (click)="removeOrganization(organization.id)">
-        <mat-icon>delete</mat-icon>
-        <span>Delete Organization</span>
-      </button> -->
-      <!-- TODO placeholder until organization deletion works -->
+      <!-- TODO disabled until multiple organizations -->
+      <!-- TODO soft delete organizations due to relationship with business events -->
       <button mat-menu-item
-              disabled>
+              [disabled]="true || !!sites?.length"
+              (click)="removeOrganization(organization.id)">
         <mat-icon>delete</mat-icon>
         <span>Delete Organization</span>
       </button>

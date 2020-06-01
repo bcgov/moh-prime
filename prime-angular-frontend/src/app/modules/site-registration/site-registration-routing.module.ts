@@ -8,8 +8,6 @@ import { DashboardComponent } from '@shared/components/dashboard/dashboard.compo
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
-// TODO drop registration guard
-import { RegistrationGuard } from './shared/guards/registration.guard';
 import { RegistrantGuard } from './shared/guards/registrant.guard';
 import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';

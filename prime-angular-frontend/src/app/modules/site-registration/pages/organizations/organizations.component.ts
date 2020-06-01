@@ -44,9 +44,11 @@ export class OrganizationsComponent implements OnInit {
 
   public viewOrganization(organizationId: number, optionalRoutePath: string = null) {
     const organization = this.organizations.find(o => o.id === organizationId);
-    const routePath = [optionalRoutePath] ?? (!organization.completed)
-      ? [SiteRoutes.SIGNING_AUTHORITY]
-      : []; // Defaults to overview
+    const routePath = (optionalRoutePath)
+      ? [optionalRoutePath]
+      : (!organization.completed)
+        ? [SiteRoutes.SIGNING_AUTHORITY]
+        : []; // Defaults to overview
     this.routeUtils.routeRelativeTo([organizationId, ...routePath]);
   }
 
@@ -89,7 +91,7 @@ export class OrganizationsComponent implements OnInit {
         // TODO only for single organization then remove
         exhaustMap((organizations: Organization[]) =>
           (organizations.length)
-            // TODO hardcoded organization for single organization then remove
+            // TODO hardcoded organization index for single organization then remove
             ? this.siteResource.getSites(organizations[0].id)
             : EMPTY
         ),

@@ -17,10 +17,16 @@ export class OrganizationFormStateService {
   public organizationInformationForm: FormGroup;
   public organizationTypeForm: FormGroup;
 
+  private patched: boolean;
+
   constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService,
   ) {
+    // Initial state of the form is unpatched and ready for
+    // enrolment information
+    this.patched = false;
+
     // Initialize and configure the forms
     this.signingAuthorityForm = this.buildSigningAuthorityForm();
     this.organizationInformationForm = this.buildOrganizationInformationForm();
@@ -29,9 +35,17 @@ export class OrganizationFormStateService {
 
   /**
    * @description
-   * Convert JSON into reactive form abstract controls.
+   * Convert JSON into reactive form abstract controls, which can
+   * only be set more than once when explicitly forced.
    */
-  public set organization(organization: Organization) {
+  public setForm(organization: Organization, forcePatch: boolean = false) {
+    if (this.patched && !forcePatch) {
+      return;
+    }
+
+    // Indicate that the form is patched, and may contain unsaved information
+    this.patched = true;
+
     this.patchForm(organization);
   }
 

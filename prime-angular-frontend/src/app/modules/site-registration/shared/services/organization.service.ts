@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Organization } from '@registration/shared/models/organization.model';
 
-export interface ISiteRegistrationService {
-  organization$: BehaviorSubject<Organization>;
-  organization: Organization;
-}
+/**
+ * @description
+ * Service is considered a source of truth and should be set
+ * directly from a HTTP response.
+ */
+// TODO make an interface for the different services
 @Injectable({
   providedIn: 'root'
 })
@@ -19,11 +21,18 @@ export class OrganizationService {
     this._organization = new BehaviorSubject<Organization>(null);
   }
 
-  public get organization$(): BehaviorSubject<Organization> {
-    return this._organization;
+  public set organization(organization: Organization) {
+    // Store a copy to prevent updates by reference
+    this._organization.next({ ...organization });
   }
 
   public get organization(): Organization {
-    return this._organization.value;
+    // Allow access to current value, but prevent updates by reference
+    return { ...this._organization.value };
+  }
+
+  public get organization$(): Observable<Organization> {
+    // Allow subscriptions, but make immutable
+    return this._organization.asObservable();
   }
 }

@@ -35,8 +35,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    // TODO setup guard to pull organization on each route in the loop
-    // private organizationService: OrganizationService,
+    private organizationService: OrganizationService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private dialog: MatDialog
@@ -66,30 +65,25 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
   }
 
   public ngOnInit(): void {
-    // TODO setup guard to pull organization on each route in the loop
-    // TODO structured to match in all organization views
-    const organizationId = this.route.snapshot.params.oid;
-    this.organizationResource
-      .getOrganizationById(organizationId)
-      .subscribe((organization: Organization) => {
-        this.isCompleted = organization?.completed;
-        this.organizationFormStateService.organization = organization;
+    // TODO structured to match in all site views
+    const organization = this.organizationService.organization;
+    this.isCompleted = organization?.completed;
+    this.organizationFormStateService.setForm(organization);
 
-        // TODO different from other components
-        this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
-      });
+    this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
 
-    // TODO chain multiple requests when tightening up components
     this.organizationResource
       .getOrganizationAgreement()
-      .subscribe((organizationAgreement: string) => this.organizationAgreement = organizationAgreement);
+      .subscribe((organizationAgreement: string) =>
+        this.organizationAgreement = organizationAgreement
+      );
   }
 }

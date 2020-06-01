@@ -11,7 +11,6 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
@@ -31,8 +30,7 @@ export class OrganizationOverviewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    // TODO setup guard to pull organization on each route in the loop
-    // private organizationService: OrganizationService,
+    private organizationService: OrganizationService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private dialog: MatDialog
@@ -41,26 +39,25 @@ export class OrganizationOverviewComponent implements OnInit {
   }
 
   public onSubmit() {
-    // TODO not needed until updates are allowed
+    // TODO shouldn't come from service when spoking to save updates
     // const payload = this.organizationService.organization;
-    // const data: DialogOptions = {
-    //   title: 'Save Organization',
-    //   message: 'When your organization is saved you will be able to register site(s). Are you ready to save your organization?',
-    //   actionText: 'Save Organization'
-    // };
-    // this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-    //   .afterClosed()
-    //   .pipe(
-    //     exhaustMap((result: boolean) =>
-    //       (result)
-    //         ? this.organizationResource.submitOrganization(payload)
-    //         : EMPTY
-    //     )
-    //   )
-    //   .subscribe(() =>
-    // TODO add some temporary messaging for users in demo
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
-    // );
+    const data: DialogOptions = {
+      title: 'Save Organization',
+      message: 'When your organization is saved you will be able to register site(s). Are you ready to save your organization?',
+      actionText: 'Save Organization'
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        // TODO not needed until updates are allowed
+        // TODO update only required when spoking
+        // exhaustMap((result: boolean) =>
+        //   (result)
+        //     ? this.organizationResource.submitOrganization(payload)
+        //     : EMPTY
+        // )
+      )
+      .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT));
   }
 
   public onBack() {
@@ -72,10 +69,6 @@ export class OrganizationOverviewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // TODO temporary until spoke routing
-    const organizationId = this.route.snapshot.params.oid;
-    this.organizationResource
-      .getOrganizationById(organizationId)
-      .subscribe((organization: Organization) => this.organization = organization);
+    this.organization = this.organizationService.organization;
   }
 }

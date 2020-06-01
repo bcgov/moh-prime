@@ -36,8 +36,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    // TODO setup guard to pull organization on each route in the loop
-    // private siteService: SiteService,
+    private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
@@ -55,6 +54,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public onSubmit() {
     // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.businessDays)) {
+      // TODO when spoking don't update
       this.hasNoHours = false;
 
       const payload = this.siteFormStateService.site;
@@ -110,15 +110,10 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO setup guard to pull site on each route in the loop
     // TODO structured to match in all site views
-    const siteId = this.route.snapshot.params.sid;
-    this.siteResource
-      .getSiteById(siteId)
-      .subscribe((site: Site) => {
-        this.isCompleted = site?.completed;
-        this.siteFormStateService.site = site;
-      });
+    const site = this.siteService.site;
+    this.isCompleted = site?.completed;
+    this.siteFormStateService.setForm(site);
   }
 
   /**
