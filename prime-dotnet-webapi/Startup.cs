@@ -13,9 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Wkhtmltopdf.NetCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Serilog;
 
 using Prime.Auth;
@@ -62,6 +61,7 @@ namespace Prime
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
+            services.AddScoped<IPdfService, PdfService>();
 
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
@@ -113,6 +113,7 @@ namespace Prime
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddSwaggerGenNewtonsoftSupport();
+            services.AddWkhtmltopdf("./Resources/wkhtmltopdf");
 
             services.AddHttpContextAccessor();
             services.AddRazorPages();
