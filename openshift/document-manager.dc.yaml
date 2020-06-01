@@ -47,6 +47,31 @@ parameters:
     required: true
     value: 5Gi
 objects:
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: '${NAME}-base'
+    creationTimestamp: null
+    annotations:
+      description: Python Runtime Image
+    labels:
+      shared: 'true'
+  spec:
+    lookupPolicy:
+      local: false
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: '${NAME}'
+    creationTimestamp: null
+    labels:
+      shared: 'true'
+    annotations:
+      description: Keeps track of changes in the application image
+  spec:
+    lookupPolicy:
+      local: false
+    tags: []
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
