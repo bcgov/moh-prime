@@ -18,7 +18,6 @@ import { SameAsComponent } from './shared/components/same-as/same-as.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { OrganizationsComponent } from './pages/organizations/organizations.component';
 import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
-import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
 import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
@@ -42,7 +41,6 @@ import { BusinessLicenceComponent } from './pages/business-licence/business-lice
 
     OrganizationsComponent,
     OrganizationSigningAuthorityComponent,
-    SigningAuthorityComponent,
     OrganizationInformationComponent,
     OrganizationTypeComponent,
     OrganizationAgreementComponent,

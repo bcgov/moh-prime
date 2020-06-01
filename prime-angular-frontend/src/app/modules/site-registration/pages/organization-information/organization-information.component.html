@@ -13,7 +13,7 @@
         <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
         <ng-container appPageSubheaderSummary>
           An organization is the legal entity that operates/controls one or more sites where PharmaNet is accessed. The
-          organization may be any kind of business: a sole proprietorship, limited partnership, corporation, etc.
+          organization may be: a sole proprietorship, limited partnership, corporation, etc.
         </ng-container>
       </app-page-subheader>
 
@@ -41,13 +41,18 @@
 
       <div class="row">
         <div class="col">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Organization Registration ID"
-                   formControlName="registrationId">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
+          <app-form-icon-group>
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Organization Registration ID"
+                     formControlName="registrationId">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+            <ng-container appContextualContent>
+              This number can be found on the Certificate of Registration that was issued to the company by the
+              Corporate Registry.
+            </ng-container>
+          </app-form-icon-group>
 
         </div>
       </div>
@@ -59,8 +64,8 @@
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Doing Business As</ng-container>
         <ng-container appPageSubheaderSummary>
-          If different, the name under which the organization does business ("doing business as"). If you enter a
-          numbered corporation as the organization, you must provide a "doing business as" name. One of those names must
+          If different, the name under which the organization does business (“doing business as”). If you enter a
+          numbered corporation as the organization, you must provide a “doing business as” name. One of those names must
           match that on the business licence.
         </ng-container>
       </app-page-subheader>
