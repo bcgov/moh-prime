@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --provider=openshift --build=deploy-config --build-repo=https://github.com/bcgov/moh-prime.git
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: redis
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: redis
+  strategy:
+    resources: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.network/primenet: "true"
+        io.kompose.service: redis
+    spec:
+      containers:
+      - args:
+        - redis-server
+        - --requirepass
+        - redis-password
+        image: ' '
+        name: prime-cache
+        ports:
+        - containerPort: 6379
+        resources: {}
+      restartPolicy: Always
+  test: false
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - prime_cache
+      from:
+        kind: ImageStreamTag
+        name: redis:3.2-alpine
+    type: ImageChange
+status: {}

@@ -1,0 +1,295 @@
+kind: Template
+apiVersion: v1
+labels:
+  template: database-backup-template
+metadata:
+  name: document-manager-bc
+  creationTimestamp: null
+parameters:
+  - name: NAME
+    displayName: Name
+    description: A prefix appended to all objects
+    required: true
+    value: document-manager
+  - name: SUFFIX
+    displayName: Name Suffix
+    description: A suffix appended to all objects
+    required: false
+  - name: VERSION
+    required: false
+  - name: SOURCE_CONTEXT_DIR
+    value: document-manager
+    required: true
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: https://github.com/bcgov/moh-prime
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+  - name: OC_NAMESPACE
+    required: true
+    value: dqszvc
+  - name: OC_APP
+    required: true
+    value: dev
+  - name: FLASK_ENV
+    value: "production"
+    required: true
+  - name: STORAGE_CLASS
+    value: netapp-block-standard
+    required: true
+  - name: STORAGE_MODE
+    value: ReadWriteOnce
+    required: true
+  - description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
+    displayName: Volume Capacity
+    name: VOLUME_CAPACITY
+    required: true
+    value: 5Gi
+objects:
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.network/primenet: "true"
+        io.kompose.service: ${NAME}${SUFFIX}-migrate
+      name: ${NAME}${SUFFIX}-migrate
+    spec:
+      containers:
+      - args:
+        - flask
+        - 
+        - upgrade
+      image: ${NAME}${SUFFIX}-migrate
+      name: ${NAME}${SUFFIX}-migrate
+      resources: {}
+      volumeMounts:
+      - mountPath: /app/
+        name: ${NAME}${SUFFIX}-migrate-pvc
+    restartPolicy: OnFailure
+    volumes:
+    - name: ${NAME}${SUFFIX}-migrate-pvc
+      persistentVolumeClaim:
+        claimName: ${NAME}${SUFFIX}-migrate-pvc
+    status: {}
+  -sapiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: redis
+      name: redis
+    spec:
+      ports:
+      - name: "6379"
+        port: 6379
+        targetPort: 6379
+      selector:
+        io.kompose.service: redis
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ${NAME}${SUFFIX}-backend
+      name: ${NAME}${SUFFIX}-backend
+    spec:
+      ports:
+      - name: "6001"
+        port: 6001
+        targetPort: 6001
+      selector:
+        io.kompose.service: ${NAME}${SUFFIX}-backend
+    status:
+      loadBalancer: {}
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ${NAME}${SUFFIX}-backend
+      name: ${NAME}${SUFFIX}-backend
+    spec:
+      replicas: 1
+      selector:
+        io.kompose.service: ${NAME}${SUFFIX}-backend
+      strategy:
+        resources: {}
+        type: Recreate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            io.kompose.network/primenet: "true"
+            io.kompose.service: ${NAME}${SUFFIX}-backend
+        spec:
+          containers:
+          - dockerfilePath: openshift.dockerfile
+          - env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  key: database-user
+                  name: "postgresql-secret"
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: database-admin-password
+                  name: "postgresql-secret"
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: database-name
+                  name: "postgresql-secret"
+            - name: CACHE_REDIS_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: database-admin-password
+                  name: "postgresql-secret"
+            - name: CACHE_REDIS_HOST
+              value: redis${SUFFIX}
+            - name: DB_NAME_TEST
+              value: postgres_test
+            - name: DB_HOST
+              value: postgresql${SUFFIX}
+            - name: DB_PORT
+              value: "5432"
+            - name: KEYCLOAK_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: KEYCLOAK_CLIENT_ID
+                  name: "keycloak"
+            - name: KEYCLOAK_REALM
+              valueFrom:
+                secretKeyRef:
+                  key: KEYCLOAK_REALM
+                  name: "keycloak"
+            - name: KEYCLOAK_URL
+              valueFrom:
+                secretKeyRef:
+                  key: KEYCLOAK_URL
+                  name: "keycloak"
+            - name: JWT_OIDC_WELL_KNOWN_CONFIG
+              valueFrom:
+                secretKeyRef:
+                  key: JWT_WELL_KNOWN_CONFIG
+                  name: "keycloak"
+            - name: JWT_OIDC_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  key: JWT_WELL_KNOWN_CONFIG
+                  name: "KEYCLOAK_CLIENT_ID"
+            - name: JWT_OIDC_ALGORITHMS
+              value: RS256
+            - name: DOCUMENT_MANAGER_URL
+              value: "http://${NAME}${SUFFIX}:6001"
+            - name: ELASTIC_ENABLED
+              value: "0"
+            - name: FLASK_APP
+              valueFrom:
+                configMapKeyRef:
+                  key: FLASK_APP
+                  name: document-manager-backend-config
+            - name: FLASK_DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  key: FLASK_DEBUG
+                  name: document-manager-backend-config
+            - name: FLASK_ENV
+              valueFrom:
+                configMapKeyRef:
+                  key: FLASK_ENV
+                  name: document-manager-backend-config
+            - name: FLASK_RUN_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: FLASK_RUN_HOST
+                  name: document-manager-backend-config
+            - name: FLASK_RUN_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: FLASK_RUN_PORT
+                  name: document-manager-backend-config
+          type: Docker
+            image: ' '
+            name: ${NAME}${SUFFIX}-backend
+            ports:
+            - containerPort: 6001
+            resources: {}
+            volumeMounts:
+            - mountPath: /app/
+              name: ${NAME}${SUFFIX}-backend-pvc
+          restartPolicy: Always
+          volumes:
+          - name: ${NAME}${SUFFIX}-backend-pvc
+            emptyDir: {}
+      test: false
+      triggers:
+        - type: ConfigChange
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+            - document_manager_backend
+            from:
+              kind: ImageStreamTag
+              name: ${NAME}${SUFFIX}-backend:latest
+          type: ImageChange
+      status: {}
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: ${NAME}${SUFFIX}-backend
+      name: ${NAME}${SUFFIX}-backend
+    spec:
+      tags:
+      - annotations: null
+        from:
+          kind: DockerImage
+          name: ${NAME}${SUFFIX}-backend
+        generation: null
+        importPolicy: {}
+        name: latest
+    status:
+      dockerImageRepository: ""
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: redis${SUFFIX}
+      name: redis${SUFFIX}
+    spec: {}
+    status:
+      dockerImageRepository: ""
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: redis${SUFFIX}
+      name: redis${SUFFIX}
+    spec:
+      ports:
+      - name: "6379"
+        port: 6379
+        targetPort: 6379
+      selector:
+        io.kompose.service: redis${SUFFIX}
+    status:
+      loadBalancer: {}

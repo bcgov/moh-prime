@@ -6,6 +6,7 @@ export class SiteRoutes {
   public static ORGANIZATIONS = 'organizations';
   public static SIGNING_AUTHORITY = 'signing-authority';
   public static ORGANIZATION_INFORMATION = 'organization-information';
+  public static BUSINESS_LICENCE = 'business-licence';
   public static ORGANIZATION_TYPE = 'organization-type';
   public static ORGANIZATION_REVIEW = 'organization-review';
   public static ORGANIZATION_AGREEMENT = 'access-agreement';
@@ -61,9 +62,12 @@ export class SiteRoutes {
 
   public static noOrganizationAgreementRoutes(): string[] {
     return [
+      // SiteRoutes.MULTIPLE_SITES,
       // SiteRoutes.ORGANIZATION_INFORMATION,
+      // SiteRoutes.BUSINESS_LICENCE,
       // SiteRoutes.SITE_ADDRESS,
-      // SiteRoutes.ORGANIZATION_AGREEMENT
+      // SiteRoutes.ORGANIZATION_TYPE,
+      // SiteRoutes.ORGANIZATION_AGREEMENT,
     ];
   }
 

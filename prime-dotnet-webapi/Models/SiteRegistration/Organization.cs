@@ -30,8 +30,9 @@ namespace Prime.Models
 
         public int? OrganizationTypeCode { get; set; }
 
+        public OrganizationType OrganizationType { get; set; }
+
         [JsonIgnore]
         public IEnumerable<Location> Locations { get; set; }
-
     }
 }

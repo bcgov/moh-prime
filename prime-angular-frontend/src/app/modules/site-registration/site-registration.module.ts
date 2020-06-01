@@ -5,6 +5,10 @@ import { SharedModule } from '@shared/shared.module';
 import { SiteRegistrationRoutingModule } from './site-registration-routing.module';
 
 import { BusinessHoursModule } from '@lib/modules/business-hours/business-hours.module';
+// TODO split out all related filepond files into a /lib module ie. config and components
+import { FilePondModule, registerPlugin } from 'ngx-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+registerPlugin(FilePondPluginFileValidateType);
 
 import { RegistrantProfileFormComponent } from './shared/components/registrant-profile-form/registrant-profile-form.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
@@ -55,6 +59,8 @@ import { OrganizationReviewComponent } from './shared/components/organization-re
   ],
   imports: [
     SharedModule,
+    SiteRegistrationRoutingModule,
+    FilePondModule,
     BusinessHoursModule,
     SiteRegistrationRoutingModule
   ]

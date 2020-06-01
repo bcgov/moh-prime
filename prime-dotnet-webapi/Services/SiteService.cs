@@ -274,6 +274,51 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(s => s.Id == vendorId);
         }
 
+        public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)
+        {
+            var businessLicence = new BusinessLicence
+            {
+                DocumentGuid = documentGuid,
+                SiteId = siteId,
+                FileName = filename,
+            };
+
+            _context.BusinessLicences.Add(businessLicence);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not add business licence.");
+            }
+
+            return businessLicence;
+        }
+
+        public async Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId)
+        {
+            return await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).ToListAsync();
+        }
+
+        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
+        {
+            // Remove existing items
+            foreach (var item in dbCollection)
+            {
+                _context.Remove(item);
+            }
+
+            // Create new items
+            if (newCollection != null)
+            {
+                foreach (var item in newCollection)
+                {
+                    // Prevent the ID from being changed by the incoming changes
+                    item.EnrolleeId = enrolleeId;
+                    _context.Entry(item).State = EntityState.Added;
+                }
+            }
+        }
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
