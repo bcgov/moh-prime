@@ -1,0 +1,279 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"
+                               [currentRoute]="SiteRoutes.SIGNING_AUTHORITY"></app-site-progress-indicator>
+
+  <form [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+      <app-page-subheader [summaryAsInfo]="true">
+        <ng-container appPageSubheaderTitle>Signing Authority Information</ng-container>
+        <!-- Work around for ngProjectAs not passing directive reference to subheader when applied to ng-content -->
+        <ng-container appPageSubheaderSummary>Only the Signing Authority can revise and sign the Organization Agreement.
+          This information comes
+          from our BC Services Card, provide a preferred name if necessary.</ng-container>
+        <ng-container appPageSubheaderSummary>
+          The Signing Authority must be a duly authorized representative of the organization with authority to submit
+          the
+          site request on the organization’s behalf. This is the individual who will be designated as responsible for
+          PharmaNet activities at the location being set up for PharmaNet access (site). This person must be the same
+          individual who signs the Organization Agreement for PharmaNet Use. If the site is owned/leased and operated by
+          a
+          corporation, the Signing Authority must be legally able to bind the corporation to the terms of this document
+          and the Organization Agreement for PharmaNet Use. The Signing Authority must be the same individual for all
+          PharmaNet access sites operating under the same organization. The Signing Authority does not need to be a
+          PharmaNet user, a member of a regulated health profession, or providing direct patient care at the site. The
+          Signing Authority must sign Section 5 (Certification) of the PharmaNet Access Community Practice Site Request
+          for new PharmaNet access sites, updates to existing information for a PharmaNet access sites, discontinuing
+          current software vendors, or discontinuations of PharmaNet access at a site.
+          <ng-content select="[appPageSubheaderSummary]"></ng-content>
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row mb-3">
+        <div class="col-6 mb-3 mat-body-2">
+          Name:
+        </div>
+        <div class="col-6 mb-3">
+          {{ site.location.organization.signingAuthority.firstName | default }}
+          {{ site.location.organization.signingAuthority.lastName | default }}
+        </div>
+
+      </div>
+      <div class="row mb-3">
+        <div class="col-4 mb-3 mat-body-2">
+          <span class="mat-body-2">Date of Birth:</span>
+        </div>
+        <div class="col-6">
+          {{ site.location.organization.signingAuthority?.dateOfBirth | formatDate | default }}
+        </div>
+      </div>
+
+      <mat-slide-toggle class="mb-3"
+                        color="primary"
+                        (change)="onPreferredNameChange()"
+                        [checked]="hasPreferredName">
+        I have a preferred name
+      </mat-slide-toggle>
+    </section>
+
+    <ng-container *ngIf="hasPreferredName">
+
+      <section class="mb-3">
+
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
+          <ng-container appPageSubheaderSummary>
+            If you have a name that is different than your legal name that people know you by, enter your full
+            preferred name.
+          </ng-container>
+        </app-page-subheader>
+
+        <div class="row">
+          <div class="col">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Preferred First Name"
+                     formControlName="preferredFirstName">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Preferred Middle Name (Optional)"
+                     formControlName="preferredMiddleName">
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Preferred Last Name"
+                     formControlName="preferredLastName">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+      </section>
+
+    </ng-container>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Address</ng-container>
+        <ng-container appPageSubheaderSummary>
+          This information comes from your BC Services Card, provide a different address if needed.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row mb-3">
+
+        <div class="col-6 mb-3 mat-body-2">
+          Country
+        </div>
+        <div class="col-6 text-right mb-3">
+          {{ physicalAddress?.countryCode | configCode: 'countries' | default }}
+        </div>
+
+        <div class="col-6 mb-3 mat-body-2">
+          Province
+        </div>
+        <div class="col-6 text-right mb-3">
+          {{ physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+        </div>
+
+        <div class="col-6 mb-3 mat-body-2">
+          Street Address
+        </div>
+        <div class="col-6 text-right mb-3">
+          {{ physicalAddress?.street | default }}
+        </div>
+
+        <ng-container *ngIf="physicalAddress?.street2">
+
+          <div class="col-6 mb-3 mat-body-2">
+            Street Address 2
+          </div>
+          <div class="col-6 text-right mb-3">
+            {{ physicalAddress?.street2 | default }}
+          </div>
+
+        </ng-container>
+
+        <div class="col-6 mb-3 mat-body-2">
+          City
+        </div>
+        <div class="col-6 text-right mb-3">
+          {{ physicalAddress?.city | default }}
+        </div>
+
+        <div class="col-6 mb-3 mat-body-2">
+          Postal Code
+        </div>
+        <div class="col-6 text-right mb-3">
+          {{ physicalAddress?.postal | postal | default }}
+        </div>
+
+      </div>
+
+      <mat-slide-toggle class="mb-3"
+                        color="primary"
+                        (change)="onMailingAddressChange()"
+                        [checked]="hasMailingAddress">
+        My mailing address is different
+      </mat-slide-toggle>
+    </section>
+
+    <ng-container *ngIf="hasMailingAddress">
+
+      <section class="mb-3">
+
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
+        </app-page-subheader>
+
+        <app-address [form]="mailingAddress"></app-address>
+
+      </section>
+
+    </ng-container>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Signing Authority Information</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Provide your Job Title and Contact Information
+        </ng-container>
+      </app-page-subheader>
+
+
+
+      <div class="row">
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Job or Role Title"
+                   formControlName="jobRoleTitle">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Phone"
+                   formControlName="phone"
+                   mask="(000) 000-0000"
+                   [showMaskTyped]="false">
+            <mat-error *ngIf="phone.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="phone.hasError('phone')">Must be a valid phone number</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Fax"
+                   formControlName="fax"
+                   mask="(000) 000-0000"
+                   [showMaskTyped]="false">
+            <mat-error *ngIf="fax.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="fax.hasError('phone')">Must be a valid phone number</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="SMS Phone"
+                   formControlName="smsPhone"
+                   mask="(000) 000-0000"
+                   [showMaskTyped]="false">
+            <mat-error *ngIf="smsPhone.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="smsPhone.hasError('phone')">Must be a valid phone number</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Email"
+                   formControlName="email">
+            <mat-error *ngIf="email.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+
+    </section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

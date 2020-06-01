@@ -118,6 +118,37 @@ namespace Prime.Services
             }
         }
 
+        private void UpdateOrganization(Organization current, Organization updated)
+        {
+            this._context.Entry(current).CurrentValues.SetValues(updated);
+
+            this._context.Entry(current.SigningAuthority).CurrentValues.SetValues(updated.SigningAuthority);
+
+            if (updated.SigningAuthority?.PhysicalAddress != null)
+            {
+                if (current.SigningAuthority?.PhysicalAddress == null)
+                {
+                    current.SigningAuthority.PhysicalAddress = updated.SigningAuthority.PhysicalAddress;
+                }
+                else
+                {
+                    this._context.Entry(current.SigningAuthority.PhysicalAddress).CurrentValues.SetValues(updated.SigningAuthority.PhysicalAddress);
+                }
+            }
+
+            if (updated.SigningAuthority?.MailingAddress != null)
+            {
+                if (current.SigningAuthority?.MailingAddress == null)
+                {
+                    current.SigningAuthority.MailingAddress = updated.SigningAuthority.MailingAddress;
+                }
+                else
+                {
+                    this._context.Entry(current.SigningAuthority.MailingAddress).CurrentValues.SetValues(updated.SigningAuthority.MailingAddress);
+                }
+            }
+        }
+
         private void UpdateLocation(Location current, Location updated)
         {
             this._context.Entry(current).CurrentValues.SetValues(updated);
@@ -205,6 +236,11 @@ namespace Prime.Services
             {
                 return;
             }
+
+            _context.Addresses.Remove(site.Location.Organization.SigningAuthority.PhysicalAddress);
+            _context.Addresses.Remove(site.Location.Organization.SigningAuthority.MailingAddress);
+            _context.Parties.Remove(site.Location.Organization.SigningAuthority);
+            _context.Organizations.Remove(site.Location.Organization);
 
             // Check if relation exists before delete to allow delete of incomplete registrations
             if (site.Location != null)
@@ -325,6 +361,14 @@ namespace Prime.Services
                 .Include(s => s.Provisioner)
                 // .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Vendor)
+                .Include(s => s.Location)
+                    .ThenInclude(l => l.Organization)
+                        .ThenInclude(o => o.SigningAuthority)
+                            .ThenInclude(p => p.PhysicalAddress)
+                .Include(s => s.Location)
+                    .ThenInclude(l => l.Organization)
+                        .ThenInclude(o => o.SigningAuthority)
+                            .ThenInclude(p => p.MailingAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PhysicalAddress)
                 .Include(s => s.Location)

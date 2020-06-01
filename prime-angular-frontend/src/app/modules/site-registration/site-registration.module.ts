@@ -17,10 +17,12 @@ import { SameAsComponent } from './shared/components/same-as/same-as.component';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { OrganizationsComponent } from './pages/organizations/organizations.component';
+import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
 import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
+import { OrganizationReviewComponent } from './shared/components/organization-review/organization-review.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
 import { VendorComponent } from './pages/vendor/vendor.component';
@@ -31,7 +33,6 @@ import { HoursOperationComponent } from './pages/hours-operation/hours-operation
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
-import { OrganizationReviewComponent } from './shared/components/organization-review/organization-review.component';
 import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 
 @NgModule({
@@ -40,6 +41,7 @@ import { BusinessLicenceComponent } from './pages/business-licence/business-lice
     SiteCollectionNoticeComponent,
 
     OrganizationsComponent,
+    OrganizationSigningAuthorityComponent,
     SigningAuthorityComponent,
     OrganizationInformationComponent,
     OrganizationTypeComponent,
