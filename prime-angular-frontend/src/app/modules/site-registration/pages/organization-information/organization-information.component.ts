@@ -31,6 +31,7 @@ import {
 export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public title: string;
   public routeUtils: RouteUtils;
   public organizations: string[];
   public doingBusinessAsNames: string[];
@@ -48,6 +49,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     private utilsService: UtilsService,
     private dialog: MatDialog
   ) {
+    this.title = 'Organization Information';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 

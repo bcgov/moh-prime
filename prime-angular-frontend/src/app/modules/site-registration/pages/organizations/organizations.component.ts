@@ -22,6 +22,7 @@ import { SiteResource } from '@registration/shared/services/site-resource.servic
 })
 export class OrganizationsComponent implements OnInit {
   public busy: Subscription;
+  public title: string;
   public organizations: Organization[];
   // TODO only for single organization then remove
   public sites: Site[];
@@ -35,6 +36,7 @@ export class OrganizationsComponent implements OnInit {
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource
   ) {
+    this.title = 'Site Administration';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 

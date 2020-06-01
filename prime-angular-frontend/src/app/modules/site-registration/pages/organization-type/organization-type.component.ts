@@ -28,13 +28,14 @@ import { OrganizationService } from '@registration/shared/services/organization.
 export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public title: string;
   public routeUtils: RouteUtils;
   public organization: string;
   public doingBusinessAsNames: string[];
-  public isCompleted: boolean;
-  public SiteRoutes = SiteRoutes;
   public organizationTypes: Config<number>[];
   public filteredOrganizationTypes: Config<number>[];
+  public isCompleted: boolean;
+  public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +47,7 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
     private dialog: MatDialog,
     private configService: ConfigService,
   ) {
+    this.title = 'Organization Information';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.organizationTypes = this.configService.organizationTypes;
   }

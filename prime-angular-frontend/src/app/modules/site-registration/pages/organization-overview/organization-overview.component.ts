@@ -23,6 +23,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 })
 export class OrganizationOverviewComponent implements OnInit {
   public busy: Subscription;
+  public title: string;
   public routeUtils: RouteUtils;
   public organization: Organization;
   public SiteRoutes = SiteRoutes;
@@ -35,6 +36,7 @@ export class OrganizationOverviewComponent implements OnInit {
     private organizationFormStateService: OrganizationFormStateService,
     private dialog: MatDialog
   ) {
+    this.title = 'Organization Information Review';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
