@@ -103,7 +103,7 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: '${NAME}-base:${VERSION}'
+          name: '${NAME}-base:latest'
       resources:
         limits:
           cpu: 500m
@@ -137,14 +137,14 @@ objects:
         sourceStrategy:
           from:
             kind: ImageStreamTag
-            name: '${NAME}-base:${VERSION}'
+            name: '${NAME}-base:latest'
           env:
             - name: BUILD_LOGLEVEL
               value: '2'
       output:
         to:
           kind: ImageStreamTag
-          name: '${NAME}:${VERSION}'
+          name: '${NAME}:latest'
       resources:
         limits:
           cpu: 200m
