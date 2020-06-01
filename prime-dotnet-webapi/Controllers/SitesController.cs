@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
+    [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
     public class SitesController : ControllerBase
     {
         private readonly ISiteService _siteService;
@@ -28,7 +28,7 @@ namespace Prime.Controllers
             ISiteService siteService,
             IPartyService partyService,
             IOrganizationService organizationService,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
             IEmailService emailService)
         {
             _siteService = siteService;
