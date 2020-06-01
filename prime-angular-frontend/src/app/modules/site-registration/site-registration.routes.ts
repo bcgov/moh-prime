@@ -6,14 +6,13 @@ export class SiteRoutes {
   public static ORGANIZATIONS = 'organizations';
   public static SIGNING_AUTHORITY = 'signing-authority';
   public static ORGANIZATION_INFORMATION = 'organization-information';
-  public static BUSINESS_LICENCE = 'business-licence';
   public static ORGANIZATION_TYPE = 'organization-type';
   public static ORGANIZATION_REVIEW = 'organization-review';
   public static ORGANIZATION_AGREEMENT = 'access-agreement';
 
   public static SITES = 'sites';
   public static SITE_ADDRESS = 'site-address';
-  // TODO business licence
+  public static BUSINESS_LICENCE = 'business-licence';
   public static HOURS_OPERATION = 'hours-operation';
   public static VENDOR = 'vendor';
   // TODO remote user(s)
@@ -39,7 +38,7 @@ export class SiteRoutes {
   // of the registration process
   public static initialRegistrationRouteOrder(): string[] {
     return [
-      ...SiteRoutes.registrationRoutes()
+      // ...SiteRoutes.registrationRoutes()
     ];
   }
 

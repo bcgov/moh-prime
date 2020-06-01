@@ -22,6 +22,7 @@ import { OrganizationOverviewComponent } from './pages/organization-overview/org
 
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
+import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
@@ -111,7 +112,13 @@ const routes: Routes = [
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Site Address' }
                   },
-                  // TODO business licence
+                  {
+                    path: SiteRoutes.BUSINESS_LICENCE,
+                    component: BusinessLicenceComponent,
+                    canActivate: [SiteGuard],
+                    canDeactivate: [CanDeactivateFormGuard],
+                    data: { title: 'Submit a copy of the Business Licence' }
+                  },
                   {
                     path: SiteRoutes.HOURS_OPERATION,
                     component: HoursOperationComponent,

@@ -220,7 +220,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Site>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
+        public async Task<ActionResult<BusinessLicence>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
@@ -234,9 +234,15 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid, filename);
+            var licence = await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid, filename);
 
-            return Ok(ApiResponse.Result(site));
+            // TODO updated to be licence instead of site, and should have GET and CreatedAtAction
+            return Ok(ApiResponse.Result(licence));
+            // return CreatedAtAction(
+            //     nameof(GetSiteById),
+            //     new { siteId = createdSiteId },
+            //     ApiResponse.Result(createdSite)
+            // );
         }
 
         // Get: api/sites/5/business-licence

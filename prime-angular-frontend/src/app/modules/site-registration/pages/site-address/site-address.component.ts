@@ -73,7 +73,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+      this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
     }
   }
 

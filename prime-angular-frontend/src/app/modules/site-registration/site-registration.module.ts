@@ -32,30 +32,34 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { OrganizationReviewComponent } from './shared/components/organization-review/organization-review.component';
+import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 
 @NgModule({
   declarations: [
     CollectionNoticeComponent,
+    SiteCollectionNoticeComponent,
+
     OrganizationsComponent,
     SigningAuthorityComponent,
     OrganizationInformationComponent,
     OrganizationTypeComponent,
     OrganizationAgreementComponent,
     OrganizationOverviewComponent,
+    OrganizationReviewComponent,
 
+    SiteAddressComponent,
+    BusinessLicenceComponent,
+    HoursOperationComponent,
     VendorComponent,
     AdministratorComponent,
+    PrivacyOfficerComponent,
     TechnicalSupportComponent,
     SiteOverviewComponent,
-    HoursOperationComponent,
-    PrivacyOfficerComponent,
-    RegistrantProfileFormComponent,
     ConfirmationComponent,
+
     SiteProgressIndicatorComponent,
-    SiteCollectionNoticeComponent,
-    SiteAddressComponent,
-    SameAsComponent,
-    OrganizationReviewComponent
+    RegistrantProfileFormComponent,
+    SameAsComponent
   ],
   imports: [
     SharedModule,

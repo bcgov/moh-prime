@@ -82,7 +82,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
 
   public nextRoute() {
