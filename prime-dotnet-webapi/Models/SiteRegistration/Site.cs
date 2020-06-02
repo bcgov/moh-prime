@@ -14,6 +14,8 @@ namespace Prime.Models
 
         public string PEC { get; set; }
 
+        public string Name { get; set; }
+
         public bool Completed { get; set; }
 
         public DateTimeOffset? SubmittedDate { get; set; }
