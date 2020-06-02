@@ -46,7 +46,6 @@ export interface HttpEnrollee extends Enrollee {
   requestingRemoteAccess: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
-  isObo: boolean;
 }
 
 
@@ -89,5 +88,4 @@ export interface Enrolment {
   requestingRemoteAccess: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
-  isObo: boolean;
 }

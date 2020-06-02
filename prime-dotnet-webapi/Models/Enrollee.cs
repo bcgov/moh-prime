@@ -183,6 +183,7 @@ namespace Prime.Models
         }
 
         [NotMapped]
+        [JsonIgnore]
         public bool? IsObo
         {
             get => AccessTerms?

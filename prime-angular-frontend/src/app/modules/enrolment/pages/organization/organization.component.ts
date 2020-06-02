@@ -68,7 +68,8 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public showRemoteAccess(): boolean {
-    return !this.enrolmentStateService.enrolment.enrollee.isObo;
+    const certifications = this.enrolmentStateService.regulatoryForm.get('certifications') as FormArray;
+    return certifications.length > 0;
   }
 
   public removeOrganization(index: number) {
