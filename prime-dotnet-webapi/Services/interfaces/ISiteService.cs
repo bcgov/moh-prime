@@ -18,5 +18,6 @@ namespace Prime.Services
         Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId);
         Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename);
         Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId);
+        Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId);
     }
 }

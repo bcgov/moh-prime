@@ -122,9 +122,7 @@ namespace Prime.Services
             var subject = "PRIME Site Registration Submission";
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
 
-            var businessLicence = _documentService.GetBusinessLicenceDocumentsBySiteId(site.Id);
-            // TODO will there be multiple business licence documents?
-            // TODO get filename extension for the business licence document(s), something like:
+            // var businessLicence = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
             // var fileExt = businessLicence.Filename.Split('.').Last();
 
             // TODO Option 1: Create HTML content for document, if it works add to PDF service

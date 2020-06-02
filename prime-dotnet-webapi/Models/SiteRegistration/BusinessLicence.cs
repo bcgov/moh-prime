@@ -19,5 +19,7 @@ namespace Prime.Models
 
         [JsonIgnore]
         public Site Site { get; set; }
+
+        public DateTimeOffset UploadedDate { get; set; }
     }
 }

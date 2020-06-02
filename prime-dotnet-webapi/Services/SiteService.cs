@@ -317,6 +317,7 @@ namespace Prime.Services
                 DocumentGuid = documentGuid,
                 SiteId = siteId,
                 FileName = filename,
+                UploadedDate = DateTimeOffset.Now
             };
 
             _context.BusinessLicences.Add(businessLicence);
@@ -332,7 +333,17 @@ namespace Prime.Services
 
         public async Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId)
         {
-            return await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).ToListAsync();
+            return await _context.BusinessLicences
+                .Where(bl => bl.SiteId == siteId)
+                .ToListAsync();
+        }
+
+        public async Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId)
+        {
+            return await _context.BusinessLicences
+                .Where(bl => bl.SiteId == siteId)
+                .OrderByDescending(bl => bl.UploadedDate)
+                .FirstOrDefaultAsync();
         }
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
