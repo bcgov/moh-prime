@@ -113,8 +113,8 @@ export class OrganizationResource {
       );
   }
 
-  public getOrganizationAgreement(): Observable<string> {
-    return this.apiResource.get<string>(`organizations/organization-agreement`)
+  public getOrganizationAgreement(organizationId: number): Observable<string> {
+    return this.apiResource.get<string>(`organizations/${organizationId}/organization-agreement`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {

@@ -136,19 +136,15 @@ export class OrganizationFormStateService {
 
         formGroup.patchValue(party);
 
-        // TODO may not be needed anymore
-        // const physicalAddressFormGroup = formGroup.get('physicalAddress');
-        // (physicalAddress)
-        //   ? physicalAddressFormGroup.patchValue(physicalAddress)
-        //   : physicalAddressFormGroup.reset({ id: 0 });
+        const physicalAddressFormGroup = formGroup.get('physicalAddress');
+        (physicalAddress)
+          ? physicalAddressFormGroup.patchValue(physicalAddress)
+          : physicalAddressFormGroup.reset({ id: 0 });
 
-        // const mailingAddressFormGroup = formGroup.get('mailingAddress');
-        // (mailingAddress)
-        //   ? mailingAddressFormGroup.patchValue(mailingAddress)
-        //   : mailingAddressFormGroup.reset({ id: 0 });
-
-        console.log(formGroup.getRawValue());
-
+        const mailingAddressFormGroup = formGroup.get('mailingAddress');
+        (mailingAddress)
+          ? mailingAddressFormGroup.patchValue(mailingAddress)
+          : mailingAddressFormGroup.reset({ id: 0 });
       });
   }
 

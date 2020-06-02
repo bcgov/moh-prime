@@ -83,9 +83,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public onSubmit() {
-    console.log(this.formUtilsService.getFormErrors(this.form));
-
-
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
       // TODO when spoking don't update

@@ -81,7 +81,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
 
     this.organizationResource
-      .getOrganizationAgreement()
+      .getOrganizationAgreement(organization.id)
       .subscribe((organizationAgreement: string) =>
         this.organizationAgreement = organizationAgreement
       );

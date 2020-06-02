@@ -176,15 +176,23 @@ namespace Prime.Controllers
         /// <summary>
         /// Get the organization agreement.
         /// </summary>
-        [HttpGet("organization-agreement", Name = nameof(GetOrganizationAgreement))]
+        /// <param name="organizationId"></param>
+        [HttpGet("{organizationId}/organization-agreement", Name = nameof(GetOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetOrganizationAgreement()
+        public async Task<ActionResult<string>> GetOrganizationAgreement(int organizationId)
         {
-            var agreement = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", new Organization());
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            var agreement = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", organization);
 
             return Ok(ApiResponse.Result(agreement));
         }
