@@ -122,20 +122,13 @@ namespace Prime.Services
             var subject = "PRIME Site Registration Submission";
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
 
-            // var businessLicence = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
-            // var fileExt = businessLicence.Filename.Split('.').Last();
-
-            // TODO Option 1: Create HTML content for document, if it works add to PDF service
-            // var base64 = String.Format($"data:image/{fileExt};base64,{0}", Convert.ToBase64String(businessLicence.Data));
-            // var htmlContent = $"<img src='" + base64 + "' />";
+            // var document = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
 
             var pdfContents = new[]
             {
                 await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", new Site()),
                 await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site),
-                // TODO Option 2: Create HTML content for document, less ideal implementation since need to pass in a model
-                // TODO might be okay if there are multiple documents
-                // await _razorConverterService.RenderViewToStringAsync("/Views/Emails/Image.cshtml", new EmailParams())
+                // await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", document)
             };
             var pdfs = pdfContents.Select(content => _pdfService.Generate(content));
             var attachments = pdfs.Select(pdf => new Attachment(new MemoryStream(pdf), "application/pdf"));
