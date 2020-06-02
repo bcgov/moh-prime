@@ -54,7 +54,7 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
     HoursOperationComponent,
     VendorComponent,
     RemoteUsersComponent,
-    RemoteUserComponent
+    RemoteUserComponent,
     AdministratorComponent,
     PrivacyOfficerComponent,
     TechnicalSupportComponent,

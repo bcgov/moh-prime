@@ -68,14 +68,14 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['../', SiteRoutes.HOURS_OPERATION]);
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.VENDOR]);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
     } else {
-      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SIGNING_AUTHORITY]);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.ADMINISTRATOR]);
     }
   }
 

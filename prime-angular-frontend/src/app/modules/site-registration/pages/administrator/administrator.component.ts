@@ -68,7 +68,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeTo(SiteRoutes.VENDOR);
+    this.routeUtils.routeTo(SiteRoutes.REMOTE_USERS);
   }
 
   public nextRoute() {
