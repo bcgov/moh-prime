@@ -23,7 +23,8 @@ namespace Prime.Configuration
                     new StatusReason { Code = 11, Name = "Contact Address or Identity Address not in British Columbia", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 12, Name = "Admin has flagged the applicant for manual adjudication", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 13, Name = "User does not have high enough identity assurance level", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new StatusReason { Code = 14, Name = "User has Requested Remote Access", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 14, Name = "User authenticated with a method other than BC Services Card", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 15, Name = "User has Requested Remote Access", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }

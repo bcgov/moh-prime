@@ -15,6 +15,7 @@ namespace Prime.Models
         Address = 11,
         AlwaysManual = 12,
         AssuranceLevel = 13,
-        RequestingRemoteAccess = 14,
+        IdentityProvider = 14,
+        RequestingRemoteAccess = 15,
     }
 }
