@@ -50,7 +50,7 @@ objects:
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: '${NAME}-base'
+    name: '${NAME}${SUFFIX}-base'
     creationTimestamp: null
     annotations:
       description: Python Runtime Image
@@ -62,7 +62,7 @@ objects:
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: '${NAME}'
+    name: '${NAME}${SUFFIX}'
     creationTimestamp: null
     labels:
       shared: 'true'
