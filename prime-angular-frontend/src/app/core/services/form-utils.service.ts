@@ -82,8 +82,17 @@ export class FormUtilsService {
 
   /**
    * @description
-   * Push model(s) as abstract controls onto a form array.
+   * Push JSON model(s) as abstract controls onto a form array.
+   *
+   * NOTE: Helper method for quickly adding FormControls or FormGroups to a
+   * FormArray that are mapped directly from JSON. This does not take into
+   * account application of validators, or other AbstractControl properties.
    */
+  // TODO rename to formArrayPushFromJson, and add below TODOs in separate method(s)
+  // TODO allow for push of FormControls onto the FormArray
+  // TODO allow for push of FormGroups onto the FormArray
+  // TODO allow for child JSON arrays to be created recursively
+  // TODO allow for configuration of JSON with validators
   public formArrayPush(array: FormArray, models: any | any[], type: 'group' | 'control' = 'group') {
     const push = (control: AbstractControl) => array.push(control);
     (Array.isArray(models))

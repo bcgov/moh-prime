@@ -15,7 +15,7 @@ export class SiteRoutes {
   public static BUSINESS_LICENCE = 'business-licence';
   public static HOURS_OPERATION = 'hours-operation';
   public static VENDOR = 'vendor';
-  // TODO remote user(s)
+  public static REMOTE_USERS = 'remote-users';
   public static ADMINISTRATOR = 'site-administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
   public static TECHNICAL_SUPPORT = 'technical-support';

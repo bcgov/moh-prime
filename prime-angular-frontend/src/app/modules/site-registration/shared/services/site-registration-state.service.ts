@@ -3,6 +3,7 @@ import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '
 import { RouterEvent } from '@angular/router';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -12,7 +13,9 @@ import { Address } from '@shared/models/address.model';
 
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
+import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { RemoteUserLocation } from '../models/remote-user-location.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +25,7 @@ export class SiteRegistrationStateService {
   public organizationTypeForm: FormGroup;
   public siteAddressForm: FormGroup;
   public hoursOperationForm: FormGroup;
+  public remoteUsersForm: FormGroup;
   public vendorForm: FormGroup;
   public signingAuthorityForm: FormGroup;
   public privacyOfficerForm: FormGroup;
@@ -41,6 +45,7 @@ export class SiteRegistrationStateService {
     this.organizationTypeForm = this.buildOrganizationTypeForm();
     this.siteAddressForm = this.buildSiteAddressForm();
     this.hoursOperationForm = this.buildHoursOperationForm();
+    this.remoteUsersForm = this.buildRemoteUsersForm();
     this.vendorForm = this.buildVendorForm();
     this.signingAuthorityForm = this.buildSigningAuthorityForm();
     this.privacyOfficerForm = this.buildPrivacyOfficerForm();
@@ -95,8 +100,9 @@ export class SiteRegistrationStateService {
   public get site(): Site {
     const organizationInformation = this.organizationInformationForm.getRawValue();
     const physicalAddress = this.siteAddressForm.getRawValue();
-    const businessHours = this.hoursOperationForm.getRawValue().businessDays;
+    const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
     const { organizationTypeCode } = this.organizationTypeForm.getRawValue();
+    const { remoteUsers } = this.remoteUsersForm.getRawValue();
     const vendor = this.vendorForm.getRawValue();
 
 
@@ -173,6 +179,7 @@ export class SiteRegistrationStateService {
       vendorId: vendor?.id,
       vendor,
       provisionerId: this.provisionerId,
+      remoteUsers
       // TODO where is PEC coming from?
       // pec
     } as Site; // Force type definition
@@ -238,6 +245,31 @@ export class SiteRegistrationStateService {
     return this.technicalSupportForm.valid;
   }
 
+  /**
+   * @description
+   * Create an empty remote user form group, and patch
+   * it with a remote user if provided.
+   */
+  public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
+    const group = this.remoteUserFormGroup() as FormGroup;
+    if (remoteUser) {
+      const { id, firstName, lastName, remoteUserLocations } = remoteUser;
+      group.patchValue({ id, firstName, lastName });
+      const array = group.get('remoteUserLocations') as FormArray;
+      remoteUserLocations
+        .map((rul: RemoteUserLocation) => {
+          const formGroup = this.remoteUserLocationFormGroup();
+          formGroup.patchValue(rul);
+          return formGroup;
+        })
+        .forEach((remoteUserLocationFormGroup: FormGroup) =>
+          array.push(remoteUserLocationFormGroup)
+        );
+    }
+
+    return group;
+  }
+
   private patchSite(site: Site) {
     if (site) {
       this.organizationInformationForm.patchValue(site.location.organization);
@@ -253,6 +285,22 @@ export class SiteRegistrationStateService {
         const array = this.hoursOperationForm.get('businessDays') as FormArray;
         array.clear(); // Clear out existing indices
         this.formUtilsService.formArrayPush(array, site.location.businessHours);
+      }
+
+      if (site.remoteUsers?.length) {
+        const form = this.remoteUsersForm;
+        const remoteUsersFormArray = form.get('remoteUsers') as FormArray;
+        remoteUsersFormArray.clear(); // Clear out existing indices
+
+        // Omitted from payload, but provided in the form to allow for
+        // validation to occur when "Have Remote Users" is toggled
+        // TODO component-level add control on init and remove control on submission to drop from state service
+        form.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
+
+        site.remoteUsers.map((remoteUser: RemoteUser) => {
+          const group = this.createEmptyRemoteUserFormAndPatch(remoteUser);
+          remoteUsersFormArray.push(group);
+        });
       }
 
       [
@@ -365,6 +413,57 @@ export class SiteRegistrationStateService {
     });
   }
 
+  private buildRemoteUsersForm(): FormGroup {
+    return this.fb.group({
+      // Omitted from payload, but provided in the form to allow for
+      // validation to occur when "Have Remote Users" is toggled
+      hasRemoteUsers: [
+        false,
+        []
+      ],
+      remoteUsers: this.fb.array(
+        [],
+        // TODO at least one if has remote users if hasRemoteUsers is checked validator
+        []
+      )
+    });
+  }
+
+  private remoteUserFormGroup(): FormGroup {
+    return this.fb.group({
+      id: [
+        null,
+        []
+      ],
+      firstName: [
+        null,
+        [Validators.required]
+      ],
+      lastName: [
+        null,
+        [Validators.required]
+      ],
+      remoteUserLocations: this.fb.array(
+        [],
+        [FormArrayValidators.atLeast(1)]
+      )
+    });
+  }
+
+  public remoteUserLocationFormGroup(): FormGroup {
+    return this.fb.group({
+      id: [
+        null,
+        []
+      ],
+      internetProvider: [
+        null,
+        [Validators.required]
+      ],
+      physicalAddress: this.physicalAddressFormGroup(true)
+    });
+  }
+
   private buildVendorForm(): FormGroup {
     return this.fb.group({
       id: [
@@ -474,37 +573,45 @@ export class SiteRegistrationStateService {
           FormControlValidators.email
         ]
       ],
-      physicalAddress: this.fb.group({
-        // TODO should this be null or 0?
-        id: [
-          0,
-          []
-        ],
-        countryCode: [
-          { value: null, disabled: false },
-          []
-        ],
-        provinceCode: [
-          { value: null, disabled: false },
-          []
-        ],
-        street: [
-          { value: null, disabled: false },
-          []
-        ],
-        street2: [
-          { value: null, disabled: false },
-          []
-        ],
-        city: [
-          { value: null, disabled: false },
-          []
-        ],
-        postal: [
-          { value: null, disabled: false },
-          []
-        ]
-      })
+      physicalAddress: this.physicalAddressFormGroup()
+    });
+  }
+
+  private physicalAddressFormGroup(isRequired: boolean = false, disable: string[] = []): FormGroup {
+    const validators = (isRequired) ? [Validators.required] : [];
+
+    return this.fb.group({
+      id: [
+        // TODO should this be 0, or null like everything else?
+        0,
+        []
+      ],
+      countryCode: [
+        { value: null, disabled: disable.includes('countryCode') },
+        validators
+      ],
+      provinceCode: [
+        { value: null, disabled: disable.includes('provinceCode') },
+        validators
+      ],
+      street: [
+        { value: null, disabled: disable.includes('street') },
+        validators
+      ],
+      street2: [
+        { value: null, disabled: disable.includes('street2') },
+        // NOTE: Never used so omitted from validations to reduce need
+        // to clear validators at the component-level
+        []
+      ],
+      city: [
+        { value: null, disabled: disable.includes('city') },
+        validators
+      ],
+      postal: [
+        { value: null, disabled: disable.includes('postal') },
+        validators
+      ]
     });
   }
 }

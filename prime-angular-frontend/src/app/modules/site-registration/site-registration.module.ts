@@ -24,15 +24,17 @@ import { OrganizationOverviewComponent } from './pages/organization-overview/org
 import { OrganizationReviewComponent } from './shared/components/organization-review/organization-review.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
-import { VendorComponent } from './pages/vendor/vendor.component';
-import { AdministratorComponent } from './pages/administrator/administrator.component';
-import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
-import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
-import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
-import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
-import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
+import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
+import { VendorComponent } from './pages/vendor/vendor.component';
+import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
+import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
+import { AdministratorComponent } from './pages/administrator/administrator.component';
+import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
+import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
+import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
+import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { BusinessLicenceComponent } from './pages/business-licence/business-lice
     BusinessLicenceComponent,
     HoursOperationComponent,
     VendorComponent,
+    RemoteUsersComponent,
+    RemoteUserComponent
     AdministratorComponent,
     PrivacyOfficerComponent,
     TechnicalSupportComponent,

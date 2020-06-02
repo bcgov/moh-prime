@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
 
 namespace Prime.Models
 {
@@ -34,5 +33,7 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<BusinessLicence> BusinessLicences { get; set; }
+
+        public IEnumerable<RemoteUser> RemoteUsers { get; set; }
     }
 }
