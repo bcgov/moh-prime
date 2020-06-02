@@ -138,19 +138,18 @@
       <button mat-menu-item
               [disabled]="true"
               (click)="viewOrganization(organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY)">
-        <mat-icon>visibility</mat-icon>
+        <mat-icon>assignment_ind</mat-icon>
         <span>View/Update Signing Authority</span>
       </button>
       <!-- TODO disabled until multiple organizations -->
       <button mat-menu-item
-              [disabled]="!!organization?.acceptedAgreementDate"
+              [disabled]="true || !organization?.acceptedAgreementDate"
               (click)="viewOrganization(organization.id)">
-        <mat-icon>visibility</mat-icon>
+        <mat-icon>location_city</mat-icon>
         <span>View/Update Organization</span>
       </button>
-      <!-- TODO disabled until multiple organizations -->
       <button mat-menu-item
-              [disabled]="true || !!organization?.acceptedAgreementDate"
+              [disabled]="!organization?.acceptedAgreementDate"
               (click)="viewOrganization(organization.id, SiteRoutes.ORGANIZATION_AGREEMENT)">
         <mat-icon>article</mat-icon>
         <span>View Organization Agreement</span>

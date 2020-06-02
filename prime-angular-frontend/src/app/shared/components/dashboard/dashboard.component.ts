@@ -331,7 +331,7 @@ export class DashboardComponent implements OnInit {
         showHeader: false,
         items: [
           {
-            name: 'Site Registration',
+            name: 'Organizations',
             icon: 'location_city',
             route: SiteRoutes.ORGANIZATIONS,
             showItem: true
