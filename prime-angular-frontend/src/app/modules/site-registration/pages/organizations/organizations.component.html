@@ -4,6 +4,21 @@
   <app-site-progress-indicator [inProgress]="false"
                                message=" "></app-site-progress-indicator>
 
+  <div class="mb-4">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Your application has been received
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        If your location accesses PharmaNet through multiple software vendors, you will need to register those sites as
+        well. You will be informed by the Ministry of Health when your registration has been approved.
+      </ng-container>
+    </app-alert>
+  </div>
+
   <section class="mb-3">
 
     <app-page-subheader>
