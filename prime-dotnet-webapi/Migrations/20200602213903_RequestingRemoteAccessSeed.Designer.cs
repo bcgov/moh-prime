@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200602075314_RequestingRemoteAccessRuleSeed")]
-    partial class RequestingRemoteAccessRuleSeed
+    [Migration("20200602213903_RequestingRemoteAccessSeed")]
+    partial class RequestingRemoteAccessSeed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -5178,6 +5178,9 @@ namespace Prime.Migrations
                     b.Property<int>("IdentityAssuranceLevel")
                         .HasColumnType("integer");
 
+                    b.Property<string>("IdentityProvider")
+                        .HasColumnType("text");
+
                     b.Property<bool?>("IsInsulinPumpProvider")
                         .HasColumnType("boolean");
 
@@ -8228,6 +8231,15 @@ namespace Prime.Migrations
                         new
                         {
                             Code = 14,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "User authenticated with a method other than BC Services Card",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = 15,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "User has Requested Remote Access",
