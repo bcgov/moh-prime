@@ -77,8 +77,8 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      io.kompose.service: document-manager-backend-claim0
-    name: document-manager-backend-claim0
+      io.kompose.service: ${NAME}${SUFFIX}-backend-claim0
+    name: ${NAME}${SUFFIX}-backend-claim0
   spec:
     accessModes:
     - ReadWriteOnce
@@ -91,8 +91,8 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      io.kompose.service: document-manager-migrate-claim0
-    name: document-manager-migrate-claim0
+      io.kompose.service: ${NAME}${SUFFIX}r-migrate-claim0
+    name: ${NAME}${SUFFIX}-migrate-claim0
   spec:
     accessModes:
     - ReadWriteOnce
@@ -108,15 +108,15 @@ objects:
       kompose.version: 1.21.0 (992df58d8)
     creationTimestamp: null
     labels:
-      io.kompose.service: document-manager-backend
-    name: document-manager-backend
+      io.kompose.service: ${NAME}${SUFFIX}-backend
+    name: ${NAME}${SUFFIX}-backend
   spec:
     ports:
     - name: "6001"
       port: 6001
       targetPort: 6001
     selector:
-      io.kompose.service: document-manager-backend
+      io.kompose.service: ${NAME}${SUFFIX}-backend
   status:
     loadBalancer: {} 
 - apiVersion: v1
@@ -127,12 +127,12 @@ objects:
       kompose.version: 1.21.0 (992df58d8)
     creationTimestamp: null
     labels:
-      io.kompose.service: document-manager-backend
-    name: document-manager-backend
+      io.kompose.service: ${NAME}${SUFFIX}-backend
+    name: ${NAME}${SUFFIX}-backend
   spec:
     replicas: 1
     selector:
-      io.kompose.service: document-manager-backend
+      io.kompose.service: ${NAME}${SUFFIX}-backend
     strategy:
       resources: {}
       type: Recreate
@@ -141,7 +141,7 @@ objects:
         creationTimestamp: null
         labels:
           io.kompose.network/primenet: "true"
-          io.kompose.service: document-manager-backend
+          io.kompose.service: ${NAME}${SUFFIX}-backend
       spec:
         containers:
         - env:
@@ -251,18 +251,18 @@ objects:
                 key: JWT_OIDC_WELL_KNOWN_CONFIG
                 name: document-manager-backend--env-prime
           image: ' '
-          name: document-manager-backend
+          name: ${NAME}${SUFFIX}-backend
           ports:
           - containerPort: 6001
           resources: {}
           volumeMounts:
           - mountPath: /app/
-            name: document-manager-backend-claim0
+            name: ${NAME}${SUFFIX}-backend-claim0
         restartPolicy: Always
         volumes:
-        - name: document-manager-backend-claim0
+        - name: ${NAME}${SUFFIX}-backend-claim0
           persistentVolumeClaim:
-            claimName: document-manager-backend-claim0
+            claimName: ${NAME}${SUFFIX}-backend-claim0
     test: false
     triggers:
     - type: ConfigChange
@@ -272,7 +272,7 @@ objects:
         - document_manager_backend
         from:
           kind: ImageStreamTag
-          name: document-manager-backend:latest
+          name: ${NAME}${SUFFIX}-backend:latest
       type: ImageChange
   status: {}
 - apiVersion: v1
@@ -281,8 +281,8 @@ objects:
     creationTimestamp: null
     labels:
       io.kompose.network/primenet: "true"
-      io.kompose.service: document-manager-migrate
-    name: document-manager-migrate
+      io.kompose.service: ${NAME}${SUFFIX}-migrate
+    name: ${NAME}${SUFFIX}-migrate
   spec:
     containers:
     - args:
@@ -395,16 +395,16 @@ objects:
           configMapKeyRef:
             key: JWT_OIDC_WELL_KNOWN_CONFIG
             name: document-manager-backend--env-prime
-      image: dqszvc-dev/document-manager-migrate
-      name: document-manager-migrate
+      image: dqszvc-dev/${NAME}${SUFFIX}-migrate
+      name: ${NAME}${SUFFIX}-migrate
       resources: {}
       volumeMounts:
       - mountPath: /app/
-        name: document-manager-migrate-claim0
+        name: ${NAME}${SUFFIX}-migrate-claim0
     restartPolicy: OnFailure
     volumes:
-    - name: document-manager-migrate-claim0
+    - name: ${NAME}${SUFFIX}-migrate-claim0
       persistentVolumeClaim:
-        claimName: document-manager-migrate-claim0
+        claimName: ${NAME}${SUFFIX}-migrate-claim0
   status: {}
   
