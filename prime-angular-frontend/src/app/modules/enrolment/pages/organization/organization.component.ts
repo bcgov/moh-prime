@@ -67,6 +67,10 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     return (organizationTypeCode !== OrganizationTypeEnum.COMMUNITY_PRACTICE);
   }
 
+  public showRemoteAccess(): boolean {
+    return !this.enrolmentStateService.enrolment.enrollee.isObo;
+  }
+
   public removeOrganization(index: number) {
     this.organizations.removeAt(index);
   }

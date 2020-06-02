@@ -298,7 +298,8 @@ export class EnrolmentStateService {
 
   private buildOrganizationsForm(): FormGroup {
     return this.fb.group({
-      organizations: this.fb.array([])
+      organizations: this.fb.array([]),
+      requestingRemoteAccess: [false, []]
     });
   }
 

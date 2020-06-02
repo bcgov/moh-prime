@@ -221,6 +221,12 @@
     None
   </app-enrollee-property>
 
+  <app-enrollee-property *ngIf="isRequestingRemoteAccess"
+                         title="Requesting Remote Access"
+                         [makeBold]="true">
+    Yes
+  </app-enrollee-property>
+
 </section>
 
 <section class="mb-4">

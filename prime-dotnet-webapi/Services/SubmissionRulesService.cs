@@ -41,6 +41,7 @@ namespace Prime.Services
                 // new DeviceProviderRule(),
                 new LicenceClassRule(),
                 new AlwaysManualRule(),
+                new RequestingRemoteAccessRule(),
                 new IdentityAssuranceLevelRule()
             };
 
