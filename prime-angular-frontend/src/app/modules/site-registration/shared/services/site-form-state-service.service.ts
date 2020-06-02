@@ -250,6 +250,7 @@ export class SiteFormStateService {
   }
 
   private buildSiteAddressForm(): FormGroup {
+    // TODO add site name and make this buildSiteLocationForm
     return this.fb.group({
       id: [
         0,

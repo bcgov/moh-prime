@@ -16,14 +16,26 @@
         </ng-container>
       </app-page-subheader>
 
-      <!-- TODO SURPRISE! new form field required -->
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Name">
+            <!-- TODO formControlName="name" -->
+            <!-- TODO populate with organization name and doing business as from OrgBook -->
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
 
     </section>
 
     <section class="mb-3">
 
       <app-page-subheader>
-        <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
+        <ng-container appPageSubheaderTitle>Site Address</ng-container>
         <ng-container appPageSubheaderSummary>
           Provide the address of your site (British Columbia only)
         </ng-container>

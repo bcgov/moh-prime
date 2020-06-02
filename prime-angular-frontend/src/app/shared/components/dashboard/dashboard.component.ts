@@ -335,13 +335,6 @@ export class DashboardComponent implements OnInit {
             icon: 'location_city',
             route: SiteRoutes.ORGANIZATIONS,
             showItem: true
-          },
-          {
-            name: 'Organization Agreement',
-            icon: 'lock',
-            route: SiteRoutes.ORGANIZATION_AGREEMENT,
-            showItem: true,
-            disabled: true
           }
         ]
       }

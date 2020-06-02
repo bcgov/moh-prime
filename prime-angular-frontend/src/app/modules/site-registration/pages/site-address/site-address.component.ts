@@ -17,6 +17,8 @@ import { SiteResource } from '@registration/shared/services/site-resource.servic
 import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
 import { SiteService } from '@registration/shared/services/site.service';
 
+// TODO rename to SiteLocationComponent
+// TODO rename form to siteLocationForm in SiteFormStateService
 @Component({
   selector: 'app-site-address',
   templateUrl: './site-address.component.html',

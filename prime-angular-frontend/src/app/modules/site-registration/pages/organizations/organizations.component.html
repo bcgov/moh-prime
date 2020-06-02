@@ -156,12 +156,13 @@
       </button>
       <!-- TODO disabled until multiple organizations -->
       <!-- TODO soft delete organizations due to relationship with business events -->
-      <button mat-menu-item
+      <!-- TODO commented out for demo to reduce needless discussions -->
+      <!-- <button mat-menu-item
               [disabled]="true || !!sites?.length"
               (click)="removeOrganization(organization.id)">
         <mat-icon>delete</mat-icon>
         <span>Delete Organization</span>
-      </button>
+      </button> -->
     </mat-menu>
 
   </ng-template>
@@ -181,11 +182,13 @@
         <mat-icon>visibility</mat-icon>
         <span>View/Update Site</span>
       </button>
-      <button mat-menu-item
+      <!-- TODO disabled until multiple organizations -->
+      <!-- TODO commented out for demo to reduce needless discussions -->
+      <!-- <button mat-menu-item
               (click)="removeSite(site.id)">
         <mat-icon>delete</mat-icon>
         <span>Delete Site</span>
-      </button>
+      </button> -->
     </mat-menu>
 
   </ng-template>
