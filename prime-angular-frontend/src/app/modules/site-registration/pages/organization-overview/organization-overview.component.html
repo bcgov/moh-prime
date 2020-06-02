@@ -11,7 +11,7 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
       <ng-container appPageSubheaderSummary>
-        Review the Organization Information you have provided.
+        Review the organization information you have provided.
       </ng-container>
     </app-page-subheader>
   </div>
@@ -21,9 +21,9 @@
                            [showEditRedirect]="true"
                            (route)="onRoute($event)"></app-organization-review>
 
-  <!-- TODO pull over changes to footer from other branch -->
   <app-page-footer [isInitialEnrolment]="true"
                    [hasSecondaryAction]="true"
+                   primaryActionLabel="Save Organization Information"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>
 

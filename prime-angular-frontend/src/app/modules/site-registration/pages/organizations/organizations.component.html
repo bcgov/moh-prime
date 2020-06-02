@@ -1,5 +1,5 @@
 <app-page [busy]="busy">
-  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-page-header>{{ title }}</app-page-header>
   <!-- TODO allow base progress indicator to not have a message by default instead of hacking in a space -->
   <app-site-progress-indicator [inProgress]="false"
                                message=" "></app-site-progress-indicator>
@@ -7,10 +7,14 @@
   <section class="mb-3">
 
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
+      <ng-container appPageSubheaderTitle>
+        Submit details about your organization and sites here
+      </ng-container>
       <ng-container appPageSubheaderSummary>
-        As the Signing Authority, complete this form by submitting your Organization Information, and your Site
-        Information.
+        An organization is the legal entity that operates/controls one or more sites where PharmaNet is accessed
+        (e.g., a sole proprietorship, limited partnership, corporation). A site is the combination of location and
+        PharmaNet software vendor. If your location has more than one vendor, you will need to submit a separate site
+        registration.
       </ng-container>
     </app-page-subheader>
 

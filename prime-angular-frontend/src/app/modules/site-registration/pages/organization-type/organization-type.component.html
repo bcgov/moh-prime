@@ -12,31 +12,23 @@
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
         <ng-container appPageSubheaderSummary>
-          Identify all of the organizational types and work settings this site will be operating under.
+          Identify the organization type (e.g. community health practice).
         </ng-container>
       </app-page-subheader>
 
       <div class="row">
         <div class="col col-sm-10 py-3">
 
-          <app-form-icon-group [show]="organization">
-            <app-form-icon-group [show]="organization">
-              <mat-form-field class="w-100">
-                <mat-label>Organization Type</mat-label>
-                <mat-select formControlName="organizationTypeCode">
-                  <mat-option *ngFor="let organizationType of organizationTypes"
-                              [value]="organizationType.code"
-                              [disabled]="disableOrganization(organizationType.code)">
-                    {{ organizationType.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <ng-container appContextualContent>
-                Organization type is the location where you access PharmaNet to deliver patient care.
-              </ng-container>
-            </app-form-icon-group>
-          </app-form-icon-group>
+          <mat-form-field class="w-100">
+            <mat-label>Organization Type</mat-label>
+            <mat-select formControlName="organizationTypeCode">
+              <mat-option *ngFor="let organizationType of organizationTypes"
+                          [value]="organizationType.code"
+                          [disabled]="disableOrganization(organizationType.code)">
+                {{ organizationType.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
         </div>
       </div>

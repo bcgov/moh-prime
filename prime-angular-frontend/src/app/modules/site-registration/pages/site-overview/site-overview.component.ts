@@ -31,38 +31,39 @@ export class SiteOverviewComponent implements OnInit, IPage {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    // TODO setup guard to pull organization on each route in the loop
-    // private siteService: SiteService,
+    private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
     private dialog: MatDialog
   ) {
-    this.title = 'Site Registration Review';
+    this.title = 'Site Information Review';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
   }
 
   public onSubmit() {
-    // TODO should this be Save Site instead?
+    // TODO shouldn't come from service when spoking to save updates
     // const payload = this.siteService.site;
-    // const data: DialogOptions = {
-    //   title: 'Save Site',
-    // TODO who are they submitting it to?
-    //   message: 'When your site is saved you will be able to submit it to ________. Are you ready to save your site?',
-    //   actionText: 'Save Site'
-    // };
-    // this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-    //   .afterClosed()
-    //   .pipe(
-    //     exhaustMap((result: boolean) =>
-    //       (result)
-    //         ? this.siteRegistrationResource.submitSiteRegistration(payload)
-    //         : EMPTY
-    //     )
-    //   )
-    //   .subscribe(() =>
-    // TODO add some temporary messaging for users in demo
-    this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION);
-    // );
+    const data: DialogOptions = {
+      title: 'Save Site',
+      message: 'When your site is saved it will be submitted for review. Are you ready to save your site?',
+      actionText: 'Save Site'
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        // TODO not needed until updates are allowed
+        // TODO update only required when spoking
+        // exhaustMap((result: boolean) =>
+        //   (result)
+        //     ? this.siteResource.submitSiteRegistration(payload)
+        //     : EMPTY
+        // )
+      )
+      .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION));
+  }
+
+  public onBack() {
+    this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
   }
 
   public onRoute(routePath: string) {
@@ -70,10 +71,6 @@ export class SiteOverviewComponent implements OnInit, IPage {
   }
 
   public ngOnInit() {
-    // TODO temporary until spoke routing
-    const siteId = this.route.snapshot.params.sid;
-    this.siteResource
-      .getSiteById(siteId)
-      .subscribe((site: Site) => this.site = site);
+    this.site = this.siteService.site;
   }
 }

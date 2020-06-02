@@ -21,6 +21,7 @@ import { SiteRegistrationStateService } from '@registration/shared/services/site
 export class RemoteUsersComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
+  public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
@@ -33,6 +34,7 @@ export class RemoteUsersComponent implements OnInit {
     private siteRegistrationStateService: SiteRegistrationStateService,
     private formUtilsService: FormUtilsService
   ) {
+    this.title = 'Practitioners Requiring Remote PharmaNet Access';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 

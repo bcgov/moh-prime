@@ -44,7 +44,7 @@ export class BusinessLicenceComponent implements OnInit {
     private toastService: ToastService,
     private logger: LoggerService
   ) {
-    this.title = 'Submit a copy of the Business Licence';
+    this.title = 'Submit Your Business Licence';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.filePondOptions = {
       class: 'prime-filepond',

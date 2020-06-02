@@ -9,11 +9,11 @@
     <section class="mb-3">
       <app-page-subheader [summaryAsInfo]="true">
         <ng-container appPageSubheaderTitle>Signing Authority Information</ng-container>
-        <!-- Work around for ngProjectAs not passing directive reference to subheader when applied to ng-content -->
         <ng-container appPageSubheaderSummary>
-          Only the Signing Authority can revise and sign the Organization Agreement. This information comes from our BC
-          Services Card, provide a preferred name if necessary.
+          Your name, address and date of birth are as they appear on your BC Services Card. Provide a preferred name if
+          you have one.
         </ng-container>
+        <!-- TODO make a new directive specifically for summary help, align with existing subtitle or summary if exists -->
         <ng-container appPageSubheaderSummary>
           The Signing Authority must be a duly authorized representative of the organization with authority to submit
           the site request on the organization’s behalf. This is the individual who will be designated as responsible
@@ -26,7 +26,6 @@
           at the site. The Signing Authority must sign Section 5 (Certification) of the PharmaNet Access Community
           Practice Site Request for new PharmaNet access sites, updates to existing information for a PharmaNet access
           sites, discontinuing current software vendors, or discontinuations of PharmaNet access at a site.
-          <ng-content select="[appPageSubheaderSummary]"></ng-content>
         </ng-container>
       </app-page-subheader>
 
@@ -195,8 +194,6 @@
           Provide your Job Title and Contact Information
         </ng-container>
       </app-page-subheader>
-
-
 
       <div class="row">
         <div class="col-12">

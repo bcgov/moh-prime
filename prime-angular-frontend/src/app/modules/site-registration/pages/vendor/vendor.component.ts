@@ -42,16 +42,16 @@ export class VendorComponent implements OnInit, IPage, IForm {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'What vendor does this site use?';
+    this.title = 'What PharmaNet software vendor does this site use?';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
 
     // TODO supply through config using lookups
     this.vendorConfig = [
       { id: 1, name: 'Care Connect' },
       { id: 2, name: 'Excelleris' },
-      { id: 3, name: 'iClinic' },
+      { id: 3, name: 'iClinic Inc.' },
       { id: 4, name: 'MediNet' },
-      { id: 5, name: 'Plexia' }
+      { id: 5, name: 'Plexia Electronic Medical Systems' }
     ];
     // TODO should be a autocomplete instead of radio buttons to scale
     this.hasNoVendorError = false;

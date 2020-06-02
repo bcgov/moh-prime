@@ -47,7 +47,7 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
     private dialog: MatDialog,
     private configService: ConfigService,
   ) {
-    this.title = 'Organization Information';
+    this.title = 'Organization Type';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.organizationTypes = this.configService.organizationTypes;
   }

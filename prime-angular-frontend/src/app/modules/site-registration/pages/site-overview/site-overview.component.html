@@ -11,9 +11,7 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
       <ng-container appPageSubheaderSummary>
-        Review all the information to ensure it is accurate, you will not get approved if any of your information is
-        incorrect. If you need to edit your information use the pencil icon to navigate to that section of the
-        registration to make changes.
+        Review the site information you provided.
       </ng-container>
     </app-page-subheader>
   </div>
@@ -59,5 +57,11 @@
 
     </div>
   </div>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   [hasSecondaryAction]="true"
+                   primaryActionLabel="Save Organization Information"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
 
 </app-page>

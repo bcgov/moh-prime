@@ -24,6 +24,8 @@ import { VendorComponent } from './pages/vendor/vendor.component';
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
 import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
+import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
+import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
@@ -110,14 +112,14 @@ const routes: Routes = [
                     component: SiteAddressComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Site Address' }
+                    data: { title: 'Site Name' }
                   },
                   {
                     path: SiteRoutes.BUSINESS_LICENCE,
                     component: BusinessLicenceComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Submit a copy of the Business Licence' }
+                    data: { title: 'Submit Your Business Licence' }
                   },
                   {
                     path: SiteRoutes.HOURS_OPERATION,
@@ -131,9 +133,27 @@ const routes: Routes = [
                     component: VendorComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Vendor' }
+                    data: { title: 'What PharmaNet software vendor does this site use?' }
                   },
-                  // TODO remote user(s)
+                  {
+                    path: SiteRoutes.REMOTE_USERS,
+                    children: [
+                      {
+                        path: '',
+                        component: RemoteUsersComponent,
+                        canActivate: [SiteGuard],
+                        canDeactivate: [CanDeactivateFormGuard],
+                        data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
+                      },
+                      {
+                        path: ':id',
+                        component: RemoteUserComponent,
+                        canActivate: [SiteGuard],
+                        canDeactivate: [CanDeactivateFormGuard],
+                        data: { title: 'Remote User' }
+                      }
+                    ]
+                  },
                   {
                     path: SiteRoutes.ADMINISTRATOR,
                     component: AdministratorComponent,

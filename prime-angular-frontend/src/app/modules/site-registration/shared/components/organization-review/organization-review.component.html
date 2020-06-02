@@ -56,7 +56,7 @@
 
   <app-enrollee-property title="Organization Type"
                          [makeBold]="true">
-    {{ organization?.organizationTypeCode | configCode: 'organizationTypes' }}
+    {{ organization?.organizationTypeCode | configCode: 'organizationTypes' | default }}
   </app-enrollee-property>
 
 </section>
