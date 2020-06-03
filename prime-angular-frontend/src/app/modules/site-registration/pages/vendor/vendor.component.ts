@@ -53,7 +53,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
       { id: 4, name: 'MediNet' },
       { id: 5, name: 'Plexia Electronic Medical Systems' }
     ];
-    // TODO should be a autocomplete instead of radio buttons to scale
+    // TODO should be an autocomplete instead of radio buttons to scale when there are more vendors
     this.hasNoVendorError = false;
   }
 

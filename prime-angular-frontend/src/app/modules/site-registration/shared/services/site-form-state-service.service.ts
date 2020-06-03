@@ -12,6 +12,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
 
+// TODO default is null and on reset it would be great if no special 0 id was required
 // TODO add a form state service interface/abstract class for form state services
 // TODO should the forms built be stored in a different file or service
 @Injectable({
@@ -320,9 +321,15 @@ export class SiteFormStateService {
 
   private buildVendorForm(): FormGroup {
     return this.fb.group({
+      // TODO id can't be null, but might be worth adding a new custom required validator
       id: [
         0,
-        [Validators.required]
+        // TODO can't be required since 0 is considered valid
+        // TODO can't be made null due to issues updating the site
+        // TODO make a required and not 0 validator
+        // [Validators.required]
+        // TODO using pattern for now that matches the IDs of the vendors should be updated to pull from config
+        [Validators.pattern('[1-5]{1,}')]
       ]
     });
   }
@@ -346,7 +353,7 @@ export class SiteFormStateService {
   private remoteUserFormGroup(): FormGroup {
     return this.fb.group({
       id: [
-        null,
+        0,
         []
       ],
       firstName: [
@@ -367,7 +374,7 @@ export class SiteFormStateService {
   public remoteUserLocationFormGroup(): FormGroup {
     return this.fb.group({
       id: [
-        null,
+        0,
         []
       ],
       internetProvider: [

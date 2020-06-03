@@ -13,17 +13,8 @@
       </ng-container>
     </app-page-subheader>
 
-    <ng-container *ngIf="hasNoVendorError">
-      <app-alert type="danger"
-                 icon="error_outline">
-        <ng-container #alertContent
-                      class="alert-content">
-          Each site is required to choose a vendor.
-        </ng-container>
-      </app-alert>
-    </ng-container>
+    <section class="mb-4">
 
-    <div class="mb-4">
       <mat-radio-group class="radio-group"
                        formControlName="id"
                        (change)="onChange()">
@@ -33,7 +24,18 @@
           {{ vendor.name }}
         </mat-radio-button>
       </mat-radio-group>
-    </div>
+
+      <app-alert *ngIf="hasNoVendorError"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          Each site is required to choose a vendor.
+        </ng-container>
+      </app-alert>
+
+    </section>
+
   </form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"

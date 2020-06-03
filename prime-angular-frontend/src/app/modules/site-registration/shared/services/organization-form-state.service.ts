@@ -9,6 +9,7 @@ import { Country } from '@shared/enums/country.enum';
 import { Party } from '@registration/shared/models/party.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
+// TODO default is null and on reset it would be great if no special 0 id was required
 // TODO add a form state service interface/abstract class for form state services
 // TODO should the forms built be stored in a different file or service
 @Injectable({
