@@ -11,7 +11,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision = '7eefdf5d93c4'
-down_revision = '136b2d0f435d'
+down_revision = None
 branch_labels = None
 depends_on = None
 
@@ -28,9 +28,7 @@ def upgrade():
                     sa.Column('upload_started_date', sa.DateTime(), nullable=False),
                     sa.Column('upload_completed_date', sa.DateTime(), nullable=True),
                     sa.Column('file_display_name', sa.String(length=255), nullable=False),
-                    sa.Column('path_display_name', sa.String(length=4096), nullable=False),
                     sa.PrimaryKeyConstraint('document_id'))
-    op.drop_table('document_manager')
     # ### end Alembic commands ###
 
 
