@@ -53,15 +53,9 @@
       <button mat-flat-button
               color="primary"
               [disabled]="!accept.checked || !!site?.submittedDate"
-              (click)="onSubmit()">Submit Registration</button>
+              (click)="onSubmit()">Save Organization Information</button>
 
     </div>
   </div>
-
-  <app-page-footer [isInitialEnrolment]="true"
-                   [hasSecondaryAction]="true"
-                   primaryActionLabel="Save Organization Information"
-                   (save)="onSubmit()"
-                   (back)="onBack()"></app-page-footer>
 
 </app-page>

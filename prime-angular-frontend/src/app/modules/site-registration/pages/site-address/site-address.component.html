@@ -21,8 +21,8 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="Name">
-            <!-- TODO formControlName="name" -->
+                   placeholder="Name"
+                   formControlName="name">
             <!-- TODO populate with organization name and doing business as from OrgBook -->
             <mat-error>Required</mat-error>
           </mat-form-field>
@@ -41,7 +41,7 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-address [form]="form"
+      <app-address [form]="physicalAddress"
                    [formControlNames]="formControlNames"></app-address>
 
     </section>

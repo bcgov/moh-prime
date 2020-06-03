@@ -59,7 +59,11 @@ export class SiteOverviewComponent implements OnInit, IPage {
         //     : EMPTY
         // )
       )
-      .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION));
+      .subscribe(() =>
+        this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION, {
+          queryParams: { submitted: true }
+        })
+      );
   }
 
   public onBack() {

@@ -26,6 +26,7 @@ export class OrganizationsComponent implements OnInit {
   public organizations: Organization[];
   // TODO only for single organization then remove
   public sites: Site[];
+  public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
 
@@ -87,6 +88,9 @@ export class OrganizationsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.hasSubmittedSite = this.route.snapshot.queryParams?.submitted;
+    this.router.navigate([], { queryParams: { submitted: null } });
+
     this.busy = this.organizationResource.getOrganizations()
       .pipe(
         map((organizations: Organization[]) => this.organizations = organizations),

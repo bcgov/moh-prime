@@ -113,7 +113,8 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     // TODO structured to match in all site views
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteFormStateService.setForm(site);
+    // TODO cannot set form each time the view is loaded when updating
+    this.siteFormStateService.setForm(site, true);
   }
 
   /**

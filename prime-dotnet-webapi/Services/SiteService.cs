@@ -86,11 +86,7 @@ namespace Prime.Services
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
-            if (updatedSite.Provisioner?.PhysicalAddress != null)
-            {
-                this._context.Entry(currentSite.Provisioner.PhysicalAddress).CurrentValues.SetValues(updatedSite.Provisioner.PhysicalAddress);
-            }
-
+            // TODO should create a location controller to avoid these kinds of updates
             UpdateLocation(currentSite.Location, updatedSite.Location);
 
             // Update foreign key only if not null
@@ -115,37 +111,6 @@ namespace Prime.Services
             catch (DbUpdateConcurrencyException)
             {
                 return 0;
-            }
-        }
-
-        private void UpdateOrganization(Organization current, Organization updated)
-        {
-            this._context.Entry(current).CurrentValues.SetValues(updated);
-
-            this._context.Entry(current.SigningAuthority).CurrentValues.SetValues(updated.SigningAuthority);
-
-            if (updated.SigningAuthority?.PhysicalAddress != null)
-            {
-                if (current.SigningAuthority?.PhysicalAddress == null)
-                {
-                    current.SigningAuthority.PhysicalAddress = updated.SigningAuthority.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(current.SigningAuthority.PhysicalAddress).CurrentValues.SetValues(updated.SigningAuthority.PhysicalAddress);
-                }
-            }
-
-            if (updated.SigningAuthority?.MailingAddress != null)
-            {
-                if (current.SigningAuthority?.MailingAddress == null)
-                {
-                    current.SigningAuthority.MailingAddress = updated.SigningAuthority.MailingAddress;
-                }
-                else
-                {
-                    this._context.Entry(current.SigningAuthority.MailingAddress).CurrentValues.SetValues(updated.SigningAuthority.MailingAddress);
-                }
             }
         }
 

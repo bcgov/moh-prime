@@ -7,7 +7,8 @@
                                [form]="form"
                                (submit)="onSubmit()">
 
-    <app-same-as selectFor="privacyOfficer"></app-same-as>
+    <app-same-as selectFor="privacyOfficer"
+                 (selected)="onSelect($event)"></app-same-as>
 
     <ng-container appPageSubheaderSummary>
       Ensures the site adheres to the requirements of applicable privacy and security legislation and responds on the

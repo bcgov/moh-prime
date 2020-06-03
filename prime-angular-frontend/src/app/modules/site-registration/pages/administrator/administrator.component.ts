@@ -68,7 +68,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeTo(SiteRoutes.REMOTE_USERS);
+    this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
   }
 
   public nextRoute() {
@@ -99,6 +99,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
     // TODO structured to match in all site views
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
-    this.siteFormStateService.setForm(this.site);
+    // TODO cannot set form each time the view is loaded when updating
+    this.siteFormStateService.setForm(this.site, true);
   }
 }

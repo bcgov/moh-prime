@@ -9,9 +9,10 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Site } from '@registration/shared/models/site.model';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
+import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-remote-users',
@@ -29,9 +30,9 @@ export class RemoteUsersComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private siteService: SiteService,
+    private siteResource: SiteResource,
+    private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService
   ) {
     this.title = 'Practitioners Requiring Remote PharmaNet Access';
@@ -49,9 +50,11 @@ export class RemoteUsersComponent implements OnInit {
   public onSubmit() {
     // TODO should we be saving remote users individually or as wholesale PUT?
     // TODO show validation message if hasRemoteUsers and remoteUsers is empty
+    // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
+      // TODO when spoking don't update
+      const payload = this.siteFormStateService.site;
+      this.siteResource
         .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
@@ -87,13 +90,14 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.remoteUsersForm;
+    this.form = this.siteFormStateService.remoteUsersForm;
   }
 
   private initForm() {
-    // TODO remove temporary route param to prevent setting the site
-    const site = this.siteRegistrationService.site;
+    // TODO structured to match in all site views
+    const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO cannot set form each time the view is loaded when updating
+    this.siteFormStateService.setForm(site, true);
   }
 }

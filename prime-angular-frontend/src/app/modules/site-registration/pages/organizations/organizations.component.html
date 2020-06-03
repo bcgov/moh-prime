@@ -4,7 +4,8 @@
   <app-site-progress-indicator [inProgress]="false"
                                message=" "></app-site-progress-indicator>
 
-  <div class="mb-4">
+  <div *ngIf="hasSubmittedSite"
+       class="mb-4">
     <app-alert type="success"
                icon="check_circle_outline">
       <ng-container #alertTitle

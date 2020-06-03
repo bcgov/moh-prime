@@ -5,6 +5,7 @@ import { RemoteUser } from './remote-user.model';
 
 export interface Site {
   id?: number;
+  name: string;
   provisionerId: number;
   provisioner: Party;
   locationId: number;
@@ -12,7 +13,7 @@ export interface Site {
   vendorId: number;
   vendor: Vendor;
   remoteUsers: RemoteUser[];
-  
+
   pec: string;
   completed: boolean;
   approvedDate: string;
