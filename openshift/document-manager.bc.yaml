@@ -63,23 +63,23 @@ objects:
   spec:
     lookupPolicy:
       local: false
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: '${NAME}${SUFFIX}'
-    creationTimestamp: null
-    labels:
-      shared: 'true'
-    annotations:
-      description: Keeps track of changes in the application image
-  spec:
-    lookupPolicy:
-      local: false
-    tags: []
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: '${NAME}'
+      creationTimestamp: null
+      labels:
+        shared: 'true'
+      annotations:
+        description: Keeps track of changes in the application image
+    spec:
+      lookupPolicy:
+        local: false
+      tags: []
 - kind: BuildConfig
   apiVersion: v1
   metadata:
-    name: '${NAME}-base'
+    name: '${NAME}${SUFFIX}-base'
     creationTimestamp: null
     labels: {}
     annotations: {}
@@ -103,7 +103,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: '${NAME}-base:${VERSION}'
+        name: '${NAME}-base:latest'
     resources:
       limits:
         cpu: 500m
