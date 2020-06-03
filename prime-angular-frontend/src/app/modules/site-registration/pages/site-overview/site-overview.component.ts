@@ -42,7 +42,7 @@ export class SiteOverviewComponent implements OnInit, IPage {
 
   public onSubmit() {
     // TODO shouldn't come from service when spoking to save updates
-    // const payload = this.siteService.site;
+    const payload = this.siteService.site;
     const data: DialogOptions = {
       title: 'Save Site',
       message: 'When your site is saved it will be submitted for review. Are you ready to save your site?',
@@ -51,13 +51,11 @@ export class SiteOverviewComponent implements OnInit, IPage {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        // TODO not needed until updates are allowed
-        // TODO update only required when spoking
-        // exhaustMap((result: boolean) =>
-        //   (result)
-        //     ? this.siteResource.submitSiteRegistration(payload)
-        //     : EMPTY
-        // )
+        exhaustMap((result: boolean) =>
+          (result)
+            ? this.siteResource.submitSite(payload)
+            : EMPTY
+        )
       )
       .subscribe(() =>
         this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS], {
