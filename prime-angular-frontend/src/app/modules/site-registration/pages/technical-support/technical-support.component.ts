@@ -53,7 +53,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
       // TODO when spoking don't update
       const payload = this.siteFormStateService.site;
       this.siteResource
-        .updateSite(payload)
+        .updateSite(payload, true)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();

@@ -31,8 +31,7 @@ export class SiteResource {
   ) { }
 
   public getSites(organizationId: number): Observable<Site[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ organizationId });
-    return this.apiResource.get<Site[]>(`organizations/${organizationId}/sites`, params)
+    return this.apiResource.get<Site[]>(`organizations/${organizationId}/sites`)
       .pipe(
         map((response: ApiHttpResponse<Site[]>) => response.result),
         // TODO split out into proper adapter
@@ -88,7 +87,6 @@ export class SiteResource {
   }
 
   public createSite(organizationId: number): Observable<Site> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ organizationId });
     return this.apiResource.post<Site>(`organizations/${organizationId}/sites`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
