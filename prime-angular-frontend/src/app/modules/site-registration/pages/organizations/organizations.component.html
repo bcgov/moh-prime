@@ -100,15 +100,23 @@
     <ng-container *ngFor="let site of sites; let i = index; let last = last">
       <mat-card class="has-hover mb-3">
         <mat-card-header class="no-avatar">
-          <mat-card-title>Site Information</mat-card-title>
+          <mat-card-title>{{ site?.name | default: 'Site Information' }}</mat-card-title>
 
           <ng-container [ngTemplateOutlet]="siteMenu"
                         [ngTemplateOutletContext]="{ site: site }"></ng-container>
 
         </mat-card-header>
+        <mat-card-content>
+          Vendor:
+          <strong>{{ site?.vendor?.name | default: 'Not Chosen' }}</strong>
+
+          Submitted Date:
+          <strong>{{ site?.submittedDate | formatDate | default: 'Not Submitted' }}</strong>
+        </mat-card-content>
         <mat-card-actions>
           <!-- TODO hardcoded organization for single organization then remove -->
-          <button mat-stroked-button
+          <button *ngIf="!site.completed"
+                  mat-stroked-button
                   color="primary"
                   [routerLink]="[organizations[0].id, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS]">
             Add Information
