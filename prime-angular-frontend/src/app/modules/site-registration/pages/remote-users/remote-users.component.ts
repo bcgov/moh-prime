@@ -98,6 +98,11 @@ export class RemoteUsersComponent implements OnInit {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     // TODO cannot set form each time the view is loaded when updating
-    this.siteFormStateService.setForm(site, true);
+    // TODO temporary to prevent overwriting the parent form state
+    const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
+    this.router.navigate([], { queryParams: { fromRemoteUser: null } });
+    console.log('FROM_REMOTE_USER', !fromRemoteUser);
+
+    this.siteFormStateService.setForm(site, !fromRemoteUser);
   }
 }

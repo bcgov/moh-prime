@@ -11,8 +11,10 @@ import { Province } from '@shared/enums/province.enum';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Site } from '@registration/shared/models/site.model';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
+import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-remote-user',
@@ -32,8 +34,9 @@ export class RemoteUserComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private siteService: SiteService,
+    private siteResource: SiteResource,
+    private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -92,7 +95,8 @@ export class RemoteUserComponent implements OnInit {
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(['./']);
+    // TODO temporary to prevent overwriting the parent form state
+    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
   }
 
   public ngOnInit(): void {
@@ -103,22 +107,24 @@ export class RemoteUserComponent implements OnInit {
   private createFormInstance() {
     // Set the parent form for updating on submission, but otherwise use the
     // local form group for all changes
-    this.parent = this.siteRegistrationStateService.remoteUsersForm;
+    this.parent = this.siteFormStateService.remoteUsersForm;
   }
 
   private initForm() {
-    const site = this.siteRegistrationService.site;
+    const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO don't clear the form in this component
+    this.siteFormStateService.setForm(site, true);
 
     const remoteUserId = +this.route.snapshot.params.id;
     const remoteUser = this.parent.value.remoteUsers
       .find((r: RemoteUser) => r.id === remoteUserId);
     // Create a local form group for creating or updating remote users
-    this.form = this.siteRegistrationStateService
+    this.form = this.siteFormStateService
       .createEmptyRemoteUserFormAndPatch(remoteUser);
 
-    if (remoteUserId) {
+    // TODO ID being default zero causes so many issues
+    if (remoteUserId && remoteUserId !== 0) {
       this.disableProvince(this.remoteUserLocations.controls as FormGroup[]);
     } else {
       this.addRemoteUserLocation();
@@ -126,7 +132,7 @@ export class RemoteUserComponent implements OnInit {
   }
 
   private addRemoteUserLocation(): void {
-    const remoteUserLocation = this.siteRegistrationStateService
+    const remoteUserLocation = this.siteFormStateService
       .remoteUserLocationFormGroup();
     remoteUserLocation.get('physicalAddress')
       .patchValue({
