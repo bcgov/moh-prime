@@ -67,6 +67,10 @@ export class EnrolleeReviewComponent {
     return (this.enrolment && !!this.enrolment.organizations.length);
   }
 
+  public get isRequestingRemoteAccess(): boolean {
+    return (this.enrolment && !!this.enrolment.requestingRemoteAccess);
+  }
+
   public get organizations(): Organization[] {
     return (this.hasOrganization) ? this.enrolment.organizations : [];
   }
