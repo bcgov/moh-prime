@@ -18,6 +18,7 @@ import { RemoteUserLocation } from '@registration/shared/models/remote-user-loca
   providedIn: 'root'
 })
 export class SiteFormStateService {
+  // TODO rename this member variable since it isn't just site anymore
   public siteAddressForm: FormGroup;
   public hoursOperationForm: FormGroup;
   public vendorForm: FormGroup;
@@ -25,6 +26,11 @@ export class SiteFormStateService {
   public administratorPharmaNetForm: FormGroup;
   public privacyOfficerForm: FormGroup;
   public technicalSupportForm: FormGroup;
+
+  // ***************************************************
+  // TODO temporarily added to get this to work for demo
+  public tempSite: Site;
+  // ***************************************************
 
   private patched: boolean;
   private siteId: number;
@@ -69,6 +75,11 @@ export class SiteFormStateService {
     this.organizationId = site.location.organizationId;
     this.provisionerId = site.provisionerId;
 
+    // ***************************************************
+    // TODO temporarily added to get this to work for demo
+    this.tempSite = site;
+    // ***************************************************
+
     this.patchForm(site);
   }
 
@@ -79,7 +90,7 @@ export class SiteFormStateService {
   // TODO method constructs the JSON, and attempts to adapt, should
   // adapt in only one place and separately in method
   public get site(): Site {
-    const physicalAddress = this.siteAddressForm.getRawValue();
+    const { name, physicalAddress } = this.siteAddressForm.getRawValue();
     const businessHours = this.hoursOperationForm.getRawValue().businessDays;
     const vendor = this.vendorForm.getRawValue();
     const { remoteUsers } = this.remoteUsersForm.getRawValue();
@@ -98,6 +109,15 @@ export class SiteFormStateService {
       } else if (!party.physicalAddress.street) {
         party.physicalAddress = null;
       }
+
+      // ***************************************************
+      // TODO temporarily added to get this to work for demo
+      if (party) {
+        party.hpdid = this.tempSite?.provisioner.hpdid;
+        party.userId = this.tempSite?.provisioner.userId;
+      }
+      // ***************************************************
+
       return party;
     });
 
@@ -106,6 +126,7 @@ export class SiteFormStateService {
     // and the type enforced
     return {
       id: this.siteId,
+      name,
       provisionerId: this.provisionerId,
       // provisioner (N/A)
       locationId: this.locationId,
@@ -201,8 +222,12 @@ export class SiteFormStateService {
       return null;
     }
 
+    this.siteAddressForm.get('name').patchValue(site.name);
+
     if (site.location.physicalAddress) {
-      this.siteAddressForm.patchValue(site.location.physicalAddress);
+      console.log(site.location.physicalAddress);
+
+      this.siteAddressForm.get('physicalAddress').patchValue(site.location.physicalAddress);
     }
     if (site.vendor) {
       this.vendorForm.patchValue(site.vendor);
@@ -249,33 +274,39 @@ export class SiteFormStateService {
       });
   }
 
+  // TODO rename this method since it isn't just address anymore
   private buildSiteAddressForm(): FormGroup {
-    // TODO add site name and make this buildSiteLocationForm
     return this.fb.group({
-      id: [
-        0,
-        []
-      ],
-      street: [
-        { value: null, disabled: false },
+      name: [
+        null,
         [Validators.required]
       ],
-      city: [
-        { value: null, disabled: false },
-        [Validators.required]
-      ],
-      provinceCode: [
-        { value: Province.BRITISH_COLUMBIA, disabled: true },
-        [Validators.required]
-      ],
-      postal: [
-        { value: null, disabled: false },
-        [Validators.required]
-      ],
-      countryCode: [
-        { value: Country.CANADA, disabled: true },
-        [Validators.required]
-      ]
+      physicalAddress: this.fb.group({
+        id: [
+          0,
+          []
+        ],
+        street: [
+          { value: null, disabled: false },
+          [Validators.required]
+        ],
+        city: [
+          { value: null, disabled: false },
+          [Validators.required]
+        ],
+        provinceCode: [
+          { value: Province.BRITISH_COLUMBIA, disabled: true },
+          [Validators.required]
+        ],
+        postal: [
+          { value: null, disabled: false },
+          [Validators.required]
+        ],
+        countryCode: [
+          { value: Country.CANADA, disabled: true },
+          [Validators.required]
+        ]
+      })
     });
   }
 
