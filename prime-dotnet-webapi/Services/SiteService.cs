@@ -89,6 +89,23 @@ namespace Prime.Services
             // TODO should create a location controller to avoid these kinds of updates
             UpdateLocation(currentSite.Location, updatedSite.Location);
 
+            // Wholesale replace the remote users
+            // TODO refactor after demo
+            if(currentSite?.RemoteUsers != null && currentSite?.RemoteUsers.Count() != 0) {
+                foreach (var remoteUser in currentSite.RemoteUsers)
+                {
+                    _context.RemoteUsers.Remove(remoteUser);
+                }
+            }
+
+            if (updatedSite?.RemoteUsers != null && updatedSite?.RemoteUsers.Count() != 0)
+            {
+                foreach (var remoteUser in updatedSite.RemoteUsers)
+                {
+                    _context.RemoteUsers.Add(remoteUser);
+                }
+            }
+
             // Update foreign key only if not null
             currentSite.VendorId = (updatedSite.VendorId != 0)
                 ? updatedSite.VendorId
