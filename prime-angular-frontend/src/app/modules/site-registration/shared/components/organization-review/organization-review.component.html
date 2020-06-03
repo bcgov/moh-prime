@@ -1,7 +1,9 @@
+<!-- TODO refactor entirely for reuse thrown together for demo -->
+<!-- TODO break down sections into sets of review components -->
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Signing Authority</ng-container>
+    <ng-container appPageSubheaderTitle>Signing Authority Information</ng-container>
 
     <button *ngIf="showEditRedirect"
             mat-icon-button
@@ -11,6 +13,39 @@
     </button>
   </app-page-subheader>
 
+  <!-- TODO rename this to be PartyProfile for reuse -->
+  <app-enrollee-profile [enrollee]="organization?.signingAuthority"></app-enrollee-profile>
+
+</section>
+
+<section *ngIf="organization?.signingAuthority?.preferredFirstName"
+         class="mb-4">
+
+  <div class="mb-3">
+    <strong>Preferred Name</strong>
+  </div>
+
+  <app-enrollee-property title="Preferred First Name">
+    {{ organization?.signingAuthority?.preferredFirstName | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Preferred Middle Name">
+    {{ organization?.signingAuthority?.preferredMiddleName | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Preferred Last Name">
+    {{ organization?.signingAuthority?.preferredLastName | default }}
+  </app-enrollee-property>
+
+</section>
+
+<section class="mb-4">
+
+  <div class="mb-3">
+    <strong>Contact Information</strong>
+  </div>
+
+  <!-- TODO refactor this component is doesn't match a consistent pattern with enrolments for reuse -->
   <app-party-review [party]="organization?.signingAuthority"></app-party-review>
 
 </section>

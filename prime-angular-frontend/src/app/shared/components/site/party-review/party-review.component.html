@@ -1,11 +1,3 @@
-<app-enrollee-property title="First Name">
-  {{ party?.firstName | default }}
-</app-enrollee-property>
-
-<app-enrollee-property title="Last Name">
-  {{ party?.lastName | default }}
-</app-enrollee-property>
-
 <app-enrollee-property title="Job or Role Title">
   {{ party?.jobRoleTitle | default }}
 </app-enrollee-property>
@@ -26,35 +18,35 @@
   {{ party?.email | default }}
 </app-enrollee-property>
 
-<ng-container *ngIf="party?.physicalAddress">
+<ng-container *ngIf="party?.mailingAddress">
 
   <div class="my-3">
-    <strong>Address</strong>
+    <strong>Mailing Address</strong>
   </div>
 
   <app-enrollee-property title="Country">
-    {{ party?.physicalAddress?.countryCode | configCode: 'countries' | default }}
+    {{ party?.mailingAddress?.countryCode | configCode: 'countries' | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Province">
-    {{ party?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+    {{ party?.mailingAddress?.provinceCode | configCode: 'provinces' | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Street Address">
-    {{ party?.physicalAddress?.street | default }}
+    {{ party?.mailingAddress?.street | default }}
   </app-enrollee-property>
 
-  <app-enrollee-property *ngIf="party?.physicalAddress?.street2"
+  <app-enrollee-property *ngIf="party?.mailingAddress?.street2"
                          title="Street Address 2">
-    {{ party?.physicalAddress?.street2 | default }}
+    {{ party?.mailingAddress?.street2 | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="City">
-    {{ party?.physicalAddress?.city | default }}
+    {{ party?.mailingAddress?.city | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Postal Code">
-    {{ party?.physicalAddress?.postal | postal | default }}
+    {{ party?.mailingAddress?.postal | postal | default }}
   </app-enrollee-property>
 
 </ng-container>

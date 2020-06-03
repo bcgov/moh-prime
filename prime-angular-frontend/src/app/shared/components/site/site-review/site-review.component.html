@@ -1,6 +1,25 @@
 <section class="mb-4">
 
   <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Site Name</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Site Name"
+            (click)="onRoute(SiteRoutes.SITE_ADDRESS)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Name">
+    {{ site?.name | default }}
+  </app-enrollee-property>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
     <ng-container appPageSubheaderTitle>Site Address</ng-container>
 
     <button *ngIf="showEditRedirect"
@@ -33,24 +52,7 @@
 
 </section>
 
-<section class="mb-4">
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Vendors</ng-container>
-
-    <button *ngIf="showEditRedirect"
-            mat-icon-button
-            matTooltip="Edit Vendors"
-            (click)="onRoute(SiteRoutes.VENDOR)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader>
-
-  <app-enrollee-property>
-    {{ site?.vendor.name | default }}
-  </app-enrollee-property>
-
-</section>
+<!-- TODO business licence section list the uploaded document(s) -->
 
 <section class="mb-4">
 
@@ -77,6 +79,27 @@
   </ng-container>
 
 </section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Vendors</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Vendors"
+            (click)="onRoute(SiteRoutes.VENDOR)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <app-enrollee-property>
+    {{ site?.vendor.name | default }}
+  </app-enrollee-property>
+
+</section>
+
+<!-- TODO remote uses section list all users -->
 
 <section class="mb-4">
 
