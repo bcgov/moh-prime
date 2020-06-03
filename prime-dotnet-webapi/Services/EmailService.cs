@@ -122,13 +122,13 @@ namespace Prime.Services
             var subject = "PRIME Site Registration Submission";
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
 
-            // var document = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
+            var document = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
 
             var pdfContents = new[]
             {
                 await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", new Organization()),
                 await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site),
-                // await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", document)
+                await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", document)
             };
             var pdfs = pdfContents.Select(content => _pdfService.Generate(content));
             var attachments = pdfs.Select(pdf => new Attachment(new MemoryStream(pdf), "application/pdf"));
