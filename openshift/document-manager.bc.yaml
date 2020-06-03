@@ -63,23 +63,23 @@ objects:
   spec:
     lookupPolicy:
       local: false
-  - kind: ImageStream
-    apiVersion: v1
-    metadata:
-      name: '${NAME}'
-      creationTimestamp: null
-      labels:
-        shared: 'true'
-      annotations:
-        description: Keeps track of changes in the application image
-    spec:
-      lookupPolicy:
-        local: false
-      tags: []
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: '${NAME}${SUFFIX}'
+    creationTimestamp: null
+    labels:
+      shared: 'true'
+    annotations:
+      description: Keeps track of changes in the application image
+  spec:
+    lookupPolicy:
+      local: false
+    tags: []
 - kind: BuildConfig
   apiVersion: v1
   metadata:
-    name: '${NAME}${SUFFIX}-base'
+    name: '${NAME}-base'
     creationTimestamp: null
     labels: {}
     annotations: {}

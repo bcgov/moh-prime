@@ -52,8 +52,8 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      io.kompose.service: ${NAME}${SUFFIX}-backend-claim0
-    name: ${NAME}${SUFFIX}-backend-claim0
+      io.kompose.service: ${NAME}${SUFFIX}-backend
+    name: ${NAME}${SUFFIX}-backend
   spec:
     accessModes:
     - ReadWriteOnce
@@ -66,8 +66,8 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      io.kompose.service: ${NAME}${SUFFIX}r-migrate-claim0
-    name: ${NAME}${SUFFIX}-migrate-claim0
+      io.kompose.service: ${NAME}${SUFFIX}-migrate
+    name: ${NAME}${SUFFIX}-migrate
   spec:
     accessModes:
     - ReadWriteOnce
@@ -232,12 +232,12 @@ objects:
           resources: {}
           volumeMounts:
           - mountPath: /app/
-            name: ${NAME}${SUFFIX}-backend-claim0
+            name: ${NAME}${SUFFIX}-backend
         restartPolicy: Always
         volumes:
-        - name: ${NAME}${SUFFIX}-backend-claim0
+        - name: ${NAME}${SUFFIX}-backend
           persistentVolumeClaim:
-            claimName: ${NAME}${SUFFIX}-backend-claim0
+            claimName: ${NAME}${SUFFIX}-backend
     test: false
     triggers:
     - type: ConfigChange
@@ -375,11 +375,11 @@ objects:
       resources: {}
       volumeMounts:
       - mountPath: /app/
-        name: ${NAME}${SUFFIX}-migrate-claim0
+        name: ${NAME}${SUFFIX}-migrate
     restartPolicy: OnFailure
     volumes:
-    - name: ${NAME}${SUFFIX}-migrate-claim0
+    - name: ${NAME}${SUFFIX}-migrate
       persistentVolumeClaim:
-        claimName: ${NAME}${SUFFIX}-migrate-claim0
+        claimName: ${NAME}${SUFFIX}-migrate
   status: {}
   
