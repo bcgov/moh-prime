@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -53,20 +54,8 @@ namespace Prime.Auth
                     options.RequireHttpsMetadata = false;
                 }
 
-                var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-                if (audience == null)
-                {
-                    audience = configuration["Jwt:Audience"];
-                }
-
-                var wellKnownConfig = System.Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG");
-                if (wellKnownConfig == null)
-                {
-                    wellKnownConfig = configuration["Jwt:WellKnown"];
-                }
-
-                options.Audience = audience;
-                options.MetadataAddress = wellKnownConfig;
+                options.Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? configuration["Jwt:Audience"];
+                options.MetadataAddress = Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG") ?? configuration["Jwt:WellKnown"];
                 options.Events = new JwtBearerEvents
                 {
                     OnAuthenticationFailed = c =>

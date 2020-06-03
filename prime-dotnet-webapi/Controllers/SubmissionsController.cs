@@ -72,7 +72,9 @@ namespace Prime.Controllers
             }
 
             updatedProfile.IdentityAssuranceLevel = User.GetIdentityAssuranceLevel();
+            updatedProfile.IdentityProvider = User.GetIdentityProvider();
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
+
             enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             return Ok(ApiResponse.Result(enrollee));
         }

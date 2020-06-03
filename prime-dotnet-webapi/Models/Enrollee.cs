@@ -119,6 +119,9 @@ namespace Prime.Models
         [JsonIgnore]
         public int IdentityAssuranceLevel { get; set; }
 
+        [JsonIgnore]
+        public string IdentityProvider { get; set; }
+
         [NotMapped]
         public EnrolmentStatus CurrentStatus
         {
