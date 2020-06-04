@@ -5,12 +5,12 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Signing Authority Information</ng-container>
 
-    <button *ngIf="showEditRedirect"
+    <!-- <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Signing Authority"
             (click)="onRoute(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY)">
       <mat-icon>edit</mat-icon>
-    </button>
+    </button> -->
   </app-page-subheader>
 
   <!-- TODO rename this to be PartyProfile for reuse -->
@@ -55,12 +55,12 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Organization Information</ng-container>
 
-    <button *ngIf="showEditRedirect"
+    <!-- <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Organization Information"
             (click)="onRoute(SiteRoutes.ORGANIZATION_INFORMATION)">
       <mat-icon>edit</mat-icon>
-    </button>
+    </button> -->
   </app-page-subheader>
 
   <app-enrollee-property title="Organization Number (Legal Entity Operating Site)">
@@ -81,12 +81,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Organization Type</ng-container>
-    <button *ngIf="showEditRedirect"
+
+    <!-- <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Organization Type"
             (click)="onRoute(SiteRoutes.ORGANIZATION_TYPE)">
       <mat-icon>edit</mat-icon>
-    </button>
+    </button> -->
   </app-page-subheader>
 
   <app-enrollee-property title="Organization Type"

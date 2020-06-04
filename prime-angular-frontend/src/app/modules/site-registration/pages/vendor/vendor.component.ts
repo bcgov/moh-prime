@@ -47,10 +47,10 @@ export class VendorComponent implements OnInit, IPage, IForm {
 
     // TODO supply through config using lookups
     this.vendorConfig = [
-      { id: 1, name: 'Care Connect' },
+      { id: 1, name: 'CareConnect' },
       { id: 2, name: 'Excelleris' },
       { id: 3, name: 'iClinic Inc.' },
-      { id: 4, name: 'MediNet' },
+      { id: 4, name: 'Medinet' },
       { id: 5, name: 'Plexia Electronic Medical Systems' }
     ];
     // TODO should be an autocomplete instead of radio buttons to scale when there are more vendors

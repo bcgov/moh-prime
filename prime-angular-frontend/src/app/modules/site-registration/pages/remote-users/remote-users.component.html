@@ -21,7 +21,7 @@
 
   <mat-slide-toggle class="mb-3"
                     color="primary"
-                    [checked]="hasRemoteUsers"
+                    [checked]="hasRemoteUsers.value"
                     [disabled]="!!remoteUsers?.length"
                     (change)="onToggleRemoteUsers($event)">Site Has Remote Users</mat-slide-toggle>
 
@@ -47,14 +47,14 @@
       </mat-card>
     </ng-container>
 
-    <p *ngIf="hasRemoteUsers && !remoteUsers?.length"
+    <p *ngIf="hasRemoteUsers.value && !remoteUsers?.length"
        class="lead text-muted">
       No Remote Users
     </p>
   </section>
 
   <button mat-button
-          *ngIf="hasRemoteUsers"
+          *ngIf="hasRemoteUsers.value"
           type="button"
           color="primary"
           class="mb-3"

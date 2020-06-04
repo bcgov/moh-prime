@@ -90,22 +90,22 @@ namespace Prime.Services
             UpdateLocation(currentSite.Location, updatedSite.Location);
 
             // Wholesale replace the remote users
-            // TODO definitely won't work and I'm too #&$@ tired to care!!!
-            // if (currentSite?.RemoteUsers != null && currentSite?.RemoteUsers.Count() != 0)
-            // {
-            //     foreach (var remoteUser in currentSite.RemoteUsers)
-            //     {
-            //         _context.RemoteUsers.Remove(remoteUser);
-            //     }
-            // }
+            if (currentSite?.RemoteUsers != null && currentSite?.RemoteUsers.Count() != 0)
+            {
+                foreach (var remoteUser in currentSite.RemoteUsers)
+                {
+                    _context.RemoteUsers.Remove(remoteUser);
+                }
+            }
 
-            // if (updatedSite?.RemoteUsers != null && updatedSite?.RemoteUsers.Count() != 0)
-            // {
-            //     foreach (var remoteUser in updatedSite.RemoteUsers)
-            //     {
-            //         _context.RemoteUsers.Add(remoteUser);
-            //     }
-            // }
+            if (updatedSite?.RemoteUsers != null && updatedSite?.RemoteUsers.Count() != 0)
+            {
+                foreach (var remoteUser in updatedSite.RemoteUsers)
+                {
+                    remoteUser.SiteId = currentSite.Id;
+                    _context.RemoteUsers.Add(remoteUser);
+                }
+            }
 
             // Update foreign key only if not null
             currentSite.VendorId = (updatedSite.VendorId != 0)
@@ -375,7 +375,10 @@ namespace Prime.Services
                     .ThenInclude(l => l.TechnicalSupport)
                         .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
-                    .ThenInclude(l => l.BusinessHours);
+                    .ThenInclude(l => l.BusinessHours)
+                .Include(s => s.RemoteUsers)
+                    .ThenInclude(r => r.RemoteUserLocations)
+                        .ThenInclude(rul => rul.PhysicalAddress);
         }
     }
 }

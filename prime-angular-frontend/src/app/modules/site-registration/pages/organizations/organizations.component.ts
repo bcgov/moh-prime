@@ -13,7 +13,9 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
 
 @Component({
   selector: 'app-organizations',
@@ -35,7 +37,9 @@ export class OrganizationsComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private organizationResource: OrganizationResource,
-    private siteResource: SiteResource
+    private organizationFormStateService: OrganizationFormStateService,
+    private siteResource: SiteResource,
+    private siteFormStateService: SiteFormStateService
   ) {
     this.title = 'Administration';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -88,6 +92,10 @@ export class OrganizationsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    // TODO move to a guard that is used outside of loops
+    // this.siteFormStateService.reset();
+    // this.organizationFormStateService.reset();
+
     this.hasSubmittedSite = this.route.snapshot.queryParams?.submitted;
     this.router.navigate([], { queryParams: { submitted: null } });
 
