@@ -3,12 +3,12 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Site Name</ng-container>
 
-    <!-- <button *ngIf="showEditRedirect"
+    <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
             matTooltip="Edit Site Name"
             (click)="onRoute(SiteRoutes.SITE_ADDRESS)">
       <mat-icon>edit</mat-icon>
-    </button> -->
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Name">
@@ -22,12 +22,12 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Site Address</ng-container>
 
-    <!-- <button *ngIf="showEditRedirect"
+    <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
             matTooltip="Edit Site Address"
             (click)="onRoute(SiteRoutes.SITE_ADDRESS)">
       <mat-icon>edit</mat-icon>
-    </button> -->
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Address">
@@ -59,12 +59,12 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Hours of Operation</ng-container>
 
-    <!-- <button *ngIf="showEditRedirect"
+    <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
             matTooltip="Edit Hours of Operation"
             (click)="onRoute(SiteRoutes.HOURS_OPERATION)">
       <mat-icon>edit</mat-icon>
-    </button> -->
+    </button>
   </app-page-subheader>
 
   <ng-container *ngFor="let businessDay of site?.location?.businessHours">
@@ -85,12 +85,12 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Vendors</ng-container>
 
-    <!-- <button *ngIf="showEditRedirect"
+    <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
             matTooltip="Edit Vendors"
             (click)="onRoute(SiteRoutes.VENDOR)">
       <mat-icon>edit</mat-icon>
-    </button> -->
+    </button>
   </app-page-subheader>
 
   <app-enrollee-property>
@@ -106,12 +106,12 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Administrator of PharmaNet Onboarding</ng-container>
 
-    <!-- <button *ngIf="showEditRedirect"
+    <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
             matTooltip="Edit Administrator"
             (click)="onRoute(SiteRoutes.ADMINISTRATOR)">
       <mat-icon>edit</mat-icon>
-    </button> -->
+    </button>
   </app-page-subheader>
 
   <app-party-review [party]="site?.location?.administratorPharmaNet"></app-party-review>
@@ -123,12 +123,12 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Privacy Officer</ng-container>
 
-    <!-- <button *ngIf="showEditRedirect"
+    <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
             matTooltip="Edit Privacy Officer"
             (click)="onRoute(SiteRoutes.PRIVACY_OFFICER)">
       <mat-icon>edit</mat-icon>
-    </button> -->
+    </button>
   </app-page-subheader>
 
   <app-party-review [party]="site?.location?.privacyOfficer"></app-party-review>
@@ -139,13 +139,12 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Technical Support</ng-container>
-
-    <!-- <button *ngIf="showEditRedirect"
+    <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
             matTooltip="Edit Technical Support Contact"
             (click)="onRoute(SiteRoutes.TECHNICAL_SUPPORT)">
       <mat-icon>edit</mat-icon>
-    </button> -->
+    </button>
   </app-page-subheader>
 
   <app-party-review [party]="site?.location?.technicalSupport"></app-party-review>
