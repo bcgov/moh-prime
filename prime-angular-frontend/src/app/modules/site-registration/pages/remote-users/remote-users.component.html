@@ -19,11 +19,15 @@
     </ng-container>
   </app-page-subheader>
 
-  <mat-slide-toggle class="mb-3"
-                    color="primary"
-                    [checked]="hasRemoteUsers.value"
-                    [disabled]="!!remoteUsers?.length"
-                    (change)="onToggleRemoteUsers($event)">Site Has Remote Users</mat-slide-toggle>
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <mat-slide-toggle class="mb-3"
+                      color="primary"
+                      formControlName="hasRemoteUsers">Site Has Remote Users</mat-slide-toggle>
+
+  </form>
 
   <section>
     <ng-container *ngFor="let remoteUser of remoteUsers.controls; let i = index; let last = last">
@@ -42,7 +46,7 @@
         <mat-card-actions>
           <button mat-button
                   color="primary"
-                  [routerLink]="[remoteUser.value.id]">View or Edit User's Details</button>
+                  [routerLink]="[i]">View or Edit User's Details</button>
         </mat-card-actions>
       </mat-card>
     </ng-container>
@@ -53,12 +57,21 @@
     </p>
   </section>
 
+  <app-alert *ngIf="hasNoRemoteUserError"
+             type="danger"
+             icon="warning">
+    <ng-container #alertContent
+                  class="alert-content">
+      By indicating you have remote users at least one remote user is required.
+    </ng-container>
+  </app-alert>
+
   <button mat-button
           *ngIf="hasRemoteUsers.value"
           type="button"
           color="primary"
           class="mb-3"
-          [routerLink]="[0]">
+          [routerLink]="['new']">
     <mat-icon class="add-icon">add</mat-icon>
     Add Remote User
   </button>

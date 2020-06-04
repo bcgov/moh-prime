@@ -146,7 +146,7 @@ const routes: Routes = [
                         data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
                       },
                       {
-                        path: ':id',
+                        path: ':index',
                         component: RemoteUserComponent,
                         canActivate: [SiteGuard],
                         canDeactivate: [CanDeactivateFormGuard],

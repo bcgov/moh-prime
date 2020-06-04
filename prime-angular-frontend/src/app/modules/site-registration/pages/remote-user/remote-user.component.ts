@@ -54,24 +54,16 @@ export class RemoteUserComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const remoteUserId = +this.route.snapshot.params.id;
+      const remoteUserIndex = this.route.snapshot.params.index;
       const remoteUsersFormGroup = this.parent.get('remoteUsers') as FormArray;
 
-      if (remoteUserId) {
-        const currentRemoteUsers = this.parent.get('remoteUsers').value as RemoteUser[];
-        const index = currentRemoteUsers
-          .findIndex((remoteUser: RemoteUser) =>
-            remoteUser.id === remoteUserId
-          );
-        remoteUsersFormGroup.removeAt(index);
+      if (remoteUserIndex !== 'new') {
+        // Replace the updated remote user in the parent form for submission
+        remoteUsersFormGroup.at(remoteUserIndex).reset(this.form.value);
+      } else {
+        // Store the new remote user in the parent form for submission
+        remoteUsersFormGroup.push(this.form);
       }
-
-      // TODO won't work wipes out changes on route with the latest from the server!!!
-      // TODO set temporary route param to prevent setting the site
-      remoteUsersFormGroup.push(this.form);
-
-      console.log('LOCAL_FORM', this.form.getRawValue());
-      console.log('PARENT_FORM', remoteUsersFormGroup.getRawValue());
 
       this.nextRoute();
     }
@@ -95,7 +87,7 @@ export class RemoteUserComponent implements OnInit {
   }
 
   public nextRoute() {
-    // TODO temporary to prevent overwriting the parent form state
+    // Inform the remote users view not to patch the form, otherwise updates will be lost
     this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
   }
 
@@ -113,22 +105,26 @@ export class RemoteUserComponent implements OnInit {
   private initForm() {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    // TODO don't clear the form in this component
-    this.siteFormStateService.setForm(site, true);
 
-    const remoteUserId = +this.route.snapshot.params.id;
-    const remoteUser = this.parent.value.remoteUsers
-      .find((r: RemoteUser) => r.id === remoteUserId);
+    // Attempt to patch if needed on a refresh, otherwise do not forceably
+    // update the form state as it will drop unsaved updates
+    this.siteFormStateService.setForm(site);
+
+    const remoteUserIndex = this.route.snapshot.params.index;
+    const remoteUser = this.parent.value.remoteUsers[remoteUserIndex];
+
     // Create a local form group for creating or updating remote users
     this.form = this.siteFormStateService
       .createEmptyRemoteUserFormAndPatch(remoteUser);
 
-    // TODO ID being default zero causes so many issues
-    if (remoteUserId && remoteUserId !== 0) {
-      this.disableProvince(this.remoteUserLocations.controls as FormGroup[]);
-    } else {
-      this.addRemoteUserLocation();
-    }
+    // Remote user index and "new" were used instead of ID and 0 since the
+    // remote users can't be persisted immediately, and need to be stored
+    // locally for submission by the sibling view. Therefore, there could
+    // be multiple "new" entries without an unique identifier that might
+    // be edited prior to submission so it was necessary to use an index
+    (remoteUserIndex !== 'new')
+      ? this.disableProvince(this.remoteUserLocations.controls as FormGroup[])
+      : this.addRemoteUserLocation();
   }
 
   private addRemoteUserLocation(): void {

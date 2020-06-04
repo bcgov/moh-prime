@@ -226,8 +226,6 @@ export class SiteFormStateService {
     this.siteAddressForm.get('name').patchValue(site.name);
 
     if (site.location.physicalAddress) {
-      console.log(site.location.physicalAddress);
-
       this.siteAddressForm.get('physicalAddress').patchValue(site.location.physicalAddress);
     }
     if (site.vendor) {
@@ -352,10 +350,6 @@ export class SiteFormStateService {
 
   private remoteUserFormGroup(): FormGroup {
     return this.fb.group({
-      id: [
-        0,
-        []
-      ],
       firstName: [
         null,
         [Validators.required]
@@ -373,15 +367,38 @@ export class SiteFormStateService {
 
   public remoteUserLocationFormGroup(): FormGroup {
     return this.fb.group({
-      id: [
-        0,
-        []
-      ],
       internetProvider: [
         null,
         [Validators.required]
       ],
-      physicalAddress: this.physicalAddressFormGroup(true)
+      physicalAddress: this.fb.group({
+        countryCode: [
+          { value: null, disabled: false },
+          [Validators.required]
+        ],
+        provinceCode: [
+          { value: null, disabled: false },
+          [Validators.required]
+        ],
+        street: [
+          { value: null, disabled: false },
+          [Validators.required]
+        ],
+        street2: [
+          { value: null, disabled: false },
+          // NOTE: Never used so omitted from validations to reduce need
+          // to clear validators at the component-level
+          []
+        ],
+        city: [
+          { value: null, disabled: false },
+          [Validators.required]
+        ],
+        postal: [
+          { value: null, disabled: false },
+          [Validators.required]
+        ]
+      })
     });
   }
 
@@ -543,46 +560,5 @@ export class SiteFormStateService {
     });
 
     return this.fb.group(controlsConfig);
-  }
-
-  /**
-   * @deprecated drop and replace with buildAddressForm
-   */
-  private physicalAddressFormGroup(isRequired: boolean = false, disable: string[] = []): FormGroup {
-    const validators = (isRequired) ? [Validators.required] : [];
-
-    return this.fb.group({
-      id: [
-        // TODO should this be 0, or null like everything else?
-        0,
-        []
-      ],
-      countryCode: [
-        { value: null, disabled: disable.includes('countryCode') },
-        validators
-      ],
-      provinceCode: [
-        { value: null, disabled: disable.includes('provinceCode') },
-        validators
-      ],
-      street: [
-        { value: null, disabled: disable.includes('street') },
-        validators
-      ],
-      street2: [
-        { value: null, disabled: disable.includes('street2') },
-        // NOTE: Never used so omitted from validations to reduce need
-        // to clear validators at the component-level
-        []
-      ],
-      city: [
-        { value: null, disabled: disable.includes('city') },
-        validators
-      ],
-      postal: [
-        { value: null, disabled: disable.includes('postal') },
-        validators
-      ]
-    });
   }
 }

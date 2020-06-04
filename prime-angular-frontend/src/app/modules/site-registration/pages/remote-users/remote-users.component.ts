@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Subscription } from 'rxjs';
 
@@ -13,6 +12,8 @@ import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
 import { SiteService } from '@registration/shared/services/site.service';
+import { RemoteUser } from '@registration/shared/models/remote-user.model';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Component({
   selector: 'app-remote-users',
@@ -26,6 +27,7 @@ export class RemoteUsersComponent implements OnInit {
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public hasNoRemoteUserError: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,6 +54,7 @@ export class RemoteUsersComponent implements OnInit {
     // TODO show validation message if hasRemoteUsers and remoteUsers is empty
     // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
+      this.hasNoRemoteUserError = false;
       // TODO when spoking don't update
       const payload = this.siteFormStateService.site;
       this.siteResource
@@ -60,16 +63,13 @@ export class RemoteUsersComponent implements OnInit {
           this.form.markAsPristine();
           this.nextRoute();
         });
+    } else {
+      this.hasNoRemoteUserError = true;
     }
   }
 
   public onRemove(index: number) {
     this.remoteUsers.removeAt(index);
-  }
-
-  public onToggleRemoteUsers(change: MatSlideToggleChange) {
-    // TODO now that it's in the form group refactor and add binding in template
-    this.hasRemoteUsers.patchValue(change.checked);
   }
 
   public onBack() {
@@ -94,15 +94,31 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   private initForm() {
+    this.remoteUsers.valueChanges
+      .subscribe((remoteUsers: RemoteUser[]) => {
+        (remoteUsers.length)
+          ? this.hasRemoteUsers.disable({ emitEvent: false })
+          : this.hasRemoteUsers.enable({ emitEvent: false });
+      });
+
+    this.hasRemoteUsers.valueChanges
+      .subscribe((hasRemoteUsers: boolean) => {
+        (hasRemoteUsers)
+          ? this.remoteUsers.setValidators(FormArrayValidators.atLeast(1))
+          : this.remoteUsers.clearValidators();
+
+        this.hasNoRemoteUserError = false;
+        this.remoteUsers.updateValueAndValidity({ emitEvent: false });
+      });
+
     // TODO structured to match in all site views
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    // TODO cannot set form each time the view is loaded when updating
-    // TODO temporary to prevent overwriting the parent form state
+    // Inform the parent not to patch the form as there are outstanding changes
+    // to the remote users that need to be persisted
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
+    // Remove query param from URL without refreshing
     this.router.navigate([], { queryParams: { fromRemoteUser: null } });
-    console.log('FROM_REMOTE_USER', !fromRemoteUser);
-
     this.siteFormStateService.setForm(site, !fromRemoteUser);
   }
 }
