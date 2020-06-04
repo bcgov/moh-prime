@@ -150,7 +150,7 @@ namespace Prime.Services
 
             if (updated?.AdministratorPharmaNet != null)
             {
-                if (updated?.AdministratorPharmaNet?.UserId != null)
+                if (updated?.AdministratorPharmaNet?.UserId != Guid.Empty)
                 {
                     current.AdministratorPharmaNetId = updated.AdministratorPharmaNetId;
                 }
@@ -171,7 +171,7 @@ namespace Prime.Services
 
             if (updated?.PrivacyOfficer != null)
             {
-                if (updated?.PrivacyOfficer?.UserId != null)
+                if (updated?.PrivacyOfficer?.UserId != Guid.Empty)
                 {
                     current.PrivacyOfficerId = updated.PrivacyOfficerId;
                 }
@@ -192,7 +192,7 @@ namespace Prime.Services
 
             if (updated?.TechnicalSupport != null)
             {
-                if (updated?.TechnicalSupport?.UserId != null)
+                if (updated?.TechnicalSupport?.UserId != Guid.Empty)
                 {
                     current.TechnicalSupportId = updated.TechnicalSupportId;
                 }
