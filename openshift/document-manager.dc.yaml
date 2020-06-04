@@ -1,9 +1,9 @@
 kind: Template
 apiVersion: v1
 labels:
-  template: document-manager-template
+  template: database-backup-template
 metadata:
-  name: document-manager-dc
+  name: document-manager-bc
   creationTimestamp: null
 parameters:
   - name: NAME
@@ -17,7 +17,6 @@ parameters:
     required: false
   - name: VERSION
     required: false
-    value: latest
   - name: SOURCE_CONTEXT_DIR
     value: document-manager
     required: true
@@ -52,8 +51,8 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      io.kompose.service: ${NAME}${SUFFIX}-backend
-    name: ${NAME}${SUFFIX}-backend
+      io.kompose.service: ${NAME}${SUFFIX}-backend-pvc
+    name: ${NAME}${SUFFIX}-backend-pvc
   spec:
     accessModes:
     - ReadWriteOnce
@@ -66,15 +65,15 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      io.kompose.service: ${NAME}${SUFFIX}-migrate
-    name: ${NAME}${SUFFIX}-migrate
+      io.kompose.service: ${NAME}${SUFFIX}-migrate-pvc
+    name: ${NAME}${SUFFIX}-migrate-pvc
   spec:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
         storage: 100Mi
-  status: {} 
+  status: {}
 - apiVersion: v1
   kind: Service
   metadata:
@@ -93,7 +92,7 @@ objects:
     selector:
       io.kompose.service: ${NAME}${SUFFIX}-backend
   status:
-    loadBalancer: {} 
+    loadBalancer: {}
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -232,12 +231,12 @@ objects:
           resources: {}
           volumeMounts:
           - mountPath: /app/
-            name: ${NAME}${SUFFIX}-backend
+            name: ${NAME}${SUFFIX}-backend-pvc
         restartPolicy: Always
         volumes:
-        - name: ${NAME}${SUFFIX}-backend
+        - name: ${NAME}${SUFFIX}-backend-pvc
           persistentVolumeClaim:
-            claimName: ${NAME}${SUFFIX}-backend
+            claimName: ${NAME}${SUFFIX}-backend-pvc
     test: false
     triggers:
     - type: ConfigChange
@@ -370,16 +369,16 @@ objects:
           configMapKeyRef:
             key: JWT_OIDC_WELL_KNOWN_CONFIG
             name: document-manager-backend--env-prime
-      image: dqszvc-dev/${NAME}${SUFFIX}-migrate
+      image: ${NAME}${SUFFIX}-migrate
       name: ${NAME}${SUFFIX}-migrate
       resources: {}
       volumeMounts:
       - mountPath: /app/
-        name: ${NAME}${SUFFIX}-migrate
+        name: ${NAME}${SUFFIX}-migrate-pvc
     restartPolicy: OnFailure
     volumes:
-    - name: ${NAME}${SUFFIX}-migrate
+    - name: ${NAME}${SUFFIX}-migrate-pvc
       persistentVolumeClaim:
-        claimName: ${NAME}${SUFFIX}-migrate
+        claimName: ${NAME}${SUFFIX}-migrate-pvc
   status: {}
   
