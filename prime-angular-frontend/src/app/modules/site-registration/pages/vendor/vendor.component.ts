@@ -49,9 +49,9 @@ export class VendorComponent implements OnInit, IPage, IForm {
     this.vendorConfig = [
       { id: 1, name: 'CareConnect' },
       { id: 2, name: 'Excelleris' },
-      { id: 3, name: 'iClinic Inc.' },
+      { id: 3, name: 'iClinic' },
       { id: 4, name: 'Medinet' },
-      { id: 5, name: 'Plexia Electronic Medical Systems' }
+      { id: 5, name: 'Plexia' }
     ];
     // TODO should be an autocomplete instead of radio buttons to scale when there are more vendors
     this.hasNoVendorError = false;
