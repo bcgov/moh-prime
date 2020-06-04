@@ -1515,7 +1515,7 @@
         "clientId": "https://sso.pathfinder.gov.bc.ca/auth/realms/v4mbqqas",
         "uiLocales": "",
         "jwksUrl": "https://sso.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/certs",
-        "backchannelSupported": "false",
+        "backchannelSupported": "true",
         "issuer": "https://sso.pathfinder.gov.bc.ca/auth/realms/idir",
         "useJwksUrl": "true",
         "loginHint": "",
@@ -1583,7 +1583,7 @@
         "loginHint": "",
         "authorizationUrl": "https://id.gov.bc.ca/login/oidc/authorize",
         "disableUserInfo": "",
-        "logoutUrl": "https://id.gov.bc.ca/oauth2/revoke",
+        "logoutUrl": "",
         "clientSecret": "**********",
         "defaultScope": "openid profile address"
       }
