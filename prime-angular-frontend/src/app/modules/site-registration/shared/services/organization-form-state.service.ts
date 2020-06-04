@@ -30,10 +30,7 @@ export class OrganizationFormStateService {
     // enrolment information
     this.patched = false;
 
-    // Initialize and configure the forms
-    this.signingAuthorityForm = this.buildSigningAuthorityForm();
-    this.organizationInformationForm = this.buildOrganizationInformationForm();
-    this.organizationTypeForm = this.buildOrganizationTypeForm();
+    this.init();
   }
 
   /**
@@ -100,6 +97,17 @@ export class OrganizationFormStateService {
   public markAsPristine(): void {
     this.forms
       .forEach((form: AbstractControl) => form.markAsPristine());
+  }
+
+  /**
+   * @description
+   * Initialize and configure the forms for patching, which is also used
+   * clear previous form data from the service.
+   */
+  public init() {
+    this.signingAuthorityForm = this.buildSigningAuthorityForm();
+    this.organizationInformationForm = this.buildOrganizationInformationForm();
+    this.organizationTypeForm = this.buildOrganizationTypeForm();
   }
 
   /**

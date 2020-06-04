@@ -92,9 +92,11 @@ export class OrganizationsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // TODO move to a guard that is used outside of loops
-    // this.siteFormStateService.reset();
-    // this.organizationFormStateService.reset();
+    // TODO move into a guard after multiple organizations is in place, and routes are locked down
+    // Clear the organization and site form states so new organizations, and
+    // sites aren't filled with previous information
+    this.siteFormStateService.init();
+    this.organizationFormStateService.init();
 
     this.hasSubmittedSite = this.route.snapshot.queryParams?.submitted;
     this.router.navigate([], { queryParams: { submitted: null } });

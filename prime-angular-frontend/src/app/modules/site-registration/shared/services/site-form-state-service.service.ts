@@ -47,14 +47,7 @@ export class SiteFormStateService {
     // enrolment information
     this.patched = false;
 
-    // Initialize and configure the forms
-    this.siteAddressForm = this.buildSiteAddressForm();
-    this.hoursOperationForm = this.buildHoursOperationForm();
-    this.vendorForm = this.buildVendorForm();
-    this.remoteUsersForm = this.buildRemoteUsersForm();
-    this.administratorPharmaNetForm = this.buildAdministratorPharmaNetForm();
-    this.privacyOfficerForm = this.buildPrivacyOfficerForm();
-    this.technicalSupportForm = this.buildTechnicalSupportForm();
+    this.init();
   }
 
   /**
@@ -170,6 +163,21 @@ export class SiteFormStateService {
   public markAsPristine(): void {
     this.forms
       .forEach((form: AbstractControl) => form.markAsPristine());
+  }
+
+  /**
+   * @description
+   * Initialize and configure the forms for patching, which is also used
+   * clear previous form data from the service.
+   */
+  public init() {
+    this.siteAddressForm = this.buildSiteAddressForm();
+    this.hoursOperationForm = this.buildHoursOperationForm();
+    this.vendorForm = this.buildVendorForm();
+    this.remoteUsersForm = this.buildRemoteUsersForm();
+    this.administratorPharmaNetForm = this.buildAdministratorPharmaNetForm();
+    this.privacyOfficerForm = this.buildPrivacyOfficerForm();
+    this.technicalSupportForm = this.buildTechnicalSupportForm();
   }
 
   /**
