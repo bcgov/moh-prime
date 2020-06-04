@@ -12,6 +12,7 @@ namespace Prime.Models
 
         public int RemoteUserId { get; set; }
 
+        [JsonIgnore]
         public RemoteUser RemoteUser { get; set; }
 
         [Required]

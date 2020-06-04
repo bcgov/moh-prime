@@ -375,7 +375,10 @@ namespace Prime.Services
                     .ThenInclude(l => l.TechnicalSupport)
                         .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
-                    .ThenInclude(l => l.BusinessHours);
+                    .ThenInclude(l => l.BusinessHours)
+                .Include(s => s.RemoteUsers)
+                    .ThenInclude(r => r.RemoteUserLocations)
+                        .ThenInclude(rul => rul.PhysicalAddress);
         }
     }
 }

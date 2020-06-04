@@ -127,7 +127,7 @@ namespace Prime.Services
             {
                 document = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
                 // TODO want to abort the email, log, and retry, but make it work for the demo
                 document = new Document("business-licence.pdf", new byte[20]);
