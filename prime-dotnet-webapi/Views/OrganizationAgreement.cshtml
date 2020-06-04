@@ -1,7 +1,9 @@
 @using Prime.Models
 @model Organization
 
-@* <partial name="../Account/_PartialName.cshtml" /> *@
+@{
+  var organizationName = Model.Name;
+}
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
@@ -66,10 +68,6 @@ ol[type="1"].decimal ol[type="1"] > li::before {
 }
 
 </style>
-
-@{
-  var organizationName = Model.Name;
-}
 
 <div class="container">
 
