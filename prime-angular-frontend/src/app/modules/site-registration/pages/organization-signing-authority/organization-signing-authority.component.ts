@@ -24,7 +24,6 @@ import { OrganizationService } from '@registration/shared/services/organization.
 })
 export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IForm {
   // TODO Show 2 subheaders (normal one and information button one)
-  // TODO preferred middle name being filled without random field. GHOSTS!
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
