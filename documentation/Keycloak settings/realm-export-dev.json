@@ -345,16 +345,6 @@
           "attributes": {}
         }
       ],
-      "prime-document-management": [
-        {
-          "id": "51ed927d-f658-47b4-8fd9-114ca856b29e",
-          "name": "uma_protection",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "b539b23d-02df-4e3d-8a8a-30e31c80d4b8",
-          "attributes": {}
-        }
-      ],
       "prime-pos-gpid": [],
       "prime-careconnect-access": [],
       "security-admin-console": [],
@@ -403,6 +393,16 @@
           "composite": false,
           "clientRole": true,
           "containerId": "f8df3aeb-6e65-406d-b172-02bce11e4298",
+          "attributes": {}
+        }
+      ],
+      "prime-document-manager": [
+        {
+          "id": "51ed927d-f658-47b4-8fd9-114ca856b29e",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "b539b23d-02df-4e3d-8a8a-30e31c80d4b8",
           "attributes": {}
         }
       ]
@@ -1017,7 +1017,7 @@
     },
     {
       "id": "b539b23d-02df-4e3d-8a8a-30e31c80d4b8",
-      "clientId": "prime-document-management",
+      "clientId": "prime-document-manager",
       "description": "Service account used by the PRIME API to access the document manager",
       "surrogateAuthRequired": false,
       "enabled": true,
@@ -1864,15 +1864,19 @@
       "config": {
         "userInfoUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/userinfo",
         "validateSignature": "true",
+        "hideOnLoginPage": "",
         "tokenUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/token",
         "clientId": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas",
+        "uiLocales": "",
         "jwksUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/certs",
-        "authorizationUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/auth",
-        "logoutUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/logout",
-        "clientSecret": "**********",
-        "backchannelSupported": "true",
+        "backchannelSupported": "false",
         "issuer": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/idir",
-        "useJwksUrl": "true"
+        "useJwksUrl": "true",
+        "loginHint": "",
+        "authorizationUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/auth",
+        "disableUserInfo": "",
+        "logoutUrl": "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/logout",
+        "clientSecret": "**********"
       }
     },
     {
@@ -1896,7 +1900,7 @@
         "tokenUrl": "https://idtest.gov.bc.ca/oauth2/token",
         "uiLocales": "",
         "jwksUrl": "https://idtest.gov.bc.ca/oauth2/jwk.json",
-        "backchannelSupported": "true",
+        "backchannelSupported": "false",
         "issuer": "https://idtest.gov.bc.ca/oauth2/",
         "useJwksUrl": "true",
         "loginHint": "",

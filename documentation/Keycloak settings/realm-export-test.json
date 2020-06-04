@@ -398,6 +398,18 @@
   },
   "groups": [
     {
+      "id": "8770410e-ed92-4a9b-a568-4a24bd44b25c",
+      "name": "Prime Admin",
+      "path": "/Prime Admin",
+      "attributes": {},
+      "realmRoles": [
+        "prime_super_admin",
+        "feature_site_registration"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
       "id": "56e54e6b-438c-48b4-af69-53c53ae5727f",
       "name": "Realm Administrator",
       "path": "/Realm Administrator",
@@ -1428,13 +1440,17 @@
       "config": {
         "userInfoUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/userinfo",
         "validateSignature": "true",
+        "hideOnLoginPage": "",
         "tokenUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/token",
         "clientId": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/v4mbqqas",
+        "uiLocales": "",
         "jwksUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/certs",
+        "loginHint": "",
         "authorizationUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/auth",
+        "disableUserInfo": "",
         "logoutUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/logout",
         "clientSecret": "**********",
-        "backchannelSupported": "true",
+        "backchannelSupported": "false",
         "issuer": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir",
         "useJwksUrl": "true"
       }
@@ -1460,7 +1476,7 @@
         "tokenUrl": "https://idtest.gov.bc.ca/oauth2/token",
         "clientId": "urn.ca.bc.gov.health.prime.test",
         "jwksUrl": "https://idtest.gov.bc.ca/oauth2/jwk.json",
-        "backchannelSupported": "true",
+        "backchannelSupported": "false",
         "issuer": "https://idtest.gov.bc.ca/oauth2/",
         "useJwksUrl": "true",
         "loginHint": "",
