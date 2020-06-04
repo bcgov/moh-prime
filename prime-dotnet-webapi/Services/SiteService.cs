@@ -94,6 +94,11 @@ namespace Prime.Services
             {
                 foreach (var remoteUser in currentSite.RemoteUsers)
                 {
+                    foreach (var location in remoteUser.RemoteUserLocations)
+                    {
+                        _context.Addresses.Remove(location.PhysicalAddress);
+                        _context.RemoteUserLocations.Remove(location);
+                    }
                     _context.RemoteUsers.Remove(remoteUser);
                 }
             }
