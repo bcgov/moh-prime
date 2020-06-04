@@ -30,7 +30,6 @@ import { AdministratorComponent } from './pages/administrator/administrator.comp
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
-import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
 const routes: Routes = [
   {
@@ -180,12 +179,6 @@ const routes: Routes = [
                     canActivate: [SiteGuard],
                     component: SiteOverviewComponent,
                     data: { title: 'Site Registration Review' }
-                  },
-                  {
-                    path: SiteRoutes.CONFIRMATION,
-                    canActivate: [SiteGuard],
-                    component: ConfirmationComponent,
-                    data: { title: 'Submission Confirmation' }
                   },
                   {
                     // TODO need a guard/component redirect back to signing authority if not completed

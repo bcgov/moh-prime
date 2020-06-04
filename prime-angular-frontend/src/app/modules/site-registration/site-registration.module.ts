@@ -34,7 +34,6 @@ import { AdministratorComponent } from './pages/administrator/administrator.comp
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
-import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +58,6 @@ import { ConfirmationComponent } from './pages/confirmation/confirmation.compone
     PrivacyOfficerComponent,
     TechnicalSupportComponent,
     SiteOverviewComponent,
-    ConfirmationComponent,
 
     SiteProgressIndicatorComponent,
     RegistrantProfileFormComponent,

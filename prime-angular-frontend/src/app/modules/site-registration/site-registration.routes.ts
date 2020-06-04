@@ -20,7 +20,6 @@ export class SiteRoutes {
   public static PRIVACY_OFFICER = 'privacy-officer';
   public static TECHNICAL_SUPPORT = 'technical-support';
   public static SITE_REVIEW = 'site-review';
-  public static CONFIRMATION = 'confirmation';
 
   public static MODULE_PATH = SiteRoutes.SITE_REGISTRATION;
 
@@ -33,6 +32,32 @@ export class SiteRoutes {
   }
 
   // TODO need to refactor route workflow for organizations and sites
+
+  // Used to indicate the routes and order of registration for organizations
+  public static organizationRegistrationRouteOrder(): string[] {
+    return [
+      this.ORGANIZATION_SIGNING_AUTHORITY,
+      this.ORGANIZATION_INFORMATION,
+      this.ORGANIZATION_TYPE,
+      this.ORGANIZATION_REVIEW,
+      this.ORGANIZATION_AGREEMENT
+    ];
+  }
+
+  // Used to indicate the routes and order of registration for sites
+  public static siteRegistrationRouteOrder(): string[] {
+    return [
+      this.SITE_ADDRESS,
+      this.BUSINESS_LICENCE,
+      this.HOURS_OPERATION,
+      this.VENDOR,
+      this.REMOTE_USERS,
+      this.ADMINISTRATOR,
+      this.PRIVACY_OFFICER,
+      this.TECHNICAL_SUPPORT,
+      this.SITE_REVIEW
+    ];
+  }
 
   // Use by the progress indicator to calculate percent completion
   // of the registration process
