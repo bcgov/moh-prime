@@ -425,8 +425,8 @@ export class SiteFormStateService {
   // TODO duplicated until services are completely split apart
   private partyFormGroup(disabled: boolean = false): FormGroup {
     return this.fb.group({
-      id: [
-        0,
+      userId: [
+        null,
         []
       ],
       firstName: [
