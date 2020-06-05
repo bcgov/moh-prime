@@ -55,15 +55,14 @@ export class RemoteUserComponent implements OnInit {
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const remoteUserIndex = this.route.snapshot.params.index;
-      const remoteUsersFormGroup = this.parent.get('remoteUsers') as FormArray;
+      const remoteUsersFormArray = this.parent.get('remoteUsers') as FormArray;
 
       if (remoteUserIndex !== 'new') {
         // Replace the updated remote user in the parent form for submission
-        remoteUsersFormGroup.at(remoteUserIndex).reset(this.form.getRawValue());
-
+        remoteUsersFormArray.at(remoteUserIndex).reset(this.form.getRawValue());
       } else {
         // Store the new remote user in the parent form for submission
-        remoteUsersFormGroup.push(this.form);
+        remoteUsersFormArray.push(this.form);
       }
 
       this.nextRoute();
