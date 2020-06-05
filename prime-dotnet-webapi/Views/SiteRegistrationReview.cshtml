@@ -2,34 +2,216 @@
 @model Site
 
 @* <partial name="../Account/_PartialName.cshtml" /> *@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-<h1>PharmaNet Site Registration</h1>
+<style>
 
-<h2>Organization Information Review</h2>
+  .container {
+    width: 85%;
+    margin: 50px auto 0 auto;
+  }
 
-<h3>Signing Authority</h3>
+</style>
 
-<h3>Organization Information</h3>
+<div>
 
-<h3>Organization Type</h3>
+  <h1 class="mb-2">SITE REGISTRATION REVIEW</h1>
 
-<h2>Site Information Review</h2>
+  @* Site Information *@
+  <h2 class="mb-2">Site Information</h2>
 
-<h3>Site Name</h3>
+  <div class="ml-2 mb-2">
+    <h5>Site Name</h5>
+    <span class="ml-2">@Model.Name</span>
+  </div>
 
-<h3>Site Address</h3>
+  @* Site Address *@
+  <h2 class="mb-2">Site Address</h2>
 
-<h3>Business Licence</h3>
+  <div class="ml-2 mb-2">
+    <h5>Address</h5>
+    <span class="ml-2">@Model.Location.PhysicalAddress.Street</span>
+  </div>
 
-<h3>Hours of Operation</h3>
+  <div class="ml-2 mb-2">
+    <h5>Address 2</h5>
+    <span class="ml-2">@Model.Location.PhysicalAddress.Street2</span>
+  </div>
 
-<h3>Vendor</h3>
+  <div class="ml-2 mb-2">
+    <h5>City</h5>
+    <span class="ml-2">@Model.Location.PhysicalAddress.City</span>
+  </div>
 
-<h3>Remote Users</h3>
+  <div class="ml-2 mb-2">
+    <h5>Province</h5>
+    <span class="ml-2">@Model.Location.PhysicalAddress.ProvinceCode</span>
+  </div>
 
-<h3>Administrator of PharmaNet Onboarding</h3>
+  <div class="ml-2 mb-2">
+    <h5>Postal Code</h5>
+    <span class="ml-2">@Model.Location.PhysicalAddress.Postal</span>
+  </div>
 
-<h3>Privacy Officer</h3>
+  <div class="ml-2 mb-2">
+    <h5>Country</h5>
+    <span class="ml-2">@Model.Location.PhysicalAddress.CountryCode</span>
+  </div>
 
-<h3>Technical Support Contact</h3>
+  @* Hours of Operation *@
+  <h2 class="mb-2">Hours of Operation</h2>
+
+  @foreach (var BusinessHour in Model.Location.BusinessHours) {
+    <div class="ml-2 mb-2">
+      <h5>@BusinessHour.Day</h5>
+      <span class="ml-2">@BusinessHour.StartTime - @BusinessHour.EndTime</span>
+    </div>
+  }
+
+  @* Vendor *@
+  <h2 class="mb-2">Vendors</h2>
+
+  <div class="ml-2 mb-2">
+    <h5>Vendor Name</h5>
+    <span class="ml-2">@Model.Vendor.Name</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Vendor Email</h5>
+    <span class="ml-2">@Model.Vendor.Email</span>
+  </div>
+
+  @* Provisioner *@
+  <h2 class="mb-2">Provisioner</h2>
+
+  <div class="ml-2 mb-2">
+    <h5>Job or Role Title</h5>
+    <span class="ml-2">@Model.Provisioner.JobRoleTitle</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Name</h5>
+    <span class="ml-2">@Model.Provisioner.FirstName @Model.Provisioner.LastName</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Phone</h5>
+    <span class="ml-2">@Model.Provisioner.Phone</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Fax</h5>
+    <span class="ml-2">@Model.Provisioner.Fax</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>SMS Phone</h5>
+    <span class="ml-2">@Model.Provisioner.SMSPhone</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Email</h5>
+    <span class="ml-2">@Model.Provisioner.Email</span>
+  </div>
+
+  <h2 class="mb-2">Administrator of PharmaNet Onboarding</h2>
+
+  <div class="ml-2 mb-2">
+    <h5>Job or Role Title</h5>
+    <span class="ml-2">@Model.Location.AdministratorPharmaNet.JobRoleTitle</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Name</h5>
+    <span class="ml-2">@Model.Location.AdministratorPharmaNet.FirstName @Model.Location.AdministratorPharmaNet.LastName</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Phone</h5>
+    <span class="ml-2">@Model.Location.AdministratorPharmaNet.Phone</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Fax</h5>
+    <span class="ml-2">@Model.Location.AdministratorPharmaNet.Fax</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>SMS Phone</h5>
+    <span class="ml-2">@Model.Location.AdministratorPharmaNet.SMSPhone</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Email</h5>
+    <span class="ml-2">@Model.Location.AdministratorPharmaNet.Email</span>
+  </div>
+
+  <h2 class="mb-2">Privacy Officer</h2>
+
+  <div class="ml-2 mb-2">
+    <h5>Job or Role Title</h5>
+    <span class="ml-2">@Model.Location.PrivacyOfficer.JobRoleTitle</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Name</h5>
+    <span class="ml-2">@Model.Location.PrivacyOfficer.FirstName @Model.Location.PrivacyOfficer.LastName</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Phone</h5>
+    <span class="ml-2">@Model.Location.PrivacyOfficer.Phone</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Fax</h5>
+    <span class="ml-2">@Model.Location.PrivacyOfficer.Fax</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>SMS Phone</h5>
+    <span class="ml-2">@Model.Location.PrivacyOfficer.SMSPhone</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Email</h5>
+    <span class="ml-2">@Model.Location.PrivacyOfficer.Email</span>
+  </div>
+
+  <h2 class="mb-2">Technical Support</h2>
+
+  <div class="ml-2 mb-2">
+    <h5>Job or Role Title</h5>
+    <span class="ml-2">@Model.Location.TechnicalSupport.JobRoleTitle</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Name</h5>
+    <span class="ml-2">@Model.Location.TechnicalSupport.FirstName @Model.Location.TechnicalSupport.LastName</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Phone</h5>
+    <span class="ml-2">@Model.Location.TechnicalSupport.Phone</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Fax</h5>
+    <span class="ml-2">@Model.Location.TechnicalSupport.Fax</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>SMS Phone</h5>
+    <span class="ml-2">@Model.Location.TechnicalSupport.SMSPhone</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Email</h5>
+    <span class="ml-2">@Model.Location.TechnicalSupport.Email</span>
+  </div>
+
+  @* End? *@
+
+</div>
+
 
