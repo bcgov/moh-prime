@@ -64,6 +64,7 @@
         // Only display list counts in children
         content: counters(section,".") " ";
         // Re-align with default list counters
+        // TODO make this -50px and wrap text in <p> if just in an <li> only
         margin-left: -26px;
       }
     }

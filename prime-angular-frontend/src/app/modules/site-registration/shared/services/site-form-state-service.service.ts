@@ -69,11 +69,6 @@ export class SiteFormStateService {
     this.organizationId = site.location.organizationId;
     this.provisionerId = site.provisionerId;
 
-    // ***************************************************
-    // TODO temporarily added to get this to work for demo
-    this.tempSite = site;
-    // ***************************************************
-
     this.patchForm(site);
   }
 
@@ -103,14 +98,6 @@ export class SiteFormStateService {
       } else if (!party.physicalAddress.street) {
         party.physicalAddress = null;
       }
-
-      // ***************************************************
-      // TODO temporarily added to get this to work for demo
-      if (party) {
-        party.hpdid = this.tempSite?.provisioner.hpdid;
-        party.userId = this.tempSite?.provisioner.userId;
-      }
-      // ***************************************************
 
       return party;
     });
@@ -427,6 +414,10 @@ export class SiteFormStateService {
     return this.fb.group({
       id: [
         0,
+        []
+      ],
+      userId: [
+        '00000000-0000-0000-0000-000000000000',
         []
       ],
       firstName: [

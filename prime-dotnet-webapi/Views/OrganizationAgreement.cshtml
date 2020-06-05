@@ -1,75 +1,9 @@
 @using Prime.Models
 @model Organization
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-<style>
-
-@@import url("https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,700&display=swap");
-
-.container {
-  width: 85%;
-  margin: 50px auto 0 auto;
-}
-
-h1, p, li {
-  font-family: 'Roboto', 'Helvetica Neue', 'sans-serif';
-}
-
-h1 {
-  font-size: 1.2rem;
-  text-align: center;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-  line-height: 1.8rem;
-}
-.italic {
-  font-style: italic;
-}
-.bold {
-  font-weight: bold;
-}
-.underline {
-  text-decoration: underline;
-}
-.text-indent {
-  text-indent: 1rem;
-}
-li {
-  margin-bottom: 1rem;
-}
-ol[type="1"].decimal {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-ol[type="1"].decimal[start="1"] {
-  counter-reset: section 0;
-}
-ol[type="1"].decimal > li,
-ol[type="1"].decimal ol[type="1"] > li {
-  counter-increment: section;
-}
-ol[type="1"].decimal > li > p:first-child,
-ol[type="1"].decimal ol[type="1"] > li > p:first-child {
-  margin-top: -1.5rem;
-}
-ol[type="1"].decimal ol[type="1"] {
-  counter-reset: section;
-  list-style-type: none;
-}
-ol[type="1"].decimal ol[type="1"] > li::before {
-  content: counters(section, ".") " ";
-  margin-left: -26px;
-}
-
-</style>
-
 @{
   var organizationName = Model.Name;
 }
-
-<div class="container">
 
 <h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>
 
@@ -717,5 +651,3 @@ ol[type="1"].decimal ol[type="1"] > li::before {
     and reporting mechanisms available to Authorized Users for this purpose.
   </li>
 </ol>
-
-</div>

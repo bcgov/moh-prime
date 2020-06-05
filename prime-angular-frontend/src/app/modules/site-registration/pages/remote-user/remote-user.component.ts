@@ -59,7 +59,8 @@ export class RemoteUserComponent implements OnInit {
 
       if (remoteUserIndex !== 'new') {
         // Replace the updated remote user in the parent form for submission
-        remoteUsersFormGroup.at(remoteUserIndex).reset(this.form.value);
+        remoteUsersFormGroup.at(remoteUserIndex).reset(this.form.getRawValue());
+
       } else {
         // Store the new remote user in the parent form for submission
         remoteUsersFormGroup.push(this.form);
@@ -141,6 +142,7 @@ export class RemoteUserComponent implements OnInit {
   }
 
   private disableProvince(remoteUserLocationFormGroups: FormGroup | FormGroup[]): void {
+
     (Array.isArray(remoteUserLocationFormGroups))
       ? remoteUserLocationFormGroups.forEach(group => this.disableProvince(group))
       : remoteUserLocationFormGroups.get('physicalAddress.provinceCode').disable();

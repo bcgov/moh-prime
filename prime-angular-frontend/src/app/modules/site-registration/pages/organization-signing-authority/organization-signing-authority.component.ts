@@ -24,7 +24,6 @@ import { OrganizationService } from '@registration/shared/services/organization.
 })
 export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IForm {
   // TODO Show 2 subheaders (normal one and information button one)
-  // TODO preferred middle name being filled without random field. GHOSTS!
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
@@ -108,7 +107,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
   public onMailingAddressChange() {
     this.hasMailingAddress = !this.hasMailingAddress;
-    this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
+    this.toggleMailingAddressValidators(this.mailingAddress, ['street2', 'id']);
   }
 
   public onBack() {
@@ -166,7 +165,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
       this.mailingAddress.get('postal').value
     );
 
-    this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
+    this.toggleMailingAddressValidators(this.mailingAddress, ['street2', 'id']);
   }
 
   private togglePreferredNameValidators(preferredFirstName: FormControl, preferredLastName: FormControl) {
@@ -183,6 +182,8 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     if (!this.hasMailingAddress) {
       this.formUtilsService.resetAndClearValidators(mailingAddress);
     } else {
+      // const id = mailingAddress.get('id') as FormControl;
+      // this.formUtilsService.resetAndClearValidators(id);
       this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
     }
   }
