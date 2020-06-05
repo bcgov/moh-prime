@@ -16,7 +16,7 @@ parameters:
     required: false
     value: latest
   - name: SOURCE_CONTEXT_DIR
-    value: prime-database-backup
+    value: document-manager
     required: true
   - name: SOURCE_REPOSITORY_URL
     required: true
