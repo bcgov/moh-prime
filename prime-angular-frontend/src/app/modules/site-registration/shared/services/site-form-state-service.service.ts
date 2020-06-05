@@ -102,6 +102,10 @@ export class SiteFormStateService {
       return party;
     });
 
+    remoteUsers.map((user) => {
+      user.remoteUserLocations.forEach(location => location.physicalAddress.provinceCode = 'BC');
+    });
+
     // Includes site and location related keys to uphold relationships, and
     // allow for updates to a site. Keys not for update have been omitted
     // and the type enforced

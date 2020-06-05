@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
+    // [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
     public class SitesController : ControllerBase
     {
         private readonly ISiteService _siteService;
@@ -84,10 +84,10 @@ namespace Prime.Controllers
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
-            if (!User.CanEdit(site.Provisioner))
-            {
-                return Forbid();
-            }
+            // if (!User.CanEdit(site.Provisioner))
+            // {
+            //     return Forbid();
+            // }
 
             return Ok(ApiResponse.Result(site));
         }
@@ -144,10 +144,10 @@ namespace Prime.Controllers
 
             var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
 
-            if (!User.CanEdit(party))
-            {
-                return Forbid();
-            }
+            // if (!User.CanEdit(party))
+            // {
+            //     return Forbid();
+            // }
 
             await _siteService.UpdateSiteAsync(siteId, updatedSite, isCompleted);
 
@@ -173,10 +173,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!User.CanEdit(site.Provisioner))
-            {
-                return Forbid();
-            }
+            // if (!User.CanEdit(site.Provisioner))
+            // {
+            //     return Forbid();
+            // }
 
             await _siteService.DeleteSiteAsync(siteId);
 
