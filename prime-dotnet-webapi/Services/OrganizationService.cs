@@ -102,6 +102,18 @@ namespace Prime.Services
                 }
             }
 
+            if (updatedOrganization.SigningAuthority?.MailingAddress != null)
+            {
+                if (currentOrganization.SigningAuthority?.MailingAddress == null)
+                {
+                    currentOrganization.SigningAuthority.MailingAddress = updatedOrganization.SigningAuthority.MailingAddress;
+                }
+                else
+                {
+                    this._context.Entry(currentOrganization.SigningAuthority.MailingAddress).CurrentValues.SetValues(updatedOrganization.SigningAuthority.MailingAddress);
+                }
+            }
+
             // Keep userId the same from BCSC card, do not update
             currentOrganization.SigningAuthority.UserId = userId;
 
@@ -185,7 +197,9 @@ namespace Prime.Services
         {
             return _context.Organizations
                 .Include(o => o.SigningAuthority)
-                    .ThenInclude(p => p.PhysicalAddress);
+                    .ThenInclude(p => p.PhysicalAddress)
+                .Include(o => o.SigningAuthority)
+                    .ThenInclude(p => p.MailingAddress);;
         }
     }
 }
