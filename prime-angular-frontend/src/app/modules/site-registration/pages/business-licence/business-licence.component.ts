@@ -107,7 +107,10 @@ export class BusinessLicenceComponent implements OnInit {
     }
   }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+    const site = this.siteService.site;
+    this.isCompleted = site?.completed;
+  }
 
   private getBusinessLicences() {
     const siteId = this.siteService.site.id;

@@ -113,40 +113,51 @@
     </button>
   </app-page-subheader>
 
-  <ng-container *ngFor="let user of site?.remoteUsers">
+  <ng-container *ngFor="let user of site?.remoteUsers; let i = index">
 
-    <app-enrollee-property title="Name">
-      {{ user | fullname | default }}
-    </app-enrollee-property>
+    <div class="mb-3">
+      <strong>Remote User</strong>
+    </div>
 
-    <ng-container *ngFor="let location of user.remoteUserLocations">
-      <div class="ml-2">
-        <div class="my-3">
+    <div class="ml-4 mb-3">
+
+      <app-enrollee-property title="Name">
+        {{ user | fullname | default }}
+      </app-enrollee-property>
+
+      <ng-container *ngFor="let location of user.remoteUserLocations">
+        <div class="mb-4">
           <strong>Remote Address</strong>
         </div>
 
-        <app-enrollee-property title="Internet Provider">
-          {{ location?.internetProvider | default }}
-        </app-enrollee-property>
+        <div class="ml-4 mb-3">
 
-        <app-enrollee-property title="Street Address">
-          {{ location?.physicalAddress?.street | default }}
-        </app-enrollee-property>
+          <app-enrollee-property title="Internet Provider">
+            {{ location?.internetProvider | default }}
+          </app-enrollee-property>
 
-        <app-enrollee-property title="City">
-          {{ location?.physicalAddress?.city | default }}
-        </app-enrollee-property>
+          <app-enrollee-property title="Street Address">
+            {{ location?.physicalAddress?.street | default }}
+          </app-enrollee-property>
 
-        <app-enrollee-property title="Province">
-          {{ location?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
-        </app-enrollee-property>
+          <app-enrollee-property title="City">
+            {{ location?.physicalAddress?.city | default }}
+          </app-enrollee-property>
 
-        <app-enrollee-property title="Postal Code">
-          {{ location?.physicalAddress?.postal | postal | default }}
-        </app-enrollee-property>
-      </div>
+          <app-enrollee-property title="Province">
+            {{ location?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+          </app-enrollee-property>
 
-    </ng-container>
+          <app-enrollee-property title="Postal Code">
+            {{ location?.physicalAddress?.postal | postal | default }}
+          </app-enrollee-property>
+
+        </div>
+
+      </ng-container>
+
+    </div>
+
   </ng-container>
 
 </section>

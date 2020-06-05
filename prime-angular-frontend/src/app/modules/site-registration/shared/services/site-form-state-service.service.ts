@@ -115,7 +115,8 @@ export class SiteFormStateService {
         organizationId: this.organizationId,
         // TODO set on organization and copied to location, but why?
         // TODO not going to work as they expect regarding site name
-        // doingBusinessAs
+        // doingBusinessAs,
+        name,
         physicalAddressId: physicalAddress?.id,
         physicalAddress,
         businessHours,
@@ -124,8 +125,7 @@ export class SiteFormStateService {
         privacyOfficerId: privacyOfficer?.id,
         privacyOfficer,
         technicalSupportId: technicalSupport?.id,
-        technicalSupport,
-        name
+        technicalSupport
       },
       vendorId: vendor?.id,
       vendor,

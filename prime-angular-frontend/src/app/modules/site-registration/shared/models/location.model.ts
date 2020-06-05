@@ -8,6 +8,9 @@ export interface Location {
   id?: number;
   organizationId?: number;
   organization: Organization;
+  // TODO not going to work like they expect
+  // doingBusinessAs?: string;
+  name: string;
   physicalAddressId?: number;
   physicalAddress: Address;
   administratorPharmaNetId?: number;
@@ -17,6 +20,4 @@ export interface Location {
   technicalSupportId?: number;
   technicalSupport: Party;
   businessHours: BusinessDay[];
-  doingBusinessAs?: string;
-  name: string;
 }
