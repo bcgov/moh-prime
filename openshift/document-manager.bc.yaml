@@ -30,54 +30,105 @@ parameters:
     required: true
     value: dev
 objects:
-- apiVersion: v1
-  kind: ImageStream
-  metadata:
-    creationTimestamp: null
-    labels:
-      io.kompose.service: ${NAME}${SUFFIX}-backend
-    name: ${NAME}${SUFFIX}-backend
-  spec:
-    tags:
-    - annotations: null
-      from:
-        kind: DockerImage
-        name: ${NAME}${SUFFIX}-backend
-      generation: null
-      importPolicy: {}
-      name: latest
-  status:
-    dockerImageRepository: ""
-- apiVersion: v1
-  kind: BuildConfig
-  metadata:
-    annotations:
-      kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
-      kompose.version: 1.21.0 (992df58d8)
-    creationTimestamp: null
-    labels:
-      io.kompose.service: ${NAME}${SUFFIX}-backend
-    name: ${NAME}${SUFFIX}-backend
-  spec:
-    nodeSelector: null
-    output:
-      to:
-        kind: ImageStreamTag
-        name: ${NAME}${SUFFIX}-backend:latest
-    postCommit: {}
-    resources: {}
-    runPolicy: Serial
-    source:
-      contextDir: document-manager/backend/
-      git:
-        ref: ${SOURCE_REPOSITORY_REF}
-        uri: ${SOURCE_REPOSITORY_URL}
-      type: Git
-    strategy:
-      dockerStrategy: {}
-      type: Docker
-    triggers:
-    - type: ConfigChange
-  status:
-    lastVersion: 0
-  
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: rhscl-python-36-rhel7
+      creationTimestamp: 
+      annotations:
+        description: Python Base Image
+      labels:
+        shared: 'true'
+    spec:
+      lookupPolicy:
+        local: false
+      tags:
+      - name: 3.6.1-36
+        annotations: 
+        from:
+          kind: DockerImage
+          name: registry.access.redhat.com/rhscl/python-36-rhel7:1-36
+        importPolicy: {}
+        referencePolicy:
+          type: Local
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: "${NAME}${SUFFIX}-base"
+      creationTimestamp: 
+      annotations:
+        description: Python Runtime Image
+      labels:
+        shared: 'true'
+    spec:
+      lookupPolicy:
+        local: false
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: "${NAME}${SUFFIX}"
+      creationTimestamp: 
+      labels:
+        shared: 'true'
+      annotations:
+        description: Keeps track of changes in the application image
+    spec:
+      lookupPolicy:
+        local: false
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: "${NAME}${SUFFIX}-base"
+    spec:
+      completionDeadlineSeconds: 1440
+      triggers:
+      - type: ImageChange
+        imageChange: {}
+      - type: ConfigChange
+      runPolicy: SerialLatestOnly
+      source:
+        contextDir: openshift/docker-images/python-36-docman
+        type: Binary
+      strategy:
+        type: Docker
+        dockerStrategy:
+          from:
+            kind: ImageStreamTag
+            name: rhscl-python-36-rhel7:3.6.1-36
+      output:
+        to:
+          kind: ImageStreamTag
+          name: "${NAME}${SUFFIX}-base:${VERSION}"
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: "${NAME}${SUFFIX}"
+      creationTimestamp: 
+      annotations:
+        description: Defines how to build the application
+    spec:
+      completionDeadlineSeconds: 600
+      triggers:
+      - type: ImageChange
+      - type: ConfigChange
+      runPolicy: SerialLatestOnly
+      source:
+        type: Git
+        git:
+          uri: "${SOURCE_REPOSITORY_URL}"
+          ref: "${SOURCE_REPOSITORY_REF}"
+        contextDir: "${SOURCE_CONTEXT_DIR}"
+      strategy:
+        type: Source
+        sourceStrategy:
+          from:
+            kind: ImageStreamTag
+            name: "${NAME}${SUFFIX}-base:${VERSION}"
+          env:
+          - name: BUILD_LOGLEVEL
+            value: '2'
+      output:
+        to:
+          kind: ImageStreamTag
+          name: "${NAME}${SUFFIX}:${VERSION}"
+      
