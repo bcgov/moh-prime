@@ -107,7 +107,6 @@ export class SiteFormStateService {
     // and the type enforced
     return {
       id: this.siteId,
-      name,
       provisionerId: this.provisionerId,
       // provisioner (N/A)
       locationId: this.locationId,
@@ -125,7 +124,8 @@ export class SiteFormStateService {
         privacyOfficerId: privacyOfficer?.id,
         privacyOfficer,
         technicalSupportId: technicalSupport?.id,
-        technicalSupport
+        technicalSupport,
+        name
       },
       vendorId: vendor?.id,
       vendor,
@@ -218,7 +218,7 @@ export class SiteFormStateService {
       return null;
     }
 
-    this.siteAddressForm.get('name').patchValue(site.name);
+    this.siteAddressForm.get('name').patchValue(site.location.name);
 
     if (site.location.physicalAddress) {
       this.siteAddressForm.get('physicalAddress').patchValue(site.location.physicalAddress);
