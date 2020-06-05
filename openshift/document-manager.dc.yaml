@@ -367,8 +367,8 @@ objects:
           configMapKeyRef:
             key: JWT_OIDC_WELL_KNOWN_CONFIG
             name: document-manager-backend--env-prime
-      image: ${NAME}${SUFFIX}
-      name: ${NAME}${SUFFIX}
+      image: ${NAME}${SUFFIX}-base
+      name: ${NAME}${SUFFIX}-base
       resources: {}
       volumeMounts:
       - mountPath: /app/
