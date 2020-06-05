@@ -8,7 +8,15 @@
                                (submit)="onSubmit()">
 
     <app-same-as selectFor="administratorPharmaNet"
-                 (selected)="onSelect($event)"></app-same-as>
+                 (selected)="onSelect($event)">
+      <button *ngIf="isSameAs()"
+              mat-stroked-button
+              type="button"
+              color="primary"
+              (click)="onClear()">
+        Enable Editing
+      </button>
+    </app-same-as>
 
     <ng-container appPageSubheaderSummary>
       Sets up individual PharmaNet access accounts at the site or requests setups by the software vendor. They may be

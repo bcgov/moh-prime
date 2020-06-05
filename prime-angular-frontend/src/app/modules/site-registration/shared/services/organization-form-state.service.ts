@@ -69,10 +69,18 @@ export class OrganizationFormStateService {
         party = null;
       } else if (!party.mailingAddress.street) {
         party.mailingAddress = null;
+      } else if (party.mailingAddress.street) {
+        if (party.mailingAddress.id == null) {
+          party.mailingAddress.id = 0;
+        }
       }
 
       return party;
     });
+
+    signingAuthority.mailingAddressId = signingAuthority.mailingAddress?.id
+      ? signingAuthority.mailingAddress?.id
+      : 0;
 
     return {
       // OrganizationInformation is the only form

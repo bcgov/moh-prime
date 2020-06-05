@@ -94,6 +94,11 @@ namespace Prime.Services
             {
                 foreach (var remoteUser in currentSite.RemoteUsers)
                 {
+                    foreach (var location in remoteUser.RemoteUserLocations)
+                    {
+                        _context.Addresses.Remove(location.PhysicalAddress);
+                        _context.RemoteUserLocations.Remove(location);
+                    }
                     _context.RemoteUsers.Remove(remoteUser);
                 }
             }
@@ -150,44 +155,65 @@ namespace Prime.Services
 
             if (updated?.AdministratorPharmaNet != null)
             {
-                if (current.AdministratorPharmaNet == null)
+                if (updated?.AdministratorPharmaNet?.UserId != Guid.Empty)
                 {
-                    current.AdministratorPharmaNet = updated.AdministratorPharmaNet;
+                    current.AdministratorPharmaNetId = updated.AdministratorPharmaNetId;
                 }
                 else
                 {
-                    this._context.Entry(current.AdministratorPharmaNet).CurrentValues.SetValues(updated.AdministratorPharmaNet);
-                }
+                    if (current.AdministratorPharmaNet == null)
+                    {
+                        current.AdministratorPharmaNet = updated.AdministratorPharmaNet;
+                    }
+                    else
+                    {
+                        this._context.Entry(current.AdministratorPharmaNet).CurrentValues.SetValues(updated.AdministratorPharmaNet);
+                    }
 
-                _partyService.UpdatePartyAddress(current.AdministratorPharmaNet, updated.AdministratorPharmaNet);
+                    _partyService.UpdatePartyAddress(current.AdministratorPharmaNet, updated.AdministratorPharmaNet);
+                }
             }
 
             if (updated?.PrivacyOfficer != null)
             {
-                if (current.PrivacyOfficer == null)
+                if (updated?.PrivacyOfficer?.UserId != Guid.Empty)
                 {
-                    current.PrivacyOfficer = updated.PrivacyOfficer;
+                    current.PrivacyOfficerId = updated.PrivacyOfficerId;
                 }
                 else
                 {
-                    this._context.Entry(current.PrivacyOfficer).CurrentValues.SetValues(updated.PrivacyOfficer);
-                }
+                    if (current.PrivacyOfficer == null)
+                    {
+                        current.PrivacyOfficer = updated.PrivacyOfficer;
+                    }
+                    else
+                    {
+                        this._context.Entry(current.PrivacyOfficer).CurrentValues.SetValues(updated.PrivacyOfficer);
+                    }
 
-                _partyService.UpdatePartyAddress(current.PrivacyOfficer, updated.PrivacyOfficer);
+                    _partyService.UpdatePartyAddress(current.PrivacyOfficer, updated.PrivacyOfficer);
+                }
             }
 
             if (updated?.TechnicalSupport != null)
             {
-                if (current.TechnicalSupport == null)
+                if (updated?.TechnicalSupport?.UserId != Guid.Empty)
                 {
-                    current.TechnicalSupport = updated.TechnicalSupport;
+                    current.TechnicalSupportId = updated.TechnicalSupportId;
                 }
                 else
                 {
-                    this._context.Entry(current.TechnicalSupport).CurrentValues.SetValues(updated.TechnicalSupport);
-                }
+                    if (current.TechnicalSupport == null)
+                    {
+                        current.TechnicalSupport = updated.TechnicalSupport;
+                    }
+                    else
+                    {
+                        this._context.Entry(current.TechnicalSupport).CurrentValues.SetValues(updated.TechnicalSupport);
+                    }
 
-                _partyService.UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
+                    _partyService.UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
+                }
             }
 
             if (updated?.BusinessHours != null)

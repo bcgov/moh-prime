@@ -75,8 +75,9 @@ export class BusinessLicenceComponent implements OnInit {
         'Access-Control-Allow-Origin': '*',
         Authorization: `Bearer ${token}`,
       },
-      onError: async (error: Error) =>
-        this.toastService.openErrorToast(error.message),
+      onError: async (error: Error) => this.logger.error('BusinessLicence::onFilePondAddFile', error),
+      // TODO throws an error intermittently so commented out for release
+      // this.toastService.openErrorToast(error.message),
       onProgress: async (bytesUploaded: number, bytesTotal: number) =>
         this.filePondUploadProgress = (bytesUploaded / bytesTotal * 100),
       onSuccess: async () => {
