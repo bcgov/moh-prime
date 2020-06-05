@@ -114,7 +114,6 @@ objects:
       metadata:
         creationTimestamp: null
         labels:
-          io.kompose.network/primenet: "true"
           io.kompose.service: ${NAME}${SUFFIX}-backend
       spec:
         containers:
@@ -254,7 +253,6 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      io.kompose.network/primenet: "true"
       io.kompose.service: ${NAME}${SUFFIX}-migrate
     name: ${NAME}${SUFFIX}-migrate
   spec:
