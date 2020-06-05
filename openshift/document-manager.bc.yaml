@@ -47,7 +47,7 @@ objects:
           annotations: null
           from:
             kind: DockerImage
-            name: 'registry.access.redhat.com/rhscl/python-36-rhel7:1-36'
+            name: 'dqszvc-tools/python-36-rhel7:1-36'
           importPolicy: {}
           referencePolicy:
             type: Local
