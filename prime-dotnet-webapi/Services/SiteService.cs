@@ -259,11 +259,15 @@ namespace Prime.Services
                 return;
             }
 
-            _context.Addresses.Remove(site.Location.Organization.SigningAuthority.PhysicalAddress);
-            _context.Addresses.Remove(site.Location.Organization.SigningAuthority.MailingAddress);
-            _context.Parties.Remove(site.Location.Organization.SigningAuthority);
-            _context.Organizations.Remove(site.Location.Organization);
+            _context.Sites.Remove(site);
 
+            await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
+
+            await _context.SaveChangesAsync();
+        }
+
+        private void DeleteLocation(Location location)
+        {
             // Check if relation exists before delete to allow delete of incomplete registrations
             if (site.Location != null)
             {
@@ -277,11 +281,6 @@ namespace Prime.Services
                 DeletePartyFromLocation(site.Location.TechnicalSupport);
                 DeletePartyFromLocation(site.Location.PrivacyOfficer);
             }
-            _context.Sites.Remove(site);
-
-            await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
-
-            await _context.SaveChangesAsync();
         }
 
         private void DeletePartyFromLocation(Party party)
@@ -366,26 +365,6 @@ namespace Prime.Services
                 .Where(bl => bl.SiteId == siteId)
                 .OrderByDescending(bl => bl.UploadedDate)
                 .FirstOrDefaultAsync();
-        }
-
-        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
-        {
-            // Remove existing items
-            foreach (var item in dbCollection)
-            {
-                _context.Remove(item);
-            }
-
-            // Create new items
-            if (newCollection != null)
-            {
-                foreach (var item in newCollection)
-                {
-                    // Prevent the ID from being changed by the incoming changes
-                    item.EnrolleeId = enrolleeId;
-                    _context.Entry(item).State = EntityState.Added;
-                }
-            }
         }
 
         private IQueryable<Site> GetBaseSiteQuery()
