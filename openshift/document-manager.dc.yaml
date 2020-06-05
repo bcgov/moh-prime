@@ -109,7 +109,19 @@ objects:
       io.kompose.service: ${NAME}${SUFFIX}-backend
     strategy:
       resources: {}
-      type: Recreate
+      type: Rolling
+      rollingParams:
+        pre:
+          failurePolicy: Retry
+          execNewPod:
+            containerName: app
+            command:
+            - bash
+            - "-c"
+            - cd /opt/app-root/src && flask db upgrade
+        maxSurge: 50%
+        maxUnavailable: 1
+        timeoutSeconds: 1200
     template:
       metadata:
         creationTimestamp: null
@@ -248,135 +260,3 @@ objects:
           name: ${NAME}${SUFFIX}-backend:latest
       type: ImageChange
   status: {}
-- apiVersion: v1
-  kind: Pod
-  metadata:
-    creationTimestamp: null
-    labels:
-      io.kompose.service: ${NAME}${SUFFIX}-migrate
-    name: ${NAME}${SUFFIX}-migrate
-  spec:
-    containers:
-    - args:
-      - flask
-      - db
-      - upgrade
-      env:
-      - name: CACHE_REDIS_HOST
-        valueFrom:
-          configMapKeyRef:
-            key: CACHE_REDIS_HOST
-            name: document-manager-backend--env-prime
-      - name: CACHE_REDIS_PASS
-        valueFrom:
-          configMapKeyRef:
-            key: CACHE_REDIS_PASS
-            name: document-manager-backend--env-prime
-      - name: DB_HOST
-        valueFrom:
-          configMapKeyRef:
-            key: DB_HOST
-            name: document-manager-backend--env-prime
-      - name: DB_NAME
-        valueFrom:
-          configMapKeyRef:
-            key: DB_NAME
-            name: document-manager-backend--env-prime
-      - name: DB_NAME_TEST
-        valueFrom:
-          configMapKeyRef:
-            key: DB_NAME_TEST
-            name: document-manager-backend--env-prime
-      - name: DB_PASS
-        valueFrom:
-          configMapKeyRef:
-            key: DB_PASS
-            name: document-manager-backend--env-prime
-      - name: DB_PORT
-        valueFrom:
-          configMapKeyRef:
-            key: DB_PORT
-            name: document-manager-backend--env-prime
-      - name: DB_USER
-        valueFrom:
-          configMapKeyRef:
-            key: DB_USER
-            name: document-manager-backend--env-prime
-      - name: DOCUMENT_MANAGER_URL
-        valueFrom:
-          configMapKeyRef:
-            key: DOCUMENT_MANAGER_URL
-            name: document-manager-backend--env-prime
-      - name: ELASTIC_ENABLED
-        valueFrom:
-          configMapKeyRef:
-            key: ELASTIC_ENABLED
-            name: document-manager-backend--env-prime
-      - name: ELASTIC_SECRET_TOKEN
-        valueFrom:
-          configMapKeyRef:
-            key: ELASTIC_SECRET_TOKEN
-            name: document-manager-backend--env-prime
-      - name: ELASTIC_SERVER_URL
-        valueFrom:
-          configMapKeyRef:
-            key: ELASTIC_SERVER_URL
-            name: document-manager-backend--env-prime
-      - name: ELASTIC_SERVICE_NAME
-        valueFrom:
-          configMapKeyRef:
-            key: ELASTIC_SERVICE_NAME
-            name: document-manager-backend--env-prime
-      - name: FLASK_APP
-        valueFrom:
-          configMapKeyRef:
-            key: FLASK_APP
-            name: document-manager-backend--env-prime
-      - name: FLASK_DEBUG
-        valueFrom:
-          configMapKeyRef:
-            key: FLASK_DEBUG
-            name: document-manager-backend--env-prime
-      - name: FLASK_ENV
-        valueFrom:
-          configMapKeyRef:
-            key: FLASK_ENV
-            name: document-manager-backend--env-prime
-      - name: FLASK_RUN_HOST
-        valueFrom:
-          configMapKeyRef:
-            key: FLASK_RUN_HOST
-            name: document-manager-backend--env-prime
-      - name: FLASK_RUN_PORT
-        valueFrom:
-          configMapKeyRef:
-            key: FLASK_RUN_PORT
-            name: document-manager-backend--env-prime
-      - name: JWT_OIDC_ALGORITHMS
-        valueFrom:
-          configMapKeyRef:
-            key: JWT_OIDC_ALGORITHMS
-            name: document-manager-backend--env-prime
-      - name: JWT_OIDC_AUDIENCE
-        valueFrom:
-          configMapKeyRef:
-            key: JWT_OIDC_AUDIENCE
-            name: document-manager-backend--env-prime
-      - name: JWT_OIDC_WELL_KNOWN_CONFIG
-        valueFrom:
-          configMapKeyRef:
-            key: JWT_OIDC_WELL_KNOWN_CONFIG
-            name: document-manager-backend--env-prime
-      image: ${NAME}${SUFFIX}-base
-      name: ${NAME}${SUFFIX}-base
-      resources: {}
-      volumeMounts:
-      - mountPath: /app/
-        name: ${NAME}${SUFFIX}-migrate-pvc
-    restartPolicy: OnFailure
-    volumes:
-    - name: ${NAME}${SUFFIX}-migrate-pvc
-      persistentVolumeClaim:
-        claimName: ${NAME}${SUFFIX}-migrate-pvc
-  status: {}
-  

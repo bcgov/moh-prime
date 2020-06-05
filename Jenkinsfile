@@ -23,8 +23,8 @@ pipeline {
                 script {
                     checkout scm
                     echo "Building ..."
-                    sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                    /*sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"*/
                     sh "./player.sh build documentmanager dev -p SUFFIX=${SUFFIX}"
                 }
             }
@@ -40,10 +40,10 @@ pipeline {
                     checkout scm
                     echo "Deploy to dev..."
                     sh "./player.sh deploy documentmanager dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
-                    sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    /*sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"*/
                 }
             }
         }
@@ -57,10 +57,10 @@ pipeline {
                 script {
                     checkout scm
                     echo "Deploy to dev..."
-                    sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
+                    /*sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
                     sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"*/
                     sh "./player.sh deploy documentmanager dev -p SUFFIX=${SUFFIX}"
                 }
             }
