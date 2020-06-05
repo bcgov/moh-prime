@@ -138,7 +138,7 @@ namespace Prime.Services
 
             var pdfContents = new[]
             {
-                await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", new Organization()),
+                await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", new Organization()),
                 await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site),
                 await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", document)
             };
