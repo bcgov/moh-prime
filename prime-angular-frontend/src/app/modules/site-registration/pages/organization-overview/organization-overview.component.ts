@@ -41,6 +41,10 @@ export class OrganizationOverviewComponent implements OnInit {
   }
 
   public onSubmit() {
+    if (this.organization.acceptedAgreementDate) {
+      return this.nextRoute();
+    }
+
     // TODO shouldn't come from service when spoking to save updates
     // const payload = this.organizationService.organization;
     const data: DialogOptions = {
@@ -59,11 +63,19 @@ export class OrganizationOverviewComponent implements OnInit {
         //     : EMPTY
         // )
       )
-      .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT));
+      .subscribe(() => this.nextRoute());
   }
 
   public onBack() {
     this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
+  }
+
+  public nextRoute() {
+    if (!this.organization.acceptedAgreementDate) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
+    } else {
+      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
+    }
   }
 
   public onRoute(routePath: string) {

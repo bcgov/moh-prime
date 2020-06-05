@@ -21,9 +21,10 @@
                            [showEditRedirect]="true"
                            (route)="onRoute($event)"></app-organization-review>
 
+  <!-- TODO remove ternary after release with implementation of organization updates, and keep Save Organization Information -->
   <app-page-footer [isInitialEnrolment]="true"
                    [hasSecondaryAction]="true"
-                   primaryActionLabel="Save Organization Information"
+                   [primaryActionLabel]="(!organization.acceptedAgreementDate) ? 'Save Organization Information' : 'Continue'"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>
 
