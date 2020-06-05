@@ -54,7 +54,7 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: '${NAME}-base'
+      name: '${NAME}${SUFFIX}-base'
       creationTimestamp: null
       annotations:
         description: Python Runtime Image
@@ -79,7 +79,7 @@ objects:
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: '${NAME}-base${SUFFIX}'
+      name: '${NAME}${SUFFIX}-base'
       creationTimestamp: null
       labels: {}
       annotations: {}
@@ -103,7 +103,7 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: '${NAME}-base:latest'
+          name: '${NAME}${SUFFIX}-base:latest'
       resources:
         limits:
           cpu: 500m
@@ -137,14 +137,14 @@ objects:
         sourceStrategy:
           from:
             kind: ImageStreamTag
-            name: '${NAME}-base:latest'
+            name: '${NAME}${SUFFIX}-base:latest'
           env:
             - name: BUILD_LOGLEVEL
               value: '2'
       output:
         to:
           kind: ImageStreamTag
-          name: '${NAME}:latest'
+          name: '${NAME}${SUFFIX}:latest'
       resources:
         limits:
           cpu: 200m
