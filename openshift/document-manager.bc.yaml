@@ -70,8 +70,8 @@ objects:
     source:
       contextDir: document-manager/backend/
       git:
-        ref: feature/PRIME-676-business-licence-upload
-        uri: https://github.com/bcgov/moh-prime.git
+        ref: ${SOURCE_REPOSITORY_REF}
+        uri: ${SOURCE_REPOSITORY_URL}
       type: Git
     strategy:
       dockerStrategy: {}
