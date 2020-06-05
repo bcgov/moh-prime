@@ -5,7 +5,7 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Signing Authority Information</ng-container>
 
-    <button *ngIf="showEditRedirect && !organization.submittedDate"
+    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
             mat-icon-button
             matTooltip="Edit Signing Authority"
             (click)="onRoute(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY)">
@@ -21,9 +21,16 @@
 <section *ngIf="organization?.signingAuthority?.preferredFirstName"
          class="mb-4">
 
-  <div class="mb-3">
-    <strong>Preferred Name</strong>
-  </div>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
+
+    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
+            mat-icon-button
+            matTooltip="Edit Signing Authority"
+            (click)="onRoute(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
 
   <app-enrollee-property title="Preferred First Name">
     {{ organization?.signingAuthority?.preferredFirstName | default }}
@@ -41,12 +48,20 @@
 
 <section class="mb-4">
 
-  <div class="mb-3">
-    <strong>Contact Information</strong>
-  </div>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Contact Information</ng-container>
+
+    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
+            mat-icon-button
+            matTooltip="Edit Signing Authority"
+            (click)="onRoute(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
 
   <!-- TODO refactor this component is doesn't match a consistent pattern with enrolments for reuse -->
-  <app-party-review [party]="organization?.signingAuthority"></app-party-review>
+  <app-party-review [party]="organization?.signingAuthority"
+                    [showName]="false"></app-party-review>
 
 </section>
 
@@ -55,7 +70,7 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Organization Information</ng-container>
 
-    <button *ngIf="showEditRedirect && !organization.submittedDate"
+    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
             mat-icon-button
             matTooltip="Edit Organization Information"
             (click)="onRoute(SiteRoutes.ORGANIZATION_INFORMATION)">
@@ -82,7 +97,7 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Organization Type</ng-container>
 
-    <button *ngIf="showEditRedirect && !organization.submittedDate"
+    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
             mat-icon-button
             matTooltip="Edit Organization Type"
             (click)="onRoute(SiteRoutes.ORGANIZATION_TYPE)">

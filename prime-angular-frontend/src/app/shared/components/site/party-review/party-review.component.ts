@@ -9,4 +9,10 @@ import { Party } from '@registration/shared/models/party.model';
 })
 export class PartyReviewComponent {
   @Input() party: Party;
+  // TODO temporary fix for signing authority being different then the other parties
+  @Input() showName: boolean;
+
+  constructor() {
+    this.showName = true;
+  }
 }
