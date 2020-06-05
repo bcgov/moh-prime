@@ -49,8 +49,9 @@ export class BusinessLicenceComponent implements OnInit {
     this.filePondOptions = {
       class: 'prime-filepond',
       multiple: true,
-      labelIdle: 'Drop files here',
-      acceptedFileTypes: 'image/jpeg, image/png'
+      labelIdle: 'Click to Browse or Drop files here',
+      acceptedFileTypes: ['image/jpeg', 'image/png'],
+      allowFileTypeValidation: true,
     };
   }
 
@@ -67,32 +68,34 @@ export class BusinessLicenceComponent implements OnInit {
     const token = await this.keycloakTokenService.token();
     const file = event.file.file; // File for uploading
     const { name: filename, type: filetype } = file;
-    const upload = new tus.Upload(file, {
-      endpoint: `${environment.apiEndpoint}/document`,
-      retryDelays: [0, 3000, 5000, 10000, 20000],
-      metadata: { filename, filetype },
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        Authorization: `Bearer ${token}`,
-      },
-      onError: async (error: Error) => this.logger.error('BusinessLicence::onFilePondAddFile', error),
-      // TODO throws an error intermittently so commented out for release
-      // this.toastService.openErrorToast(error.message),
-      onProgress: async (bytesUploaded: number, bytesTotal: number) =>
-        this.filePondUploadProgress = (bytesUploaded / bytesTotal * 100),
-      onSuccess: async () => {
-        this.filePondUploadProgress = 100;
-        this.toastService.openSuccessToast('File(s) have been uploaded');
+    if (this.filePondOptions.acceptedFileTypes.includes(filetype)) {
+      const upload = new tus.Upload(file, {
+        endpoint: `${environment.apiEndpoint}/document`,
+        retryDelays: [0, 3000, 5000, 10000, 20000],
+        metadata: { filename, filetype },
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          Authorization: `Bearer ${token}`,
+        },
+        onError: async (error: Error) => this.logger.error('BusinessLicence::onFilePondAddFile', error),
+        // TODO throws an error intermittently so commented out for release
+        // this.toastService.openErrorToast(error.message),
+        onProgress: async (bytesUploaded: number, bytesTotal: number) =>
+          this.filePondUploadProgress = (bytesUploaded / bytesTotal * 100),
+        onSuccess: async () => {
+          this.filePondUploadProgress = 100;
+          this.toastService.openSuccessToast('File(s) have been uploaded');
 
-        const documentGuid = upload.url.split('/').pop();
-        const siteId = this.siteService.site.id;
+          const documentGuid = upload.url.split('/').pop();
+          const siteId = this.siteService.site.id;
 
-        this.siteResource
-          .createBusinessLicence(siteId, documentGuid, filename)
-          .subscribe();
-      }
-    });
-    upload.start();
+          this.siteResource
+            .createBusinessLicence(siteId, documentGuid, filename)
+            .subscribe();
+        }
+      });
+      upload.start();
+    }
   }
 
   public onBack() {
