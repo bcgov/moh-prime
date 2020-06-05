@@ -58,8 +58,21 @@ export class RemoteUserComponent implements OnInit {
       const remoteUsersFormArray = this.parent.get('remoteUsers') as FormArray;
 
       if (remoteUserIndex !== 'new') {
+        const remoteUserFormGroup = remoteUsersFormArray.at(remoteUserIndex);
+        const remoteUserLocationsFormArray = remoteUserFormGroup.get('remoteUserLocations') as FormArray;
+
+        // Changes in the amount of locations requires adjusting the number of
+        // locations in the parent, which is not handled automatically
+        if (this.remoteUserLocations.length !== remoteUserLocationsFormArray.length) {
+          remoteUserLocationsFormArray.clear();
+
+          Object.keys(this.remoteUserLocations.controls)
+            .map(() => this.siteFormStateService.remoteUserLocationFormGroup())
+            .forEach((group: FormGroup) => remoteUserLocationsFormArray.push(group));
+        }
+
         // Replace the updated remote user in the parent form for submission
-        remoteUsersFormArray.at(remoteUserIndex).reset(this.form.getRawValue());
+        remoteUserFormGroup.reset(this.form.getRawValue());
       } else {
         // Store the new remote user in the parent form for submission
         remoteUsersFormArray.push(this.form);
