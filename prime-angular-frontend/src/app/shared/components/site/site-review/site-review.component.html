@@ -1,18 +1,18 @@
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Site Name</ng-container>
+    <ng-container appPageSubheaderTitle>Location Name</ng-container>
 
     <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
-            matTooltip="Edit Site Name"
+            matTooltip="Edit Location Name"
             (click)="onRoute(SiteRoutes.SITE_ADDRESS)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Name">
-    {{ site?.name | default }}
+    {{ site?.location?.name | default }}
   </app-enrollee-property>
 
 </section>
@@ -20,11 +20,11 @@
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Site Address</ng-container>
+    <ng-container appPageSubheaderTitle>Location Address</ng-container>
 
     <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
-            matTooltip="Edit Site Address"
+            matTooltip="Edit Location Address"
             (click)="onRoute(SiteRoutes.SITE_ADDRESS)">
       <mat-icon>edit</mat-icon>
     </button>
@@ -99,7 +99,57 @@
 
 </section>
 
-<!-- TODO remote uses section list all users -->
+<section *ngIf="site?.remoteUsers.length > 0"
+         class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Remote Users</ng-container>
+
+    <button *ngIf="showEditRedirect && !site.submittedDate"
+            mat-icon-button
+            matTooltip="Edit Remote Users"
+            (click)="onRoute(SiteRoutes.REMOTE_USERS)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <ng-container *ngFor="let user of site?.remoteUsers">
+
+    <app-enrollee-property title="Name">
+      {{ user | fullname | default }}
+    </app-enrollee-property>
+
+    <ng-container *ngFor="let location of user.remoteUserLocations">
+      <div class="ml-2">
+        <div class="my-3">
+          <strong>Remote Address</strong>
+        </div>
+
+        <app-enrollee-property title="Internet Provider">
+          {{ location?.internetProvider | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Street Address">
+          {{ location?.physicalAddress?.street | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="City">
+          {{ location?.physicalAddress?.city | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Province">
+          {{ location?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Postal Code">
+          {{ location?.physicalAddress?.postal | postal | default }}
+        </app-enrollee-property>
+      </div>
+
+    </ng-container>
+  </ng-container>
+
+</section>
 
 <section class="mb-4">
 

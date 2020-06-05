@@ -18,7 +18,7 @@
   <h1 class="mb-2">SITE REGISTRATION REVIEW</h1>
 
   @* Location Information *@
-  <h2 class="mb-2">Location Information</h2>
+  <h2 class="mb-2">Site Information</h2>
 
   <div class="ml-2 mb-2">
     <h5>Location Name</h5>
@@ -80,6 +80,49 @@
     <h5>Vendor Email</h5>
     <span class="ml-2">@Model.Vendor.Email</span>
   </div>
+
+  @* Remote Users *@
+  <h2 class="mb-2">Remote Users</h2>
+
+  @foreach(var user in @Model.RemoteUsers )
+  {
+    <div class="ml-2 mb-2">
+      <h5>Name</h5>
+      <span class="ml-2">@user.FirstName @user.LastName</span>
+    </div>
+
+    @foreach(var location in @user.RemoteUserLocations )
+    {
+      <div class="ml-2 mb-2">
+        <strong>Remote Address</strong>
+      </div>
+
+      <div class="ml-2 mb-2">
+        <h5>Internet Provider</h5>
+        <span class="ml-2">@location.InternetProvider</span>
+      </div>
+
+      <div class="ml-2 mb-2">
+        <h5>Street Address</h5>
+        <span class="ml-2">@location.PhysicalAddress.Street</span>
+      </div>
+
+      <div class="ml-2 mb-2">
+        <h5>City</h5>
+        <span class="ml-2">@location.PhysicalAddress.City</span>
+      </div>
+
+      <div class="ml-2 mb-2">
+        <h5>Provice</h5>
+        <span class="ml-2">@location.PhysicalAddress.ProvinceCode</span>
+      </div>
+
+      <div class="ml-2 mb-2">
+        <h5>Postal Code</h5>
+        <span class="ml-2">@location.PhysicalAddress.Postal</span>
+      </div>
+    }
+  }
 
   @* Provisioner *@
   <h2 class="mb-2">Provisioner</h2>
