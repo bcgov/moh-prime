@@ -111,7 +111,7 @@ export class RemoteUserComponent implements OnInit {
     this.siteFormStateService.setForm(site);
 
     const remoteUserIndex = this.route.snapshot.params.index;
-    const remoteUser = this.parent.value.remoteUsers[remoteUserIndex];
+    const remoteUser = this.parent.getRawValue().remoteUsers[remoteUserIndex];
 
     // Create a local form group for creating or updating remote users
     this.form = this.siteFormStateService
@@ -141,7 +141,6 @@ export class RemoteUserComponent implements OnInit {
   }
 
   private disableProvince(remoteUserLocationFormGroups: FormGroup | FormGroup[]): void {
-
     (Array.isArray(remoteUserLocationFormGroups))
       ? remoteUserLocationFormGroups.forEach(group => this.disableProvince(group))
       : remoteUserLocationFormGroups.get('physicalAddress.provinceCode').disable();
