@@ -143,12 +143,14 @@
 
     <div class="ml-4 mb-3">
 
-      <app-enrollee-property title="Name">
-        {{ user | fullname | default }}
-      </app-enrollee-property>
+      <div class="mb-3">
+        <app-enrollee-property title="Name">
+          {{ user | fullname | default }}
+        </app-enrollee-property>
+      </div>
 
       <ng-container *ngFor="let location of user.remoteUserLocations">
-        <div class="mb-4">
+        <div class="mb-3">
           <strong>Remote Address</strong>
         </div>
 
