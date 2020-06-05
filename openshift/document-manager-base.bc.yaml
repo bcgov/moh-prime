@@ -51,6 +51,9 @@ objects:
           importPolicy: {}
           referencePolicy:
             type: Local
+    strategy:
+      dockerStrategy: 
+        dockerfilePath: document-manager-base.dockerfile
   - kind: ImageStream
     apiVersion: v1
     metadata:
@@ -85,7 +88,7 @@ objects:
         dockerStrategy:
           from:
             kind: ImageStreamTag
-            name: 'rhscl-python-36-rhel7:3.6.1-36'
+            name: rhscl-python-36-rhel7:3.6.1-36
           env: []
       output:
         to:

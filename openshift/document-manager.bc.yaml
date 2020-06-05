@@ -30,6 +30,81 @@ parameters:
     required: true
     value: dev
 objects:
+
+  - kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: rhscl-python-36-rhel7
+    creationTimestamp: null
+    annotations:
+      description: Python Base Image
+    labels:
+      shared: 'true'
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+      - name: 3.6.1-36
+        annotations: null
+        from:
+          kind: DockerImage
+          name: 'dqszvc-tools/python-36-rhel7:1-36'
+        importPolicy: {}
+        referencePolicy:
+          type: Local
+  strategy:
+    dockerStrategy: 
+      dockerfilePath: document-manager-base.dockerfile
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: '${NAME}${SUFFIX}'
+    creationTimestamp: null
+    annotations:
+      description: Python Runtime Image
+    labels:
+      shared: 'true'
+  spec:
+    lookupPolicy:
+      local: false
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    name: '${NAME}${SUFFIX}-base'
+    creationTimestamp: null
+    labels: {}
+    annotations: {}
+  spec:
+    completionDeadlineSeconds: 1440
+    triggers:
+      - type: ImageChange
+        imageChange: {}
+      - type: ConfigChange
+    runPolicy: SerialLatestOnly
+    source:
+      contextDir: openshift/docker-images/python-36-docman
+      type: Binary
+    strategy:
+      type: Docker
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: rhscl-python-36-rhel7:3.6.1-36
+        env: []
+    output:
+      to:
+        kind: ImageStreamTag
+        name: '${NAME}${SUFFIX}-base:latest'
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 250m
+        memory: 1Gi
+    postCommit: {}
+    nodeSelector: null
+
   - kind: ImageStream
     apiVersion: v1
     metadata:
