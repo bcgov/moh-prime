@@ -25,6 +25,7 @@ pipeline {
                     echo "Building ..."
                     /*sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"*/
+                    sh "./player.sh build documentmanagerbase dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build documentmanager dev -p SUFFIX=${SUFFIX}"
                 }
             }
