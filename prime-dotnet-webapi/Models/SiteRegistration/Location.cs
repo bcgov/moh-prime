@@ -15,6 +15,8 @@ namespace Prime.Models
 
         public string DoingBusinessAs { get; set; }
 
+        public string Name { get; set; }
+
         public PhysicalAddress PhysicalAddress { get; set; }
 
         public int? AdministratorPharmaNetId { get; set; }
