@@ -111,7 +111,13 @@ export class RemoteUserComponent implements OnInit {
     this.siteFormStateService.setForm(site);
 
     const remoteUserIndex = this.route.snapshot.params.index;
-    const remoteUser = this.parent.getRawValue().remoteUsers[remoteUserIndex];
+    const remoteUser = this.parent.getRawValue().remoteUsers[remoteUserIndex] as RemoteUser;
+
+    // Remote user at index does not exist likely due to a browser
+    // refresh on this page, and the URL param should be update
+    if (remoteUserIndex !== 'new' && !remoteUser) {
+      this.routeUtils.routeRelativeTo(['new']);
+    }
 
     // Create a local form group for creating or updating remote users
     this.form = this.siteFormStateService
@@ -122,7 +128,7 @@ export class RemoteUserComponent implements OnInit {
     // locally for submission by the sibling view. Therefore, there could
     // be multiple "new" entries without an unique identifier that might
     // be edited prior to submission so it was necessary to use an index
-    (remoteUserIndex !== 'new')
+    (remoteUserIndex !== 'new' && remoteUser)
       ? this.disableProvince(this.remoteUserLocations.controls as FormGroup[])
       : this.addRemoteUserLocation();
   }
