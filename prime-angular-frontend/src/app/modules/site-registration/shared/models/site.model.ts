@@ -5,7 +5,6 @@ import { RemoteUser } from './remote-user.model';
 
 export interface Site {
   id?: number;
-  name: string;
   provisionerId: number;
   provisioner: Party;
   locationId: number;

@@ -18,4 +18,5 @@ export interface Location {
   technicalSupport: Party;
   businessHours: BusinessDay[];
   doingBusinessAs?: string;
+  name: string;
 }
