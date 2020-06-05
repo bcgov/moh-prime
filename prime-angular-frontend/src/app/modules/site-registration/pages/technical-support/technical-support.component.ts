@@ -55,7 +55,9 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     }
     // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
-      this.form.disable();
+      if (isDisabled) {
+        this.form.disable();
+      }
       // TODO when spoking don't update
       const payload = this.siteFormStateService.site;
       this.siteResource
@@ -76,6 +78,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
       party.physicalAddress = new Address();
     }
     this.form.patchValue(party);
+    this.form.disable();
   }
 
   public onClear() {
@@ -96,8 +99,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
 
   public isSameAs() {
     return this.site.provisioner.userId === this.site.location.technicalSupport?.userId ||
-      this.site.location.administratorPharmaNet.userId === this.site.location.technicalSupport?.userId ||
-      this.site.location.privacyOfficer.userId === this.site.location.technicalSupport?.userId;
+      this.site.provisioner.userId === this.form.get('userId').value;
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
