@@ -117,7 +117,7 @@ services:
       - 6001:6001
     volumes:
       - ./document-manager/backend/:/app/
-    env_file: ./document-manager/backend/.env-prime
+    env_file: ./document-manager/backend/.env-prime-local
     networks:
       - primenet
 

@@ -1,7 +1,7 @@
-"""empty message
+"""
 
 Revision ID: 7eefdf5d93c4
-Revises: 136b2d0f435d
+Revises:
 Create Date: 2019-07-16 22:35:43.866229
 
 """
@@ -27,7 +27,7 @@ def upgrade():
                     sa.Column('full_storage_path', sa.String(length=4096), nullable=False),
                     sa.Column('upload_started_date', sa.DateTime(), nullable=False),
                     sa.Column('upload_completed_date', sa.DateTime(), nullable=True),
-                    sa.Column('file_display_name', sa.String(length=255), nullable=False),
+                    sa.Column('filename', sa.String(length=255), nullable=False),
                     sa.PrimaryKeyConstraint('document_id'))
     # ### end Alembic commands ###
 

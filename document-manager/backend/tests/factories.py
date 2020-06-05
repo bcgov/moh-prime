@@ -41,4 +41,4 @@ class DocumentFactory(BaseFactory):
                                                                   .file_display_name))
     upload_started_date = TODAY
     upload_completed_date = TODAY
-    file_display_name = factory.Faker('file_name')
+    filename = factory.Faker('file_name')
