@@ -274,7 +274,7 @@ namespace Prime.Services
                 _context.Locations.Remove(site.Location);
 
                 DeletePartyFromLocation(site.Location.AdministratorPharmaNet);
-                DeletePartyFromLocation(site.Location.PrivacyOfficer);
+                DeletePartyFromLocation(site.Location.TechnicalSupport);
                 DeletePartyFromLocation(site.Location.PrivacyOfficer);
             }
             _context.Sites.Remove(site);

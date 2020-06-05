@@ -24,6 +24,7 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
+import { FullnamePipe } from './pipes/fullname.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import {
@@ -60,7 +61,6 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { SiteReviewComponent } from './components/site/site-review/site-review.component';
 import { PartyReviewComponent } from './components/site/party-review/party-review.component';
-import { FullnamePipe } from './pipes/fullname.pipe';
 
 @NgModule({
   declarations: [
@@ -76,6 +76,7 @@ import { FullnamePipe } from './pipes/fullname.pipe';
     ReplacePipe,
     YesNoPipe,
     WeekdayPipe,
+    FullnamePipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -111,8 +112,7 @@ import { FullnamePipe } from './pipes/fullname.pipe';
     PageFooterComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    PartyReviewComponent,
-    FullnamePipe
+    PartyReviewComponent
   ],
   imports: [
     CommonModule,
@@ -146,6 +146,7 @@ import { FullnamePipe } from './pipes/fullname.pipe';
     ReplacePipe,
     YesNoPipe,
     WeekdayPipe,
+    FullnamePipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
@@ -174,8 +175,7 @@ import { FullnamePipe } from './pipes/fullname.pipe';
     PageFooterComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    PartyReviewComponent,
-    FullnamePipe
+    PartyReviewComponent
   ]
 })
 export class SharedModule { }
