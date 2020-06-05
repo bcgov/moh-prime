@@ -98,7 +98,7 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: "${NAME}${SUFFIX}-base:${VERSION}"
+          name: "${NAME}${SUFFIX}-base"
   - kind: BuildConfig
     apiVersion: v1
     metadata:
@@ -123,7 +123,7 @@ objects:
         sourceStrategy:
           from:
             kind: ImageStreamTag
-            name: "${NAME}${SUFFIX}-base:${VERSION}"
+            name: "${NAME}${SUFFIX}-base"
           env:
           - name: BUILD_LOGLEVEL
             value: '2'
