@@ -56,7 +56,12 @@ namespace Prime.Services
                 throw new ArgumentNullException(nameof(organization), "Could not create a site, the passed in Organization doesnt exist.");
             }
 
-            var location = new Location { OrganizationId = organization.Id };
+            var location = await this.GetLocationByOrganizationIdAsync(organizationId);
+
+            if(location == null)
+            {
+                location = new Location { OrganizationId = organization.Id };
+            }
 
             // Site provisionerId should be equal to organization signingAuthorityId
             var site = new Site
@@ -135,6 +140,14 @@ namespace Prime.Services
             {
                 return 0;
             }
+        }
+
+        private async Task<Location> GetLocationByOrganizationIdAsync(int organizationId)
+        {
+            // assmuing an organization only has 1 location
+            return await _context.Locations
+                .Where(l => l.OrganizationId == organizationId)
+                .FirstOrDefaultAsync();
         }
 
         private void UpdateLocation(Location current, Location updated)
