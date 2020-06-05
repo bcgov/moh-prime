@@ -266,22 +266,22 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        // private void DeleteLocation(Location location)
-        // {
-        //     // Check if relation exists before delete to allow delete of incomplete registrations
-        //     if (site.Location != null)
-        //     {
-        //         if (site.Location.PhysicalAddress != null)
-        //         {
-        //             _context.Addresses.Remove(site.Location.PhysicalAddress);
-        //         }
-        //         _context.Locations.Remove(site.Location);
+        private void DeleteLocation(Site site)
+        {
+            // Check if relation exists before delete to allow delete of incomplete registrations
+            if (site.Location != null)
+            {
+                if (site.Location.PhysicalAddress != null)
+                {
+                    _context.Addresses.Remove(site.Location.PhysicalAddress);
+                }
+                _context.Locations.Remove(site.Location);
 
-        //         DeletePartyFromLocation(site.Location.AdministratorPharmaNet);
-        //         DeletePartyFromLocation(site.Location.TechnicalSupport);
-        //         DeletePartyFromLocation(site.Location.PrivacyOfficer);
-        //     }
-        // }
+                DeletePartyFromLocation(site.Location.AdministratorPharmaNet);
+                DeletePartyFromLocation(site.Location.TechnicalSupport);
+                DeletePartyFromLocation(site.Location.PrivacyOfficer);
+            }
+        }
 
         private void DeletePartyFromLocation(Party party)
         {
