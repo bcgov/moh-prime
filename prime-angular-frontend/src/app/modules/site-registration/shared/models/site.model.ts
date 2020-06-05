@@ -12,7 +12,7 @@ export interface Site {
   vendorId: number;
   vendor: Vendor;
   remoteUsers: RemoteUser[];
-
+  businessLicences: [];
   pec: string;
   completed: boolean;
   approvedDate: string;

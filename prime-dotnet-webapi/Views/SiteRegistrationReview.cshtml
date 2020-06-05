@@ -58,6 +58,17 @@
     <span class="ml-2">@Model.Location.PhysicalAddress.CountryCode</span>
   </div>
 
+  @* Business Licences *@
+  <h2 class="mb-2">Business Licences</h2>
+
+  @foreach(var licence in @Model.BusinessLicences )
+  {
+    <div class="ml-2 mb-2">
+      <h5>Filename</h5>
+      <span class="ml-2">@licence.FileName</span>
+    </div>
+  }
+
   @* Hours of Operation *@
   <h2 class="mb-2">Hours of Operation</h2>
 
