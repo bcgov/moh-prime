@@ -8,7 +8,15 @@
                                (submit)="onSubmit()">
 
     <app-same-as selectFor="privacyOfficer"
-                 (selected)="onSelect($event)"></app-same-as>
+                 (selected)="onSelect($event)">
+      <button *ngIf="isSameAs()"
+              mat-stroked-button
+              type="button"
+              color="primary"
+              (click)="onClear()">
+        Enable Editing
+      </button>
+    </app-same-as>
 
     <ng-container appPageSubheaderSummary>
       Ensures the site adheres to the requirements of applicable privacy and security legislation and responds on the

@@ -48,8 +48,14 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
+    // TODO temporary fix for allow submissions of disabled forms
+    const isDisabled = this.form.disabled;
+    if (isDisabled) {
+      this.form.enable();
+    }
     // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
+      this.form.disable();
       // TODO when spoking don't update
       const payload = this.siteFormStateService.site;
       this.siteResource
@@ -58,6 +64,10 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
           this.form.markAsPristine();
           this.nextRoute();
         });
+    } else {
+      if (isDisabled) {
+        this.form.disable();
+      }
     }
   }
 
@@ -66,6 +76,14 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
       party.physicalAddress = new Address();
     }
     this.form.patchValue(party);
+  }
+
+  public onClear() {
+    this.form.reset({
+      id: 0,
+      userId: '00000000-0000-0000-0000-000000000000'
+    });
+    this.form.enable();
   }
 
   public onBack() {
@@ -78,6 +96,11 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
     } else {
       this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
     }
+  }
+
+  public isSameAs() {
+    return this.site.provisioner.userId === this.site.location.privacyOfficer?.userId ||
+      this.site.location.administratorPharmaNet.userId === this.site.location.privacyOfficer?.userId;
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -102,5 +125,10 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
     this.isCompleted = this.site?.completed;
     // TODO cannot set form each time the view is loaded when updating
     this.siteFormStateService.setForm(this.site, true);
+
+    // TODO temporary fix to disable same as party
+    if (this.isSameAs()) {
+      this.form.disable();
+    }
   }
 }
