@@ -58,8 +58,21 @@ export class RemoteUserComponent implements OnInit {
       const remoteUsersFormArray = this.parent.get('remoteUsers') as FormArray;
 
       if (remoteUserIndex !== 'new') {
+        const remoteUserFormGroup = remoteUsersFormArray.at(remoteUserIndex);
+        const remoteUserLocationsFormArray = remoteUserFormGroup.get('remoteUserLocations') as FormArray;
+
+        // Changes in the amount of locations requires adjusting the number of
+        // locations in the parent, which is not handled automatically
+        if (this.remoteUserLocations.length !== remoteUserLocationsFormArray.length) {
+          remoteUserLocationsFormArray.clear();
+
+          Object.keys(this.remoteUserLocations.controls)
+            .map(() => this.siteFormStateService.remoteUserLocationFormGroup())
+            .forEach((group: FormGroup) => remoteUserLocationsFormArray.push(group));
+        }
+
         // Replace the updated remote user in the parent form for submission
-        remoteUsersFormArray.at(remoteUserIndex).reset(this.form.getRawValue());
+        remoteUserFormGroup.reset(this.form.getRawValue());
       } else {
         // Store the new remote user in the parent form for submission
         remoteUsersFormArray.push(this.form);
@@ -111,7 +124,13 @@ export class RemoteUserComponent implements OnInit {
     this.siteFormStateService.setForm(site);
 
     const remoteUserIndex = this.route.snapshot.params.index;
-    const remoteUser = this.parent.getRawValue().remoteUsers[remoteUserIndex];
+    const remoteUser = this.parent.getRawValue().remoteUsers[remoteUserIndex] as RemoteUser;
+
+    // Remote user at index does not exist likely due to a browser
+    // refresh on this page, and the URL param should be update
+    if (remoteUserIndex !== 'new' && !remoteUser) {
+      this.routeUtils.routeRelativeTo(['new']);
+    }
 
     // Create a local form group for creating or updating remote users
     this.form = this.siteFormStateService
@@ -122,7 +141,7 @@ export class RemoteUserComponent implements OnInit {
     // locally for submission by the sibling view. Therefore, there could
     // be multiple "new" entries without an unique identifier that might
     // be edited prior to submission so it was necessary to use an index
-    (remoteUserIndex !== 'new')
+    (remoteUserIndex !== 'new' && remoteUser)
       ? this.disableProvince(this.remoteUserLocations.controls as FormGroup[])
       : this.addRemoteUserLocation();
   }

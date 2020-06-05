@@ -36,6 +36,7 @@
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v1.html" />
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v2.html" />
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v3.html" />
+    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v4.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v1.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v2.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v3.html" />

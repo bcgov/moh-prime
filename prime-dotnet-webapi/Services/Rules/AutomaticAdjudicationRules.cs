@@ -156,6 +156,19 @@ namespace Prime.Services.Rules
         }
     }
 
+    public class RequestingRemoteAccessRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.RequestingRemoteAccess)
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.RequestingRemoteAccess);
+            }
+
+            return Task.FromResult(!enrollee.RequestingRemoteAccess);
+        }
+    }
+
     public class IdentityAssuranceLevelRule : AutomaticAdjudicationRule
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)

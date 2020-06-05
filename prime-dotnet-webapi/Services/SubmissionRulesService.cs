@@ -42,7 +42,8 @@ namespace Prime.Services
                 new LicenceClassRule(),
                 new AlwaysManualRule(),
                 new IdentityAssuranceLevelRule(),
-                new IdentityProviderRule()
+                new IdentityProviderRule(),
+                new RequestingRemoteAccessRule()
             };
 
             return await ProcessRules(rules, enrollee);
