@@ -1,3 +1,7 @@
+<app-enrollee-property title="Name">
+  {{ party | fullname | default }}
+</app-enrollee-property>
+
 <app-enrollee-property title="Job or Role Title">
   {{ party?.jobRoleTitle | default }}
 </app-enrollee-property>
