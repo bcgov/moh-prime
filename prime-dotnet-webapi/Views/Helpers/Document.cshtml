@@ -4,7 +4,7 @@
 @{
   var fileExt = Model.Filename.Split(".").Last();
   var base64 = Convert.ToBase64String(Model.Data);
-  var imgSrc = String.Format($"data:image/{fileExt};base64,{0}", base64);
+  var imgSrc = $"data:image/{fileExt};base64,{base64}";
 }
 
 <img src="@imgSrc">
