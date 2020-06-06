@@ -8,7 +8,7 @@ RUN mkdir /app
 WORKDIR /app
 
 # Install the requirements
-COPY requirements.txt .
+COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
