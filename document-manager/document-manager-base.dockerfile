@@ -1,4 +1,4 @@
-FROM "__FROM_IMAGE_STREAM_DEFINED_IN_TEMPLATE__"
+FROM docker-registry.default.svc:5000/dqszvc-tools/python-36-rhel7
 
 # Install sonar-scanner
 RUN curl -sLo /tmp/sonar-scanner-cli.zip https://dl.bintray.com/sonarsource/SonarQube/org/sonarsource/scanner/cli/sonar-scanner-cli/3.2.0.1227/sonar-scanner-cli-3.2.0.1227-linux.zip && \
@@ -7,7 +7,6 @@ RUN curl -sLo /tmp/sonar-scanner-cli.zip https://dl.bintray.com/sonarsource/Sona
     rm -rf ${APP_ROOT}/_sonar-scanner-cli \
     rm /tmp/sonar-scanner-cli.zip && \
     chmod -R 755 ${APP_ROOT}/sonar-scanner-cli
-
 
 # Install project dependencies
 COPY requirements.txt ${APP_ROOT}/src
