@@ -8,10 +8,10 @@ RUN curl -sLo /tmp/sonar-scanner-cli.zip https://dl.bintray.com/sonarsource/Sona
     rm /tmp/sonar-scanner-cli.zip && \
     chmod -R 755 ${APP_ROOT}/sonar-scanner-cli
 
-COPY app/requirements.txt ${APP_ROOT}/src
 RUN ls -alh ${APP_ROOT}/src
 # Install project dependencies
-COPY requirements.txt ${APP_ROOT}/src
+COPY ./requirements.txt ${APP_ROOT}/src
+
 RUN source /opt/app-root/etc/scl_enable && \
     set -x && \
     pip install -U pip setuptools wheel && \
