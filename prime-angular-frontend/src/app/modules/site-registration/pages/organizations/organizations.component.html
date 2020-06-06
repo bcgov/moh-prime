@@ -2,7 +2,7 @@
   <app-page-header>{{ title }}</app-page-header>
   <!-- TODO allow base progress indicator to not have a message by default instead of hacking in a space -->
   <app-site-progress-indicator [inProgress]="false"
-                               message=" "></app-site-progress-indicator>
+                               [noContent]="true"></app-site-progress-indicator>
 
   <div *ngIf="hasSubmittedSite"
        class="mb-4">
@@ -100,7 +100,8 @@
     <ng-container *ngFor="let site of sites; let i = index; let last = last">
       <mat-card class="has-hover mb-3">
         <mat-card-header class="no-avatar">
-          <mat-card-title>{{ site?.name | default: 'Site Information' }}</mat-card-title>
+          <!-- TODO only added for single organization and location then remove -->
+          <mat-card-title>{{ organizations[0].location[0]?.name | default: 'Site Information' }}</mat-card-title>
 
           <ng-container [ngTemplateOutlet]="siteMenu"
                         [ngTemplateOutletContext]="{ site: site }"></ng-container>

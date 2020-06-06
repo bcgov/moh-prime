@@ -61,6 +61,7 @@ import { PageFooterComponent } from './components/page-footer/page-footer.compon
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { SiteReviewComponent } from './components/site/site-review/site-review.component';
 import { PartyReviewComponent } from './components/site/party-review/party-review.component';
+import { ProgressIndicator2Component } from './components/progress-indicator2/progress-indicator2.component';
 
 @NgModule({
   declarations: [
@@ -112,7 +113,8 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     PageFooterComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    PartyReviewComponent
+    PartyReviewComponent,
+    ProgressIndicator2Component
   ],
   imports: [
     CommonModule,
@@ -175,7 +177,8 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     PageFooterComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    PartyReviewComponent
+    PartyReviewComponent,
+    ProgressIndicator2Component
   ]
 })
 export class SharedModule { }

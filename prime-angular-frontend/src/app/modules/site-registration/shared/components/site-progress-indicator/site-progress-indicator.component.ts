@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
 
-import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
   selector: 'app-site-progress-indicator',
@@ -10,16 +11,28 @@ import { SiteRoutes } from 'app/modules/site-registration/site-registration.rout
   styleUrls: ['./site-progress-indicator.component.scss']
 })
 export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicator {
-  @Input() public currentRoute: string;
   @Input() public inProgress: boolean;
   @Input() public message: string;
+  @Input() public template: TemplateRef<any>;
+  @Input() public noContent: boolean;
+
+  public currentRoute: string;
   public routes: string[];
   public prefix: string;
 
   public SiteRoutes = SiteRoutes;
 
-  constructor() {
-    this.routes = SiteRoutes.initialRegistrationRouteOrder();
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.currentRoute = this.route.snapshot.routeConfig.path;
+    // Possible route pathways within site registration
+    const routePaths = [
+      SiteRoutes.organizationRegistrationRouteOrder(),
+      SiteRoutes.siteRegistrationRouteOrder()
+    ];
+    this.routes = routePaths.filter(rp => rp.includes(this.currentRoute)).shift();
     this.prefix = 'Registration';
   }
 

@@ -1,4 +1,5 @@
 import { Party } from './party.model';
+import { Location } from './location.model';
 
 export interface Organization {
   id?: number;
@@ -9,6 +10,7 @@ export interface Organization {
   doingBusinessAs?: string;
   organizationTypeCode: number;
   acceptedAgreementDate: string;
+  location: Location[];
   submittedDate: string;
   completed: boolean;
 }
