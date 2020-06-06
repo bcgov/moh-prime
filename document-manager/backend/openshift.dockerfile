@@ -1,4 +1,4 @@
-FROM docker-registry.default.svc:5000/dqszvc-tools/python-36-rhel7:1-36
+FROM document-manager-base{$SUFFIX}
 
 # Update installation utility
 RUN apt-get update

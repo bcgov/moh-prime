@@ -30,129 +30,58 @@ parameters:
     required: true
     value: dev
 objects:
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: rhscl-python-36-rhel7
-    creationTimestamp: null
-    annotations:
-      description: Python Base Image
-    labels:
-      shared: 'true'
-  spec:
-    lookupPolicy:
-      local: false
-    tags:
-      - name: 3.6.1-36
-        annotations: null
-        from:
-          kind: DockerImage
-          name: 'dqszvc-tools/python-36-rhel7:1-36'
-        importPolicy: {}
-        referencePolicy:
-          type: Local
-  strategy:
-    dockerStrategy: 
-      dockerfilePath: document-manager-base.dockerfile
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: '${NAME}${SUFFIX}-base'
-    creationTimestamp: null
-    annotations:
-      description: Python Runtime Image
-    labels:
-      shared: 'true'
-  spec:
-    lookupPolicy:
-      local: false
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: '${NAME}${SUFFIX}-base'
-    creationTimestamp: null
-    labels: {}
-    annotations: {}
-  spec:
-    completionDeadlineSeconds: 1440
-    triggers:
-      - type: ImageChange
-        imageChange: {}
-      - type: ConfigChange
-    runPolicy: SerialLatestOnly
-    source:
-      contextDir: openshift/docker-images/python-36-docman
-      type: Binary
-    strategy:
-      type: Docker
-      dockerStrategy:
-        from:
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: '${NAME}${SUFFIX}'
+      creationTimestamp: null
+      labels:
+        shared: 'true'
+      annotations:
+        description: Keeps track of changes in the application image
+    spec:
+      lookupPolicy:
+        local: false
+      tags: []
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: '${NAME}${SUFFIX}'
+      creationTimestamp: null
+      annotations:
+        description: Defines how to build the application
+    spec:
+      completionDeadlineSeconds: 600
+      triggers:
+        - type: ImageChange
+        - type: ConfigChange
+      runPolicy: SerialLatestOnly
+      source:
+        type: Git
+        git:
+          uri: '${SOURCE_REPOSITORY_URL}'
+          ref: '${SOURCE_REPOSITORY_REF}'
+        contextDir: '${SOURCE_CONTEXT_DIR}'
+      strategy:
+        type: Source
+        sourceStrategy:
+          from:
+            kind: ImageStreamTag
+            name: '${NAME}${SUFFIX}-base:latest'
+          env:
+            - name: SUFFIX
+              value: ${SUFFIX}
+            - name: BUILD_LOGLEVEL
+              value: '2'
+      output:
+        to:
           kind: ImageStreamTag
-          name: rhscl-python-36-rhel7:3.6.1-36
-        env: []
-    output:
-      to:
-        kind: ImageStreamTag
-        name: '${NAME}${SUFFIX}-base:latest'
-    resources:
-      limits:
-        cpu: 500m
-        memory: 2Gi
-      requests:
-        cpu: 250m
-        memory: 1Gi
-    postCommit: {}
-    nodeSelector: null
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: '${NAME}${SUFFIX}'
-    creationTimestamp: null
-    labels:
-      shared: 'true'
-    annotations:
-      description: Keeps track of changes in the application image
-  spec:
-    lookupPolicy:
-      local: false
-    tags: []
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: '${NAME}${SUFFIX}'
-    creationTimestamp: null
-    annotations:
-      description: Defines how to build the application
-  spec:
-    completionDeadlineSeconds: 600
-    triggers:
-      - type: ImageChange
-      - type: ConfigChange
-    runPolicy: SerialLatestOnly
-    source:
-      type: Git
-      git:
-        uri: '${SOURCE_REPOSITORY_URL}'
-        ref: '${SOURCE_REPOSITORY_REF}'
-      contextDir: '${SOURCE_CONTEXT_DIR}'
-    strategy:
-      type: Source
-      sourceStrategy:
-        from:
-          kind: ImageStreamTag
-          name: '${NAME}${SUFFIX}-base:latest'
-        env:
-          - name: BUILD_LOGLEVEL
-            value: '2'
-    output:
-      to:
-        kind: ImageStreamTag
-        name: '${NAME}${SUFFIX}:latest'
-    resources:
-      limits:
-        cpu: 200m
-        memory: 2Gi
-      requests:
-        cpu: 100m
-        memory: 1Gi
-    nodeSelector: null
+          name: '${NAME}${SUFFIX}:latest'
+      resources:
+        limits:
+          cpu: 200m
+          memory: 2Gi
+        requests:
+          cpu: 100m
+          memory: 1Gi
+      nodeSelector: null
