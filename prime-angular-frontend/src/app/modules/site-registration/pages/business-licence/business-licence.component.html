@@ -17,6 +17,15 @@
              (onaddfile)="onFilePondAddFile($event)">
   </file-pond>
 
+  <app-alert *ngIf="hasNoLicenceError"
+             type="danger"
+             icon="warning">
+    <ng-container #alertContent
+                  class="alert-content">
+      Each site is required to upload a business licence.
+    </ng-container>
+  </app-alert>
+
   <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"
                    primaryActionLabel="Continue"

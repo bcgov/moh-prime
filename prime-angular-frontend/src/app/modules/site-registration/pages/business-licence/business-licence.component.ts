@@ -16,6 +16,8 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-business-licence',
@@ -29,6 +31,8 @@ export class BusinessLicenceComponent implements OnInit {
   public businessLicences: BusinessLicence[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public hasNoLicenceError: boolean;
+  public uploadedFile: boolean;
 
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
   public filePondOptions: { [key: string]: any };
@@ -42,7 +46,8 @@ export class BusinessLicenceComponent implements OnInit {
     private siteResource: SiteResource,
     private keycloakTokenService: KeycloakTokenService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private formUtilsService: FormUtilsService
   ) {
     this.title = 'Submit Your Business Licence';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -57,7 +62,12 @@ export class BusinessLicenceComponent implements OnInit {
 
   public onSubmit() {
     // TODO has to have at least one document uploaded
-    this.nextRoute();
+
+    if (this.siteService.site.businessLicences.length > 0 || this.uploadedFile) {
+      this.nextRoute();
+    } else {
+      this.hasNoLicenceError = true;
+    }
   }
 
   public onFilePondInit() {
@@ -92,6 +102,9 @@ export class BusinessLicenceComponent implements OnInit {
           this.siteResource
             .createBusinessLicence(siteId, documentGuid, filename)
             .subscribe();
+
+          this.uploadedFile = true;
+          this.hasNoLicenceError = false;
         }
       });
       upload.start();
@@ -113,6 +126,8 @@ export class BusinessLicenceComponent implements OnInit {
   public ngOnInit() {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
+
+    this.uploadedFile = false;
   }
 
   private getBusinessLicences() {

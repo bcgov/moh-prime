@@ -196,10 +196,11 @@ namespace Prime.Services
         private IQueryable<Organization> GetBaseOrganizationQuery()
         {
             return _context.Organizations
+                .Include(o => o.Locations)
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(o => o.SigningAuthority)
-                    .ThenInclude(p => p.MailingAddress);;
+                    .ThenInclude(p => p.MailingAddress);
         }
     }
 }
