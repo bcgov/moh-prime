@@ -144,7 +144,11 @@ namespace Prime.Services
             };
             var pdfs = pdfContents.Select(content => _pdfService.Generate(content));
 
-            var attachments = pdfs.Select(pdf => new Attachment(new MemoryStream(pdf), new ContentType("application/pdf")));
+            // TODO: Weird work around to have the filenames show up possibly on the attachments
+            List<Attachment> attachments = new List<Attachment>();
+            attachments.Add(new Attachment(new MemoryStream(pdfs.First()), "OrganizationAgreement.pdf", "application/pdf"));
+            attachments.Add(new Attachment(new MemoryStream(pdfs.First()), "SiteRegistrationReview.pdf", "application/pdf"));
+            attachments.Add(new Attachment(new MemoryStream(pdfs.First()), "BusinessLicence.pdf", "application/pdf"));
 
             await Send(PRIME_EMAIL, MOH_EMAIL, subject, body, attachments);
         }
