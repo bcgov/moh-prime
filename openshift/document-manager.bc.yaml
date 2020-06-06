@@ -67,7 +67,7 @@ objects:
         sourceStrategy:
           from:
             kind: ImageStreamTag
-            name: '${NAME}${SUFFIX}-base:latest'
+            name: '${NAME}-base${SUFFIX}:latest'
           env:
             - name: SUFFIX
               value: ${SUFFIX}
