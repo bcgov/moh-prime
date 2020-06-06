@@ -30,7 +30,6 @@ parameters:
     required: true
     value: dev
 objects:
-
   - kind: ImageStream
   apiVersion: v1
   metadata:
