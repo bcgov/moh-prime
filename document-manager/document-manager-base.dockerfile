@@ -7,8 +7,8 @@ RUN curl -sLo /tmp/sonar-scanner-cli.zip https://dl.bintray.com/sonarsource/Sona
     rm -rf ${APP_ROOT}/_sonar-scanner-cli \
     rm /tmp/sonar-scanner-cli.zip && \
     chmod -R 755 ${APP_ROOT}/sonar-scanner-cli
-RUN ls -alh
-COPY . ${APP_ROOT}/src
+
+COPY app/requirements.txt ${APP_ROOT}/src
 RUN ls -alh ${APP_ROOT}/src
 # Install project dependencies
 COPY requirements.txt ${APP_ROOT}/src
