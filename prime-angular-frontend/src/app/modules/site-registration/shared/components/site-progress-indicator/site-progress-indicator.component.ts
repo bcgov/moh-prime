@@ -26,15 +26,27 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
     private route: ActivatedRoute,
     private router: Router
   ) {
-    this.currentRoute = this.route.snapshot.routeConfig.path;
+    this.currentRoute = this.getCurrentRoute();
+
     // Possible route pathways within site registration
     const routePaths = [
       SiteRoutes.organizationRegistrationRouteOrder(),
       SiteRoutes.siteRegistrationRouteOrder()
     ];
+
     this.routes = routePaths.filter(rp => rp.includes(this.currentRoute)).shift();
     this.prefix = 'Registration';
   }
 
   public ngOnInit() { }
+
+  private getCurrentRoute(): string {
+    return this.router.url
+      .split('/')
+      // Remove URL params that are numbers
+      .filter(p => !/^\d+$/.test(p))
+      // Blacklisted URL params
+      .filter(p => !['new'].includes(p))
+      .pop(); // Current route is the last index
+  }
 }

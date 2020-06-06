@@ -1,7 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"
-                               [currentRoute]="SiteRoutes.BUSINESS_LICENCE"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
@@ -22,7 +21,7 @@
              icon="warning">
     <ng-container #alertContent
                   class="alert-content">
-      Each site is required to upload a business licence.
+      No business licence has been uploaded.
     </ng-container>
   </app-alert>
 

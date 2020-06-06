@@ -4,13 +4,15 @@ export class SiteRoutes {
   public static COLLECTION_NOTICE = 'collection-notice';
 
   public static ORGANIZATIONS = 'organizations';
+
   public static ORGANIZATION_SIGNING_AUTHORITY = 'organization-signing-authority';
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static ORGANIZATION_TYPE = 'organization-type';
   public static ORGANIZATION_REVIEW = 'organization-review';
-  public static ORGANIZATION_AGREEMENT = 'access-agreement';
+  public static ORGANIZATION_AGREEMENT = 'organization-agreement';
 
   public static SITES = 'sites';
+
   public static SITE_ADDRESS = 'site-address';
   public static BUSINESS_LICENCE = 'business-licence';
   public static HOURS_OPERATION = 'hours-operation';
