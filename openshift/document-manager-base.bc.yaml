@@ -50,7 +50,7 @@ objects:
     labels: {}
     annotations: {}
   spec:
-    completionDeadlineSeconds: 1440
+    completionDeadlineSeconds: 6000
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -65,9 +65,6 @@ objects:
       type: Docker
       dockerStrategy:
         dockerfilePath: document-manager-base.dockerfile
-        from:
-          kind: ImageStreamTag
-          name: rhscl-python-36-rhel7:3.6.1-36
         env: []
     output:
       to:
