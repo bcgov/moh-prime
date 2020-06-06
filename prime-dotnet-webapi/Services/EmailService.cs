@@ -132,23 +132,23 @@ namespace Prime.Services
             }
             catch (NullReferenceException)
             {
-                // TODO want to abort the email, log, and retry, but make it work for the demo
+                // TODO abort, log, and retry, but make it work for the demo for now
                 document = new Document("business-licence.pdf", new byte[20]);
             }
 
-            var pdfContents = new[]
-            {
-                await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", new Organization()),
-                await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site),
-                await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", document)
-            };
-            var pdfs = pdfContents.Select(content => _pdfService.Generate(content));
+            var location = await _context.Locations
+                .Where(l => l.Id == site.LocationId)
+                .Include(l => l.Organization)
+                .SingleOrDefaultAsync();
 
-            // TODO: Weird work around to have the filenames show up possibly on the attachments
-            List<Attachment> attachments = new List<Attachment>();
-            attachments.Add(new Attachment(new MemoryStream(pdfs.First()), "OrganizationAgreement.pdf", "application/pdf"));
-            attachments.Add(new Attachment(new MemoryStream(pdfs.First()), "SiteRegistrationReview.pdf", "application/pdf"));
-            attachments.Add(new Attachment(new MemoryStream(pdfs.First()), "BusinessLicence.pdf", "application/pdf"));
+            var attachments = new (string Filename, string HtmlContent)[]
+            {
+                ("OrganizationAgreement.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", location.Organization)),
+                ("SiteRegistrationReview.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
+                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", document))
+            }
+            .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)))
+            .Select(pdf => new Attachment(new MemoryStream(pdf.Content), pdf.Filename, "application/pdf"));
 
             await Send(PRIME_EMAIL, MOH_EMAIL, subject, body, attachments);
         }

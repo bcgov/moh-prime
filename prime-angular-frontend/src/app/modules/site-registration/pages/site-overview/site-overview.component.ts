@@ -58,9 +58,9 @@ export class SiteOverviewComponent implements OnInit, IPage {
         )
       )
       .subscribe(() =>
-        // this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS], {
-        //   queryParams: { submitted: true }
-        // })
+        this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS], {
+          queryParams: { submitted: true }
+        })
       );
   }
 
