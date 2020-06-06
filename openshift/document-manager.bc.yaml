@@ -30,7 +30,7 @@ parameters:
     required: true
     value: dev
 objects:
-  - kind: ImageStream
+- kind: ImageStream
   apiVersion: v1
   metadata:
     name: rhscl-python-36-rhel7
