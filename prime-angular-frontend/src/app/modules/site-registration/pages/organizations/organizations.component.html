@@ -21,18 +21,17 @@
   </div>
 
   <section class="mb-3">
-
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>
         Submit details about your organization and sites here
       </ng-container>
-      <ng-container appPageSubheaderSummary>
+      <ng-container appPageSubheader2Summary>
         An organization is the legal entity that operates/controls one or more sites where PharmaNet is accessed
         (e.g., a sole proprietorship, limited partnership, corporation). A site is the combination of location and
         PharmaNet software vendor. If your location has more than one vendor, you will need to submit a separate site
         registration.
       </ng-container>
-    </app-page-subheader>
+    </app-page-subheader2>
 
     <ng-container *ngFor="let organization of organizations; let i = index; let last = last">
 
@@ -81,7 +80,6 @@
         </button>
       </mat-card-actions>
     </mat-card>
-
   </section>
 
   <button mat-button
@@ -95,7 +93,6 @@
   </button>
 
   <section class="mb-3">
-
     <!-- TODO only for single organization then remove -->
     <ng-container *ngFor="let site of sites; let i = index; let last = last">
       <mat-card class="has-hover mb-3">
@@ -125,7 +122,6 @@
         </mat-card-actions>
       </mat-card>
     </ng-container>
-
   </section>
 
   <ng-template #organizationMenu

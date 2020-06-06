@@ -7,12 +7,12 @@
   <app-site-progress-indicator [inProgress]="!site?.completed"></app-site-progress-indicator>
 
   <div class="mb-5">
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
-      <ng-container appPageSubheaderSummary>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
         Review the site information you provided.
       </ng-container>
-    </app-page-subheader>
+    </app-page-subheader2>
   </div>
 
   <app-site-review *ngIf="site"

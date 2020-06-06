@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, TemplateRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
-import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
+import { IProgressIndicator } from '@enrolment/shared/components/progress-indicator/progress-indicator.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 
@@ -23,7 +23,6 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   public SiteRoutes = SiteRoutes;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router
   ) {
     this.currentRoute = this.getCurrentRoute();

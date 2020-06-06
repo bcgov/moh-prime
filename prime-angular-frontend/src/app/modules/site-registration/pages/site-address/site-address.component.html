@@ -7,13 +7,12 @@
         novalidate>
 
     <section class="mb-3">
-
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
-        <ng-container appPageSubheaderSummary>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+        <ng-container appPageSubheader2Summary>
           As on business licence; may be the same as organization name or "doing business as" name.
         </ng-container>
-      </app-page-subheader>
+      </app-page-subheader2>
 
       <div class="row">
         <div class="col">
@@ -28,21 +27,19 @@
 
         </div>
       </div>
-
     </section>
 
     <section class="mb-3">
 
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Location Address</ng-container>
-        <ng-container appPageSubheaderSummary>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Location Address</ng-container>
+        <ng-container appPageSubheader2Summary>
           Provide the address of your location (British Columbia only)
         </ng-container>
-      </app-page-subheader>
+      </app-page-subheader2>
 
       <app-address [form]="physicalAddress"
                    [formControlNames]="formControlNames"></app-address>
-
     </section>
 
   </form>

@@ -8,12 +8,12 @@
 
     <section class="mb-3">
 
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
-        <ng-container appPageSubheaderSummary>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+        <ng-container appPageSubheader2Summary>
           Specify the days and times your location is open or functioning.
         </ng-container>
-      </app-page-subheader>
+      </app-page-subheader2>
 
       <app-business-hours [form]="form"
                           (add)="onAdd($event)"

@@ -6,11 +6,11 @@
         (ngOnSubmit)="onSubmit()"
         novalidate>
 
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>
         Remote User
       </ng-container>
-    </app-page-subheader>
+    </app-page-subheader2>
 
     <section class="mb-3">
       <div class="row">
@@ -37,16 +37,16 @@
       </div>
     </section>
 
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>
         Remote Address
       </ng-container>
-      <ng-container appPageSubheaderSummary>
+      <ng-container appPageSubheader2Summary>
         The remote address is the location the practitioner will be accessing PharmaNet outside the physical boundaries
         of the authorized community practice location (e.g., from their home). The remote address cannot be another
         healthcare practice setting.
       </ng-container>
-    </app-page-subheader>
+    </app-page-subheader2>
 
     <ng-container *ngFor="let remoteUserLocation of remoteUserLocations.controls; let i = index; let last = last"
                   formArrayName="remoteUserLocations">

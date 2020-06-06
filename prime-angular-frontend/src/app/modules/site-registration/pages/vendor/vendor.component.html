@@ -5,15 +5,14 @@
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
         novalidate>
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
-      <ng-container appPageSubheaderSummary>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
         If you have more than one vendor, you will need to complete another site registration.
       </ng-container>
-    </app-page-subheader>
+    </app-page-subheader2>
 
     <section class="mb-4">
-
       <mat-radio-group class="radio-group"
                        formControlName="id"
                        (change)="onChange()">
@@ -32,7 +31,6 @@
           No vendor has been chosen.
         </ng-container>
       </app-alert>
-
     </section>
 
   </form>

@@ -6,14 +6,14 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!organization?.completed"></app-site-progress-indicator>
 
-  <div class="mb-5">
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
-      <ng-container appPageSubheaderSummary>
+  <section class="mb-5">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
         Review the organization information you have provided.
       </ng-container>
-    </app-page-subheader>
-  </div>
+    </app-page-subheader2>
+  </section>
 
   <app-organization-review *ngIf="organization"
                            [organization]="organization"

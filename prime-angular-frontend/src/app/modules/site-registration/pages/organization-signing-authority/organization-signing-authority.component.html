@@ -6,14 +6,13 @@
         novalidate>
 
     <section class="mb-3">
-      <app-page-subheader [summaryAsInfo]="true">
-        <ng-container appPageSubheaderTitle>Signing Authority Information</ng-container>
-        <ng-container appPageSubheaderSummary>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Signing Authority Information</ng-container>
+        <!-- <ng-container appPageSubheader2Summary>
           Your name, address and date of birth are as they appear on your BC Services Card. Provide a preferred name if
           you have one.
-        </ng-container>
-        <!-- TODO make a new directive specifically for summary help, align with existing subtitle or summary if exists -->
-        <ng-container appPageSubheaderSummary>
+        </ng-container> -->
+        <ng-container appPageSubheader2MoreInfo>
           The Signing Authority must be a duly authorized representative of the organization with authority to submit
           the site request on the organization’s behalf. This is the individual who will be designated as responsible
           for PharmaNet activities at the location being set up for PharmaNet access (site). This person must be the
@@ -26,7 +25,7 @@
           Practice Site Request for new PharmaNet access sites, updates to existing information for a PharmaNet access
           sites, discontinuing current software vendors, or discontinuations of PharmaNet access at a site.
         </ng-container>
-      </app-page-subheader>
+      </app-page-subheader2>
 
       <div class="row mb-3">
         <div class="col-6 mb-3">
@@ -54,14 +53,13 @@
     <ng-container *ngIf="hasPreferredName">
 
       <section class="mb-3">
-
-        <app-page-subheader>
-          <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
-          <ng-container appPageSubheaderSummary>
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>Preferred Name</ng-container>
+          <ng-container appPageSubheader2Summary>
             If you have a name that is different than your legal name that people know you by, enter your full
             preferred name.
           </ng-container>
-        </app-page-subheader>
+        </app-page-subheader2>
 
         <div class="row">
           <div class="col">
@@ -98,19 +96,17 @@
 
           </div>
         </div>
-
       </section>
 
     </ng-container>
 
     <section class="mb-3">
-
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Address</ng-container>
-        <ng-container appPageSubheaderSummary>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Address</ng-container>
+        <ng-container appPageSubheader2Summary>
           This information comes from your BC Services Card, provide a different address if needed.
         </ng-container>
-      </app-page-subheader>
+      </app-page-subheader2>
 
       <div class="row mb-3">
 
@@ -174,25 +170,22 @@
     <ng-container *ngIf="hasMailingAddress">
 
       <section class="mb-3">
-
-        <app-page-subheader>
-          <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
-        </app-page-subheader>
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>Mailing Address</ng-container>
+        </app-page-subheader2>
 
         <app-address [form]="mailingAddress"></app-address>
-
       </section>
 
     </ng-container>
 
     <section class="mb-3">
-
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Contact Information</ng-container>
-        <ng-container appPageSubheaderSummary>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Contact Information</ng-container>
+        <ng-container appPageSubheader2Summary>
           Provide your contact information to be used to correspond with you
         </ng-container>
-      </app-page-subheader>
+      </app-page-subheader2>
 
       <div class="row">
         <div class="col-12">
@@ -257,8 +250,6 @@
 
         </div>
       </div>
-
-
     </section>
 
   </form>
