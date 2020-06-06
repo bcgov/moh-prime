@@ -8,6 +8,7 @@ parameters:
     displayName: Name
     description: A suffix appended to all objects
     required: true
+    value: document-manager-base
   - name: SUFFIX
     displayName: Name Suffix
     description: A suffix appended to all objects
