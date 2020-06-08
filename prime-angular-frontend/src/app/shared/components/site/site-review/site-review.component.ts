@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 
@@ -8,8 +9,8 @@ import { Site } from '@registration/shared/models/site.model';
   styleUrls: ['./site-review.component.scss']
 })
 export class SiteReviewComponent {
+  @Input() public site: Site;
   @Input() public showEditRedirect: boolean;
-  @Input() public siteInput: Site;
   @Output() public route: EventEmitter<string>;
 
   public SiteRoutes = SiteRoutes;
@@ -19,12 +20,7 @@ export class SiteReviewComponent {
     this.route = new EventEmitter<string>();
   }
 
-  public get site() {
-    return (this.siteInput) ? this.siteInput : null;
-  }
-
   public onRoute(routePath: string): void {
     this.route.emit(routePath);
   }
-
 }

@@ -1,0 +1,37 @@
+<div class="page-subheader d-flex divider">
+  <div class="w-100">
+    <!-- Subtitle for a section -->
+    <h2 class="title">
+      <ng-content select="[appPageSubheader2Title]"></ng-content>
+    </h2>
+    <!-- Optional summary for describing a section -->
+    <p *ngIf="hasPageSubheaderSummary"
+       class="summary">
+      <ng-content select="[appPageSubheader2Summary]"></ng-content>
+    </p>
+    <!-- Optional more information content displayed by action -->
+    <div *ngIf="hasPageSubheaderMoreInfo && showMoreInfo"
+         class="more-info">
+      <!-- Content markup should be controlled by the parent container -->
+      <ng-content select="[appPageSubheader2MoreInfo]"></ng-content>
+    </div>
+  </div>
+  <div class="action-icon flex-shrink-1">
+    <ng-container *ngIf="hasPageSubheaderMoreInfo then more; else optional"></ng-container>
+
+    <ng-template #more>
+      <!-- Action for displaying more information when provided -->
+      <a mat-icon-button
+         color="primary"
+         aria-label="More Info"
+         (click)="toggleMoreInfo()">
+        <mat-icon>info</mat-icon>
+      </a>
+    </ng-template>
+
+    <ng-template #optional>
+      <!-- Optional mat-icon-button for actions at the end of a subheading -->
+      <ng-content select="[mat-icon-button]"></ng-content>
+    </ng-template>
+  </div>
+</div>

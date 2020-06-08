@@ -34,6 +34,7 @@ import {
 } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
 import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
 import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
+import { ProgressIndicatorComponent } from './shared/components/progress-indicator/progress-indicator.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,8 @@ import { NotificationConfirmationComponent } from './pages/notification-confirma
     NextStepsInfographicComponent,
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
+    // TODO drop this component and reimplement using ProgressIndicator2Component
+    ProgressIndicatorComponent,
     AccessDeclinedComponent,
     NotificationConfirmationComponent
   ],

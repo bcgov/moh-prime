@@ -1,9 +1,7 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"
-                               [currentRoute]="SiteRoutes.ORGANIZATION_AGREEMENT"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <!-- TODO refactor later -->
   <ng-container *ngIf="!hasAcceptedAgreement; else continue">
     <div class="organization-agreement"
          [innerHTML]="organizationAgreement | safeHtml"></div>
@@ -11,7 +9,8 @@
     <div class="footer mb-4">
       <mat-checkbox #accept>
         <div class="pl-3">
-          I have read and accept the Organization Agreement.
+          By checking here I agree to the terms of this Agreement as the duly authorized representative of the
+          Organization.
         </div>
       </mat-checkbox>
     </div>
@@ -36,7 +35,7 @@
   </ng-container>
 
   <ng-template #continue>
-    <div class="mb-5">
+    <div class="mb-4">
       <app-alert type="success"
                  icon="check_circle_outline">
         <ng-container #alertTitle
@@ -45,11 +44,14 @@
         </ng-container>
         <ng-container #alertContent
                       class="alert-content">
-          The organization agreement has already been accepted.If you have questions please
-          contact us at <app-prime-phone></app-prime-phone> or <app-prime-support-email></app-prime-support-email>.
+          The organization agreement has been accepted. If you have questions please contact us at
+          <app-prime-phone></app-prime-phone> or <app-prime-support-email></app-prime-support-email>.
         </ng-container>
       </app-alert>
     </div>
+
+    <div class="organization-agreement mb-5"
+         [innerHTML]="organizationAgreement | safeHtml"></div>
 
     <div class="row justify-content-end">
       <div class="col">

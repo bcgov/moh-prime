@@ -1,0 +1,11 @@
+@import 'palette';
+
+//
+// MATERIAL ICON
+//
+
+.mat-icon.add-icon {
+  .mat-button > & {
+    margin-top: -3px;
+  }
+}

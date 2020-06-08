@@ -30,22 +30,36 @@ namespace Prime.Services
         {
             var result = new List<Document>();
             var businessLicences = await _siteService.GetBusinessLicencesAsync(siteId);
+
             foreach (var licence in businessLicences)
             {
-                var request = new HttpRequestMessage
-                {
-                    RequestUri = new Uri($"{PrimeConstants.DOCUMENT_MANAGER_URL}?token={licence.DocumentGuid}"),
-                    Method = HttpMethod.Get
-                };
-                var response = await _client.SendAsync(request);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    result.Add(new Document(licence.FileName, response.Content.ReadAsByteArrayAsync().Result));
-                }
+                var document = await GetBusinessLicenceDocument(licence);
+                result.Add(document);
             };
 
             return result;
         }
 
+        public async Task<Document> GetLatestBusinessLicenceDocumentBySiteId(int siteId)
+        {
+            var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
+            return await GetBusinessLicenceDocument(licence);
+        }
+
+        private async Task<Document> GetBusinessLicenceDocument(BusinessLicence licence)
+        {
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri($"{PrimeConstants.DOCUMENT_MANAGER_URL}?token={licence.DocumentGuid}"),
+                Method = HttpMethod.Get
+            };
+            var response = await _client.SendAsync(request);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return new Document(licence.FileName, response.Content.ReadAsByteArrayAsync().Result);
+            }
+
+            return null;
+        }
     }
 }

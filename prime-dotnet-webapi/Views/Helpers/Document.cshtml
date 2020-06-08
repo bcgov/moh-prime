@@ -1,0 +1,10 @@
+@using Prime.Models
+@model Document
+
+@{
+  var fileExt = Model.Filename.Split(".").Last();
+  var base64 = Convert.ToBase64String(Model.Data);
+  var imgSrc = $"data:image/{fileExt};base64,{base64}";
+}
+
+<img src="@imgSrc">

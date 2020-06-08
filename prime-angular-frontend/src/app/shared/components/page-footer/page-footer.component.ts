@@ -11,10 +11,16 @@ export class PageFooterComponent implements OnInit {
   @Input() public isInitialEnrolment: boolean;
   @Input() public hasSecondaryAction: boolean;
   @Input() public disableSave: boolean;
+  // TODO when refactored keep these in the generic page footer, and
+  // drop saveButtonLabel and secondaryActionButtonLabel. Wrap to
+  // enforce label defaults in specific modules
+  @Input() public primaryActionLabel: string;
+  @Input() public secondaryActionLabel: string;
   @Output() public save: EventEmitter<void>;
   @Output() public continue: EventEmitter<void>;
   @Output() public back: EventEmitter<void>;
 
+  // TODO drop after generic component refactor
   public saveButtonLabel: string;
   public secondaryActionButtonLabel: string;
 
@@ -39,10 +45,12 @@ export class PageFooterComponent implements OnInit {
 
   public ngOnInit() {
     if (this.isInitialEnrolment) {
-      this.saveButtonLabel = 'Save and Continue';
-      this.secondaryActionButtonLabel = 'Back';
+      // TODO temporary hack until time for generic page footer, otherwise normal functionality
+      this.saveButtonLabel = this.primaryActionLabel ?? 'Save and Continue';
+      this.secondaryActionButtonLabel = this.secondaryActionLabel ?? 'Back';
     } else {
-      this.saveButtonLabel = 'Continue';
+      this.saveButtonLabel = this.primaryActionLabel ?? 'Continue';
+      // TODO drop opinion from generic page footer
       this.hasSecondaryAction = false;
     }
   }

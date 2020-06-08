@@ -19,14 +19,24 @@ namespace Prime.Models
         [Required]
         public string FirstName { get; set; }
 
+        public string MiddleName { get; set; }
+
         [Required]
         public string LastName { get; set; }
+
+        public string PreferredFirstName { get; set; }
+
+        public string PreferredMiddleName { get; set; }
+
+        public string PreferredLastName { get; set; }
 
         public DateTime DateOfBirth { get; set; }
 
         public string JobRoleTitle { get; set; }
 
         public PhysicalAddress PhysicalAddress { get; set; }
+
+        public MailingAddress MailingAddress { get; set; }
 
         public string Email { get; set; }
 

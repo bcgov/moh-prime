@@ -10,6 +10,7 @@ namespace Prime.Models
     public class BusinessDay : BaseAuditable, IValidatableObject
     {
         [Key]
+        [JsonIgnore]
         public int Id { get; set; }
 
         public int LocationId { get; set; }

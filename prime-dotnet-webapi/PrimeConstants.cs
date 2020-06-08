@@ -12,7 +12,7 @@ namespace Prime
         public const string PRIME_RU = "RU";
 
         // Mail server
-        public readonly static string MAIL_SERVER_URL = Environment.GetEnvironmentVariable("MAIL_SERVER_URL") ?? "mailhog";
+        public readonly static string MAIL_SERVER_URL = Environment.GetEnvironmentVariable("MAIL_SERVER_URL") ?? "localhost";
         public readonly static int MAIL_SERVER_PORT = int.Parse(Environment.GetEnvironmentVariable("MAIL_SERVER_PORT") ?? "1025");
 
         // Pharmanet college validation API

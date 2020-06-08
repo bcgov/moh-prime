@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -15,9 +15,10 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 import {
   OrgBookResource, OrgBookAutocompleteResult, OrgBookFacetHttpResponse, OrgBookDetailHttpResponse, OrgBookRelatedHttpResponse
 } from '@registration/shared/services/org-book-resource.service';
@@ -30,6 +31,7 @@ import {
 export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public title: string;
   public routeUtils: RouteUtils;
   public organizations: string[];
   public doingBusinessAsNames: string[];
@@ -39,14 +41,15 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private organizationService: OrganizationService,
+    private organizationResource: OrganizationResource,
+    private organizationFormStateService: OrganizationFormStateService,
     private orgBookResource: OrgBookResource,
     private formUtilsService: FormUtilsService,
     private utilsService: UtilsService,
     private dialog: MatDialog
   ) {
+    this.title = 'Organization Information';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -63,10 +66,12 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
+    // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        .updateSite(payload)
+      // TODO when spoking don't update
+      const payload = this.organizationFormStateService.organization;
+      this.organizationResource
+        .updateOrganization(payload)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
@@ -104,12 +109,12 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.MULTIPLE_SITES);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
     } else {
       this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
     }
@@ -128,13 +133,14 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.organizationInformationForm;
+    this.form = this.organizationFormStateService.organizationInformationForm;
   }
 
   private initForm() {
-    const site = this.siteRegistrationService.site;
-    this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO structured to match in all site views
+    const organization = this.organizationService.organization;
+    this.isCompleted = organization?.completed;
+    this.organizationFormStateService.setForm(organization);
 
     this.name.valueChanges
       .pipe(

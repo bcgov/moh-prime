@@ -4,23 +4,20 @@
   </ng-container>
 
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!site?.completed"
-                               [currentRoute]="SiteRoutes.SITE_REVIEW"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!site?.completed"></app-site-progress-indicator>
 
   <div class="mb-5">
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Site Registration Review</ng-container>
-      <ng-container appPageSubheaderSummary>
-        Review all the information to ensure it is accurate, you will not get approved if any of your information is
-        incorrect. If you need to edit your information use the pencil icon to navigate to that section of the
-        registration to make changes.
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Review the site information you provided.
       </ng-container>
-    </app-page-subheader>
+    </app-page-subheader2>
   </div>
 
   <app-site-review *ngIf="site"
+                   [site]="site"
                    [showEditRedirect]="true"
-                   [siteInput]="site"
                    (route)="onRoute($event)"></app-site-review>
 
   <div class="footer mb-4">
@@ -33,8 +30,8 @@
       </ng-container>
       <ng-container #alertContent
                     class="alert-content">
-        Your registration has already been submitted. If you have questions please
-        contact us at <app-prime-phone></app-prime-phone> or <app-prime-support-email></app-prime-support-email>.
+        Your registration has already been submitted. If you have questions please contact us at
+        <app-prime-phone></app-prime-phone> or <app-prime-support-email></app-prime-support-email>.
       </ng-container>
     </app-alert>
 
@@ -55,7 +52,7 @@
       <button mat-flat-button
               color="primary"
               [disabled]="!accept.checked || !!site?.submittedDate"
-              (click)="onSubmit()">Submit Registration</button>
+              (click)="onSubmit()">Save Site Information</button>
 
     </div>
   </div>

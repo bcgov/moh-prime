@@ -16,7 +16,8 @@ namespace Prime.Configuration
                     new BusinessEventType { Code = 4, Name = "Admin Claim", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new BusinessEventType { Code = 5, Name = "Enrollee", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new BusinessEventType { Code = 6, Name = "Site", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new BusinessEventType { Code = 7, Name = "Admin View", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new BusinessEventType { Code = 7, Name = "Admin View", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new BusinessEventType { Code = 8, Name = "Organization", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
                 };
             }
         }

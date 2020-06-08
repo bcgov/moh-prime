@@ -8,6 +8,9 @@ using System.Net.Mail;
 using Prime.Models;
 using System.IO;
 
+using System.Net.Mime;
+using System.Text;
+
 namespace Prime.Services
 {
     public class EmailParams
@@ -122,25 +125,30 @@ namespace Prime.Services
             var subject = "PRIME Site Registration Submission";
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
 
-            var businessLicence = _documentService.GetBusinessLicenceDocumentsBySiteId(site.Id);
-            // TODO will there be multiple business licence documents?
-            // TODO get filename extension for the business licence document(s), something like:
-            // var fileExt = businessLicence.Filename.Split('.').Last();
-
-            // TODO Option 1: Create HTML content for document, if it works add to PDF service
-            // var base64 = String.Format($"data:image/{fileExt};base64,{0}", Convert.ToBase64String(businessLicence.Data));
-            // var htmlContent = $"<img src='" + base64 + "' />";
-
-            var pdfContents = new[]
+            Document document = null;
+            try
             {
-                await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", new Site()),
-                await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site),
-                // TODO Option 2: Create HTML content for document, less ideal implementation since need to pass in a model
-                // TODO might be okay if there are multiple documents
-                // await _razorConverterService.RenderViewToStringAsync("/Views/Emails/Image.cshtml", new EmailParams())
-            };
-            var pdfs = pdfContents.Select(content => _pdfService.Generate(content));
-            var attachments = pdfs.Select(pdf => new Attachment(new MemoryStream(pdf), "application/pdf"));
+                document = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
+            }
+            catch (NullReferenceException)
+            {
+                // TODO abort, log, and retry, but make it work for the demo for now
+                document = new Document("business-licence.pdf", new byte[20]);
+            }
+
+            var location = await _context.Locations
+                .Where(l => l.Id == site.LocationId)
+                .Include(l => l.Organization)
+                .SingleOrDefaultAsync();
+
+            var attachments = new (string Filename, string HtmlContent)[]
+            {
+                ("OrganizationAgreement.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", location.Organization)),
+                ("SiteRegistrationReview.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
+                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", document))
+            }
+            .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)))
+            .Select(pdf => new Attachment(new MemoryStream(pdf.Content), pdf.Filename, "application/pdf"));
 
             await Send(PRIME_EMAIL, MOH_EMAIL, subject, body, attachments);
         }
