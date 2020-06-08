@@ -6,11 +6,11 @@
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="3.0.0" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="3.0.0"/>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -31,15 +31,16 @@
     <PackageReference Include="CompareNETObjects" Version="4.65.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.4" />
     <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.0" />
+    <PackageReference Include="IdentityModel" Version="4.3.0"/>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v1.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v2.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v3.html" />
-    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v4.html" />
+    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v1.html"/>
+    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v2.html"/>
+    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v3.html"/>
+    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v1.html"/>
+    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v2.html"/>
+    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v3.html"/>
+    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v4.html"/>
   </ItemGroup>
   <ItemGroup>
     <None Update="Resources\wkhtmltopdf\Linux\wkhtmltopdf">
