@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
+import { Observable, pipe } from 'rxjs';
+import { map, tap, catchError, switchMap } from 'rxjs/operators';
 
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { UtilsService, SortWeight } from '@core/services/utils.service';
 
 export interface OrgBookAutocompleteHttpResponse {
   first_index: number;
@@ -136,6 +137,7 @@ export class OrgBookResource {
     private http: HttpClient,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
+    private utilsService: UtilsService,
     private logger: LoggerService
   ) { }
 
@@ -163,14 +165,14 @@ export class OrgBookResource {
    *
    * @param orgName of the organization
    */
-  public getOrganizationFacet(orgName: string) {
+  public getOrganizationFacet(orgName: string): Observable<OrgBookFacetHttpResponse> {
     const params = this.apiResourceUtilsService.makeHttpParams({ name: orgName });
     return this.http.get<OrgBookFacetHttpResponse>(`${this.ORGBOOK_API_URL}/search/credential/topic/facets`, { params })
       .pipe(
         map((response: OrgBookFacetHttpResponse) => response),
         tap((response: OrgBookFacetHttpResponse) => this.logger.info('ORGBOOK_FACET', response)),
         catchError((error: any) => {
-          // TODO should this even have a toast message?
+          // TODO should this even have a toast error message?
           // this.toastService.openErrorToast('');
           this.logger.error('[Adjudication] OrgBookResource::getOrganizationFacet error has occurred: ', error);
           throw error;
@@ -178,13 +180,13 @@ export class OrgBookResource {
       );
   }
 
-  public getOrganizationDetail(sourceId: string) {
+  public getOrganizationDetail(sourceId: string): Observable<OrgBookDetailHttpResponse> {
     return this.http.get<OrgBookDetailHttpResponse>(`${this.ORGBOOK_API_URL}/topic/ident/registration/${sourceId}/formatted`)
       .pipe(
         map((response: OrgBookDetailHttpResponse) => response),
         tap((response: OrgBookDetailHttpResponse) => this.logger.info('ORGBOOK_DETAIL', response)),
         catchError((error: any) => {
-          // TODO should this even have a toast message?
+          // TODO should this even have a toast error message?
           // this.toastService.openErrorToast('');
           this.logger.error('[Adjudication] OrgBookResource::getOrganizationBySourceId error has occurred: ', error);
           throw error;
@@ -192,17 +194,63 @@ export class OrgBookResource {
       );
   }
 
-  public getOrganizationRelatedTo(topicId: number) {
+  public getOrganizationRelatedTo(topicId: number): Observable<OrgBookRelatedHttpResponse[]> {
     return this.http.get<OrgBookRelatedHttpResponse[]>(`${this.ORGBOOK_API_URL}/topic_relationship/${topicId}/related_to_relations`)
       .pipe(
         map((response: OrgBookRelatedHttpResponse[]) => response),
         tap((response: OrgBookRelatedHttpResponse[]) => this.logger.info('ORGBOOK_RELATED_TO', response)),
         catchError((error: any) => {
-          // TODO should this even have a toast message?
+          // TODO should this even have a toast error message?
           // this.toastService.openErrorToast('');
           this.logger.error('[Adjudication] OrgBookResource::getOrganizationRelated error has occurred: ', error);
           throw error;
         })
       );
+  }
+
+  /**
+   * @description
+   * Extract the appropriate source ID.
+   */
+  public sourceIdMap() {
+    return pipe(
+      map((response: OrgBookFacetHttpResponse) => {
+        // Assumed that only a single source ID will exist based on a
+        // specific selection being made in autocomplete
+        return response.objects.results[0].topic.source_id;
+      })
+    );
+  }
+
+  /**
+   * @description
+   * Get a list of "Doing Business As" based on a source ID.
+   */
+  public doingBusinessAsMap() {
+    return pipe(
+      switchMap((sourceId: string) => this.getOrganizationDetail(sourceId)),
+      map((response: OrgBookDetailHttpResponse) => response.id),
+      switchMap((topicId: number) => this.getOrganizationRelatedTo(topicId)),
+      map((response: OrgBookRelatedHttpResponse[]) => {
+        const doingBusinessAs = response
+          .map((relation: OrgBookRelatedHttpResponse) => {
+            // Assumed only a single name per organization is relavent
+            const businessName = relation.related_topic.names[0].text;
+            const isDoingBusinessAs = relation.attributes.some(a => a.value === 'Does Business As');
+            return (isDoingBusinessAs) ? businessName : null;
+          });
+        // Remove duplicates since only names are persisted
+        return [...new Set(doingBusinessAs)]
+          .sort(this.sortDoingBusinessAsNames());
+      }));
+  }
+
+  /**
+   * @description
+   * Sort by day of the week.
+   */
+  private sortDoingBusinessAsNames(): (a: string, b: string) => SortWeight {
+    return (a: string, b: string) =>
+      this.utilsService.sort<string>(a, b);
   }
 }
