@@ -67,7 +67,11 @@ export class OrganizationOverviewComponent implements OnInit {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
+    if (!this.organization.acceptedAgreementDate) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
+    } else {
+      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
+    }
   }
 
   public nextRoute() {
