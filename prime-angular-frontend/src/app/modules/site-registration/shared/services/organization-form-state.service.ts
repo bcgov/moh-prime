@@ -195,11 +195,11 @@ export class OrganizationFormStateService {
       ],
       phone: [
         null,
-        [Validators.required, FormControlValidators.phone]
+        [FormControlValidators.phone]
       ],
       fax: [
         null,
-        [Validators.required, FormControlValidators.phone]
+        [FormControlValidators.phone]
       ],
       smsPhone: [
         null,
