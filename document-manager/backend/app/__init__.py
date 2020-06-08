@@ -16,7 +16,7 @@ from app.docman.resources import *
 
 from app.commands import register_commands
 from app.routes import register_routes
-from app.extensions import api, cache, db, jwt, apm, migrate
+from app.extensions import api, cache, db, jwt, migrate
 
 from .config import Config
 
