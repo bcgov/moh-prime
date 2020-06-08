@@ -7,8 +7,7 @@ from flask import request, current_app, send_file, make_response, jsonify
 from flask_restplus import Resource, reqparse
 
 from app.docman.models.document import Document
-from app.extensions import api, cache
-from app.utils.access_decorators import requires_any_of, PRIME_DOC
+from app.extensions import api, cache, jwt
 from app.constants import FILE_UPLOAD_SIZE, FILE_UPLOAD_OFFSET, FILE_UPLOAD_PATH, DOWNLOAD_TOKEN, TIMEOUT_24_HOURS, TUS_API_VERSION, TUS_API_SUPPORTED_VERSIONS, FORBIDDEN_FILETYPES
 
 
@@ -20,8 +19,7 @@ class DocumentListResource(Resource):
     parser.add_argument(
         'filename', type=str, required=False, help='File name + extension of the document.')
 
-    # @requires_any_of(
-    #     [PRIME_DOC])
+    @jwt.requires_auth
     def post(self):
         if request.headers.get('Tus-Resumable') is None:
             raise BadRequest('Received file upload for unsupported file transfer protocol')
