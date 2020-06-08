@@ -43,6 +43,9 @@ export class OrganizationsComponent implements OnInit {
   ) {
     this.title = 'Administration';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+
+    this.organizations = [];
+    this.sites = [];
   }
 
   public addOrganization() {
