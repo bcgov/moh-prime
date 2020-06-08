@@ -10,7 +10,7 @@ export interface Organization {
   doingBusinessAs?: string;
   organizationTypeCode: number;
   acceptedAgreementDate: string;
-  location: Location[];
+  locations: Location[];
   submittedDate: string;
   completed: boolean;
 }

@@ -63,7 +63,7 @@
 
     </ng-container>
 
-    <mat-card *ngIf="!organizations?.length"
+    <mat-card *ngIf="!organizations.length"
               class="has-hover mb-3">
       <mat-card-header class="no-avatar">
         <mat-card-title>Organization Information</mat-card-title>
@@ -92,14 +92,16 @@
     Add Organization
   </button>
 
-  <section class="mb-3">
+  <section *ngIf="sites.length"
+           class="mb-3">
     <!-- TODO only for single organization then remove -->
     <ng-container *ngFor="let site of sites; let i = index; let last = last">
       <mat-card class="has-hover mb-3">
         <mat-card-header class="no-avatar">
           <!-- TODO only added for single organization and location then remove -->
-          <mat-card-title>{{ organizations[0].location[0]?.name | default: 'Site Information' }}</mat-card-title>
-
+          <mat-card-title>
+            {{ organizations[0].locations[0]?.name | default: 'Site Information' }}
+          </mat-card-title>
           <ng-container [ngTemplateOutlet]="siteMenu"
                         [ngTemplateOutletContext]="{ site: site }"></ng-container>
 
