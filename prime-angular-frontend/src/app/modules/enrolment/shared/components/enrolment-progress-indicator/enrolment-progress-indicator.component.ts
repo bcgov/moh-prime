@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
+import { IProgressIndicator } from '@enrolment/shared/components/progress-indicator/progress-indicator.component';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 

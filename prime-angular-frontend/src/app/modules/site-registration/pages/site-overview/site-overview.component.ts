@@ -12,9 +12,9 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { Site } from '@registration/shared/models/site.model';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
+import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-site-overview',
@@ -23,6 +23,7 @@ import { SiteRegistrationStateService } from '@registration/shared/services/site
 })
 export class SiteOverviewComponent implements OnInit, IPage {
   public busy: Subscription;
+  public title: string;
   public routeUtils: RouteUtils;
   public site: Site;
   public SiteRoutes = SiteRoutes;
@@ -30,31 +31,41 @@ export class SiteOverviewComponent implements OnInit, IPage {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private siteService: SiteService,
+    private siteResource: SiteResource,
+    private siteFormStateService: SiteFormStateService,
     private dialog: MatDialog
   ) {
-    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.title = 'Site Information Review';
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
   }
 
   public onSubmit() {
-    const payload = this.siteRegistrationService.site;
+    // TODO shouldn't come from service when spoking to save updates
+    const payload = this.siteService.site;
     const data: DialogOptions = {
-      title: 'Submit Site Registration',
-      message: 'When your registration is submitted it can no longer be updated. Are you ready to submit your registration?',
-      actionText: 'Submit Registration'
+      title: 'Save Site',
+      message: 'When your site is saved it will be submitted for review. Are you ready to save your site?',
+      actionText: 'Save Site'
     };
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
         exhaustMap((result: boolean) =>
           (result)
-            ? this.siteRegistrationResource.submitSiteRegistration(payload)
+            ? this.siteResource.submitSite(payload)
             : EMPTY
         )
       )
-      .subscribe(() => this.routeUtils.routeRelativeTo(SiteRoutes.CONFIRMATION));
+      .subscribe(() =>
+        this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS], {
+          queryParams: { submitted: true }
+        })
+      );
+  }
+
+  public onBack() {
+    this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
   }
 
   public onRoute(routePath: string) {
@@ -62,6 +73,6 @@ export class SiteOverviewComponent implements OnInit, IPage {
   }
 
   public ngOnInit() {
-    this.site = this.siteRegistrationService.site;
+    this.site = this.siteService.site;
   }
 }

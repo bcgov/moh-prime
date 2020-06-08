@@ -14,9 +14,10 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Site } from '@registration/shared/models/site.model';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
+import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-hours-operation',
@@ -26,22 +27,24 @@ import { SiteRegistrationStateService } from '@registration/shared/services/site
 export class HoursOperationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public title: string;
   public routeUtils: RouteUtils;
+  public hasNoHours: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
-  public hasNoHours: boolean;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private siteService: SiteService,
+    private siteResource: SiteResource,
+    private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
     private utilsService: UtilsService,
     private dialog: MatDialog
   ) {
-    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.title = 'Hours of Operation';
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
   }
 
   public get businessDays(): FormArray {
@@ -49,11 +52,13 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
+    // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.businessDays)) {
+      // TODO when spoking don't update
       this.hasNoHours = false;
 
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
+      const payload = this.siteFormStateService.site;
+      this.siteResource
         .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
@@ -77,14 +82,14 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.VENDOR);
+    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SIGNING_AUTHORITY);
+      this.routeUtils.routeRelativeTo(SiteRoutes.VENDOR);
     }
   }
 
@@ -101,13 +106,15 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.hoursOperationForm;
+    this.form = this.siteFormStateService.hoursOperationForm;
   }
 
   private initForm() {
-    const site = this.siteRegistrationService.site;
+    // TODO structured to match in all site views
+    const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO cannot set form each time the view is loaded when updating
+    this.siteFormStateService.setForm(site, true);
   }
 
   /**

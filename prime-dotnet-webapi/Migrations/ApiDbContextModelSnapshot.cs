@@ -367,6 +367,9 @@ namespace Prime.Migrations
                     b.Property<DateTimeOffset?>("EventDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("OrganizationId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("PartyId")
                         .HasColumnType("integer");
 
@@ -386,6 +389,8 @@ namespace Prime.Migrations
                     b.HasIndex("BusinessEventTypeCode");
 
                     b.HasIndex("EnrolleeId");
+
+                    b.HasIndex("OrganizationId");
 
                     b.HasIndex("PartyId");
 
@@ -483,6 +488,15 @@ namespace Prime.Migrations
                             Name = "Admin View",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = 8,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Organization",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -513,6 +527,9 @@ namespace Prime.Migrations
 
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("UploadedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -6573,6 +6590,9 @@ namespace Prime.Migrations
                     b.Property<string>("DoingBusinessAs")
                         .HasColumnType("text");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
                     b.Property<int?>("OrganizationId")
                         .HasColumnType("integer");
 
@@ -6616,6 +6636,9 @@ namespace Prime.Migrations
                     b.Property<DateTimeOffset?>("AcceptedAgreementDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("Completed")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -6636,6 +6659,9 @@ namespace Prime.Migrations
 
                     b.Property<int>("SigningAuthorityId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("SubmittedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -6755,11 +6781,26 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("MailingAddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MiddleName")
+                        .HasColumnType("text");
+
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
                     b.Property<int?>("PhysicalAddressId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("PreferredFirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferredLastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferredMiddleName")
+                        .HasColumnType("text");
 
                     b.Property<string>("SMSPhone")
                         .HasColumnType("text");
@@ -6774,6 +6815,8 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MailingAddressId");
 
                     b.HasIndex("PhysicalAddressId");
 
@@ -7955,6 +7998,81 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
+                });
+
+            modelBuilder.Entity("Prime.Models.RemoteUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("RemoteUser");
+                });
+
+            modelBuilder.Entity("Prime.Models.RemoteUserLocation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("InternetProvider")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PhysicalAddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RemoteUserId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhysicalAddressId");
+
+                    b.HasIndex("RemoteUserId");
+
+                    b.ToTable("RemoteUserLocation");
                 });
 
             modelBuilder.Entity("Prime.Models.Site", b =>
@@ -12534,6 +12652,10 @@ namespace Prime.Migrations
                         .WithMany()
                         .HasForeignKey("EnrolleeId");
 
+                    b.HasOne("Prime.Models.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId");
+
                     b.HasOne("Prime.Models.Party", "Party")
                         .WithMany()
                         .HasForeignKey("PartyId");
@@ -12797,6 +12919,10 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Party", b =>
                 {
+                    b.HasOne("Prime.Models.MailingAddress", "MailingAddress")
+                        .WithMany()
+                        .HasForeignKey("MailingAddressId");
+
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()
                         .HasForeignKey("PhysicalAddressId");
@@ -12825,6 +12951,30 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.RemoteUser", b =>
+                {
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithMany("RemoteUsers")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.RemoteUserLocation", b =>
+                {
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.RemoteUser", "RemoteUser")
+                        .WithMany("RemoteUserLocations")
+                        .HasForeignKey("RemoteUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

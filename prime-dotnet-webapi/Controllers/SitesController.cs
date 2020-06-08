@@ -20,31 +20,41 @@ namespace Prime.Controllers
     {
         private readonly ISiteService _siteService;
         private readonly IPartyService _partyService;
+        private readonly IOrganizationService _organizationService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailService _emailService;
 
         public SitesController(
             ISiteService siteService,
             IPartyService partyService,
+            IOrganizationService organizationService,
             IRazorConverterService razorConverterService,
             IEmailService emailService)
         {
             _siteService = siteService;
             _partyService = partyService;
+            _organizationService = organizationService;
             _razorConverterService = razorConverterService;
             _emailService = emailService;
         }
 
         // GET: api/Sites
         /// <summary>
-        /// Gets all of the Sites for a user, or all sites if user has ADMIN role
+        /// Gets all of the Sites for an organization, or all sites if user has ADMIN role
         /// </summary>
-        [HttpGet(Name = nameof(GetSites))]
+        /// <param name="organizationId"></param>
+        [HttpGet("/api/organizations/{organizationId:int}/sites", Name = nameof(GetSites))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSites()
+        public async Task<ActionResult<IEnumerable<Site>>> GetSites(int organizationId)
         {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
             IEnumerable<Site> sites = null;
 
             if (User.IsAdmin() || User.HasAdminView())
@@ -53,11 +63,7 @@ namespace Prime.Controllers
             }
             else
             {
-                var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-
-                sites = (party != null)
-                    ? await _siteService.GetSitesAsync(party.Id)
-                    : new List<Site>();
+                sites = await _siteService.GetSitesAsync(organizationId);
             }
 
             return Ok(ApiResponse.Result(sites));
@@ -89,21 +95,22 @@ namespace Prime.Controllers
         // POST: api/Sites
         /// <summary>
         /// Creates a new Site.
+        /// <param name="organizationId"></param>
         /// </summary>
-        [HttpPost(Name = nameof(CreateSite))]
+        [HttpPost("/api/organizations/{organizationId:int}/sites", Name = nameof(CreateSite))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Site>> CreateSite(Party party)
+        public async Task<ActionResult<Site>> CreateSite(int organizationId)
         {
-            if (party == null)
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
             {
-                this.ModelState.AddModelError("Party", "Could not create an site, the passed in Party cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            var createdSiteId = await _siteService.CreateSiteAsync(party);
+            var createdSiteId = await _siteService.CreateSiteAsync(organizationId);
 
             var createdSite = await _siteService.GetSiteAsync(createdSiteId);
 
@@ -176,53 +183,6 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(site));
         }
 
-        // GET: api/Sites/organization-agreement
-        /// <summary>
-        /// Get the organization agreement.
-        /// </summary>
-        [HttpGet("organization-agreement", Name = nameof(GetOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetOrganizationAgreement()
-        {
-            var agreement = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", new Site());
-
-            return Ok(ApiResponse.Result(agreement));
-        }
-
-        // PUT: api/Sites/5/organization-agreement
-        /// <summary>
-        /// Accept an organization agreement
-        /// </summary>
-        /// <param name="siteId"></param>
-        [HttpPut("{siteId}/organization-agreement", Name = nameof(AcceptCurrentOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> AcceptCurrentOrganizationAgreement(int siteId)
-        {
-            var site = await _siteService.GetSiteNoTrackingAsync(siteId);
-
-            if (site == null)
-            {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
-            }
-
-            if (!User.CanEdit(site.Provisioner))
-            {
-                return Forbid();
-            }
-
-            await _siteService.AcceptCurrentOrganizationAgreementAsync(site.Location.Organization.SigningAuthorityId);
-
-            return NoContent();
-        }
-
         // POST: api/sites/5/submission
         /// <summary>
         /// Submits the given site for adjudication.
@@ -265,7 +225,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Site>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
+        public async Task<ActionResult<BusinessLicence>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
@@ -279,9 +239,15 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid, filename);
+            var licence = await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid, filename);
 
-            return Ok(ApiResponse.Result(site));
+            // TODO updated to be licence instead of site, and should have GET and CreatedAtAction
+            return Ok(ApiResponse.Result(licence));
+            // return CreatedAtAction(
+            //     nameof(GetSiteById),
+            //     new { siteId = createdSiteId },
+            //     ApiResponse.Result(createdSite)
+            // );
         }
 
         // Get: api/sites/5/business-licence

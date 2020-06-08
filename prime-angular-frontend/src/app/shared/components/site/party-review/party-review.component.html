@@ -1,0 +1,57 @@
+<app-enrollee-property *ngIf="showName"
+                       title="Name">
+  {{ party | fullname | default }}
+</app-enrollee-property>
+
+<app-enrollee-property title="Job or Role Title">
+  {{ party?.jobRoleTitle | default }}
+</app-enrollee-property>
+
+<app-enrollee-property title="Phone">
+  {{ party?.phone | phone | default }}
+</app-enrollee-property>
+
+<app-enrollee-property title="Fax">
+  {{ party?.fax | phone | default }}
+</app-enrollee-property>
+
+<app-enrollee-property title="SMS Phone">
+  {{ party?.smsPhone | phone | default }}
+</app-enrollee-property>
+
+<app-enrollee-property title="Email">
+  {{ party?.email | default }}
+</app-enrollee-property>
+
+<ng-container *ngIf="party?.mailingAddress">
+
+  <div class="my-3">
+    <strong>Mailing Address</strong>
+  </div>
+
+  <app-enrollee-property title="Country">
+    {{ party?.mailingAddress?.countryCode | configCode: 'countries' | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Province">
+    {{ party?.mailingAddress?.provinceCode | configCode: 'provinces' | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Street Address">
+    {{ party?.mailingAddress?.street | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="party?.mailingAddress?.street2"
+                         title="Street Address 2">
+    {{ party?.mailingAddress?.street2 | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="City">
+    {{ party?.mailingAddress?.city | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Postal Code">
+    {{ party?.mailingAddress?.postal | postal | default }}
+  </app-enrollee-property>
+
+</ng-container>

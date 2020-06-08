@@ -125,5 +125,4 @@ export class SiteRegistrationsComponent extends AbstractComponent implements OnI
     queryParams = { ...this.route.snapshot.queryParams, ...queryParams };
     this.router.navigate([], { queryParams });
   }
-
 }

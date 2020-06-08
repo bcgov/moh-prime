@@ -1,0 +1,22 @@
+<!-- TODO don't make assumptions on spacing, and allow for overriding -->
+<div class="progress-indicator mb-5 w-75">
+  <mat-progress-bar mode="determinate"
+                    color="accent"
+                    [value]="percentComplete"></mat-progress-bar>
+
+  <ng-container [ngSwitch]="mode">
+    <ng-container *ngSwitchCase="'template'">
+
+      <ng-container [ngTemplateOutlet]="template"
+                    [ngTemplateOutletContext]="templateContext"></ng-container>
+
+    </ng-container>
+    <ng-container *ngSwitchCase="'message'">
+      {{ message }}
+    </ng-container>
+    <ng-container *ngSwitchCase="'percent'">
+      {{ prefix }} {{ percentComplete }}% Completed
+    </ng-container>
+  </ng-container>
+
+</div>

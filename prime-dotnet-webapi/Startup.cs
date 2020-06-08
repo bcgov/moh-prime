@@ -60,6 +60,7 @@ namespace Prime
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IDocumentService, DocumentService>();
+            services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPdfService, PdfService>();
 
             if (PrimeConstants.ENVIRONMENT_NAME == "local")

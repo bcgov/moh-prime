@@ -331,17 +331,10 @@ export class DashboardComponent implements OnInit {
         showHeader: false,
         items: [
           {
-            name: 'Site Registration',
+            name: 'Organizations',
             icon: 'location_city',
-            route: SiteRoutes.MULTIPLE_SITES,
+            route: SiteRoutes.ORGANIZATIONS,
             showItem: true
-          },
-          {
-            name: 'Organization Agreement',
-            icon: 'lock',
-            route: SiteRoutes.ORGANIZATION_AGREEMENT,
-            showItem: true,
-            disabled: true
           }
         ]
       }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   CanLoad, CanActivate, CanActivateChild, Route, UrlSegment,
-  ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree
+  ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Params
 } from '@angular/router';
 
 import { Observable } from 'rxjs';
@@ -28,6 +28,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
     route: Route,
     segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
     const url = this.getUrl(segments);
+    // TODO pass params to checkAccess
     return this.checkAccess(url);
   }
 
@@ -35,14 +36,14 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url = this.getUrl(state);
-    return this.checkAccess(url);
+    return this.checkAccess(url, next.params);
   }
 
   public canActivateChild(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url = this.getUrl(state);
-    return this.checkAccess(url);
+    return this.checkAccess(url, next.params);
   }
 
   /**
@@ -58,7 +59,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    * @description
    * Check the access of a user based on the resolution of a hook.
    */
-  protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
+  protected checkAccess(routePath: string = null, params?: Params): Observable<boolean> | Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       try {
         this.authenticated = await this.authService.isLoggedIn();
@@ -71,6 +72,17 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
         reject(`${message}: ${error}`);
       }
     });
+  }
+
+  /**
+   * @description
+   * Get the current route.
+   *
+   * NOTE: Only care about the second parameter to determine route
+   * access, and assumes that all child routes are allowed
+   */
+  protected route(routePath: string): string {
+    return routePath.slice(1).split('/')[1];
   }
 
   /**

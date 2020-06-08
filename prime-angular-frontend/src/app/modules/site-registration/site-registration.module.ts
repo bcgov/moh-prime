@@ -15,43 +15,53 @@ import { SiteProgressIndicatorComponent } from './shared/components/site-progres
 import { SiteCollectionNoticeComponent } from './shared/components/site-collection-notice/site-collection-notice.component';
 import { SameAsComponent } from './shared/components/same-as/same-as.component';
 
-import { VendorComponent } from './pages/vendor/vendor.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { SigningAuthorityComponent } from './pages/signing-authority/signing-authority.component';
+import { OrganizationsComponent } from './pages/organizations/organizations.component';
+import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
+import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
+import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
+import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
+import { OrganizationReviewComponent } from './shared/components/organization-review/organization-review.component';
+import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+
+import { SiteAddressComponent } from './pages/site-address/site-address.component';
+import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
+import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
+import { VendorComponent } from './pages/vendor/vendor.component';
+import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
+import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
-import { MultipleSitesComponent } from './pages/multiple-sites/multiple-sites.component';
+import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
-import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
-import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
-import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
-import { ConfirmationComponent } from './pages/confirmation/confirmation.component';
-import { SiteAddressComponent } from './pages/site-address/site-address.component';
-import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
-import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
-import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 
 @NgModule({
   declarations: [
     CollectionNoticeComponent,
+    SiteCollectionNoticeComponent,
+
+    OrganizationsComponent,
+    OrganizationSigningAuthorityComponent,
+    OrganizationInformationComponent,
+    OrganizationTypeComponent,
+    OrganizationAgreementComponent,
+    OrganizationOverviewComponent,
+    OrganizationReviewComponent,
+
+    SiteAddressComponent,
+    BusinessLicenceComponent,
+    HoursOperationComponent,
     VendorComponent,
-    SigningAuthorityComponent,
+    RemoteUsersComponent,
+    RemoteUserComponent,
     AdministratorComponent,
-    MultipleSitesComponent,
+    PrivacyOfficerComponent,
     TechnicalSupportComponent,
     SiteOverviewComponent,
-    OrganizationInformationComponent,
-    HoursOperationComponent,
-    PrivacyOfficerComponent,
-    RegistrantProfileFormComponent,
-    ConfirmationComponent,
+
     SiteProgressIndicatorComponent,
-    SiteCollectionNoticeComponent,
-    SiteAddressComponent,
-    OrganizationAgreementComponent,
-    SameAsComponent,
-    BusinessLicenceComponent,
-    OrganizationTypeComponent
+    RegistrantProfileFormComponent,
+    SameAsComponent
   ],
   imports: [
     SharedModule,
