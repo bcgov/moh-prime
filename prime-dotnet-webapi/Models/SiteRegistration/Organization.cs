@@ -32,7 +32,6 @@ namespace Prime.Models
 
         public OrganizationType OrganizationType { get; set; }
 
-        [JsonIgnore]
         public IEnumerable<Location> Locations { get; set; }
     }
 }
