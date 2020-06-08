@@ -1,2 +1,0 @@
-
-../../../document-manager/backend/requirements.txt
