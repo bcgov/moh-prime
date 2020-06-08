@@ -16,6 +16,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
 import { SiteService } from '@registration/shared/services/site.service';
+import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 
 // TODO rename to SiteLocationComponent
 // TODO rename form to siteLocationForm in SiteFormStateService
@@ -30,6 +31,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   public title: string;
   public routeUtils: RouteUtils;
   public formControlNames: string[];
+  public locationNames: { group: string, options: string[] }[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
@@ -39,6 +41,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
+    private orgBookResource: OrgBookResource,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
@@ -50,6 +53,23 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
       'city',
       'provinceCode',
       'postal'
+    ];
+
+    this.locationNames = [
+      {
+        group: 'Organization',
+        options: [
+          'Telus Communications Inc.'
+        ]
+      },
+      {
+        group: 'Doing Business As',
+        options: [
+          'Telus Mobility',
+          'Telus Internet',
+          'Teletubees'
+        ]
+      }
     ];
   }
 
@@ -97,6 +117,12 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
+
+    // TODO get the organization name from our API
+    // TODO get the facet from orgbook
+    // TODO get the detail from orgbook
+    // TODO get the relatedTo from orgbook
+    this.busy = this.orgBookResource.getOrganizationFacet('');
   }
 
   private createFormInstance() {
