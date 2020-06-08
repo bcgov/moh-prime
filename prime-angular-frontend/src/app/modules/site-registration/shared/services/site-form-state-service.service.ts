@@ -442,10 +442,7 @@ export class SiteFormStateService {
       ],
       smsPhone: [
         null,
-        [
-          Validators.required,
-          FormControlValidators.phone
-        ]
+        [FormControlValidators.phone]
       ],
       email: [
         null,

@@ -203,7 +203,7 @@ export class OrganizationFormStateService {
       ],
       smsPhone: [
         null,
-        [Validators.required, FormControlValidators.phone]
+        [FormControlValidators.phone]
       ],
       email: [
         null,
