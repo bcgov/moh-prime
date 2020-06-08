@@ -130,7 +130,7 @@ namespace Prime
             services.AddTransient<DocumentManagerBearerTokenHandler>()
             .AddHttpClient<IDocumentManagerClient, DocumentManagerClient>(client =>
             {
-                client.BaseAddress = new Uri(PrimeConstants.DOCUMENT_MANAGER_URL);
+                client.BaseAddress = new Uri(PrimeConstants.DOCUMENT_MANAGER_URL.EnsureTrailingSlash());
             })
             .AddHttpMessageHandler<DocumentManagerBearerTokenHandler>();
 
