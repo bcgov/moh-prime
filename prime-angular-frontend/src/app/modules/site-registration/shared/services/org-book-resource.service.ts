@@ -208,6 +208,10 @@ export class OrgBookResource {
       );
   }
 
+  /**
+   * @description
+   * Extract the appropriate source ID.
+   */
   public sourceIdMap() {
     return pipe(
       map((response: OrgBookFacetHttpResponse) => {
@@ -220,7 +224,7 @@ export class OrgBookResource {
 
   /**
    * @description
-   * List o f
+   * Get a list of "Doing Business As" based on a source ID.
    */
   public doingBusinessAsMap() {
     return pipe(
