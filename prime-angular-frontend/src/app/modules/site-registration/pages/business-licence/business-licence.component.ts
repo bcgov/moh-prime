@@ -61,13 +61,12 @@ export class BusinessLicenceComponent implements OnInit {
   }
 
   public onSubmit() {
-    // TODO has to have at least one document uploaded
-
-    if (this.siteService.site.businessLicences.length > 0 || this.uploadedFile) {
-      this.nextRoute();
-    } else {
-      this.hasNoLicenceError = true;
-    }
+    // TODO validations temporarily turned off
+    // if (this.siteService.site.businessLicences.length > 0 || this.uploadedFile) {
+    this.nextRoute();
+    // } else {
+    //   this.hasNoLicenceError = true;
+    // }
   }
 
   public onFilePondInit() {

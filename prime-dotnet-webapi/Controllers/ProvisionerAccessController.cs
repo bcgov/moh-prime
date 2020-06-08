@@ -119,7 +119,11 @@ namespace Prime.Controllers
                 this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
-
+            if (!enrollee.CurrentStatus.IsType(StatusType.Editable))
+            {
+                this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in an editable state.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
 
             // Only a few provisioners want emails sent directly, otherwise sent only to managers
