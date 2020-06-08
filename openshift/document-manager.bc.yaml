@@ -16,7 +16,7 @@ parameters:
     required: false
     value: latest
   - name: SOURCE_CONTEXT_DIR
-    value: document-manager
+    value: document-manager/backend
     required: true
   - name: SOURCE_REPOSITORY_URL
     required: true
