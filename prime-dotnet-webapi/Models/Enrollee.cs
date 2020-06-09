@@ -184,13 +184,9 @@ namespace Prime.Models
 
         [NotMapped]
         [JsonIgnore]
-        public bool? IsObo
+        public bool IsRegulatedUser
         {
-            get => AccessTerms?
-                .Where(at => at.AcceptedDate != null)
-                .OrderByDescending(at => at.AcceptedDate)
-                .FirstOrDefault()?
-                .UserClause?.EnrolleeClassification == PrimeConstants.PRIME_OBO;
+            get => Certifications.Any(cert => cert.License.RegulatedUser);
         }
 
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
