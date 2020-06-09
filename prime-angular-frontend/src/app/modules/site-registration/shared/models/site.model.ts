@@ -9,7 +9,7 @@ export interface Site {
   provisioner: Party;
   locationId: number;
   location: Location;
-  vendorId: number;
+  vendorCode: number;
   vendor: Vendor;
   remoteUsers: RemoteUser[];
   businessLicences: [];
