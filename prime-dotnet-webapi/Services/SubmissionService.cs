@@ -196,6 +196,11 @@ namespace Prime.Services
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving the declined status");
         }
 
+        private async Task RerunRulesAsync(Enrollee enrollee)
+        {
+            // TODO implement rerunning rule actions
+        }
+
         private async Task SetGpid(Enrollee enrollee)
         {
             if (string.IsNullOrWhiteSpace(enrollee.GPID))
@@ -239,6 +244,7 @@ namespace Prime.Services
             private async Task HandleLockProfile() { await _submissionService.LockProfileAsync(_enrollee); }
             private async Task HandleDeclineProfile() { await _submissionService.DeclineProfileAsync(_enrollee); }
             private async Task HandleEnableProfile() { await _submissionService.EnableProfileAsync(_enrollee); }
+            private async Task HandleRerunRules() { await _submissionService.EnableProfileAsync(_enrollee); }
 
             public SubmissionStateMachine(Enrollee enrollee, SubmissionService submissionService)
             {
@@ -280,7 +286,8 @@ namespace Prime.Services
                     .On(SubmissionAction.Approve).If<bool>(isAdmin => isAdmin).Execute(HandleApprove)
                     .On(SubmissionAction.EnableEditing).If<bool>(isAdmin => isAdmin).Execute(HandleEnableEditing)
                     .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile)
-                    .On(SubmissionAction.DeclineProfile).If<bool>(isAdmin => isAdmin).Execute(HandleDeclineProfile);
+                    .On(SubmissionAction.DeclineProfile).If<bool>(isAdmin => isAdmin).Execute(HandleDeclineProfile)
+                    .On(SubmissionAction.RerunRules).If<bool>(isAdmin => isAdmin).Execute(HandleRerunRules);
 
                 builder.In(EnrolleeState.RequiresToa)
                     .On(SubmissionAction.AcceptToa).If<bool>(isAdmin => !isAdmin).Execute(HandleAcceptToa)
