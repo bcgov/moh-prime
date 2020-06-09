@@ -253,7 +253,7 @@ namespace Prime
             modelBuilder.Entity<Site>()
                 .HasOne(s => s.Vendor)
                 .WithMany(v => v.Sites)
-                .HasForeignKey(s => s.VendorId);
+                .HasForeignKey(s => s.VendorCode);
 
             modelBuilder.Entity<BusinessLicence>()
                 .HasOne(bl => bl.Site)

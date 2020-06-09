@@ -5,14 +5,15 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("Vendor")]
+    [Table("VendorLookup")]
     public class Vendor : BaseAuditable
     {
         [Key]
-        public int Id { get; set; }
+        public int Code { get; set; }
 
         public string Name { get; set; }
 
+        [JsonIgnore]
         public string Email { get; set; }
 
         [JsonIgnore]
