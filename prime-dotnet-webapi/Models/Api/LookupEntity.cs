@@ -15,5 +15,6 @@ namespace Prime.Models.Api
         public List<StatusReason> StatusReasons { get; set; }
         public List<PrivilegeGroup> PrivilegeGroups { get; set; }
         public List<PrivilegeType> PrivilegeTypes { get; set; }
+        public List<Vendor> Vendors { get; set; }
     }
 }

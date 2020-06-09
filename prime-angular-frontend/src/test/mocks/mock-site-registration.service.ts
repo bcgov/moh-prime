@@ -55,7 +55,7 @@ export class MockSiteRegistrationService implements ISiteRegistrationService {
         businessHours: null,
         doingBusinessAs: null
       },
-      vendorId: null,
+      vendorCode: null,
       vendor: null,
       provisionerId: faker.random.number(),
       provisioner: user,

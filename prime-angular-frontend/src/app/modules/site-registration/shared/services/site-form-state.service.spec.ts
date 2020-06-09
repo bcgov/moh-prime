@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SiteFormStateService } from './site-form-state-service.service';
+import { SiteFormStateService } from './site-form-state.service';
 
 describe('SiteFormStateService', () => {
   let service: SiteFormStateService;
