@@ -25,6 +25,7 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
+        private readonly ISubmissionService _submissionService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
@@ -32,7 +33,8 @@ namespace Prime.Controllers
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
-            IEmailService emailService)
+            IEmailService emailService,
+            ISubmissionService submissionService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
@@ -40,6 +42,25 @@ namespace Prime.Controllers
             _adminService = adminService;
             _businessEventService = businessEventService;
             _emailService = emailService;
+            _submissionService = submissionService;
+        }
+
+        // PUT: api/Enrollees/UpdateGPIDS
+        /// <summary>
+        /// Updates all non HL7 compliant gpid's for all enrollees
+        /// </summary>
+        [HttpPut(Name = nameof(UpdateGPIDs))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateGPIDs()
+        {
+
+            await _submissionService.UpdateNonCompliantGPIDs();
+
+            return NoContent();
         }
 
         // GET: api/Enrollees
