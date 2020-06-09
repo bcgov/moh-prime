@@ -267,8 +267,7 @@ namespace Prime.Services
 
         private async Task<UserClause> GetUserClause(Enrollee enrollee)
         {
-            bool isRu = enrollee.Certifications.Any(cer => cer.License.RegulatedUser);
-            var classification = isRu ? PrimeConstants.PRIME_RU : PrimeConstants.PRIME_OBO;
+            var classification = enrollee.IsRegulatedUser ? PrimeConstants.PRIME_RU : PrimeConstants.PRIME_OBO;
 
             return await _context.UserClauses
                 .Where(g => g.EnrolleeClassification == classification)
