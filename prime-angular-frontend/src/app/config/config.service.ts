@@ -103,6 +103,11 @@ export class ConfigService implements IConfigService {
       .sort(this.sortConfigByName());
   }
 
+  public get vendors() {
+    return [...this.configuration.vendors]
+      .sort(this.sortConfigByName());
+  }
+
   /**
    * @description
    * Load the runtime configuration.
