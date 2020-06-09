@@ -1,0 +1,113 @@
+<!-- TODO refactor entirely for reuse thrown together for demo -->
+<!-- TODO break down sections into sets of review components -->
+<section class="mb-4">
+
+  <app-page-subheader2>
+    <ng-container appPageSubheader2Title>Signing Authority Information</ng-container>
+
+    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
+            mat-icon-button
+            matTooltip="Edit Signing Authority"
+            (click)="onRoute(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader2>
+
+  <!-- TODO rename this to be PartyProfile for reuse -->
+  <app-enrollee-profile [enrollee]="organization?.signingAuthority"></app-enrollee-profile>
+
+</section>
+
+<section *ngIf="organization?.signingAuthority?.preferredFirstName"
+         class="mb-4">
+
+  <app-page-subheader2>
+    <ng-container appPageSubheader2Title>Preferred Name</ng-container>
+
+    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
+            mat-icon-button
+            matTooltip="Edit Signing Authority"
+            (click)="onRoute(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader2>
+
+  <app-enrollee-property title="Preferred First Name">
+    {{ organization?.signingAuthority?.preferredFirstName | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Preferred Middle Name">
+    {{ organization?.signingAuthority?.preferredMiddleName | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Preferred Last Name">
+    {{ organization?.signingAuthority?.preferredLastName | default }}
+  </app-enrollee-property>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader2>
+    <ng-container appPageSubheader2Title>Contact Information</ng-container>
+
+    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
+            mat-icon-button
+            matTooltip="Edit Signing Authority"
+            (click)="onRoute(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader2>
+
+  <!-- TODO refactor this component is doesn't match a consistent pattern with enrolments for reuse -->
+  <app-party-review [party]="organization?.signingAuthority"
+                    [showName]="false"></app-party-review>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader2>
+    <ng-container appPageSubheader2Title>Organization Information</ng-container>
+
+    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
+            mat-icon-button
+            matTooltip="Edit Organization Information"
+            (click)="onRoute(SiteRoutes.ORGANIZATION_INFORMATION)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader2>
+
+  <app-enrollee-property title="Organization Number (Legal Entity Operating Site)">
+    {{ organization?.name | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Organization Registration ID">
+    {{ organization?.registrationId | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Doing Business As">
+    {{ organization?.doingBusinessAs | default }}
+  </app-enrollee-property>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader2>
+    <ng-container appPageSubheader2Title>Organization Type</ng-container>
+
+    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
+            mat-icon-button
+            matTooltip="Edit Organization Type"
+            (click)="onRoute(SiteRoutes.ORGANIZATION_TYPE)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader2>
+
+  <app-enrollee-property title="Organization Type"
+                         [makeBold]="true">
+    {{ organization?.organizationTypeCode | configCode: 'organizationTypes' | default }}
+  </app-enrollee-property>
+
+</section>

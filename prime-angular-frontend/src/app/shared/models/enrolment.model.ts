@@ -43,6 +43,7 @@ export interface HttpEnrollee extends Enrollee {
   collectionNoticeAccepted: boolean;
   // Always send an enrollee to manual adjudication
   alwaysManual: boolean;
+  requestingRemoteAccess: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
 }
@@ -84,6 +85,7 @@ export interface Enrolment {
   collectionNoticeAccepted: boolean;
   // Always send an enrollee to manual adjudication
   alwaysManual: boolean;
+  requestingRemoteAccess: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
 }

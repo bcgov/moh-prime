@@ -15,6 +15,8 @@ namespace Prime.Models
 
         public string DoingBusinessAs { get; set; }
 
+        public string Name { get; set; }
+
         public PhysicalAddress PhysicalAddress { get; set; }
 
         public int? AdministratorPharmaNetId { get; set; }
@@ -31,6 +33,7 @@ namespace Prime.Models
 
         public int? OrganizationId { get; set; }
 
+        [JsonIgnore]
         public Organization Organization { get; set; }
 
         [JsonIgnore]

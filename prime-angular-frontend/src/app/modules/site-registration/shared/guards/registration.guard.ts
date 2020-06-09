@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Observable, from, of } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
-
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 
@@ -19,6 +18,7 @@ import { SiteRegistrationResource } from '@registration/shared/services/site-reg
 import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 
 // TODO duplication with enrolment.guard should be split out for reuse
+// TODO drop once organization and site guards are in place
 @Injectable({
   providedIn: 'root'
 })
@@ -62,12 +62,6 @@ export class RegistrationGuard extends BaseGuard {
       );
   }
 
-  private route(routePath: string): string {
-    // Only care about the second parameter to determine route access, and
-    // assumes that all child routes are allowed
-    return routePath.slice(1).split('/')[1];
-  }
-
   /**
    * @description
    * Determine the route destination based on the site status.
@@ -92,7 +86,8 @@ export class RegistrationGuard extends BaseGuard {
   }
 
   private manageIncompleteSiteRouting(routePath: string, site: Site) {
-    return this.manageRouting(routePath, SiteRoutes.MULTIPLE_SITES, site);
+    // TODO set to SITE_REVIEW to allow removal of MULTIPLE_SITES, but definitely the wrong route
+    return this.manageRouting(routePath, SiteRoutes.SITE_REVIEW, site);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, site: Site): boolean {

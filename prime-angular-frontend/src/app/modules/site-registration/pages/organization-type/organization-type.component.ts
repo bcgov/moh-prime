@@ -1,25 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Organization } from '@enrolment/shared/models/organization.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
   selector: 'app-organization-type',
@@ -29,25 +28,26 @@ import { SiteRegistrationStateService } from '@registration/shared/services/site
 export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public title: string;
   public routeUtils: RouteUtils;
   public organization: string;
   public doingBusinessAsNames: string[];
-  public isCompleted: boolean;
-  public SiteRoutes = SiteRoutes;
   public organizationTypes: Config<number>[];
   public filteredOrganizationTypes: Config<number>[];
+  public isCompleted: boolean;
+  public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private organizationService: OrganizationService,
+    private organizationResource: OrganizationResource,
+    private organizationFormStateService: OrganizationFormStateService,
     private formUtilsService: FormUtilsService,
-    private utilsService: UtilsService,
     private dialog: MatDialog,
     private configService: ConfigService,
   ) {
+    this.title = 'Organization Type';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.organizationTypes = this.configService.organizationTypes;
   }
@@ -62,10 +62,12 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
+    // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        .updateSite(payload)
+      // TODO when spoking don't update
+      const payload = this.organizationFormStateService.organization;
+      this.organizationResource
+        .updateOrganization(payload, true)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
@@ -78,11 +80,7 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   }
 
   public nextRoute() {
-    if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
-    } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
-    }
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -98,12 +96,13 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.organizationTypeForm;
+    this.form = this.organizationFormStateService.organizationTypeForm;
   }
 
   private initForm() {
-    const site = this.siteRegistrationService.site;
-    this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO structured to match in all site views
+    const organization = this.organizationService.organization;
+    this.isCompleted = organization?.completed;
+    this.organizationFormStateService.setForm(organization);
   }
 }

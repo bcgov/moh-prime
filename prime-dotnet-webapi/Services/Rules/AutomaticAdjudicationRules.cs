@@ -156,6 +156,19 @@ namespace Prime.Services.Rules
         }
     }
 
+    public class RequestingRemoteAccessRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.RequestingRemoteAccess)
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.RequestingRemoteAccess);
+            }
+
+            return Task.FromResult(!enrollee.RequestingRemoteAccess);
+        }
+    }
+
     public class IdentityAssuranceLevelRule : AutomaticAdjudicationRule
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
@@ -163,6 +176,20 @@ namespace Prime.Services.Rules
             if (enrollee.IdentityAssuranceLevel < 3)
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.AssuranceLevel);
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
+    }
+
+    public class IdentityProviderRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.IdentityProvider != Auth.AuthConstants.BC_SERVICES_CARD)
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.IdentityProvider, $"Method used: {enrollee.IdentityProvider}");
                 return Task.FromResult(false);
             }
 

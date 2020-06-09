@@ -13,7 +13,7 @@
             *ngIf="isUnderReview"
             (click)="onApprove()">
       <mat-icon>check_circle_outline</mat-icon>
-      <span>Approve Enrolment</span>
+      <span>Approve Enrollee</span>
     </button>
     <button mat-menu-item
             [disabled]="!canEdit"
@@ -41,7 +41,7 @@
             *ngIf="enrollee.currentStatus.statusCode === EnrolmentStatus.DECLINED"
             [disabled]="!canEdit"
             (click)="onEnableEnrollee()">
-      <mat-icon>lock_open</mat-icon>
+      <mat-icon>thumb_up</mat-icon>
       <span>Enable Enrollee</span>
     </button>
     <button mat-menu-item

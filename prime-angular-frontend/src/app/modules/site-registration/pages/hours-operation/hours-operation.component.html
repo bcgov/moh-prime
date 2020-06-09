@@ -1,7 +1,6 @@
 <app-page>
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"
-                               [currentRoute]="SiteRoutes.HOURS_OPERATION"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -9,9 +8,12 @@
 
     <section class="mb-3">
 
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Hours of Operation</ng-container>
-      </app-page-subheader>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Specify the days and times your location is open or functioning.
+        </ng-container>
+      </app-page-subheader2>
 
       <app-business-hours [form]="form"
                           (add)="onAdd($event)"

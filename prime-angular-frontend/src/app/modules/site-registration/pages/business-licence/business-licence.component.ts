@@ -1,28 +1,23 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import tus from 'tus-js-client';
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
 
 import { environment } from '@env/environment';
 import { ToastService } from '@core/services/toast.service';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { LoggerService } from '@core/services/logger.service';
 import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
 
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteService } from '@registration/shared/services/site.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { exhaustMap, map } from 'rxjs/operators';
-
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-business-licence',
@@ -31,11 +26,13 @@ import { exhaustMap, map } from 'rxjs/operators';
 })
 export class BusinessLicenceComponent implements OnInit {
   public busy: Subscription;
-  public form: FormGroup;
+  public title: string;
   public routeUtils: RouteUtils;
+  public businessLicences: BusinessLicence[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
-  public businessLicences: BusinessLicence[];
+  public hasNoLicenceError: boolean;
+  public uploadedFile: boolean;
 
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
   public filePondOptions: { [key: string]: any };
@@ -45,34 +42,31 @@ export class BusinessLicenceComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private siteService: SiteService,
+    private siteResource: SiteResource,
     private keycloakTokenService: KeycloakTokenService,
-    private formUtilsService: FormUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private formUtilsService: FormUtilsService
   ) {
+    this.title = 'Submit Your Business Licence';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.filePondOptions = {
       class: 'prime-filepond',
       multiple: true,
-      labelIdle: 'Drop files here',
-      acceptedFileTypes: 'image/jpeg, image/png'
+      labelIdle: 'Click to Browse or Drop files here',
+      acceptedFileTypes: ['image/jpeg', 'image/png'],
+      allowFileTypeValidation: true,
     };
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
+    // TODO validations temporarily turned off
+    // if (this.siteService.site.businessLicences.length > 0 || this.uploadedFile) {
+    this.nextRoute();
+    // } else {
+    //   this.hasNoLicenceError = true;
+    // }
   }
 
   public onFilePondInit() {
@@ -83,73 +77,63 @@ export class BusinessLicenceComponent implements OnInit {
     const token = await this.keycloakTokenService.token();
     const file = event.file.file; // File for uploading
     const { name: filename, type: filetype } = file;
-    const upload = new tus.Upload(file, {
-      endpoint: `${environment.apiEndpoint}/document`,
-      retryDelays: [0, 3000, 5000, 10000, 20000],
-      metadata: { filename, filetype },
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        Authorization: `Bearer ${token}`,
-      },
-      onError: async (error: Error) =>
-        this.toastService.openErrorToast(error.message),
-      onProgress: async (bytesUploaded: number, bytesTotal: number) =>
-        this.filePondUploadProgress = (bytesUploaded / bytesTotal * 100),
-      onSuccess: async () => {
-        this.filePondUploadProgress = 100;
-        this.toastService.openSuccessToast('File(s) have been uploaded');
+    if (this.filePondOptions.acceptedFileTypes.includes(filetype)) {
+      const upload = new tus.Upload(file, {
+        endpoint: `${environment.apiEndpoint}/document`,
+        retryDelays: [0, 3000, 5000, 10000, 20000],
+        metadata: { filename, filetype },
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          Authorization: `Bearer ${token}`,
+        },
+        onError: async (error: Error) => this.logger.error('BusinessLicence::onFilePondAddFile', error),
+        // TODO throws an error intermittently so commented out for release
+        // this.toastService.openErrorToast(error.message),
+        onProgress: async (bytesUploaded: number, bytesTotal: number) =>
+          this.filePondUploadProgress = (bytesUploaded / bytesTotal * 100),
+        onSuccess: async () => {
+          this.filePondUploadProgress = 100;
+          this.toastService.openSuccessToast('File(s) have been uploaded');
 
-        const documentGuid = upload.url.split('/').pop();
+          const documentGuid = upload.url.split('/').pop();
+          const siteId = this.siteService.site.id;
 
-        this.siteRegistrationResource
-          .createBusinessLicence(this.siteRegistrationStateService.site.id, documentGuid, filename)
-          .subscribe(() => {
-            this.toastService.openSuccessToast('Business Licence has been added');
-          });
-      }
-    });
-    upload.start();
+          this.siteResource
+            .createBusinessLicence(siteId, documentGuid, filename)
+            .subscribe();
+
+          this.uploadedFile = true;
+          this.hasNoLicenceError = false;
+        }
+      });
+      upload.start();
+    }
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
     }
   }
 
-  public canDeactivate(): Observable<boolean> | boolean {
-    const data = 'unsaved';
-    return (this.form.dirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
-      : true;
-  }
-
   public ngOnInit() {
-    this.createFormInstance();
-    this.initForm();
-    // this.getBusinessLicences();
-  }
+    const site = this.siteService.site;
+    this.isCompleted = site?.completed;
 
-  private createFormInstance() {
-    this.form = this.siteRegistrationStateService.organizationInformationForm;
-  }
-
-  private initForm() {
-    const site = this.siteRegistrationService.site;
-    this.isCompleted = site.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    this.uploadedFile = false;
   }
 
   private getBusinessLicences() {
-    const siteId = this.siteRegistrationService.site.id;
-    return this.siteRegistrationResource.getBusinesssLicences(siteId).subscribe(
-      (bl: BusinessLicence[]) => this.businessLicences = bl
-    );
+    const siteId = this.siteService.site.id;
+    return this.siteResource.getBusinessLicences(siteId)
+      .subscribe((businessLicenses: BusinessLicence[]) =>
+        this.businessLicences = businessLicenses
+      );
   }
 }

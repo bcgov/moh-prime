@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -12,9 +12,10 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -34,8 +35,9 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
+    private organizationService: OrganizationService,
+    private organizationResource: OrganizationResource,
+    private organizationFormStateService: OrganizationFormStateService,
     private dialog: MatDialog
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -43,7 +45,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   public onSubmit() {
     if (this.accepted.checked) {
-      const siteId = this.siteRegistrationService.site?.id;
+      const organizationid = this.route.snapshot.params.oid;
       const data: DialogOptions = {
         title: 'Organization Agreement',
         message: 'Are you sure you want to accept the Organization Agreement?',
@@ -54,7 +56,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.siteRegistrationResource.acceptCurrentOrganizationAgreement(siteId)
+              ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
               : EMPTY
           )
         )
@@ -63,17 +65,25 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.VENDOR);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
   }
 
   public ngOnInit(): void {
-    this.hasAcceptedAgreement = !!this.siteRegistrationService.site?.location?.organization.acceptedAgreementDate;
-    this.siteRegistrationResource
-      .getOrganizationAgreement()
-      .subscribe((organizationAgreement: string) => this.organizationAgreement = organizationAgreement);
+    // TODO structured to match in all site views
+    const organization = this.organizationService.organization;
+    this.isCompleted = organization?.completed;
+    this.organizationFormStateService.setForm(organization);
+
+    this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
+
+    this.organizationResource
+      .getOrganizationAgreement(organization.id)
+      .subscribe((organizationAgreement: string) =>
+        this.organizationAgreement = organizationAgreement
+      );
   }
 }

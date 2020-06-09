@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-
 import { Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
@@ -20,6 +19,9 @@ import { BusinessLicence } from '../models/business-licence.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
+/**
+ * @deprecated
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -31,7 +33,7 @@ export class SiteRegistrationResource {
     private logger: LoggerService
   ) { }
 
-  public getSites() {
+  public getSites(): Observable<Site[]> {
     return this.apiResource.get<Site[]>('sites')
       .pipe(
         map((response: ApiHttpResponse<Site[]>) => response.result),
@@ -60,7 +62,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public getSiteById(siteId: number) {
+  public getSiteById(siteId: number): Observable<Site> {
     return this.apiResource.get<Site>(`sites/${siteId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
@@ -87,7 +89,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public createSite(party: Party) {
+  public createSite(party: Party): Observable<Site> {
     return this.apiResource.post<Site>('sites', party)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
@@ -135,7 +137,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public deleteSite(siteId: number) {
+  public deleteSite(siteId: number): Observable<Site> {
     return this.apiResource.delete<Site>(`sites/${siteId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
