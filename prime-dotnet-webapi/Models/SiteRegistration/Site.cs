@@ -28,7 +28,7 @@ namespace Prime.Models
 
         public Location Location { get; set; }
 
-        public int? VendorId { get; set; }
+        public int? VendorCode { get; set; }
 
         public Vendor Vendor { get; set; }
 
