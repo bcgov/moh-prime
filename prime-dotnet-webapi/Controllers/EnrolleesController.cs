@@ -45,6 +45,7 @@ namespace Prime.Controllers
             _submissionService = submissionService;
         }
 
+        // TODO revert after prod gpids are updated
         // PUT: api/Enrollees/UpdateGPIDS
         /// <summary>
         /// Updates all non HL7 compliant gpid's for all enrollees
@@ -57,6 +58,10 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateGPIDs()
         {
+            if (!User.IsAdmin())
+            {
+                return Forbid();
+            }
 
             await _submissionService.UpdateNonCompliantGPIDs();
 
