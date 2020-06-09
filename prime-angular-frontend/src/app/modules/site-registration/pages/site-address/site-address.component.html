@@ -20,8 +20,17 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Name"
-                   formControlName="name">
-            <!-- TODO populate with organization name and doing business as from OrgBook -->
+                   formControlName="name"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-optgroup *ngFor="let locationName of locationNames"
+                            [label]="locationName.group">
+                <mat-option *ngFor="let option of locationName.options"
+                            [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-autocomplete>
             <mat-error>Required</mat-error>
           </mat-form-field>
 
