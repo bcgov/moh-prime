@@ -5,7 +5,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
-import { debounceTime, switchMap, map } from 'rxjs/operators';
+import { debounceTime, switchMap, map, tap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
@@ -83,29 +83,14 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     const orgName = option.value;
     this.orgBookResource.getOrganizationFacet(orgName)
       .pipe(
-        map((response: OrgBookFacetHttpResponse) => {
-          // Assumed that only a single source ID will exist based on a
-          // specific selection being made in autocomplete
-          const sourceId = response.objects.results[0].topic.source_id;
-          this.form.get('registrationId').patchValue(sourceId);
-          return sourceId;
-        }),
-        switchMap((sourceId: string) => this.orgBookResource.getOrganizationDetail(sourceId)),
-        map((response: OrgBookDetailHttpResponse) => response.id),
-        switchMap((topicId: number) => this.orgBookResource.getOrganizationRelatedTo(topicId))
+        this.orgBookResource.sourceIdMap(),
+        // Perform a side effect
+        tap((sourceId: string) => this.form.get('registrationId').patchValue(sourceId)),
+        this.orgBookResource.doingBusinessAsMap()
       )
-      .subscribe((response: OrgBookRelatedHttpResponse[]) => {
-        const doingBusinessAs = response
-          .map((relation: OrgBookRelatedHttpResponse) => {
-            // Assumed only a single name per organization is relavent
-            const businessName = relation.related_topic.names[0].text;
-            const isDoingBusinessAs = relation.attributes.some(a => a.value === 'Does Business As');
-            return (isDoingBusinessAs) ? businessName : null;
-          });
-        // Remove duplicates since only names are persisted
-        this.doingBusinessAsNames = [...new Set(doingBusinessAs)]
-          .sort(this.sortDoingBusinessAsNames());
-      });
+      .subscribe((doingBusinessAsNames: string[]) =>
+        this.doingBusinessAsNames = doingBusinessAsNames
+      );
   }
 
   public onBack() {
