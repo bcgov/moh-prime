@@ -49,10 +49,22 @@ namespace Prime.Migrations
                 principalTable: "VendorLookup",
                 principalColumn: "Code",
                 onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.Sql(@"
+                UPDATE ""VendorLookup""
+                SET ""Name"" = 'Medinet'
+                WHERE ""Code"" = 4;
+            ");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(@"
+                UPDATE ""VendorLookup""
+                SET ""Name"" = 'MediNet'
+                WHERE ""Code"" = 4;
+            ");
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Site_VendorLookup_VendorCode",
                 table: "Site");
