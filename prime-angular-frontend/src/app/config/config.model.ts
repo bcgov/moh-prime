@@ -24,6 +24,7 @@ export class Config<T> {
 }
 
 export interface LicenseConfig extends Config<number> {
+  regulatedUser: boolean;
   collegeLicenses: AssociatedCollegeConfig[];
 }
 

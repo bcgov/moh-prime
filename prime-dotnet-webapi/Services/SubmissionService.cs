@@ -15,6 +15,8 @@ namespace Prime.Services
 {
     public class SubmissionService : BaseService, ISubmissionService
     {
+        private static string GPID_CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
+        private static int GPID_LENGTH = 20;
         private readonly IAccessTermService _accessTermService;
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IBusinessEventService _businessEventService;
@@ -100,6 +102,27 @@ namespace Prime.Services
                 .SingleAsync(e => e.Id == enrolleeId);
 
             enrollee.AlwaysManual = alwaysManual;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateNonCompliantGPIDs()
+        {
+            var enrollees = await _enrolleeService.GetEnrolleesAsync();
+
+            foreach (var enrollee in enrollees)
+            {
+                if (!string.IsNullOrWhiteSpace(enrollee.GPID))
+                {
+                    bool valid = enrollee.GPID.All(s => GPID_CHAR_SET.Contains(s)) && enrollee.GPID.Length == GPID_LENGTH;
+
+                    if (!valid)
+                    {
+                        enrollee.GPID = null;
+                        await this.SetGpid(enrollee);
+                    }
+                }
+            }
+
             await _context.SaveChangesAsync();
         }
 
@@ -198,10 +221,8 @@ namespace Prime.Services
         private static string GenerateGpid()
         {
             Random r = new Random();
-            int length = 20;
-            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
 
-            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
+            IEnumerable<char> chars = Enumerable.Repeat(GPID_CHAR_SET, GPID_LENGTH).Select(s => s[r.Next(s.Length)]);
 
             return new string(chars.ToArray());
         }

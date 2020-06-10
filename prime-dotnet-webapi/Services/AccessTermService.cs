@@ -267,23 +267,12 @@ namespace Prime.Services
 
         private async Task<UserClause> GetUserClause(Enrollee enrollee)
         {
-            var userType = PrimeConstants.PRIME_OBO;
-
-            if (enrollee.Certifications.Count > 0)
-            {
-                foreach (var cert in enrollee.Certifications)
-                {
-                    if (cert.License.DefaultPrivileges.Any(dp => dp.PrivilegeId == Privilege.RU_CODE))
-                    {
-                        userType = PrimeConstants.PRIME_RU;
-                    }
-                }
-            }
+            var classification = enrollee.IsRegulatedUser() ? PrimeConstants.PRIME_RU : PrimeConstants.PRIME_OBO;
 
             return await _context.UserClauses
-                .Where(g => g.EnrolleeClassification == userType)
+                .Where(g => g.EnrolleeClassification == classification)
                 .OrderByDescending(g => g.EffectiveDate)
-                .FirstOrDefaultAsync();
+                .FirstAsync();
         }
 
         private async Task<IEnumerable<AccessTermLicenseClassClause>> GetAccessTermLicenseClassClauses(Enrollee enrollee, AccessTerm accessTerms)
