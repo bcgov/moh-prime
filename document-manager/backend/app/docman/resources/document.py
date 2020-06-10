@@ -19,7 +19,7 @@ class DocumentListResource(Resource):
     parser.add_argument(
         'filename', type=str, required=False, help='File name + extension of the document.')
 
-    @jwt.requires_auth
+    #@jwt.requires_auth
     def post(self):
         if request.headers.get('Tus-Resumable') is None:
             raise BadRequest('Received file upload for unsupported file transfer protocol')
@@ -79,23 +79,6 @@ class DocumentListResource(Resource):
         response.autocorrect_location_header = False
         return response
 
-    def get(self):
-        doc_guid = request.args.get('token', '')
-        # doc_guid = cache.get(DOWNLOAD_TOKEN(token_guid))
-        # cache.delete(DOWNLOAD_TOKEN(token_guid))
-
-        if not doc_guid:
-            raise BadRequest('Valid token required for download')
-
-        doc = Document.query.filter_by(document_guid=doc_guid).first()
-        if not doc:
-            raise NotFound('Could not find the document corresponding to the token')
-
-        return send_file(
-            filename_or_fp=doc.full_storage_path,
-            attachment_filename=doc.filename,
-            as_attachment=True)
-
     # Ensure that a given path lies under a given base directory (and so has not been manipulated in a manner such as 'app/document_uploads/../../etc')
     def is_safe_path(self, basedir, path):
       return os.path.abspath(path).startswith(basedir)
@@ -103,6 +86,24 @@ class DocumentListResource(Resource):
 
 @api.route(f'/documents/<string:document_guid>')
 class DocumentResource(Resource):
+    #@jwt.requires_auth
+    def get(self, document_guid):
+        # doc_guid = request.args.get('token', '')
+        # doc_guid = cache.get(DOWNLOAD_TOKEN(token_guid))
+        # cache.delete(DOWNLOAD_TOKEN(token_guid))
+
+        if not document_guid:
+            raise BadRequest('Document GUID is required')
+
+        doc = Document.find_by_document_guid(document_guid)
+        if not doc:
+            raise NotFound()
+
+        return send_file(
+            filename_or_fp=doc.full_storage_path,
+            #attachment_filename=doc.filename,
+            as_attachment=False)
+
     def patch(self, document_guid):
         file_path = cache.get(FILE_UPLOAD_PATH(document_guid))
         if file_path is None or not os.path.lexists(file_path):
