@@ -21,7 +21,7 @@ class Config(object):
 
     # Auth
     JWT_OIDC_WELL_KNOWN_CONFIG = os.environ.get('JWT_OIDC_WELL_KNOWN_CONFIG')
-    JWT_OIDC_AUDIENCE = os.environ.get('JWT_OIDC_AUDIENCE', '')
+    JWT_OIDC_AUDIENCE = os.environ.get('JWT_OIDC_AUDIENCE', 'prime-document-manager')
     JWT_OIDC_ALGORITHMS = 'RS256'
 
     SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(16))
