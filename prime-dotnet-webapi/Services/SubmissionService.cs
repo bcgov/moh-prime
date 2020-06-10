@@ -130,7 +130,7 @@ namespace Prime.Services
                 if (enrollee.AdjudicatorId != null)
                 {
                     await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
-                    await _businessEventService.CreateAdminClaimEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
+                    await _businessEventService.CreateAdminActionEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
                 }
             }
             else
@@ -177,6 +177,7 @@ namespace Prime.Services
 
         private async Task RerunRulesAsync(Enrollee enrollee)
         {
+            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator manually ran the enrollee application rules");
             await this.ProcessEnrolleeApplicationRules(enrollee.Id);
             await _context.SaveChangesAsync();
