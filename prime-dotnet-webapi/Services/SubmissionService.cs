@@ -250,7 +250,7 @@ namespace Prime.Services
             private async Task HandleLockProfile() { await _submissionService.LockProfileAsync(_enrollee); }
             private async Task HandleDeclineProfile() { await _submissionService.DeclineProfileAsync(_enrollee); }
             private async Task HandleEnableProfile() { await _submissionService.EnableProfileAsync(_enrollee); }
-            private async Task HandleRerunRules() { await _submissionService.EnableProfileAsync(_enrollee); }
+            private async Task HandleRerunRules() { await _submissionService.RerunRulesAsync(_enrollee); }
 
             public SubmissionStateMachine(Enrollee enrollee, SubmissionService submissionService)
             {
