@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Prime.Services.Clients
 {
@@ -13,10 +15,16 @@ namespace Prime.Services.Clients
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-        public async Task<HttpResponseMessage> InitializeFileUploadAsync()
+        public Task<HttpResponseMessage> InitializeFileUploadAsync(HttpRequestMessage request)
         {
-            await _client.GetAsync("");
-            return (HttpResponseMessage)null;
+            var response = _client.SendAsync(request);
+            throw new NotImplementedException();
+        }
+
+        public async Task<Stream> GetFileAsync(Guid documentGuid)
+        {
+            var response = await _client.GetAsync($"documents/{documentGuid}");
+            return await response.Content.ReadAsStreamAsync();
         }
     }
 }
