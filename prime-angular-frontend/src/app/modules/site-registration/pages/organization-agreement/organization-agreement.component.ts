@@ -101,11 +101,12 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
           this.toastService.openSuccessToast('File(s) have been uploaded');
 
           const documentGuid = upload.url.split('/').pop();
-          const organizationId = this.organizationService.organization.id;
+          console.log(this.organizationService.organization);
+          // const organizationId = this.organizationService.organization.id;
 
-          this.organizationResource
-            .addSignedAgreement(organizationId, documentGuid, filename)
-            .subscribe();
+          // this.organizationResource
+          //   .addSignedAgreement(organizationId, documentGuid, filename)
+          //   .subscribe();
 
           this.uploadedFile = true;
           this.hasNoUploadError = false;
@@ -147,6 +148,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public ngOnInit(): void {
     // TODO structured to match in all site views
     const organization = this.organizationService.organization;
+    console.log(organization);
     this.isCompleted = organization?.completed;
     this.canSignOnline = true;
     this.organizationFormStateService.setForm(organization);

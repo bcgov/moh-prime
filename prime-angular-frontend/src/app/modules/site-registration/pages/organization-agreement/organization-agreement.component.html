@@ -21,58 +21,59 @@
       </mat-slide-toggle>
     </section>
 
-    <ng-container *ngIf="!canSignOnline; else electronic">
-      <section class="mb-3">
+    <!-- <ng-container *ngIf="!canSignOnline; else electronic"> -->
+    <section class="mb-3">
 
-        <app-page-subheader2>
-          <ng-container appPageSubheader2Summary>
-            Download and print off the Organization Agreement for PharmaNet Use. Sign, and upload. You cannot make
-            changes
-            to the agreement.
-          </ng-container>
-        </app-page-subheader2>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Summary>
+          Download and print off the Organization Agreement for PharmaNet Use. Sign, and upload. You cannot make
+          changes
+          to the agreement.
+        </ng-container>
+      </app-page-subheader2>
 
-        <div class="mb-2 row">
-          <div class="col">
-            <button mat-flat-button
-                    color="primary"
-                    disabled="true"
-                    (click)="onDownload()">Download Agreement</button>
-          </div>
+      <div class="mb-2 row">
+        <div class="col">
+          <button mat-flat-button
+                  color="primary"
+                  disabled="true"
+                  (click)="onDownload()">Download Agreement</button>
         </div>
-
-        <div class="mb-2">
-          <div class="mb-2 property-key"
-               [ngClass]="'font-weight-bolder'">
-            Upload the signed Organization Agreement here.
-          </div>
-        </div>
-
-        <file-pond #filePond
-                   [options]="filePondOptions"
-                   [files]="filePondFiles"
-                   (oninit)="onFilePondInit()"
-                   (onaddfile)="onFilePondAddFile($event)">
-        </file-pond>
-
-      </section>
-    </ng-container>
-
-    <ng-template #electronic>
-
-      <div class="organization-agreement"
-           [innerHTML]="organizationAgreement | safeHtml"></div>
-
-      <div class="footer mb-4">
-        <mat-checkbox #accept>
-          <div class="pl-3">
-            By checking here I agree to the terms of this Agreement as the duly authorized representative of the
-            Organization.
-          </div>
-        </mat-checkbox>
       </div>
 
-    </ng-template>
+      <div class="mb-2">
+        <div class="mb-2 property-key"
+             [ngClass]="'font-weight-bolder'">
+          Upload the signed Organization Agreement here.
+        </div>
+      </div>
+
+      <file-pond #filePond
+                 name="org-filePond"
+                 [options]="filePondOptions"
+                 [files]="filePondFiles"
+                 (oninit)="onFilePondInit()"
+                 (onaddfile)="onFilePondAddFile($event)">
+      </file-pond>
+
+    </section>
+    <!-- </ng-container> -->
+
+    <!-- <ng-template #electronic> -->
+
+    <div class="organization-agreement"
+         [innerHTML]="organizationAgreement | safeHtml"></div>
+
+    <div class="footer mb-4">
+      <mat-checkbox #accept>
+        <div class="pl-3">
+          By checking here I agree to the terms of this Agreement as the duly authorized representative of the
+          Organization.
+        </div>
+      </mat-checkbox>
+    </div>
+
+    <!-- </ng-template> -->
 
     <div class="row justify-content-end">
       <div class="col">
