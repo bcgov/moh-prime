@@ -43,7 +43,7 @@
 
         <div class="mb-2">
           <div class="mb-2 property-key"
-               [ngClass]="(makeBold) ? 'font-weight-bolder' : 'font-weight-bold'">
+               [ngClass]="'font-weight-bolder'">
             Upload the signed Organization Agreement here.
           </div>
         </div>
@@ -86,7 +86,7 @@
 
         <button mat-flat-button
                 color="primary"
-                [disabled]="!accept?.checked"
+                [disabled]="!accepted?.checked"
                 (click)="onSubmit()">Accept Organization Agreement</button>
 
       </div>

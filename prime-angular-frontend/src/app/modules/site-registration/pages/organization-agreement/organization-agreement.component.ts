@@ -101,11 +101,11 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
           this.toastService.openSuccessToast('File(s) have been uploaded');
 
           const documentGuid = upload.url.split('/').pop();
-          // const siteId = this.siteService.site.id;
+          const organizationId = this.organizationService.organization.id;
 
-          // this.siteResource
-          //   .createBusinessLicence(siteId, documentGuid, filename)
-          //   .subscribe();
+          this.organizationResource
+            .addSignedAgreement(organizationId, documentGuid, filename)
+            .subscribe();
 
           this.uploadedFile = true;
           this.hasNoUploadError = false;
