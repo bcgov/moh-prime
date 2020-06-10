@@ -59,6 +59,34 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     private toastService: ToastService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.filePondOptions = {
+      class: 'prime-filepond',
+      multiple: true,
+      labelIdle: 'Click to Browse or Drop files here',
+      acceptedFileTypes: ['image/jpeg', 'image/png'],
+      allowFileTypeValidation: true,
+    };
+  }
+
+  public onSubmit() {
+    if (this.accepted.checked) {
+      const organizationid = this.route.snapshot.params.oid;
+      const data: DialogOptions = {
+        title: 'Organization Agreement',
+        message: 'Are you sure you want to accept the Organization Agreement?',
+        actionText: 'Accept Organization Agreement'
+      };
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
+              : EMPTY
+          )
+        )
+        .subscribe(() => this.nextRoute());
+    }
   }
 
   public onCanSignOnlineChange() {
@@ -67,10 +95,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     if (!this.canSignOnline) {
       // this.form.get('preferredMiddleName').reset();
     }
-
-  }
-
-  public onDownload() {
 
   }
 
@@ -116,25 +140,8 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     }
   }
 
-  public onSubmit() {
-    if (this.accepted.checked) {
-      const organizationid = this.route.snapshot.params.oid;
-      const data: DialogOptions = {
-        title: 'Organization Agreement',
-        message: 'Are you sure you want to accept the Organization Agreement?',
-        actionText: 'Accept Organization Agreement'
-      };
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
-              : EMPTY
-          )
-        )
-        .subscribe(() => this.nextRoute());
-    }
+  public onDownload() {
+
   }
 
   public onBack() {
