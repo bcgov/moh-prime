@@ -266,8 +266,8 @@ objects:
     creationTimestamp: null
     labels:
       io.kompose.network/primenet: "true"
-      io.kompose.service: ${NAME}${SUFFIX}-migrate
-    name: ${NAME}${SUFFIX}-migrate
+      io.kompose.service: ${NAME}${SUFFIX}
+    name: ${NAME}${SUFFIX}
   spec:
     containers:
     - args:
@@ -380,8 +380,8 @@ objects:
           configMapKeyRef:
             key: JWT_OIDC_WELL_KNOWN_CONFIG
             name: document-manager-backend--env-prime
-      image: ${NAME}${SUFFIX}-migrate
-      name: ${NAME}${SUFFIX}-migrate
+      image: ${NAME}${SUFFIX}
+      name: ${NAME}${SUFFIX}
       resources: {}
       volumeMounts:
       - mountPath: /app/

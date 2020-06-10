@@ -76,7 +76,7 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: '${NAME}${SUFFIX}-migrate:latest'
+          name: '${NAME}${SUFFIX}:latest'
       resources:
         limits:
           cpu: 200m
