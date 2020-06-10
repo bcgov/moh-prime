@@ -177,8 +177,8 @@ namespace Prime.Services
 
         private async Task RerunRulesAsync(Enrollee enrollee)
         {
-            await this.ProcessEnrolleeApplicationRules(enrollee.Id);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator manually ran the enrollee application rules");
+            await this.ProcessEnrolleeApplicationRules(enrollee.Id);
             await _context.SaveChangesAsync();
         }
 
