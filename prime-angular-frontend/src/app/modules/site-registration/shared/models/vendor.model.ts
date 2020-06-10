@@ -1,4 +1,4 @@
 export interface Vendor {
-  id?: number;
+  code?: number;
   name: string;
 }

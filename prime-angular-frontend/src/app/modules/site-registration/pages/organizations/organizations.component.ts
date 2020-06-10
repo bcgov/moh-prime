@@ -15,7 +15,7 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
-import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
 @Component({
   selector: 'app-organizations',
