@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -253,6 +254,72 @@ namespace Prime.Controllers
 
             organization = await _organizationService.SubmitRegistrationAsync(organizationId);
             return Ok(ApiResponse.Result(organization));
+        }
+
+        // POST: api/organizations/5/signed-agreement
+        /// <summary>
+        /// Adds a new signed agreement to an organization.
+        /// </summary>
+        /// <param name="documentGuid"></param>
+        /// <param name="filename"></param>
+        /// <param name="organizationId"></param>
+        [HttpPost("{organizationId}/business-licence", Name = nameof(CreateBusinessLicence))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<BusinessLicence>> CreateBusinessLicence(int organizationId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            if (!User.CanEdit(organization.SigningAuthority))
+            {
+                return Forbid();
+            }
+
+            var licence = await _organizationService.AddSignedAgreementAsync(organization.Id, documentGuid, filename);
+
+            // TODO updated to be licence instead of organization, and should have GET and CreatedAtAction
+            return Ok(ApiResponse.Result(licence));
+            // return CreatedAtAction(
+            //     nameof(GetOrganizationById),
+            //     new { organizationId = createdOrganizationId },
+            //     ApiResponse.Result(createdOrganization)
+            // );
+        }
+
+        // Get: api/organizations/5/business-licence
+        /// <summary>
+        /// Gets a new Business Licence for a organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpGet("{organizationId}/business-licence", Name = nameof(CreateBusinessLicence))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<IEnumerable<BusinessLicence>>> GetBusinessLicence(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            if (!User.CanEdit(organization.SigningAuthority))
+            {
+                return Forbid();
+            }
+
+            var licences = await _organizationService.GetSignedAgreementsAsync(organization.Id);
+
+            return Ok(ApiResponse.Result(licences));
         }
     }
 }

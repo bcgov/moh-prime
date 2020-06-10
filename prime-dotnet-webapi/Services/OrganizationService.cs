@@ -192,6 +192,33 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
         }
 
+        public async Task<SignedAgreement> AddSignedAgreementAsync(int organizationId, Guid documentGuid, string filename)
+        {
+            var signedAgreement = new SignedAgreement
+            {
+                DocumentGuid = documentGuid,
+                OrganizationId = organizationId,
+                FileName = filename,
+                UploadedDate = DateTimeOffset.Now
+            };
+
+            _context.SignedAgreements.Add(signedAgreement);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not add business licence.");
+            }
+
+            return signedAgreement;
+        }
+
+        public async Task<IEnumerable<SignedAgreement>> GetSignedAgreementsAsync(int organizationId)
+        {
+            return await _context.SignedAgreements
+                .Where(a => a.OrganizationId == organizationId)
+                .ToListAsync();
+        }
 
         private IQueryable<Organization> GetBaseOrganizationQuery()
         {
