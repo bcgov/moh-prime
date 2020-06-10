@@ -263,12 +263,12 @@ namespace Prime.Controllers
         /// <param name="documentGuid"></param>
         /// <param name="filename"></param>
         /// <param name="organizationId"></param>
-        [HttpPost("{organizationId}/business-licence", Name = nameof(CreateBusinessLicence))]
+        [HttpPost("{organizationId}/signed-agreement", Name = nameof(CreateSignedAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<BusinessLicence>> CreateBusinessLicence(int organizationId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
+        public async Task<ActionResult<SignedAgreement>> CreateSignedAgreement(int organizationId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
@@ -293,17 +293,17 @@ namespace Prime.Controllers
             // );
         }
 
-        // Get: api/organizations/5/business-licence
+        // Get: api/organizations/5/signed-agreement
         /// <summary>
-        /// Gets a new Business Licence for a organization.
+        /// Gets the signed agreement for a organization.
         /// </summary>
         /// <param name="organizationId"></param>
-        [HttpGet("{organizationId}/business-licence", Name = nameof(CreateBusinessLicence))]
+        [HttpGet("{organizationId}/signed-agreement", Name = nameof(GetSignedAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<IEnumerable<BusinessLicence>>> GetBusinessLicence(int organizationId)
+        public async Task<ActionResult<IEnumerable<SignedAgreement>>> GetSignedAgreement(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
