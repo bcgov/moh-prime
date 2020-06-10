@@ -65,28 +65,7 @@ namespace Prime.Services
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
 
-            // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
-            enrollee = await _context.Enrollees
-                .Include(e => e.PhysicalAddress)
-                .Include(e => e.MailingAddress)
-                .Include(e => e.EnrolmentStatuses)
-                    .ThenInclude(es => es.EnrolmentStatusReasons)
-                .Include(e => e.Certifications)
-                    .ThenInclude(cer => cer.College)
-                .Include(e => e.Certifications)
-                    .ThenInclude(c => c.License)
-                        .ThenInclude(l => l.DefaultPrivileges)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
-            {
-                var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
-                newStatus.AddStatusReason(StatusReasonType.Automatic);
-
-                await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
-                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
-            }
-
+            await this.ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();
         }
 
@@ -198,7 +177,9 @@ namespace Prime.Services
 
         private async Task RerunRulesAsync(Enrollee enrollee)
         {
-            // TODO implement rerunning rule actions
+            await this.ProcessEnrolleeApplicationRules(enrollee.Id);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator manually ran the enrollee application rules");
+            await _context.SaveChangesAsync();
         }
 
         private async Task SetGpid(Enrollee enrollee)
@@ -222,6 +203,31 @@ namespace Prime.Services
             IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
 
             return new string(chars.ToArray());
+        }
+
+        private async Task ProcessEnrolleeApplicationRules(int enrolleeId)
+        {
+            // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
+            var enrollee = await _context.Enrollees
+                .Include(e => e.PhysicalAddress)
+                .Include(e => e.MailingAddress)
+                .Include(e => e.EnrolmentStatuses)
+                    .ThenInclude(es => es.EnrolmentStatusReasons)
+                .Include(e => e.Certifications)
+                    .ThenInclude(cer => cer.College)
+                .Include(e => e.Certifications)
+                    .ThenInclude(c => c.License)
+                        .ThenInclude(l => l.DefaultPrivileges)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
+            {
+                var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
+                newStatus.AddStatusReason(StatusReasonType.Automatic);
+
+                await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
+            }
         }
 
         public class InvalidActionException : Exception
