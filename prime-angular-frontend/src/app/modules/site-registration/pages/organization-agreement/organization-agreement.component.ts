@@ -91,7 +91,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
           'Access-Control-Allow-Origin': '*',
           Authorization: `Bearer ${token}`,
         },
-        onError: async (error: Error) => this.logger.error('BusinessLicence::onFilePondAddFile', error),
+        onError: async (error: Error) => this.logger.error('UploadOrganizationAgreement::onFilePondAddFile', error),
         // TODO throws an error intermittently so commented out for release
         // this.toastService.openErrorToast(error.message),
         onProgress: async (bytesUploaded: number, bytesTotal: number) =>
