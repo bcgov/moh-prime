@@ -25,11 +25,10 @@ class Config(object):
     JWT_OIDC_ALGORITHMS = 'RS256'
 
     SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(16))
-    ENVIRONMENT_NAME = os.environ.get('ENVIRONMENT_NAME', 'dev')
     BASE_PATH = os.environ.get('BASE_PATH', '')
     DOCUMENT_MANAGER_URL = os.environ.get('DOCUMENT_MANAGER_URL')
     UPLOADED_DOCUMENT_DEST = os.environ.get('UPLOADED_DOCUMENT_DEST', '/app/document_uploads')
-    MAX_CONTENT_LENGTH = 400 * 1024 * 1024
+    MAX_CONTENT_LENGTH = 400 * 1024 * 1024 # 400 MB max file size
     JSONIFY_PRETTYPRINT_REGULAR = False
 
     def JWT_ROLE_CALLBACK(jwt_dict):
