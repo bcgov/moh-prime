@@ -24,6 +24,9 @@ using Prime.Models.Api;
 using Prime.Infrastructure;
 using System.Text;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Prime
 {
@@ -78,11 +81,13 @@ namespace Prime
                 .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
             }
 
-            services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
-                });
+            services.AddControllers(options =>
+            {
+                options.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+            }).AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
+            });
 
             services.Configure<RouteOptions>(options =>
             {
@@ -230,6 +235,22 @@ namespace Prime
                     }
                 };
             });
+        }
+
+        private static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()
+        {
+            var builder = new ServiceCollection()
+                .AddLogging()
+                .AddMvc()
+                .AddNewtonsoftJson()
+                .Services.BuildServiceProvider();
+
+            return builder
+                .GetRequiredService<IOptions<MvcOptions>>()
+                .Value
+                .InputFormatters
+                .OfType<NewtonsoftJsonPatchInputFormatter>()
+                .First();
         }
     }
 }
