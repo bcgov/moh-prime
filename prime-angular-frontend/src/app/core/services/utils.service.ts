@@ -82,4 +82,31 @@ export class UtilsService {
       ? 1 : (a < b)
         ? -1 : 0;
   }
+
+  /**
+   * @description
+   * Download a document from an ArrayBuffer
+   */
+  public downloadDocumentFromArrayBuffer(arrayBuffer: ArrayBuffer, type: string, filename: string): boolean {
+    const blob: any = new Blob([arrayBuffer], { type });
+
+    // IE doesn't allow using a blob object directly as link href
+    // instead it is necessary to use msSaveOrOpenBlob
+    if (navigator && navigator.msSaveOrOpenBlob) {
+      navigator.msSaveOrOpenBlob(blob, filename);
+      return;
+    }
+
+    // For other browsers:
+    // Create a link pointing to the ObjectURL containing the blob.
+    const data = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = data;
+    link.download = filename;
+    link.click();
+    setTimeout(() => {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      URL.revokeObjectURL(data);
+    }, 100);
+  }
 }
