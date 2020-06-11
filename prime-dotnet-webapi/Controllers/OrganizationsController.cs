@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -320,6 +322,37 @@ namespace Prime.Controllers
             var licences = await _organizationService.GetSignedAgreementsAsync(organization.Id);
 
             return Ok(ApiResponse.Result(licences));
+        }
+
+        // GET: api/Organizations/download-organization-agreement
+        /// <summary>
+        /// Download the organization agreement document.
+        /// </summary>
+        [HttpGet("download-organization-agreement", Name = nameof(DownloadOrganizationAgreement))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<FileStreamResult>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<FileStreamResult>> DownloadOrganizationAgreement()
+        {
+            var uploads = Path.Combine("Resources", "documents");
+            var filePath = Path.Combine(uploads, "Organization-Agreement.docx");
+            if (!System.IO.File.Exists(filePath))
+                return NotFound();
+
+            var memory = new MemoryStream();
+            using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+
+            Response.ContentType = new MediaTypeHeaderValue("application/doc").ToString();// Content type
+
+            return Ok(ApiResponse.Result(File(memory, "application/doc")));
+
+            // return Ok(ApiResponse.Result(agreement));
         }
     }
 }
