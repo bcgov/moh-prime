@@ -14,15 +14,18 @@ namespace Prime.Services
     public class DocumentService : BaseService, IDocumentService
     {
         private readonly ISiteService _siteService;
+        private readonly IOrganizationService _organizationService;
         private readonly HttpClient _client;
 
         public DocumentService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            ISiteService siteService)
+            ISiteService siteService,
+            IOrganizationService organizationService)
             : base(context, httpContext)
         {
             _siteService = siteService;
+            _organizationService = organizationService;
             _client = new HttpClient();
         }
 
@@ -57,6 +60,28 @@ namespace Prime.Services
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 return new Document(licence.FileName, response.Content.ReadAsByteArrayAsync().Result);
+            }
+
+            return null;
+        }
+
+        public async Task<Document> GetLatestSignedAgreementDocumentByOrganizationId(int organizationId)
+        {
+            var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
+            return await GetSignedAgreementDocument(agreement);
+        }
+
+        private async Task<Document> GetSignedAgreementDocument(SignedAgreement agreement)
+        {
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri($"{PrimeConstants.DOCUMENT_MANAGER_URL}?token={agreement.DocumentGuid}"),
+                Method = HttpMethod.Get
+            };
+            var response = await _client.SendAsync(request);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return new Document(agreement.FileName, response.Content.ReadAsByteArrayAsync().Result);
             }
 
             return null;

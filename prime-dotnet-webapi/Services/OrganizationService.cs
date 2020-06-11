@@ -220,6 +220,14 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<SignedAgreement> GetLatestSignedAgreementAsync(int organizationId)
+        {
+            return await _context.SignedAgreements
+                .Where(sa => sa.OrganizationId == organizationId)
+                .OrderByDescending(sa => sa.UploadedDate)
+                .FirstOrDefaultAsync();
+        }
+
         private IQueryable<Organization> GetBaseOrganizationQuery()
         {
             return _context.Organizations
