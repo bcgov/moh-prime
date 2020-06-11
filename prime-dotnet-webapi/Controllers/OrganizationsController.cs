@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -333,24 +335,30 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<FileStreamResult>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<FileStreamResult>> DownloadOrganizationAgreement()
+        [ProducesResponseType(typeof(ApiResultResponse<HttpResponseMessage>), StatusCodes.Status200OK)]
+        public ActionResult<HttpResponseMessage> DownloadOrganizationAgreement()
         {
+
+            var fileName = "Organization-Agreement.docx";
             var uploads = Path.Combine("Resources", "documents");
-            var filePath = Path.Combine(uploads, "Organization-Agreement.docx");
+            var filePath = Path.Combine(uploads, fileName);
             if (!System.IO.File.Exists(filePath))
                 return NotFound();
 
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(filePath, FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
+            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+            var info = System.IO.File.GetAttributes(filePath);
+            // result = Request.CreateResponse(StatusCodes.Status200OK);
+            // result = Request.CreateResponse(StatusCodes.Status200OK);
+            result.Content = new StreamContent(new FileStream(filePath, FileMode.Open, FileAccess.Read));
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/doc");
+            result.Content.Headers.Add("x-filename", fileName);
+            result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+            result.Content.Headers.ContentDisposition.FileName = fileName;
 
-            Response.ContentType = new MediaTypeHeaderValue("application/doc").ToString();// Content type
+            // Response.ContentType = new MediaTypeHeaderValue("application/doc").ToString();// Content type
 
-            return Ok(ApiResponse.Result(File(memory, "application/doc")));
+
+            return Ok(ApiResponse.Result(result));
 
             // return Ok(ApiResponse.Result(agreement));
         }
