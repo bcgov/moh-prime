@@ -54,7 +54,7 @@ export class BusinessLicenceComponent implements OnInit {
     this.filePondOptions = {
       class: 'prime-filepond',
       multiple: true,
-      labelIdle: 'Click to Browse or Drop files here',
+      labelIdle: 'Temporary disabled.',
       acceptedFileTypes: ['image/jpeg', 'image/png'],
       allowFileTypeValidation: true,
     };
