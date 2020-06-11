@@ -64,7 +64,6 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -yqq --no-install-recommends postgresql-client-10 net-tools moreutils && \
     apt-get install -yf libfontconfig1 libxrender1 xvfb && \
-    apt upgrade && \
     chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
     chmod +x entrypoint.sh && \
