@@ -348,7 +348,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
         public async Task<ActionResult<AdjudicatorNote>> CreateEnrolmentReference(int enrolleeId)
         {
-
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
@@ -476,7 +475,7 @@ namespace Prime.Controllers
 
             var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, admin);
-            await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin claimed enrollee");
+            await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin claimed enrollee");
 
             return Ok(ApiResponse.Result(updatedEnrollee));
         }
@@ -503,7 +502,7 @@ namespace Prime.Controllers
             }
 
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
-            await _businessEventService.CreateAdminClaimEventAsync(enrolleeId, "Admin disclaimed enrollee");
+            await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin disclaimed enrollee");
 
             return Ok(ApiResponse.Result(updatedEnrollee));
         }

@@ -6,4 +6,5 @@ export enum SubmissionAction {
   LOCK_PROFILE = 'lock-profile',
   DECLINE_PROFILE = 'decline-profile',
   ENABLE_PROFILE = 'enable-profile',
+  RERUN_RULES = 'rerun-rules',
 }

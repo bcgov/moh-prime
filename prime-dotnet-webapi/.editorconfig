@@ -17,6 +17,9 @@ indent_size = 4
 [Dockerfile]
 indent_size = 4
 
+[*.dockerfile]
+indent_size = 4
+
 [*.md]
 max_line_length = off
 trim_trailing_whitespace = false
