@@ -136,6 +136,17 @@ namespace Prime.Services
                 document = new Document("business-licence.pdf", new byte[20]);
             }
 
+            Document uploadedAgreement = null;
+            try
+            {
+                uploadedAgreement = await _documentService.GetLatestSignedAgreementDocumentByOrganizationId(site.Location.Organization.Id);
+            }
+            catch (NullReferenceException)
+            {
+                // TODO abort, log, and retry, but make it work for the demo for now
+                uploadedAgreement = new Document("SignedOrganizationAgreement.pdf", new byte[20]);
+            }
+
             var location = await _context.Locations
                 .Where(l => l.Id == site.LocationId)
                 .Include(l => l.Organization)
@@ -145,7 +156,8 @@ namespace Prime.Services
             {
                 ("OrganizationAgreement.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", location.Organization)),
                 ("SiteRegistrationReview.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
-                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", document))
+                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", document)),
+                ("SignedOrganizationAgreement.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", uploadedAgreement)),
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)))
             .Select(pdf => new Attachment(new MemoryStream(pdf.Content), pdf.Filename, "application/pdf"));
