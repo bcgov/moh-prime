@@ -99,6 +99,13 @@ objects:
                   value: "prime-web-api"
                 - name: DB_HOST
                   value: "postgresql${SUFFIX}"
+                - name: DOCUMENT_MANAGER_CLIENT_ID
+                  value: prime-document-manager
+                - name: DOCUMENT_MANAGER_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: DOCUMENT_MANAGER_CLIENT_SECRET
+                      name: "document-manager-secret"
                 - name: PHARMANET_API_URL
                   valueFrom:
                     secretKeyRef:

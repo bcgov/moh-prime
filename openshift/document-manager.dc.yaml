@@ -130,15 +130,25 @@ objects:
       spec:
         containers:
         - env:
-          - name: CACHE_REDIS_HOST
+          - name: BASE_PATH
             valueFrom:
               configMapKeyRef:
+                key: BASE_PATH
+                name: "document-manager-secret"
+          - name: CACHE_REDIS_HOST
+            valueFrom:
+              secretKeyRef:
                 key: CACHE_REDIS_HOST
                 name: document-manager-backend--env-prime
           - name: CACHE_REDIS_PASS
             valueFrom:
-              configMapKeyRef:
+              secretKeyRef:
                 key: CACHE_REDIS_PASS
+                name: "redis-secret"
+          - name: CACHE_REDIS_PORT
+            valueFrom:
+              secretKeyRef:
+                key: CACHE_REDIS_PORT
                 name: document-manager-backend--env-prime
           - name: DB_HOST
             valueFrom:
@@ -147,9 +157,9 @@ objects:
                 name: document-manager-backend--env-prime
           - name: DB_NAME
             valueFrom:
-              configMapKeyRef:
-                key: DB_NAME
-                name: document-manager-backend--env-prime
+              secretKeyRef:
+                key: database-name
+                name: "postgresql-secret"
           - name: DB_NAME_TEST
             valueFrom:
               configMapKeyRef:
@@ -157,9 +167,9 @@ objects:
                 name: document-manager-backend--env-prime
           - name: DB_PASS
             valueFrom:
-              configMapKeyRef:
-                key: DB_PASS
-                name: document-manager-backend--env-prime
+              secretKeyRef:
+                key: database-admin-password
+                name: "postgresql-secret"
           - name: DB_PORT
             valueFrom:
               configMapKeyRef:
@@ -167,33 +177,23 @@ objects:
                 name: document-manager-backend--env-prime
           - name: DB_USER
             valueFrom:
-              configMapKeyRef:
-                key: DB_USER
-                name: document-manager-backend--env-prime
+              secretKeyRef:
+                key: database-user
+                name: "postgresql-secret"
+          - name: DOCUMENT_MANAGER_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: DOCUMENT_MANAGER_CLIENT_SECRET
+                name: "document-manager-secret"
           - name: DOCUMENT_MANAGER_URL
             valueFrom:
               configMapKeyRef:
                 key: DOCUMENT_MANAGER_URL
                 name: document-manager-backend--env-prime
-          - name: ELASTIC_ENABLED
+          - name: ENVIRONMENT_NAME
             valueFrom:
               configMapKeyRef:
-                key: ELASTIC_ENABLED
-                name: document-manager-backend--env-prime
-          - name: ELASTIC_SECRET_TOKEN
-            valueFrom:
-              configMapKeyRef:
-                key: ELASTIC_SECRET_TOKEN
-                name: document-manager-backend--env-prime
-          - name: ELASTIC_SERVER_URL
-            valueFrom:
-              configMapKeyRef:
-                key: ELASTIC_SERVER_URL
-                name: document-manager-backend--env-prime
-          - name: ELASTIC_SERVICE_NAME
-            valueFrom:
-              configMapKeyRef:
-                key: ELASTIC_SERVICE_NAME
+                key: ENVIRONMENT_NAME
                 name: document-manager-backend--env-prime
           - name: FLASK_APP
             valueFrom:
@@ -220,21 +220,11 @@ objects:
               configMapKeyRef:
                 key: FLASK_RUN_PORT
                 name: document-manager-backend--env-prime
-          - name: JWT_OIDC_ALGORITHMS
-            valueFrom:
-              configMapKeyRef:
-                key: JWT_OIDC_ALGORITHMS
-                name: document-manager-backend--env-prime
-          - name: JWT_OIDC_AUDIENCE
-            valueFrom:
-              configMapKeyRef:
-                key: JWT_OIDC_AUDIENCE
-                name: document-manager-backend--env-prime
           - name: JWT_OIDC_WELL_KNOWN_CONFIG
             valueFrom:
-              configMapKeyRef:
-                key: JWT_OIDC_WELL_KNOWN_CONFIG
-                name: document-manager-backend--env-prime
+              secretKeyRef:
+                key: JWT_WELL_KNOWN_CONFIG
+                name: "keycloak"
           image: ' '
           name: ${NAME}${SUFFIX}-backend
           ports:
