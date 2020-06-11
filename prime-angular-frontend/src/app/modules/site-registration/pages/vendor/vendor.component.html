@@ -18,7 +18,7 @@
                        (change)="onChange()">
         <mat-radio-button *ngFor="let vendor of vendorConfig"
                           class="radio-button"
-                          [value]="vendor.id">
+                          [value]="vendor.code">
           {{ vendor.name }}
         </mat-radio-button>
       </mat-radio-group>

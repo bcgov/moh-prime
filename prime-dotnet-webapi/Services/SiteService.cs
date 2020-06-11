@@ -58,7 +58,7 @@ namespace Prime.Services
 
             var location = await this.GetLocationByOrganizationIdAsync(organizationId);
 
-            if(location == null)
+            if (location == null)
             {
                 location = new Location { OrganizationId = organization.Id };
             }
@@ -118,8 +118,8 @@ namespace Prime.Services
             }
 
             // Update foreign key only if not null
-            currentSite.VendorId = (updatedSite.VendorId != 0)
-                ? updatedSite.VendorId
+            currentSite.VendorCode = (updatedSite.VendorCode != 0)
+                ? updatedSite.VendorCode
                 : null;
 
             // Managed through separate API endpoint, and should never be updated
@@ -325,10 +325,10 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<Vendor> GetVendorAsync(int vendorId)
+        public async Task<Vendor> GetVendorAsync(int vendorCode)
         {
             return await _context.Vendors
-                .SingleOrDefaultAsync(s => s.Id == vendorId);
+                .SingleOrDefaultAsync(v => v.Code == vendorCode);
         }
 
         public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)

@@ -17,7 +17,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
-import { SiteFormStateService } from '@registration/shared/services/site-form-state-service.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 

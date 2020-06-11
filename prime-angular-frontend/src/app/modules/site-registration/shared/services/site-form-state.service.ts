@@ -127,7 +127,7 @@ export class SiteFormStateService {
         technicalSupportId: technicalSupport?.id,
         technicalSupport
       },
-      vendorId: vendor?.id,
+      vendorCode: vendor?.id,
       vendor,
       remoteUsers,
       // TODO pec not implemented

@@ -8,10 +8,6 @@ namespace Prime.Models
     [Table("Privilege")]
     public class Privilege : BaseAuditable
     {
-        public const int RU_CODE = 17;
-        public const int OBO_CODE = 18;
-
-
         [Key]
         public int Id { get; set; }
 
@@ -29,6 +25,5 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
-
     }
 }

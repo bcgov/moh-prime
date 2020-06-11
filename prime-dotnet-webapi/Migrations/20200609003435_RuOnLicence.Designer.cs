@@ -2,16 +2,19 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
+using Prime.Models;
 
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200609003435_RuOnLicence")]
+    partial class RuOnLicence
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -7590,44 +7593,6 @@ namespace Prime.Migrations
                     b.ToTable("RemoteUserLocation");
                 });
 
-            modelBuilder.Entity("Prime.Models.SignedAgreement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("DocumentGuid")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("text");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("UploadedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.ToTable("SignedAgreement");
-                });
-
             modelBuilder.Entity("Prime.Models.Site", b =>
                 {
                     b.Property<int>("Id")
@@ -7665,7 +7630,7 @@ namespace Prime.Migrations
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("VendorCode")
+                    b.Property<int?>("VendorId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -7674,7 +7639,7 @@ namespace Prime.Migrations
 
                     b.HasIndex("ProvisionerId");
 
-                    b.HasIndex("VendorCode");
+                    b.HasIndex("VendorId");
 
                     b.ToTable("Site");
                 });
@@ -11992,7 +11957,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Vendor", b =>
                 {
-                    b.Property<int>("Code")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -12015,14 +11980,14 @@ namespace Prime.Migrations
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Code");
+                    b.HasKey("Id");
 
-                    b.ToTable("VendorLookup");
+                    b.ToTable("Vendor");
 
                     b.HasData(
                         new
                         {
-                            Code = 1,
+                            Id = 1,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "CareConnect@phsa.ca",
@@ -12032,7 +11997,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 2,
+                            Id = 2,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "support@excelleris.com",
@@ -12042,7 +12007,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 3,
+                            Id = 3,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "help@iclinicemr.com",
@@ -12052,7 +12017,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 4,
+                            Id = 4,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "prime@medinet.ca",
@@ -12062,7 +12027,7 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 5,
+                            Id = 5,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "service@plexia.ca",
@@ -12077,6 +12042,8 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
+
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
@@ -12530,15 +12497,6 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.SignedAgreement", b =>
-                {
-                    b.HasOne("Prime.Models.Organization", "Organization")
-                        .WithMany("SignedAgreements")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Prime.Models.Site", b =>
                 {
                     b.HasOne("Prime.Models.Location", "Location")
@@ -12552,7 +12510,7 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.Vendor", "Vendor")
                         .WithMany("Sites")
-                        .HasForeignKey("VendorCode");
+                        .HasForeignKey("VendorId");
                 });
 #pragma warning restore 612, 618
         }
