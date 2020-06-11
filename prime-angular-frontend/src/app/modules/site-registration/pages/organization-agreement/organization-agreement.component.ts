@@ -10,7 +10,11 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import tus from 'tus-js-client';
+import { registerPlugin } from 'ngx-filepond';
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+
+registerPlugin(FilePondPluginFileValidateType);
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
@@ -23,6 +27,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
 import { environment } from '@env/environment';
 import { ToastService } from '@core/services/toast.service';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -63,13 +68,22 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       class: 'prime-filepond',
       multiple: true,
       labelIdle: 'Click to Browse or Drop files here',
-      acceptedFileTypes: ['image/jpeg', 'image/png'],
+      acceptedFileTypes: [
+        'application/pdf',
+        'application/doc',
+      ],
+      fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
+
+        // Do custom type detection here and return with promise
+
+        resolve(type);
+      }),
       allowFileTypeValidation: true,
     };
   }
 
   public onSubmit() {
-    if (this.accepted.checked) {
+    if (this.accepted?.checked || this.uploadedFile) {
       const organizationid = this.route.snapshot.params.oid;
       const data: DialogOptions = {
         title: 'Organization Agreement',
@@ -126,11 +140,11 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
           const documentGuid = upload.url.split('/').pop();
           console.log(this.organizationService.organization);
-          // const organizationId = this.organizationService.organization.id;
+          const organizationId = this.organizationService.organization.id;
 
-          // this.organizationResource
-          //   .addSignedAgreement(organizationId, documentGuid, filename)
-          //   .subscribe();
+          this.organizationResource
+            .addSignedAgreement(organizationId, documentGuid, filename)
+            .subscribe();
 
           this.uploadedFile = true;
           this.hasNoUploadError = false;
@@ -141,6 +155,16 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public onDownload() {
+    this.organizationResource
+      .downloadOrganizationAgreement()
+      .subscribe(response => {
+        let blob: any = new Blob([response]);
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
+        // window.location.href = response.url;
+        //fileSaver.saveAs(blob, 'employees.json');
+      }), error => console.log('Error downloading the file'),
+      () => console.info('File downloaded successfully');
 
   }
 

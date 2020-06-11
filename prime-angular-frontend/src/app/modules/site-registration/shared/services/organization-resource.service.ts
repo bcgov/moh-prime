@@ -164,4 +164,16 @@ export class OrganizationResource {
         })
       );
   }
+
+  public downloadOrganizationAgreement(): Observable<Blob> {
+    return this.apiResource.get<Blob>(`organizations/download-organization-agreement`)
+      .pipe(
+        map((response: ApiHttpResponse<Blob>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement document could not be downloaded');
+          this.logger.error('[SiteRegistration] OrganizationResource::downlaodOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }
