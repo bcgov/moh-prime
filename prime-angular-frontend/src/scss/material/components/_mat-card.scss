@@ -1,0 +1,75 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+//
+// MATERIAL CARD
+//
+// @description
+// Applies general theme styles to Material Card components, as well as, an
+// action icon to the upper right of the card, but is not opinionated on
+// responsiveness of the container dimensions or typography of the
+// content, which can be enforced at the component-level.
+
+.mat-card {
+  border-bottom: 4px solid transparent;
+  margin-bottom: .5rem;
+
+  // Apply .has-hover to mat-card container to add
+  // a border underline to the mat-card container
+  &:hover.has-hover {
+    border-bottom-color: theme-palette(yellow);
+  }
+
+  .mat-card-header {
+    // Apply .no-avatar to mat-card-header to remove spacing if
+    // a mat-card-avatar is not being used
+    &.no-avatar .mat-card-header-text {
+      margin-left: 0;
+    }
+
+    // Apply positioning to an .mat-icon-button to place it to the
+    // top right of the card when placed in the mat-card-header, where
+    // the mat-icon-button can be a normal button or a menu trigger
+    .mat-icon-button {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      // Position over content for use with menus
+      z-index: 100;
+    }
+
+    .mat-card-title {
+      color: theme-palette(blue, light);
+    }
+  }
+
+  // NOTE: Updates to the mat-card-content component should most
+  // likely be implemented at the component-level
+  .mat-card-content {
+    color: theme-palette(blue);
+  }
+
+  .mat-card-actions {
+    button[mat-stroked-button]:first-child {
+      // Provide spacing from edge of card to align with card title and subtitle
+      margin-left: .5rem;
+    }
+    
+    // Responsiveness of mat-card component actions are not optimally
+    // aligned, and forces an approach that is not mobile-first through
+    // the use of media-breakpoint-down to patch
+    @include media-breakpoint-down(sm) {
+      button {
+        // Allow mat-buttons to left align when stacked on small viewports
+        margin: 0;
+        &:not(:last-child) {
+          // Adjust spacing for small viewports
+          margin-right: 1rem;
+          // Create spacing between stacked buttons to provide gap so
+          // buttons are not miss clicked
+          margin-bottom: .5rem;
+        }
+      }
+    }
+  }
+}

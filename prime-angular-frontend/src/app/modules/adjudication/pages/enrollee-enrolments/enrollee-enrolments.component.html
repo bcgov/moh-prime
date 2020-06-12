@@ -29,14 +29,15 @@
                 }">
   </ng-container>
 
-  <ng-container *ngFor="let accessTerm of accessTerms; let first = first">
+  <ng-container *ngFor="let accessTerm of accessTerms; let first = first; let last = last">
     <ng-container [ngTemplateOutlet]="card"
                   [ngTemplateOutletContext]="{
                     isCurrent: first && !isUnderAdjudication(enrollee),
                     submittedDate: enrollee?.appliedDate,
                     acceptedDate: accessTerm.acceptedDate,
                     enrolmentRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT],
-                    toaRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM]
+                    toaRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM],
+                    isLast: last
                   }">
     </ng-container>
   </ng-container>
@@ -47,10 +48,15 @@
              let-submittedDate="submittedDate"
              let-acceptedDate="acceptedDate"
              let-enrolmentRoute="enrolmentRoute"
-             let-toaRoute="toaRoute">
-  <mat-card class="card-width mb-4">
+             let-toaRoute="toaRoute"
+             let-isLast="isLast">
+  <mat-card class="has-hover"
+            [class.mb-3]="isLast">
     <mat-card-content class="mb-0">
-      <!-- Used instead of mat-card-header with mat-card-title since flexbox doesn't work within these components -->
+      <!--
+        Custom card title used instead of mat-card-header with mat-card-title due
+        to mat-card-title not allowing the use of flexbox
+      -->
       <div class="card-title">
         <small>Submitted {{ submittedDate | formatDate: 'MMMM Do YYYY' }}</small>
         <small *ngIf="isCurrent">CURRENT</small>
@@ -66,12 +72,12 @@
       </p>
     </mat-card-content>
     <mat-card-actions>
+      <!-- class="mb-md-2 mx-md-0" -->
       <button mat-button
-              class="mb-2 mx-0"
               color="primary"
               [routerLink]="enrolmentRoute">View Enrolment</button>
+      <!-- class="mb-md-2 mr-md-1" -->
       <button mat-button
-              class="mb-2 mr-1"
               color="primary"
               [disabled]="!acceptedDate"
               [routerLink]="toaRoute">View Terms of Access</button>

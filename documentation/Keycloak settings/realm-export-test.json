@@ -193,8 +193,8 @@
               "realm-management": [
                 "view-clients",
                 "view-users",
-                "manage-identity-providers",
                 "query-groups",
+                "manage-identity-providers",
                 "manage-realm",
                 "manage-users",
                 "view-realm",
@@ -397,6 +397,18 @@
     }
   },
   "groups": [
+    {
+      "id": "8770410e-ed92-4a9b-a568-4a24bd44b25c",
+      "name": "Prime Admin",
+      "path": "/Prime Admin",
+      "attributes": {},
+      "realmRoles": [
+        "prime_super_admin",
+        "feature_site_registration"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
     {
       "id": "56e54e6b-438c-48b4-af69-53c53ae5727f",
       "name": "Realm Administrator",
@@ -711,8 +723,8 @@
       "protocol": "openid-connect",
       "attributes": {
         "saml.assertion.signature": "false",
-        "saml.force.post.binding": "false",
         "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
         "saml.encrypt": "false",
         "saml.server.signature": "false",
         "saml.server.signature.keyinfo.ext": "false",
@@ -1428,15 +1440,19 @@
       "config": {
         "userInfoUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/userinfo",
         "validateSignature": "true",
+        "hideOnLoginPage": "",
         "tokenUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/token",
         "clientId": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/v4mbqqas",
+        "uiLocales": "",
         "jwksUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/certs",
-        "authorizationUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/auth",
-        "logoutUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/logout",
-        "clientSecret": "**********",
         "backchannelSupported": "true",
         "issuer": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir",
-        "useJwksUrl": "true"
+        "useJwksUrl": "true",
+        "loginHint": "",
+        "authorizationUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/auth",
+        "disableUserInfo": "",
+        "logoutUrl": "https://sso-test.pathfinder.gov.bc.ca/auth/realms/idir/protocol/openid-connect/logout",
+        "clientSecret": "**********"
       }
     },
     {
@@ -1460,13 +1476,13 @@
         "tokenUrl": "https://idtest.gov.bc.ca/oauth2/token",
         "clientId": "urn.ca.bc.gov.health.prime.test",
         "jwksUrl": "https://idtest.gov.bc.ca/oauth2/jwk.json",
-        "backchannelSupported": "true",
+        "backchannelSupported": "false",
         "issuer": "https://idtest.gov.bc.ca/oauth2/",
         "useJwksUrl": "true",
         "loginHint": "",
         "authorizationUrl": "https://idtest.gov.bc.ca/login/oidc/authorize",
         "disableUserInfo": "",
-        "logoutUrl": "https://idtest.gov.bc.ca/oauth2/revoke",
+        "logoutUrl": "",
         "clientSecret": "**********",
         "allowedClockSkew": "",
         "defaultScope": "openid profile address"

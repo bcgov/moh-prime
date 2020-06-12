@@ -82,7 +82,8 @@ namespace Prime.Services.Rules
 
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            var comparitor = InitComparitor(enrollee);
+            bool isObo = !enrollee.Certifications.Any();
+            var comparitor = InitComparitor(isObo);
 
             if (!comparitor.Compare(enrollee, _updatedProfile).AreEqual)
             {
@@ -97,7 +98,7 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-            if (enrollee.IsObo != true // OBOs can change Job titles
+            if (!isObo // Only OBOs can change Job titles; if not an OBO, Jobs must be same
                 && !CompareCollections(comparitor, enrollee.Jobs, _updatedProfile.Jobs))
             {
                 return Task.FromResult(false);
@@ -111,7 +112,7 @@ namespace Prime.Services.Rules
             return Task.FromResult(true);
         }
 
-        private static CompareLogic InitComparitor(Enrollee enrollee)
+        private static CompareLogic InitComparitor(bool isObo)
         {
             ComparisonConfig config = new ComparisonConfig();
             config.IgnoreObjectTypes = true; // To match Enrollee to EnrolleeViewModel
@@ -124,7 +125,7 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<Enrollee>(x => x.ContactPhone);
             config.IgnoreProperty<Enrollee>(x => x.VoicePhone);
             config.IgnoreProperty<Enrollee>(x => x.VoiceExtension);
-            if (enrollee.IsObo == true)
+            if (isObo)
             {
                 config.IgnoreProperty<Enrollee>(x => x.Jobs);
             }

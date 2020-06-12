@@ -1,0 +1,35 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+
+  <app-page-subheader2>
+    <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+    <ng-container appPageSubheader2Summary>
+      Scan and upload.
+    </ng-container>
+  </app-page-subheader2>
+
+  <file-pond #filePond
+             [options]="filePondOptions"
+             [files]="filePondFiles"
+             (oninit)="onFilePondInit()"
+             (onaddfile)="onFilePondAddFile($event)"
+             disabled="true">
+  </file-pond>
+
+  <app-alert *ngIf="hasNoLicenceError"
+             type="danger"
+             icon="warning">
+    <ng-container #alertContent
+                  class="alert-content">
+      No business licence has been uploaded.
+    </ng-container>
+  </app-alert>
+
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   primaryActionLabel="Continue"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

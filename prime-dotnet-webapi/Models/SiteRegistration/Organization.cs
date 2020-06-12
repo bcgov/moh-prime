@@ -20,14 +20,18 @@ namespace Prime.Models
 
         public DateTimeOffset? AcceptedAgreementDate { get; set; }
 
+        public bool Completed { get; set; }
+
+        public DateTimeOffset? SubmittedDate { get; set; }
+
         public Party SigningAuthority { get; set; }
 
         public int SigningAuthorityId { get; set; }
 
         public int? OrganizationTypeCode { get; set; }
 
-        [JsonIgnore]
-        public IEnumerable<Location> Locations { get; set; }
+        public OrganizationType OrganizationType { get; set; }
 
+        public IEnumerable<Location> Locations { get; set; }
     }
 }

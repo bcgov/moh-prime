@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Prime.Models
 {
@@ -28,8 +28,13 @@ namespace Prime.Models
 
         public Location Location { get; set; }
 
-        public int? VendorId { get; set; }
+        public int? VendorCode { get; set; }
 
         public Vendor Vendor { get; set; }
+
+        [JsonIgnore]
+        public ICollection<BusinessLicence> BusinessLicences { get; set; }
+
+        public IEnumerable<RemoteUser> RemoteUsers { get; set; }
     }
 }

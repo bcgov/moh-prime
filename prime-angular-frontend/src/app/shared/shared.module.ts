@@ -24,6 +24,7 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
+import { FullnamePipe } from './pipes/fullname.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import {
@@ -33,13 +34,18 @@ import { DashboardComponent } from '@shared/components/dashboard/dashboard.compo
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
+import { ProgressIndicator2Component } from './components/progress-indicator2/progress-indicator2.component';
 import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
+import { PageSubheader2Component } from './components/page-subheader2/page-subheader2.component';
+import { PageSubheader2TitleDirective } from './components/page-subheader2/page-subheader2-title.directive';
+import { PageSubheader2MoreInfoDirective } from './components/page-subheader2/page-subheader2-more-info.directive';
+import { PageSubheader2SummaryDirective } from './components/page-subheader2/page-subheader2-summary.directive';
+import { PageFooterComponent } from './components/page-footer/page-footer.component';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
-import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
 import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
@@ -56,10 +62,9 @@ import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrol
 import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
 import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
-import { PageFooterComponent } from './components/page-footer/page-footer.component';
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { SiteReviewComponent } from './components/site/site-review/site-review.component';
-import { RegistrantProfileReviewComponent } from './components/site/registrant-profile-review/registrant-profile-review.component';
+import { PartyReviewComponent } from './components/site/party-review/party-review.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +80,7 @@ import { RegistrantProfileReviewComponent } from './components/site/registrant-p
     ReplacePipe,
     YesNoPipe,
     WeekdayPipe,
+    FullnamePipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -85,12 +91,12 @@ import { RegistrantProfileReviewComponent } from './components/site/registrant-p
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
+    PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
     CertificatePipe,
-    ProgressIndicatorComponent,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     EnrolleePropertyErrorComponent,
@@ -107,10 +113,14 @@ import { RegistrantProfileReviewComponent } from './components/site/registrant-p
     ManualFlagNoteComponent,
     FeedbackComponent,
     CollectionNoticeContainerComponent,
-    PageFooterComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    RegistrantProfileReviewComponent
+    PartyReviewComponent,
+    ProgressIndicator2Component,
+    PageSubheader2Component,
+    PageSubheader2TitleDirective,
+    PageSubheader2SummaryDirective,
+    PageSubheader2MoreInfoDirective,
   ],
   imports: [
     CommonModule,
@@ -144,34 +154,40 @@ import { RegistrantProfileReviewComponent } from './components/site/registrant-p
     ReplacePipe,
     YesNoPipe,
     WeekdayPipe,
+    FullnamePipe,
+    SafeHtmlPipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
     PageComponent,
     PageHeaderComponent,
+    ProgressIndicator2Component,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
+    PageSubheader2Component,
+    PageSubheader2TitleDirective,
+    PageSubheader2SummaryDirective,
+    PageSubheader2MoreInfoDirective,
+    PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
     CertificatePipe,
-    ProgressIndicatorComponent,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
     PrimeLogoComponent,
-    SafeHtmlPipe,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
     CollectionNoticeContainerComponent,
-    PageFooterComponent,
     FormErrorsComponent,
-    SiteReviewComponent
+    SiteReviewComponent,
+    PartyReviewComponent
   ]
 })
 export class SharedModule { }

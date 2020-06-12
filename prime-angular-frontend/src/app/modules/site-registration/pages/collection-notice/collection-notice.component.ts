@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 
 @Component({
@@ -19,8 +18,7 @@ export class CollectionNoticeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
-    private siteRegistrationService: SiteRegistrationService
+    private authService: AuthService
   ) {
     this.isFull = true;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -28,15 +26,10 @@ export class CollectionNoticeComponent implements OnInit {
 
   public onAccept() {
     this.authService.hasJustLoggedIn = false;
-    this.routeUtils.routeRelativeTo(SiteRoutes.MULTIPLE_SITES);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATIONS);
   }
 
   public ngOnInit() {
     this.authService.hasJustLoggedIn = true;
-    this.isCompleted = this.siteRegistrationService.site?.completed;
-
-    if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
-    }
   }
 }

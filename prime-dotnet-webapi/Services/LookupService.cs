@@ -40,6 +40,7 @@ namespace Prime.Services
             lookupEntity.StatusReasons = await _context.Set<StatusReason>().ToListAsync();
             lookupEntity.PrivilegeGroups = await _context.Set<PrivilegeGroup>().ToListAsync();
             lookupEntity.PrivilegeTypes = await _context.Set<PrivilegeType>().ToListAsync();
+            lookupEntity.Vendors = await _context.Set<Vendor>().ToListAsync();
 
             return lookupEntity;
         }

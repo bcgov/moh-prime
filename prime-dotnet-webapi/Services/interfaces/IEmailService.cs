@@ -10,6 +10,8 @@ namespace Prime.Services
 
         Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null);
 
+        Task SendSiteRegistrationAsync(Site site);
+
         Task<string> GetPharmaNetProvisionerEmailAsync(string pharmaNetVendor);
 
         Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync();

@@ -1,14 +1,13 @@
 @import 'palette';
+@import 'bootstrap/bootstrap-imports';
 
-.no-avatar {
-  margin-left: -16px;
-}
-
-.card-width {
+.mat-card {
   min-width: 325px;
   max-width: 375px;
 }
 
+// Custom card title used instead of mat-card-header with mat-card-title due
+// to mat-card-title not allowing the user of flexbox
 .card-title {
   display: flex;
   justify-content: space-between;

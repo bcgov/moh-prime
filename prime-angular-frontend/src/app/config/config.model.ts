@@ -10,6 +10,7 @@ export interface Configuration {
   statusReasons: Config<number>[];
   privilegeGroups: PrivilegeGroupConfig[];
   privilegeTypes: Config<number>[];
+  vendors: Config<number>[];
 }
 
 export class Config<T> {
@@ -23,6 +24,7 @@ export class Config<T> {
 }
 
 export interface LicenseConfig extends Config<number> {
+  regulatedUser: boolean;
   collegeLicenses: AssociatedCollegeConfig[];
 }
 

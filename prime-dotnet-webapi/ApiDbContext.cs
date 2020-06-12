@@ -84,8 +84,11 @@ namespace Prime
         public DbSet<Party> Parties { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<RemoteUser> RemoteUsers { get; set; }
+        public DbSet<RemoteUserLocation> RemoteUserLocations { get; set; }
 
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
+        public DbSet<BusinessLicence> BusinessLicences { get; set; }
 
         public override int SaveChanges()
         {
@@ -237,20 +240,35 @@ namespace Prime
             // Site Registration
             modelBuilder.Entity<Location>()
                 .HasOne(l => l.Organization)
-                .WithMany(t => t.Locations)
-                .HasForeignKey(be => be.OrganizationId)
+                .WithMany(o => o.Locations)
+                .HasForeignKey(l => l.OrganizationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Site>()
-                .HasOne(l => l.Location)
-                .WithMany(t => t.Sites)
-                .HasForeignKey(be => be.LocationId)
+                .HasOne(s => s.Location)
+                .WithMany(l => l.Sites)
+                .HasForeignKey(s => s.LocationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Site>()
-                .HasOne(l => l.Vendor)
-                .WithMany(t => t.Sites)
-                .HasForeignKey(be => be.VendorId);
+                .HasOne(s => s.Vendor)
+                .WithMany(v => v.Sites)
+                .HasForeignKey(s => s.VendorCode);
+
+            modelBuilder.Entity<BusinessLicence>()
+                .HasOne(bl => bl.Site)
+                .WithMany(s => s.BusinessLicences)
+                .HasForeignKey(bl => bl.SiteId);
+
+            modelBuilder.Entity<RemoteUser>()
+                .HasOne(ru => ru.Site)
+                .WithMany(s => s.RemoteUsers)
+                .HasForeignKey(ru => ru.SiteId);
+
+            modelBuilder.Entity<RemoteUserLocation>()
+                .HasOne(rul => rul.RemoteUser)
+                .WithMany(ru => ru.RemoteUserLocations)
+                .HasForeignKey(rul => rul.RemoteUserId);
 
             #endregion
         }

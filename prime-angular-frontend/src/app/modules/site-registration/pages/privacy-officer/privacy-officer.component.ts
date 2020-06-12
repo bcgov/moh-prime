@@ -12,9 +12,12 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Party } from '@registration/shared/models/party.model';
+import { Address } from '@shared/models/address.model';
+import { Site } from '@registration/shared/models/site.model';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
+import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-privacy-officer',
@@ -29,29 +32,61 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
+  private site: Site;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private siteService: SiteService,
+    private siteResource: SiteResource,
+    private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
     this.title = 'Privacy Officer';
-    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
   }
 
   public onSubmit() {
+    // TODO temporary fix for allow submissions of disabled forms
+    const isDisabled = this.form.disabled;
+    if (isDisabled) {
+      this.form.enable();
+    }
+    // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
+      if (isDisabled) {
+        this.form.disable();
+      }
+      // TODO when spoking don't update
+      const payload = this.siteFormStateService.site;
+      this.siteResource
         .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
         });
+    } else {
+      if (isDisabled) {
+        this.form.disable();
+      }
     }
+  }
+
+  public onSelect(party: Party) {
+    if (!party.physicalAddress) {
+      party.physicalAddress = new Address();
+    }
+    this.form.patchValue(party);
+    this.form.disable();
+  }
+
+  public onClear() {
+    this.form.reset({
+      id: 0,
+      userId: '00000000-0000-0000-0000-000000000000'
+    });
+    this.form.enable();
   }
 
   public onBack() {
@@ -64,6 +99,11 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
     } else {
       this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
     }
+  }
+
+  public isSameAs() {
+    return this.site.provisioner.userId === this.site.location.privacyOfficer?.userId ||
+      this.site.provisioner.userId === this.form.get('userId').value;
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -79,12 +119,19 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.privacyOfficerForm;
+    this.form = this.siteFormStateService.privacyOfficerForm;
   }
 
   private initForm() {
-    const site = this.siteRegistrationService.site;
-    this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO structured to match in all site views
+    this.site = this.siteService.site;
+    this.isCompleted = this.site?.completed;
+    // TODO cannot set form each time the view is loaded when updating
+    this.siteFormStateService.setForm(this.site, true);
+
+    // TODO temporary fix to disable same as party
+    if (this.isSameAs()) {
+      this.form.disable();
+    }
   }
 }

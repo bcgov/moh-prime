@@ -20,6 +20,8 @@ parameters:
     displayName: Metabase Service Name
     value: metabase
     required: true
+  - name: CONTAINER_VERSION
+    value: v0.35.3
 objects:
 - apiVersion: v1
   kind: ServiceAccount
@@ -153,5 +155,5 @@ objects:
         - ${APP_NAME}
         from:
           kind: ImageStreamTag
-          name: ${APP_NAME}:latest
+          name: ${APP_NAME}:${CONTAINER_VERSION}
         lastTriggeredImage: ""

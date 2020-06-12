@@ -114,7 +114,7 @@ services:
     build:
       context: document-manager/backend
     ports:
-      - 6001:5001
+      - 6001:6001
     volumes:
       - ./document-manager/backend/:/app/
     env_file: ./document-manager/backend/.env-prime
@@ -126,6 +126,8 @@ services:
     container_name: document_manager_migrate
     build:
       context: document-manager/backend
+    depends_on:
+      - postgres
     volumes:
       - ./document-manager/backend/:/app/
     command: flask db upgrade
@@ -147,7 +149,7 @@ volumes:
   local_postgres_data:
   local_mongodb_data:
   db_backup_data:
-  
+
 networks:
   primenet:
     driver: bridge

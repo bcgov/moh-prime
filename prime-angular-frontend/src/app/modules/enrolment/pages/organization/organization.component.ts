@@ -19,6 +19,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { UtilsService } from '@core/services/utils.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
+import { EnrolleeUtilsService } from '@core/services/enrollee-utils.service';
 
 @Component({
   selector: 'app-organization',
@@ -42,6 +43,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     protected utilService: UtilsService,
     private configService: ConfigService,
     private authService: AuthService,
+    private enrolleeUtilsService: EnrolleeUtilsService
   ) {
     super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
@@ -65,6 +67,11 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     }
     // Omit organizations types that are not "Community Practices" for ComPap
     return (organizationTypeCode !== OrganizationTypeEnum.COMMUNITY_PRACTICE);
+  }
+
+  public showRemoteAccess(): boolean {
+    const enrolment = this.enrolmentStateService.enrolment;
+    return this.enrolleeUtilsService.isRegulatedUser(enrolment);
   }
 
   public removeOrganization(index: number) {
