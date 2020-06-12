@@ -65,7 +65,11 @@ import { CollectionNoticeContainerComponent } from './components/collection-noti
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { SiteReviewComponent } from './components/site/site-review/site-review.component';
 import { PartyReviewComponent } from './components/site/party-review/party-review.component';
-
+import { DocumentUploadComponent } from './components/document-upload/document-upload/document-upload.component';
+// TODO split out all related filepond files into a /lib module ie. config and components
+import { FilePondModule, registerPlugin } from 'ngx-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+registerPlugin(FilePondPluginFileValidateType);
 @NgModule({
   declarations: [
     CapitalizePipe,
@@ -121,6 +125,7 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     PageSubheader2TitleDirective,
     PageSubheader2SummaryDirective,
     PageSubheader2MoreInfoDirective,
+    DocumentUploadComponent
   ],
   imports: [
     CommonModule,
@@ -131,6 +136,7 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     NgxMaskModule.forRoot(),
     NgxMaterialModule,
     NgxProgressModule,
+    FilePondModule,
     ReactiveFormsModule
   ],
   exports: [
@@ -187,7 +193,8 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    PartyReviewComponent
+    PartyReviewComponent,
+    DocumentUploadComponent,
   ]
 })
 export class SharedModule { }
