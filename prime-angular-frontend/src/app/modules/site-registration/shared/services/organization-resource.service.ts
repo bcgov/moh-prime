@@ -12,6 +12,7 @@ import { NoContent } from '@core/resources/abstract-resource';
 
 import { Organization } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
+import { Operation } from 'fast-json-patch';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -79,6 +80,22 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be updated');
           this.logger.error('[SiteRegistration] OrganizationResource::updateOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public patchOrganization(organizationId: number, jsonPatchDoc: Operation[]): NoContent {
+
+    return this.apiResource.patch<NoContent>(`organizations/${organizationId}`, jsonPatchDoc)
+      // TODO remove pipe when ApiResource handles NoContent
+      .pipe(
+        map(() => {
+          this.toastService.openSuccessToast('Organization has been patched');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be patched');
+          this.logger.error('[OrganizationRegistration] OrganizationResource::patchOrganization error has occurred: ', error);
           throw error;
         })
       );

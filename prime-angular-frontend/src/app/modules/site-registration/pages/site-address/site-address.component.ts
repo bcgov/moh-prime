@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
+import { compare } from 'fast-json-patch';
+
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -75,12 +77,24 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     if (this.formUtilsService.checkValidity(this.form)) {
       // TODO when spoking don't update
       const payload = this.siteFormStateService.site;
+      const site = this.siteService.site;
+      const jsonPatch = compare(payload, site);
+
+      console.log('jsonPatch: ', jsonPatch);
+
       this.siteResource
-        .updateSite(payload)
+        .patchSite(site.id, jsonPatch)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
         });
+
+      // this.siteResource
+      //   .updateSite(payload)
+      //   .subscribe(() => {
+      //     this.form.markAsPristine();
+      //     this.nextRoute();
+      //   });
     }
   }
 

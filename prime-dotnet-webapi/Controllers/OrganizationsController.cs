@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
@@ -225,6 +226,40 @@ namespace Prime.Controllers
             await _organizationService.AcceptCurrentOrganizationAgreementAsync(organization.Id);
 
             return NoContent();
+        }
+
+        // PATCH: api/Organization/5
+        /// <summary>
+        /// Updates a specific Organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        /// <param name="patchDoc"></param>
+        [HttpPatch("{organizationId}", Name = nameof(JsonPatchOrganizationWithModelState))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult JsonPatchOrganizationWithModelState(int organizationId, [FromBody] JsonPatchDocument<Organization> patchDoc)
+        {
+            // Need to send whole Organization object from front end because backend expects it
+            if (patchDoc != null)
+            {
+                var organization = new Organization();
+
+                patchDoc.ApplyTo(organization, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         // POST: api/organizations/5/submission

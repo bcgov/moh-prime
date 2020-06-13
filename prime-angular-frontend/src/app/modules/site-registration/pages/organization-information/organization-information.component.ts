@@ -22,6 +22,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import {
   OrgBookResource, OrgBookAutocompleteResult, OrgBookFacetHttpResponse, OrgBookDetailHttpResponse, OrgBookRelatedHttpResponse
 } from '@registration/shared/services/org-book-resource.service';
+import { compare, Operation } from 'fast-json-patch';
 
 @Component({
   selector: 'app-organization-information',
@@ -31,6 +32,7 @@ import {
 export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public initialForm: FormGroup;
   public title: string;
   public routeUtils: RouteUtils;
   public organizations: string[];
@@ -69,13 +71,42 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
       // TODO when spoking don't update
+
       const payload = this.organizationFormStateService.organization;
+
+      const organization = this.organizationService.organization;
+
+      const jsonPatch = compare(this.initialForm, this.form.value);
+
+      console.log('jsonPatch: ', jsonPatch);
+
+      jsonPatch.map((operation) => {
+        if (operation.path.includes('signingAuthority')) {
+          const parts = operation.path.split('/');
+          let path = `${parts[1]}/${organization.signingAuthorityId}/${parts[2]}`;
+          if (parts[3] === 'physicalAddress') {
+            path = `${path}/${organization.signingAuthority.physicalAddressId}/${parts[3]}`;
+          }
+          operation.path = path;
+        }
+      });
+
+      console.log('jsonPatch: ', jsonPatch);
+      // Need to send whole Organization object from front end because backend expects it
+
       this.organizationResource
-        .updateOrganization(payload)
+        .patchOrganization(organization.id, jsonPatch)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
         });
+
+      // this.organizationResource
+      //   .updateOrganization(payload)
+      //   .subscribe(() => {
+      //     this.form.markAsPristine();
+      //     this.nextRoute();
+      //   });
     }
   }
 
@@ -127,6 +158,8 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);
 
+
+
     this.name.valueChanges
       .pipe(
         debounceTime(400),
@@ -136,6 +169,9 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
         // Assumed only a single name per organization is relavent
         this.organizations = organizations.map(o => o.names[0].text);
       });
+
+    console.log('form on init: ', this.form.value);
+    this.initialForm = this.form.value;
   }
 
   /**

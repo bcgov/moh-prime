@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
@@ -153,6 +154,40 @@ namespace Prime.Controllers
 
             return NoContent();
         }
+
+        // PATCH: api/Sites/5
+        /// <summary>
+        /// Updates a specific Site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="patchDoc"></param>
+        [HttpPatch("{siteId}", Name = nameof(JsonPatchSiteWithModelState))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public IActionResult JsonPatchSiteWithModelState(int siteId, [FromBody] JsonPatchDocument<Site> patchDoc)
+        {
+            if (patchDoc != null)
+            {
+                var site = new Site();
+
+                patchDoc.ApplyTo(site, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
 
         // DELETE: api/Sites/5
         /// <summary>

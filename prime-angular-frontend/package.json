@@ -36,6 +36,7 @@
     "bootstrap": "^4.4.1",
     "classlist.js": "^1.1.20150312",
     "core-js": "^3.6.4",
+    "fast-json-patch": "^3.0.0-1",
     "filepond": "^4.13.4",
     "filepond-plugin-file-validate-type": "^1.2.5",
     "keycloak-angular": "^7.0.1",

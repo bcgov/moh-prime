@@ -16,6 +16,7 @@ import { BusinessDay } from '@lib/modules/business-hours/models/business-day.mod
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 import { BusinessLicence } from '../models/business-licence.model';
+import { Operation } from 'fast-json-patch';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -129,6 +130,22 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updateSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public patchSite(siteId: number, jsonPatchDoc: Operation[]): NoContent {
+
+    return this.apiResource.patch<NoContent>(`sites/${siteId}`, jsonPatchDoc)
+      // TODO remove pipe when ApiResource handles NoContent
+      .pipe(
+        map(() => {
+          this.toastService.openSuccessToast('Site has been patched');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site could not be patched');
+          this.logger.error('[SiteRegistration] SiteResource::patchSite error has occurred: ', error);
           throw error;
         })
       );
