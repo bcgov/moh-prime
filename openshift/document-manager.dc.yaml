@@ -82,15 +82,15 @@ objects:
       kompose.version: 1.21.0 (992df58d8)
     creationTimestamp: null
     labels:
-      io.kompose.service: ${NAME}${SUFFIX}-backend
-    name: ${NAME}${SUFFIX}-backend
+      io.kompose.service: "${NAME}${SUFFIX}-backend"
+    name: "${NAME}${SUFFIX}-backend"
   spec:
     ports:
     - name: "6001"
       port: 6001
       targetPort: 6001
     selector:
-      io.kompose.service: ${NAME}${SUFFIX}-backend
+      io.kompose.service: "${NAME}${SUFFIX}-backend"
   status:
     loadBalancer: {}
 - apiVersion: v1
@@ -101,12 +101,12 @@ objects:
       kompose.version: 1.21.0 (992df58d8)
     creationTimestamp: null
     labels:
-      io.kompose.service: ${NAME}${SUFFIX}-backend
-    name: ${NAME}${SUFFIX}-backend
+      io.kompose.service: "${NAME}${SUFFIX}-backend"
+    name: "${NAME}${SUFFIX}-backend"
   spec:
     replicas: 1
     selector:
-      io.kompose.service: ${NAME}${SUFFIX}-backend
+      io.kompose.service: "${NAME}${SUFFIX}-backend"
     strategy:
       resources: {}
       type: Rolling
@@ -114,7 +114,7 @@ objects:
         pre:
           failurePolicy: Retry
           execNewPod:
-            containerName: ${NAME}${SUFFIX}-backend
+            containerName: "${NAME}${SUFFIX}-backend"
             command:
             - bash
             - "-c"
@@ -126,7 +126,7 @@ objects:
       metadata:
         creationTimestamp: null
         labels:
-          io.kompose.service: ${NAME}${SUFFIX}-backend
+          io.kompose.service: "${NAME}${SUFFIX}-backend"
       spec:
         containers:
         - env:
@@ -134,7 +134,7 @@ objects:
             valueFrom:
               configMapKeyRef:
                 key: CACHE_REDIS_HOST
-                name: document-manager-backend--env-prime
+                name: redis${SUFFIX}
           - name: CACHE_REDIS_PASS
             valueFrom:
               secretKeyRef:
@@ -149,7 +149,7 @@ objects:
             valueFrom:
               configMapKeyRef:
                 key: DB_HOST
-                name: document-manager-backend--env-prime
+                name: postgresql${SUFFIX}
           - name: DB_NAME
             valueFrom:
               secretKeyRef:
@@ -215,8 +215,8 @@ objects:
               secretKeyRef:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
-          image: ' '
-          name: ${NAME}${SUFFIX}-backend
+          image: " "
+          name: ${NAME}-backend
           ports:
           - containerPort: 6001
           resources: {}
