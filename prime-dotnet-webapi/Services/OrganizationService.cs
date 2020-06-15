@@ -139,9 +139,15 @@ namespace Prime.Services
             }
         }
 
-        public async Task<int> SavePatchOrganizationAsync(Organization organization)
+        public async Task<int> SavePatchOrganizationAsync(Organization organization, bool isCompleted = false)
         {
+            // Registration has been completed
+            organization.Completed = (isCompleted == true)
+                ? isCompleted
+                : organization.Completed;
+
             _context.Entry(organization).State = EntityState.Modified;
+
             try
             {
                 return await _context.SaveChangesAsync();

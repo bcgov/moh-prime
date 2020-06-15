@@ -144,6 +144,45 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // PATCH: api/Organization/5
+        /// <summary>
+        /// Updates a specific Organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        /// <param name="patchDoc"></param>
+        /// <param name="isCompleted"></param>
+        [HttpPatch("{organizationId}", Name = nameof(JsonPatchOrganizationWithModelState))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> JsonPatchOrganizationWithModelState(
+            int organizationId,
+            [FromBody] JsonPatchDocument<Organization> patchDoc,
+            [FromQuery] bool isCompleted)
+        {
+            if (patchDoc != null)
+            {
+                var organization = await _organizationService.GetOrganizationAsync(organizationId);
+
+                patchDoc.ApplyTo(organization, ModelState);
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                await _organizationService.SavePatchOrganizationAsync(organization, isCompleted);
+
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
+
         // DELETE: api/Organizations/5
         /// <summary>
         /// Deletes a specific Organization.
@@ -226,41 +265,6 @@ namespace Prime.Controllers
             await _organizationService.AcceptCurrentOrganizationAgreementAsync(organization.Id);
 
             return NoContent();
-        }
-
-        // PATCH: api/Organization/5
-        /// <summary>
-        /// Updates a specific Organization.
-        /// </summary>
-        /// <param name="organizationId"></param>
-        /// <param name="patchDoc"></param>
-        [HttpPatch("{organizationId}", Name = nameof(JsonPatchOrganizationWithModelState))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> JsonPatchOrganizationWithModelState(int organizationId, [FromBody] JsonPatchDocument<Organization> patchDoc)
-        {
-            if (patchDoc != null)
-            {
-                var organization = await _organizationService.GetOrganizationAsync(organizationId);
-
-                patchDoc.ApplyTo(organization, ModelState);
-
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                await _organizationService.SavePatchOrganizationAsync(organization);
-
-                return NoContent();
-            }
-            else
-            {
-                return BadRequest(ModelState);
-            }
         }
 
         // POST: api/organizations/5/submission

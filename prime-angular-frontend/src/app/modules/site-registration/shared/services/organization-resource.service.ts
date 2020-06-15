@@ -86,20 +86,14 @@ export class OrganizationResource {
       );
   }
 
-  public patchOrganization(organization: Organization, jsonPatchDoc: Operation[]): NoContent {
-
-    // jsonPatchDoc.map((operation) => {
-    //   if (operation.path.includes('signingAuthority')) {
-    //     const parts = operation.path.split('/');
-    //     let path = `${parts[1]}/${organization.signingAuthorityId}/${parts[2]}`;
-    //     if (parts[3] === 'physicalAddress') {
-    //       path = `${path}/${organization.signingAuthority.physicalAddressId}/${parts[3]}`;
-    //     }
-    //     operation.path = path;
-    //   }
-    // });
-
-    return this.apiResource.patch<NoContent>(`organizations/${organization.id}`, jsonPatchDoc)
+  public patchOrganization(
+    organizationId: number,
+    initialOrg: Organization,
+    updateOrg: Organization,
+    isCompleted?: boolean): NoContent {
+    const params = this.apiResourceUtilsService.makeHttpParams({ isCompleted });
+    const jsonPatchDoc = compare(initialOrg, updateOrg);
+    return this.apiResource.patch<NoContent>(`organizations/${organizationId}`, jsonPatchDoc, params)
       // TODO remove pipe when ApiResource handles NoContent
       .pipe(
         map(() => {

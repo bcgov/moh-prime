@@ -22,7 +22,6 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import {
   OrgBookResource, OrgBookAutocompleteResult, OrgBookFacetHttpResponse, OrgBookDetailHttpResponse, OrgBookRelatedHttpResponse
 } from '@registration/shared/services/org-book-resource.service';
-import { compare, Operation } from 'fast-json-patch';
 
 @Component({
   selector: 'app-organization-information',
@@ -70,18 +69,12 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public onSubmit() {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
-      const organization = this.organizationService.organization;
-
       const updateOrg = {
         ...this.form.value
       } as Organization;
 
-      const jsonPatch = compare(this.initialOrg, updateOrg);
-      console.log('jsonPatch: ', jsonPatch);
-
       this.organizationResource
-        .patchOrganization(organization, jsonPatch)
+        .patchOrganization(this.organizationService?.organization?.id, this.initialOrg, updateOrg)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();

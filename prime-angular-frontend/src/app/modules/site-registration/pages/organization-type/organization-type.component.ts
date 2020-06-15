@@ -31,6 +31,7 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   public title: string;
   public routeUtils: RouteUtils;
   public organization: string;
+  public initialOrg: Organization;
   public doingBusinessAsNames: string[];
   public organizationTypes: Config<number>[];
   public filteredOrganizationTypes: Config<number>[];
@@ -64,10 +65,17 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   public onSubmit() {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
-      const payload = this.organizationFormStateService.organization;
+      const updateOrg = {
+        ...this.form.value
+      } as Organization;
+
       this.organizationResource
-        .updateOrganization(payload, true)
+        .patchOrganization(
+          this.organizationService.organization.id,
+          this.initialOrg,
+          updateOrg,
+          true
+        )
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
@@ -104,5 +112,9 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);
+
+    this.initialOrg = {
+      ...this.form.value
+    } as Organization;
   }
 }

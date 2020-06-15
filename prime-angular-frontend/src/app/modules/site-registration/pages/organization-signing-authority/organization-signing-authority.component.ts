@@ -88,7 +88,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   public onSubmit() {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
       const updateParty = {
         ...this.form.value
       } as Party;
@@ -96,8 +95,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
       if (!this.hasMailingAddress) {
         updateParty.mailingAddress = null;
       }
-
-      // const jsonPatch = compare(this.initialParty, updateParty);
 
       this.organizationResource
         .patchParty(this.initialParty, updateParty)
