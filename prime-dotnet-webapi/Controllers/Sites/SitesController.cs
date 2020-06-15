@@ -161,17 +161,25 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="patchDoc"></param>
+        /// <param name="isCompleted"></param>
         [HttpPatch("{siteId}", Name = nameof(JsonPatchSiteWithModelState))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult JsonPatchSiteWithModelState(int siteId, [FromBody] JsonPatchDocument<Site> patchDoc)
+        public async Task<IActionResult> JsonPatchSiteWithModelState(int siteId, [FromBody] JsonPatchDocument<Site> patchDoc, [FromQuery] bool isCompleted)
         {
             if (patchDoc != null)
             {
-                var site = new Site();
+                var site = await _siteService.GetSiteAsync(siteId);
+
+                // Check if physical address is being added
+                var operations = patchDoc.Operations.FindAll(x => x.path.Contains("physicalAddress"));
+                if (operations.Exists(x => x.op == "add") && site.Location.PhysicalAddress == null)
+                {
+                    site.Location.PhysicalAddress = new PhysicalAddress { };
+                }
 
                 patchDoc.ApplyTo(site, ModelState);
 
