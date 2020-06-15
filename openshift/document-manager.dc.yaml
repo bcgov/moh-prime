@@ -237,6 +237,6 @@ objects:
         - document_manager_backend
         from:
           kind: ImageStreamTag
-          name: ${NAME}${SUFFIX}:latest
+          name: ${NAME}:latest
       type: ImageChange
   status: {}
