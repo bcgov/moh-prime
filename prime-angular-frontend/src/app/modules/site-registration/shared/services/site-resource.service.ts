@@ -5,6 +5,8 @@ import { map, catchError, tap } from 'rxjs/operators';
 
 import * as moment from 'moment';
 
+import { compare, Operation } from 'fast-json-patch';
+
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -16,7 +18,7 @@ import { BusinessDay } from '@lib/modules/business-hours/models/business-day.mod
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 import { BusinessLicence } from '../models/business-licence.model';
-import { Operation } from 'fast-json-patch';
+
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -135,8 +137,8 @@ export class SiteResource {
       );
   }
 
-  public patchSite(siteId: number, jsonPatchDoc: Operation[]): NoContent {
-
+  public patchSite(siteId: number, initialSite: Site, updateSite: Site, isCompleted?: boolean): NoContent {
+    const jsonPatchDoc = compare(initialSite, updateSite);
     return this.apiResource.patch<NoContent>(`sites/${siteId}`, jsonPatchDoc)
       // TODO remove pipe when ApiResource handles NoContent
       .pipe(
@@ -146,6 +148,22 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be patched');
           this.logger.error('[SiteRegistration] SiteResource::patchSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public patchLocation(locationId: number, initialLocation: Location, updateLocation: Location): NoContent {
+    const jsonPatchDoc = compare(initialLocation, updateLocation);
+    return this.apiResource.patch<NoContent>(`locations/${locationId}`, jsonPatchDoc)
+      // TODO remove pipe when ApiResource handles NoContent
+      .pipe(
+        map(() => {
+          this.toastService.openSuccessToast('Location has been patched');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Location could not be patched');
+          this.logger.error('[SiteRegistration] SiteResource::patchLocation error has occurred: ', error);
           throw error;
         })
       );
