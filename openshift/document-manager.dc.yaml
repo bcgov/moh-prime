@@ -237,7 +237,7 @@ objects:
         - document_manager_backend
         from:
           kind: ImageStreamTag
-          name: ${NAME}:latest
+          name: ${NAME}${SUFFIX}:latest
       type: ImageChange
   status: {}
 - apiVersion: v1
