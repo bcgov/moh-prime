@@ -21,5 +21,6 @@ namespace Prime.Services
         void UpdatePartyAddress(Party current, Party updated);
 
         Task DeletePartyAsync(int partyId);
+        Task<int> SavePatchPartyAsync(Party party);
     }
 }

@@ -88,6 +88,19 @@ namespace Prime.Services
             }
         }
 
+        public async Task<int> SavePatchPartyAsync(Party party)
+        {
+            _context.Entry(party).State = EntityState.Modified;
+            try
+            {
+                return await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return 0;
+            }
+        }
+
 
         public async Task DeletePartyAsync(int partyId)
         {
@@ -106,7 +119,8 @@ namespace Prime.Services
         private IQueryable<Party> GetBasePartyQuery()
         {
             return _context.Parties
-                .Include(p => p.PhysicalAddress);
+                .Include(p => p.PhysicalAddress)
+                .Include(p => p.MailingAddress);
         }
 
         public async Task<Party> GetPartyAsync(int partyId)

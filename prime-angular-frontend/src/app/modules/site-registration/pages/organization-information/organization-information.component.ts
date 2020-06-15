@@ -71,46 +71,21 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
       // TODO when spoking don't update
-
-      const payload = this.organizationFormStateService.organization;
-
       const organization = this.organizationService.organization;
 
       const updateOrg = {
         ...this.form.value
       } as Organization;
 
-      // const jsonPatch = compare(this.initialForm, this.form.value);
       const jsonPatch = compare(this.initialOrg, updateOrg);
-
-      console.log('jsonPatch: ', jsonPatch);
-
-      jsonPatch.map((operation) => {
-        if (operation.path.includes('signingAuthority')) {
-          const parts = operation.path.split('/');
-          let path = `${parts[1]}/${organization.signingAuthorityId}/${parts[2]}`;
-          if (parts[3] === 'physicalAddress') {
-            path = `${path}/${organization.signingAuthority.physicalAddressId}/${parts[3]}`;
-          }
-          operation.path = path;
-        }
-      });
-
       console.log('jsonPatch: ', jsonPatch);
 
       this.organizationResource
-        .patchOrganization(organization.id, jsonPatch)
+        .patchOrganization(organization, jsonPatch)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
         });
-
-      // this.organizationResource
-      //   .updateOrganization(payload)
-      //   .subscribe(() => {
-      //     this.form.markAsPristine();
-      //     this.nextRoute();
-      //   });
     }
   }
 
@@ -162,8 +137,6 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);
 
-
-
     this.name.valueChanges
       .pipe(
         debounceTime(400),
@@ -174,7 +147,6 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
         this.organizations = organizations.map(o => o.names[0].text);
       });
 
-    console.log('form on init: ', this.form.value);
     this.initialOrg = {
       ...this.form.value
     } as Organization;

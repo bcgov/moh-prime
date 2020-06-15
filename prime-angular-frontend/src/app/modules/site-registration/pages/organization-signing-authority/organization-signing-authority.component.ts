@@ -5,6 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
 
+import { compare, Operation } from 'fast-json-patch';
+
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -16,6 +18,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { Party } from '@registration/shared/models/party.model';
 
 @Component({
   selector: 'app-organization-signing-authority',
@@ -28,6 +31,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   public form: FormGroup;
   public title: string;
   public routeUtils: RouteUtils;
+  public initialParty: Party;
   public organization: Organization;
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
@@ -85,9 +89,18 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
       // TODO when spoking don't update
-      const payload = this.organizationFormStateService.organization;
+      const updateParty = {
+        ...this.form.value
+      } as Party;
+
+      if (!this.hasMailingAddress) {
+        updateParty.mailingAddress = null;
+      }
+
+      // const jsonPatch = compare(this.initialParty, updateParty);
+
       this.organizationResource
-        .updateOrganization(payload)
+        .patchParty(this.initialParty, updateParty)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
@@ -166,6 +179,14 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     );
 
     this.toggleMailingAddressValidators(this.mailingAddress, ['street2', 'id']);
+
+    this.initialParty = {
+      ...this.form.value
+    } as Party;
+
+    // if (this.initialParty.mailingAddress.city == null) {
+    //   this.initialParty.mailingAddress = null;
+    // }
   }
 
   private togglePreferredNameValidators(preferredFirstName: FormControl, preferredLastName: FormControl) {

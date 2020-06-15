@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
+import { compare, Operation } from 'fast-json-patch';
+
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -12,7 +14,6 @@ import { NoContent } from '@core/resources/abstract-resource';
 
 import { Organization } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
-import { Operation } from 'fast-json-patch';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -85,9 +86,20 @@ export class OrganizationResource {
       );
   }
 
-  public patchOrganization(organizationId: number, jsonPatchDoc: Operation[]): NoContent {
+  public patchOrganization(organization: Organization, jsonPatchDoc: Operation[]): NoContent {
 
-    return this.apiResource.patch<NoContent>(`organizations/${organizationId}`, jsonPatchDoc)
+    // jsonPatchDoc.map((operation) => {
+    //   if (operation.path.includes('signingAuthority')) {
+    //     const parts = operation.path.split('/');
+    //     let path = `${parts[1]}/${organization.signingAuthorityId}/${parts[2]}`;
+    //     if (parts[3] === 'physicalAddress') {
+    //       path = `${path}/${organization.signingAuthority.physicalAddressId}/${parts[3]}`;
+    //     }
+    //     operation.path = path;
+    //   }
+    // });
+
+    return this.apiResource.patch<NoContent>(`organizations/${organization.id}`, jsonPatchDoc)
       // TODO remove pipe when ApiResource handles NoContent
       .pipe(
         map(() => {
@@ -96,6 +108,32 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be patched');
           this.logger.error('[OrganizationRegistration] OrganizationResource::patchOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public patchParty(initialParty: Party, updateParty: Party): NoContent {
+    const jsonPatchDoc = compare(initialParty, updateParty);
+
+    jsonPatchDoc.map((operation) => {
+      // If mailing address is being added, change replace to add
+      if (initialParty?.mailingAddress?.city == null && updateParty?.mailingAddress?.city != null) {
+        if (operation.path.includes('mailingAddress')) {
+          operation.op = 'add';
+        }
+      }
+    });
+
+    return this.apiResource.patch<NoContent>(`parties/${updateParty.id}`, jsonPatchDoc)
+      // TODO remove pipe when ApiResource handles NoContent
+      .pipe(
+        map(() => {
+          this.toastService.openSuccessToast('Party has been patched');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Party could not be patched');
+          this.logger.error('[SiteRegistration] PartyResource::patchParty error has occurred: ', error);
           throw error;
         })
       );
