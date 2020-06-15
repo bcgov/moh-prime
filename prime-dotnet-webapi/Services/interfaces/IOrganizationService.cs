@@ -17,5 +17,6 @@ namespace Prime.Services
         Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);
         Task<int> AcceptCurrentOrganizationAgreementAsync(int organizationId);
         Task<Organization> GetOrganizationByPartyIdAsync(int partyId);
+        Task<int> SavePatchOrganizationAsync(Organization organization);
     }
 }

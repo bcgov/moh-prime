@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
@@ -128,6 +129,19 @@ namespace Prime.Services
 
             await _businessEventService.CreateOrganizationEventAsync(currentOrganization.Id, currentOrganization.SigningAuthorityId, "Organization Updated");
 
+            try
+            {
+                return await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return 0;
+            }
+        }
+
+        public async Task<int> SavePatchOrganizationAsync(Organization organization)
+        {
+            _context.Entry(organization).State = EntityState.Modified;
             try
             {
                 return await _context.SaveChangesAsync();

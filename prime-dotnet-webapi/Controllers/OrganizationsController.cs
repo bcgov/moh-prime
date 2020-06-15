@@ -240,12 +240,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public IActionResult JsonPatchOrganizationWithModelState(int organizationId, [FromBody] JsonPatchDocument<Organization> patchDoc)
+        public async Task<IActionResult> JsonPatchOrganizationWithModelState(int organizationId, [FromBody] JsonPatchDocument<Organization> patchDoc)
         {
-            // Need to send whole Organization object from front end because backend expects it
             if (patchDoc != null)
             {
-                var organization = new Organization();
+                var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
                 patchDoc.ApplyTo(organization, ModelState);
 
@@ -253,6 +252,8 @@ namespace Prime.Controllers
                 {
                     return BadRequest(ModelState);
                 }
+
+                await _organizationService.SavePatchOrganizationAsync(organization);
 
                 return NoContent();
             }

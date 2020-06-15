@@ -32,7 +32,7 @@ import { compare, Operation } from 'fast-json-patch';
 export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
-  public initialForm: FormGroup;
+  public initialOrg: Organization;
   public title: string;
   public routeUtils: RouteUtils;
   public organizations: string[];
@@ -76,7 +76,12 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
 
       const organization = this.organizationService.organization;
 
-      const jsonPatch = compare(this.initialForm, this.form.value);
+      const updateOrg = {
+        ...this.form.value
+      } as Organization;
+
+      // const jsonPatch = compare(this.initialForm, this.form.value);
+      const jsonPatch = compare(this.initialOrg, updateOrg);
 
       console.log('jsonPatch: ', jsonPatch);
 
@@ -92,7 +97,6 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
       });
 
       console.log('jsonPatch: ', jsonPatch);
-      // Need to send whole Organization object from front end because backend expects it
 
       this.organizationResource
         .patchOrganization(organization.id, jsonPatch)
@@ -171,7 +175,9 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
       });
 
     console.log('form on init: ', this.form.value);
-    this.initialForm = this.form.value;
+    this.initialOrg = {
+      ...this.form.value
+    } as Organization;
   }
 
   /**
