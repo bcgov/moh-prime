@@ -216,7 +216,7 @@ objects:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
           image: " "
-          name: ${NAME}-backend
+          name: ${NAME}${SUFFIX}-backend
           ports:
           - containerPort: 6001
           resources: {}
