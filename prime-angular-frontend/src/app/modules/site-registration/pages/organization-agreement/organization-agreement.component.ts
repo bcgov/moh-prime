@@ -159,8 +159,9 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public onDownload() {
     this.organizationResource
       .downloadOrganizationAgreement()
-      .subscribe(response => {
-        this.utilsService.downloadDocumentFromArrayBuffer(response, 'application/doc', 'Organization-Agreement.docx');
+      .subscribe((base64: string) => {
+        const blob = this.utilsService.base64ToBlob(base64);
+        this.utilsService.downloadDocument(blob, 'Organization-Agreement');
       });
 
   }

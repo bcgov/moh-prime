@@ -165,13 +165,13 @@ export class OrganizationResource {
       );
   }
 
-  public downloadOrganizationAgreement(): Observable<ArrayBuffer> {
-    return this.apiResource.get<ArrayBuffer>(`organizations/download-organization-agreement`)
+  public downloadOrganizationAgreement(): Observable<string> {
+    return this.apiResource.get<string>(`organizations/download-organization-agreement`)
       .pipe(
-        map((response: ApiHttpResponse<ArrayBuffer>) => response.result),
+        map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement document could not be downloaded');
-          this.logger.error('[SiteRegistration] OrganizationResource::downlaodOrganizationAgreement error has occurred: ', error);
+          this.logger.error('[SiteRegistration] OrganizationResource::downloadOrganizationAgreement error has occurred: ', error);
           throw error;
         })
       );

@@ -85,28 +85,42 @@ export class UtilsService {
 
   /**
    * @description
-   * Download a document from an ArrayBuffer
+   * Conversion of Base64 encoded document to a Blob.
    */
-  public downloadDocumentFromArrayBuffer(arrayBuffer: ArrayBuffer, type: string, filename: string): boolean {
-    const blob: any = new Blob([arrayBuffer], { type });
+  public base64ToBlob(base64: string, type: string = 'application/pdf'): Blob {
+    const decoded = window.atob(base64.replace(/\s/g, ''));
+    const len = decoded.length;
+    const buffer = new ArrayBuffer(len);
+    const data = new Uint8Array(buffer);
 
-    // IE doesn't allow using a blob object directly as link href
-    // instead it is necessary to use msSaveOrOpenBlob
+    for (let i = 0; i < len; i++) {
+      data[i] = decoded.charCodeAt(i);
+    }
+
+    return new Blob([data], { type });
+  }
+
+  /**
+   * @description
+   * Download a document.
+   */
+  public downloadDocument(file: Blob, filename: string): void {
+    // Allow downloads in IE and Edge browsers prior to
+    // Chromium-based Edge where it is deprecated
     if (navigator && navigator.msSaveOrOpenBlob) {
-      navigator.msSaveOrOpenBlob(blob, filename);
+      navigator.msSaveOrOpenBlob(file, filename);
       return;
     }
 
-    // For other browsers:
-    // Create a link pointing to the ObjectURL containing the blob.
-    const data = URL.createObjectURL(blob);
+    const data = URL.createObjectURL(file);
     const link = document.createElement('a');
     link.href = data;
     link.download = filename;
+    link.target = '_blank';
     link.click();
     setTimeout(() => {
-      // For Firefox it is necessary to delay revoking the ObjectURL
       URL.revokeObjectURL(data);
+      link.remove();
     }, 100);
   }
 }

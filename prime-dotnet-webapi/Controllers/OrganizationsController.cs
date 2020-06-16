@@ -335,32 +335,20 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<HttpResponseMessage>), StatusCodes.Status200OK)]
-        public ActionResult<HttpResponseMessage> DownloadOrganizationAgreement()
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public ActionResult<string> DownloadOrganizationAgreement()
         {
-
-            var fileName = "Organization-Agreement.docx";
-            var uploads = Path.Combine("Resources", "documents");
-            var filePath = Path.Combine(uploads, fileName);
+            var fileName = "Organization-Agreement.pdf";
+            var filePath = Path.Combine("Resources", "documents", fileName);
             if (!System.IO.File.Exists(filePath))
+            {
                 return NotFound();
+            }
 
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-            var info = System.IO.File.GetAttributes(filePath);
-            // result = Request.CreateResponse(StatusCodes.Status200OK);
-            // result = Request.CreateResponse(StatusCodes.Status200OK);
-            result.Content = new StreamContent(new FileStream(filePath, FileMode.Open, FileAccess.Read));
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/doc");
-            result.Content.Headers.Add("x-filename", fileName);
-            result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
-            result.Content.Headers.ContentDisposition.FileName = fileName;
+            byte[] file = System.IO.File.ReadAllBytes(filePath);
+            string base64 = Convert.ToBase64String(file);
 
-            // Response.ContentType = new MediaTypeHeaderValue("application/doc").ToString();// Content type
-
-
-            return Ok(ApiResponse.Result(result));
-
-            // return Ok(ApiResponse.Result(agreement));
+            return Ok(ApiResponse.Result(base64));
         }
     }
 }
