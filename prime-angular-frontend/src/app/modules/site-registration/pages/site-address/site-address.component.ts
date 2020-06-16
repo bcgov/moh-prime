@@ -76,7 +76,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
       const updateLocation = {
-        ...this.form.value
+        ...this.form.getRawValue()
       } as Location;
 
       this.siteResource
@@ -144,7 +144,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
       .subscribe();
 
     this.initialLocation = {
-      ...this.form.value
+      ...this.form.getRawValue()
     } as Location;
     console.log(this.initialLocation);
   }

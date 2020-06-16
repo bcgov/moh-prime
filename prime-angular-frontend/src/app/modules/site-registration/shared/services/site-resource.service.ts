@@ -18,6 +18,7 @@ import { BusinessDay } from '@lib/modules/business-hours/models/business-day.mod
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 import { BusinessLicence } from '../models/business-licence.model';
+import { Location } from '@registration/shared/models/location.model';
 
 
 // TODO use ApiResourceUtils to build URLs
@@ -139,6 +140,7 @@ export class SiteResource {
 
   public patchSite(siteId: number, initialSite: Site, updateSite: Site, isCompleted?: boolean): NoContent {
     const jsonPatchDoc = compare(initialSite, updateSite);
+
     return this.apiResource.patch<NoContent>(`sites/${siteId}`, jsonPatchDoc)
       // TODO remove pipe when ApiResource handles NoContent
       .pipe(
@@ -155,6 +157,16 @@ export class SiteResource {
 
   public patchLocation(locationId: number, initialLocation: Location, updateLocation: Location): NoContent {
     const jsonPatchDoc = compare(initialLocation, updateLocation);
+
+    jsonPatchDoc.map((operation) => {
+      // If mailing address is being added, change replace to add
+      if (initialLocation?.physicalAddress?.city == null && updateLocation?.physicalAddress?.city != null) {
+        if (operation.path.includes('physicalAddress')) {
+          operation.op = 'add';
+        }
+      }
+    });
+
     return this.apiResource.patch<NoContent>(`locations/${locationId}`, jsonPatchDoc)
       // TODO remove pipe when ApiResource handles NoContent
       .pipe(

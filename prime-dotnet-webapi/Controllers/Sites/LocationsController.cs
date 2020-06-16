@@ -35,7 +35,7 @@ namespace Prime.Controllers
         [HttpPatch("{locationId}", Name = nameof(JsonPatchLocationWithModelState))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        // [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> JsonPatchLocationWithModelState(int locationId, [FromBody] JsonPatchDocument<Location> patchDoc)
@@ -68,6 +68,7 @@ namespace Prime.Controllers
             }
         }
     }
-
-
 }
+
+
+

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
-
 namespace Prime.Services
 {
     public class LocationService : BaseService, ILocationService
