@@ -63,6 +63,8 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
             Ignore(x => x.AlwaysManual);
+            Ignore(x => x.RequestingRemoteAccess);
+            Ignore(x => x.IdentityProvider);
 
             RuleSet("status.submitted", (set) =>
             {
