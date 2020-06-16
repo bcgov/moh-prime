@@ -12,6 +12,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { DocumentUploadOutput } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 @Component({
   selector: 'app-self-declaration',
@@ -81,6 +82,22 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     const hasBeenThroughTheWizard = true;
     this.hasAttemptedFormSubmission = true;
     super.onSubmit(hasBeenThroughTheWizard);
+  }
+
+  public onHasConvictionUpload(event: DocumentUploadOutput) {
+
+  }
+
+  public onHasRegistrationSuspendedUpload(event: DocumentUploadOutput) {
+
+  }
+
+  public onHasDisciplinaryActionUpload(event: DocumentUploadOutput) {
+
+  }
+
+  public onHasPharmanetSuspendedUpload(event: DocumentUploadOutput) {
+
   }
 
   public ngOnInit() {

@@ -5,6 +5,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -78,4 +79,48 @@ export class EnrolleeReviewComponent {
   public onRoute(routePath: string): void {
     this.route.emit(routePath);
   }
+
+  public hasConviction(): boolean {
+    return this.hasSelfDeclaration(SelfDeclarationTypeEnum.HAS_CONVICTION);
+  }
+
+  public hasRegistrationSuspended(): boolean {
+    return this.hasSelfDeclaration(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED);
+  }
+
+  public hasDisciplinaryAction(): boolean {
+    return this.hasSelfDeclaration(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION);
+  }
+
+  public hasPharmaNetSuspended(): boolean {
+    return this.hasSelfDeclaration(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED);
+  }
+
+  public getConvictionDetails(): string {
+    return this.getSelfDeclarationDetailsIfExist(SelfDeclarationTypeEnum.HAS_CONVICTION);
+  }
+
+  public getRegistrationSuspendedDetails(): string {
+    return this.getSelfDeclarationDetailsIfExist(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED);
+  }
+
+  public getDisciplinaryActionDetails(): string {
+    return this.getSelfDeclarationDetailsIfExist(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION);
+  }
+
+  public getPharmaNetSuspendedDetails(): string {
+    return this.getSelfDeclarationDetailsIfExist(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED);
+  }
+
+  private hasSelfDeclaration(type: SelfDeclarationTypeEnum): boolean {
+    return !!this.enrolment?.selfDeclarations
+      .filter((decl) => decl.selfDeclarationTypeCode === type).length;
+  }
+
+  private getSelfDeclarationDetailsIfExist(type: SelfDeclarationTypeEnum): string {
+    const declaration = this.enrolment?.selfDeclarations
+      .filter((decl) => decl.selfDeclarationTypeCode === type).pop();
+    return declaration?.selfDeclarationDetails ?? '';
+  }
+
 }

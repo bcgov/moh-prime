@@ -169,6 +169,7 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new StatusReasonConfiguration());
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
+            modelBuilder.ApplyConfiguration(new SelfDeclarationTypeConfiguration());
 
             modelBuilder.ApplyConfiguration(new PrivilegeTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PrivilegeGroupConfiguration());
