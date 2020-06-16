@@ -67,7 +67,7 @@ objects:
 - kind: BuildConfig
   apiVersion: v1
   metadata:
-    name: '${NAME}'
+    name: '${NAME}${SUFFIX}'
     creationTimestamp: null
     labels: {}
     annotations: {}
@@ -91,7 +91,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: '${NAME}:latest'
+        name: '${NAME}${SUFFIX}:latest'
     resources:
       limits:
         cpu: 500m
