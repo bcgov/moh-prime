@@ -188,6 +188,8 @@ namespace Prime.Controllers
                     return BadRequest(ModelState);
                 }
 
+                await _siteService.SavePatchSiteAsync(site, isCompleted);
+
                 return NoContent();
             }
             else

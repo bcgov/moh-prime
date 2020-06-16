@@ -247,6 +247,25 @@ namespace Prime.Services
             }
         }
 
+        public async Task<int> SavePatchSiteAsync(Site site, bool isCompleted = false)
+        {
+            // Registration has been completed
+            site.Completed = (isCompleted == true)
+                ? isCompleted
+                : site.Completed;
+
+            _context.Entry(site).State = EntityState.Modified;
+
+            try
+            {
+                return await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return 0;
+            }
+        }
+
         public async Task DeleteSiteAsync(int siteId)
         {
             var site = await this.GetBaseSiteQuery()

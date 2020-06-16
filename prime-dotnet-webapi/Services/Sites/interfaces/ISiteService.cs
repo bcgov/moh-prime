@@ -19,5 +19,6 @@ namespace Prime.Services
         Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename);
         Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId);
         Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId);
+        Task<int> SavePatchSiteAsync(Site site, bool isCompleted = false);
     }
 }
