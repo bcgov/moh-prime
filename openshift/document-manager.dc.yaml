@@ -114,7 +114,7 @@ objects:
         pre:
           failurePolicy: Retry
           execNewPod:
-            containerName: "${NAME}-backend"
+            containerName: "${NAME}${SUFFIX}-backend"
             command:
             - bash
             - "-c"
@@ -237,7 +237,7 @@ objects:
         - document_manager_backend
         from:
           kind: ImageStreamTag
-          name: ${NAME}${SUFFIX}:latest
+          name: "${NAME}${SUFFIX}:latest"
       type: ImageChange
   status: {}
 - apiVersion: v1
