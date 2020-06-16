@@ -5,8 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
 
-import { compare, Operation } from 'fast-json-patch';
-
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -43,7 +41,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     private route: ActivatedRoute,
     private router: Router,
     private organizationService: OrganizationService,
-    private organizationResource: OrganizationResource,
     private partyResource: PartyResource,
     private organizationFormStateService: OrganizationFormStateService,
     private formUtilsService: FormUtilsService,
