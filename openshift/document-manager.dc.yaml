@@ -114,7 +114,7 @@ objects:
         pre:
           failurePolicy: Retry
           execNewPod:
-            containerName: "${NAME}${SUFFIX}-backend"
+            containerName: "${NAME}-backend"
             command:
             - bash
             - "-c"
