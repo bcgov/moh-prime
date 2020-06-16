@@ -82,10 +82,8 @@ namespace Prime
                 .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
             }
 
-            services.AddControllers(options =>
-            {
-                options.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
-            }).AddNewtonsoftJson(options =>
+            services.AddControllers()
+            .AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
             });
@@ -238,20 +236,5 @@ namespace Prime
             });
         }
 
-        private static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()
-        {
-            var builder = new ServiceCollection()
-                .AddLogging()
-                .AddMvc()
-                .AddNewtonsoftJson()
-                .Services.BuildServiceProvider();
-
-            return builder
-                .GetRequiredService<IOptions<MvcOptions>>()
-                .Value
-                .InputFormatters
-                .OfType<NewtonsoftJsonPatchInputFormatter>()
-                .First();
-        }
     }
 }
