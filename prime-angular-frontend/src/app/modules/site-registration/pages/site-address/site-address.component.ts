@@ -16,7 +16,6 @@ import { IForm } from '@registration/shared/interfaces/form.interface';
 import { Organization } from '@registration/shared/models/organization.model';
 import { Location } from '@registration/shared/models/location.model';
 import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
-import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
@@ -146,6 +145,5 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     this.initialLocation = {
       ...this.form.getRawValue()
     } as Location;
-    console.log(this.initialLocation);
   }
 }

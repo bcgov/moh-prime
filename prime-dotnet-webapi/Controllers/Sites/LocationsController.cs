@@ -32,13 +32,14 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="locationId"></param>
         /// <param name="patchDoc"></param>
+        /// <param name="isCompletedSiteId"></param>
         [HttpPatch("{locationId}", Name = nameof(JsonPatchLocationWithModelState))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> JsonPatchLocationWithModelState(int locationId, [FromBody] JsonPatchDocument<Location> patchDoc)
+        public async Task<IActionResult> JsonPatchLocationWithModelState(int locationId, [FromBody] JsonPatchDocument<Location> patchDoc, [FromQuery] int isCompletedSiteId)
         {
             if (patchDoc != null)
             {
@@ -58,7 +59,7 @@ namespace Prime.Controllers
                     return BadRequest(ModelState);
                 }
 
-                await _locationService.SavePatchLocationAsync(location);
+                await _locationService.SavePatchLocationAsync(location, isCompletedSiteId);
 
                 return NoContent();
             }

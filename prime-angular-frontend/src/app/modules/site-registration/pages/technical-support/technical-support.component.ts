@@ -168,7 +168,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     } as Location;
 
     this.siteResource
-      .patchLocation(this.site?.locationId, initialLocation, updateLocation)
+      .patchLocation(this.site?.locationId, initialLocation, updateLocation, this.site?.id)
       .subscribe(() => {
         this.form.markAsPristine();
         this.nextRoute();

@@ -9,11 +9,16 @@ namespace Prime.Services
 {
     public class LocationService : BaseService, ILocationService
     {
+        private readonly ISiteService _siteService;
+
         public LocationService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            ISiteService siteService)
             : base(context, httpContext)
-        { }
+        {
+            _siteService = siteService;
+        }
 
         public async Task<int> CreateLocationAsync(Location location)
         {
@@ -67,8 +72,17 @@ namespace Prime.Services
             }
         }
 
-        public async Task<int> SavePatchLocationAsync(Location location)
+        public async Task<int> SavePatchLocationAsync(Location location, int isCompletedSiteId = 0)
         {
+            // Site + Location loop has been completed
+            // TODO update this on site instead. Currently Location object is last page patched
+            if (isCompletedSiteId != 0)
+            {
+                var site = await _siteService.GetSiteAsync(isCompletedSiteId);
+                site.Completed = true;
+                _context.Entry(site).State = EntityState.Modified;
+            }
+
             _context.Entry(location).State = EntityState.Modified;
             try
             {
@@ -98,7 +112,8 @@ namespace Prime.Services
         private IQueryable<Location> GetBaseLocationQuery()
         {
             return _context.Locations
-                .Include(p => p.PhysicalAddress);
+                .Include(l => l.PhysicalAddress)
+                .Include(l => l.BusinessHours);
         }
 
         public async Task<Location> GetLocationAsync(int locationId)

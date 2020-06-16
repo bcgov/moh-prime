@@ -14,7 +14,7 @@ namespace Prime.Services
 
         void UpdateLocationAddress(Location current, Location updated);
 
-        Task<int> SavePatchLocationAsync(Location location);
+        Task<int> SavePatchLocationAsync(Location location, int isCompletedSiteId = 0);
 
         Task DeleteLocationAsync(int locationId);
 

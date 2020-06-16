@@ -155,7 +155,14 @@ export class SiteResource {
       );
   }
 
-  public patchLocation(locationId: number, initialLocation: Location, updateLocation: Location): NoContent {
+  public patchLocation(
+    locationId: number,
+    initialLocation: Location,
+    updateLocation: Location,
+    isCompletedSiteId?: number
+  ): NoContent {
+    const params = this.apiResourceUtilsService.makeHttpParams({ isCompletedSiteId });
+
     const jsonPatchDoc = compare(initialLocation, updateLocation);
 
     jsonPatchDoc.map((operation) => {
@@ -167,7 +174,7 @@ export class SiteResource {
       }
     });
 
-    return this.apiResource.patch<NoContent>(`locations/${locationId}`, jsonPatchDoc)
+    return this.apiResource.patch<NoContent>(`locations/${locationId}`, jsonPatchDoc, params)
       // TODO remove pipe when ApiResource handles NoContent
       .pipe(
         map(() => {
