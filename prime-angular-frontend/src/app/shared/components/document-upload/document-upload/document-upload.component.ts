@@ -11,7 +11,7 @@ import { environment } from '@env/environment';
 import tus from 'tus-js-client';
 import { EventEmitter } from '@angular/core';
 
-export class DocumentUploadOutput {
+export class BaseDocument {
   filename: string;
   documentGuid: string;
 
@@ -28,7 +28,7 @@ export class DocumentUploadOutput {
 })
 export class DocumentUploadComponent implements OnInit {
 
-  @Output() completed: EventEmitter<DocumentUploadOutput> = new EventEmitter();
+  @Output() completed: EventEmitter<BaseDocument> = new EventEmitter();
 
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
   public filePondOptions: { [key: string]: any };
@@ -88,7 +88,7 @@ export class DocumentUploadComponent implements OnInit {
           const documentGuid = upload.url.split('/').pop();
 
           // Emit event to trigger parent saving ralationship in database
-          this.completed.emit(new DocumentUploadOutput(filename, documentGuid));
+          this.completed.emit(new BaseDocument(filename, documentGuid));
         }
       });
       upload.start();

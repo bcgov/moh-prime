@@ -9,10 +9,16 @@ namespace Prime.Models
     public class SelfDeclarationDocument : BaseDocumentUpload
     {
 
-        public int SelfDeclarationId { get; set; }
+        [Required]
+        public int EnrolleeId { get; set; }
 
         [JsonIgnore]
-        public SelfDeclaration SelfDeclaration { get; set; }
+        public Enrollee Enrollee { get; set; }
+
+        [Required]
+        public int SelfDeclarationTypeCode { get; set; }
+
+        public SelfDeclarationType SelfDeclarationType { get; set; }
 
     }
 }

@@ -64,6 +64,8 @@ namespace Prime.Models
 
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 
+        public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
+
         [NotMapped]
         public string CurrentTOAStatus { get; set; }
 

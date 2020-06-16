@@ -8,7 +8,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { DocumentUploadOutput } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 @Component({
   selector: 'app-business-licence',
@@ -44,7 +44,7 @@ export class BusinessLicenceComponent implements OnInit {
     // }
   }
 
-  public onUpload(event: DocumentUploadOutput) {
+  public onUpload(event: BaseDocument) {
     const siteId = this.siteService.site.id;
     this.siteResource
       .createBusinessLicence(siteId, event.documentGuid, event.filename).subscribe(() => {

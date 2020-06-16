@@ -19,5 +19,8 @@ namespace Prime.Models
         [JsonIgnore]
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 
+        [JsonIgnore]
+        public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
+
     }
 }

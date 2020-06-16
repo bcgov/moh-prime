@@ -89,6 +89,9 @@ namespace Prime
 
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
         public DbSet<BusinessLicence> BusinessLicences { get; set; }
+        public DbSet<SelfDeclaration> SelfDeclarations { get; set; }
+
+        public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
 
         public override int SaveChanges()
         {
@@ -260,6 +263,21 @@ namespace Prime
                 .HasOne(bl => bl.Site)
                 .WithMany(s => s.BusinessLicences)
                 .HasForeignKey(bl => bl.SiteId);
+
+            modelBuilder.Entity<SelfDeclarationDocument>()
+                .HasOne(sdd => sdd.Enrollee)
+                .WithMany(e => e.SelfDeclarationDocuments)
+                .HasForeignKey(sdd => sdd.EnrolleeId);
+
+            modelBuilder.Entity<SelfDeclarationDocument>()
+                .HasOne(sdd => sdd.SelfDeclarationType)
+                .WithMany(e => e.SelfDeclarationDocuments)
+                .HasForeignKey(sdd => sdd.SelfDeclarationTypeCode);
+
+            modelBuilder.Entity<SelfDeclaration>()
+                .HasOne(sd => sd.Enrollee)
+                .WithMany(e => e.SelfDeclarations)
+                .HasForeignKey(sd => sd.EnrolleeId);
 
             modelBuilder.Entity<RemoteUser>()
                 .HasOne(ru => ru.Site)

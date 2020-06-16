@@ -151,6 +151,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeOrganizationTypes)
+                .Include(e => e.SelfDeclarations)
                 .SingleAsync(e => e.Id == enrolleeId);
 
             _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile);
@@ -159,6 +160,7 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.Certifications, enrolleeProfile.Certifications, enrolleeId);
             ReplaceExistingItems(enrollee.Jobs, enrolleeProfile.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeOrganizationTypes, enrolleeProfile.EnrolleeOrganizationTypes, enrolleeId);
+            ReplaceExistingItems(enrollee.SelfDeclarations, enrolleeProfile.SelfDeclarations, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -266,6 +268,7 @@ namespace Prime.Services
                     .ThenInclude(es => es.EnrolmentStatusReasons)
                         .ThenInclude(esr => esr.StatusReason)
                 .Include(e => e.AccessAgreementNote)
+                .Include(e => e.SelfDeclarations)
                 .Include(e => e.AssignedPrivileges)
                     .ThenInclude(ap => ap.Privilege)
                 .Include(e => e.AccessTerms);
@@ -479,6 +482,22 @@ namespace Prime.Services
                 .Where(e => !e.CurrentStatus.IsType(StatusType.Declined))
                 .Select(e => HpdidLookup.FromEnrollee(e))
                 .ToListAsync();
+        }
+
+        public async Task<SelfDeclarationDocument> AddSelfDeclarationDocumentAsync(int enrolleeId, int selfDeclarationTypeCode, SelfDeclarationDocument selfDeclarationDocument)
+        {
+            selfDeclarationDocument.EnrolleeId = enrolleeId;
+            selfDeclarationDocument.SelfDeclarationTypeCode = selfDeclarationTypeCode;
+
+            _context.SelfDeclarationDocuments.Add(selfDeclarationDocument);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not add Self Declaration Documents.");
+            }
+
+            return selfDeclarationDocument;
         }
 
     }

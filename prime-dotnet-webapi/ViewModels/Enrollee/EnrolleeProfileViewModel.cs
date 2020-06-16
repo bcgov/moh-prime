@@ -34,6 +34,8 @@ namespace Prime.ViewModels
 
         public bool? IsInsulinPumpProvider { get; set; }
 
+        public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
+
         public bool? HasConviction { get; set; }
 
         public string HasConvictionDetails { get; set; }
