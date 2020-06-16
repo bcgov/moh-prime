@@ -161,8 +161,6 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
     this.initialParty = {
       ...this.form.getRawValue()
     } as Party;
-
-    console.log('PROVISIONER: ', this.site.provisioner);
   }
 
   private patchLocation(administratorPharmaNetId: number) {
