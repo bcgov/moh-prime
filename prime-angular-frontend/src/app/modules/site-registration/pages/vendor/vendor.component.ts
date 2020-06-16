@@ -33,6 +33,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
   public hasNoVendorError: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public initialSite: Site;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,16 +52,19 @@ export class VendorComponent implements OnInit, IPage, IForm {
     this.hasNoVendorError = false;
   }
 
-  public get vendorId(): FormControl {
-    return this.form.get('id') as FormControl;
+  public get vendorCode(): FormControl {
+    return this.form.get('code') as FormControl;
   }
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       // TODO when spoking don't update
-      const payload = this.siteFormStateService.site;
+      const updateSite = {
+        vendorCode: this.vendorCode.value
+      } as Site;
+
       this.siteResource
-        .updateSite(payload)
+        .patchSite(this.siteService?.site?.id, this.initialSite, updateSite)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
@@ -108,5 +112,9 @@ export class VendorComponent implements OnInit, IPage, IForm {
     this.isCompleted = site?.completed;
     // TODO cannot set form each time the view is loaded when updating
     this.siteFormStateService.setForm(site, true);
+
+    this.initialSite = {
+      vendorCode: this.vendorCode.value
+    } as Site;
   }
 }

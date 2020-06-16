@@ -127,7 +127,7 @@ export class SiteFormStateService {
         technicalSupportId: technicalSupport?.id,
         technicalSupport
       },
-      vendorCode: vendor?.id,
+      vendorCode: vendor?.code,
       vendor,
       remoteUsers,
       // TODO pec not implemented
@@ -315,7 +315,7 @@ export class SiteFormStateService {
   private buildVendorForm(): FormGroup {
     return this.fb.group({
       // TODO id can't be null, but might be worth adding a new custom required validator
-      id: [
+      code: [
         0,
         // TODO can't be required since 0 is considered valid
         // TODO can't be made null due to issues updating the site
