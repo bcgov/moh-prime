@@ -12,17 +12,6 @@ export const environment = {
     phone: '1-844-397-7463',
     email: 'prime@gov.bc.ca',
     supportEmail: 'primesupport@gov.bc.ca',
-  },
-  keycloakConfig: {
-    config: {
-      url: 'https://sso-dev.pathfinder.gov.bc.ca/auth',
-      realm: 'v4mbqqas',
-      clientId: 'prime-application-local'
-    },
-    initOptions: {
-      onLoad: 'check-sso'
-    },
-    bearerExcludedUrls: ['/provisioner-access/certificate']
   }
 };
 
