@@ -54,7 +54,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public onSubmit() {
     // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.businessDays)) {
-      // TODO when spoking don't update
+      // TODO patch instead of update
       this.hasNoHours = false;
 
       const payload = this.siteFormStateService.site;

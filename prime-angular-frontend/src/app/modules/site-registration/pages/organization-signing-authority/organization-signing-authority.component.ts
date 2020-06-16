@@ -89,7 +89,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
       const updateParty = {
-        ...this.form.value
+        ...this.form.getRawValue()
       } as Party;
 
       if (!this.hasMailingAddress) {
@@ -178,7 +178,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     this.toggleMailingAddressValidators(this.mailingAddress, ['street2', 'id']);
 
     this.initialParty = {
-      ...this.form.value
+      ...this.form.getRawValue()
     } as Party;
 
     // if (this.initialParty.mailingAddress.city == null) {

@@ -55,7 +55,7 @@ export class RemoteUsersComponent implements OnInit {
     // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
       this.hasNoRemoteUserError = false;
-      // TODO when spoking don't update
+      // TODO patch instead of update
       const payload = this.siteFormStateService.site;
       this.siteResource
         .updateSite(payload)

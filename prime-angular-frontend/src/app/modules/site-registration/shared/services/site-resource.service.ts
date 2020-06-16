@@ -181,6 +181,33 @@ export class SiteResource {
       );
   }
 
+  public patchParty(initialParty: Party, updateParty: Party): NoContent {
+
+    const jsonPatchDoc = compare(initialParty, updateParty);
+
+    jsonPatchDoc.map((operation) => {
+      // If physical address is being added, change replace to add
+      if (initialParty?.physicalAddress?.city == null && updateParty?.physicalAddress?.city != null) {
+        if (operation.path.includes('physicalAddress')) {
+          operation.op = 'add';
+        }
+      }
+    });
+
+    return this.apiResource.patch<NoContent>(`parties/${updateParty.id}`, jsonPatchDoc)
+      // TODO remove pipe when ApiResource handles NoContent
+      .pipe(
+        map(() => {
+          this.toastService.openSuccessToast('Party has been patched');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Party could not be patched');
+          this.logger.error('[SiteRegistration] SiteResource::patchParty error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public deleteSite(siteId: number): Observable<Site> {
     return this.apiResource.delete<Site>(`sites/${siteId}`)
       .pipe(

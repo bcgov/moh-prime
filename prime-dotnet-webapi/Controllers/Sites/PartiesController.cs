@@ -26,6 +26,57 @@ namespace Prime.Controllers
             _partyService = partyService;
         }
 
+        // GET: api/Parties/5
+        /// <summary>
+        /// Gets a specific Party.
+        /// </summary>
+        /// <param name="partyId"></param>
+        [HttpGet("{partyId}", Name = nameof(GetPartyById))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Party>> GetPartyById(int partyId)
+        {
+            var party = await _partyService.GetPartyAsync(partyId);
+
+            if (!User.CanEdit(party))
+            {
+                return Forbid();
+            }
+
+            return Ok(ApiResponse.Result(party));
+        }
+
+        // POST: api/Parties
+        /// <summary>
+        /// Creates a new Party.
+        /// </summary>
+        [HttpPost("/api/parties", Name = nameof(CreateParty))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<Party>> CreateParty(Party party)
+        {
+            if (party == null)
+            {
+                this.ModelState.AddModelError("Party", "Could not create a party, the passed in Party cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            var createdPartyId = await _partyService.CreatePartyAsync(party);
+
+            var createdParty = await _partyService.GetPartyAsync(createdPartyId);
+
+            return CreatedAtAction(
+                nameof(GetPartyById),
+                new { partyId = createdPartyId },
+                ApiResponse.Result(createdParty)
+            );
+        }
+
         // PATCH: api/Party/5
         /// <summary>
         /// Updates a specific Party.

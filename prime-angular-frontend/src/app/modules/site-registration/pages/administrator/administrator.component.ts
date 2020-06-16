@@ -15,9 +15,11 @@ import { IForm } from '@registration/shared/interfaces/form.interface';
 import { Party } from '@registration/shared/models/party.model';
 import { Address } from '@shared/models/address.model';
 import { Site } from '@registration/shared/models/site.model';
+import { Location } from '@registration/shared/models/location.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
+import { PartyResource } from '@registration/shared/services/party-resource.service';
 
 @Component({
   selector: 'app-administrator',
@@ -31,6 +33,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public initialParty: Party;
 
   private site: Site;
 
@@ -39,6 +42,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
     private router: Router,
     private siteService: SiteService,
     private siteResource: SiteResource,
+    private partyResource: PartyResource,
     private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
@@ -58,14 +62,33 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
       if (isDisabled) {
         this.form.disable();
       }
-      // TODO when spoking don't update
-      const payload = this.siteFormStateService.site;
-      this.siteResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
+      const updateParty = {
+        ...this.form.getRawValue()
+      } as Party;
+
+      if (updateParty.userId !== '00000000-0000-0000-0000-000000000000') {
+        // Party is same as signing authority, patch location administratorPharmaNetId
+        this.patchLocation(updateParty.id);
+      } else {
+        if (updateParty.id === 0) {
+          // Party is not yet created and is not the same as the signing authority
+          updateParty.physicalAddress.id = 0;
+
+          this.partyResource.createParty(updateParty)
+            .subscribe((party: Party) => {
+              // Patch location with created administratorPharmanetId
+              this.patchLocation(party.id);
+            });
+        } else {
+          // Party already exists, patch party
+          this.partyResource
+            .patchParty(this.initialParty, updateParty)
+            .subscribe(() => {
+              this.form.markAsPristine();
+              this.nextRoute();
+            });
+        }
+      }
     } else {
       if (isDisabled) {
         this.form.disable();
@@ -123,6 +146,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
+
     // TODO structured to match in all site views
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
@@ -133,5 +157,28 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
     if (this.isSameAs()) {
       this.form.disable();
     }
+
+    this.initialParty = {
+      ...this.form.getRawValue()
+    } as Party;
+
+    console.log('PROVISIONER: ', this.site.provisioner);
+  }
+
+  private patchLocation(administratorPharmaNetId: number) {
+    const initialLocation = {
+      administratorPharmaNetId: 0
+    } as Location;
+
+    const updateLocation = {
+      administratorPharmaNetId
+    } as Location;
+
+    this.siteResource
+      .patchLocation(this.site?.locationId, initialLocation, updateLocation)
+      .subscribe(() => {
+        this.form.markAsPristine();
+        this.nextRoute();
+      });
   }
 }
