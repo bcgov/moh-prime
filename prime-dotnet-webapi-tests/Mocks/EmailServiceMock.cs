@@ -34,5 +34,10 @@ namespace PrimeTests.Mocks
         {
             throw new System.NotImplementedException();
         }
+
+        public Task SendSiteRegistrationAsync(Site site)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

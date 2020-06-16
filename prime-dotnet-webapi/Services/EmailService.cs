@@ -126,14 +126,15 @@ namespace Prime.Services
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
 
             Document document = null;
+            string documentTemplate = "/Views/Helpers/Document.cshtml";
             try
             {
                 document = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
             }
             catch (NullReferenceException)
             {
-                // TODO abort, log, and retry, but make it work for the demo for now
-                document = new Document("business-licence.pdf", new byte[20]);
+                document = new Document("BusinessLicence.pdf", new byte[20]);
+                documentTemplate = "/Views/Helpers/ApologyDocument.cshtml";
             }
 
             Document uploadedAgreement = null;
@@ -156,7 +157,7 @@ namespace Prime.Services
             {
                 ("OrganizationAgreement.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", location.Organization)),
                 ("SiteRegistrationReview.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
-                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", document)),
+                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(documentTemplate, document)),
                 ("SignedOrganizationAgreement.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", uploadedAgreement)),
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)))
