@@ -107,32 +107,6 @@ export class OrganizationResource {
       );
   }
 
-  public patchParty(initialParty: Party, updateParty: Party): NoContent {
-    const jsonPatchDoc = compare(initialParty, updateParty);
-
-    jsonPatchDoc.map((operation) => {
-      // If mailing address is being added, change replace to add
-      if (initialParty?.mailingAddress?.city == null && updateParty?.mailingAddress?.city != null) {
-        if (operation.path.includes('mailingAddress')) {
-          operation.op = 'add';
-        }
-      }
-    });
-
-    return this.apiResource.patch<NoContent>(`parties/${updateParty.id}`, jsonPatchDoc)
-      // TODO remove pipe when ApiResource handles NoContent
-      .pipe(
-        map(() => {
-          this.toastService.openSuccessToast('Party has been patched');
-        }),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Party could not be patched');
-          this.logger.error('[SiteRegistration] PartyResource::patchParty error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
   public deleteOrganization(organizationId: number): Observable<Organization> {
     return this.apiResource.delete<Organization>(`organizations/${organizationId}`)
       .pipe(

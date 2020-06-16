@@ -19,6 +19,7 @@ import { OrganizationResource } from '@registration/shared/services/organization
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { Party } from '@registration/shared/models/party.model';
+import { PartyResource } from '@registration/shared/services/party-resource.service';
 
 @Component({
   selector: 'app-organization-signing-authority',
@@ -43,6 +44,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     private router: Router,
     private organizationService: OrganizationService,
     private organizationResource: OrganizationResource,
+    private partyResource: PartyResource,
     private organizationFormStateService: OrganizationFormStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
@@ -96,7 +98,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
         updateParty.mailingAddress = null;
       }
 
-      this.organizationResource
+      this.partyResource
         .patchParty(this.initialParty, updateParty)
         .subscribe(() => {
           this.form.markAsPristine();
@@ -180,10 +182,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     this.initialParty = {
       ...this.form.getRawValue()
     } as Party;
-
-    // if (this.initialParty.mailingAddress.city == null) {
-    //   this.initialParty.mailingAddress = null;
-    // }
   }
 
   private togglePreferredNameValidators(preferredFirstName: FormControl, preferredLastName: FormControl) {
