@@ -55,7 +55,7 @@ objects:
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: '${NAME}${SUFFIX}'
+    name: '${NAME}'
     creationTimestamp: null
     annotations:
       description: Python Runtime Image
@@ -67,7 +67,7 @@ objects:
 - kind: BuildConfig
   apiVersion: v1
   metadata:
-    name: '${NAME}${SUFFIX}'
+    name: '${NAME}'
     creationTimestamp: null
     labels: {}
     annotations: {}
@@ -91,7 +91,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: '${NAME}${SUFFIX}:latest'
+        name: '${NAME}:latest'
     resources:
       limits:
         cpu: 500m

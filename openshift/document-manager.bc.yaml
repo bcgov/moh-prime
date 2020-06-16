@@ -33,6 +33,27 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
+      name: rhscl-python-36-rhel7
+      creationTimestamp: null
+      annotations:
+        description: Python Base Image
+      labels:
+        shared: 'true'
+    spec:
+      lookupPolicy:
+        local: false
+      tags:
+        - name: 3.6.1-36
+          annotations: null
+          from:
+            kind: DockerImage
+            name: 'registry.access.redhat.com/rhscl/python-36-rhel7:1-36'
+          importPolicy: {}
+          referencePolicy:
+            type: Local
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
       name: '${NAME}${SUFFIX}'
       creationTimestamp: null
       labels:
@@ -67,7 +88,7 @@ objects:
         sourceStrategy:
           from:
             kind: ImageStreamTag
-            name: '${NAME}-base${SUFFIX}:latest'
+            name: '${NAME}-base:latest'
           env:
             - name: SUFFIX
               value: ${SUFFIX}

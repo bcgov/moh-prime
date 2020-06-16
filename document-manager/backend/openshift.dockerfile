@@ -1,4 +1,4 @@
-FROM document-manager-base{$SUFFIX}
+FROM document-manager-base
 
 # Update installation utility
 RUN apt-get update
