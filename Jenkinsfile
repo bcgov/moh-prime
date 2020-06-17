@@ -59,6 +59,7 @@ pipeline {
                 script {
                     checkout scm
                     echo "Deploy to dev..."
+                    sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy document-manager dev -p SUFFIX=${SUFFIX}"
                     /*
                     sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
