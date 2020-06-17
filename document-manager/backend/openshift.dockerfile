@@ -1,5 +1,5 @@
 FROM docker-registry.default.svc:5000/dqszvc-tools/python-36-rhel7:1-36
-
+USER 0
 # Update installation utility
 #RUN apt-get update
 
@@ -7,21 +7,22 @@ RUN ls -alh
 # Install project dependencies
 COPY . ${APP_ROOT}/src
 
+# Install the requirements
+
+COPY . .
+
 RUN ls -alh && \
     source /opt/app-root/etc/scl_enable && \
     set -x && \
     pip install -U pip setuptools wheel && \
-    cd ${APP_ROOT}/src && pip install -r requirements.txt
+    cd ${APP_ROOT}/src && \ 
+    pip install -r requirements.txt
 
 # Create working directory
-RUN mkdir /app
+RUN mkdir -p /app
 WORKDIR /app
 
-# Install the requirements
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
 
 # Run the server
 EXPOSE 5001
