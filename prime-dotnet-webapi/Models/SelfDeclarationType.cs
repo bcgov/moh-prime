@@ -9,7 +9,6 @@ namespace Prime.Models
     [Table("SelfDeclarationTypeLookup")]
     public class SelfDeclarationType : BaseAuditable
     {
-
         [Key]
         public int Code { get; set; }
 
@@ -21,6 +20,5 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
-
     }
 }
