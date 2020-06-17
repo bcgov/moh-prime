@@ -68,14 +68,17 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.filePondOptions = {
       class: 'prime-filepond',
-      multiple: true,
+      multiple: false,
       labelIdle: 'Click to Browse or Drop files here',
       acceptedFileTypes: [
-        'application/pdf'
+        'image/jpeg',
+        'image/png',
       ],
       fileValidateTypeDetectType: (source: any, type: string) => new Promise((resolve, reject) => {
-        console.log('VALIDATE_FILE_TYPES', source, type);
-        // TODO do custom type detection
+        if (!type.includes('image')) {
+          this.toastService.openSuccessToast('File must be image');
+          reject(type);
+        }
         resolve(type);
       }),
       allowFileTypeValidation: true
