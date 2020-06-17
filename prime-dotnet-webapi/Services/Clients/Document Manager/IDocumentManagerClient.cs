@@ -7,8 +7,10 @@ namespace Prime.Services.Clients
 {
     public interface IDocumentManagerClient
     {
-        Task<HttpResponseMessage> InitializeFileUploadAsync(HttpRequestMessage request);
+        Task<HttpResponseMessage> InitializeFileUploadAsync(string filename, string destinationFolder);
 
         Task<Stream> GetFileAsync(Guid documentGuid);
+
+        Task<string> CreateDownloadTokenAsync(Guid documentGuid);
     }
 }
