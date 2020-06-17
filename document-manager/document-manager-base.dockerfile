@@ -14,5 +14,5 @@ COPY requirements.txt ${APP_ROOT}/src
 
 RUN source /opt/app-root/etc/scl_enable && \
     set -x && \
-    pip install -U pip setuptools wheel && \
-    cd ${APP_ROOT}/src && pip install -r requirements.txt
+    pip install -U pip setuptools wheel
+RUN cd ${APP_ROOT}/src && pip install -r requirements.txt
