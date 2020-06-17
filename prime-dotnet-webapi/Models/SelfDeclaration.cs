@@ -12,13 +12,11 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public int EnrolleeId { get; set; }
 
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        [Required]
         public int SelfDeclarationTypeCode { get; set; }
 
         public SelfDeclarationType SelfDeclarationType { get; set; }

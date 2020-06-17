@@ -559,7 +559,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/Enrollees/5/self-declaration-document/3?{GUID}
+        // POST: api/Enrollees/5/self-declaration-document/3\
         /// <summary>
         /// Create Self Declaration Document Link
         /// </summary>
@@ -579,6 +579,11 @@ namespace Prime.Controllers
             if (enrollee == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            if (!User.CanEdit(enrollee))
+            {
+                return Forbid();
             }
 
             var sdd = await _enrolleeService.AddSelfDeclarationDocumentAsync(enrolleeId, selfDeclarationTypeCode, selfDeclarationDocument);

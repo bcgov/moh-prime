@@ -18,9 +18,7 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            // check to see if the enrollee has any self declarations
-            // note: if for some reason the question was not answered, we will assume 'Yes'
-            if (enrollee.SelfDeclarations != null && enrollee.SelfDeclarations.Any())
+            if (enrollee.SelfDeclarations.Any())
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.SelfDeclaration);
                 return Task.FromResult(false);

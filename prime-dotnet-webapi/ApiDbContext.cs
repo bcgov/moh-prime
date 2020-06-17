@@ -265,21 +265,6 @@ namespace Prime
                 .WithMany(s => s.BusinessLicences)
                 .HasForeignKey(bl => bl.SiteId);
 
-            modelBuilder.Entity<SelfDeclarationDocument>()
-                .HasOne(sdd => sdd.Enrollee)
-                .WithMany(e => e.SelfDeclarationDocuments)
-                .HasForeignKey(sdd => sdd.EnrolleeId);
-
-            modelBuilder.Entity<SelfDeclarationDocument>()
-                .HasOne(sdd => sdd.SelfDeclarationType)
-                .WithMany(e => e.SelfDeclarationDocuments)
-                .HasForeignKey(sdd => sdd.SelfDeclarationTypeCode);
-
-            modelBuilder.Entity<SelfDeclaration>()
-                .HasOne(sd => sd.Enrollee)
-                .WithMany(e => e.SelfDeclarations)
-                .HasForeignKey(sd => sd.EnrolleeId);
-
             modelBuilder.Entity<RemoteUser>()
                 .HasOne(ru => ru.Site)
                 .WithMany(s => s.RemoteUsers)

@@ -8,15 +8,14 @@ namespace Prime.Models
     [Table("SelfDeclarationDocument")]
     public class SelfDeclarationDocument : BaseDocumentUpload
     {
-        [Required]
         public int EnrolleeId { get; set; }
 
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        [Required]
         public int SelfDeclarationTypeCode { get; set; }
 
+        [JsonIgnore]
         public SelfDeclarationType SelfDeclarationType { get; set; }
     }
 }

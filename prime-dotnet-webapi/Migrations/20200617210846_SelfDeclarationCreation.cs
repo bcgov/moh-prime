@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class SelfDeclarationUpdates : Migration
+    public partial class SelfDeclarationCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -88,6 +88,39 @@ namespace Prime.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SelfDeclarationDocument",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
+                    DocumentGuid = table.Column<Guid>(nullable: false),
+                    FileName = table.Column<string>(nullable: true),
+                    UploadedDate = table.Column<DateTimeOffset>(nullable: false),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    SelfDeclarationTypeCode = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SelfDeclarationDocument", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SelfDeclarationDocument_Enrollee_EnrolleeId",
+                        column: x => x.EnrolleeId,
+                        principalTable: "Enrollee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SelfDeclarationDocument_SelfDeclarationTypeLookup_SelfDecla~",
+                        column: x => x.SelfDeclarationTypeCode,
+                        principalTable: "SelfDeclarationTypeLookup",
+                        principalColumn: "Code",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "SelfDeclarationTypeLookup",
                 columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
@@ -99,13 +132,6 @@ namespace Prime.Migrations
                     { 4, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), "Has PharmaNet Suspended", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000") }
                 });
 
-            migrationBuilder.UpdateData(
-                table: "VendorLookup",
-                keyColumn: "Code",
-                keyValue: 4,
-                column: "Name",
-                value: "Medinet");
-
             migrationBuilder.CreateIndex(
                 name: "IX_SelfDeclaration_EnrolleeId",
                 table: "SelfDeclaration",
@@ -115,12 +141,25 @@ namespace Prime.Migrations
                 name: "IX_SelfDeclaration_SelfDeclarationTypeCode",
                 table: "SelfDeclaration",
                 column: "SelfDeclarationTypeCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SelfDeclarationDocument_EnrolleeId",
+                table: "SelfDeclarationDocument",
+                column: "EnrolleeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SelfDeclarationDocument_SelfDeclarationTypeCode",
+                table: "SelfDeclarationDocument",
+                column: "SelfDeclarationTypeCode");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "SelfDeclaration");
+
+            migrationBuilder.DropTable(
+                name: "SelfDeclarationDocument");
 
             migrationBuilder.DropTable(
                 name: "SelfDeclarationTypeLookup");
@@ -172,13 +211,6 @@ namespace Prime.Migrations
                 table: "Enrollee",
                 type: "text",
                 nullable: true);
-
-            migrationBuilder.UpdateData(
-                table: "VendorLookup",
-                keyColumn: "Code",
-                keyValue: 4,
-                column: "Name",
-                value: "MediNet");
         }
     }
 }

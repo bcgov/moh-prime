@@ -488,6 +488,7 @@ namespace Prime.Services
         {
             selfDeclarationDocument.EnrolleeId = enrolleeId;
             selfDeclarationDocument.SelfDeclarationTypeCode = selfDeclarationTypeCode;
+            selfDeclarationDocument.UploadedDate = DateTimeOffset.Now;
 
             _context.SelfDeclarationDocuments.Add(selfDeclarationDocument);
 
