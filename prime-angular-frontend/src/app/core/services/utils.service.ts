@@ -82,4 +82,45 @@ export class UtilsService {
       ? 1 : (a < b)
         ? -1 : 0;
   }
+
+  /**
+   * @description
+   * Conversion of Base64 encoded document to a Blob.
+   */
+  public base64ToBlob(base64: string, type: string = 'application/pdf'): Blob {
+    const decoded = window.atob(base64.replace(/\s/g, ''));
+    const len = decoded.length;
+    const buffer = new ArrayBuffer(len);
+    const data = new Uint8Array(buffer);
+
+    for (let i = 0; i < len; i++) {
+      data[i] = decoded.charCodeAt(i);
+    }
+
+    return new Blob([data], { type });
+  }
+
+  /**
+   * @description
+   * Download a document.
+   */
+  public downloadDocument(file: Blob, filename: string): void {
+    // Allow downloads in IE and Edge browsers prior to
+    // Chromium-based Edge where it is deprecated
+    if (navigator && navigator.msSaveOrOpenBlob) {
+      navigator.msSaveOrOpenBlob(file, filename);
+      return;
+    }
+
+    const data = URL.createObjectURL(file);
+    const link = document.createElement('a');
+    link.href = data;
+    link.download = filename;
+    link.target = '_blank';
+    link.click();
+    setTimeout(() => {
+      URL.revokeObjectURL(data);
+      link.remove();
+    }, 100);
+  }
 }

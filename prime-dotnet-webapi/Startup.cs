@@ -25,6 +25,7 @@ using Prime.Infrastructure;
 using System.Net.Http.Headers;
 using IdentityModel.Client;
 using IdentityModel;
+using Microsoft.Extensions.FileProviders;
 
 namespace Prime
 {
@@ -172,6 +173,13 @@ namespace Prime
             // Matches request to an endpoint
             app.UseRouting();
             app.UseCors(AllowSpecificOrigins);
+
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();
