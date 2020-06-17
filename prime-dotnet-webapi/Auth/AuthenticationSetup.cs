@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Prime.Infrastructure;
@@ -54,8 +55,18 @@ namespace Prime.Auth
                     options.RequireHttpsMetadata = false;
                 }
 
-                options.Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? configuration["Jwt:Audience"];
                 options.MetadataAddress = Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG") ?? configuration["Jwt:WellKnown"];
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidAudiences = new List<string>
+                    {
+                        AuthConstants.ENROLMENT_AUDIENCE,
+                        AuthConstants.ADMIN_AUDIENCE,
+                        AuthConstants.SITE_AUDIENCE,
+                        "prime-web-api" // TODO: remove
+                    }
+                };
                 options.Events = new JwtBearerEvents
                 {
                     OnAuthenticationFailed = c =>
@@ -78,7 +89,7 @@ namespace Prime.Auth
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(AuthConstants.USER_POLICY, policy => policy.Requirements.Add(new PrimeUserRequirement()));
+                options.AddPolicy(AuthConstants.USER_POLICY, policy => policy.AddRequirements(new PrimeUserRequirement()));
                 options.AddPolicy(AuthConstants.ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_ADMIN_ROLE));
                 options.AddPolicy(AuthConstants.SUPER_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_SUPER_ADMIN_ROLE));
                 options.AddPolicy(AuthConstants.READONLY_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_READONLY_ADMIN));
