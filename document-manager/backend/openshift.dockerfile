@@ -14,9 +14,9 @@ COPY . .
 RUN ls -alh && \
     source /opt/app-root/etc/scl_enable && \
     set -x && \
-    pip install -U pip setuptools wheel && \
+    pip3 install -U pip setuptools wheel && \
     cd ${APP_ROOT}/src && \ 
-    pip install -r requirements.txt
+    pip3 install -r requirements.txt
 
 # Create working directory
 RUN mkdir -p /app
