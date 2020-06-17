@@ -1,5 +1,6 @@
 FROM docker-registry.default.svc:5000/dqszvc-tools/python-36-rhel7:1-36
 USER 0
+SHELL ["/bin/bash","-c"]
 # Update installation utility
 #RUN apt-get update
 
