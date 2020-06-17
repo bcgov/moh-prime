@@ -59,6 +59,8 @@ parameters:
   - name: OC_APP
     required: true
     value: dev
+  - name: VERSION
+    required: false
 objects:
   - kind: Secret
     apiVersion: v1
