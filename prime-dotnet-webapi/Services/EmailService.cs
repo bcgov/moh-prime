@@ -123,6 +123,8 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<Attachment>());
         }
 
+        // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
+        // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
         public async Task SendSiteRegistrationAsync(Site site)
         {
             var subject = "PRIME Site Registration Submission";
