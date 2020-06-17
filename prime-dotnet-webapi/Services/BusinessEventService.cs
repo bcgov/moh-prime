@@ -58,15 +58,15 @@ namespace Prime.Services
             return businessEvent;
         }
 
-        public async Task<BusinessEvent> CreateAdminClaimEventAsync(int enrolleeId, string description)
+        public async Task<BusinessEvent> CreateAdminActionEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = await CreateBusinessEvent(BusinessEventType.ADMIN_CLAIM_CODE, enrolleeId, description);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.ADMIN_ACTION_CODE, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not create admin claim business event.");
+                throw new InvalidOperationException("Could not create admin action business event.");
             };
 
             return businessEvent;
@@ -80,7 +80,7 @@ namespace Prime.Services
 
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not create admin claim business event.");
+                throw new InvalidOperationException("Could not create admin view business event.");
             };
 
             return businessEvent;
