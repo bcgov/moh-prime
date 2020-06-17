@@ -51,7 +51,7 @@ objects:
     annotations:
       description: Defines how to build the application
   spec:
-    completionDeadlineSeconds: 600
+    completionDeadlineSeconds: 6000
     triggers:
       - type: ImageChange
       - type: ConfigChange
