@@ -17,7 +17,8 @@ namespace PrimeTests.UnitTests
             IHttpContextAccessor httpContext = null,
             IRazorConverterService razorConverterService = null,
             IDocumentService documentService = null,
-            IPdfService pdfService = null
+            IPdfService pdfService = null,
+            IOrganizationService organizationService = null
         )
         {
             return new EmailService(
@@ -25,7 +26,8 @@ namespace PrimeTests.UnitTests
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 razorConverterService,
                 documentService,
-                pdfService
+                pdfService,
+                organizationService
             );
         }
     }

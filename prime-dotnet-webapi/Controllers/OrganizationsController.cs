@@ -273,7 +273,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResultResponse<SignedAgreement>), StatusCodes.Status201Created)]
         public async Task<ActionResult<SignedAgreement>> CreateSignedAgreement(int organizationId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
@@ -288,15 +288,13 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var licence = await _organizationService.AddSignedAgreementAsync(organization.Id, documentGuid, filename);
+            var agreement = await _organizationService.AddSignedAgreementAsync(organization.Id, documentGuid, filename);
 
-            // TODO updated to be licence instead of organization, and should have GET and CreatedAtAction
-            return Ok(ApiResponse.Result(licence));
-            // return CreatedAtAction(
-            //     nameof(GetOrganizationById),
-            //     new { organizationId = createdOrganizationId },
-            //     ApiResponse.Result(createdOrganization)
-            // );
+            return CreatedAtAction(
+                nameof(GetSignedAgreement),
+                new { organizationId = organization.Id },
+                ApiResponse.Result(agreement)
+            );
         }
 
         // Get: api/organizations/5/signed-agreement
@@ -308,7 +306,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResultResponse<SignedAgreement>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<SignedAgreement>>> GetSignedAgreement(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
@@ -323,9 +321,9 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var licences = await _organizationService.GetSignedAgreementsAsync(organization.Id);
+            var agreements = await _organizationService.GetSignedAgreementsAsync(organization.Id);
 
-            return Ok(ApiResponse.Result(licences));
+            return Ok(ApiResponse.Result(agreements));
         }
 
         // GET: api/Organizations/organization-agreement-document
