@@ -341,7 +341,6 @@ namespace Prime.Controllers
         public ActionResult<string> OrganizationAgreementDocument()
         {
             var fileName = "Organization-Agreement.pdf";
-            var filePath = Path.Combine("Resources", "documents", fileName);
             string resourcePath = fileName;
             var assembly = Assembly.GetExecutingAssembly();
 
@@ -354,7 +353,6 @@ namespace Prime.Controllers
             using (var reader = new MemoryStream())
             {
                 stream.CopyTo(reader);
-
                 base64 = Convert.ToBase64String(reader.ToArray());
             }
 
