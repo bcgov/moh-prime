@@ -37,8 +37,7 @@ parameters:
   - name: REDIS_PASSWORD
     displayName: Redis Connection Password
     description: Password for the Redis connection user.
-    generate: expression
-    from: '[a-zA-Z0-9]{16}'
+    value: "prime"
     required: true
   - name: REDIS_VERSION
     displayName: Version of Redis Image
