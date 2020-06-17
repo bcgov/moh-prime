@@ -51,18 +51,21 @@ namespace Prime.Services
         private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
         private readonly IPdfService _pdfService;
+        private readonly IOrganizationService _organizationService;
 
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IRazorConverterService razorConverterService,
             IDocumentService documentService,
-            IPdfService pdfService)
+            IPdfService pdfService,
+            IOrganizationService organizationService)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
             _documentService = documentService;
             _pdfService = pdfService;
+            _organizationService = organizationService;
         }
 
         public static bool IsValidEmail(string email)
@@ -125,40 +128,45 @@ namespace Prime.Services
             var subject = "PRIME Site Registration Submission";
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
 
-            Document document = null;
-            string documentTemplate = "/Views/Helpers/Document.cshtml";
+            Document businessLicenceDoc = null;
+            string businessLicenceTemplate = "/Views/Helpers/Document.cshtml";
             try
             {
-                document = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
+                businessLicenceDoc = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
             }
             catch (NullReferenceException)
             {
-                document = new Document("BusinessLicence.pdf", new byte[20]);
-                documentTemplate = "/Views/Helpers/ApologyDocument.cshtml";
+                businessLicenceDoc = new Document("BusinessLicence.pdf", new byte[20]);
+                businessLicenceTemplate = "/Views/Helpers/ApologyDocument.cshtml";
             }
 
-            Document uploadedAgreement = null;
-            try
+            var organization = site.Location.Organization;
+            var organizationAgreementHtml = "";
+            if (_organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
             {
-                uploadedAgreement = await _documentService.GetLatestSignedAgreementDocumentByOrganizationId(site.Location.Organization.Id);
-            }
-            catch (NullReferenceException)
-            {
-                // TODO abort, log, and retry, but make it work for the demo for now
-                uploadedAgreement = new Document("SignedOrganizationAgreement.pdf", new byte[20]);
-            }
+                Document organizationAgreementDoc = null;
+                try
+                {
+                    organizationAgreementDoc = await _documentService.GetLatestSignedAgreementDocumentByOrganizationId(organization.Id);
+                }
+                catch (NullReferenceException)
+                {
+                    organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", new byte[20]);
+                    businessLicenceTemplate = "/Views/Helpers/ApologyDocument.cshtml";
+                }
 
-            var location = await _context.Locations
-                .Where(l => l.Id == site.LocationId)
-                .Include(l => l.Organization)
-                .SingleOrDefaultAsync();
+                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", organizationAgreementDoc);
+            }
+            else
+            {
+                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
+            }
 
             var attachments = new (string Filename, string HtmlContent)[]
             {
-                ("OrganizationAgreement.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", location.Organization)),
+                ("OrganizationAgreement.pdf", organizationAgreementHtml),
                 ("SiteRegistrationReview.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
-                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(documentTemplate, document)),
-                ("SignedOrganizationAgreement.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", uploadedAgreement)),
+                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(businessLicenceTemplate, businessLicenceDoc))
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)))
             .Select(pdf => new Attachment(new MemoryStream(pdf.Content), pdf.Filename, "application/pdf"));
