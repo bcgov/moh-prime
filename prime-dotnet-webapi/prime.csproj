@@ -41,6 +41,7 @@
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v2.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v3.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v4.html" />
+    <EmbeddedResource Include="Resources\documents\Organization-Agreement.pdf" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Resources\wkhtmltopdf\Linux\wkhtmltopdf">

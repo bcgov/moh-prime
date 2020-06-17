@@ -57,12 +57,14 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Privileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
             RuleFor(x => x.isAdminView, f => true);
-            Ignore(x => x.CurrentTOAStatus);
+            RuleFor(x => x.RequestingRemoteAccess, f => false);
             // TODO: fix these ignores
+            Ignore(x => x.CurrentTOAStatus);
             Ignore(x => x.AccessTerms);
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
             Ignore(x => x.AlwaysManual);
+            Ignore(x => x.IdentityProvider);
 
             RuleSet("status.submitted", (set) =>
             {

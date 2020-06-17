@@ -54,7 +54,7 @@
         <mat-card-actions>
           <button mat-stroked-button
                   color="primary"
-                  [disabled]="!organization?.completed"
+                  [disabled]="!organization?.acceptedAgreementDate"
                   (click)="addSite(organization.id)">
             Add Site
           </button>
@@ -138,7 +138,7 @@
               aria-label="Organization actions menu">
       <button mat-menu-item
               (click)="addSite(organization.id)"
-              [disabled]="!organization?.completed">
+              [disabled]="!organization?.acceptedAgreementDate">
         <mat-icon>add_location_alt</mat-icon>
         <span>Add Site</span>
       </button>

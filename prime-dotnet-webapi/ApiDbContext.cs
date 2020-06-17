@@ -89,6 +89,7 @@ namespace Prime
 
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
         public DbSet<BusinessLicence> BusinessLicences { get; set; }
+        public DbSet<SignedAgreement> SignedAgreements { get; set; }
         public DbSet<SelfDeclaration> SelfDeclarations { get; set; }
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
