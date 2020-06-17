@@ -166,7 +166,7 @@ export class OrganizationResource {
   }
 
   public downloadOrganizationAgreement(): Observable<string> {
-    return this.apiResource.get<string>(`organizations/download-organization-agreement`)
+    return this.apiResource.get<string>(`organizations/organization-agreement-document`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {

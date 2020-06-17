@@ -328,15 +328,15 @@ namespace Prime.Controllers
 
         // GET: api/Organizations/download-organization-agreement
         /// <summary>
-        /// Download the organization agreement document.
+        /// Get the organization agreement document.
         /// </summary>
-        [HttpGet("download-organization-agreement", Name = nameof(DownloadOrganizationAgreement))]
+        [HttpGet("organization-agreement-document", Name = nameof(OrganizationAgreementDocument))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public ActionResult<string> DownloadOrganizationAgreement()
+        public ActionResult<string> OrganizationAgreementDocument()
         {
             var fileName = "Organization-Agreement.pdf";
             var filePath = Path.Combine("Resources", "documents", fileName);

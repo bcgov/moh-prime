@@ -145,6 +145,7 @@ namespace Prime.Services
             if (_organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
             {
                 Document organizationAgreementDoc = null;
+                string organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
                 try
                 {
                     organizationAgreementDoc = await _documentService.GetLatestSignedAgreementDocumentByOrganizationId(organization.Id);
@@ -152,10 +153,10 @@ namespace Prime.Services
                 catch (NullReferenceException)
                 {
                     organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", new byte[20]);
-                    businessLicenceTemplate = "/Views/Helpers/ApologyDocument.cshtml";
+                    organizationAgreementTemplate = "/Views/Helpers/ApologyDocument.cshtml";
                 }
 
-                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/Helpers/Document.cshtml", organizationAgreementDoc);
+                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync(organizationAgreementTemplate, organizationAgreementDoc);
             }
             else
             {
