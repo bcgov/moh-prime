@@ -109,19 +109,7 @@ objects:
       io.kompose.service: "${NAME}${SUFFIX}-backend"
     strategy:
       resources: {}
-      type: Rolling
-      rollingParams:
-        pre:
-          failurePolicy: Retry
-          execNewPod:
-            containerName: "${NAME}${SUFFIX}-backend"
-            command:
-            - bash
-            - "-c"
-            - cd /opt/app-root/src && flask db upgrade
-        maxSurge: 50%
-        maxUnavailable: 1
-        timeoutSeconds: 1200
+      type: Recreate
     template:
       metadata:
         creationTimestamp: null

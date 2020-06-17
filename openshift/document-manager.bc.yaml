@@ -63,16 +63,15 @@ objects:
         ref: '${SOURCE_REPOSITORY_REF}'
       contextDir: '${SOURCE_CONTEXT_DIR}'
     strategy:
-      type: Source
-      sourceStrategy:
-        from:
-          kind: ImageStreamTag
-          name: '${NAME}-base${SUFFIX}:latest'
+      dockerStrategy:
+        noCache: true
+        dockerfilePath: openshift.dockerfile
         env:
           - name: SUFFIX
             value: ${SUFFIX}
           - name: BUILD_LOGLEVEL
             value: '2'
+      type: Docker
     output:
       to:
         kind: ImageStreamTag

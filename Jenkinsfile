@@ -25,7 +25,7 @@ pipeline {
                     echo "Building ..."
                     // sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     // sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}""
-                    sh "./player.sh build document-manager-base dev -p SUFFIX=${SUFFIX}"
+                    // sh "./player.sh build document-manager-base dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
                 }
             }
@@ -41,7 +41,7 @@ pipeline {
                     checkout scm
                     echo "Deploy to dev..."
                     sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy document-manager-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    sh "./player.sh deploy document-manager dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
