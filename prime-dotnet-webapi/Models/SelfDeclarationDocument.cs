@@ -8,7 +8,6 @@ namespace Prime.Models
     [Table("SelfDeclarationDocument")]
     public class SelfDeclarationDocument : BaseDocumentUpload
     {
-
         [Required]
         public int EnrolleeId { get; set; }
 
@@ -19,6 +18,5 @@ namespace Prime.Models
         public int SelfDeclarationTypeCode { get; set; }
 
         public SelfDeclarationType SelfDeclarationType { get; set; }
-
     }
 }
