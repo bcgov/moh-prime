@@ -41,10 +41,10 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public organizationAgreement: string;
   public hasAcceptedAgreement: boolean;
   public isCompleted: boolean;
-  public canSignOnline: boolean;
   public SiteRoutes = SiteRoutes;
+  public hasDownloadedFile: boolean;
+  public hasUploadedFile: boolean;
   public hasNoUploadError: boolean;
-  public uploadedFile: boolean;
 
   @ViewChild('accept') accepted: MatCheckbox;
 
@@ -71,21 +71,19 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       multiple: true,
       labelIdle: 'Click to Browse or Drop files here',
       acceptedFileTypes: [
-        'application/pdf',
-        'application/doc',
+        'application/pdf'
       ],
-      fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
-
-        // Do custom type detection here and return with promise
-
+      fileValidateTypeDetectType: (source: any, type: string) => new Promise((resolve, reject) => {
+        console.log('VALIDATE_FILE_TYPES', source, type);
+        // TODO do custom type detection
         resolve(type);
       }),
-      allowFileTypeValidation: true,
+      allowFileTypeValidation: true
     };
   }
 
   public onSubmit() {
-    if (this.accepted?.checked || this.uploadedFile) {
+    if (this.accepted?.checked || this.hasUploadedFile) {
       const organizationid = this.route.snapshot.params.oid;
       const data: DialogOptions = {
         title: 'Organization Agreement',
@@ -103,15 +101,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         )
         .subscribe(() => this.nextRoute());
     }
-  }
-
-  public onCanSignOnlineChange() {
-    this.canSignOnline = !this.canSignOnline;
-
-    if (!this.canSignOnline) {
-      // this.form.get('preferredMiddleName').reset();
-    }
-
   }
 
   public onFilePondInit() {
@@ -148,7 +137,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
             .addSignedAgreement(organizationId, documentGuid, filename)
             .subscribe();
 
-          this.uploadedFile = true;
+          this.hasUploadedFile = true;
           this.hasNoUploadError = false;
         }
       });
@@ -162,6 +151,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       .subscribe((base64: string) => {
         const blob = this.utilsService.base64ToBlob(base64);
         this.utilsService.downloadDocument(blob, 'Organization-Agreement');
+        this.hasDownloadedFile = true;
       });
 
   }
@@ -177,9 +167,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public ngOnInit(): void {
     // TODO structured to match in all site views
     const organization = this.organizationService.organization;
-    console.log(organization);
     this.isCompleted = organization?.completed;
-    this.canSignOnline = true;
     this.organizationFormStateService.setForm(organization);
 
     this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
