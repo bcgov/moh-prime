@@ -11,6 +11,11 @@ namespace Prime.Auth
         public readonly static string PRIME_ADMIN_CLIENT = Environment.GetEnvironmentVariable("JWT_ADMIN_CLIENT") ?? Startup.StaticConfig["Jwt:AdminClient"];
         public readonly static string PRIME_USER_CLIENT = Environment.GetEnvironmentVariable("JWT_USER_CLIENT") ?? Startup.StaticConfig["Jwt:UserClient"];
         public readonly static string[] PRIME_CLIENT_IDS = { PRIME_ADMIN_CLIENT, PRIME_USER_CLIENT };
+        public const string ADMIN_AUDIENCE = "prime-application-admin";
+        public const string ENROLMENT_AUDIENCE = "prime-application-enrolment";
+        public const string SITE_AUDIENCE = "prime-application-site";
+        public const string CARECONNECT_AUDIENCE = "prime-careconnect-access";
+        public const string POS_GPID_AUDIENCE = "prime-pos-gpid";
 
         // Claims
         public const string ASSURANCE_LEVEL_CLAIM_TYPE = "identity_assurance_level";
