@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-
 import { Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
@@ -16,9 +15,13 @@ import { BusinessDay } from '@lib/modules/business-hours/models/business-day.mod
 
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
+import { BusinessLicence } from '../models/business-licence.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
+/**
+ * @deprecated
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -30,7 +33,7 @@ export class SiteRegistrationResource {
     private logger: LoggerService
   ) { }
 
-  public getSites() {
+  public getSites(): Observable<Site[]> {
     return this.apiResource.get<Site[]>('sites')
       .pipe(
         map((response: ApiHttpResponse<Site[]>) => response.result),
@@ -59,7 +62,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public getSiteById(siteId: number) {
+  public getSiteById(siteId: number): Observable<Site> {
     return this.apiResource.get<Site>(`sites/${siteId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
@@ -86,7 +89,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public createSite(party: Party) {
+  public createSite(party: Party): Observable<Site> {
     return this.apiResource.post<Site>('sites', party)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
@@ -134,7 +137,7 @@ export class SiteRegistrationResource {
       );
   }
 
-  public deleteSite(siteId: number) {
+  public deleteSite(siteId: number): Observable<Site> {
     return this.apiResource.delete<Site>(`sites/${siteId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
@@ -196,6 +199,34 @@ export class SiteRegistrationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration could not be submitted');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::submitSiteRegistration error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createBusinessLicence(siteId: number, documentGuid: string, fileName: string): Observable<string> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid, fileName });
+    return this.apiResource.post<string>(`sites/${siteId}/business-licence`, { siteId }, params)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Business licence has been added')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Business Licence could not be added');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::createBusinessLicence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getBusinesssLicences(siteId: number): Observable<BusinessLicence[]> {
+    return this.apiResource.get<BusinessLicence[]>(`sites/${siteId}/business-licence`)
+      .pipe(
+        map((response: ApiHttpResponse<BusinessLicence[]>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Business licences Retrieved')),
+        tap((result: any) => console.log(result)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Business Licence could not be Retrieved');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinesssLicences error has occurred: ', error);
           throw error;
         })
       );

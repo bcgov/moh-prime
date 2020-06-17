@@ -4,6 +4,7 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 // TODO rename and make it party instead of registrant
+// TODO watch valueChanges/onChange if party contains address then open toggle the address
 @Component({
   selector: 'app-registrant-profile-form',
   templateUrl: './registrant-profile-form.component.html',

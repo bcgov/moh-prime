@@ -13,15 +13,18 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using Wkhtmltopdf.NetCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Serilog;
 
 using Prime.Auth;
 using Prime.Services;
+using Prime.Services.Clients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
+using System.Text;
+using System.Net.Http.Headers;
+using Microsoft.Extensions.FileProviders;
 
 namespace Prime
 {
@@ -47,7 +50,6 @@ namespace Prime
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
             services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IPharmanetApiService, PharmanetApiService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IAccessTermService, AccessTermService>();
             services.AddScoped<IEnrolleeProfileVersionService, EnrolleeProfileVersionService>();
@@ -58,7 +60,25 @@ namespace Prime
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<IPartyService, PartyService>();
+            services.AddScoped<IDocumentService, DocumentService>();
+            services.AddScoped<IOrganizationService, OrganizationService>();
+            services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<ICHESApiService, CHESApiService>();
+
+            if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            {
+                services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
+            }
+            else
+            {
+                services.AddTransient<CollegeLicenceClientHandler>()
+                .AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
+                {
+                    var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.PHARMANET_API_USERNAME}:{PrimeConstants.PHARMANET_API_PASSWORD}");
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
+                })
+                .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
+            }
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -79,7 +99,8 @@ namespace Prime
                         builder
                             .AllowAnyOrigin()
                             .AllowAnyMethod()
-                            .AllowAnyHeader();
+                            .AllowAnyHeader()
+                            .WithExposedHeaders("Location");
                     });
             });
 
@@ -94,6 +115,7 @@ namespace Prime
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddSwaggerGenNewtonsoftSupport();
+            services.AddWkhtmltopdf("./Resources/wkhtmltopdf");
 
             services.AddHttpContextAccessor();
             services.AddRazorPages();
@@ -132,6 +154,13 @@ namespace Prime
             // Matches request to an endpoint
             app.UseRouting();
             app.UseCors(AllowSpecificOrigins);
+
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();

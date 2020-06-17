@@ -296,12 +296,12 @@ export class AdjudicationResource {
       );
   }
 
-  public createStatusAdjudicatorReference(enrolleeId: number): Observable<EnrolmentStatusReference> {
+  public createEnrolmentReference(enrolleeId: number): Observable<EnrolmentStatusReference> {
     return this.apiResource.post(`enrollees/${enrolleeId}/status-reference`)
       .pipe(
         map((response: ApiHttpResponse<EnrolmentStatusReference>) => response.result),
         catchError((error: any) => {
-          this.logger.error('[Adjudication] AdjudicationResource::createStatusAdjudicatorReference error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::createEnrolmentReference error has occurred: ', error);
           throw error;
         })
       );
@@ -310,6 +310,7 @@ export class AdjudicationResource {
   // ---
   // Site Registration
   // ---
+
   public getSites(textSearch?: string, statusCode?: number): Observable<Site[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode });
     return this.apiResource.get<Site[]>('sites', params)

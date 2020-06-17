@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Prime.ViewModels;
 using Prime.Models.Api;
+using Prime.Models;
 
 namespace Prime.Services
 {
@@ -11,5 +12,7 @@ namespace Prime.Services
         Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin);
 
         Task UpdateAlwaysManualAsync(int enrolleeId, bool alwaysManual);
+
+        Task UpdateNonCompliantGPIDs();
     }
 }

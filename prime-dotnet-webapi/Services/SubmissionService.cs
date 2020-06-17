@@ -15,6 +15,8 @@ namespace Prime.Services
 {
     public class SubmissionService : BaseService, ISubmissionService
     {
+        private static string GPID_CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
+        private static int GPID_LENGTH = 20;
         private readonly IAccessTermService _accessTermService;
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IBusinessEventService _businessEventService;
@@ -65,28 +67,7 @@ namespace Prime.Services
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
 
-            // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
-            enrollee = await _context.Enrollees
-                .Include(e => e.PhysicalAddress)
-                .Include(e => e.MailingAddress)
-                .Include(e => e.EnrolmentStatuses)
-                    .ThenInclude(es => es.EnrolmentStatusReasons)
-                .Include(e => e.Certifications)
-                    .ThenInclude(cer => cer.College)
-                .Include(e => e.Certifications)
-                    .ThenInclude(c => c.License)
-                        .ThenInclude(l => l.DefaultPrivileges)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
-            {
-                var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
-                newStatus.AddStatusReason(StatusReasonType.Automatic);
-
-                await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
-                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
-            }
-
+            await this.ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();
         }
 
@@ -124,6 +105,27 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateNonCompliantGPIDs()
+        {
+            var enrollees = await _enrolleeService.GetEnrolleesAsync();
+
+            foreach (var enrollee in enrollees)
+            {
+                if (!string.IsNullOrWhiteSpace(enrollee.GPID))
+                {
+                    bool valid = enrollee.GPID.All(s => GPID_CHAR_SET.Contains(s)) && enrollee.GPID.Length == GPID_LENGTH;
+
+                    if (!valid)
+                    {
+                        enrollee.GPID = null;
+                        await this.SetGpid(enrollee);
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         private async Task ApproveApplicationAsync(Enrollee enrollee)
         {
             var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
@@ -151,7 +153,7 @@ namespace Prime.Services
                 if (enrollee.AdjudicatorId != null)
                 {
                     await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
-                    await _businessEventService.CreateAdminClaimEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
+                    await _businessEventService.CreateAdminActionEventAsync(enrollee.Id, "Admin disclaimed after TOA accepted");
                 }
             }
             else
@@ -196,6 +198,14 @@ namespace Prime.Services
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Email to Enrollee after leaving the declined status");
         }
 
+        private async Task RerunRulesAsync(Enrollee enrollee)
+        {
+            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator manually ran the enrollee application rules");
+            await this.ProcessEnrolleeApplicationRules(enrollee.Id);
+            await _context.SaveChangesAsync();
+        }
+
         private async Task SetGpid(Enrollee enrollee)
         {
             if (string.IsNullOrWhiteSpace(enrollee.GPID))
@@ -211,12 +221,35 @@ namespace Prime.Services
         private static string GenerateGpid()
         {
             Random r = new Random();
-            int length = 20;
-            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
 
-            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
+            IEnumerable<char> chars = Enumerable.Repeat(GPID_CHAR_SET, GPID_LENGTH).Select(s => s[r.Next(s.Length)]);
 
             return new string(chars.ToArray());
+        }
+
+        private async Task ProcessEnrolleeApplicationRules(int enrolleeId)
+        {
+            // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
+            var enrollee = await _context.Enrollees
+                .Include(e => e.PhysicalAddress)
+                .Include(e => e.MailingAddress)
+                .Include(e => e.EnrolmentStatuses)
+                    .ThenInclude(es => es.EnrolmentStatusReasons)
+                .Include(e => e.Certifications)
+                    .ThenInclude(cer => cer.College)
+                .Include(e => e.Certifications)
+                    .ThenInclude(c => c.License)
+                        .ThenInclude(l => l.DefaultPrivileges)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
+            {
+                var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
+                newStatus.AddStatusReason(StatusReasonType.Automatic);
+
+                await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
+            }
         }
 
         public class InvalidActionException : Exception
@@ -239,6 +272,7 @@ namespace Prime.Services
             private async Task HandleLockProfile() { await _submissionService.LockProfileAsync(_enrollee); }
             private async Task HandleDeclineProfile() { await _submissionService.DeclineProfileAsync(_enrollee); }
             private async Task HandleEnableProfile() { await _submissionService.EnableProfileAsync(_enrollee); }
+            private async Task HandleRerunRules() { await _submissionService.RerunRulesAsync(_enrollee); }
 
             public SubmissionStateMachine(Enrollee enrollee, SubmissionService submissionService)
             {
@@ -280,7 +314,8 @@ namespace Prime.Services
                     .On(SubmissionAction.Approve).If<bool>(isAdmin => isAdmin).Execute(HandleApprove)
                     .On(SubmissionAction.EnableEditing).If<bool>(isAdmin => isAdmin).Execute(HandleEnableEditing)
                     .On(SubmissionAction.LockProfile).If<bool>(isAdmin => isAdmin).Execute(HandleLockProfile)
-                    .On(SubmissionAction.DeclineProfile).If<bool>(isAdmin => isAdmin).Execute(HandleDeclineProfile);
+                    .On(SubmissionAction.DeclineProfile).If<bool>(isAdmin => isAdmin).Execute(HandleDeclineProfile)
+                    .On(SubmissionAction.RerunRules).If<bool>(isAdmin => isAdmin).Execute(HandleRerunRules);
 
                 builder.In(EnrolleeState.RequiresToa)
                     .On(SubmissionAction.AcceptToa).If<bool>(isAdmin => !isAdmin).Execute(HandleAcceptToa)

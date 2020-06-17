@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
-import { debounceTime, switchMap, map } from 'rxjs/operators';
+import { debounceTime, switchMap, map, tap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
@@ -15,9 +15,10 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 import {
   OrgBookResource, OrgBookAutocompleteResult, OrgBookFacetHttpResponse, OrgBookDetailHttpResponse, OrgBookRelatedHttpResponse
 } from '@registration/shared/services/org-book-resource.service';
@@ -30,6 +31,7 @@ import {
 export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
+  public title: string;
   public routeUtils: RouteUtils;
   public organizations: string[];
   public doingBusinessAsNames: string[];
@@ -39,14 +41,15 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService,
-    private siteRegistrationStateService: SiteRegistrationStateService,
+    private organizationService: OrganizationService,
+    private organizationResource: OrganizationResource,
+    private organizationFormStateService: OrganizationFormStateService,
     private orgBookResource: OrgBookResource,
     private formUtilsService: FormUtilsService,
     private utilsService: UtilsService,
     private dialog: MatDialog
   ) {
+    this.title = 'Organization Information';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -63,10 +66,12 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
+    // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteRegistrationStateService.site;
-      this.siteRegistrationResource
-        .updateSite(payload)
+      // TODO when spoking don't update
+      const payload = this.organizationFormStateService.organization;
+      this.organizationResource
+        .updateOrganization(payload)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
@@ -78,40 +83,25 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     const orgName = option.value;
     this.orgBookResource.getOrganizationFacet(orgName)
       .pipe(
-        map((response: OrgBookFacetHttpResponse) => {
-          // Assumed that only a single source ID will exist based on a
-          // specific selection being made in autocomplete
-          const sourceId = response.objects.results[0].topic.source_id;
-          this.form.get('registrationId').patchValue(sourceId);
-          return sourceId;
-        }),
-        switchMap((sourceId: string) => this.orgBookResource.getOrganizationDetail(sourceId)),
-        map((response: OrgBookDetailHttpResponse) => response.id),
-        switchMap((topicId: number) => this.orgBookResource.getOrganizationRelatedTo(topicId))
+        this.orgBookResource.sourceIdMap(),
+        // Perform a side effect
+        tap((sourceId: string) => this.form.get('registrationId').patchValue(sourceId)),
+        this.orgBookResource.doingBusinessAsMap()
       )
-      .subscribe((response: OrgBookRelatedHttpResponse[]) => {
-        const doingBusinessAs = response
-          .map((relation: OrgBookRelatedHttpResponse) => {
-            // Assumed only a single name per organization is relavent
-            const businessName = relation.related_topic.names[0].text;
-            const isDoingBusinessAs = relation.attributes.some(a => a.value === 'Does Business As');
-            return (isDoingBusinessAs) ? businessName : null;
-          });
-        // Remove duplicates since only names are persisted
-        this.doingBusinessAsNames = [...new Set(doingBusinessAs)]
-          .sort(this.sortDoingBusinessAsNames());
-      });
+      .subscribe((doingBusinessAsNames: string[]) =>
+        this.doingBusinessAsNames = doingBusinessAsNames
+      );
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.MULTIPLE_SITES);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
     }
   }
 
@@ -128,13 +118,14 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteRegistrationStateService.organizationInformationForm;
+    this.form = this.organizationFormStateService.organizationInformationForm;
   }
 
   private initForm() {
-    const site = this.siteRegistrationService.site;
-    this.isCompleted = site?.completed;
-    this.siteRegistrationStateService.setSite(site, true);
+    // TODO structured to match in all site views
+    const organization = this.organizationService.organization;
+    this.isCompleted = organization?.completed;
+    this.organizationFormStateService.setForm(organization);
 
     this.name.valueChanges
       .pipe(

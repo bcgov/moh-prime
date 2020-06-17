@@ -13,16 +13,19 @@ namespace Prime.Services
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly IPartyService _partyService;
+        private readonly IOrganizationService _organizationService;
 
         public SiteService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IBusinessEventService businessEventService,
-            IPartyService partyService)
+            IPartyService partyService,
+            IOrganizationService organizationService)
             : base(context, httpContext)
         {
             _businessEventService = businessEventService;
             _partyService = partyService;
+            _organizationService = organizationService;
         }
 
         public async Task<IEnumerable<Site>> GetSitesAsync()
@@ -31,10 +34,10 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Site>> GetSitesAsync(int partyId)
+        public async Task<IEnumerable<Site>> GetSitesAsync(int organizationId)
         {
             return await this.GetBaseSiteQuery()
-                .Where(s => s.ProvisionerId == partyId)
+                .Where(s => s.Location.OrganizationId == organizationId)
                 .ToListAsync();
         }
 
@@ -44,32 +47,26 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(s => s.Id == siteId);
         }
 
-        public async Task<int> CreateSiteAsync(Party provisioner)
+        public async Task<int> CreateSiteAsync(int organizationId)
         {
-            if (provisioner == null)
-            {
-                throw new ArgumentNullException(nameof(provisioner), "Could not create a site, the passed in Party cannot be null.");
-            }
-
-            var provsionerId = await _partyService.CreatePartyAsync(provisioner);
-
-            var organization = await this.GetOrganizationByPartyIdAsync(provsionerId);
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
             if (organization == null)
             {
-                organization = new Organization
-                { SigningAuthorityId = provsionerId };
-
-                _context.Organizations.Add(organization);
-
-                await _context.SaveChangesAsync();
+                throw new ArgumentNullException(nameof(organization), "Could not create a site, the passed in Organization doesnt exist.");
             }
 
-            var location = new Location { OrganizationId = organization.Id };
+            var location = await this.GetLocationByOrganizationIdAsync(organizationId);
 
+            if (location == null)
+            {
+                location = new Location { OrganizationId = organization.Id };
+            }
+
+            // Site provisionerId should be equal to organization signingAuthorityId
             var site = new Site
             {
-                ProvisionerId = provsionerId,
+                ProvisionerId = organization.SigningAuthorityId,
                 Location = location
             };
 
@@ -81,44 +78,51 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create Site.");
             }
 
-            await _businessEventService.CreateSiteEventAsync(site.Id, provsionerId, "Site Created");
+            await _businessEventService.CreateSiteEventAsync(site.Id, organization.SigningAuthorityId, "Site Created");
 
             return site.Id;
         }
 
         public async Task<int> UpdateSiteAsync(int siteId, Site updatedSite, bool isCompleted = false)
         {
-            // TODO signing authority needs a partial update to non-BCSC fields
-            // TODO clean up and simplify update function
-
             var currentSite = await this.GetSiteAsync(siteId);
-            var acceptedAgreementDate = currentSite.Location.Organization.AcceptedAgreementDate;
             var submittedDate = currentSite.SubmittedDate;
             var currentIsCompleted = currentSite.Completed;
-            // BCSC Fields
-            var userId = currentSite.Location.Organization.SigningAuthority.UserId;
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
-            if (updatedSite.Provisioner?.PhysicalAddress != null)
-            {
-                this._context.Entry(currentSite.Provisioner.PhysicalAddress).CurrentValues.SetValues(updatedSite.Provisioner.PhysicalAddress);
-            }
-
+            // TODO should create a location controller to avoid these kinds of updates
             UpdateLocation(currentSite.Location, updatedSite.Location);
 
-            UpdateOrganization(currentSite.Location.Organization, updatedSite.Location.Organization);
+            // Wholesale replace the remote users
+            if (currentSite?.RemoteUsers != null && currentSite?.RemoteUsers.Count() != 0)
+            {
+                foreach (var remoteUser in currentSite.RemoteUsers)
+                {
+                    foreach (var location in remoteUser.RemoteUserLocations)
+                    {
+                        _context.Addresses.Remove(location.PhysicalAddress);
+                        _context.RemoteUserLocations.Remove(location);
+                    }
+                    _context.RemoteUsers.Remove(remoteUser);
+                }
+            }
 
-            // Keep userId the same from BCSC card, do not update
-            currentSite.Location.Organization.SigningAuthority.UserId = userId;
+            if (updatedSite?.RemoteUsers != null && updatedSite?.RemoteUsers.Count() != 0)
+            {
+                foreach (var remoteUser in updatedSite.RemoteUsers)
+                {
+                    remoteUser.SiteId = currentSite.Id;
+                    _context.RemoteUsers.Add(remoteUser);
+                }
+            }
 
             // Update foreign key only if not null
-            currentSite.VendorId = (updatedSite.VendorId != 0)
-                ? updatedSite.VendorId
+            currentSite.VendorCode = (updatedSite.VendorCode != 0)
+                ? updatedSite.VendorCode
                 : null;
 
             // Managed through separate API endpoint, and should never be updated
-            currentSite.Location.Organization.AcceptedAgreementDate = acceptedAgreementDate;
             currentSite.SubmittedDate = submittedDate;
 
             // Registration has been completed
@@ -138,23 +142,12 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateOrganization(Organization current, Organization updated)
+        private async Task<Location> GetLocationByOrganizationIdAsync(int organizationId)
         {
-            this._context.Entry(current).CurrentValues.SetValues(updated);
-
-            this._context.Entry(current.SigningAuthority).CurrentValues.SetValues(updated.SigningAuthority);
-
-            if (updated.SigningAuthority?.PhysicalAddress != null)
-            {
-                if (current.SigningAuthority?.PhysicalAddress == null)
-                {
-                    current.SigningAuthority.PhysicalAddress = updated.SigningAuthority.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(current.SigningAuthority.PhysicalAddress).CurrentValues.SetValues(updated.SigningAuthority.PhysicalAddress);
-                }
-            }
+            // assmuing an organization only has 1 location
+            return await _context.Locations
+                .Where(l => l.OrganizationId == organizationId)
+                .FirstOrDefaultAsync();
         }
 
         private void UpdateLocation(Location current, Location updated)
@@ -175,44 +168,65 @@ namespace Prime.Services
 
             if (updated?.AdministratorPharmaNet != null)
             {
-                if (current.AdministratorPharmaNet == null)
+                if (updated?.AdministratorPharmaNet?.UserId != Guid.Empty)
                 {
-                    current.AdministratorPharmaNet = updated.AdministratorPharmaNet;
+                    current.AdministratorPharmaNetId = updated.AdministratorPharmaNetId;
                 }
                 else
                 {
-                    this._context.Entry(current.AdministratorPharmaNet).CurrentValues.SetValues(updated.AdministratorPharmaNet);
-                }
+                    if (current.AdministratorPharmaNet == null)
+                    {
+                        current.AdministratorPharmaNet = updated.AdministratorPharmaNet;
+                    }
+                    else
+                    {
+                        this._context.Entry(current.AdministratorPharmaNet).CurrentValues.SetValues(updated.AdministratorPharmaNet);
+                    }
 
-                _partyService.UpdatePartyAddress(current.AdministratorPharmaNet, updated.AdministratorPharmaNet);
+                    _partyService.UpdatePartyAddress(current.AdministratorPharmaNet, updated.AdministratorPharmaNet);
+                }
             }
 
             if (updated?.PrivacyOfficer != null)
             {
-                if (current.PrivacyOfficer == null)
+                if (updated?.PrivacyOfficer?.UserId != Guid.Empty)
                 {
-                    current.PrivacyOfficer = updated.PrivacyOfficer;
+                    current.PrivacyOfficerId = updated.PrivacyOfficerId;
                 }
                 else
                 {
-                    this._context.Entry(current.PrivacyOfficer).CurrentValues.SetValues(updated.PrivacyOfficer);
-                }
+                    if (current.PrivacyOfficer == null)
+                    {
+                        current.PrivacyOfficer = updated.PrivacyOfficer;
+                    }
+                    else
+                    {
+                        this._context.Entry(current.PrivacyOfficer).CurrentValues.SetValues(updated.PrivacyOfficer);
+                    }
 
-                _partyService.UpdatePartyAddress(current.PrivacyOfficer, updated.PrivacyOfficer);
+                    _partyService.UpdatePartyAddress(current.PrivacyOfficer, updated.PrivacyOfficer);
+                }
             }
 
             if (updated?.TechnicalSupport != null)
             {
-                if (current.TechnicalSupport == null)
+                if (updated?.TechnicalSupport?.UserId != Guid.Empty)
                 {
-                    current.TechnicalSupport = updated.TechnicalSupport;
+                    current.TechnicalSupportId = updated.TechnicalSupportId;
                 }
                 else
                 {
-                    this._context.Entry(current.TechnicalSupport).CurrentValues.SetValues(updated.TechnicalSupport);
-                }
+                    if (current.TechnicalSupport == null)
+                    {
+                        current.TechnicalSupport = updated.TechnicalSupport;
+                    }
+                    else
+                    {
+                        this._context.Entry(current.TechnicalSupport).CurrentValues.SetValues(updated.TechnicalSupport);
+                    }
 
-                _partyService.UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
+                    _partyService.UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
+                }
             }
 
             if (updated?.BusinessHours != null)
@@ -245,10 +259,15 @@ namespace Prime.Services
                 return;
             }
 
-            _context.Addresses.Remove(site.Location.Organization.SigningAuthority.PhysicalAddress);
-            _context.Parties.Remove(site.Location.Organization.SigningAuthority);
-            _context.Organizations.Remove(site.Location.Organization);
+            _context.Sites.Remove(site);
 
+            await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
+
+            await _context.SaveChangesAsync();
+        }
+
+        private void DeleteLocation(Site site)
+        {
             // Check if relation exists before delete to allow delete of incomplete registrations
             if (site.Location != null)
             {
@@ -259,14 +278,9 @@ namespace Prime.Services
                 _context.Locations.Remove(site.Location);
 
                 DeletePartyFromLocation(site.Location.AdministratorPharmaNet);
-                DeletePartyFromLocation(site.Location.PrivacyOfficer);
+                DeletePartyFromLocation(site.Location.TechnicalSupport);
                 DeletePartyFromLocation(site.Location.PrivacyOfficer);
             }
-            _context.Sites.Remove(site);
-
-            await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
-
-            await _context.SaveChangesAsync();
         }
 
         private void DeletePartyFromLocation(Party party)
@@ -311,47 +325,46 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task AcceptCurrentOrganizationAgreementAsync(int signingAuthorityId)
-        {
-            var organization = await _context.Organizations
-                .Where(e => e.SigningAuthorityId == signingAuthorityId)
-                .FirstOrDefaultAsync();
-
-            organization.AcceptedAgreementDate = DateTimeOffset.Now;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<Organization> GetOrganizationByPartyIdAsync(int partyId)
-        {
-            return await _context.Organizations
-                .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
-        }
-
-        public async Task<Vendor> GetVendorAsync(int vendorId)
+        public async Task<Vendor> GetVendorAsync(int vendorCode)
         {
             return await _context.Vendors
-                .SingleOrDefaultAsync(s => s.Id == vendorId);
+                .SingleOrDefaultAsync(v => v.Code == vendorCode);
         }
 
-        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
+        public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)
         {
-            // Remove existing items
-            foreach (var item in dbCollection)
+            var businessLicence = new BusinessLicence
             {
-                _context.Remove(item);
+                DocumentGuid = documentGuid,
+                SiteId = siteId,
+                FileName = filename,
+                UploadedDate = DateTimeOffset.Now
+            };
+
+            _context.BusinessLicences.Add(businessLicence);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not add business licence.");
             }
 
-            // Create new items
-            if (newCollection != null)
-            {
-                foreach (var item in newCollection)
-                {
-                    // Prevent the ID from being changed by the incoming changes
-                    item.EnrolleeId = enrolleeId;
-                    _context.Entry(item).State = EntityState.Added;
-                }
-            }
+            return businessLicence;
+        }
+
+        public async Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId)
+        {
+            return await _context.BusinessLicences
+                .Where(bl => bl.SiteId == siteId)
+                .ToListAsync();
+        }
+
+        public async Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId)
+        {
+            return await _context.BusinessLicences
+                .Where(bl => bl.SiteId == siteId)
+                .OrderByDescending(bl => bl.UploadedDate)
+                .FirstOrDefaultAsync();
         }
 
         private IQueryable<Site> GetBaseSiteQuery()
@@ -365,6 +378,10 @@ namespace Prime.Services
                         .ThenInclude(o => o.SigningAuthority)
                             .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
+                    .ThenInclude(l => l.Organization)
+                        .ThenInclude(o => o.SigningAuthority)
+                            .ThenInclude(p => p.MailingAddress)
+                .Include(s => s.Location)
                     .ThenInclude(l => l.PhysicalAddress)
                 .Include(s => s.Location)
                     .ThenInclude(l => l.PrivacyOfficer)
@@ -376,7 +393,11 @@ namespace Prime.Services
                     .ThenInclude(l => l.TechnicalSupport)
                         .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.Location)
-                    .ThenInclude(l => l.BusinessHours);
+                    .ThenInclude(l => l.BusinessHours)
+                .Include(s => s.RemoteUsers)
+                    .ThenInclude(r => r.RemoteUserLocations)
+                        .ThenInclude(rul => rul.PhysicalAddress)
+                .Include(s => s.BusinessLicences);
         }
     }
 }

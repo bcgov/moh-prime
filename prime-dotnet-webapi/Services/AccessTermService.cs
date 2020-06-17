@@ -147,10 +147,13 @@ namespace Prime.Services
             var accessTerm = await _context.AccessTerms
                 .Where(at => at.EnrolleeId == enrollee.Id)
                 .OrderByDescending(at => at.CreatedDate)
-                .FirstAsync();
+                .FirstOrDefaultAsync();
 
-            // Set expiry date to now, sudo expirying an access term.
-            accessTerm.ExpiryDate = DateTimeOffset.Now;
+            if (accessTerm != null)
+            {
+                // Set expiry date to now, sudo expirying an access term.
+                accessTerm.ExpiryDate = DateTimeOffset.Now;
+            }
 
             await _context.SaveChangesAsync();
         }
@@ -264,23 +267,12 @@ namespace Prime.Services
 
         private async Task<UserClause> GetUserClause(Enrollee enrollee)
         {
-            var userType = PrimeConstants.PRIME_OBO;
-
-            if (enrollee.Certifications.Count > 0)
-            {
-                foreach (var cert in enrollee.Certifications)
-                {
-                    if (cert.License.DefaultPrivileges.Any(dp => dp.PrivilegeId == Privilege.RU_CODE))
-                    {
-                        userType = PrimeConstants.PRIME_RU;
-                    }
-                }
-            }
+            var classification = enrollee.IsRegulatedUser() ? PrimeConstants.PRIME_RU : PrimeConstants.PRIME_OBO;
 
             return await _context.UserClauses
-                .Where(g => g.EnrolleeClassification == userType)
+                .Where(g => g.EnrolleeClassification == classification)
                 .OrderByDescending(g => g.EffectiveDate)
-                .FirstOrDefaultAsync();
+                .FirstAsync();
         }
 
         private async Task<IEnumerable<AccessTermLicenseClassClause>> GetAccessTermLicenseClassClauses(Enrollee enrollee, AccessTerm accessTerms)

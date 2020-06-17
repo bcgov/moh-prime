@@ -60,5 +60,11 @@ namespace Prime
             return assuranceLevel;
         }
 
+        public static string GetIdentityProvider(this ClaimsPrincipal User)
+        {
+            Claim identityProviderClaim = User?.Claims?.SingleOrDefault(c => c.Type == AuthConstants.IDENTITY_PROVIDER_CLAIM_TYPE);
+
+            return identityProviderClaim?.Value;
+        }
     }
 }

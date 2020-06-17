@@ -37,6 +37,11 @@ namespace Prime.Models
         [JsonIgnore]
         public Site Site { get; set; }
 
+        public int? OrganizationId { get; set; }
+
+        [JsonIgnore]
+        public Organization Organization { get; set; }
+
         public int BusinessEventTypeCode { get; set; }
 
         [JsonIgnore]

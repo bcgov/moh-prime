@@ -46,7 +46,7 @@ export class MockSiteRegistrationService implements ISiteRegistrationService {
           signingAuthorityId: faker.random.number(),
           signingAuthority: user,
           name: faker.company.companyName(),
-          registrationId: null,
+          registrationId: faker.random.number(),
           doingBusinessAs: null,
           acceptedAgreementDate: faker.date.past(2).toDateString()
         },
@@ -55,7 +55,7 @@ export class MockSiteRegistrationService implements ISiteRegistrationService {
         businessHours: null,
         doingBusinessAs: null
       },
-      vendorId: null,
+      vendorCode: null,
       vendor: null,
       provisionerId: faker.random.number(),
       provisioner: user,

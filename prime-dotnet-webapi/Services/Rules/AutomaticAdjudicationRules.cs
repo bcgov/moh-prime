@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Prime.Models;
+using Prime.Services.Clients;
 
 namespace Prime.Services.Rules
 {
@@ -51,11 +52,11 @@ namespace Prime.Services.Rules
     // If enrollee has credentials, check to see if the college license is active in PharmaNet and matches the enrollee
     public class PharmanetValidationRule : AutomaticAdjudicationRule
     {
-        private readonly IPharmanetApiService _pharmanetApiService;
+        private readonly ICollegeLicenceClient _collegeLicenceClient;
 
-        public PharmanetValidationRule(IPharmanetApiService pharmanetApiService)
+        public PharmanetValidationRule(ICollegeLicenceClient collegeLicenceClient)
         {
-            _pharmanetApiService = pharmanetApiService;
+            _collegeLicenceClient = collegeLicenceClient;
         }
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
@@ -73,9 +74,9 @@ namespace Prime.Services.Rules
                 PharmanetCollegeRecord record = null;
                 try
                 {
-                    record = await _pharmanetApiService.GetCollegeRecordAsync(cert);
+                    record = await _collegeLicenceClient.GetCollegeRecordAsync(cert);
                 }
-                catch (PharmanetApiService.PharmanetCollegeApiException)
+                catch (PharmanetCollegeApiException)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.FullLicenseNumber}");
                     passed = false;
@@ -155,6 +156,19 @@ namespace Prime.Services.Rules
         }
     }
 
+    public class RequestingRemoteAccessRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.RequestingRemoteAccess)
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.RequestingRemoteAccess);
+            }
+
+            return Task.FromResult(!enrollee.RequestingRemoteAccess);
+        }
+    }
+
     public class IdentityAssuranceLevelRule : AutomaticAdjudicationRule
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
@@ -162,6 +176,20 @@ namespace Prime.Services.Rules
             if (enrollee.IdentityAssuranceLevel < 3)
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.AssuranceLevel);
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
+    }
+
+    public class IdentityProviderRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.IdentityProvider != Auth.AuthConstants.BC_SERVICES_CARD)
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.IdentityProvider, $"Method used: {enrollee.IdentityProvider}");
                 return Task.FromResult(false);
             }
 

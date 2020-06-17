@@ -7,21 +7,22 @@ using Microsoft.AspNetCore.Http;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Services.Rules;
+using Prime.Services.Clients;
 
 namespace Prime.Services
 {
     public class SubmissionRulesService : BaseService, ISubmissionRulesService
     {
-        private readonly IPharmanetApiService _pharmanetApiService;
+        private readonly ICollegeLicenceClient _collegeLicenceClient;
         private readonly IAccessTermService _accessTermService;
 
         public SubmissionRulesService(
             ApiDbContext context, IHttpContextAccessor httpContext,
-            IPharmanetApiService pharmanetApiService,
+            ICollegeLicenceClient collegeLicenceClient,
             IAccessTermService accessTermService)
             : base(context, httpContext)
         {
-            _pharmanetApiService = pharmanetApiService;
+            _collegeLicenceClient = collegeLicenceClient;
             _accessTermService = accessTermService;
         }
 
@@ -35,12 +36,14 @@ namespace Prime.Services
             {
                 new SelfDeclarationRule(),
                 new AddressRule(),
-                new PharmanetValidationRule(_pharmanetApiService),
+                new PharmanetValidationRule(_collegeLicenceClient),
                 // TODO removed until after Community Practice
                 // new DeviceProviderRule(),
                 new LicenceClassRule(),
                 new AlwaysManualRule(),
-                new IdentityAssuranceLevelRule()
+                new IdentityAssuranceLevelRule(),
+                new IdentityProviderRule(),
+                new RequestingRemoteAccessRule()
             };
 
             return await ProcessRules(rules, enrollee);

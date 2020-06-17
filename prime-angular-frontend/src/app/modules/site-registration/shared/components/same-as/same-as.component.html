@@ -4,6 +4,7 @@
   <button mat-flat-button
           color="primary"
           type="button"
+          class="mr-2"
           [matMenuTriggerFor]="menu">
     Same as: <mat-icon>keyboard_arrow_down</mat-icon>
   </button>
@@ -17,5 +18,7 @@
       </button>
     </ng-container>
   </mat-menu>
+
+  <ng-content></ng-content>
 
 </div>

@@ -17,8 +17,9 @@ export class AdjudicatorActionsComponent implements OnInit {
   @Output() public lock: EventEmitter<number>;
   @Output() public unlock: EventEmitter<number>;
   @Output() public enableEnrollee: EventEmitter<number>;
-  @Output() public declineEnrollee: EventEmitter<number>;
   @Output() public toggleManualAdj: EventEmitter<HttpEnrollee>;
+  @Output() public enableEditing: EventEmitter<number>;
+  @Output() public rerunRules: EventEmitter<number>;
   @Output() public delete: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
@@ -33,7 +34,8 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.lock = new EventEmitter<number>();
     this.unlock = new EventEmitter<number>();
     this.enableEnrollee = new EventEmitter<number>();
-    this.declineEnrollee = new EventEmitter<number>();
+    this.enableEditing = new EventEmitter<number>();
+    this.rerunRules = new EventEmitter<number>();
     this.delete = new EventEmitter<number>();
     this.toggleManualAdj = new EventEmitter<HttpEnrollee>();
     this.route = new EventEmitter<string | (string | number)[]>();
@@ -88,9 +90,15 @@ export class AdjudicatorActionsComponent implements OnInit {
     }
   }
 
-  public onDeclineEnrollee() {
+  public onEnableEditing() {
     if (this.canEdit) {
-      this.declineEnrollee.emit(this.enrollee.id);
+      this.enableEditing.emit(this.enrollee.id);
+    }
+  }
+
+  public onRerunRules() {
+    if (this.canEdit) {
+      this.rerunRules.emit(this.enrollee.id);
     }
   }
 

@@ -116,8 +116,13 @@ namespace Prime.Models
 
         public bool AlwaysManual { get; set; }
 
+        public bool RequestingRemoteAccess { get; set; }
+
         [JsonIgnore]
         public int IdentityAssuranceLevel { get; set; }
+
+        [JsonIgnore]
+        public string IdentityProvider { get; set; }
 
         [NotMapped]
         public EnrolmentStatus CurrentStatus
@@ -177,17 +182,6 @@ namespace Prime.Models
             get => Id + DISPLAY_OFFSET;
         }
 
-        [NotMapped]
-        [JsonIgnore]
-        public bool? IsObo
-        {
-            get => AccessTerms?
-                .Where(at => at.AcceptedDate != null)
-                .OrderByDescending(at => at.AcceptedDate)
-                .FirstOrDefault()?
-                .UserClause?.EnrolleeClassification == PrimeConstants.PRIME_OBO;
-        }
-
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
             var newStatus = EnrolmentStatus.FromType(statusType, this.Id);
@@ -209,6 +203,16 @@ namespace Prime.Models
             }
 
             CurrentStatus.AddStatusReason(type, statusReasonNote);
+        }
+
+        public bool IsRegulatedUser()
+        {
+            if (Certifications == null || Certifications.Any(cert => cert.License == null))
+            {
+                throw new InvalidOperationException("Could not determine Regulated User status; Certifications or Licences were null");
+            }
+
+            return Certifications.Any(cert => cert.License.RegulatedUser);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

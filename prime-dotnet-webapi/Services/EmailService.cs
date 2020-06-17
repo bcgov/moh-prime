@@ -9,6 +9,10 @@ using Prime.Models;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Security.Cryptography.X509Certificates;
+using System.IO;
+
+using System.Net.Mime;
+using System.Text;
 
 namespace Prime.Services
 {
@@ -20,6 +24,7 @@ namespace Prime.Services
         public int MaxViews { get => EnrolmentCertificateAccessToken.MaxViews; }
         public int ExpiryDays { get => EnrolmentCertificateAccessToken.Lifespan.Days; }
         public string ProvisionerName { get; set; }
+        public byte[] BusinessLicenceDoc { get; set; }
 
         public EmailParams()
         {
@@ -33,23 +38,38 @@ namespace Prime.Services
             TokenUrl = token.FrontendUrl;
             ProvisionerName = provisionerName;
         }
+
+        public EmailParams(Site site)
+        {
+            // TODO what does the email body need?
+            // TODO split out into specific email params for different emails
+            // TODO if only used to render razor views then rename
+        }
     }
 
     public class EmailService : BaseService, IEmailService
     {
         private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
-
+        private const string MOH_EMAIL = "HLTH.HnetConnection@gov.bc.ca";
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IDocumentService _documentService;
+        private readonly IPdfService _pdfService;
+        private readonly IOrganizationService _organizationService;
         private readonly ICHESApiService _chesApiService;
 
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IRazorConverterService razorConverterService,
+            IDocumentService documentService,
+            IPdfService pdfService,
+            IOrganizationService organizationService,
             ICHESApiService chesApiService)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
+            _documentService = documentService;
+            _pdfService = pdfService;
+            _organizationService = organizationService;
             _chesApiService = chesApiService;
         }
 
@@ -105,7 +125,61 @@ namespace Prime.Services
                 ? "/Views/Emails/OfficeManagerEmail.cshtml"
                 : "/Views/Emails/VendorEmail.cshtml";
             string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token, provisionerName));
-            await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody);
+            await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<Attachment>());
+        }
+
+        // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
+        // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
+        public async Task SendSiteRegistrationAsync(Site site)
+        {
+            var subject = "PRIME Site Registration Submission";
+            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
+
+            Document businessLicenceDoc = null;
+            string businessLicenceTemplate = "/Views/Helpers/Document.cshtml";
+            try
+            {
+                businessLicenceDoc = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
+            }
+            catch (NullReferenceException)
+            {
+                businessLicenceDoc = new Document("BusinessLicence.pdf", new byte[20]);
+                businessLicenceTemplate = "/Views/Helpers/ApologyDocument.cshtml";
+            }
+
+            var organization = site.Location.Organization;
+            var organizationAgreementHtml = "";
+            if (await _organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
+            {
+                Document organizationAgreementDoc = null;
+                string organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
+                try
+                {
+                    organizationAgreementDoc = await _documentService.GetLatestSignedAgreementDocumentByOrganizationId(organization.Id);
+                }
+                catch (NullReferenceException)
+                {
+                    organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", new byte[20]);
+                    organizationAgreementTemplate = "/Views/Helpers/ApologyDocument.cshtml";
+                }
+
+                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync(organizationAgreementTemplate, organizationAgreementDoc);
+            }
+            else
+            {
+                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
+            }
+
+            var attachments = new (string Filename, string HtmlContent)[]
+            {
+                ("OrganizationAgreement.pdf", organizationAgreementHtml),
+                ("SiteRegistrationReview.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
+                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(businessLicenceTemplate, businessLicenceDoc))
+            }
+            .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)))
+            .Select(pdf => new Attachment(new MemoryStream(pdf.Content), pdf.Filename, "application/pdf"));
+
+            await Send(PRIME_EMAIL, MOH_EMAIL, subject, body, attachments);
         }
 
         public async Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName)
@@ -125,10 +199,15 @@ namespace Prime.Services
 
         private async Task Send(string from, string to, string subject, string body)
         {
-            await Send(from, new[] { to }, new string[0], subject, body);
+            await Send(from, new[] { to }, new string[0], subject, body, Enumerable.Empty<Attachment>());
         }
 
-        private async Task Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body)
+        private async Task Send(string from, string to, string subject, string body, IEnumerable<Attachment> attachments)
+        {
+            await Send(from, new[] { to }, new string[0], subject, body, attachments);
+        }
+
+        private async Task Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<Attachment> attachments)
         {
             if (!to.Any())
             {
@@ -160,6 +239,10 @@ namespace Prime.Services
                     IsBodyHtml = true,
                 };
 
+            foreach (var attachment in attachments)
+            {
+                mail.Attachments.Add(attachment);
+            }
                 foreach (var address in toAddresses)
                 {
                     mail.To.Add(address);

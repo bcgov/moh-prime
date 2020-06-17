@@ -30,5 +30,9 @@ namespace Prime
 
         // Logging
         public readonly static string LOG_FILE_PATH = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
+
+        // Document Manager
+        // TODO: Have this in a config!
+        public readonly static string DOCUMENT_MANAGER_URL = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_URL") ?? "http://localhost:6001/documents";
     }
 }

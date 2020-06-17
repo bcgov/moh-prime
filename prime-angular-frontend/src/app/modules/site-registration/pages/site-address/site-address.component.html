@@ -1,24 +1,54 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"
-                               [currentRoute]="SiteRoutes.SITE_ADDRESS"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
         novalidate>
 
     <section class="mb-3">
-
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Site Address</ng-container>
-        <ng-container appPageSubheaderSummary>
-          Provide the address of your site for British Columbia only
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+        <ng-container appPageSubheader2Summary>
+          As on business licence; may be the same as organization name or "doing business as" name.
         </ng-container>
-      </app-page-subheader>
+      </app-page-subheader2>
 
-      <app-address [form]="form"
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Name"
+                   formControlName="name"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-optgroup *ngFor="let locationName of locationNames"
+                            [label]="locationName.group">
+                <mat-option *ngFor="let option of locationName.options"
+                            [value]="option">
+                  {{ option }}
+                </mat-option>
+              </mat-optgroup>
+            </mat-autocomplete>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-3">
+
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Location Address</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Provide the address of your location (British Columbia only)
+        </ng-container>
+      </app-page-subheader2>
+
+      <app-address [form]="physicalAddress"
                    [formControlNames]="formControlNames"></app-address>
-
     </section>
 
   </form>
