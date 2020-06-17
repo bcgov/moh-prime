@@ -180,8 +180,8 @@ class DocumentResource(Resource):
         return response
 
 
-@api.route(f'/documents/<string:document_guid>/token')
-class TokenCreationResource(Resource):
+@api.route(f'/documents/<string:document_guid>/download-token')
+class DownloadTokenCreationResource(Resource):
     @jwt.requires_auth
     def post(self, document_guid):
         if not document_guid:
