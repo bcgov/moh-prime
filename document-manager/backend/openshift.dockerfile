@@ -5,9 +5,10 @@ FROM docker-registry.default.svc:5000/dqszvc-tools/python-36-rhel7:1-36
 
 RUN ls -alh 
 # Install project dependencies
-COPY requirements.txt ${APP_ROOT}/src
+COPY . ${APP_ROOT}/src
 
-RUN source /opt/app-root/etc/scl_enable && \
+RUN ls -alh && \
+    source /opt/app-root/etc/scl_enable && \
     set -x && \
     pip install -U pip setuptools wheel && \
     cd ${APP_ROOT}/src && pip install -r requirements.txt
