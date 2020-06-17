@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Reflection;
 
 using Prime.Auth;
 using Prime.Models;
@@ -326,7 +328,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(licences));
         }
 
-        // GET: api/Organizations/download-organization-agreement
+        // GET: api/Organizations/organization-agreement-document
         /// <summary>
         /// Get the organization agreement document.
         /// </summary>
@@ -340,13 +342,21 @@ namespace Prime.Controllers
         {
             var fileName = "Organization-Agreement.pdf";
             var filePath = Path.Combine("Resources", "documents", fileName);
-            if (!System.IO.File.Exists(filePath))
-            {
-                return NotFound();
-            }
+            string resourcePath = fileName;
+            var assembly = Assembly.GetExecutingAssembly();
 
-            byte[] file = System.IO.File.ReadAllBytes(filePath);
-            string base64 = Convert.ToBase64String(file);
+            resourcePath = assembly.GetManifestResourceNames()
+                    .Single(str => str.EndsWith(fileName));
+
+            string base64;
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+            using (var reader = new MemoryStream())
+            {
+                stream.CopyTo(reader);
+
+                base64 = Convert.ToBase64String(reader.ToArray());
+            }
 
             return Ok(ApiResponse.Result(base64));
         }
