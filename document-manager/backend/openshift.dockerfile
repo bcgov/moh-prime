@@ -3,7 +3,7 @@ FROM docker-registry.default.svc:5000/dqszvc-tools/python-36-rhel7:1-36
 # Update installation utility
 #RUN apt-get update
 
-RUN ls -alh ${APP_ROOT}/src
+RUN ls -alh 
 # Install project dependencies
 COPY requirements.txt ${APP_ROOT}/src
 
