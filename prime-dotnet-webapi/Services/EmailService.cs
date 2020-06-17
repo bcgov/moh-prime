@@ -142,7 +142,7 @@ namespace Prime.Services
 
             var organization = site.Location.Organization;
             var organizationAgreementHtml = "";
-            if (_organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
+            if (await _organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
             {
                 Document organizationAgreementDoc = null;
                 string organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
