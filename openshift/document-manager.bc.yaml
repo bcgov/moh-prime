@@ -78,9 +78,9 @@ objects:
         name: '${NAME}${SUFFIX}:latest'
     resources:
       limits:
-        cpu: 200m
+        cpu: 2
         memory: 2Gi
       requests:
-        cpu: 100m
+        cpu: 1
         memory: 1Gi
     nodeSelector: null
