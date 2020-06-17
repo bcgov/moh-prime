@@ -24,6 +24,5 @@ namespace Prime.Models
         public SelfDeclarationType SelfDeclarationType { get; set; }
 
         public string SelfDeclarationDetails { get; set; }
-
     }
 }
