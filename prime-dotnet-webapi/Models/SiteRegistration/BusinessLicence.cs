@@ -8,11 +8,9 @@ namespace Prime.Models
     [Table("BusinessLicence")]
     public class BusinessLicence : BaseDocumentUpload
     {
-
         public int SiteId { get; set; }
 
         [JsonIgnore]
         public Site Site { get; set; }
-
     }
 }
