@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
+using System.Collections.Generic;
 
 namespace Prime.Services.Clients
 {
@@ -15,10 +15,18 @@ namespace Prime.Services.Clients
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-        public Task<HttpResponseMessage> InitializeFileUploadAsync(string filename, string destinationFolder)
+        public async Task<HttpResponseMessage> InitializeFileUploadAsync(string filename, string fileSize, string destinationFolder)
         {
-            //var response = _client.SendAsync(request);
-            throw new NotImplementedException();
+            _client.DefaultRequestHeaders.Add("Tus-Resumable", "1.0.0");
+            _client.DefaultRequestHeaders.Add("Upload-Length", fileSize);
+
+            var content = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                { "filename", filename },
+                { "folder", destinationFolder },
+            });
+
+            return await _client.PostAsync("documents", content);
         }
 
         public async Task<Stream> GetFileAsync(Guid documentGuid)
