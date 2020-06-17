@@ -100,10 +100,5 @@ pipeline {
                 }
             }
         }
-        stage('Cleanup') {
-            steps {
-                    sh "rm -fr *"
-            }
-        }
     }
 }
