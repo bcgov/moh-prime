@@ -15,13 +15,17 @@ namespace PrimeTests.UnitTests
     {
         public EmailService CreateService(
             IHttpContextAccessor httpContext = null,
-            IRazorConverterService razorConverterService = null
+            IRazorConverterService razorConverterService = null,
+            IDocumentService documentService = null,
+            IPdfService pdfService = null
         )
         {
             return new EmailService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
-                razorConverterService ?? A.Fake<IRazorConverterService>()
+                razorConverterService,
+                documentService,
+                pdfService
             );
         }
     }

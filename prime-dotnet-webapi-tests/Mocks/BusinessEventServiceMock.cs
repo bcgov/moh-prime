@@ -16,13 +16,13 @@ namespace PrimeTests.Mocks
         public override void SeedData()
         { }
 
-        public Task<BusinessEvent> CreateAdminClaimEventAsync(int enrolleeId, string description)
+        public Task<BusinessEvent> CreateAdminActionEventAsync(int enrolleeId, string description)
         {
             var businessEvent = new BusinessEvent
             {
                 EnrolleeId = enrolleeId,
                 AdminId = 0,
-                BusinessEventTypeCode = BusinessEventType.ADMIN_CLAIM_CODE,
+                BusinessEventTypeCode = BusinessEventType.ADMIN_ACTION_CODE,
                 Description = description,
                 EventDate = DateTime.Now
             };
@@ -102,6 +102,20 @@ namespace PrimeTests.Mocks
                 EnrolleeId = enrolleeId,
                 AdminId = 0,
                 BusinessEventTypeCode = BusinessEventType.ADMIN_VIEW_CODE,
+                Description = description,
+                EventDate = DateTime.Now
+            };
+            return Task.FromResult(businessEvent);
+        }
+
+        public Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int partyId, string description)
+        {
+            var businessEvent = new BusinessEvent
+            {
+                OrganizationId = organizationId,
+                AdminId = 0,
+                PartyId = partyId,
+                BusinessEventTypeCode = BusinessEventType.ORGANIZATION_CODE,
                 Description = description,
                 EventDate = DateTime.Now
             };
