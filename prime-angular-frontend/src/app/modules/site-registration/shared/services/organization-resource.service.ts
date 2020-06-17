@@ -150,4 +150,30 @@ export class OrganizationResource {
         })
       );
   }
+
+  public addSignedAgreement(organizationId: number, documentGuid: string, fileName: string): Observable<string> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid, fileName });
+    return this.apiResource.post<string>(`organizations/${organizationId}/signed-agreement`, { organizationId }, params)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Signed agreement has been added')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Signed agreement could not be added');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::addSignedAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public downloadOrganizationAgreement(): Observable<string> {
+    return this.apiResource.get<string>(`organizations/organization-agreement-document`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement document could not be downloaded');
+          this.logger.error('[SiteRegistration] OrganizationResource::downloadOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }
