@@ -14,7 +14,8 @@ COPY . .
 RUN ls -alh && \
     source /opt/app-root/etc/scl_enable && \
     set -x && \
-    pip3 install -U pip setuptools wheel && \
+    pip3 install --upgrade -U pip setuptools wheel && \
+    pip3 install psycopg2 && \
     cd ${APP_ROOT}/src && \ 
     pip3 install -r requirements.txt
 
