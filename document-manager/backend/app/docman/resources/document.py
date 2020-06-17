@@ -8,7 +8,7 @@ from flask_restplus import Resource, reqparse
 
 from app.docman.models.document import Document
 from app.extensions import api, cache, jwt
-from app.constants import FILE_UPLOAD_SIZE, FILE_UPLOAD_OFFSET, FILE_UPLOAD_PATH, DOWNLOAD_TOKEN, TIMEOUT_24_HOURS, TUS_API_VERSION, TUS_API_SUPPORTED_VERSIONS, FORBIDDEN_FILETYPES
+from app.constants import FILE_UPLOAD_SIZE, FILE_UPLOAD_OFFSET, FILE_UPLOAD_PATH, DOWNLOAD_TOKEN, TIMEOUT_5_MINUTES, TIMEOUT_24_HOURS, TUS_API_VERSION, TUS_API_SUPPORTED_VERSIONS, FORBIDDEN_FILETYPES
 
 
 @api.route('/documents')
@@ -19,7 +19,7 @@ class DocumentListResource(Resource):
     parser.add_argument(
         'filename', type=str, required=False, help='File name + extension of the document.')
 
-    #@jwt.requires_auth
+    @jwt.requires_auth
     def post(self):
         if request.headers.get('Tus-Resumable') is None:
             raise BadRequest('Received file upload for unsupported file transfer protocol')
@@ -29,7 +29,7 @@ class DocumentListResource(Resource):
             raise BadRequest('Received file upload of unspecified size')
         file_size = int(file_size)
 
-        max_file_size = current_app.config["MAX_FILE_SIZE"]
+        max_file_size = current_app.config['MAX_FILE_SIZE']
         if file_size > max_file_size:
             raise RequestEntityTooLarge(f'The maximum file upload size is {max_file_size/1024/1024}MB.')
 
@@ -86,12 +86,8 @@ class DocumentListResource(Resource):
 
 @api.route(f'/documents/<string:document_guid>')
 class DocumentResource(Resource):
-    #@jwt.requires_auth
+    @jwt.requires_auth
     def get(self, document_guid):
-        # doc_guid = request.args.get('token', '')
-        # doc_guid = cache.get(DOWNLOAD_TOKEN(token_guid))
-        # cache.delete(DOWNLOAD_TOKEN(token_guid))
-
         if not document_guid:
             raise BadRequest('Document GUID is required')
 
@@ -101,13 +97,13 @@ class DocumentResource(Resource):
 
         return send_file(
             filename_or_fp=doc.full_storage_path,
-            #attachment_filename=doc.filename,
+            attachment_filename=doc.filename,
             as_attachment=False)
 
     def patch(self, document_guid):
         file_path = cache.get(FILE_UPLOAD_PATH(document_guid))
         if file_path is None or not os.path.lexists(file_path):
-            raise NotFound('PATCH sent for a upload that does not exist')
+            raise NotFound('PATCH sent for an upload that does not exist')
 
         request_offset = int(request.headers.get('Upload-Offset', 0))
         file_offset = cache.get(FILE_UPLOAD_OFFSET(document_guid))
@@ -182,3 +178,38 @@ class DocumentResource(Resource):
         response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Tus-Extension,Tus-Max-Size"
         response.status_code = 204
         return response
+
+
+@api.route(f'/documents/<string:document_guid>/token')
+class TokenCreationResource(Resource):
+    @jwt.requires_auth
+    def post(self, document_guid):
+        if not document_guid:
+            raise BadRequest('Must specify document GUID')
+
+        token = str(uuid.uuid4())
+        cache.set(DOWNLOAD_TOKEN(token), document_guid, TIMEOUT_5_MINUTES)
+
+        return {'token': token}
+
+
+@api.route(f'/documents/downloads/<string:token>')
+class DocumentDownloadResource(Resource):
+    def get(self, token):
+        if not token:
+            raise BadRequest('Must specify token')
+
+        doc_guid = cache.get(DOWNLOAD_TOKEN(token))
+        cache.delete(DOWNLOAD_TOKEN(token))
+
+        if not doc_guid:
+            raise NotFound('Could not find token')
+
+        doc = Document.find_by_document_guid(doc_guid)
+        if not doc:
+            raise NotFound('Could not find document')
+
+        return send_file(
+            filename_or_fp=doc.full_storage_path,
+            attachment_filename=doc.filename,
+            as_attachment=True)
