@@ -13,20 +13,18 @@ COPY . ${APP_ROOT}/src
 
 COPY . .
 
-RUN ls -alh && \
-    source /opt/app-root/etc/scl_enable && \
-    set -x && \
+RUN set -x && \
+    find / -type f -name scl_enable && \
     pip3 install --upgrade -U pip setuptools wheel && \
     pip3 install psycopg2 && \
     cd ${APP_ROOT}/src && \ 
     pip3 install -r requirements.txt
+#    source /opt/app-root/etc/scl_enable && \
 
 # Create working directory
-RUN mkdir -p /app
-WORKDIR /app
-
-
+WORKDIR ${APP_ROOT}/src/app
 
 # Run the server
-EXPOSE 5001
-CMD ["flask","run"]
+EXPOSE 5001 9191
+ENTRYPOINT ${WORKDIR}/app.sh
+#CMD ["flask","run"]
