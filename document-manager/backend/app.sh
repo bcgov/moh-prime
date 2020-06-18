@@ -1,4 +1,4 @@
 #!/bin/bash
-cd ${WORKDIR}/src/app
+cd /opt/app-root/src/app
 flask run &disown 
 uwsgi uwsgi.ini
