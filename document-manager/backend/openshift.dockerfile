@@ -21,7 +21,7 @@ RUN set -x && \
 
 # Create working directory
 WORKDIR ${APP_ROOT}/src/app
-
+ENV FLASK_APP app.py
 # Run the server
 EXPOSE 5001 9191
 ENTRYPOINT /opt/app-root/src/app.sh
