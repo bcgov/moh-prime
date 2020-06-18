@@ -236,20 +236,11 @@ objects:
       - upgrade
       env:
         - name: CACHE_REDIS_HOST
-          valueFrom:
-            configMapKeyRef:
-              key: CACHE_REDIS_HOST
-              name: redis${SUFFIX}
+          value: "redis${SUFFIX}"
         - name: CACHE_REDIS_PASS
-          valueFrom:
-            secretKeyRef:
-              key: CACHE_REDIS_PASS
-              name: "redis-secret"
+          value: "prime"
         - name: CACHE_REDIS_PORT
-          valueFrom:
-            configMapKeyRef:
-              key: CACHE_REDIS_PORT
-              name: document-manager-backend--env-prime
+          value: "6379"
         - name: DB_HOST
           valueFrom:
             configMapKeyRef:
