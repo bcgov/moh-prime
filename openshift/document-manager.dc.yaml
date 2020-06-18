@@ -122,13 +122,13 @@ objects:
         containers:
         - env:
           - name: CACHE_REDIS_HOST
-            value: redis${SUFFIX}
+            value: "redis${SUFFIX}"
           - name: CACHE_REDIS_PASS
             value: "prime"
           - name: CACHE_REDIS_PORT
-            value: 6379
+            value: "6379"
           - name: DB_HOST
-            value: postgresql${SUFFIX}
+            value: "postgresql${SUFFIX}"
           - name: DB_NAME
             valueFrom:
               secretKeyRef: 
