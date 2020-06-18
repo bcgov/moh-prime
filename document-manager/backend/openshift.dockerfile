@@ -20,7 +20,7 @@ RUN set -x && \
     pip3 install -r requirements.txt
 
 # Create working directory
-WORKDIR ${APP_ROOT}/src/app
+WORKDIR ${APP_ROOT}/src
 ENV FLASK_APP app.py
 # Run the server
 EXPOSE 5001 9191

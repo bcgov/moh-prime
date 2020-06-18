@@ -22,7 +22,7 @@ RUN set -x && \
 #    source /opt/app-root/etc/scl_enable && \
 
 # Create working directory
-WORKDIR ${APP_ROOT}/src/app
+WORKDIR ${APP_ROOT}/src
 
 # Run the server
 EXPOSE 5001 9191
