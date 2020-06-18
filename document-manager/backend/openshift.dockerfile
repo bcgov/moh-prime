@@ -24,4 +24,4 @@ WORKDIR ${APP_ROOT}/src/app
 
 # Run the server
 EXPOSE 5001 9191
-ENTRYPOINT ${WORKDIR}/app.sh
+ENTRYPOINT ./app.sh
