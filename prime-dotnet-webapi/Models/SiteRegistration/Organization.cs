@@ -33,5 +33,8 @@ namespace Prime.Models
         public OrganizationType OrganizationType { get; set; }
 
         public IEnumerable<Location> Locations { get; set; }
+
+        [JsonIgnore]
+        public ICollection<SignedAgreement> SignedAgreements { get; set; }
     }
 }

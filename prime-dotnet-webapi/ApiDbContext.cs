@@ -89,6 +89,7 @@ namespace Prime
 
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
         public DbSet<BusinessLicence> BusinessLicences { get; set; }
+        public DbSet<SignedAgreement> SignedAgreements { get; set; }
 
         public override int SaveChanges()
         {
@@ -253,7 +254,7 @@ namespace Prime
             modelBuilder.Entity<Site>()
                 .HasOne(s => s.Vendor)
                 .WithMany(v => v.Sites)
-                .HasForeignKey(s => s.VendorId);
+                .HasForeignKey(s => s.VendorCode);
 
             modelBuilder.Entity<BusinessLicence>()
                 .HasOne(bl => bl.Site)

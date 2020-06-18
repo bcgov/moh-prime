@@ -176,7 +176,7 @@ export class SiteRegistrationStateService {
         physicalAddress,
         businessHours
       },
-      vendorId: vendor?.id,
+      vendorCode: vendor?.id,
       vendor,
       provisionerId: this.provisionerId,
       remoteUsers

@@ -62,11 +62,14 @@ RUN apt-get update && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
     apt-get install -yqq --no-install-recommends postgresql-client-10 net-tools moreutils && \
+    apt-get install -yf libfontconfig1 libxrender1 xvfb && \
+    chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
+    /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
     chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
     chmod -R 777 /var/run/ && \
     chmod -R 777 /opt/app-root && \
-    chmod -R 777 /opt/app-root/.* 
+    chmod -R 777 /opt/app-root/.*
 
 EXPOSE 8080 5001 1025
 ENTRYPOINT [ "./entrypoint.sh" ]

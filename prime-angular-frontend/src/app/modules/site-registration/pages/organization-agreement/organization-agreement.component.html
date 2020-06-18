@@ -3,17 +3,69 @@
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <ng-container *ngIf="!hasAcceptedAgreement; else continue">
-    <div class="organization-agreement"
-         [innerHTML]="organizationAgreement | safeHtml"></div>
 
-    <div class="footer mb-4">
-      <mat-checkbox #accept>
-        <div class="pl-3">
-          By checking here I agree to the terms of this Agreement as the duly authorized representative of the
-          Organization.
-        </div>
-      </mat-checkbox>
-    </div>
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Organization Agreement</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Does your organization have signing requirements that prevent you from signing an online agreement?
+        </ng-container>
+      </app-page-subheader2>
+
+      <mat-slide-toggle #canSignOnline
+                        color="primary"
+                        class="mt-3 mb-3"
+                        [checked]="true">
+        I can sign online agreements
+      </mat-slide-toggle>
+    </section>
+
+    <ng-container *ngIf="!canSignOnline.checked; else electronic">
+      <section class="mb-5">
+
+        <ng-container *ngIf="!hasDownloadedFile; else upload">
+          <p class="mb-4">
+            Download and print off the Organization Agreement for PharmaNet Use. Sign, and upload. You cannot make
+            changes to the agreement.
+          </p>
+
+          <div class="mb-2 row">
+            <div class="col">
+              <button mat-flat-button
+                      color="primary"
+                      (click)="onDownload()">Download Agreement</button>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #upload>
+          <p class="mb-3">
+            <strong>Upload the signed Organization Agreement here.</strong>
+          </p>
+
+          <file-pond #filePond
+                     [options]="filePondOptions"
+                     [files]="filePondFiles"
+                     (oninit)="onFilePondInit()"
+                     (onaddfile)="onFilePondAddFile($event)">
+          </file-pond>
+        </ng-template>
+      </section>
+    </ng-container>
+
+    <ng-template #electronic>
+      <div class="organization-agreement"
+           [innerHTML]="organizationAgreement | safeHtml"></div>
+
+      <div class="footer mb-4">
+        <mat-checkbox #accept>
+          <div class="pl-3">
+            By checking here I agree to the terms of this Agreement as the duly authorized representative of the
+            Organization.
+          </div>
+        </mat-checkbox>
+      </div>
+    </ng-template>
 
     <div class="row justify-content-end">
       <div class="col">
@@ -27,7 +79,7 @@
 
         <button mat-flat-button
                 color="primary"
-                [disabled]="!accept?.checked"
+                [disabled]="!accepted?.checked && !hasUploadedFile"
                 (click)="onSubmit()">Accept Organization Agreement</button>
 
       </div>

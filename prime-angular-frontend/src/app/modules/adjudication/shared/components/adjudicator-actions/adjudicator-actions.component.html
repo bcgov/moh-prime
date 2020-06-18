@@ -23,8 +23,8 @@
       <span>Decline Enrollee</span>
     </button>
     <button mat-menu-item
-            *ngIf="enrollee.currentStatus.statusCode !== EnrolmentStatus.LOCKED
-            && enrollee.currentStatus.statusCode !== EnrolmentStatus.DECLINED"
+            *ngIf="enrollee.currentStatus.statusCode !== EnrolmentStatus.LOCKED &&
+                   enrollee.currentStatus.statusCode !== EnrolmentStatus.DECLINED"
             [disabled]="!canEdit"
             (click)="onLock()">
       <mat-icon>lock</mat-icon>
@@ -57,6 +57,13 @@
       <mat-icon>flag</mat-icon>
       <span *ngIf="enrollee.alwaysManual">Unflag Enrollee</span>
       <span *ngIf="!enrollee.alwaysManual">Flag Enrollee</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            *ngIf="enrollee.currentStatus.statusCode === EnrolmentStatus.UNDER_REVIEW"
+            (click)="onRerunRules()">
+      <mat-icon>redo</mat-icon>
+      <span>Rerun Rules</span>
     </button>
     <button mat-menu-item
             *ngIf="canDelete"
