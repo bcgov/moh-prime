@@ -89,6 +89,9 @@ objects:
     - name: "6001"
       port: 6001
       targetPort: 6001
+    - name: "9191"
+      port: 9191
+      targetPort: 9191
     selector:
       io.kompose.service: "${NAME}${SUFFIX}-backend"
   status:
