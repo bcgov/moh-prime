@@ -1,14 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
-
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-
 import tus from 'tus-js-client';
 import { registerPlugin } from 'ngx-filepond';
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
@@ -16,19 +12,20 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 
 registerPlugin(FilePondPluginFileValidateType);
 
+import { environment } from '@env/environment';
+import { ToastService } from '@core/services/toast.service';
+import { UtilsService } from '@core/services/utils.service';
+import { LoggerService } from '@core/services/logger.service';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+
+import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { Organization } from '@registration/shared/models/organization.model';
-import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { LoggerService } from '@core/services/logger.service';
-import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
-import { environment } from '@env/environment';
-import { ToastService } from '@core/services/toast.service';
-import { HttpEventType } from '@angular/common/http';
-import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-organization-agreement',

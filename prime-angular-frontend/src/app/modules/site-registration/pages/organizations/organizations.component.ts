@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, from, EMPTY } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { User } from '@auth/shared/models/user.model';
 
@@ -12,7 +13,6 @@ import { Party } from '@registration/shared/models/party.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';

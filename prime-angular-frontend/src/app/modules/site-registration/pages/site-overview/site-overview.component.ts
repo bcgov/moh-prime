@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 

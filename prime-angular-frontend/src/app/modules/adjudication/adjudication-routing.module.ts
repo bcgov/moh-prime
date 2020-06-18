@@ -115,7 +115,7 @@ const routes: Routes = [
                 data: { title: 'Site Reigstration' }
               }
             ]
-          },
+          }
         ]
       },
       {
