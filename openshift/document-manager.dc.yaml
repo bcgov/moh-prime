@@ -198,6 +198,7 @@ objects:
           name: ${NAME}${SUFFIX}-backend
           ports:
           - containerPort: 6001
+          - containerPort: 9191
           resources: {}
           volumeMounts:
           - mountPath: /app/
