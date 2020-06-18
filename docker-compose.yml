@@ -110,7 +110,7 @@ services:
 ####################### DOCUMENT_MANAGER_BACKEND Definition #######################
   document_manager_backend:
     restart: always
-    container_name: document_manager_backend
+    container_name: document-manager-backend
     build:
       context: document-manager/backend
     ports:
@@ -123,7 +123,7 @@ services:
 
   document_manager_migrate:
     restart: on-failure
-    container_name: document_manager_migrate
+    container_name: document-manager-migrate
     build:
       context: document-manager/backend
     depends_on:

@@ -195,7 +195,7 @@ objects:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
           image: " "
-          name: document_manager_backend
+          name: document-manager-backend
           ports:
           - containerPort: 6001
           - containerPort: 9191
@@ -214,7 +214,7 @@ objects:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - document_manager_backend
+        - document-manager-backend
         from:
           kind: ImageStreamTag
           name: "${NAME}${SUFFIX}:latest"
