@@ -18,32 +18,32 @@ pipeline {
             options {
                 timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
             }
-                parallel {
-                    stage ('Build API') {
-                        agent { label 'master' }
-                        steps {
-                        script {
-                            echo "Building API..."
-                            sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                            }
+            parallel {
+                stage ('Build API') {
+                    agent { label 'master' }
+                    steps {
+                    script {
+                        echo "Building API..."
+                        sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                         }
                     }
-                    stage ('Build Frontend') {
-                        agent { label 'master' }
-                        steps {
-                        script {
-                            echo "Building Frontend..."
-                            sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                            }
+                }
+                stage ('Build Frontend') {
+                    agent { label 'master' }
+                    steps {
+                    script {
+                        echo "Building Frontend..."
+                        sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                         }
                     }
-                    stage ('Build Frontend') {
-                        agent { label 'master' }
-                        steps {
-                        script {
-                            echo "Building document-manager..."
-                            sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
-                        }            
+                }
+                stage ('Build Document Manager') {
+                    agent { label 'master' }
+                    steps {
+                    script {
+                        echo "Building Document Manager..."
+                        sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
+                        }
                     }
                 }
             }
@@ -81,7 +81,6 @@ pipeline {
                     sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                    */
                 }
             }
         }
