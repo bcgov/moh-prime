@@ -48,4 +48,25 @@ export class RouteUtils {
       ...navigationExtras
     });
   }
+
+  /**
+   * @description
+   * Update the query parameters on the current route without routing
+   * to a view. Query parameters are merged, but can be removed by
+   * setting the keys value to `null`.
+   */
+  public updateQueryParams(queryParams: { [key: string]: any }) {
+    // Passing `null` values removes the query parameter from the URL
+    queryParams = { ...this.route.snapshot.queryParams, ...queryParams };
+    this.router.navigate([], { queryParams });
+  }
+
+  /**
+   * @description
+   * Remove every query parameter on the current route without routing
+   * to a view.
+   */
+  public removeQueryParams() {
+    this.router.navigate([], { queryParams: {} });
+  }
 }
