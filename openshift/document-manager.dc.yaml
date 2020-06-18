@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 labels:
-  template: database-backup-template
+  template: document-manager-template
 metadata:
   name: document-manager-bc
   creationTimestamp: null
@@ -195,7 +195,7 @@ objects:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
           image: " "
-          name: ${NAME}${SUFFIX}-backend
+          name: ${NAME}${SUFFIX}
           ports:
           - containerPort: 6001
           - containerPort: 9191
