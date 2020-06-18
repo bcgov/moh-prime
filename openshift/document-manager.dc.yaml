@@ -220,7 +220,7 @@ objects:
           name: "${NAME}${SUFFIX}:latest"
       type: ImageChange
   status: {}
-  - apiVersion: v1
+- apiVersion: v1
   kind: Pod
   metadata:
     creationTimestamp: null
@@ -320,7 +320,7 @@ objects:
             secretKeyRef:
               key: JWT_WELL_KNOWN_CONFIG
               name: "keycloak"
-      image: ${NAME}${SUFFIX}-migrate
+      image: ${NAME}${SUFFIX}
       name: ${NAME}${SUFFIX}-migrate
       resources: {}
       volumeMounts:
