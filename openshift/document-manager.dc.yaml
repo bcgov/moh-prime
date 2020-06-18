@@ -194,8 +194,6 @@ objects:
               secretKeyRef:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
-          - name: FLASK_APP
-            value: app.py
           image: " "
           name: ${NAME}${SUFFIX}
           ports:
