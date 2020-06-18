@@ -26,5 +26,5 @@ WORKDIR ${APP_ROOT}/src/app
 
 # Run the server
 EXPOSE 5001 9191
-ENTRYPOINT ./app.sh
+ENTRYPOINT /opt/app-root/src/app.sh
 #CMD ["flask","run"]
