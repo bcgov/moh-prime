@@ -195,7 +195,7 @@ objects:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
           image: " "
-          name: ${NAME}${SUFFIX}
+          name: document_manager_backend
           ports:
           - containerPort: 6001
           - containerPort: 9191
