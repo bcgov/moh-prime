@@ -35,7 +35,8 @@ export class DocumentUploadComponent implements OnInit {
   public filePondUploadProgress = 0;
   public filePondFiles = [];
 
-  public componentName: string;
+  @Input() public componentName: string;
+  @Input() public multiple: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,9 +50,16 @@ export class DocumentUploadComponent implements OnInit {
   ) {
     this.filePondOptions = {
       class: `prime-filepond-${this.componentName}`,
-      multiple: true,
+      multiple: !!this.multiple,
       labelIdle: 'Click to Browse or Drop files here',
       acceptedFileTypes: ['image/jpeg', 'image/png'],
+      fileValidateTypeDetectType: (source: any, type: string) => new Promise((resolve, reject) => {
+        if (!type.includes('image')) {
+          this.toastService.openSuccessToast('File must be image');
+          reject(type);
+        }
+        resolve(type);
+      }),
       allowFileTypeValidation: true,
     };
   }

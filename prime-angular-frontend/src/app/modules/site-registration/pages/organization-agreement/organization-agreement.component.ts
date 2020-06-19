@@ -29,6 +29,7 @@ import { environment } from '@env/environment';
 import { ToastService } from '@core/services/toast.service';
 import { HttpEventType } from '@angular/common/http';
 import { UtilsService } from '@core/services/utils.service';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -106,46 +107,14 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     }
   }
 
-  public onFilePondInit() {
-    this.logger.info('FilePond has initialised', this.filePondComponent);
-  }
+  public onUpload(event: BaseDocument) {
+    const organizationId = this.organizationService.organization.id;
+    this.organizationResource
+      .addSignedAgreement(organizationId, event.documentGuid, event.filename)
+      .subscribe();
 
-  public async onFilePondAddFile(event: any) {
-    const token = await this.keycloakTokenService.token();
-    const file = event.file.file; // File for uploading
-    const { name: filename, type: filetype } = file;
-    if (this.filePondOptions.acceptedFileTypes.includes(filetype)) {
-      const upload = new tus.Upload(file, {
-        endpoint: `${environment.apiEndpoint}/document`,
-        retryDelays: [0, 3000, 5000, 10000, 20000],
-        metadata: { filename, filetype },
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          Authorization: `Bearer ${token}`,
-        },
-        onError: async (error: Error) => this.logger.error('UploadOrganizationAgreement::onFilePondAddFile', error),
-        // TODO throws an error intermittently so commented out for release
-        // this.toastService.openErrorToast(error.message),
-        onProgress: async (bytesUploaded: number, bytesTotal: number) =>
-          this.filePondUploadProgress = (bytesUploaded / bytesTotal * 100),
-        onSuccess: async () => {
-          this.filePondUploadProgress = 100;
-          this.toastService.openSuccessToast('File(s) have been uploaded');
-
-          const documentGuid = upload.url.split('/').pop();
-          console.log(this.organizationService.organization);
-          const organizationId = this.organizationService.organization.id;
-
-          this.organizationResource
-            .addSignedAgreement(organizationId, documentGuid, filename)
-            .subscribe();
-
-          this.hasUploadedFile = true;
-          this.hasNoUploadError = false;
-        }
-      });
-      upload.start();
-    }
+    this.hasUploadedFile = true;
+    this.hasNoUploadError = false;
   }
 
   public onDownload() {

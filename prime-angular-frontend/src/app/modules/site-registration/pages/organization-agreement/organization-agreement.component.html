@@ -43,12 +43,11 @@
             <strong>Upload the signed Organization Agreement here.</strong>
           </p>
 
-          <file-pond #filePond
-                     [options]="filePondOptions"
-                     [files]="filePondFiles"
-                     (oninit)="onFilePondInit()"
-                     (onaddfile)="onFilePondAddFile($event)">
-          </file-pond>
+          <app-document-upload (completed)="onUpload($event)"
+                               componentName="organization-agreement"
+                               multiple=false>
+          </app-document-upload>
+
         </ng-template>
       </section>
     </ng-container>

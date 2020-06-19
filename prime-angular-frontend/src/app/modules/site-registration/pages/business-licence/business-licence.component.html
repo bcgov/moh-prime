@@ -10,7 +10,8 @@
   </app-page-subheader2>
 
   <app-document-upload (completed)="onUpload($event)"
-                       componentName="business-licence">
+                       componentName="business-licence"
+                       multiple=false>
   </app-document-upload>
 
   <app-alert *ngIf="hasNoLicenceError"
