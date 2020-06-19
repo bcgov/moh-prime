@@ -39,12 +39,22 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
 
   public ngOnInit() { }
 
+  /**
+   * @description
+   * Determine the current route by removing query and URI params
+   * that can't be mapped to existing module routes.
+   */
   private getCurrentRoute(): string {
-    return this.router.url
+    const routerUrl = this.router.url;
+    return routerUrl
+      // Truncate query parameters
+      .split('?')
+      .shift()
+      // List the remaining URI params
       .split('/')
-      // Remove URL params that are numbers
+      // Remove URI params that are numbers
       .filter(p => !/^\d+$/.test(p))
-      // Blacklisted URL params
+      // Remove blacklisted URI params
       .filter(p => !['new'].includes(p))
       .pop(); // Current route is the last index
   }

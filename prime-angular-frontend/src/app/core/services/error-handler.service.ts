@@ -3,7 +3,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,16 +18,15 @@ export class ErrorHandlerService implements ErrorHandler {
   public handleError(error: Error | HttpErrorResponse) {
     const logger = this.injector.get(LoggerService);
     const router = this.injector.get(Router);
-    const toastService = this.injector.get(ToastService);
 
     if (error instanceof HttpErrorResponse) {
       // Server or connection error occurred
       if (!navigator.onLine) {
         // HTTP error intercept has occurred
-        return toastService.openErrorToast('No Internet Connection');
+        return logger.error('No Internet Connection');
       } else {
         // HTTP error has occurred (error.status = 403, 404, 500...)
-        return toastService.openErrorToast(`${error.status} - ${error.message}`);
+        return logger.error(`${error.status} - ${error.message}`);
       }
     } else {
       // Client error has occurred (Angular Error, ReferenceError...)
