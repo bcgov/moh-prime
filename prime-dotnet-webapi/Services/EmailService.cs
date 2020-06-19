@@ -219,12 +219,6 @@ namespace Prime.Services
                 throw new ArgumentException("Must specify at least one \"To\" email address.");
             }
 
-            // TODO temporarily only send emails to Anais just in case
-            var tempTo = new List<string>();
-            tempTo.Add("anais.hebert@nttdata.com");
-
-            to = tempTo;
-
             var fromAddress = new MailAddress(from);
             var toAddresses = to.Select(addr => new MailAddress(addr));
             var ccAddresses = cc.Select(addr => new MailAddress(addr));
@@ -234,9 +228,7 @@ namespace Prime.Services
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }
 
-            // If CHES Email Service is running and ENV == prod, else send through smtp
-            // PrimeConstants.ENVIRONMENT_NAME == "prod"
-
+            // If CHES Email Service is running and useCHES = true, else send through smtp
             if (PrimeConstants.USE_CHES == "true" && await _chesApiService.HealthCheckAsync())
             {
                 await _chesApiService.SendAsync(from, to, cc, subject, body, attachments);
@@ -245,14 +237,6 @@ namespace Prime.Services
             {
                 await _smtpService.SendAsync(from, to, cc, subject, body, attachments);
             }
-        }
-
-
-        public class EmailServiceException : Exception
-        {
-            public EmailServiceException() { }
-            public EmailServiceException(string message) : base(message) { }
-            public EmailServiceException(string message, Exception inner) : base(message, inner) { }
         }
     }
 }
