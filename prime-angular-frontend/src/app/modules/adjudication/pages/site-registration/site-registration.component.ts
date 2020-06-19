@@ -34,5 +34,4 @@ export class SiteRegistrationComponent extends AbstractComponent implements OnIn
       )
       .subscribe((site: Site) => this.site = site);
   }
-
 }
