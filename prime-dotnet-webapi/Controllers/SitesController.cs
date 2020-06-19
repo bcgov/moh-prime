@@ -38,6 +38,21 @@ namespace Prime.Controllers
             _emailService = emailService;
         }
 
+        // TODO Temporary endpoint for admins until fruit loops!!!
+        // GET: api/Sites
+        /// <summary>
+        /// Gets all of the Sites.
+        /// </summary>
+        [HttpGet(Name = nameof(GetAllSites))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Site>>> GetAllSites()
+        {
+            return Ok(ApiResponse.Result(await _siteService.GetSitesAsync()));
+        }
+
         // GET: api/Sites
         /// <summary>
         /// Gets all of the Sites for an organization, or all sites if user has ADMIN role
