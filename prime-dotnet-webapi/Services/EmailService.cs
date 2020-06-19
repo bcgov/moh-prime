@@ -213,10 +213,11 @@ namespace Prime.Services
             await Send(from, new[] { to }, new string[0], subject, body, attachments);
         }
 
-        private async Task Send(string from, IEnumerable<string> to, string subject, string body, IEnumerable<Attachment> attachments)
+        private async Task Send(string from, IEnumerable<string> to, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             await Send(from, to, new string[0], subject, body, attachments);
         }
+
         private async Task Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             if (!to.Any())
