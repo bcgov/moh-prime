@@ -35,7 +35,6 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
   @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
-  public columns: string[];
   public dataSource: MatTableDataSource<HttpEnrollee>;
 
   public showSearchFilter: boolean;
@@ -53,7 +52,6 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
     this.action = new EventEmitter<void>();
 
     this.hasActions = false;
-    this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
     this.dataSource = new MatTableDataSource<HttpEnrollee>([]);
 
     this.showSearchFilter = false;
