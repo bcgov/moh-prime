@@ -57,13 +57,17 @@ namespace Prime.Services
         private readonly IOrganizationService _organizationService;
         private readonly ICHESApiService _chesApiService;
 
+        private readonly ISMTPService _smtpService;
+
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
+            IRazorConverterService razorConverterService,
             IDocumentService documentService,
             IPdfService pdfService,
             IOrganizationService organizationService,
-            ICHESApiService chesApiService)
+            ICHESApiService chesApiService,
+            ISMTPService smtpService)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
@@ -71,6 +75,7 @@ namespace Prime.Services
             _pdfService = pdfService;
             _organizationService = organizationService;
             _chesApiService = chesApiService;
+            _smtpService = smtpService;
         }
 
         public static bool IsValidEmail(string email)
@@ -125,7 +130,7 @@ namespace Prime.Services
                 ? "/Views/Emails/OfficeManagerEmail.cshtml"
                 : "/Views/Emails/VendorEmail.cshtml";
             string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token, provisionerName));
-            await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<Attachment>());
+            await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
 
         // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
@@ -176,8 +181,8 @@ namespace Prime.Services
                 ("SiteRegistrationReview.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
                 ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(businessLicenceTemplate, businessLicenceDoc))
             }
-            .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)))
-            .Select(pdf => new Attachment(new MemoryStream(pdf.Content), pdf.Filename, "application/pdf"));
+            .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
+            // .Select(pdf => new Attachment(new MemoryStream(pdf.Content), pdf.Filename, "application/pdf"));
 
             await Send(PRIME_EMAIL, MOH_EMAIL, subject, body, attachments);
         }
@@ -199,20 +204,26 @@ namespace Prime.Services
 
         private async Task Send(string from, string to, string subject, string body)
         {
-            await Send(from, new[] { to }, new string[0], subject, body, Enumerable.Empty<Attachment>());
+            await Send(from, new[] { to }, new string[0], subject, body, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
 
-        private async Task Send(string from, string to, string subject, string body, IEnumerable<Attachment> attachments)
+        private async Task Send(string from, string to, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             await Send(from, new[] { to }, new string[0], subject, body, attachments);
         }
 
-        private async Task Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<Attachment> attachments)
+        private async Task Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             if (!to.Any())
             {
                 throw new ArgumentException("Must specify at least one \"To\" email address.");
             }
+
+            // TODO temporarily only send emails to Anais just in case
+            var tempTo = new List<string>();
+            tempTo.Add("anais.hebert@nttdata.com");
+
+            to = tempTo;
 
             var fromAddress = new MailAddress(from);
             var toAddresses = to.Select(addr => new MailAddress(addr));
@@ -225,56 +236,14 @@ namespace Prime.Services
 
             // If CHES Email Service is running and ENV == prod, else send through smtp
             // PrimeConstants.ENVIRONMENT_NAME == "prod"
-            if (await _chesApiService.HealthCheckAsync())
+
+            if (PrimeConstants.USE_CHES == "true" && await _chesApiService.HealthCheckAsync())
             {
-                await _chesApiService.SendAsync(from, to, cc, subject, body);
+                await _chesApiService.SendAsync(from, to, cc, subject, body, attachments);
             }
             else
             {
-                MailMessage mail = new MailMessage()
-                {
-                    From = fromAddress,
-                    Subject = subject,
-                    Body = body,
-                    IsBodyHtml = true,
-                };
-
-            foreach (var attachment in attachments)
-            {
-                mail.Attachments.Add(attachment);
-            }
-                foreach (var address in toAddresses)
-                {
-                    mail.To.Add(address);
-                }
-
-                foreach (var address in ccAddresses)
-                {
-                    mail.CC.Add(address);
-                }
-
-                SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL, PrimeConstants.MAIL_SERVER_PORT);
-                try
-                {
-                    await smtp.SendMailAsync(mail);
-                }
-                catch (Exception ex)
-                {
-                    if (ex is InvalidOperationException
-                        || ex is SmtpException
-                        || ex is SmtpFailedRecipientException
-                        || ex is SmtpFailedRecipientsException)
-                    {
-                        // TODO log mail exception
-                    }
-
-                    throw;
-                }
-                finally
-                {
-                    smtp.Dispose();
-                    mail.Dispose();
-                }
+                await _smtpService.SendAsync(from, to, cc, subject, body, attachments);
             }
         }
 

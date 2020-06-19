@@ -64,6 +64,7 @@ namespace Prime
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<ICHESApiService, CHESApiService>();
+            services.AddScoped<ISMTPService, SMTPService>();
 
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {

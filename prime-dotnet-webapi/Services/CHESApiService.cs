@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mail;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace Prime.Services
             values.Add(new KeyValuePair<string, string>("client_secret", PrimeConstants.PRIME_SERVICE_CLIENT));
             var content = new FormUrlEncodedContent(values);
 
-            Console.WriteLine("rimeConstants.OPEN_ID_URL: " + PrimeConstants.OPENID_API_URL);
+            Console.WriteLine("PrimeConstants.OPEN_ID_URL: " + PrimeConstants.OPENID_API_URL);
 
             var requestUri = new Uri(PrimeConstants.OPENID_API_URL + "/token");
 
@@ -67,10 +68,26 @@ namespace Prime.Services
             return client;
         }
 
-        public async Task SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body)
+        public async Task SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             Client = await InitHttpClientAsync();
-            var requestParams = new CHESEmailRequestParams(from, to, subject, body);
+
+            var chesAttachments = new List<CHESAttachment>();
+            foreach (var attachment in attachments)
+            {
+                var chesAttachment = new CHESAttachment()
+                {
+                    content = Convert.ToBase64String(attachment.Content),
+                    contentType = "application/pdf",
+                    encoding = "base64",
+                    filename = attachment.Filename
+                };
+
+                chesAttachments.Add(chesAttachment);
+            }
+
+            var requestParams = new CHESEmailRequestParams(from, to, subject, body, chesAttachments);
+
             var requestContent = new StringContent(JsonConvert.SerializeObject(requestParams), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = null;
@@ -111,7 +128,7 @@ namespace Prime.Services
 
     public class CHESEmailRequestParams
     {
-        public IEnumerable<Attachment> attachments { get; set; }
+        public IEnumerable<CHESAttachment> attachments { get; set; }
         public IEnumerable<string> bcc { get; set; }
         public string bodyType { get; set; }
         public string body { get; set; }
@@ -124,9 +141,9 @@ namespace Prime.Services
         public string tag { get; set; }
         public IEnumerable<string> to { get; set; }
 
-        public CHESEmailRequestParams(string from, IEnumerable<string> to, string subject, string body)
+        public CHESEmailRequestParams(string from, IEnumerable<string> to, string subject, string body, IEnumerable<CHESAttachment> attachments)
         {
-            attachments = new List<Attachment>();
+            this.attachments = attachments;
             bcc = new List<string>();
             bodyType = "html";
             this.body = body;
@@ -141,7 +158,7 @@ namespace Prime.Services
         }
     }
 
-    public class Attachment
+    public class CHESAttachment
     {
         public string content { get; set; }
         public string contentType { get; set; }

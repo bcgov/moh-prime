@@ -1,13 +1,11 @@
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using Prime.Models;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace Prime.Services
 {
-    public interface ICHESApiService
+    public interface ISMTPService
     {
         Task SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments);
-        Task<bool> HealthCheckAsync();
     }
 }
