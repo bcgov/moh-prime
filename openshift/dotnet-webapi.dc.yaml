@@ -190,7 +190,12 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       key: JWT_WELL_KNOWN_CONFIG
-                      name: "keycloak" 
+                      name: "keycloak"
+                - name: useCHES
+                  valueFrom:
+                    configMapKeyRef:
+                      key: USE_CHES
+                      name: ches-email-config
               image: " "
               name: primeapi
               ports:
