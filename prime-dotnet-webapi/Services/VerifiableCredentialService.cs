@@ -21,9 +21,9 @@ namespace Prime.Services
         Issued
     }
 
-    public class VerifiableCredentialsService : BaseService, IVerifiableCredentialService
+    public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
-        public VerifiableCredentialsService(
+        public VerifiableCredentialService(
             ApiDbContext context,
             IHttpContextAccessor httpContext)
             : base(context, httpContext)

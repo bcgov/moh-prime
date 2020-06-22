@@ -63,6 +63,7 @@ namespace Prime
             services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPdfService, PdfService>();
+            services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
 
             if (PrimeConstants.ENVIRONMENT_NAME == "local")
             {
