@@ -12,11 +12,12 @@ import tus from 'tus-js-client';
 import { EventEmitter } from '@angular/core';
 
 export class BaseDocument {
-  filename: string;
+  id: number;
+  fileName: string;
   documentGuid: string;
 
-  constructor(filename: string, documentGuid: string) {
-    this.filename = filename;
+  constructor(fileName: string, documentGuid: string) {
+    this.fileName = fileName;
     this.documentGuid = documentGuid;
   }
 }

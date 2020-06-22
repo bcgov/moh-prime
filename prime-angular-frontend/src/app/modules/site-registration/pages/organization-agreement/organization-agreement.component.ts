@@ -110,7 +110,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public onUpload(event: BaseDocument) {
     const organizationId = this.organizationService.organization.id;
     this.organizationResource
-      .addSignedAgreement(organizationId, event.documentGuid, event.filename)
+      .addSignedAgreement(organizationId, event.documentGuid, event.fileName)
       .subscribe();
 
     this.hasUploadedFile = true;

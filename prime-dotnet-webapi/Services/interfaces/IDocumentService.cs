@@ -10,5 +10,7 @@ namespace Prime.Services
         Task<IEnumerable<Document>> GetBusinessLicenceDocumentsBySiteId(int siteId);
         Task<Document> GetLatestBusinessLicenceDocumentBySiteId(int siteId);
         Task<Document> GetLatestSignedAgreementDocumentByOrganizationId(int organizationId);
+
+        Task<Document> GetDocumentBySelfDeclarationDocumentId(int selfDeclarationDocumentId);
     }
 }

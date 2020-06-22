@@ -36,7 +36,7 @@ namespace Prime.Services
 
             foreach (var licence in businessLicences)
             {
-                var document = await GetBusinessLicenceDocument(licence);
+                var document = await GetDocument(licence);
                 result.Add(document);
             };
 
@@ -46,42 +46,33 @@ namespace Prime.Services
         public async Task<Document> GetLatestBusinessLicenceDocumentBySiteId(int siteId)
         {
             var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
-            return await GetBusinessLicenceDocument(licence);
-        }
-
-        private async Task<Document> GetBusinessLicenceDocument(BusinessLicence licence)
-        {
-            var request = new HttpRequestMessage
-            {
-                RequestUri = new Uri($"{PrimeConstants.DOCUMENT_MANAGER_URL}?token={licence.DocumentGuid}"),
-                Method = HttpMethod.Get
-            };
-            var response = await _client.SendAsync(request);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                return new Document(licence.FileName, response.Content.ReadAsByteArrayAsync().Result);
-            }
-
-            return null;
+            return await GetDocument(licence);
         }
 
         public async Task<Document> GetLatestSignedAgreementDocumentByOrganizationId(int organizationId)
         {
             var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
-            return await GetSignedAgreementDocument(agreement);
+            return await GetDocument(agreement);
         }
 
-        private async Task<Document> GetSignedAgreementDocument(SignedAgreement agreement)
+        public async Task<Document> GetDocumentBySelfDeclarationDocumentId(int selfDeclarationDocumentId)
+        {
+            var selfDeclarationDocument = await _context.SelfDeclarationDocuments
+                .Where(sa => sa.Id == selfDeclarationDocumentId).SingleAsync();
+            return await GetDocument(selfDeclarationDocument);
+        }
+
+        private async Task<Document> GetDocument(BaseDocumentUpload baseDocumentUpload)
         {
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri($"{PrimeConstants.DOCUMENT_MANAGER_URL}?token={agreement.DocumentGuid}"),
+                RequestUri = new Uri($"{PrimeConstants.DOCUMENT_MANAGER_URL}?token={baseDocumentUpload.DocumentGuid}"),
                 Method = HttpMethod.Get
             };
             var response = await _client.SendAsync(request);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                return new Document(agreement.FileName, response.Content.ReadAsByteArrayAsync().Result);
+                return new Document(baseDocumentUpload.FileName, response.Content.ReadAsByteArrayAsync().Result);
             }
 
             return null;

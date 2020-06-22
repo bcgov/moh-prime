@@ -5,6 +5,10 @@ import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.mo
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { UtilsService } from '@core/services/utils.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 class Status {
   public date: string;
@@ -20,6 +24,7 @@ class Reason {
   public note: string;
   public isSelfDeclaration: boolean;
   public question: string;
+  public documents: SelfDeclarationDocument[];
 }
 
 @Component({
@@ -62,7 +67,18 @@ export class ReviewStatusContentComponent implements OnInit {
 
   }
 
-  constructor() { }
+  constructor(
+    private utilsService: UtilsService,
+    private enrolmentResource: EnrolmentResource,
+  ) { }
+
+  public downloadDocument(document: SelfDeclarationDocument) {
+    this.enrolmentResource.getSelfDeclarationDocument(this.enrollee.id, document.id)
+      .subscribe((base64: string) => {
+        const blob = this.utilsService.base64ToBlob(base64);
+        this.utilsService.downloadDocument(blob, document.fileName);
+      });
+  }
 
   public ngOnInit() {
   }
@@ -112,6 +128,10 @@ export class ReviewStatusContentComponent implements OnInit {
     }, []);
   }
 
+  private getDocumentsForSelfDeclaration(enrollee: Enrolment, code: SelfDeclarationTypeEnum) {
+    return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
+  }
+
 
   private parseDeclarations(enrollee: Enrolment): Reason[] {
     return enrollee.selfDeclarations.reduce((acc, decl: SelfDeclaration) => {
@@ -121,6 +141,7 @@ export class ReviewStatusContentComponent implements OnInit {
         conviction.isSelfDeclaration = true;
         conviction.note = decl.selfDeclarationDetails;
         conviction.question = this.convictionQ;
+        conviction.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_CONVICTION);
         acc.push(conviction);
       }
       if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED) {
@@ -129,6 +150,7 @@ export class ReviewStatusContentComponent implements OnInit {
         registationSuspended.isSelfDeclaration = true;
         registationSuspended.note = decl.selfDeclarationDetails;
         registationSuspended.question = this.registrationQ;
+        registationSuspended.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED);
         acc.push(registationSuspended);
       }
 
@@ -138,6 +160,7 @@ export class ReviewStatusContentComponent implements OnInit {
         disciplinaryAction.isSelfDeclaration = true;
         disciplinaryAction.note = decl.selfDeclarationDetails;
         disciplinaryAction.question = this.disciplinaryQ;
+        disciplinaryAction.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION);
         acc.push(disciplinaryAction);
       }
 
@@ -147,9 +170,9 @@ export class ReviewStatusContentComponent implements OnInit {
         pharmaNetSuspended.isSelfDeclaration = true;
         pharmaNetSuspended.note = decl.selfDeclarationDetails;
         pharmaNetSuspended.question = this.pharmanetQ;
+        pharmaNetSuspended.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED);
         acc.push(pharmaNetSuspended);
       }
-
       return acc;
     }, []);
 

@@ -6,20 +6,12 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("SignedAgreement")]
-    public class SignedAgreement : BaseAuditable
+    public class SignedAgreement : BaseDocumentUpload
     {
-        [Key]
-        public int Id { get; set; }
-
-        public Guid DocumentGuid { get; set; }
-
-        public string FileName { get; set; }
-
         public int OrganizationId { get; set; }
 
         [JsonIgnore]
         public Organization Organization { get; set; }
 
-        public DateTimeOffset UploadedDate { get; set; }
     }
 }

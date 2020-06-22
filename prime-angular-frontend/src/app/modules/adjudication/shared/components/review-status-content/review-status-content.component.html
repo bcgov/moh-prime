@@ -10,6 +10,14 @@
       <div *ngIf="reason.note">
         <span class="mb-2 font-weight-bolder" *ngIf="reason.isSelfDeclaration">User's Explanation:</span>
         <p class="pl-2">{{ reason.note }}</p>
+        <div class="pl-2 mb-2"
+             *ngFor="let document of reason.documents">
+          <button mat-stroked-button
+                  color="primary"
+                  (click)="downloadDocument(document)">
+            <mat-icon class="mr-1">attachment</mat-icon>{{document.fileName}}
+          </button>
+        </div>
       </div>
     </div>
   </div>

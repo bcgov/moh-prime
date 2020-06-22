@@ -223,7 +223,6 @@ export class SiteRegistrationResource {
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence[]>) => response.result),
         tap(() => this.toastService.openSuccessToast('Business licences Retrieved')),
-        tap((result: any) => console.log(result)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Business Licence could not be Retrieved');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinesssLicences error has occurred: ', error);

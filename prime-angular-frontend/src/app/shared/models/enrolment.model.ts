@@ -9,6 +9,7 @@ import { Organization } from '@enrolment/shared/models/organization.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { SelfDeclaration } from './self-declarations.model';
+import { SelfDeclarationDocument } from './self-declaration-document.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -23,6 +24,7 @@ export interface HttpEnrollee extends Enrollee {
   isInsulinPumpProvider: boolean;
   jobs: Job[];
   selfDeclarations: SelfDeclaration[];
+  selfDeclarationDocuments: SelfDeclarationDocument[];
   enrolleeOrganizationTypes: Organization[];
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
@@ -59,6 +61,7 @@ export interface Enrolment {
   jobs: Job[];
 
   selfDeclarations: SelfDeclaration[];
+  selfDeclarationDocuments: SelfDeclarationDocument[];
   organizations: Organization[];
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
