@@ -7,9 +7,8 @@ from flask import request, current_app, send_file, make_response, jsonify
 from flask_restplus import Resource, reqparse
 
 from app.docman.models.document import Document
-from app.extensions import api, cache
-from app.utils.access_decorators import requires_any_of, PRIME_DOC
-from app.constants import FILE_UPLOAD_SIZE, FILE_UPLOAD_OFFSET, FILE_UPLOAD_PATH, DOWNLOAD_TOKEN, TIMEOUT_24_HOURS, TUS_API_VERSION, TUS_API_SUPPORTED_VERSIONS, FORBIDDEN_FILETYPES
+from app.extensions import api, cache, jwt
+from app.constants import FILE_UPLOAD_SIZE, FILE_UPLOAD_OFFSET, FILE_UPLOAD_PATH, DOWNLOAD_TOKEN, TIMEOUT_5_MINUTES, TIMEOUT_24_HOURS, TUS_API_VERSION, TUS_API_SUPPORTED_VERSIONS, FORBIDDEN_FILETYPES
 
 
 @api.route('/documents')
@@ -18,49 +17,42 @@ class DocumentListResource(Resource):
     parser.add_argument(
         'folder', type=str, required=False, help='The sub folder path to store the document in.')
     parser.add_argument(
-        'pretty_folder',
-        type=str,
-        required=False,
-        help=
-        'The sub folder path to store the document in with the guids replaced for more readable names.'
-    )
-    parser.add_argument(
         'filename', type=str, required=False, help='File name + extension of the document.')
 
-    # @requires_any_of(
-    #     [PRIME_DOC])
+    @jwt.requires_auth
     def post(self):
         if request.headers.get('Tus-Resumable') is None:
             raise BadRequest('Received file upload for unsupported file transfer protocol')
 
         file_size = request.headers.get('Upload-Length')
-        max_file_size = current_app.config["MAX_CONTENT_LENGTH"]
         if not file_size:
             raise BadRequest('Received file upload of unspecified size')
         file_size = int(file_size)
+
+        max_file_size = current_app.config['MAX_FILE_SIZE']
         if file_size > max_file_size:
-            raise RequestEntityTooLarge(
-                f'The maximum file upload size is {max_file_size/1024/1024}MB.')
+            raise RequestEntityTooLarge(f'The maximum file upload size is {max_file_size/1024/1024}MB.')
 
         data = self.parser.parse_args()
-        filename = data.get('filename') or request.headers.get('Filename')
+        filename = data.get('filename')
         if not filename:
-            raise BadRequest('File name cannot be empty')
+            raise BadRequest('File name is required')
         if filename.endswith(FORBIDDEN_FILETYPES):
             raise BadRequest('File type is forbidden')
 
-        document_guid = str(uuid.uuid4())
         base_folder = current_app.config['UPLOADED_DOCUMENT_DEST']
-        folder = data.get('folder') or request.headers.get('Folder')
+        folder = data.get('folder')
         folder = os.path.join(base_folder, folder)
+        if not self.is_safe_path(base_folder, folder):
+          raise BadRequest('Supplied folder path is invalid')
+
+        document_guid = str(uuid.uuid4())
         file_path = os.path.join(folder, document_guid)
-        pretty_folder = data.get('pretty_folder') or request.headers.get('Pretty-Folder')
-        pretty_path = os.path.join(base_folder, pretty_folder, filename)
 
         try:
             if not os.path.exists(folder):
                 os.makedirs(folder)
-            with open(file_path, "wb") as f:
+            with open(file_path, 'wb') as f:
                 f.seek(file_size - 1)
                 f.write(b"\0")
         except IOError as e:
@@ -70,57 +62,48 @@ class DocumentListResource(Resource):
         cache.set(FILE_UPLOAD_OFFSET(document_guid), 0, TIMEOUT_24_HOURS)
         cache.set(FILE_UPLOAD_PATH(document_guid), file_path, TIMEOUT_24_HOURS)
 
-        document_info = Document(
+        document = Document(
             document_guid=document_guid,
             full_storage_path=file_path,
             upload_started_date=datetime.utcnow(),
-            file_display_name=filename,
-            path_display_name=pretty_path,
+            filename=filename,
         )
-        document_info.save()
+        document.save()
 
-        response = make_response(jsonify(document_manager_guid=document_guid), 201)
+        response = make_response(jsonify(document_guid=document_guid), 201)
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
-        response.headers[
-            'Location'] = f'{current_app.config["DOCUMENT_MANAGER_URL"]}/documents/{document_guid}'
+        response.headers['Location'] = f'{current_app.config["DOCUMENT_MANAGER_URL"]}/documents/{document_guid}'
         response.headers['Upload-Offset'] = 0
-        response.headers[
-            'Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Location,Upload-Offset"
+        response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Location,Upload-Offset"
         response.autocorrect_location_header = False
         return response
 
-    def get(self):
-        doc_guid = request.args.get('token', '')
-        attachment = request.args.get('as_attachment', None)
-        # doc_guid = cache.get(DOWNLOAD_TOKEN(token_guid))
-        # cache.delete(DOWNLOAD_TOKEN(token_guid))
-
-        if not doc_guid:
-            raise BadRequest('Valid token required for download')
-
-        doc = Document.query.filter_by(document_guid=doc_guid).first()
-        if not doc:
-            raise NotFound('Could not find the document corresponding to the token')
-        if attachment is not None:
-            attach_style = True if attachment == 'true' else False
-        else:
-            attach_style = '.pdf' not in doc.file_display_name.lower()
-
-        return send_file(
-            filename_or_fp=doc.full_storage_path,
-            attachment_filename=doc.file_display_name,
-            as_attachment=attach_style)
+    # Ensure that a given path lies under a given base directory (and so has not been manipulated in a manner such as 'app/document_uploads/../../etc')
+    def is_safe_path(self, basedir, path):
+      return os.path.abspath(path).startswith(basedir)
 
 
 @api.route(f'/documents/<string:document_guid>')
 class DocumentResource(Resource):
-    # @requires_any_of(
-    #     [PRIME_DOC])
+    @jwt.requires_auth
+    def get(self, document_guid):
+        if not document_guid:
+            raise BadRequest('Document GUID is required')
+
+        doc = Document.find_by_document_guid(document_guid)
+        if not doc:
+            raise NotFound()
+
+        return send_file(
+            filename_or_fp=doc.full_storage_path,
+            attachment_filename=doc.filename,
+            as_attachment=False)
+
     def patch(self, document_guid):
         file_path = cache.get(FILE_UPLOAD_PATH(document_guid))
         if file_path is None or not os.path.lexists(file_path):
-            raise NotFound('PATCH sent for a upload that does not exist')
+            raise NotFound('PATCH sent for an upload that does not exist')
 
         request_offset = int(request.headers.get('Upload-Offset', 0))
         file_offset = cache.get(FILE_UPLOAD_OFFSET(document_guid))
@@ -135,8 +118,7 @@ class DocumentResource(Resource):
         new_offset = file_offset + chunk_size
         file_size = cache.get(FILE_UPLOAD_SIZE(document_guid))
         if new_offset > file_size:
-            raise RequestEntityTooLarge(
-                'The uploaded chunk would put the file above its declared file size.')
+            raise RequestEntityTooLarge('The uploaded chunk would put the file above its declared file size.')
 
         try:
             with open(file_path, "r+b") as f:
@@ -162,12 +144,9 @@ class DocumentResource(Resource):
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
         response.headers['Upload-Offset'] = new_offset
-        response.headers[
-            'Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Upload-Offset"
+        response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Upload-Offset"
         return response
 
-    # @requires_any_of(
-    #     [PRIME_DOC])
     def head(self, document_guid):
         if document_guid is None:
             raise BadRequest('Must specify document GUID in HEAD')
@@ -182,8 +161,7 @@ class DocumentResource(Resource):
         response.headers['Upload-Offset'] = cache.get(FILE_UPLOAD_OFFSET(document_guid))
         response.headers['Upload-Length'] = cache.get(FILE_UPLOAD_SIZE(document_guid))
         response.headers['Cache-Control'] = 'no-store'
-        response.headers[
-            'Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Upload-Offset,Upload-Length,Cache-Control"
+        response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Upload-Offset,Upload-Length,Cache-Control"
         return response
 
     def options(self, document_guid):
@@ -196,8 +174,42 @@ class DocumentResource(Resource):
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
         response.headers['Tus-Extension'] = "creation"
-        response.headers['Tus-Max-Size'] = current_app.config["MAX_CONTENT_LENGTH"]
-        response.headers[
-            'Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Tus-Extension,Tus-Max-Size"
+        response.headers['Tus-Max-Size'] = current_app.config["MAX_FILE_SIZE"]
+        response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Tus-Extension,Tus-Max-Size"
         response.status_code = 204
         return response
+
+
+@api.route(f'/documents/<string:document_guid>/download-token')
+class DownloadTokenCreationResource(Resource):
+    @jwt.requires_auth
+    def post(self, document_guid):
+        if not document_guid:
+            raise BadRequest('Must specify document GUID')
+
+        token = str(uuid.uuid4())
+        cache.set(DOWNLOAD_TOKEN(token), document_guid, TIMEOUT_5_MINUTES)
+
+        return {'token': token}
+
+
+@api.route(f'/documents/downloads/<string:token>')
+class DocumentDownloadResource(Resource):
+    def get(self, token):
+        if not token:
+            raise BadRequest('Must specify token')
+
+        doc_guid = cache.get(DOWNLOAD_TOKEN(token))
+        cache.delete(DOWNLOAD_TOKEN(token))
+
+        if not doc_guid:
+            raise NotFound('Could not find token')
+
+        doc = Document.find_by_document_guid(doc_guid)
+        if not doc:
+            raise NotFound('Could not find document')
+
+        return send_file(
+            filename_or_fp=doc.full_storage_path,
+            attachment_filename=doc.filename,
+            as_attachment=True)

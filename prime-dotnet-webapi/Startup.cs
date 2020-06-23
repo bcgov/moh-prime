@@ -22,8 +22,9 @@ using Prime.Services;
 using Prime.Services.Clients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
-using System.Text;
 using System.Net.Http.Headers;
+using IdentityModel.Client;
+using IdentityModel;
 using Microsoft.Extensions.FileProviders;
 
 namespace Prime
@@ -64,20 +65,7 @@ namespace Prime
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPdfService, PdfService>();
 
-            if (PrimeConstants.ENVIRONMENT_NAME == "local")
-            {
-                services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
-            }
-            else
-            {
-                services.AddTransient<CollegeLicenceClientHandler>()
-                .AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
-                {
-                    var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.PHARMANET_API_USERNAME}:{PrimeConstants.PHARMANET_API_PASSWORD}");
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
-                })
-                .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
-            }
+            ConfigureClients(services);
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -122,6 +110,38 @@ namespace Prime
             this.ConfigureDatabase(services);
 
             AuthenticationSetup.Initialize(services, Configuration, Environment);
+        }
+
+        protected void ConfigureClients(IServiceCollection services)
+        {
+            if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            {
+                services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
+            }
+            else
+            {
+                services.AddTransient<CollegeLicenceClientHandler>()
+                .AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
+                {
+                    client.SetBasicAuthentication(PrimeConstants.PHARMANET_API_USERNAME, PrimeConstants.PHARMANET_API_PASSWORD);
+                })
+                .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
+            }
+
+            services.AddTransient<DocumentManagerBearerTokenHandler>()
+            .AddHttpClient<IDocumentManagerClient, DocumentManagerClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeConstants.DOCUMENT_MANAGER_URL.EnsureTrailingSlash());
+            })
+            .AddHttpMessageHandler<DocumentManagerBearerTokenHandler>();
+
+            services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
+            services.AddSingleton(new DocumentManagerClientCredentials
+            {
+                Address = "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token",
+                ClientId = PrimeConstants.DOCUMENT_MANAGER_CLIENT_ID,
+                ClientSecret = PrimeConstants.DOCUMENT_MANAGER_CLIENT_SECRET,
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
