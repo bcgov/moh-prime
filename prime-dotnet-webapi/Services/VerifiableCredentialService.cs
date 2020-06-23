@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 using Prime.Models;
+using Prime.Services.Clients;
+using Newtonsoft.Json.Linq;
 
 namespace Prime.Services
 {
@@ -23,11 +25,20 @@ namespace Prime.Services
 
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
+        private readonly IVerifiableCredentialClient _verifiableCredentialClient;
         public VerifiableCredentialService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            IVerifiableCredentialClient verifiableCredentialClient)
             : base(context, httpContext)
-        { }
+        {
+            _verifiableCredentialClient = verifiableCredentialClient;
+        }
+
+        public async Task<JObject> CreateInvitation()
+        {
+            return await _verifiableCredentialClient.CreateInvitation();
+        }
 
         // TODO temporary data object provided, and return type
         // @see https://github.com/esune/issuer-kit/blob/api-refactor/api/src/services/webhooks/webhooks.class.ts#L30

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Newtonsoft.Json.Linq;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -23,6 +23,22 @@ namespace Prime.Controllers
         )
         {
             _verifiableCredentialsService = verifiableCredentialService;
+        }
+
+        // POST: api/connections/create-invitation
+        /// <summary>
+        ///
+        /// </summary>
+        [HttpPost("/api/connections/create-invitation", Name = nameof(CreateInvitation))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<JObject>> CreateInvitation()
+        {
+
+            var response = await _verifiableCredentialsService.CreateInvitation();
+
+            return Ok(ApiResponse.Result(response));
         }
 
         // POST: api/topic/:topic

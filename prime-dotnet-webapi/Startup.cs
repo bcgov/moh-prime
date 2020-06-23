@@ -80,6 +80,12 @@ namespace Prime
                 .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
             }
 
+            services.AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeConstants.VERIFIABLE_CREDENTIAL_API_URL);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("x-api-key", PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY);
+            });
+
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {

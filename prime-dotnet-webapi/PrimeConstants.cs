@@ -22,6 +22,7 @@ namespace Prime
         public readonly static string PHARMANET_SSL_CERT_FILENAME = Environment.GetEnvironmentVariable("PHARMANET_SSL_CERT_FILENAME") ?? "";
         public readonly static string PHARMANET_SSL_CERT_PASSWORD = Environment.GetEnvironmentVariable("PHARMANET_SSL_CERT_PASSWORD") ?? "";
 
+
         // Logging
         public readonly static string LOG_FILE_PATH = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
@@ -29,6 +30,8 @@ namespace Prime
         // TODO: Have this in a config!
         public readonly static string DOCUMENT_MANAGER_URL = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_URL") ?? "http://localhost:6001/documents";
 
+        // Aries Prime Agent
+        public readonly static string VERIFIABLE_CREDENTIAL_API_URL = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "https://prime-agent-admin-dev.pathfinder.gov.bc.ca/";
         public readonly static string VERIFIABLE_CREDENTIAL_API_KEY = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_KEY") ?? "P8ZmRJ05biXGWI1/bDtXcp1pixtWdsAqhcUJcn4S7QQ=";
     }
 }
