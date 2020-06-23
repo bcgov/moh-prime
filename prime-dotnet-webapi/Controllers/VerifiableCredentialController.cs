@@ -29,14 +29,14 @@ namespace Prime.Controllers
         /// <summary>
         ///
         /// </summary>
-        [HttpPost("/api/connections/create-invitation", Name = nameof(CreateInvitation))]
+        [HttpPost("/api/connections/create-connection", Name = nameof(CreateConnection))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<JObject>> CreateInvitation()
+        public async Task<ActionResult<JObject>> CreateConnection()
         {
 
-            var response = await _verifiableCredentialsService.CreateInvitation();
+            var response = await _verifiableCredentialsService.CreateConnection();
 
             return Ok(ApiResponse.Result(response));
         }

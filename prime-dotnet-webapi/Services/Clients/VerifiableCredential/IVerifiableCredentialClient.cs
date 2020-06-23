@@ -7,5 +7,7 @@ namespace Prime.Services.Clients
     public interface IVerifiableCredentialClient
     {
         Task<JObject> CreateInvitation();
+        Task<JObject> ReceiveInvitation(string invitation);
+        Task<JObject> AcceptInvitation(string connection_id);
     }
 }

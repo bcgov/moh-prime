@@ -35,10 +35,26 @@ namespace Prime.Services
             _verifiableCredentialClient = verifiableCredentialClient;
         }
 
-        public async Task<JObject> CreateInvitation()
+        public async Task<JObject> CreateConnection()
         {
-            return await _verifiableCredentialClient.CreateInvitation();
+            var invitationResponse = await _verifiableCredentialClient.CreateInvitation();
+            var invitation = invitationResponse.GetValue("invitation");
+
+            if (invitation != null)
+            {
+                var receiveResponse = await _verifiableCredentialClient.ReceiveInvitation(invitation.ToString());
+                var connection_id = receiveResponse.GetValue("connection_id");
+
+                if (connection_id != null)
+                {
+                    var acceptResponse = await _verifiableCredentialClient.AcceptInvitation(connection_id.ToString());
+                    return acceptResponse;
+                }
+            }
+
+            return invitationResponse;
         }
+
 
         // TODO temporary data object provided, and return type
         // @see https://github.com/esune/issuer-kit/blob/api-refactor/api/src/services/webhooks/webhooks.class.ts#L30

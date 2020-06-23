@@ -44,8 +44,57 @@ namespace Prime.Services.Clients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
             }
 
-            JObject joResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
-            return joResponse;
+            return JObject.Parse(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<JObject> ReceiveInvitation(String invitation)
+        {
+            var httpContent = new StringContent(invitation);
+            httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.PostAsync("connections/receive-invitation", httpContent);
+            }
+            catch (Exception ex)
+            {
+                await LogError(httpContent, response, ex);
+                throw new VerifiableCredentialApiException("Error occurred when calling Verfiable Credential API. Try again later.", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(httpContent, response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
+            }
+
+            return JObject.Parse(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<JObject> AcceptInvitation(String connection_id)
+        {
+            var httpContent = new StringContent("");
+            httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.PostAsync($"connections/{connection_id}/accept-invitation", httpContent);
+            }
+            catch (Exception ex)
+            {
+                await LogError(httpContent, response, ex);
+                throw new VerifiableCredentialApiException("Error occurred when calling Verfiable Credential API. Try again later.", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(httpContent, response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
+            }
+
+            return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
         // TODO use real logger
