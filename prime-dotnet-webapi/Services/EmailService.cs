@@ -47,6 +47,7 @@ namespace Prime.Services
     public class EmailService : BaseService, IEmailService
     {
         private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
+        private const string PRIME_SUPPORT_EMAIL = "primesupport@gov.bc.ca";
         private const string MOH_EMAIL = "HLTH.HnetConnection@gov.bc.ca";
         private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
@@ -174,7 +175,7 @@ namespace Prime.Services
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)))
             .Select(pdf => new Attachment(new MemoryStream(pdf.Content), pdf.Filename, "application/pdf"));
 
-            await Send(PRIME_EMAIL, MOH_EMAIL, subject, body, attachments);
+            await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
         }
 
         public async Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName)
@@ -200,6 +201,11 @@ namespace Prime.Services
         private async Task Send(string from, string to, string subject, string body, IEnumerable<Attachment> attachments)
         {
             await Send(from, new[] { to }, new string[0], subject, body, attachments);
+        }
+
+        private async Task Send(string from, IEnumerable<string> to, string subject, string body, IEnumerable<Attachment> attachments)
+        {
+            await Send(from, to, new string[0], subject, body, attachments);
         }
 
         private async Task Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<Attachment> attachments)

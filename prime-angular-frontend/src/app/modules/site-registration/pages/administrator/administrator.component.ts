@@ -84,7 +84,10 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   public onClear() {
     this.form.reset({
       id: 0,
-      userId: '00000000-0000-0000-0000-000000000000'
+      userId: '00000000-0000-0000-0000-000000000000',
+      physicalAddress: {
+        id: 0
+      }
     });
     this.form.enable();
   }
