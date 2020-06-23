@@ -40,19 +40,21 @@ namespace Prime.Services
             var invitationResponse = await _verifiableCredentialClient.CreateInvitation();
             var invitation = invitationResponse.GetValue("invitation");
 
-            if (invitation != null)
+            if (invitation == null)
             {
-                var receiveResponse = await _verifiableCredentialClient.ReceiveInvitation(invitation.ToString());
-                var connection_id = receiveResponse.GetValue("connection_id");
-
-                if (connection_id != null)
-                {
-                    var acceptResponse = await _verifiableCredentialClient.AcceptInvitation(connection_id.ToString());
-                    return acceptResponse;
-                }
+                return invitationResponse;
             }
 
-            return invitationResponse;
+            var receiveResponse = await _verifiableCredentialClient.ReceiveInvitation(invitation.ToString());
+            var connection_id = receiveResponse.GetValue("connection_id");
+
+            if (connection_id == null)
+            {
+                return receiveResponse;
+            }
+
+            var acceptResponse = await _verifiableCredentialClient.AcceptInvitation(connection_id.ToString());
+            return acceptResponse;
         }
 
 
