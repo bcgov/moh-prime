@@ -44,7 +44,7 @@ namespace Prime.Services.Clients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
             }
 
-            JObject joResponse = JObject.Parse(response.ToString());
+            JObject joResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
             return joResponse;
         }
 

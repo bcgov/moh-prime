@@ -83,7 +83,10 @@ namespace Prime
             services.AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
             {
                 client.BaseAddress = new Uri(PrimeConstants.VERIFIABLE_CREDENTIAL_API_URL);
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("x-api-key", PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY);
+
+                // var authBytes = ASCIIEncoding.ASCII.GetBytes(PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY);
+                // client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("x-api-key", Convert.ToBase64String(authBytes));
+                client.DefaultRequestHeaders.Add("x-api-key", PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY);
             });
 
             services.AddControllers()
