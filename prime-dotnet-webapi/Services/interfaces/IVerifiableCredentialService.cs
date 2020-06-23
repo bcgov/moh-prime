@@ -7,6 +7,6 @@ namespace Prime.Services
     public interface IVerifiableCredentialService
     {
         Task<JObject> CreateConnection();
-        Task<bool> create(Object data, WebhookTopic topic);
+        Task<bool> create(JObject data, WebhookTopic topic);
     }
 }

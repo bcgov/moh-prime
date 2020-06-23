@@ -9,5 +9,6 @@ namespace Prime.Services.Clients
         Task<JObject> CreateInvitation();
         Task<JObject> ReceiveInvitation(string invitation);
         Task<JObject> AcceptInvitation(string connection_id);
+        Task<JObject> AcceptRequest(string connection_id);
     }
 }

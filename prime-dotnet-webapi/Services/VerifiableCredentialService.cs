@@ -60,7 +60,7 @@ namespace Prime.Services
 
         // TODO temporary data object provided, and return type
         // @see https://github.com/esune/issuer-kit/blob/api-refactor/api/src/services/webhooks/webhooks.class.ts#L30
-        public async Task<bool> create(Object data, WebhookTopic topic)
+        public async Task<bool> create(JObject data, WebhookTopic topic)
         {
             switch (topic)
             {
@@ -76,9 +76,10 @@ namespace Prime.Services
 
         // TODO temporary data object provided, and return type
         // @see https://github.com/esune/issuer-kit/blob/api-refactor/api/src/services/webhooks/webhooks.class.ts#L44
-        private async Task<bool> handleConnection(Object data)
+        private async Task<bool> handleConnection(JObject data)
         {
             // TODO implement connection webhook logic
+            var response = await _verifiableCredentialClient.AcceptRequest(data.GetValue("connection_id").ToString());
             return await Task.FromResult(true);
         }
 

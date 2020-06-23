@@ -52,7 +52,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> Create(WebhookTopic topic, [FromBody] Object data)
+        public async Task<ActionResult> Create(WebhookTopic topic, [FromBody] JObject data)
         {
             // TODO what are we going to get?
             // TODO how do we determine the topic?
