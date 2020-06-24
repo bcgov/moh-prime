@@ -87,8 +87,6 @@ objects:
               secretKeyRef:
                 key: KEYCLOAK_URL
                 name: "keycloak"
-          - name: DOCUMENT_MANAGER_URL
-            value: http://document-manager${SUFFIX}-backend:6001
           image: " "
           name: primeweb
           ports:
