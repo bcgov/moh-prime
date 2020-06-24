@@ -66,7 +66,7 @@ namespace Prime.Services
             return sendResponse;
         }
 
-        public async Task<bool> Create(JObject data, WebhookTopic topic)
+        public async Task<bool> Create(JObject data, string topic)
         {
             switch (topic)
             {

@@ -8,6 +8,6 @@ namespace Prime.Services
     {
         Task<JObject> CreateConnection();
         Task<JObject> SendCredential(String gpid);
-        Task<bool> Create(JObject data, WebhookTopic topic);
+        Task<bool> Create(JObject data, string topic);
     }
 }
