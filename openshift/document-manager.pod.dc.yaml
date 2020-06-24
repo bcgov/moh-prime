@@ -254,6 +254,8 @@ objects:
       - flask
       - db
       - upgrade
+      command: 
+        - flask db upgrade
       env:
         - name: CACHE_REDIS_HOST
           valueFrom:
