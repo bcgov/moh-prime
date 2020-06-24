@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
@@ -31,10 +32,11 @@ export class SiteAdjudicationComponent implements OnInit {
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const siteId = this.route.snapshot.params.sid;
-      console.log(this.form.value.pec, this.form.value);
-
-      this.siteResource.updatePecCode(siteId, this.form.value.pec)
-        .pipe()
+      this.busy = this.siteResource
+        .updatePecCode(siteId, this.form.value.pec)
+        .pipe(
+          exhaustMap(() => this.getSite())
+        )
         .subscribe();
     }
   }
@@ -42,8 +44,7 @@ export class SiteAdjudicationComponent implements OnInit {
   public ngOnInit(): void {
     this.createFormInstance();
 
-    const siteId = this.route.snapshot.params.sid;
-    this.busy = this.siteResource.getSiteById(siteId)
+    this.busy = this.getSite()
       .subscribe((site: Site) => this.form.patchValue(site));
   }
 
@@ -54,5 +55,10 @@ export class SiteAdjudicationComponent implements OnInit {
         [Validators.required]
       ]
     });
+  }
+
+  private getSite(): Observable<Site> {
+    const siteId = this.route.snapshot.params.sid;
+    return this.siteResource.getSiteById(siteId);
   }
 }
