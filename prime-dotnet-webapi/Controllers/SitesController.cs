@@ -38,7 +38,8 @@ namespace Prime.Controllers
             _emailService = emailService;
         }
 
-        // TODO Temporary endpoint for admins until fruit loops!!!
+        // Temporary endpoint for admins until fruit loops, and the organizations query can provide org, location, and site!!!
+        // James avert your eyes!  This is not the code you're looking for...
         // GET: api/Sites
         /// <summary>
         /// Gets all of the Sites.
@@ -50,6 +51,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Site>>> GetAllSites()
         {
+            // JAMES! Why are you still looking at this code :)
             return Ok(ApiResponse.Result(await _siteService.GetSitesAsync()));
         }
 
