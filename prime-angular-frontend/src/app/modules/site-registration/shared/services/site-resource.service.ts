@@ -167,7 +167,7 @@ export class SiteResource {
   // TODO probably not the best name or messages for this endpoint
   public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
     const payload = { data: pecCode };
-    return this.apiResource.put<Site>(`sites/${siteId}/pec`, { payload })
+    return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         tap((site: Site) => {
