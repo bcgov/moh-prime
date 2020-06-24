@@ -31,6 +31,9 @@ case "$1" in
     functionTest)
         functionTest $@
         ;;
+    fsparsify)
+        sparsify $@
+        ;;
     *)
     echo "You\'re doing it wrong..."
 esac
