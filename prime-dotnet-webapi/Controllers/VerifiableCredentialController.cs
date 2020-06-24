@@ -27,7 +27,7 @@ namespace Prime.Controllers
 
         // POST: api/connections/create-invitation
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [HttpPost("/api/connections/create-connection", Name = nameof(CreateConnection))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -53,7 +53,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Create(WebhookTopic topic, [FromBody] JObject data)
         {
-            await _verifiableCredentialsService.create(data, topic);
+            await _verifiableCredentialsService.Create(data, topic);
 
             return NoContent();
         }

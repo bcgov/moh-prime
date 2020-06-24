@@ -26,7 +26,7 @@ namespace Prime.Services
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
-        
+
         public VerifiableCredentialService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
@@ -65,7 +65,7 @@ namespace Prime.Services
             return sendResponse;
         }
 
-        public async Task<bool> create(JObject data, WebhookTopic topic)
+        public async Task<bool> Create(JObject data, WebhookTopic topic)
         {
             switch (topic)
             {
