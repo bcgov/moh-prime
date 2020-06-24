@@ -29,6 +29,7 @@ export class OrganizationsComponent implements OnInit {
   // TODO only for single organization then remove
   public sites: Site[];
   public hasSubmittedSite: boolean;
+  public hasSignedOrganizationAgreement: boolean;
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
 
@@ -102,7 +103,8 @@ export class OrganizationsComponent implements OnInit {
     this.organizationFormStateService.init();
 
     this.hasSubmittedSite = this.route.snapshot.queryParams?.submitted;
-    this.router.navigate([], { queryParams: { submitted: null } });
+    this.hasSignedOrganizationAgreement = this.route.snapshot.queryParams?.signed;
+    this.router.navigate([], { queryParams: { submitted: null, signed: null } });
 
     this.busy = this.organizationResource.getOrganizations()
       .pipe(
