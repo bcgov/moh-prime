@@ -11,7 +11,8 @@
                    (refresh)="onRefresh()"></app-search-form>
 
   <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
-                               [dataSource]="dataSource"></app-site-registration-table>
+                               [dataSource]="dataSource"
+                               (delete)="onDelete($event)"></app-site-registration-table>
 
   <ng-container *ngIf="content">
 

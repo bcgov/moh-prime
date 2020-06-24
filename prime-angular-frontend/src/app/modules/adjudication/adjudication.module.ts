@@ -55,8 +55,8 @@ import { SiteRegistrationActionsComponent } from './shared/components/site-regis
   ],
   imports: [
     SharedModule,
-    AdjudicationRoutingModule,
-    EditorModule
+    EditorModule,
+    AdjudicationRoutingModule
   ]
 })
 export class AdjudicationModule { }

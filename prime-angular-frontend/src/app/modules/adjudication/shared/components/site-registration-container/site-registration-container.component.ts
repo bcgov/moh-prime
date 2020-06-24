@@ -15,12 +15,10 @@ import { NoteComponent } from '@shared/components/dialogs/content/note/note.comp
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
-import { Location } from '@registration/shared/models/location.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-data-source-utils.class';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -46,7 +44,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
-    // private adjudicationResource: AdjudicationResource,
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource,
     private dialog: MatDialog
@@ -76,7 +73,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
   }
 
-  // TODO
   public onDelete(siteId: number) {
     const data: DialogOptions = {
       ...this.defaultOptions.delete('site'),
@@ -99,7 +95,10 @@ export class SiteRegistrationContainerComponent implements OnInit {
           // }),
           exhaustMap(() => this.siteResource.deleteSite(siteId))
         )
-        .subscribe(() => this.routeUtils.routeRelativeTo(AdjudicationRoutes.SITE_REGISTRATIONS));
+        .subscribe(() =>
+          this.dataSource.data = MatTableDataSourceUtils
+            .delete<Site>(this.dataSource, 'id', siteId)
+        );
     }
   }
 

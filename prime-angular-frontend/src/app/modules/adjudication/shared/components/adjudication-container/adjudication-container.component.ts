@@ -18,14 +18,15 @@ import {
   ClaimEnrolleeAction,
   ClaimActionEnum
 } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-data-source-utils.class';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
-
-import { AuthService } from '@auth/shared/services/auth.service';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
+
+import { AuthService } from '@auth/shared/services/auth.service';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -343,18 +344,14 @@ export class AdjudicationContainerComponent implements OnInit {
       );
   }
 
-  // TODO split out into service and use generics for managing data tables, and update with add row
   private updateEnrollee(enrollee: HttpEnrollee) {
-    this.dataSource.data = this.dataSource.data
-      .map((currentEnrollee: HttpEnrollee) =>
-        (currentEnrollee.id === enrollee.id) ? enrollee : currentEnrollee
-      );
+    this.dataSource.data = MatTableDataSourceUtils
+      .update<HttpEnrollee>(this.dataSource, 'id', enrollee);
   }
 
-  // TODO split out into service and use generics for managing data tables, and update with add row
   private removeEnrollee(enrollee: HttpEnrollee) {
-    this.dataSource.data = this.dataSource.data
-      .filter((currentEnrollee: HttpEnrollee) => currentEnrollee.id !== enrollee.id);
+    this.dataSource.data = MatTableDataSourceUtils
+      .delete<HttpEnrollee>(this.dataSource, 'id', enrollee.id);
   }
 
   private adjudicationActionPipe(enrolleeId: number, action: SubmissionAction) {
