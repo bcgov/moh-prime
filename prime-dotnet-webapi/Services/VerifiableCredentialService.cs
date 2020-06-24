@@ -27,7 +27,7 @@ namespace Prime.Services
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
-        
+
         public VerifiableCredentialService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
@@ -100,13 +100,15 @@ namespace Prime.Services
             string credential_exchange_id;
             switch (state)
             {
-                case "request_sent":
+
+                case CredentialExchangeStates.RequestReceived:
                     // Call aries agent to create credential
                     credential_exchange_id = data.GetValue("credential_exchange_id").ToString();
                     var attributes = data.GetValue("attributes") as JArray;
                     await _verifiableCredentialClient.IssueCredential(credential_exchange_id, attributes);
                     return await Task.FromResult(true);
-                case "credential_received":
+
+                case CredentialExchangeStates.Issued:
                     // Store a received credential
                     credential_exchange_id = data.GetValue("credential_exchange_id").ToString();
                     await _verifiableCredentialClient.StoreCredential(credential_exchange_id);
