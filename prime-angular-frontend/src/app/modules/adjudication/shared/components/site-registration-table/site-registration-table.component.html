@@ -88,11 +88,13 @@
       </button>
 
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item
+                (click)="view('organization', row.id)">
           <mat-icon>location_city</mat-icon>
           <span>Organization Information</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item
+                (click)="view('site', row.id)">
           <mat-icon>store</mat-icon>
           <span>Site Information</span>
         </button>

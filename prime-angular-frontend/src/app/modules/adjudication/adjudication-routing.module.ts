@@ -112,7 +112,7 @@ const routes: Routes = [
               {
                 path: AdjudicationRoutes.SITE_REGISTRATION,
                 component: SiteRegistrationComponent,
-                data: { title: 'Site Reigstration' }
+                data: { title: 'Site Registration' }
               }
             ]
           }

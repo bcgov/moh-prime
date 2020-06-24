@@ -13,6 +13,8 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class SiteRegistrationTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<Site>;
+  @Output() public viewOrganization: EventEmitter<number>;
+  @Output() public viewSite: EventEmitter<number>;
   @Output() public delete: EventEmitter<number>;
 
   public columns: string[];
@@ -29,7 +31,15 @@ export class SiteRegistrationTableComponent implements OnInit {
       'actions'
     ];
     this.dataSource = new MatTableDataSource<Site>([]);
+    this.viewOrganization = new EventEmitter<number>();
+    this.viewSite = new EventEmitter<number>();
     this.delete = new EventEmitter<number>();
+  }
+
+  public view(type: 'organization' | 'site', siteId: number) {
+    (type === 'organization')
+      ? this.viewOrganization.emit(siteId)
+      : this.viewSite.emit(siteId);
   }
 
   public deleteSite(siteId: number) {

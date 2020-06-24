@@ -38,7 +38,7 @@ namespace Prime.Controllers
             _emailService = emailService;
         }
 
-        // Temporary endpoint for admins until fruit loops, and the organizations query can provide org, location, and site!!!
+        // Temporary endpoint for admins until fruit loops
         // James avert your eyes!  This is not the code you're looking for...
         // GET: api/Sites
         /// <summary>

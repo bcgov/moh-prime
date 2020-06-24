@@ -73,6 +73,15 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
   }
 
+  public onViewOrganization(siteId: number) {
+    // TODO look up organization
+    this.routeUtils.routeRelativeTo([]);
+  }
+
+  public onViewSite(siteId: number) {
+    this.routeUtils.routeRelativeTo([siteId]);
+  }
+
   public onDelete(siteId: number) {
     const data: DialogOptions = {
       ...this.defaultOptions.delete('site'),
