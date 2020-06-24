@@ -19,6 +19,7 @@ pipeline {
             steps {
                 script {
                     echo "Test (MASTER) ..."
+                    sh "./player.sh sparsify"
                     sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build document-manager test -p SUFFIX=${SUFFIX}"
