@@ -1,7 +1,6 @@
 import { MatTableDataSource } from '@angular/material/table';
 
 export class MatTableDataSourceUtils {
-
   /**
    * @description
    * Update an item in a datasource based on a predicate.
