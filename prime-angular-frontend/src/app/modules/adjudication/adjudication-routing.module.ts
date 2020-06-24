@@ -107,7 +107,7 @@ const routes: Routes = [
             data: { title: 'Site Registrations' }
           },
           {
-            path: ':id',
+            path: ':sid',
             children: [
               {
                 path: '',

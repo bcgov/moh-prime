@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-site-adjudication',
@@ -29,16 +30,21 @@ export class SiteAdjudicationComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO working on PEC/adjudication update
-      // this.siteResource.adjudicateSite()
-      //   .pipe()
-      //   .subscribe();
+      const siteId = this.route.snapshot.params.sid;
+      console.log(this.form.value.pec, this.form.value);
+
+      this.siteResource.updatePecCode(siteId, this.form.value.pec)
+        .pipe()
+        .subscribe();
     }
   }
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.initForm();
+
+    const siteId = this.route.snapshot.params.sid;
+    this.busy = this.siteResource.getSiteById(siteId)
+      .subscribe((site: Site) => this.form.patchValue(site));
   }
 
   private createFormInstance() {
@@ -48,9 +54,5 @@ export class SiteAdjudicationComponent implements OnInit {
         [Validators.required]
       ]
     });
-  }
-
-  private initForm() {
-
   }
 }

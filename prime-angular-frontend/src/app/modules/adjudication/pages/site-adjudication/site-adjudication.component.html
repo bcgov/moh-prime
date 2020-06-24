@@ -21,17 +21,24 @@
         </ng-container>
       </app-page-subheader2>
 
-      <mat-form-field class="w-100">
-        <input matInput
-               placeholder="PEC Code"
-               formControlName="pec">
-        <mat-error>Required</mat-error>
-      </mat-form-field>
+
+      <div class="row mb-4">
+        <div class="col-sm-12 col-lg-9 col-xl-5">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="PEC Code"
+                   formControlName="pec">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+          <button mat-flat-button
+                  color="primary">Approve this Site</button>
+
+        </div>
+      </div>
 
     </section>
-
-    <button mat-flat-button
-            color="primary">Approve this Site</button>
 
   </form>
 

@@ -1,0 +1,12 @@
+@import 'palette';
+
+.status {
+  &.under-review {
+    color: theme-palette(yellow);
+  }
+
+  &.approved {
+    color: theme-palette(green);
+  }
+}
+

@@ -28,7 +28,7 @@ export class SiteRegistrationComponent extends AbstractComponent implements OnIn
   }
 
   public ngOnInit(): void {
-    this.getSite(this.route.snapshot.params.id);
+    this.getSite(this.route.snapshot.params.sid);
   }
 
   private getSite(siteId: number, statusCode?: number): void {

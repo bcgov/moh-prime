@@ -25,7 +25,6 @@ import { DatedContentTableComponent } from './shared/components/dated-content-ta
 import {
   ReviewStatusContentComponent
 } from './shared/components/review-status-content/review-status-content.component';
-import { SiteTableComponent } from './shared/components/site-table/site-table.component';
 import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
 import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
 import { SiteRegistrationActionsComponent } from './shared/components/site-registration-actions/site-registration-actions.component';
@@ -48,7 +47,6 @@ import { SiteRegistrationActionsComponent } from './shared/components/site-regis
     DatedContentTableComponent,
     ReviewStatusContentComponent,
     SiteRegistrationsComponent,
-    SiteTableComponent,
     SiteRegistrationComponent,
     SiteRegistrationContainerComponent,
     SiteRegistrationTableComponent,
