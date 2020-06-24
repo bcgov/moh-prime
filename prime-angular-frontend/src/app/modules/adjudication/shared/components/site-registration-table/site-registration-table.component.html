@@ -89,6 +89,7 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
+                [disabled]="true"
                 (click)="view('organization', row.id)">
           <mat-icon>location_city</mat-icon>
           <span>Organization Information</span>

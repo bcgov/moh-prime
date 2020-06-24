@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
@@ -83,31 +83,20 @@ export class SiteRegistrationContainerComponent implements OnInit {
   }
 
   public onDelete(siteId: number) {
-    const data: DialogOptions = {
-      ...this.defaultOptions.delete('site'),
-      // TODO temporary until they decide whether notes are added to site registration
-      // component: NoteComponent
-    };
-
+    const data = this.defaultOptions.delete('site');
     if (this.authService.isSuperAdmin()) {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
-          // TODO temporary until they decide whether notes are added to site registration
-          // exhaustMap((result: { output: string }) => {
-          //   if (result) {
-          //     return (result.output)
-          //       ? this.adjudicationResource.createAdjudicatorNote(siteId, result.output)
-          //       : of(noop);
-          //   }
-          //   return EMPTY;
-          // }),
-          exhaustMap(() => this.siteResource.deleteSite(siteId))
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => this.siteResource.deleteSite(siteId)),
+          map((site: Site) => this.dataSource.data = MatTableDataSourceUtils.delete<Site>(this.dataSource, 'id', site.id))
         )
-        .subscribe(() =>
-          this.dataSource.data = MatTableDataSourceUtils
-            .delete<Site>(this.dataSource, 'id', siteId)
-        );
+        .subscribe(() => this.routeUtils.routeRelativeTo(['./']));
     }
   }
 
