@@ -11,16 +11,17 @@ using Newtonsoft.Json.Linq;
 
 namespace Prime.Services
 {
-    public enum WebhookTopic
+    public class WebhookTopic
     {
-        Connections,
-        IssueCredential
+        public const string Connections = "connections";
+        public const string IssueCredential = "issue_credential";
     }
 
-    public enum CredentialExchangeState
+    public class CredentialExchangeStates
     {
-        RequestReceived,
-        Issued
+        public const string OfferSent = "offer_sent";
+        public const string RequestReceived = "request_received";
+        public const string Issued = "issued";
     }
 
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
@@ -68,7 +69,7 @@ namespace Prime.Services
 
         // TODO temporary data object provided, and return type
         // @see https://github.com/esune/issuer-kit/blob/api-refactor/api/src/services/webhooks/webhooks.class.ts#L30
-        public async Task<bool> create(JObject data, WebhookTopic topic)
+        public async Task<bool> create(JObject data, string topic)
         {
             switch (topic)
             {
