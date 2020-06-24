@@ -98,7 +98,7 @@ namespace Prime.Services.Clients
         }
 
         // TODO change back to Object
-        public async Task<String> AcceptRequest(String connection_id)
+        public async Task<JObject> AcceptRequest(String connection_id)
         {
             var httpContent = new StringContent("");
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
@@ -114,14 +114,14 @@ namespace Prime.Services.Clients
                 throw new VerifiableCredentialApiException("Error occurred when calling Verfiable Credential API. Try again later.", ex);
             }
 
-            // if (!response.IsSuccessStatusCode)
-            // {
-            //     await LogError(httpContent, response);
-            //     throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
-            // }
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(httpContent, response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
+            }
 
-            // return JObject.Parse(await response.Content.ReadAsStringAsync());
-            return await response.Content.ReadAsStringAsync();
+            return JObject.Parse(await response.Content.ReadAsStringAsync());
+            // return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<JObject> SendCredential(string requestContent)
