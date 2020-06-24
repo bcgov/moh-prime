@@ -130,9 +130,9 @@ export class SiteRegistrationContainerComponent implements OnInit {
   // }
 
   private getDataset(queryParams: { search?: string, status?: number }): void {
-    const organizationId = this.route.snapshot.params.id;
-    const results$ = (organizationId)
-      ? this.getSiteById(organizationId)
+    const siteId = this.route.snapshot.params.sid;
+    const results$ = (siteId)
+      ? this.getSiteById(siteId)
       : this.getSites(queryParams);
 
     this.busy = results$
