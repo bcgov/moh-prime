@@ -95,6 +95,8 @@ objects:
                   value: "postgresql${SUFFIX}"
                 - name: DOCUMENT_MANAGER_CLIENT_ID
                   value: prime-document-manager
+                - name: DOCUMENT_MANAGER_URL
+                  value: document-manager${SUFFIX}
                 - name: DOCUMENT_MANAGER_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
