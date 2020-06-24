@@ -107,14 +107,15 @@ const routes: Routes = [
             data: { title: 'Site Registrations' }
           },
           {
+            // path: ':id',
+            // children: [
+            // {
+            // path: AdjudicationRoutes.SITE_REGISTRATION,
             path: ':id',
-            children: [
-              {
-                path: AdjudicationRoutes.SITE_REGISTRATION,
-                component: SiteRegistrationComponent,
-                data: { title: 'Site Registration' }
-              }
-            ]
+            component: SiteRegistrationComponent,
+            data: { title: 'Site Registration' }
+            // }
+            // ]
           }
         ]
       },
