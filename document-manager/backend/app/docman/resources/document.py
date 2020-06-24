@@ -29,7 +29,7 @@ class DocumentListResource(Resource):
             raise BadRequest('Received file upload of unspecified size')
         file_size = int(file_size)
 
-        max_file_size = current_app.config['MAX_FILE_SIZE']
+        max_file_size = current_app.config['MAX_CONTENT_LENGTH']
         if file_size > max_file_size:
             raise RequestEntityTooLarge(f'The maximum file upload size is {max_file_size/1024/1024}MB.')
 
