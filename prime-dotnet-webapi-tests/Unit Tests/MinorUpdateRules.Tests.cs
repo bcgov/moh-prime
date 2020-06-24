@@ -212,6 +212,7 @@ namespace PrimeTests.UnitTests
                 typeof(int),
                 typeof(string),
                 typeof(bool?),
+                typeof(bool),
                 typeof(MailingAddress),
                 typeof(ICollection<Certification>),
                 typeof(ICollection<Job>),
