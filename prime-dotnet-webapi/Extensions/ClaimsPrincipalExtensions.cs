@@ -50,21 +50,24 @@ namespace Prime
             return User.IsInRole(AuthConstants.PRIME_READONLY_ADMIN);
         }
 
+        public static string GetAudience(this ClaimsPrincipal User)
+        {
+            return User.FindFirstValue(AuthConstants.AUDIENCE_CLAIM);
+        }
+
         public static int GetIdentityAssuranceLevel(this ClaimsPrincipal User)
         {
-            Claim assuranceLevelClaim = User?.Claims?.SingleOrDefault(c => c.Type == AuthConstants.ASSURANCE_LEVEL_CLAIM_TYPE);
+            var claimValue = User.FindFirstValue(AuthConstants.ASSURANCE_LEVEL_CLAIM);
 
             int assuranceLevel = 0;
-            Int32.TryParse(assuranceLevelClaim?.Value, out assuranceLevel);
+            Int32.TryParse(claimValue, out assuranceLevel);
 
             return assuranceLevel;
         }
 
         public static string GetIdentityProvider(this ClaimsPrincipal User)
         {
-            Claim identityProviderClaim = User?.Claims?.SingleOrDefault(c => c.Type == AuthConstants.IDENTITY_PROVIDER_CLAIM_TYPE);
-
-            return identityProviderClaim?.Value;
+            return User.FindFirstValue(AuthConstants.IDENTITY_PROVIDER_CLAIM);
         }
     }
 }
