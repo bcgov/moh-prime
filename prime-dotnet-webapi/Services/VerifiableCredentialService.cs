@@ -100,7 +100,6 @@ namespace Prime.Services
             string credential_exchange_id;
             switch (state)
             {
-
                 case CredentialExchangeStates.RequestReceived:
                     // Call aries agent to create credential
                     credential_exchange_id = data.GetValue("credential_exchange_id").ToString();
