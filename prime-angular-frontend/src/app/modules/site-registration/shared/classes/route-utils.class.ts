@@ -39,11 +39,12 @@ export class RouteUtils {
 
   /**
    * @description
-   * Route within a specified base path, for example within a module, otherwise uses root.
+   * Route within a specified base path, for example within a
+   * module, otherwise uses root.
    */
   public routeWithin(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}) {
     let commands = (Array.isArray(routePath)) ? routePath : [routePath];
-    commands = (this.baseRoutePath) ? [...this.baseRoutePath, ...commands] : commands;
+    commands = (this.baseRoutePath) ? [this.baseRoutePath, ...commands] : commands;
     this.routeTo(commands, {
       ...navigationExtras
     });

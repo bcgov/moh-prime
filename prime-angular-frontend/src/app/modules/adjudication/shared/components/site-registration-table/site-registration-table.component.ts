@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
+import { AuthService } from '@auth/shared/services/auth.service';
 import { Site } from '@registration/shared/models/site.model';
-
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-
 
 @Component({
   selector: 'app-site-registration-table',
@@ -13,15 +12,16 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class SiteRegistrationTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<Site>;
-  @Output() public viewOrganization: EventEmitter<number>;
-  @Output() public viewSite: EventEmitter<number>;
+  @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public delete: EventEmitter<number>;
 
   public columns: string[];
 
   public AdjudicationRoutes = AdjudicationRoutes;
 
-  constructor() {
+  constructor(
+    private authService: AuthService
+  ) {
     this.columns = [
       'locationName',
       'vendor',
@@ -31,15 +31,16 @@ export class SiteRegistrationTableComponent implements OnInit {
       'actions'
     ];
     this.dataSource = new MatTableDataSource<Site>([]);
-    this.viewOrganization = new EventEmitter<number>();
-    this.viewSite = new EventEmitter<number>();
+    this.route = new EventEmitter<string | (string | number)[]>();
     this.delete = new EventEmitter<number>();
   }
 
-  public view(type: 'organization' | 'site', siteId: number) {
-    (type === 'organization')
-      ? this.viewOrganization.emit(siteId)
-      : this.viewSite.emit(siteId);
+  public get canEdit(): boolean {
+    return this.authService.isAdmin();
+  }
+
+  public onRoute(routePath: string | (string | number)[]) {
+    this.route.emit(routePath);
   }
 
   public deleteSite(siteId: number) {

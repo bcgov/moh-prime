@@ -90,16 +90,22 @@
       <mat-menu #menu="matMenu">
         <button mat-menu-item
                 [disabled]="true"
-                (click)="view('organization', row.id)">
+                (click)="onRoute([])">
           <mat-icon>location_city</mat-icon>
           <span>Organization Information</span>
         </button>
         <button mat-menu-item
-                (click)="view('site', row.id)">
+                (click)="onRoute([AdjudicationRoutes.SITE_REGISTRATIONS, row.id])">
           <mat-icon>store</mat-icon>
           <span>Site Information</span>
         </button>
         <button mat-menu-item
+                (click)="onRoute([AdjudicationRoutes.SITE_REGISTRATIONS, row.id, AdjudicationRoutes.SITE_ADJUDICATION])">
+          <mat-icon>rate_review</mat-icon>
+          <span>Site Adjudication</span>
+        </button>
+        <button mat-menu-item
+                [disabled]="!canEdit"
                 (click)="deleteSite(row.id)">
           <mat-icon>delete</mat-icon>
           <span>Delete Site</span>

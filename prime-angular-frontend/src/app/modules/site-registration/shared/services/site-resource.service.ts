@@ -164,6 +164,9 @@ export class SiteResource {
       );
   }
 
+  // TODO working on PEC/adjudication update
+  public adjudicateSite() { }
+
   public deleteSite(siteId: number): Observable<Site> {
     return this.apiResource.delete<Site>(`sites/${siteId}`)
       .pipe(

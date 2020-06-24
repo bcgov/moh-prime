@@ -6,14 +6,16 @@ import { EMPTY, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
+
+import { Feedback } from '@shared/models/feedback.model';
+import { FeedbackResourceService } from '@core/resources/feedback-resource.service';
+import { FeedbackComponent } from '@shared/components/dialogs/content/feedback/feedback.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { FeedbackComponent, Feedback } from '@shared/components/dialogs/content/feedback/feedback.component';
-import { FeedbackResourceService } from '@shared/services/feedback-resource.service';
+import { DialogContentOutput } from '@shared/components/dialogs/dialog-output.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { DialogContentOutput } from '@shared/components/dialogs/dialog-output.model';
 
 @Component({
   selector: 'app-notification-confirmation',
