@@ -92,6 +92,12 @@ objects:
       to:
         kind: ImageStreamTag
         name: '${NAME}${SUFFIX}:latest'
-    resources: {}
+    resources:
+      limits:
+        cpu: 2
+        memory: 2Gi
+      requests:
+        cpu: 1
+        memory: 1Gi
     postCommit: {}
     nodeSelector: null

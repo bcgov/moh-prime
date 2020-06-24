@@ -122,7 +122,13 @@ objects:
           generation: null
           importPolicy: {}
           name: latest
-    resources: {}
+    resources:
+      requests:
+        cpu: '1'
+        memory: 1Gi
+      limits:
+        cpu: '2'
+        memory: 4Gi
     runPolicy: Serial
     status:
       dockerImageRepository: ""
@@ -145,7 +151,13 @@ objects:
           kind: ImageStreamTag
           name: "${NAME}${SUFFIX}:latest"
       postCommit: {}
-      resources: {}
+      resources:
+        requests:
+          cpu: "2"
+          memory: 4Gi
+        limits:
+          cpu: "4"
+          memory: 8Gi
       runPolicy: Serial
       source:
         contextDir: "${SOURCE_CONTEXT_DIR}"

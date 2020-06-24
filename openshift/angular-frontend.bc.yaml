@@ -135,7 +135,13 @@ objects:
         kind: ImageStreamTag
         name: "${NAME}${SUFFIX}:latest"
     postCommit: {}
-    resources: {}
+    resources:
+      requests:
+        cpu: '1'
+        memory: 1Gi
+      limits:
+        cpu: '2'
+        memory: 4Gi
     runPolicy: Serial
     source:
       contextDir: "${SOURCE_CONTEXT_DIR}"
