@@ -111,7 +111,9 @@ namespace Prime.Services
                     // Store a received credential
                     credential_exchange_id = data.GetValue("credential_exchange_id").ToString();
                     await _verifiableCredentialClient.StoreCredential(credential_exchange_id);
+                    // TODO store credential in our database
                     return await Task.FromResult(true);
+
                 default:
                     // TODO log a message using serilog
                     Console.WriteLine($"Received unexpected state {state} for CredentialExchangeState ${state}");
