@@ -151,6 +151,18 @@ export class OrganizationResource {
       );
   }
 
+  public downloadLatestSignedAgreement(organizationId: number): Observable<string> {
+    return this.apiResource.get<string>(`organizations/${organizationId}/latest-signed-agreement`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Latest signed organization agreement could not be retrieved');
+          this.logger.error('[SiteRegistration] OrganizationResource::downloadLatestSignedAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public addSignedAgreement(organizationId: number, documentGuid: string, fileName: string): Observable<string> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid, fileName });
     return this.apiResource.post<string>(`organizations/${organizationId}/signed-agreement`, { organizationId }, params)
