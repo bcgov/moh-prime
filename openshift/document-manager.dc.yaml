@@ -160,10 +160,7 @@ objects:
                 key: DOCUMENT_MANAGER_CLIENT_SECRET
                 name: "document-manager-secret"
           - name: DOCUMENT_MANAGER_URL
-            valueFrom:
-              configMapKeyRef:
-                key: DOCUMENT_MANAGER_URL
-                name: document-manager-backend--env-prime
+            value: http://document-manager${SUFFIX}-backend:6001
           - name: FLASK_APP
             valueFrom:
               configMapKeyRef:
