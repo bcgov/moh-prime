@@ -11,16 +11,17 @@ using Newtonsoft.Json.Linq;
 
 namespace Prime.Services
 {
-    public enum WebhookTopic
+    public class WebhookTopic
     {
-        Connections,
-        IssueCredential
+        public const string Connections = "connections";
+        public const string IssueCredential = "issue_credential";
     }
 
-    public enum CredentialExchangeState
+    public class CredentialExchangeStates
     {
-        RequestReceived,
-        Issued
+        public const string OfferSent = "offer_sent";
+        public const string RequestReceived = "request_received";
+        public const string Issued = "issued";
     }
 
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
@@ -99,13 +100,14 @@ namespace Prime.Services
             string credential_exchange_id;
             switch (state)
             {
-                case "request_sent":
+                case CredentialExchangeStates.RequestReceived:
                     // Call aries agent to create credential
                     credential_exchange_id = data.GetValue("credential_exchange_id").ToString();
                     var attributes = data.GetValue("attributes") as JArray;
                     await _verifiableCredentialClient.IssueCredential(credential_exchange_id, attributes);
                     return await Task.FromResult(true);
-                case "credential_received":
+
+                case CredentialExchangeStates.Issued:
                     // Store a received credential
                     credential_exchange_id = data.GetValue("credential_exchange_id").ToString();
                     await _verifiableCredentialClient.StoreCredential(credential_exchange_id);

@@ -96,7 +96,6 @@ namespace Prime.Services.Clients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
-        // TODO change back to Object
         public async Task<JObject> AcceptRequest(String connection_id)
         {
             var httpContent = new StringContent("");

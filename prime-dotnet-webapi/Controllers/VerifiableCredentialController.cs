@@ -51,7 +51,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> Create(WebhookTopic topic, [FromBody] JObject data)
+        public async Task<ActionResult> Create(string topic, [FromBody] JObject data)
         {
             await _verifiableCredentialsService.Create(data, topic);
 
