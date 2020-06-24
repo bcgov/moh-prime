@@ -63,13 +63,7 @@ objects:
                       name: NODE_SECRET
               image: " "
               name: sonar-scanner
-              resources:
-                requests:
-                  cpu: 300m
-                  memory: 512Mi
-                limits:
-                  cpu: "1"
-                  memory: 1024Mi
+              resources: {}
           restartPolicy: Always
       test: false
       triggers:
