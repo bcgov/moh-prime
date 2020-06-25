@@ -239,7 +239,7 @@ namespace Prime.Services.Clients
 
         private class SendCredentialParams
         {
-            string connection_id;
+            public string connection_id;
             public string issuer_did;
             public string schema_id;
             public string cred_def_id;
