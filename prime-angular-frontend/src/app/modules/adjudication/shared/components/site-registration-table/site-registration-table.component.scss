@@ -1,13 +1,3 @@
-@import 'palette';
+@import 'mixins/statuses';
 
-// TODO separate out and share these styles with only the components that need it
-.status {
-  &.under-review {
-    color: theme-palette(yellow);
-  }
-
-  &.approved {
-    color: theme-palette(green);
-  }
-}
-
+@include statuses;

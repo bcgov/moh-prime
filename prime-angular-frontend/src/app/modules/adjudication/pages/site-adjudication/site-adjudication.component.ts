@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, BehaviorSubject } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -18,6 +18,7 @@ export class SiteAdjudicationComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public hasActions: boolean;
+  public refresh: BehaviorSubject<boolean>;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,6 +28,7 @@ export class SiteAdjudicationComponent implements OnInit {
     private siteResource: SiteResource
   ) {
     this.hasActions = true;
+    this.refresh = new BehaviorSubject<boolean>(null);
   }
 
   public onSubmit() {
@@ -34,10 +36,10 @@ export class SiteAdjudicationComponent implements OnInit {
       const siteId = this.route.snapshot.params.sid;
       this.busy = this.siteResource
         .updatePecCode(siteId, this.form.value.pec)
-        .pipe(
-          exhaustMap(() => this.getSite())
-        )
-        .subscribe();
+        // .pipe(
+        //   exhaustMap(() => this.getSite())
+        // )
+        .subscribe(() => this.refresh.next(true));
     }
   }
 

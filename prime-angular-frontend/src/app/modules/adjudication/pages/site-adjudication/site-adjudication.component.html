@@ -1,11 +1,13 @@
 <app-site-registration-container [content]="content"
-                                 [hasActions]="hasActions">
+                                 [hasActions]="hasActions"
+                                 [refresh]="refresh">
 
   <app-page-header>Site Adjudication</app-page-header>
 
 </app-site-registration-container>
 
-<ng-template #content>
+<ng-template #content
+             let-site="site">
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -21,8 +23,7 @@
         </ng-container>
       </app-page-subheader2>
 
-
-      <div class="row mb-4">
+      <div class="row mb-3">
         <div class="col-sm-12 col-lg-9 col-xl-5">
 
           <mat-form-field class="w-100">
@@ -32,11 +33,11 @@
             <mat-error>Required</mat-error>
           </mat-form-field>
 
-          <button mat-flat-button
-                  color="primary">Approve this Site</button>
-
         </div>
       </div>
+
+      <button mat-flat-button
+              color="primary">Approve this Site</button>
 
     </section>
 
