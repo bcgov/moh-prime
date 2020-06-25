@@ -125,9 +125,9 @@ namespace Prime.Services.Clients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<JObject> SendCredential(string requestContent)
+        public async Task<JObject> SendCredential(string connection_id)
         {
-            var credParams = new SendCredentialParams("assign gpid");
+            var credParams = new SendCredentialParams(connection_id, "assign gpid");
 
             System.Console.WriteLine("SEND CREDENTIAL PARAMETERS");
             System.Console.WriteLine(JsonConvert.SerializeObject(credParams));
@@ -239,6 +239,7 @@ namespace Prime.Services.Clients
 
         private class SendCredentialParams
         {
+            string connection_id;
             public string issuer_did;
             public string schema_id;
             public string cred_def_id;
@@ -252,8 +253,9 @@ namespace Prime.Services.Clients
 
 
             // string issuer_did, string schema_id, string cred_def_id, string schema_version, string comment
-            public SendCredentialParams(string comment)
+            public SendCredentialParams(string connection_id, string comment)
             {
+                this.connection_id = connection_id;
                 // issuer_did == public DID from (GET /wallet/DID/public)
                 // TODO get DID from agent through api every time
                 issuer_did = "QDaSxvduZroHDKkdXKV5gG";
