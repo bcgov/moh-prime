@@ -128,6 +128,10 @@ namespace Prime.Services.Clients
         public async Task<JObject> SendCredential(string requestContent)
         {
             var credParams = new SendCredentialParams("assign gpid");
+
+            System.Console.WriteLine("SEND CREDENTIAL PARAMETERS");
+            System.Console.WriteLine(JsonConvert.SerializeObject(credParams));
+
             var httpContent = new StringContent(credParams.ToString());
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 

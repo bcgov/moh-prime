@@ -99,7 +99,7 @@ namespace Prime.Services
             if (state == "response")
             {
                 var connection_id = data.GetValue("connection_id").ToString();
-                Console.WriteLine($"connection_id: " + connection_id);
+                Console.WriteLine($"About to issue a credential with this connection_id: " + connection_id);
                 // var response = await _verifiableCredentialClient.AcceptRequest(connection_id);
 
                 // Connection successful, issue credential
