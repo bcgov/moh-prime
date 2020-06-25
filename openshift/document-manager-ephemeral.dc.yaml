@@ -192,7 +192,7 @@ objects:
                 key: FLASK_RUN_PORT
                 name: document-manager-backend--env-prime
           - name: FLASK_RUN_PARAMS
-            value: "--cert=/app/certs/chained.crt, ${CERT_PASSWORD} --key=/app/certs/private.key"
+            value: "--cert=/app/certs/chained.crt --key=/app/certs/private.key"
           - name: JWT_OIDC_WELL_KNOWN_CONFIG
             valueFrom:
               secretKeyRef:
@@ -317,7 +317,7 @@ objects:
               key: FLASK_RUN_PORT
               name: document-manager-backend--env-prime
         - name: FLASK_RUN_PARAMS
-          value: "--cert=/app/certs/chained.crt, ${CERT_PASSWORD} --key=/app/certs/private.key" 
+          value: "--cert=/app/certs/chained.crt --key=/app/certs/private.key"
         - name: JWT_OIDC_WELL_KNOWN_CONFIG
           valueFrom:
             secretKeyRef:
