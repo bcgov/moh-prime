@@ -161,7 +161,9 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public nextRoute() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS], {
+      queryParams: { submitted: true, signed: true }
+    });
   }
 
   public ngOnInit(): void {

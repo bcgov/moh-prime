@@ -87,7 +87,6 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     VendorPipe,
     CasePipe,
     SafeHtmlPipe,
-    CertificatePipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
