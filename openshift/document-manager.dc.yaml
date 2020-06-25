@@ -165,7 +165,7 @@ objects:
                 key: DOCUMENT_MANAGER_CLIENT_SECRET
                 name: "document-manager-secret"
           - name: DOCUMENT_MANAGER_URL
-            value: https://document-manager${SUFFIX}-backend:6001/
+            value: https://document-manager${SUFFIX}-backend.pharmanetenrolment.gov.bc.ca/
           - name: FLASK_APP
             valueFrom:
               configMapKeyRef:
@@ -284,7 +284,7 @@ objects:
               key: DOCUMENT_MANAGER_CLIENT_SECRET
               name: "document-manager-secret"
         - name: DOCUMENT_MANAGER_URL
-          value: "https://document-manager${SUFFIX}-backend:6001/"
+          value: "https://document-manager${SUFFIX}-backend.pharmanetenrolment.gov.bc.ca/"
         - name: FLASK_APP
           valueFrom:
             configMapKeyRef:
