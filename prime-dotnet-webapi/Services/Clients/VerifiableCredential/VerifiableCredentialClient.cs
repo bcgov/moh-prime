@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 using Prime.Models;
-using Newtonsoft.Json.Linq;
+using Serilog;
 
 namespace Prime.Services.Clients
 {
@@ -15,10 +16,15 @@ namespace Prime.Services.Clients
     {
         private readonly HttpClient _client;
 
-        public VerifiableCredentialClient(HttpClient client)
+        private readonly ILogger _logger;
+
+        public VerifiableCredentialClient(
+            HttpClient client,
+            ILogger logger)
         {
             // Auth header and api-key are injected in Startup.cs
             _client = client;
+            _logger = logger;
         }
 
         public async Task<JObject> CreateInvitation()
@@ -115,11 +121,11 @@ namespace Prime.Services.Clients
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(httpContent, response);
+                _logger.Information("AcceptRequest response {@HttpResponseMessage}", response);
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
             }
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
-            // return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<JObject> SendCredential(string requestContent)
