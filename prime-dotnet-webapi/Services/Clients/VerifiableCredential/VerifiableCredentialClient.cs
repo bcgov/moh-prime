@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 using Prime.Models;
-using Newtonsoft.Json.Linq;
 
 namespace Prime.Services.Clients
 {
@@ -15,7 +15,10 @@ namespace Prime.Services.Clients
     {
         private readonly HttpClient _client;
 
-        public VerifiableCredentialClient(HttpClient client)
+        // private readonly ILogger _logger;
+
+        public VerifiableCredentialClient(
+            HttpClient client)
         {
             // Auth header and api-key are injected in Startup.cs
             _client = client;
@@ -119,7 +122,6 @@ namespace Prime.Services.Clients
             }
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
-            // return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<JObject> SendCredential(string requestContent)
@@ -222,8 +224,11 @@ namespace Prime.Services.Clients
                 secondaryMessage = "no additional message. Http response and exception were null.";
             }
 
-            // TODO log using serilog
-            Console.WriteLine($"{DateTime.Now} - Error sending invitation.");
+            // _logger.Error(exception, secondaryMessage, new Object[] { response, content });
+            System.Console.WriteLine("RESPONSE");
+            System.Console.WriteLine(JsonConvert.SerializeObject(response));
+            System.Console.WriteLine("CONTENT");
+            System.Console.WriteLine(JsonConvert.SerializeObject(content));
         }
 
         private class SendCredentialParams

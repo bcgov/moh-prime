@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 using Prime.Models;
 using Prime.Services.Clients;
@@ -65,7 +67,6 @@ namespace Prime.Services
             }
 
             var acceptResponse = await _verifiableCredentialClient.AcceptInvitation(connection_id);
-
             return acceptResponse;
         }
 
@@ -77,6 +78,9 @@ namespace Prime.Services
 
         public async Task<bool> Create(JObject data, string topic)
         {
+            System.Console.WriteLine($"DATA ${topic}");
+            System.Console.WriteLine(JsonConvert.SerializeObject(data));
+
             switch (topic)
             {
                 case WebhookTopic.Connections:
@@ -84,7 +88,8 @@ namespace Prime.Services
                 case WebhookTopic.IssueCredential:
                     return await handleIssueCredential(data);
                 default:
-                    // TODO log a message using serilog $"Webhook {topic} is not supported";
+                    // _logger.Error($"Webhook {topic} is not supported");
+                    System.Console.WriteLine($"Webhook {topic} is not supported");
                     return false;
             };
         }
@@ -125,8 +130,8 @@ namespace Prime.Services
                     return await Task.FromResult(true);
 
                 default:
-                    // TODO log a message using serilog
-                    Console.WriteLine($"Received unexpected state {state} for CredentialExchangeState ${state}");
+                    // _logger.Error($"Received unexpected state {state} for CredentialExchangeState ${state}");
+                    System.Console.WriteLine($"Received unexpected state {state} for CredentialExchangeState ${state}");
                     return await Task.FromResult(false);
             }
         }
