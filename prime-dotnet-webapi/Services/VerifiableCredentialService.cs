@@ -96,7 +96,7 @@ namespace Prime.Services
         {
             var state = data.GetValue("state").ToString();
 
-            if (state == "active")
+            if (state == "response")
             {
                 var connection_id = data.GetValue("connection_id").ToString();
                 Console.WriteLine($"connection_id: " + connection_id);
