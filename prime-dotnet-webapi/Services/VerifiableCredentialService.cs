@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 using Prime.Services.Clients;
 using Newtonsoft.Json.Linq;
+using QRCoder;
 
 namespace Prime.Services
 {
@@ -27,11 +28,13 @@ namespace Prime.Services
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
+        private readonly IEnrolleeService _enrolleeService;
 
         public VerifiableCredentialService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IVerifiableCredentialClient verifiableCredentialClient)
+            IVerifiableCredentialClient verifiableCredentialClient,
+            IEnrolleeService enrolleeService)
             : base(context, httpContext)
         {
             _verifiableCredentialClient = verifiableCredentialClient;
@@ -41,11 +44,17 @@ namespace Prime.Services
         {
             var invitationResponse = await _verifiableCredentialClient.CreateInvitation();
             var invitation = invitationResponse.GetValue("invitation");
+            var invitationURL = invitationResponse.GetValue("invitation_url").ToString();
 
             if (invitation == null)
             {
                 return invitationResponse;
             }
+
+            // QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            // QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationURL, QRCodeGenerator.ECCLevel.Q);
+            // Base64QRCode qrCode = new Base64QRCode(qrCodeData);
+            // string qrCodeImageAsBase64 = qrCode.GetGraphic(20);
 
             var receiveResponse = await _verifiableCredentialClient.ReceiveInvitation(invitation.ToString());
             var connection_id = receiveResponse.GetValue("connection_id").ToString();
@@ -83,13 +92,14 @@ namespace Prime.Services
         private async Task<bool> handleConnection(JObject data)
         {
             var connection_id = data.GetValue("connection_id").ToString();
-            var response = await _verifiableCredentialClient.AcceptRequest(connection_id);
+            Console.WriteLine($"connection_id: ", connection_id);
+            // var response = await _verifiableCredentialClient.AcceptRequest(connection_id);
 
             // Connection successful, issue credential
-            if (response != null)
-            {
-                var credResponse = await SendCredential(connection_id);
-            }
+            // if (response != null)
+            // {
+            var credResponse = await SendCredential(connection_id);
+            // }
 
             return await Task.FromResult(true);
         }
