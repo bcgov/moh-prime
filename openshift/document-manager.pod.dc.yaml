@@ -250,12 +250,11 @@ objects:
     name: ${NAME}${SUFFIX}-migrate
   spec:
     containers:
-    - args:
-      - flask
-      - db
-      - upgrade
-      command: 
-        - flask db upgrade
+    - command: 
+        - flask
+      args:
+        - db
+        - upgrade
       env:
         - name: CACHE_REDIS_HOST
           valueFrom:
