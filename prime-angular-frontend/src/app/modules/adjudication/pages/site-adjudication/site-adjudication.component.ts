@@ -36,9 +36,6 @@ export class SiteAdjudicationComponent implements OnInit {
       const siteId = this.route.snapshot.params.sid;
       this.busy = this.siteResource
         .updatePecCode(siteId, this.form.value.pec)
-        // .pipe(
-        //   exhaustMap(() => this.getSite())
-        // )
         .subscribe(() => this.refresh.next(true));
     }
   }
