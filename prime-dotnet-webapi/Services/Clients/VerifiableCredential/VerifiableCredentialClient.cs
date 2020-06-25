@@ -258,11 +258,11 @@ namespace Prime.Services.Clients
                 // TODO get DID from agent through api every time
                 issuer_did = "QDaSxvduZroHDKkdXKV5gG";
                 // TODO get schema_id from GET /schemas/created, or make constant
-                this.schema_id = "QDaSxvduZroHDKkdXKV5gG:2:enrollee: 1.0";
+                this.schema_id = "QDaSxvduZroHDKkdXKV5gG:2:enrollee:1.1";
                 // TODO get cred_def_id from GET /credential-definitions/created, or make constant
-                this.cred_def_id = "QDaSxvduZroHDKkdXKV5gG:3:CL:112114:default";
+                this.cred_def_id = "QDaSxvduZroHDKkdXKV5gG:3:CL:113261:default";
                 // set to the last segment of the schema_id, a three part version number that was randomly generated on startup of the Faber agent. Segments of the schema_id are separated by ":"s
-                this.schema_version = "1.0";
+                this.schema_version = "1.1";
                 schema_name = "enrollee";
                 // By setting auto-remove to true, ACA-Py will automatically remove the credential exchange record after the protocol completes.
                 auto_remove = true;
