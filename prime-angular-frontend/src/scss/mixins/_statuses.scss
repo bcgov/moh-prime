@@ -1,0 +1,27 @@
+@import 'palette';
+
+/// Provides a list of status colours for use within the application. The
+/// status colours are not Enrolment or Site Registration specific
+@mixin statuses() {
+  .status {
+    &.under-review,
+    &.locked {
+      color: theme-palette(yellow);
+    }
+
+    &.editable,
+    &.approved {
+      color: theme-palette(green);
+    }
+
+    &.declined {
+      color: theme-palette(red)
+    }
+
+    &.requires-toa {
+      // No point putting this in the theme palette since it's
+      // definitely a one off use case
+      color: #9400D3;
+    }
+  }
+}
