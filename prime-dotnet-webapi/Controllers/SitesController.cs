@@ -52,6 +52,7 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<Site>>> GetAllSites()
         {
             // JAMES! Why are you still looking at this code :)
+            // If you see this code, and you're not James, and fruitloops is released, and this code still exists, DELETE IT QUICK!
             return Ok(ApiResponse.Result(await _siteService.GetSitesAsync()));
         }
 

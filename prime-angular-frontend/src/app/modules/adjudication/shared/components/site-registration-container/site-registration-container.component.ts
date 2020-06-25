@@ -49,7 +49,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     private siteResource: SiteResource,
     private dialog: MatDialog
   ) {
-    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.MODULE_PATH);
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
 
     this.action = new EventEmitter<void>();
 
@@ -83,7 +83,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
           exhaustMap(() => this.siteResource.deleteSite(siteId)),
           map((site: Site) => this.dataSource.data = MatTableDataSourceUtils.delete<Site>(this.dataSource, 'id', site.id))
         )
-        .subscribe(() => this.routeUtils.routeRelativeTo(['./']));
+        .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
     }
   }
 

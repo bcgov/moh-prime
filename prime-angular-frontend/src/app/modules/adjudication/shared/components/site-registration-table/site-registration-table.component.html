@@ -98,12 +98,12 @@
           <span>Organization Information</span>
         </button>
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.SITE_REGISTRATIONS, row.id])">
+                (click)="onRoute([row.id])">
           <mat-icon>store</mat-icon>
           <span>Site Information</span>
         </button>
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.SITE_REGISTRATIONS, row.id, AdjudicationRoutes.SITE_ADJUDICATION])">
+                (click)="onRoute([row.id, AdjudicationRoutes.SITE_ADJUDICATION])">
           <mat-icon>rate_review</mat-icon>
           <span>Site Adjudication</span>
         </button>
