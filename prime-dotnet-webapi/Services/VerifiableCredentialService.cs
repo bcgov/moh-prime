@@ -9,8 +9,7 @@ using Newtonsoft.Json;
 
 using Prime.Models;
 using Prime.Services.Clients;
-using Newtonsoft.Json.Linq;
-using QRCoder;
+// using QRCoder;
 
 namespace Prime.Services
 {
