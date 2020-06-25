@@ -31,8 +31,8 @@ namespace Prime
         public readonly static string DOCUMENT_MANAGER_URL = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_URL") ?? "http://localhost:6001/documents";
 
         // Aries Prime Agent
-        public readonly static string VERIFIABLE_CREDENTIAL_API_URL = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "http://52.250.9.144:8000/";
-        // public readonly static string VERIFIABLE_CREDENTIAL_API_URL = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "https://prime-agent-admin-dev.pathfinder.gov.bc.ca/";
+        // public readonly static string VERIFIABLE_CREDENTIAL_API_URL = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "http://localhost:8005";
+        public readonly static string VERIFIABLE_CREDENTIAL_API_URL = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "https://prime-agent-admin-dev.pathfinder.gov.bc.ca/";
         public readonly static string VERIFIABLE_CREDENTIAL_API_KEY = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_KEY") ?? "P8ZmRJ05biXGWI1/bDtXcp1pixtWdsAqhcUJcn4S7QQ=";
     }
 }
