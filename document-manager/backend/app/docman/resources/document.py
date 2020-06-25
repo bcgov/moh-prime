@@ -73,7 +73,7 @@ class DocumentListResource(Resource):
         response = make_response(jsonify(document_guid=document_guid), 201)
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
-        response.headers['Location'] = f'{current_app.config["DOCUMENT_MANAGER_URL"]}/documents/{document_guid}'
+        response.headers['Location'] = os.path.join(current_app.config['DOCUMENT_MANAGER_URL'], 'documents', document_guid)
         response.headers['Upload-Offset'] = 0
         response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Location,Upload-Offset"
         response.autocorrect_location_header = False
