@@ -27,6 +27,7 @@ namespace Prime.Services.Clients
         public async Task<JObject> CreateInvitation()
         {
             var values = new List<KeyValuePair<string, string>>();
+            // values.Add(new KeyValuePair<string, string>("x-api-key", PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY));
             var httpContent = new FormUrlEncodedContent(values);
 
             HttpResponseMessage response = null;
@@ -207,6 +208,7 @@ namespace Prime.Services.Clients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
+        // TODO use real logger
         private async Task LogError(HttpContent content, HttpResponseMessage response, Exception exception = null)
         {
             string secondaryMessage;
@@ -243,6 +245,7 @@ namespace Prime.Services.Clients
             public string schema_issuer_did;
             public string schema_name;
             public JObject credential_proposal;
+
 
             // string issuer_did, string schema_id, string cred_def_id, string schema_version, string comment
             public SendCredentialParams(string comment)
@@ -281,6 +284,7 @@ namespace Prime.Services.Clients
             {
                 return new StringContent(JsonConvert.SerializeObject(this));
             }
+
         }
     }
 

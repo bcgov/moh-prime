@@ -19,6 +19,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
+import { DomSanitizer } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
   templateUrl: './pharmanet-enrolment-summary.component.html',
@@ -39,7 +41,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     private toastService: ToastService,
     private logger: LoggerService,
     private windowRef: WindowRefService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private domSanitizer: DomSanitizer
   ) {
     super(route, router);
     this.showProgressBar = false;
@@ -48,6 +51,11 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   public get enrollee() {
     return (this.enrolment) ? this.enrolment.enrollee : null;
+  }
+
+  public get base64QRCode() {
+    return this.domSanitizer.bypassSecurityTrustUrl(`data:image/png;base64,
+     ${this.enrolment.base64QRCode}`);
   }
 
   public get mailingAddress() {

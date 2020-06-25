@@ -124,6 +124,14 @@ namespace Prime.Models
         [JsonIgnore]
         public string IdentityProvider { get; set; }
 
+        public int? CredentialId { get; set; }
+
+        [JsonIgnore]
+        public Credential Credential { get; set; }
+
+        [NotMapped]
+        public string base64QRCode { get; set; }
+
         [NotMapped]
         public EnrolmentStatus CurrentStatus
         {
