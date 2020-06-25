@@ -1,0 +1,39 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <ng-content select="app-page-header"></ng-content>
+
+  <ng-content select="app-page-subheader"></ng-content>
+
+  <app-search-form [disabled]="true"
+                   (search)="onSearch($event)"
+                   (filter)="onFilter($event)"
+                   (refresh)="onRefresh()"></app-search-form>
+
+  <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
+                               [dataSource]="dataSource"
+                               (viewOrganization)="onViewOrganization($event)"
+                               (viewSite)="onViewSite($event)"
+                               (delete)="onDelete($event)"></app-site-registration-table>
+
+  <ng-container *ngIf="content">
+
+    <div class="row">
+      <div class="col py-5">
+
+        <ng-container [ngTemplateOutlet]="content"
+                      [ngTemplateOutletContext]="{ site: dataSource?.data[0] }"></ng-container>
+
+      </div>
+      <div *ngIf="hasActions"
+           class="col-auto py-5">
+
+        <app-site-registration-actions [site]="dataSource?.data[0]"
+                                       (delete)="onDelete($event)"></app-site-registration-actions>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+</app-page>

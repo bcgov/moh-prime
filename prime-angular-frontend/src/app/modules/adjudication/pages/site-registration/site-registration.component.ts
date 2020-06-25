@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Site } from '@registration/shared/models/site.model';
-import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+
+import { Subscription } from 'rxjs';
+
 import { AbstractComponent } from '@shared/classes/abstract-component';
-import { map } from 'rxjs/operators';
+import { Site } from '@registration/shared/models/site.model';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
   selector: 'app-site-registration',
@@ -14,6 +15,7 @@ import { map } from 'rxjs/operators';
 export class SiteRegistrationComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
   public site: Site;
+  public hasActions: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -21,18 +23,16 @@ export class SiteRegistrationComponent extends AbstractComponent implements OnIn
     private adjudicationResource: AdjudicationResource
   ) {
     super(route, router);
+
+    this.hasActions = true;
   }
 
   public ngOnInit(): void {
     this.getSite(this.route.snapshot.params.id);
   }
 
-  private getSite(siteId: number, statusCode?: number) {
+  private getSite(siteId: number, statusCode?: number): void {
     this.busy = this.adjudicationResource.getSiteById(siteId, statusCode)
-      .pipe(
-        map((site: Site) => site)
-      )
       .subscribe((site: Site) => this.site = site);
   }
-
 }

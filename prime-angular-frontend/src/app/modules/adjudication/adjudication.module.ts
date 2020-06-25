@@ -25,6 +25,9 @@ import {
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
 import { SiteTableComponent } from './shared/components/site-table/site-table.component';
 import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
+import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
+import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
+import { SiteRegistrationActionsComponent } from './shared/components/site-registration-actions/site-registration-actions.component';
 
 @NgModule({
   declarations: [
@@ -45,12 +48,15 @@ import { SiteRegistrationComponent } from './pages/site-registration/site-regist
     ReviewStatusContentComponent,
     SiteRegistrationsComponent,
     SiteTableComponent,
-    SiteRegistrationComponent
+    SiteRegistrationComponent,
+    SiteRegistrationContainerComponent,
+    SiteRegistrationTableComponent,
+    SiteRegistrationActionsComponent
   ],
   imports: [
     SharedModule,
-    AdjudicationRoutingModule,
-    EditorModule
+    EditorModule,
+    AdjudicationRoutingModule
   ]
 })
 export class AdjudicationModule { }

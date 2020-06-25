@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, TemplateRef, Output, EventEmitter, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,9 +18,13 @@ import {
   ClaimEnrolleeAction,
   ClaimActionEnum
 } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-data-source-utils.class';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
+import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
@@ -29,43 +33,43 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
   templateUrl: './adjudication-container.component.html',
   styleUrls: ['./adjudication-container.component.scss']
 })
-export class AdjudicationContainerComponent extends AbstractComponent implements OnInit {
+export class AdjudicationContainerComponent implements OnInit {
   @Input() public hasActions: boolean;
   @Input() public content: TemplateRef<any>;
   @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
-  public columns: string[];
   public dataSource: MatTableDataSource<HttpEnrollee>;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
 
+  private routeUtils: RouteUtils;
+
   constructor(
+    @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
     protected route: ActivatedRoute,
     protected router: Router,
     private authService: AuthService,
     private adjudicationResource: AdjudicationResource,
     private dialog: MatDialog
   ) {
-    super(route, router);
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.MODULE_PATH);
 
     this.action = new EventEmitter<void>();
 
     this.hasActions = false;
-    this.columns = ['uniqueId', 'name', 'appliedDate', 'status', 'approvedDate', 'adjudicator', 'actions'];
     this.dataSource = new MatTableDataSource<HttpEnrollee>([]);
 
     this.showSearchFilter = false;
-    this.baseRoutePath = [AdjudicationRoutes.MODULE_PATH, AdjudicationRoutes.ENROLLEES];
   }
 
   public onSearch(search: string | null): void {
-    this.setQueryParams({ search });
+    this.routeUtils.updateQueryParams({ search });
   }
 
   public onFilter(status: EnrolmentStatus | null): void {
-    this.setQueryParams({ status });
+    this.routeUtils.updateQueryParams({ status });
   }
 
   public onRefresh(): void {
@@ -251,10 +255,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
 
   public onDelete(enrolleeId: number) {
     const data: DialogOptions = {
-      title: 'Delete Enrollee',
-      message: 'Are you sure you want to delete this enrolment?',
-      actionType: 'warn',
-      actionText: 'Delete Enrollee',
+      ...this.defaultOptions.delete('enrollee'),
       component: NoteComponent,
     };
 
@@ -272,7 +273,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
           }),
           exhaustMap(() => this.adjudicationResource.deleteEnrollee(enrolleeId)),
         )
-        .subscribe((enrollee: HttpEnrollee) => this.routeTo(this.baseRoutePath));
+        .subscribe(() => this.routeUtils.routeRelativeTo([AdjudicationRoutes.ENROLLEES]));
     }
   }
 
@@ -305,7 +306,7 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
   }
 
   public onRoute(routePath: string | (string | number)[]) {
-    this.routeWithin(routePath);
+    this.routeUtils.routeWithin(routePath);
   }
 
   public ngOnInit() {
@@ -343,28 +344,14 @@ export class AdjudicationContainerComponent extends AbstractComponent implements
       );
   }
 
-  private setQueryParams(queryParams: { search?: string, status?: number } = { search: null, status: null }) {
-    // Passing `null` removes the query parameter from the URL
-    queryParams = { ...this.route.snapshot.queryParams, ...queryParams };
-    this.router.navigate([], { queryParams });
-  }
-
-  private resetQueryParams() {
-    this.setQueryParams();
-  }
-
-  // TODO split out into service and use generics for managing data tables, and update with add row
   private updateEnrollee(enrollee: HttpEnrollee) {
-    this.dataSource.data = this.dataSource.data
-      .map((currentEnrollee: HttpEnrollee) =>
-        (currentEnrollee.id === enrollee.id) ? enrollee : currentEnrollee
-      );
+    this.dataSource.data = MatTableDataSourceUtils
+      .update<HttpEnrollee>(this.dataSource, 'id', enrollee);
   }
 
-  // TODO split out into service and use generics for managing data tables, and update with add row
   private removeEnrollee(enrollee: HttpEnrollee) {
-    this.dataSource.data = this.dataSource.data
-      .filter((currentEnrollee: HttpEnrollee) => currentEnrollee.id !== enrollee.id);
+    this.dataSource.data = MatTableDataSourceUtils
+      .delete<HttpEnrollee>(this.dataSource, 'id', enrollee.id);
   }
 
   private adjudicationActionPipe(enrolleeId: number, action: SubmissionAction) {

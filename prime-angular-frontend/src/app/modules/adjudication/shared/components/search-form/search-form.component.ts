@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,8 +14,10 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
   styleUrls: ['./search-form.component.scss']
 })
 export class SearchFormComponent implements OnInit {
+  @Input() public disabled: boolean;
   @Output() public search: EventEmitter<string>;
   @Output() public filter: EventEmitter<EnrolmentStatus>;
+  @Output() public refresh: EventEmitter<void>;
 
   public form: FormGroup;
   public statuses: Config<number>[];
@@ -28,6 +30,7 @@ export class SearchFormComponent implements OnInit {
     this.statuses = this.configService.statuses;
     this.search = new EventEmitter<string>();
     this.filter = new EventEmitter<EnrolmentStatus>();
+    this.refresh = new EventEmitter<void>();
   }
 
   public get textSearch(): FormControl {
@@ -38,6 +41,10 @@ export class SearchFormComponent implements OnInit {
     return this.form.get('statusCode') as FormControl;
   }
 
+  public onRefresh() {
+    this.refresh.emit();
+  }
+
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
@@ -45,8 +52,8 @@ export class SearchFormComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      textSearch: [null, []],
-      statusCode: ['', []]
+      textSearch: [{ value: null, disabled: this.disabled }, []],
+      statusCode: [{ value: '', disabled: this.disabled }, []]
     });
   }
 

@@ -6,6 +6,7 @@ import { map, exhaustMap } from 'rxjs/operators';
 
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { User } from '@auth/shared/models/user.model';
@@ -13,7 +14,6 @@ import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
-import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Injectable({

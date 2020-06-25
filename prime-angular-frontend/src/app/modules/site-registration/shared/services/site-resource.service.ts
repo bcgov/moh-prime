@@ -30,6 +30,36 @@ export class SiteResource {
     private logger: LoggerService
   ) { }
 
+  // TODO Temporary endpoint for admins until fruit loops!!!
+  public getAllSites(): Observable<Site[]> {
+    return this.apiResource.get<Site[]>(`sites`)
+      .pipe(
+        map((response: ApiHttpResponse<Site[]>) => response.result),
+        // TODO split out into proper adapter
+        map((sites: Site[]) => {
+          sites.map((site: Site) => {
+            site.location.businessHours = site.location.businessHours.map((businessDay: BusinessDay) => {
+              businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
+              businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
+
+              if (businessDay.endTime === '24') {
+                businessDay.startTime = null;
+                businessDay.endTime = null;
+              }
+              return businessDay;
+            });
+          });
+          return sites;
+        }),
+        tap((sites: Site[]) => this.logger.info('SITES', sites)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Sites could not be retrieved');
+          this.logger.error('[SiteRegistration] SiteResource::getAllSites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getSites(organizationId: number): Observable<Site[]> {
     return this.apiResource.get<Site[]>(`organizations/${organizationId}/sites`)
       .pipe(
