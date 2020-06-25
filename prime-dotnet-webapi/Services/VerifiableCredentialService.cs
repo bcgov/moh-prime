@@ -94,15 +94,22 @@ namespace Prime.Services
 
         private async Task<bool> handleConnection(JObject data)
         {
-            var connection_id = data.GetValue("connection_id").ToString();
-            Console.WriteLine($"connection_id: " + connection_id);
-            // var response = await _verifiableCredentialClient.AcceptRequest(connection_id);
+            var state = data.GetValue("state").ToString();
 
-            // Connection successful, issue credential
-            // if (response != null)
-            // {
-            var credResponse = await SendCredential(connection_id);
-            // }
+            if (state == "response")
+            {
+                var connection_id = data.GetValue("connection_id").ToString();
+                Console.WriteLine($"connection_id: " + connection_id);
+                // var response = await _verifiableCredentialClient.AcceptRequest(connection_id);
+
+                // Connection successful, issue credential
+                // if (response != null)
+                // {
+                var credResponse = await SendCredential(connection_id);
+                // }
+            }
+
+
 
             return await Task.FromResult(true);
         }
