@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 
 using Prime.Models;
 using Prime.Services.Clients;
-// using QRCoder;
 
 namespace Prime.Services
 {
@@ -96,7 +95,7 @@ namespace Prime.Services
         private async Task<bool> handleConnection(JObject data)
         {
             var connection_id = data.GetValue("connection_id").ToString();
-            Console.WriteLine($"connection_id: ", connection_id);
+            Console.WriteLine($"connection_id: " + connection_id);
             // var response = await _verifiableCredentialClient.AcceptRequest(connection_id);
 
             // Connection successful, issue credential
