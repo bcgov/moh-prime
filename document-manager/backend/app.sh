@@ -1,4 +1,4 @@
 #!/bin/bash
 cd /opt/app-root/src
-flask run &disown 
+flask run ${FLASK_RUN_PARAMS} &disown 
 uwsgi uwsgi.ini
