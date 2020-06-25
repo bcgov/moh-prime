@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Serilog;
 
 using Prime.Models;
-using Serilog;
 
 namespace Prime.Services.Clients
 {
@@ -121,7 +121,6 @@ namespace Prime.Services.Clients
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(httpContent, response);
-                _logger.Information("AcceptRequest response {@HttpResponseMessage}", response);
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
             }
 
@@ -228,8 +227,7 @@ namespace Prime.Services.Clients
                 secondaryMessage = "no additional message. Http response and exception were null.";
             }
 
-            // TODO log using serilog
-            Console.WriteLine($"{DateTime.Now} - Error sending invitation.");
+            _logger.Error(exception, secondaryMessage, new Object[] { response, content });
         }
 
         private class SendCredentialParams

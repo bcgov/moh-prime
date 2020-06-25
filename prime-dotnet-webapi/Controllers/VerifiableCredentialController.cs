@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using Serilog;
+
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -17,12 +19,15 @@ namespace Prime.Controllers
     public class VerifiableCredentialController : ControllerBase
     {
         private readonly IVerifiableCredentialService _verifiableCredentialsService;
+        private readonly ILogger _logger;
 
         public VerifiableCredentialController(
-            IVerifiableCredentialService verifiableCredentialService
+            IVerifiableCredentialService verifiableCredentialService,
+            ILogger logger
         )
         {
             _verifiableCredentialsService = verifiableCredentialService;
+            _logger = logger;
         }
 
         // POST: api/connections/create-invitation
@@ -35,6 +40,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<JObject>> CreateConnection()
         {
+            _logger.Information("TEST");
             var response = await _verifiableCredentialsService.CreateConnection();
 
             return Ok(ApiResponse.Result(response));
