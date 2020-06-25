@@ -159,11 +159,6 @@ objects:
               secretKeyRef:
                 key: database-user
                 name: "postgresql-secret"
-          - name: DOCUMENT_MANAGER_CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                key: DOCUMENT_MANAGER_CLIENT_SECRET
-                name: "document-manager-secret"
           - name: DOCUMENT_MANAGER_URL
             value: https://document-manager${SUFFIX}-backend.pharmanetenrolment.gov.bc.ca/
           - name: FLASK_APP
