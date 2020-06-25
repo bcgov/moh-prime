@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
-using Serilog;
+using Newtonsoft.Json;
 
 using Prime.Models;
 using Prime.Services.Clients;
@@ -28,17 +28,14 @@ namespace Prime.Services
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
-        private readonly ILogger _logger;
 
         public VerifiableCredentialService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IVerifiableCredentialClient verifiableCredentialClient,
-            ILogger logger)
+            IVerifiableCredentialClient verifiableCredentialClient)
             : base(context, httpContext)
         {
             _verifiableCredentialClient = verifiableCredentialClient;
-            _logger = logger;
         }
 
         public async Task<JObject> CreateConnection()
@@ -71,6 +68,9 @@ namespace Prime.Services
 
         public async Task<bool> Create(JObject data, string topic)
         {
+            System.Console.WriteLine($"DATA ${topic}");
+            System.Console.WriteLine(JsonConvert.SerializeObject(data));
+
             switch (topic)
             {
                 case WebhookTopic.Connections:
@@ -78,7 +78,8 @@ namespace Prime.Services
                 case WebhookTopic.IssueCredential:
                     return await handleIssueCredential(data);
                 default:
-                    _logger.Error($"Webhook {topic} is not supported");
+                    // _logger.Error($"Webhook {topic} is not supported");
+                    System.Console.WriteLine($"Webhook {topic} is not supported");
                     return false;
             };
         }
@@ -118,7 +119,8 @@ namespace Prime.Services
                     return await Task.FromResult(true);
 
                 default:
-                    _logger.Error($"Received unexpected state {state} for CredentialExchangeState ${state}");
+                    // _logger.Error($"Received unexpected state {state} for CredentialExchangeState ${state}");
+                    System.Console.WriteLine($"Received unexpected state {state} for CredentialExchangeState ${state}");
                     return await Task.FromResult(false);
             }
         }

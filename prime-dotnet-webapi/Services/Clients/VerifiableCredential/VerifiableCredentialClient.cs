@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Serilog;
 
 using Prime.Models;
 
@@ -16,15 +15,13 @@ namespace Prime.Services.Clients
     {
         private readonly HttpClient _client;
 
-        private readonly ILogger _logger;
+        // private readonly ILogger _logger;
 
         public VerifiableCredentialClient(
-            HttpClient client,
-            ILogger logger)
+            HttpClient client)
         {
             // Auth header and api-key are injected in Startup.cs
             _client = client;
-            _logger = logger;
         }
 
         public async Task<JObject> CreateInvitation()
@@ -227,7 +224,11 @@ namespace Prime.Services.Clients
                 secondaryMessage = "no additional message. Http response and exception were null.";
             }
 
-            _logger.Error(exception, secondaryMessage, new Object[] { response, content });
+            // _logger.Error(exception, secondaryMessage, new Object[] { response, content });
+            System.Console.WriteLine("RESPONSE");
+            System.Console.WriteLine(JsonConvert.SerializeObject(response));
+            System.Console.WriteLine("CONTENT");
+            System.Console.WriteLine(JsonConvert.SerializeObject(content));
         }
 
         private class SendCredentialParams
