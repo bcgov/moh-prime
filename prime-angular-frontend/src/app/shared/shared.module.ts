@@ -19,6 +19,7 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
+import { CasePipe } from '@shared/pipes/case.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
@@ -84,6 +85,9 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     WeekdayPipe,
     FullnamePipe,
     VendorPipe,
+    CasePipe,
+    SafeHtmlPipe,
+    CertificatePipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -99,7 +103,6 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
-    CertificatePipe,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     EnrolleePropertyErrorComponent,
@@ -107,7 +110,6 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     PrimePhoneComponent,
     PrimeLogoComponent,
     ApproveEnrolmentComponent,
-    SafeHtmlPipe,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
@@ -123,7 +125,7 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     PageSubheader2Component,
     PageSubheader2TitleDirective,
     PageSubheader2SummaryDirective,
-    PageSubheader2MoreInfoDirective,
+    PageSubheader2MoreInfoDirective
   ],
   imports: [
     CommonModule,
@@ -146,6 +148,7 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     NgxProgressModule,
     ReactiveFormsModule,
     CapitalizePipe,
+    CasePipe,
     CertificatePipe,
     DefaultPipe,
     EnrolleePipe,
@@ -179,7 +182,6 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
-    CertificatePipe,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     PrimeEmailComponent,
