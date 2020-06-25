@@ -16,7 +16,6 @@ import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
