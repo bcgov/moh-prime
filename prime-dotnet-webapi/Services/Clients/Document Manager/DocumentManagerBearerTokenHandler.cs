@@ -22,14 +22,7 @@ namespace Prime.Services.Clients
             // TODO: we could do access token caching/refreshing/etc. here
             var accessToken = await _tokenClient.GetAccessTokenAsync(_credentials);
 
-            // TODO: Remove
-            System.Console.WriteLine("-----------  DEBUG   ------------");
-            System.Console.WriteLine($"access Token:{accessToken}");
-
             request.SetBearerToken(accessToken);
-
-            System.Console.WriteLine("-----------  DEBUG   ------------");
-            System.Console.WriteLine($"request:{request.ToString()}");
 
             return await base.SendAsync(request, cancellationToken);
         }
