@@ -279,6 +279,7 @@ namespace Prime.Services.Clients
                 var attributes = new JArray();
                 var attribute = new JObject();
                 attribute.Add("name", "gpid");
+                attribute.Add("mime-type", "text/plain");
                 attribute.Add("value", "MY_TEST_GPID");
                 attributes.Add(attribute);
                 credential_proposal_object.Add("@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview");
