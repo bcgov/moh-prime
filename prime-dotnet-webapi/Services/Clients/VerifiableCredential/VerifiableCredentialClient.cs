@@ -26,9 +26,15 @@ namespace Prime.Services.Clients
 
         public async Task<JObject> CreateInvitation()
         {
+            System.Console.WriteLine("CREATE_INVITATION**********************************************");
+
             var values = new List<KeyValuePair<string, string>>();
             // values.Add(new KeyValuePair<string, string>("x-api-key", PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY));
             var httpContent = new FormUrlEncodedContent(values);
+
+            System.Console.WriteLine("CREATE_INVITATION_HTTP_CONTENT");
+            System.Console.WriteLine(JsonConvert.SerializeObject(httpContent));
+            System.Console.WriteLine("END_CREATE_INVITATION_PAYLOAD---------------------------------------------");
 
             HttpResponseMessage response = null;
             try
@@ -47,11 +53,16 @@ namespace Prime.Services.Clients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
             }
 
+            System.Console.WriteLine("CREATE_INVITATION_RESPONSE");
+            System.Console.WriteLine(JsonConvert.SerializeObject(response));
+            System.Console.WriteLine("END_CREATE_INVITATION_RESPONSE---------------------------------------------");
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
         public async Task<JObject> ReceiveInvitation(String invitation)
         {
+            System.Console.WriteLine("RECEIVE_INVITATION**********************************************");
+
             var httpContent = new StringContent(invitation);
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
@@ -77,6 +88,8 @@ namespace Prime.Services.Clients
 
         public async Task<JObject> AcceptInvitation(String connection_id)
         {
+            System.Console.WriteLine("ACCEPT_INVITATION**********************************************");
+
             var httpContent = new StringContent("");
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
@@ -102,6 +115,8 @@ namespace Prime.Services.Clients
 
         public async Task<JObject> AcceptRequest(String connection_id)
         {
+            System.Console.WriteLine("ACCEPT_REQUEST**********************************************");
+
             var httpContent = new StringContent("");
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
@@ -127,13 +142,20 @@ namespace Prime.Services.Clients
 
         public async Task<JObject> SendCredential(string connection_id)
         {
+            System.Console.WriteLine("SEND_CREDENTIAL**********************************************");
+
             var credParams = new SendCredentialParams(connection_id, "assign gpid");
 
-            System.Console.WriteLine("SEND CREDENTIAL PARAMETERS");
+            System.Console.WriteLine("SEND_CREDENTIAL_PARAMS");
             System.Console.WriteLine(JsonConvert.SerializeObject(credParams));
+            System.Console.WriteLine("END_SEND_CREDENTIAL_PARAMS---------------------------------------------");
 
             var httpContent = new StringContent(credParams.ToString());
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            System.Console.WriteLine("SEND_CREDENTIAL_HTTP_CONTENT");
+            System.Console.WriteLine(JsonConvert.SerializeObject(httpContent));
+            System.Console.WriteLine("END_SEND_CREDENTIAL_HTTP_CONTENT---------------------------------------------");
 
             HttpResponseMessage response = null;
             try
@@ -152,6 +174,9 @@ namespace Prime.Services.Clients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
             }
 
+            System.Console.WriteLine("SEND_CREDENTIAL_RESPONSE");
+            System.Console.WriteLine(JsonConvert.SerializeObject(response));
+            System.Console.WriteLine("END_SEND_CREDENTIAL_RESPONSE---------------------------------------------");
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
@@ -159,13 +184,25 @@ namespace Prime.Services.Clients
         {
             var issueParams = new JObject();
             var credential_preview = new JObject();
+            // TODO separate out for easy updates in case it is changed
             credential_preview.Add("@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview");
             credential_preview.Add("attributes", attributes);
             issueParams.Add("credential_preview", credential_preview);
             issueParams.Add("comment", "issue_credential");
 
+            System.Console.WriteLine("ISSUE_CREDENTIAL_PREVIEW");
+            System.Console.WriteLine(JsonConvert.SerializeObject(credential_preview));
+            System.Console.WriteLine("END_ISSUE_CREDENTIAL_PREVIEW");
+            System.Console.WriteLine("ISSUE_CREDENTIAL_ISSUE_PARAMS");
+            System.Console.WriteLine(JsonConvert.SerializeObject(issueParams));
+            System.Console.WriteLine("END_ISSUE_CREDENTIAL_ISSUE_PARAMS---------------------------------------------");
+
             var httpContent = new StringContent(issueParams.ToString());
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            System.Console.WriteLine("ISSUE_CREDENTIAL_HTTP_CONTENT");
+            System.Console.WriteLine(JsonConvert.SerializeObject(httpContent));
+            System.Console.WriteLine("END_ISSUE_CREDENTIAL_HTTP_CONTENT---------------------------------------------");
 
             HttpResponseMessage response = null;
             try
@@ -184,11 +221,17 @@ namespace Prime.Services.Clients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
             }
 
+            System.Console.WriteLine("ISSUE_CREDENTIAL_RESPONSE");
+            System.Console.WriteLine(JsonConvert.SerializeObject(response));
+            System.Console.WriteLine("END_ISSUE_CREDENTIAL_RESPONSE---------------------------------------------");
+
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
         public async Task<JObject> StoreCredential(string credential_exchange_id)
         {
+            System.Console.WriteLine("STORE_CREDENTIAL**********************************************");
+
             var httpContent = new StringContent("");
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
@@ -212,7 +255,6 @@ namespace Prime.Services.Clients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
-        // TODO use real logger
         private async Task LogError(HttpContent content, HttpResponseMessage response, Exception exception = null)
         {
             string secondaryMessage;
@@ -231,10 +273,12 @@ namespace Prime.Services.Clients
             }
 
             // _logger.Error(exception, secondaryMessage, new Object[] { response, content });
-            System.Console.WriteLine("RESPONSE");
+            System.Console.WriteLine("ERROR_RESPONSE");
             System.Console.WriteLine(JsonConvert.SerializeObject(response));
-            System.Console.WriteLine("CONTENT");
+            System.Console.WriteLine("END_ERROR_RESPONSE---------------------------------------------");
+            System.Console.WriteLine("ERROR_CONTENT");
             System.Console.WriteLine(JsonConvert.SerializeObject(content));
+            System.Console.WriteLine("END_ERROR_CONTENT---------------------------------------------");
         }
 
         private class SendCredentialParams

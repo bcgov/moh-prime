@@ -54,6 +54,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Create(string topic, [FromBody] JObject data)
         {
+            System.Console.WriteLine("WEBHOOK%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+
             await _verifiableCredentialsService.Create(data, topic);
 
             return NoContent();
