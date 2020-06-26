@@ -46,7 +46,7 @@ parameters:
     required: true
     value: 5Gi
   - name: HTTP_PORT
-    value: 6001
+    value: "6001"
     required: true
 objects:
 - apiVersion: v1
