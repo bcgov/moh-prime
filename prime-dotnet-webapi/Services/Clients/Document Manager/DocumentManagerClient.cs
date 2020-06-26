@@ -20,6 +20,10 @@ namespace Prime.Services.Clients
             _client.DefaultRequestHeaders.Add("Tus-Resumable", "1.0.0");
             _client.DefaultRequestHeaders.Add("Upload-Length", fileSize);
 
+            // TODO: Remvoe, testing
+            System.Console.WriteLine("-----------  DEBUG   ------------");
+            System.Console.WriteLine($"filename:{filename}, filesize:{fileSize}");
+
             var content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 { "filename", filename },
