@@ -49,7 +49,7 @@ export class AdjudicationGuard extends BaseGuard {
           return (this.authService.isAdmin())
             ? this.adjudicationResource.createAdmin(admin)
             : Promise.resolve(admin);
-        }),
+        })
       ).toPromise();
 
     const redirect$ = new Promise(async (resolve, reject) => {
