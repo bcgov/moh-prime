@@ -36,6 +36,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<JObject>> CreateConnection()
         {
+            System.Console.WriteLine("CREATE_CONNECTION ===================================");
+
             var response = await _verifiableCredentialsService.CreateConnection();
 
             return Ok(ApiResponse.Result(response));
@@ -54,7 +56,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Create(string topic, [FromBody] JObject data)
         {
-            System.Console.WriteLine("WEBHOOK%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            System.Console.WriteLine($"WEBHOOK: {topic} ===================================");
 
             await _verifiableCredentialsService.Create(data, topic);
 
