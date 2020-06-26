@@ -144,7 +144,7 @@ class DocumentResource(Resource):
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
         response.headers['Upload-Offset'] = new_offset
-        response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Upload-Offset"
+        response.headers['Access-Control-Expose-Headers'] = 'Tus-Resumable,Tus-Version,Upload-Offset'
         return response
 
     def head(self, document_guid):
@@ -161,7 +161,7 @@ class DocumentResource(Resource):
         response.headers['Upload-Offset'] = cache.get(FILE_UPLOAD_OFFSET(document_guid))
         response.headers['Upload-Length'] = cache.get(FILE_UPLOAD_SIZE(document_guid))
         response.headers['Cache-Control'] = 'no-store'
-        response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Upload-Offset,Upload-Length,Cache-Control"
+        response.headers['Access-Control-Expose-Headers'] = 'Tus-Resumable,Tus-Version,Upload-Offset,Upload-Length,Cache-Control'
         return response
 
     def options(self, document_guid):
@@ -174,8 +174,8 @@ class DocumentResource(Resource):
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
         response.headers['Tus-Extension'] = "creation"
-        response.headers['Tus-Max-Size'] = current_app.config["MAX_FILE_SIZE"]
-        response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Tus-Extension,Tus-Max-Size"
+        response.headers['Tus-Max-Size'] = current_app.config['MAX_CONTENT_LENGTH']
+        response.headers['Access-Control-Expose-Headers'] = 'Tus-Resumable,Tus-Version,Tus-Extension,Tus-Max-Size'
         response.status_code = 204
         return response
 
