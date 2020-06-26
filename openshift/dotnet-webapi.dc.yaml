@@ -96,7 +96,7 @@ objects:
                 - name: DOCUMENT_MANAGER_CLIENT_ID
                   value: prime-document-manager
                 - name: DOCUMENT_MANAGER_URL
-                  value: "https://document-manager${SUFFIX}-backend:6001/"
+                  value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca:6001/"
                 - name: DOCUMENT_MANAGER_CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
