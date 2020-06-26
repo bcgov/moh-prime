@@ -92,12 +92,12 @@ pipeline {
                 }
             }
         }
-        stage('Cleanup') {
+        /*stage('Cleanup') {
             steps {
                 script {
                     sh "./player.sh sparsify"
                 }
             }
-        }
+        }*/
     }
 }
