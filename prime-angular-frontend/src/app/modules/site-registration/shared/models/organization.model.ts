@@ -1,5 +1,6 @@
 import { Party } from './party.model';
 import { Location } from './location.model';
+import { SignedAgreement } from './signed-agreement.model';
 
 export interface Organization {
   id?: number;
@@ -13,4 +14,5 @@ export interface Organization {
   locations: Location[];
   submittedDate: string;
   completed: boolean;
+  signedAgreements: SignedAgreement[];
 }
