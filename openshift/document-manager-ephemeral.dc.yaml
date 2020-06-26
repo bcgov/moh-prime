@@ -352,4 +352,4 @@ objects:
         termination: passthrough
     to:
       kind: Service
-      name: "${NAME}${SUFFIX}"
+      name: "${NAME}${SUFFIX}-backend"
