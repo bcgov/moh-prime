@@ -315,7 +315,7 @@ export class DashboardComponent implements OnInit {
           },
           {
             name: 'Site Registrations',
-            icon: 'location_city',
+            icon: 'store',
             route: AdjudicationRoutes.SITE_REGISTRATIONS,
             showItem: true
           }
@@ -331,8 +331,8 @@ export class DashboardComponent implements OnInit {
         showHeader: false,
         items: [
           {
-            name: 'Organizations',
-            icon: 'location_city',
+            name: 'Administration',
+            icon: 'store',
             route: SiteRoutes.ORGANIZATIONS,
             showItem: true
           }

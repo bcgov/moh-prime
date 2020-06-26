@@ -54,7 +54,7 @@ export class AdjudicationContainerComponent implements OnInit {
     private adjudicationResource: AdjudicationResource,
     private dialog: MatDialog
   ) {
-    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.MODULE_PATH);
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
 
     this.action = new EventEmitter<void>();
 

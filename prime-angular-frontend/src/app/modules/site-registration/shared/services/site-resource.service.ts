@@ -164,6 +164,24 @@ export class SiteResource {
       );
   }
 
+  // TODO probably not the best name or messages for this endpoint
+  public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
+    const payload = { data: pecCode };
+    return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        tap((site: Site) => {
+          this.toastService.openSuccessToast('Site has been updated');
+          this.logger.info('UPDATED_SITE', site);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site could not be updated');
+          this.logger.error('[SiteRegistration] SiteResource::updatePecCode error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public deleteSite(siteId: number): Observable<Site> {
     return this.apiResource.delete<Site>(`sites/${siteId}`)
       .pipe(

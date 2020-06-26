@@ -8,6 +8,7 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
+import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-data-source-utils.class';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -18,7 +19,6 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-data-source-utils.class';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -28,6 +28,7 @@ import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-
 export class SiteRegistrationContainerComponent implements OnInit {
   @Input() public hasActions: boolean;
   @Input() public content: TemplateRef<any>;
+  @Input() public refresh: Observable<boolean>;
   @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
@@ -48,7 +49,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     private siteResource: SiteResource,
     private dialog: MatDialog
   ) {
-    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.MODULE_PATH);
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
 
     this.action = new EventEmitter<void>();
 
@@ -65,21 +66,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
   }
 
   public onRefresh(): void {
-    // Use existing query params for initial search
     this.getDataset(this.route.snapshot.queryParams);
-
-    // Update results on query param change
-    this.route.queryParams
-      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
-  }
-
-  public onViewOrganization(siteId: number) {
-    // TODO look up organization
-    this.routeUtils.routeRelativeTo([]);
-  }
-
-  public onViewSite(siteId: number) {
-    this.routeUtils.routeRelativeTo([siteId]);
   }
 
   public onDelete(siteId: number) {
@@ -96,7 +83,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
           exhaustMap(() => this.siteResource.deleteSite(siteId)),
           map((site: Site) => this.dataSource.data = MatTableDataSourceUtils.delete<Site>(this.dataSource, 'id', site.id))
         )
-        .subscribe(() => this.routeUtils.routeRelativeTo(['./']));
+        .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
     }
   }
 
@@ -105,7 +92,21 @@ export class SiteRegistrationContainerComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    // Use existing query params for initial search
     this.getDataset(this.route.snapshot.queryParams);
+
+    // Update results on query param change
+    this.route.queryParams
+      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
+
+    // Listen for requests to refresh the data layer
+    if (this.refresh instanceof Observable) {
+      this.refresh.subscribe((shouldRefresh: boolean) => {
+        if (shouldRefresh) {
+          this.onRefresh();
+        }
+      });
+    }
   }
 
   // private getDataset(queryParams: { search?: string, status?: number }): void {
@@ -138,9 +139,9 @@ export class SiteRegistrationContainerComponent implements OnInit {
   // }
 
   private getDataset(queryParams: { search?: string, status?: number }): void {
-    const organizationId = this.route.snapshot.params.id;
-    const results$ = (organizationId)
-      ? this.getSiteById(organizationId)
+    const siteId = this.route.snapshot.params.sid;
+    const results$ = (siteId)
+      ? this.getSiteById(siteId)
       : this.getSites(queryParams);
 
     this.busy = results$

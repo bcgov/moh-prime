@@ -46,7 +46,10 @@
         <th mat-header-cell
             *matHeaderCellDef> State </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ null | default }} </td>
+            *matCellDef="let row;"
+            class="status"
+            [class.approved]="row.pec"
+            [class.under-review]="!row.pec"> {{ (row.pec) ? 'Approved' : 'Under Review' | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="pecCode">
@@ -90,16 +93,22 @@
       <mat-menu #menu="matMenu">
         <button mat-menu-item
                 [disabled]="true"
-                (click)="view('organization', row.id)">
+                (click)="onRoute([])">
           <mat-icon>location_city</mat-icon>
           <span>Organization Information</span>
         </button>
         <button mat-menu-item
-                (click)="view('site', row.id)">
+                (click)="onRoute([row.id])">
           <mat-icon>store</mat-icon>
           <span>Site Information</span>
         </button>
         <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.SITE_ADJUDICATION])">
+          <mat-icon>rate_review</mat-icon>
+          <span>Site Adjudication</span>
+        </button>
+        <button mat-menu-item
+                [disabled]="!canEdit"
                 (click)="deleteSite(row.id)">
           <mat-icon>delete</mat-icon>
           <span>Delete Site</span>

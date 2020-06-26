@@ -52,6 +52,7 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<Site>>> GetAllSites()
         {
             // JAMES! Why are you still looking at this code :)
+            // If you see this code, and you're not James, and fruitloops is released, and this code still exists, DELETE IT QUICK!
             return Ok(ApiResponse.Result(await _siteService.GetSitesAsync()));
         }
 
@@ -294,6 +295,44 @@ namespace Prime.Controllers
             var licences = await _siteService.GetBusinessLicencesAsync(site.Id);
 
             return Ok(ApiResponse.Result(licences));
+        }
+
+        // PUT: api/Sites/5/pec
+        /// <summary>
+        /// Update the PEC code.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="pecCode"></param>
+        [HttpPut("{siteId}/pec", Name = nameof(UpdatePecCode))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdatePecCode(int siteId, FromBodyText pecCode)
+        {
+            if (string.IsNullOrWhiteSpace(pecCode))
+            {
+                this.ModelState.AddModelError("Site.PEC", "PEC Code was not provided");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            var site = await _siteService.GetSiteNoTrackingAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+
+            if (!User.CanEdit(party))
+            {
+                return Forbid();
+            }
+
+            var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
+
+            return Ok(ApiResponse.Result(updatedSite));
         }
     }
 }
