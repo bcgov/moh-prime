@@ -33,16 +33,13 @@ export class SiteRoutes {
     return `/${SiteRoutes.MODULE_PATH}/${route}`;
   }
 
-  // TODO need to refactor route workflow for organizations and sites
-
   // Used to indicate the routes and order of registration for organizations
   public static organizationRegistrationRouteOrder(): string[] {
     return [
       this.ORGANIZATION_SIGNING_AUTHORITY,
       this.ORGANIZATION_INFORMATION,
       this.ORGANIZATION_TYPE,
-      this.ORGANIZATION_REVIEW,
-      this.ORGANIZATION_AGREEMENT
+      this.ORGANIZATION_REVIEW
     ];
   }
 
@@ -61,45 +58,11 @@ export class SiteRoutes {
     ];
   }
 
-  // Use by the progress indicator to calculate percent completion
-  // of the registration process
-  public static initialRegistrationRouteOrder(): string[] {
+  public static siteRegistrationRoutes(): string[] {
     return [
-      // ...SiteRoutes.registrationRoutes()
-    ];
-  }
-
-  // Registration routes are ordered from the perspective of an
-  // "initial" registration. The order is important for directing the
-  // user incrementally through creating their registration
-  public static registrationRoutes(): string[] {
-    return [
-      // ...SiteRoutes.noOrganizationAgreementRoutes(),
-      // SiteRoutes.HOURS_OPERATION,
-      // SiteRoutes.VENDOR,
-      // SiteRoutes.SIGNING_AUTHORITY,
-      // SiteRoutes.ADMINISTRATOR,
-      // SiteRoutes.PRIVACY_OFFICER,
-      // SiteRoutes.TECHNICAL_SUPPORT,
-      // SiteRoutes.SITE_REVIEW,
-      // ...SiteRoutes.siteRegistrationSubmissionRoutes()
-    ];
-  }
-
-  public static noOrganizationAgreementRoutes(): string[] {
-    return [
-      // SiteRoutes.MULTIPLE_SITES,
-      // SiteRoutes.ORGANIZATION_INFORMATION,
-      // SiteRoutes.BUSINESS_LICENCE,
-      // SiteRoutes.SITE_ADDRESS,
-      // SiteRoutes.ORGANIZATION_TYPE,
-      // SiteRoutes.ORGANIZATION_AGREEMENT,
-    ];
-  }
-
-  public static siteRegistrationSubmissionRoutes(): string[] {
-    return [
-      // SiteRoutes.CONFIRMATION
+      ...this.organizationRegistrationRouteOrder(),
+      ...this.siteRegistrationRouteOrder(),
+      this.ORGANIZATION_AGREEMENT
     ];
   }
 }

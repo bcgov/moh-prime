@@ -19,12 +19,15 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
+import { CasePipe } from '@shared/pipes/case.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
-import { FullnamePipe } from './pipes/fullname.pipe';
+import { FullnamePipe } from '@shared/pipes/fullname.pipe';
+import { VendorPipe } from '@shared/pipes/vendor.pipe';
+
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import {
@@ -55,16 +58,16 @@ import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
-import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
-import { AccessTermComponent } from './components/access-term/access-term.component';
-import { NoteComponent } from './components/dialogs/content/note/note.component';
-import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
-import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
-import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
-import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
-import { FormErrorsComponent } from './components/form-errors/form-errors.component';
-import { SiteReviewComponent } from './components/site/site-review/site-review.component';
-import { PartyReviewComponent } from './components/site/party-review/party-review.component';
+import { AccessTermsTableComponent } from '@shared/components/access-terms-table/access-terms-table.component';
+import { AccessTermComponent } from '@shared/components/access-term/access-term.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { ClaimEnrolleeComponent } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { FeedbackComponent } from '@shared/components/dialogs/content/feedback/feedback.component';
+import { CollectionNoticeContainerComponent } from '@shared/components/collection-notice-container/collection-notice-container.component';
+import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.component';
+import { SiteReviewComponent } from '@shared/components/site/site-review/site-review.component';
+import { PartyReviewComponent } from '@shared/components/site/party-review/party-review.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +84,9 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     YesNoPipe,
     WeekdayPipe,
     FullnamePipe,
+    VendorPipe,
+    CasePipe,
+    SafeHtmlPipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -96,7 +102,6 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
-    CertificatePipe,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     EnrolleePropertyErrorComponent,
@@ -104,7 +109,6 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     PrimePhoneComponent,
     PrimeLogoComponent,
     ApproveEnrolmentComponent,
-    SafeHtmlPipe,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
@@ -120,7 +124,7 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     PageSubheader2Component,
     PageSubheader2TitleDirective,
     PageSubheader2SummaryDirective,
-    PageSubheader2MoreInfoDirective,
+    PageSubheader2MoreInfoDirective
   ],
   imports: [
     CommonModule,
@@ -143,6 +147,7 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     NgxProgressModule,
     ReactiveFormsModule,
     CapitalizePipe,
+    CasePipe,
     CertificatePipe,
     DefaultPipe,
     EnrolleePipe,
@@ -156,6 +161,7 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     WeekdayPipe,
     FullnamePipe,
     SafeHtmlPipe,
+    VendorPipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
@@ -175,7 +181,6 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
-    CertificatePipe,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     PrimeEmailComponent,

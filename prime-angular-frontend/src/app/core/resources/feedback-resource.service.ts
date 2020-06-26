@@ -7,7 +7,8 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ApiResource } from '@core/resources/api-resource.service';
-import { Feedback } from '@shared/components/dialogs/content/feedback/feedback.component';
+
+import { Feedback } from '@shared/models/feedback.model';
 
 @Injectable({
   providedIn: 'root'

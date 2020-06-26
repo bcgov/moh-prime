@@ -39,13 +39,35 @@ export class RouteUtils {
 
   /**
    * @description
-   * Route within a specified base path, for example within a module, otherwise uses root.
+   * Route within a specified base path, for example within a
+   * module, otherwise uses root.
    */
   public routeWithin(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}) {
     let commands = (Array.isArray(routePath)) ? routePath : [routePath];
-    commands = (this.baseRoutePath) ? [...this.baseRoutePath, ...commands] : commands;
+    commands = (this.baseRoutePath) ? [this.baseRoutePath, ...commands] : commands;
     this.routeTo(commands, {
       ...navigationExtras
     });
+  }
+
+  /**
+   * @description
+   * Update the query parameters on the current route without routing
+   * to a view. Query parameters are merged, but can be removed by
+   * setting the keys value to `null`.
+   */
+  public updateQueryParams(queryParams: { [key: string]: any }) {
+    // Passing `null` values removes the query parameter from the URL
+    queryParams = { ...this.route.snapshot.queryParams, ...queryParams };
+    this.router.navigate([], { queryParams });
+  }
+
+  /**
+   * @description
+   * Remove every query parameter on the current route without routing
+   * to a view.
+   */
+  public removeQueryParams() {
+    this.router.navigate([], { queryParams: {} });
   }
 }

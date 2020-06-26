@@ -133,7 +133,7 @@ export class OrganizationResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be accepted');
-          this.logger.error('[SiteRegistration] OrganizationResource::acceptOrganizationAgreement error has occurred: ', error);
+          this.logger.error('[SiteRegistration] OrganizationResource::acceptCurrentOrganizationAgreement error has occurred: ', error);
           throw error;
         })
       );
@@ -145,7 +145,7 @@ export class OrganizationResource {
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be retrieved');
-          this.logger.error('[SiteRegistration] OrganizationResource::getCurrentOrganizationAgreement error has occurred: ', error);
+          this.logger.error('[SiteRegistration] OrganizationResource::getSignedOrganizationAgreement error has occurred: ', error);
           throw error;
         })
       );
