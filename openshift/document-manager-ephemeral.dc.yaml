@@ -45,6 +45,9 @@ parameters:
     name: VOLUME_CAPACITY
     required: true
     value: 5Gi
+  - name: HTTP_PORT
+    value: 6001
+    required: true
 objects:
 - apiVersion: v1
   kind: PersistentVolumeClaim
@@ -341,7 +344,7 @@ objects:
   metadata:
     name: "${NAME}${SUFFIX}"
   spec:
-    host: "${VANITY_URL}"
+    host: "${NAME}${SUFFIX}.pharmanetenrolment.gov.bc.ca"
     port:
       targetPort: "${HTTP_PORT}"
     tls:
