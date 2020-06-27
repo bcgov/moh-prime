@@ -1,15 +1,12 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
-using Prime.Models;
 using Prime.Services.Clients;
 
+// TODO should implement a queue when using webhooks
 namespace Prime.Services
 {
     public class WebhookTopic
@@ -48,20 +45,19 @@ namespace Prime.Services
             _verifiableCredentialClient = verifiableCredentialClient;
         }
 
+        // Create an invitation to establish a connection between the agents.
         public async Task<JObject> CreateConnection()
         {
             return await _verifiableCredentialClient.CreateInvitation();
         }
 
-        public async Task<JObject> IssueCredential(string connectionId)
-        {
-            // TODO get the enrollee information for issuing a credential
-            // TODO build out the request information for issuance
-            return await _verifiableCredentialClient.IssueCredential(connectionId);
-        }
-
+        // Handle webhook events pushed by the issuing agent.
         public async Task<bool> Webhook(JObject data, string topic)
         {
+            // _logger.Information($"Webhook topic \"{topic}\" for @JObject", data);
+            System.Console.WriteLine($"Webhook topic \"{topic}\"");
+            System.Console.WriteLine(JsonConvert.SerializeObject(data));
+
             switch (topic)
             {
                 case WebhookTopic.Connections:
@@ -75,17 +71,22 @@ namespace Prime.Services
             };
         }
 
+        // Handle webhook events for connection states.
         private async Task<bool> handleConnection(JObject data)
         {
             var state = data.GetValue("state").ToString();
 
-            // _logger.Information($"Connection state \"{response}\" for @JObject", data);
-            System.Console.WriteLine($"Connection state \"{ConnectionStates.Response}\"");
+            // _logger.Information($"Connection state \"{state}\" for @JObject", data);
+            System.Console.WriteLine($"Connection state \"{state}\"");
             System.Console.WriteLine(JsonConvert.SerializeObject(data));
 
             switch (state)
             {
+                case ConnectionStates.Invitation:
+                case ConnectionStates.Request:
+                    return await Task.FromResult(true);
                 case ConnectionStates.Response:
+                    // TODO store the connection ID for checking whether it is active in the future
                     var connection_id = data.GetValue("connection_id").ToString();
 
                     // _logger.Information($"Issuing a credential with this connection_id: {connection_id}");
@@ -100,6 +101,10 @@ namespace Prime.Services
                     System.Console.WriteLine(JsonConvert.SerializeObject(issueCredentialResponse));
 
                     return await Task.FromResult(true);
+
+                case ConnectionStates.Active:
+                    // TODO store the connection ID for checking whether it is active in the future
+                    return await Task.FromResult(true);
                 default:
                     // _logger.Error($"Connection state {state} is not supported");
                     System.Console.WriteLine($"Connection state {state} is not supported");
@@ -107,23 +112,30 @@ namespace Prime.Services
             }
         }
 
+        // Issue a credential to an agent.
+        private async Task<JObject> IssueCredential(string connectionId)
+        {
+            // TODO get the enrollee information for creating a claim for issuing a credential
+            // TODO build out the request information for issuance
+            return await _verifiableCredentialClient.IssueCredential(connectionId);
+        }
+
+        // Handle webhook events for issue credential topics.
         private async Task<bool> handleIssueCredential(JObject data)
         {
             var state = data.GetValue("state").ToString();
 
+            // _logger.Information($"Issue credential state \"{state}\" for @JObject", data);
+            System.Console.WriteLine($"Issue credential state \"{state}\"");
+            System.Console.WriteLine(JsonConvert.SerializeObject(data));
+
             switch (state)
             {
+                case CredentialExchangeStates.OfferSent:
                 case CredentialExchangeStates.RequestReceived:
-                    System.Console.WriteLine("CREDENTIAL_EXCHANGE_STATES_REQUEST_RECEIVED -------------------------------");
-                    System.Console.WriteLine(JsonConvert.SerializeObject(data));
-                    System.Console.WriteLine("END_CREDENTIAL_EXCHANGE_STATES_REQUEST_RECEIVED ---------------------------");
-
-                    // string credential_exchange_id = data.GetValue("credential_exchange_id").ToString();
-                    // var attributes = data.GetValue("attributes") as JArray;
-
-                    // await _verifiableCredentialClient.IssueCredential(credential_exchange_id, attributes);
+                // TODO store that the credential has been accepted
+                case CredentialExchangeStates.Issued:
                     return await Task.FromResult(true);
-
                 default:
                     // _logger.Error($"Credential exchange state {state} is not supported");
                     System.Console.WriteLine($"Credential exchange state {state} is not supported");

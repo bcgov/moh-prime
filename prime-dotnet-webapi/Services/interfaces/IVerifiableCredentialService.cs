@@ -7,7 +7,6 @@ namespace Prime.Services
     public interface IVerifiableCredentialService
     {
         Task<JObject> CreateConnection();
-        Task<JObject> IssueCredential(String gpid);
         Task<bool> Webhook(JObject data, string topic);
     }
 }
