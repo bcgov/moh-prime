@@ -50,15 +50,15 @@ namespace Prime.Controllers
         /// <param name="topic"></param>
         /// <param name="data"></param>
         // Webhooks explained "In Soviet Russia API call you!" - Jason Aitchison 2020
-        [HttpPost("/api/webhooks/topic/{topic}", Name = nameof(Create))]
+        [HttpPost("/api/webhooks/topic/{topic}", Name = nameof(Webhook))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> Create(string topic, [FromBody] JObject data)
+        public async Task<ActionResult> Webhook(string topic, [FromBody] JObject data)
         {
             System.Console.WriteLine($"WEBHOOK: {topic} ===================================");
 
-            await _verifiableCredentialsService.Create(data, topic);
+            await _verifiableCredentialsService.Webhook(data, topic);
 
             return NoContent();
         }

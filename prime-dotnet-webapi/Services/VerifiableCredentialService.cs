@@ -53,12 +53,14 @@ namespace Prime.Services
             return await _verifiableCredentialClient.CreateInvitation();
         }
 
-        public async Task<JObject> SendCredential(String gpid)
+        public async Task<JObject> IssueCredential(string connectionId)
         {
-            return await _verifiableCredentialClient.SendCredential(gpid); ;
+            // TODO get the enrollee information for issuing a credential
+            // TODO build out the request information for issuance
+            return await _verifiableCredentialClient.IssueCredential(connectionId);
         }
 
-        public async Task<bool> Create(JObject data, string topic)
+        public async Task<bool> Webhook(JObject data, string topic)
         {
             switch (topic)
             {
@@ -77,23 +79,27 @@ namespace Prime.Services
         {
             var state = data.GetValue("state").ToString();
 
+            // _logger.Information($"Connection state \"{response}\" for @JObject", data);
+            System.Console.WriteLine($"Connection state \"{ConnectionStates.Response}\"");
+            System.Console.WriteLine(JsonConvert.SerializeObject(data));
+
             switch (state)
             {
                 case ConnectionStates.Response:
-                    System.Console.WriteLine("HANDLE_CONNECTION_RESPONSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-                    System.Console.WriteLine(JsonConvert.SerializeObject(data));
-
                     var connection_id = data.GetValue("connection_id").ToString();
 
-                    Console.WriteLine($"About to issue a credential with this connection_id: {connection_id}");
+                    // _logger.Information($"Issuing a credential with this connection_id: {connection_id}");
+                    Console.WriteLine($"Issuing a credential with this connection_id: {connection_id}");
 
-                    var credResponse = await SendCredential(connection_id);
+                    // Assumed that when a connection invitation has been sent and accepted
+                    // the enrollee has been approved, and has a GPID for issuing a credential
+                    var issueCredentialResponse = await IssueCredential(connection_id);
 
-                    System.Console.WriteLine(JsonConvert.SerializeObject(credResponse));
-                    System.Console.WriteLine("END_HANDLE_CONNECTION_RESPONSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                    // _logger.Information($"Credential has been issued for connection_id: {connection_id} with response @JObject", issueCredentialResponse);
+                    Console.WriteLine($"Credential has been issued for connection_id: {connection_id}");
+                    System.Console.WriteLine(JsonConvert.SerializeObject(issueCredentialResponse));
 
                     return await Task.FromResult(true);
-
                 default:
                     // _logger.Error($"Connection state {state} is not supported");
                     System.Console.WriteLine($"Connection state {state} is not supported");
@@ -104,21 +110,18 @@ namespace Prime.Services
         private async Task<bool> handleIssueCredential(JObject data)
         {
             var state = data.GetValue("state").ToString();
-            string credential_exchange_id;
+
             switch (state)
             {
                 case CredentialExchangeStates.RequestReceived:
-                    System.Console.WriteLine("CREDENTIAL_EXCHANGE_STATES_REQUEST_RECEIVED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                    System.Console.WriteLine("CREDENTIAL_EXCHANGE_STATES_REQUEST_RECEIVED -------------------------------");
                     System.Console.WriteLine(JsonConvert.SerializeObject(data));
+                    System.Console.WriteLine("END_CREDENTIAL_EXCHANGE_STATES_REQUEST_RECEIVED ---------------------------");
 
-                    credential_exchange_id = data.GetValue("credential_exchange_id").ToString();
-                    var attributes = data.GetValue("attributes") as JArray;
+                    // string credential_exchange_id = data.GetValue("credential_exchange_id").ToString();
+                    // var attributes = data.GetValue("attributes") as JArray;
 
-                    System.Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-                    System.Console.WriteLine(JsonConvert.SerializeObject(attributes));
-                    System.Console.WriteLine("END_CREDENTIAL_EXCHANGE_STATES_REQUEST_RECEIVED @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-
-                    await _verifiableCredentialClient.IssueCredential(credential_exchange_id, attributes);
+                    // await _verifiableCredentialClient.IssueCredential(credential_exchange_id, attributes);
                     return await Task.FromResult(true);
 
                 default:

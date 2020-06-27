@@ -15,8 +15,6 @@ namespace Prime.Services.Clients
     {
         private readonly HttpClient _client;
 
-        // private readonly ILogger _logger;
-
         public VerifiableCredentialClient(
             HttpClient client)
         {
@@ -30,10 +28,6 @@ namespace Prime.Services.Clients
 
             var values = new List<KeyValuePair<string, string>>();
             var httpContent = new FormUrlEncodedContent(values);
-
-            System.Console.WriteLine("CREATE_INVITATION_HTTP_CONTENT");
-            System.Console.WriteLine(JsonConvert.SerializeObject(httpContent));
-            System.Console.WriteLine("END_CREATE_INVITATION_PAYLOAD---------------------------------------------");
 
             HttpResponseMessage response = null;
             try
@@ -49,7 +43,7 @@ namespace Prime.Services.Clients
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(httpContent, response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::CreateInvitation");
             }
 
             System.Console.WriteLine("CREATE_INVITATION_RESPONSE");
@@ -58,22 +52,40 @@ namespace Prime.Services.Clients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<JObject> SendCredential(string connection_id)
+        public async Task<JObject> IssueCredential(string connectionId)
         {
-            System.Console.WriteLine("SEND_CREDENTIAL *******************************************************");
+            System.Console.WriteLine("ISSUE_CREDENTIAL *******************************************************");
 
-            var credParams = new SendCredentialParams(connection_id, "assign gpid");
+            JObject payload = new JObject
+                {
+                    { "connection_id", connectionId },
+                    { "issuer_did", "QDaSxvduZroHDKkdXKV5gG" },
+                    { "schema_id", "QDaSxvduZroHDKkdXKV5gG:2:enrollee:1.1" },
+                    { "schema_issuer_did", "QDaSxvduZroHDKkdXKV5gG" },
+                    { "schema_name", "enrollee" },
+                    { "schema_version", "1.1" },
+                    { "cred_def_id", "QDaSxvduZroHDKkdXKV5gG:3:CL:113261:default" },
+                    { "comment", "PharmaNet GPID" },
+                    { "auto_remove", true },
+                    { "revoc_reg_id", null },
+                    { "credential_proposal", new JObject
+                        {
+                            { "@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview" },
+                            { "attributes", new JArray
+                                {
+                                    new JObject
+                                    {
+                                        { "name", "gpid" },
+                                        { "value", "EXAMPLE_GPID_FOR_TESTING" }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
 
-            System.Console.WriteLine("SEND_CREDENTIAL_PARAMS");
-            System.Console.WriteLine(JsonConvert.SerializeObject(credParams));
-            System.Console.WriteLine("END_SEND_CREDENTIAL_PARAMS --------------------------------------------");
-
-            var httpContent = new StringContent(credParams.ToString());
+            var httpContent = new StringContent(payload.ToString());
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-
-            System.Console.WriteLine("SEND_CREDENTIAL_HTTP_CONTENT");
-            System.Console.WriteLine(JsonConvert.SerializeObject(httpContent));
-            System.Console.WriteLine("END_SEND_CREDENTIAL_HTTP_CONTENT --------------------------------------");
 
             HttpResponseMessage response = null;
             try
@@ -83,61 +95,134 @@ namespace Prime.Services.Clients
             catch (Exception ex)
             {
                 await LogError(httpContent, response, ex);
-                throw new VerifiableCredentialApiException("Error occurred when calling Verfiable Credential API. Try again later.", ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to issue a credential: ", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(httpContent, response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::IssueCredential");
             }
 
-            System.Console.WriteLine("SEND_CREDENTIAL_RESPONSE -------------------------------------------------");
+            System.Console.WriteLine("ISSUE_CREDENTIAL_RESPONSE -------------------------------------------------");
             System.Console.WriteLine(JsonConvert.SerializeObject(response));
-            System.Console.WriteLine("END_SEND_CREDENTIAL_RESPONSE ---------------------------------------------");
+            System.Console.WriteLine("END_ISSUE_CREDENTIAL_RESPONSE ---------------------------------------------");
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<JObject> IssueCredential(string credential_exchange_id, JArray attributes)
+        // public async Task<JObject> IssueCredential(string credential_exchange_id, JArray attributes)
+        // {
+        //     var credential_preview = new JObject();
+        //     credential_preview.Add("@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview");
+        //     credential_preview.Add("attributes", attributes);
+
+        //     var issueParams = new JObject();
+        //     issueParams.Add("credential_preview", credential_preview);
+        //     issueParams.Add("comment", "issue_credential");
+
+        //     System.Console.WriteLine("ISSUE_CREDENTIAL_PREVIEW_AND_PARAMS ------------------------------------------");
+        //     System.Console.WriteLine(JsonConvert.SerializeObject(credential_preview));
+        //     System.Console.WriteLine("------------------------------------------------------------------------------");
+        //     System.Console.WriteLine(JsonConvert.SerializeObject(issueParams));
+        //     System.Console.WriteLine("END_ISSUE_CREDENTIAL_ISSUE_PREVIEW_AND_PARAMS --------------------------------");
+
+        //     var httpContent = new StringContent(issueParams.ToString());
+        //     httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+        //     HttpResponseMessage response = null;
+        //     try
+        //     {
+        //         response = await _client.PostAsync($"issue-credential/records/{credential_exchange_id}/issue", httpContent);
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         await LogError(httpContent, response, ex);
+        //         throw new VerifiableCredentialApiException("Error occurred when calling Verfiable Credential API. Try again later.", ex);
+        //     }
+
+        //     if (!response.IsSuccessStatusCode)
+        //     {
+        //         await LogError(httpContent, response);
+        //         throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
+        //     }
+
+        //     System.Console.WriteLine("ISSUE_CREDENTIAL_RESPONSE ------------------------------------------------");
+        //     System.Console.WriteLine(JsonConvert.SerializeObject(response));
+        //     System.Console.WriteLine("END_ISSUE_CREDENTIAL_RESPONSE --------------------------------------------");
+
+        //     return JObject.Parse(await response.Content.ReadAsStringAsync());
+        // }
+
+        public async Task<string> GetIssuerDID()
         {
-            var credential_preview = new JObject();
-            credential_preview.Add("@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview");
-            credential_preview.Add("attributes", attributes);
-
-            var issueParams = new JObject();
-            issueParams.Add("credential_preview", credential_preview);
-            issueParams.Add("comment", "issue_credential");
-
-            System.Console.WriteLine("ISSUE_CREDENTIAL_PREVIEW_AND_PARAMS ------------------------------------------");
-            System.Console.WriteLine(JsonConvert.SerializeObject(credential_preview));
-            System.Console.WriteLine("------------------------------------------------------------------------------");
-            System.Console.WriteLine(JsonConvert.SerializeObject(issueParams));
-            System.Console.WriteLine("END_ISSUE_CREDENTIAL_ISSUE_PREVIEW_AND_PARAMS --------------------------------");
-
-            var httpContent = new StringContent(issueParams.ToString());
-            httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.PostAsync($"issue-credential/records/{credential_exchange_id}/issue", httpContent);
+                response = await _client.GetAsync("wallet/did/public");
             }
             catch (Exception ex)
             {
-                await LogError(httpContent, response, ex);
-                throw new VerifiableCredentialApiException("Error occurred when calling Verfiable Credential API. Try again later.", ex);
+                // TODO log error but needs to have overload to so httpContent not required, or put null
+                // await LogError(httpContent, response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to GET issuer DID: ", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                await LogError(httpContent, response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was returned when calling Verifiable Credential API.");
+                // TODO log error but needs to have overload to so httpContent not required, or put null
+                // await LogError(httpContent, response, ex);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetIssuerDID");
             }
 
-            System.Console.WriteLine("ISSUE_CREDENTIAL_RESPONSE ------------------------------------------------");
-            System.Console.WriteLine(JsonConvert.SerializeObject(response));
-            System.Console.WriteLine("END_ISSUE_CREDENTIAL_RESPONSE --------------------------------------------");
+            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+            return body.Value<string>("did");
+        }
+
+        public async Task<JObject> GetSchema(string schemaIssuerDid)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.GetAsync($"schemas/created?schema_issuer_did={schemaIssuerDid}");
+            }
+            catch (Exception ex)
+            {
+                // TODO log error but needs to have overload to so httpContent not required, or put null
+                // await LogError(httpContent, response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to GET schema: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // TODO log error but needs to have overload to so httpContent not required, or put null
+                // await LogError(httpContent, response, ex);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetSchema");
+            }
+
+            return JObject.Parse(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<JObject> GetCredentialDefinition(string schemaIssuerDid)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.GetAsync($"credential-definitions/created?schema_issuer_did={schemaIssuerDid}");
+            }
+            catch (Exception ex)
+            {
+                // TODO log error but needs to have overload to so httpContent not required, or put null
+                // await LogError(httpContent, response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to GET credential definition: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // TODO log error but needs to have overload to so httpContent not required, or put null
+                // await LogError(httpContent, response, ex);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetCredentialDefinition");
+            }
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
@@ -161,6 +246,8 @@ namespace Prime.Services.Clients
 
             // _logger.Error(exception, secondaryMessage, new Object[] { response, content });
             System.Console.WriteLine("ERROR_RESPONSE_AND_CONTENT ------------------------------------------------");
+            System.Console.WriteLine(JsonConvert.SerializeObject(secondaryMessage));
+            System.Console.WriteLine("---------------------------------------------------------------------------");
             System.Console.WriteLine(JsonConvert.SerializeObject(response));
             System.Console.WriteLine("---------------------------------------------------------------------------");
             System.Console.WriteLine(JsonConvert.SerializeObject(content));
