@@ -8,7 +8,7 @@
                                       [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY">
     </app-enrolment-progress-indicator>
 
-    <app-next-steps-infographic></app-next-steps-infographic>
+    <app-next-steps-infographic [enrolment]="enrolment"></app-next-steps-infographic>
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Next Steps</ng-container>
@@ -217,10 +217,6 @@
 
         </div>
       </div> -->
-
-      <!-- TODO display this in a modal when or place a FAB or regular action in the view to trigger -->
-      <img [src]="'data:image/png;base64,' + enrolment.base64QRCode | safe: 'url'"
-           class="qrCode">
 
       <p class="mb-4">
         If you work at more than one site, enter the email
