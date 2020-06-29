@@ -309,13 +309,13 @@ export class DashboardComponent implements OnInit {
         items: [
           {
             name: 'PRIME Enrollees',
-            icon: 'format_list_bulleted',
+            icon: 'people',
             route: AdjudicationRoutes.ENROLLEES,
             showItem: true
           },
           {
             name: 'Site Registrations',
-            icon: 'format_list_bulleted',
+            icon: 'store',
             route: AdjudicationRoutes.SITE_REGISTRATIONS,
             showItem: true
           }
@@ -331,8 +331,8 @@ export class DashboardComponent implements OnInit {
         showHeader: false,
         items: [
           {
-            name: 'Organizations',
-            icon: 'location_city',
+            name: 'Administration',
+            icon: 'store',
             route: SiteRoutes.ORGANIZATIONS,
             showItem: true
           }

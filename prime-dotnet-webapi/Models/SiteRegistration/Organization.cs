@@ -34,7 +34,6 @@ namespace Prime.Models
 
         public IEnumerable<Location> Locations { get; set; }
 
-        [JsonIgnore]
         public ICollection<SignedAgreement> SignedAgreements { get; set; }
     }
 }

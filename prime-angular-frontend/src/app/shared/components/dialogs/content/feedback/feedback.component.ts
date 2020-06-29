@@ -1,12 +1,9 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+
 import { debounceTime } from 'rxjs/operators';
 
-export class Feedback {
-  public comment: string;
-  public enrolleeId: number;
-  public route: string;
-}
+import { Feedback } from '@shared/models/feedback.model';
 
 @Component({
   selector: 'app-feedback',

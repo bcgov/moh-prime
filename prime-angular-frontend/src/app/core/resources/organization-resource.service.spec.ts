@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { OrganizationResource } from './organization-resource.service';
 
 describe('OrganizationResource', () => {
-  let service: OrganizationResourceService;
+  let service: OrganizationResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

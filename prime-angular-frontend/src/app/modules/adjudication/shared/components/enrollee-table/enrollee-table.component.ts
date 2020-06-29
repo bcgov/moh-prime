@@ -2,10 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-enrollee-table',

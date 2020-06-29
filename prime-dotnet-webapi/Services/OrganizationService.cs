@@ -232,6 +232,7 @@ namespace Prime.Services
         {
             return _context.Organizations
                 .Include(o => o.Locations)
+                .Include(o => o.SignedAgreements)
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(o => o.SigningAuthority)

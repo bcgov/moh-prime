@@ -12,6 +12,7 @@ namespace Prime.Services
         Task<Site> GetSiteAsync(int siteId);
         Task<int> CreateSiteAsync(int organizationId);
         Task<int> UpdateSiteAsync(int siteId, Site site, bool isCompleted = false);
+        Task<Site> UpdatePecCode(int siteId, string pecCode);
         Task DeleteSiteAsync(int siteId);
         Task<Site> SubmitRegistrationAsync(int siteId);
         Task<Site> GetSiteNoTrackingAsync(int siteId);

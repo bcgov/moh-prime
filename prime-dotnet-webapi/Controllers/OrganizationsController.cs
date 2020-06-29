@@ -27,15 +27,18 @@ namespace Prime.Controllers
         private readonly IOrganizationService _organizationService;
         private readonly IPartyService _partyService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IDocumentService _documentService;
 
         public OrganizationsController(
             IOrganizationService organizationService,
             IPartyService partyService,
+            IDocumentService documentService,
             IRazorConverterService razorConverterService)
         {
             _organizationService = organizationService;
             _partyService = partyService;
             _razorConverterService = razorConverterService;
+            _documentService = documentService;
         }
 
         // GET: api/Organizations
@@ -324,6 +327,35 @@ namespace Prime.Controllers
             var agreements = await _organizationService.GetSignedAgreementsAsync(organization.Id);
 
             return Ok(ApiResponse.Result(agreements));
+        }
+
+        // Get: api/organizations/5/latest-signed-agreement
+        /// <summary>
+        /// Gets the latest signed agreement by organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpGet("{organizationId}/latest-signed-agreement", Name = nameof(GetLatestSignedAgreement))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<SignedAgreement>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SignedAgreement>>> GetLatestSignedAgreement(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            if (!User.CanEdit(organization.SigningAuthority))
+            {
+                return Forbid();
+            }
+
+            var signedAgreement = await _documentService.GetLatestSignedAgreementDocumentByOrganizationId(organizationId);
+
+            return Ok(ApiResponse.Result(signedAgreement.Data));
         }
 
         // GET: api/Organizations/organization-agreement-document
