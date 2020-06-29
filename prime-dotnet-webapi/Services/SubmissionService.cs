@@ -70,10 +70,11 @@ namespace Prime.Services
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
 
-            // TODO each submission shouldn't create a new connection
-            // TODO need robust issuance rules to be added
+            // TODO need robust issuance rules to be added since each submission shouldn't create
+            // a new connection and issue a new credential
             // TODO when/where should a new credential be issued?
-            // TODO perform check for an active connection and/or issued credential in ver cred service
+            // TODO check for an active connection
+            // TODO check for issued credential
             await _verifiableCredentialService.CreateConnectionAsync(enrollee);
 
             await this.ProcessEnrolleeApplicationRules(enrolleeId);
