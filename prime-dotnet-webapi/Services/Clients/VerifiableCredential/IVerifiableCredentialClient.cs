@@ -6,10 +6,9 @@ namespace Prime.Services.Clients
 {
     public interface IVerifiableCredentialClient
     {
-        Task<JObject> CreateInvitation();
-        Task<JObject> IssueCredential(string connectionId);
-        Task<string> GetIssuerDID();
-        Task<JObject> GetSchema(string schemaIssuerDid);
-        Task<JObject> GetCredentialDefinition(string schemaIssuerDid);
+        Task<JObject> CreateInvitationAsync(string alias);
+        Task<JObject> IssueCredentialAsync(JObject credentialOffer);
+        Task<string> GetIssuerDidAsync();
+        Task<string> GetCredentialDefinitionIdAsync(string schemaId);
     }
 }

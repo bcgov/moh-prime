@@ -18,7 +18,7 @@ namespace Prime.Services.Clients
             _client = client;
         }
 
-        public async Task<JObject> CreateInvitation()
+        public async Task<JObject> CreateInvitationAsync(string alias)
         {
             // _logger.Information("Create connection invitation");
             System.Console.WriteLine("Create connection invitation");
@@ -29,7 +29,7 @@ namespace Prime.Services.Clients
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.PostAsync("connections/create-invitation", httpContent);
+                response = await _client.PostAsync($"connections/create-invitation?alias={alias}", httpContent);
             }
             catch (Exception ex)
             {
@@ -40,7 +40,7 @@ namespace Prime.Services.Clients
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(httpContent, response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::CreateInvitation");
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::CreateInvitationAsync");
             }
 
             // _logger.Information("Create connection invitation response @JObject", response);
@@ -50,39 +50,9 @@ namespace Prime.Services.Clients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<JObject> IssueCredential(string connectionId)
+        public async Task<JObject> IssueCredentialAsync(JObject credentialOffer)
         {
-            // TODO load parameters dynamically for schema, credential definition, etc
-            // TODO clean up object construction
-            JObject payload = new JObject
-                {
-                    { "connection_id", connectionId },
-                    { "issuer_did", "QDaSxvduZroHDKkdXKV5gG" },
-                    { "schema_id", "QDaSxvduZroHDKkdXKV5gG:2:enrollee:1.1" },
-                    { "schema_issuer_did", "QDaSxvduZroHDKkdXKV5gG" },
-                    { "schema_name", "enrollee" },
-                    { "schema_version", "1.1" },
-                    { "cred_def_id", "QDaSxvduZroHDKkdXKV5gG:3:CL:113261:default" },
-                    { "comment", "PharmaNet GPID" },
-                    { "auto_remove", true },
-                    { "revoc_reg_id", null },
-                    { "credential_proposal", new JObject
-                        {
-                            { "@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview" },
-                            { "attributes", new JArray
-                                {
-                                    new JObject
-                                    {
-                                        { "name", "gpid" },
-                                        { "value", "EXAMPLE_GPID_FOR_TESTING" }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
-
-            var httpContent = new StringContent(payload.ToString());
+            var httpContent = new StringContent(credentialOffer.ToString());
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
             HttpResponseMessage response = null;
@@ -99,13 +69,13 @@ namespace Prime.Services.Clients
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(httpContent, response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::IssueCredential");
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::IssueCredentialAsync");
             }
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<string> GetIssuerDID()
+        public async Task<string> GetIssuerDidAsync()
         {
             HttpResponseMessage response = null;
             try
@@ -121,41 +91,19 @@ namespace Prime.Services.Clients
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetIssuerDID");
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetIssuerDidAsync");
             }
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
             return body.Value<string>("did");
         }
 
-        public async Task<JObject> GetSchema(string schemaIssuerDid)
+        public async Task<string> GetCredentialDefinitionIdAsync(string schemaId)
         {
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.GetAsync($"schemas/created?schema_issuer_did={schemaIssuerDid}");
-            }
-            catch (Exception ex)
-            {
-                await LogError(response, ex);
-                throw new VerifiableCredentialApiException("Error occurred attempting to GET schema: ", ex);
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                await LogError(response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetSchema");
-            }
-
-            return JObject.Parse(await response.Content.ReadAsStringAsync());
-        }
-
-        public async Task<JObject> GetCredentialDefinition(string schemaIssuerDid)
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                response = await _client.GetAsync($"credential-definitions/created?schema_issuer_did={schemaIssuerDid}");
+                response = await _client.GetAsync($"credential-definitions/created?schema_id={schemaId}");
             }
             catch (Exception ex)
             {
@@ -166,10 +114,11 @@ namespace Prime.Services.Clients
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetCredentialDefinition");
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetCredentialDefinitionAsync");
             }
 
-            return JObject.Parse(await response.Content.ReadAsStringAsync());
+            JObject credentialDefinition = JObject.Parse(await response.Content.ReadAsStringAsync());
+            return (string)credentialDefinition["credential_definition_ids"][0];
         }
 
         private async Task LogError(HttpResponseMessage response, Exception exception = null)
