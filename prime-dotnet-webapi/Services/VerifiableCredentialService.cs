@@ -119,7 +119,6 @@ namespace Prime.Services
                 case ConnectionStates.Request:
                     return await Task.FromResult(true);
                 case ConnectionStates.Response:
-                    // TODO store the connection ID for checking whether it is active in the future
                     var connection_id = data.Value<string>("connection_id");
                     var alias = data.Value<int>("alias");
 
@@ -138,7 +137,6 @@ namespace Prime.Services
                     return await Task.FromResult(true);
 
                 case ConnectionStates.Active:
-                    // TODO store the connection ID for checking whether it is active in the future
                     return await Task.FromResult(true);
                 default:
                     // _logger.Error($"Connection state {state} is not supported");
