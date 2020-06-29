@@ -24,7 +24,8 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
-import { FullnamePipe } from './pipes/fullname.pipe';
+import { FullnamePipe } from '@shared/pipes/fullname.pipe';
+import { SafePipe } from '@shared/pipes/safe.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import {
@@ -81,6 +82,8 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     YesNoPipe,
     WeekdayPipe,
     FullnamePipe,
+    SafeHtmlPipe,
+    SafePipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -104,7 +107,6 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     PrimePhoneComponent,
     PrimeLogoComponent,
     ApproveEnrolmentComponent,
-    SafeHtmlPipe,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
@@ -156,6 +158,7 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     WeekdayPipe,
     FullnamePipe,
     SafeHtmlPipe,
+    SafePipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
