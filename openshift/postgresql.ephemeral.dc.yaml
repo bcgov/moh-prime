@@ -32,7 +32,7 @@ parameters:
   - description: The OpenShift ImageStream name.
     displayName: IMAGE_STREAM_NAME
     name: IMAGE_STREAM_NAME
-    value: patroni:10
+    value: ongres/patroni
   - description: The OpenShift Namespace where the ImageStream resides.
     displayName: Namespace
     name: IMAGE_STREAM_NAMESPACE
@@ -67,7 +67,7 @@ parameters:
     value: ReadWriteOnce
     required: true
   - name: SERVICE_ACCOUNT
-    value:
+    value: default
 objects:
 - apiVersion: v1
   kind: Service
@@ -82,12 +82,9 @@ objects:
   spec:
     ports:
       - name: postgresql
-        nodePort: 0
         port: 5432
         protocol: TCP
         targetPort: 5432
-    selector:
-      name: '${NAME}${SUFFIX}'
     sessionAffinity: None
     type: ClusterIP
   status:
@@ -134,17 +131,6 @@ objects:
     type: ClusterIP
   status:
     loadBalancer: {}
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: '${NAME}${SUFFIX}'
-    creationTimestamp: null
-    labels:
-      shared: 'true'
-    annotations: {}
-  spec:
-    lookupPolicy:
-      local: false
 - apiVersion: apps/v1
   kind: StatefulSet
   metadata:
@@ -172,7 +158,7 @@ objects:
       spec:
         containers:
         - env:
-          - name: POD_IP
+          - name: PATRONI_KUBERNETES_POD_IP
             valueFrom:
               fieldRef:
                 apiVersion: v1
@@ -189,7 +175,6 @@ objects:
               secretKeyRef:
                 key: database-user
                 name: '${NAME}-secret'
-
           - name: PATRONI_SUPERUSER_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -273,7 +258,7 @@ objects:
   kind: ServiceAccount
   metadata:
     name: ${SERVICE_ACCOUNT}
-- apiVersion: v1
+- apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     name: ${SERVICE_ACCOUNT}
@@ -312,6 +297,17 @@ objects:
     - patch
     - update
     - watch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: ${SERVICE_ACCOUNT}
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: ${SERVICE_ACCOUNT}
+  subjects:
+  - kind: ServiceAccount
+    name: ${SERVICE_ACCOUNT}
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
@@ -374,28 +370,11 @@ objects:
               tcpSocket:
                 port: 5432
               timeoutSeconds: 1
-            name: postgresql
+            name: ${NAME}${SUFFIX}
             ports:
               - containerPort: 5432
                 protocol: TCP
-            readinessProbe:
-              exec:
-                command:
-                  - /bin/sh
-                  - '-i'
-                  - '-c'
-                  - >-
-                    psql -h 127.0.0.1 -d postgres -U
-                    $POSTGRESQL_USER -c 'SELECT 1'
-              initialDelaySeconds: 5
-              timeoutSeconds: 1
-            resources:
-              requests:
-                cpu: '${CPU_REQUEST}'
-                memory: '${MEMORY_REQUEST}'
-              limits:
-                cpu: '${CPU_LIMIT}'
-                memory: '${MEMORY_LIMIT}'
+            resources: {}
             securityContext:
               capabilities: {}
               privileged: false
@@ -416,7 +395,7 @@ objects:
       - imageChangeParams:
           automatic: true
           containerNames:
-            - postgresql
+            - ${NAME}${SUFFIX}
           from:
             kind: ImageStreamTag
             name: 'postgresql-10:latest'
