@@ -247,6 +247,24 @@ namespace Prime.Services
             }
         }
 
+        public async Task<Site> UpdatePecCode(int siteId, string pecCode)
+        {
+            var site = await this.GetBaseSiteQuery()
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            site.PEC = pecCode;
+
+            this._context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the site.");
+            }
+
+            return site;
+        }
+
         public async Task DeleteSiteAsync(int siteId)
         {
             var site = await this.GetBaseSiteQuery()
