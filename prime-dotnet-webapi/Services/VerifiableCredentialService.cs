@@ -163,8 +163,8 @@ namespace Prime.Services
                 case CredentialExchangeStates.CredentialIssued:
                     // var cred_def_id = data.Value<string>("cred_def_id");
                     // System.Console.WriteLine($"cred_def_id \"{cred_def_id}\"");
-                    System.Console.WriteLine(JsonConvert.SerializeObject(data));
-                    System.Console.WriteLine($"UPDATE ACCEPTED CREDENTIAL DATE");
+                    // System.Console.WriteLine(JsonConvert.SerializeObject(data));
+                    // System.Console.WriteLine($"UPDATE ACCEPTED CREDENTIAL DATE");
                     // await UpdateAcceptedCredentialDate(cred_def_id);
                     return await Task.FromResult(true);
                 default:
@@ -174,13 +174,13 @@ namespace Prime.Services
             }
         }
 
-        private async Task<int> UpdateAcceptedCredentialDate(String cred_def_id)
-        {
-            var credential = _context.Credentials
-                .SingleOrDefault(c => c.CredentialDefinitionId == cred_def_id);
-            credential.AcceptedCredentialDate = DateTime.Now;
-            return await _context.SaveChangesAsync();
-        }
+        // private async Task<int> UpdateAcceptedCredentialDate(String cred_def_id)
+        // {
+        //     var credential = _context.Credentials
+        //         .SingleOrDefault(c => c.CredentialDefinitionId == cred_def_id);
+        //     credential.AcceptedCredentialDate = DateTime.Now;
+        //     return await _context.SaveChangesAsync();
+        // }
 
         // Issue a credential to an active connection.
         private async Task<JObject> IssueCredential(string connectionId, int enrolleeId)
@@ -215,6 +215,10 @@ namespace Prime.Services
                         }
                     }
                 };
+
+            // _logger.Information($"Credential offer for connection ID \"{connectionId}\" for @JObject", data);
+            System.Console.WriteLine($"Credential offer for connection ID \"{connectionId}\"");
+            System.Console.WriteLine(JsonConvert.SerializeObject(credentialOffer));
 
             return credentialOffer;
         }
