@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
+using Prime.Models;
 using Prime.Services.Clients;
+using QRCoder;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services
@@ -27,11 +29,17 @@ namespace Prime.Services
     {
         public const string OfferSent = "offer_sent";
         public const string RequestReceived = "request_received";
-        public const string Issued = "issued";
+        public const string CredentialIssued = "credential_issued";
     }
 
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
+        private static readonly string SCHEMA_ID = "QDaSxvduZroHDKkdXKV5gG:2:enrollee:1.1";
+        // TODO can extract issuer_did, schema name, and schema version off of the schema ID
+        // so could drop use of static constants, and extra API calls
+        private static readonly string SCHEMA_NAME = "enrollee";
+        private static readonly string SCHEMA_VERSION = "1.1";
+
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
         private readonly IEnrolleeService _enrolleeService;
 
@@ -43,27 +51,52 @@ namespace Prime.Services
             : base(context, httpContext)
         {
             _verifiableCredentialClient = verifiableCredentialClient;
+            _enrolleeService = enrolleeService;
         }
 
         // Create an invitation to establish a connection between the agents.
-        public async Task<JObject> CreateConnection()
+        public async Task<JObject> CreateConnectionAsync(Enrollee enrollee)
         {
-            return await _verifiableCredentialClient.CreateInvitation();
+            var alias = enrollee.Id.ToString();
+            var invitation = await _verifiableCredentialClient.CreateInvitationAsync(alias);
+            var invitationUrl = invitation.Value<string>("invitation_url");
+            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
+
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
+            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
+            string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
+
+            enrollee.Credential = new Credential
+            {
+                SchemaId = SCHEMA_ID,
+                CredentialDefinitionId = credentialDefinitionId,
+                Alias = alias,
+                Base64QRCode = qrCodeImageAsBase64
+            };
+
+            var created = await _context.SaveChangesAsync();
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not store connection invitation.");
+            }
+
+            // TODO after testing don't need to pass back the invitation
+            return invitation;
         }
 
         // Handle webhook events pushed by the issuing agent.
-        public async Task<bool> Webhook(JObject data, string topic)
+        public async Task<bool> WebhookAsync(JObject data, string topic)
         {
-            // _logger.Information($"Webhook topic \"{topic}\" for @JObject", data);
+            // _logger.Information($"Webhook topic \"{topic}\"");
             System.Console.WriteLine($"Webhook topic \"{topic}\"");
-            System.Console.WriteLine(JsonConvert.SerializeObject(data));
 
             switch (topic)
             {
                 case WebhookTopic.Connections:
-                    return await handleConnection(data);
+                    return await HandleConnectionAsync(data);
                 case WebhookTopic.IssueCredential:
-                    return await handleIssueCredential(data);
+                    return await HandleIssueCredentialAsync(data);
                 default:
                     // _logger.Error($"Webhook {topic} is not supported");
                     System.Console.WriteLine($"Webhook {topic} is not supported");
@@ -72,9 +105,9 @@ namespace Prime.Services
         }
 
         // Handle webhook events for connection states.
-        private async Task<bool> handleConnection(JObject data)
+        private async Task<bool> HandleConnectionAsync(JObject data)
         {
-            var state = data.GetValue("state").ToString();
+            var state = data.Value<string>("state");
 
             // _logger.Information($"Connection state \"{state}\" for @JObject", data);
             System.Console.WriteLine($"Connection state \"{state}\"");
@@ -87,14 +120,16 @@ namespace Prime.Services
                     return await Task.FromResult(true);
                 case ConnectionStates.Response:
                     // TODO store the connection ID for checking whether it is active in the future
-                    var connection_id = data.GetValue("connection_id").ToString();
+                    var connection_id = data.Value<string>("connection_id");
+                    var alias = data.Value<int>("alias");
 
                     // _logger.Information($"Issuing a credential with this connection_id: {connection_id}");
                     Console.WriteLine($"Issuing a credential with this connection_id: {connection_id}");
 
                     // Assumed that when a connection invitation has been sent and accepted
                     // the enrollee has been approved, and has a GPID for issuing a credential
-                    var issueCredentialResponse = await IssueCredential(connection_id);
+                    // TODO should be queued and managed outside of webhook callback
+                    var issueCredentialResponse = await IssueCredential(connection_id, alias);
 
                     // _logger.Information($"Credential has been issued for connection_id: {connection_id} with response @JObject", issueCredentialResponse);
                     Console.WriteLine($"Credential has been issued for connection_id: {connection_id}");
@@ -113,17 +148,17 @@ namespace Prime.Services
         }
 
         // Issue a credential to an agent.
-        private async Task<JObject> IssueCredential(string connectionId)
+        private async Task<JObject> IssueCredential(string connectionId, int enrolleeId)
         {
-            // TODO get the enrollee information for creating a claim for issuing a credential
-            // TODO build out the request information for issuance
-            return await _verifiableCredentialClient.IssueCredential(connectionId);
+            var credentialAttributes = await CreateCredentialAttributesAsync(enrolleeId);
+            var credentialOffer = await CreateCredentialOfferAsync(connectionId, credentialAttributes);
+            return await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
         }
 
         // Handle webhook events for issue credential topics.
-        private async Task<bool> handleIssueCredential(JObject data)
+        private async Task<bool> HandleIssueCredentialAsync(JObject data)
         {
-            var state = data.GetValue("state").ToString();
+            var state = data.Value<string>("state");
 
             // _logger.Information($"Issue credential state \"{state}\" for @JObject", data);
             System.Console.WriteLine($"Issue credential state \"{state}\"");
@@ -133,14 +168,68 @@ namespace Prime.Services
             {
                 case CredentialExchangeStates.OfferSent:
                 case CredentialExchangeStates.RequestReceived:
-                // TODO store that the credential has been accepted
-                case CredentialExchangeStates.Issued:
+                    return await Task.FromResult(true);
+                case CredentialExchangeStates.CredentialIssued:
+                    // TODO store that the credential has been accepted
                     return await Task.FromResult(true);
                 default:
                     // _logger.Error($"Credential exchange state {state} is not supported");
                     System.Console.WriteLine($"Credential exchange state {state} is not supported");
                     return await Task.FromResult(false);
             }
+        }
+
+        // Create the credential offer.
+        private async Task<JObject> CreateCredentialOfferAsync(string connectionId, JArray attributes)
+        {
+            var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
+            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
+
+            JObject credentialOffer = new JObject
+                {
+                    { "connection_id", connectionId },
+                    { "issuer_did", issuerDid },
+                    { "schema_id", SCHEMA_ID },
+                    { "schema_issuer_did", issuerDid },
+                    { "schema_name", SCHEMA_NAME },
+                    { "schema_version", SCHEMA_VERSION },
+                    { "cred_def_id", credentialDefinitionId },
+                    { "comment", "PharmaNet GPID" },
+                    { "auto_remove", true },
+                    { "revoc_reg_id", null },
+                    { "credential_proposal", new JObject
+                        {
+                            { "@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview" },
+                            { "attributes", attributes }
+                        }
+                    }
+                };
+
+            return credentialOffer;
+        }
+
+        // Create the credential proposal attributes.
+        private async Task<JArray> CreateCredentialAttributesAsync(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            // TODO add addition claim information
+            // Renewal Date
+            // User Classes
+            //   Practice Setting (Organization Type)
+            //   RU vs OBO
+            // Remote Access
+
+            JArray attributes = new JArray
+            {
+                new JObject
+                {
+                    { "name", "gpid" },
+                    { "value", enrollee.GPID }
+                }
+            };
+
+            return attributes;
         }
     }
 }
