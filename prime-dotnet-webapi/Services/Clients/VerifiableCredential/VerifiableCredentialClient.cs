@@ -99,7 +99,7 @@ namespace Prime.Services.Clients
             System.Console.WriteLine("GET Issuer DID");
             System.Console.WriteLine(JsonConvert.SerializeObject(body));
 
-            return body.Value<string>("did");
+            return body.Value<JObject>("result").Value<string>("did");
         }
 
         public async Task<string> GetCredentialDefinitionIdAsync(string schemaId)
