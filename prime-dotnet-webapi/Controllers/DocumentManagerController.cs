@@ -64,16 +64,15 @@ namespace Prime.Controllers
 
         // GET: api/Document/1234-5678
         /// <summary>
-        ///
+        /// Returns a short lived single-use token to download a file from the document manager
         /// </summary>
-        /// <param name="documentGuid"></param>
-        /// <param name="attachment"></param>
         [HttpGet("{documentGuid}", Name = nameof(GetFileFromDocumentManager))]
-        [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<RedirectResult> GetFileFromDocumentManager(Guid documentGuid)
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetFileFromDocumentManager(Guid documentGuid)
         {
             var token = await _client.CreateDownloadTokenAsync(documentGuid);
-            return Redirect($"{PrimeConstants.DOCUMENT_MANAGER_URL}documents/downloads/{token}");
+
+            return Ok(ApiResponse.Result(token));
         }
     }
 }
