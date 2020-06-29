@@ -147,14 +147,6 @@ namespace Prime.Services
             }
         }
 
-        // Issue a credential to an agent.
-        private async Task<JObject> IssueCredential(string connectionId, int enrolleeId)
-        {
-            var credentialAttributes = await CreateCredentialAttributesAsync(enrolleeId);
-            var credentialOffer = await CreateCredentialOfferAsync(connectionId, credentialAttributes);
-            return await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
-        }
-
         // Handle webhook events for issue credential topics.
         private async Task<bool> HandleIssueCredentialAsync(JObject data)
         {
@@ -177,6 +169,14 @@ namespace Prime.Services
                     System.Console.WriteLine($"Credential exchange state {state} is not supported");
                     return await Task.FromResult(false);
             }
+        }
+
+        // Issue a credential to an active connection.
+        private async Task<JObject> IssueCredential(string connectionId, int enrolleeId)
+        {
+            var credentialAttributes = await CreateCredentialAttributesAsync(enrolleeId);
+            var credentialOffer = await CreateCredentialOfferAsync(connectionId, credentialAttributes);
+            return await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
         }
 
         // Create the credential offer.
