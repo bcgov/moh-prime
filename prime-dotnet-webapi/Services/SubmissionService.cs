@@ -23,6 +23,7 @@ namespace Prime.Services
         private readonly IEmailService _emailService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
+        private readonly IVerifiableCredentialService _verifiableCredentialService;
         private readonly IPrivilegeService _privilegeService;
 
         public SubmissionService(ApiDbContext context, IHttpContextAccessor httpContext,
@@ -32,6 +33,7 @@ namespace Prime.Services
             IEmailService emailService,
             IEnrolleeService enrolleeService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IVerifiableCredentialService verifiableCredentialService,
             IPrivilegeService privilegeService)
             : base(context, httpContext)
         {
@@ -41,6 +43,7 @@ namespace Prime.Services
             _emailService = emailService;
             _enrolleeService = enrolleeService;
             _enroleeProfileVersionService = enrolleeProfileVersionService;
+            _verifiableCredentialService = verifiableCredentialService;
             _privilegeService = privilegeService;
         }
 
@@ -66,6 +69,12 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
+
+            // TODO each submission shouldn't create a new connection
+            // TODO need robust issuance rules to be added
+            // TODO when/where should a new credential be issued?
+            // TODO perform check for an active connection and/or issued credential in ver cred service
+            await _verifiableCredentialService.CreateConnectionAsync(enrollee);
 
             await this.ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();
