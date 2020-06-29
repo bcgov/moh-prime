@@ -85,6 +85,10 @@ objects:
         port: 5432
         protocol: TCP
         targetPort: 5432
+      - name: REST
+        port: 8008
+        protocol: TCP
+        targetPort: 8008
     sessionAffinity: None
     type: ClusterIP
   status:
@@ -106,27 +110,6 @@ objects:
       application: ${NAME}${SUFFIX}
       cluster-name: patroni${SUFFIX}
       role: master
-    sessionAffinity: None
-    type: ClusterIP
-  status:
-    loadBalancer: {}
-- apiVersion: v1
-  kind: Service
-  metadata:
-    creationTimestamp: null
-    labels:
-      application: ${NAME}${SUFFIX}
-      cluster-name: patroni${SUFFIX}
-    name: patroni-replica${SUFFIX}
-  spec:
-    ports:
-    - port: 5432
-      protocol: TCP
-      targetPort: 5432
-    selector:
-      application: ${NAME}${SUFFIX}
-      cluster-name: patroni${SUFFIX}
-      role: replica
     sessionAffinity: None
     type: ClusterIP
   status:
@@ -308,98 +291,3 @@ objects:
   subjects:
   - kind: ServiceAccount
     name: ${SERVICE_ACCOUNT}
-- kind: DeploymentConfig
-  apiVersion: v1
-  metadata:
-    annotations:
-      volume.beta.kubernetes.io/storage-class: ${STORAGE_CLASS}
-    name: '${NAME}${SUFFIX}'
-  spec:
-    affinity:
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-            - key: dev-app
-              operator: In
-              values:
-              - database
-          topologyKey: "kubernetes.io/hostname"
-    replicas: 1
-    selector:
-      name: '${NAME}${SUFFIX}'
-    strategy:
-      type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
-    template:
-      metadata:
-        labels:
-          dev-app: database
-          name: '${NAME}${SUFFIX}'
-      spec:
-        containers:
-          - capabilities: {}
-            env:
-              - name: POSTGRESQL_USER
-                valueFrom:
-                  secretKeyRef:
-                    key: database-user
-                    name: '${NAME}-secret'
-              - name: POSTGRESQL_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    key: database-password
-                    name: '${NAME}-secret'
-              - name: POSTGRESQL_ADMIN_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    key: database-admin-password
-                    name: '${NAME}-secret'
-              - name: POSTGRESQL_DATABASE
-                valueFrom:
-                  secretKeyRef:
-                    key: database-name
-                    name: '${NAME}-secret'
-              - name: DB_HOST
-                value: '${NAME}${SUFFIX}'
-            image: ${IMAGE_STREAM_NAME}
-            imagePullPolicy: IfNotPresent
-            livenessProbe:
-              initialDelaySeconds: 30
-              tcpSocket:
-                port: 5432
-              timeoutSeconds: 1
-            name: ${NAME}${SUFFIX}
-            ports:
-              - containerPort: 5432
-                protocol: TCP
-            resources: {}
-            securityContext:
-              capabilities: {}
-              privileged: false
-            terminationMessagePath: /dev/termination-log
-            volumeMounts:
-              - mountPath: /var/lib/pgsql/data
-                name: '${NAME}${SUFFIX}-data'
-              - mountPath: /var/run/postgresql
-                name: '${NAME}${SUFFIX}-run'
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
-        volumes:
-          - name: '${NAME}${SUFFIX}-data'
-            emptyDir: {}
-          - name: '${NAME}${SUFFIX}-run'
-            emptyDir: {}
-    triggers:
-      - imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${NAME}${SUFFIX}
-          from:
-            kind: ImageStreamTag
-            name: 'postgresql-10:latest'
-            namespace: dqszvc-tools
-        type: ImageChange
-      - type: ConfigChange
-  status: {}
