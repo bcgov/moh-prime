@@ -89,17 +89,6 @@ namespace Prime.Controllers
             else
             {
                 var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
-
-                if (enrollee != null)
-                {
-                    QRCodeGenerator qrGenerator = new QRCodeGenerator();
-                    QRCodeData qrCodeData = qrGenerator.CreateQrCode("https://prime-agent-dev.pathfinder.gov.bc.ca?c_i=eyJAdHlwZSI6ICJkaWQ6c292OkJ6Q2JzTlloTXJqSGlxWkRUVUFTSGc7c3BlYy9jb25uZWN0aW9ucy8xLjAvaW52aXRhdGlvbiIsICJAaWQiOiAiMjNjYjIwMDQtNDkyNC00MzFlLWJhMzktZmVmZWQzYmMxNTJkIiwgImxhYmVsIjogInByaW1lLWFnZW50LWRldiIsICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cHM6Ly9wcmltZS1hZ2VudC1kZXYucGF0aGZpbmRlci5nb3YuYmMuY2EiLCAicmVjaXBpZW50S2V5cyI6IFsiNW5ta0o3VTc3Snc1WHlRTXpnYWtHSFZjTE1qOFYxN0dLNjk4M1hLMUJOd2UiXX0=", QRCodeGenerator.ECCLevel.Q);
-                    Base64QRCode qrCode = new Base64QRCode(qrCodeData);
-                    string qrCodeImageAsBase64 = qrCode.GetGraphic(20);
-
-                    enrollee.base64QRCode = qrCodeImageAsBase64;
-                }
-
                 enrollees = (enrollee != null) ? new[] { enrollee } : new Enrollee[0];
             }
 
@@ -135,13 +124,6 @@ namespace Prime.Controllers
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing the current Enrolment");
             }
-
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode("https://prime-agent-dev.pathfinder.gov.bc.ca?c_i=eyJAdHlwZSI6ICJkaWQ6c292OkJ6Q2JzTlloTXJqSGlxWkRUVUFTSGc7c3BlYy9jb25uZWN0aW9ucy8xLjAvaW52aXRhdGlvbiIsICJAaWQiOiAiMjNjYjIwMDQtNDkyNC00MzFlLWJhMzktZmVmZWQzYmMxNTJkIiwgImxhYmVsIjogInByaW1lLWFnZW50LWRldiIsICJzZXJ2aWNlRW5kcG9pbnQiOiAiaHR0cHM6Ly9wcmltZS1hZ2VudC1kZXYucGF0aGZpbmRlci5nb3YuYmMuY2EiLCAicmVjaXBpZW50S2V5cyI6IFsiNW5ta0o3VTc3Snc1WHlRTXpnYWtHSFZjTE1qOFYxN0dLNjk4M1hLMUJOd2UiXX0=", QRCodeGenerator.ECCLevel.Q);
-            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
-            string qrCodeImageAsBase64 = qrCode.GetGraphic(20);
-
-            enrollee.base64QRCode = qrCodeImageAsBase64;
 
             return Ok(ApiResponse.Result(enrollee));
         }
