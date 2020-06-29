@@ -32,7 +32,7 @@ parameters:
   - description: The OpenShift ImageStream name.
     displayName: IMAGE_STREAM_NAME
     name: IMAGE_STREAM_NAME
-    value: ongres/patroni
+    value: patroni:10
   - description: The OpenShift Namespace where the ImageStream resides.
     displayName: Namespace
     name: IMAGE_STREAM_NAMESPACE
@@ -67,7 +67,7 @@ parameters:
     value: ReadWriteOnce
     required: true
   - name: SERVICE_ACCOUNT
-    value: jenkins
+    value: default
 objects:
 - apiVersion: v1
   kind: Service
