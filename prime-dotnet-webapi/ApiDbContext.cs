@@ -90,6 +90,7 @@ namespace Prime
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
         public DbSet<BusinessLicence> BusinessLicences { get; set; }
         public DbSet<SignedAgreement> SignedAgreements { get; set; }
+        public DbSet<Credential> Credentials { get; set; }
 
         public override int SaveChanges()
         {

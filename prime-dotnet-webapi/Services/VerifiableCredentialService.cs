@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Prime.Models;
 using Prime.Services.Clients;
 using QRCoder;
+using System.Linq;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services
@@ -160,13 +161,25 @@ namespace Prime.Services
                 case CredentialExchangeStates.RequestReceived:
                     return await Task.FromResult(true);
                 case CredentialExchangeStates.CredentialIssued:
-                    // TODO store that the credential has been accepted
+                    var cred_def_id = data.Value<string>("cred_def_id");
+                    System.Console.WriteLine($"cred_def_id \"{cred_def_id}\"");
+                    System.Console.WriteLine(JsonConvert.SerializeObject(data));
+                    System.Console.WriteLine($"UPDATE ACCEPTED CREDENTIAL DATE");
+                    // await UpdateAcceptedCredentialDate(cred_def_id);
                     return await Task.FromResult(true);
                 default:
                     // _logger.Error($"Credential exchange state {state} is not supported");
                     System.Console.WriteLine($"Credential exchange state {state} is not supported");
                     return await Task.FromResult(false);
             }
+        }
+
+        private async Task<int> UpdateAcceptedCredentialDate(String cred_def_id)
+        {
+            var credential = _context.Credentials
+                .SingleOrDefault(c => c.CredentialDefinitionId == cred_def_id);
+            credential.AcceptedCredentialDate = DateTime.Now;
+            return await _context.SaveChangesAsync();
         }
 
         // Issue a credential to an active connection.
