@@ -95,6 +95,10 @@ namespace Prime.Services.Clients
             }
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+            System.Console.WriteLine("GET Issuer DID");
+            System.Console.WriteLine(JsonConvert.SerializeObject(body));
+
             return body.Value<string>("did");
         }
 
@@ -117,8 +121,12 @@ namespace Prime.Services.Clients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetCredentialDefinitionAsync");
             }
 
-            JObject credentialDefinition = JObject.Parse(await response.Content.ReadAsStringAsync());
-            return (string)credentialDefinition["credential_definition_ids"][0];
+            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+            System.Console.WriteLine("GET Credential Definition IDs");
+            System.Console.WriteLine(JsonConvert.SerializeObject(body));
+
+            return (string)body["credential_definition_ids"][0];
         }
 
         private async Task LogError(HttpResponseMessage response, Exception exception = null)
