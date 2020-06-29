@@ -67,7 +67,7 @@ parameters:
     value: ReadWriteOnce
     required: true
   - name: SERVICE_ACCOUNT
-    value: default
+    value: jenkins
 objects:
 - apiVersion: v1
   kind: Service
