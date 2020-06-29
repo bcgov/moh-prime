@@ -161,8 +161,8 @@ namespace Prime.Services
                 case CredentialExchangeStates.RequestReceived:
                     return await Task.FromResult(true);
                 case CredentialExchangeStates.CredentialIssued:
-                    var cred_def_id = data.Value<string>("cred_def_id");
-                    System.Console.WriteLine($"cred_def_id \"{cred_def_id}\"");
+                    // var cred_def_id = data.Value<string>("cred_def_id");
+                    // System.Console.WriteLine($"cred_def_id \"{cred_def_id}\"");
                     System.Console.WriteLine(JsonConvert.SerializeObject(data));
                     System.Console.WriteLine($"UPDATE ACCEPTED CREDENTIAL DATE");
                     // await UpdateAcceptedCredentialDate(cred_def_id);
