@@ -196,6 +196,15 @@ namespace Prime.Services
             var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
 
+            System.Console.WriteLine($"ConnectionId \"{connectionId}\"");
+            System.Console.WriteLine($"SCHEMA_ID \"{SCHEMA_ID}\"");
+            System.Console.WriteLine($"SCHEMA_NAME \"{SCHEMA_NAME}\"");
+            System.Console.WriteLine($"SCHEMA_VERSION \"{SCHEMA_VERSION}\"");
+            System.Console.WriteLine($"IssuerDid \"{issuerDid}\"");
+            System.Console.WriteLine($"CredentialDefinitionId \"{credentialDefinitionId}\"");
+            System.Console.WriteLine($"Attributes: ");
+            System.Console.WriteLine(JsonConvert.SerializeObject(attributes));
+
             JObject credentialOffer = new JObject
                 {
                     { "connection_id", connectionId },
@@ -243,6 +252,10 @@ namespace Prime.Services
                     { "value", enrollee.GPID }
                 }
             };
+
+            // _logger.Information($"Credential offer attributes for @JObject", attributes);
+            System.Console.WriteLine($"Credential offer attributes");
+            System.Console.WriteLine(JsonConvert.SerializeObject(attributes));
 
             return attributes;
         }
