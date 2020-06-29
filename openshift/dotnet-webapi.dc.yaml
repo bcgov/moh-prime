@@ -83,6 +83,8 @@ objects:
                   value: "http://+:8080"
                 - name: FRONTEND_URL
                   value: "${HTTP_SCHEMA}://${VANITY_URL}"
+                - name: KEYCLOAK_TOKEN_URL
+                  value: "https://sso${SUFFIX}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token"
                 - name: JWT_SIGNING_KEY
                   value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
                 - name: JWT_ADMIN_CLIENT
