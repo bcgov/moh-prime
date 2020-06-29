@@ -32,7 +32,6 @@ namespace Prime.Controllers
         /// <param name="topic"></param>
         /// <param name="data"></param>
         // Webhooks explained "In Soviet Russia API call you!" - Jason Aitchison 2020
-        // Reverse third-party API, which instead of pulling data from the third-party they pushes data
         // TODO add security to the webhook receiver endpoint
         [HttpPost("/api/webhooks/topic/{topic}", Name = nameof(Webhook))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
