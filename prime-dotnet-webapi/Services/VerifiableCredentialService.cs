@@ -194,6 +194,16 @@ namespace Prime.Services
         // Issue a credential to an active connection.
         private async Task<JObject> IssueCredential(string connectionId, int enrolleeId)
         {
+            var enrollee = _context.Enrollees
+                .SingleOrDefault(e => e.Id == enrolleeId);
+
+            var credential = GetCredentialByIdAsync((int)enrollee.CredentialId);
+
+            if (credential.AcceptedCredentialDate != null)
+            {
+                return null;
+            }
+
             var credentialAttributes = await CreateCredentialAttributesAsync(enrolleeId);
             var credentialOffer = await CreateCredentialOfferAsync(connectionId, credentialAttributes);
             return await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
