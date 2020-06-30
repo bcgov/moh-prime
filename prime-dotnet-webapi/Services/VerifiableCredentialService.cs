@@ -161,7 +161,6 @@ namespace Prime.Services
                 case CredentialExchangeStates.RequestReceived:
                     return await Task.FromResult(true);
                 case CredentialExchangeStates.CredentialIssued:
-                    System.Console.WriteLine($"UPDATE ACCEPTED CREDENTIAL DATE");
                     await UpdateAcceptedCredentialDate(data);
                     return await Task.FromResult(true);
                 default:
@@ -174,9 +173,6 @@ namespace Prime.Services
         private async Task<int> UpdateAcceptedCredentialDate(JObject data)
         {
             var gpid = (string)data.SelectToken("credential_proposal_dict.credential_proposal.attributes[?(@.name == 'gpid')].value");
-            System.Console.WriteLine($"GPID:  \"{gpid}\"");
-            System.Console.WriteLine(JsonConvert.SerializeObject(data));
-
             var enrollee = _context.Enrollees
                 .SingleOrDefault(e => e.GPID == gpid);
 
@@ -184,7 +180,7 @@ namespace Prime.Services
             {
                 var credential = _context.Credentials
                     .SingleOrDefault(c => c.Id == enrollee.CredentialId);
-                credential.AcceptedCredentialDate = DateTime.Now;
+                credential.AcceptedCredentialDate = DateTimeOffset.Now;
             }
 
             return await _context.SaveChangesAsync();
