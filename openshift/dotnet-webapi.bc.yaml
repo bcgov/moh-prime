@@ -64,12 +64,6 @@ objects:
             value: "http://+:8080"
           - name: JWT_SIGNING_KEY
             value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
-          - name: JWT_ADMIN_CLIENT
-            value: "prime-admin-${OC_APP}"
-          - name: JWT_USER_CLIENT
-            value: "prime-application-${OC_APP}"
-          - name: JWT_AUDIENCE
-            value: "prime-web-api"
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: POSTGRESQL_USER
@@ -92,21 +86,6 @@ objects:
               secretKeyRef:
                 key: database-name
                 name: "postgresql-secret"
-          - name: KEYCLOAK_URL
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_URL
-                name: "keycloak"
-          - name: KEYCLOAK_REALM
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_REALM
-                name: "keycloak"
-          - name: KEYCLOAK_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_CLIENT_ID
-                name: "keycloak"
           - name: JWT_WELL_KNOWN_CONFIG
             valueFrom:
               secretKeyRef:
