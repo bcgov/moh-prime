@@ -24,8 +24,7 @@ namespace Prime.Services.Clients
 
         public async Task<JObject> CreateInvitationAsync(string alias)
         {
-            // _logger.Information("Create connection invitation");
-            System.Console.WriteLine("Create connection invitation");
+            _logger.LogInformation("Create connection invitation");
 
             var values = new List<KeyValuePair<string, string>>();
             var httpContent = new FormUrlEncodedContent(values);
@@ -47,9 +46,7 @@ namespace Prime.Services.Clients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::CreateInvitationAsync");
             }
 
-            // _logger.Information("Create connection invitation response @JObject", response);
-            System.Console.WriteLine("Create connection invitation response");
-            System.Console.WriteLine(JsonConvert.SerializeObject(response));
+            _logger.LogInformation("Create connection invitation response @JObject", response);
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
@@ -100,8 +97,7 @@ namespace Prime.Services.Clients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            System.Console.WriteLine("GET Schema");
-            System.Console.WriteLine(JsonConvert.SerializeObject(body));
+            _logger.LogInformation("GET Schema response @JObject", body);
 
             return body;
         }
@@ -127,8 +123,7 @@ namespace Prime.Services.Clients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            System.Console.WriteLine("GET Issuer DID");
-            System.Console.WriteLine(JsonConvert.SerializeObject(body));
+            _logger.LogInformation("GET Issuer DID response @JObject", body);
 
             return (string)body.SelectToken("result.did");
         }
@@ -154,8 +149,7 @@ namespace Prime.Services.Clients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            System.Console.WriteLine("GET Credential Definition IDs");
-            System.Console.WriteLine(JsonConvert.SerializeObject(body));
+            _logger.LogInformation("GET Credential Definition IDs @JObject", body);
 
             return (string)body.SelectToken("credential_definition_ids[0]");
         }
@@ -183,13 +177,6 @@ namespace Prime.Services.Clients
             }
 
             _logger.LogError(exception, secondaryMessage, new Object[] { content, response });
-            // System.Console.WriteLine("ERROR_RESPONSE_AND_CONTENT ------------------------------------------------");
-            // System.Console.WriteLine(JsonConvert.SerializeObject(secondaryMessage));
-            // System.Console.WriteLine("---------------------------------------------------------------------------");
-            // System.Console.WriteLine(JsonConvert.SerializeObject(content));
-            // System.Console.WriteLine("---------------------------------------------------------------------------");
-            // System.Console.WriteLine(JsonConvert.SerializeObject(response));
-            // System.Console.WriteLine("END_ERROR_RESPONSE_AND_CONTENT --------------------------------------------");
         }
     }
 
