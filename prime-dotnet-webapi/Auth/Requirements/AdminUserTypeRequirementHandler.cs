@@ -12,7 +12,7 @@ namespace Prime.Auth.Requirements
         {
             if (requirement.AllowedTypes.Contains(UserType.Admin)
                 && context.User.HasAdminView()
-                && context.User.GetAudience() == Audiences.Admin)
+                && context.User.GetAuthorizedParty() == AuthorizedParties.Admin)
             {
                 context.Succeed(requirement);
             }

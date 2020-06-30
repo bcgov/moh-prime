@@ -57,18 +57,8 @@ namespace Prime.Auth
                     options.RequireHttpsMetadata = false;
                 }
 
+                options.Audience = AuthConstants.API_AUDIENCE;
                 options.MetadataAddress = Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG") ?? configuration["Jwt:WellKnown"];
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidAudiences = new List<string>
-                    {
-                        Audiences.Enrolment,
-                        Audiences.Admin,
-                        Audiences.Site,
-                        Audiences.CareConnect,
-                        Audiences.PosGpid
-                    }
-                };
                 options.Events = new JwtBearerEvents
                 {
                     OnAuthenticationFailed = c =>
@@ -91,7 +81,7 @@ namespace Prime.Auth
             services.AddSingleton<IAuthorizationHandler, EnrolleeUserTypeRequirementHandler>();
             services.AddSingleton<IAuthorizationHandler, SiteUserTypeRequirementHandler>();
             services.AddSingleton<IAuthorizationHandler, CanEditRequirementHandler>();
-            services.AddSingleton<IAuthorizationHandler, AudienceRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, AuthorizedPartyRequirementHandler>();
 
             services.AddAuthorization(options =>
             {
@@ -104,8 +94,8 @@ namespace Prime.Auth
 
                 options.AddPolicy(Policies.CanEdit, policy => policy.AddRequirements(new CanEditRequirement()));
 
-                options.AddPolicy(Policies.CareConnectAccess, policy => policy.AddRequirements(new AudienceRequirement(Audiences.CareConnect)));
-                options.AddPolicy(Policies.PosGpidAccess, policy => policy.AddRequirements(new AudienceRequirement(Audiences.PosGpid)));
+                options.AddPolicy(Policies.CareConnectAccess, policy => policy.AddRequirements(new AuthorizedPartyRequirement(AuthorizedParties.CareConnect)));
+                options.AddPolicy(Policies.PosGpidAccess, policy => policy.AddRequirements(new AuthorizedPartyRequirement(AuthorizedParties.PosGpid)));
             });
         }
 

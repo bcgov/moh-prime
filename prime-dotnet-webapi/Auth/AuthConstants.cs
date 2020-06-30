@@ -4,13 +4,14 @@ namespace Prime.Auth
 {
     public static class AuthConstants
     {
+        public const string API_AUDIENCE = "prime-web-api";
         public const string KEYCLOAK_REALM_ACCESS_KEY = "realm_access";
         public const string BC_SERVICES_CARD = "bcsc";
     }
 
     public static class Claims
     {
-        public const string Audience = "aud";
+        public const string AuthorizedParty = "azp";
         public const string AssuranceLevel = "identity_assurance_level";
         public const string IdentityProvider = "identity_provider";
     }
@@ -38,7 +39,7 @@ namespace Prime.Auth
         public const string PosGpidAccess = "pos-gpid-access-policy";
     }
 
-    public static class Audiences
+    public static class AuthorizedParties
     {
         public const string Admin = "prime-application-admin";
         public const string Enrolment = "prime-application-enrolment";
@@ -50,5 +51,6 @@ namespace Prime.Auth
     public static class FeatureFlags
     {
         public const string SiteRegistration = "feature_site_registration";
+        public const string CredentialIssuance = "feature_vc_issuance";
     }
 }

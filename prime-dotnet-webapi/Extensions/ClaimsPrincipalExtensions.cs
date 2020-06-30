@@ -50,9 +50,9 @@ namespace Prime
             return User.IsInRole(Roles.ReadonlyAdmin);
         }
 
-        public static string GetAudience(this ClaimsPrincipal User)
+        public static string GetAuthorizedParty(this ClaimsPrincipal User)
         {
-            return User.FindFirstValue(Claims.Audience);
+            return User.FindFirstValue(Claims.AuthorizedParty);
         }
 
         public static int GetIdentityAssuranceLevel(this ClaimsPrincipal User)

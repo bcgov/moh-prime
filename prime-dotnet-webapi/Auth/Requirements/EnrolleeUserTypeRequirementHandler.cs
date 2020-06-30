@@ -12,7 +12,7 @@ namespace Prime.Auth.Requirements
         {
             if (requirement.AllowedTypes.Contains(UserType.Enrollee)
                 && context.User.IsInRole(Roles.User)
-                && context.User.GetAudience() == Audiences.Enrolment)
+                && context.User.GetAuthorizedParty() == AuthorizedParties.Enrolment)
             {
                 context.Succeed(requirement);
             }
