@@ -234,6 +234,8 @@ namespace Prime.Services
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
+            var organizationType = _context.OrganizationTypes.SingleOrDefault(t => t.Code == enrollee.EnrolleeOrganizationTypes.FirstOrDefault().OrganizationTypeCode);
+
             // TODO add addition claim information
             // Renewal Date
             // User Classes
@@ -256,7 +258,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "organization_type" },
-                    { "value", enrollee.EnrolleeOrganizationTypes.FirstOrDefault().OrganizationType.Name }
+                    { "value", organizationType.Name }
                 },
                 new JObject
                 {
