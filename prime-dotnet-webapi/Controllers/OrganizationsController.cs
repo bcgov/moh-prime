@@ -21,7 +21,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
+    [Authorize(Policy = Policies.SiteRegistrantOrAdmin, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
     public class OrganizationsController : ControllerBase
     {
         private readonly IOrganizationService _organizationService;
@@ -53,7 +53,7 @@ namespace Prime.Controllers
         {
             IEnumerable<Organization> organizations = null;
 
-            if (User.IsAdmin() || User.HasAdminView())
+            if (User.HasAdminView())
             {
                 organizations = await _organizationService.GetOrganizationsAsync();
             }
@@ -97,6 +97,7 @@ namespace Prime.Controllers
         /// Creates a new Organization.
         /// </summary>
         [HttpPost(Name = nameof(CreateOrganization))]
+        [Authorize(Policy = Policies.CanEdit)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -128,6 +129,7 @@ namespace Prime.Controllers
         /// <param name="updatedOrganization"></param>
         /// <param name="isCompleted"></param>
         [HttpPut("{organizationId}", Name = nameof(UpdateOrganization))]
+        [Authorize(Policy = Policies.CanEdit)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -159,6 +161,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpDelete("{organizationId}", Name = nameof(DeleteOrganization))]
+        [Authorize(Policy = Policies.CanEdit)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -213,6 +216,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpPut("{organizationId}/organization-agreement", Name = nameof(AcceptCurrentOrganizationAgreement))]
+        [Authorize(Policy = Policies.SiteRegistrantOnly)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -242,6 +246,7 @@ namespace Prime.Controllers
         /// Submits the given organization for adjudication.
         /// </summary>
         [HttpPost("{organizationId}/submission", Name = nameof(SubmitOrganizationRegistration))]
+        [Authorize(Policy = Policies.SiteRegistrantOnly)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -273,6 +278,7 @@ namespace Prime.Controllers
         /// <param name="filename"></param>
         /// <param name="organizationId"></param>
         [HttpPost("{organizationId}/signed-agreement", Name = nameof(CreateSignedAgreement))]
+        [Authorize(Policy = Policies.SiteRegistrantOnly)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

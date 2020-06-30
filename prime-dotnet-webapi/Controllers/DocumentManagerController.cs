@@ -23,7 +23,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/document")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize(Policy = Policies.AnyUser)]
     public class DocumentManagerController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
