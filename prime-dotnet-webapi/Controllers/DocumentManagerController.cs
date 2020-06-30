@@ -1,38 +1,29 @@
+using System;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-
-using Prime.Models;
-using Prime.Models.Api;
-using Prime.Services;
 
 using Prime.Auth;
-using Prime.ViewModels;
+using Prime.Models.Api;
+using Prime.Services.Clients;
 
-using System.Net.Http;
-using System.Net;
-using System;
-using System.Linq;
-using System.Net.Http.Headers;
-using Microsoft.Extensions.Primitives;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
     [Route("api/document")]
     [ApiController]
-    [AllowAnonymous]
+    [Authorize(Policy = AuthConstants.USER_POLICY)]
     public class DocumentManagerController : ControllerBase
     {
-        private readonly IEnrolleeService _enrolleeService;
-        private readonly HttpClient _client;
+        private readonly IDocumentManagerClient _client;
 
-        public DocumentManagerController(IEnrolleeService enrolleeService)
+        public DocumentManagerController(IDocumentManagerClient documentManagerClient)
         {
-            _enrolleeService = enrolleeService;
-            _client = new HttpClient();
+            _client = documentManagerClient;
         }
 
         // POST: api/Document
@@ -43,71 +34,45 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult> InitializeFileUploadWithDocumentManager()
         {
-            var metaData = Request.Headers["Upload-MetaData"].ToString();
-            var parts = metaData.Split(",");
-            var filename = parts[0].Split(" ")[1];
-            var filetype = parts[1].Split(" ")[1];
+            var metadata = Request.Headers["Upload-MetaData"].ToString();
+            var filename = ParseFilenameFromMetadata(metadata);
+            var fileSize = Request.Headers["Upload-Length"].ToString();
 
-            var auth = Request.Headers["Authorization"].ToString();
+            var response = await _client.InitializeFileUploadAsync(filename, fileSize, "sites/businessLicences");
 
-            var tusResumable = Request.Headers["Tus-Resumable"].ToString();
-            var uploadLength = Request.Headers["Upload-Length"].ToString();
-
-            var data = new Dictionary<string, string>
-            {
-                { "folder", "prime/site/businessLicence" },
-                { "pretty_folder", "prime/site/businessLicence" },
-                { "filename", filename },
-            };
-
-            var content = new FormUrlEncodedContent(data);
-
-            var request = new HttpRequestMessage
-            {
-                RequestUri = new Uri(PrimeConstants.DOCUMENT_MANAGER_URL),
-                Method = HttpMethod.Post,
-                Content = content,
-                Headers = {
-                    {"Tus-Resumable", tusResumable},
-                    {"Upload-Length", uploadLength},
-                    {"Authorization", auth},
-                }
-            };
-            var response = new HttpResponseMessage();
-            try
-            {
-                response = await _client.SendAsync(request);
-
-                foreach (KeyValuePair<string, IEnumerable<string>> entry in response.Headers)
-                {
-                    Response.Headers.Add(entry.Key, new StringValues(entry.Value.ToArray()));
-                }
-            }
-            catch (HttpRequestException e)
-            {
-                throw new Exception("ERROR: " + e);
-            }
-
+            HttpContext.Response.Headers.Add("Location", response.Headers.GetValues("Location").FirstOrDefault());
             return Ok();
         }
 
-        // GET: api/Document/token?attachment=false
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="documentGuid"></param>
-        /// <param name="attachment"></param>
-        [HttpGet("{documentGuid}", Name = nameof(GetFileFromDocumentManager))]
-        [ProducesResponseType(StatusCodes.Status302Found)]
-        public Task<RedirectResult> GetFileFromDocumentManager(Guid documentGuid, [FromQuery] string attachment)
+        private string ParseFilenameFromMetadata(string metadata)
         {
-            var suffix = "";
-            if (attachment != null)
+            // Upload-Metadata is in the form:
+            // filename <Base64EncodedValue>,filetype <Base64EncodedValue>
+
+            var dictionary = metadata.Split(",")
+                .Select(x => x.Split(' '))
+                .ToDictionary(x => x[0], x => x[1]);
+
+            string value;
+            if (!dictionary.TryGetValue("filename", out value))
             {
-                suffix = $"&as_attachment={attachment}";
+                throw new ArgumentException($"Could not parse Upload-Metadata [{metadata}], could not find the filename");
             }
-            return Task.FromResult(Redirect($"{PrimeConstants.DOCUMENT_MANAGER_URL}?token={documentGuid}{suffix}"));
+
+            return Encoding.UTF8.GetString(Convert.FromBase64String(value));
         }
 
+        // GET: api/Document/1234-5678
+        /// <summary>
+        /// Returns a short lived single-use token to download a file from the document manager
+        /// </summary>
+        [HttpGet("{documentGuid}", Name = nameof(GetFileFromDocumentManager))]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetFileFromDocumentManager(Guid documentGuid)
+        {
+            var token = await _client.CreateDownloadTokenAsync(documentGuid);
+
+            return Ok(ApiResponse.Result(token));
+        }
     }
 }

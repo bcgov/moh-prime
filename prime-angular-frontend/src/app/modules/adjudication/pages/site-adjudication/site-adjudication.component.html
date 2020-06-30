@@ -1,0 +1,46 @@
+<app-site-registration-container [content]="content"
+                                 [hasActions]="hasActions"
+                                 [refresh]="refresh">
+
+  <app-page-header>Site Adjudication</app-page-header>
+
+</app-site-registration-container>
+
+<ng-template #content
+             let-site="site">
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Enter PEC Code to approve this site</ng-container>
+        <ng-container appPageSubheader2Summary>
+          The PEC Code will be sent to the Signing Authority, Administrator of PharmaNet onboarding and the vendor
+          associated to this submission.
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row mb-3">
+        <div class="col-sm-12 col-lg-9 col-xl-5">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="PEC Code"
+                   formControlName="pec">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <button mat-flat-button
+              color="primary">Approve this Site</button>
+
+    </section>
+
+  </form>
+
+</ng-template>

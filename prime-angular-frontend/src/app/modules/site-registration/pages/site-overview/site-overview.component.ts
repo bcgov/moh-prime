@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, EMPTY, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -15,7 +16,6 @@ import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({

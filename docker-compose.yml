@@ -110,20 +110,20 @@ services:
 ####################### DOCUMENT_MANAGER_BACKEND Definition #######################
   document_manager_backend:
     restart: always
-    container_name: document_manager_backend
+    container_name: document-manager-backend
     build:
       context: document-manager/backend
     ports:
       - 6001:6001
     volumes:
       - ./document-manager/backend/:/app/
-    env_file: ./document-manager/backend/.env-prime
+    env_file: ./document-manager/backend/.env-prime-local
     networks:
       - primenet
 
   document_manager_migrate:
     restart: on-failure
-    container_name: document_manager_migrate
+    container_name: document-manager-migrate
     build:
       context: document-manager/backend
     depends_on:

@@ -3,14 +3,15 @@ import { Address } from '@shared/models/address.model';
 
 import { Party } from './party.model';
 import { Organization } from './organization.model';
+import { Site } from './site.model';
 
 export interface Location {
   id?: number;
   organizationId?: number;
   organization: Organization;
-  // TODO not going to work like they expect
-  // doingBusinessAs?: string;
   name: string;
+  // TODO do they need doingBusinessAs as when they have location name?
+  // doingBusinessAs?: string;
   physicalAddressId?: number;
   physicalAddress: Address;
   administratorPharmaNetId?: number;
@@ -20,4 +21,5 @@ export interface Location {
   technicalSupportId?: number;
   technicalSupport: Party;
   businessHours: BusinessDay[];
+  sites: Site[];
 }

@@ -101,8 +101,19 @@
       </app-alert>
     </div>
 
-    <div class="organization-agreement mb-5"
-         [innerHTML]="organizationAgreement | safeHtml"></div>
+    <ng-container *ngIf="showDefaultAgreement(); else uploadedAgreement">
+      <div class="organization-agreement mb-5"
+           [innerHTML]="organizationAgreement | safeHtml"></div>
+    </ng-container>
+    
+    <ng-template #uploadedAgreement>
+      <button mat-stroked-button
+              color="primary"
+              class="mb-4 ml-2"
+              (click)="downloadSignedAgreement()">
+        <mat-icon class="mr-1">attachment</mat-icon>Signed Agreement
+      </button>
+    </ng-template>
 
     <div class="row justify-content-end">
       <div class="col">
