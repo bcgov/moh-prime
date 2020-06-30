@@ -554,7 +554,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
+            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            var username = admin.IDIR.Replace("@idir", "");
             await _emailService.SendReminderEmailAsync(enrollee);
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Email reminder sent to Enrollee by {username}");
 
             return NoContent();
         }
