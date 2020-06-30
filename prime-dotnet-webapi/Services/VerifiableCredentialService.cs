@@ -36,7 +36,7 @@ namespace Prime.Services
 
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
-        private static readonly string SCHEMA_ID = "QDaSxvduZroHDKkdXKV5gG:2:enrollee:1.1";
+        private static readonly string SCHEMA_ID = "QDaSxvduZroHDKkdXKV5gG:2:enrollee:2.0";
 
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
         private readonly IEnrolleeService _enrolleeService;
@@ -247,7 +247,28 @@ namespace Prime.Services
                 {
                     { "name", "gpid" },
                     { "value", enrollee.GPID }
-                }
+                },
+                new JObject
+                {
+                    { "name", "renewal_date" },
+                    { "value", enrollee.ExpiryDate }
+                },
+                new JObject
+                {
+                    { "name", "organization_type" },
+                    { "value", enrollee.EnrolleeOrganizationTypes.FirstOrDefault().OrganizationType.Name }
+                },
+                new JObject
+                {
+                    { "name", "user_class" },
+                    { "value", enrollee.IsRegulatedUser() ? "RU" : "OBO" }
+                },
+                new JObject
+                {
+                    { "name", "remote_access" },
+                    { "value", enrollee.RequestingRemoteAccess}
+                },
+
             };
 
             _logger.LogInformation($"Credential offer attributes for @JObject", attributes);
