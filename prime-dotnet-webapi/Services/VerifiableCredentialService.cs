@@ -178,12 +178,17 @@ namespace Prime.Services
 
             if (enrollee != null)
             {
-                var credential = _context.Credentials
-                    .SingleOrDefault(c => c.Id == enrollee.CredentialId);
+                var credential = GetCredentialByIdAsync((int)enrollee.CredentialId);
                 credential.AcceptedCredentialDate = DateTimeOffset.Now;
             }
 
             return await _context.SaveChangesAsync();
+        }
+
+        private Credential GetCredentialByIdAsync(int credentialId)
+        {
+            return _context.Credentials
+                    .SingleOrDefault(c => c.Id == credentialId);
         }
 
         // Issue a credential to an active connection.
