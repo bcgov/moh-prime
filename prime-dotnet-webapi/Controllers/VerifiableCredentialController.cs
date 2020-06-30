@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
-using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 
@@ -36,10 +33,10 @@ namespace Prime.Controllers
         [HttpPost("/api/webhooks/topic/{topic}", Name = nameof(Webhook))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        // TODO update to response code 202 when queue has been added for webhooks
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Webhook(string topic, [FromBody] JObject data)
         {
-            // TODO how should this respond and what occurs on their side regarding retries?
             await _verifiableCredentialsService.WebhookAsync(data, topic);
             return NoContent();
         }

@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -10,12 +11,15 @@ namespace Prime.Services.Clients
     public class VerifiableCredentialClient : IVerifiableCredentialClient
     {
         private readonly HttpClient _client;
+        private readonly ILogger _logger;
 
         public VerifiableCredentialClient(
-            HttpClient client)
+            HttpClient client,
+            ILogger<VerifiableCredentialClient> logger)
         {
             // Auth header and api-key are injected in Startup.cs
             _client = client;
+            _logger = logger;
         }
 
         public async Task<JObject> CreateInvitationAsync(string alias)
@@ -75,6 +79,33 @@ namespace Prime.Services.Clients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
+        public async Task<JObject> GetSchema(string schemaId)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.GetAsync($"schemas/{schemaId}");
+            }
+            catch (Exception ex)
+            {
+                await LogError(response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to get the schema: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetSchema");
+            }
+
+            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+            System.Console.WriteLine("GET Schema");
+            System.Console.WriteLine(JsonConvert.SerializeObject(body));
+
+            return body;
+        }
+
         public async Task<string> GetIssuerDidAsync()
         {
             HttpResponseMessage response = null;
@@ -99,7 +130,7 @@ namespace Prime.Services.Clients
             System.Console.WriteLine("GET Issuer DID");
             System.Console.WriteLine(JsonConvert.SerializeObject(body));
 
-            return body.Value<JObject>("result").Value<string>("did");
+            return (string)body.SelectToken("result.did");
         }
 
         public async Task<string> GetCredentialDefinitionIdAsync(string schemaId)
@@ -112,7 +143,7 @@ namespace Prime.Services.Clients
             catch (Exception ex)
             {
                 await LogError(response, ex);
-                throw new VerifiableCredentialApiException("Error occurred attempting to GET credential definition: ", ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to get credential definition: ", ex);
             }
 
             if (!response.IsSuccessStatusCode)
@@ -126,7 +157,7 @@ namespace Prime.Services.Clients
             System.Console.WriteLine("GET Credential Definition IDs");
             System.Console.WriteLine(JsonConvert.SerializeObject(body));
 
-            return (string)body["credential_definition_ids"][0];
+            return (string)body.SelectToken("credential_definition_ids[0]");
         }
 
         private async Task LogError(HttpResponseMessage response, Exception exception = null)
@@ -151,14 +182,14 @@ namespace Prime.Services.Clients
                 secondaryMessage = "No additional message. Http response and exception were null.";
             }
 
-            // _logger.Error(exception, secondaryMessage, new Object[] { content, response });
-            System.Console.WriteLine("ERROR_RESPONSE_AND_CONTENT ------------------------------------------------");
-            System.Console.WriteLine(JsonConvert.SerializeObject(secondaryMessage));
-            System.Console.WriteLine("---------------------------------------------------------------------------");
-            System.Console.WriteLine(JsonConvert.SerializeObject(content));
-            System.Console.WriteLine("---------------------------------------------------------------------------");
-            System.Console.WriteLine(JsonConvert.SerializeObject(response));
-            System.Console.WriteLine("END_ERROR_RESPONSE_AND_CONTENT --------------------------------------------");
+            _logger.LogError(exception, secondaryMessage, new Object[] { content, response });
+            // System.Console.WriteLine("ERROR_RESPONSE_AND_CONTENT ------------------------------------------------");
+            // System.Console.WriteLine(JsonConvert.SerializeObject(secondaryMessage));
+            // System.Console.WriteLine("---------------------------------------------------------------------------");
+            // System.Console.WriteLine(JsonConvert.SerializeObject(content));
+            // System.Console.WriteLine("---------------------------------------------------------------------------");
+            // System.Console.WriteLine(JsonConvert.SerializeObject(response));
+            // System.Console.WriteLine("END_ERROR_RESPONSE_AND_CONTENT --------------------------------------------");
         }
     }
 
