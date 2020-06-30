@@ -75,6 +75,33 @@ namespace Prime.Services.Clients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
+        public async Task<JObject> GetSchema(string schemaId)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.GetAsync($"schemas/{schemaId}");
+            }
+            catch (Exception ex)
+            {
+                await LogError(response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to get the schema: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetSchema");
+            }
+
+            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+            System.Console.WriteLine("GET Schema");
+            System.Console.WriteLine(JsonConvert.SerializeObject(body));
+
+            return body;
+        }
+
         public async Task<string> GetIssuerDidAsync()
         {
             HttpResponseMessage response = null;
@@ -99,7 +126,7 @@ namespace Prime.Services.Clients
             System.Console.WriteLine("GET Issuer DID");
             System.Console.WriteLine(JsonConvert.SerializeObject(body));
 
-            return body.Value<JObject>("result").Value<string>("did");
+            return (string)body.SelectToken("result.did");
         }
 
         public async Task<string> GetCredentialDefinitionIdAsync(string schemaId)
@@ -112,7 +139,7 @@ namespace Prime.Services.Clients
             catch (Exception ex)
             {
                 await LogError(response, ex);
-                throw new VerifiableCredentialApiException("Error occurred attempting to GET credential definition: ", ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to get credential definition: ", ex);
             }
 
             if (!response.IsSuccessStatusCode)
@@ -126,7 +153,7 @@ namespace Prime.Services.Clients
             System.Console.WriteLine("GET Credential Definition IDs");
             System.Console.WriteLine(JsonConvert.SerializeObject(body));
 
-            return (string)body["credential_definition_ids"][0];
+            return (string)body.SelectToken("credential_definition_ids[0]");
         }
 
         private async Task LogError(HttpResponseMessage response, Exception exception = null)
