@@ -192,7 +192,7 @@ objects:
           - name: PATRONI_RESTAPI_LISTEN
             value: 0.0.0.0:8008
           image: >-
-            docker-registry.default.svc:5000/openshift/patroni@sha256:214f0c96b5162fd5b08976d3c62f2a3f95bf3485d2145d7d8f9fc1ec2b8ff39a
+            docker-registry.default.svc:5000/${OC_NAMESPACE}-tools/patroni:pg11.7
           imagePullPolicy: IfNotPresent
           name: ${NAME}${SUFFIX}
           ports:
@@ -238,10 +238,6 @@ objects:
       cluster-name: patroni${SUFFIX}
     name: ${NAME}${SUFFIX}
   subsets: []
-- apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    name: ${SERVICE_ACCOUNT}
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
@@ -281,14 +277,3 @@ objects:
     - patch
     - update
     - watch
-- apiVersion: rbac.authorization.k8s.io/v1
-  kind: RoleBinding
-  metadata:
-    name: ${SERVICE_ACCOUNT}
-  roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: Role
-    name: ${SERVICE_ACCOUNT}
-  subjects:
-  - kind: ServiceAccount
-    name: ${SERVICE_ACCOUNT}
