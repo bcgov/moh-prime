@@ -60,13 +60,7 @@ objects:
       selector:
         io.kompose.service: "${NAME}${SUFFIX}"
       strategy: null
-      resources:
-        requests:
-          cpu: 300m
-          memory: 512Mi
-        limits:
-          cpu: "1"
-          memory: 1024Mi
+      resources: {}
       template:
         metadata:
           creationTimestamp: null
@@ -89,10 +83,21 @@ objects:
                   value: "http://+:8080"
                 - name: FRONTEND_URL
                   value: "${HTTP_SCHEMA}://${VANITY_URL}"
+                - name: KEYCLOAK_TOKEN_URL
+                  value: "https://sso${SUFFIX}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token"
                 - name: JWT_SIGNING_KEY
                   value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
                 - name: DB_HOST
                   value: "postgresql${SUFFIX}"
+                - name: DOCUMENT_MANAGER_CLIENT_ID
+                  value: prime-document-manager
+                - name: DOCUMENT_MANAGER_URL
+                  value: 'https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/'
+                - name: DOCUMENT_MANAGER_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: DOCUMENT_MANAGER_CLIENT_SECRET
+                      name: "document-manager-secret"
                 - name: PHARMANET_API_URL
                   valueFrom:
                     secretKeyRef:

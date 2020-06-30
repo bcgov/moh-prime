@@ -101,6 +101,14 @@ objects:
           generation: null
           importPolicy: {}
           name: latest
+    resources:
+      requests:
+        cpu: '1'
+        memory: 1Gi
+      limits:
+        cpu: '2'
+        memory: 4Gi
+    runPolicy: Serial
     status:
       dockerImageRepository: ""
   - apiVersion: v1

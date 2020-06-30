@@ -26,7 +26,7 @@ RUN apt-get update && \
     chmod -R 777 /var/cache/nginx && \
     chmod -R 777 /var/run
 COPY nginx.conf /etc/nginx/
-COPY nginx.template.conf /etc/nginx/nginx.template.conf
+COPY nginxdev.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
 RUN echo "Populating environment..." && \
     (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
