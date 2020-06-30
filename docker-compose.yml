@@ -131,7 +131,7 @@ services:
     volumes:
       - ./document-manager/backend/:/app/
     command: flask db upgrade
-    env_file: ./document-manager/backend/.env-prime
+    env_file: ./document-manager/backend/.env-prime-local
     networks:
       - primenet
 
