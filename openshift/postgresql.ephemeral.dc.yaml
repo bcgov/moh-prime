@@ -188,7 +188,7 @@ objects:
           - name: PATRONI_RESTAPI_LISTEN
             value: 0.0.0.0:8008
           image: >-
-            docker-registry.default.svc:5000/${OC_NAMESPACE}-tools/patroni@sha256:214f0c96b5162fd5b08976d3c62f2a3f95bf3485d2145d7d8f9fc1ec2b8ff39a
+            docker-registry.default.svc:5000/openshift/patroni@sha256:214f0c96b5162fd5b08976d3c62f2a3f95bf3485d2145d7d8f9fc1ec2b8ff39a
           imagePullPolicy: IfNotPresent
           name: ${NAME}${SUFFIX}
           ports:
