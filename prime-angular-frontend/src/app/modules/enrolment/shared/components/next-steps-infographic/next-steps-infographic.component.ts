@@ -25,7 +25,7 @@ export class NextStepsInfographicComponent implements OnInit {
       message: 'This QR code is your verified credential, you can now store it in your digital wallet.',
       actionHide: true,
       cancelText: 'PRIME',
-      data: { base64QRCode: this.enrolment.base64QRCode },
+      data: { base64Image: this.enrolment.base64QRCode },
       component: ImageComponent
     };
 
