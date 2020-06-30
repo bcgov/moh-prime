@@ -151,3 +151,19 @@ function functionTest() {
     echo "Trailing = ${@:4}"
     echo "All = $@"
 }
+
+function sparsify() {
+    echo "Deleting all non-configuration subdirectories..."
+    rm -fr documentation
+    rm -fr document-manager
+    rm -fr mailhog
+    rm -fr poc
+    rm -fr prime-angular-frontend
+    rm -fr prime-database-backup
+    rm -fr prime-dotnet-webapi
+    rm -fr prime-dotnet-webapi-tests
+    rm -fr prime-mongo
+    rm -fr postgres
+    rm -fr schemaspy
+    rm -fr sonar-scanner
+}
