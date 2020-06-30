@@ -32,7 +32,7 @@ parameters:
   - description: The OpenShift ImageStream name.
     displayName: IMAGE_STREAM_NAME
     name: IMAGE_STREAM_NAME
-    value: patroni:10
+    value: openshift\patroni:10
   - description: The OpenShift Namespace where the ImageStream resides.
     displayName: Namespace
     name: IMAGE_STREAM_NAMESPACE
@@ -191,7 +191,8 @@ objects:
             value: 0.0.0.0:5432
           - name: PATRONI_RESTAPI_LISTEN
             value: 0.0.0.0:8008
-          image: ${IMAGE_STREAM_NAME}
+          image: >-
+            docker-registry.default.svc:5000/openshift/patroni@sha256:214f0c96b5162fd5b08976d3c62f2a3f95bf3485d2145d7d8f9fc1ec2b8ff39a
           imagePullPolicy: IfNotPresent
           name: ${NAME}${SUFFIX}
           ports:
