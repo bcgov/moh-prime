@@ -98,6 +98,7 @@ namespace Prime.Auth
                 options.AddPolicy(Policies.SiteRegistrantOnly, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Site)));
                 options.AddPolicy(Policies.EnrolleeOrAdmin, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Enrollee, UserType.Admin)));
                 options.AddPolicy(Policies.SiteRegistrantOrAdmin, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Site, UserType.Admin)));
+                options.AddPolicy(Policies.AnyUser, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Enrollee, UserType.Site, UserType.Admin)));
 
                 options.AddPolicy(Policies.CanEdit, policy => policy.AddRequirements(new CanEditRequirement()));
 
