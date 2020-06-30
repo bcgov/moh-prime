@@ -10,11 +10,6 @@ import { KeycloakOptionsService } from './keycloak.service';
 
 export function initializer(keycloak: KeycloakService, injector: Injector): () => Promise<any> {
   return async (): Promise<boolean | void> => {
-    /**
-     * Keycloak clients need to be dynamically determined based on one of two critera:
-     * 1) User is unauthenticated and it is based on route
-     * 2) User is authenticated and it is based on audience within their token claim
-     */
     const service = new KeycloakOptionsService();
     return keycloak.init(service.getKeycloakOptions())
       .then((authenticated) => {

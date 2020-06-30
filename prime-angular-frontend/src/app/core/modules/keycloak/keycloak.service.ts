@@ -1,6 +1,12 @@
 import { KeycloakOptions } from 'keycloak-angular';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
+/**
+ * @description
+ * Keycloak clients need to be dynamically determined based on one of two critera:
+ * 1) User is unauthenticated and it is based on route, or
+ * 2) User is authenticated and it is based on the token audience
+ */
 export class KeycloakOptionsService {
   private path: string;
   private token: string;
@@ -13,6 +19,7 @@ export class KeycloakOptionsService {
   private defaultClientId: string;
 
   constructor() {
+    // Angular has not fully bootstrapped so can't use ActivatedRoute
     this.path = window.location.pathname.slice(1);
     this.token = localStorage.token;
     this.jwtHelper = new JwtHelperService();
@@ -23,7 +30,6 @@ export class KeycloakOptionsService {
   public getKeycloakOptions(): KeycloakOptions {
     const clientId = this.getClientId();
 
-    // TODO split out into readonly member variable
     return {
       config: {
         url: 'https://sso-dev.pathfinder.gov.bc.ca/auth',
