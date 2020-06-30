@@ -85,7 +85,7 @@ objects:
         port: 5432
         protocol: TCP
         targetPort: 5432
-      - name: REST
+      - name: rest
         port: 8008
         protocol: TCP
         targetPort: 8008
@@ -209,8 +209,8 @@ objects:
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
-        serviceAccount: ${NAME}
-        serviceAccountName: ${NAME}
+        serviceAccount: default
+        serviceAccountName: default
         terminationGracePeriodSeconds: 0
         volumes:
         - name: ${NAME}${SUFFIX}
