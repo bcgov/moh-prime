@@ -161,11 +161,8 @@ namespace Prime.Services
                 case CredentialExchangeStates.RequestReceived:
                     return await Task.FromResult(true);
                 case CredentialExchangeStates.CredentialIssued:
-                    // var cred_def_id = data.Value<string>("cred_def_id");
-                    // System.Console.WriteLine($"cred_def_id \"{cred_def_id}\"");
-                    // System.Console.WriteLine(JsonConvert.SerializeObject(data));
-                    // System.Console.WriteLine($"UPDATE ACCEPTED CREDENTIAL DATE");
-                    // await UpdateAcceptedCredentialDate(cred_def_id);
+                    System.Console.WriteLine($"UPDATE ACCEPTED CREDENTIAL DATE");
+                    await UpdateAcceptedCredentialDate(data);
                     return await Task.FromResult(true);
                 default:
                     // _logger.Error($"Credential exchange state {state} is not supported");
@@ -174,13 +171,24 @@ namespace Prime.Services
             }
         }
 
-        // private async Task<int> UpdateAcceptedCredentialDate(String cred_def_id)
-        // {
-        //     var credential = _context.Credentials
-        //         .SingleOrDefault(c => c.CredentialDefinitionId == cred_def_id);
-        //     credential.AcceptedCredentialDate = DateTime.Now;
-        //     return await _context.SaveChangesAsync();
-        // }
+        private async Task<int> UpdateAcceptedCredentialDate(JObject data)
+        {
+            var gpid = (string)data.SelectToken("credential_proposal_dict.credential_proposal.attributes[?(@.name == 'gpid')].value");
+            System.Console.WriteLine($"GPID:  \"{gpid}\"");
+            System.Console.WriteLine(JsonConvert.SerializeObject(data));
+
+            var enrollee = _context.Enrollees
+                .SingleOrDefault(e => e.GPID == gpid);
+
+            if (enrollee != null)
+            {
+                var credential = _context.Credentials
+                    .SingleOrDefault(c => c.Id == enrollee.CredentialId);
+                credential.AcceptedCredentialDate = DateTime.Now;
+            }
+
+            return await _context.SaveChangesAsync();
+        }
 
         // Issue a credential to an active connection.
         private async Task<JObject> IssueCredential(string connectionId, int enrolleeId)

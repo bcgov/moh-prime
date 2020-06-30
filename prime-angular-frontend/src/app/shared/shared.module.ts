@@ -68,6 +68,7 @@ import { CollectionNoticeContainerComponent } from '@shared/components/collectio
 import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.component';
 import { SiteReviewComponent } from '@shared/components/site/site-review/site-review.component';
 import { PartyReviewComponent } from '@shared/components/site/party-review/party-review.component';
+import { ImageComponent } from './components/dialogs/content/image/image.component';
 
 @NgModule({
   declarations: [
@@ -117,6 +118,7 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
     FeedbackComponent,
+    ImageComponent,
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
     SiteReviewComponent,
@@ -125,7 +127,8 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     PageSubheader2Component,
     PageSubheader2TitleDirective,
     PageSubheader2SummaryDirective,
-    PageSubheader2MoreInfoDirective
+    PageSubheader2MoreInfoDirective,
+    ImageComponent
   ],
   imports: [
     CommonModule,
