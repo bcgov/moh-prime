@@ -166,6 +166,19 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     });
   }
 
+  public showDefaultAgreement() {
+    return this.organizationService.organization.signedAgreements?.length < 1 ?? true;
+  }
+
+  public downloadSignedAgreement() {
+    this.organizationResource
+      .downloadLatestSignedAgreement(this.organizationService.organization.id)
+      .subscribe((base64: string) => {
+        const blob = this.utilsService.base64ToBlob(base64);
+        this.utilsService.downloadDocument(blob, 'Signed-organization-agreement');
+      });
+  }
+
   public ngOnInit(): void {
     // TODO structured to match in all site views
     const organization = this.organizationService.organization;
