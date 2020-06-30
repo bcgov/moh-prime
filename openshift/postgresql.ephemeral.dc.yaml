@@ -77,7 +77,7 @@ objects:
         postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
     labels:
       application: ${NAME}${SUFFIX}
-      cluster-name: patroni{${SUFFIX}
+      cluster-name: patroni${SUFFIX}
     name: '${NAME}${SUFFIX}'
   spec:
     ports:
