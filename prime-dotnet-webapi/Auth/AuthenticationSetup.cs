@@ -13,6 +13,8 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using System.Security.Claims;
+
 
 using Prime.Auth.Requirements;
 namespace Prime.Auth
@@ -110,18 +112,12 @@ namespace Prime.Auth
         private static Task OnTokenValidatedAsync(TokenValidatedContext context)
         {
             if (context.SecurityToken is JwtSecurityToken accessToken
-                    && context.Principal.Identity is ClaimsIdentity identity
-                    && identity.IsAuthenticated)
+                && context.Principal.Identity is ClaimsIdentity identity
+                && identity.IsAuthenticated)
             {
-                // add the access token to the identity claims in case it is needed later
-                identity.AddClaim(new Claim(AuthConstants.PRIME_ACCESS_TOKEN_KEY, accessToken.RawData));
                 identity.AddClaim(new Claim(ClaimTypes.Name, accessToken.Subject));
 
-                // flatten realm_access because Microsoft identity model doesn't support nested claims
                 AddRolesForRealmAccessClaims(identity);
-
-                // flatten resource_access because Microsoft identity model doesn't support nested claims
-                AddRolesForResourceAccessClaims(identity);
             }
 
             return Task.CompletedTask;
@@ -130,43 +126,22 @@ namespace Prime.Auth
         private static void AddRolesForRealmAccessClaims(ClaimsIdentity identity)
         {
             // flatten realm_access because Microsoft identity model doesn't support nested claims
-            if (identity.HasClaim((claim) => claim.Type == AuthConstants.KEYCLOAK_REALM_ACCESS_KEY))
-            {
-                var realmAccessClaim = identity.Claims.Single((claim) => claim.Type == AuthConstants.KEYCLOAK_REALM_ACCESS_KEY);
-                var realmAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(realmAccessClaim.Value);
+            var realmAccessClaim = identity.Claims.SingleOrDefault(claim => claim.Type == AuthConstants.KEYCLOAK_REALM_ACCESS_KEY);
 
-                if (realmAccessAsDict.ContainsKey(AuthConstants.KEYCLOAK_ROLES_KEY))
+            if (realmAccessClaim != null)
+            {
+                var realmAccess = JsonConvert.DeserializeObject<RealmAccess>(realmAccessClaim.Value);
+
+                foreach (var role in realmAccess.roles)
                 {
-                    foreach (var role in realmAccessAsDict[AuthConstants.KEYCLOAK_ROLES_KEY])
-                    {
-                        identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                    }
+                    identity.AddClaim(new Claim(ClaimTypes.Role, role));
                 }
             }
         }
 
-        private static void AddRolesForResourceAccessClaims(ClaimsIdentity identity)
+        private class RealmAccess
         {
-            // flatten resource_access because Microsoft identity model doesn't support nested claims
-            if (identity.HasClaim((claim) => claim.Type == AuthConstants.KEYCLOAK_RESOURCE_ACCESS_KEY))
-            {
-                var resourceAccessClaim = identity.Claims.Single((claim) => claim.Type == AuthConstants.KEYCLOAK_RESOURCE_ACCESS_KEY);
-                var resourceAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string[]>>>(resourceAccessClaim.Value);
-
-                // get the roles from each potential client key that we care about
-                foreach (var clientId in AuthConstants.PRIME_CLIENT_IDS)
-                {
-                    Dictionary<string, string[]> clientKeyValue;
-                    if (resourceAccessAsDict.TryGetValue(clientId, out clientKeyValue)
-                            && clientKeyValue.ContainsKey(AuthConstants.KEYCLOAK_ROLES_KEY))
-                    {
-                        foreach (var role in clientKeyValue[AuthConstants.KEYCLOAK_ROLES_KEY])
-                        {
-                            identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                        }
-                    }
-                }
-            }
+            public string[] roles { get; set; }
         }
     }
 }

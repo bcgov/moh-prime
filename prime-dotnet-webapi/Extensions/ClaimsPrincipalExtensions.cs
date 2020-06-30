@@ -42,22 +42,22 @@ namespace Prime
 
         public static bool IsAdmin(this ClaimsPrincipal User)
         {
-            return User.IsInRole(AuthConstants.PRIME_ADMIN_ROLE);
+            return User.IsInRole(Roles.Admin);
         }
 
         public static bool HasAdminView(this ClaimsPrincipal User)
         {
-            return User.IsInRole(AuthConstants.PRIME_READONLY_ADMIN);
+            return User.IsInRole(Roles.ReadonlyAdmin);
         }
 
         public static string GetAudience(this ClaimsPrincipal User)
         {
-            return User.FindFirstValue(AuthConstants.AUDIENCE_CLAIM);
+            return User.FindFirstValue(Claims.Audience);
         }
 
         public static int GetIdentityAssuranceLevel(this ClaimsPrincipal User)
         {
-            var claimValue = User.FindFirstValue(AuthConstants.ASSURANCE_LEVEL_CLAIM);
+            var claimValue = User.FindFirstValue(Claims.AssuranceLevel);
 
             int assuranceLevel = 0;
             Int32.TryParse(claimValue, out assuranceLevel);
@@ -67,7 +67,7 @@ namespace Prime
 
         public static string GetIdentityProvider(this ClaimsPrincipal User)
         {
-            return User.FindFirstValue(AuthConstants.IDENTITY_PROVIDER_CLAIM);
+            return User.FindFirstValue(Claims.IdentityProvider);
         }
     }
 }

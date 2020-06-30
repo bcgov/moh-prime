@@ -11,7 +11,7 @@ namespace Prime.Auth.Requirements
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, UserTypeRequirement requirement)
         {
             if (requirement.AllowedTypes.Contains(UserType.Enrollee)
-                && context.User.IsInRole(AuthConstants.PRIME_USER_ROLE)
+                && context.User.IsInRole(Roles.User)
                 && context.User.GetAudience() == Audiences.Enrolment)
             {
                 context.Succeed(requirement);

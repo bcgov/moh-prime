@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = Policies.SiteRegistrantOrAdmin, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
+    [Authorize(Policy = Policies.SiteRegistrantOrAdmin, Roles = FeatureFlags.SiteRegistration)]
     public class SitesController : ControllerBase
     {
         private readonly ISiteService _siteService;
