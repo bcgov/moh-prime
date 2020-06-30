@@ -8,6 +8,7 @@ using Prime.Models;
 using Prime.Services.Clients;
 using QRCoder;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services
@@ -36,23 +37,22 @@ namespace Prime.Services
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
         private static readonly string SCHEMA_ID = "QDaSxvduZroHDKkdXKV5gG:2:enrollee:1.1";
-        // TODO can extract issuer_did, schema name, and schema version off of the schema ID
-        // so could drop use of static constants, and extra API calls
-        private static readonly string SCHEMA_NAME = "enrollee";
-        private static readonly string SCHEMA_VERSION = "1.1";
 
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
         private readonly IEnrolleeService _enrolleeService;
+        private readonly ILogger _logger;
 
         public VerifiableCredentialService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IVerifiableCredentialClient verifiableCredentialClient,
-            IEnrolleeService enrolleeService)
+            IEnrolleeService enrolleeService,
+            ILogger<VerifiableCredentialService> logger)
             : base(context, httpContext)
         {
             _verifiableCredentialClient = verifiableCredentialClient;
             _enrolleeService = enrolleeService;
+            _logger = logger;
         }
 
         // Create an invitation to establish a connection between the agents.
@@ -194,16 +194,8 @@ namespace Prime.Services
         private async Task<JObject> CreateCredentialOfferAsync(string connectionId, JArray attributes)
         {
             var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
+            var schema = await _verifiableCredentialClient.GetSchema(SCHEMA_ID);
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
-
-            System.Console.WriteLine($"ConnectionId \"{connectionId}\"");
-            System.Console.WriteLine($"SCHEMA_ID \"{SCHEMA_ID}\"");
-            System.Console.WriteLine($"SCHEMA_NAME \"{SCHEMA_NAME}\"");
-            System.Console.WriteLine($"SCHEMA_VERSION \"{SCHEMA_VERSION}\"");
-            System.Console.WriteLine($"IssuerDid \"{issuerDid}\"");
-            System.Console.WriteLine($"CredentialDefinitionId \"{credentialDefinitionId}\"");
-            System.Console.WriteLine($"Attributes: ");
-            System.Console.WriteLine(JsonConvert.SerializeObject(attributes));
 
             JObject credentialOffer = new JObject
                 {
@@ -211,8 +203,8 @@ namespace Prime.Services
                     { "issuer_did", issuerDid },
                     { "schema_id", SCHEMA_ID },
                     { "schema_issuer_did", issuerDid },
-                    { "schema_name", SCHEMA_NAME },
-                    { "schema_version", SCHEMA_VERSION },
+                    { "schema_name", schema.Value<string>("name") },
+                    { "schema_version", schema.Value<string>("version") },
                     { "cred_def_id", credentialDefinitionId },
                     { "comment", "PharmaNet GPID" },
                     { "auto_remove", true },
