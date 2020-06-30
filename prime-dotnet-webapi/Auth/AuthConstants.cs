@@ -31,11 +31,15 @@ namespace Prime.Auth
 
     public static class Policies
     {
-        public const string Enrollee = "enrollee-policy";
-        public const string AdminView = "admin-view-policy";
-        public const string Admin = "admin-policy";
-        public const string SuperAdmin = "super-admin-policy";
-        public const string HpdidAccess = "hpdid-access-policy";
+        public const string EnrolleeOnly = "enrollee-policy";
+        public const string AdminOnly = "admin-policy";
+        public const string SiteRegistrantOnly = "site-policy";
+        public const string EnrolleeOrAdmin = "enrollee-admin-policy";
+        public const string SiteRegistrantOrAdmin = "enrollee-admin-policy";
+
+        public const string CanEdit = "can-edit-policy";
+
+        public const string CareConnectAccess = "hpdid-access-policy";
         public const string PosGpidAccess = "pos-gpid-access-policy";
     }
 
@@ -45,6 +49,6 @@ namespace Prime.Auth
         public const string Enrolment = "prime-application-enrolment";
         public const string Site = "prime-application-site";
         public const string CareConnect = "prime-careconnect-access";
-        public const string GpidAccess = "prime-pos-gpid";
+        public const string PosGpid = "prime-pos-gpid";
     }
 }

@@ -13,8 +13,8 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using Prime.Infrastructure;
 
+using Prime.Auth.Requirements;
 namespace Prime.Auth
 {
     public static class AuthenticationSetup
@@ -58,13 +58,13 @@ namespace Prime.Auth
                 options.MetadataAddress = Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG") ?? configuration["Jwt:WellKnown"];
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
                     ValidAudiences = new List<string>
                     {
-                        AuthConstants.ENROLMENT_AUDIENCE,
-                        AuthConstants.ADMIN_AUDIENCE,
-                        AuthConstants.SITE_AUDIENCE,
-                        "prime-web-api" // TODO: remove
+                        Audiences.Enrolment,
+                        Audiences.Admin,
+                        Audiences.Site,
+                        Audiences.CareConnect,
+                        Audiences.PosGpid
                     }
                 };
                 options.Events = new JwtBearerEvents
@@ -85,15 +85,24 @@ namespace Prime.Auth
                 };
             });
 
-            services.AddSingleton<IAuthorizationHandler, PrimeUserAuthHandler>();
+            services.AddSingleton<IAuthorizationHandler, AdminUserTypeRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, EnrolleeUserTypeRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, SiteUserTypeRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, CanEditRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, AudienceRequirementHandler>();
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(AuthConstants.USER_POLICY, policy => policy.AddRequirements(new PrimeUserRequirement()));
-                options.AddPolicy(AuthConstants.ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_ADMIN_ROLE));
-                options.AddPolicy(AuthConstants.SUPER_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_SUPER_ADMIN_ROLE));
-                options.AddPolicy(AuthConstants.READONLY_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_READONLY_ADMIN));
-                options.AddPolicy(AuthConstants.EXTERNAL_HPDID_ACCESS_POLICY, policy => policy.RequireRole(AuthConstants.EXTERNAL_HPDID_ACCESS_ROLE));
+                options.AddPolicy(Policies.EnrolleeOnly, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Enrollee)));
+                options.AddPolicy(Policies.AdminOnly, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Admin)));
+                options.AddPolicy(Policies.SiteRegistrantOnly, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Site)));
+                options.AddPolicy(Policies.EnrolleeOrAdmin, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Enrollee, UserType.Admin)));
+                options.AddPolicy(Policies.SiteRegistrantOrAdmin, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Site, UserType.Admin)));
+
+                options.AddPolicy(Policies.CanEdit, policy => policy.AddRequirements(new CanEditRequirement()));
+
+                options.AddPolicy(Policies.CareConnectAccess, policy => policy.AddRequirements(new AudienceRequirement(Audiences.CareConnect)));
+                options.AddPolicy(Policies.PosGpidAccess, policy => policy.AddRequirements(new AudienceRequirement(Audiences.PosGpid)));
             });
         }
 

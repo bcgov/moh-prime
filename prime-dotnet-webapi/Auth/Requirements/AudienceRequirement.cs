@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace Prime.Auth
+namespace Prime.Auth.Requirements
 {
     public class AudienceRequirement : IAuthorizationRequirement
     {

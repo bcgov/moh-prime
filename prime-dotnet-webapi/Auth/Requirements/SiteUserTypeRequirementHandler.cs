@@ -1,19 +1,18 @@
 using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 
-namespace Prime.Auth
+namespace Prime.Auth.Requirements
 {
-    public class AdminUserTypeHandler : AuthorizationHandler<UserTypeRequirement>
+    public class SiteUserTypeRequirementHandler : AuthorizationHandler<UserTypeRequirement>
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, UserTypeRequirement requirement)
         {
-            if (requirement.AllowedTypes.Contains(UserType.Admin)
-                && context.User.HasAdminView()
-                && context.User.GetAudience() == Audiences.Admin)
+            if (requirement.AllowedTypes.Contains(UserType.Site)
+                && context.User.IsInRole(AuthConstants.PRIME_USER_ROLE)
+                && context.User.GetAudience() == Audiences.Site)
             {
                 context.Succeed(requirement);
             }

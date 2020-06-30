@@ -39,7 +39,7 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
         }
 
-        // GET: api/Enrollees/access-terms
+        // GET: api/Enrollees/5/access-terms
         /// <summary>
         /// Get a list of the enrollee's access terms.
         /// </summary>
@@ -75,7 +75,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(accessTerms));
         }
 
-        // GET: api/Enrollees/5/access-terms
+        // GET: api/Enrollees/5/access-terms/7
         /// <summary>
         /// Get a specific access term for an enrollee.
         /// </summary>

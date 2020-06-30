@@ -1,13 +1,12 @@
 using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
 
-namespace Prime.Auth
+namespace Prime.Auth.Requirements
 {
-    public class EnrolleeUserTypeHandler : AuthorizationHandler<UserTypeRequirement>
+    public class EnrolleeUserTypeRequirementHandler : AuthorizationHandler<UserTypeRequirement>
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, UserTypeRequirement requirement)
         {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace Prime.Auth
+namespace Prime.Auth.Requirements
 {
     public enum UserType
     {
@@ -13,7 +13,7 @@ namespace Prime.Auth
     {
         public UserType[] AllowedTypes { get; set; }
 
-        public UserTypeRequirement(UserType[] allowedTypes)
+        public UserTypeRequirement(params UserType[] allowedTypes)
         {
             AllowedTypes = allowedTypes;
         }
