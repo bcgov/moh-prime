@@ -15,7 +15,6 @@ pipeline {
             agent { label 'master' }
             steps {
                 echo "Building ..."
-                sh "./player.sh sparsify"
                 //sh "./player.sh toolbelt sonar tools"
                 //sh "./player.sh toolbelt zap tools"
                 //sh "./player.sh toolbelt mailhog test"
