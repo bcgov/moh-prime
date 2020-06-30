@@ -234,7 +234,7 @@ namespace Prime.Services
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
-            var organizationType = _context.OrganizationTypes.SingleOrDefault(t => t.Code == enrollee.EnrolleeOrganizationTypes.FirstOrDefault().OrganizationTypeCode);
+            // var organizationType = _context.OrganizationTypes.SingleOrDefault(t => t.Code == enrollee.EnrolleeOrganizationTypes.FirstOrDefault().OrganizationTypeCode);
 
             // TODO add addition claim information
             // Renewal Date
@@ -255,11 +255,11 @@ namespace Prime.Services
                     { "name", "renewal_date" },
                     { "value", enrollee.ExpiryDate }
                 },
-                new JObject
-                {
-                    { "name", "organization_type" },
-                    { "value", organizationType.Name }
-                },
+                // new JObject
+                // {
+                //     { "name", "organization_type" },
+                //     { "value", organizationType.Name }
+                // },
                 new JObject
                 {
                     { "name", "user_class" },
