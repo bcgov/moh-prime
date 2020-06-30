@@ -138,7 +138,7 @@ namespace Prime
             services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
             services.AddSingleton(new DocumentManagerClientCredentials
             {
-                Address = "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token",
+                Address = PrimeConstants.KEYCLOAK_TOKEN_URL,
                 ClientId = PrimeConstants.DOCUMENT_MANAGER_CLIENT_ID,
                 ClientSecret = PrimeConstants.DOCUMENT_MANAGER_CLIENT_SECRET,
             });
