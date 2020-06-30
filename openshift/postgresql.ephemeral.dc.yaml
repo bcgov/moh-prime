@@ -37,10 +37,6 @@ parameters:
     displayName: Namespace
     name: IMAGE_STREAM_NAMESPACE
     value: 'openshift'
-  - description: 'Version of PostgreSQL image to be used (9.2, 9.4, 9.5 or latest).'
-    displayName: Version of PostgreSQL Image
-    name: IMAGE_STREAM_VERSION
-    required: true
     value: 'latest'
   - description: Name of the PostgreSQL database accessed.
     displayName: PostgreSQL Database Name
@@ -61,10 +57,10 @@ parameters:
   - name: MEMORY_REQUEST
     value: 1.5Gi
   - name: STORAGE_CLASS
-    value: netapp-block-standard
+    value: netapp-block-file
     required: true
   - name: STORAGE_MODE
-    value: ReadWriteOnce
+    value: ReadWriteMany
     required: true
   - name: SERVICE_ACCOUNT
     value: default
@@ -192,7 +188,7 @@ objects:
           - name: PATRONI_RESTAPI_LISTEN
             value: 0.0.0.0:8008
           image: >-
-            docker-registry.default.svc:5000/${OC_NAMESPACE}-tools/patroni:pg11.7
+            docker-registry.default.svc:5000/${OC_NAMESPACE}-tools/patroni@sha256:214f0c96b5162fd5b08976d3c62f2a3f95bf3485d2145d7d8f9fc1ec2b8ff39a
           imagePullPolicy: IfNotPresent
           name: ${NAME}${SUFFIX}
           ports:
