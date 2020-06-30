@@ -6,6 +6,7 @@ import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 import { Subscription } from 'rxjs';
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-next-steps-infographic',
@@ -17,7 +18,14 @@ export class NextStepsInfographicComponent implements OnInit {
 
   public busy: Subscription;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(
+    private dialog: MatDialog,
+    private authService: AuthService
+  ) { }
+
+  public get hasVCIssuance(): boolean {
+    return this.authService.hasVCIssuance();
+  }
 
   public openQR() {
     const data: DialogOptions = {
