@@ -90,7 +90,6 @@ namespace Prime.Services
         public async Task<bool> WebhookAsync(JObject data, string topic)
         {
             _logger.LogInformation($"Webhook topic \"{topic}\"");
-            // System.Console.WriteLine($"Webhook topic \"{topic}\"");
 
             switch (topic)
             {
@@ -100,7 +99,6 @@ namespace Prime.Services
                     return await HandleIssueCredentialAsync(data);
                 default:
                     _logger.LogError($"Webhook {topic} is not supported");
-                    // System.Console.WriteLine($"Webhook {topic} is not supported");
                     return false;
             };
         }
@@ -111,20 +109,17 @@ namespace Prime.Services
             var state = data.Value<string>("state");
 
             _logger.LogInformation($"Connection state \"{state}\" for @JObject", data);
-            // System.Console.WriteLine($"Connection state \"{state}\"");
-            // System.Console.WriteLine(JsonConvert.SerializeObject(data));
 
             switch (state)
             {
                 case ConnectionStates.Invitation:
                 case ConnectionStates.Request:
-                    return await Task.FromResult(true);
+                    return true;
                 case ConnectionStates.Response:
                     var connection_id = data.Value<string>("connection_id");
                     var alias = data.Value<int>("alias");
 
                     _logger.LogInformation($"Issuing a credential with this connection_id: {connection_id}");
-                    // Console.WriteLine($"Issuing a credential with this connection_id: {connection_id}");
 
                     // Assumed that when a connection invitation has been sent and accepted
                     // the enrollee has been approved, and has a GPID for issuing a credential
@@ -132,17 +127,13 @@ namespace Prime.Services
                     var issueCredentialResponse = await IssueCredential(connection_id, alias);
 
                     _logger.LogInformation($"Credential has been issued for connection_id: {connection_id} with response @JObject", issueCredentialResponse);
-                    // Console.WriteLine($"Credential has been issued for connection_id: {connection_id}");
-                    // System.Console.WriteLine(JsonConvert.SerializeObject(issueCredentialResponse));
 
-                    return await Task.FromResult(true);
-
+                    return true;
                 case ConnectionStates.Active:
-                    return await Task.FromResult(true);
+                    return true;
                 default:
-                    // _logger.Error($"Connection state {state} is not supported");
-                    System.Console.WriteLine($"Connection state {state} is not supported");
-                    return await Task.FromResult(false);
+                    _logger.LogError($"Connection state {state} is not supported");
+                    return false;
             }
         }
 
@@ -152,21 +143,18 @@ namespace Prime.Services
             var state = data.Value<string>("state");
 
             _logger.LogInformation($"Issue credential state \"{state}\" for @JObject", data);
-            // System.Console.WriteLine($"Issue credential state \"{state}\"");
-            // System.Console.WriteLine(JsonConvert.SerializeObject(data));
 
             switch (state)
             {
                 case CredentialExchangeStates.OfferSent:
                 case CredentialExchangeStates.RequestReceived:
-                    return await Task.FromResult(true);
+                    return true;
                 case CredentialExchangeStates.CredentialIssued:
                     await UpdateAcceptedCredentialDate(data);
-                    return await Task.FromResult(true);
+                    return true;
                 default:
                     _logger.LogError($"Credential exchange state {state} is not supported");
-                    // System.Console.WriteLine($"Credential exchange state {state} is not supported");
-                    return await Task.FromResult(false);
+                    return false;
             }
         }
 
@@ -237,8 +225,6 @@ namespace Prime.Services
                 };
 
             _logger.LogInformation($"Credential offer for connection ID \"{connectionId}\" for @JObject", credentialOffer);
-            // System.Console.WriteLine($"Credential offer for connection ID \"{connectionId}\"");
-            // System.Console.WriteLine(JsonConvert.SerializeObject(credentialOffer));
 
             return credentialOffer;
         }
@@ -265,8 +251,6 @@ namespace Prime.Services
             };
 
             _logger.LogInformation($"Credential offer attributes for @JObject", attributes);
-            // System.Console.WriteLine($"Credential offer attributes");
-            // System.Console.WriteLine(JsonConvert.SerializeObject(attributes));
 
             return attributes;
         }
