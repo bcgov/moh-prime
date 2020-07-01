@@ -30,7 +30,7 @@ namespace Prime.Auth
         public const string AdminOnly = "admin-policy";
         public const string SiteRegistrantOnly = "site-policy";
         public const string EnrolleeOrAdmin = "enrollee-admin-policy";
-        public const string SiteRegistrantOrAdmin = "enrollee-admin-policy";
+        public const string SiteRegistrantOrAdmin = "site-admin-policy";
         public const string AnyUser = "any-user-policy";
 
         public const string CanEdit = "can-edit-policy";
