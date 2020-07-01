@@ -39,6 +39,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
               { collegeCode: 1, licenseCode: 3 },
               { collegeCode: 1, licenseCode: 2 }
             ],
+            regulatedUser: false,
             collegePractices: [
               { collegeCode: 1, practiceCode: 1 },
               { collegeCode: 1, practiceCode: 2 },
@@ -54,6 +55,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
               { collegeCode: 2, licenseCode: 5 },
               { collegeCode: 2, licenseCode: 4 }
             ],
+            regulatedUser: false,
             collegePractices: [
               { collegeCode: 2, practiceCode: 2 },
               { collegeCode: 2, practiceCode: 1 },
@@ -69,6 +71,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
               { collegeCode: 3, licenseCode: 5 },
               { collegeCode: 3, licenseCode: 1 }
             ],
+            regulatedUser: false,
             collegePractices: [
               { collegeCode: 3, practiceCode: 4 },
               { collegeCode: 3, practiceCode: 1 },
@@ -81,6 +84,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             name: 'None',
             prefix: null,
             collegeLicenses: [],
+            regulatedUser: false,
             collegePractices: []
           }
         ],
@@ -101,7 +105,8 @@ export class MockConfigService extends ConfigService implements IConfigService {
             weight: 1,
             collegeLicenses: [
               { collegeCode: 3, licenseCode: 1 }
-            ]
+            ],
+            regulatedUser: false
           },
           {
             code: 2,
@@ -109,7 +114,8 @@ export class MockConfigService extends ConfigService implements IConfigService {
             weight: 2,
             collegeLicenses: [
               { collegeCode: 1, licenseCode: 2 }
-            ]
+            ],
+            regulatedUser: false
           },
           {
             code: 3,
@@ -117,7 +123,8 @@ export class MockConfigService extends ConfigService implements IConfigService {
             weight: 3,
             collegeLicenses: [
               { collegeCode: 1, licenseCode: 3 }
-            ]
+            ],
+            regulatedUser: false
           },
           {
             code: 4,
@@ -125,7 +132,8 @@ export class MockConfigService extends ConfigService implements IConfigService {
             weight: 4,
             collegeLicenses: [
               { collegeCode: 2, licenseCode: 4 }
-            ]
+            ],
+            regulatedUser: false
           },
           {
             code: 5,
@@ -134,7 +142,8 @@ export class MockConfigService extends ConfigService implements IConfigService {
             collegeLicenses: [
               { collegeCode: 2, licenseCode: 5 },
               { collegeCode: 3, licenseCode: 5 }
-            ]
+            ],
+            regulatedUser: false
           }
         ],
         organizationTypes: [
@@ -149,7 +158,8 @@ export class MockConfigService extends ConfigService implements IConfigService {
               { collegeCode: 1, practiceCode: 1 },
               { collegeCode: 2, practiceCode: 1 },
               { collegeCode: 3, practiceCode: 1 }
-            ]
+            ],
+            regulatedUser: false
           },
           {
             code: 2,
@@ -158,7 +168,8 @@ export class MockConfigService extends ConfigService implements IConfigService {
               { collegeCode: 1, practiceCode: 2 },
               { collegeCode: 2, practiceCode: 2 },
               { collegeCode: 3, practiceCode: 2 }
-            ]
+            ],
+            regulatedUser: false
           },
           {
             code: 3,
@@ -167,7 +178,8 @@ export class MockConfigService extends ConfigService implements IConfigService {
               { collegeCode: 1, practiceCode: 3 },
               { collegeCode: 2, practiceCode: 3 },
               { collegeCode: 3, practiceCode: 3 }
-            ]
+            ],
+            regulatedUser: false
           },
           {
             code: 4,
@@ -176,7 +188,8 @@ export class MockConfigService extends ConfigService implements IConfigService {
               { collegeCode: 1, practiceCode: 4 },
               { collegeCode: 2, practiceCode: 4 },
               { collegeCode: 3, practiceCode: 4 }
-            ]
+            ],
+            regulatedUser: false
           }
         ],
         provinces: [
