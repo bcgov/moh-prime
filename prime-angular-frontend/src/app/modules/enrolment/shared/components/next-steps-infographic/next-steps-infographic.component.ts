@@ -1,11 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+
+import { Subscription } from 'rxjs';
+
+import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
-import { Subscription } from 'rxjs';
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
+
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
@@ -27,12 +29,14 @@ export class NextStepsInfographicComponent implements OnInit {
     return this.authService.hasVCIssuance();
   }
 
-  public openQR() {
+  public openQR(event: Event) {
+    event.preventDefault();
+
     const data: DialogOptions = {
       title: 'Verified Credential',
       message: 'Scan this QR code to receive an invitation to your verifiable credential that can be stored in your digital wallet.',
       actionHide: true,
-      cancelText: 'PRIME',
+      cancelText: 'Close',
       data: { base64Image: this.enrolment.base64QRCode },
       component: ImageComponent
     };
