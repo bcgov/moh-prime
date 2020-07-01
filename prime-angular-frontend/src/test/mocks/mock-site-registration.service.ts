@@ -25,9 +25,7 @@ export class MockSiteRegistrationService implements ISiteRegistrationService {
       dateOfBirth: null,
       jobRoleTitle: null,
       email: null,
-      phone: null,
-      fax: null,
-      smsPhone: null
+      phone: null
     };
     this._site = new BehaviorSubject<Site>({
       id: siteId,

@@ -8,14 +8,14 @@ export class Party {
   physicalAddressId?: number;
   physicalAddress: Address;
   mailingAddressId?: number;
-  mailingAddress: Address;
+  mailingAddress?: Address;
   hpdid: string;
   firstName: string;
   lastName: string;
-  preferredFirstName: string;
-  preferredMiddleName: string;
-  preferredLastName: string;
-  dateOfBirth: string; // TODO why are we storing this?
+  preferredFirstName?: string;
+  preferredMiddleName?: string;
+  preferredLastName?: string;
+  dateOfBirth: string;
   jobRoleTitle: string = null;
   email: string = null;
   phone: string = null;

@@ -7,7 +7,7 @@ export interface Organization {
   signingAuthorityId?: number;
   signingAuthority: Party;
   name: string;
-  registrationId: string;
+  registrationId: number;
   doingBusinessAs?: string;
   organizationTypeCode: number;
   acceptedAgreementDate: string;

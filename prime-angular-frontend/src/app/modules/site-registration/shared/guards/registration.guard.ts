@@ -93,22 +93,22 @@ export class RegistrationGuard extends BaseGuard {
   private manageRouting(routePath: string, defaultRoute: string, site: Site): boolean {
     const currentRoute = this.route(routePath);
     // Allow access to a set of routes
-    let whiteListedRoutes = SiteRoutes.registrationRoutes();
+    // let whiteListedRoutes = SiteRoutes.registrationRoutes();
 
     if (!site.location.organization.acceptedAgreementDate) {
       // No routing beyond the organization agreement without accepting
-      whiteListedRoutes = whiteListedRoutes
-        .filter((route: string) => SiteRoutes.noOrganizationAgreementRoutes().includes(route));
+      // whiteListedRoutes = whiteListedRoutes
+      //   .filter((route: string) => SiteRoutes.noOrganizationAgreementRoutes().includes(route));
     } else if (!site.completed) {
       // No reviewing without completing the registration
-      whiteListedRoutes = whiteListedRoutes
-        .filter((route: string) => route !== SiteRoutes.SITE_REVIEW);
+      // whiteListedRoutes = whiteListedRoutes
+      //   .filter((route: string) => route !== SiteRoutes.SITE_REVIEW);
     }
 
     // Redirect to an appropriate default route
-    if (!whiteListedRoutes.includes(currentRoute)) {
-      return this.navigate(routePath, defaultRoute);
-    }
+    // if (!whiteListedRoutes.includes(currentRoute)) {
+    return this.navigate(routePath, defaultRoute);
+    // }
 
     // Otherwise, allow access to the route
     return true;
