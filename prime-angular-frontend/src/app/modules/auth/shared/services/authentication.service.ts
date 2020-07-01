@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
+
+import { KeycloakService } from 'keycloak-angular';
+
 import { Role } from '@auth/shared/enum/role.enum';
-import { KeycloakTokenService } from './keycloak-token.service';
 import { User } from '../models/user.model';
 import { Admin } from '../models/admin.model';
+import { KeycloakTokenService } from './keycloak-token.service';
 
 export interface IAuthenticationService {
   checkAssuranceLevel(assuranceLevel: number): Promise<boolean>;
@@ -29,6 +32,7 @@ export class AuthenticationService implements IAuthenticationService {
   private hasJustLoggedInState: boolean;
 
   constructor(
+    private keycloakService: KeycloakService,
     private keycloakTokenService: KeycloakTokenService
   ) { }
 
@@ -52,6 +56,8 @@ export class AuthenticationService implements IAuthenticationService {
     return this.keycloakTokenService.logout(redirectUri);
   }
 
+  // TODO only have a singular method that returns BcscUser or IdirUser
+  // TODO use switch case to determine the authenticated user type
   public async getUser(forceReload?: boolean): Promise<User> {
     return this.keycloakTokenService.getUser(forceReload);
   }

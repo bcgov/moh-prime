@@ -6,12 +6,11 @@ import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { ToastService } from '@core/services/toast.service';
 import { AuthRoutes } from '@auth/auth.routes';
 
-import { KeycloakOptionsService } from './keycloak.service';
+import { KeycloakOptionsService } from './keycloak-options.service';
 
 export function initializer(keycloak: KeycloakService, injector: Injector): () => Promise<any> {
   return async (): Promise<boolean | void> => {
     const service = new KeycloakOptionsService();
-    console.log('CONFIG', service.getKeycloakOptions());
 
     return keycloak.init(service.getKeycloakOptions())
       .then((authenticated) => {
