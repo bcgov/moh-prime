@@ -220,6 +220,13 @@ export class MockConfigService extends ConfigService implements IConfigService {
         privilegeTypes: [
           { code: 1, name: 'Allowable Role' },
           { code: 2, name: 'Allowable Transaction' }
+        ],
+        vendors: [
+          { code: 1, name: 'CareConnect' },
+          { code: 2, name: 'Excelleris' },
+          { code: 3, name: 'iClinic' },
+          { code: 4, name: 'Medinet' },
+          { code: 5, name: 'Plexia' }
         ]
       };
 
