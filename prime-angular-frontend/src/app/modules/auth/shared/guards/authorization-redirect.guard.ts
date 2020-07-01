@@ -5,19 +5,19 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { Role } from '@auth/shared/enum/role.enum';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthorizationRedirectGuard extends BaseGuard {
   constructor(
-    protected authService: AuthService,
+    protected authenticationService: AuthenticationService,
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router
   ) {
-    super(authService, logger);
+    super(authenticationService, logger);
   }
 
   /**
@@ -35,11 +35,11 @@ export class AuthorizationRedirectGuard extends BaseGuard {
 
       let destinationRoute = this.config.routes.denied;
 
-      if (this.authService.hasEnrollee()) {
+      if (this.authenticationService.hasEnrollee()) {
 
         destinationRoute = this.config.routes.enrolment;
 
-      } else if (this.authService.hasAdminView()) {
+      } else if (this.authenticationService.hasAdminView()) {
         destinationRoute = this.config.routes.adjudication;
       }
 

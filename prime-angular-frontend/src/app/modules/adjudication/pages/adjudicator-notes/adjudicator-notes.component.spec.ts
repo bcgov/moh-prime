@@ -13,8 +13,8 @@ import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
+import { MockAuthenticationService } from 'test/mocks/mock-authentication.service';
 
 describe('AdjudicatorNotesComponent', () => {
   let component: AdjudicatorNotesComponent;
@@ -43,8 +43,8 @@ describe('AdjudicatorNotesComponent', () => {
             useValue: MockConfigService
           },
           {
-            provide: AuthService,
-            useClass: MockAuthService
+            provide: AuthenticationService,
+            useClass: MockAuthenticationService
           }
         ]
       }

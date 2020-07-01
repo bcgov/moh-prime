@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { Site } from '@registration/shared/models/site.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
@@ -20,7 +20,7 @@ export class SiteRegistrationTableComponent implements OnInit {
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
-    private authService: AuthService
+    private authenticationService: AuthenticationService
   ) {
     this.columns = [
       'locationName',
@@ -36,7 +36,7 @@ export class SiteRegistrationTableComponent implements OnInit {
   }
 
   public get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.authenticationService.isAdmin();
   }
 
   public onRoute(routePath: string | (string | number)[]) {

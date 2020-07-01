@@ -7,20 +7,20 @@ import { ConfigService } from '@config/config.service';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { AuthProvider } from '@auth/shared/enum/auth-provider.enum';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationGuard extends BaseGuard {
   constructor(
-    protected authService: AuthService,
+    protected authenticationService: AuthenticationService,
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private configService: ConfigService,
     private router: Router
   ) {
-    super(authService, logger);
+    super(authenticationService, logger);
   }
 
   /**
@@ -57,7 +57,7 @@ export class AuthenticationGuard extends BaseGuard {
           idpHint
         };
 
-        this.authService.login(options)
+        this.authenticationService.login(options)
           .catch((error: any) => {
             this.logger.error(`Error occurred during attempted authentication`, error);
             this.router.navigate([routes.auth]);

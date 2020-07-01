@@ -11,7 +11,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { User } from '@auth/shared/models/user.model';
 import { Enrollee } from '@shared/models/enrollee.model';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -21,14 +21,14 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 })
 export class EnrolmentGuard extends BaseGuard {
   constructor(
-    protected authService: AuthService,
+    protected authenticationService: AuthenticationService,
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private router: Router
   ) {
-    super(authService, logger);
+    super(authenticationService, logger);
   }
 
   /**
@@ -38,7 +38,7 @@ export class EnrolmentGuard extends BaseGuard {
    * status.
    */
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
-    const user$ = from(this.authService.getUser());
+    const user$ = from(this.authenticationService.getUser());
     const createEnrollee$ = user$
       .pipe(
         exhaustMap(({ userId, hpdid, firstName, lastName, dateOfBirth, physicalAddress }: User) => {

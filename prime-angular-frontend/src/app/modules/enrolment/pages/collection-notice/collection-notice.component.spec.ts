@@ -3,10 +3,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
-import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MockAuthenticationService } from 'test/mocks/mock-authentication.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
@@ -46,8 +46,8 @@ describe('CollectionNoticeComponent', () => {
             useClass: MockEnrolmentService
           },
           {
-            provide: AuthService,
-            useClass: MockAuthService
+            provide: AuthenticationService,
+            useClass: MockAuthenticationService
           }
         ]
       }

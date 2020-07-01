@@ -2,11 +2,11 @@ import * as faker from 'faker';
 import { KeycloakTokenParsed, KeycloakLoginOptions } from 'keycloak-js';
 
 import { Role } from '@auth/shared/enum/role.enum';
-import { IAuthService } from '@auth/shared/services/auth.service';
+import { IAuthenticationService } from '@auth/shared/services/authentication.service';
 import { User } from '@auth/shared/models/user.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
-export class MockAuthService implements IAuthService {
+export class MockAuthenticationService implements IAuthenticationService {
   // tslint:disable-next-line: variable-name
   private _role: Role;
   // tslint:disable-next-line: variable-name

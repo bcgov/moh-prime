@@ -14,8 +14,8 @@ import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
+import { MockAuthenticationService } from 'test/mocks/mock-authentication.service';
 
 describe('LimitsConditionsClausesComponent', () => {
   let component: LimitsConditionsClausesComponent;
@@ -43,8 +43,8 @@ describe('LimitsConditionsClausesComponent', () => {
           useValue: MockConfigService
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+          provide: AuthenticationService,
+          useClass: MockAuthenticationService
         }
       ]
     })

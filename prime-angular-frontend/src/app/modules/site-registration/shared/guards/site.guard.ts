@@ -9,7 +9,7 @@ import { LoggerService } from '@core/services/logger.service';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { User } from '@auth/shared/models/user.model';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
@@ -22,14 +22,14 @@ import { SiteService } from '../services/site.service';
 })
 export class SiteGuard extends BaseGuard {
   constructor(
-    protected authService: AuthService,
+    protected authenticationService: AuthenticationService,
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private siteResource: SiteResource,
     private siteService: SiteService
   ) {
-    super(authService, logger);
+    super(authenticationService, logger);
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {

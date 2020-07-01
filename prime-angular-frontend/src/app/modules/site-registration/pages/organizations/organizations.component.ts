@@ -5,7 +5,7 @@ import { Subscription, from, EMPTY } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { User } from '@auth/shared/models/user.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -36,7 +36,7 @@ export class OrganizationsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private siteResource: SiteResource,
@@ -122,7 +122,7 @@ export class OrganizationsComponent implements OnInit {
   }
 
   private createOrganization() {
-    this.busy = from(this.authService.getUser())
+    this.busy = from(this.authenticationService.getUser())
       .pipe(
         map((user: User) => new Party(user)),
         exhaustMap((party: Party) => this.organizationResource.createOrganization(party)),

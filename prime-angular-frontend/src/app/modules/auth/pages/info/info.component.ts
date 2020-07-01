@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
 import { AuthProvider } from '@auth/shared/enum/auth-provider.enum';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
@@ -23,7 +23,7 @@ export class InfoComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private viewportService: ViewportService
   ) {
     this.unsubscribe$ = new Subject<void>();
@@ -38,7 +38,7 @@ export class InfoComponent implements OnInit, OnDestroy {
     const redirectRoute = EnrolmentRoutes.routePath(EnrolmentRoutes.COLLECTION_NOTICE);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
-    this.authService.login({
+    this.authenticationService.login({
       idpHint: AuthProvider.BCSC,
       redirectUri
     });

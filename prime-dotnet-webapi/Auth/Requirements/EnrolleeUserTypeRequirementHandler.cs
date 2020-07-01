@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-
 namespace Prime.Auth.Requirements
 {
     public class EnrolleeUserTypeRequirementHandler : AuthorizationHandler<UserTypeRequirement>

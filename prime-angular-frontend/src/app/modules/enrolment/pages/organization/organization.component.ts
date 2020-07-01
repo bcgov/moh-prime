@@ -17,7 +17,7 @@ import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-stat
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { UtilsService } from '@core/services/utils.service';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
 import { EnrolleeUtilsService } from '@core/services/enrollee-utils.service';
 
@@ -42,7 +42,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     protected logger: LoggerService,
     protected utilService: UtilsService,
     private configService: ConfigService,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private enrolleeUtilsService: EnrolleeUtilsService
   ) {
     super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
@@ -60,7 +60,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public disableOrganization(organizationTypeCode: number): boolean {
-    if (this.authService.isCommunityPharmacist()) {
+    if (this.authenticationService.isCommunityPharmacist()) {
       // If feature flagged enable "Community Practice" & "Community Pharmacist"
       return !(organizationTypeCode === OrganizationTypeEnum.COMMUNITY_PRACTICE
         || organizationTypeCode === OrganizationTypeEnum.COMMUNITY_PHARMACIST);

@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MockAuthenticationService } from 'test/mocks/mock-authentication.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { CertificateComponent } from './certificate.component';
@@ -10,7 +10,7 @@ import { ProvisionerAccessModule } from '../../provisioner-access.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SharedModule } from '@shared/shared.module';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 describe('CertificateComponent', () => {
   let component: CertificateComponent;
@@ -35,8 +35,8 @@ describe('CertificateComponent', () => {
             useClass: MockConfigService
           },
           {
-            provide: AuthService,
-            useClass: MockAuthService
+            provide: AuthenticationService,
+            useClass: MockAuthenticationService
           }
         ]
       }

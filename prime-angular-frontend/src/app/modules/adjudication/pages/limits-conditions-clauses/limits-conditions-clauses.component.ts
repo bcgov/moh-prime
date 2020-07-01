@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
@@ -27,7 +27,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
-    private authService: AuthService
+    private authenticationService: AuthenticationService
   ) {
     this.hasActions = false;
     this.editorConfig = {
@@ -41,7 +41,7 @@ export class LimitsConditionsClausesComponent implements OnInit {
   }
 
   public get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.authenticationService.isAdmin();
   }
 
   public get note(): FormControl {

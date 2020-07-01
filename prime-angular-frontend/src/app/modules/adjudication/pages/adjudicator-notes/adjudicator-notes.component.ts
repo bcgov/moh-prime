@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription, BehaviorSubject, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
@@ -26,14 +26,14 @@ export class AdjudicatorNotesComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
-    private authService: AuthService
+    private authenticationService: AuthenticationService
   ) {
     this.hasActions = false;
     this.adjudicatorNotes$ = new BehaviorSubject<DateContent[]>(null);
   }
 
   public get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.authenticationService.isAdmin();
   }
 
   public get note(): FormControl {
@@ -63,7 +63,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       note: [
         {
           value: '',
-          disabled: !this.authService.isAdmin()
+          disabled: !this.authenticationService.isAdmin()
         },
         []
       ]

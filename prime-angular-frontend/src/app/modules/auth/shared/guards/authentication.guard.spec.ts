@@ -2,11 +2,11 @@ import { TestBed, async, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MockAuthenticationService } from 'test/mocks/mock-authentication.service';
 
 import { AuthenticationGuard } from './authentication.guard';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { Role } from '@auth/shared/enum/role.enum';
 
 describe('AuthenticationGuard', () => {
@@ -23,16 +23,16 @@ describe('AuthenticationGuard', () => {
           useValue: APP_DI_CONFIG
         },
         {
-          provide: AuthService,
-          useClass: MockAuthService
+          provide: AuthenticationService,
+          useClass: MockAuthenticationService
         }
       ]
     });
   });
 
-  it('should create', inject([AuthenticationGuard, AuthService], (guard: AuthenticationGuard, authService: MockAuthService) => {
-    authService.loggedIn = true;
-    authService.role = Role.ADMIN;
+  it('should create', inject([AuthenticationGuard, AuthenticationService], (guard: AuthenticationGuard, authenticationService: MockAuthenticationService) => {
+    authenticationService.loggedIn = true;
+    authenticationService.role = Role.ADMIN;
     expect(guard).toBeTruthy();
   }));
 });

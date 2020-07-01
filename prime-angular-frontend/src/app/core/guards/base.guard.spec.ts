@@ -1,9 +1,9 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 
-import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MockAuthenticationService } from 'test/mocks/mock-authentication.service';
 
 import { BaseGuard } from './base.guard';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 describe('BaseGuard', () => {
   beforeEach(() => {
@@ -11,8 +11,8 @@ describe('BaseGuard', () => {
       providers: [
         BaseGuard,
         {
-          provide: AuthService,
-          useClass: MockAuthService
+          provide: AuthenticationService,
+          useClass: MockAuthenticationService
         }
       ]
     });

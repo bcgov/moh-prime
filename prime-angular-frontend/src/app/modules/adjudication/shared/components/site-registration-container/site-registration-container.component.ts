@@ -14,7 +14,7 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
@@ -44,7 +44,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource,
     private dialog: MatDialog
@@ -71,7 +71,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   public onDelete(siteId: number) {
     const data = this.defaultOptions.delete('site');
-    if (this.authService.isSuperAdmin()) {
+    if (this.authenticationService.isSuperAdmin()) {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(

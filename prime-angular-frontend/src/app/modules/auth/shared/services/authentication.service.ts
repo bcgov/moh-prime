@@ -4,7 +4,7 @@ import { KeycloakTokenService } from './keycloak-token.service';
 import { User } from '../models/user.model';
 import { Admin } from '../models/admin.model';
 
-export interface IAuthService {
+export interface IAuthenticationService {
   checkAssuranceLevel(assuranceLevel: number): Promise<boolean>;
   isEnrollee(): Promise<boolean>;
   isAdmin(): boolean;
@@ -23,15 +23,14 @@ export interface IAuthService {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements IAuthService {
+export class AuthenticationService implements IAuthenticationService {
   // Login event state for performing operations
   // required immediately after authentication
   private hasJustLoggedInState: boolean;
 
   constructor(
-    private keycloakTokenService: KeycloakTokenService,
-  ) {
-  }
+    private keycloakTokenService: KeycloakTokenService
+  ) { }
 
   public set hasJustLoggedIn(hasJustLoggedIn: boolean) {
     this.hasJustLoggedInState = hasJustLoggedIn;
@@ -45,12 +44,12 @@ export class AuthService implements IAuthService {
     return this.keycloakTokenService.isLoggedIn();
   }
 
-  public logout(redirectUri: string = '/'): Promise<void> {
-    return this.keycloakTokenService.logout(redirectUri);
-  }
-
   public login(options?: any): Promise<void> {
     return this.keycloakTokenService.login(options);
+  }
+
+  public logout(redirectUri: string = '/'): Promise<void> {
+    return this.keycloakTokenService.logout(redirectUri);
   }
 
   public async getUser(forceReload?: boolean): Promise<User> {
@@ -66,6 +65,7 @@ export class AuthService implements IAuthService {
     return (token.identity_assurance_level === assuranceLevel);
   }
 
+  // TODO move these into an authorization service
   public async isEnrollee(): Promise<boolean> {
     return this.keycloakTokenService.isUserInRole(Role.ENROLLEE) && await this.checkAssuranceLevel(3);
   }

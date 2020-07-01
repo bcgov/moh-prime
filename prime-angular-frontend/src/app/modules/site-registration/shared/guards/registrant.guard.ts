@@ -4,19 +4,19 @@ import { Router } from '@angular/router';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegistrantGuard extends BaseGuard {
   constructor(
-    protected authService: AuthService,
+    protected authenticationService: AuthenticationService,
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router
   ) {
-    super(authService, logger);
+    super(authenticationService, logger);
   }
 
   /**
@@ -30,10 +30,10 @@ export class RegistrantGuard extends BaseGuard {
 
       if (!authenticated) {
         destinationRoute = this.config.routes.auth;
-      } else if (this.authService.isRegistrant()) {
+      } else if (this.authenticationService.isRegistrant()) {
         // Allow route to resolve
         return resolve(true);
-      } else if (this.authService.hasEnrollee()) {
+      } else if (this.authenticationService.hasEnrollee()) {
         destinationRoute = this.config.routes.enrolment;
       }
 

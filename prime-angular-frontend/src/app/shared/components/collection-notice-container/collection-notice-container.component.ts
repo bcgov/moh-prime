@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 export abstract class AbstractCollectionNoticeAlert {
   @Input() public isFull: boolean;
@@ -22,7 +22,7 @@ export class CollectionNoticeContainerComponent extends AbstractCollectionNotice
   public title: string;
 
   constructor(
-    private authService: AuthService
+    private authenticationService: AuthenticationService
   ) {
     super();
 
@@ -34,7 +34,7 @@ export class CollectionNoticeContainerComponent extends AbstractCollectionNotice
   }
 
   public get show(): boolean {
-    return this.authService.hasJustLoggedIn;
+    return this.authenticationService.hasJustLoggedIn;
   }
 
   public onAccept() {
@@ -42,7 +42,7 @@ export class CollectionNoticeContainerComponent extends AbstractCollectionNotice
     // after acceptance, otherwise full collection notices manage this
     // within the parent component
     if (!this.isFull) {
-      this.authService.hasJustLoggedIn = false;
+      this.authenticationService.hasJustLoggedIn = false;
     }
 
     this.accepted.emit();

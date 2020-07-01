@@ -14,7 +14,7 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { DashboardNavSection } from '@shared/models/dashboard.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { AuthRoutes } from '@auth/auth.routes';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private routeStateService: RouteStateService,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private viewportService: ViewportService,
     private enrolmentService: EnrolmentService,
     private logger: LoggerService
@@ -74,11 +74,11 @@ export class DashboardComponent implements OnInit {
   public onLogout() {
     let routePath = this.config.loginRedirectUrl;
 
-    if (this.authService.hasAdminView()) {
+    if (this.authenticationService.hasAdminView()) {
       routePath = `${routePath}/${AuthRoutes.ADMIN}`;
     }
 
-    this.authService.logout(routePath);
+    this.authenticationService.logout(routePath);
   }
 
   public async ngOnInit() {
@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
     // Initialize the side navigation based on the type of user
     this.dashboardNavSections = this.getSideNavSections();
 
-    if (await this.authService.isEnrollee()) {
+    if (await this.authenticationService.isEnrollee()) {
       // Listen for changes to the current enrolment status to update
       // the side navigation based on enrollee progression
       merge(
@@ -113,16 +113,16 @@ export class DashboardComponent implements OnInit {
     this.viewportService.onResize()
       .subscribe((device: string) => this.setSideNavProps(device));
 
-    const user = await this.authService.getUser();
+    const user = await this.authenticationService.getUser();
     this.username = `${user.firstName} ${user.lastName}`;
   }
 
   private getSideNavSections(): DashboardNavSection[] {
     const currentBaseRoute = this.router.url.slice(1).split('/')[0];
-    if (this.authService.hasAdminView()) {
+    if (this.authenticationService.hasAdminView()) {
       return this.getAdjudicationSideNavSections();
       // TODO use of routes creates coupling between modules
-    } else if (this.authService.isRegistrant() && currentBaseRoute === SiteRoutes.MODULE_PATH) {
+    } else if (this.authenticationService.isRegistrant() && currentBaseRoute === SiteRoutes.MODULE_PATH) {
       return this.getRegistrantSideNavSections();
     } else {
       return this.getEnrolleeSideNavSections();

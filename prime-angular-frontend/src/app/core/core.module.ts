@@ -5,6 +5,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { throwIfAlreadyLoaded } from '@core/module-import-guard';
 
 import { AuthHttpModule } from '@core/modules/auth-http/auth-http.module';
+// TODO move keycloak module into /lib and import into AuthModule
 import { KeycloakModule } from '@core/modules/keycloak/keycloak.module';
 import { ErrorHandlerInterceptor } from '@core/interceptors/error-handler.interceptor';
 import { ErrorHandlerService } from '@core/services/error-handler.service';

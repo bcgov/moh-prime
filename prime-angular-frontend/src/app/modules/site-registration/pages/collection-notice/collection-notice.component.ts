@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 
@@ -18,18 +18,18 @@ export class CollectionNoticeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authenticationService: AuthenticationService
   ) {
     this.isFull = true;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
   public onAccept() {
-    this.authService.hasJustLoggedIn = false;
+    this.authenticationService.hasJustLoggedIn = false;
     this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATIONS);
   }
 
   public ngOnInit() {
-    this.authService.hasJustLoggedIn = true;
+    this.authenticationService.hasJustLoggedIn = true;
   }
 }

@@ -9,7 +9,7 @@ import { LoggerService } from '@core/services/logger.service';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { User } from '@auth/shared/models/user.model';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
@@ -25,18 +25,18 @@ import { SiteRegistrationService } from '@registration/shared/services/site-regi
 export class RegistrationGuard extends BaseGuard {
 
   constructor(
-    protected authService: AuthService,
+    protected authenticationService: AuthenticationService,
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private siteRegistrationResource: SiteRegistrationResource,
     private siteRegistrationService: SiteRegistrationService
   ) {
-    super(authService, logger);
+    super(authenticationService, logger);
   }
 
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
-    const user$ = from(this.authService.getUser());
+    const user$ = from(this.authenticationService.getUser());
     const createSite$ = user$
       .pipe(
         map((user: User) => new Party(user)),

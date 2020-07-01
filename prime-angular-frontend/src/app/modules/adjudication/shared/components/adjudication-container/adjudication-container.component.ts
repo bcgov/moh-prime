@@ -23,7 +23,7 @@ import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manu
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -50,7 +50,7 @@ export class AdjudicationContainerComponent implements OnInit {
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
     protected route: ActivatedRoute,
     protected router: Router,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private adjudicationResource: AdjudicationResource,
     private dialog: MatDialog
   ) {
@@ -259,7 +259,7 @@ export class AdjudicationContainerComponent implements OnInit {
       component: NoteComponent,
     };
 
-    if (this.authService.isSuperAdmin()) {
+    if (this.authenticationService.isSuperAdmin()) {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(

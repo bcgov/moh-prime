@@ -14,8 +14,8 @@ import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
+import { MockAuthenticationService } from 'test/mocks/mock-authentication.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 
 describe('OverviewComponent', () => {
@@ -48,8 +48,8 @@ describe('OverviewComponent', () => {
             useClass: MockEnrolmentService
           },
           {
-            provide: AuthService,
-            useClass: MockAuthService
+            provide: AuthenticationService,
+            useClass: MockAuthenticationService
           }
         ]
       }

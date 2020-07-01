@@ -11,6 +11,8 @@ import { KeycloakOptionsService } from './keycloak.service';
 export function initializer(keycloak: KeycloakService, injector: Injector): () => Promise<any> {
   return async (): Promise<boolean | void> => {
     const service = new KeycloakOptionsService();
+    console.log('CONFIG', service.getKeycloakOptions());
+
     return keycloak.init(service.getKeycloakOptions())
       .then((authenticated) => {
         const kc = keycloak.getKeycloakInstance();

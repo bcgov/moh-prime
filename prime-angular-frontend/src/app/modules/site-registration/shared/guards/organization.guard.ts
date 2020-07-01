@@ -10,7 +10,7 @@ import { OrganizationResource } from '@core/resources/organization-resource.serv
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { User } from '@auth/shared/models/user.model';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
@@ -21,14 +21,14 @@ import { OrganizationService } from '@registration/shared/services/organization.
 })
 export class OrganizationGuard extends BaseGuard {
   constructor(
-    protected authService: AuthService,
+    protected authenticationService: AuthenticationService,
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private organizationResource: OrganizationResource,
     private organizationService: OrganizationService
   ) {
-    super(authService, logger);
+    super(authenticationService, logger);
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {

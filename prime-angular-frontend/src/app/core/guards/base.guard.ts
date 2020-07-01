@@ -7,7 +7,7 @@ import {
 import { Observable } from 'rxjs';
 
 import { LoggerService } from '@core/services/logger.service';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
   private authenticated: boolean;
 
   constructor(
-    protected authService: AuthService,
+    protected authenticationService: AuthenticationService,
     protected logger: LoggerService
   ) { }
 
@@ -62,7 +62,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
   protected checkAccess(routePath: string = null, params?: Params): Observable<boolean> | Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       try {
-        this.authenticated = await this.authService.isLoggedIn();
+        this.authenticated = await this.authenticationService.isLoggedIn();
         const result = await this.canAccess(this.authenticated, routePath);
         resolve(result);
       } catch (error) {

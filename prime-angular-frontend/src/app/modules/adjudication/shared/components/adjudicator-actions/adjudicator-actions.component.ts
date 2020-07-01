@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
@@ -27,7 +27,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
-    private authService: AuthService
+    private authenticationService: AuthenticationService
   ) {
     this.approve = new EventEmitter<HttpEnrollee>();
     this.decline = new EventEmitter<number>();
@@ -42,11 +42,11 @@ export class AdjudicatorActionsComponent implements OnInit {
   }
 
   public get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.authenticationService.isAdmin();
   }
 
   public get canDelete(): boolean {
-    return this.authService.isSuperAdmin();
+    return this.authenticationService.isSuperAdmin();
   }
 
   public get isUnderReview(): boolean {

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -18,14 +18,14 @@ export class CollectionNoticeComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private enrolmentService: EnrolmentService
   ) {
     this.isFull = true;
   }
 
   public onAccept() {
-    this.authService.hasJustLoggedIn = false;
+    this.authenticationService.hasJustLoggedIn = false;
 
     const route = (!this.enrolmentService.isProfileComplete)
       ? EnrolmentRoutes.DEMOGRAPHIC
@@ -37,7 +37,7 @@ export class CollectionNoticeComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.authService.hasJustLoggedIn = true;
+    this.authenticationService.hasJustLoggedIn = true;
 
     // Collection notice is the initial route after login, and used as a hub
     // for redirection to an appropriate view based on the enrolment

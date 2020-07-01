@@ -30,6 +30,8 @@ export class KeycloakOptionsService {
   public getKeycloakOptions(): KeycloakOptions {
     const clientId = this.getClientId();
 
+    console.log('CLIENT_ID', clientId);
+
     return {
       config: {
         url: 'https://sso-dev.pathfinder.gov.bc.ca/auth',
@@ -53,8 +55,6 @@ export class KeycloakOptionsService {
     if (!clientId) {
       clientId = this.getClientIdByPath();
     }
-
-    console.log('CLIENT_ID', clientId);
 
     return clientId;
   }
