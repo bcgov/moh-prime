@@ -16,7 +16,7 @@ import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/mod
 
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { OrganizationType } from '@enrolment/shared/models/organization-type.model';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
@@ -231,7 +231,7 @@ export class EnrolmentResource {
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
     enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
-    enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
+    enrolment.organizations = this.removeIncompleteOrganizationTypes(enrolment.organizations);
 
     return this.enrolleeAdapter(enrolment);
   }
@@ -272,7 +272,7 @@ export class EnrolmentResource {
     return jobs.filter((job: Job) => (job.title !== ''));
   }
 
-  private removeIncompleteOrganizations(organizations: Organization[]) {
-    return organizations.filter((organization: Organization) => organization.organizationTypeCode);
+  private removeIncompleteOrganizationTypes(organizationTypes: OrganizationType[]) {
+    return organizationTypes.filter((organizationType: OrganizationType) => organizationType.organizationTypeCode);
   }
 }

@@ -5,7 +5,7 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { OrganizationType } from '@enrolment/shared/models/organization-type.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
@@ -29,7 +29,7 @@ export interface HttpEnrollee extends Enrollee {
   hasDisciplinaryActionDetails: string;
   hasPharmaNetSuspended: boolean;
   hasPharmaNetSuspendedDetails: string;
-  enrolleeOrganizationTypes: Organization[];
+  enrolleeOrganizationTypes: OrganizationType[];
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
@@ -71,7 +71,8 @@ export interface Enrolment {
   hasDisciplinaryActionDetails: string;
   hasPharmaNetSuspended: boolean;
   hasPharmaNetSuspendedDetails: string;
-  organizations: Organization[];
+  // TODO should be organizationTypes now
+  organizations: OrganizationType[];
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;

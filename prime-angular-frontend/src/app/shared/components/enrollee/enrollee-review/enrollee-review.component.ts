@@ -4,7 +4,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { OrganizationType } from '@enrolment/shared/models/organization-type.model';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -71,7 +71,7 @@ export class EnrolleeReviewComponent {
     return (this.enrolment && !!this.enrolment.requestingRemoteAccess);
   }
 
-  public get organizations(): Organization[] {
+  public get organizations(): OrganizationType[] {
     return (this.hasOrganization) ? this.enrolment.organizations : [];
   }
 

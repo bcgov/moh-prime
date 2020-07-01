@@ -1,4 +1,4 @@
-export interface Organization {
+export interface OrganizationType {
   id?: number;
   organizationTypeCode: number;
 }

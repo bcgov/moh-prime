@@ -9,7 +9,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { OrganizationType } from '@enrolment/shared/models/organization-type.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 // TODO refactor into enrolment service and enrolment form service
@@ -203,7 +203,7 @@ export class EnrolmentStateService {
       if (enrolment.organizations.length) {
         const organizations = this.organizationForm.get('organizations') as FormArray;
         organizations.clear();
-        enrolment.organizations.forEach((o: Organization) => {
+        enrolment.organizations.forEach((o: OrganizationType) => {
           const organization = this.buildOrganizationForm();
           organization.patchValue(o);
           organizations.push(organization);

@@ -11,7 +11,7 @@ import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { OrganizationType } from '@enrolment/shared/models/organization-type.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -83,7 +83,7 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     if (this.organizations.length) {
       // All the currently chosen organizations
       const selectedOrganizationTypeCodes = this.organizations.value
-        .map((o: Organization) => o.organizationTypeCode);
+        .map((o: OrganizationType) => o.organizationTypeCode);
       // Current organization type selected
       const currentOrganization = this.organizationTypes
         .find(o => o.code === organization.get('organizationTypeCode').value);

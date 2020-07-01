@@ -10,7 +10,7 @@ export interface Location {
   organizationId?: number;
   organization: Organization;
   name: string;
-  // TODO do they need doingBusinessAs as when they have location name?
+  // TODO do they need doingBusinessAs when they have location name?
   // doingBusinessAs?: string;
   physicalAddressId?: number;
   physicalAddress: Address;
