@@ -11,7 +11,7 @@ export interface Location {
   organization: Organization;
   name: string;
   // TODO do they need doingBusinessAs when they have location name?
-  // doingBusinessAs?: string;
+  doingBusinessAs?: string;
   physicalAddressId?: number;
   physicalAddress: Address;
   administratorPharmaNetId?: number;

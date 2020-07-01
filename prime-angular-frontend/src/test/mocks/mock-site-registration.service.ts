@@ -32,6 +32,8 @@ export class MockSiteRegistrationService implements ISiteRegistrationService {
       locationId: faker.random.number(),
       location: {
         id: faker.random.number(),
+        name: faker.company.companyName(),
+        doingBusinessAs: null,
         administratorPharmaNetId: faker.random.number(),
         administratorPharmaNet: user,
         privacyOfficerId: faker.random.number(),
@@ -46,15 +48,22 @@ export class MockSiteRegistrationService implements ISiteRegistrationService {
           name: faker.company.companyName(),
           registrationId: faker.random.number(),
           doingBusinessAs: null,
-          acceptedAgreementDate: faker.date.past(2).toDateString()
+          organizationTypeCode: null,
+          acceptedAgreementDate: faker.date.past(2).toDateString(),
+          locations: [],
+          submittedDate: faker.date.past(2).toDateString(),
+          completed: true,
+          signedAgreements: []
         },
         physicalAddressId: faker.random.number(),
         physicalAddress: address,
         businessHours: null,
-        doingBusinessAs: null
+        sites: []
       },
       vendorCode: null,
       vendor: null,
+      remoteUsers: [],
+      businessLicences: [],
       provisionerId: faker.random.number(),
       provisioner: user,
       pec: null,
