@@ -64,7 +64,7 @@ export class KeycloakOptionsService {
    * Attempt to determine the client ID directly from the token.
    */
   private getClientIdByToken() {
-    return this.jwtHelper.decodeToken(this.token)?.aud;
+    return this.jwtHelper.decodeToken(this.token)?.azp;
   }
 
   /**
