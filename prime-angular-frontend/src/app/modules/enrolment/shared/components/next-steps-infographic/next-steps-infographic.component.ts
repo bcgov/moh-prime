@@ -30,7 +30,7 @@ export class NextStepsInfographicComponent implements OnInit {
   public openQR() {
     const data: DialogOptions = {
       title: 'Verified Credential',
-      message: 'This QR code is your verified credential, you can now store it in your digital wallet.',
+      message: 'Scan this QR code to receive an invitation to your verifiable credential that can be stored in your digital wallet.',
       actionHide: true,
       cancelText: 'PRIME',
       data: { base64Image: this.enrolment.base64QRCode },
