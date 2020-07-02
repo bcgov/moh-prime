@@ -1,4 +1,5 @@
 FROM python:3.6
+ENV APP_ROOT /opt/app-root
 
 # Update installation utility
 USER 0

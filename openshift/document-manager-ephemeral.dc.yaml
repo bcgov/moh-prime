@@ -203,11 +203,15 @@ objects:
           - containerPort: 9191
           resources: {}
           volumeMounts:
+          - mountPath: /app/
+            name: ${NAME}${SUFFIX}-backend-pvc
           - mountPath: /app/certs
             name: vanity-tls-certs
             readOnly: true
         restartPolicy: Always
         volumes:
+        - name: ${NAME}${SUFFIX}-backend-pvc
+          emptyDir: {}
         - name: vanity-tls-certs
           secret:
             defaultMode: 420

@@ -181,11 +181,15 @@ objects:
                 privileged: false
               terminationMessagePath: /dev/termination-log
               volumeMounts:
+                - mountPath: /var/lib/pgsql/data
+                  name: '${NAME}${SUFFIX}-data'
                 - mountPath: /var/run/postgresql
                   name: '${NAME}${SUFFIX}-run'
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           volumes:
+            - name: '${NAME}${SUFFIX}-data'
+              emptyDir: {}
             - name: '${NAME}${SUFFIX}-run'
               emptyDir: {}
       triggers:
