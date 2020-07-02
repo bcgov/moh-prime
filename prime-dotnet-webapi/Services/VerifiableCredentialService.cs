@@ -89,7 +89,7 @@ namespace Prime.Services
         // Handle webhook events pushed by the issuing agent.
         public async Task<bool> WebhookAsync(JObject data, string topic)
         {
-            _logger.LogInformation($"Webhook topic \"{topic}\"");
+            _logger.LogInformation("Webhook topic \"{topic}\"", topic);
 
             switch (topic)
             {
@@ -98,7 +98,7 @@ namespace Prime.Services
                 case WebhookTopic.IssueCredential:
                     return await HandleIssueCredentialAsync(data);
                 default:
-                    _logger.LogError($"Webhook {topic} is not supported");
+                    _logger.LogError("Webhook {topic} is not supported", topic);
                     return false;
             };
         }
@@ -108,7 +108,7 @@ namespace Prime.Services
         {
             var state = data.Value<string>("state");
 
-            _logger.LogInformation($"Connection state \"{state}\" for @JObject", data);
+            _logger.LogInformation("Connection state \"{state}\" for {@JObject}", state, data);
 
             switch (state)
             {
@@ -116,23 +116,23 @@ namespace Prime.Services
                 case ConnectionStates.Request:
                     return true;
                 case ConnectionStates.Response:
-                    var connection_id = data.Value<string>("connection_id");
+                    var connectionId = data.Value<string>("connection_id");
                     var alias = data.Value<int>("alias");
 
-                    _logger.LogInformation($"Issuing a credential with this connection_id: {connection_id}");
+                    _logger.LogInformation("Issuing a credential with this connection_id: {connectionId}", connectionId);
 
                     // Assumed that when a connection invitation has been sent and accepted
                     // the enrollee has been approved, and has a GPID for issuing a credential
                     // TODO should be queued and managed outside of webhook callback
-                    var issueCredentialResponse = await IssueCredential(connection_id, alias);
+                    var issueCredentialResponse = await IssueCredential(connectionId, alias);
 
-                    _logger.LogInformation($"Credential has been issued for connection_id: {connection_id} with response @JObject", issueCredentialResponse);
+                    _logger.LogInformation("Credential has been issued for connection_id: {connectionId} with response {@JObject}", connectionId, issueCredentialResponse);
 
                     return true;
                 case ConnectionStates.Active:
                     return true;
                 default:
-                    _logger.LogError($"Connection state {state} is not supported");
+                    _logger.LogError("Connection state {state} is not supported", state);
                     return false;
             }
         }
@@ -142,7 +142,7 @@ namespace Prime.Services
         {
             var state = data.Value<string>("state");
 
-            _logger.LogInformation($"Issue credential state \"{state}\" for @JObject", data);
+            _logger.LogInformation("Issue credential state \"{state}\" for {@JObject}", state, data);
 
             switch (state)
             {
@@ -153,7 +153,7 @@ namespace Prime.Services
                     await UpdateAcceptedCredentialDate(data);
                     return true;
                 default:
-                    _logger.LogError($"Credential exchange state {state} is not supported");
+                    _logger.LogError("Credential exchange state {state} is not supported", state);
                     return false;
             }
         }

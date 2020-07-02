@@ -46,7 +46,7 @@ namespace Prime.Services.Clients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::CreateInvitationAsync");
             }
 
-            _logger.LogInformation("Create connection invitation response @JObject", response);
+            _logger.LogInformation("Create connection invitation response {@JObject}", response);
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
@@ -97,7 +97,7 @@ namespace Prime.Services.Clients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            _logger.LogInformation("GET Schema response @JObject", body);
+            _logger.LogInformation("GET Schema response {@JObject}", body);
 
             return body;
         }
@@ -123,7 +123,7 @@ namespace Prime.Services.Clients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            _logger.LogInformation("GET Issuer DID response @JObject", body);
+            _logger.LogInformation("GET Issuer DID response {@JObject}", body);
 
             return (string)body.SelectToken("result.did");
         }
@@ -149,7 +149,7 @@ namespace Prime.Services.Clients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            _logger.LogInformation("GET Credential Definition IDs @JObject", body);
+            _logger.LogInformation("GET Credential Definition IDs {@JObject}", body);
 
             return (string)body.SelectToken("credential_definition_ids[0]");
         }
