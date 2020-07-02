@@ -561,5 +561,37 @@ namespace Prime.Controllers
 
             return NoContent();
         }
+
+        // POST: api/Enrollees/5/self-declaration-document/3\
+        /// <summary>
+        /// Create Self Declaration Document Link
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="selfDeclarationTypeCode"></param>
+        /// <param name="selfDeclarationDocument"></param>
+        [HttpPost("{enrolleeId}/self-declaration-document/{selfDeclarationTypeCode}", Name = nameof(createSelfDeclarationDocument))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<SelfDeclarationDocument>> createSelfDeclarationDocument(int enrolleeId, int selfDeclarationTypeCode, SelfDeclarationDocument selfDeclarationDocument)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            if (!User.CanEdit(enrollee))
+            {
+                return Forbid();
+            }
+
+            var sdd = await _enrolleeService.AddSelfDeclarationDocumentAsync(enrolleeId, selfDeclarationTypeCode, selfDeclarationDocument);
+
+            return Ok(ApiResponse.Result(sdd));
+        }
     }
 }
