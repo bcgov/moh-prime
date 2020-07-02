@@ -34,7 +34,7 @@ describe('AccessAgreementCurrentComponent', () => {
         {
           provide: EnrolmentService,
           useClass: MockEnrolmentService
-        },
+        }
       ]
     })
       .compileComponents();

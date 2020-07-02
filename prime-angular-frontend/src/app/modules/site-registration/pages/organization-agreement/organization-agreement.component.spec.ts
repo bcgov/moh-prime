@@ -1,10 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { OrganizationAgreementComponent } from './organization-agreement.component';
-import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { AuthenticationService } from '@auth/shared/services/authentication.service';
 
 describe('OrganizationAgreementComponent', () => {
   let component: OrganizationAgreementComponent;
@@ -21,7 +24,9 @@ describe('OrganizationAgreementComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        AuthenticationService,
+        KeycloakService
       ]
     })
       .compileComponents();

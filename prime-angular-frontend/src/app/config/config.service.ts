@@ -23,6 +23,7 @@ export interface IConfigService {
   statuses: Config<number>[];
   privilegeGroups: Config<number>[];
   privilegeTypes: Config<number>[];
+  vendors: Config<number>[];
   load(): Observable<Configuration>;
 }
 

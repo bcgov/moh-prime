@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { OrganizationReviewComponent } from './organization-review.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
 
 describe('OrganizationReviewComponent', () => {
   let component: OrganizationReviewComponent;
@@ -8,9 +11,18 @@ describe('OrganizationReviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OrganizationReviewComponent ]
+      imports: [
+        HttpClientTestingModule,
+        SiteRegistrationModule
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

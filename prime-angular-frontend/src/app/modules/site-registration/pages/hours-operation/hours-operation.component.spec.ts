@@ -3,9 +3,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
+import { MockConfigService } from 'test/mocks/mock-config.service';
+
 import { HoursOperationComponent } from './hours-operation.component';
-import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { ConfigService } from '@config/config.service';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
 
 describe('HoursOperationComponent', () => {
   let component: HoursOperationComponent;
@@ -23,6 +26,10 @@ describe('HoursOperationComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
         }
       ]
     })
