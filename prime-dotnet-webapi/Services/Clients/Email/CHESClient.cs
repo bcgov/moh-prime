@@ -16,7 +16,6 @@ namespace Prime.Services
     public class CHESClient : BaseService, ICHESClient
     {
         private static HttpClient _client;
-        // private static String accessToken = "";
 
         public CHESClient(
             ApiDbContext context,
@@ -29,8 +28,6 @@ namespace Prime.Services
 
         public async Task SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
-            // _client = await InitHttpClientAsync();
-
             var chesAttachments = new List<CHESAttachment>();
             foreach (var attachment in attachments)
             {
@@ -68,7 +65,6 @@ namespace Prime.Services
 
         public async Task<bool> HealthCheckAsync()
         {
-            // _client = await InitHttpClientAsync();
             HttpResponseMessage response = null;
             Console.WriteLine("rimeConstants.CHES_API_URL: " + PrimeConstants.CHES_API_URL);
 
