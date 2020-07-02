@@ -435,7 +435,7 @@ export class SiteFormStateService {
       ],
       phone: [
         null,
-        [FormControlValidators.phone]
+        [Validators.required, FormControlValidators.phone]
       ],
       fax: [
         null,
