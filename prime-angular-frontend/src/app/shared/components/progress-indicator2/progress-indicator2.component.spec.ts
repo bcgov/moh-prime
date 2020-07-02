@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProgressIndicator2Component } from './progress-indicator2.component';
+import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
 describe('ProgressIndicator2Component', () => {
   let component: ProgressIndicator2Component;
@@ -8,9 +9,14 @@ describe('ProgressIndicator2Component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProgressIndicator2Component ]
+      imports: [
+        NgxMaterialModule
+      ],
+      declarations: [
+        ProgressIndicator2Component
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
