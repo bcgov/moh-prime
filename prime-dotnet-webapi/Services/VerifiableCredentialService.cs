@@ -274,7 +274,8 @@ namespace Prime.Services
                 }
             };
 
-            _logger.LogInformation("Credential offer attributes for {@JObject}", attributes);
+
+            _logger.LogInformation("Credential offer attributes for {@JObject}", JsonConvert.SerializeObject(attributes));
             System.Console.WriteLine(JsonConvert.SerializeObject(attributes));
 
             return attributes;
