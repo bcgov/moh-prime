@@ -270,7 +270,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "remote_access" },
-                    { "value", enrollee.RequestingRemoteAccess}
+                    { "value", enrollee.RequestingRemoteAccess ? "true" : "false"}
                 }
             };
 
