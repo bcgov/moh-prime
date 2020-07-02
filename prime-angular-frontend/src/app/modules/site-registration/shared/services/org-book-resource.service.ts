@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, pipe } from 'rxjs';
+import { Observable, pipe, OperatorFunction } from 'rxjs';
 import { map, tap, catchError, switchMap } from 'rxjs/operators';
 
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -226,7 +226,7 @@ export class OrgBookResource {
    * @description
    * Get a list of "Doing Business As" based on a source ID.
    */
-  public doingBusinessAsMap() {
+  public doingBusinessAsMap(): OperatorFunction<string, string[]> {
     return pipe(
       switchMap((sourceId: string) => this.getOrganizationDetail(sourceId)),
       map((response: OrgBookDetailHttpResponse) => response.id),
