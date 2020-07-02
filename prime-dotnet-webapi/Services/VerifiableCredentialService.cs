@@ -225,6 +225,8 @@ namespace Prime.Services
                 };
 
             _logger.LogInformation("Credential offer for connection ID \"{connectionId}\" for {@JObject}", connectionId, credentialOffer);
+            System.Console.WriteLine($"Credential offer for connection ID \"{connectionId}\"");
+            System.Console.WriteLine(JsonConvert.SerializeObject(credentialOffer));
 
             return credentialOffer;
         }
