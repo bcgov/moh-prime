@@ -29,11 +29,6 @@ namespace Prime.Services
 
         private static async Task<HttpClient> InitHttpClientAsync()
         {
-            // if (PrimeConstants.ENVIRONMENT_NAME == "local")
-            // {
-            //     return null;
-            // }
-
             HttpClient client = new HttpClient();
 
             var values = new List<KeyValuePair<string, string>>();
