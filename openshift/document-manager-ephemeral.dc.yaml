@@ -196,8 +196,6 @@ objects:
               secretKeyRef:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
-          - name: KEYCLOAK_TOKEN_URL
-            value: "https://sso${SUFFIX}.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token"
           image: " "
           name: document-manager-backend
           ports:
