@@ -62,21 +62,9 @@ namespace Prime.Models
 
         public bool? IsInsulinPumpProvider { get; set; }
 
-        public bool? HasConviction { get; set; }
+        public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 
-        public string HasConvictionDetails { get; set; }
-
-        public bool? HasRegistrationSuspended { get; set; }
-
-        public string HasRegistrationSuspendedDetails { get; set; }
-
-        public bool? HasDisciplinaryAction { get; set; }
-
-        public string HasDisciplinaryActionDetails { get; set; }
-
-        public bool? HasPharmaNetSuspended { get; set; }
-
-        public string HasPharmaNetSuspendedDetails { get; set; }
+        public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
 
         [NotMapped]
         public string CurrentTOAStatus { get; set; }

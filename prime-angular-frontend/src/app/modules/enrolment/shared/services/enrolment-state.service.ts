@@ -11,6 +11,8 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 // TODO refactor into enrolment service and enrolment form service
 @Injectable({
@@ -89,15 +91,17 @@ export class EnrolmentStateService {
     const id = this.enrolleeId;
     const userId = this.userId;
 
+    const selfDeclarations = this.generateSelfDeclarations();
+
     const profile = this.demographicForm.getRawValue();
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
-    const selfDeclaration = this.selfDeclarationForm.getRawValue();
     const organization = this.organizationForm.getRawValue();
 
     return {
       id,
+      selfDeclarations,
       enrollee: {
         userId,
         ...profile
@@ -105,9 +109,44 @@ export class EnrolmentStateService {
       ...regulatory,
       ...deviceProvider,
       ...jobs,
-      ...selfDeclaration,
       ...organization
     };
+  }
+
+  // Generate the self decl array from form data
+  private generateSelfDeclarations() {
+    const results: SelfDeclaration[] = [];
+    const raw = this.selfDeclarationForm.getRawValue();
+
+    if (raw.hasConviction) {
+      const conv = new SelfDeclaration();
+      conv.selfDeclarationTypeCode = SelfDeclarationTypeEnum.HAS_CONVICTION;
+      conv.selfDeclarationDetails = raw.hasConvictionDetails;
+      conv.enrolleeId = this.enrolleeId;
+      results.push(conv);
+    }
+    if (raw.hasDisciplinaryAction) {
+      const disc = new SelfDeclaration();
+      disc.selfDeclarationTypeCode = SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION;
+      disc.selfDeclarationDetails = raw.hasDisciplinaryActionDetails;
+      disc.enrolleeId = this.enrolleeId;
+      results.push(disc);
+    }
+    if (raw.hasPharmaNetSuspended) {
+      const phar = new SelfDeclaration();
+      phar.selfDeclarationTypeCode = SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED;
+      phar.selfDeclarationDetails = raw.hasPharmaNetSuspendedDetails;
+      phar.enrolleeId = this.enrolleeId;
+      results.push(phar);
+    }
+    if (raw.hasRegistrationSuspended) {
+      const regi = new SelfDeclaration();
+      regi.selfDeclarationTypeCode = SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED;
+      regi.selfDeclarationDetails = raw.hasRegistrationSuspendedDetails;
+      regi.enrolleeId = this.enrolleeId;
+      results.push(regi);
+    }
+    return results;
   }
 
   public get isDirty(): boolean {
