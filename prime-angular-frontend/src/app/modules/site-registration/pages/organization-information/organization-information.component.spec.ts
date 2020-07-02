@@ -7,7 +7,7 @@ import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('SiteInformationComponent', () => {
+describe('OrganizationInformationComponent', () => {
   let component: OrganizationInformationComponent;
   let fixture: ComponentFixture<OrganizationInformationComponent>;
 
