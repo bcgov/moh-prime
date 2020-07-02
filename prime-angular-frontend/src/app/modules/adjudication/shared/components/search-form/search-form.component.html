@@ -1,18 +1,29 @@
-<form [formGroup]="form">
-  <mat-form-field class="w-50 mr-4">
-    <input matInput
-           placeholder="Search"
-           formControlName="textSearch">
-  </mat-form-field>
+<form [formGroup]="form"
+      novalidate>
+  <div class="search-container">
 
-  <mat-form-field>
-    <mat-label>Filter By Status</mat-label>
-    <mat-select formControlName="statusCode">
-      <mat-option value="">All</mat-option>
-      <mat-option *ngFor="let status of statuses"
-                  [value]="status.code">
-        {{ status.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+    <mat-form-field class="search">
+      <input matInput
+             placeholder="Search"
+             formControlName="textSearch">
+    </mat-form-field>
+
+    <mat-form-field class="filter">
+      <mat-label>Filter By Status</mat-label>
+      <mat-select formControlName="statusCode">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let status of statuses"
+                    [value]="status.code">
+          {{ status.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-icon-button
+            matTooltip="Refresh the results"
+            (click)="onRefresh()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+
+  </div>
 </form>

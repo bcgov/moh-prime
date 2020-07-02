@@ -25,11 +25,11 @@ pipeline {
                     echo "Building ..."
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                    // sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
                 }
             }
         }
-        stage('Deploy Branch') {
+        stage('Deploy Images') {
             options {
                 timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
             }
@@ -37,18 +37,17 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    checkout scm
                     echo "Deploy to dev..."
-                    sh "printenv"
+                    sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
-                    sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
-                    // sh "./player.sh deploy document-manager dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    sh "./player.sh deploy document-manager dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    // sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
             }
         }
-        stage('Deploy Develop') {
+        stage('Deploy PR') {
             options {
                 timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
             }
@@ -56,11 +55,11 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    checkout scm
                     echo "Deploy to dev..."
-                    sh "printenv"
+                    sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
-                    sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
+                    sh "./player.sh deploy document-manager-ephemeral dev -p SUFFIX=${SUFFIX}"
+                    // sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
@@ -68,7 +67,7 @@ pipeline {
         }
         stage('Quality Check') {
             options {
-                timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
+                timeout(time: 30, unit: 'MINUTES')   // timeout on this stage
             }
             when { expression { ( BRANCH_NAME == 'develop' ) } }
             parallel {
@@ -81,7 +80,6 @@ pipeline {
                 stage('ZAP') {
                     agent { label 'code-tests' }
                     steps {
-                        checkout scm
                         echo "Scanning..."
                         sh "./player.sh zap frontend"
                     }
@@ -89,11 +87,17 @@ pipeline {
                 stage('SchemaSpy Database Investigation') {
                     agent { label 'master' }
                     steps {
-                        checkout scm
                         sh "./player.sh toolbelt schemaspy dev"
                     }
                 }
             }
         }
+        /*stage('Cleanup') {
+            steps {
+                script {
+                    sh "./player.sh sparsify"
+                }
+            }
+        }*/
     }
 }

@@ -51,13 +51,7 @@ objects:
           kind: ImageStreamTag
           name: sonar-runner:latest
       postCommit: {}
-      resources: 
-        requests:
-          cpu: 300m
-          memory: 512Mi
-        limits:
-          cpu: "1"
-          memory: 1024Mi
+      resources: {}
       runPolicy: Serial
       source:
         contextDir: sonar-scanner/

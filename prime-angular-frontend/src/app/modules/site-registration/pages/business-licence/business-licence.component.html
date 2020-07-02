@@ -13,8 +13,7 @@
              [options]="filePondOptions"
              [files]="filePondFiles"
              (oninit)="onFilePondInit()"
-             (onaddfile)="onFilePondAddFile($event)"
-             disabled="true">
+             (onaddfile)="onFilePondAddFile($event)">
   </file-pond>
 
   <app-alert *ngIf="hasNoLicenceError"

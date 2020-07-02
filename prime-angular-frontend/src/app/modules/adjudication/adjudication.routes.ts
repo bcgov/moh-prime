@@ -12,6 +12,7 @@ export class AdjudicationRoutes {
 
   public static SITE_REGISTRATIONS = 'site-registrations';
   public static SITE_REGISTRATION = 'site-registration';
+  public static SITE_ADJUDICATION = 'site-adjudication';
 
   public static MODULE_PATH = AdjudicationRoutes.ADJUDICATION;
 

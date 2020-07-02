@@ -92,7 +92,7 @@
   <ng-container *ngFor="let businessDay of site?.location?.businessHours">
     <app-enrollee-property [title]="businessDay.day | weekday">
       <ng-container *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
-        {{ businessDay.startTime }}:00 to {{ businessDay.endTime }}:00
+        {{ businessDay.startTime | replace: ':00:00' : ':00' }} to {{ businessDay.endTime | replace: ':00:00' : ':00' }}
       </ng-container>
       <ng-template #open24Hours>
         24 hours
@@ -116,7 +116,7 @@
   </app-page-subheader>
 
   <app-enrollee-property>
-    {{ site?.vendor.name | default }}
+    {{ site?.vendor?.name | default }}
   </app-enrollee-property>
 
 </section>
