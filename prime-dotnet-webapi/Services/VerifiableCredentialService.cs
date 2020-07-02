@@ -224,7 +224,7 @@ namespace Prime.Services
                     }
                 };
 
-            _logger.LogInformation($"Credential offer for connection ID \"{connectionId}\" for @JObject", credentialOffer);
+            _logger.LogInformation("Credential offer for connection ID \"{connectionId}\" for @JObject", connectionId, credentialOffer);
 
             return credentialOffer;
         }
@@ -272,7 +272,7 @@ namespace Prime.Services
                 }
             };
 
-            _logger.LogInformation($"Credential offer attributes for @JObject", attributes);
+            _logger.LogInformation("Credential offer attributes for {@JObject}", attributes);
 
             return attributes;
         }
