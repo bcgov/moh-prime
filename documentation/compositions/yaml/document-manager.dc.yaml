@@ -1,9 +1,9 @@
 kind: Template
 apiVersion: v1
 labels:
-  template: database-backup-template
+  template: document-manager-template
 metadata:
-  name: document-manager-bc
+  name: document-manager-dc
   creationTimestamp: null
 parameters:
   - name: NAME
@@ -72,7 +72,7 @@ objects:
       persistentVolumeClaim:
         claimName: ${NAME}${SUFFIX}-migrate-pvc
     status: {}
-  -sapiVersion: v1
+  - apiVersion: v1
     kind: Service
     metadata:
       annotations:
@@ -246,50 +246,3 @@ objects:
               name: ${NAME}${SUFFIX}-backend:latest
           type: ImageChange
       status: {}
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      creationTimestamp: null
-      labels:
-        io.kompose.service: ${NAME}${SUFFIX}-backend
-      name: ${NAME}${SUFFIX}-backend
-    spec:
-      tags:
-      - annotations: null
-        from:
-          kind: DockerImage
-          name: ${NAME}${SUFFIX}-backend
-        generation: null
-        importPolicy: {}
-        name: latest
-    status:
-      dockerImageRepository: ""
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      creationTimestamp: null
-      labels:
-        io.kompose.service: redis${SUFFIX}
-      name: redis${SUFFIX}
-    spec: {}
-    status:
-      dockerImageRepository: ""
-  - apiVersion: v1
-    kind: Service
-    metadata:
-      annotations:
-        kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
-        kompose.version: 1.21.0 (992df58d8)
-      creationTimestamp: null
-      labels:
-        io.kompose.service: redis${SUFFIX}
-      name: redis${SUFFIX}
-    spec:
-      ports:
-      - name: "6379"
-        port: 6379
-        targetPort: 6379
-      selector:
-        io.kompose.service: redis${SUFFIX}
-    status:
-      loadBalancer: {}

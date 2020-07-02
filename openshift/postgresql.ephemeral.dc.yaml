@@ -175,13 +175,7 @@ objects:
                       $POSTGRESQL_USER -c 'SELECT 1'
                 initialDelaySeconds: 5
                 timeoutSeconds: 1
-              resources:
-                requests:
-                  cpu: '${CPU_REQUEST}'
-                  memory: '${MEMORY_REQUEST}'
-                limits:
-                  cpu: '${CPU_LIMIT}'
-                  memory: '${MEMORY_LIMIT}'
+              resources: {}
               securityContext:
                 capabilities: {}
                 privileged: false

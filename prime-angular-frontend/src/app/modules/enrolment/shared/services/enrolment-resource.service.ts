@@ -138,6 +138,17 @@ export class EnrolmentResource {
       );
   }
 
+  public createSelfDeclarationDocument(enrolleeId: number, selfDeclarationStatusCode: number, sdd: SelfDeclarationDocument):
+    Observable<SelfDeclarationDocument> {
+    return this.apiResource
+      .post<SelfDeclarationDocument>(`enrollees/${enrolleeId}/self-declaration-document/${selfDeclarationStatusCode}`
+        , sdd)
+      .pipe(
+        map((response: ApiHttpResponse<SelfDeclarationDocument>) => response.result),
+        tap((selfDeclarationDocument: SelfDeclarationDocument) => this.logger.info('SELF_DECLARATION_DOCUMENT', selfDeclarationDocument)),
+      );
+  }
+
   // ---
   // Self Declaration Documents
   // ---

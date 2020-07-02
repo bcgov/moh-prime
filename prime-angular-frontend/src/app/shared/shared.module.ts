@@ -19,12 +19,15 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
+import { CasePipe } from '@shared/pipes/case.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
-import { FullnamePipe } from './pipes/fullname.pipe';
+import { FullnamePipe } from '@shared/pipes/fullname.pipe';
+import { VendorPipe } from '@shared/pipes/vendor.pipe';
+
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import {
@@ -85,6 +88,9 @@ registerPlugin(FilePondPluginFileValidateType);
     YesNoPipe,
     WeekdayPipe,
     FullnamePipe,
+    VendorPipe,
+    CasePipe,
+    SafeHtmlPipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -100,7 +106,6 @@ registerPlugin(FilePondPluginFileValidateType);
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
-    CertificatePipe,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     EnrolleePropertyErrorComponent,
@@ -108,7 +113,6 @@ registerPlugin(FilePondPluginFileValidateType);
     PrimePhoneComponent,
     PrimeLogoComponent,
     ApproveEnrolmentComponent,
-    SafeHtmlPipe,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
@@ -149,6 +153,7 @@ registerPlugin(FilePondPluginFileValidateType);
     NgxProgressModule,
     ReactiveFormsModule,
     CapitalizePipe,
+    CasePipe,
     CertificatePipe,
     DefaultPipe,
     EnrolleePipe,
@@ -162,6 +167,7 @@ registerPlugin(FilePondPluginFileValidateType);
     WeekdayPipe,
     FullnamePipe,
     SafeHtmlPipe,
+    VendorPipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
@@ -181,7 +187,6 @@ registerPlugin(FilePondPluginFileValidateType);
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
-    CertificatePipe,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     PrimeEmailComponent,

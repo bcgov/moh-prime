@@ -1,33 +1,28 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
-
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-
-import tus from 'tus-js-client';
 import { registerPlugin } from 'ngx-filepond';
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 
 registerPlugin(FilePondPluginFileValidateType);
 
+import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { Organization } from '@registration/shared/models/organization.model';
-import { OrganizationResource } from '@registration/shared/services/organization-resource.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { LoggerService } from '@core/services/logger.service';
 import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
-import { environment } from '@env/environment';
 import { ToastService } from '@core/services/toast.service';
-import { HttpEventType } from '@angular/common/http';
 import { UtilsService } from '@core/services/utils.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
@@ -133,7 +128,22 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public nextRoute() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS], {
+      queryParams: { submitted: true, signed: true }
+    });
+  }
+
+  public showDefaultAgreement() {
+    return this.organizationService.organization.signedAgreements?.length < 1 ?? true;
+  }
+
+  public downloadSignedAgreement() {
+    this.organizationResource
+      .downloadLatestSignedAgreement(this.organizationService.organization.id)
+      .subscribe((base64: string) => {
+        const blob = this.utilsService.base64ToBlob(base64);
+        this.utilsService.downloadDocument(blob, 'Signed-organization-agreement');
+      });
   }
 
   public ngOnInit(): void {
