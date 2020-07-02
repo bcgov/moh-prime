@@ -154,6 +154,32 @@ namespace Prime.Services.Clients
             return (string)body.SelectToken("credential_definition_ids[0]");
         }
 
+        public async Task<JObject> GetPresentationProof(string presentationExchangeId)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.GetAsync($"presentation-proof/records/{presentationExchangeId}");
+            }
+            catch (Exception ex)
+            {
+                await LogError(response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to get presentation proof: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetPresentationProof");
+            }
+
+            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+            _logger.LogInformation("GET Presentation proof @JObject", body);
+
+            return body;
+        }
+
         private async Task LogError(HttpResponseMessage response, Exception exception = null)
         {
             await LogError(null, response, exception);

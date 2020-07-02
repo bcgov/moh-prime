@@ -59,13 +59,6 @@ namespace Prime
                 Console.WriteLine("Creating the logging directory failed: {0}", e.ToString());
             }
 
-            // var environment = (isDevelopment()) ? ".Development" : "";
-            // var configuration = new ConfigurationBuilder()
-            // .SetBasePath(Directory.GetCurrentDirectory())
-            // .AddJsonFile($"appsettings{environment}.json", optional: false, reloadOnChange: true)
-            // .AddEnvironmentVariables()
-            // .Build();
-
             var name = Assembly.GetExecutingAssembly().GetName();
             var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
@@ -74,7 +67,6 @@ namespace Prime
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
-                // .ReadFrom.Configuration(configuration)
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithProperty("Assembly", $"{name.Name}")

@@ -17,6 +17,7 @@ namespace Prime.Services
     {
         public const string Connections = "connections";
         public const string IssueCredential = "issue_credential";
+        public const string PresentProof = "present_proof";
     }
 
     public class ConnectionStates
@@ -33,6 +34,14 @@ namespace Prime.Services
         public const string RequestReceived = "request_received";
         public const string CredentialIssued = "credential_issued";
     }
+
+    public class PresentProofStates
+    {
+        public const string RequestSent = "request_sent";
+        public const string PresentationReceived = "presentation_received";
+        public const string Verified = "verified";
+    }
+
 
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
@@ -86,6 +95,23 @@ namespace Prime.Services
             return invitation;
         }
 
+        // Create an invitation to establish a connection between the agents.
+        public async Task SendProofRequest(Enrollee enrollee)
+        {
+            // TODO add a new schema with:
+            // - POS vendor
+            // - Legal Name of Organization, and/or BC Registration ID
+            // - Status of Approval
+            // - Name of Site (Location?)
+            // - Address of Site
+            // TODO create a credential definition
+
+            // TODO create proof request JObject model
+            // - Populate model with enrollee data and API queried values
+
+            // TODO send a proof request, and test on mobile the states
+        }
+
         // Handle webhook events pushed by the issuing agent.
         public async Task<bool> WebhookAsync(JObject data, string topic)
         {
@@ -97,6 +123,8 @@ namespace Prime.Services
                     return await HandleConnectionAsync(data);
                 case WebhookTopic.IssueCredential:
                     return await HandleIssueCredentialAsync(data);
+                case WebhookTopic.PresentProof:
+                    return await HandlePresentProofAsync(data);
                 default:
                     _logger.LogError("Webhook {topic} is not supported", topic);
                     return false;
@@ -238,13 +266,6 @@ namespace Prime.Services
 
             var organizationType = _context.OrganizationTypes.SingleOrDefault(t => t.Code == enrollee.EnrolleeOrganizationTypes.FirstOrDefault().OrganizationTypeCode);
 
-            // TODO add addition claim information
-            // Renewal Date
-            // User Classes
-            //   Practice Setting (Organization Type)
-            //   RU vs OBO
-            // Remote Access
-
             JArray attributes = new JArray
             {
                 new JObject
@@ -279,6 +300,31 @@ namespace Prime.Services
             System.Console.WriteLine(JsonConvert.SerializeObject(attributes));
 
             return attributes;
+        }
+
+        private async Task<bool> HandlePresentProofAsync(JObject data)
+        {
+            var state = data.Value<string>("state");
+
+            _logger.LogInformation("Present proof state \"{state}\" for {@JObject}", data);
+
+            switch (state)
+            {
+                case PresentProofStates.RequestSent:
+                    var presentationExchangeId = data.Value<string>("presentation_exchange_id");
+                    var response = await _verifiableCredentialClient.GetPresentationProof(presentationExchangeId);
+                    // TODO log that the proof request was received for auditing by checking that state is verified
+                    return true;
+                case PresentProofStates.PresentationReceived:
+                    return true;
+                case PresentProofStates.Verified:
+                    // TODO proof positive: state=verified and verified=true
+                    // TODO perform business logic to inform Medinet
+                    return true;
+                default:
+                    _logger.LogError($"Present proof state {state} is not supported");
+                    return false;
+            }
         }
     }
 }

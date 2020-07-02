@@ -11,5 +11,6 @@ namespace Prime.Services.Clients
         Task<JObject> GetSchema(string schemaId);
         Task<string> GetIssuerDidAsync();
         Task<string> GetCredentialDefinitionIdAsync(string schemaId);
+        Task<JObject> GetPresentationProof(string presentationExchangeId);
     }
 }
