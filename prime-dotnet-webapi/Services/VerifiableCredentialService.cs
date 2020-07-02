@@ -269,8 +269,7 @@ namespace Prime.Services
                 {
                     { "name", "remote_access" },
                     { "value", enrollee.RequestingRemoteAccess}
-                },
-
+                }
             };
 
             _logger.LogInformation($"Credential offer attributes for @JObject", attributes);
