@@ -1,6 +1,8 @@
 import { KeycloakOptions } from 'keycloak-angular';
-import { JwtHelperService } from '@auth0/angular-jwt';
 
+import { KeycloakOptionsConfig } from './keycloak-options.config';
+
+// TODO incorrect token doesn't exist can only use URLs
 /**
  * @description
  * Keycloak clients need to be dynamically determined based on one of two critera:
@@ -9,26 +11,21 @@ import { JwtHelperService } from '@auth0/angular-jwt';
  */
 export class KeycloakOptionsService {
   private path: string;
-  private token: string;
-  private jwtHelper: JwtHelperService;
-  private readonly pathToClientIdMapping = {
-    info: 'prime-application-enrolment',
-    admin: 'prime-application-admin',
-    site: 'prime-application-site'
-  };
-  private defaultClientId: string;
+  private config: KeycloakOptionsConfig;
 
   constructor() {
     // Angular has not fully bootstrapped so can't use ActivatedRoute
-    this.path = window.location.pathname.slice(1);
-    this.token = localStorage.token;
-    this.jwtHelper = new JwtHelperService();
-
-    this.defaultClientId = this.pathToClientIdMapping.info;
+    this.path = window.location.pathname
+      .split('/')
+      .filter((segment: string) => segment)
+      .shift();
+    this.config = new KeycloakOptionsConfig();
   }
 
   public getKeycloakOptions(): KeycloakOptions {
-    const clientId = this.getClientId();
+    const clientId = this.getClientIdByPath(this.path);
+
+    console.log('CLIENT', clientId);
 
     return {
       config: {
@@ -43,34 +40,17 @@ export class KeycloakOptionsService {
     };
   }
 
-  private getClientId(): string {
-    let clientId = null;
-
-    if (this.token) {
-      clientId = this.getClientIdByToken();
-    }
-
-    if (!clientId) {
-      clientId = this.getClientIdByPath();
-    }
-
-    return clientId;
-  }
-
-  /**
-   * @description
-   * Attempt to determine the client ID directly from the token.
-   */
-  private getClientIdByToken() {
-    return this.jwtHelper.decodeToken(this.token)?.azp;
-  }
-
   /**
    * @description
    * Attempt to determine the client ID from the path. The paths
    * only include views used for authentication.
    */
-  private getClientIdByPath(): string {
-    return this.pathToClientIdMapping[this.path] ?? this.defaultClientId;
+  private getClientIdByPath(path: string): string {
+    const clientId = this.config.clientConfig
+      .filter(c => c.routes.includes(path))
+      .shift()
+      ?.clientId;
+
+    return clientId ?? this.config.defaultClientId;
   }
 }
