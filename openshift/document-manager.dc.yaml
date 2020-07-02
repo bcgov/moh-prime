@@ -205,11 +205,17 @@ objects:
           volumeMounts:
           - mountPath: /app/
             name: ${NAME}${SUFFIX}-backend-pvc
+          - mountPath: /app/certs
+            name: vanity-tls-certs
+            readOnly: true
         restartPolicy: Always
         volumes:
         - name: ${NAME}${SUFFIX}-backend-pvc
-          persistentVolumeClaim:
-            claimName: ${NAME}${SUFFIX}-backend-pvc
+          emptyDir: {}
+        - name: vanity-tls-certs
+          secret:
+            defaultMode: 420
+            secretName: vanity-tls-certificate
     test: false
     triggers:
     - type: ConfigChange
@@ -328,7 +334,7 @@ objects:
     volumes:
     - name: ${NAME}${SUFFIX}-migrate-pvc
       persistentVolumeClaim:
-        claimName: ${NAME}${SUFFIX}-migrate-pvc
+        claimName: '${NAME}${SUFFIX}'
     - name: vanity-tls-certs
       secret:
         defaultMode: 420
