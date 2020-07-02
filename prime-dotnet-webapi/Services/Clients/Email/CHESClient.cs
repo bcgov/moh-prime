@@ -13,16 +13,19 @@ using Newtonsoft.Json;
 
 namespace Prime.Services
 {
-    public class CHESApiService : BaseService, ICHESApiService
+    public class CHESClient : BaseService, ICHESClient
     {
-        private static HttpClient Client;
+        private static HttpClient _client;
         private static String accessToken = "";
 
-        public CHESApiService(
+        public CHESClient(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            HttpClient httpClient)
             : base(context, httpContext)
-        { }
+        {
+            _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        }
 
         private static async Task<HttpClient> InitHttpClientAsync()
         {
@@ -70,7 +73,7 @@ namespace Prime.Services
 
         public async Task SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
-            Client = await InitHttpClientAsync();
+            _client = await InitHttpClientAsync();
 
             var chesAttachments = new List<CHESAttachment>();
             foreach (var attachment in attachments)
@@ -93,7 +96,7 @@ namespace Prime.Services
             HttpResponseMessage response = null;
             try
             {
-                response = await Client.PostAsync(PrimeConstants.CHES_API_URL + "/email", requestContent);
+                response = await _client.PostAsync(PrimeConstants.CHES_API_URL + "/email", requestContent);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -109,13 +112,13 @@ namespace Prime.Services
 
         public async Task<bool> HealthCheckAsync()
         {
-            Client = await InitHttpClientAsync();
+            _client = await InitHttpClientAsync();
             HttpResponseMessage response = null;
             Console.WriteLine("rimeConstants.CHES_API_URL: " + PrimeConstants.CHES_API_URL);
 
             try
             {
-                response = await Client.GetAsync(new Uri(PrimeConstants.CHES_API_URL + "/health"));
+                response = await _client.GetAsync(new Uri(PrimeConstants.CHES_API_URL + "/health"));
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)

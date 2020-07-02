@@ -64,7 +64,6 @@ namespace Prime
             services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPdfService, PdfService>();
-            services.AddScoped<ICHESApiService, CHESApiService>();
             services.AddScoped<ISMTPService, SMTPService>();
 
             ConfigureClients(services);
@@ -143,6 +142,20 @@ namespace Prime
                 Address = PrimeConstants.KEYCLOAK_TOKEN_URL,
                 ClientId = PrimeConstants.DOCUMENT_MANAGER_CLIENT_ID,
                 ClientSecret = PrimeConstants.DOCUMENT_MANAGER_CLIENT_SECRET,
+            });
+
+            services.AddTransient<CHESBearerTokenHandler>()
+            .AddHttpClient<ICHESClient, CHESClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeConstants.CHES_API_URL.EnsureTrailingSlash());
+            })
+            .AddHttpMessageHandler<CHESBearerTokenHandler>();
+
+            services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
+            services.AddSingleton(new CHESClientCredentials
+            {
+                Address = PrimeConstants.OPENID_API_URL,
+                ClientId = PrimeConstants.PRIME_SERVICE_CLIENT
             });
         }
 
