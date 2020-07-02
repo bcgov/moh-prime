@@ -154,8 +154,9 @@ namespace Prime
             services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
             services.AddSingleton(new CHESClientCredentials
             {
-                Address = PrimeConstants.OPENID_API_URL,
-                ClientId = PrimeConstants.PRIME_SERVICE_CLIENT
+                Address = $"{ PrimeConstants.OPENID_API_URL}/token",
+                ClientId = "PRIME_SERVICE_CLIENT",
+                ClientSecret = PrimeConstants.PRIME_SERVICE_CLIENT
             });
         }
 

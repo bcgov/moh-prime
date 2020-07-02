@@ -16,7 +16,7 @@ namespace Prime.Services
     public class CHESClient : BaseService, ICHESClient
     {
         private static HttpClient _client;
-        private static String accessToken = "";
+        // private static String accessToken = "";
 
         public CHESClient(
             ApiDbContext context,
@@ -27,48 +27,9 @@ namespace Prime.Services
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-        private static async Task<HttpClient> InitHttpClientAsync()
-        {
-            HttpClient client = new HttpClient();
-
-            var values = new List<KeyValuePair<string, string>>();
-            values.Add(new KeyValuePair<string, string>("grant_type", "client_credentials"));
-            values.Add(new KeyValuePair<string, string>("client_id", "PRIME_SERVICE_CLIENT"));
-            values.Add(new KeyValuePair<string, string>("client_secret", PrimeConstants.PRIME_SERVICE_CLIENT));
-            var content = new FormUrlEncodedContent(values);
-
-            Console.WriteLine("PrimeConstants.OPEN_ID_URL: " + PrimeConstants.OPENID_API_URL);
-
-            var requestUri = new Uri(PrimeConstants.OPENID_API_URL + "/token");
-
-            HttpResponseMessage response = null;
-            try
-            {
-                response = await client.PostAsync(requestUri, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseJsonString = await response.Content.ReadAsStringAsync();
-                    var successResponse = JsonConvert.DeserializeObject<OpenIdSuccessResponse>(responseJsonString);
-                    accessToken = successResponse.access_token;
-
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-                        "Bearer",
-                        accessToken
-                    );
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error occurred when calling CHES Email API. Try again later." + requestUri, ex);
-            }
-
-            return client;
-        }
-
         public async Task SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
-            _client = await InitHttpClientAsync();
+            // _client = await InitHttpClientAsync();
 
             var chesAttachments = new List<CHESAttachment>();
             foreach (var attachment in attachments)
@@ -107,7 +68,7 @@ namespace Prime.Services
 
         public async Task<bool> HealthCheckAsync()
         {
-            _client = await InitHttpClientAsync();
+            // _client = await InitHttpClientAsync();
             HttpResponseMessage response = null;
             Console.WriteLine("rimeConstants.CHES_API_URL: " + PrimeConstants.CHES_API_URL);
 
