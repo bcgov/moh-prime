@@ -3,8 +3,6 @@ USER 0
 SHELL ["/bin/bash","-c"]
 # Update installation utility
 #RUN apt-get update
-
-RUN ls -alh 
 # Install project dependencies
 COPY . ${APP_ROOT}/src
 
