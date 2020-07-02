@@ -8,9 +8,6 @@ using System.Net.Mail;
 using Prime.Models;
 using System.IO;
 
-using System.Net.Mime;
-using System.Text;
-
 namespace Prime.Services
 {
     public class EmailParams
