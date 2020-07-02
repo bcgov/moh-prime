@@ -155,8 +155,8 @@ namespace Prime
             services.AddSingleton(new CHESClientCredentials
             {
                 Address = $"{ PrimeConstants.OPENID_API_URL}/token",
-                ClientId = "PRIME_SERVICE_CLIENT",
-                ClientSecret = PrimeConstants.PRIME_SERVICE_CLIENT
+                ClientId = PrimeConstants.CHES_SERVICE_CLIENT_ID,
+                ClientSecret = PrimeConstants.CHES_SERVICE_CLIENT_SECRET
             });
         }
 
