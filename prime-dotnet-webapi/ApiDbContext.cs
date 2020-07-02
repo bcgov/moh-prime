@@ -90,7 +90,10 @@ namespace Prime
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
         public DbSet<BusinessLicence> BusinessLicences { get; set; }
         public DbSet<SignedAgreement> SignedAgreements { get; set; }
+        public DbSet<SelfDeclaration> SelfDeclarations { get; set; }
         public DbSet<Credential> Credentials { get; set; }
+
+        public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
 
         public override int SaveChanges()
         {
@@ -171,6 +174,7 @@ namespace Prime
             modelBuilder.ApplyConfiguration(new StatusReasonConfiguration());
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
             modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
+            modelBuilder.ApplyConfiguration(new SelfDeclarationTypeConfiguration());
 
             modelBuilder.ApplyConfiguration(new PrivilegeTypeConfiguration());
             modelBuilder.ApplyConfiguration(new PrivilegeGroupConfiguration());

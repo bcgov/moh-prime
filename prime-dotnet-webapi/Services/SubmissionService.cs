@@ -243,6 +243,7 @@ namespace Prime.Services
             var enrollee = await _context.Enrollees
                 .Include(e => e.PhysicalAddress)
                 .Include(e => e.MailingAddress)
+                .Include(e => e.SelfDeclarations)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.EnrolmentStatusReasons)
                 .Include(e => e.Certifications)

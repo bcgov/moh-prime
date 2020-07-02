@@ -33,6 +33,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public organizations: string[];
   public doingBusinessAsNames: string[];
   public isCompleted: boolean;
+  public usedOrgBook: boolean;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -54,12 +55,16 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     return this.form.get('name') as FormControl;
   }
 
-  public get orgId(): FormControl {
-    return this.form.get('orgId') as FormControl;
+  public get registrationId(): FormControl {
+    return this.form.get('registrationId') as FormControl;
   }
 
   public get doingBusinessAs(): FormControl {
     return this.form.get('doingBusinessAs') as FormControl;
+  }
+
+  public getOrgBookLink(orgId: string) {
+    return `https://www.orgbook.gov.bc.ca/en/organization/${orgId}`;
   }
 
   public onSubmit() {
@@ -81,13 +86,18 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     this.orgBookResource.getOrganizationFacet(orgName)
       .pipe(
         this.orgBookResource.sourceIdMap(),
-        // Perform a side effect
+        tap((sourceId: string) => this.usedOrgBook = true),
         tap((sourceId: string) => this.form.get('registrationId').patchValue(sourceId)),
         this.orgBookResource.doingBusinessAsMap()
       )
       .subscribe((doingBusinessAsNames: string[]) =>
         this.doingBusinessAsNames = doingBusinessAsNames
       );
+  }
+
+  public onInput() {
+    this.usedOrgBook = false;
+    this.registrationId.reset();
   }
 
   public onBack() {
