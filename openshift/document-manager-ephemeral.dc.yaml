@@ -204,13 +204,13 @@ objects:
           resources: {}
           volumeMounts:
           - mountPath: /app/
-            name: ${NAME}${SUFFIX}-backend-pvc
+            name: ${NAME}${SUFFIX}-pvc
           - mountPath: /app/certs
             name: vanity-tls-certs
             readOnly: true
         restartPolicy: Always
         volumes:
-        - name: ${NAME}${SUFFIX}-backend-pvc
+        - name: ${NAME}${SUFFIX}-pvc
           emptyDir: {}
         - name: vanity-tls-certs
           secret:
@@ -326,13 +326,13 @@ objects:
       resources: {}
       volumeMounts:
       - mountPath: /app/
-        name: ${NAME}${SUFFIX}-migrate-pvc
+        name: ${NAME}${SUFFIX}-pvc
       - mountPath: /app/certs
         name: vanity-tls-certs
         readOnly: true
     restartPolicy: OnFailure
     volumes:
-    - name: ${NAME}${SUFFIX}-migrate-pvc
+    - name: ${NAME}${SUFFIX}-pvc
       emptyDir: {}
     - name: vanity-tls-certs
       secret:
