@@ -7,10 +7,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./image.component.scss']
 })
 export class ImageComponent implements OnInit {
-
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
