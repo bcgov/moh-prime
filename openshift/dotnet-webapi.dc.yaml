@@ -102,20 +102,25 @@ objects:
                     secretKeyRef:
                       key: DOCUMENT_MANAGER_CLIENT_SECRET
                       name: "document-manager-secret"
-                - name: OPENID_API_URL
-                  valueFrom:
-                    secretKeyRef:
-                      key: OPENID_API_URL
-                      name: "ches-secrets"
-                - name: PRIME_SERVICE_CLIENT
-                  valueFrom:
-                    secretKeyRef:
-                      key: PRIME_SERVICE_CLIENT
-                      name: "ches-secrets"
                 - name: CHES_API_URL
                   valueFrom:
                     secretKeyRef:
                       key: CHES_API_URL
+                      name: "ches-secrets"
+                - name: CHES_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: CHES_CLIENT_SECRET
+                      name: "ches-secrets"
+                - name: CHES_ENABLED
+                  valueFrom:
+                    secretKeyRef:
+                      key: CHES_ENABLED
+                      name: "ches-secrets"
+                - name: CHES_TOKEN_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: CHES_TOKEN_URL
                       name: "ches-secrets"
                 - name: PHARMANET_API_URL
                   valueFrom:
@@ -199,11 +204,6 @@ objects:
                     secretKeyRef:
                       key: KEYCLOAK_TOKEN_URL
                       name: "keycloak" 
-                - name: useCHES
-                  valueFrom:
-                    configMapKeyRef:
-                      key: USE_CHES
-                      name: ches-email-config
               image: " "
               name: primeapi
               ports:
