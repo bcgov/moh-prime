@@ -142,6 +142,22 @@ namespace Prime
                 ClientId = PrimeConstants.DOCUMENT_MANAGER_CLIENT_ID,
                 ClientSecret = PrimeConstants.DOCUMENT_MANAGER_CLIENT_SECRET,
             });
+
+            services.AddTransient<ChesBearerTokenHandler>()
+            .AddHttpClient<IChesClient, ChesClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeConstants.CHES_API_URL.EnsureTrailingSlash());
+            })
+            .AddHttpMessageHandler<ChesBearerTokenHandler>();
+
+            services.AddSingleton(new ChesClientCredentials
+            {
+                Address = $"{ PrimeConstants.CHES_TOKEN_URL}/token",
+                ClientId = PrimeConstants.CHES_CLIENT_ID,
+                ClientSecret = PrimeConstants.CHES_CLIENT_SECRET
+            });
+
+            services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
