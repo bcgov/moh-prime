@@ -24,18 +24,21 @@ namespace Prime.Controllers
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailService _emailService;
 
+        private readonly IDocumentService _documentService;
         public SitesController(
             ISiteService siteService,
             IPartyService partyService,
             IOrganizationService organizationService,
             IRazorConverterService razorConverterService,
-            IEmailService emailService)
+            IEmailService emailService,
+            IDocumentService documentService)
         {
             _siteService = siteService;
             _partyService = partyService;
             _organizationService = organizationService;
             _razorConverterService = razorConverterService;
             _emailService = emailService;
+            _documentService = documentService;
         }
 
         // Temporary endpoint for admins until fruit loops
@@ -333,6 +336,35 @@ namespace Prime.Controllers
             var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
 
             return Ok(ApiResponse.Result(updatedSite));
+        }
+
+        // Get: api/site/5/latest-business-licence
+        /// <summary>
+        /// Gets the latest business licence by site download token.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/latest-business-licence", Name = nameof(GetLatestBusinessLicenceDownloadToken))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<SignedAgreement>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetLatestBusinessLicenceDownloadToken(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            if (!User.CanEdit(site.Provisioner))
+            {
+                return Forbid();
+            }
+
+            var token = await _documentService.GetDownloadTokenForLatestBusinessLicenceDocument(siteId);
+
+            return Ok(ApiResponse.Result(token));
         }
     }
 }

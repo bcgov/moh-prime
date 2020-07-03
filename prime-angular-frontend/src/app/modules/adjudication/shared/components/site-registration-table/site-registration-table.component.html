@@ -92,8 +92,7 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                [disabled]="true"
-                (click)="onRoute([])">
+                (click)="onRoute([row.id, AdjudicationRoutes.ORGANIZATION_INFORMATION, row.location.organizationId])">
           <mat-icon>location_city</mat-icon>
           <span>Organization Information</span>
         </button>

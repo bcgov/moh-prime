@@ -238,4 +238,16 @@ export class SiteResource {
         })
       );
   }
+
+  public getBusinessLicenceDownloadToken(siteId: number): Observable<string> {
+    return this.apiResource.get<string>(`sites/${siteId}/latest-business-licence`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Business Licence token could not be Retrieved');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicenceDownloadToken error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }

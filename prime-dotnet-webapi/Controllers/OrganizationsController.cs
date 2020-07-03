@@ -338,6 +338,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<SignedAgreement>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<SignedAgreement>>> GetLatestSignedAgreement(int organizationId)
         {

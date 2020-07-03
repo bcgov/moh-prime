@@ -72,6 +72,7 @@ import { DocumentUploadComponent } from './components/document-upload/document-u
 // TODO split out all related filepond files into a /lib module ie. config and components
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import { OrganizationReviewComponent } from './components/organization-review/organization-review.component';
 registerPlugin(FilePondPluginFileValidateType);
 @NgModule({
   declarations: [
@@ -129,7 +130,8 @@ registerPlugin(FilePondPluginFileValidateType);
     PageSubheader2TitleDirective,
     PageSubheader2SummaryDirective,
     PageSubheader2MoreInfoDirective,
-    DocumentUploadComponent
+    DocumentUploadComponent,
+    OrganizationReviewComponent
   ],
   imports: [
     CommonModule,
@@ -200,6 +202,7 @@ registerPlugin(FilePondPluginFileValidateType);
     SiteReviewComponent,
     PartyReviewComponent,
     DocumentUploadComponent,
+    OrganizationReviewComponent,
   ]
 })
 export class SharedModule { }

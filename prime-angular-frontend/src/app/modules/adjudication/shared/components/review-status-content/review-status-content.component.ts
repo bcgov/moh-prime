@@ -6,7 +6,6 @@ import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
