@@ -230,7 +230,7 @@ namespace Prime.Services
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }
 
-            // If CHES Email Service is running and useCHES = true, else send through smtp
+            // If CHES Email Service is running and CHES_ENABLED = true, else send through smtp
             if (PrimeConstants.CHES_ENABLED == "true" && await _chesClient.HealthCheckAsync())
             {
                 await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
