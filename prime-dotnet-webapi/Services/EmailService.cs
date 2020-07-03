@@ -53,7 +53,7 @@ namespace Prime.Services
         private readonly IDocumentService _documentService;
         private readonly IPdfService _pdfService;
         private readonly IOrganizationService _organizationService;
-        private readonly ICHESClient _chesClient;
+        private readonly IChesClient _chesClient;
 
         private readonly ISMTPService _smtpService;
 
@@ -64,7 +64,7 @@ namespace Prime.Services
             IDocumentService documentService,
             IPdfService pdfService,
             IOrganizationService organizationService,
-            ICHESClient chesClient,
+            IChesClient chesClient,
             ISMTPService smtpService)
             : base(context, httpContext)
         {
@@ -237,7 +237,7 @@ namespace Prime.Services
             }
 
             // If CHES Email Service is running and useCHES = true, else send through smtp
-            if (PrimeConstants.USE_CHES == "true" && await _chesClient.HealthCheckAsync())
+            if (PrimeConstants.CHES_ENABLED == "true" && await _chesClient.HealthCheckAsync())
             {
                 await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
             }

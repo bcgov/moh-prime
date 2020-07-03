@@ -144,19 +144,19 @@ namespace Prime
                 ClientSecret = PrimeConstants.DOCUMENT_MANAGER_CLIENT_SECRET,
             });
 
-            services.AddTransient<CHESBearerTokenHandler>()
-            .AddHttpClient<ICHESClient, CHESClient>(client =>
+            services.AddTransient<ChesBearerTokenHandler>()
+            .AddHttpClient<IChesClient, ChesClient>(client =>
             {
                 client.BaseAddress = new Uri(PrimeConstants.CHES_API_URL.EnsureTrailingSlash());
             })
-            .AddHttpMessageHandler<CHESBearerTokenHandler>();
+            .AddHttpMessageHandler<ChesBearerTokenHandler>();
 
             services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
-            services.AddSingleton(new CHESClientCredentials
+            services.AddSingleton(new ChesClientCredentials
             {
-                Address = $"{ PrimeConstants.OPENID_API_URL}/token",
-                ClientId = PrimeConstants.CHES_SERVICE_CLIENT_ID,
-                ClientSecret = PrimeConstants.CHES_SERVICE_CLIENT_SECRET
+                Address = $"{ PrimeConstants.CHES_TOKEN_URL}/token",
+                ClientId = PrimeConstants.CHES_CLIENT_ID,
+                ClientSecret = PrimeConstants.CHES_CLIENT_SECRET
             });
         }
 

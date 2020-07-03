@@ -13,11 +13,11 @@ using Newtonsoft.Json;
 
 namespace Prime.Services
 {
-    public class CHESClient : BaseService, ICHESClient
+    public class ChesClient : BaseService, IChesClient
     {
         private static HttpClient _client;
 
-        public CHESClient(
+        public ChesClient(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             HttpClient httpClient)
@@ -28,10 +28,10 @@ namespace Prime.Services
 
         public async Task SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
-            var chesAttachments = new List<CHESAttachment>();
+            var chesAttachments = new List<ChesAttachment>();
             foreach (var attachment in attachments)
             {
-                var chesAttachment = new CHESAttachment()
+                var chesAttachment = new ChesAttachment()
                 {
                     content = Convert.ToBase64String(attachment.Content),
                     contentType = "application/pdf",
@@ -83,7 +83,7 @@ namespace Prime.Services
 
     public class CHESEmailRequestParams
     {
-        public IEnumerable<CHESAttachment> attachments { get; set; }
+        public IEnumerable<ChesAttachment> attachments { get; set; }
         public IEnumerable<string> bcc { get; set; }
         public string bodyType { get; set; }
         public string body { get; set; }
@@ -96,7 +96,7 @@ namespace Prime.Services
         public string tag { get; set; }
         public IEnumerable<string> to { get; set; }
 
-        public CHESEmailRequestParams(string from, IEnumerable<string> to, string subject, string body, IEnumerable<CHESAttachment> attachments)
+        public CHESEmailRequestParams(string from, IEnumerable<string> to, string subject, string body, IEnumerable<ChesAttachment> attachments)
         {
             this.attachments = attachments;
             bcc = new List<string>();
@@ -113,7 +113,7 @@ namespace Prime.Services
         }
     }
 
-    public class CHESAttachment
+    public class ChesAttachment
     {
         public string content { get; set; }
         public string contentType { get; set; }

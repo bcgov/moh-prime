@@ -4,5 +4,5 @@ namespace Prime.Services.Clients
 {
     public class DocumentManagerClientCredentials : ClientCredentialsTokenRequest { }
 
-    public class CHESClientCredentials : ClientCredentialsTokenRequest { }
+    public class ChesClientCredentials : ClientCredentialsTokenRequest { }
 }
