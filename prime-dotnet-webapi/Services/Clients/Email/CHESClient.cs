@@ -1,27 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Mail;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
 namespace Prime.Services
 {
-    public class ChesClient : BaseService, IChesClient
+    public class ChesClient : IChesClient
     {
         private static HttpClient _client;
 
-        public ChesClient(
-            ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            HttpClient httpClient)
-            : base(context, httpContext)
+        public ChesClient(HttpClient httpClient)
         {
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
@@ -68,7 +58,7 @@ namespace Prime.Services
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.GetAsync(new Uri("health"));
+                response = await _client.GetAsync("health");
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
