@@ -151,7 +151,6 @@ namespace Prime
             })
             .AddHttpMessageHandler<ChesBearerTokenHandler>();
 
-            services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
             services.AddSingleton(new ChesClientCredentials
             {
                 Address = $"{ PrimeConstants.CHES_TOKEN_URL}/token",
