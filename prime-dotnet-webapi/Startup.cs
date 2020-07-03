@@ -157,7 +157,7 @@ namespace Prime
                 ClientSecret = PrimeConstants.CHES_CLIENT_SECRET
             });
 
-            services.AddHttpClient<ISmtpEmailClient, SmtpEmailClient>();
+            services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

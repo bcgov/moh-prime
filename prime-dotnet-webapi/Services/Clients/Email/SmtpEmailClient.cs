@@ -10,11 +10,8 @@ namespace Prime.Services
 {
     public class SmtpEmailClient : ISmtpEmailClient
     {
-        private static HttpClient _client;
-        public SmtpEmailClient(HttpClient httpClient)
-        {
-            _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        }
+        public SmtpEmailClient()
+        { }
 
         public async Task SendAsync(
             string from,
