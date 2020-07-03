@@ -12,29 +12,23 @@ namespace Prime.Models
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public string PreferredFirstName { get; set; }
-        public string PreferredMiddleName { get; set; }
-        public string PreferredLastName { get; set; }
         public string GPID { get; set; }
         public DateTimeOffset? ExpiryDate { get; set; }
         public IEnumerable<OrganizationType> OrganizationTypes { get; set; }
 
-        public static EnrolmentCertificate Create(Enrollee enrolleeHistory, Enrollee enrollee)
+        public static EnrolmentCertificate Create(Enrollee enrollee)
         {
             // Display information from profile history from last submission before most recently accepted TOA
             // Display GPID and Expiry Date from current enrollee object because inital submission will
             // not have these fields until after accepting the TOA
             return new EnrolmentCertificate
             {
-                FirstName = enrolleeHistory.FirstName,
-                MiddleName = enrolleeHistory.MiddleName,
-                LastName = enrolleeHistory.LastName,
-                PreferredFirstName = enrolleeHistory.PreferredFirstName,
-                PreferredMiddleName = enrolleeHistory.PreferredMiddleName,
-                PreferredLastName = enrolleeHistory.PreferredLastName,
+                FirstName = enrollee.FirstName,
+                MiddleName = enrollee.MiddleName,
+                LastName = enrollee.LastName,
                 GPID = enrollee.GPID,
                 ExpiryDate = enrollee.ExpiryDate,
-                OrganizationTypes = enrolleeHistory.EnrolleeOrganizationTypes.Select(org => org.OrganizationType)
+                OrganizationTypes = enrollee.EnrolleeOrganizationTypes.Select(org => org.OrganizationType)
             };
         }
     }
