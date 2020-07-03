@@ -11,9 +11,6 @@ using Newtonsoft.Json;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
 
-using System.Net.Mime;
-using System.Text;
-
 namespace Prime.Services
 {
     public class EmailParams

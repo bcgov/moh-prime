@@ -4,42 +4,42 @@ metadata:
   name: dotnet-webapi-dc
   creationTimestamp: null
 parameters:
-  - name: NAME
-    displayName: Name
-    description: A prefix appended to all objects
-    required: true
-  - name: SUFFIX
-    displayName: Name Suffix
-    description: A suffix appended to all objects
-    required: false
-  - name: VERSION
-    required: true
-  - name: SOURCE_CONTEXT_DIR
-    required: true
-    value: prime-dotnet-webapi
-  - name: SOURCE_REPOSITORY_URL
-    required: true
-    value: "https://github.com/bcgov/moh-prime"
-  - name: SOURCE_REPOSITORY_REF
-    required: true
-  - name: OC_NAMESPACE
-    required: true
-  - name: OC_APP
-    required: true
-  - name: ASPNETCORE_ENVIRONMENT
-    value: Release
-  - name: VANITY_URL
-    required: true
-    value: "pharmanetenrolment.gov.bc.ca"
-  - name: HTTP_SCHEMA
-    required: true
-    value: "https"
-  - name: HTTP_PORT
-    required: true
-    value: "8443"
-  - name: TERMINATION_TYPE
-    required: true
-    value: "passthrough"
+- name: NAME
+  displayName: Name
+  description: A prefix appended to all objects
+  required: true
+- name: SUFFIX
+  displayName: Name Suffix
+  description: A suffix appended to all objects
+  required: false
+- name: VERSION
+  required: true
+- name: SOURCE_CONTEXT_DIR
+  required: true
+  value: prime-dotnet-webapi
+- name: SOURCE_REPOSITORY_URL
+  required: true
+  value: "https://github.com/bcgov/moh-prime"
+- name: SOURCE_REPOSITORY_REF
+  required: true
+- name: OC_NAMESPACE
+  required: true
+- name: OC_APP
+  required: true
+- name: ASPNETCORE_ENVIRONMENT
+  value: Release
+- name: VANITY_URL
+  required: true
+  value: "pharmanetenrolment.gov.bc.ca"
+- name: HTTP_SCHEMA
+  required: true
+  value: "https"
+- name: HTTP_PORT
+  required: true
+  value: "8443"
+- name: TERMINATION_TYPE
+  required: true
+  value: "passthrough"
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
@@ -60,7 +60,6 @@ objects:
     selector:
       io.kompose.service: "${NAME}${SUFFIX}"
     strategy: null
-    resources: {}
     template:
       metadata:
         creationTimestamp: null
@@ -220,7 +219,6 @@ objects:
               periodSeconds: 30
               successThreshold: 1
               timeoutSeconds: 10
-            resources: {}
             volumeMounts:
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs

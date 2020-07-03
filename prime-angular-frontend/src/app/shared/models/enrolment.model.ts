@@ -8,6 +8,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { Admin } from '@auth/shared/models/admin.model';
+import { SelfDeclaration } from './self-declarations.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -21,14 +22,7 @@ export interface HttpEnrollee extends Enrollee {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
-  hasConviction: boolean;
-  hasConvictionDetails: string;
-  hasRegistrationSuspended: boolean;
-  hasRegistrationSuspendedDetails: string;
-  hasDisciplinaryAction: boolean;
-  hasDisciplinaryActionDetails: string;
-  hasPharmaNetSuspended: boolean;
-  hasPharmaNetSuspendedDetails: string;
+  selfDeclarations: SelfDeclaration[];
   enrolleeOrganizationTypes: Organization[];
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
@@ -63,14 +57,8 @@ export interface Enrolment {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
-  hasConviction: boolean;
-  hasConvictionDetails: string;
-  hasRegistrationSuspended: boolean;
-  hasRegistrationSuspendedDetails: string;
-  hasDisciplinaryAction: boolean;
-  hasDisciplinaryActionDetails: string;
-  hasPharmaNetSuspended: boolean;
-  hasPharmaNetSuspendedDetails: string;
+
+  selfDeclarations: SelfDeclaration[];
   organizations: Organization[];
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];

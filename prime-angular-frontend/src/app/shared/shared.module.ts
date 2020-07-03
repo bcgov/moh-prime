@@ -58,17 +58,21 @@ import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
-import { AccessTermsTableComponent } from '@shared/components/access-terms-table/access-terms-table.component';
-import { AccessTermComponent } from '@shared/components/access-term/access-term.component';
-import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
-import { ClaimEnrolleeComponent } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
-import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
-import { FeedbackComponent } from '@shared/components/dialogs/content/feedback/feedback.component';
-import { CollectionNoticeContainerComponent } from '@shared/components/collection-notice-container/collection-notice-container.component';
-import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.component';
-import { SiteReviewComponent } from '@shared/components/site/site-review/site-review.component';
-import { PartyReviewComponent } from '@shared/components/site/party-review/party-review.component';
-
+import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
+import { AccessTermComponent } from './components/access-term/access-term.component';
+import { NoteComponent } from './components/dialogs/content/note/note.component';
+import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
+import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
+import { FormErrorsComponent } from './components/form-errors/form-errors.component';
+import { SiteReviewComponent } from './components/site/site-review/site-review.component';
+import { PartyReviewComponent } from './components/site/party-review/party-review.component';
+import { DocumentUploadComponent } from './components/document-upload/document-upload/document-upload.component';
+// TODO split out all related filepond files into a /lib module ie. config and components
+import { FilePondModule, registerPlugin } from 'ngx-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+registerPlugin(FilePondPluginFileValidateType);
 @NgModule({
   declarations: [
     CapitalizePipe,
@@ -124,7 +128,8 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     PageSubheader2Component,
     PageSubheader2TitleDirective,
     PageSubheader2SummaryDirective,
-    PageSubheader2MoreInfoDirective
+    PageSubheader2MoreInfoDirective,
+    DocumentUploadComponent
   ],
   imports: [
     CommonModule,
@@ -135,6 +140,7 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     NgxMaskModule.forRoot(),
     NgxMaterialModule,
     NgxProgressModule,
+    FilePondModule,
     ReactiveFormsModule
   ],
   exports: [
@@ -192,7 +198,8 @@ import { PartyReviewComponent } from '@shared/components/site/party-review/party
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    PartyReviewComponent
+    PartyReviewComponent,
+    DocumentUploadComponent,
   ]
 })
 export class SharedModule { }
