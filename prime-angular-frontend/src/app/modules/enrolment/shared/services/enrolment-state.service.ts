@@ -236,7 +236,24 @@ export class EnrolmentStateService {
 
       this.regulatoryForm.patchValue(enrolment);
       this.jobsForm.patchValue(enrolment);
-      this.selfDeclarationForm.patchValue(enrolment);
+
+      const defaultValue = (enrolment.profileCompleted) ? false : null;
+      const selfDeclarationsTypes = {
+        hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
+        hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
+        hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
+        hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
+      };
+      const selfDeclarations = Object.keys(selfDeclarationsTypes)
+        .reduce((sds, sd) => {
+          const adapted = {
+            [sd]: selfDeclarationsTypes[sd].selfDeclarationTypeCode ?? defaultValue,
+            [`${sd}Details`]: selfDeclarationsTypes[sd].selfDeclarationDetails ?? null
+          };
+          return { ...sds, ...adapted };
+        }, {});
+
+      this.selfDeclarationForm.patchValue(selfDeclarations);
       this.organizationForm.patchValue(enrolment);
 
       if (enrolment.organizations.length) {
