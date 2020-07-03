@@ -236,7 +236,7 @@ export class EnrolmentStateService {
 
       this.regulatoryForm.patchValue(enrolment);
       this.jobsForm.patchValue(enrolment);
-      this.selfDeclarationForm.patchValue(enrolment);
+      this.selfDeclarationForm.patchValue(enrolment.selfDeclarations);
       this.organizationForm.patchValue(enrolment);
 
       if (enrolment.organizations.length) {
