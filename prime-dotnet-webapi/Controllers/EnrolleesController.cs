@@ -605,7 +605,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/{enrolleeId}/self-declaration-document/{selfDeclarationDocumentId}
         /// <summary>
-        /// Get the self Declaration document data.
+        /// Get the self Declaration document download token.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="selfDeclarationDocumentId"></param>
@@ -629,9 +629,9 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var document = await _documentService.GetDocumentBySelfDeclarationDocumentId(selfDeclarationDocumentId);
+            var token = await _documentService.GetDownloadTokenForSelfDeclarationDocument(selfDeclarationDocumentId);
 
-            return Ok(ApiResponse.Result(document.Data));
+            return Ok(ApiResponse.Result(token));
         }
     }
 }

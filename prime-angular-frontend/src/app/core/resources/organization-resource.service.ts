@@ -151,7 +151,7 @@ export class OrganizationResource {
       );
   }
 
-  public downloadLatestSignedAgreement(organizationId: number): Observable<string> {
+  public getDownloadTokenForLatestSignedAgreement(organizationId: number): Observable<string> {
     return this.apiResource.get<string>(`organizations/${organizationId}/latest-signed-agreement`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
@@ -177,7 +177,7 @@ export class OrganizationResource {
       );
   }
 
-  public downloadOrganizationAgreement(): Observable<string> {
+  public getDownloadTokenForOrganizationAgreement(): Observable<string> {
     return this.apiResource.get<string>(`organizations/organization-agreement-document`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),

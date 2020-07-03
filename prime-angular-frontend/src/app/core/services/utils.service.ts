@@ -123,4 +123,13 @@ export class UtilsService {
       link.remove();
     }, 100);
   }
+
+  /**
+   * @description
+   * Download a document using a document manager download token.
+   */
+  public downloadToken(token: string): void {
+    // TODO: Replace with injected env variable
+    window.location.replace(`http://localhost:6001/documents/downloads/${token}`);
+  }
 }

@@ -73,10 +73,9 @@ export class ReviewStatusContentComponent implements OnInit {
   ) { }
 
   public downloadDocument(document: SelfDeclarationDocument) {
-    this.enrolmentResource.getSelfDeclarationDocument(this.enrollee.id, document.id)
-      .subscribe((base64: string) => {
-        const blob = this.utilsService.base64ToBlob(base64);
-        this.utilsService.downloadDocument(blob, document.fileName);
+    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, document.id)
+      .subscribe((token: string) => {
+        this.utilsService.downloadToken(token);
       });
   }
 

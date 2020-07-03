@@ -132,7 +132,10 @@ namespace Prime.Services
             string businessLicenceTemplate = "/Views/Helpers/Document.cshtml";
             try
             {
-                businessLicenceDoc = await _documentService.GetLatestBusinessLicenceDocumentBySiteId(site.Id);
+                var stream = await _documentService.GetStreamForLatestBusinessLicenceDocument(site.Id);
+                MemoryStream ms = new MemoryStream();
+                stream.CopyTo(ms);
+                businessLicenceDoc = new Document("BusinessLicence.pdf", ms.ToArray());
             }
             catch (NullReferenceException)
             {
@@ -148,7 +151,10 @@ namespace Prime.Services
                 string organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
                 try
                 {
-                    organizationAgreementDoc = await _documentService.GetLatestSignedAgreementDocumentByOrganizationId(organization.Id);
+                    var stream = await _documentService.GetStreamForLatestSignedAgreementDocument(organization.Id);
+                    MemoryStream ms = new MemoryStream();
+                    stream.CopyTo(ms);
+                    organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", ms.ToArray());
                 }
                 catch (NullReferenceException)
                 {
