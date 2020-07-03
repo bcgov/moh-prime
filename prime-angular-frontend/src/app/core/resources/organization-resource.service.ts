@@ -177,7 +177,7 @@ export class OrganizationResource {
       );
   }
 
-  public getDownloadTokenForOrganizationAgreement(): Observable<string> {
+  public getUnsignedOrganizationAgreement(): Observable<string> {
     return this.apiResource.get<string>(`organizations/organization-agreement-document`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
