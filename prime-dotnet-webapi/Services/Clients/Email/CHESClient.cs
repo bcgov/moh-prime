@@ -49,7 +49,7 @@ namespace Prime.Services
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.PostAsync(PrimeConstants.CHES_API_URL + "/email", requestContent);
+                response = await _client.PostAsync("email", requestContent);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -66,11 +66,9 @@ namespace Prime.Services
         public async Task<bool> HealthCheckAsync()
         {
             HttpResponseMessage response = null;
-            Console.WriteLine("rimeConstants.CHES_API_URL: " + PrimeConstants.CHES_API_URL);
-
             try
             {
-                response = await _client.GetAsync(new Uri(PrimeConstants.CHES_API_URL + "/health"));
+                response = await _client.GetAsync(new Uri("health"));
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
