@@ -221,12 +221,6 @@ namespace Prime.Services
                 throw new ArgumentException("Must specify at least one \"To\" email address.");
             }
 
-            // TODO temporarily only send emails to Anais just in case
-            var tempTo = new List<string>();
-            tempTo.Add("anais.hebert@nttdata.com");
-
-            to = tempTo;
-
             var fromAddress = new MailAddress(from);
             var toAddresses = to.Select(addr => new MailAddress(addr));
             var ccAddresses = cc.Select(addr => new MailAddress(addr));
