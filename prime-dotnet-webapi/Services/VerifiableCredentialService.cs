@@ -154,7 +154,7 @@ namespace Prime.Services
                     // TODO should be queued and managed outside of webhook callback
                     var issueCredentialResponse = await IssueCredential(connectionId, alias);
 
-                    _logger.LogInformation("Credential has been issued for connection_id: {connectionId} with response {@JObject}", connectionId, issueCredentialResponse);
+                    _logger.LogInformation("Credential has been issued for connection_id: {connectionId} with response {@JObject}", connectionId, JsonConvert.SerializeObject(issueCredentialResponse));
 
                     return true;
                 case ConnectionStates.Active:
@@ -170,7 +170,7 @@ namespace Prime.Services
         {
             var state = data.Value<string>("state");
 
-            _logger.LogInformation("Issue credential state \"{state}\" for {@JObject}", state, data);
+            _logger.LogInformation("Issue credential state \"{state}\" for {@JObject}", state, JsonConvert.SerializeObject(data));
 
             switch (state)
             {
@@ -306,7 +306,7 @@ namespace Prime.Services
         {
             var state = data.Value<string>("state");
 
-            _logger.LogInformation("Present proof state \"{state}\" for {@JObject}", data);
+            _logger.LogInformation("Present proof state \"{state}\" for {@JObject}", JsonConvert.SerializeObject(data));
 
             switch (state)
             {
