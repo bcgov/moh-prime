@@ -101,6 +101,26 @@ objects:
                   secretKeyRef:
                     key: DOCUMENT_MANAGER_CLIENT_SECRET
                     name: "document-manager-secret"
+              - name: CHES_API_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: CHES_API_URL
+                    name: "ches-secrets"
+              - name: CHES_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: CHES_CLIENT_SECRET
+                    name: "ches-secrets"
+              - name: CHES_ENABLED
+                valueFrom:
+                  secretKeyRef:
+                    key: CHES_ENABLED
+                    name: "ches-secrets"
+              - name: CHES_TOKEN_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: CHES_TOKEN_URL
+                    name: "ches-secrets"
               - name: PHARMANET_API_URL
                 valueFrom:
                   secretKeyRef:
