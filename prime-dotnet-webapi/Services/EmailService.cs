@@ -55,7 +55,7 @@ namespace Prime.Services
         private readonly IOrganizationService _organizationService;
         private readonly IChesClient _chesClient;
 
-        private readonly ISMTPService _smtpService;
+        private readonly ISmtpEmailClient _smtpEmailClient;
 
         public EmailService(
             ApiDbContext context,
@@ -65,7 +65,7 @@ namespace Prime.Services
             IPdfService pdfService,
             IOrganizationService organizationService,
             IChesClient chesClient,
-            ISMTPService smtpService)
+            ISmtpEmailClient smtpEmailClient)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
@@ -73,7 +73,7 @@ namespace Prime.Services
             _pdfService = pdfService;
             _organizationService = organizationService;
             _chesClient = chesClient;
-            _smtpService = smtpService;
+            _smtpEmailClient = smtpEmailClient;
         }
 
         public static bool IsValidEmail(string email)
@@ -237,7 +237,7 @@ namespace Prime.Services
             }
             else
             {
-                await _smtpService.SendAsync(from, to, cc, subject, body, attachments);
+                await _smtpEmailClient.SendAsync(from, to, cc, subject, body, attachments);
             }
         }
     }

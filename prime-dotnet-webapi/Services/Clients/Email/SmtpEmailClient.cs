@@ -3,18 +3,18 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Net.Http;
 
 namespace Prime.Services
 {
-    public class SMTPService : BaseService, ISMTPService
+    public class SmtpEmailClient : ISmtpEmailClient
     {
-        public SMTPService(
-            ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
-        { }
+        private static HttpClient _client;
+        public SmtpEmailClient(HttpClient httpClient)
+        {
+            _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        }
 
         public async Task SendAsync(
             string from,
@@ -66,6 +66,7 @@ namespace Prime.Services
                     || ex is SmtpFailedRecipientsException)
                 {
                     // TODO log mail exception
+                    Console.WriteLine($"SmtpEmailClient exception: {ex}");
                 }
 
                 throw;
@@ -75,13 +76,6 @@ namespace Prime.Services
                 smtp.Dispose();
                 mail.Dispose();
             }
-        }
-
-        public class EmailServiceException : Exception
-        {
-            public EmailServiceException() { }
-            public EmailServiceException(string message) : base(message) { }
-            public EmailServiceException(string message, Exception inner) : base(message, inner) { }
         }
     }
 }

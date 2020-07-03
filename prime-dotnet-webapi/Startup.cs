@@ -64,7 +64,6 @@ namespace Prime
             services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPdfService, PdfService>();
-            services.AddScoped<ISMTPService, SMTPService>();
 
             ConfigureClients(services);
 
@@ -157,6 +156,8 @@ namespace Prime
                 ClientId = PrimeConstants.CHES_CLIENT_ID,
                 ClientSecret = PrimeConstants.CHES_CLIENT_SECRET
             });
+
+            services.AddHttpClient<ISmtpEmailClient, SmtpEmailClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
