@@ -35,7 +35,7 @@ namespace Prime.Services
 
             await UpdateTokenMetadataAsync(token);
 
-            if (token.Active && token.Enrollee.ExpiryDate != null)
+            if (token.Active)
             {
                 return EnrolmentCertificate.Create(token.Enrollee);
             }
