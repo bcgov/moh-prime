@@ -23,6 +23,13 @@ namespace Prime
         public readonly static string PHARMANET_SSL_CERT_FILENAME = Environment.GetEnvironmentVariable("PHARMANET_SSL_CERT_FILENAME");
         public readonly static string PHARMANET_SSL_CERT_PASSWORD = Environment.GetEnvironmentVariable("PHARMANET_SSL_CERT_PASSWORD");
 
+        // CHES Email API
+        public readonly static string CHES_ENABLED = Environment.GetEnvironmentVariable("CHES_ENABLED") ?? "false";
+        public readonly static string CHES_API_URL = Environment.GetEnvironmentVariable("CHES_API_URL") ?? "https://ches-master-9f0fbe-dev.pathfinder.gov.bc.ca/api/v1";
+        public readonly static string CHES_CLIENT_ID = "PRIME_SERVICE_CLIENT";
+        public readonly static string CHES_CLIENT_SECRET = Environment.GetEnvironmentVariable("CHES_CLIENT_SECRET") ?? "88e123a6-80cb-46a0-96d3-e2edae076ae7";
+        public readonly static string CHES_TOKEN_URL = Environment.GetEnvironmentVariable("CHES_TOKEN_URL") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect";
+
         // Logging
         public readonly static string LOG_FILE_PATH = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
