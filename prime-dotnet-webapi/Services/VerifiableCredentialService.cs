@@ -136,7 +136,7 @@ namespace Prime.Services
         {
             var state = data.Value<string>("state");
 
-            _logger.LogInformation("Connection state \"{state}\" for {@JObject}", state, data);
+            _logger.LogInformation("Connection state \"{state}\" for {@JObject}", state, JsonConvert.SerializeObject(data));
 
             switch (state)
             {
@@ -252,9 +252,7 @@ namespace Prime.Services
                     }
                 };
 
-            _logger.LogInformation("Credential offer for connection ID \"{connectionId}\" for {@JObject}", connectionId, credentialOffer);
-            System.Console.WriteLine($"Credential offer for connection ID \"{connectionId}\"");
-            System.Console.WriteLine(JsonConvert.SerializeObject(credentialOffer));
+            _logger.LogInformation("Credential offer for connection ID \"{connectionId}\" for {@JObject}", connectionId, JsonConvert.SerializeObject(credentialOffer));
 
             return credentialOffer;
         }
