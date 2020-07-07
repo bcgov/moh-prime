@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using Prime.Models;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Security.Cryptography.X509Certificates;
 using System.IO;
 
 namespace Prime.Services
@@ -50,6 +53,9 @@ namespace Prime.Services
         private readonly IDocumentService _documentService;
         private readonly IPdfService _pdfService;
         private readonly IOrganizationService _organizationService;
+        private readonly IChesClient _chesClient;
+
+        private readonly ISmtpEmailClient _smtpEmailClient;
 
         public EmailService(
             ApiDbContext context,
@@ -57,13 +63,17 @@ namespace Prime.Services
             IRazorConverterService razorConverterService,
             IDocumentService documentService,
             IPdfService pdfService,
-            IOrganizationService organizationService)
+            IOrganizationService organizationService,
+            IChesClient chesClient,
+            ISmtpEmailClient smtpEmailClient)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
             _documentService = documentService;
             _pdfService = pdfService;
             _organizationService = organizationService;
+            _chesClient = chesClient;
+            _smtpEmailClient = smtpEmailClient;
         }
 
         public static bool IsValidEmail(string email)
@@ -118,7 +128,7 @@ namespace Prime.Services
                 ? "/Views/Emails/OfficeManagerEmail.cshtml"
                 : "/Views/Emails/VendorEmail.cshtml";
             string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token, provisionerName));
-            await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<Attachment>());
+            await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
 
         // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
@@ -175,8 +185,7 @@ namespace Prime.Services
                 ("SiteRegistrationReview.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
                 ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(businessLicenceTemplate, businessLicenceDoc))
             }
-            .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)))
-            .Select(pdf => new Attachment(new MemoryStream(pdf.Content), pdf.Filename, "application/pdf"));
+            .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
 
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
         }
@@ -198,20 +207,20 @@ namespace Prime.Services
 
         private async Task Send(string from, string to, string subject, string body)
         {
-            await Send(from, new[] { to }, new string[0], subject, body, Enumerable.Empty<Attachment>());
+            await Send(from, new[] { to }, new string[0], subject, body, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
 
-        private async Task Send(string from, string to, string subject, string body, IEnumerable<Attachment> attachments)
+        private async Task Send(string from, string to, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             await Send(from, new[] { to }, new string[0], subject, body, attachments);
         }
 
-        private async Task Send(string from, IEnumerable<string> to, string subject, string body, IEnumerable<Attachment> attachments)
+        private async Task Send(string from, IEnumerable<string> to, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             await Send(from, to, new string[0], subject, body, attachments);
         }
 
-        private async Task Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<Attachment> attachments)
+        private async Task Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             if (!to.Any())
             {
@@ -227,58 +236,15 @@ namespace Prime.Services
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }
 
-            MailMessage mail = new MailMessage()
+            // If CHES Email Service is running and CHES_ENABLED = true, else send through smtp
+            if (PrimeConstants.CHES_ENABLED == "true" && await _chesClient.HealthCheckAsync())
             {
-                From = fromAddress,
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true,
-            };
-
-            foreach (var address in toAddresses)
-            {
-                mail.To.Add(address);
+                await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
             }
-
-            foreach (var address in ccAddresses)
+            else
             {
-                mail.CC.Add(address);
+                await _smtpEmailClient.SendAsync(from, to, cc, subject, body, attachments);
             }
-
-            foreach (var attachment in attachments)
-            {
-                mail.Attachments.Add(attachment);
-            }
-
-            SmtpClient smtp = new SmtpClient(PrimeConstants.MAIL_SERVER_URL, PrimeConstants.MAIL_SERVER_PORT);
-            try
-            {
-                await smtp.SendMailAsync(mail);
-            }
-            catch (Exception ex)
-            {
-                if (ex is InvalidOperationException
-                    || ex is SmtpException
-                    || ex is SmtpFailedRecipientException
-                    || ex is SmtpFailedRecipientsException)
-                {
-                    // TODO log mail exception
-                }
-
-                throw;
-            }
-            finally
-            {
-                smtp.Dispose();
-                mail.Dispose();
-            }
-        }
-
-        public class EmailServiceException : Exception
-        {
-            public EmailServiceException() { }
-            public EmailServiceException(string message) : base(message) { }
-            public EmailServiceException(string message, Exception inner) : base(message, inner) { }
         }
     }
 }
