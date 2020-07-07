@@ -1,58 +1,71 @@
+/* Jenkinsfile.promotion
+ *
+ * After merging the test branch into the master branch, this will work to 
+ * build and deploy changes to the OpenShift production environment.
+ * 
+ * This is achieved via the following stages:
+ *   1. Approval is provided by user in Jenkins console log.
+ *   2. Promotion of Master
+ *   3. Build & deploy to Demo environment
+ *   4. Build & deploy to Production environment
+ *
+ */
+
 pipeline {
     agent none
     stages {
-        stage('Promote Master to Test') {
-            options {
-                timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
-            }
-            when { expression { ( BRANCH_NAME == 'master' ) } }
-            environment {
-                    BRANCH_LOWER = BRANCH_NAME.toLowerCase()
-                    VANITY_URL = "test.pharmanetenrolment.gov.bc.ca"
-                    SCHEMA = "https"
-                    PORT = "8443"
-                    FRONTEND_ARGS = "-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
-                    API_ARGS = "-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
-                    SUFFIX= "-test"
-            }
-            agent { label 'master' }
-            steps {
-                script {
-                    echo "Test (MASTER) ..."
-                    sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh build document-manager test -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy postgres test -p SUFFIX=${SUFFIX}"
-                    // sh "./player.sh deploy mongo test -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh toolbelt schemaspy test"
-                }
-            }
-        }
-        stage('Quality Check') {
-            options {
-                timeout(time: 30, unit: 'MINUTES')   // timeout on this stage
-            }
-            when { expression { ( BRANCH_NAME == 'master' ) } }
-            parallel {
-                stage('SonarQube Code Check') {
-                    agent { label 'code-tests' }
-                    steps {
-                        sh "./player.sh scan"
-                    }      
-                }
-                stage('ZAP') {
-                    agent { label 'code-tests' }
-                    steps {
-                        checkout scm
-                        echo "Scanning..."
-                        sh "./player.sh zap frontend"
-                    }
-                }
-            }
-        }
-        stage('Approve Promotion of Demo & Production') {
+        // stage('Promote Master to Test') {
+        //     options {
+        //         timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
+        //     }
+        //     when { expression { ( BRANCH_NAME == 'master' ) } }
+        //     environment {
+        //             BRANCH_LOWER = BRANCH_NAME.toLowerCase()
+        //             VANITY_URL = "test.pharmanetenrolment.gov.bc.ca"
+        //             SCHEMA = "https"
+        //             PORT = "8443"
+        //             FRONTEND_ARGS = "-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
+        //             API_ARGS = "-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
+        //             SUFFIX= "-test"
+        //     }
+        //     agent { label 'master' }
+        //     steps {
+        //         script {
+        //             echo "Test (MASTER) ..."
+        //             sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
+        //             sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+        //             sh "./player.sh build document-manager test -p SUFFIX=${SUFFIX}"
+        //             sh "./player.sh deploy postgres test -p SUFFIX=${SUFFIX}"
+        //             // sh "./player.sh deploy mongo test -p SUFFIX=${SUFFIX}"
+        //             sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
+        //             sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+        //             sh "./player.sh toolbelt schemaspy test"
+        //         }
+        //     }
+        // }
+        // stage('Quality Check') {
+        //     options {
+        //         timeout(time: 30, unit: 'MINUTES')   // timeout on this stage
+        //     }
+        //     when { expression { ( BRANCH_NAME == 'master' ) } }
+        //     parallel {
+        //         stage('SonarQube Code Check') {
+        //             agent { label 'code-tests' }
+        //             steps {
+        //                 sh "./player.sh scan"
+        //             }      
+        //         }
+        //         stage('ZAP') {
+        //             agent { label 'code-tests' }
+        //             steps {
+        //                 checkout scm
+        //                 echo "Scanning..."
+        //                 sh "./player.sh zap frontend"
+        //             }
+        //         }
+        //     }
+        // }
+        stage('Approve Promotion of Master to Demo & Production Environment') {
             options {
                 timeout(time: 6, unit: 'DAYS')   // timeout on this stage
             }
@@ -70,7 +83,7 @@ pipeline {
                 }
             }
         }
-        stage('Promote to Demo & Production') {
+        stage('Promote Master to Demo & Production Environment') {
             options {
                 timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
             }

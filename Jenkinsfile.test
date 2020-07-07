@@ -1,7 +1,14 @@
+/* Jenkinsfile.test
+ *
+ * After merging the develop branch into the test branch, this will work to 
+ * build and deploy changes to the OpenShift test environment. 
+ *
+ */
+
 pipeline {
     agent none
     stages {
-        stage('Build Test Environment') {
+        stage('Build & Deploy Test Environment') {
             options {
                 timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
             }
@@ -18,11 +25,11 @@ pipeline {
             agent { label 'test' }
             steps {
                 script {
-                    echo "Test (TEST) ..."
+                    echo "Build & deploy (TEST) branch ..."
                     sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy postgres test -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy mongo test -p SUFFIX=${SUFFIX}"
+                    // sh "./player.sh deploy mongo test -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh toolbelt schemaspy test"
@@ -51,67 +58,5 @@ pipeline {
                 }
             }
         }
-        stage('Approve Promotion of Demo & Production') {
-            options {
-                timeout(time: 6, unit: 'DAYS')   // timeout on this stage
-            }
-            when { expression { ( BRANCH_NAME == 'master' ) } }
-            steps {
-                script {
-                    def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Deploy to Demo & Production?", ok: "Yes", parameters: [
-                            string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Demo & Production?')
-                            ])
-                    if (IS_APPROVED != 'yes') {
-                        currentBuild.result = "SUCCESS"
-                        echo "User cancelled deployment"
-                    }
-                }
-            }
-        }
-        // stage('Promote to Demo & Production') {
-        //     options {
-        //         timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
-        //     }
-        //     when { expression { ( BRANCH_NAME == 'master' ) } }
-        //     parallel {
-        //         stage('Promote Master to Demo') {
-        //             agent { label 'master' }
-        //             environment {
-        //                     VANITY_URL="demo.pharmanetenrolment.gov.bc.ca"
-        //                     SCHEMA="https"
-        //                     PORT="8443"
-        //                     FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
-        //                     API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
-        //                     SUFFIX="-demo"
-        //             }
-        //             steps {
-        //                 script {
-        //                     echo "Demo (MASTER) ..."
-        //                     sh "./player.sh build api test ${API_ARGS} -p SUFFIX='-demo'"
-        //                     sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
-        //                     sh "./player.sh deploy postgres test -p SUFFIX='-demo'"
-        //                     sh "./player.sh deploy mongo test -p SUFFIX='-demo'"
-        //                     sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX='-demo'"
-        //                     sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
-        //                 }
-        //             }
-        //         }
-        //         stage('Promote Master to Production') {
-        //             agent { label 'master' }
-        //             steps {
-        //                 script {
-        //                     echo "Deploy to Production..."
-        //                     sh "./player.sh build api prod"
-        //                     sh "./player.sh build frontend prod"
-        //                     sh "./player.sh deploy postgres prod"
-        //                     sh "./player.sh deploy api prod"
-        //                     sh "./player.sh deploy frontend prod"
-        //                     sh "./player.sh toolbelt schemaspy prod"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
     }
 }
