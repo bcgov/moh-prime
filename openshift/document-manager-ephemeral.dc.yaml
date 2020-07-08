@@ -311,15 +311,11 @@ objects:
       name: ${NAME}${SUFFIX}-migrate
       resources: {}
       volumeMounts:
-      - mountPath: /app/
-        name: ${NAME}${SUFFIX}-pvc
       - mountPath: /app/certs
         name: vanity-tls-certs
         readOnly: true
     restartPolicy: OnFailure
     volumes:
-    - name: ${NAME}${SUFFIX}-pvc
-      emptyDir: {}
     - name: vanity-tls-certs
       secret:
         defaultMode: 420
