@@ -140,7 +140,7 @@ namespace Prime.Services
         {
             var state = data.Value<string>("state");
 
-            _logger.LogInformation("Connection state \"{state}\" for {@JObject}", state, data);
+            _logger.LogInformation("Connection state \"{state}\" for {@JObject}", state, JsonConvert.SerializeObject(data));
 
             switch (state)
             {
