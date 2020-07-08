@@ -54,22 +54,8 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      io.kompose.service: ${NAME}${SUFFIX}-backend-pvc
+      io.kompose.service: ${NAME}${SUFFIX}-pvc
     name: ${NAME}${SUFFIX}-backend-pvc
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 100Mi
-  status: {}
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    creationTimestamp: null
-    labels:
-      io.kompose.service: ${NAME}${SUFFIX}-migrate-pvc
-    name: ${NAME}${SUFFIX}-migrate-pvc
   spec:
     accessModes:
     - ReadWriteOnce
