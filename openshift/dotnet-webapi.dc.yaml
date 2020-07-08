@@ -202,7 +202,12 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     key: KEYCLOAK_TOKEN_URL
-                    name: "keycloak" 
+                    name: "keycloak"
+              - name: VERIFIABLE_CREDENTIAL_WEBHOOK_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: VERIFIABLE_CREDENTIAL_WEBHOOK_KEY
+                    name: "verifiable-credential-secrets"
             image: " "
             name: primeapi
             ports:
