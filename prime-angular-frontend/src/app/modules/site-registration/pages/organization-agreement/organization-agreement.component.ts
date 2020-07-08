@@ -120,7 +120,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         this.utilsService.downloadDocument(blob, 'Organization-Agreement')
         this.hasDownloadedFile = true;
       });
-
   }
 
   public onBack() {
