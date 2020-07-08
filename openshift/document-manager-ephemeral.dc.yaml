@@ -55,7 +55,7 @@ objects:
     creationTimestamp: null
     labels:
       io.kompose.service: ${NAME}${SUFFIX}-pvc
-    name: ${NAME}${SUFFIX}-backend-pvc
+    name: ${NAME}${SUFFIX}-pvc
   spec:
     accessModes:
     - ReadWriteOnce
