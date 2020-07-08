@@ -26,8 +26,8 @@ import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
+import { SafePipe } from '@shared/pipes/safe.pipe';
 import { VendorPipe } from '@shared/pipes/vendor.pipe';
-
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import {
@@ -73,6 +73,7 @@ import { DocumentUploadComponent } from './components/document-upload/document-u
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 registerPlugin(FilePondPluginFileValidateType);
+import { ImageComponent } from './components/dialogs/content/image/image.component';
 @NgModule({
   declarations: [
     CapitalizePipe,
@@ -88,9 +89,10 @@ registerPlugin(FilePondPluginFileValidateType);
     YesNoPipe,
     WeekdayPipe,
     FullnamePipe,
+    SafeHtmlPipe,
+    SafePipe,
     VendorPipe,
     CasePipe,
-    SafeHtmlPipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -120,6 +122,7 @@ registerPlugin(FilePondPluginFileValidateType);
     ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
     FeedbackComponent,
+    ImageComponent,
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
     SiteReviewComponent,
@@ -129,7 +132,8 @@ registerPlugin(FilePondPluginFileValidateType);
     PageSubheader2TitleDirective,
     PageSubheader2SummaryDirective,
     PageSubheader2MoreInfoDirective,
-    DocumentUploadComponent
+    DocumentUploadComponent,
+    ImageComponent
   ],
   imports: [
     CommonModule,
@@ -167,6 +171,7 @@ registerPlugin(FilePondPluginFileValidateType);
     WeekdayPipe,
     FullnamePipe,
     SafeHtmlPipe,
+    SafePipe,
     VendorPipe,
     AddressComponent,
     DashboardComponent,

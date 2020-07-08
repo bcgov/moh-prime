@@ -9,6 +9,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using QRCoder;
 
 namespace Prime.Controllers
 {
@@ -88,7 +89,7 @@ namespace Prime.Controllers
             else
             {
                 var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
-                enrollees = enrollee != null ? new[] { enrollee } : new Enrollee[0];
+                enrollees = (enrollee != null) ? new[] { enrollee } : new Enrollee[0];
             }
 
             return Ok(ApiResponse.Result(enrollees));

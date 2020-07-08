@@ -69,7 +69,6 @@ namespace Prime.Services
             return entity;
         }
 
-
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
             IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery()
@@ -271,7 +270,8 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.AssignedPrivileges)
                     .ThenInclude(ap => ap.Privilege)
-                .Include(e => e.AccessTerms);
+                .Include(e => e.AccessTerms)
+                .Include(e => e.Credential);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
