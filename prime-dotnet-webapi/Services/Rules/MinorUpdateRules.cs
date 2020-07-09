@@ -114,6 +114,11 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
+            if (!CompareCollections(comparitor, enrollee.SelfDeclarationDocuments, _updatedProfile.SelfDeclarationDocuments))
+            {
+                return Task.FromResult(false);
+            }
+
             return Task.FromResult(true);
         }
 
@@ -164,6 +169,12 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<SelfDeclaration>(x => x.Id);
             config.IgnoreProperty<SelfDeclaration>(x => x.SelfDeclarationType);
             config.IgnoreProperty<SelfDeclaration>(x => x.EnrolleeId);
+            config.IgnoreProperty<SelfDeclaration>(x => x.Enrollee);
+
+            config.IgnoreProperty<SelfDeclarationDocument>(x => x.Id);
+            config.IgnoreProperty<SelfDeclarationDocument>(x => x.SelfDeclarationType);
+            config.IgnoreProperty<SelfDeclarationDocument>(x => x.EnrolleeId);
+            config.IgnoreProperty<SelfDeclarationDocument>(x => x.Enrollee);
 
             return new CompareLogic(config);
         }

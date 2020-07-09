@@ -70,6 +70,8 @@ objects:
             value: ${OC_APP}
           - name: REDIRECT_URL
             value: "${REDIRECT_URL}"
+          - name: DOCUMENT_MANAGER_URL
+            value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/"
           - name: KEYCLOAK_CLIENT_ID
             valueFrom:
               secretKeyRef:

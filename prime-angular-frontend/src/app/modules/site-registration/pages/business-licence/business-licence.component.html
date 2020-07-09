@@ -11,7 +11,7 @@
 
   <app-document-upload (completed)="onUpload($event)"
                        componentName="business-licence"
-                       multiple=false>
+                       [multiple]="false">
   </app-document-upload>
 
   <app-alert *ngIf="hasNoLicenceError"

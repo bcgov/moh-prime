@@ -218,6 +218,7 @@ namespace PrimeTests.UnitTests
                 typeof(ICollection<Job>),
                 typeof(ICollection<EnrolleeOrganizationType>),
                 typeof(ICollection<SelfDeclaration>),
+                typeof(ICollection<SelfDeclarationDocument>),
             };
 
             var unknownTypes = typeof(EnrolleeProfileViewModel)

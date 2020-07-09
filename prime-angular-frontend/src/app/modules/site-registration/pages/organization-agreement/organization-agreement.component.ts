@@ -105,7 +105,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public onUpload(event: BaseDocument) {
     const organizationId = this.organizationService.organization.id;
     this.organizationResource
-      .addSignedAgreement(organizationId, event.documentGuid, event.filename)
+      .addSignedAgreement(organizationId, event.documentGuid, event.fileName)
       .subscribe();
 
     this.hasUploadedFile = true;
@@ -114,13 +114,12 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   public onDownload() {
     this.organizationResource
-      .downloadOrganizationAgreement()
+      .getUnsignedOrganizationAgreement()
       .subscribe((base64: string) => {
         const blob = this.utilsService.base64ToBlob(base64);
-        this.utilsService.downloadDocument(blob, 'Organization-Agreement');
+        this.utilsService.downloadDocument(blob, 'Organization-Agreement')
         this.hasDownloadedFile = true;
       });
-
   }
 
   public onBack() {
@@ -139,10 +138,9 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   public downloadSignedAgreement() {
     this.organizationResource
-      .downloadLatestSignedAgreement(this.organizationService.organization.id)
-      .subscribe((base64: string) => {
-        const blob = this.utilsService.base64ToBlob(base64);
-        this.utilsService.downloadDocument(blob, 'Signed-organization-agreement');
+      .getDownloadTokenForLatestSignedAgreement(this.organizationService.organization.id)
+      .subscribe((token: string) => {
+        this.utilsService.downloadToken(token);
       });
   }
 
