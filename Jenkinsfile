@@ -23,7 +23,6 @@ pipeline {
                     checkout scm
                 }
             }
-          }
         }
         stage('Build Branch') {
             options {
