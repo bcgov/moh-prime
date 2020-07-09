@@ -13,8 +13,8 @@ namespace Prime.Services.Clients
         private readonly HttpClient _client;
         private readonly ILogger _logger;
 
-        private static readonly string SCHEMA_NAME = "enrollee";
-        private static readonly string SCHEMA_VERSION = "1.0";
+        private static readonly string SchemaName = "enrollee";
+        private static readonly string SchemaVersion = "1.0";
 
         public VerifiableCredentialClient(
             HttpClient client,
@@ -84,7 +84,7 @@ namespace Prime.Services.Clients
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.GetAsync($"schemas/created?schema_version={SCHEMA_VERSION}&schema_issuer_did={did}&schema_name={SCHEMA_NAME}");
+                response = await _client.GetAsync($"schemas/created?schema_version={SchemaVersion}&schema_issuer_did={did}&schema_name={SchemaName}");
             }
             catch (Exception ex)
             {
