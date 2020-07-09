@@ -827,18 +827,6 @@
           }
         },
         {
-          "id": "20f73420-b2a4-43c9-9e1a-8070e05035a5",
-          "name": "set audience to prime-web-api",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-audience-mapper",
-          "consentRequired": false,
-          "config": {
-            "id.token.claim": "false",
-            "access.token.claim": "true",
-            "included.custom.audience": "prime-web-api"
-          }
-        },
-        {
           "id": "a68a4d7b-ca16-4f4c-b852-8fcf05f0ae44",
           "name": "Client ID",
           "protocol": "openid-connect",
@@ -863,6 +851,21 @@
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "56151b29-1bd7-431e-a40f-3d1713f5faa1",
+          "name": "set audience to prime-web-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.value": "prime-web-api",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "aud",
             "jsonType.label": "String"
           }
         }
@@ -1342,18 +1345,6 @@
           }
         },
         {
-          "id": "8741a47d-fcc9-45ba-ae22-b5c7e31feec8",
-          "name": "set audience to prime-web-api",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-audience-mapper",
-          "consentRequired": false,
-          "config": {
-            "id.token.claim": "false",
-            "access.token.claim": "true",
-            "included.custom.audience": "prime-web-api"
-          }
-        },
-        {
           "id": "87baf495-7163-4aaf-bd67-2e661a3d6f7e",
           "name": "feature-site_registration",
           "protocol": "openid-connect",
@@ -1371,6 +1362,21 @@
           "consentRequired": false,
           "config": {
             "role": "feature_vc_issuance"
+          }
+        },
+        {
+          "id": "232f431e-8e8a-47c8-89c7-d73afe67a336",
+          "name": "set audience to prime-web-api",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.value": "prime-web-api",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "aud",
+            "jsonType.label": "String"
           }
         },
         {
