@@ -27,18 +27,18 @@ namespace Prime.Controllers
         /// <summary>
         /// Handle webhook events sent from the issuing agent.
         /// </summary>
-        /// <param name="accessTokenId"></param>
+        /// <param name="apiKey"></param>
         /// <param name="topic"></param>
         /// <param name="data"></param>
         // Webhooks explained "In Soviet Russia API call you!" - Jason Aitchison 2020
-        [HttpPost("/api/webhooks/{accessTokenId}/topic/{topic}", Name = nameof(Webhook))]
+        [HttpPost("/api/webhooks/{api-key}/topic/{topic}", Name = nameof(Webhook))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         // TODO update to response code 202 when queue has been added for webhooks
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> Webhook(string accessTokenId, string topic, [FromBody] JObject data)
+        public async Task<ActionResult> Webhook(string apiKey, string topic, [FromBody] JObject data)
         {
-            if (accessTokenId != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
+            if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
             {
                 return Forbid();
             }
