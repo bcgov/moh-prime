@@ -51,9 +51,6 @@ namespace Prime.Services
         // test agent schema id
         // private static readonly string SCHEMA_ID = "TVmQfMZwLFWWK3z1RLgFBR:2:enrollee:1.0";
 
-        private string SCHEMA_ID;
-        private string ISSUER_DID;
-
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
         private readonly IEnrolleeService _enrolleeService;
         private readonly ILogger _logger;
@@ -75,8 +72,8 @@ namespace Prime.Services
         public async Task<JObject> CreateConnectionAsync(Enrollee enrollee)
         {
             var alias = enrollee.Id.ToString();
-            ISSUER_DID = await _verifiableCredentialClient.GetIssuerDidAsync();
-            SCHEMA_ID = await _verifiableCredentialClient.GetSchemaId(ISSUER_DID);
+            var ISSUER_DID = await _verifiableCredentialClient.GetIssuerDidAsync();
+            var SCHEMA_ID = await _verifiableCredentialClient.GetSchemaId(ISSUER_DID);
             var invitation = await _verifiableCredentialClient.CreateInvitationAsync(alias);
             var invitationUrl = invitation.Value<string>("invitation_url");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
@@ -237,6 +234,8 @@ namespace Prime.Services
         // Create the credential offer.
         private async Task<JObject> CreateCredentialOfferAsync(string connectionId, JArray attributes)
         {
+            var ISSUER_DID = await _verifiableCredentialClient.GetIssuerDidAsync();
+            var SCHEMA_ID = await _verifiableCredentialClient.GetSchemaId(ISSUER_DID);
             var schema = (await _verifiableCredentialClient.GetSchema(SCHEMA_ID)).Value<JObject>("schema");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
 
