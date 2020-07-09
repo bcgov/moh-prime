@@ -13,16 +13,18 @@ pipeline {
         disableResume()
     }
     stages {
-        // stage('Checkout') {
-        //   steps {
-        //     script {
-        //       // Found this in almost all the tutorials:
-        //       // Q. Wouldn't we want to clean the workspace?
-        //       // cleanWs()
-        //       // checkout scm
-        //     }
-        //   }
-        // }
+        stage('Checkout') {
+            options {
+                timeout(time: 10, unit: 'MINUTES') // timeout on this stage
+            }
+            agent { label 'master' }
+            steps {
+                script {
+                    checkout scm
+                }
+            }
+          }
+        }
         stage('Build Branch') {
             options {
                 timeout(time: 90, unit: 'MINUTES') // timeout on this stage
@@ -30,7 +32,7 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    checkout scm
+                    // checkout scm
                     echo "Building ..."
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
@@ -82,7 +84,8 @@ pipeline {
           steps {
             script {
               echo "Running integrity tests..."
-              // dotnetTests
+              echo "$GIT_BRANCH"
+              echo "$BRANCH_NAME"
             }
           }
         }
