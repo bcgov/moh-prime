@@ -54,22 +54,8 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      io.kompose.service: ${NAME}${SUFFIX}-backend-pvc
-    name: ${NAME}${SUFFIX}-backend-pvc
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 100Mi
-  status: {}
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    creationTimestamp: null
-    labels:
-      io.kompose.service: ${NAME}${SUFFIX}-migrate-pvc
-    name: ${NAME}${SUFFIX}-migrate-pvc
+      io.kompose.service: ${NAME}${SUFFIX}-pvc
+    name: ${NAME}${SUFFIX}-pvc
   spec:
     accessModes:
     - ReadWriteOnce
@@ -325,15 +311,11 @@ objects:
       name: ${NAME}${SUFFIX}-migrate
       resources: {}
       volumeMounts:
-      - mountPath: /app/
-        name: ${NAME}${SUFFIX}-pvc
       - mountPath: /app/certs
         name: vanity-tls-certs
         readOnly: true
     restartPolicy: OnFailure
     volumes:
-    - name: ${NAME}${SUFFIX}-pvc
-      emptyDir: {}
     - name: vanity-tls-certs
       secret:
         defaultMode: 420

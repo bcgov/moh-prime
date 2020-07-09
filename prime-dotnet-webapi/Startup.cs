@@ -64,6 +64,7 @@ namespace Prime
             services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPdfService, PdfService>();
+            services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
 
             ConfigureClients(services);
 
@@ -141,6 +142,12 @@ namespace Prime
                 Address = PrimeConstants.KEYCLOAK_TOKEN_URL,
                 ClientId = PrimeConstants.DOCUMENT_MANAGER_CLIENT_ID,
                 ClientSecret = PrimeConstants.DOCUMENT_MANAGER_CLIENT_SECRET,
+            });
+
+            services.AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeConstants.VERIFIABLE_CREDENTIAL_API_URL);
+                client.DefaultRequestHeaders.Add("x-api-key", PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY);
             });
 
             services.AddTransient<ChesBearerTokenHandler>()

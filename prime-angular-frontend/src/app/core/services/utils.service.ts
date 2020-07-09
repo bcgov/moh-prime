@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { WindowRefService } from './window-ref.service';
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 export type SortWeight = -1 | 0 | 1;
 
@@ -13,6 +14,7 @@ export class UtilsService {
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
+    @Inject(APP_CONFIG) protected config: AppConfig,
     private windowRef: WindowRefService
   ) {
     this.window = windowRef.nativeWindow;
@@ -122,5 +124,13 @@ export class UtilsService {
       URL.revokeObjectURL(data);
       link.remove();
     }, 100);
+  }
+
+  /**
+   * @description
+   * Download a document using a document manager download token.
+   */
+  public downloadToken(token: string): void {
+    window.location.replace(`${this.config.documentManagerUrl}documents/downloads/${token}`);
   }
 }

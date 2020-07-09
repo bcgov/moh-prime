@@ -1296,6 +1296,45 @@ namespace Prime.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Prime.Models.Credential", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset?>("AcceptedCredentialDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Alias")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Base64QRCode")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CredentialDefinitionId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SchemaId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Credential");
+                });
+
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
                 {
                     b.Property<int>("PrivilegeId")
@@ -4635,6 +4674,9 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<int?>("CredentialId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
@@ -4708,6 +4750,8 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdjudicatorId");
+
+                    b.HasIndex("CredentialId");
 
                     b.HasIndex("GPID")
                         .IsUnique();
@@ -12425,6 +12469,10 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
                         .WithMany("Enrollees")
                         .HasForeignKey("AdjudicatorId");
+
+                    b.HasOne("Prime.Models.Credential", "Credential")
+                        .WithMany()
+                        .HasForeignKey("CredentialId");
 
                     b.HasOne("Prime.Models.MailingAddress", "MailingAddress")
                         .WithMany()

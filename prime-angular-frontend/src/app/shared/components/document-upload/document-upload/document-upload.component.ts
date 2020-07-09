@@ -12,11 +12,12 @@ import tus from 'tus-js-client';
 import { EventEmitter } from '@angular/core';
 
 export class BaseDocument {
-  filename: string;
+  id: number;
+  fileName: string;
   documentGuid: string;
 
-  constructor(filename: string, documentGuid: string) {
-    this.filename = filename;
+  constructor(fileName: string, documentGuid: string) {
+    this.fileName = fileName;
     this.documentGuid = documentGuid;
   }
 }
@@ -27,16 +28,13 @@ export class BaseDocument {
   styleUrls: ['./document-upload.component.scss']
 })
 export class DocumentUploadComponent implements OnInit {
-
-  @Output() completed: EventEmitter<BaseDocument> = new EventEmitter();
-
+  @Input() public componentName: string;
+  @Input() public multiple: boolean;
+  @Output() public completed: EventEmitter<BaseDocument> = new EventEmitter();
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
   public filePondOptions: { [key: string]: any };
   public filePondUploadProgress = 0;
   public filePondFiles = [];
-
-  @Input() public componentName: string;
-  @Input() public multiple: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,7 +48,6 @@ export class DocumentUploadComponent implements OnInit {
   ) {
     this.filePondOptions = {
       class: `prime-filepond-${this.componentName}`,
-      multiple: !!this.multiple,
       labelIdle: 'Click to Browse or Drop files here',
       acceptedFileTypes: ['image/jpeg', 'image/png'],
       fileValidateTypeDetectType: (source: any, type: string) => new Promise((resolve, reject) => {
@@ -64,11 +61,15 @@ export class DocumentUploadComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
+    this.filePondOptions = {
+      ...this.filePondOptions,
+      multiple: !!this.multiple
+    };
   }
 
   public onFilePondInit() {
-    this.logger.info('FilePond has initialised', this.filePondComponent);
+    this.logger.info('FilePond has initialized', this.filePondComponent);
   }
 
   public async onFilePondAddFile(event: any) {
@@ -102,5 +103,4 @@ export class DocumentUploadComponent implements OnInit {
       upload.start();
     }
   }
-
 }

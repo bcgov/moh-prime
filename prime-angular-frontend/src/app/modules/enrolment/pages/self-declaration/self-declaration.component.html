@@ -85,7 +85,7 @@
 
             <app-document-upload (completed)="onHasConvictionUpload($event)"
                                  componentName="has-conviction"
-                                 multiple=true>
+                                 [multiple]="true">
             </app-document-upload>
 
           </ol>
@@ -148,7 +148,7 @@
 
             <app-document-upload (completed)="onHasRegistrationSuspendedUpload($event)"
                                  componentName="has-registration-suspended"
-                                 multiple=true>
+                                 [multiple]="true">
             </app-document-upload>
           </ol>
         </div>
@@ -205,7 +205,7 @@
 
             <app-document-upload (completed)="onHasDisciplinaryActionUpload($event)"
                                  componentName="has-disciplinary-action"
-                                 multiple=true>
+                                 [multiple]="true">
             </app-document-upload>
           </ol>
         </div>
@@ -264,7 +264,7 @@
 
             <app-document-upload (completed)="onHasPharmanetSuspendedUpload($event)"
                                  componentName="has-pharmanet-suspended"
-                                 multiple=true>
+                                 [multiple]="true">
             </app-document-upload>
           </ol>
         </div>

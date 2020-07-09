@@ -69,7 +69,6 @@ namespace Prime.Services
             return entity;
         }
 
-
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
             IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery()
@@ -269,9 +268,11 @@ namespace Prime.Services
                         .ThenInclude(esr => esr.StatusReason)
                 .Include(e => e.AccessAgreementNote)
                 .Include(e => e.SelfDeclarations)
+                .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.AssignedPrivileges)
                     .ThenInclude(ap => ap.Privilege)
-                .Include(e => e.AccessTerms);
+                .Include(e => e.AccessTerms)
+                .Include(e => e.Credential);
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
@@ -484,10 +485,9 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<SelfDeclarationDocument> AddSelfDeclarationDocumentAsync(int enrolleeId, int selfDeclarationTypeCode, SelfDeclarationDocument selfDeclarationDocument)
+        public async Task<SelfDeclarationDocument> AddSelfDeclarationDocumentAsync(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument)
         {
             selfDeclarationDocument.EnrolleeId = enrolleeId;
-            selfDeclarationDocument.SelfDeclarationTypeCode = selfDeclarationTypeCode;
             selfDeclarationDocument.UploadedDate = DateTimeOffset.Now;
 
             _context.SelfDeclarationDocuments.Add(selfDeclarationDocument);

@@ -331,7 +331,7 @@ namespace Prime.Controllers
 
         // Get: api/organizations/5/latest-signed-agreement
         /// <summary>
-        /// Gets the latest signed agreement by organization.
+        /// Gets the latest signed agreement by organization download token.
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpGet("{organizationId}/latest-signed-agreement", Name = nameof(GetLatestSignedAgreement))]
@@ -353,9 +353,9 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var signedAgreement = await _documentService.GetLatestSignedAgreementDocumentByOrganizationId(organizationId);
+            var token = await _documentService.GetDownloadTokenForLatestSignedAgreementDocument(organizationId);
 
-            return Ok(ApiResponse.Result(signedAgreement.Data));
+            return Ok(ApiResponse.Result(token));
         }
 
         // GET: api/Organizations/organization-agreement-document

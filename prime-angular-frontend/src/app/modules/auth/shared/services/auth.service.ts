@@ -13,6 +13,7 @@ export interface IAuthService {
   hasEnrollee(): boolean;
   isLoggedIn(): Promise<boolean>;
   isRegistrant(): boolean;
+  hasVCIssuance(): boolean;
 
   logout(redirectUri?: string): Promise<void>;
   login(options?: any): Promise<void>;
@@ -92,5 +93,9 @@ export class AuthService implements IAuthService {
 
   public isCommunityPharmacist(): boolean {
     return this.keycloakTokenService.isUserInRole(Role.FEATURE_COMMUNITY_PHARMACIST);
+  }
+
+  public hasVCIssuance(): boolean {
+    return this.keycloakTokenService.isUserInRole(Role.FEATURE_VC_ISSUANCE);
   }
 }
