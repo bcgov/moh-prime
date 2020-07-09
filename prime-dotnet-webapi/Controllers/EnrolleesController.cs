@@ -9,6 +9,10 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using System.Reflection;
+using System.IO;
+using System.Linq;
+using System;
 using QRCoder;
 
 namespace Prime.Controllers
@@ -27,6 +31,8 @@ namespace Prime.Controllers
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
         private readonly ISubmissionService _submissionService;
+        private readonly IDocumentService _documentService;
+        private readonly IRazorConverterService _razorConverterService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
@@ -35,7 +41,9 @@ namespace Prime.Controllers
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
-            ISubmissionService submissionService)
+            ISubmissionService submissionService,
+            IDocumentService documentService,
+            IRazorConverterService razorConverterService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
@@ -44,6 +52,8 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
             _emailService = emailService;
             _submissionService = submissionService;
+            _documentService = documentService;
+            _razorConverterService = razorConverterService;
         }
 
         // TODO revert after prod gpids are updated
@@ -563,20 +573,19 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/Enrollees/5/self-declaration-document/3\
+        // POST: api/Enrollees/5/self-declaration-document
         /// <summary>
         /// Create Self Declaration Document Link
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="selfDeclarationTypeCode"></param>
         /// <param name="selfDeclarationDocument"></param>
-        [HttpPost("{enrolleeId}/self-declaration-document/{selfDeclarationTypeCode}", Name = nameof(createSelfDeclarationDocument))]
+        [HttpPost("{enrolleeId}/self-declaration-document", Name = nameof(createSelfDeclarationDocument))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<SelfDeclarationDocument>> createSelfDeclarationDocument(int enrolleeId, int selfDeclarationTypeCode, SelfDeclarationDocument selfDeclarationDocument)
+        public async Task<ActionResult<SelfDeclarationDocument>> createSelfDeclarationDocument(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -590,9 +599,40 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var sdd = await _enrolleeService.AddSelfDeclarationDocumentAsync(enrolleeId, selfDeclarationTypeCode, selfDeclarationDocument);
+            var sdd = await _enrolleeService.AddSelfDeclarationDocumentAsync(enrolleeId, selfDeclarationDocument);
 
             return Ok(ApiResponse.Result(sdd));
+        }
+
+        // GET: api/Enrollees/{enrolleeId}/self-declaration-document/{selfDeclarationDocumentId}
+        /// <summary>
+        /// Get the self Declaration document download token.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="selfDeclarationDocumentId"></param>
+        [HttpGet("{enrolleeId}/self-declaration-document/{selfDeclarationDocumentId}", Name = nameof(getSelfDeclarationDocument))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> getSelfDeclarationDocument(int enrolleeId, int selfDeclarationDocumentId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            if (!User.CanView(enrollee))
+            {
+                return Forbid();
+            }
+
+            var token = await _documentService.GetDownloadTokenForSelfDeclarationDocument(selfDeclarationDocumentId);
+
+            return Ok(ApiResponse.Result(token));
         }
     }
 }

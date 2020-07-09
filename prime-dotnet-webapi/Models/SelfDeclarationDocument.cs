@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("SelfDeclarationDocument")]
-    public class SelfDeclarationDocument : BaseDocumentUpload
+    public class SelfDeclarationDocument : BaseDocumentUpload, IEnrolleeNavigationProperty
     {
         public int EnrolleeId { get; set; }
 

@@ -268,6 +268,7 @@ namespace Prime.Services
                         .ThenInclude(esr => esr.StatusReason)
                 .Include(e => e.AccessAgreementNote)
                 .Include(e => e.SelfDeclarations)
+                .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.AssignedPrivileges)
                     .ThenInclude(ap => ap.Privilege)
                 .Include(e => e.AccessTerms)
@@ -484,10 +485,9 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<SelfDeclarationDocument> AddSelfDeclarationDocumentAsync(int enrolleeId, int selfDeclarationTypeCode, SelfDeclarationDocument selfDeclarationDocument)
+        public async Task<SelfDeclarationDocument> AddSelfDeclarationDocumentAsync(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument)
         {
             selfDeclarationDocument.EnrolleeId = enrolleeId;
-            selfDeclarationDocument.SelfDeclarationTypeCode = selfDeclarationTypeCode;
             selfDeclarationDocument.UploadedDate = DateTimeOffset.Now;
 
             _context.SelfDeclarationDocuments.Add(selfDeclarationDocument);
