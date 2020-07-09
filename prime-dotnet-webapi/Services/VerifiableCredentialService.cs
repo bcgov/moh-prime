@@ -45,12 +45,6 @@ namespace Prime.Services
 
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
-        // dev agent schema id
-        // private static readonly string SCHEMA_ID = "QDaSxvduZroHDKkdXKV5gG:2:enrollee:2.0";
-
-        // test agent schema id
-        // private static readonly string SCHEMA_ID = "TVmQfMZwLFWWK3z1RLgFBR:2:enrollee:1.0";
-
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
         private readonly IEnrolleeService _enrolleeService;
         private readonly ILogger _logger;
@@ -72,11 +66,11 @@ namespace Prime.Services
         public async Task<JObject> CreateConnectionAsync(Enrollee enrollee)
         {
             var alias = enrollee.Id.ToString();
-            var ISSUER_DID = await _verifiableCredentialClient.GetIssuerDidAsync();
-            var SCHEMA_ID = await _verifiableCredentialClient.GetSchemaId(ISSUER_DID);
+            var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
+            var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
             var invitation = await _verifiableCredentialClient.CreateInvitationAsync(alias);
             var invitationUrl = invitation.Value<string>("invitation_url");
-            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
+            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
@@ -85,7 +79,7 @@ namespace Prime.Services
 
             enrollee.Credential = new Credential
             {
-                SchemaId = SCHEMA_ID,
+                SchemaId = schemaId,
                 CredentialDefinitionId = credentialDefinitionId,
                 Alias = alias,
                 Base64QRCode = qrCodeImageAsBase64
@@ -234,17 +228,17 @@ namespace Prime.Services
         // Create the credential offer.
         private async Task<JObject> CreateCredentialOfferAsync(string connectionId, JArray attributes)
         {
-            var ISSUER_DID = await _verifiableCredentialClient.GetIssuerDidAsync();
-            var SCHEMA_ID = await _verifiableCredentialClient.GetSchemaId(ISSUER_DID);
-            var schema = (await _verifiableCredentialClient.GetSchema(SCHEMA_ID)).Value<JObject>("schema");
-            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
+            var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
+            var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
+            var schema = (await _verifiableCredentialClient.GetSchema(schemaId)).Value<JObject>("schema");
+            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
             JObject credentialOffer = new JObject
                 {
                     { "connection_id", connectionId },
-                    { "issuer_did", ISSUER_DID },
-                    { "schema_id", SCHEMA_ID },
-                    { "schema_issuer_did", ISSUER_DID },
+                    { "issuer_did", issuerDid },
+                    { "schema_id", schemaId },
+                    { "schema_issuer_did", issuerDid },
                     { "schema_name", schema.Value<string>("name") },
                     { "schema_version", schema.Value<string>("version") },
                     { "cred_def_id", credentialDefinitionId },
