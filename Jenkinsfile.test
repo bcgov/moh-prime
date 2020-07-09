@@ -22,13 +22,15 @@ pipeline {
                     API_ARGS = "-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
                     SUFFIX= "-test"
             }
-            agent { label 'test' }
+            agent { label 'master' }
             steps {
                 script {
                     echo "Build & deploy (TEST) branch ..."
                     sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh build document-manager test -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy postgres test -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy document-manager test -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     // sh "./player.sh deploy mongo test -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
