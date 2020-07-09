@@ -246,9 +246,13 @@ export class EnrolmentStateService {
       };
       const selfDeclarations = Object.keys(selfDeclarationsTypes)
         .reduce((sds, sd) => {
+          const type = selfDeclarationsTypes[sd];
+          const selfDeclarationDetails = enrolment.selfDeclarations
+            .find(esd => esd.selfDeclarationTypeCode === type)
+            ?.selfDeclarationDetails;
           const adapted = {
-            [sd]: selfDeclarationsTypes[sd].selfDeclarationTypeCode ?? defaultValue,
-            [`${sd}Details`]: selfDeclarationsTypes[sd].selfDeclarationDetails ?? null
+            [sd]: (selfDeclarationDetails) ? true : defaultValue,
+            [`${sd}Details`]: (selfDeclarationDetails) ? selfDeclarationDetails : null
           };
           return { ...sds, ...adapted };
         }, {});
