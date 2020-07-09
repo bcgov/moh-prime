@@ -22,8 +22,10 @@ using Prime.Services;
 using Prime.Services.Clients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
-using System.Text;
 using System.Net.Http.Headers;
+using IdentityModel.Client;
+using IdentityModel;
+using Microsoft.Extensions.FileProviders;
 
 namespace Prime
 {
@@ -62,21 +64,9 @@ namespace Prime
             services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPdfService, PdfService>();
+            services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
 
-            if (PrimeConstants.ENVIRONMENT_NAME == "local")
-            {
-                services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
-            }
-            else
-            {
-                services.AddTransient<CollegeLicenceClientHandler>()
-                .AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
-                {
-                    var authBytes = ASCIIEncoding.ASCII.GetBytes($"{PrimeConstants.PHARMANET_API_USERNAME}:{PrimeConstants.PHARMANET_API_PASSWORD}");
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authBytes));
-                })
-                .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
-            }
+            ConfigureClients(services);
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
@@ -123,6 +113,60 @@ namespace Prime
             AuthenticationSetup.Initialize(services, Configuration, Environment);
         }
 
+        protected void ConfigureClients(IServiceCollection services)
+        {
+            if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            {
+                services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
+            }
+            else
+            {
+                services.AddTransient<CollegeLicenceClientHandler>()
+                .AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
+                {
+                    client.SetBasicAuthentication(PrimeConstants.PHARMANET_API_USERNAME, PrimeConstants.PHARMANET_API_PASSWORD);
+                })
+                .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
+            }
+
+            services.AddTransient<DocumentManagerBearerTokenHandler>()
+            .AddHttpClient<IDocumentManagerClient, DocumentManagerClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeConstants.DOCUMENT_MANAGER_URL.EnsureTrailingSlash());
+            })
+            .AddHttpMessageHandler<DocumentManagerBearerTokenHandler>();
+
+            services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
+            services.AddSingleton(new DocumentManagerClientCredentials
+            {
+                Address = PrimeConstants.KEYCLOAK_TOKEN_URL,
+                ClientId = PrimeConstants.DOCUMENT_MANAGER_CLIENT_ID,
+                ClientSecret = PrimeConstants.DOCUMENT_MANAGER_CLIENT_SECRET,
+            });
+
+            services.AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeConstants.VERIFIABLE_CREDENTIAL_API_URL);
+                client.DefaultRequestHeaders.Add("x-api-key", PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY);
+            });
+
+            services.AddTransient<ChesBearerTokenHandler>()
+            .AddHttpClient<IChesClient, ChesClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeConstants.CHES_API_URL.EnsureTrailingSlash());
+            })
+            .AddHttpMessageHandler<ChesBearerTokenHandler>();
+
+            services.AddSingleton(new ChesClientCredentials
+            {
+                Address = $"{ PrimeConstants.CHES_TOKEN_URL}/token",
+                ClientId = PrimeConstants.CHES_CLIENT_ID,
+                ClientSecret = PrimeConstants.CHES_CLIENT_SECRET
+            });
+
+            services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
+        }
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -152,6 +196,13 @@ namespace Prime
             // Matches request to an endpoint
             app.UseRouting();
             app.UseCors(AllowSpecificOrigins);
+
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+                RequestPath = new PathString("/Resources")
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();

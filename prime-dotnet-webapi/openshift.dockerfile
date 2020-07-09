@@ -4,8 +4,7 @@ FROM docker-registry.default.svc:5000/dqszvc-tools/sdk:3.1 AS build
 WORKDIR /opt/app-root/app
 
 USER 0
-RUN ls -alh /opt; \
-    mkdir -p /opt/app-root; \
+RUN mkdir -p /opt/app-root; \
     mkdir -p /opt/app-root/app
 
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
@@ -63,7 +62,7 @@ RUN apt-get update && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
     apt-get install -yqq --no-install-recommends postgresql-client-10 net-tools moreutils && \
-    apt-get install -yf libfontconfig1 libxrender1 xvfb && \
+    apt-get install -yf libfontconfig1 libxrender1 libgdiplus xvfb && \
     chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
     chmod +x entrypoint.sh && \

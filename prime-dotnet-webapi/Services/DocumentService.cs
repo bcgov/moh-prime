@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
+using Prime.Services.Clients;
 
 // TODO add logging
 namespace Prime.Services
@@ -14,52 +16,52 @@ namespace Prime.Services
     public class DocumentService : BaseService, IDocumentService
     {
         private readonly ISiteService _siteService;
-        private readonly HttpClient _client;
+        private readonly IOrganizationService _organizationService;
+
+        private readonly IDocumentManagerClient _documentManagerClient;
 
         public DocumentService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            ISiteService siteService)
+            ISiteService siteService,
+            IOrganizationService organizationService,
+            IDocumentManagerClient documentManagerClient)
             : base(context, httpContext)
         {
             _siteService = siteService;
-            _client = new HttpClient();
+            _organizationService = organizationService;
+            _documentManagerClient = documentManagerClient;
         }
 
-        public async Task<IEnumerable<Document>> GetBusinessLicenceDocumentsBySiteId(int siteId)
-        {
-            var result = new List<Document>();
-            var businessLicences = await _siteService.GetBusinessLicencesAsync(siteId);
-
-            foreach (var licence in businessLicences)
-            {
-                var document = await GetBusinessLicenceDocument(licence);
-                result.Add(document);
-            };
-
-            return result;
-        }
-
-        public async Task<Document> GetLatestBusinessLicenceDocumentBySiteId(int siteId)
+        public async Task<string> GetDownloadTokenForLatestBusinessLicenceDocument(int siteId)
         {
             var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
-            return await GetBusinessLicenceDocument(licence);
+            return await _documentManagerClient.CreateDownloadTokenAsync(licence.DocumentGuid);
         }
 
-        private async Task<Document> GetBusinessLicenceDocument(BusinessLicence licence)
+        public async Task<string> GetDownloadTokenForLatestSignedAgreementDocument(int organizationId)
         {
-            var request = new HttpRequestMessage
-            {
-                RequestUri = new Uri($"{PrimeConstants.DOCUMENT_MANAGER_URL}?token={licence.DocumentGuid}"),
-                Method = HttpMethod.Get
-            };
-            var response = await _client.SendAsync(request);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                return new Document(licence.FileName, response.Content.ReadAsByteArrayAsync().Result);
-            }
-
-            return null;
+            var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
+            return await _documentManagerClient.CreateDownloadTokenAsync(agreement.DocumentGuid);
         }
+
+        public async Task<Stream> GetStreamForLatestBusinessLicenceDocument(int siteId)
+        {
+            var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
+            return await _documentManagerClient.GetFileAsync(licence.DocumentGuid);
+        }
+        public async Task<Stream> GetStreamForLatestSignedAgreementDocument(int organizationId)
+        {
+            var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
+            return await _documentManagerClient.GetFileAsync(agreement.DocumentGuid);
+        }
+
+        public async Task<string> GetDownloadTokenForSelfDeclarationDocument(int selfDeclarationDocumentId)
+        {
+            var selfDeclarationDocument = await _context.SelfDeclarationDocuments
+                .Where(sa => sa.Id == selfDeclarationDocumentId).SingleAsync();
+            return await _documentManagerClient.CreateDownloadTokenAsync(selfDeclarationDocument.DocumentGuid);
+        }
+
     }
 }

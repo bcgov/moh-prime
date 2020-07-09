@@ -51,7 +51,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
     this.hasNoVendorError = false;
   }
 
-  public get vendorId(): FormControl {
+  public get vendorCode(): FormControl {
     return this.form.get('id') as FormControl;
   }
 

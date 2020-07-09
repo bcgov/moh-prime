@@ -1,8 +1,15 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Reflection;
 
 using Prime.Auth;
 using Prime.Models;
@@ -20,15 +27,18 @@ namespace Prime.Controllers
         private readonly IOrganizationService _organizationService;
         private readonly IPartyService _partyService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IDocumentService _documentService;
 
         public OrganizationsController(
             IOrganizationService organizationService,
             IPartyService partyService,
+            IDocumentService documentService,
             IRazorConverterService razorConverterService)
         {
             _organizationService = organizationService;
             _partyService = partyService;
             _razorConverterService = razorConverterService;
+            _documentService = documentService;
         }
 
         // GET: api/Organizations
@@ -253,6 +263,130 @@ namespace Prime.Controllers
 
             organization = await _organizationService.SubmitRegistrationAsync(organizationId);
             return Ok(ApiResponse.Result(organization));
+        }
+
+        // POST: api/organizations/5/signed-agreement
+        /// <summary>
+        /// Adds a new signed agreement to an organization.
+        /// </summary>
+        /// <param name="documentGuid"></param>
+        /// <param name="filename"></param>
+        /// <param name="organizationId"></param>
+        [HttpPost("{organizationId}/signed-agreement", Name = nameof(CreateSignedAgreement))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<SignedAgreement>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<SignedAgreement>> CreateSignedAgreement(int organizationId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            if (!User.CanEdit(organization.SigningAuthority))
+            {
+                return Forbid();
+            }
+
+            var agreement = await _organizationService.AddSignedAgreementAsync(organization.Id, documentGuid, filename);
+
+            return CreatedAtAction(
+                nameof(GetSignedAgreement),
+                new { organizationId = organization.Id },
+                ApiResponse.Result(agreement)
+            );
+        }
+
+        // Get: api/organizations/5/signed-agreement
+        /// <summary>
+        /// Gets the signed agreement for a organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpGet("{organizationId}/signed-agreement", Name = nameof(GetSignedAgreement))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<SignedAgreement>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SignedAgreement>>> GetSignedAgreement(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            if (!User.CanEdit(organization.SigningAuthority))
+            {
+                return Forbid();
+            }
+
+            var agreements = await _organizationService.GetSignedAgreementsAsync(organization.Id);
+
+            return Ok(ApiResponse.Result(agreements));
+        }
+
+        // Get: api/organizations/5/latest-signed-agreement
+        /// <summary>
+        /// Gets the latest signed agreement by organization download token.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpGet("{organizationId}/latest-signed-agreement", Name = nameof(GetLatestSignedAgreement))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<SignedAgreement>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SignedAgreement>>> GetLatestSignedAgreement(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            if (!User.CanEdit(organization.SigningAuthority))
+            {
+                return Forbid();
+            }
+
+            var token = await _documentService.GetDownloadTokenForLatestSignedAgreementDocument(organizationId);
+
+            return Ok(ApiResponse.Result(token));
+        }
+
+        // GET: api/Organizations/organization-agreement-document
+        /// <summary>
+        /// Get the organization agreement document.
+        /// </summary>
+        [HttpGet("organization-agreement-document", Name = nameof(OrganizationAgreementDocument))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public ActionResult<string> OrganizationAgreementDocument()
+        {
+            var fileName = "Organization-Agreement.pdf";
+            string resourcePath = fileName;
+            var assembly = Assembly.GetExecutingAssembly();
+
+            resourcePath = assembly.GetManifestResourceNames()
+                    .Single(str => str.EndsWith(fileName));
+
+            string base64;
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+            using (var reader = new MemoryStream())
+            {
+                stream.CopyTo(reader);
+                base64 = Convert.ToBase64String(reader.ToArray());
+            }
+
+            return Ok(ApiResponse.Result(base64));
         }
     }
 }

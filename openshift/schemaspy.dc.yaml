@@ -150,7 +150,4 @@ objects:
             httpGet:
               path: "/"
               port: 8080
-          resources:
-            limits:
-              cpu: "${CPU_LIMIT}"
-              memory: "${MEMORY_LIMIT}"
+          resources: {}

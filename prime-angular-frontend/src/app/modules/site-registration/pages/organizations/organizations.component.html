@@ -10,12 +10,19 @@
                icon="check_circle_outline">
       <ng-container #alertTitle
                     class="alert-title">
-        Your application has been received
+        <ng-container *ngIf="hasSignedOrganizationAgreement; else createdSite">
+          You have accepted the Organization Agreement and your application has been submitted.
+        </ng-container>
+
+        <ng-template #createdSite>
+          You have already signed the Organization Agreement, you can review it at any time using this Administration
+          portal.
+        </ng-template>
       </ng-container>
       <ng-container #alertContent
                     class="alert-content">
         If your location accesses PharmaNet through multiple software vendors, you will need to register those sites as
-        well. You will be informed by the Ministry of Health when your registration has been approved.
+        well. You will be informed by the Ministry of Health when your Site registration has been approved.
       </ng-container>
     </app-alert>
   </div>
@@ -153,7 +160,7 @@
               (click)="viewOrganization(organization.id)">
         <mat-icon>location_city</mat-icon>
         <!-- TODO update to be View/Update Organization when updates are implemented -->
-        <span>{{ (!organization?.acceptedAgreementDate) ? 'View/Update Organization' : 'View Organization' }}</span>
+        <span>{{ (!organization?.completed) ? 'View/Update Organization' : 'View Organization' }}</span>
       </button>
       <button mat-menu-item
               [disabled]="!organization?.acceptedAgreementDate"

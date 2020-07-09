@@ -20,6 +20,7 @@ import { Organization } from '@enrolment/shared/models/organization.model';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 @Injectable({
   providedIn: 'root'
@@ -134,6 +135,31 @@ export class EnrolmentResource {
         map((response: ApiHttpResponse<EnrolmentProfileVersion>) => response.result),
         tap((enrolmentProfileVersion: EnrolmentProfileVersion) => this.logger.info('ENROLMENT_PROFILE_VERSION', enrolmentProfileVersion)),
         map(this.enrolleeVersionAdapterResponse.bind(this))
+      );
+  }
+
+  // ---
+  // Self Declaration Documents
+  // ---
+
+  public createSelfDeclarationDocument(enrolleeId: number, selfDeclarationStatusCode: number, sdd: SelfDeclarationDocument):
+    Observable<SelfDeclarationDocument> {
+    sdd.selfDeclarationTypeCode = selfDeclarationStatusCode;
+    return this.apiResource
+      .post<SelfDeclarationDocument>(`enrollees/${enrolleeId}/self-declaration-document`
+        , sdd)
+      .pipe(
+        map((response: ApiHttpResponse<SelfDeclarationDocument>) => response.result),
+        tap((selfDeclarationDocument: SelfDeclarationDocument) => this.logger.info('SELF_DECLARATION_DOCUMENT', selfDeclarationDocument)),
+      );
+  }
+
+  public getDownloadTokenSelfDeclarationDocument(enrolleeId: number, selfDeclarationDocumentId: number): Observable<string> {
+    return this.apiResource
+      .get<string>(`enrollees/${enrolleeId}/self-declaration-document/${selfDeclarationDocumentId}`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap((document: string) => this.logger.info('DOCUMENT', document)),
       );
   }
 

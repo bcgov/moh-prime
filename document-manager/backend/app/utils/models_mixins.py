@@ -3,7 +3,6 @@ from flask import current_app
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.extensions import db
-from .include.user_info import User
 
 
 class Base(db.Model):
@@ -20,12 +19,7 @@ class Base(db.Model):
 
 
 class AuditMixin(object):
-    create_user = db.Column(db.String(60), nullable=False, default=User().get_user_username)
     create_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    update_user = db.Column(db.String(60),
-                            nullable=False,
-                            default=User().get_user_username,
-                            onupdate=User().get_user_username)
     update_timestamp = db.Column(db.DateTime,
                                  nullable=False,
                                  default=datetime.utcnow,

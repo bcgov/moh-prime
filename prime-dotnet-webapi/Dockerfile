@@ -34,7 +34,7 @@ RUN apt-get update && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
     apt-get update && \
     apt-get install -yqq --no-install-recommends postgresql-client-10 && \
-    apt-get install -y libfontconfig1 libxrender1 xvfb && \
+    apt-get install -y libfontconfig1 libxrender1 libgdiplus xvfb && \
     chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
     chmod +x entrypoint.sh && \

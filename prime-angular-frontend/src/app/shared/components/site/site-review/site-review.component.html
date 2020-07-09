@@ -1,7 +1,7 @@
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Location Name</ng-container>
+    <ng-container appPageSubheaderTitle>Site Name</ng-container>
 
     <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
@@ -20,7 +20,7 @@
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Location Address</ng-container>
+    <ng-container appPageSubheaderTitle>Site Address</ng-container>
 
     <button *ngIf="showEditRedirect && !site.submittedDate"
             mat-icon-button
@@ -92,7 +92,7 @@
   <ng-container *ngFor="let businessDay of site?.location?.businessHours">
     <app-enrollee-property [title]="businessDay.day | weekday">
       <ng-container *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
-        {{ businessDay.startTime }}:00 to {{ businessDay.endTime }}:00
+        {{ businessDay.startTime | replace: ':00:00' : ':00' }} to {{ businessDay.endTime | replace: ':00:00' : ':00' }}
       </ng-container>
       <ng-template #open24Hours>
         24 hours
@@ -116,7 +116,7 @@
   </app-page-subheader>
 
   <app-enrollee-property>
-    {{ site?.vendor.name | default }}
+    {{ site?.vendor?.name | default }}
   </app-enrollee-property>
 
 </section>

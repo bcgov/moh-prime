@@ -14,6 +14,7 @@ export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 export class AppConfig {
   apiEndpoint: string;
   loginRedirectUrl: string;
+  documentManagerUrl: string;
   prime: {
     displayPhone: string;
     phone: string;
@@ -33,6 +34,7 @@ export class AppConfig {
 export const APP_DI_CONFIG: AppConfig = {
   apiEndpoint: environment.apiEndpoint,
   loginRedirectUrl: environment.loginRedirectUrl,
+  documentManagerUrl: environment.documentManagerUrl,
   prime: {
     displayPhone: environment.prime.displayPhone,
     phone: environment.prime.phone,

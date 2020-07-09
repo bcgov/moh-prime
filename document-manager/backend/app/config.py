@@ -3,50 +3,32 @@ import os
 
 class Config(object):
     # Environment config
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'dev')
+    SECRET_KEY = os.urandom(16)
     BASE_PATH = os.environ.get('BASE_PATH', '')
-    DB_HOST = os.environ.get('DB_HOST', 'localhost')
-    DB_USER = os.environ.get('DB_USER', 'user')
-    DB_PASS = os.environ.get('DB_PASS', 'pass')
-    DB_PORT = os.environ.get('DB_PORT', 5432)
-    DB_NAME = os.environ.get('DB_NAME', 'db_name')
+    DB_HOST = os.environ.get('DB_HOST')
+    DB_USER = os.environ.get('DB_USER')
+    DB_PASS = os.environ.get('DB_PASS')
+    DB_PORT = os.environ.get('DB_PORT')
+    DB_NAME = os.environ.get('DB_NAME')
     DB_URL = f"postgres://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-
-    ENVIRONMENT_NAME = os.environ.get('ENVIRONMENT_NAME', 'dev')
-
     SQLALCHEMY_DATABASE_URI = DB_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    JWT_OIDC_WELL_KNOWN_CONFIG = os.environ.get(
-        'JWT_OIDC_WELL_KNOWN_CONFIG',
-        'https://localhost:8080/auth/realms/mds/.well-known/openid-configuration')
-    JWT_OIDC_AUDIENCE = os.environ.get('JWT_OIDC_AUDIENCE', 'mds')
-    JWT_OIDC_ALGORITHMS = os.environ.get('JWT_OIDC_ALGORITHMS', 'RS256')
-
-    # Elastic config
-    ELASTIC_ENABLED = os.environ.get('ELASTIC_ENABLED', '0')
-    ELASTIC_SERVICE_NAME = os.environ.get('ELASTIC_SERVICE_NAME', 'Local-Dev')
-    ELASTIC_SECRET_TOKEN = os.environ.get('ELASTIC_SECRET_TOKEN', None)
-    ELASTIC_SERVER_URL = os.environ.get('ELASTIC_SERVER_URL', 'http://localhost:8200')
-    ELASTIC_DEBUG = os.environ.get('ELASTIC_DEBUG', True)
-    ELASTIC_APM = {
-        'SERVICE_NAME': ELASTIC_SERVICE_NAME,
-        'SECRET_TOKEN': ELASTIC_SECRET_TOKEN,
-        'SERVER_URL': ELASTIC_SERVER_URL,
-        'DEBUG': ELASTIC_DEBUG
-    }
+    # Auth
+    JWT_OIDC_WELL_KNOWN_CONFIG = os.environ.get('JWT_OIDC_WELL_KNOWN_CONFIG')
+    JWT_OIDC_AUDIENCE = os.environ.get('JWT_OIDC_AUDIENCE', 'prime-document-manager')
+    JWT_OIDC_ALGORITHMS = 'RS256'
 
     # Cache settings
-    CACHE_TYPE = os.environ.get('CACHE_TYPE', 'redis')
-    CACHE_REDIS_HOST = os.environ.get('CACHE_REDIS_HOST', 'redis')
-    CACHE_REDIS_PORT = os.environ.get('CACHE_REDIS_PORT', 6379)
-    CACHE_REDIS_PASS = os.environ.get('CACHE_REDIS_PASS', 'redis-password')
-    CACHE_REDIS_URL = 'redis://:{0}@{1}:{2}'.format(CACHE_REDIS_PASS, CACHE_REDIS_HOST,
-                                                    CACHE_REDIS_PORT)
-    DOCUMENT_MANAGER_URL = os.environ.get('DOCUMENT_MANAGER_URL',
-                                          'http://document_manager_backend:5001')
+    CACHE_TYPE = 'redis'
+    CACHE_REDIS_HOST = os.environ.get('CACHE_REDIS_HOST')
+    CACHE_REDIS_PORT = os.environ.get('CACHE_REDIS_PORT')
+    CACHE_REDIS_PASS = os.environ.get('CACHE_REDIS_PASS')
+    CACHE_REDIS_URL = f'redis://:{CACHE_REDIS_PASS}@{CACHE_REDIS_HOST}:{CACHE_REDIS_PORT}'
+
+    DOCUMENT_MANAGER_URL = os.environ.get('DOCUMENT_MANAGER_URL')
     UPLOADED_DOCUMENT_DEST = os.environ.get('UPLOADED_DOCUMENT_DEST', '/app/document_uploads')
-    MAX_CONTENT_LENGTH = 400 * 1024 * 1024
+    MAX_CONTENT_LENGTH = 400 * 1024 * 1024 # 400 MB max file size
     JSONIFY_PRETTYPRINT_REGULAR = False
 
     def JWT_ROLE_CALLBACK(jwt_dict):

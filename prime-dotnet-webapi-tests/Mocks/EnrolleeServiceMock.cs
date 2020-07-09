@@ -190,5 +190,15 @@ namespace PrimeTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task<SelfDeclarationDocument> AddSelfDeclarationDocumentAsync(int enrolleeId, int selfDeclarationTypeCode, SelfDeclarationDocument selfDeclarationDocument)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<SelfDeclarationDocument> IEnrolleeService.AddSelfDeclarationDocumentAsync(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -16,15 +16,18 @@ import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enroll
 import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-term-enrolment/enrollee-access-term-enrolment.component';
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
+import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
+import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
+import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 import {
   ReviewStatusContentComponent
 } from './shared/components/review-status-content/review-status-content.component';
-import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
-import { SiteTableComponent } from './shared/components/site-table/site-table.component';
-import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
+import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
+import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
+import { SiteRegistrationActionsComponent } from './shared/components/site-registration-actions/site-registration-actions.component';
 
 @NgModule({
   declarations: [
@@ -44,13 +47,16 @@ import { SiteRegistrationComponent } from './pages/site-registration/site-regist
     DatedContentTableComponent,
     ReviewStatusContentComponent,
     SiteRegistrationsComponent,
-    SiteTableComponent,
-    SiteRegistrationComponent
+    SiteRegistrationComponent,
+    SiteRegistrationContainerComponent,
+    SiteRegistrationTableComponent,
+    SiteRegistrationActionsComponent,
+    SiteAdjudicationComponent
   ],
   imports: [
     SharedModule,
-    AdjudicationRoutingModule,
-    EditorModule
+    EditorModule,
+    AdjudicationRoutingModule
   ]
 })
 export class AdjudicationModule { }

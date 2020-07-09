@@ -36,14 +36,8 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.ProfileCompleted, f => false);
             RuleFor(x => x.IdentityAssuranceLevel, 3);
 
-            RuleFor(x => x.HasConviction, false);
-            RuleFor(x => x.HasConvictionDetails, f => null);
-            RuleFor(x => x.HasRegistrationSuspended, false);
-            RuleFor(x => x.HasRegistrationSuspendedDetails, f => null);
-            RuleFor(x => x.HasDisciplinaryAction, false);
-            RuleFor(x => x.HasDisciplinaryActionDetails, f => null);
-            RuleFor(x => x.HasPharmaNetSuspended, false);
-            RuleFor(x => x.HasPharmaNetSuspendedDetails, f => null);
+            RuleFor(x => x.SelfDeclarations, (f, x) => new SelfDeclarationFactory(x).GenerateBetween(0, 1));
+            RuleFor(x => x.SelfDeclarationDocuments, f => null);
 
             RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x).Generate(1, "default,inProgress"));
             RuleFor(x => x.PhysicalAddress, f => new PhysicalAddressFactory().Generate());
@@ -57,12 +51,14 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Privileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
             RuleFor(x => x.isAdminView, f => true);
-            Ignore(x => x.CurrentTOAStatus);
+            RuleFor(x => x.RequestingRemoteAccess, f => false);
             // TODO: fix these ignores
+            Ignore(x => x.CurrentTOAStatus);
             Ignore(x => x.AccessTerms);
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
             Ignore(x => x.AlwaysManual);
+            Ignore(x => x.IdentityProvider);
 
             RuleSet("status.submitted", (set) =>
             {
@@ -81,17 +77,6 @@ namespace PrimeTests.ModelFactories
             {
                 set.RuleFor(x => x.DeviceProviderNumber, f => f.Random.Replace("#####"));
                 set.RuleFor(x => x.IsInsulinPumpProvider, f => f.Random.Bool());
-            });
-            RuleSet("selfDeclaration", (set) =>
-            {
-                set.RuleFor(x => x.HasConviction, f => f.Random.Bool());
-                set.RuleFor(x => x.HasRegistrationSuspended, f => f.Random.Bool());
-                set.RuleFor(x => x.HasDisciplinaryAction, f => f.Random.Bool());
-                set.RuleFor(x => x.HasPharmaNetSuspended, f => f.Random.Bool());
-                set.RuleFor(x => x.HasConvictionDetails, (f, x) => x.HasConviction == true ? f.Lorem.Paragraphs(2) : null);
-                set.RuleFor(x => x.HasRegistrationSuspendedDetails, (f, x) => x.HasRegistrationSuspended == true ? f.Lorem.Paragraphs(2) : null);
-                set.RuleFor(x => x.HasDisciplinaryActionDetails, (f, x) => x.HasDisciplinaryAction == true ? f.Lorem.Paragraphs(2) : null);
-                set.RuleFor(x => x.HasPharmaNetSuspendedDetails, (f, x) => x.HasPharmaNetSuspended == true ? f.Lorem.Paragraphs(2) : null);
             });
 
             FinishWith((f, x) =>

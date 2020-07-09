@@ -12,6 +12,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 @Component({
   selector: 'app-self-declaration',
@@ -83,6 +85,22 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     super.onSubmit(hasBeenThroughTheWizard);
   }
 
+  public onHasConvictionUpload(sdd: SelfDeclarationDocument) {
+    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_CONVICTION, sdd);
+  }
+
+  public onHasRegistrationSuspendedUpload(sdd: SelfDeclarationDocument) {
+    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED, sdd);
+  }
+
+  public onHasDisciplinaryActionUpload(sdd: SelfDeclarationDocument) {
+    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION, sdd);
+  }
+
+  public onHasPharmanetSuspendedUpload(sdd: SelfDeclarationDocument) {
+    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED, sdd);
+  }
+
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm();
@@ -122,6 +140,13 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   protected onSubmitFormIsInvalid() {
     this.showUnansweredQuestionsError = this.showUnansweredQuestions();
+  }
+
+  private createSelfDeclarationDocument(code: SelfDeclarationTypeEnum, sdd: SelfDeclarationDocument) {
+    const enrolleeId = this.enrolmentService.enrolment.id;
+    this.enrolmentResource
+      .createSelfDeclarationDocument(enrolleeId, code, sdd)
+      .subscribe();
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
