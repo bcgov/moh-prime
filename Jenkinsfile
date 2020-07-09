@@ -13,14 +13,16 @@ pipeline {
         disableResume()
     }
     stages {
-        stage('Checkout') {
-          steps {
-            script {
-              // cleanWs() // Q. Wouldn't we want to clean the workspace?
-              checkout scm
-            }
-          }
-        }
+        // stage('Checkout') {
+        //   steps {
+        //     script {
+        //       // Found this in almost all the tutorials:
+        //       // Q. Wouldn't we want to clean the workspace?
+        //       // cleanWs()
+        //       // checkout scm
+        //     }
+        //   }
+        // }
         stage('Build Branch') {
             options {
                 timeout(time: 90, unit: 'MINUTES') // timeout on this stage
@@ -28,6 +30,7 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
+                    checkout scm
                     echo "Building ..."
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
