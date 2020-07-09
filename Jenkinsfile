@@ -11,17 +11,19 @@ pipeline {
     }
     options {
         disableResume()
-
     }
     stages {
+        stage('Checkout') {
+          // cleanWs() // Q. Wouldn't we want to clean the workspace?
+          checkout scm
+        }
         stage('Build Branch') {
             options {
-                timeout(time: 90, unit: 'MINUTES')   // timeout on this stage
+                timeout(time: 90, unit: 'MINUTES') // timeout on this stage
             }
             agent { label 'master' }
             steps {
                 script {
-                    checkout scm
                     echo "Building ..."
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
@@ -31,7 +33,7 @@ pipeline {
         }
         stage('Deploy Images') {
             options {
-                timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
+                timeout(time: 10, unit: 'MINUTES') // timeout on this stage
             }
             when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
@@ -49,7 +51,7 @@ pipeline {
         }
         stage('Deploy PR') {
             options {
-                timeout(time: 10, unit: 'MINUTES')   // timeout on this stage
+                timeout(time: 10, unit: 'MINUTES') // timeout on this stage
             }
             when { expression { ( GIT_BRANCH != 'develop' ) } }
             agent { label 'master' }
@@ -65,9 +67,21 @@ pipeline {
                 }
             }
         }
+        stage('Integrity Test') {
+          options {
+              timeout(time: 10, unit: 'MINUTES') // timeout on this stage
+          }
+          agent { label 'master' }
+          steps {
+            script {
+              echo "Running integrity tests..."
+              // dotnetTests
+            }
+          }
+        }
         stage('Quality Check') {
             options {
-                timeout(time: 30, unit: 'MINUTES')   // timeout on this stage
+                timeout(time: 30, unit: 'MINUTES') // timeout on this stage
             }
             when { expression { ( BRANCH_NAME == 'develop' ) } }
             parallel {
@@ -75,7 +89,7 @@ pipeline {
                     agent { label 'code-tests' }
                     steps {
                         sh "./player.sh scan"
-                    }      
+                    }
                 }
                 stage('ZAP') {
                     agent { label 'code-tests' }
