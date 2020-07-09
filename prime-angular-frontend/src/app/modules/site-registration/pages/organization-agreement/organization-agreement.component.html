@@ -45,7 +45,7 @@
 
           <app-document-upload (completed)="onUpload($event)"
                                componentName="organization-agreement"
-                               multiple=false>
+                               [multiple]="false">
           </app-document-upload>
 
         </ng-template>
@@ -105,7 +105,7 @@
       <div class="organization-agreement mb-5"
            [innerHTML]="organizationAgreement | safeHtml"></div>
     </ng-container>
-    
+
     <ng-template #uploadedAgreement>
       <button mat-stroked-button
               color="primary"

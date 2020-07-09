@@ -42,6 +42,7 @@ export interface HttpEnrollee extends Enrollee {
   requestingRemoteAccess: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
+  base64QRCode: string;
 }
 
 
@@ -79,4 +80,5 @@ export interface Enrolment {
   requestingRemoteAccess: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
+  base64QRCode: string;
 }

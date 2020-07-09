@@ -101,6 +101,26 @@ objects:
                   secretKeyRef:
                     key: DOCUMENT_MANAGER_CLIENT_SECRET
                     name: "document-manager-secret"
+              - name: CHES_API_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: CHES_API_URL
+                    name: "ches-secrets"
+              - name: CHES_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: CHES_CLIENT_SECRET
+                    name: "ches-secrets"
+              - name: CHES_ENABLED
+                valueFrom:
+                  secretKeyRef:
+                    key: CHES_ENABLED
+                    name: "ches-secrets"
+              - name: CHES_TOKEN_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: CHES_TOKEN_URL
+                    name: "ches-secrets"
               - name: PHARMANET_API_URL
                 valueFrom:
                   secretKeyRef:
@@ -182,7 +202,22 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     key: KEYCLOAK_TOKEN_URL
-                    name: "keycloak" 
+                    name: "keycloak"
+              - name: VERIFIABLE_CREDENTIAL_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: VERIFIABLE_CREDENTIAL_API_KEY
+                    name: "verifiable-credential-secrets"
+              - name: VERIFIABLE_CREDENTIAL_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: VERIFIABLE_CREDENTIAL_URL
+                    name: "verifiable-credential-secrets"
+              - name: VERIFIABLE_CREDENTIAL_WEBHOOK_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: VERIFIABLE_CREDENTIAL_WEBHOOK_KEY
+                    name: "verifiable-credential-secrets"
             image: " "
             name: primeapi
             ports:
