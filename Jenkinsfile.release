@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Do you approve a deploy to Demo & Production environments?", ok: "Yes", parameters: [
+                        id: 'IS_APPROVED', message: "Do you wish to approve a deploy to the Demo & Production environments?", ok: "Yes", parameters: [
                             string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Demo & Production?')
                             ])
                     if (IS_APPROVED != 'yes') {
@@ -58,7 +58,7 @@ pipeline {
                             // sh "./player.sh deploy mongo test -p SUFFIX='-demo'"
                             sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
-                            sh "./player.sh deploy document-manager test -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                            sh "./player.sh deploy document-manager test -p SUFFIX='-demo' -p VOLUME_CAPACITY=1Gi"
                         }
                     }
                 }
