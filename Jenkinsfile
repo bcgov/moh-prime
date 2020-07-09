@@ -15,8 +15,10 @@ pipeline {
     stages {
         stage('Checkout') {
           steps {
-            // cleanWs() // Q. Wouldn't we want to clean the workspace?
-            checkout scm
+            script {
+              // cleanWs() // Q. Wouldn't we want to clean the workspace?
+              checkout scm
+            }
           }
         }
         stage('Build Branch') {
