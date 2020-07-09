@@ -8,6 +8,7 @@ namespace Prime.Services.Clients
     {
         Task<JObject> CreateInvitationAsync(string alias);
         Task<JObject> IssueCredentialAsync(JObject credentialOffer);
+        Task<string> GetSchemaId(string did);
         Task<JObject> GetSchema(string schemaId);
         Task<string> GetIssuerDidAsync();
         Task<string> GetCredentialDefinitionIdAsync(string schemaId);

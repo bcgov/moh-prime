@@ -13,6 +13,9 @@ namespace Prime.Services.Clients
         private readonly HttpClient _client;
         private readonly ILogger _logger;
 
+        private static readonly string SCHEMA_NAME = "enrollee";
+        private static readonly string SCHEMA_VERSION = "1.0";
+
         public VerifiableCredentialClient(
             HttpClient client,
             ILogger<VerifiableCredentialClient> logger)
@@ -74,6 +77,32 @@ namespace Prime.Services.Clients
             }
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<string> GetSchemaId(string did)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.GetAsync($"schemas/created?schema_version={SCHEMA_VERSION}&schema_issuer_did={did}&schema_name={SCHEMA_NAME}");
+            }
+            catch (Exception ex)
+            {
+                await LogError(response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to get the schema id by issuer did: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetSchema");
+            }
+
+            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+            _logger.LogInformation("GET Schema id by issuer id response {@JObject}", JsonConvert.SerializeObject(body));
+
+            return (string)body.SelectToken("schema_ids[0]");
         }
 
         public async Task<JObject> GetSchema(string schemaId)

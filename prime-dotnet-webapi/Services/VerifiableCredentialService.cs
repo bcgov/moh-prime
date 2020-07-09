@@ -49,7 +49,10 @@ namespace Prime.Services
         // private static readonly string SCHEMA_ID = "QDaSxvduZroHDKkdXKV5gG:2:enrollee:2.0";
 
         // test agent schema id
-        private static readonly string SCHEMA_ID = "TVmQfMZwLFWWK3z1RLgFBR:2:enrollee:1.0";
+        // private static readonly string SCHEMA_ID = "TVmQfMZwLFWWK3z1RLgFBR:2:enrollee:1.0";
+
+        private string SCHEMA_ID;
+        private string ISSUER_DID;
 
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
         private readonly IEnrolleeService _enrolleeService;
@@ -72,6 +75,8 @@ namespace Prime.Services
         public async Task<JObject> CreateConnectionAsync(Enrollee enrollee)
         {
             var alias = enrollee.Id.ToString();
+            ISSUER_DID = await _verifiableCredentialClient.GetIssuerDidAsync();
+            SCHEMA_ID = await _verifiableCredentialClient.GetSchemaId(ISSUER_DID);
             var invitation = await _verifiableCredentialClient.CreateInvitationAsync(alias);
             var invitationUrl = invitation.Value<string>("invitation_url");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
@@ -232,16 +237,15 @@ namespace Prime.Services
         // Create the credential offer.
         private async Task<JObject> CreateCredentialOfferAsync(string connectionId, JArray attributes)
         {
-            var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
             var schema = (await _verifiableCredentialClient.GetSchema(SCHEMA_ID)).Value<JObject>("schema");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
 
             JObject credentialOffer = new JObject
                 {
                     { "connection_id", connectionId },
-                    { "issuer_did", issuerDid },
+                    { "issuer_did", ISSUER_DID },
                     { "schema_id", SCHEMA_ID },
-                    { "schema_issuer_did", issuerDid },
+                    { "schema_issuer_did", ISSUER_DID },
                     { "schema_name", schema.Value<string>("name") },
                     { "schema_version", schema.Value<string>("version") },
                     { "cred_def_id", credentialDefinitionId },
