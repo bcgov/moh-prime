@@ -14,58 +14,7 @@
 pipeline {
     agent none
     stages {
-        stage('Promote Master to Test') {
-            options {
-                timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
-            }
-            when { expression { ( BRANCH_NAME == 'master' ) } }
-            environment {
-                    BRANCH_LOWER = BRANCH_NAME.toLowerCase()
-                    VANITY_URL = "test.pharmanetenrolment.gov.bc.ca"
-                    SCHEMA = "https"
-                    PORT = "8443"
-                    FRONTEND_ARGS = "-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
-                    API_ARGS = "-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
-                    SUFFIX= "-test"
-            }
-            agent { label 'master' }
-            steps {
-                script {
-                    echo "Test (MASTER) ..."
-                    sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh build document-manager test -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy postgres test -p SUFFIX=${SUFFIX}"
-                    // sh "./player.sh deploy mongo test -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh toolbelt schemaspy test"
-                }
-            }
-        }
-        stage('Quality Check') {
-            options {
-                timeout(time: 30, unit: 'MINUTES')   // timeout on this stage
-            }
-            when { expression { ( BRANCH_NAME == 'master' ) } }
-            parallel {
-                stage('SonarQube Code Check') {
-                    agent { label 'code-tests' }
-                    steps {
-                        sh "./player.sh scan"
-                    }      
-                }
-                stage('ZAP') {
-                    agent { label 'code-tests' }
-                    steps {
-                        checkout scm
-                        echo "Scanning..."
-                        sh "./player.sh zap frontend"
-                    }
-                }
-            }
-        }
-        stage('Approve Promotion of Demo & Production') {
+        stage('Approve Promotion of Master to Demo & Production Environment') {
             options {
                 timeout(time: 6, unit: 'DAYS')   // timeout on this stage
             }
@@ -73,7 +22,7 @@ pipeline {
             steps {
                 script {
                     def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Deploy to Demo & Production?", ok: "Yes", parameters: [
+                        id: 'IS_APPROVED', message: "Do you approve a deploy to Demo & Production environments?", ok: "Yes", parameters: [
                             string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Demo & Production?')
                             ])
                     if (IS_APPROVED != 'yes') {
@@ -83,7 +32,7 @@ pipeline {
                 }
             }
         }
-        stage('Promote to Demo & Production') {
+        stage('Promote Master to Demo & Production Environment') {
             options {
                 timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
             }
@@ -109,6 +58,7 @@ pipeline {
                             // sh "./player.sh deploy mongo test -p SUFFIX='-demo'"
                             sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
+                            sh "./player.sh deploy document-manager test -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                         }
                     }
                 }
@@ -123,6 +73,7 @@ pipeline {
                             sh "./player.sh deploy postgres prod"
                             sh "./player.sh deploy api prod"
                             sh "./player.sh deploy frontend prod"
+                            sh "./player.sh deploy document-manager prod"
                             sh "./player.sh toolbelt schemaspy prod"
                         }
                     }
