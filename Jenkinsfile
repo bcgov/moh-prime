@@ -14,10 +14,6 @@ pipeline {
     }
     stages {
         stage('Checkout') {
-            options {
-                timeout(time: 10, unit: 'MINUTES') // timeout on this stage
-            }
-            agent { label 'master' }
             steps {
                 script {
                     cleanWs()
