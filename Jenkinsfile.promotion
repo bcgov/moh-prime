@@ -99,7 +99,7 @@ pipeline {
                             // sh "./player.sh deploy mongo test -p SUFFIX='-demo'"
                             sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
-                            sh "./player.sh deploy document-manager dev -p SUFFIX='-demo' -p VOLUME_CAPACITY=1Gi"                            
+                            sh "./player.sh deploy document-manager test -p SUFFIX='-demo' -p VOLUME_CAPACITY=1Gi"                            
                         }
                     }
                 }
