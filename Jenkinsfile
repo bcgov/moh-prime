@@ -83,8 +83,6 @@ pipeline {
             script {
               echo "Running integrity tests..."
               echo "$GIT_BRANCH"
-
-              // sh "./player.sh scan"
             }
             post {
               always: {
