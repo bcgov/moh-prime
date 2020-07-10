@@ -20,6 +20,7 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
+                    cleanWs()
                     checkout scm
                 }
             }
