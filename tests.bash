@@ -1,5 +1,6 @@
 export uuid=$(cat /proc/sys/kernel/random/uuid)
 export SONAR_URL=http://sonar-backend-dqszvc-tools.pathfinder.gov.bc.ca
+
 function headless(){
     export DISPLAY=:1.0
     if [ ! -f /tmp/.X1-lock ]
@@ -34,8 +35,8 @@ function angularTests()
 }
 function scan()
 {
-    echo "Beginning tests on Angular ..."
-    angularTests # > /dev/null 2>&1 
+    # echo "Beginning tests on Angular ..."
+    # angularTests # > /dev/null 2>&1
     echo "Beginning tests on .NET ..."
     dotnetTests # > /dev/null 2>&1
 }

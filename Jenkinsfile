@@ -31,7 +31,6 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    // checkout scm
                     echo "Building ..."
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
@@ -84,7 +83,13 @@ pipeline {
             script {
               echo "Running integrity tests..."
               echo "$GIT_BRANCH"
-              echo "$BRANCH_NAME"
+
+              // source api.conf
+              // dotnet build
+              // ~/.dotnet/tools/coverlet "./bin/Debug/netcoreapp3.1/PrimeTests.dll" --target "dotnet" --targetargs 'test . --no-build --logger "trx;LogFileName=TestResults.trx" --logger "xunit;LogFileName=TestResults.xml" --results-directory ../BuildReports/UnitTests' -f opencover -o ./BuildReports/Coverage/coverage
+              // dotnet build-server shutdown
+
+              sh "./player.sh scan"
             }
           }
         }
