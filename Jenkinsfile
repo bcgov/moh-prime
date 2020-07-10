@@ -79,8 +79,11 @@ pipeline {
             script {
               echo "Running integrity tests..."
               echo "$GIT_BRANCH"
+              echo "$BRANCH_NAME"
               // Attempt to see merge prevented
-              exit 1;
+              // exit 1;
+
+              // sh "exit 1"
             }
             // post {
             //   always: {
@@ -121,6 +124,17 @@ pipeline {
                     }
                 }
             }
+        }
+        stage('Prevent Merge') {
+          options {
+              timeout(time: 10, unit: 'MINUTES')
+          }
+          // when { expression { ( BRANCH_NAME == 'feature/PRIME-895-api-unit-test' ) }  }
+          steps {
+            script {
+              sh "exit 1"
+            }
+          }
         }
         /*stage('Cleanup') {
             steps {
