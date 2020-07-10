@@ -83,6 +83,8 @@ pipeline {
             script {
               echo "Running integrity tests..."
               echo "$GIT_BRANCH"
+              // Attempt to see merge prevented
+              exit 1;
             }
             // post {
             //   always: {
