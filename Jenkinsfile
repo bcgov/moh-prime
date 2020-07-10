@@ -84,17 +84,17 @@ pipeline {
               echo "Running integrity tests..."
               echo "$GIT_BRANCH"
             }
-            post {
-              always: {
-                echo "Tests are always run!"
-              }
-              success: {
-                echo: "Tests Passed :)"
-              }
-              failure: {
-                echo: "Tests Failed :("
-              }
-            }
+            // post {
+            //   always: {
+            //     echo "Tests are always run!"
+            //   }
+            //   success: {
+            //     echo: "Tests Passed :)"
+            //   }
+            //   failure: {
+            //     echo: "Tests Failed :("
+            //   }
+            // }
           }
         }
         stage('Quality Check') {
