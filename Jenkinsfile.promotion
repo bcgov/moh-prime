@@ -92,7 +92,7 @@ pipeline {
                         script {
                             echo "Demo (MASTER) ..."
                             sh "./player.sh build api test ${API_ARGS} -p SUFFIX='-demo'"
-                            sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SightsUFFIX='-demo'"
+                            sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh build document-manager test -p SUFFIX='-demo'"
                             sh "./player.sh deploy postgres test -p SUFFIX='-demo'"
                             sh "./player.sh deploy redis test -p SUFFIX='-demo'"
