@@ -14,6 +14,7 @@ pipeline {
     }
     stages {
         stage('Checkout') {
+            agent { label 'master' }
             steps {
                 script {
                     checkout scm
@@ -136,12 +137,12 @@ pipeline {
             }
           }
         }
-        /*stage('Cleanup') {
-            steps {
-                script {
-                    sh "./player.sh sparsify"
-                }
-            }
-        }*/
+        // stage('Cleanup') {
+        //     steps {
+        //         script {
+        //             sh "./player.sh sparsify"
+        //         }
+        //     }
+        // }
     }
 }
