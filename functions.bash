@@ -117,7 +117,7 @@ function getAllOpenPr () {
 }
 
 function preventMerge() {
-  curl "https://api.gitHub.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT?access_token=<YOUR_GITHUB_TOKEN>" \
+  curl "https://api.gitHub.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT" \
     -H "Content-Type: application/json" \
     -X POST \
     -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/${PROJECT_OWNER}/$BUILD_NUMBER/console\"}"
