@@ -36,6 +36,7 @@ case "$1" in
         ;;
     preventMerge)
         preventMerge
+        ;;
     *)
     echo "You\'re doing it wrong..."
 esac
