@@ -122,10 +122,12 @@ function preventMerge() {
   echo "GIT_COMMENT: $GIT_COMMIT"
   echo "BUILD_NUMBER: $BUILD_NUMBER"
 
+  whoami
+
   curl \
     -X POST \
     -H "Accept: application/vnd.github.v3+json" \
-    "https://api.gitHub.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT" \
+    "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT" \
     -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/${PROJECT_OWNER}/$BUILD_NUMBER/console\"}"
 }
 
