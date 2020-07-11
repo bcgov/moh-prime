@@ -121,6 +121,7 @@ function preventMerge() {
   echo "PROJECT_NAME: $PROJECT_NAME"
   echo "GIT_COMMENT: $GIT_COMMIT"
   echo "BUILD_NUMBER: $BUILD_NUMBER"
+  echo "GIT_USERNAME: $GIT_USERNAME"
 
   whoami
 
