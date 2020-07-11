@@ -11,7 +11,7 @@ function variablePopulation() {
     if [ -z "${CHANGE_BRANCH}" ];
     then
         export REPOSITORY_REF="${BRANCH_LOWER}"
-    else   
+    else
         export REPOSITORY_REF="${CHANGE_BRANCH}"
     fi
 }
@@ -25,10 +25,10 @@ function pipeline_args() {
 function determineMode() {
     buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true | wc -l)
     if [ -z "${buildPresent}" ];
-    then 
+    then
         MODE="apply"
         OC_ARGS=""
-    else 
+    else
         MODE="apply"
         OC_ARGS="--overwrite=true --all"
     fi;
@@ -116,6 +116,13 @@ function getAllOpenPr () {
     declare -p OPEN_PR_ARRAY=( $(grep '"number"' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}') )
 }
 
+function preventMerge() {
+  curl "https://api.gitHub.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT?access_token=<YOUR_GITHUB_TOKEN>" \
+    -H "Content-Type: application/json" \
+    -X POST \
+    -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/${PROJECT_OWNER}/$BUILD_NUMBER/console\"}"
+}
+
 function getOldPr () {
     ORPHANS=$(printf '%s\n' "${ROUTE_ARRAY[@]}" "${OPEN_PR_ARRAY[@]}" | sort | uniq -u)
 }
@@ -131,7 +138,7 @@ function occleanup() {
     echo "ORPHANS=${ORPHANS}"
     for i in ${ORPHANS}
     do
-        cleanOcArtifacts $i 
+        cleanOcArtifacts $i
     done
 }
 

@@ -34,6 +34,8 @@ case "$1" in
     fsparsify)
         sparsify $@
         ;;
+    preventMerge)
+        preventMerge
     *)
     echo "You\'re doing it wrong..."
 esac

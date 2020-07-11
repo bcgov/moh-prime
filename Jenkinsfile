@@ -17,7 +17,7 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    checkout scm
+                  sh "./player.sh preventMerge"
                 }
             }
         }
