@@ -117,6 +117,11 @@ function getAllOpenPr () {
 }
 
 function preventMerge() {
+  echo "PROJECT_OWNER: $PROJECT_OWNER"
+  echo "PROJECT_NAME: $PROJECT_NAME"
+  echo "GIT_COMMENT: $GIT_COMMIT"
+  echo "BUILD_NUMBER: $BUILD_NUMBER"
+
   curl "https://api.gitHub.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT" \
     -H "Content-Type: application/json" \
     -X POST \

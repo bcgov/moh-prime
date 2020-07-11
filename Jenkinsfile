@@ -18,10 +18,10 @@ pipeline {
             steps {
                 script {
                     checkout scm
-                    echo "PROJECT_OWNER: $PROJECT_OWNER"
-                    echo "PROJECT_NAME: $PROJECT_NAME"
-                    echo "GIT_COMMENT: $GIT_COMMIT"
-                    echo "BUILD_NUMBER: $BUILD_NUMBER"
+                    // echo "PROJECT_OWNER: $PROJECT_OWNER"
+                    // echo "PROJECT_NAME: $PROJECT_NAME"
+                    // echo "GIT_COMMENT: $GIT_COMMIT"
+                    // echo "BUILD_NUMBER: $BUILD_NUMBER"
                     // Attempt to get a message into GitHub
                     sh "./player.sh preventMerge"
                 }
