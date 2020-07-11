@@ -29,6 +29,22 @@ pipeline {
                         currentBuild.result = "SUCCESS"
                         echo "User cancelled deployment"
                     }
+
+                    // Generate release prior to deploy to production, and request release tag name and description from user
+                    def releaseTag = input(
+                            id: 'Release Version Tag', message: "Please provide this release's version tag. A BETA suffix will be added to denote that this is a prerelease, and not production ready.", ok: "Submit", parameters: [
+                            string(name: 'IS_APPROVED', defaultValue: 'v', description: 'Deploy to Demo & Production?')
+                        ])
+                    def releaseTitle = input(
+                            id: 'Release Title', message: "Please provide an appropriate title for this release.", ok: "Submit", parameters: [
+                            string(name: 'Release Title', defaultValue: 'Yes', description: 'Deploy to Demo & Production?')
+                        ])
+                    def releaseBody = input(
+                            id: 'Description', message: "Please provide a description in GitHub style Markdown of the features included in this release.", ok: "Submit", parameters: [
+                            string(name: 'Release Description', description: 'Deploy to Demo & Production?')
+                        ])
+                    def isPrerelease = false
+                    sh "./player.sh createRelease ${releaseTag} ${releaseTitle} ${releaseBody} ${isPrerelease}"
                 }
             }
         }
@@ -38,7 +54,7 @@ pipeline {
             }
             when { expression { ( BRANCH_NAME == 'master' ) } }
             parallel {
-                stage('Promote Master to Demo') {
+                stage('Build & Deploy Master to Demo') {
                     agent { label 'master' }
                     environment {
                             VANITY_URL="demo.pharmanetenrolment.gov.bc.ca"
@@ -50,11 +66,14 @@ pipeline {
                     }
                     steps {
                         script {
-                            echo "Demo (MASTER) ..."
+                            echo "Building (MASTER) for Demo ..."
                             sh "./player.sh build api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh build document-manager test -p SUFFIX='-demo'"
+
+                            echo "Deploying (MASTER) to Demo ..."
                             sh "./player.sh deploy postgres test -p SUFFIX='-demo'"
+                            sh "./player.sh deploy redis test -p SUFFIX='-demo'"
                             // sh "./player.sh deploy mongo test -p SUFFIX='-demo'"
                             sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
@@ -62,15 +81,18 @@ pipeline {
                         }
                     }
                 }
-                stage('Promote Master to Production') {
+                stage('Build & Deploy Master to Production') {
                     agent { label 'master' }
                     steps {
                         script {
-                            echo "Deploy to Production..."
+                            echo "Building (MASTER) branch for Production..."
                             sh "./player.sh build api prod"
                             sh "./player.sh build frontend prod"
                             sh "./player.sh build document-manager prod"
+
+                            echo "Deploying (MASTER) branch to Production..."
                             sh "./player.sh deploy postgres prod"
+                            sh "./player.sh deploy redis prod"
                             sh "./player.sh deploy api prod"
                             sh "./player.sh deploy frontend prod"
                             sh "./player.sh deploy document-manager prod"

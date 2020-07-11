@@ -9,13 +9,13 @@ pipeline {
     agent none
     stages {
         stage('Build & Deploy Test Environment') {
-            options {
+                options {
                 timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
             }
             when { expression { ( BRANCH_NAME == 'test' ) } }
             environment {
                     BRANCH_LOWER = BRANCH_NAME.toLowerCase()
-                    VANITY_URL = "pr-611.pharmanetenrolment.gov.bc.ca"
+                    VANITY_URL = "test.pharmanetenrolment.gov.bc.ca"
                     SCHEMA = "https"
                     PORT = "8443"
                     FRONTEND_ARGS = "-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
@@ -25,15 +25,34 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    echo "Build & deploy (TEST) branch ..."
+                    // Generate release prior to deploy to production, and request release tag name and description from user
+                    def releaseTag = input(
+                            id: 'Release Version Tag', message: "Please provide this release's version tag. A BETA suffix will be added to denote that this is a prerelease, and not production ready.", ok: "Submit", parameters: [
+                            string(name: 'IS_APPROVED', defaultValue: 'v', description: 'Deploy to Demo & Production?')
+                        ])
+                    def releaseTitle = input(
+                            id: 'Release Title', message: "Please provide an appropriate title for this release.", ok: "Submit", parameters: [
+                            string(name: 'Release Title', defaultValue: 'Yes', description: 'Deploy to Demo & Production?')
+                        ])
+                    def releaseBody = input(
+                            id: 'Description', message: "Please provide a description in GitHub style Markdown of the features included in this release.", ok: "Submit", parameters: [
+                            string(name: 'Release Description', description: 'Deploy to Demo & Production?')
+                        ])
+                    def isPrerelease = true
+                    sh "./player.sh createRelease ${releaseTag} ${releaseTitle} ${releaseBody} ${isPrerelease}"
+
+                    echo "Building (TEST) branch ..."
                     sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build document-manager test -p SUFFIX=${SUFFIX}"
+
+                    echo "Deploying (TEST) branch ..."
                     sh "./player.sh deploy postgres test -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy redis test -p SUFFIX=${SUFFIX}"
                     // sh "./player.sh deploy mongo test -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy document-manager test -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"                    
+                    sh "./player.sh deploy document-manager test -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh toolbelt schemaspy test"
                 }
             }

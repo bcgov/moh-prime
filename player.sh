@@ -22,6 +22,9 @@ case "$1" in
     zap)
         zap $@
         ;;
+    createRelease)
+        createRelease
+        ;;
     occleanup)
         occleanup
         ;;
