@@ -26,7 +26,7 @@ namespace Prime.Services.Clients
                 { "folder", destinationFolder },
             });
 
-            return await _client.PostAsync("documents", content);
+            return await _client.PostAsync("documents/uploads", content);
         }
 
         public async Task<Stream> GetFileAsync(Guid documentGuid)
