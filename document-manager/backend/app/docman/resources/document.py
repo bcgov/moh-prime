@@ -1,7 +1,6 @@
 import uuid
 import os
 from datetime import datetime
-import collections
 
 from werkzeug.exceptions import BadRequest, NotFound, Conflict, RequestEntityTooLarge, InternalServerError
 from flask import request, current_app, send_file, make_response, jsonify
