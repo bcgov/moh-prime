@@ -1,6 +1,7 @@
 import uuid
 import os
 from datetime import datetime
+import collections
 
 from werkzeug.exceptions import BadRequest, NotFound, Conflict, RequestEntityTooLarge, InternalServerError
 from flask import request, current_app, send_file, make_response, jsonify
@@ -11,47 +12,65 @@ from app.extensions import api, cache, jwt
 from app.constants import FILE_UPLOAD_SIZE, FILE_UPLOAD_OFFSET, FILE_UPLOAD_PATH, DOWNLOAD_TOKEN, TIMEOUT_5_MINUTES, TIMEOUT_24_HOURS, TUS_API_VERSION, TUS_API_SUPPORTED_VERSIONS, FORBIDDEN_FILETYPES
 
 
-@api.route('/documents')
-class DocumentListResource(Resource):
+def validate_filename(filename):
+    if not filename:
+        raise BadRequest('File name is required')
+    if filename.endswith(FORBIDDEN_FILETYPES):
+        raise BadRequest('File type is forbidden')
+
+    return filename
+
+
+def validate_folder(folder):
+    if not folder:
+        raise BadRequest('Folder is required')
+
+    base_folder = current_app.config['UPLOADED_DOCUMENT_DEST']
+    combined_folder = os.path.join(base_folder, folder)
+    # Ensure that the upload folder lies under the base directory (and so has not been manipulated in a manner such as 'app/document_uploads/../../etc')
+    if not os.path.abspath(combined_folder).startswith(base_folder):
+        raise BadRequest('Supplied folder path is invalid')
+
+    return combined_folder
+
+
+def validate_file_size(file_size):
+    if not file_size:
+        raise BadRequest('Received file upload of unspecified size')
+
+    size = int(file_size)
+    if size <= 0:
+        raise BadRequest('File size must be a positve number')
+
+    max_file_size = current_app.config['MAX_CONTENT_LENGTH']
+    if size > max_file_size:
+        raise RequestEntityTooLarge(f'The maximum file upload size is {max_file_size/1024/1024}MB.')
+
+    return size
+
+
+@api.route('/documents/uploads')
+class DocumentUploadInitializationResource(Resource):
     parser = reqparse.RequestParser(trim=True)
-    parser.add_argument(
-        'folder', type=str, required=False, help='The sub folder path to store the document in.')
-    parser.add_argument(
-        'filename', type=str, required=False, help='File name + extension of the document.')
+    parser.add_argument('folder', type=str, required=True, help='The sub folder path to store the document in.')
+    parser.add_argument('filename', type=str, required=True, help='File name + extension of the document.')
 
     @jwt.requires_auth
     def post(self):
         if request.headers.get('Tus-Resumable') is None:
             raise BadRequest('Received file upload for unsupported file transfer protocol')
 
-        file_size = request.headers.get('Upload-Length')
-        if not file_size:
-            raise BadRequest('Received file upload of unspecified size')
-        file_size = int(file_size)
-
-        max_file_size = current_app.config['MAX_CONTENT_LENGTH']
-        if file_size > max_file_size:
-            raise RequestEntityTooLarge(f'The maximum file upload size is {max_file_size/1024/1024}MB.')
-
         data = self.parser.parse_args()
-        filename = data.get('filename')
-        if not filename:
-            raise BadRequest('File name is required')
-        if filename.endswith(FORBIDDEN_FILETYPES):
-            raise BadRequest('File type is forbidden')
-
-        base_folder = current_app.config['UPLOADED_DOCUMENT_DEST']
-        folder = data.get('folder')
-        folder = os.path.join(base_folder, folder)
-        if not self.is_safe_path(base_folder, folder):
-          raise BadRequest('Supplied folder path is invalid')
+        filename = validate_filename(data.get('filename'))
+        destination_folder = validate_folder(data.get('folder'))
+        file_size = validate_file_size(request.headers.get('Upload-Length'))
 
         document_guid = str(uuid.uuid4())
-        file_path = os.path.join(folder, document_guid)
+        file_path = os.path.join(destination_folder, document_guid)
 
         try:
-            if not os.path.exists(folder):
-                os.makedirs(folder)
+            if not os.path.exists(destination_folder):
+                os.makedirs(destination_folder)
             with open(file_path, 'wb') as f:
                 f.seek(file_size - 1)
                 f.write(b"\0")
@@ -62,44 +81,24 @@ class DocumentListResource(Resource):
         cache.set(FILE_UPLOAD_OFFSET(document_guid), 0, TIMEOUT_24_HOURS)
         cache.set(FILE_UPLOAD_PATH(document_guid), file_path, TIMEOUT_24_HOURS)
 
-        document = Document(
-            document_guid=document_guid,
-            full_storage_path=file_path,
-            upload_started_date=datetime.utcnow(),
-            filename=filename,
-        )
+        document = Document(document_guid=document_guid,
+                            full_storage_path=file_path,
+                            upload_started_date=datetime.utcnow(),
+                            filename=filename)
         document.save()
 
         response = make_response(jsonify(document_guid=document_guid), 201)
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
-        response.headers['Location'] = os.path.join(current_app.config['DOCUMENT_MANAGER_URL'], 'documents', document_guid)
+        response.headers['Location'] = os.path.join(current_app.config['DOCUMENT_MANAGER_URL'], 'documents', 'uploads', document_guid)
         response.headers['Upload-Offset'] = 0
         response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Location,Upload-Offset"
         response.autocorrect_location_header = False
         return response
 
-    # Ensure that a given path lies under a given base directory (and so has not been manipulated in a manner such as 'app/document_uploads/../../etc')
-    def is_safe_path(self, basedir, path):
-      return os.path.abspath(path).startswith(basedir)
 
-
-@api.route(f'/documents/<string:document_guid>')
-class DocumentResource(Resource):
-    @jwt.requires_auth
-    def get(self, document_guid):
-        if not document_guid:
-            raise BadRequest('Document GUID is required')
-
-        doc = Document.find_by_document_guid(document_guid)
-        if not doc:
-            raise NotFound()
-
-        return send_file(
-            filename_or_fp=doc.full_storage_path,
-            attachment_filename=doc.filename,
-            as_attachment=False)
-
+@api.route(f'/documents/uploads/<string:document_guid>')
+class DocumentUploadResource(Resource):
     def patch(self, document_guid):
         file_path = cache.get(FILE_UPLOAD_PATH(document_guid))
         if file_path is None or not os.path.lexists(file_path):
@@ -114,6 +113,8 @@ class DocumentResource(Resource):
         if chunk_size is None:
             raise BadRequest('No Content-Length header in request')
         chunk_size = int(chunk_size)
+        if chunk_size <= 0:
+            raise BadRequest('Content-Length header must be a positive value')
 
         new_offset = file_offset + chunk_size
         file_size = cache.get(FILE_UPLOAD_SIZE(document_guid))
@@ -180,6 +181,58 @@ class DocumentResource(Resource):
         return response
 
 
+@api.route(f'/documents')
+class DocumentListResource(Resource):
+    parser = reqparse.RequestParser(trim=True)
+    parser.add_argument('folder', type=str, location='args', required=True, help='The sub folder path to store the document in.')
+    parser.add_argument('filename', type=str, location='args', required=True, help='File name + extension of the document.')
+
+    @jwt.requires_auth
+    def post(self):
+        data = self.parser.parse_args()
+        filename = validate_filename(data.get('filename'))
+        destination_folder = validate_folder(data.get('folder'))
+        validate_file_size(request.content_length)
+
+        document_guid = str(uuid.uuid4())
+        file_path = os.path.join(destination_folder, document_guid)
+
+        try:
+            if not os.path.exists(destination_folder):
+                os.makedirs(destination_folder)
+            with open(file_path, 'wb') as f:
+                f.write(request.data)
+        except IOError as e:
+            raise InternalServerError('Unable to write to file')
+
+        document = Document(
+            document_guid=document_guid,
+            full_storage_path=file_path,
+            upload_started_date=datetime.utcnow(),
+            upload_completed_date=datetime.utcnow(),
+            filename=filename,
+        )
+        document.save()
+
+        return make_response(jsonify(document_guid=document_guid), 201)
+
+
+@api.route(f'/documents/<string:document_guid>')
+class DocumentResource(Resource):
+    @jwt.requires_auth
+    def get(self, document_guid):
+        if not document_guid:
+            raise BadRequest('Document GUID is required')
+
+        doc = Document.find_by_document_guid(document_guid)
+        if not doc:
+            raise NotFound()
+
+        return send_file(filename_or_fp=doc.full_storage_path,
+                         attachment_filename=doc.filename,
+                         as_attachment=False)
+
+
 @api.route(f'/documents/<string:document_guid>/download-token')
 class DownloadTokenCreationResource(Resource):
     @jwt.requires_auth
@@ -209,7 +262,6 @@ class DocumentDownloadResource(Resource):
         if not doc:
             raise NotFound('Could not find document')
 
-        return send_file(
-            filename_or_fp=doc.full_storage_path,
-            attachment_filename=doc.filename,
-            as_attachment=True)
+        return send_file(filename_or_fp=doc.full_storage_path,
+                         attachment_filename=doc.filename,
+                         as_attachment=True)
