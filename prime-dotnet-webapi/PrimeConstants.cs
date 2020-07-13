@@ -39,12 +39,8 @@ namespace Prime
         public readonly static string DOCUMENT_MANAGER_CLIENT_SECRET = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_SECRET") ?? "b515de16-419b-49b1-bca9-f97eafc95d41";
 
         // Aries Prime Agent
-        // Commented out dev defaults, switching to using their test agent in dev and test, will be switching back once merged to test
-        // public readonly static string VERIFIABLE_CREDENTIAL_API_URL = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "https://prime-agent-admin-dev.pathfinder.gov.bc.ca/";
-        // public readonly static string VERIFIABLE_CREDENTIAL_API_KEY = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_KEY") ?? "P8ZmRJ05biXGWI1/bDtXcp1pixtWdsAqhcUJcn4S7QQ=";
-        // public readonly static string VERIFIABLE_CREDENTIAL_SCHEMA_ID = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_SCHEMA_ID") ?? "QDaSxvduZroHDKkdXKV5gG:2:enrollee:2.0";
-        public readonly static string VERIFIABLE_CREDENTIAL_API_URL = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "https://prime-agent-admin-test.pathfinder.gov.bc.ca/";
-        public readonly static string VERIFIABLE_CREDENTIAL_API_KEY = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_KEY") ?? "2+01DlJcpwimu7+mPmr2+DjezU4VcnK4kvaiPznJPk8=";
+        public readonly static string VERIFIABLE_CREDENTIAL_API_URL = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "https://prime-agent-admin-dev.pathfinder.gov.bc.ca/";
+        public readonly static string VERIFIABLE_CREDENTIAL_API_KEY = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_KEY") ?? "P8ZmRJ05biXGWI1/bDtXcp1pixtWdsAqhcUJcn4S7QQ=";
         public readonly static string VERIFIABLE_CREDENTIAL_WEBHOOK_KEY = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_WEBHOOK_KEY") ?? "0ce755d5-1fb1-483a-ba22-439061aa8f67";
     }
 }
