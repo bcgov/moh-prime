@@ -127,7 +127,7 @@ function preventMerge() {
     -X POST \
     -H "Accept: application/json" \
     -u "mtpultz:ff7cb734452eceb1bdf24221cf990b50a4beb089" \
-    "https://api.github.com/repos/bcgov/moh-prime/statuses/0acbcea78108b6a6eaaed9e5b3bb471d3919c402"
+    "https://api.github.com/repos/bcgov/moh-prime/statuses/0acbcea78108b6a6eaaed9e5b3bb471d3919c402" \
     -d "{\"state\": \"failure\", \"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\"}"
 
   # curl \
