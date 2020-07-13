@@ -18,10 +18,6 @@ pipeline {
             steps {
                 script {
                     checkout scm
-                    // echo "PROJECT_OWNER: $PROJECT_OWNER"
-                    // echo "PROJECT_NAME: $PROJECT_NAME"
-                    // echo "GIT_COMMENT: $GIT_COMMIT"
-                    // echo "BUILD_NUMBER: $BUILD_NUMBER"
                     // Attempt to get a message into GitHub
                     sh "./player.sh preventMerge"
                 }
@@ -87,22 +83,7 @@ pipeline {
               echo "Running integrity tests..."
               echo "$GIT_BRANCH"
               echo "$BRANCH_NAME"
-              // Attempt to see merge prevented
-              // exit 1;
-
-              // sh "exit 1"
             }
-            // post {
-            //   always: {
-            //     echo "Tests are always run!"
-            //   }
-            //   success: {
-            //     echo: "Tests Passed :)"
-            //   }
-            //   failure: {
-            //     echo: "Tests Failed :("
-            //   }
-            // }
           }
         }
         stage('Quality Check') {
@@ -139,7 +120,7 @@ pipeline {
           // when { expression { ( BRANCH_NAME == 'feature/PRIME-895-api-unit-test' ) }  }
           steps {
             script {
-              sh "exit 1"
+
             }
           }
         }

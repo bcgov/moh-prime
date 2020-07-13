@@ -128,12 +128,12 @@ function preventMerge() {
   curl \
     -X POST \
     -H "Accept: application/vnd.github.v3+json" \
-    "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT" \
+    "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT?access_token=68f730b6873afa5e0a6cec3c2656b546d9a336f3" \
     -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/${PROJECT_OWNER}/$BUILD_NUMBER/console\"}"
 
-  curl \
-    -X GET \
-    "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
+  # curl \
+  #   -X GET \
+  #   "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
 }
 
 function getOldPr () {
