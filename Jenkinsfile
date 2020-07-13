@@ -113,17 +113,17 @@ pipeline {
                 }
             }
         }
-        stage('Prevent Merge') {
-          options {
-              timeout(time: 10, unit: 'MINUTES')
-          }
-          // when { expression { ( BRANCH_NAME == 'feature/PRIME-895-api-unit-test' ) }  }
-          steps {
-            script {
+        // stage('Prevent Merge') {
+        //   options {
+        //       timeout(time: 10, unit: 'MINUTES')
+        //   }
+        //   // when { expression { ( BRANCH_NAME == 'feature/PRIME-895-api-unit-test' ) }  }
+        //   steps {
+        //     script {
 
-            }
-          }
-        }
+        //     }
+        //   }
+        // }
         // stage('Cleanup') {
         //     steps {
         //         script {
