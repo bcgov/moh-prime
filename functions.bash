@@ -123,6 +123,13 @@ function preventMerge() {
   echo "BUILD_NUMBER: $BUILD_NUMBER"
   echo "GIT_USERNAME: $GIT_USERNAME"
 
+  curl \
+    -X POST \
+    -H "Accept: application/json" \
+    -u "mtpultz:ff7cb734452eceb1bdf24221cf990b50a4beb089" \
+    "https://api.github.com/repos/bcgov/moh-prime/statuses/0acbcea78108b6a6eaaed9e5b3bb471d3919c402"
+    -d "{\"state\": \"failure\", \"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\"}"
+
   # curl \
   #   -X GET \
   #   "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
