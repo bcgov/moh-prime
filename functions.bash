@@ -123,8 +123,6 @@ function preventMerge() {
   echo "BUILD_NUMBER: $BUILD_NUMBER"
   echo "GIT_USERNAME: $GIT_USERNAME"
 
-  whoami
-
   # curl \
   #   -X GET \
   #   "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
