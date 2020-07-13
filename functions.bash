@@ -128,7 +128,7 @@ function preventMerge() {
   curl \
     -X POST \
     -H "Accept: application/vnd.github.v3+json" \
-    "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT?access_token=68f730b6873afa5e0a6cec3c2656b546d9a336f3" \
+    "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT?access_token=885007bd98c62498752b5154eae3d8e4cf20b5c4" \
     -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/${PROJECT_OWNER}/$BUILD_NUMBER/console\"}"
 
   # curl \
