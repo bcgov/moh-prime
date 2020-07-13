@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Web;
 
 namespace Prime.Services.Clients
 {
@@ -35,6 +36,21 @@ namespace Prime.Services.Clients
             return await response.Content.ReadAsStreamAsync();
         }
 
+        public async Task<string> PostFileAsync(Stream document, string filename)
+        {
+            // Build Uri with query param
+            var uriBuilder = new UriBuilder("documents");
+            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+            query["filename"] = filename;
+            uriBuilder.Query = query.ToString();
+
+            var content = new StreamContent(document);
+            var response = await _client.PostAsync(uriBuilder.Uri, content);
+            var documentToken = await response.Content.ReadAsAsync<DocumentToken>();
+
+            return documentToken?.token;
+        }
+
         public async Task<string> CreateDownloadTokenAsync(Guid documentGuid)
         {
             var response = await _client.PostAsync($"documents/{documentGuid}/download-token", null);
@@ -44,6 +60,11 @@ namespace Prime.Services.Clients
         }
 
         private class DownloadToken
+        {
+            public string token { get; set; }
+        }
+
+        private class DocumentToken
         {
             public string token { get; set; }
         }
