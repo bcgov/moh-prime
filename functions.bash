@@ -131,9 +131,9 @@ function preventMerge() {
     "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/$GIT_COMMIT?access_token=885007bd98c62498752b5154eae3d8e4cf20b5c4" \
     -d "{\"state\": \"failure\",\"context\": \"continuous-integration/jenkins\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/${PROJECT_OWNER}/$BUILD_NUMBER/console\"}"
 
-  # curl \
-  #   -X GET \
-  #   "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
+  curl \
+    -X GET \
+    "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
 }
 
 function getOldPr () {
