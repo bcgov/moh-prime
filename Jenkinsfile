@@ -138,8 +138,8 @@ pipeline {
 // @param $4 GitHub credentials
 def notifyGitHub(String state, String context) {
   withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIAL')]) {
+    sh("source project.conf")
     sh("""
-      source project.conf
       curl \
         -X POST \
         -H "Accept: application/vnd.github.v3+json" \
