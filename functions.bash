@@ -116,16 +116,14 @@ function getAllOpenPr () {
     declare -p OPEN_PR_ARRAY=( $(grep '"number"' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}') )
 }
 
-function preventMerge() {
+function notifyStatus() {
   echo "PROJECT_OWNER: $PROJECT_OWNER"
   echo "PROJECT_NAME: $PROJECT_NAME"
   echo "GIT_COMMENT: $GIT_COMMIT"
   echo "BUILD_NUMBER: $BUILD_NUMBER"
   echo "GIT_USERNAME: $GIT_USERNAME"
   echo "CREDENTIAL: $GITHUB_CREDENTIAL"
-}
 
-function notifyStatus() {
   # TODO update username and credential used to send cURL
   curl \
     -X POST \
