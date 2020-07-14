@@ -102,6 +102,7 @@ namespace Prime.Services.Clients
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
             _logger.LogInformation("GET Schema id by issuer id response {@JObject}", JsonConvert.SerializeObject(body));
+            _logger.LogInformation("SCHEMA_ID: ", (string)body.SelectToken("schema_ids[0]"));
 
             return (string)body.SelectToken("schema_ids[0]");
         }
