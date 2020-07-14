@@ -22,7 +22,7 @@ namespace Prime.Services.Clients
             _client.DefaultRequestHeaders.Add("Tus-Resumable", "1.0.0");
             _client.DefaultRequestHeaders.Add("Upload-Length", fileSize);
 
-            var content = DocumentUploadInfo.AsHttpContent(filename, destinationFolder);
+            var content = UploadMetadata.AsHttpContent(filename, destinationFolder);
             return await _client.PostAsync("documents/uploads", content);
         }
 
@@ -36,7 +36,7 @@ namespace Prime.Services.Clients
 
         public async Task<Guid> SendFileAsync(Stream document, string filename, string destinationFolder)
         {
-            var url = DocumentUploadInfo.AsQueryStringUrl("documents", filename, destinationFolder);
+            var url = UploadMetadata.AsQueryStringUrl("documents", filename, destinationFolder);
             var content = new StreamContent(document);
 
             var response = await _client.PostAsync(url, content);
@@ -51,7 +51,7 @@ namespace Prime.Services.Clients
             return await response.Content.ReadAsStreamAsync();
         }
 
-        private static class DocumentUploadInfo
+        private static class UploadMetadata
         {
             public static HttpContent AsHttpContent(string filename, string destinationFolder)
             {
