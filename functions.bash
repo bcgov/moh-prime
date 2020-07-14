@@ -123,6 +123,7 @@ function notifyStatus() {
   echo "BUILD_NUMBER: $BUILD_NUMBER"
   echo "GIT_USERNAME: $GIT_USERNAME"
   echo "CREDENTIAL: $GITHUB_CREDENTIAL"
+  echo "CREDENTIALV2: $3"
 
   # TODO update username and credential used to send cURL
   curl \
@@ -131,6 +132,13 @@ function notifyStatus() {
     -u "mtpultz:${GITHUB_CREDENTIAL}" \
     "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/${GIT_COMMIT}" \
     -d "{\"state\": \"${2}\",\"context\": \"${3}\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/Development/jenkins/Development/job/${BRANCH_NAME}/${BUILD_NUMBER}/display/redirect\"}"
+
+  curl \
+    -X POST \
+    -H "Accept: application/vnd.github.v3+json" \
+    -u "${4}" \
+    "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/${GIT_COMMIT}" \
+    -d "{\"state\": \"error\",\"context\": \"${3}\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/Development/jenkins/Development/job/${BRANCH_NAME}/${BUILD_NUMBER}/display/redirect\"}"
 }
 
 function getOldPr () {
