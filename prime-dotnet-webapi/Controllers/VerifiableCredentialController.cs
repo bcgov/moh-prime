@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
 using Prime.Models.Api;
@@ -15,12 +16,15 @@ namespace Prime.Controllers
     public class VerifiableCredentialController : ControllerBase
     {
         private readonly IVerifiableCredentialService _verifiableCredentialsService;
+        private readonly ILogger _logger;
 
         public VerifiableCredentialController(
-            IVerifiableCredentialService verifiableCredentialService
+            IVerifiableCredentialService verifiableCredentialService,
+            ILogger<VerifiableCredentialController> logger
         )
         {
             _verifiableCredentialsService = verifiableCredentialService;
+            _logger = logger;
         }
 
         // POST: api/topic/:topic/{guid}
@@ -38,6 +42,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Webhook(string apiKey, string topic, [FromBody] JObject data)
         {
+            _logger.LogInformation("API-KEY: {apiKey}, VERIFIABLE_CREDENTIAL_WEBHOOK_KEY: {PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY}", apiKey, PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY);
+
             if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
             {
                 return Forbid();
