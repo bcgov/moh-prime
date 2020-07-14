@@ -22,7 +22,7 @@ pipeline {
 
                     // Access via scoped credentials
                     withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIALV2')]) {
-                        sh "./player.sh notifyGitHub pending continuous-integration/jenkins $GITHUB_CREDENTIALV2"
+                      sh "./player.sh notifyGitHub pending continuous-integration/jenkins $GITHUB_CREDENTIALV2"
                     }
                 }
             }
@@ -34,11 +34,15 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    notifyGitHub("failure", "continuous-integration/jenkins")
-                    echo "Building ..."
-                    sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
+                  // Access via global credentials
+                  sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
+
+                  echo "Building ..."
+                  sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                  sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                  sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
+
+                  sh "./player.sh notifyGitHub success build $GITHUB_CREDENTIAL"
                 }
             }
         }
@@ -68,6 +72,8 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
+                    sh "./player.sh notifyGitHub pending deployment $GITHUB_CREDENTIAL"
+
                     echo "Deploy to dev..."
                     sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
@@ -75,6 +81,8 @@ pipeline {
                     // sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+
+                    sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
                 }
             }
         }
@@ -85,12 +93,14 @@ pipeline {
           agent { label 'master' }
           steps {
             script {
+              sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+
               echo "Running integrity tests..."
               echo "$GIT_BRANCH"
               echo "$BRANCH_NAME"
 
-              // Access via global credentials
-              sh "./player.sh notifyGitHub success continuous-integration/jenkins $GITHUB_CREDENTIAL"
+              sh "./player.sh notifyGitHub failure continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+              // sh "./player.sh notifyGitHub success continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
             }
           }
         }
