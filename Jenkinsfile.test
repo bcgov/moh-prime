@@ -12,7 +12,7 @@ pipeline {
                 options {
                 timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
             }
-            when { expression { ( BRANCH_NAME == 'feature/pr-611-test-branch' ) } }
+            // when { expression { ( BRANCH_NAME == 'feature/pr-611-test-branch' ) } }
             environment {
                     BRANCH_LOWER = BRANCH_NAME.toLowerCase()
                     VANITY_URL = "${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
