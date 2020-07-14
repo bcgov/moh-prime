@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Web;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Prime.Services.Clients
 {
@@ -21,34 +22,8 @@ namespace Prime.Services.Clients
             _client.DefaultRequestHeaders.Add("Tus-Resumable", "1.0.0");
             _client.DefaultRequestHeaders.Add("Upload-Length", fileSize);
 
-            var content = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                { "filename", filename },
-                { "folder", destinationFolder },
-            });
-
+            var content = DocumentUploadInfo.AsHttpContent(filename, destinationFolder);
             return await _client.PostAsync("documents/uploads", content);
-        }
-
-        public async Task<Stream> GetFileAsync(Guid documentGuid)
-        {
-            var response = await _client.GetAsync($"documents/{documentGuid}");
-            return await response.Content.ReadAsStreamAsync();
-        }
-
-        public async Task<string> PostFileAsync(Stream document, string filename)
-        {
-            // Build Uri with query param
-            var uriBuilder = new UriBuilder("documents");
-            var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-            query["filename"] = filename;
-            uriBuilder.Query = query.ToString();
-
-            var content = new StreamContent(document);
-            var response = await _client.PostAsync(uriBuilder.Uri, content);
-            var documentToken = await response.Content.ReadAsAsync<DocumentToken>();
-
-            return documentToken?.token;
         }
 
         public async Task<string> CreateDownloadTokenAsync(Guid documentGuid)
@@ -59,14 +34,53 @@ namespace Prime.Services.Clients
             return downloadToken?.token;
         }
 
+        public async Task<Guid> SendFileAsync(Stream document, string filename, string destinationFolder)
+        {
+            var url = DocumentUploadInfo.AsQueryStringUrl("documents", filename, destinationFolder);
+            var content = new StreamContent(document);
+
+            var response = await _client.PostAsync(url, content);
+            var documentResponse = await response.Content.ReadAsAsync<DocumentResponse>();
+
+            return documentResponse?.document_guid ?? Guid.Empty;
+        }
+
+        public async Task<Stream> GetFileAsync(Guid documentGuid)
+        {
+            var response = await _client.GetAsync($"documents/{documentGuid}");
+            return await response.Content.ReadAsStreamAsync();
+        }
+
+        private static class DocumentUploadInfo
+        {
+            public static HttpContent AsHttpContent(string filename, string destinationFolder)
+            {
+                return new FormUrlEncodedContent(ToDictionary(filename, destinationFolder));
+            }
+
+            public static string AsQueryStringUrl(string baseUrl, string filename, string destinationFolder)
+            {
+                return QueryHelpers.AddQueryString(baseUrl, ToDictionary(filename, destinationFolder));
+            }
+
+            private static Dictionary<string, string> ToDictionary(string filename, string destinationFolder)
+            {
+                return new Dictionary<string, string>()
+                {
+                    { "filename", filename },
+                    { "folder", destinationFolder },
+                };
+            }
+        }
+
         private class DownloadToken
         {
             public string token { get; set; }
         }
 
-        private class DocumentToken
+        private class DocumentResponse
         {
-            public string token { get; set; }
+            public Guid document_guid { get; set; }
         }
     }
 }

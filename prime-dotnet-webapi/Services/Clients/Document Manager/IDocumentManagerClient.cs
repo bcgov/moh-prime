@@ -9,10 +9,10 @@ namespace Prime.Services.Clients
     {
         Task<HttpResponseMessage> InitializeFileUploadAsync(string filename, string fileSize, string destinationFolder);
 
-        Task<Stream> GetFileAsync(Guid documentGuid);
-
         Task<string> CreateDownloadTokenAsync(Guid documentGuid);
 
-        Task<string> PostFileAsync(Stream document, string filename);
+        Task<Guid> SendFileAsync(Stream document, string filename, string destinationFolder);
+
+        Task<Stream> GetFileAsync(Guid documentGuid);
     }
 }
