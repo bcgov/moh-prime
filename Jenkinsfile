@@ -22,7 +22,7 @@ pipeline {
 
                     // Access via scoped credentials
                     withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIALV2')]) {
-                        sh "./player.sh notifyStatus pending continuous-integration/jenkins $GITHUB_CREDENTIALV2"
+                        sh "./player.sh notifyGitHub pending continuous-integration/jenkins $GITHUB_CREDENTIALV2"
                     }
                 }
             }
@@ -90,7 +90,7 @@ pipeline {
               echo "$BRANCH_NAME"
 
               // Access via global credentials
-              sh "./player.sh notifyStatus success continuous-integration/jenkins $GITHUB_CREDENTIAL"
+              sh "./player.sh notifyGitHub success continuous-integration/jenkins $GITHUB_CREDENTIAL"
             }
           }
         }
