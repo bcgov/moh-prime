@@ -139,12 +139,13 @@ pipeline {
 def notifyGitHub(String state, String context) {
   withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIAL')]) {
     sh("""
+      source project.conf
       curl \
         -X POST \
         -H "Accept: application/vnd.github.v3+json" \
         -u "${GITHUB_CREDENTIAL}" \
         "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/${GIT_COMMIT}" \
-        -d "{\"state\": \"${2}\",\"context\": \"${3}\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/Development/jenkins/Development/job/${BRANCH_NAME}/${BUILD_NUMBER}/display/redirect\"}"
+        -d "{\"state\": \"${state}\",\"context\": \"${context}\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/Development/jenkins/Development/job/${BRANCH_NAME}/${BUILD_NUMBER}/display/redirect\"}"
     """)
   }
 }
