@@ -15,7 +15,7 @@ namespace Prime.Services.Clients
 
         private static readonly string SchemaName = "enrollee";
         // TODO update version to 2.0 in test agent (and update cred_def_id) so versions are the same between dev and test
-        private static readonly string SchemaVersion = "1.0";
+        private static readonly string SchemaVersion = "2.0";
 
         public VerifiableCredentialClient(
             HttpClient client,
