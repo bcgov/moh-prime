@@ -34,8 +34,8 @@ case "$1" in
     fsparsify)
         sparsify $@
         ;;
-    preventMerge)
-        preventMerge
+    notifyStatus)
+        notifyStatus $@
         ;;
     *)
     echo "You\'re doing it wrong..."

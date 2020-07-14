@@ -8,7 +8,7 @@ pipeline {
         SUFFIX="-${BRANCH_LOWER}"
         FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
-        GITHUB_CREDENTIAL = credentials('GitHub')
+        GITHUB_CREDENTIAL = credentials('e016fbfb-84ac-4601-99ac-a7a906aa3108')
     }
     options {
         disableResume()
@@ -19,8 +19,8 @@ pipeline {
             steps {
                 script {
                     checkout scm
-                    // Attempt to get a message into GitHub
-                    sh "./player.sh preventMerge"
+                    // Update GitHub commit status to be pending
+                    sh "./player.sh notifyStatus pending continuous-integration/jenkins"
                 }
             }
         }
@@ -114,17 +114,6 @@ pipeline {
                 }
             }
         }
-        // stage('Prevent Merge') {
-        //   options {
-        //       timeout(time: 10, unit: 'MINUTES')
-        //   }
-        //   // when { expression { ( BRANCH_NAME == 'feature/PRIME-895-api-unit-test' ) }  }
-        //   steps {
-        //     script {
-
-        //     }
-        //   }
-        // }
         // stage('Cleanup') {
         //     steps {
         //         script {
