@@ -8,6 +8,7 @@ pipeline {
         SUFFIX="-${BRANCH_LOWER}"
         FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
+        GITHUB_CREDENTIAL = credentials('GitHub')
     }
     options {
         disableResume()

@@ -122,6 +122,7 @@ function preventMerge() {
   echo "GIT_COMMENT: $GIT_COMMIT"
   echo "BUILD_NUMBER: $BUILD_NUMBER"
   echo "GIT_USERNAME: $GIT_USERNAME"
+  echo "CREDENTIAL: $GITHUB_CREDENTIAL"
 }
 
 function getOldPr () {
