@@ -63,6 +63,7 @@ namespace Prime.Services.Clients
             HttpResponseMessage response = null;
             try
             {
+                _logger.LogInformation("Credential offer at request time:  {@JObject}", JsonConvert.SerializeObject(credentialOffer));
                 response = await _client.PostAsync("issue-credential/send", httpContent);
             }
             catch (Exception ex)
