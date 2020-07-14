@@ -20,7 +20,9 @@ export class AdminOrganizationInformationComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private organizationResource: OrganizationResource
-  ) { }
+  ) {
+    this.hasActions = true;
+  }
 
   ngOnInit(): void {
     this.busy = this.getOrganization()

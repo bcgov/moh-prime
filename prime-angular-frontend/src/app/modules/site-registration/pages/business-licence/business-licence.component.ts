@@ -47,7 +47,7 @@ export class BusinessLicenceComponent implements OnInit {
   public onUpload(event: BaseDocument) {
     const siteId = this.siteService.site.id;
     this.siteResource
-      .createBusinessLicence(siteId, event.documentGuid, event.fileName).subscribe(() => {
+      .createBusinessLicence(siteId, event.documentGuid, event.filename).subscribe(() => {
         this.uploadedFile = true;
         this.hasNoLicenceError = false;
       });

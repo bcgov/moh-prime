@@ -94,6 +94,7 @@ namespace Prime
         public DbSet<Credential> Credentials { get; set; }
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
+        public DbSet<SiteRegistrationReview> SiteRegistrationReviews { get; set; }
 
         public override int SaveChanges()
         {

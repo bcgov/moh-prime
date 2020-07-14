@@ -198,7 +198,7 @@ namespace Prime.Services
             {
                 DocumentGuid = documentGuid,
                 OrganizationId = organizationId,
-                FileName = filename,
+                Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };
 

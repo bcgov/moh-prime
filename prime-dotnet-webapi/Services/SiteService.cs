@@ -355,7 +355,7 @@ namespace Prime.Services
             {
                 DocumentGuid = documentGuid,
                 SiteId = siteId,
-                FileName = filename,
+                Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };
 

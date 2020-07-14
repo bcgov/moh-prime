@@ -36,5 +36,7 @@ namespace Prime.Models
         public ICollection<BusinessLicence> BusinessLicences { get; set; }
 
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }
+
+        public SiteRegistrationReview SiteRegistrationReview { get; set; }
     }
 }

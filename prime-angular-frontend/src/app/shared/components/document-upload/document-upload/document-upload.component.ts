@@ -13,11 +13,11 @@ import { EventEmitter } from '@angular/core';
 
 export class BaseDocument {
   id: number;
-  fileName: string;
+  filename: string;
   documentGuid: string;
 
-  constructor(fileName: string, documentGuid: string) {
-    this.fileName = fileName;
+  constructor(filename: string, documentGuid: string) {
+    this.filename = filename;
     this.documentGuid = documentGuid;
   }
 }
