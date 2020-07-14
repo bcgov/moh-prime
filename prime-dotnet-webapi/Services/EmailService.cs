@@ -200,14 +200,13 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
         }
 
-        private async Task<int> CreateSiteRegistrationReview(string razorViewString, int siteId)
+        private async Task<int> CreateSiteRegistrationReview(string html, int siteId)
         {
 
 
-            var siteRegistrationReviewBytes = Encoding.ASCII.GetBytes(razorViewString);
-            var siteRegistrationReviewStream = new MemoryStream(siteRegistrationReviewBytes);
+            var pdfStream = new MemoryStream(_pdfService.Generate(html));
 
-            var documentGuid = await _documentManagerClient.SendFileAsync(siteRegistrationReviewStream, $"siteRegistrationReview-{siteId}.pdf", "site-registration");
+            var documentGuid = await _documentManagerClient.SendFileAsync(pdfStream, $"siteRegistrationReview-{siteId}.pdf", "site-registration");
 
             var old = await _context.SiteRegistrationReviews.SingleOrDefaultAsync(srr => srr.SiteId == siteId);
 
