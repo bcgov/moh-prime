@@ -19,8 +19,9 @@ pipeline {
             steps {
                 script {
                     checkout scm
-                    // Update GitHub commit status to be pending
-                    withCredentials([usernameColonPassword(credentialsId: '1075792c-57f5-4392-b289-8830c511c639', variable: 'GITHUB_CREDENTIALV2')]) {
+
+                    // Access via scoped credentials
+                    withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIALV2')]) {
                         sh "./player.sh notifyStatus pending continuous-integration/jenkins $GITHUB_CREDENTIALV2"
                     }
                 }
@@ -86,6 +87,9 @@ pipeline {
               echo "Running integrity tests..."
               echo "$GIT_BRANCH"
               echo "$BRANCH_NAME"
+
+              // Access via global credentials
+              sh "./player.sh notifyStatus success continuous-integration/jenkins $GITHUB_CREDENTIAL"
             }
           }
         }

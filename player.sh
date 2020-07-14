@@ -34,8 +34,8 @@ case "$1" in
     fsparsify)
         sparsify $@
         ;;
-    notifyStatus)
-        notifyStatus $@
+    notifyGitHub)
+        notifyGitHub $@
         ;;
     *)
     echo "You\'re doing it wrong..."
