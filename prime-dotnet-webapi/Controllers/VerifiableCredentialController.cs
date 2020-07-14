@@ -44,7 +44,7 @@ namespace Prime.Controllers
         {
             _logger.LogInformation("API-KEY: {apiKey}, VERIFIABLE_CREDENTIAL_WEBHOOK_KEY: {WEBHOOK_KEY}", apiKey, PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY);
 
-            if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
+            if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY.Trim())
             {
                 return Forbid();
             }
