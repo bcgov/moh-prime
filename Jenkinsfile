@@ -8,7 +8,7 @@ pipeline {
         SUFFIX="-${BRANCH_LOWER}"
         FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
-        GITHUB_CREDENTIAL = credentials('1075792c-57f5-4392-b289-8830c511c639')
+        GITHUB_CREDENTIAL = credentials('jenkins-github-credentials')
     }
     options {
         disableResume()

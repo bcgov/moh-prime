@@ -129,7 +129,7 @@ function notifyStatus() {
   curl \
     -X POST \
     -H "Accept: application/vnd.github.v3+json" \
-    -u "mtpultz:${GITHUB_CREDENTIAL}" \
+    -u "${GITHUB_CREDENTIAL}" \
     "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/${GIT_COMMIT}" \
     -d "{\"state\": \"${2}\",\"context\": \"${3}\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/Development/jenkins/Development/job/${BRANCH_NAME}/${BUILD_NUMBER}/display/redirect\"}"
 
