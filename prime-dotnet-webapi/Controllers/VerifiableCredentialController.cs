@@ -42,7 +42,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Webhook(string apiKey, string topic, [FromBody] JObject data)
         {
-            _logger.LogInformation("API-KEY: {apiKey}, VERIFIABLE_CREDENTIAL_WEBHOOK_KEY: {PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY}", apiKey, PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY);
+            _logger.LogInformation("API-KEY: {apiKey}, VERIFIABLE_CREDENTIAL_WEBHOOK_KEY: {WEBHOOK_KEY}", apiKey, PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY);
 
             if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
             {
