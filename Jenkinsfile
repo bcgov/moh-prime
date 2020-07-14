@@ -34,6 +34,7 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
+                    notifyGitHub("failure", "continuous-integration/jenkins")
                     echo "Building ..."
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
@@ -128,4 +129,22 @@ pipeline {
         //     }
         // }
     }
+}
+
+// @description
+// Notify GitHub of a change in the commit status for a specific context.
+// @param $2 state: 'pending' | 'success' | 'failure' | 'error'
+// @param $3 context: 'continuous-integration/jenkins/example'
+// @param $4 GitHub credentials
+def notifyGitHub(String state, String context) {
+  withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIAL')]) {
+    sh("""
+      curl \
+        -X POST \
+        -H "Accept: application/vnd.github.v3+json" \
+        -u "${GITHUB_CREDENTIAL}" \
+        "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/${GIT_COMMIT}" \
+        -d "{\"state\": \"${2}\",\"context\": \"${3}\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/Development/jenkins/Development/job/${BRANCH_NAME}/${BUILD_NUMBER}/display/redirect\"}"
+    """)
+  }
 }
