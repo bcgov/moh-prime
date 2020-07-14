@@ -24,6 +24,8 @@ pipeline {
                     withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIALV2')]) {
                       sh "./player.sh notifyGitHub pending continuous-integration/jenkins $GITHUB_CREDENTIALV2"
                     }
+
+                    notifyGitHub("failure", "example")
                 }
             }
         }
@@ -148,8 +150,8 @@ pipeline {
 // @param $4 GitHub credentials
 def notifyGitHub(String state, String context) {
   withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIAL')]) {
-    sh("source project.conf")
     sh("""
+      . ./project.conf
       curl \
         -X POST \
         -H "Accept: application/vnd.github.v3+json" \
