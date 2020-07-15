@@ -45,9 +45,6 @@ pipeline {
                   sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                   sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                   sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
-
-                  // TODO catch if build fails and notify GitHub of state "failure"
-                  // error("Oh the humanity!")
                 }
             }
             post {
@@ -76,9 +73,6 @@ pipeline {
                     // sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-
-                    // TODO catch if deploy fails and notify GitHub of state "failure"
-                    // error("Oh the humanity!")
                 }
             }
             post {
@@ -108,21 +102,60 @@ pipeline {
                 }
             }
         }
-        // TODO only for testing, otherwise use Quality Check stage
-        // stage('Integrity Test') {
+        // TODO only for testing, otherwise use commented step and subsequent gated stage
+        stage('Integrity Test (PR)') {
+          options {
+              timeout(time: 10, unit: 'MINUTES') // timeout on this stage
+          }
+          agent { label 'master' }
+          when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
+          steps {
+            script {
+              sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+
+              echo "Running integrity tests..."
+              echo "$GIT_BRANCH"
+              echo "$BRANCH_NAME"
+
+              // TODO catch failure and notify GitHub of state "failure"
+              // error("Oh the humanity!")
+            }
+            post {
+              success {
+                sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
+              }
+              failure {
+                sh "./player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
+              }
+            }
+          }
+          // TODO requires an update to Jenkins and addition of official SonarQube Jenkins plugin
+          // steps {
+          //   sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+          //
+          //   echo "Running integrity tests..."
+          //   withSonarQubeEnv('SonarQube Server') {
+          //     ???
+          //   }
+          // }
+        }
+        // TODO requires an update to Jenkins and addition of official SonarQube Jenkins plugin
+        // stage('Integrity Test Gate (PR)') {
         //   options {
-        //       timeout(time: 10, unit: 'MINUTES') // timeout on this stage
+        //     timeout(time: 1, unit: 'HOURS') // timeout on this stage
         //   }
         //   agent { label 'master' }
+        //   when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
         //   steps {
-        //     script {
-        //       sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
-
-        //       echo "Running integrity tests..."
-        //       echo "$GIT_BRANCH"
-        //       echo "$BRANCH_NAME"
-
-        //       sh "./player.sh notifyGitHub success continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+        //     // Abort the pipeline if quality gate status is not green
+        //     waitForQualityGate abortPipeline = true
+        //   }
+        //   post {
+        //     success {
+        //       sh "./player.sh notifyGitHub success continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
+        //     }
+        //     failure {
+        //       sh "./player.sh notifyGitHub failure continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
         //     }
         //   }
         // }
@@ -130,35 +163,14 @@ pipeline {
             options {
                 timeout(time: 30, unit: 'MINUTES') // timeout on this stage
             }
-            when {
-              anyOf {
-                expression { (BRANCH_NAME ==~ /PR-\d+/) };
-                expression { (BRANCH_NAME == 'develop') }
-              }
-            }
+            when { expression { ( BRANCH_NAME == 'develop' ) } }
             parallel {
                 stage('SonarQube') {
                     agent { label 'code-tests' }
                     steps {
-                        echo "Running integrity tests..."
-                        sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
                         sh "./player.sh scan"
-                        sh "./player.sh notifyGitHub success continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
                     }
-                    // steps {
-                    //   withSonarQubeEnv('SonarQube Server') {
-                    //     ??
-                    //   }
-                    // }
                 }
-                // post {
-                //   success {
-                //     sh "./player.sh notifyGitHub success continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
-                //   }
-                //   failure {
-                //     sh "./player.sh notifyGitHub failure continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
-                //   }
-                // }
                 stage('Zap') {
                     agent { label 'code-tests' }
                     steps {
@@ -173,16 +185,6 @@ pipeline {
                 }
             }
         }
-        // TODO need webhooks setup, need Jenkins upgraded, need a drink...
-        // stage('Quality Gate') {
-        //     options {
-        //         timeout(time: 1, unit: 'HOURS') // timeout on this stage
-        //     }
-        //     steps {
-        //       // Abort the pipeline if quality gate status is not green
-        //       waitForQualityGate abortPipeline = true
-        //     }
-        // }
         // stage('Cleanup') {
         //     steps {
         //         script {
@@ -192,24 +194,3 @@ pipeline {
         // }
     }
 }
-
-// TODO doesn't load project.conf
-// notifyGitHub("failure", "example")
-// @description
-// Notify GitHub of a change in the commit status for a specific context.
-// @param $2 state: 'pending' | 'success' | 'failure' | 'error'
-// @param $3 context: 'continuous-integration/jenkins/example'
-// @param $4 GitHub credentials
-// def notifyGitHub(String state, String context) {
-//   withCredentials([usernameColonPassword(credentialsId: '42118129-086b-40a0-b800-bf490c2a2e82', variable: 'GITHUB_CREDENTIAL')]) {
-//     sh("""
-//       . project.conf
-//       curl \
-//         -X POST \
-//         -H "Accept: application/vnd.github.v3+json" \
-//         -u "${GITHUB_CREDENTIAL}" \
-//         "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/${GIT_COMMIT}" \
-//         -d "{\"state\": \"${state}\",\"context\": \"${context}\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/Development/jenkins/Development/job/${BRANCH_NAME}/${BUILD_NUMBER}/display/redirect\"}"
-//     """)
-//   }
-// }
