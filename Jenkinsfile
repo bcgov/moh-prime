@@ -8,7 +8,9 @@ pipeline {
         SUFFIX="-${BRANCH_LOWER}"
         FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
-        GITHUB_CREDENTIAL = credentials('jenkins-github-credentials')
+        // TODO request made for adding human-readable ID to moh-prime credential of jenkins-git-credential
+        // to reduce changes required if credentials change
+        GITHUB_CREDENTIAL = credentials('42118129-086b-40a0-b800-bf490c2a2e82')
     }
     options {
         disableResume()
@@ -19,22 +21,16 @@ pipeline {
             steps {
                 script {
                     checkout scm
-
-                    // Access via scoped credentials
-                    withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIALV2')]) {
-                      sh "./player.sh notifyGitHub pending continuous-integration/jenkins $GITHUB_CREDENTIALV2"
-                    }
                 }
             }
         }
-        stage('Build Branch') {
+        stage('Build') {
             options {
                 timeout(time: 90, unit: 'MINUTES') // timeout on this stage
             }
             agent { label 'master' }
             steps {
                 script {
-                  // Access via global credentials
                   sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
 
                   echo "Building ..."
@@ -42,29 +38,13 @@ pipeline {
                   sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                   sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
 
+                  // TODO catch if build fails and notify GitHub of state "failure"
+
                   sh "./player.sh notifyGitHub success build $GITHUB_CREDENTIAL"
                 }
             }
         }
-        stage('Deploy Images') {
-            options {
-                timeout(time: 10, unit: 'MINUTES') // timeout on this stage
-            }
-            when { expression { ( GIT_BRANCH == 'develop' ) } }
-            agent { label 'master' }
-            steps {
-                script {
-                    echo "Deploy to dev..."
-                    sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
-                    sh "./player.sh deploy document-manager dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
-                    // sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
-                    sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                }
-            }
-        }
-        stage('Deploy PR') {
+        stage('Deploy (PR)') {
             options {
                 timeout(time: 10, unit: 'MINUTES') // timeout on this stage
             }
@@ -82,47 +62,66 @@ pipeline {
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
 
+                    // TODO catch if deploy fails and notify GitHub of state "failure"
+
                     sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
                 }
             }
         }
-        stage('Integrity Test') {
-          options {
-              timeout(time: 10, unit: 'MINUTES') // timeout on this stage
-          }
-          agent { label 'master' }
-          steps {
-            script {
-              sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
-
-              echo "Running integrity tests..."
-              echo "$GIT_BRANCH"
-              echo "$BRANCH_NAME"
-
-              sh "./player.sh notifyGitHub success continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+        stage('Deploy (DEV)') {
+            options {
+                timeout(time: 10, unit: 'MINUTES') // timeout on this stage
             }
-          }
+            when { expression { ( GIT_BRANCH == 'develop' ) } }
+            agent { label 'master' }
+            steps {
+                script {
+                    echo "Deploy to dev..."
+                    sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    sh "./player.sh deploy document-manager dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    // sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                }
+            }
         }
+        // stage('Integrity Test') {
+        //   options {
+        //       timeout(time: 10, unit: 'MINUTES') // timeout on this stage
+        //   }
+        //   agent { label 'master' }
+        //   steps {
+        //     script {
+        //       sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+
+        //       echo "Running integrity tests..."
+        //       echo "$GIT_BRANCH"
+        //       echo "$BRANCH_NAME"
+
+        //       sh "./player.sh notifyGitHub success continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+        //     }
+        //   }
+        // }
         stage('Quality Check') {
             options {
                 timeout(time: 30, unit: 'MINUTES') // timeout on this stage
             }
             when { expression { ( BRANCH_NAME == 'develop' ) } }
             parallel {
-                stage('SonarQube Code Check') {
+                stage('SonarQube') {
                     agent { label 'code-tests' }
                     steps {
                         sh "./player.sh scan"
                     }
                 }
-                stage('ZAP') {
+                stage('Zap') {
                     agent { label 'code-tests' }
                     steps {
-                        echo "Scanning..."
                         sh "./player.sh zap frontend"
                     }
                 }
-                stage('SchemaSpy Database Investigation') {
+                stage('SchemaSpy') {
                     agent { label 'master' }
                     steps {
                         sh "./player.sh toolbelt schemaspy dev"
@@ -130,6 +129,16 @@ pipeline {
                 }
             }
         }
+        // TODO need webhooks setup, need Jenkins upgraded, need a drink...
+        // stage('Quality Gate') {
+        //     options {
+        //         timeout(time: 1, unit: 'HOURS') // timeout on this stage
+        //     }
+        //     steps {
+        //       // Abort the pipeline if quality gate status is not green
+        //       waitForQualityGate abortPipeline = true
+        //     }
+        // }
         // stage('Cleanup') {
         //     steps {
         //         script {
@@ -148,7 +157,7 @@ pipeline {
 // @param $3 context: 'continuous-integration/jenkins/example'
 // @param $4 GitHub credentials
 // def notifyGitHub(String state, String context) {
-//   withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIAL')]) {
+//   withCredentials([usernameColonPassword(credentialsId: '42118129-086b-40a0-b800-bf490c2a2e82', variable: 'GITHUB_CREDENTIAL')]) {
 //     sh("""
 //       . project.conf
 //       curl \
