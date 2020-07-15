@@ -23,14 +23,6 @@ pipeline {
                     checkout scm
                 }
             }
-            post {
-              success {
-                echo "SUCCESS"
-              }
-              failure {
-                echo "FAILURE"
-              }
-            }
         }
         stage('Build') {
             options {
@@ -47,9 +39,16 @@ pipeline {
                   sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
 
                   // TODO catch if build fails and notify GitHub of state "failure"
-
-                  sh "./player.sh notifyGitHub success build $GITHUB_CREDENTIAL"
+                  // error("Oh the humanity!")
                 }
+            }
+            post {
+              success {
+                sh "./player.sh notifyGitHub success build $GITHUB_CREDENTIAL"
+              }
+              failure {
+                sh "./player.sh notifyGitHub failure build $GITHUB_CREDENTIAL"
+              }
             }
         }
         stage('Deploy (PR)') {
@@ -71,9 +70,16 @@ pipeline {
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
 
                     // TODO catch if deploy fails and notify GitHub of state "failure"
-
-                    sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
+                    // error("Oh the humanity!")
                 }
+            }
+            post {
+              success {
+                sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
+              }
+              failure {
+                sh "./player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
+              }
             }
         }
         stage('Deploy (DEV)') {
@@ -122,7 +128,20 @@ pipeline {
                     steps {
                         sh "./player.sh scan"
                     }
+                    // steps {
+                    //   withSonarQubeEnv('SonarQube Server') {
+                    //     sh 'mvn clean package sonar:sonar'
+                    //   }
+                    // }
                 }
+                // post {
+                //   success {
+                //     sh "./player.sh notifyGitHub success continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
+                //   }
+                //   failure {
+                //     sh "./player.sh notifyGitHub failure continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
+                //   }
+                // }
                 stage('Zap') {
                     agent { label 'code-tests' }
                     steps {

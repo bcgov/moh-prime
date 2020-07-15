@@ -11,6 +11,8 @@ function headless(){
 
 function dotnetTests()
 {
+    curl "http://sonarqube:9000/api/qualitygates/show"
+
     source api.conf
     echo "Building .NET application..."
     dotnet build
@@ -22,6 +24,8 @@ function dotnetTests()
     dotnet build -v n
     ~/.dotnet/tools/dotnet-sonarscanner end
     dotnet build-server shutdown
+
+    curl "http://sonarqube:9000/api/qualitygates/show"
 }
 
 function angularTests()
