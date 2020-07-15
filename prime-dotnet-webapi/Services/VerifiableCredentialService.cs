@@ -222,7 +222,8 @@ namespace Prime.Services
 
             var credentialAttributes = await CreateCredentialAttributesAsync(enrolleeId);
             var credentialOffer = await CreateCredentialOfferAsync(connectionId, credentialAttributes);
-            return await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
+            return credentialOffer;
+            // return await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
         }
 
         // Create the credential offer.
