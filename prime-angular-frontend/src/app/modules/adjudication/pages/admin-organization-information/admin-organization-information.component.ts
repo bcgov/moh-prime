@@ -27,7 +27,6 @@ export class AdminOrganizationInformationComponent implements OnInit {
   ngOnInit(): void {
     this.busy = this.getOrganization()
       .subscribe((organization: Organization) => {
-        console.log(organization);
         this.organization = organization;
       });
   }

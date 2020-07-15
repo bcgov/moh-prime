@@ -185,10 +185,6 @@ namespace Prime.Services
                 organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
             }
 
-            var siteRegistrationReview = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
-
-            await CreateSiteRegistrationReview(siteRegistrationReview, site.Id);
-
             var attachments = new (string Filename, string HtmlContent)[]
             {
                 ("OrganizationAgreement.pdf", organizationAgreementHtml),
@@ -198,6 +194,10 @@ namespace Prime.Services
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
 
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
+
+            // Create Site Registration review and save it to the Database
+            var siteRegistrationReview = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
+            await CreateSiteRegistrationReview(siteRegistrationReview, site.Id);
         }
 
         private async Task<int> CreateSiteRegistrationReview(string html, int siteId)

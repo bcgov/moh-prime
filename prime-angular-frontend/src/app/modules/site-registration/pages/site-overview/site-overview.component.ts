@@ -71,8 +71,6 @@ export class SiteOverviewComponent implements OnInit, IPage {
   }
 
   public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
-    console.log(hasSignedOrgAgreement, organizationId);
-
     if (!hasSignedOrgAgreement) {
       this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.ORGANIZATIONS), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT]);
     } else {
