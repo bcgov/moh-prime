@@ -29,19 +29,19 @@ pipeline {
                     // Generate release prior to deploy to production, and request release tag name and description from user
                     def releaseTag = input(
                             id: 'Release Version Tag', message: "Please provide this release's version tag. A BETA suffix will be added to denote that this is a prerelease, and not production ready.", ok: "Submit", parameters: [
-                            string(name: 'Version Tag', description: 'A version number that will tag and easily identify this release.')
+                            string(name: 'Version Tag', defaultValue: 'v', description: 'A version number that will tag and easily identify this release.')
                         ])
                     def releaseTitle = input(
                             id: 'Release Title', message: "Please provide an appropriate title for this release.", ok: "Submit", parameters: [
-                            string(name: 'Release Title', description: 'A title that summarizes the new features and modifications that are contained in this release. ')
+                            string(name: 'Release Title', description: 'A title that summarizes the new features and modifications that are contained in this release.')
                         ])
-                    def releaseBody = input(
-                            id: 'Description', message: "Please provide a description, in GitHub-style Markdown, of the features included in this release.", ok: "Submit", parameters: [
-                            string(name: 'Release Description')
-                        ])
+                    
+                    def isDraft = true
                     def isPrerelease = true
-                    sh "./player.sh createRelease ${releaseTag} ${releaseTitle} ${releaseBody} ${isPrerelease}"
-
+                    
+                    withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIAL')]) {
+                        sh "./player.sh createRelease $GITHUB_CREDENTIAL ${releaseTag} ${releaseTitle} ${releaseBody} ${isPrerelease} ${isDraft}"
+                    }
                     echo "Building (TEST) branch ..."
                     sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
