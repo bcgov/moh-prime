@@ -56,29 +56,6 @@ namespace Prime.Controllers
             _razorConverterService = razorConverterService;
         }
 
-        // TODO revert after prod gpids are updated
-        // PUT: api/Enrollees/UpdateGPIDS
-        /// <summary>
-        /// Updates all non HL7 compliant gpid's for all enrollees
-        /// </summary>
-        [HttpPut(Name = nameof(UpdateGPIDs))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateGPIDs()
-        {
-            if (!User.IsAdmin())
-            {
-                return Forbid();
-            }
-
-            await _submissionService.UpdateNonCompliantGPIDs();
-
-            return NoContent();
-        }
-
         // GET: api/Enrollees
         /// <summary>
         /// Gets all of the enrollees for the user, or all enrollees if user has ADMIN role.
