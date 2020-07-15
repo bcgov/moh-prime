@@ -36,6 +36,7 @@ namespace Prime.Services.Clients
             HttpResponseMessage response = null;
             try
             {
+                _logger.LogInformation($"Full Path: {_client.BaseAddress}connections/create-invitation?alias={alias}");
                 response = await _client.PostAsync($"connections/create-invitation?alias={alias}", httpContent);
             }
             catch (Exception ex)
@@ -64,6 +65,7 @@ namespace Prime.Services.Clients
             HttpResponseMessage response = null;
             try
             {
+                _logger.LogInformation($"Full Path: {_client.BaseAddress}issue-credential/send");
                 response = await _client.PostAsync("issue-credential/send", httpContent);
             }
             catch (Exception ex)
@@ -86,6 +88,7 @@ namespace Prime.Services.Clients
             HttpResponseMessage response = null;
             try
             {
+                _logger.LogInformation($"Full Path: {_client.BaseAddress}schemas/created?schema_version={SchemaVersion}&schema_issuer_did={did}&schema_name={SchemaName}");
                 response = await _client.GetAsync($"schemas/created?schema_version={SchemaVersion}&schema_issuer_did={did}&schema_name={SchemaName}");
             }
             catch (Exception ex)
@@ -113,6 +116,7 @@ namespace Prime.Services.Clients
             HttpResponseMessage response = null;
             try
             {
+                _logger.LogInformation($"Full Path: {_client.BaseAddress}schemas/{schemaId}");
                 response = await _client.GetAsync($"schemas/{schemaId}");
             }
             catch (Exception ex)
@@ -139,6 +143,7 @@ namespace Prime.Services.Clients
             HttpResponseMessage response = null;
             try
             {
+                _logger.LogInformation($"Full Path: {_client.BaseAddress}wallet/did/public");
                 response = await _client.GetAsync("wallet/did/public");
             }
             catch (Exception ex)
@@ -165,6 +170,7 @@ namespace Prime.Services.Clients
             HttpResponseMessage response = null;
             try
             {
+                _logger.LogInformation($"Full Path: {_client.BaseAddress}credential-definitions/created?schema_id={schemaId}");
                 response = await _client.GetAsync($"credential-definitions/created?schema_id={schemaId}");
             }
             catch (Exception ex)
