@@ -71,8 +71,8 @@ namespace Prime.Services.Clients
             catch (Exception ex)
             {
                 await LogError(httpContent, response, ex);
-                _logger.LogInformation("Log ERROR httpContent: {httpContent}", httpContent));
-                _logger.LogInformation("Log ERROR response: {response}", response));
+                _logger.LogInformation("Log ERROR httpContent: {httpContent}", httpContent);
+                _logger.LogInformation("Log ERROR response: {response}", response);
                 throw new VerifiableCredentialApiException("Error occurred attempting to issue a credential: ", ex);
             }
 
