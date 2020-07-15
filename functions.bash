@@ -104,7 +104,7 @@ function toolbelt() {
 
 # GitHub-related Functions
 function createRelease() {
-   curl -X POST -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/releases -d '{"tag_name": $2, "name": $3, "body": $4, "draft": true, "prerelease": $5}'
+   curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: $2" https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/releases -d '{"tag_name": $3, "name": $4, "draft": $5, "prerelease": $6}'
 }
 
 function getAllAssets() {
