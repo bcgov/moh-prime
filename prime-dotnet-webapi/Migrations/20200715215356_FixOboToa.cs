@@ -16,12 +16,7 @@ namespace Prime.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.UpdateData(
-                table: "UserClause",
-                keyColumn: "Id",
-                keyValue: 8,
-                column: "EnrolleeClassification",
-                value: "OBO");
+
         }
     }
 }
