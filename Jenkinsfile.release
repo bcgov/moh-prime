@@ -1,60 +1,28 @@
 /* Jenkinsfile.promotion
  *
  * After merging the test branch into the master branch, this will work to 
- * build and deploy changes to the OpenShift production environment.
+ * build and deploy changes to the OpenShift production environment. This
+ * will also include a deploy to our Demo site.
  * 
- * This is achieved via the following stages:
- *   1. Approval is provided by user in Jenkins console log.
- *   2. Promotion of Master
- *   3. Build & deploy to Demo environment
- *   4. Build & deploy to Production environment
+ * A deploy to test is not automatically performed - a merge from test
+ * into master will need to be done, and then the deploy must be initiated
+ * from Jenkins in the 'Release' project.
+ *
+ * Procedure:
+ *  1. Promotion and simultaneous build and deployment of Master
+ *      a. Build & deploy to Demo environment
+ *      b. Build & deploy to Production environment
  *
  */
 
 pipeline {
     agent none
     stages {
-        stage('Approve Promotion of Master to Demo & Production Environment') {
-            options {
-                timeout(time: 6, unit: 'DAYS')   // timeout on this stage
-            }
-            when { expression { ( BRANCH_NAME == 'master' ) } }
-            steps {
-                script {
-                    def IS_APPROVED = input(
-                        id: 'IS_APPROVED', message: "Do you wish to approve a deploy to the Demo & Production environments?", ok: "Yes", parameters: [
-                            string(name: 'IS_APPROVED', defaultValue: 'Yes', description: 'Deploy to Demo & Production?')
-                            ])
-                    if (IS_APPROVED != 'yes') {
-                        currentBuild.result = "SUCCESS"
-                        echo "User cancelled deployment"
-                    }
-
-                    // 2020-07-14: VERSIONING W/GITHUB NOT WORKING
-                    // Generate release prior to deploy to production, and request release tag name and description from user
-                    // def releaseTag = input(
-                    //         id: 'Release Version Tag', message: "Please provide this release's version tag.", ok: "Submit", parameters: [
-                    //         string(name: 'IS_APPROVED', defaultValue: 'v', description: 'A version number that will tag and easily identify this release.')
-                    //     ])
-                    // def releaseTitle = input(
-                    //         id: 'Release Title', message: "Please provide an appropriate title for this release.", ok: "Submit", parameters: [
-                    //         string(name: 'Release Title', defaultValue: 'Yes', description: 'A title that summarizes the new features and modifications that are contained in this release.')
-                    //     ])
-                    // def isPrerelease = false
-                    // def isDraft = true
-                    
-                    // withCredentials([usernameColonPassword(credentialsId: 'jenkins-github-credentials', variable: 'GITHUB_CREDENTIAL')]) {
-                    //     sh "./player.sh createRelease $GITHUB_CREDENTIAL ${releaseTag} ${releaseTitle} ${releaseBody} ${isPrerelease} ${isDraft}"
-                    // }
-                    
-                    // sh "./player.sh createRelease ${releaseTag} ${releaseTitle} ${releaseBody} ${isPrerelease}"
-                }
-            }
-        }
         stage('Promote Master to Demo & Production Environment') {
             options {
                 timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
             }
+            // Build and deploy master simultaneously to both Demo and Production
             when { expression { ( BRANCH_NAME == 'master' ) } }
             parallel {
                 stage('Build & Deploy Master to Demo') {
