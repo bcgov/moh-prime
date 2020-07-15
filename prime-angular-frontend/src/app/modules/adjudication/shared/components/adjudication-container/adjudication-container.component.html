@@ -5,31 +5,10 @@
 
   <ng-content select="app-page-subheader"></ng-content>
 
-  <div *ngIf="showSearchFilter"
-       class="row justify-content-end">
-    <div class="col text-right">
-      <div class="row">
-        <div class="col text-right pr-0">
-
-          <app-search-form (search)="onSearch($event)"
-                           (filter)="onFilter($event)"></app-search-form>
-
-        </div>
-        <div class="col-auto">
-
-          <div class="d-flex align-items-center pb-3 refresh">
-            <button class=""
-                    mat-icon-button
-                    matTooltip="Refresh the list of enrolments"
-                    (click)="onRefresh()">
-              <mat-icon>refresh</mat-icon>
-            </button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-search-form *ngIf="showSearchFilter"
+                   (search)="onSearch($event)"
+                   (filter)="onFilter($event)"
+                   (refresh)="onRefresh()"></app-search-form>
 
   <app-enrollee-table *ngIf="busy.closed || dataSource.data.length"
                       [dataSource]="dataSource"

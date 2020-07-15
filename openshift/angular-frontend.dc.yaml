@@ -1,4 +1,3 @@
----
 kind: Template
 apiVersion: v1
 metadata:
@@ -57,13 +56,6 @@ objects:
     selector:
       io.kompose.service: "${NAME}${SUFFIX}"
     strategy: 
-    resources:
-      requests:
-        cpu: 300m
-        memory: 512Mi
-      limits:
-        cpu: "1"
-        memory: 1024Mi
     template:
       metadata:
         creationTimestamp: 
@@ -78,6 +70,8 @@ objects:
             value: ${OC_APP}
           - name: REDIRECT_URL
             value: "${REDIRECT_URL}"
+          - name: DOCUMENT_MANAGER_URL
+            value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/"
           - name: KEYCLOAK_CLIENT_ID
             valueFrom:
               secretKeyRef:
@@ -93,11 +87,6 @@ objects:
               secretKeyRef:
                 key: KEYCLOAK_URL
                 name: "keycloak"
-          - name: JWT_WELL_KNOWN_CONFIG
-            valueFrom:
-              secretKeyRef:
-                key: JWT_WELL_KNOWN_CONFIG
-                name: keycloak
           image: " "
           name: primeweb
           ports:
@@ -113,7 +102,6 @@ objects:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
-          resources: {}
           volumeMounts:
             - mountPath: /etc/nginx/certs
               name: vanity-tls-certs

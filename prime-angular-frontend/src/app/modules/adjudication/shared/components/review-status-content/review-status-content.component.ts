@@ -3,6 +3,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { UtilsService } from '@core/services/utils.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 class Status {
   public date: string;
@@ -18,6 +24,7 @@ class Reason {
   public note: string;
   public isSelfDeclaration: boolean;
   public question: string;
+  public documents: SelfDeclarationDocument[];
 }
 
 @Component({
@@ -60,7 +67,17 @@ export class ReviewStatusContentComponent implements OnInit {
 
   }
 
-  constructor() { }
+  constructor(
+    private utilsService: UtilsService,
+    private enrolmentResource: EnrolmentResource,
+  ) { }
+
+  public downloadDocument(document: SelfDeclarationDocument) {
+    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, document.id)
+      .subscribe((token: string) => {
+        this.utilsService.downloadToken(token);
+      });
+  }
 
   public ngOnInit() {
   }
@@ -110,45 +127,53 @@ export class ReviewStatusContentComponent implements OnInit {
     }, []);
   }
 
+  private getDocumentsForSelfDeclaration(enrollee: Enrolment, code: SelfDeclarationTypeEnum) {
+    return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
+  }
+
 
   private parseDeclarations(enrollee: Enrolment): Reason[] {
-    const results = [];
-    if (enrollee.hasConviction) {
-      const conviction = new Reason();
-      conviction.name = 'User Answered Yes to a Self Declaration Question:';
-      conviction.isSelfDeclaration = true;
-      conviction.note = enrollee.hasConvictionDetails;
-      conviction.question = this.convictionQ;
-      results.push(conviction);
-    }
+    return enrollee.selfDeclarations.reduce((acc, decl: SelfDeclaration) => {
+      if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_CONVICTION) {
+        const conviction = new Reason();
+        conviction.name = 'User Answered Yes to a Self Declaration Question:';
+        conviction.isSelfDeclaration = true;
+        conviction.note = decl.selfDeclarationDetails;
+        conviction.question = this.convictionQ;
+        conviction.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_CONVICTION);
+        acc.push(conviction);
+      }
+      if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED) {
+        const registationSuspended = new Reason();
+        registationSuspended.name = 'User Answered Yes to a Self Declaration Question:';
+        registationSuspended.isSelfDeclaration = true;
+        registationSuspended.note = decl.selfDeclarationDetails;
+        registationSuspended.question = this.registrationQ;
+        registationSuspended.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED);
+        acc.push(registationSuspended);
+      }
 
-    if (enrollee.hasRegistrationSuspended) {
-      const registationSuspended = new Reason();
-      registationSuspended.name = 'User Answered Yes to a Self Declaration Question:';
-      registationSuspended.isSelfDeclaration = true;
-      registationSuspended.note = enrollee.hasRegistrationSuspendedDetails;
-      registationSuspended.question = this.registrationQ;
-      results.push(registationSuspended);
-    }
+      if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION) {
+        const disciplinaryAction = new Reason();
+        disciplinaryAction.name = 'User Answered Yes to a Self Declaration Question:';
+        disciplinaryAction.isSelfDeclaration = true;
+        disciplinaryAction.note = decl.selfDeclarationDetails;
+        disciplinaryAction.question = this.disciplinaryQ;
+        disciplinaryAction.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION);
+        acc.push(disciplinaryAction);
+      }
 
-    if (enrollee.hasDisciplinaryAction) {
-      const disciplinaryAction = new Reason();
-      disciplinaryAction.name = 'User Answered Yes to a Self Declaration Question:';
-      disciplinaryAction.isSelfDeclaration = true;
-      disciplinaryAction.note = enrollee.hasDisciplinaryActionDetails;
-      disciplinaryAction.question = this.disciplinaryQ;
-      results.push(disciplinaryAction);
-    }
+      if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED) {
+        const pharmaNetSuspended = new Reason();
+        pharmaNetSuspended.name = 'User Answered Yes to a Self Declaration Question:';
+        pharmaNetSuspended.isSelfDeclaration = true;
+        pharmaNetSuspended.note = decl.selfDeclarationDetails;
+        pharmaNetSuspended.question = this.pharmanetQ;
+        pharmaNetSuspended.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED);
+        acc.push(pharmaNetSuspended);
+      }
+      return acc;
+    }, []);
 
-    if (enrollee.hasPharmaNetSuspended) {
-      const pharmaNetSuspended = new Reason();
-      pharmaNetSuspended.name = 'User Answered Yes to a Self Declaration Question:';
-      pharmaNetSuspended.isSelfDeclaration = true;
-      pharmaNetSuspended.note = enrollee.hasPharmaNetSuspendedDetails;
-      pharmaNetSuspended.question = this.pharmanetQ;
-      results.push(pharmaNetSuspended);
-    }
-
-    return results;
   }
 }

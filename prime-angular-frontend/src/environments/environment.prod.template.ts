@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   version: '1.0.0',
   apiEndpoint: '/api/v1',
+  documentManagerUrl: '$DOCUMENT_MANAGER_URL',
   loginRedirectUrl: '$REDIRECT_URL',
   prime: {
     displayPhone: '1-844-39PRIME',

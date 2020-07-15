@@ -3,6 +3,7 @@ import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
+import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
@@ -41,7 +42,8 @@ export class SiteFormStateService {
 
   constructor(
     private fb: FormBuilder,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private configService: ConfigService
   ) {
     // Initial state of the form is unpatched and ready for
     // enrolment information
@@ -81,7 +83,7 @@ export class SiteFormStateService {
   public get site(): Site {
     const { name, physicalAddress } = this.siteAddressForm.getRawValue();
     const businessHours = this.hoursOperationForm.getRawValue().businessDays;
-    const vendor = this.vendorForm.getRawValue();
+    const vendorCode = this.vendorForm.getRawValue().vendorCode;
     const { remoteUsers } = this.remoteUsersForm.getRawValue();
 
     const [
@@ -127,8 +129,7 @@ export class SiteFormStateService {
         technicalSupportId: technicalSupport?.id,
         technicalSupport
       },
-      vendorCode: vendor?.id,
-      vendor,
+      vendorCode,
       remoteUsers,
       // TODO pec not implemented
       // completed (N/A)
@@ -223,8 +224,8 @@ export class SiteFormStateService {
     if (site.location.physicalAddress) {
       this.siteAddressForm.get('physicalAddress').patchValue(site.location.physicalAddress);
     }
-    if (site.vendor) {
-      this.vendorForm.patchValue(site.vendor);
+    if (site.vendorCode) {
+      this.vendorForm.patchValue({ vendorCode: site.vendorCode });
     }
 
     if (site.location.businessHours?.length) {
@@ -315,14 +316,14 @@ export class SiteFormStateService {
   private buildVendorForm(): FormGroup {
     return this.fb.group({
       // TODO id can't be null, but might be worth adding a new custom required validator
-      id: [
+      vendorCode: [
         0,
         // TODO can't be required since 0 is considered valid
         // TODO can't be made null due to issues updating the site
         // TODO make a required and not 0 validator
         // [Validators.required]
         // TODO using pattern for now that matches the IDs of the vendors should be updated to pull from config
-        [Validators.pattern('[1-5]{1,}')]
+        [Validators.pattern(`[1-${this.configService.vendors.length}]{1}`)]
       ]
     });
   }
@@ -434,7 +435,7 @@ export class SiteFormStateService {
       ],
       phone: [
         null,
-        [FormControlValidators.phone]
+        [Validators.required, FormControlValidators.phone]
       ],
       fax: [
         null,

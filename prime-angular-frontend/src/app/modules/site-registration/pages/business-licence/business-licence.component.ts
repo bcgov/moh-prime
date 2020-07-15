@@ -1,23 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
-
-import tus from 'tus-js-client';
-import { FilePondComponent } from 'ngx-filepond/filepond.component';
-
-import { environment } from '@env/environment';
-import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
-import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
 
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { FormGroup } from '@angular/forms';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 @Component({
   selector: 'app-business-licence',
@@ -34,30 +25,14 @@ export class BusinessLicenceComponent implements OnInit {
   public hasNoLicenceError: boolean;
   public uploadedFile: boolean;
 
-  @ViewChild('filePond') public filePondComponent: FilePondComponent;
-  public filePondOptions: { [key: string]: any };
-  public filePondUploadProgress = 0;
-  public filePondFiles = [];
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private siteService: SiteService,
     private siteResource: SiteResource,
-    private keycloakTokenService: KeycloakTokenService,
-    private toastService: ToastService,
-    private logger: LoggerService,
-    private formUtilsService: FormUtilsService
   ) {
     this.title = 'Submit Your Business Licence';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.filePondOptions = {
-      class: 'prime-filepond',
-      multiple: true,
-      labelIdle: 'Temporarily disabled.',
-      acceptedFileTypes: ['image/jpeg', 'image/png'],
-      allowFileTypeValidation: true,
-    };
   }
 
   public onSubmit() {
@@ -69,45 +44,13 @@ export class BusinessLicenceComponent implements OnInit {
     // }
   }
 
-  public onFilePondInit() {
-    this.logger.info('FilePond has initialised', this.filePondComponent);
-  }
-
-  public async onFilePondAddFile(event: any) {
-    const token = await this.keycloakTokenService.token();
-    const file = event.file.file; // File for uploading
-    const { name: filename, type: filetype } = file;
-    if (this.filePondOptions.acceptedFileTypes.includes(filetype)) {
-      const upload = new tus.Upload(file, {
-        endpoint: `${environment.apiEndpoint}/document`,
-        retryDelays: [0, 3000, 5000, 10000, 20000],
-        metadata: { filename, filetype },
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          Authorization: `Bearer ${token}`,
-        },
-        onError: async (error: Error) => this.logger.error('BusinessLicence::onFilePondAddFile', error),
-        // TODO throws an error intermittently so commented out for release
-        // this.toastService.openErrorToast(error.message),
-        onProgress: async (bytesUploaded: number, bytesTotal: number) =>
-          this.filePondUploadProgress = (bytesUploaded / bytesTotal * 100),
-        onSuccess: async () => {
-          this.filePondUploadProgress = 100;
-          this.toastService.openSuccessToast('File(s) have been uploaded');
-
-          const documentGuid = upload.url.split('/').pop();
-          const siteId = this.siteService.site.id;
-
-          this.siteResource
-            .createBusinessLicence(siteId, documentGuid, filename)
-            .subscribe();
-
-          this.uploadedFile = true;
-          this.hasNoLicenceError = false;
-        }
+  public onUpload(event: BaseDocument) {
+    const siteId = this.siteService.site.id;
+    this.siteResource
+      .createBusinessLicence(siteId, event.documentGuid, event.fileName).subscribe(() => {
+        this.uploadedFile = true;
+        this.hasNoLicenceError = false;
       });
-      upload.start();
-    }
   }
 
   public onBack() {

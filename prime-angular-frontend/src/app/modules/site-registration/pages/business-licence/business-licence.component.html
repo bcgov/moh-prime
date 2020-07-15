@@ -9,13 +9,10 @@
     </ng-container>
   </app-page-subheader2>
 
-  <file-pond #filePond
-             [options]="filePondOptions"
-             [files]="filePondFiles"
-             (oninit)="onFilePondInit()"
-             (onaddfile)="onFilePondAddFile($event)"
-             disabled="true">
-  </file-pond>
+  <app-document-upload (completed)="onUpload($event)"
+                       componentName="business-licence"
+                       [multiple]="false">
+  </app-document-upload>
 
   <app-alert *ngIf="hasNoLicenceError"
              type="danger"

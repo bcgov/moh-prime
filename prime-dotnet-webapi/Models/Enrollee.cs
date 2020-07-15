@@ -62,21 +62,9 @@ namespace Prime.Models
 
         public bool? IsInsulinPumpProvider { get; set; }
 
-        public bool? HasConviction { get; set; }
+        public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 
-        public string HasConvictionDetails { get; set; }
-
-        public bool? HasRegistrationSuspended { get; set; }
-
-        public string HasRegistrationSuspendedDetails { get; set; }
-
-        public bool? HasDisciplinaryAction { get; set; }
-
-        public string HasDisciplinaryActionDetails { get; set; }
-
-        public bool? HasPharmaNetSuspended { get; set; }
-
-        public string HasPharmaNetSuspendedDetails { get; set; }
+        public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
 
         [NotMapped]
         public string CurrentTOAStatus { get; set; }
@@ -123,6 +111,19 @@ namespace Prime.Models
 
         [JsonIgnore]
         public string IdentityProvider { get; set; }
+
+        public int? CredentialId { get; set; }
+
+        [JsonIgnore]
+        public Credential Credential { get; set; }
+
+        // TODO remove after testing is completed and replace with a specific
+        // QRCode endpoint to populate the view
+        [NotMapped]
+        public string Base64QRCode
+        {
+            get => this.Credential?.Base64QRCode;
+        }
 
         [NotMapped]
         public EnrolmentStatus CurrentStatus

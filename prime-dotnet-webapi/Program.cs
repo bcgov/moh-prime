@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 using Serilog;
+using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
 
@@ -58,18 +59,14 @@ namespace Prime
                 Console.WriteLine("Creating the logging directory failed: {0}", e.ToString());
             }
 
-            var environment = (isDevelopment()) ? ".Development" : "";
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"appsettings{environment}.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-
             var name = Assembly.GetExecutingAssembly().GetName();
             var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+                .MinimumLevel.Override("System", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithProperty("Assembly", $"{name.Name}")

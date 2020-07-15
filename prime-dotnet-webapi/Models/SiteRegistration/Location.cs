@@ -31,7 +31,7 @@ namespace Prime.Models
 
         public Party TechnicalSupport { get; set; }
 
-        public int? OrganizationId { get; set; }
+        public int OrganizationId { get; set; }
 
         [JsonIgnore]
         public Organization Organization { get; set; }

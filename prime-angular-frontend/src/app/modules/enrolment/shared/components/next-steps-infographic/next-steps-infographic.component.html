@@ -3,6 +3,9 @@
     <h5>
       1. You have been approved to use PharmaNet by the Ministry of Health.
     </h5>
+    <a *ngIf="hasVCIssuance"
+       href="#"
+       (click)="openQR($event)">Access your Verified Credential</a>
   </div>
   <div class="col-12 info">
     <h5>
@@ -12,7 +15,8 @@
       Who is my PharmaNet administrator?
       <app-contextual-help>
         <ng-container appContextualContent>
-          Your PharmaNet administrator may be your Pharmacy Manager, Office Manager, or Medical Office Assistant.
+          This person communicates with the software vendor to set up individual PharmaNet access accounts; e.g., office
+          administrator, HR lead, medical office assistant (MOA), or practitioner.
         </ng-container>
       </app-contextual-help>
     </p>

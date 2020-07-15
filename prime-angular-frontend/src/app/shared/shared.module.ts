@@ -19,12 +19,15 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
+import { CasePipe } from '@shared/pipes/case.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
-import { FullnamePipe } from './pipes/fullname.pipe';
+import { FullnamePipe } from '@shared/pipes/fullname.pipe';
+import { SafePipe } from '@shared/pipes/safe.pipe';
+import { VendorPipe } from '@shared/pipes/vendor.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import {
@@ -65,7 +68,12 @@ import { CollectionNoticeContainerComponent } from './components/collection-noti
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
 import { SiteReviewComponent } from './components/site/site-review/site-review.component';
 import { PartyReviewComponent } from './components/site/party-review/party-review.component';
-
+import { DocumentUploadComponent } from './components/document-upload/document-upload/document-upload.component';
+// TODO split out all related filepond files into a /lib module ie. config and components
+import { FilePondModule, registerPlugin } from 'ngx-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+registerPlugin(FilePondPluginFileValidateType);
+import { ImageComponent } from './components/dialogs/content/image/image.component';
 @NgModule({
   declarations: [
     CapitalizePipe,
@@ -81,6 +89,10 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     YesNoPipe,
     WeekdayPipe,
     FullnamePipe,
+    SafeHtmlPipe,
+    SafePipe,
+    VendorPipe,
+    CasePipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -96,7 +108,6 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
-    CertificatePipe,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     EnrolleePropertyErrorComponent,
@@ -104,7 +115,6 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     PrimePhoneComponent,
     PrimeLogoComponent,
     ApproveEnrolmentComponent,
-    SafeHtmlPipe,
     PrimeSupportEmailComponent,
     AccessTermsTableComponent,
     AccessTermComponent,
@@ -112,6 +122,7 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
     FeedbackComponent,
+    ImageComponent,
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
     SiteReviewComponent,
@@ -121,6 +132,8 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     PageSubheader2TitleDirective,
     PageSubheader2SummaryDirective,
     PageSubheader2MoreInfoDirective,
+    DocumentUploadComponent,
+    ImageComponent
   ],
   imports: [
     CommonModule,
@@ -131,6 +144,7 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     NgxMaskModule.forRoot(),
     NgxMaterialModule,
     NgxProgressModule,
+    FilePondModule,
     ReactiveFormsModule
   ],
   exports: [
@@ -143,6 +157,7 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     NgxProgressModule,
     ReactiveFormsModule,
     CapitalizePipe,
+    CasePipe,
     CertificatePipe,
     DefaultPipe,
     EnrolleePipe,
@@ -156,6 +171,8 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     WeekdayPipe,
     FullnamePipe,
     SafeHtmlPipe,
+    SafePipe,
+    VendorPipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
@@ -175,7 +192,6 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
-    CertificatePipe,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     PrimeEmailComponent,
@@ -187,7 +203,8 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
     SiteReviewComponent,
-    PartyReviewComponent
+    PartyReviewComponent,
+    DocumentUploadComponent,
   ]
 })
 export class SharedModule { }

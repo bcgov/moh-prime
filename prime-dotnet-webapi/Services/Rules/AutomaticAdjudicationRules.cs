@@ -18,12 +18,7 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            // check to see if any of the self-declaration rules were answered as 'Yes'
-            // note: if for some reason the question was not answered, we will assume 'Yes'
-            if (enrollee.HasConviction.GetValueOrDefault(true)
-                || enrollee.HasDisciplinaryAction.GetValueOrDefault(true)
-                || enrollee.HasPharmaNetSuspended.GetValueOrDefault(true)
-                || enrollee.HasRegistrationSuspended.GetValueOrDefault(true))
+            if (enrollee.SelfDeclarations.Any())
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.SelfDeclaration);
                 return Task.FromResult(false);

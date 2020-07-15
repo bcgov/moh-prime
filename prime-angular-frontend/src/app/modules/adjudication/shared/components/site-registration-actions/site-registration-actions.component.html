@@ -1,0 +1,25 @@
+<ng-container *ngIf="site">
+
+  <button mat-flat-button
+          color="primary"
+          [disabled]="!site"
+          [matMenuTriggerFor]="menu">
+    Site Information Actions <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
+
+  <mat-menu #menu>
+    <button mat-menu-item
+            [disabled]="true">
+      <!-- <mat-icon>get_app</mat-icon> -->
+      <!-- <mat-icon>cloud_download</mat-icon> -->
+      <span>Organization Agreement</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="true">
+      <!-- <mat-icon>get_app</mat-icon> -->
+      <!-- <mat-icon>cloud_download</mat-icon> -->
+      <span>Business Licence</span>
+    </button>
+  </mat-menu>
+
+</ng-container>

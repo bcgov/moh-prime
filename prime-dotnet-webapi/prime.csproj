@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.0" />
+    <PackageReference Include="QRCoder" Version="1.3.9" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
     <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
@@ -31,6 +32,7 @@
     <PackageReference Include="CompareNETObjects" Version="4.65.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.4" />
     <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.0" />
+    <PackageReference Include="IdentityModel" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v1.html" />
@@ -41,6 +43,7 @@
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v2.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v3.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v4.html" />
+    <EmbeddedResource Include="Resources\documents\Organization-Agreement.pdf" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Resources\wkhtmltopdf\Linux\wkhtmltopdf">

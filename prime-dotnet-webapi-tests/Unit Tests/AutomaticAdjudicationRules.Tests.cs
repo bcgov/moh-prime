@@ -44,7 +44,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Flags]
-        public enum SelfDeclaration
+        public enum SelfDeclarationFlag
         {
             NONE = 0,
             CONVICTION = 1,
@@ -52,12 +52,38 @@ namespace PrimeTests.UnitTests
             PHARMANET_SUSPENDED = 4,
             REGISTRATION_SUSPENDED = 8
         }
-        private void UpdateSelfDeclaration(Enrollee enrollee, SelfDeclaration declarations)
+        private void UpdateSelfDeclaration(Enrollee enrollee, SelfDeclarationFlag declarations)
         {
-            enrollee.HasConviction = declarations.HasFlag(SelfDeclaration.CONVICTION);
-            enrollee.HasDisciplinaryAction = declarations.HasFlag(SelfDeclaration.DISCIPLINARY);
-            enrollee.HasPharmaNetSuspended = declarations.HasFlag(SelfDeclaration.PHARMANET_SUSPENDED);
-            enrollee.HasRegistrationSuspended = declarations.HasFlag(SelfDeclaration.REGISTRATION_SUSPENDED);
+            var updated = new List<SelfDeclaration>();
+            if (declarations.HasFlag(SelfDeclarationFlag.CONVICTION))
+            {
+                updated.Add(GenerateSelfDeclaration(enrollee, 1));
+            }
+            if (declarations.HasFlag(SelfDeclarationFlag.DISCIPLINARY))
+            {
+                updated.Add(GenerateSelfDeclaration(enrollee, 3));
+            }
+            if (declarations.HasFlag(SelfDeclarationFlag.PHARMANET_SUSPENDED))
+            {
+                updated.Add(GenerateSelfDeclaration(enrollee, 2));
+            }
+            if (declarations.HasFlag(SelfDeclarationFlag.REGISTRATION_SUSPENDED))
+            {
+                updated.Add(GenerateSelfDeclaration(enrollee, 4));
+            }
+            enrollee.SelfDeclarations = updated;
+        }
+
+        private SelfDeclaration GenerateSelfDeclaration(Enrollee enrollee, int selfDeclarationTypeCode)
+        {
+            var decl = new SelfDeclaration
+            {
+                Enrollee = enrollee,
+                EnrolleeId = enrollee.Id,
+                SelfDeclarationTypeCode = selfDeclarationTypeCode,
+                SelfDeclarationDetails = "",
+            };
+            return decl;
         }
 
         private void UpdateAddresses(Enrollee enrollee, bool physInBc, bool? mailInBc)
@@ -90,13 +116,13 @@ namespace PrimeTests.UnitTests
         }
 
         [Theory]
-        [InlineData(SelfDeclaration.NONE, true)]
-        [InlineData(SelfDeclaration.CONVICTION, false)]
-        [InlineData(SelfDeclaration.DISCIPLINARY, false)]
-        [InlineData(SelfDeclaration.PHARMANET_SUSPENDED, false)]
-        [InlineData(SelfDeclaration.REGISTRATION_SUSPENDED, false)]
-        [InlineData((SelfDeclaration.CONVICTION | SelfDeclaration.DISCIPLINARY | SelfDeclaration.PHARMANET_SUSPENDED | SelfDeclaration.REGISTRATION_SUSPENDED), false)]
-        public async void testSelfDeclarationRule(SelfDeclaration declaration, bool expected)
+        [InlineData(SelfDeclarationFlag.NONE, true)]
+        [InlineData(SelfDeclarationFlag.CONVICTION, false)]
+        [InlineData(SelfDeclarationFlag.DISCIPLINARY, false)]
+        [InlineData(SelfDeclarationFlag.PHARMANET_SUSPENDED, false)]
+        [InlineData(SelfDeclarationFlag.REGISTRATION_SUSPENDED, false)]
+        [InlineData((SelfDeclarationFlag.CONVICTION | SelfDeclarationFlag.DISCIPLINARY | SelfDeclarationFlag.PHARMANET_SUSPENDED | SelfDeclarationFlag.REGISTRATION_SUSPENDED), false)]
+        public async void testSelfDeclarationRule(SelfDeclarationFlag declaration, bool expected)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateSelfDeclaration(enrollee, declaration);

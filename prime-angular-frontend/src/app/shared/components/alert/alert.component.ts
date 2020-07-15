@@ -8,6 +8,7 @@ import { Component, Input, ContentChildren, QueryList, TemplateRef } from '@angu
 export class AlertComponent {
   @Input() type: 'info' | 'warn' | 'danger';
   @Input() icon: string;
+  @Input() class: string;
 
   @ContentChildren('alertTitle', { descendants: true })
   public alertTitleChildren: QueryList<TemplateRef<any>>;
@@ -17,6 +18,7 @@ export class AlertComponent {
   constructor() {
     this.type = 'info';
     this.icon = null;
+    this.class = '';
   }
 
   public hasTitle(): boolean {
