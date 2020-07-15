@@ -58,18 +58,21 @@ namespace Prime.Services.Clients
         public async Task<JObject> IssueCredentialAsync(JObject credentialOffer)
         {
             var httpContent = new StringContent(credentialOffer.ToString());
+            _logger.LogInformation("Credential offer httpContent:  {@JObject}", JsonConvert.SerializeObject(httpContent));
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
             HttpResponseMessage response = null;
             try
             {
                 _logger.LogInformation("Credential offer at request time:  {@JObject}", JsonConvert.SerializeObject(credentialOffer));
-                _logger.LogInformation("Credential offer httpContent:  {@JObject}", JsonConvert.SerializeObject(httpContent));
+
                 response = await _client.PostAsync("issue-credential/send", httpContent);
             }
             catch (Exception ex)
             {
                 await LogError(httpContent, response, ex);
+                _logger.LogInformation("Log ERROR httpContent: {httpContent}", httpContent));
+                _logger.LogInformation("Log ERROR response: {response}", response));
                 throw new VerifiableCredentialApiException("Error occurred attempting to issue a credential: ", ex);
             }
 
