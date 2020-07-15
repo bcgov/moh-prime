@@ -21,7 +21,16 @@ pipeline {
             steps {
                 script {
                     checkout scm
+                    error("Oh the humanity!")
                 }
+            }
+            post {
+              success {
+                echo "SUCCESS"
+              }
+              failure {
+                echo "FAILURE"
+              }
             }
         }
         stage('Build') {
