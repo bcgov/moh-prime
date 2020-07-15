@@ -208,17 +208,17 @@ namespace Prime.Services
 
             var documentGuid = await _documentManagerClient.SendFileAsync(pdfStream, $"siteRegistrationReview-{siteId}.pdf", "sites/site_registration");
 
-            var old = await _context.SiteRegistrationReviewDocumentss.SingleOrDefaultAsync(srr => srr.SiteId == siteId);
+            var old = await _context.SiteRegistrationReviewDocuments.SingleOrDefaultAsync(srr => srr.SiteId == siteId);
 
             if (old == null)
             {
                 var newObj = new SiteRegistrationReviewDocument(siteId, documentGuid, $"siteRegistrationReview-{siteId}.pdf");
-                _context.SiteRegistrationReviewDocumentss.Add(newObj);
+                _context.SiteRegistrationReviewDocuments.Add(newObj);
             }
             else
             {
                 old.DocumentGuid = documentGuid;
-                _context.SiteRegistrationReviewDocumentss.Update(old);
+                _context.SiteRegistrationReviewDocuments.Update(old);
             }
 
             return await _context.SaveChangesAsync();
