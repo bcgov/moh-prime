@@ -130,7 +130,6 @@ pipeline {
             options {
                 timeout(time: 30, unit: 'MINUTES') // timeout on this stage
             }
-            // when { expression { ( BRANCH_NAME == 'develop' ) } }
             when {
               anyOf {
                 expression { (BRANCH_NAME ==~ /PR-\d+/) };
@@ -141,11 +140,14 @@ pipeline {
                 stage('SonarQube') {
                     agent { label 'code-tests' }
                     steps {
+                        echo "Running integrity tests..."
+                        sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
                         sh "./player.sh scan"
+                        sh "./player.sh notifyGitHub success continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
                     }
                     // steps {
                     //   withSonarQubeEnv('SonarQube Server') {
-                    //     sh 'mvn clean package sonar:sonar'
+                    //     ??
                     //   }
                     // }
                 }
