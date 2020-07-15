@@ -206,7 +206,7 @@ namespace Prime.Services
 
             var pdfStream = new MemoryStream(_pdfService.Generate(html));
 
-            var documentGuid = await _documentManagerClient.SendFileAsync(pdfStream, $"siteRegistrationReview-{siteId}.pdf", "site-registration");
+            var documentGuid = await _documentManagerClient.SendFileAsync(pdfStream, $"siteRegistrationReview-{siteId}.pdf", "sites/site_registration");
 
             var old = await _context.SiteRegistrationReviews.SingleOrDefaultAsync(srr => srr.SiteId == siteId);
 

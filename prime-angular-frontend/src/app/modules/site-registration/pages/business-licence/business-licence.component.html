@@ -11,7 +11,8 @@
 
   <app-document-upload (completed)="onUpload($event)"
                        componentName="business-licence"
-                       [multiple]="false">
+                       [multiple]="false"
+                       additionalApiSuffix="business-licence">
   </app-document-upload>
 
   <app-alert *ngIf="hasNoLicenceError"

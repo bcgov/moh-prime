@@ -44,6 +44,42 @@ namespace Prime.Controllers
             return Ok();
         }
 
+        // POST: api/Document/Business-Licence
+        /// <summary>
+        ///
+        /// </summary>
+        [HttpPost("Business-Licence", Name = nameof(InitializeBusinessLicenceUploadWithDocumentManager))]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> InitializeBusinessLicenceUploadWithDocumentManager()
+        {
+            var metadata = Request.Headers["Upload-MetaData"].ToString();
+            var filename = ParseFilenameFromMetadata(metadata);
+            var fileSize = Request.Headers["Upload-Length"].ToString();
+
+            var response = await _client.InitializeFileUploadAsync(filename, fileSize, "sites/business_licences");
+
+            HttpContext.Response.Headers.Add("Location", response.Headers.GetValues("Location").FirstOrDefault());
+            return Ok();
+        }
+
+        // POST: api/Document/Self-Declaration
+        /// <summary>
+        ///
+        /// </summary>
+        [HttpPost("Self-Declaration", Name = nameof(InitializeSelfDeclarationUploadWithDocumentManager))]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> InitializeSelfDeclarationUploadWithDocumentManager()
+        {
+            var metadata = Request.Headers["Upload-MetaData"].ToString();
+            var filename = ParseFilenameFromMetadata(metadata);
+            var fileSize = Request.Headers["Upload-Length"].ToString();
+
+            var response = await _client.InitializeFileUploadAsync(filename, fileSize, "self_declarations");
+
+            HttpContext.Response.Headers.Add("Location", response.Headers.GetValues("Location").FirstOrDefault());
+            return Ok();
+        }
+
         private string ParseFilenameFromMetadata(string metadata)
         {
             // Upload-Metadata is in the form:
