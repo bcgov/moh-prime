@@ -30,7 +30,7 @@ pipeline {
                         echo "User cancelled deployment"
                     }
 
-                    // VERSIONING W/GITHUB NOT WORKING
+                    // 2020-07-14: VERSIONING W/GITHUB NOT WORKING
                     // Generate release prior to deploy to production, and request release tag name and description from user
                     // def releaseTag = input(
                     //         id: 'Release Version Tag', message: "Please provide this release's version tag.", ok: "Submit", parameters: [

@@ -25,7 +25,7 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    // VERSIONING W/GITHUB NOT WORKING
+                    // 2020-07-14: VERSIONING W/GITHUB NOT WORKING
                     // Generate release prior to deploy to production, and request release tag name and description from user
                     // def releaseTag = input(
                     //         id: 'Release Version Tag', message: "Please provide this release's version tag. A BETA suffix will be added to denote that this is a prerelease, and not production ready.", ok: "Submit", parameters: [

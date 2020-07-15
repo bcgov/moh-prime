@@ -103,9 +103,11 @@ function toolbelt() {
 }
 
 # GitHub-related Functions
-function createRelease() {
-   curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: $2" https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/releases -d '{"tag_name": $3, "name": $4, "draft": $5, "prerelease": $6}'
-}
+
+# 2020-07-14: Versioning with GitHub currently not functional.
+# function createRelease() {
+#    curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: $2" https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/releases -d '{"tag_name": $3, "name": $4, "draft": $5, "prerelease": $6}'
+# }
 
 function getAllAssets() {
     oc get all,pvc,secrets -n $PROJECT_PREFIX-dev | column -t | awk '{print $1}' | sort -n
