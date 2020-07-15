@@ -68,16 +68,12 @@ namespace Prime.Services.Clients
             catch (Exception ex)
             {
                 await LogError(httpContent, response, ex);
-                _logger.LogInformation("Log ERROR httpContent: {httpContent}", httpContent);
-                _logger.LogInformation("Log ERROR response: {response}", response);
                 throw new VerifiableCredentialApiException("Error occurred attempting to issue a credential: ", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(httpContent, response);
-                _logger.LogInformation("Log ERROR httpContent: {httpContent}", httpContent);
-                _logger.LogInformation("Log ERROR response: {response}", response);
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::IssueCredentialAsync");
             }
 
