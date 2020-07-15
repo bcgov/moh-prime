@@ -246,6 +246,7 @@ namespace Prime.Services
                     { "comment", "PharmaNet GPID" },
                     { "auto_remove", true },
                     { "revoc_reg_id", null },
+                    { "trace", false },
                     { "credential_proposal", new JObject
                         {
                             { "@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview" },
