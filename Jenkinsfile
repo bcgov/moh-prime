@@ -21,7 +21,6 @@ pipeline {
             steps {
                 script {
                     checkout scm
-                    error("Oh the humanity!")
                 }
             }
             post {
