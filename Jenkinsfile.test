@@ -39,7 +39,7 @@ pipeline {
                     def isDraft = true
                     def isPrerelease = true
 
-                    withCredentials([usernameColonPassword(credentialsId: '1a12dfa4-7fc5-47a7-aa17-cc56572a41c7', variable: 'GITHUB_CREDENTIAL')]) {
+                    withCredentials([usernameColonPassword(credentialsId: '20d79298-4519-4032-8047-60cd53827045', variable: 'GITHUB_CREDENTIAL')]) {
                         sh "./player.sh createRelease $GITHUB_CREDENTIAL ${releaseTag} ${releaseTitle} ${releaseBody} ${isPrerelease} ${isDraft}"
                     }
                     echo "Building (TEST) branch ..."
