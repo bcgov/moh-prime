@@ -33,10 +33,11 @@ namespace Prime.Models
         public Vendor Vendor { get; set; }
 
         [JsonIgnore]
-        public ICollection<BusinessLicence> BusinessLicences { get; set; }
+        public ICollection<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
 
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }
 
-        public SiteRegistrationReview SiteRegistrationReview { get; set; }
+        [JsonIgnore]
+        public SiteRegistrationReviewDocument SiteRegistrationReviewDocument { get; set; }
     }
 }

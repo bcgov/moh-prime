@@ -2,7 +2,7 @@ kind: Template
 apiVersion: v1
 metadata:
   name: angular-frontend-dc
-  creationTimestamp: 
+  creationTimestamp:
 parameters:
 - name: NAME
   displayName: Name
@@ -46,7 +46,7 @@ objects:
     annotations:
       kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
       kompose.version: 1.18.0 (06a2e56)
-    creationTimestamp: 
+    creationTimestamp:
     labels:
       io.kompose.service: "${NAME}${SUFFIX}"
     name: "${NAME}${SUFFIX}"
@@ -55,10 +55,10 @@ objects:
     replicas: 1
     selector:
       io.kompose.service: "${NAME}${SUFFIX}"
-    strategy: 
+    strategy:
     template:
       metadata:
-        creationTimestamp: 
+        creationTimestamp:
         labels:
           io.kompose.service: "${NAME}${SUFFIX}"
       spec:
@@ -71,7 +71,7 @@ objects:
           - name: REDIRECT_URL
             value: "${REDIRECT_URL}"
           - name: DOCUMENT_MANAGER_URL
-            value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/"
+            value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca"
           - name: KEYCLOAK_CLIENT_ID
             valueFrom:
               secretKeyRef:
@@ -111,7 +111,7 @@ objects:
             secret:
               defaultMode: 420
               secretName: vanity-tls-certificate
-    test: false 
+    test: false
     triggers:
       - type: ConfigChange
       - imageChangeParams:
@@ -140,7 +140,7 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    creationTimestamp: 
+    creationTimestamp:
     labels:
       io.kompose.service: "${NAME}${SUFFIX}"
     name: "${NAME}${SUFFIX}"

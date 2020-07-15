@@ -212,7 +212,7 @@ namespace Prime.Services
 
             if (old == null)
             {
-                var newObj = new SiteRegistrationReview(siteId, documentGuid, $"siteRegistrationReview-{siteId}.pdf");
+                var newObj = new SiteRegistrationReviewDocument(siteId, documentGuid, $"siteRegistrationReview-{siteId}.pdf");
                 _context.SiteRegistrationReviews.Add(newObj);
             }
             else

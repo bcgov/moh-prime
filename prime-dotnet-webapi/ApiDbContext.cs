@@ -88,13 +88,13 @@ namespace Prime
         public DbSet<RemoteUserLocation> RemoteUserLocations { get; set; }
 
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
-        public DbSet<BusinessLicence> BusinessLicences { get; set; }
-        public DbSet<SignedAgreement> SignedAgreements { get; set; }
+        public DbSet<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
+        public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
         public DbSet<SelfDeclaration> SelfDeclarations { get; set; }
         public DbSet<Credential> Credentials { get; set; }
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
-        public DbSet<SiteRegistrationReview> SiteRegistrationReviews { get; set; }
+        public DbSet<SiteRegistrationReviewDocument> SiteRegistrationReviews { get; set; }
 
         public override int SaveChanges()
         {
@@ -262,9 +262,9 @@ namespace Prime
                 .WithMany(v => v.Sites)
                 .HasForeignKey(s => s.VendorCode);
 
-            modelBuilder.Entity<BusinessLicence>()
+            modelBuilder.Entity<BusinessLicenceDocument>()
                 .HasOne(bl => bl.Site)
-                .WithMany(s => s.BusinessLicences)
+                .WithMany(s => s.BusinessLicenceDocuments)
                 .HasForeignKey(bl => bl.SiteId);
 
             modelBuilder.Entity<RemoteUser>()

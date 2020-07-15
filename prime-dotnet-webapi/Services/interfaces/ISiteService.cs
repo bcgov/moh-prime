@@ -17,8 +17,8 @@ namespace Prime.Services
         Task<Site> SubmitRegistrationAsync(int siteId);
         Task<Site> GetSiteNoTrackingAsync(int siteId);
         Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId);
-        Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename);
-        Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId);
-        Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId);
+        Task<BusinessLicenceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename);
+        Task<IEnumerable<BusinessLicenceDocument>> GetBusinessLicencesAsync(int siteId);
+        Task<BusinessLicenceDocument> GetLatestBusinessLicenceAsync(int siteId);
     }
 }

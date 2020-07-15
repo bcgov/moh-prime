@@ -131,6 +131,6 @@ export class UtilsService {
    * Download a document using a document manager download token.
    */
   public downloadToken(token: string): void {
-    window.location.replace(`${this.config.documentManagerUrl}documents/downloads/${token}`);
+    window.location.replace(`${this.config.documentManagerUrl}/documents/downloads/${token}`);
   }
 }

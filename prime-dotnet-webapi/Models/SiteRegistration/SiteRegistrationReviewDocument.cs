@@ -5,15 +5,15 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("SiteRegistrationReview")]
-    public class SiteRegistrationReview : BaseDocumentUpload
+    [Table("SiteRegistrationReviewDocument")]
+    public class SiteRegistrationReviewDocument : BaseDocumentUpload
     {
         public int SiteId { get; set; }
 
         [JsonIgnore]
         public Site Site { get; set; }
 
-        public SiteRegistrationReview(int siteId, Guid documentGuid, string filename)
+        public SiteRegistrationReviewDocument(int siteId, Guid documentGuid, string filename)
         {
             this.SiteId = siteId;
             this.DocumentGuid = documentGuid;

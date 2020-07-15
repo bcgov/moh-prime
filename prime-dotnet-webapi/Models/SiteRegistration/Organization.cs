@@ -34,6 +34,6 @@ namespace Prime.Models
 
         public IEnumerable<Location> Locations { get; set; }
 
-        public ICollection<SignedAgreement> SignedAgreements { get; set; }
+        public ICollection<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
     }
 }
