@@ -152,8 +152,8 @@ namespace Prime.Services
                     // Assumed that when a connection invitation has been sent and accepted
                     // the enrollee has been approved, and has a GPID for issuing a credential
                     // TODO should be queued and managed outside of webhook callback
-                    var issueCredentialResponse = await IssueCredential(connectionId, alias);
                     System.Threading.Thread.Sleep(2000);
+                    var issueCredentialResponse = await IssueCredential(connectionId, alias);
 
                     _logger.LogInformation("Credential has been issued for connection_id: {connectionId} with response {@JObject}", connectionId, JsonConvert.SerializeObject(issueCredentialResponse));
 
