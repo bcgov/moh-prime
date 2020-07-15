@@ -30,7 +30,6 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
-        private readonly ISubmissionService _submissionService;
         private readonly IDocumentService _documentService;
         private readonly IRazorConverterService _razorConverterService;
 
@@ -41,7 +40,6 @@ namespace Prime.Controllers
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
-            ISubmissionService submissionService,
             IDocumentService documentService,
             IRazorConverterService razorConverterService)
         {
@@ -51,7 +49,6 @@ namespace Prime.Controllers
             _adminService = adminService;
             _businessEventService = businessEventService;
             _emailService = emailService;
-            _submissionService = submissionService;
             _documentService = documentService;
             _razorConverterService = razorConverterService;
         }
