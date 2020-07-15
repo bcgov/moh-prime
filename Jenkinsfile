@@ -23,6 +23,14 @@ pipeline {
                     checkout scm
                 }
             }
+            post {
+              always {
+                // TODO should this be performed up front since they are expected by GitHub, or in the separate stages?
+                // sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
+                // sh "./player.sh notifyGitHub pending deployment $GITHUB_CREDENTIAL"
+                // sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-tests $GITHUB_CREDENTIAL"
+              }
+            }
         }
         stage('Build') {
             options {
@@ -100,6 +108,7 @@ pipeline {
                 }
             }
         }
+        // TODO only for testing, otherwise use Quality Check stage
         // stage('Integrity Test') {
         //   options {
         //       timeout(time: 10, unit: 'MINUTES') // timeout on this stage
@@ -121,7 +130,13 @@ pipeline {
             options {
                 timeout(time: 30, unit: 'MINUTES') // timeout on this stage
             }
-            when { expression { ( BRANCH_NAME == 'develop' ) } }
+            // when { expression { ( BRANCH_NAME == 'develop' ) } }
+            when {
+              anyOf {
+                expression { (BRANCH_NAME ==~ /PR-\d+/) };
+                expression { (BRANCH_NAME == 'develop') }
+              }
+            }
             parallel {
                 stage('SonarQube') {
                     agent { label 'code-tests' }
