@@ -42,6 +42,8 @@ namespace Prime
         // Commented out dev defaults, switching to using their test agent in dev and test
         public readonly static string VERIFIABLE_CREDENTIAL_API_URL = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "https://prime-agent-admin-dev.pathfinder.gov.bc.ca/";
         public readonly static string VERIFIABLE_CREDENTIAL_API_KEY = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_KEY") ?? "P8ZmRJ05biXGWI1/bDtXcp1pixtWdsAqhcUJcn4S7QQ=";
-        public readonly static string VERIFIABLE_CREDENTIAL_WEBHOOK_KEY = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_WEBHOOK_KEY") ?? "0ce755d5-1fb1-483a-ba22-439061aa8f67";
+        // public readonly static string VERIFIABLE_CREDENTIAL_WEBHOOK_KEY = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_WEBHOOK_KEY") ?? "0ce755d5-1fb1-483a-ba22-439061aa8f67";
+        public readonly static string VERIFIABLE_CREDENTIAL_WEBHOOK_KEY = "0ce755d5";
+
     }
 }
