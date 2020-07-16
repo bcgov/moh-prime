@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
 using Prime.Models.Api;
@@ -15,45 +14,15 @@ namespace Prime.Controllers
     public class VerifiableCredentialController : ControllerBase
     {
         private readonly IVerifiableCredentialService _verifiableCredentialsService;
-        private readonly ILogger _logger;
 
         public VerifiableCredentialController(
-            IVerifiableCredentialService verifiableCredentialService,
-            ILogger<VerifiableCredentialController> logger
+            IVerifiableCredentialService verifiableCredentialService
         )
         {
             _verifiableCredentialsService = verifiableCredentialService;
-            _logger = logger;
         }
 
-        // // POST: api/topic/:topic/{guid}
-        // /// <summary>
-        // /// Handle webhook events sent from the issuing agent.
-        // /// </summary>
-        // /// <param name="apiKey"></param>
-        // /// <param name="topic"></param>
-        // /// <param name="data"></param>
-        // // Webhooks explained "In Soviet Russia API call you!" - Jason Aitchison 2020
-        // // TODO add security to the webhook receiver endpoint
-        // [HttpPost("/api/webhooks/{apiKey}/topic/{topic}/", Name = nameof(Webhook))]
-        // [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        // // TODO update to response code 202 when queue has been added for webhooks
-        // [ProducesResponseType(StatusCodes.Status204NoContent)]
-        // public async Task<ActionResult> Webhook(string topic, [FromBody] JObject data)
-        // {
-        //     _logger.LogInformation($"API-KEY: [{apiKey}], VERIFIABLE_CREDENTIAL_WEBHOOK_KEY: [{PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY}]");
-
-        //     if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
-        //     {
-        //         return Forbid();
-        //     }
-        //     await _verifiableCredentialsService.WebhookAsync(data, topic);
-        //     return NoContent();
-        // }
-
-
-        // POST: api/topic/:topic/{guid}
+        // POST: api/topic/:topic
         /// <summary>
         /// Handle webhook events sent from the issuing agent.
         /// </summary>
@@ -61,7 +30,7 @@ namespace Prime.Controllers
         /// <param name="data"></param>
         // Webhooks explained "In Soviet Russia API call you!" - Jason Aitchison 2020
         // TODO add security to the webhook receiver endpoint
-        [HttpPost("/api/webhooks/topic/{topic}/", Name = nameof(Webhook))]
+        [HttpPost("/api/webhooks/topic/{topic}", Name = nameof(Webhook))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         // TODO update to response code 202 when queue has been added for webhooks
