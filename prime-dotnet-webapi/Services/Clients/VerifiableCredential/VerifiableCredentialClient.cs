@@ -67,7 +67,7 @@ namespace Prime.Services.Clients
 
             var postRequest = new HttpRequestMessage(HttpMethod.Post, "issue-credential/send")
             {
-                Content = JsonContent.Create(credentialOffer)
+                Content = JsonContent.Create(JsonConvert.SerializeObject(credentialOffer))
             };
 
             HttpResponseMessage response = null;
