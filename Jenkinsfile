@@ -23,14 +23,14 @@ pipeline {
                     checkout scm
                 }
             }
-            post {
-              always {
-                // TODO should this be performed up front since they are expected by GitHub, or in the separate stages?
-                // sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
-                // sh "./player.sh notifyGitHub pending deployment $GITHUB_CREDENTIAL"
-                // sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-tests $GITHUB_CREDENTIAL"
-              }
-            }
+            // TODO should this be performed up front since they are expected by GitHub, or in the separate stages?
+            // post {
+            //   always {
+            //     sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
+            //     sh "./player.sh notifyGitHub pending deployment $GITHUB_CREDENTIAL"
+            //     sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-tests $GITHUB_CREDENTIAL"
+            //   }
+            // }
         }
         stage('Build') {
             options {
