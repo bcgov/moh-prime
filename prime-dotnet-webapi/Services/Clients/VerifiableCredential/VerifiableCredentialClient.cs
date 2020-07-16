@@ -58,7 +58,7 @@ namespace Prime.Services.Clients
 
         public async Task<JObject> IssueCredentialAsync(JObject credentialOffer)
         {
-            var httpContent = new StringContent(credentialOffer.ToString());
+            var httpContent = new StringContent(credentialOffer.ToString(Newtonsoft.Json.Formatting.None));
             _logger.LogInformation("Credential offer in client {@JObject}", JsonConvert.SerializeObject(credentialOffer));
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
