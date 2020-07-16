@@ -185,6 +185,11 @@ namespace Prime.Services
                 organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
             }
 
+            // Generate Site Reg review first since it is used later seperatly that the attachments
+            var siteRegReviewTemp = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
+            var siteRegReviewPdf = _pdfService.Generate(siteRegReviewTemp);
+
+            // Generate email attachments array
             var attachments = new (string Filename, string HtmlContent)[]
             {
                 ("OrganizationAgreement.pdf", organizationAgreementHtml),
@@ -193,33 +198,27 @@ namespace Prime.Services
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
 
+            // Add generated Site Reg Review into the attachments array
+            attachments.Concat(new (string Filename, byte[] Content)[]{
+                ("SiteRegistrationReview.pdf", siteRegReviewPdf)
+            });
+
+
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
 
             // Create Site Registration review and save it to the Database
             var siteRegistrationReview = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
-            await CreateSiteRegistrationReview(siteRegistrationReview, site.Id);
+            await CreateSiteRegistrationReview(siteRegReviewPdf, site.Id);
         }
 
-        private async Task<int> CreateSiteRegistrationReview(string html, int siteId)
+        private async Task<int> CreateSiteRegistrationReview(byte[] pdf, int siteId)
         {
+            var pdfStream = new MemoryStream(pdf);
 
+            var documentGuid = await _documentManagerClient.SendFileAsync(pdfStream, $"siteRegistrationReview.pdf", $"sites/{siteId}/site_registration");
 
-            var pdfStream = new MemoryStream(_pdfService.Generate(html));
-
-            var documentGuid = await _documentManagerClient.SendFileAsync(pdfStream, $"siteRegistrationReview-{siteId}.pdf", "sites/site_registration");
-
-            var old = await _context.SiteRegistrationReviewDocumentss.SingleOrDefaultAsync(srr => srr.SiteId == siteId);
-
-            if (old == null)
-            {
-                var newObj = new SiteRegistrationReviewDocument(siteId, documentGuid, $"siteRegistrationReview-{siteId}.pdf");
-                _context.SiteRegistrationReviewDocumentss.Add(newObj);
-            }
-            else
-            {
-                old.DocumentGuid = documentGuid;
-                _context.SiteRegistrationReviewDocumentss.Update(old);
-            }
+            var newObj = new SiteRegistrationReviewDocument(siteId, documentGuid, $"siteRegistrationReview.pdf");
+            _context.SiteRegistrationReviewDocumentss.Add(newObj);
 
             return await _context.SaveChangesAsync();
         }

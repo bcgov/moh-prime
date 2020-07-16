@@ -38,6 +38,6 @@ namespace Prime.Models
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }
 
         [JsonIgnore]
-        public SiteRegistrationReviewDocument SiteRegistrationReviewDocument { get; set; }
+        public ICollection<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
     }
 }
