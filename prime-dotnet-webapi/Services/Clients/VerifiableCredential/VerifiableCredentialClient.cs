@@ -58,7 +58,9 @@ namespace Prime.Services.Clients
 
         public async Task<JObject> IssueCredentialAsync(JObject credentialOffer)
         {
-            var httpContent = new StringContent(credentialOffer.ToString(Newtonsoft.Json.Formatting.None));
+            var stringOffer = "{\"connection_id\":\"76546988-b7e4-44cc-942b-89d20aa6665b\",\"issuer_did\":\"QDaSxvduZroHDKkdXKV5gG\",\"schema_id\":\"QDaSxvduZroHDKkdXKV5gG:2:enrollee:2.0\",\"schema_issuer_did\":\"QDaSxvduZroHDKkdXKV5gG\",\"schema_name\":\"enrollee\",\"schema_version\":\"2.0\",\"cred_def_id\":\"QDaSxvduZroHDKkdXKV5gG:3:CL:115642:default\",\"comment\":\"PharmaNet GPID\",\"auto_remove\":true,\"trace\":false,\"credential_proposal\":{ \"@type\":\"did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview\",\"attributes\":[{ \"name\":\"gpid\",\"value\":\"CZ#WIW,0ZAWRH!PBGTKL\"},{ \"name\":\"renewal_date\",\"value\":\"2021-07-16T01:55:18.892386+00:00\"},{ \"name\":\"organization_type\",\"value\":\"Community Pharmacy\"},{ \"name\":\"user_class\",\"value\":\"OBO\"},{ \"name\":\"remote_access\",\"value\":\"false\"}]}}";
+            var httpContent = new StringContent(stringOffer);
+            // var httpContent = new StringContent(credentialOffer.ToString(Newtonsoft.Json.Formatting.None));
             _logger.LogInformation("Credential offer in client {@JObject}", JsonConvert.SerializeObject(credentialOffer));
             httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
