@@ -218,7 +218,7 @@ namespace Prime.Services
             var documentGuid = await _documentManagerClient.SendFileAsync(pdfStream, $"siteRegistrationReview.pdf", $"sites/{siteId}/site_registration");
 
             var newObj = new SiteRegistrationReviewDocument(siteId, documentGuid, $"siteRegistrationReview.pdf");
-            _context.SiteRegistrationReviewDocumentss.Add(newObj);
+            _context.SiteRegistrationReviewDocuments.Add(newObj);
 
             return await _context.SaveChangesAsync();
         }
