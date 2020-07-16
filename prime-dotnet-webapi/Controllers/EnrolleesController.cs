@@ -30,7 +30,6 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
-        private readonly ISubmissionService _submissionService;
         private readonly IDocumentService _documentService;
         private readonly IRazorConverterService _razorConverterService;
 
@@ -41,7 +40,6 @@ namespace Prime.Controllers
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
-            ISubmissionService submissionService,
             IDocumentService documentService,
             IRazorConverterService razorConverterService)
         {
@@ -51,32 +49,8 @@ namespace Prime.Controllers
             _adminService = adminService;
             _businessEventService = businessEventService;
             _emailService = emailService;
-            _submissionService = submissionService;
             _documentService = documentService;
             _razorConverterService = razorConverterService;
-        }
-
-        // TODO revert after prod gpids are updated
-        // PUT: api/Enrollees/UpdateGPIDS
-        /// <summary>
-        /// Updates all non HL7 compliant gpid's for all enrollees
-        /// </summary>
-        [HttpPut(Name = nameof(UpdateGPIDs))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateGPIDs()
-        {
-            if (!User.IsAdmin())
-            {
-                return Forbid();
-            }
-
-            await _submissionService.UpdateNonCompliantGPIDs();
-
-            return NoContent();
         }
 
         // GET: api/Enrollees
