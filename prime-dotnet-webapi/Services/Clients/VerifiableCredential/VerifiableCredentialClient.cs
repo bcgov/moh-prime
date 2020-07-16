@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
@@ -58,17 +59,23 @@ namespace Prime.Services.Clients
 
         public async Task<JObject> IssueCredentialAsync(JObject credentialOffer)
         {
-            // var httpContent = new StringContent(credentialOffer.ToString(Newtonsoft.Json.Formatting.None));
-            var httpContent = new StringContent(JsonConvert.SerializeObject(credentialOffer));
+            var httpContent = new StringContent(credentialOffer.ToString(Newtonsoft.Json.Formatting.None));
+            // var httpContent = new StringContent(JsonConvert.SerializeObject(credentialOffer));
             // var httpContent = JsonContent.Create(credentialOffer);
             _logger.LogInformation("Credential offer in client {@JObject}", JsonConvert.SerializeObject(credentialOffer));
             // httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, "issue-credential/send")
+            {
+                Content = JsonContent.Create(credentialOffer)
+            };
 
             HttpResponseMessage response = null;
             try
             {
                 _logger.LogInformation($"Full Path: {_client.BaseAddress}issue-credential/send");
-                response = await _client.PostAsJsonAsync("issue-credential/send", credentialOffer);
+                // response = await _client.PostAsJsonAsync("issue-credential/send", credentialOffer);
+                response = await _client.SendAsync(postRequest);
             }
             catch (Exception ex)
             {
