@@ -185,42 +185,28 @@ namespace Prime.Services
                 organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
             }
 
-            // Generate Site Reg review first since it is used later seperatly that the attachments
-            var siteRegReviewTemp = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
-            var siteRegReviewPdf = _pdfService.Generate(siteRegReviewTemp);
+            string registrationReviewFilename = "SiteRegistrationReview.pdf";
 
-            // Generate email attachments array
             var attachments = new (string Filename, string HtmlContent)[]
             {
                 ("OrganizationAgreement.pdf", organizationAgreementHtml),
-                ("SiteRegistrationReview.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
+                (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
                 ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(businessLicenceTemplate, businessLicenceDoc))
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
 
-            // Add generated Site Reg Review into the attachments array
-            attachments.Concat(new (string Filename, byte[] Content)[]{
-                ("SiteRegistrationReview.pdf", siteRegReviewPdf)
-            });
-
-
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
 
-            // Create Site Registration review and save it to the Database
-            var siteRegistrationReview = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
-            await CreateSiteRegistrationReview(siteRegReviewPdf, site.Id);
+            var siteRegReviewPdf = attachments.Single(a => a.Filename == registrationReviewFilename).Content;
+            await SaveSiteRegistrationReview(site.Id, registrationReviewFilename, siteRegReviewPdf);
         }
 
-        private async Task<int> CreateSiteRegistrationReview(byte[] pdf, int siteId)
+        private async Task SaveSiteRegistrationReview(int siteId, string filename, byte[] pdf)
         {
-            var pdfStream = new MemoryStream(pdf);
+            var documentGuid = await _documentManagerClient.SendFileAsync(new MemoryStream(pdf), filename, $"sites/{siteId}/site_registration_reviews");
 
-            var documentGuid = await _documentManagerClient.SendFileAsync(pdfStream, $"siteRegistrationReview.pdf", $"sites/{siteId}/site_registration");
-
-            var newObj = new SiteRegistrationReviewDocument(siteId, documentGuid, $"siteRegistrationReview.pdf");
-            _context.SiteRegistrationReviewDocuments.Add(newObj);
-
-            return await _context.SaveChangesAsync();
+            _context.SiteRegistrationReviewDocuments.Add(new SiteRegistrationReviewDocument(siteId, documentGuid, filename));
+            await _context.SaveChangesAsync();
         }
 
         public async Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName)
