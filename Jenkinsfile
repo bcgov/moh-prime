@@ -109,6 +109,7 @@ pipeline {
           }
           agent { label 'master' }
           when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
+          // TODO replace with the step below once Jenkins is updated
           steps {
             script {
               sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
