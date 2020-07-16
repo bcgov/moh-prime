@@ -13,11 +13,11 @@ import { EventEmitter } from '@angular/core';
 
 export class BaseDocument {
   id: number;
-  fileName: string;
+  filename: string;
   documentGuid: string;
 
-  constructor(fileName: string, documentGuid: string) {
-    this.fileName = fileName;
+  constructor(filename: string, documentGuid: string) {
+    this.filename = filename;
     this.documentGuid = documentGuid;
   }
 }
@@ -35,6 +35,8 @@ export class DocumentUploadComponent implements OnInit {
   public filePondOptions: { [key: string]: any };
   public filePondUploadProgress = 0;
   public filePondFiles = [];
+  @Input() public additionalApiSuffix: string;
+  public apiSuffix = '/document';
 
   constructor(
     private route: ActivatedRoute,
@@ -45,7 +47,9 @@ export class DocumentUploadComponent implements OnInit {
     private toastService: ToastService,
     private logger: LoggerService,
     private formUtilsService: FormUtilsService
-  ) {
+  ) { }
+
+  public ngOnInit(): void {
     this.filePondOptions = {
       class: `prime-filepond-${this.componentName}`,
       labelIdle: 'Click to Browse or Drop files here',
@@ -58,14 +62,11 @@ export class DocumentUploadComponent implements OnInit {
         resolve(type);
       }),
       allowFileTypeValidation: true,
-    };
-  }
-
-  public ngOnInit(): void {
-    this.filePondOptions = {
-      ...this.filePondOptions,
       multiple: !!this.multiple
     };
+    if (this.additionalApiSuffix) {
+      this.apiSuffix = `${this.apiSuffix}/${this.additionalApiSuffix}`;
+    }
   }
 
   public onFilePondInit() {
@@ -78,7 +79,7 @@ export class DocumentUploadComponent implements OnInit {
     const { name: filename, type: filetype } = file;
     if (this.filePondOptions.acceptedFileTypes.includes(filetype)) {
       const upload = new tus.Upload(file, {
-        endpoint: `${environment.apiEndpoint}/document`,
+        endpoint: `${environment.apiEndpoint}${this.apiSuffix}`,
         retryDelays: [0, 3000, 5000, 10000, 20000],
         metadata: { filename, filetype },
         headers: {

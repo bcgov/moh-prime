@@ -7,7 +7,7 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 @Component({
@@ -19,7 +19,7 @@ export class BusinessLicenceComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public routeUtils: RouteUtils;
-  public businessLicences: BusinessLicence[];
+  public businessLicenceDocuments: BusinessLicenceDocument[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
   public hasNoLicenceError: boolean;
@@ -37,7 +37,7 @@ export class BusinessLicenceComponent implements OnInit {
 
   public onSubmit() {
     // TODO validations temporarily turned off
-    // if (this.siteService.site.businessLicences.length > 0 || this.uploadedFile) {
+    // if (this.siteService.site.businessLicenceDocuments.length > 0 || this.uploadedFile) {
     this.nextRoute();
     // } else {
     //   this.hasNoLicenceError = true;
@@ -47,7 +47,7 @@ export class BusinessLicenceComponent implements OnInit {
   public onUpload(event: BaseDocument) {
     const siteId = this.siteService.site.id;
     this.siteResource
-      .createBusinessLicence(siteId, event.documentGuid, event.fileName).subscribe(() => {
+      .createBusinessLicence(siteId, event.documentGuid, event.filename).subscribe(() => {
         this.uploadedFile = true;
         this.hasNoLicenceError = false;
       });
@@ -75,8 +75,8 @@ export class BusinessLicenceComponent implements OnInit {
   private getBusinessLicences() {
     const siteId = this.siteService.site.id;
     return this.siteResource.getBusinessLicences(siteId)
-      .subscribe((businessLicenses: BusinessLicence[]) =>
-        this.businessLicences = businessLicenses
+      .subscribe((businessLicenses: BusinessLicenceDocument[]) =>
+        this.businessLicenceDocuments = businessLicenses
       );
   }
 }

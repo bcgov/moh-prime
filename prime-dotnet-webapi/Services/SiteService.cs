@@ -349,17 +349,17 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(v => v.Code == vendorCode);
         }
 
-        public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)
+        public async Task<BusinessLicenceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)
         {
-            var businessLicence = new BusinessLicence
+            var businessLicence = new BusinessLicenceDocument
             {
                 DocumentGuid = documentGuid,
                 SiteId = siteId,
-                FileName = filename,
+                Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };
 
-            _context.BusinessLicences.Add(businessLicence);
+            _context.BusinessLicenceDocuments.Add(businessLicence);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
@@ -370,16 +370,16 @@ namespace Prime.Services
             return businessLicence;
         }
 
-        public async Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId)
+        public async Task<IEnumerable<BusinessLicenceDocument>> GetBusinessLicencesAsync(int siteId)
         {
-            return await _context.BusinessLicences
+            return await _context.BusinessLicenceDocuments
                 .Where(bl => bl.SiteId == siteId)
                 .ToListAsync();
         }
 
-        public async Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId)
+        public async Task<BusinessLicenceDocument> GetLatestBusinessLicenceAsync(int siteId)
         {
-            return await _context.BusinessLicences
+            return await _context.BusinessLicenceDocuments
                 .Where(bl => bl.SiteId == siteId)
                 .OrderByDescending(bl => bl.UploadedDate)
                 .FirstOrDefaultAsync();
@@ -415,7 +415,7 @@ namespace Prime.Services
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserLocations)
                         .ThenInclude(rul => rul.PhysicalAddress)
-                .Include(s => s.BusinessLicences);
+                .Include(s => s.BusinessLicenceDocuments);
         }
     }
 }

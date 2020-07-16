@@ -5,8 +5,8 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("SignedAgreement")]
-    public class SignedAgreement : BaseDocumentUpload
+    [Table("SignedAgreementDocument")]
+    public class SignedAgreementDocument : BaseDocumentUpload
     {
         public int OrganizationId { get; set; }
 

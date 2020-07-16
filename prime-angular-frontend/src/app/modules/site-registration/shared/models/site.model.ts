@@ -2,6 +2,7 @@ import { Location } from './location.model';
 import { Vendor } from './vendor.model';
 import { Party } from './party.model';
 import { RemoteUser } from './remote-user.model';
+import { BusinessLicenceDocument } from './business-licence-document.model';
 
 export interface Site {
   id?: number;
@@ -12,7 +13,7 @@ export interface Site {
   vendorCode: number;
   vendor: Vendor;
   remoteUsers: RemoteUser[];
-  businessLicences: [];
+  businessLicenceDocuments: BusinessLicenceDocument[];
   pec: string;
   completed: boolean;
   approvedDate: string;

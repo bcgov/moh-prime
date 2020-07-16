@@ -21,7 +21,6 @@ import { OrganizationSigningAuthorityComponent } from './pages/organization-sign
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
 import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
-import { OrganizationReviewComponent } from './shared/components/organization-review/organization-review.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
 import { SiteAddressComponent } from './pages/site-address/site-address.component';
@@ -46,7 +45,6 @@ import { SiteOverviewComponent } from './pages/site-overview/site-overview.compo
     OrganizationTypeComponent,
     OrganizationAgreementComponent,
     OrganizationOverviewComponent,
-    OrganizationReviewComponent,
 
     SiteAddressComponent,
     BusinessLicenceComponent,
@@ -68,6 +66,6 @@ import { SiteOverviewComponent } from './pages/site-overview/site-overview.compo
     SiteRegistrationRoutingModule,
     BusinessHoursModule,
     SiteRegistrationRoutingModule
-  ]
+  ],
 })
 export class SiteRegistrationModule { }
