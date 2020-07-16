@@ -133,7 +133,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public showDefaultAgreement() {
-    return this.organizationService.organization.signedAgreements?.length < 1 ?? true;
+    return this.organizationService.organization.signedAgreementDocuments?.length < 1 ?? true;
   }
 
   public downloadSignedAgreement() {

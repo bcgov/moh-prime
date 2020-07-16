@@ -14,8 +14,7 @@ import { NoContent } from '@core/resources/abstract-resource';
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
 import { Site } from '@registration/shared/models/site.model';
-import { Party } from '@registration/shared/models/party.model';
-import { BusinessLicence } from '../models/business-licence.model';
+import { BusinessLicenceDocument } from '../models/business-licence-document.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -211,11 +210,11 @@ export class SiteResource {
       );
   }
 
-  public createBusinessLicence(siteId: number, documentGuid: string, filename: string): Observable<BusinessLicence> {
+  public createBusinessLicence(siteId: number, documentGuid: string, filename: string): Observable<BusinessLicenceDocument> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid, filename });
-    return this.apiResource.post<BusinessLicence>(`sites/${siteId}/business-licence`, { siteId }, params)
+    return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licence`, { siteId }, params)
       .pipe(
-        map((response: ApiHttpResponse<BusinessLicence>) => response.result),
+        map((response: ApiHttpResponse<BusinessLicenceDocument>) => response.result),
         tap(() => this.toastService.openSuccessToast('Business licence has been added')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Business Licence could not be added');
@@ -227,10 +226,10 @@ export class SiteResource {
 
   // TODO should have a single GET of getBusinessLicenceById?
 
-  public getBusinessLicences(siteId: number): Observable<BusinessLicence[]> {
-    return this.apiResource.get<BusinessLicence[]>(`sites/${siteId}/business-licence`)
+  public getBusinessLicences(siteId: number): Observable<BusinessLicenceDocument[]> {
+    return this.apiResource.get<BusinessLicenceDocument[]>(`sites/${siteId}/business-licence`)
       .pipe(
-        map((response: ApiHttpResponse<BusinessLicence[]>) => response.result),
+        map((response: ApiHttpResponse<BusinessLicenceDocument[]>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Business Licence could not be Retrieved');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicences error has occurred: ', error);

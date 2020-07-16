@@ -52,7 +52,7 @@
 
 </section>
 
-<section *ngIf="site?.businessLicences?.length > 0"
+<section *ngIf="site?.businessLicenceDocuments?.length > 0"
          class="mb-4">
 
   <app-page-subheader>
@@ -66,7 +66,7 @@
     </button>
   </app-page-subheader>
 
-  <ng-container *ngFor="let licence of site?.businessLicences">
+  <ng-container *ngFor="let licence of site?.businessLicenceDocuments">
 
     <app-enrollee-property title="Filename">
       {{ licence.filename | default }}

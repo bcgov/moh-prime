@@ -26,7 +26,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public getOrganizationAgreement() {
     this.organizationResource.getOrganizationById(this.site.location.organizationId).subscribe((organization: Organization) => {
-      if (organization.signedAgreements.length > 0) {
+      if (organization.signedAgreementDocuments.length > 0) {
         this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.site.location.organizationId)
           .subscribe((token: string) => {
             this.utilsService.downloadToken(token);
