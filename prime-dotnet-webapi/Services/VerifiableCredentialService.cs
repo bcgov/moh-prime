@@ -47,7 +47,6 @@ namespace Prime.Services
     {
         // dev agent schema id
         private static readonly string SCHEMA_ID = "QDaSxvduZroHDKkdXKV5gG:2:enrollee:2.0";
-
         // test agent schema id
         // private static readonly string SCHEMA_ID = "TVmQfMZwLFWWK3z1RLgFBR:2:enrollee:1.0";
 
