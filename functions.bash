@@ -102,6 +102,7 @@ function toolbelt() {
         -p OC_APP="$3" ${@:4} --output="yaml" | oc $MODE -f - --namespace="$PROJECT_PREFIX-$3" ${OC_ARGS}
 }
 
+# GitHub-related Functions
 
 function getAllAssets() {
     oc get all,pvc,secrets -n $PROJECT_PREFIX-dev | column -t | awk '{print $1}' | sort -n
@@ -134,6 +135,7 @@ function getOldPr () {
     ORPHANS=$(printf '%s\n' "${ROUTE_ARRAY[@]}" "${OPEN_PR_ARRAY[@]}" | sort | uniq -u)
 }
 
+# OpenShift-related functions
 function occleanup() {
     OPEN_PR_ARRAY=()
     LIVE_BRANCH_ARRAY=()

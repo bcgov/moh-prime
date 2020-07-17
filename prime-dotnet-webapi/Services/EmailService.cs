@@ -10,6 +10,8 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
+using System.Text;
+using Prime.Services.Clients;
 
 namespace Prime.Services
 {
@@ -57,6 +59,8 @@ namespace Prime.Services
 
         private readonly ISmtpEmailClient _smtpEmailClient;
 
+        private readonly IDocumentManagerClient _documentManagerClient;
+
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
@@ -65,7 +69,8 @@ namespace Prime.Services
             IPdfService pdfService,
             IOrganizationService organizationService,
             IChesClient chesClient,
-            ISmtpEmailClient smtpEmailClient)
+            ISmtpEmailClient smtpEmailClient,
+            IDocumentManagerClient documentManagerClient)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
@@ -73,6 +78,7 @@ namespace Prime.Services
             _pdfService = pdfService;
             _organizationService = organizationService;
             _chesClient = chesClient;
+            _documentManagerClient = documentManagerClient;
             _smtpEmailClient = smtpEmailClient;
         }
 
@@ -179,15 +185,28 @@ namespace Prime.Services
                 organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
             }
 
+            string registrationReviewFilename = "SiteRegistrationReview.pdf";
+
             var attachments = new (string Filename, string HtmlContent)[]
             {
                 ("OrganizationAgreement.pdf", organizationAgreementHtml),
-                ("SiteRegistrationReview.pdf", await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
+                (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
                 ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(businessLicenceTemplate, businessLicenceDoc))
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
 
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
+
+            var siteRegReviewPdf = attachments.Single(a => a.Filename == registrationReviewFilename).Content;
+            await SaveSiteRegistrationReview(site.Id, registrationReviewFilename, siteRegReviewPdf);
+        }
+
+        private async Task SaveSiteRegistrationReview(int siteId, string filename, byte[] pdf)
+        {
+            var documentGuid = await _documentManagerClient.SendFileAsync(new MemoryStream(pdf), filename, $"sites/{siteId}/site_registration_reviews");
+
+            _context.SiteRegistrationReviewDocuments.Add(new SiteRegistrationReviewDocument(siteId, documentGuid, filename));
+            await _context.SaveChangesAsync();
         }
 
         public async Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName)
