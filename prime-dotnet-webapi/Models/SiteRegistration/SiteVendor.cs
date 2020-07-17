@@ -15,9 +15,10 @@ namespace Prime.Models
         [JsonIgnore]
         public Site Site { get; set; }
 
-        [JsonIgnore]
+
         public int VendorCode { get; set; }
 
+        [JsonIgnore]
         public Vendor Vendor { get; set; }
     }
 }
