@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace Prime.Services.Clients
 {
@@ -53,8 +54,8 @@ namespace Prime.Services.Clients
 
         public async Task<JObject> IssueCredentialAsync(JObject credentialOffer)
         {
-            var httpContent = new StringContent(credentialOffer.ToString());
-            httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            var httpContent = new StringContent(JsonConvert.SerializeObject(credentialOffer), Encoding.UTF8, "application/json");
+            // httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
             HttpResponseMessage response = null;
             try
