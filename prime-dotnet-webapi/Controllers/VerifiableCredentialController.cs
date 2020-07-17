@@ -15,15 +15,15 @@ namespace Prime.Controllers
     public class VerifiableCredentialController : ControllerBase
     {
         private readonly IVerifiableCredentialService _verifiableCredentialsService;
-        private readonly ILogger _logger;
+        // private readonly ILogger _logger;
 
         public VerifiableCredentialController(
-            IVerifiableCredentialService verifiableCredentialService,
-            ILogger<VerifiableCredentialController> logger
+            IVerifiableCredentialService verifiableCredentialService
+        // ILogger<VerifiableCredentialController> logger
         )
         {
             _verifiableCredentialsService = verifiableCredentialService;
-            _logger = logger;
+            // _logger = logger;
         }
 
         // POST: api/topic/:topic/{guid}
@@ -42,7 +42,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Webhook(string apiKey, string topic, [FromBody] JObject data)
         {
-            _logger.LogInformation($"API-KEY: [{apiKey}], VERIFIABLE_CREDENTIAL_WEBHOOK_KEY: [{PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY}]");
+            // _logger.LogInformation($"API-KEY: [{apiKey}], VERIFIABLE_CREDENTIAL_WEBHOOK_KEY: [{PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY}]");
 
             if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
             {
