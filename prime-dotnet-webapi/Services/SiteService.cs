@@ -37,7 +37,7 @@ namespace Prime.Services
         public async Task<IEnumerable<Site>> GetSitesAsync(int organizationId)
         {
             return await this.GetBaseSiteQuery()
-                .Where(s => s.Location.OrganizationId == organizationId)
+                .Where(s => s.OrganizationId == organizationId)
                 .ToListAsync();
         }
 
@@ -56,18 +56,11 @@ namespace Prime.Services
                 throw new ArgumentNullException(nameof(organization), "Could not create a site, the passed in Organization doesnt exist.");
             }
 
-            var location = await this.GetLocationByOrganizationIdAsync(organizationId);
-
-            if (location == null)
-            {
-                location = new Location { OrganizationId = organization.Id };
-            }
-
             // Site provisionerId should be equal to organization signingAuthorityId
             var site = new Site
             {
                 ProvisionerId = organization.SigningAuthorityId,
-                Location = location
+                OrganizationId = organization.Id
             };
 
             _context.Sites.Add(site);
@@ -91,8 +84,7 @@ namespace Prime.Services
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
-            // TODO should create a location controller to avoid these kinds of updates
-            UpdateLocation(currentSite.Location, updatedSite.Location);
+            UpdateSite(currentSite, updatedSite);
 
             // Wholesale replace the remote users
             if (currentSite?.RemoteUsers != null && currentSite?.RemoteUsers.Count() != 0)
@@ -117,10 +109,12 @@ namespace Prime.Services
                 }
             }
 
-            // Update foreign key only if not null
-            currentSite.VendorCode = (updatedSite.VendorCode != 0)
-                ? updatedSite.VendorCode
-                : null;
+            // // Update foreign key only if not null
+            // currentSite.VendorCode = (updatedSite.VendorCode != 0)
+            //     ? updatedSite.VendorCode
+            //     : null;
+            // Tempoary fix, needs to be tested
+            currentSite.SiteVendors = updatedSite.SiteVendors;
 
             // Managed through separate API endpoint, and should never be updated
             currentSite.SubmittedDate = submittedDate;
@@ -142,15 +136,8 @@ namespace Prime.Services
             }
         }
 
-        private async Task<Location> GetLocationByOrganizationIdAsync(int organizationId)
-        {
-            // assmuing an organization only has 1 location
-            return await _context.Locations
-                .Where(l => l.OrganizationId == organizationId)
-                .FirstOrDefaultAsync();
-        }
 
-        private void UpdateLocation(Location current, Location updated)
+        private void UpdateSite(Site current, Site updated)
         {
             this._context.Entry(current).CurrentValues.SetValues(updated);
 
@@ -277,6 +264,15 @@ namespace Prime.Services
                 return;
             }
 
+            if (site.PhysicalAddress != null)
+            {
+                _context.Addresses.Remove(site.PhysicalAddress);
+            }
+
+            DeletePartyFromSite(site.AdministratorPharmaNet);
+            DeletePartyFromSite(site.TechnicalSupport);
+            DeletePartyFromSite(site.PrivacyOfficer);
+
             _context.Sites.Remove(site);
 
             await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
@@ -284,24 +280,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        private void DeleteLocation(Site site)
-        {
-            // Check if relation exists before delete to allow delete of incomplete registrations
-            if (site.Location != null)
-            {
-                if (site.Location.PhysicalAddress != null)
-                {
-                    _context.Addresses.Remove(site.Location.PhysicalAddress);
-                }
-                _context.Locations.Remove(site.Location);
-
-                DeletePartyFromLocation(site.Location.AdministratorPharmaNet);
-                DeletePartyFromLocation(site.Location.TechnicalSupport);
-                DeletePartyFromLocation(site.Location.PrivacyOfficer);
-            }
-        }
-
-        private void DeletePartyFromLocation(Party party)
+        private void DeletePartyFromSite(Party party)
         {
             if (party != null)
             {
@@ -390,28 +369,22 @@ namespace Prime.Services
             return _context.Sites
                 .Include(s => s.Provisioner)
                 // .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Vendor)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.Organization)
-                        .ThenInclude(o => o.SigningAuthority)
-                            .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.Organization)
-                        .ThenInclude(o => o.SigningAuthority)
-                            .ThenInclude(p => p.MailingAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.PhysicalAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.PrivacyOfficer)
+                .Include(s => s.SiteVendors)
+                    .ThenInclude(v => v.Vendor)
+                .Include(s => s.Organization)
+                    .ThenInclude(o => o.SigningAuthority)
                         .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.AdministratorPharmaNet)
-                        .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.TechnicalSupport)
-                        .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.BusinessHours)
+                .Include(s => s.Organization)
+                    .ThenInclude(o => o.SigningAuthority)
+                        .ThenInclude(p => p.MailingAddress)
+                .Include(s => s.PhysicalAddress)
+                .Include(s => s.PrivacyOfficer)
+                    .ThenInclude(p => p.PhysicalAddress)
+                .Include(s => s.AdministratorPharmaNet)
+                    .ThenInclude(p => p.PhysicalAddress)
+                .Include(s => s.TechnicalSupport)
+                    .ThenInclude(p => p.PhysicalAddress)
+                .Include(s => s.BusinessHours)
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserLocations)
                         .ThenInclude(rul => rul.PhysicalAddress)
