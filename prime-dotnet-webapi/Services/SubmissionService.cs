@@ -85,7 +85,7 @@ namespace Prime.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error occurred attempting to create a connection: ", ex);
+                _logger.LogError("Error occurred attempting to create a connection through the Verifiable Credential agent: ", ex);
             }
 
             await this.ProcessEnrolleeApplicationRules(enrolleeId);
