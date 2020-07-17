@@ -85,7 +85,7 @@ namespace Prime.Services
             }
             catch (Exception ex)
             {
-                throw new VerifiableCredentialApiException("Error occurred attempting to create a connection: ", ex);
+                _logger.LogError("Error occurred attempting to create a connection: ", ex);
             }
 
             await this.ProcessEnrolleeApplicationRules(enrolleeId);
