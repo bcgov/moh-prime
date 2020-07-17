@@ -15,7 +15,6 @@ namespace Prime.Models
         [JsonIgnore]
         public Site Site { get; set; }
 
-
         public int VendorCode { get; set; }
 
         [JsonIgnore]
