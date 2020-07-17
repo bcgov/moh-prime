@@ -78,14 +78,13 @@ namespace Prime.Services
             // TODO when/where should a new credential be issued?
             // TODO check for an active connection
             // TODO check for issued credential
-
             try
             {
                 await _verifiableCredentialService.CreateConnectionAsync(enrollee);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error occurred attempting to create a connection through the Verifiable Credential agent: ", ex);
+                _logger.LogError("Error occurred attempting to create a connection invitation through the Verifiable Credential agent: ", ex);
             }
 
             await this.ProcessEnrolleeApplicationRules(enrolleeId);
