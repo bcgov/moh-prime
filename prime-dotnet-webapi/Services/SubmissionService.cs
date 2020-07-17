@@ -78,6 +78,7 @@ namespace Prime.Services
             // TODO when/where should a new credential be issued?
             // TODO check for an active connection
             // TODO check for issued credential
+
             try
             {
                 await _verifiableCredentialService.CreateConnectionAsync(enrollee);
