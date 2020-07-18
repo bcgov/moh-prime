@@ -26,7 +26,9 @@ namespace Prime.Services
         private readonly IPrivilegeService _privilegeService;
         private readonly ILogger _logger;
 
-        public SubmissionService(ApiDbContext context, IHttpContextAccessor httpContext,
+        public SubmissionService(
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
             IAccessTermService accessTermService,
             ISubmissionRulesService submissionRulesService,
             IBusinessEventService businessEventService,
