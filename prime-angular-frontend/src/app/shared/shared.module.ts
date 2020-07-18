@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+// TODO split out all related filepond files into a /lib module ie. config and components
+import { FilePondModule, registerPlugin } from 'ngx-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+registerPlugin(FilePondPluginFileValidateType);
 import { NgxMaskModule } from 'ngx-mask';
 
 import { ConfigModule } from '@config/config.module';
@@ -69,12 +73,9 @@ import { FormErrorsComponent } from './components/form-errors/form-errors.compon
 import { SiteReviewComponent } from './components/site/site-review/site-review.component';
 import { PartyReviewComponent } from './components/site/party-review/party-review.component';
 import { DocumentUploadComponent } from './components/document-upload/document-upload/document-upload.component';
-// TODO split out all related filepond files into a /lib module ie. config and components
-import { FilePondModule, registerPlugin } from 'ngx-filepond';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import { OrganizationReviewComponent } from './components/organization-review/organization-review.component';
-registerPlugin(FilePondPluginFileValidateType);
 import { ImageComponent } from './components/dialogs/content/image/image.component';
+
 @NgModule({
   declarations: [
     CapitalizePipe,
