@@ -9,7 +9,7 @@ pipeline {
         FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
         // TODO request made for adding human-readable ID to moh-prime credential of jenkins-git-credential
-        // to reduce changes required if credentials change
+        // to reduce changes required if credentials change similar to the access token credential I created
         GITHUB_CREDENTIAL = credentials('42118129-086b-40a0-b800-bf490c2a2e82')
     }
     options {
@@ -23,14 +23,6 @@ pipeline {
                     checkout scm
                 }
             }
-            // TODO should this be performed up front since they are expected by GitHub, or in the separate stages?
-            // post {
-            //   always {
-            //     sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
-            //     sh "./player.sh notifyGitHub pending deployment $GITHUB_CREDENTIAL"
-            //     sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-tests $GITHUB_CREDENTIAL"
-            //   }
-            // }
         }
         stage('Build') {
             options {
@@ -102,54 +94,28 @@ pipeline {
                 }
             }
         }
-        // TODO only for testing, otherwise use commented step and subsequent gated stage
-        stage('Integrity Test (PR)') {
-          options {
-              timeout(time: 10, unit: 'MINUTES') // timeout on this stage
-          }
-          agent { label 'master' }
-          when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
-          // TODO replace with the step below once Jenkins is updated
-          steps {
-            script {
-              sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
-
-              echo "Running integrity tests..."
-              echo "$GIT_BRANCH"
-              echo "$BRANCH_NAME"
-
-              // TODO catch failure and notify GitHub of state "failure"
-              // error("Oh the humanity!")
-            }
-            post {
-              success {
-                sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
-              }
-              failure {
-                sh "./player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
-              }
-            }
-          }
-          // TODO requires an update to Jenkins and addition of official SonarQube Jenkins plugin
-          // steps {
-          //   sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
-          //
-          //   echo "Running integrity tests..."
-          //   withSonarQubeEnv('SonarQube Server') {
-          //     ???
-          //   }
-          // }
-        }
         // TODO requires an update to Jenkins and addition of official SonarQube Jenkins plugin
-        // stage('Integrity Test Gate (PR)') {
-        //   options {
-        //     timeout(time: 1, unit: 'HOURS') // timeout on this stage
-        //   }
+        // stage('Integrity Test (PR)') {
         //   agent { label 'master' }
         //   when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
         //   steps {
-        //     // Abort the pipeline if quality gate status is not green
-        //     waitForQualityGate abortPipeline = true
+        //     sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+        //
+        //     timeout(time: 10, unit: 'MINUTES') {
+        //       withSonarQubeEnv('SonarQube Server') {
+        //         sh "./player.sh scan" // ???
+        //       }
+        //     }
+        //   }
+        // }
+        // stage('Integrity Test Gate (PR)') {
+        //   agent { label 'master' }
+        //   when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
+        //   steps {
+        //     timeout(time: 1, unit: 'HOURS') {
+        //       // Abort the pipeline if quality gate status is not green
+        //       waitForQualityGate abortPipeline = true
+        //     }
         //   }
         //   post {
         //     success {
