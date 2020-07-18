@@ -52,6 +52,7 @@ namespace PrimeTests.UnitTests
             PHARMANET_SUSPENDED = 4,
             REGISTRATION_SUSPENDED = 8
         }
+
         private void UpdateSelfDeclaration(Enrollee enrollee, SelfDeclarationFlag declarations)
         {
             var updated = new List<SelfDeclaration>();
@@ -115,7 +116,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory]
+        [Theory(Skip = "Awaiting test refactor")]
         [InlineData(SelfDeclarationFlag.NONE, true)]
         [InlineData(SelfDeclarationFlag.CONVICTION, false)]
         [InlineData(SelfDeclarationFlag.DISCIPLINARY, false)]
@@ -139,7 +140,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory]
+        [Theory(Skip = "Awaiting test refactor")]
         [InlineData(true, null, true)]
         [InlineData(false, null, false)]
         [InlineData(true, true, true)]
@@ -163,7 +164,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory]
+        [Theory(Skip = "Awaiting test refactor")]
         [MemberData(nameof(CertificationRuleData))]
         public async void testCertificationRule(OperationMode[] apiModes, bool expected, StatusReasonType[] expectedReasons)
         {
@@ -252,7 +253,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory]
+        [Theory(Skip = "Awaiting test refactor")]
         [InlineData(false, false, true)]
         [InlineData(true, false, false)]
         [InlineData(false, true, false)]
@@ -275,7 +276,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory]
+        [Theory(Skip = "Awaiting test refactor")]
         [InlineData(0, false, true)]
         // TODO Get Licence loaded onto Certificate
         // [InlineData(1, false, true)]
@@ -298,7 +299,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory]
+        [Theory(Skip = "Awaiting test refactor")]
         [InlineData(0, false)]
         [InlineData(1, false)]
         [InlineData(2, false)]
