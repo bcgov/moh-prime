@@ -132,7 +132,7 @@ namespace Prime.Services
                 default:
                     _logger.LogError("Webhook {topic} is not supported", topic);
                     return false;
-            };
+            }
         }
 
         // Handle webhook events for connection states.
