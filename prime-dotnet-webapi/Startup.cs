@@ -171,14 +171,10 @@ namespace Prime
         {
             if (env.IsDevelopment())
             {
-                // TODO should be replaced with logging and exception handler
                 app.UseDeveloperExceptionPage();
             }
 
             this.ConfigureHealthCheck(app);
-
-            // TODO Turn on when there is an actual cert
-            // app.UseHttpsRedirection();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();

@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 using Prime.Services.Clients;
 
-// TODO add logging
 namespace Prime.Services
 {
     public class DocumentService : BaseService, IDocumentService

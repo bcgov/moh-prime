@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
-// TODO add logging
 namespace Prime.Services
 {
     public class OrganizationService : BaseService, IOrganizationService
