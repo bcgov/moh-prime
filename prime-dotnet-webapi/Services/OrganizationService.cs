@@ -121,7 +121,7 @@ namespace Prime.Services
             currentOrganization.SubmittedDate = submittedDate;
 
             // Registration has been completed
-            currentOrganization.Completed = (isCompleted == true)
+            currentOrganization.Completed = (isCompleted)
                 ? isCompleted
                 : currentIsCompleted;
 
