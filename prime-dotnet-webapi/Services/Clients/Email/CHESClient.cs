@@ -44,7 +44,7 @@ namespace Prime.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var responseJsonString = await response.Content.ReadAsStringAsync();
-                    var successResponse = JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
+                    JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
                 }
             }
             catch (Exception ex)

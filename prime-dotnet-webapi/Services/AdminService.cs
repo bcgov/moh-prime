@@ -80,11 +80,6 @@ namespace Prime.Services
 
         public async Task<int> UpdateAdminAsync(int adminId, Admin admin)
         {
-            var _adminDb = await _context.Admins
-                .AsNoTracking()
-                .Where(a => a.Id == adminId)
-                .SingleOrDefaultAsync();
-
             _context.Entry(admin).CurrentValues.SetValues(admin); // reflection
 
             try

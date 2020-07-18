@@ -313,7 +313,7 @@ namespace Prime.Services
             {
                 case PresentProofStates.RequestSent:
                     var presentationExchangeId = data.Value<string>("presentation_exchange_id");
-                    var response = await _verifiableCredentialClient.GetPresentationProof(presentationExchangeId);
+                    await _verifiableCredentialClient.GetPresentationProof(presentationExchangeId);
                     // TODO log that the proof request was received for auditing by checking that state is verified
                     return true;
                 case PresentProofStates.PresentationReceived:

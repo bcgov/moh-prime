@@ -22,8 +22,6 @@ namespace Prime.Services
         )
         {
             var fromAddress = new MailAddress(from);
-            var toAddresses = to.Select(addr => new MailAddress(addr));
-            var ccAddresses = cc.Select(addr => new MailAddress(addr));
 
             IEnumerable<Attachment> attachmentsList = attachments.Select(pdf => new Attachment(new MemoryStream(pdf.Content), pdf.Filename, "application/pdf"));
 
