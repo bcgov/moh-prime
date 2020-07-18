@@ -1,7 +1,5 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
 
 namespace Prime.Models
 {
@@ -18,6 +16,5 @@ namespace Prime.Models
         public string route { get; set; }
 
         public string Comment { get; set; }
-
     }
 }

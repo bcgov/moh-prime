@@ -11,7 +11,6 @@ using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
 using Microsoft.Extensions.Logging;
-using Prime.Services.Clients;
 
 namespace Prime.Services
 {

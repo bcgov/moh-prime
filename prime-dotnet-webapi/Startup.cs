@@ -24,7 +24,6 @@ using Prime.Models.Api;
 using Prime.Infrastructure;
 using System.Net.Http.Headers;
 using IdentityModel.Client;
-using IdentityModel;
 using Microsoft.Extensions.FileProviders;
 
 namespace Prime
