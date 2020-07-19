@@ -57,7 +57,7 @@ const routes: Routes = [
           {
             path: '',
             component: OrganizationsComponent,
-            data: { title: 'Organizations' },
+            data: { title: 'Site Management' },
           },
           {
             path: ':oid',
