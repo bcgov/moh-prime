@@ -83,6 +83,7 @@ namespace Prime.Services.Clients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
+
         public async Task<string> GetSchemaId(string did)
         {
             HttpResponseMessage response = null;
