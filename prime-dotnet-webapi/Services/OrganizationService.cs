@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
-// TODO add logging
 namespace Prime.Services
 {
     public class OrganizationService : BaseService, IOrganizationService
@@ -122,7 +121,7 @@ namespace Prime.Services
             currentOrganization.SubmittedDate = submittedDate;
 
             // Registration has been completed
-            currentOrganization.Completed = (isCompleted == true)
+            currentOrganization.Completed = (isCompleted)
                 ? isCompleted
                 : currentIsCompleted;
 

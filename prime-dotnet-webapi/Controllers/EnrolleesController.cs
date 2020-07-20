@@ -9,11 +9,6 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
-using System.Reflection;
-using System.IO;
-using System.Linq;
-using System;
-using QRCoder;
 
 namespace Prime.Controllers
 {
