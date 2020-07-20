@@ -3,7 +3,7 @@ apiVersion: v1
 labels:
   template: document-manager-template
 metadata:
-  name: document-manager-bc
+  name: document-manager-dc
   creationTimestamp: null
 parameters:
   - name: NAME
@@ -135,7 +135,7 @@ objects:
                 key: database-user
                 name: "postgresql-secret"
           - name: DOCUMENT_MANAGER_URL
-            value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/"
+            value: "https://${SUFFIX}.pharmanetenrolment.gov.bc.ca/api/docman/"
           - name: FLASK_APP
             valueFrom:
               configMapKeyRef:
@@ -260,7 +260,7 @@ objects:
               key: DOCUMENT_MANAGER_CLIENT_SECRET
               name: "document-manager-secret"
         - name: DOCUMENT_MANAGER_URL
-          value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/"
+          value: "https://${SUFFIX}.pharmanetenrolment.gov.bc.ca/api/docman/"
         - name: FLASK_APP
           valueFrom:
             configMapKeyRef:
