@@ -29,7 +29,7 @@ namespace PrimeTests.UnitTests
             // TODO: implement with better control over test DB and access term service.
         }
 
-        [Theory(Skip = "Awaiting test refactor")]
+        [Theory]
         [MemberData(nameof(DateRuleData))]
         public async void testDateRule(DateTimeOffset? expiryDate, bool expected)
         {

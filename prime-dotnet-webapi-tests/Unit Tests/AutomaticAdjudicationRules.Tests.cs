@@ -116,7 +116,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory(Skip = "Awaiting test refactor")]
+        [Theory]
         [InlineData(SelfDeclarationFlag.NONE, true)]
         [InlineData(SelfDeclarationFlag.CONVICTION, false)]
         [InlineData(SelfDeclarationFlag.DISCIPLINARY, false)]
@@ -140,7 +140,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory(Skip = "Awaiting test refactor")]
+        [Theory]
         [InlineData(true, null, true)]
         [InlineData(false, null, false)]
         [InlineData(true, true, true)]
@@ -164,7 +164,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory(Skip = "Awaiting test refactor")]
+        [Theory]
         [MemberData(nameof(CertificationRuleData))]
         public async void testCertificationRule(OperationMode[] apiModes, bool expected, StatusReasonType[] expectedReasons)
         {
@@ -253,7 +253,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory(Skip = "Awaiting test refactor")]
+        [Theory]
         [InlineData(false, false, true)]
         [InlineData(true, false, false)]
         [InlineData(false, true, false)]
@@ -276,7 +276,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory(Skip = "Awaiting test refactor")]
+        [Theory]
         [InlineData(0, false, true)]
         // TODO Get Licence loaded onto Certificate
         // [InlineData(1, false, true)]
@@ -299,7 +299,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory(Skip = "Awaiting test refactor")]
+        [Theory]
         [InlineData(0, false)]
         [InlineData(1, false)]
         [InlineData(2, false)]
