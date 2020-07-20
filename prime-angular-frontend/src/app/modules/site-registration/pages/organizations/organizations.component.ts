@@ -51,13 +51,19 @@ export class OrganizationsComponent implements OnInit {
     this.createOrganization();
   }
 
-  public viewOrganization(organizationId: number, optionalRoutePath: string = null) {
+  public viewOrganization(organizationId: number) {
     const organization = this.organizations.find(o => o.id === organizationId);
-    const routePath = (optionalRoutePath)
-      ? [optionalRoutePath]
-      : (!organization.completed)
-        ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
-        : []; // Defaults to overview
+    const routePath = (!organization.completed)
+      ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
+      : []; // Defaults to overview
+    this.routeUtils.routeRelativeTo([organizationId, ...routePath]);
+  }
+
+  public viewAgreement(organizationId: number) {
+    const organization = this.organizations.find(o => o.id === organizationId);
+    const routePath = (!organization.signedAgreementDocuments)
+      ? [SiteRoutes.ORGANIZATION_AGREEMENT]
+      : []; // Defaults to overview
     this.routeUtils.routeRelativeTo([organizationId, ...routePath]);
   }
 
