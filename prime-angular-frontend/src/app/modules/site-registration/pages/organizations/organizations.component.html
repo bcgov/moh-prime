@@ -129,6 +129,7 @@
   </ng-template>
 
   <ng-template #siteMenu
+               let-organizationId="organizationId"
                let-site="site">
     <button mat-icon-button
             [matMenuTriggerFor]="menu">
