@@ -1,0 +1,89 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: gitlab-runner-bc
+  creationTimestamp: null
+parameters:
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: 'https://github.com/bcgov/moh-prime'
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+    value: 'develop'
+  - name: OC_NAMESPACE
+    required: true
+    value: 'dqszvc'
+  - name: OC_APP
+    required: true
+    value: 'tools'
+objects:
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: 'gitlab-runner-openshift'
+      labels:
+        shared: 'true'
+      annotations: {}
+    spec:
+      replicas: 1
+      template:
+        metadata:
+          labels:
+            name: gitlab-runner
+            app: gitlab-runner
+        spec:
+          serviceAccountName: default
+          imagePullSecrets:
+          - name: docker-credentials
+          containers:
+          - name: gitlab-runner
+            image: gitlab-runner-openshift
+            command: <%= @command %>
+            imagePullPolicy: Always
+            env:
+            - name: RUNNER_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: RUNNER_USER
+              value: gitlab-runner
+            - name: RUNNER_WORKING_DIR
+              value: /home/gitlab-runner
+            - name: RUNNER_SCRIPTS_DIR
+              value: /scripts
+            - name: RUNNER_SCRIPTS_BACKUP_DIR
+              value: /home/gitlab-runner/scripts.bak
+            resources:
+              requests:
+                cpu: 50m
+                memory: 100Mi
+              limits:
+                cpu: 50m
+                memory: 250Mi
+            livenessProbe:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - "/entrypoint verify && diff -N ${RUNNER_SCRIPTS_DIR} ${RUNNER_SCRIPTS_BACKUP_DIR}"
+              initialDelaySeconds: 30
+              periodSeconds: 15
+              failureThreshold: 1
+            readinessProbe:
+              exec:
+                command:
+                  - /entrypoint
+                  - verify
+              initialDelaySeconds: 30
+              periodSeconds: 15
+              failureThreshold: 3
+            volumeMounts:
+            - name: scripts
+              mountPath: /scripts
+          volumes:
+          - name: scripts
+            configMap:
+              name: gitlab-runner-config
+          securityContext:
+            runAsUser: 100 # gitlab-runner user
+            fsGroup: 65533 # nobody, gitlab-runner group

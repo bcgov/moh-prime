@@ -1,0 +1,64 @@
+data:
+  entrypoint: |
+    #!/bin/bash
+    set -e
+
+    unregister() {
+      kill %1
+      echo "Unregistering runner [${RUNNER_NAME}]..."
+      /entrypoint unregister --name ${RUNNER_NAME}
+      trap '' EXIT HUP INT QUIT PIPE TERM
+      exit $?
+    }
+    trap 'unregister' EXIT HUP INT QUIT PIPE TERM
+
+    # Prepare config file used by runner
+    configPath="${RUNNER_WORKING_DIR}/.gitlab-runner"
+    configFilePath="${configPath}/config.toml"
+    mkdir -p "${configPath}"
+    cp "${RUNNER_SCRIPTS_DIR}/config.toml" "${configFilePath}"
+
+    # Backup scripts to see if config changes have been made
+    rm -rf "${RUNNER_SCRIPTS_BACKUP_DIR}"
+    mkdir -p "${RUNNER_SCRIPTS_BACKUP_DIR}"
+    cp -rfL "${RUNNER_SCRIPTS_DIR}"/* "${RUNNER_SCRIPTS_BACKUP_DIR}"
+
+    echo "Registering runner [${RUNNER_NAME}]..."
+    export CACHE_SHARED=true # required because --cache-cache-shared true doesn't actually work
+    /entrypoint register --non-interactive \
+      --config "${configFilePath}" \
+      --name ${RUNNER_NAME} \
+      --url <%= @url -%> \
+      --clone-url <%= @url -%> \
+      --registration-token "<%= @registrationToken %>" \
+      --executor kubernetes \
+      --kubernetes-namespace <%= @facts['bol_shortname'] -%> \
+      --kubernetes-service-account <%= @svc_account_name -%> \
+      --kubernetes-cpu-request <%= @all_resources['build']['cpu']['request'] -%> \
+      --kubernetes-cpu-limit <%= @all_resources['build']['cpu']['limit'] -%> \
+      --kubernetes-memory-request <%= @all_resources['build']['memory']['request'] -%> \
+      --kubernetes-memory-limit <%= @all_resources['build']['memory']['limit'] -%> \
+      --kubernetes-service-cpu-request <%= @all_resources['service']['cpu']['request'] -%> \
+      --kubernetes-service-cpu-limit <%= @all_resources['service']['cpu']['limit'] -%> \
+      --kubernetes-service-memory-request <%= @all_resources['service']['memory']['request'] -%> \
+      --kubernetes-service-memory-limit <%= @all_resources['service']['memory']['limit'] -%> \
+      --kubernetes-helper-cpu-request <%= @all_resources['helper']['cpu']['request'] -%> \
+      --kubernetes-helper-cpu-limit <%= @all_resources['helper']['cpu']['limit'] -%> \
+      --kubernetes-helper-memory-request <%= @all_resources['helper']['memory']['request'] -%> \
+      --kubernetes-helper-memory-limit <%= @all_resources['helper']['memory']['limit'] -%> \
+      --kubernetes-pull-policy always \
+      --kubernetes-image-pull-secrets imagepull \
+      --tag-list "<%= @tag_list -%>" \
+      --locked=<%= @locked %>
+
+    # Start the runner
+    /entrypoint \
+      run \
+      --config "${configFilePath}" \
+      --user="${RUNNER_USER}" \
+      --working-directory="${RUNNER_WORKING_DIR}" &
+
+    wait
+  config.toml: |
+    concurrent = <%= @concurrency %>
+    check_interval = <%= @checkInterval %>

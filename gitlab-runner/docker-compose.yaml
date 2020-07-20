@@ -1,0 +1,5 @@
+version: "3"
+services:
+  gitlab-runner:
+    container_name: gitlab-runner
+    restart: always
