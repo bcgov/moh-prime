@@ -77,11 +77,11 @@ export class OrganizationsComponent implements OnInit {
   }
 
   // TODO only for single organization then remove
-  public viewSite(siteId: number) {
+  public viewSite(organizationId: number, siteId: number) {
     const site = this.sites.find(o => o.id === siteId);
     const routePath = (site.completed)
-      ? [siteId, SiteRoutes.SITES, site.id] // Defaults to overview
-      : [siteId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
+      ? [organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
+      : [organizationId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
     this.routeUtils.routeRelativeTo(routePath);
   }
 
