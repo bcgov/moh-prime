@@ -57,47 +57,10 @@ namespace Prime.Services.Clients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
-        // public async Task<JObject> IssueCredentialAsync(JObject credentialOffer)
-        // {
-        //     var httpContent = new StringContent(credentialOffer.ToString(Newtonsoft.Json.Formatting.None));
-        //     // var httpContent = new StringContent(JsonConvert.SerializeObject(credentialOffer));
-        //     // var httpContent = JsonContent.Create(credentialOffer);
-        //     _logger.LogInformation("Credential offer in client {@JObject}", JsonConvert.SerializeObject(credentialOffer));
-        //     // httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-
-        //     var postRequest = new HttpRequestMessage(HttpMethod.Post, "issue-credential/send")
-        //     {
-        //         Content = JsonContent.Create(JsonConvert.SerializeObject(credentialOffer))
-        //     };
-
-        //     HttpResponseMessage response = null;
-        //     try
-        //     {
-        //         _logger.LogInformation($"Full Path: {_client.BaseAddress}issue-credential/send");
-        //         // response = await _client.PostAsJsonAsync("issue-credential/send", credentialOffer);
-        //         response = await _client.SendAsync(postRequest);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         await LogError(httpContent, response, ex);
-        //         throw new VerifiableCredentialApiException("Error occurred attempting to issue a credential: ", ex);
-        //     }
-
-        //     if (!response.IsSuccessStatusCode)
-        //     {
-        //         await LogError(httpContent, response);
-        //         throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::IssueCredentialAsync");
-        //     }
-
-        //     return JObject.Parse(await response.Content.ReadAsStringAsync());
-        // }
-
         public async Task<JObject> IssueCredentialAsync(JObject credentialOffer)
         {
-            string json = "{\"connection_id\":\"c570bdad-d811-4525-a784-81d62140d572\",\"issuer_did\":\"QDaSxvduZroHDKkdXKV5gG\",\"schema_id\":\"QDaSxvduZroHDKkdXKV5gG:2:enrollee:2.0\",\"schema_issuer_did\":\"QDaSxvduZroHDKkdXKV5gG\",\"schema_name\":\"enrollee\",\"schema_version\":\"2.0\",\"cred_def_id\":\"QDaSxvduZroHDKkdXKV5gG:3:CL:115642:default\",\"comment\":\"PharmaNetGPID\",\"credential_proposal\":{\"@type\":\"did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview\",\"attributes\":[{\"name\":\"gpid\",\"value\":\"CZ#WIW,0ZAWRH!PBGTKL\"},{\"name\":\"renewal_date\",\"value\":\"2021-07-15T21:28:57.203154+00:00\"},{\"name\":\"organization_type\",\"value\":\"CommunityPharmacy\"},{\"name\":\"user_class\",\"value\":\"OBO\"},{\"name\":\"remote_access\",\"value\":\"false\"}]}}";
-            var httpContent = new StringContent(json);
+            var httpContent = new StringContent(JsonConvert.SerializeObject(credentialOffer), Encoding.UTF8, "application/json");
             _logger.LogInformation("Credential offer in client {@JObject}", JsonConvert.SerializeObject(credentialOffer));
-            httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
             HttpResponseMessage response = null;
             try
