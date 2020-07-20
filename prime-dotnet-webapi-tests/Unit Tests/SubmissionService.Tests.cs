@@ -21,6 +21,7 @@ namespace PrimeTests.UnitTests
             IEmailService emailService = null,
             IEnrolleeService enrolleeService = null,
             IEnrolleeProfileVersionService enrolleeProfileVersionService = null,
+            IVerifiableCredentialService verifiableCredentialService = null,
             IPrivilegeService privilegeService = null)
         {
             return new SubmissionService(
@@ -32,6 +33,7 @@ namespace PrimeTests.UnitTests
                 emailService ?? A.Fake<IEmailService>(),
                 enrolleeService ?? A.Fake<IEnrolleeService>(),
                 enrolleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>(),
+                verifiableCredentialService ?? A.Fake<IVerifiableCredentialService>(),
                 privilegeService ?? A.Fake<IPrivilegeService>()
             );
         }
