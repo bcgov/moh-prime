@@ -46,7 +46,6 @@ namespace Prime.Controllers
 
             if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
             {
-                _logger.LogInformation("Inside if() guard");
                 return Forbid();
             }
             await _verifiableCredentialsService.WebhookAsync(data, topic);
