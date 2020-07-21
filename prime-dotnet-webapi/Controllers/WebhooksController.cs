@@ -27,7 +27,7 @@ namespace Prime.Controllers
             _logger = logger;
         }
 
-        // POST: /api/webhooks/1234-5678/topic/connection
+        // POST: api/webhooks/1234-5678/topic/connection
         /// <summary>
         /// Handle webhook events sent from the issuing agent.
         /// </summary>
