@@ -10,8 +10,8 @@ namespace Prime.Models
     [Table("LicenseClassClause")]
     public class LicenseClassClause : BaseAuditable, IAccessClause
     {
-        public static string Dispense = "Dispense";
-        public static string Prescribe = "Prescribe";
+        public static readonly string Dispense = "Dispense";
+        public static readonly string Prescribe = "Prescribe";
 
         public LicenseClassClause()
         {
