@@ -95,19 +95,19 @@ pipeline {
             }
         }
         // TODO requires an update to Jenkins and addition of official SonarQube Jenkins plugin
-        // stage('Integrity Test (PR)') {
-        //   agent { label 'master' }
-        //   when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
-        //   steps {
+        stage('Integrity Test (PR)') {
+          agent { label 'master' }
+          when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
+          steps {
         //     sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
         //
         //     timeout(time: 10, unit: 'MINUTES') {
         //       withSonarQubeEnv('SonarQube Server') {
-        //         sh "./player.sh scan" // ???
+                sh "./player.sh scan" // ???
         //       }
         //     }
-        //   }
-        // }
+          }
+        }
         // stage('Integrity Test Gate (PR)') {
         //   agent { label 'master' }
         //   when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
