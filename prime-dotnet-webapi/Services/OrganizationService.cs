@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
-// TODO add logging
 namespace Prime.Services
 {
     public class OrganizationService : BaseService, IOrganizationService
@@ -122,7 +121,7 @@ namespace Prime.Services
             currentOrganization.SubmittedDate = submittedDate;
 
             // Registration has been completed
-            currentOrganization.Completed = (isCompleted == true)
+            currentOrganization.Completed = (isCompleted)
                 ? isCompleted
                 : currentIsCompleted;
 
@@ -192,17 +191,17 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
         }
 
-        public async Task<SignedAgreement> AddSignedAgreementAsync(int organizationId, Guid documentGuid, string filename)
+        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, Guid documentGuid, string filename)
         {
-            var signedAgreement = new SignedAgreement
+            var signedAgreement = new SignedAgreementDocument
             {
                 DocumentGuid = documentGuid,
                 OrganizationId = organizationId,
-                FileName = filename,
+                Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };
 
-            _context.SignedAgreements.Add(signedAgreement);
+            _context.SignedAgreementDocuments.Add(signedAgreement);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
@@ -213,16 +212,16 @@ namespace Prime.Services
             return signedAgreement;
         }
 
-        public async Task<IEnumerable<SignedAgreement>> GetSignedAgreementsAsync(int organizationId)
+        public async Task<IEnumerable<SignedAgreementDocument>> GetSignedAgreementsAsync(int organizationId)
         {
-            return await _context.SignedAgreements
+            return await _context.SignedAgreementDocuments
                 .Where(a => a.OrganizationId == organizationId)
                 .ToListAsync();
         }
 
-        public async Task<SignedAgreement> GetLatestSignedAgreementAsync(int organizationId)
+        public async Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId)
         {
-            return await _context.SignedAgreements
+            return await _context.SignedAgreementDocuments
                 .Where(sa => sa.OrganizationId == organizationId)
                 .OrderByDescending(sa => sa.UploadedDate)
                 .FirstOrDefaultAsync();
@@ -232,7 +231,7 @@ namespace Prime.Services
         {
             return _context.Organizations
                 .Include(o => o.Locations)
-                .Include(o => o.SignedAgreements)
+                .Include(o => o.SignedAgreementDocuments)
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(o => o.SigningAuthority)

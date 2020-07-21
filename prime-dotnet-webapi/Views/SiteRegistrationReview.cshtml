@@ -14,7 +14,7 @@
   }
 
   h1, h2, h3, h4, h5, span {
-    font-family: 'Roboto', 'Helvetica Neue', 'sans-serif';
+    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
   }
 
 </style>
@@ -67,11 +67,11 @@
   @* Business Licences *@
   <h2 class="mb-2">Business Licences</h2>
 
-  @foreach(var licence in @Model.BusinessLicences)
+  @foreach(var licence in @Model.BusinessLicenceDocuments)
   {
     <div class="ml-2 mb-2">
       <h5>Filename</h5>
-      <span class="ml-2">@licence.FileName</span>
+      <span class="ml-2">@licence.Filename</span>
     </div>
   }
 

@@ -12,7 +12,7 @@ namespace Prime.Services
 
         Task SendSiteRegistrationAsync(Site site);
 
-        Task<string> GetPharmaNetProvisionerEmailAsync(string pharmaNetVendor);
+        Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName);
 
         Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync();
     }

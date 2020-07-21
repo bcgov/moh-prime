@@ -142,7 +142,7 @@ namespace PrimeTests.UnitTests
             await AssertAllowableChanges(false, enrollee, profile);
         }
 
-        [Theory]
+        [Theory(Skip = "Awaiting test refactor")]
         [InlineData(true, true)]
         [InlineData(false, false)]
         [InlineData(null, false)]

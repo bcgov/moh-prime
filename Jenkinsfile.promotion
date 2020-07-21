@@ -1,3 +1,23 @@
+/* Jenkinsfile.promotion
+ *
+ * After merging the develop branch into the master branch, this will work to 
+ * build and deploy changes to the OpenShift test & production environment.
+ * 
+ * This is achieved via the following stages:
+ *   1. Promotion of master to Test environment
+ *      a. Build Test environment from Master
+ *      b. Deploy Test environment from Master   
+ *   2. Perform code quality check on Test environment
+ *      a. SonarQube scan
+ *      b. OWASP ZAP scan 
+ *   3. Approval for deployment of Master to production is provided by user in
+ *      the Jenkins console log.
+ *   4. Promotion and simultaneous build and deployment of Master
+ *      a. Build & deploy to Demo environment
+ *      b. Build & deploy to Production environment
+ *
+ */
+
 pipeline {
     agent none
     stages {

@@ -9,15 +9,13 @@
 
   <mat-menu #menu>
     <button mat-menu-item
-            [disabled]="true">
-      <!-- <mat-icon>get_app</mat-icon> -->
-      <!-- <mat-icon>cloud_download</mat-icon> -->
+            (click)="getOrganizationAgreement()">
+      <mat-icon>get_app</mat-icon>
       <span>Organization Agreement</span>
     </button>
     <button mat-menu-item
-            [disabled]="true">
-      <!-- <mat-icon>get_app</mat-icon> -->
-      <!-- <mat-icon>cloud_download</mat-icon> -->
+            (click)="getBusinessLicence()">
+      <mat-icon>get_app</mat-icon>
       <span>Business Licence</span>
     </button>
   </mat-menu>
