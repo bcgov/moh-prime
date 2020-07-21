@@ -49,7 +49,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
             await _verifiableCredentialsService.WebhookAsync(data, topic);
-            return Ok();
+            return NoContent();
         }
     }
 }
