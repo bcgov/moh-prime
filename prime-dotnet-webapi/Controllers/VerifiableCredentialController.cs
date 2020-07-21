@@ -27,47 +27,28 @@ namespace Prime.Controllers
             _logger = logger;
         }
 
-        // // POST: api/topic/:topic/{guid}
-        // /// <summary>
-        // /// Handle webhook events sent from the issuing agent.
-        // /// </summary>
-        // /// <param name="apiKey"></param>
-        // /// <param name="topic"></param>
-        // /// <param name="data"></param>
-        // // Webhooks explained "In Soviet Russia API call you!" - Jason Aitchison 2020
-        // [HttpPost("/api/webhooks/{apiKey}/topic/{topic}/", Name = nameof(Webhook))]
-        // [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        // // TODO update to response code 202 when queue has been added for webhooks
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // public async Task<ActionResult> Webhook(string apiKey, string topic, [FromBody] JObject data)
-        // {
-        //     _logger.LogInformation($"API-KEY: [{apiKey}], VERIFIABLE_CREDENTIAL_WEBHOOK_KEY: [{PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY}]");
-
-        //     if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
-        //     {
-        //         _logger.LogInformation("Inside if() guard");
-        //         return Forbid();
-        //     }
-        //     await _verifiableCredentialsService.WebhookAsync(data, topic);
-        //     return Ok();
-        // }
-
-        // NO GUID IN WEBHOOK URL TEST
         // POST: api/topic/:topic/{guid}
         /// <summary>
         /// Handle webhook events sent from the issuing agent.
         /// </summary>
+        /// <param name="apiKey"></param>
         /// <param name="topic"></param>
         /// <param name="data"></param>
         // Webhooks explained "In Soviet Russia API call you!" - Jason Aitchison 2020
-        [HttpPost("/api/webhooks/topic/{topic}/", Name = nameof(Webhook))]
+        [HttpPost("/api/webhooks/{apiKey}/topic/{topic}/", Name = nameof(Webhook))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         // TODO update to response code 202 when queue has been added for webhooks
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> Webhook(string topic, [FromBody] JObject data)
+        public async Task<ActionResult> Webhook(string apiKey, string topic, [FromBody] JObject data)
         {
+            _logger.LogInformation($"API-KEY: [{apiKey}], VERIFIABLE_CREDENTIAL_WEBHOOK_KEY: [{PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY}]");
+
+            if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
+            {
+                _logger.LogInformation("Inside if() guard");
+                return Forbid();
+            }
             await _verifiableCredentialsService.WebhookAsync(data, topic);
             return Ok();
         }
