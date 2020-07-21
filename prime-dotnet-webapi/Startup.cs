@@ -144,14 +144,11 @@ namespace Prime
                 ClientSecret = PrimeConstants.DOCUMENT_MANAGER_CLIENT_SECRET,
             });
 
-            services.AddTransient<VerifiableCredentialApiKeyHandler>()
-            .AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
+            services.AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
             {
                 client.BaseAddress = new Uri(PrimeConstants.VERIFIABLE_CREDENTIAL_API_URL);
                 client.DefaultRequestHeaders.Add("x-api-key", PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY);
-            })
-            .AddHttpMessageHandler<VerifiableCredentialApiKeyHandler>();
-
+            });
 
             services.AddTransient<ChesBearerTokenHandler>()
             .AddHttpClient<IChesClient, ChesClient>(client =>
