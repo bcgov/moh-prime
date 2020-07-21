@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 using Serilog;
@@ -78,20 +77,11 @@ namespace Prime
                     $@"{path}/prime.log",
                     outputTemplate: outputTemplate,
                     rollingInterval: RollingInterval.Day,
-                    // TODO can be configured to rollover on file size limit
-                    // fileSizeLimitBytes: 1_000_000,
-                    // rollOnFileSizeLimit: true,
                     shared: true))
                 .WriteTo.Async(a => a.File(
                     new JsonFormatter(),
-                    // TODO performance boost (in μs) using compact, but less readable keys
-                    // new RenderedCompactJsonFormatter(),
                     $@"{path}/prime.json",
                     rollingInterval: RollingInterval.Day))
-                // TODO add ElasticSearch sink for Kibana
-                // @see https://github.com/serilog/serilog-sinks-elasticsearch
-                // TODO add sink for Splunk
-                // @see https://github.com/serilog/serilog-sinks-splunk
                 .CreateLogger();
         }
 

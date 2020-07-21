@@ -8,6 +8,7 @@ using Prime;
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
+using Prime.Services.Clients;
 
 namespace PrimeTests.UnitTests
 {
@@ -18,7 +19,10 @@ namespace PrimeTests.UnitTests
             IRazorConverterService razorConverterService = null,
             IDocumentService documentService = null,
             IPdfService pdfService = null,
-            IOrganizationService organizationService = null
+            IOrganizationService organizationService = null,
+            IChesClient chesClient = null,
+            ISmtpEmailClient smtpEmailClient = null,
+            IDocumentManagerClient documentManagerClient = null
         )
         {
             return new EmailService(
@@ -27,7 +31,10 @@ namespace PrimeTests.UnitTests
                 razorConverterService,
                 documentService,
                 pdfService,
-                organizationService
+                organizationService,
+                chesClient,
+                smtpEmailClient,
+                documentManagerClient
             );
         }
     }

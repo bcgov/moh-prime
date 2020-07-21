@@ -18,15 +18,11 @@ namespace PrimeTests.UnitTests
     public class EnrolmentCertificateServiceTests : InMemoryDbTest
     {
         public EnrolmentCertificateService CreateService(
-            IHttpContextAccessor httpContext = null,
-            IAccessTermService accessTermService = null,
-            IEnrolleeProfileVersionService enroleeProfileVersionService = null)
+            IHttpContextAccessor httpContext = null)
         {
             return new EnrolmentCertificateService(
                 TestDb,
-                httpContext ?? A.Fake<IHttpContextAccessor>(),
-                accessTermService ?? A.Fake<IAccessTermService>(),
-                enroleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>()
+                httpContext ?? A.Fake<IHttpContextAccessor>()
             );
         }
 
@@ -46,7 +42,7 @@ namespace PrimeTests.UnitTests
                     ProfileSnapshot = JObject.FromObject(enrollee),
                 });
 
-            return CreateService(null, accessTermServiceFake, versionServiceFake);
+            return CreateService(null);
         }
 
         [Fact]

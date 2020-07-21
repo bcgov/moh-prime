@@ -117,8 +117,6 @@ namespace Prime.Models
         [JsonIgnore]
         public Credential Credential { get; set; }
 
-        // TODO remove after testing is completed and replace with a specific
-        // QRCode endpoint to populate the view
         [NotMapped]
         public string Base64QRCode
         {
