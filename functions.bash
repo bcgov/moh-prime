@@ -11,7 +11,7 @@ function variablePopulation() {
     if [ -z "${CHANGE_BRANCH}" ];
     then
         export REPOSITORY_REF="${BRANCH_LOWER}"
-    else   
+    else
         export REPOSITORY_REF="${CHANGE_BRANCH}"
     fi
 }
@@ -25,10 +25,10 @@ function pipeline_args() {
 function determineMode() {
     buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true | wc -l)
     if [ -z "${buildPresent}" ];
-    then 
+    then
         MODE="apply"
         OC_ARGS=""
-    else 
+    else
         MODE="apply"
         OC_ARGS="--overwrite=true --all"
     fi;
@@ -117,6 +117,20 @@ function getAllOpenPr () {
     declare -p OPEN_PR_ARRAY=( $(grep '"number"' openPRs.txt | column -t | sed 's|[:,]||g' | awk '{print $2}') )
 }
 
+# @description
+#   Notify GitHub of a change in the commit status for a specific context.
+# @param $2 state: 'pending' | 'success' | 'failure' | 'error'
+# @param $3 context: 'continuous-integration/jenkins/example'
+# @param $4 GitHub credentials
+function notifyGitHub() {
+  curl \
+    -X POST \
+    -H "Accept: application/vnd.github.v3+json" \
+    -u "${4}" \
+    "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/${GIT_COMMIT}" \
+    -d "{\"state\": \"${2}\",\"context\": \"${3}\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/Development/jenkins/Development/job/${BRANCH_NAME}/${BUILD_NUMBER}/display/redirect\"}"
+}
+
 function getOldPr () {
     ORPHANS=$(printf '%s\n' "${ROUTE_ARRAY[@]}" "${OPEN_PR_ARRAY[@]}" | sort | uniq -u)
 }
@@ -133,7 +147,7 @@ function occleanup() {
     echo "ORPHANS=${ORPHANS}"
     for i in ${ORPHANS}
     do
-        cleanOcArtifacts $i 
+        cleanOcArtifacts $i
     done
 }
 
