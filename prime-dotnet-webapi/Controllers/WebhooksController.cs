@@ -39,11 +39,9 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         // TODO update to response code 202 when queue has been added for webhooks
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Webhook(string apiKey, string topic, [FromBody] JObject data)
         {
-            _logger.LogInformation($"API-KEY: [{apiKey}], VERIFIABLE_CREDENTIAL_WEBHOOK_KEY: [{PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY}]");
-
             if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
             {
                 return Forbid();
