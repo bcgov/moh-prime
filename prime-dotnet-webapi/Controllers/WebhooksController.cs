@@ -1,8 +1,6 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
 using Prime.Models.Api;
@@ -16,18 +14,13 @@ namespace Prime.Controllers
     public class WebhooksController : ControllerBase
     {
         private readonly IVerifiableCredentialService _verifiableCredentialsService;
-        private readonly ILogger _logger;
 
-        public WebhooksController(
-            IVerifiableCredentialService verifiableCredentialService,
-            ILogger<WebhooksController> logger
-        )
+        public WebhooksController(IVerifiableCredentialService verifiableCredentialService)
         {
             _verifiableCredentialsService = verifiableCredentialService;
-            _logger = logger;
         }
 
-        // POST: api/webhooks/1234-5678/topic/connection
+        // POST: api/webhooks/1234-5678/topic/connections
         /// <summary>
         /// Handle webhook events sent from the issuing agent.
         /// </summary>
