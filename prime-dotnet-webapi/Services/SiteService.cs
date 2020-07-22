@@ -130,66 +130,37 @@ namespace Prime.Services
 
         private void UpdateParties(Site current, Site updated)
         {
-            if (updated?.AdministratorPharmaNet != null)
+            string[] partyTypes = new string[] {
+                "AdministratorPharmanet",
+                "PrivacyOfficer",
+                "TechnicalSupport"
+            };
+
+            foreach (var partyType in partyTypes)
             {
-                if (updated?.AdministratorPharmaNet?.UserId != Guid.Empty)
+                var partyIdName = $"{partyType}Id";
+                Party currentParty = _context.Entry(current).Property(partyType).CurrentValue as Party;
+                Party updatedParty = _context.Entry(updated).Property(partyType).CurrentValue as Party;
+
+                if (updatedParty != null)
                 {
-                    current.AdministratorPharmaNetId = updated.AdministratorPharmaNetId;
-                }
-                else
-                {
-                    if (current.AdministratorPharmaNet == null)
+                    if (updatedParty.UserId != Guid.Empty)
                     {
-                        current.AdministratorPharmaNet = updated.AdministratorPharmaNet;
+                        _context.Entry(current).Property(partyIdName).CurrentValue = _context.Entry(updated).Property(partyIdName).CurrentValue;
                     }
                     else
                     {
-                        this._context.Entry(current.AdministratorPharmaNet).CurrentValues.SetValues(updated.AdministratorPharmaNet);
-                    }
+                        if (currentParty == null)
+                        {
+                            currentParty = updatedParty;
+                        }
+                        else
+                        {
+                            this._context.Entry(currentParty).CurrentValues.SetValues(updatedParty);
+                        }
 
-                    _partyService.UpdatePartyAddress(current.AdministratorPharmaNet, updated.AdministratorPharmaNet);
-                }
-            }
-
-            if (updated?.PrivacyOfficer != null)
-            {
-                if (updated?.PrivacyOfficer?.UserId != Guid.Empty)
-                {
-                    current.PrivacyOfficerId = updated.PrivacyOfficerId;
-                }
-                else
-                {
-                    if (current.PrivacyOfficer == null)
-                    {
-                        current.PrivacyOfficer = updated.PrivacyOfficer;
+                        _partyService.UpdatePartyAddress(currentParty, updatedParty);
                     }
-                    else
-                    {
-                        this._context.Entry(current.PrivacyOfficer).CurrentValues.SetValues(updated.PrivacyOfficer);
-                    }
-
-                    _partyService.UpdatePartyAddress(current.PrivacyOfficer, updated.PrivacyOfficer);
-                }
-            }
-
-            if (updated?.TechnicalSupport != null)
-            {
-                if (updated?.TechnicalSupport?.UserId != Guid.Empty)
-                {
-                    current.TechnicalSupportId = updated.TechnicalSupportId;
-                }
-                else
-                {
-                    if (current.TechnicalSupport == null)
-                    {
-                        current.TechnicalSupport = updated.TechnicalSupport;
-                    }
-                    else
-                    {
-                        this._context.Entry(current.TechnicalSupport).CurrentValues.SetValues(updated.TechnicalSupport);
-                    }
-
-                    _partyService.UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
                 }
             }
         }
@@ -208,7 +179,7 @@ namespace Prime.Services
 
                 foreach (var businessHour in updated.BusinessHours)
                 {
-                    businessHour.LocationId = current.Id;
+                    businessHour.SiteId = current.Id;
                     _context.Entry(businessHour).State = EntityState.Added;
                 }
             }
@@ -283,10 +254,10 @@ namespace Prime.Services
             var site = await this.GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
-            var provisionerId = site.ProvisionerId;
-
             if (site != null)
             {
+                var provisionerId = site.ProvisionerId;
+
                 if (site.PhysicalAddress != null)
                 {
                     _context.Addresses.Remove(site.PhysicalAddress);
@@ -392,7 +363,6 @@ namespace Prime.Services
         {
             return _context.Sites
                 .Include(s => s.Provisioner)
-                // .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.SiteVendors)
                     .ThenInclude(v => v.Vendor)
                 .Include(s => s.Organization)

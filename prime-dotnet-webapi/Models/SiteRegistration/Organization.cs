@@ -31,7 +31,7 @@ namespace Prime.Models
 
         public OrganizationType OrganizationType { get; set; }
 
-        public IEnumerable<Location> Locations { get; set; }
+        public IEnumerable<Site> Sites { get; set; }
 
         public ICollection<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
     }

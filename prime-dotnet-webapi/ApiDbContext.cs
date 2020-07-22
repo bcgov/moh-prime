@@ -244,9 +244,9 @@ namespace Prime
                 .HasForeignKey(be => be.BusinessEventTypeCode);
 
             // Site Registration
-            modelBuilder.Entity<Location>()
+            modelBuilder.Entity<Site>()
                 .HasOne(l => l.Organization)
-                .WithMany(o => o.Locations)
+                .WithMany(o => o.Sites)
                 .HasForeignKey(l => l.OrganizationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
