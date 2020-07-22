@@ -73,7 +73,7 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['../', SiteRoutes.VENDOR]);
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.TECHNICAL_SUPPORT]);
   }
 
   public nextRoute() {

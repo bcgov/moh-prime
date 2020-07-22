@@ -23,7 +23,6 @@ import { OrganizationService } from '@registration/shared/services/organization.
   styleUrls: ['./organization-signing-authority.component.scss']
 })
 export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IForm {
-  // TODO Show 2 subheaders (normal one and information button one)
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
@@ -84,7 +83,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   public onSubmit() {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
       const payload = this.organizationFormStateService.organization;
       this.organizationResource
         .updateOrganization(payload)
@@ -111,14 +109,14 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public onBack() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_INFORMATION);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_NAME);
     }
   }
 

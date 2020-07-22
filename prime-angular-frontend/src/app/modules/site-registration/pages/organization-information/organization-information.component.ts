@@ -70,7 +70,6 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
   public onSubmit() {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
       const payload = this.organizationFormStateService.organization;
       this.organizationResource
         .updateOrganization(payload)

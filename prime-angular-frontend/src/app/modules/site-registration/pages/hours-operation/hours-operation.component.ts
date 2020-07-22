@@ -89,7 +89,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.VENDOR);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
     }
   }
 

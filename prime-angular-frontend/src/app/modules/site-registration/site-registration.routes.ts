@@ -1,33 +1,24 @@
-// TODO add titles and options for routes for routing module and views
 export class SiteRoutes {
   public static SITE_REGISTRATION = 'site-registration';
   public static COLLECTION_NOTICE = 'collection-notice';
 
-  public static ORGANIZATIONS = 'organizations';
+  public static SITE_MANAGEMENT = 'site-management';
 
   public static ORGANIZATION_SIGNING_AUTHORITY = 'organization-signing-authority';
-  public static ORGANIZATION_INFORMATION = 'organization-information';
+  public static ORGANIZATION_NAME = 'organization-name';
+  public static ORGANIZATION_REVIEW = 'organization-review';
+  public static ORGANIZATION_AGREEMENT = 'organization-agreement';
 
   public static SITES = 'sites';
 
   public static CARE_SETTING = 'care-setting';
-
-
-
-
-
-
-  public static ORGANIZATION_REVIEW = 'organization-review';
-  public static ORGANIZATION_AGREEMENT = 'organization-agreement';
-
-  public static SITE_ADDRESS = 'site-address';
   public static BUSINESS_LICENCE = 'business-licence';
+  public static SITE_ADDRESS = 'site-address';
   public static HOURS_OPERATION = 'hours-operation';
-  public static VENDOR = 'vendor';
-  public static REMOTE_USERS = 'remote-users';
   public static ADMINISTRATOR = 'site-administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
   public static TECHNICAL_SUPPORT = 'technical-support';
+  public static REMOTE_USERS = 'remote-users';
   public static SITE_REVIEW = 'site-review';
 
   public static MODULE_PATH = SiteRoutes.SITE_REGISTRATION;
@@ -40,36 +31,43 @@ export class SiteRoutes {
     return `/${SiteRoutes.MODULE_PATH}/${route}`;
   }
 
+  // Used to indicate the routes and order of registration for an initial
+  // organization, and a subsequent associated site
+  public static initialRegistrationRouteOrder(): string[] {
+    return [
+      ...this.organizationRegistrationRouteOrder(),
+      ...this.siteRegistrationRouteOrder(),
+      // Only occurs once when creating the organization
+      this.ORGANIZATION_AGREEMENT
+    ];
+  }
+
   // Used to indicate the routes and order of registration for organizations
   public static organizationRegistrationRouteOrder(): string[] {
     return [
       this.ORGANIZATION_SIGNING_AUTHORITY,
-      this.ORGANIZATION_INFORMATION,
-      this.CARE_SETTING,
-      this.ORGANIZATION_REVIEW
+      this.ORGANIZATION_NAME
     ];
   }
 
   // Used to indicate the routes and order of registration for sites
   public static siteRegistrationRouteOrder(): string[] {
     return [
-      this.SITE_ADDRESS,
+      this.CARE_SETTING,
       this.BUSINESS_LICENCE,
+      this.SITE_ADDRESS,
       this.HOURS_OPERATION,
-      this.VENDOR,
-      this.REMOTE_USERS,
       this.ADMINISTRATOR,
       this.PRIVACY_OFFICER,
       this.TECHNICAL_SUPPORT,
-      this.SITE_REVIEW
+      this.REMOTE_USERS
     ];
   }
 
   public static siteRegistrationRoutes(): string[] {
     return [
       ...this.organizationRegistrationRouteOrder(),
-      ...this.siteRegistrationRouteOrder(),
-      this.ORGANIZATION_AGREEMENT
+      ...this.siteRegistrationRouteOrder()
     ];
   }
 }

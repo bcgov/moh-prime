@@ -76,7 +76,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_INFORMATION);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_NAME);
   }
 
   public nextRoute() {
