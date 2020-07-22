@@ -21,11 +21,11 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
-  selector: 'app-organization-type',
-  templateUrl: './organization-type.component.html',
-  styleUrls: ['./organization-type.component.scss']
+  selector: 'app-care-setting',
+  templateUrl: './care-setting.component.html',
+  styleUrls: ['./care-setting.component.scss']
 })
-export class OrganizationTypeComponent implements OnInit, IPage, IForm {
+export class CareSettingComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
@@ -47,7 +47,7 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
     private dialog: MatDialog,
     private configService: ConfigService,
   ) {
-    this.title = 'Organization Type';
+    this.title = 'Care Setting';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.organizationTypes = this.configService.organizationTypes;
   }
