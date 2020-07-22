@@ -26,10 +26,8 @@ export class OrganizationsComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: Organization[];
-  // TODO only for single organization then remove
   public sites: Site[];
   public hasSubmittedSite: boolean;
-  public hasSignedOrganizationAgreement: boolean;
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
 
@@ -42,7 +40,7 @@ export class OrganizationsComponent implements OnInit {
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService
   ) {
-    this.title = 'Administration';
+    this.title = 'Site Management';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
 
     this.organizations = [];
@@ -53,70 +51,89 @@ export class OrganizationsComponent implements OnInit {
     this.createOrganization();
   }
 
-  public viewOrganization(organizationId: number, optionalRoutePath: string = null) {
+  public viewOrganization(organizationId: number) {
     const organization = this.organizations.find(o => o.id === organizationId);
-    const routePath = (optionalRoutePath)
-      ? [optionalRoutePath]
-      : (!organization.completed)
-        ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
-        : []; // Defaults to overview
+    const routePath = (!organization.completed)
+      ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
+      : []; // Defaults to overview
     this.routeUtils.routeRelativeTo([organizationId, ...routePath]);
   }
 
-  public removeOrganization(organizationId: number) {
-    this.organizationResource
-      .deleteOrganization(organizationId)
-      .subscribe(() => {
-        const index = this.sites.findIndex(o => o.id === organizationId);
-        this.organizations.splice(index, 1);
-      });
+  public viewAgreement(organizationId: number) {
+    const organization = this.organizations.find(o => o.id === organizationId);
+    const routePath = (!organization.signedAgreementDocuments)
+      ? [SiteRoutes.ORGANIZATION_AGREEMENT]
+      : []; // Defaults to overview
+    this.routeUtils.routeRelativeTo([organizationId, ...routePath]);
   }
 
   public addSite(organizationId: number) {
     this.createSite(organizationId);
   }
 
-  // TODO only for single organization then remove
-  public viewSite(organizationId: number, siteId: number) {
-    const site = this.sites.find(o => o.id === siteId);
-    const routePath = (site.completed)
-      ? [organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
-      : [organizationId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
-    this.routeUtils.routeRelativeTo(routePath);
+  public viewSite(site: Site) {
+    // const routePath = (site.completed)
+    //   ? [site.organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
+    //   : [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
+    // this.routeUtils.routeRelativeTo(routePath);
   }
 
-  // TODO only for single organization then remove
-  public removeSite(siteId: number) {
-    this.siteResource
-      .deleteSite(siteId)
-      .subscribe(() => {
-        const index = this.sites.findIndex(s => s.id === siteId);
-        this.sites.splice(index, 1);
-      });
+  public viewSiteRemoteUsers(site: Site) {
+    if (site.completed) {
+      // const routePath = [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.REMOTE_USERS];
+      // this.routeUtils.routeRelativeTo(routePath);
+    }
+  }
+
+  // TODO send in the organization as a param
+  // TODO add default value if none provided for pipe if a global value for all isn't sufficient
+  public getOrganizationProperties() {
+    return [
+      { key: 'Signing Authority', value: null },
+      { key: 'Organization Name', value: null }
+    ];
+  }
+
+  // TODO send in the site as a param
+  // TODO add default value if none provided for pipe if a global value for all isn't sufficient
+  public getSiteProperties() {
+    return [
+      { key: 'Case Setting', value: null },
+      { key: 'Site Address', value: null },
+      // TODO display vendor name using config
+      { key: 'Vendor', value: null }
+    ];
   }
 
   public ngOnInit(): void {
-    // TODO move into a guard after multiple organizations is in place, and routes are locked down
+    this.resetFormStates();
+    this.checkQueryParams();
+    this.initOrganizationAndSites();
+  }
+
+  // TODO move into a guard or resolver to allow clearing of form states
+  private resetFormStates() {
     // Clear the organization and site form states so new organizations, and
     // sites aren't filled with previous information
     this.siteFormStateService.init();
     this.organizationFormStateService.init();
+  }
 
+  private checkQueryParams() {
     this.hasSubmittedSite = this.route.snapshot.queryParams?.submitted;
-    this.hasSignedOrganizationAgreement = this.route.snapshot.queryParams?.signed;
-    this.router.navigate([], { queryParams: { submitted: null, signed: null } });
+    this.router.navigate([], { queryParams: { submitted: null } });
+  }
 
+  // TODO remove hardcoded organization index for single organization
+  private initOrganizationAndSites() {
     this.busy = this.organizationResource.getOrganizations()
       .pipe(
         map((organizations: Organization[]) => this.organizations = organizations),
-        // TODO only for single organization then remove
         exhaustMap((organizations: Organization[]) =>
           (organizations.length)
-            // TODO hardcoded organization index for single organization then remove
             ? this.siteResource.getSites(organizations[0].id)
             : EMPTY
         ),
-        // TODO only for single organization then remove
         map((sites: Site[]) => this.sites = sites)
       ).subscribe();
   }
