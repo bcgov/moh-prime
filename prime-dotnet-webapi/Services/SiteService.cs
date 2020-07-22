@@ -84,37 +84,15 @@ namespace Prime.Services
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
-            UpdateSite(currentSite, updatedSite);
+            UpdateAddress(currentSite, updatedSite);
 
-            // Wholesale replace the remote users
-            if (currentSite?.RemoteUsers != null && currentSite?.RemoteUsers.Count() != 0)
-            {
-                foreach (var remoteUser in currentSite.RemoteUsers)
-                {
-                    foreach (var location in remoteUser.RemoteUserLocations)
-                    {
-                        _context.Addresses.Remove(location.PhysicalAddress);
-                        _context.RemoteUserLocations.Remove(location);
-                    }
-                    _context.RemoteUsers.Remove(remoteUser);
-                }
-            }
+            UpdateParties(currentSite, updatedSite);
 
-            if (updatedSite?.RemoteUsers != null && updatedSite?.RemoteUsers.Count() != 0)
-            {
-                foreach (var remoteUser in updatedSite.RemoteUsers)
-                {
-                    remoteUser.SiteId = currentSite.Id;
-                    _context.RemoteUsers.Add(remoteUser);
-                }
-            }
+            UpdateBusinessHours(currentSite, updatedSite);
 
-            // // Update foreign key only if not null
-            // currentSite.VendorCode = (updatedSite.VendorCode != 0)
-            //     ? updatedSite.VendorCode
-            //     : null;
-            // Tempoary fix, needs to be tested
-            currentSite.SiteVendors = updatedSite.SiteVendors;
+            UpdateRemoteUsers(currentSite, updatedSite);
+
+            UpdateVendors(currentSite, updatedSite);
 
             // Managed through separate API endpoint, and should never be updated
             currentSite.SubmittedDate = submittedDate;
@@ -136,11 +114,8 @@ namespace Prime.Services
             }
         }
 
-
-        private void UpdateSite(Site current, Site updated)
+        private void UpdateAddress(Site current, Site updated)
         {
-            this._context.Entry(current).CurrentValues.SetValues(updated);
-
             if (updated?.PhysicalAddress != null)
             {
                 if (current.PhysicalAddress == null)
@@ -152,7 +127,10 @@ namespace Prime.Services
                     this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
                 }
             }
+        }
 
+        private void UpdateParties(Site current, Site updated)
+        {
             if (updated?.AdministratorPharmaNet != null)
             {
                 if (updated?.AdministratorPharmaNet?.UserId != Guid.Empty)
@@ -215,7 +193,10 @@ namespace Prime.Services
                     _partyService.UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
                 }
             }
+        }
 
+        private void UpdateBusinessHours(Site current, Site updated)
+        {
             if (updated?.BusinessHours != null)
             {
                 if (current.BusinessHours != null)
@@ -230,6 +211,52 @@ namespace Prime.Services
                 {
                     businessHour.LocationId = current.Id;
                     _context.Entry(businessHour).State = EntityState.Added;
+                }
+            }
+        }
+
+        private void UpdateRemoteUsers(Site current, Site updated)
+        {
+            // Wholesale replace the remote users
+            if (current?.RemoteUsers != null && current?.RemoteUsers.Count() != 0)
+            {
+                foreach (var remoteUser in updated.RemoteUsers)
+                {
+                    foreach (var location in remoteUser.RemoteUserLocations)
+                    {
+                        _context.Addresses.Remove(location.PhysicalAddress);
+                        _context.RemoteUserLocations.Remove(location);
+                    }
+                    _context.RemoteUsers.Remove(remoteUser);
+                }
+            }
+
+            if (updated?.RemoteUsers != null && updated?.RemoteUsers.Count() != 0)
+            {
+                foreach (var remoteUser in updated.RemoteUsers)
+                {
+                    remoteUser.SiteId = current.Id;
+                    _context.RemoteUsers.Add(remoteUser);
+                }
+            }
+        }
+
+        private void UpdateVendors(Site current, Site updated)
+        {
+            if (updated?.SiteVendors != null)
+            {
+                if (current.SiteVendors != null)
+                {
+                    foreach (var vendor in current.SiteVendors)
+                    {
+                        _context.Remove(vendor);
+                    }
+                }
+
+                foreach (var vendor in updated.SiteVendors)
+                {
+                    vendor.SiteId = current.Id;
+                    _context.Entry(vendor).State = EntityState.Added;
                 }
             }
         }
