@@ -20,7 +20,7 @@ namespace Prime.Services
         public const string PresentProof = "present_proof";
     }
 
-    public class ConnectionStates
+    public class ConnectionState
     {
         public const string Invitation = "invitation";
         public const string Request = "request";
@@ -28,14 +28,14 @@ namespace Prime.Services
         public const string Active = "active";
     }
 
-    public class CredentialExchangeStates
+    public class CredentialExchangeState
     {
         public const string OfferSent = "offer_sent";
         public const string RequestReceived = "request_received";
         public const string CredentialIssued = "credential_issued";
     }
 
-    public class PresentProofStates
+    public class PresentProofState
     {
         public const string RequestSent = "request_sent";
         public const string PresentationReceived = "presentation_received";
@@ -45,12 +45,6 @@ namespace Prime.Services
 
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
-        // dev agent schema id
-        // private static readonly string SCHEMA_ID = "QDaSxvduZroHDKkdXKV5gG:2:enrollee:2.0";
-
-        // test agent schema id
-        private static readonly string SCHEMA_ID = "TVmQfMZwLFWWK3z1RLgFBR:2:enrollee:1.0";
-
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
         private readonly IEnrolleeService _enrolleeService;
         private readonly ILogger _logger;
@@ -72,9 +66,11 @@ namespace Prime.Services
         public async Task<JObject> CreateConnectionAsync(Enrollee enrollee)
         {
             var alias = enrollee.Id.ToString();
+            var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
+            var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
             var invitation = await _verifiableCredentialClient.CreateInvitationAsync(alias);
             var invitationUrl = invitation.Value<string>("invitation_url");
-            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
+            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
@@ -83,7 +79,7 @@ namespace Prime.Services
 
             enrollee.Credential = new Credential
             {
-                SchemaId = SCHEMA_ID,
+                SchemaId = schemaId,
                 CredentialDefinitionId = credentialDefinitionId,
                 Alias = alias,
                 Base64QRCode = qrCodeImageAsBase64
@@ -144,10 +140,10 @@ namespace Prime.Services
 
             switch (state)
             {
-                case ConnectionStates.Invitation:
-                case ConnectionStates.Request:
+                case ConnectionState.Invitation:
+                case ConnectionState.Request:
                     return true;
-                case ConnectionStates.Response:
+                case ConnectionState.Response:
                     var connectionId = data.Value<string>("connection_id");
                     var alias = data.Value<int>("alias");
 
@@ -161,7 +157,7 @@ namespace Prime.Services
                     _logger.LogInformation("Credential has been issued for connection_id: {connectionId} with response {@JObject}", connectionId, JsonConvert.SerializeObject(issueCredentialResponse));
 
                     return true;
-                case ConnectionStates.Active:
+                case ConnectionState.Active:
                     return true;
                 default:
                     _logger.LogError("Connection state {state} is not supported", state);
@@ -178,10 +174,10 @@ namespace Prime.Services
 
             switch (state)
             {
-                case CredentialExchangeStates.OfferSent:
-                case CredentialExchangeStates.RequestReceived:
+                case CredentialExchangeState.OfferSent:
+                case CredentialExchangeState.RequestReceived:
                     return true;
-                case CredentialExchangeStates.CredentialIssued:
+                case CredentialExchangeState.CredentialIssued:
                     await UpdateAcceptedCredentialDate(data);
                     return true;
                 default:
@@ -233,21 +229,22 @@ namespace Prime.Services
         private async Task<JObject> CreateCredentialOfferAsync(string connectionId, JArray attributes)
         {
             var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
-            var schema = (await _verifiableCredentialClient.GetSchema(SCHEMA_ID)).Value<JObject>("schema");
-            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
+            var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
+            var schema = (await _verifiableCredentialClient.GetSchema(schemaId)).Value<JObject>("schema");
+            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
             JObject credentialOffer = new JObject
                 {
                     { "connection_id", connectionId },
                     { "issuer_did", issuerDid },
-                    { "schema_id", SCHEMA_ID },
+                    { "schema_id", schemaId },
                     { "schema_issuer_did", issuerDid },
                     { "schema_name", schema.Value<string>("name") },
                     { "schema_version", schema.Value<string>("version") },
                     { "cred_def_id", credentialDefinitionId },
                     { "comment", "PharmaNet GPID" },
                     { "auto_remove", true },
-                    { "revoc_reg_id", null },
+                    { "trace", false },
                     { "credential_proposal", new JObject
                         {
                             { "@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview" },
@@ -311,14 +308,14 @@ namespace Prime.Services
 
             switch (state)
             {
-                case PresentProofStates.RequestSent:
+                case PresentProofState.RequestSent:
                     var presentationExchangeId = data.Value<string>("presentation_exchange_id");
                     await _verifiableCredentialClient.GetPresentationProof(presentationExchangeId);
                     // TODO log that the proof request was received for auditing by checking that state is verified
                     return true;
-                case PresentProofStates.PresentationReceived:
+                case PresentProofState.PresentationReceived:
                     return true;
-                case PresentProofStates.Verified:
+                case PresentProofState.Verified:
                     // TODO proof positive: state=verified and verified=true
                     // TODO perform business logic to inform Medinet
                     return true;
