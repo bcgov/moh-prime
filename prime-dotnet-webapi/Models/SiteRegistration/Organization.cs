@@ -27,10 +27,6 @@ namespace Prime.Models
 
         public int SigningAuthorityId { get; set; }
 
-        public int? OrganizationTypeCode { get; set; }
-
-        public OrganizationType OrganizationType { get; set; }
-
         public IEnumerable<Site> Sites { get; set; }
 
         public ICollection<SignedAgreementDocument> SignedAgreementDocuments { get; set; }

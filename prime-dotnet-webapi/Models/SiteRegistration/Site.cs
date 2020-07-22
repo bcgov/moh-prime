@@ -13,9 +13,10 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        public string PEC { get; set; }
+        public int OrganizationId { get; set; }
 
-        public string DoingBusinessAs { get; set; }
+        [JsonIgnore]
+        public Organization Organization { get; set; }
 
         public PhysicalAddress PhysicalAddress { get; set; }
 
@@ -31,14 +32,17 @@ namespace Prime.Models
 
         public Party TechnicalSupport { get; set; }
 
-        public int OrganizationId { get; set; }
-
-        [JsonIgnore]
-        public Organization Organization { get; set; }
-
         public int? ProvisionerId { get; set; }
 
         public Party Provisioner { get; set; }
+
+        public int? OrganizationTypeCode { get; set; }
+
+        public OrganizationType OrganizationType { get; set; }
+
+        public string PEC { get; set; }
+
+        public string DoingBusinessAs { get; set; }
 
         public bool Completed { get; set; }
 
