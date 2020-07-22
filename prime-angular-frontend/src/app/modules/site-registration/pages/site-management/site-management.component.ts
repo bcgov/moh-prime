@@ -18,11 +18,11 @@ import { SiteResource } from '@registration/shared/services/site-resource.servic
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
 @Component({
-  selector: 'app-organizations',
-  templateUrl: './organizations.component.html',
-  styleUrls: ['./organizations.component.scss']
+  selector: 'app-site-management',
+  templateUrl: './site-management.component.html',
+  styleUrls: ['./site-management.component.scss']
 })
-export class OrganizationsComponent implements OnInit {
+export class SiteManagementComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: Organization[];
