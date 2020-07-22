@@ -233,9 +233,8 @@ namespace Prime.Services
         private async Task<JArray> CreateCredentialAttributesAsync(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            var organizationType = _context.OrganizationTypes
-                .SingleOrDefault(t => t.Code == enrollee.EnrolleeOrganizationTypes.FirstOrDefault().OrganizationTypeCode);
+            var enrolleeOrgType = enrollee.EnrolleeOrganizationTypes.Single();
+            await _context.Entry(enrolleeOrgType).Reference(o => o.OrganizationType).LoadAsync();
 
             JArray attributes = new JArray
             {
@@ -252,7 +251,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "organization_type" },
-                    { "value", organizationType.Name }
+                    { "value", enrolleeOrgType.OrganizationType.Name }
                 },
                 new JObject
                 {
