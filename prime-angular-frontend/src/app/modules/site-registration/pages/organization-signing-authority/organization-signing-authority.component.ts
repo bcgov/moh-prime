@@ -81,16 +81,15 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public onSubmit() {
-    // TODO structured to match in all organization views
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    // const payload = this.organizationFormStateService.organization;
-    // this.organizationResource
-    //   .updateOrganization(payload)
-    //   .subscribe(() => {
-    //     this.form.markAsPristine();
-    this.nextRoute();
-    // });
-    // }
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.organizationFormStateService.organization;
+      this.organizationResource
+        .updateOrganization(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    }
   }
 
   public onPreferredNameChange() {

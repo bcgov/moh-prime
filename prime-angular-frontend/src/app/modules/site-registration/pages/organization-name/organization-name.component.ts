@@ -4,8 +4,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable } from 'rxjs';
-import { debounceTime, switchMap, tap } from 'rxjs/operators';
+import { Subscription, Observable, of } from 'rxjs';
+import { debounceTime, switchMap, tap, exhaustMap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
@@ -19,6 +19,8 @@ import { IForm } from '@registration/shared/interfaces/form.interface';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrgBookResource, OrgBookAutocompleteResult } from '@registration/shared/services/org-book-resource.service';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-organization-name',
@@ -43,6 +45,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private orgBookResource: OrgBookResource,
+    private siteResource: SiteResource,
     private formUtilsService: FormUtilsService,
     private utilsService: UtilsService,
     private dialog: MatDialog
@@ -69,15 +72,25 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     // TODO structured to match in all organization views
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   const payload = this.organizationFormStateService.organization;
-    //   this.organizationResource
-    //     .updateOrganization(payload)
-    //     .subscribe(() => {
-    //       this.form.markAsPristine();
-    this.nextRoute();
-    //     });
-    // }
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const organizationId = this.route.snapshot.params.oid;
+      const payload = this.organizationFormStateService.organization;
+      this.organizationResource
+        .updateOrganization(payload, true)
+        .pipe(
+          exhaustMap(
+            // Check the organization wasn't completed before the update, and
+            // if not then this is the initial registration wizard
+            () => (!this.isCompleted)
+              ? this.siteResource.createSite(organizationId)
+              : of(null)
+          )
+        )
+        .subscribe((site: Site) => {
+          this.form.markAsPristine();
+          this.nextRoute(site?.id);
+        });
+    }
   }
 
   public onSelect({ option }: MatAutocompleteSelectedEvent) {
@@ -103,11 +116,11 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
     this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY);
   }
 
-  public nextRoute() {
+  public nextRoute(siteId: number) {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.CARE_SETTING);
+      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.CARE_SETTING]);
     }
   }
 
