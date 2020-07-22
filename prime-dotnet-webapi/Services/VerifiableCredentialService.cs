@@ -17,7 +17,6 @@ namespace Prime.Services
     {
         public const string Connections = "connections";
         public const string IssueCredential = "issue_credential";
-        public const string PresentProof = "present_proof";
     }
 
     public class ConnectionState
@@ -34,15 +33,6 @@ namespace Prime.Services
         public const string RequestReceived = "request_received";
         public const string CredentialIssued = "credential_issued";
     }
-
-    public class PresentProofState
-    {
-        public const string RequestSent = "request_sent";
-        public const string PresentationReceived = "presentation_received";
-        public const string Verified = "verified";
-    }
-
-
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
@@ -95,23 +85,6 @@ namespace Prime.Services
             return invitation;
         }
 
-        // Create an invitation to establish a connection between the agents.
-        public async Task SendProofRequest(Enrollee enrollee)
-        {
-            // TODO add a new schema with:
-            // - POS vendor
-            // - Legal Name of Organization, and/or BC Registration ID
-            // - Status of Approval
-            // - Name of Site (Location?)
-            // - Address of Site
-            // TODO create a credential definition
-
-            // TODO create proof request JObject model
-            // - Populate model with enrollee data and API queried values
-
-            // TODO send a proof request, and test on mobile the states
-        }
-
         // Handle webhook events pushed by the issuing agent.
         public async Task<bool> WebhookAsync(JObject data, string topic)
         {
@@ -123,8 +96,6 @@ namespace Prime.Services
                     return await HandleConnectionAsync(data);
                 case WebhookTopic.IssueCredential:
                     return await HandleIssueCredentialAsync(data);
-                case WebhookTopic.PresentProof:
-                    return await HandlePresentProofAsync(data);
                 default:
                     _logger.LogError("Webhook {topic} is not supported", topic);
                     return false;
@@ -262,8 +233,8 @@ namespace Prime.Services
         private async Task<JArray> CreateCredentialAttributesAsync(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            var organizationType = _context.OrganizationTypes.SingleOrDefault(t => t.Code == enrollee.EnrolleeOrganizationTypes.FirstOrDefault().OrganizationTypeCode);
+            var enrolleeOrgType = enrollee.EnrolleeOrganizationTypes.Single();
+            await _context.Entry(enrolleeOrgType).Reference(o => o.OrganizationType).LoadAsync();
 
             JArray attributes = new JArray
             {
@@ -280,7 +251,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "organization_type" },
-                    { "value", organizationType.Name }
+                    { "value", enrolleeOrgType.OrganizationType.Name }
                 },
                 new JObject
                 {
@@ -294,35 +265,9 @@ namespace Prime.Services
                 }
             };
 
-
             _logger.LogInformation("Credential offer attributes for {@JObject}", JsonConvert.SerializeObject(attributes));
 
             return attributes;
-        }
-
-        private async Task<bool> HandlePresentProofAsync(JObject data)
-        {
-            var state = data.Value<string>("state");
-
-            _logger.LogInformation("Present proof state \"{state}\" for {@JObject}", JsonConvert.SerializeObject(data));
-
-            switch (state)
-            {
-                case PresentProofState.RequestSent:
-                    var presentationExchangeId = data.Value<string>("presentation_exchange_id");
-                    await _verifiableCredentialClient.GetPresentationProof(presentationExchangeId);
-                    // TODO log that the proof request was received for auditing by checking that state is verified
-                    return true;
-                case PresentProofState.PresentationReceived:
-                    return true;
-                case PresentProofState.Verified:
-                    // TODO proof positive: state=verified and verified=true
-                    // TODO perform business logic to inform Medinet
-                    return true;
-                default:
-                    _logger.LogError($"Present proof state {state} is not supported");
-                    return false;
-            }
         }
     }
 }
