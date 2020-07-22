@@ -32,7 +32,7 @@ namespace Prime.Services
                 chesAttachments.Add(chesAttachment);
             }
 
-            var requestParams = new CHESEmailRequestParams(from, to, subject, body, chesAttachments);
+            var requestParams = new ChesEmailRequestParams(from, to, subject, body, chesAttachments);
 
             var requestContent = new StringContent(JsonConvert.SerializeObject(requestParams), Encoding.UTF8, "application/json");
 
@@ -44,7 +44,7 @@ namespace Prime.Services
                 if (response.IsSuccessStatusCode)
                 {
                     var responseJsonString = await response.Content.ReadAsStringAsync();
-                    var successResponse = JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
+                    JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
                 }
             }
             catch (Exception ex)
@@ -69,7 +69,7 @@ namespace Prime.Services
         }
     }
 
-    public class CHESEmailRequestParams
+    public class ChesEmailRequestParams
     {
         public IEnumerable<ChesAttachment> attachments { get; set; }
         public IEnumerable<string> bcc { get; set; }
@@ -84,7 +84,7 @@ namespace Prime.Services
         public string tag { get; set; }
         public IEnumerable<string> to { get; set; }
 
-        public CHESEmailRequestParams(string from, IEnumerable<string> to, string subject, string body, IEnumerable<ChesAttachment> attachments)
+        public ChesEmailRequestParams(string from, IEnumerable<string> to, string subject, string body, IEnumerable<ChesAttachment> attachments)
         {
             this.attachments = attachments;
             bcc = new List<string>();

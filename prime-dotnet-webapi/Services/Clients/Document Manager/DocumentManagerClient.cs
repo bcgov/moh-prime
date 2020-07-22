@@ -3,7 +3,6 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Web;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace Prime.Services.Clients

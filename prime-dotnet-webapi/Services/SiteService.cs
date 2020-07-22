@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
-// TODO add logging
 namespace Prime.Services
 {
     public class SiteService : BaseService, ISiteService
@@ -91,7 +90,6 @@ namespace Prime.Services
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
-            // TODO should create a location controller to avoid these kinds of updates
             UpdateLocation(currentSite.Location, updatedSite.Location);
 
             // Wholesale replace the remote users
@@ -126,11 +124,11 @@ namespace Prime.Services
             currentSite.SubmittedDate = submittedDate;
 
             // Registration has been completed
-            currentSite.Completed = (isCompleted == true)
+            currentSite.Completed = (isCompleted)
                 ? isCompleted
                 : currentIsCompleted;
 
-            await _businessEventService.CreateSiteEventAsync(currentSite.Id, (int)currentSite.Provisioner.Id, "Site Updated");
+            await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
             try
             {
