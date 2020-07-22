@@ -259,25 +259,23 @@ namespace Prime.Services
 
             var provisionerId = site.ProvisionerId;
 
-            if (site == null)
+            if (site != null)
             {
-                return;
+                if (site.PhysicalAddress != null)
+                {
+                    _context.Addresses.Remove(site.PhysicalAddress);
+                }
+
+                DeletePartyFromSite(site.AdministratorPharmaNet);
+                DeletePartyFromSite(site.TechnicalSupport);
+                DeletePartyFromSite(site.PrivacyOfficer);
+
+                _context.Sites.Remove(site);
+
+                await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
+
+                await _context.SaveChangesAsync();
             }
-
-            if (site.PhysicalAddress != null)
-            {
-                _context.Addresses.Remove(site.PhysicalAddress);
-            }
-
-            DeletePartyFromSite(site.AdministratorPharmaNet);
-            DeletePartyFromSite(site.TechnicalSupport);
-            DeletePartyFromSite(site.PrivacyOfficer);
-
-            _context.Sites.Remove(site);
-
-            await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
-
-            await _context.SaveChangesAsync();
         }
 
         private void DeletePartyFromSite(Party party)

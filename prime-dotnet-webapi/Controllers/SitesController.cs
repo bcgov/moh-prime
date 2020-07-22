@@ -23,7 +23,6 @@ namespace Prime.Controllers
         private readonly IOrganizationService _organizationService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailService _emailService;
-
         private readonly IDocumentService _documentService;
         public SitesController(
             ISiteService siteService,
