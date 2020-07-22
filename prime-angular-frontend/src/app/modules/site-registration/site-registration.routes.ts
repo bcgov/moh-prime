@@ -7,11 +7,18 @@ export class SiteRoutes {
 
   public static ORGANIZATION_SIGNING_AUTHORITY = 'organization-signing-authority';
   public static ORGANIZATION_INFORMATION = 'organization-information';
-  public static ORGANIZATION_TYPE = 'organization-type';
-  public static ORGANIZATION_REVIEW = 'organization-review';
-  public static ORGANIZATION_AGREEMENT = 'organization-agreement';
 
   public static SITES = 'sites';
+
+  public static CARE_SETTING = 'care-setting';
+
+
+
+
+
+
+  public static ORGANIZATION_REVIEW = 'organization-review';
+  public static ORGANIZATION_AGREEMENT = 'organization-agreement';
 
   public static SITE_ADDRESS = 'site-address';
   public static BUSINESS_LICENCE = 'business-licence';
@@ -38,7 +45,7 @@ export class SiteRoutes {
     return [
       this.ORGANIZATION_SIGNING_AUTHORITY,
       this.ORGANIZATION_INFORMATION,
-      this.ORGANIZATION_TYPE,
+      this.CARE_SETTING,
       this.ORGANIZATION_REVIEW
     ];
   }

@@ -16,7 +16,7 @@ import { CollectionNoticeComponent } from './pages/collection-notice/collection-
 import { OrganizationsComponent } from './pages/organizations/organizations.component';
 import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
-import { OrganizationTypeComponent } from './pages/organization-type/organization-type.component';
+import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
 
@@ -77,19 +77,13 @@ const routes: Routes = [
                 data: { title: 'Organization Information' }
               },
               {
-                path: SiteRoutes.ORGANIZATION_TYPE,
-                component: OrganizationTypeComponent,
-                canActivate: [OrganizationGuard],
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Organization Type' }
-              },
-              {
                 path: SiteRoutes.ORGANIZATION_REVIEW,
                 component: OrganizationOverviewComponent,
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Review' }
               },
+              // TODO should this be in org or site routes... only occurs once ever
               {
                 path: SiteRoutes.ORGANIZATION_AGREEMENT,
                 component: OrganizationAgreementComponent,
@@ -106,6 +100,22 @@ const routes: Routes = [
               {
                 path: `${SiteRoutes.SITES}/:sid`,
                 children: [
+                  {
+                    path: SiteRoutes.CARE_SETTING,
+                    component: CareSettingComponent,
+                    canActivate: [OrganizationGuard],
+                    canDeactivate: [CanDeactivateFormGuard],
+                    data: { title: 'Care Setting' }
+                  },
+
+
+
+
+
+
+
+
+
                   {
                     path: SiteRoutes.SITE_ADDRESS,
                     component: SiteAddressComponent,

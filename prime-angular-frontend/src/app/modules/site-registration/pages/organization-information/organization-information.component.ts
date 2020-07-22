@@ -16,8 +16,8 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrgBookResource, OrgBookAutocompleteResult } from '@registration/shared/services/org-book-resource.service';
 
 @Component({
@@ -47,7 +47,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     private utilsService: UtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'Organization Information';
+    this.title = 'Organization Name';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -108,7 +108,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
+      this.routeUtils.routeRelativeTo(SiteRoutes.CARE_SETTING);
     }
   }
 
