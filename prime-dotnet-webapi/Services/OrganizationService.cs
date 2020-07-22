@@ -58,6 +58,12 @@ namespace Prime.Services
                 signingAuthorityId = await _partyService.CreatePartyAsync(signingAuthority);
             }
 
+            var organizations = await GetOrganizationsAsync(signingAuthority.Id);
+            if (organizations.Count() != 0)
+            {
+                throw new InvalidOperationException("Could not create Organization. Only one organization can exist for a user.");
+            }
+
             var organization = new Organization
             { SigningAuthorityId = signingAuthorityId };
 
