@@ -72,27 +72,27 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     // TODO structured to match in all site views
-    if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
-      const payload = this.siteFormStateService.site;
-      this.siteResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    //   // TODO when spoking don't update
+    //   const payload = this.siteFormStateService.site;
+    //   this.siteResource
+    //     .updateSite(payload)
+    //     .subscribe(() => {
+    //       this.form.markAsPristine();
+    this.nextRoute();
+    //     });
+    // }
   }
 
   public onBack() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
+      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
     }
   }
 

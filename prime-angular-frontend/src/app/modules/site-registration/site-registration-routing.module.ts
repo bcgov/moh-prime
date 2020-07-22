@@ -13,10 +13,10 @@ import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { OrganizationsComponent } from './pages/organizations/organizations.component';
+import { SiteManagementComponent } from './pages/site-management/site-management.component';
 
 import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
-import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
+import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
 import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
@@ -55,7 +55,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: OrganizationsComponent,
+            component: SiteManagementComponent,
             data: { title: 'Site Management' },
           },
           {
@@ -70,7 +70,7 @@ const routes: Routes = [
               },
               {
                 path: SiteRoutes.ORGANIZATION_NAME,
-                component: OrganizationInformationComponent,
+                component: OrganizationNameComponent,
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Information' }

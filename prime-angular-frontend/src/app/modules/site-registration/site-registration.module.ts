@@ -7,15 +7,16 @@ import { SiteRegistrationRoutingModule } from './site-registration-routing.modul
 import { BusinessHoursModule } from '@lib/modules/business-hours/business-hours.module';
 
 import { RegistrantProfileFormComponent } from './shared/components/registrant-profile-form/registrant-profile-form.component';
+import { SameAsComponent } from './shared/components/same-as/same-as.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 import { SiteCollectionNoticeComponent } from './shared/components/site-collection-notice/site-collection-notice.component';
-import { SameAsComponent } from './shared/components/same-as/same-as.component';
+import { SummaryCardComponent } from './shared/components/summary-card/summary-card.component';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { OrganizationsComponent } from './pages/organizations/organizations.component';
+import { SiteManagementComponent } from './pages/site-management/site-management.component';
 
 import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
-import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
+import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
 import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
@@ -34,10 +35,10 @@ import { SiteOverviewComponent } from './pages/site-overview/site-overview.compo
   declarations: [
     CollectionNoticeComponent,
     SiteCollectionNoticeComponent,
-    OrganizationsComponent,
+    SiteManagementComponent,
 
     OrganizationSigningAuthorityComponent,
-    OrganizationInformationComponent,
+    OrganizationNameComponent,
     OrganizationOverviewComponent,
     OrganizationAgreementComponent,
 
@@ -54,7 +55,8 @@ import { SiteOverviewComponent } from './pages/site-overview/site-overview.compo
 
     SiteProgressIndicatorComponent,
     RegistrantProfileFormComponent,
-    SameAsComponent
+    SameAsComponent,
+    SummaryCardComponent
   ],
   imports: [
     SharedModule,

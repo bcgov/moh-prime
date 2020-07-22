@@ -53,20 +53,20 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     // TODO structured to match in all site views
-    if (this.formUtilsService.checkValidity(this.businessDays)) {
-      // TODO when spoking don't update
-      this.hasNoHours = false;
+    // if (this.formUtilsService.checkValidity(this.businessDays)) {
+    // TODO when spoking don't update
+    // this.hasNoHours = false;
 
-      const payload = this.siteFormStateService.site;
-      this.siteResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    } else {
-      this.hasNoHours = true;
-    }
+    // const payload = this.siteFormStateService.site;
+    // this.siteResource
+    //   .updateSite(payload)
+    //   .subscribe(() => {
+    //     this.form.markAsPristine();
+    this.nextRoute();
+    // });
+    // } else {
+    //   this.hasNoHours = true;
+    // }
   }
 
   public onAdd(businessDay: BusinessDay[]) {
@@ -82,7 +82,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
   }
 
   public nextRoute() {

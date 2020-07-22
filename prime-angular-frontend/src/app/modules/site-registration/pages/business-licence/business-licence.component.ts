@@ -54,14 +54,14 @@ export class BusinessLicenceComponent implements OnInit {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+    this.routeUtils.routeRelativeTo(SiteRoutes.CARE_SETTING);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
     }
   }
 

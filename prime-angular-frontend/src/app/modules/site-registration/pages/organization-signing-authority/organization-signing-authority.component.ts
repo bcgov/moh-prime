@@ -82,15 +82,15 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
   public onSubmit() {
     // TODO structured to match in all organization views
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.organizationFormStateService.organization;
-      this.organizationResource
-        .updateOrganization(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    // const payload = this.organizationFormStateService.organization;
+    // this.organizationResource
+    //   .updateOrganization(payload)
+    //   .subscribe(() => {
+    //     this.form.markAsPristine();
+    this.nextRoute();
+    // });
+    // }
   }
 
   public onPreferredNameChange() {
@@ -180,8 +180,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     if (!this.hasMailingAddress) {
       this.formUtilsService.resetAndClearValidators(mailingAddress);
     } else {
-      // const id = mailingAddress.get('id') as FormControl;
-      // this.formUtilsService.resetAndClearValidators(id);
       this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
     }
   }

@@ -63,24 +63,25 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     // TODO structured to match in all organization views
-    if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
-      const payload = this.organizationFormStateService.organization;
-      this.organizationResource
-        .updateOrganization(payload, true)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    //   const payload = this.organizationFormStateService.organization;
+    //   this.organizationResource
+    //     .updateOrganization(payload, true)
+    //     .subscribe(() => {
+    //       this.form.markAsPristine();
+    this.nextRoute();
+    //     });
+    // }
   }
 
   public onBack() {
+    // TODO when this is the first site should be be organization name, otherwise site management
+    // this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
     this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_NAME);
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
+    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
