@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -372,14 +369,11 @@ namespace Prime.Controllers
         public ActionResult<string> OrganizationAgreementDocument()
         {
             var fileName = "Organization-Agreement.pdf";
-            string resourcePath = fileName;
             var assembly = Assembly.GetExecutingAssembly();
-
-            resourcePath = assembly.GetManifestResourceNames()
-                    .Single(str => str.EndsWith(fileName));
+            var resourcePath = assembly.GetManifestResourceNames()
+                .Single(str => str.EndsWith(fileName));
 
             string base64;
-
             using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
             using (var reader = new MemoryStream())
             {

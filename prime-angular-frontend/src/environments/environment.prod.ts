@@ -3,6 +3,7 @@ export const environment = {
   version: '1.0.0',
   apiEndpoint: '/api/v1',
   loginRedirectUrl: 'http://localhost:4200',
+  documentManagerUrl: 'http://localhost:6001',
   prime: {
     displayPhone: '1-844-39PRIME',
     phone: '1-844-397-7463',
