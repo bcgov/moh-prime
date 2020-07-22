@@ -261,13 +261,7 @@ namespace Prime.Controllers
 
             var licence = await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid, filename);
 
-            // TODO updated to be licence instead of site, and should have GET and CreatedAtAction
             return Ok(ApiResponse.Result(licence));
-            // return CreatedAtAction(
-            //     nameof(GetSiteById),
-            //     new { siteId = createdSiteId },
-            //     ApiResponse.Result(createdSite)
-            // );
         }
 
         // Get: api/sites/5/business-licence

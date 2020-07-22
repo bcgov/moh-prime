@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
-// TODO add logging
 namespace Prime.Services
 {
     public class OrganizationService : BaseService, IOrganizationService
@@ -77,8 +76,6 @@ namespace Prime.Services
 
         public async Task<int> UpdateOrganizationAsync(int organizationId, Organization updatedOrganization, bool isCompleted = false)
         {
-            // TODO signing authority needs a partial update to non-BCSC fields
-
             var currentOrganization = await this.GetOrganizationAsync(organizationId);
             var acceptedAgreementDate = currentOrganization.AcceptedAgreementDate;
             var submittedDate = currentOrganization.SubmittedDate;
@@ -122,7 +119,7 @@ namespace Prime.Services
             currentOrganization.SubmittedDate = submittedDate;
 
             // Registration has been completed
-            currentOrganization.Completed = (isCompleted == true)
+            currentOrganization.Completed = (isCompleted)
                 ? isCompleted
                 : currentIsCompleted;
 
@@ -148,8 +145,6 @@ namespace Prime.Services
                 return;
             }
 
-            // _context.Addresses.Remove(organization.SigningAuthority.PhysicalAddress);
-            // _context.Parties.Remove(organization.SigningAuthority);
             _context.Organizations.Remove(organization);
 
             await _context.SaveChangesAsync();

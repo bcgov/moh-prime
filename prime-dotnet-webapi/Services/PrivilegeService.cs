@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,12 +17,6 @@ namespace Prime.Services
 
         public async Task AssignPrivilegesToEnrolleeAsync(int enrolleeId, Enrollee enrollee)
         {
-            var _enrolleeDb = _context.Enrollees
-                                .Include(e => e.Certifications)
-                                .Where(e => e.Id == enrollee.Id)
-                                .AsNoTracking()
-                                .SingleOrDefault();
-
             ICollection<AssignedPrivilege> assignedPrivileges = await this.GetAssignedPrivilegesForEnrolleeAsync(enrolleeId);
 
             if (assignedPrivileges != null)
@@ -38,7 +31,7 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
 
-            _enrolleeDb = _context.Enrollees
+            var _enrolleeDb = _context.Enrollees
                                 .Include(e => e.Certifications)
                                 .Where(e => e.Id == enrollee.Id)
                                 .SingleOrDefault();

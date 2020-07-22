@@ -6,11 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using Prime.Models;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.Security.Cryptography.X509Certificates;
 using System.IO;
-using System.Text;
 using Prime.Services.Clients;
 
 namespace Prime.Services
@@ -245,10 +241,6 @@ namespace Prime.Services
             {
                 throw new ArgumentException("Must specify at least one \"To\" email address.");
             }
-
-            var fromAddress = new MailAddress(from);
-            var toAddresses = to.Select(addr => new MailAddress(addr));
-            var ccAddresses = cc.Select(addr => new MailAddress(addr));
 
             if (PrimeConstants.ENVIRONMENT_NAME != "prod")
             {

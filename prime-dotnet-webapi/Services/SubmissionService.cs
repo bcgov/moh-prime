@@ -10,6 +10,7 @@ using Appccelerate.StateMachine.AsyncMachine;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
+using Microsoft.Extensions.Logging;
 
 namespace Prime.Services
 {
@@ -23,8 +24,11 @@ namespace Prime.Services
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IVerifiableCredentialService _verifiableCredentialService;
         private readonly IPrivilegeService _privilegeService;
+        private readonly ILogger _logger;
 
-        public SubmissionService(ApiDbContext context, IHttpContextAccessor httpContext,
+        public SubmissionService(
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
             IAccessTermService accessTermService,
             ISubmissionRulesService submissionRulesService,
             IBusinessEventService businessEventService,
@@ -32,7 +36,8 @@ namespace Prime.Services
             IEnrolleeService enrolleeService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IVerifiableCredentialService verifiableCredentialService,
-            IPrivilegeService privilegeService)
+            IPrivilegeService privilegeService,
+            ILogger<SubmissionService> logger)
             : base(context, httpContext)
         {
             _accessTermService = accessTermService;
@@ -43,6 +48,7 @@ namespace Prime.Services
             _enroleeProfileVersionService = enrolleeProfileVersionService;
             _verifiableCredentialService = verifiableCredentialService;
             _privilegeService = privilegeService;
+            _logger = logger;
         }
 
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeProfileViewModel updatedProfile)
@@ -73,7 +79,14 @@ namespace Prime.Services
             // TODO when/where should a new credential be issued?
             // TODO check for an active connection
             // TODO check for issued credential
-            await _verifiableCredentialService.CreateConnectionAsync(enrollee);
+            try
+            {
+                await _verifiableCredentialService.CreateConnectionAsync(enrollee);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error occurred attempting to create a connection invitation through the Verifiable Credential agent: ", ex);
+            }
 
             await this.ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();
