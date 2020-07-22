@@ -13,7 +13,6 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
@@ -28,7 +27,6 @@ export class VendorComponent implements OnInit, IPage, IForm {
   public form: FormGroup;
   public title: string;
   public routeUtils: RouteUtils;
-  // TODO supply through config
   public vendorConfig: { code: number, name: string }[];
   public hasNoVendorError: boolean;
   public isCompleted: boolean;
@@ -47,7 +45,6 @@ export class VendorComponent implements OnInit, IPage, IForm {
     this.title = 'What PharmaNet software vendor does this site use?';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
     this.vendorConfig = this.configService.vendors;
-    // TODO should be an autocomplete instead of radio buttons to scale when there are more vendors
     this.hasNoVendorError = false;
   }
 
@@ -57,7 +54,6 @@ export class VendorComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
       const payload = this.siteFormStateService.site;
       this.siteResource
         .updateSite(payload)
@@ -106,7 +102,6 @@ export class VendorComponent implements OnInit, IPage, IForm {
     // TODO structured to match in all site views
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    // TODO cannot set form each time the view is loaded when updating
     this.siteFormStateService.setForm(site, true);
   }
 }

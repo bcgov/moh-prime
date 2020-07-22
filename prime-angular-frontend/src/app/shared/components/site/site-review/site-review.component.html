@@ -105,25 +105,6 @@
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Vendors</ng-container>
-
-    <button *ngIf="showEditRedirect && !site.submittedDate"
-            mat-icon-button
-            matTooltip="Edit Vendors"
-            (click)="onRoute(SiteRoutes.VENDOR)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader>
-
-  <app-enrollee-property>
-    {{ site?.vendor?.name | default }}
-  </app-enrollee-property>
-
-</section>
-
-<section class="mb-4">
-
-  <app-page-subheader>
     <ng-container appPageSubheaderTitle>Remote Users</ng-container>
 
     <button *ngIf="showEditRedirect && !site.submittedDate"

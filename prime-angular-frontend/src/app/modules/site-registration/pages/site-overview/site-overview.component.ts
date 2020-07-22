@@ -44,26 +44,28 @@ export class SiteOverviewComponent implements OnInit, IPage {
   }
 
   public onSubmit() {
-    const organizationId = this.route.snapshot.params.oid;
-    // TODO shouldn't come from service when spoking to save updates
-    const payload = this.siteService.site;
-    const data: DialogOptions = {
-      title: 'Save Site',
-      message: 'When your site is saved it will be submitted for review. Are you ready to save your site?',
-      actionText: 'Save Site'
-    };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.siteResource.submitSite(payload)
-            : EMPTY
-        ),
-        exhaustMap(() => this.organizationResource.getOrganizationById(organizationId)),
-        map((organization: Organization) => !!organization.acceptedAgreementDate)
-      )
-      .subscribe((hasSignedOrgAgreement: boolean) => this.nextRoute(organizationId, hasSignedOrgAgreement));
+    // const organizationId = this.route.snapshot.params.oid;
+    // // TODO shouldn't come from service when spoking to save updates
+    // const payload = this.siteService.site;
+    // const data: DialogOptions = {
+    //   title: 'Save Site',
+    //   message: 'When your site is saved it will be submitted for review. Are you ready to save your site?',
+    //   actionText: 'Save Site'
+    // };
+    // this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+    //   .afterClosed()
+    //   .pipe(
+    //     exhaustMap((result: boolean) =>
+    //       (result)
+    //         ? this.siteResource.submitSite(payload)
+    //         : EMPTY
+    //     ),
+    //     exhaustMap(() => this.organizationResource.getOrganizationById(organizationId)),
+    //     map((organization: Organization) => !!organization.acceptedAgreementDate)
+    //   )
+    //   .subscribe((hasSignedOrgAgreement: boolean) =>
+    //     this.nextRoute(organizationId, hasSignedOrgAgreement)
+    //   );
   }
 
   public onBack() {
@@ -72,9 +74,9 @@ export class SiteOverviewComponent implements OnInit, IPage {
 
   public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
     if (!hasSignedOrgAgreement) {
-      this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.ORGANIZATIONS), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT]);
+      this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.SITE_MANAGEMENT), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT]);
     } else {
-      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS], {
+      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT], {
         queryParams: { submitted: true }
       });
     }

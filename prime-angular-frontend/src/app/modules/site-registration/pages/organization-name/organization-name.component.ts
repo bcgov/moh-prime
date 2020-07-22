@@ -16,16 +16,16 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrgBookResource, OrgBookAutocompleteResult } from '@registration/shared/services/org-book-resource.service';
 
 @Component({
-  selector: 'app-organization-information',
-  templateUrl: './organization-information.component.html',
-  styleUrls: ['./organization-information.component.scss']
+  selector: 'app-organization-name',
+  templateUrl: './organization-name.component.html',
+  styleUrls: ['./organization-name.component.scss']
 })
-export class OrganizationInformationComponent implements OnInit, IPage, IForm {
+export class OrganizationNameComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
@@ -47,7 +47,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     private utilsService: UtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'Organization Information';
+    this.title = 'Organization Name';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -69,16 +69,15 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     // TODO structured to match in all organization views
-    if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
-      const payload = this.organizationFormStateService.organization;
-      this.organizationResource
-        .updateOrganization(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    //   const payload = this.organizationFormStateService.organization;
+    //   this.organizationResource
+    //     .updateOrganization(payload)
+    //     .subscribe(() => {
+    //       this.form.markAsPristine();
+    this.nextRoute();
+    //     });
+    // }
   }
 
   public onSelect({ option }: MatAutocompleteSelectedEvent) {
@@ -108,7 +107,7 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_TYPE);
+      this.routeUtils.routeRelativeTo(SiteRoutes.CARE_SETTING);
     }
   }
 
