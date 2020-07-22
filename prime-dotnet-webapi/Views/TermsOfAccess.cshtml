@@ -4,26 +4,12 @@
 @{
   var userClauseClause = Model.UserClause.Clause;
   var limitsAndConditions = Model.LimitsConditionsClause?.Clause;
-  @* var licenceClassClauses = Model.LicenseClassClauses.Select(lcc => lcc.Clause); *@
 }
 
 @Html.Raw(userClauseClause)
 
 @if(!string.IsNullOrEmpty(limitsAndConditions))
 {
-  <li>
-    <p class="bold underline">Additional Clauses that Apply to You</p>
-    <p>@Html.Raw(limitsAndConditions)</p>
-  </li>
+  <p class="bold underline">Additional Clauses that Apply to You</p>
+  <p>@Html.Raw(limitsAndConditions)</p>
 }
-
-@* @if(licenceClassClauses.Any())
-{
-  <li>
-    <p class="bold underline">Licence Class Clauses</p>
-    @foreach(var licenceClassClause in licenceClassClauses)
-    {
-      <p>@Html.Raw(licenceClassClause)</p>
-    }
-  </li>
-} *@

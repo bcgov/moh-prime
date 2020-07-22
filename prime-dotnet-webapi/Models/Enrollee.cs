@@ -159,8 +159,7 @@ namespace Prime.Models
                 return this.EnrolmentStatuses?
                     .OrderByDescending(en => en.StatusDate)
                     .Where(es => es.IsType(StatusType.RequiresToa))
-                    .Where(es => es.StatusDate > this.AppliedDate)
-                    .FirstOrDefault()
+                    .FirstOrDefault(es => es.StatusDate > this.AppliedDate)
                     ?.StatusDate;
             }
         }

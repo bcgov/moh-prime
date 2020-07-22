@@ -369,14 +369,11 @@ namespace Prime.Controllers
         public ActionResult<string> OrganizationAgreementDocument()
         {
             var fileName = "Organization-Agreement.pdf";
-            string resourcePath = fileName;
             var assembly = Assembly.GetExecutingAssembly();
-
-            resourcePath = assembly.GetManifestResourceNames()
-                    .Single(str => str.EndsWith(fileName));
+            var resourcePath = assembly.GetManifestResourceNames()
+                .Single(str => str.EndsWith(fileName));
 
             string base64;
-
             using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
             using (var reader = new MemoryStream())
             {
