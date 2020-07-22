@@ -2,14 +2,14 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { OrganizationInformationComponent } from './organization-information.component';
+import { OrganizationNameComponent } from './organization-name.component';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('SiteInformationComponent', () => {
-  let component: OrganizationInformationComponent;
-  let fixture: ComponentFixture<OrganizationInformationComponent>;
+describe('OrganizationNameComponent', () => {
+  let component: OrganizationNameComponent;
+  let fixture: ComponentFixture<OrganizationNameComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -30,7 +30,7 @@ describe('SiteInformationComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OrganizationInformationComponent);
+    fixture = TestBed.createComponent(OrganizationNameComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -21,11 +21,11 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrgBookResource, OrgBookAutocompleteResult } from '@registration/shared/services/org-book-resource.service';
 
 @Component({
-  selector: 'app-organization-information',
-  templateUrl: './organization-information.component.html',
-  styleUrls: ['./organization-information.component.scss']
+  selector: 'app-organization-name',
+  templateUrl: './organization-name.component.html',
+  styleUrls: ['./organization-name.component.scss']
 })
-export class OrganizationInformationComponent implements OnInit, IPage, IForm {
+export class OrganizationNameComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
@@ -69,15 +69,15 @@ export class OrganizationInformationComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     // TODO structured to match in all organization views
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.organizationFormStateService.organization;
-      this.organizationResource
-        .updateOrganization(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    //   const payload = this.organizationFormStateService.organization;
+    //   this.organizationResource
+    //     .updateOrganization(payload)
+    //     .subscribe(() => {
+    //       this.form.markAsPristine();
+    this.nextRoute();
+    //     });
+    // }
   }
 
   public onSelect({ option }: MatAutocompleteSelectedEvent) {
