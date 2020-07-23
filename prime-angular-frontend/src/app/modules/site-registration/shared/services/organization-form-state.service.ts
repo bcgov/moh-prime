@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
@@ -56,6 +56,18 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
       signingAuthorityId: signingAuthority?.id,
       signingAuthority
     };
+  }
+
+  /**
+   * @description
+   * List of constituent model forms, which is used at minimum to
+   * drive internal form helper methods.
+   */
+  public get forms(): AbstractControl[] {
+    return [
+      this.signingAuthorityForm,
+      this.organizationNameForm
+    ];
   }
 
   /**

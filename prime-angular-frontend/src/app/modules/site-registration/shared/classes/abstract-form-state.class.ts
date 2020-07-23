@@ -43,9 +43,7 @@ export abstract class AbstractFormState<T> {
    * List of constituent model forms, which is used at minimum to
    * drive internal form helper methods.
    */
-  public get forms(): AbstractControl[] {
-    return [];
-  }
+  public abstract get forms(): AbstractControl[];
 
   /**
    * @description
