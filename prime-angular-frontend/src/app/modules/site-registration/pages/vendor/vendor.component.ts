@@ -95,7 +95,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteFormStateService.vendorForm;
+    this.form = this.siteFormStateService.careSettingTypeForm;
   }
 
   private initForm() {

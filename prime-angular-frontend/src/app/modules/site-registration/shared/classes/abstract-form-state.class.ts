@@ -90,16 +90,18 @@ export abstract class AbstractFormState<T> {
    * Provide an address form group.
    *
    * @param options available for manipulating the form group
-   *  areRequired control names
-   *  areDisabled control names
+   *  areRequired control names that are required
+   *  areDisabled control names that are disabled
    *  useDefaults for province and country, otherwise empty
+   *  exclude control names that are not needed
    */
   // TODO start sliding this into form builders
   protected buildAddressForm(options: {
-    areRequired: string[],
-    areDisabled: string[],
-    useDefaults: boolean
-  }): FormGroup {
+    areRequired?: string[],
+    areDisabled?: string[],
+    useDefaults?: boolean,
+    exclude?: string[]
+  } = null): FormGroup {
     const controlsConfig = {
       id: [
         0,
@@ -109,6 +111,8 @@ export abstract class AbstractFormState<T> {
         { value: null, disabled: false },
         []
       ],
+      // TODO not always used so should be able to omit the key
+      // from the form controls
       street2: [
         { value: null, disabled: false },
         []
@@ -131,22 +135,24 @@ export abstract class AbstractFormState<T> {
       ]
     };
 
-    Object.keys(controlsConfig).map((key: string, index: number) => {
-      const control = controlsConfig[key];
-      if (options.areDisabled.includes(key)) {
-        control[0].disabled = true;
-      }
-      if (options.useDefaults) {
-        if (key === 'provinceCode') {
-          control[0].value = Province.BRITISH_COLUMBIA;
-        } else if (key === 'countryCode') {
-          control[0].value = Country.CANADA;
+    Object.keys(controlsConfig)
+      .filter((key: string) => !options?.exclude?.includes(key))
+      .map((key: string, index: number) => {
+        const control = controlsConfig[key];
+        if (options?.areDisabled?.includes(key)) {
+          control[0].disabled = true;
         }
-      }
-      if (options.areRequired.includes(key)) {
-        control[1].push(Validators.required);
-      }
-    });
+        if (options?.useDefaults) {
+          if (key === 'provinceCode') {
+            control[0].value = Province.BRITISH_COLUMBIA;
+          } else if (key === 'countryCode') {
+            control[0].value = Country.CANADA;
+          }
+        }
+        if (options?.areRequired?.includes(key)) {
+          control[1].push(Validators.required);
+        }
+      });
 
     return this.fb.group(controlsConfig);
   }

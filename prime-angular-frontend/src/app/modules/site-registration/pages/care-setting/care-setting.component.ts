@@ -55,14 +55,6 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     return this.form.get('organizationTypeCode') as FormControl;
   }
 
-  public disableOrganization(organizationTypeCode: number): boolean {
-    return [
-      // Omit care setting types that are not:
-      OrganizationTypeEnum.COMMUNITY_PRACTICE,
-      OrganizationTypeEnum.COMMUNITY_PHARMACIST
-    ].includes(organizationTypeCode);
-  }
-
   public onSubmit() {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
@@ -84,6 +76,14 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
 
+  public disableOrganization(organizationTypeCode: number): boolean {
+    return [
+      // Omit care setting types that are not:
+      OrganizationTypeEnum.COMMUNITY_PRACTICE,
+      OrganizationTypeEnum.COMMUNITY_PHARMACIST
+    ].includes(organizationTypeCode);
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty)
@@ -97,7 +97,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteFormStateService.organizationTypeForm;
+    this.form = this.siteFormStateService.careSettingTypeForm;
   }
 
   private initForm() {

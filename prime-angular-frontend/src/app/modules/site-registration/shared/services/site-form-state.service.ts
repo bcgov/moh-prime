@@ -5,8 +5,6 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Province } from '@shared/enums/province.enum';
-import { Country } from '@shared/enums/country.enum';
 
 import { Party } from '@registration/shared/models/party.model';
 import { Site } from '@registration/shared/models/site.model';
@@ -18,10 +16,9 @@ import { RemoteUserLocation } from '@registration/shared/models/remote-user-loca
   providedIn: 'root'
 })
 export class SiteFormStateService extends AbstractFormState<Site> {
-  public organizationTypeForm: FormGroup;
+  public careSettingTypeForm: FormGroup;
   public siteAddressForm: FormGroup;
   public hoursOperationForm: FormGroup;
-  public vendorForm: FormGroup;
   public remoteUsersForm: FormGroup;
   public administratorPharmaNetForm: FormGroup;
   public privacyOfficerForm: FormGroup;
@@ -126,10 +123,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    */
   public get forms(): AbstractControl[] {
     return [
-      this.organizationTypeForm,
+      this.careSettingTypeForm,
       this.siteAddressForm,
       this.hoursOperationForm,
-      this.vendorForm,
       this.remoteUsersForm,
       this.administratorPharmaNetForm,
       this.privacyOfficerForm,
@@ -143,10 +139,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * clear previous form data from the service.
    */
   public init() {
-    this.organizationTypeForm = this.buildOrganizationTypeForm();
+    this.careSettingTypeForm = this.buildCareSettingTypeForm();
     this.siteAddressForm = this.buildSiteAddressForm();
     this.hoursOperationForm = this.buildHoursOperationForm();
-    this.vendorForm = this.buildVendorForm();
     this.remoteUsersForm = this.buildRemoteUsersForm();
     this.administratorPharmaNetForm = this.buildAdministratorPharmaNetForm();
     this.privacyOfficerForm = this.buildPrivacyOfficerForm();
@@ -162,14 +157,15 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       return null;
     }
 
-    this.organizationTypeForm.patchValue(site);
+    this.careSettingTypeForm.patchValue(site);
+    // if (site.vendorCode) {
+    //   this.vendorForm.patchValue({ vendorCode: site.vendorCode });
+    // }
+
     this.siteAddressForm.get('name').patchValue(site.location.name);
 
     if (site.location.physicalAddress) {
       this.siteAddressForm.get('physicalAddress').patchValue(site.location.physicalAddress);
-    }
-    if (site.vendorCode) {
-      this.vendorForm.patchValue({ vendorCode: site.vendorCode });
     }
 
     if (site.location.businessHours?.length) {
@@ -238,8 +234,17 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     return group;
   }
 
-  private buildOrganizationTypeForm(code: number = null): FormGroup {
+  private buildCareSettingTypeForm(code: number = null): FormGroup {
     return this.fb.group({
+      // vendorCode: [
+      //   0,
+      //   // TODO can't be required since 0 is considered valid
+      //   // TODO can't be made null due to issues updating the site
+      //   // TODO make required and not 0 validator
+      //   // [Validators.required]
+      //   // [Validators.pattern(`[1-${this.configService.vendors.length}]{1}`)]
+      // ],
+      // TODO update to be care setting type code
       organizationTypeCode: [code, [Validators.required]]
     });
   }
@@ -250,31 +255,11 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         null,
         [Validators.required]
       ],
-      physicalAddress: this.fb.group({
-        id: [
-          0,
-          []
-        ],
-        street: [
-          { value: null, disabled: false },
-          [Validators.required]
-        ],
-        city: [
-          { value: null, disabled: false },
-          [Validators.required]
-        ],
-        provinceCode: [
-          { value: Province.BRITISH_COLUMBIA, disabled: true },
-          [Validators.required]
-        ],
-        postal: [
-          { value: null, disabled: false },
-          [Validators.required]
-        ],
-        countryCode: [
-          { value: Country.CANADA, disabled: true },
-          [Validators.required]
-        ]
+      physicalAddress: this.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        areDisabled: ['provinceCode', 'countryCode'],
+        useDefaults: true,
+        exclude: ['street2']
       })
     });
   }
@@ -284,21 +269,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       businessDays: this.fb.array(
         [],
         [Validators.required])
-    });
-  }
-
-  private buildVendorForm(): FormGroup {
-    return this.fb.group({
-      // TODO id can't be null, but might be worth adding a new custom required validator
-      vendorCode: [
-        0,
-        // TODO can't be required since 0 is considered valid
-        // TODO can't be made null due to issues updating the site
-        // TODO make a required and not 0 validator
-        // [Validators.required]
-        // TODO using pattern for now that matches the IDs of the vendors should be updated to pull from config
-        [Validators.pattern(`[1-${this.configService.vendors.length}]{1}`)]
-      ]
     });
   }
 
@@ -341,33 +311,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         null,
         [Validators.required]
       ],
-      physicalAddress: this.fb.group({
-        countryCode: [
-          { value: null, disabled: false },
-          [Validators.required]
-        ],
-        provinceCode: [
-          { value: null, disabled: false },
-          [Validators.required]
-        ],
-        street: [
-          { value: null, disabled: false },
-          [Validators.required]
-        ],
-        street2: [
-          { value: null, disabled: false },
-          // NOTE: Never used so omitted from validations to reduce need
-          // to clear validators at the component-level
-          []
-        ],
-        city: [
-          { value: null, disabled: false },
-          [Validators.required]
-        ],
-        postal: [
-          { value: null, disabled: false },
-          [Validators.required]
-        ]
+      physicalAddress: this.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        exclude: ['street2']
       })
     });
   }
@@ -425,37 +371,8 @@ export class SiteFormStateService extends AbstractFormState<Site> {
           FormControlValidators.email
         ]
       ],
-      // TODO duplication split out into reuseable address model
-      physicalAddress: this.fb.group({
-        id: [
-          0,
-          []
-        ],
-        street: [
-          { value: null, disabled: false },
-          []
-        ],
-        // TODO not needed and can likely be removed
-        street2: [
-          { value: null, disabled: false },
-          []
-        ],
-        city: [
-          { value: null, disabled: false },
-          []
-        ],
-        provinceCode: [
-          { value: null, disabled: false },
-          []
-        ],
-        countryCode: [
-          { value: null, disabled: false },
-          []
-        ],
-        postal: [
-          { value: null, disabled: false },
-          []
-        ]
+      physicalAddress: this.buildAddressForm({
+        exclude: ['street2']
       })
     });
   }

@@ -158,66 +158,10 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
         null,
         [Validators.required, FormControlValidators.email]
       ],
-      physicalAddress: this.fb.group({
-        id: [
-          0,
-          []
-        ],
-        countryCode: [
-          { value: null, disabled: true },
-          []
-        ],
-        provinceCode: [
-          { value: null, disabled: true },
-          []
-        ],
-        street: [
-          { value: null, disabled: true },
-          []
-        ],
-        street2: [
-          { value: null, disabled: true },
-          []
-        ],
-        city: [
-          { value: null, disabled: true },
-          []
-        ],
-        postal: [
-          { value: null, disabled: true },
-          []
-        ]
+      physicalAddress: this.buildAddressForm({
+        areDisabled: ['street', 'street2', 'city', 'provinceCode', 'countryCode', 'postal'],
       }),
-      mailingAddress: this.fb.group({
-        id: [
-          0,
-          []
-        ],
-        countryCode: [
-          { value: null, disabled: false },
-          []
-        ],
-        provinceCode: [
-          { value: null, disabled: false },
-          []
-        ],
-        street: [
-          { value: null, disabled: false },
-          []
-        ],
-        street2: [
-          { value: null, disabled: false },
-          []
-        ],
-        city: [
-          { value: null, disabled: false },
-          []
-        ],
-        postal: [
-          { value: null, disabled: false },
-          []
-        ]
-      }),
+      mailingAddress: this.buildAddressForm()
     });
   }
 
