@@ -177,10 +177,17 @@ objects:
           volumeMounts:
           - mountPath: /app/
             name: ${NAME}${SUFFIX}-pvc
+          - mountPath: /app/certs
+            name: vanity-tls-certs
+            readOnly: true
         restartPolicy: Always
         volumes:
         - name: ${NAME}${SUFFIX}-pvc
           emptyDir: {}
+        - name: vanity-tls-certs
+          secret:
+            defaultMode: 420
+            secretName: vanity-tls-certificate
     test: false
     triggers:
     - type: ConfigChange
@@ -289,4 +296,14 @@ objects:
       image: docker-registry.default.svc:5000/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
       name: ${NAME}${SUFFIX}-migrate
       resources: {}
+      volumeMounts:
+      - mountPath: /app/certs
+        name: vanity-tls-certs
+        readOnly: true
+    restartPolicy: OnFailure
+    volumes:
+    - name: vanity-tls-certs
+      secret:
+        defaultMode: 420
+        secretName: vanity-tls-certificate
   status: {}
