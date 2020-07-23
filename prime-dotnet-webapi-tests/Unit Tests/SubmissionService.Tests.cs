@@ -8,6 +8,7 @@ using Prime;
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace PrimeTests.UnitTests
 {
@@ -22,7 +23,8 @@ namespace PrimeTests.UnitTests
             IEnrolleeService enrolleeService = null,
             IEnrolleeProfileVersionService enrolleeProfileVersionService = null,
             IVerifiableCredentialService verifiableCredentialService = null,
-            IPrivilegeService privilegeService = null)
+            IPrivilegeService privilegeService = null,
+            ILogger<SubmissionService> logger = null)
         {
             return new SubmissionService(
                 TestDb,
@@ -34,7 +36,8 @@ namespace PrimeTests.UnitTests
                 enrolleeService ?? A.Fake<IEnrolleeService>(),
                 enrolleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>(),
                 verifiableCredentialService ?? A.Fake<IVerifiableCredentialService>(),
-                privilegeService ?? A.Fake<IPrivilegeService>()
+                privilegeService ?? A.Fake<IPrivilegeService>(),
+                logger ?? A.Fake<ILogger<SubmissionService>>()
             );
         }
     }
