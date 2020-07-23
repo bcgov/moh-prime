@@ -135,7 +135,7 @@ objects:
                 key: database-user
                 name: "postgresql-secret"
           - name: DOCUMENT_MANAGER_URL
-            value: "https://${SUFFIX}.pharmanetenrolment.gov.bc.ca/api/docman/"
+            value: "https://${VANITY_URL}/api/docman/"
           - name: FLASK_APP
             valueFrom:
               configMapKeyRef:
