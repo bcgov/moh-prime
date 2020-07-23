@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Prime.Models;
-using Prime.Models.Api;
 using Prime.Services;
 
 namespace Prime.Controllers

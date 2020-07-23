@@ -24,7 +24,6 @@ using Prime.Models.Api;
 using Prime.Infrastructure;
 using System.Net.Http.Headers;
 using IdentityModel.Client;
-using IdentityModel;
 using Microsoft.Extensions.FileProviders;
 
 namespace Prime
@@ -146,7 +145,7 @@ namespace Prime
 
             services.AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
             {
-                client.BaseAddress = new Uri(PrimeConstants.VERIFIABLE_CREDENTIAL_API_URL);
+                client.BaseAddress = new Uri(PrimeConstants.VERIFIABLE_CREDENTIAL_API_URL.EnsureTrailingSlash());
                 client.DefaultRequestHeaders.Add("x-api-key", PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY);
             });
 
@@ -159,7 +158,7 @@ namespace Prime
 
             services.AddSingleton(new ChesClientCredentials
             {
-                Address = $"{ PrimeConstants.CHES_TOKEN_URL}/token",
+                Address = $"{PrimeConstants.CHES_TOKEN_URL}/token",
                 ClientId = PrimeConstants.CHES_CLIENT_ID,
                 ClientSecret = PrimeConstants.CHES_CLIENT_SECRET
             });
@@ -172,14 +171,10 @@ namespace Prime
         {
             if (env.IsDevelopment())
             {
-                // TODO should be replaced with logging and exception handler
                 app.UseDeveloperExceptionPage();
             }
 
             this.ConfigureHealthCheck(app);
-
-            // TODO Turn on when there is an actual cert
-            // app.UseHttpsRedirection();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();

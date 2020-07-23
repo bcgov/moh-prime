@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -80,11 +79,6 @@ namespace Prime.Services
 
         public async Task<int> UpdateAdminAsync(int adminId, Admin admin)
         {
-            var _adminDb = await _context.Admins
-                .AsNoTracking()
-                .Where(a => a.Id == adminId)
-                .SingleOrDefaultAsync();
-
             _context.Entry(admin).CurrentValues.SetValues(admin); // reflection
 
             try

@@ -17,10 +17,9 @@ namespace Prime.Services
     {
         public const string Connections = "connections";
         public const string IssueCredential = "issue_credential";
-        public const string PresentProof = "present_proof";
     }
 
-    public class ConnectionStates
+    public class ConnectionState
     {
         public const string Invitation = "invitation";
         public const string Request = "request";
@@ -28,29 +27,14 @@ namespace Prime.Services
         public const string Active = "active";
     }
 
-    public class CredentialExchangeStates
+    public class CredentialExchangeState
     {
         public const string OfferSent = "offer_sent";
         public const string RequestReceived = "request_received";
         public const string CredentialIssued = "credential_issued";
     }
-
-    public class PresentProofStates
-    {
-        public const string RequestSent = "request_sent";
-        public const string PresentationReceived = "presentation_received";
-        public const string Verified = "verified";
-    }
-
-
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
-        // dev agent schema id
-        // private static readonly string SCHEMA_ID = "QDaSxvduZroHDKkdXKV5gG:2:enrollee:2.0";
-
-        // test agent schema id
-        private static readonly string SCHEMA_ID = "TVmQfMZwLFWWK3z1RLgFBR:2:enrollee:1.0";
-
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
         private readonly IEnrolleeService _enrolleeService;
         private readonly ILogger _logger;
@@ -72,9 +56,11 @@ namespace Prime.Services
         public async Task<JObject> CreateConnectionAsync(Enrollee enrollee)
         {
             var alias = enrollee.Id.ToString();
+            var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
+            var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
             var invitation = await _verifiableCredentialClient.CreateInvitationAsync(alias);
             var invitationUrl = invitation.Value<string>("invitation_url");
-            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
+            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
@@ -83,7 +69,7 @@ namespace Prime.Services
 
             enrollee.Credential = new Credential
             {
-                SchemaId = SCHEMA_ID,
+                SchemaId = schemaId,
                 CredentialDefinitionId = credentialDefinitionId,
                 Alias = alias,
                 Base64QRCode = qrCodeImageAsBase64
@@ -99,23 +85,6 @@ namespace Prime.Services
             return invitation;
         }
 
-        // Create an invitation to establish a connection between the agents.
-        public async Task SendProofRequest(Enrollee enrollee)
-        {
-            // TODO add a new schema with:
-            // - POS vendor
-            // - Legal Name of Organization, and/or BC Registration ID
-            // - Status of Approval
-            // - Name of Site (Location?)
-            // - Address of Site
-            // TODO create a credential definition
-
-            // TODO create proof request JObject model
-            // - Populate model with enrollee data and API queried values
-
-            // TODO send a proof request, and test on mobile the states
-        }
-
         // Handle webhook events pushed by the issuing agent.
         public async Task<bool> WebhookAsync(JObject data, string topic)
         {
@@ -127,12 +96,10 @@ namespace Prime.Services
                     return await HandleConnectionAsync(data);
                 case WebhookTopic.IssueCredential:
                     return await HandleIssueCredentialAsync(data);
-                case WebhookTopic.PresentProof:
-                    return await HandlePresentProofAsync(data);
                 default:
                     _logger.LogError("Webhook {topic} is not supported", topic);
                     return false;
-            };
+            }
         }
 
         // Handle webhook events for connection states.
@@ -144,10 +111,10 @@ namespace Prime.Services
 
             switch (state)
             {
-                case ConnectionStates.Invitation:
-                case ConnectionStates.Request:
+                case ConnectionState.Invitation:
+                case ConnectionState.Request:
                     return true;
-                case ConnectionStates.Response:
+                case ConnectionState.Response:
                     var connectionId = data.Value<string>("connection_id");
                     var alias = data.Value<int>("alias");
 
@@ -161,7 +128,7 @@ namespace Prime.Services
                     _logger.LogInformation("Credential has been issued for connection_id: {connectionId} with response {@JObject}", connectionId, JsonConvert.SerializeObject(issueCredentialResponse));
 
                     return true;
-                case ConnectionStates.Active:
+                case ConnectionState.Active:
                     return true;
                 default:
                     _logger.LogError("Connection state {state} is not supported", state);
@@ -178,10 +145,10 @@ namespace Prime.Services
 
             switch (state)
             {
-                case CredentialExchangeStates.OfferSent:
-                case CredentialExchangeStates.RequestReceived:
+                case CredentialExchangeState.OfferSent:
+                case CredentialExchangeState.RequestReceived:
                     return true;
-                case CredentialExchangeStates.CredentialIssued:
+                case CredentialExchangeState.CredentialIssued:
                     await UpdateAcceptedCredentialDate(data);
                     return true;
                 default:
@@ -233,21 +200,22 @@ namespace Prime.Services
         private async Task<JObject> CreateCredentialOfferAsync(string connectionId, JArray attributes)
         {
             var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
-            var schema = (await _verifiableCredentialClient.GetSchema(SCHEMA_ID)).Value<JObject>("schema");
-            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(SCHEMA_ID);
+            var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
+            var schema = (await _verifiableCredentialClient.GetSchema(schemaId)).Value<JObject>("schema");
+            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
             JObject credentialOffer = new JObject
                 {
                     { "connection_id", connectionId },
                     { "issuer_did", issuerDid },
-                    { "schema_id", SCHEMA_ID },
+                    { "schema_id", schemaId },
                     { "schema_issuer_did", issuerDid },
                     { "schema_name", schema.Value<string>("name") },
                     { "schema_version", schema.Value<string>("version") },
                     { "cred_def_id", credentialDefinitionId },
                     { "comment", "PharmaNet GPID" },
                     { "auto_remove", true },
-                    { "revoc_reg_id", null },
+                    { "trace", false },
                     { "credential_proposal", new JObject
                         {
                             { "@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview" },
@@ -265,8 +233,8 @@ namespace Prime.Services
         private async Task<JArray> CreateCredentialAttributesAsync(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            var organizationType = _context.OrganizationTypes.SingleOrDefault(t => t.Code == enrollee.EnrolleeOrganizationTypes.FirstOrDefault().OrganizationTypeCode);
+            var enrolleeOrgType = enrollee.EnrolleeOrganizationTypes.Single();
+            await _context.Entry(enrolleeOrgType).Reference(o => o.OrganizationType).LoadAsync();
 
             JArray attributes = new JArray
             {
@@ -283,7 +251,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "organization_type" },
-                    { "value", organizationType.Name }
+                    { "value", enrolleeOrgType.OrganizationType.Name }
                 },
                 new JObject
                 {
@@ -297,35 +265,9 @@ namespace Prime.Services
                 }
             };
 
-
             _logger.LogInformation("Credential offer attributes for {@JObject}", JsonConvert.SerializeObject(attributes));
 
             return attributes;
-        }
-
-        private async Task<bool> HandlePresentProofAsync(JObject data)
-        {
-            var state = data.Value<string>("state");
-
-            _logger.LogInformation("Present proof state \"{state}\" for {@JObject}", JsonConvert.SerializeObject(data));
-
-            switch (state)
-            {
-                case PresentProofStates.RequestSent:
-                    var presentationExchangeId = data.Value<string>("presentation_exchange_id");
-                    var response = await _verifiableCredentialClient.GetPresentationProof(presentationExchangeId);
-                    // TODO log that the proof request was received for auditing by checking that state is verified
-                    return true;
-                case PresentProofStates.PresentationReceived:
-                    return true;
-                case PresentProofStates.Verified:
-                    // TODO proof positive: state=verified and verified=true
-                    // TODO perform business logic to inform Medinet
-                    return true;
-                default:
-                    _logger.LogError($"Present proof state {state} is not supported");
-                    return false;
-            }
         }
     }
 }
