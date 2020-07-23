@@ -82,7 +82,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.organizationFormStateService.organization;
+      const payload = this.organizationFormStateService.json;
       this.organizationResource
         .updateOrganization(payload)
         .subscribe(() => {
