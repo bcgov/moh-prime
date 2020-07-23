@@ -225,8 +225,11 @@ namespace Prime.Services
 
                 foreach (var vendor in updated.SiteVendors)
                 {
-                    vendor.SiteId = current.Id;
-                    _context.Entry(vendor).State = EntityState.Added;
+                    if (vendor.Vendor.OrganizationTypeCode == current.OrganizationTypeCode)
+                    {
+                        vendor.SiteId = current.Id;
+                        _context.Entry(vendor).State = EntityState.Added;
+                    }
                 }
             }
         }
