@@ -149,7 +149,7 @@ objects:
                 key: database-user
                 name: "postgresql-secret"
           - name: DOCUMENT_MANAGER_URL
-            value: "https://${SUFFIX}.pharmanetenrolment.gov.bc.ca/api/docman/"
+            value: "https://${VANITY_URL}/api/docman/"
           - name: FLASK_APP
             valueFrom:
               configMapKeyRef:
@@ -265,7 +265,7 @@ objects:
               key: DOCUMENT_MANAGER_CLIENT_SECRET
               name: "document-manager-secret"
         - name: DOCUMENT_MANAGER_URL
-          value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/"
+          value: "https://${VANITY_URL}/api/docman/"
         - name: FLASK_APP
           valueFrom:
             configMapKeyRef:
