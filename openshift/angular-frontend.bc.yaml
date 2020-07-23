@@ -122,7 +122,7 @@ objects:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: 'keycloak'
           - name: DOCUMENT_MANAGER_URL
-            value: "${REDIRECT_URL}/api/docman/"
+            value: "https://${VANITY_URL}/api/docman/"
       type: Docker
     triggers:
     - type: ConfigChange
