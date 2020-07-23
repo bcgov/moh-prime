@@ -5,7 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
 
-import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -16,16 +15,16 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { Organization } from '@registration/shared/models/organization.model';
-import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
-import { OrganizationService } from '@registration/shared/services/organization.service';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteService } from '@registration/shared/services/site.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
 @Component({
-  selector: 'app-organization-type',
-  templateUrl: './organization-type.component.html',
-  styleUrls: ['./organization-type.component.scss']
+  selector: 'app-care-setting',
+  templateUrl: './care-setting.component.html',
+  styleUrls: ['./care-setting.component.scss']
 })
-export class OrganizationTypeComponent implements OnInit, IPage, IForm {
+export class CareSettingComponent implements OnInit, IPage, IForm {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
@@ -40,14 +39,14 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private organizationService: OrganizationService,
-    private organizationResource: OrganizationResource,
-    private organizationFormStateService: OrganizationFormStateService,
+    private siteService: SiteService,
+    private siteResource: SiteResource,
+    private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog,
     private configService: ConfigService,
   ) {
-    this.title = 'Organization Type';
+    this.title = 'Care Setting';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.organizationTypes = this.configService.organizationTypes;
   }
@@ -57,17 +56,19 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   }
 
   public disableOrganization(organizationTypeCode: number): boolean {
-    // Omit organizations types that are not "Community Practices" for ComPap
-    return (organizationTypeCode !== OrganizationTypeEnum.COMMUNITY_PRACTICE);
+    return [
+      // Omit care setting types that are not:
+      OrganizationTypeEnum.COMMUNITY_PRACTICE,
+      OrganizationTypeEnum.COMMUNITY_PHARMACIST
+    ].includes(organizationTypeCode);
   }
 
   public onSubmit() {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
-      const payload = this.organizationFormStateService.organization;
-      this.organizationResource
-        .updateOrganization(payload, true)
+      const payload = this.siteFormStateService.json;
+      this.siteResource
+        .updateSite(payload, true)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
@@ -76,11 +77,11 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_INFORMATION);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
+    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -96,13 +97,13 @@ export class OrganizationTypeComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.organizationFormStateService.organizationTypeForm;
+    this.form = this.siteFormStateService.organizationTypeForm;
   }
 
   private initForm() {
     // TODO structured to match in all site views
-    const organization = this.organizationService.organization;
-    this.isCompleted = organization?.completed;
-    this.organizationFormStateService.setForm(organization);
+    const site = this.siteService.site;
+    this.isCompleted = site?.completed;
+    this.siteFormStateService.setForm(site);
   }
 }

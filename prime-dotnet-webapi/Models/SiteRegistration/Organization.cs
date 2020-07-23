@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace Prime.Models
 {
@@ -27,11 +28,8 @@ namespace Prime.Models
 
         public int SigningAuthorityId { get; set; }
 
-        public int? OrganizationTypeCode { get; set; }
-
-        public OrganizationType OrganizationType { get; set; }
-
-        public IEnumerable<Location> Locations { get; set; }
+        [JsonIgnore]
+        public IEnumerable<Site> Sites { get; set; }
 
         public ICollection<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
     }

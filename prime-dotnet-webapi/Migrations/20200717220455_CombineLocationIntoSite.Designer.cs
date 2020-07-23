@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200717220455_CombineLocationIntoSite")]
+    partial class CombineLocationIntoSite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,7 +322,10 @@ namespace Prime.Migrations
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("interval");
 
-                    b.Property<int>("SiteId")
+                    b.Property<int>("LocationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SiteId")
                         .HasColumnType("integer");
 
                     b.Property<TimeSpan>("StartTime")
@@ -333,6 +338,8 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("SiteId");
 
@@ -6139,6 +6146,61 @@ namespace Prime.Migrations
                     b.ToTable("LimitsConditionsClause");
                 });
 
+            modelBuilder.Entity("Prime.Models.Location", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("AdministratorPharmaNetId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DoingBusinessAs")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PhysicalAddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PrivacyOfficerId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TechnicalSupportId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdministratorPharmaNetId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("PhysicalAddressId");
+
+                    b.HasIndex("PrivacyOfficerId");
+
+                    b.HasIndex("TechnicalSupportId");
+
+                    b.ToTable("Location");
+                });
+
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
                     b.Property<int>("Id")
@@ -6164,6 +6226,9 @@ namespace Prime.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int?>("OrganizationTypeCode")
+                        .HasColumnType("integer");
+
                     b.Property<string>("RegistrationId")
                         .HasColumnType("text");
 
@@ -6180,6 +6245,8 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrganizationTypeCode");
 
                     b.HasIndex("SigningAuthorityId");
 
@@ -7760,10 +7827,10 @@ namespace Prime.Migrations
                     b.Property<string>("DoingBusinessAs")
                         .HasColumnType("text");
 
-                    b.Property<int>("OrganizationId")
+                    b.Property<int?>("LocationId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("OrganizationTypeCode")
+                    b.Property<int>("OrganizationId")
                         .HasColumnType("integer");
 
                     b.Property<string>("PEC")
@@ -7794,9 +7861,9 @@ namespace Prime.Migrations
 
                     b.HasIndex("AdministratorPharmaNetId");
 
-                    b.HasIndex("OrganizationId");
+                    b.HasIndex("LocationId");
 
-                    b.HasIndex("OrganizationTypeCode");
+                    b.HasIndex("OrganizationId");
 
                     b.HasIndex("PhysicalAddressId");
 
@@ -12384,11 +12451,15 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.BusinessDay", b =>
                 {
-                    b.HasOne("Prime.Models.Site", "Site")
+                    b.HasOne("Prime.Models.Location", "Location")
                         .WithMany("BusinessHours")
-                        .HasForeignKey("SiteId")
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Prime.Models.Site", null)
+                        .WithMany("BusinessHours")
+                        .HasForeignKey("SiteId");
                 });
 
             modelBuilder.Entity("Prime.Models.BusinessEvent", b =>
@@ -12639,8 +12710,37 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Prime.Models.Location", b =>
+                {
+                    b.HasOne("Prime.Models.Party", "AdministratorPharmaNet")
+                        .WithMany()
+                        .HasForeignKey("AdministratorPharmaNetId");
+
+                    b.HasOne("Prime.Models.Organization", "Organization")
+                        .WithMany("Locations")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId");
+
+                    b.HasOne("Prime.Models.Party", "PrivacyOfficer")
+                        .WithMany()
+                        .HasForeignKey("PrivacyOfficerId");
+
+                    b.HasOne("Prime.Models.Party", "TechnicalSupport")
+                        .WithMany()
+                        .HasForeignKey("TechnicalSupportId");
+                });
+
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
+                    b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
+                        .WithMany()
+                        .HasForeignKey("OrganizationTypeCode");
+
                     b.HasOne("Prime.Models.Party", "SigningAuthority")
                         .WithMany()
                         .HasForeignKey("SigningAuthorityId")
@@ -12755,15 +12855,15 @@ namespace Prime.Migrations
                         .WithMany()
                         .HasForeignKey("AdministratorPharmaNetId");
 
-                    b.HasOne("Prime.Models.Organization", "Organization")
+                    b.HasOne("Prime.Models.Location", null)
                         .WithMany("Sites")
+                        .HasForeignKey("LocationId");
+
+                    b.HasOne("Prime.Models.Organization", "Organization")
+                        .WithMany()
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
-                        .WithMany()
-                        .HasForeignKey("OrganizationTypeCode");
 
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()

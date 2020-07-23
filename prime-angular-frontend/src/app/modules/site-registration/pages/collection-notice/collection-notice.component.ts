@@ -26,7 +26,7 @@ export class CollectionNoticeComponent implements OnInit {
 
   public onAccept() {
     this.authService.hasJustLoggedIn = false;
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATIONS);
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_MANAGEMENT);
   }
 
   public ngOnInit() {

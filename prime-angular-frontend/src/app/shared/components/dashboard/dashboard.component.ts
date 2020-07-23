@@ -333,7 +333,7 @@ export class DashboardComponent implements OnInit {
           {
             name: 'Administration',
             icon: 'store',
-            route: SiteRoutes.ORGANIZATIONS,
+            route: SiteRoutes.SITE_MANAGEMENT,
             showItem: true
           }
         ]
