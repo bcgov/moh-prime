@@ -321,17 +321,3 @@ objects:
         defaultMode: 420
         secretName: vanity-tls-certificate
   status: {}
-- apiVersion: v1
-  kind: Route
-  metadata:
-    name: "${NAME}${SUFFIX}"
-  spec:
-    host: "${NAME}${SUFFIX}.pharmanetenrolment.gov.bc.ca"
-    port:
-      targetPort: "${HTTP_PORT}"
-    tls:
-        insecureEdgeTerminationPolicy: Redirect
-        termination: passthrough
-    to:
-      kind: Service
-      name: "${NAME}${SUFFIX}-backend"
