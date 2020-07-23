@@ -95,7 +95,7 @@ objects:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 value: prime-document-manager
               - name: DOCUMENT_MANAGER_URL
-                value: 'https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/'
+                value: "${HTTP_SCHEMA}://${VANITY_URL}/api/docman/"
               - name: DOCUMENT_MANAGER_CLIENT_SECRET
                 valueFrom:
                   secretKeyRef:
@@ -197,7 +197,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     key: JWT_WELL_KNOWN_CONFIG
-                    name: "keycloak" 
+                    name: "keycloak"
               - name: KEYCLOAK_TOKEN_URL
                 valueFrom:
                   secretKeyRef:
@@ -208,10 +208,10 @@ objects:
                   secretKeyRef:
                     key: VERIFIABLE_CREDENTIAL_API_KEY
                     name: "verifiable-credential-secrets"
-              - name: VERIFIABLE_CREDENTIAL_URL
+              - name: VERIFIABLE_CREDENTIAL_API_URL
                 valueFrom:
                   secretKeyRef:
-                    key: VERIFIABLE_CREDENTIAL_URL
+                    key: VERIFIABLE_CREDENTIAL_API_URL
                     name: "verifiable-credential-secrets"
               - name: VERIFIABLE_CREDENTIAL_WEBHOOK_KEY
                 valueFrom:

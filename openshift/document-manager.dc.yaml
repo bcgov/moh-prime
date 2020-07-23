@@ -149,7 +149,7 @@ objects:
                 key: database-user
                 name: "postgresql-secret"
           - name: DOCUMENT_MANAGER_URL
-            value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/"
+            value: "https://${SUFFIX}.pharmanetenrolment.gov.bc.ca/api/docman/"
           - name: FLASK_APP
             valueFrom:
               configMapKeyRef:
@@ -175,8 +175,6 @@ objects:
               configMapKeyRef:
                 key: FLASK_RUN_PORT
                 name: document-manager-backend--env-prime
-          - name: FLASK_RUN_PARAMS
-            value: "--cert=/app/certs/chained.crt --key=/app/certs/private.key"
           - name: JWT_OIDC_WELL_KNOWN_CONFIG
             valueFrom:
               secretKeyRef:
@@ -191,17 +189,10 @@ objects:
           volumeMounts:
           - mountPath: /app/
             name: ${NAME}${SUFFIX}-pvc
-          - mountPath: /app/certs
-            name: vanity-tls-certs
-            readOnly: true
         restartPolicy: Always
         volumes:
         - name: ${NAME}${SUFFIX}-pvc
           emptyDir: {}
-        - name: vanity-tls-certs
-          secret:
-            defaultMode: 420
-            secretName: vanity-tls-certificate
     test: false
     triggers:
     - type: ConfigChange
@@ -300,8 +291,6 @@ objects:
             configMapKeyRef:
               key: FLASK_RUN_PORT
               name: document-manager-backend--env-prime
-        - name: FLASK_RUN_PARAMS
-          value: "--cert=/app/certs/chained.crt --key=/app/certs/private.key"
         - name: JWT_OIDC_WELL_KNOWN_CONFIG
           valueFrom:
             secretKeyRef:
@@ -310,28 +299,4 @@ objects:
       image: docker-registry.default.svc:5000/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
       name: ${NAME}${SUFFIX}-migrate
       resources: {}
-      volumeMounts:
-      - mountPath: /app/certs
-        name: vanity-tls-certs
-        readOnly: true
-    restartPolicy: OnFailure
-    volumes:
-    - name: vanity-tls-certs
-      secret:
-        defaultMode: 420
-        secretName: vanity-tls-certificate
   status: {}
-- apiVersion: v1
-  kind: Route
-  metadata:
-    name: "${NAME}${SUFFIX}"
-  spec:
-    host: "${NAME}${SUFFIX}.pharmanetenrolment.gov.bc.ca"
-    port:
-      targetPort: "${HTTP_PORT}"
-    tls:
-        insecureEdgeTerminationPolicy: Redirect
-        termination: passthrough
-    to:
-      kind: Service
-      name: "${NAME}${SUFFIX}-backend"
