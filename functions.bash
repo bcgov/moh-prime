@@ -35,7 +35,7 @@ function determineMode() {
 }
 
 function build() {
-    source ./"$2.conf"
+    source ./devops/conf/$2.conf
     echo "Building $2 ($APP_NAME$SUFFIX) to $PROJECT_PREFIX-$3..."
     buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true | wc -l)
     determineMode
@@ -58,7 +58,7 @@ function build() {
 }
 
 function deploy() {
-    source ./"$2.conf"
+    source ./devops/conf/$2.conf
     echo "Deploying $2 $APP_NAME to $3 ..."
     export deployPresent=$(oc get dc/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
     export pvcPresent=$(oc get pvc/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
@@ -77,7 +77,7 @@ function deploy() {
 }
 
 function toolbelt() {
-    source ./$2.conf
+    source ./devops/conf/$2.conf
     #OC_APP=tools
     buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true)
     MODE="apply"
