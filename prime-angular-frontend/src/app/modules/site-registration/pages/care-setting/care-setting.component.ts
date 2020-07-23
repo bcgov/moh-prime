@@ -97,7 +97,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.siteFormStateService.organizationTypeForm;
+    this.form = this.siteFormStateService.careSettingTypeForm;
   }
 
   private initForm() {
