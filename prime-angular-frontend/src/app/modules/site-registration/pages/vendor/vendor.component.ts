@@ -54,7 +54,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.siteFormStateService.site;
+      const payload = this.siteFormStateService.json;
       this.siteResource
         .updateSite(payload)
         .subscribe(() => {
