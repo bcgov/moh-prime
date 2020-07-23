@@ -12,17 +12,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
 
-export interface IConfigService {
-  practices: PracticeConfig[];
-  colleges: CollegeConfig[];
-  countries: Config<string>[];
-  jobNames: Config<number>[];
-  licenses: LicenseConfig[];
-  organizationTypes: Config<number>[];
-  provinces: ProvinceConfig[];
-  statuses: Config<number>[];
-  privilegeGroups: Config<number>[];
-  privilegeTypes: Config<number>[];
+export interface IConfigService extends Configuration {
   load(): Observable<Configuration>;
 }
 
@@ -58,7 +48,7 @@ export class ConfigService implements IConfigService {
       .sort(this.sortConfigByName());
   }
 
-  public get licenses(): LicenseConfig[] {
+  public get licenses(): LicenseWeightedConfig[] {
     return [...this.configuration.licenses]
       .sort(this.sortConfigByWeight());
   }

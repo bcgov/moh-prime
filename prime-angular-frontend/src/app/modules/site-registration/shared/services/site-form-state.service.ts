@@ -11,6 +11,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
+import { VendorConfig } from '@config/config.model';
 
 @Injectable({
   providedIn: 'root'
@@ -57,63 +58,59 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   // TODO method constructs the JSON, and attempts to adapt, should
   // adapt in only one place and separately in method
   public get json(): Site {
-    // const { organizationTypeCode } = this.organizationTypeForm.getRawValue();
-    // const { name, physicalAddress } = this.siteAddressForm.getRawValue();
-    // const businessHours = this.hoursOperationForm.getRawValue().businessDays;
-    // const vendorCode = this.vendorForm.getRawValue().vendorCode;
-    // const { remoteUsers } = this.remoteUsersForm.getRawValue();
+    // TODO clean this up
+    const { organizationTypeCode, vendorCode } = this.careSettingTypeForm.getRawValue();
+    const { physicalAddress } = this.siteAddressForm.getRawValue();
+    const businessHours = this.hoursOperationForm.getRawValue().businessDays;
+    const { remoteUsers } = this.remoteUsersForm.getRawValue();
 
-    // const [
-    //   administratorPharmaNet,
-    //   privacyOfficer,
-    //   technicalSupport
-    // ] = [
-    //   this.administratorPharmaNetForm.getRawValue(),
-    //   this.privacyOfficerForm.getRawValue(),
-    //   this.technicalSupportForm.getRawValue()
-    // ].map((party: Party) => {
-    //   if (!party.firstName) {
-    //     party = null;
-    //   } else if (!party.physicalAddress.street) {
-    //     party.physicalAddress = null;
-    //   }
+    const [
+      administratorPharmaNet,
+      privacyOfficer,
+      technicalSupport
+    ] = [
+      this.administratorPharmaNetForm.getRawValue(),
+      this.privacyOfficerForm.getRawValue(),
+      this.technicalSupportForm.getRawValue()
+    ].map((party: Party) => {
+      if (!party.firstName) {
+        party = null;
+      } else if (!party.physicalAddress.street) {
+        party.physicalAddress = null;
+      }
 
-    //   return party;
-    // });
+      return party;
+    });
 
-    // Includes site and location related keys to uphold relationships, and
-    // allow for updates to a site. Keys not for update have been omitted
-    // and the type enforced
+    // Includes site related keys to uphold relationships, and allow for updates
+    // to a site. Keys not for update have been omitted and the type enforced
     return {
-      // id: this.siteId,
-      // provisionerId: this.provisionerId,
-      // // organizationTypeCode,
-      // // provisioner (N/A)
-      // locationId: this.locationId,
-      // location: {
-      //   id: this.locationId,
-      //   organizationId: this.organizationId,
-      //   // TODO set on organization and copied to location, but why?
-      //   // TODO not going to work as they expect regarding site name
-      //   // doingBusinessAs,
-      //   name,
-      //   physicalAddressId: physicalAddress?.id,
-      //   physicalAddress,
-      //   businessHours,
-      //   administratorPharmaNetId: administratorPharmaNet?.id,
-      //   administratorPharmaNet,
-      //   privacyOfficerId: privacyOfficer?.id,
-      //   privacyOfficer,
-      //   technicalSupportId: technicalSupport?.id,
-      //   technicalSupport
-      // },
-      // vendorCode,
-      // remoteUsers,
-
-      // TODO pec not implemented
+      id: this.siteId,
+      organizationId: this.organizationId,
+      // organization (N/A)
+      provisionerId: this.provisionerId,
+      // provisioner (N/A)
+      organizationTypeCode,
+      // Only using single vendors for now
+      siteVendors: [{
+        siteId: this.siteId,
+        vendorCode
+      }],
+      // businessLicenceDocuments (N/A)
+      physicalAddressId: physicalAddress?.id,
+      physicalAddress,
+      businessHours,
+      remoteUsers,
+      administratorPharmaNetId: administratorPharmaNet?.id,
+      administratorPharmaNet,
+      privacyOfficerId: privacyOfficer?.id,
+      privacyOfficer,
+      technicalSupportId: technicalSupport?.id,
+      technicalSupport,
       // completed (N/A)
       // approvedDate (N/A)
       // submittedDate (N/A)
+      // pec (N/A)
     } as Site; // Enforced type
   }
 
@@ -234,16 +231,11 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
   private buildCareSettingTypeForm(code: number = null): FormGroup {
     return this.fb.group({
-      // vendorCode: [
-      //   0,
-      //   // TODO can't be required since 0 is considered valid
-      //   // TODO can't be made null due to issues updating the site
-      //   // TODO make required and not 0 validator
-      //   // [Validators.required]
-      //   // [Validators.pattern(`[1-${this.configService.vendors.length}]{1}`)]
-      // ],
-      // TODO update to be care setting type code
-      organizationTypeCode: [code, [Validators.required]]
+      organizationTypeCode: [code, [Validators.required]],
+      vendorCode: [
+        0,
+        [FormControlValidators.requiredTruthful]
+      ],
     });
   }
 
