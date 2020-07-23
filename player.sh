@@ -2,7 +2,7 @@
 source project.conf
 source functions.bash
 source tests.bash
-rm -fr !("."|"openshift")
+find . -type d ! -name openshift -delete
 
 case "$1" in
     build)
