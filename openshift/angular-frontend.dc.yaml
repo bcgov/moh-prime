@@ -71,7 +71,7 @@ objects:
           - name: REDIRECT_URL
             value: "${REDIRECT_URL}"
           - name: DOCUMENT_MANAGER_URL
-            value: "https://${VANITY_URL}/api/docman/"
+            value: "https://${VANITY_URL}/api/docman"
           - name: KEYCLOAK_CLIENT_ID
             valueFrom:
               secretKeyRef:
