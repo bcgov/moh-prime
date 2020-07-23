@@ -45,18 +45,22 @@ namespace Prime.Services
 
         public async Task<int> CreateOrganizationAsync(Party signingAuthority)
         {
+
             if (signingAuthority == null)
             {
                 throw new ArgumentNullException(nameof(signingAuthority), "Could not create a site, the passed in Party cannot be null.");
             }
 
-            var partyExists = await _partyService.PartyExistsAsync(signingAuthority.Id);
-            var signingAuthorityId = signingAuthority.Id;
+            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
+
+            var partyExists = await _partyService.PartyUserIdExistsAsync(userId);
 
             if (!partyExists)
             {
-                signingAuthorityId = await _partyService.CreatePartyAsync(signingAuthority);
+                await _partyService.CreatePartyAsync(signingAuthority);
             }
+
+            signingAuthority = await _partyService.GetPartyForUserIdAsync(userId);
 
             var organizations = await GetOrganizationsAsync(signingAuthority.Id);
             if (organizations.Count() != 0)
@@ -65,7 +69,7 @@ namespace Prime.Services
             }
 
             var organization = new Organization
-            { SigningAuthorityId = signingAuthorityId };
+            { SigningAuthorityId = signingAuthority.Id };
 
             _context.Organizations.Add(organization);
 
@@ -75,7 +79,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create Organization.");
             }
 
-            await _businessEventService.CreateOrganizationEventAsync(organization.Id, signingAuthorityId, "Organization Created");
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, signingAuthority.Id, "Organization Created");
 
             return organization.Id;
         }
