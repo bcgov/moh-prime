@@ -11,6 +11,10 @@ namespace Prime.Models
         [Key]
         public int Code { get; set; }
 
+        public int OrganizationTypeCode { get; set; }
+
+        public OrganizationType OrganizationType { get; set; }
+
         public string Name { get; set; }
 
         [JsonIgnore]
