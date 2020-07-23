@@ -9,15 +9,15 @@ namespace Prime.Services.Clients
     /// </summary>
     public class DummyCollegeLicenceClient : ICollegeLicenceClient
     {
-        public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification cert)
+        public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
-            if (cert.LicenseNumber == "error")
+            if (certification.LicenseNumber == "error")
             {
                 throw new PharmanetCollegeApiException();
             }
 
             int parsed;
-            if (!Int32.TryParse(cert.LicenseNumber, out parsed) || parsed < 1 || parsed > 11)
+            if (!Int32.TryParse(certification.LicenseNumber, out parsed) || parsed < 1 || parsed > 11)
             {
                 return Task.FromResult<PharmanetCollegeRecord>(null);
             }

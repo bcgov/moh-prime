@@ -1,12 +1,10 @@
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("BusinessLicence")]
-    public class BusinessLicence : BaseDocumentUpload
+    [Table("BusinessLicenceDocument")]
+    public class BusinessLicenceDocument : BaseDocumentUpload
     {
         public int SiteId { get; set; }
 

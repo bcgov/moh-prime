@@ -2,7 +2,10 @@
 @model Site
 
 @* <partial name="../Account/_PartialName.cshtml" /> *@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous">
 
 <style>
 
@@ -14,7 +17,7 @@
   }
 
   h1, h2, h3, h4, h5, span {
-    font-family: 'Roboto', 'Helvetica Neue', 'sans-serif';
+    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
   }
 
 </style>
@@ -67,11 +70,11 @@
   @* Business Licences *@
   <h2 class="mb-2">Business Licences</h2>
 
-  @foreach(var licence in @Model.BusinessLicences)
+  @foreach(var licence in @Model.BusinessLicenceDocuments)
   {
     <div class="ml-2 mb-2">
       <h5>Filename</h5>
-      <span class="ml-2">@licence.FileName</span>
+      <span class="ml-2">@licence.Filename</span>
     </div>
   }
 

@@ -25,7 +25,7 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create status change business event.");
-            };
+            }
 
             return businessEvent;
         }
@@ -39,7 +39,7 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create email business event.");
-            };
+            }
 
             return businessEvent;
         }
@@ -53,7 +53,7 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create note business event.");
-            };
+            }
 
             return businessEvent;
         }
@@ -67,7 +67,7 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create admin action business event.");
-            };
+            }
 
             return businessEvent;
         }
@@ -81,7 +81,7 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create admin view business event.");
-            };
+            }
 
             return businessEvent;
         }
@@ -95,7 +95,7 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create enrollee business event.");
-            };
+            }
 
             return businessEvent;
         }
@@ -109,7 +109,7 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create site business event.");
-            };
+            }
 
             return businessEvent;
         }
@@ -136,7 +136,7 @@ namespace Prime.Services
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not create organization business event.");
-            };
+            }
 
             return businessEvent;
         }

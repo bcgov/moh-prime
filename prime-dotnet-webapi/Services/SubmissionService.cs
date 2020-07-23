@@ -10,13 +10,12 @@ using Appccelerate.StateMachine.AsyncMachine;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
+using Microsoft.Extensions.Logging;
 
 namespace Prime.Services
 {
     public class SubmissionService : BaseService, ISubmissionService
     {
-        private static string GPID_CHAR_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
-        private static int GPID_LENGTH = 20;
         private readonly IAccessTermService _accessTermService;
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IBusinessEventService _businessEventService;
@@ -25,8 +24,11 @@ namespace Prime.Services
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IVerifiableCredentialService _verifiableCredentialService;
         private readonly IPrivilegeService _privilegeService;
+        private readonly ILogger _logger;
 
-        public SubmissionService(ApiDbContext context, IHttpContextAccessor httpContext,
+        public SubmissionService(
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
             IAccessTermService accessTermService,
             ISubmissionRulesService submissionRulesService,
             IBusinessEventService businessEventService,
@@ -34,7 +36,8 @@ namespace Prime.Services
             IEnrolleeService enrolleeService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IVerifiableCredentialService verifiableCredentialService,
-            IPrivilegeService privilegeService)
+            IPrivilegeService privilegeService,
+            ILogger<SubmissionService> logger)
             : base(context, httpContext)
         {
             _accessTermService = accessTermService;
@@ -45,6 +48,7 @@ namespace Prime.Services
             _enroleeProfileVersionService = enrolleeProfileVersionService;
             _verifiableCredentialService = verifiableCredentialService;
             _privilegeService = privilegeService;
+            _logger = logger;
         }
 
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeProfileViewModel updatedProfile)
@@ -75,7 +79,14 @@ namespace Prime.Services
             // TODO when/where should a new credential be issued?
             // TODO check for an active connection
             // TODO check for issued credential
-            await _verifiableCredentialService.CreateConnectionAsync(enrollee);
+            try
+            {
+                await _verifiableCredentialService.CreateConnectionAsync(enrollee);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error occurred attempting to create a connection invitation through the Verifiable Credential agent: ", ex);
+            }
 
             await this.ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();
@@ -112,27 +123,6 @@ namespace Prime.Services
                 .SingleAsync(e => e.Id == enrolleeId);
 
             enrollee.AlwaysManual = alwaysManual;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateNonCompliantGPIDs()
-        {
-            var enrollees = await _enrolleeService.GetEnrolleesAsync();
-
-            foreach (var enrollee in enrollees)
-            {
-                if (!string.IsNullOrWhiteSpace(enrollee.GPID))
-                {
-                    bool valid = enrollee.GPID.All(s => GPID_CHAR_SET.Contains(s)) && enrollee.GPID.Length == GPID_LENGTH;
-
-                    if (!valid)
-                    {
-                        enrollee.GPID = null;
-                        await this.SetGpid(enrollee);
-                    }
-                }
-            }
-
             await _context.SaveChangesAsync();
         }
 
@@ -231,8 +221,10 @@ namespace Prime.Services
         private static string GenerateGpid()
         {
             Random r = new Random();
+            int length = 20;
+            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
 
-            IEnumerable<char> chars = Enumerable.Repeat(GPID_CHAR_SET, GPID_LENGTH).Select(s => s[r.Next(s.Length)]);
+            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
 
             return new string(chars.ToArray());
         }

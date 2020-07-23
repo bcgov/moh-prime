@@ -14,6 +14,8 @@ export class AdjudicationRoutes {
   public static SITE_REGISTRATION = 'site-registration';
   public static SITE_ADJUDICATION = 'site-adjudication';
 
+  public static ORGANIZATION_INFORMATION = 'organization-information';
+
   public static MODULE_PATH = AdjudicationRoutes.ADJUDICATION;
 
   public static routePath(route: string): string {

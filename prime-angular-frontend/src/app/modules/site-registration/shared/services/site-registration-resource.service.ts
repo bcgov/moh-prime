@@ -15,7 +15,7 @@ import { BusinessDay } from '@lib/modules/business-hours/models/business-day.mod
 
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
-import { BusinessLicence } from '../models/business-licence.model';
+import { BusinessLicenceDocument } from '../models/business-licence-document.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -204,8 +204,8 @@ export class SiteRegistrationResource {
       );
   }
 
-  public createBusinessLicence(siteId: number, documentGuid: string, fileName: string): Observable<string> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid, fileName });
+  public createBusinessLicence(siteId: number, documentGuid: string, filename: string): Observable<string> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid, filename });
     return this.apiResource.post<string>(`sites/${siteId}/business-licence`, { siteId }, params)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
@@ -218,10 +218,10 @@ export class SiteRegistrationResource {
       );
   }
 
-  public getBusinesssLicences(siteId: number): Observable<BusinessLicence[]> {
-    return this.apiResource.get<BusinessLicence[]>(`sites/${siteId}/business-licence`)
+  public getBusinesssLicences(siteId: number): Observable<BusinessLicenceDocument[]> {
+    return this.apiResource.get<BusinessLicenceDocument[]>(`sites/${siteId}/business-licence`)
       .pipe(
-        map((response: ApiHttpResponse<BusinessLicence[]>) => response.result),
+        map((response: ApiHttpResponse<BusinessLicenceDocument[]>) => response.result),
         tap(() => this.toastService.openSuccessToast('Business licences Retrieved')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Business Licence could not be Retrieved');

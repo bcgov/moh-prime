@@ -163,8 +163,8 @@ export class OrganizationResource {
       );
   }
 
-  public addSignedAgreement(organizationId: number, documentGuid: string, fileName: string): Observable<string> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid, fileName });
+  public addSignedAgreement(organizationId: number, documentGuid: string, filename: string): Observable<string> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid, filename });
     return this.apiResource.post<string>(`organizations/${organizationId}/signed-agreement`, { organizationId }, params)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),

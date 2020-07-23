@@ -34,6 +34,9 @@ case "$1" in
     fsparsify)
         sparsify $@
         ;;
+    notifyGitHub)
+        notifyGitHub $@
+        ;;
     *)
     echo "You\'re doing it wrong..."
 esac
