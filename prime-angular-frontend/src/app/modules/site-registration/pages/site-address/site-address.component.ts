@@ -119,7 +119,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     // TODO cannot set form each time the view is loaded when updating
     this.siteFormStateService.setForm(site, true);
 
-    this.busy = this.organizationResource.getOrganizationById(site.location.organizationId)
+    this.busy = this.organizationResource.getOrganizationById(site.organizationId)
       .pipe(
         map((organization: Organization) => {
           this.locationNames.push({

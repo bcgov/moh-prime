@@ -37,7 +37,7 @@ export class SiteResource {
         // TODO split out into proper adapter
         map((sites: Site[]) => {
           sites.map((site: Site) => {
-            site.location.businessHours = site.location.businessHours.map((businessDay: BusinessDay) => {
+            site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
               businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
               businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
 
@@ -66,7 +66,7 @@ export class SiteResource {
         // TODO split out into proper adapter
         map((sites: Site[]) => {
           sites.map((site: Site) => {
-            site.location.businessHours = site.location.businessHours.map((businessDay: BusinessDay) => {
+            site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
               businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
               businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
 
@@ -94,7 +94,7 @@ export class SiteResource {
         map((response: ApiHttpResponse<Site>) => response.result),
         // TODO split out into proper adapter
         map((site: Site) => {
-          site.location.businessHours = site.location.businessHours.map((businessDay: BusinessDay) => {
+          site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
             businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
             businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
 
@@ -133,8 +133,8 @@ export class SiteResource {
 
   public updateSite(site: Site, isCompleted?: boolean): NoContent {
     // TODO separate this out into a proper adapter
-    if (site.location.businessHours?.length) {
-      site.location.businessHours = site.location.businessHours
+    if (site.businessHours?.length) {
+      site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
           if (businessDay.startTime === null && businessDay.endTime === null) {
             businessDay.startTime = '0';
@@ -145,7 +145,7 @@ export class SiteResource {
           return businessDay;
         });
     } else {
-      site.location.businessHours = null;
+      site.businessHours = null;
     }
 
     const params = this.apiResourceUtilsService.makeHttpParams({ isCompleted });

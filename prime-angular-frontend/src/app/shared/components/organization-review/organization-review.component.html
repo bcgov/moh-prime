@@ -91,23 +91,3 @@
   </app-enrollee-property>
 
 </section>
-
-<section class="mb-4">
-
-  <app-page-subheader2>
-    <ng-container appPageSubheader2Title>Organization Type</ng-container>
-
-    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
-            mat-icon-button
-            matTooltip="Edit Organization Type"
-            (click)="onRoute(SiteRoutes.CARE_SETTING)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader2>
-
-  <app-enrollee-property title="Organization Type"
-                         [makeBold]="true">
-    {{ organization?.organizationTypeCode | configCode: 'organizationTypes' | default }}
-  </app-enrollee-property>
-
-</section>

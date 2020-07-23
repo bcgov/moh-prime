@@ -25,9 +25,9 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public ngOnInit(): void { }
 
   public getOrganizationAgreement() {
-    this.organizationResource.getOrganizationById(this.site.location.organizationId).subscribe((organization: Organization) => {
+    this.organizationResource.getOrganizationById(this.site.organizationId).subscribe((organization: Organization) => {
       if (organization.signedAgreementDocuments.length > 0) {
-        this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.site.location.organizationId)
+        this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.site.organizationId)
           .subscribe((token: string) => {
             this.utilsService.downloadToken(token);
           });

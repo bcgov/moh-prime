@@ -4,9 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, from, EMPTY } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
+import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { AddressPipe } from '@shared/pipes/address.pipe';
+import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { User } from '@auth/shared/models/user.model';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Party } from '@registration/shared/models/party.model';
@@ -38,7 +41,10 @@ export class SiteManagementComponent implements OnInit {
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService
+    private siteFormStateService: SiteFormStateService,
+    private fullnamePipe: FullnamePipe,
+    private addressPipe: AddressPipe,
+    private configCodePipe: ConfigCodePipe
   ) {
     this.title = 'Site Management';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -51,20 +57,18 @@ export class SiteManagementComponent implements OnInit {
     this.createOrganization();
   }
 
-  public viewOrganization(organizationId: number) {
-    const organization = this.organizations.find(o => o.id === organizationId);
+  public viewOrganization(organization: Organization) {
     const routePath = (!organization.completed)
       ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
       : []; // Defaults to overview
-    this.routeUtils.routeRelativeTo([organizationId, ...routePath]);
+    this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
   }
 
-  public viewAgreement(organizationId: number) {
-    const organization = this.organizations.find(o => o.id === organizationId);
-    const routePath = (!organization.signedAgreementDocuments)
+  public viewAgreement(organization: Organization) {
+    const routePath = (organization.signedAgreementDocuments)
       ? [SiteRoutes.ORGANIZATION_AGREEMENT]
       : []; // Defaults to overview
-    this.routeUtils.routeRelativeTo([organizationId, ...routePath]);
+    this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
   }
 
   public addSite(organizationId: number) {
@@ -72,36 +76,31 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public viewSite(site: Site) {
-    // const routePath = (site.completed)
-    //   ? [site.organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
-    //   : [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
-    // this.routeUtils.routeRelativeTo(routePath);
+    const routePath = (site.completed)
+      ? [site.organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
+      : [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public viewSiteRemoteUsers(site: Site) {
     if (site.completed) {
-      // const routePath = [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.REMOTE_USERS];
-      // this.routeUtils.routeRelativeTo(routePath);
+      const routePath = [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.REMOTE_USERS];
+      this.routeUtils.routeRelativeTo(routePath);
     }
   }
 
-  // TODO send in the organization as a param
-  // TODO add default value if none provided for pipe if a global value for all isn't sufficient
-  public getOrganizationProperties() {
+  public getOrganizationProperties(organization: Organization) {
     return [
-      { key: 'Signing Authority', value: null },
-      { key: 'Organization Name', value: null }
+      { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
+      { key: 'Organization Name', value: organization.name }
     ];
   }
 
-  // TODO send in the site as a param
-  // TODO add default value if none provided for pipe if a global value for all isn't sufficient
-  public getSiteProperties() {
+  public getSiteProperties(site: Site) {
     return [
-      { key: 'Case Setting', value: null },
-      { key: 'Site Address', value: null },
-      // TODO display vendor name using config
-      { key: 'Vendor', value: null }
+      { key: 'Case Setting', value: this.configCodePipe.transform(site.organizationTypeCode, 'organizationTypes') },
+      { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
+      { key: 'Vendor', value: this.configCodePipe.transform(site.vendorCode, 'vendor') }
     ];
   }
 

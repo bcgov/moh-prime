@@ -44,7 +44,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   public setForm(site: Site, forcePatch: boolean = false) {
     // Store required site identifiers not captured in forms
     this.siteId = site.id;
-    this.organizationId = site.location.organizationId;
+    this.organizationId = site.organizationId;
     this.provisionerId = site.provisionerId;
 
     super.setForm(site, forcePatch);
@@ -162,16 +162,14 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     //   this.vendorForm.patchValue({ vendorCode: site.vendorCode });
     // }
 
-    this.siteAddressForm.get('name').patchValue(site.location.name);
-
-    if (site.location.physicalAddress) {
-      this.siteAddressForm.get('physicalAddress').patchValue(site.location.physicalAddress);
+    if (site.physicalAddress) {
+      this.siteAddressForm.get('physicalAddress').patchValue(site.physicalAddress);
     }
 
-    if (site.location.businessHours?.length) {
+    if (site.businessHours?.length) {
       const array = this.hoursOperationForm.get('businessDays') as FormArray;
       array.clear(); // Clear out existing indices
-      this.formUtilsService.formArrayPush(array, site.location.businessHours);
+      this.formUtilsService.formArrayPush(array, site.businessHours);
     }
 
     if (site.remoteUsers?.length) {
@@ -192,9 +190,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
     // TODO duplicated until services are completely split apart
     [
-      [this.administratorPharmaNetForm, site.location.administratorPharmaNet],
-      [this.privacyOfficerForm, site.location.privacyOfficer],
-      [this.technicalSupportForm, site.location.technicalSupport]
+      [this.administratorPharmaNetForm, site.administratorPharmaNet],
+      [this.privacyOfficerForm, site.privacyOfficer],
+      [this.technicalSupportForm, site.technicalSupport]
     ]
       .filter(([formGroup, data]: [FormGroup, Party]) => data)
       .forEach(([formGroup, data]: [FormGroup, Party]) => {

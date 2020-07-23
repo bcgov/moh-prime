@@ -11,9 +11,9 @@
     </button>
   </app-page-subheader>
 
-  <app-enrollee-property title="Name">
-    {{ site?.location?.name | default }}
-  </app-enrollee-property>
+  <!-- <app-enrollee-property title="Name">
+    {{ site?.name | default }}
+  </app-enrollee-property> -->
 
 </section>
 
@@ -31,23 +31,23 @@
   </app-page-subheader>
 
   <app-enrollee-property title="Address">
-    {{ site?.location?.physicalAddress?.street | default }}
+    {{ site?.physicalAddress?.street | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="City">
-    {{ site?.location?.physicalAddress?.city | default }}
+    {{ site?.physicalAddress?.city | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Province">
-    {{ site?.location?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+    {{ site?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Postal Code">
-    {{ site?.location?.physicalAddress?.postal | postal | default }}
+    {{ site?.physicalAddress?.postal | postal | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Country">
-    {{ site?.location?.physicalAddress?.countryCode | configCode: 'countries' | default }}
+    {{ site?.physicalAddress?.countryCode | configCode: 'countries' | default }}
   </app-enrollee-property>
 
 </section>
@@ -89,7 +89,7 @@
     </button>
   </app-page-subheader>
 
-  <ng-container *ngFor="let businessDay of site?.location?.businessHours">
+  <ng-container *ngFor="let businessDay of site?.businessHours">
     <app-enrollee-property [title]="businessDay.day | weekday">
       <ng-container *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
         {{ businessDay.startTime | replace: ':00:00' : ':00' }} to {{ businessDay.endTime | replace: ':00:00' : ':00' }}
@@ -185,7 +185,7 @@
     </button>
   </app-page-subheader>
 
-  <app-party-review [party]="site?.location?.administratorPharmaNet"></app-party-review>
+  <app-party-review [party]="site?.administratorPharmaNet"></app-party-review>
 
 </section>
 
@@ -202,7 +202,7 @@
     </button>
   </app-page-subheader>
 
-  <app-party-review [party]="site?.location?.privacyOfficer"></app-party-review>
+  <app-party-review [party]="site?.privacyOfficer"></app-party-review>
 
 </section>
 
@@ -218,6 +218,6 @@
     </button>
   </app-page-subheader>
 
-  <app-party-review [party]="site?.location?.technicalSupport"></app-party-review>
+  <app-party-review [party]="site?.technicalSupport"></app-party-review>
 
 </section>

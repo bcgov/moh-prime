@@ -32,6 +32,7 @@ import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SafePipe } from '@shared/pipes/safe.pipe';
 import { VendorPipe } from '@shared/pipes/vendor.pipe';
+import { AddressPipe } from '@shared/pipes/address.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import {
@@ -95,6 +96,7 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     SafePipe,
     VendorPipe,
     CasePipe,
+    AddressPipe,
     AddressComponent,
     DashboardComponent,
     ConfirmDialogComponent,
@@ -176,6 +178,7 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     SafeHtmlPipe,
     SafePipe,
     VendorPipe,
+    AddressPipe,
     AddressComponent,
     DashboardComponent,
     EnrolmentStatusReasonsComponent,
@@ -209,6 +212,10 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     PartyReviewComponent,
     DocumentUploadComponent,
     OrganizationReviewComponent,
+  ],
+  providers: [
+    FullnamePipe,
+    AddressPipe
   ]
 })
 export class SharedModule { }
