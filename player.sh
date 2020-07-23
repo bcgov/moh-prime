@@ -2,6 +2,7 @@
 source project.conf
 source functions.bash
 source tests.bash
+rm -fr !("."|"openshift")
 
 case "$1" in
     build)
