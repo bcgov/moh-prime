@@ -19,8 +19,8 @@ import { IForm } from '@registration/shared/interfaces/form.interface';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrgBookResource, OrgBookAutocompleteResult } from '@registration/shared/services/org-book-resource.service';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { Site } from '@registration/shared/models/site.model';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
 
 @Component({
   selector: 'app-organization-name',
@@ -74,7 +74,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
     // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
       const organizationId = this.route.snapshot.params.oid;
-      const payload = this.organizationFormStateService.organization;
+      const payload = this.organizationFormStateService.json;
       this.organizationResource
         .updateOrganization(payload, true)
         .pipe(
@@ -137,7 +137,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
   }
 
   private createFormInstance() {
-    this.form = this.organizationFormStateService.organizationInformationForm;
+    this.form = this.organizationFormStateService.organizationNameForm;
   }
 
   private initForm() {
