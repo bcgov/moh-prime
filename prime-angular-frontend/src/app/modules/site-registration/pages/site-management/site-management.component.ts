@@ -78,7 +78,7 @@ export class SiteManagementComponent implements OnInit {
   public viewSite(site: Site) {
     const routePath = (site.completed)
       ? [site.organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
-      : [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
+      : [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING];
     this.routeUtils.routeRelativeTo(routePath);
   }
 

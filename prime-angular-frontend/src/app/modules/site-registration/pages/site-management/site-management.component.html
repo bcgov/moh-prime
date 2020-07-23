@@ -83,7 +83,8 @@
       <mat-card-actions>
         <button mat-stroked-button
                 type="button"
-                color="primary">
+                color="primary"
+                [disabled]="!site.remoteUsers.length">
           Update Remote Practitioners
         </button>
       </mat-card-actions>
@@ -134,6 +135,7 @@
         <span>View/Update Site Information</span>
       </button>
       <button mat-menu-item
+              [disabled]="!site.remoteUsers.length"
               (click)="viewSiteRemoteUsers(site)">
         <span>View/Update Remote Practitioners</span>
       </button>
