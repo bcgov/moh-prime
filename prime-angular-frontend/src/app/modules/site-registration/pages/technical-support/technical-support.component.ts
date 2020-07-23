@@ -98,7 +98,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   }
 
   public isSameAs() {
-    return this.site.provisioner.userId === this.site.location.technicalSupport?.userId ||
+    return this.site.provisioner.userId === this.site.technicalSupport?.userId ||
       this.site.provisioner.userId === this.form.get('userId').value;
   }
 

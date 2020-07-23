@@ -105,7 +105,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   }
 
   public isSameAs() {
-    return this.site.provisioner.userId === this.site.location.administratorPharmaNet?.userId ||
+    return this.site.provisioner.userId === this.site.administratorPharmaNet?.userId ||
       this.site.provisioner.userId === this.form.get('userId').value;
   }
 

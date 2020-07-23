@@ -1,7 +1,7 @@
 <app-page [busy]="busy">
   <app-page-header>{{ title }}</app-page-header>
 
-  <div *ngIf="hasSubmittedSite || true"
+  <div *ngIf="hasSubmittedSite"
        class="alert-message">
     <app-alert type="info">
       <ng-container #alertContent
@@ -12,67 +12,84 @@
     </app-alert>
   </div>
 
-  <mat-card class="has-hover">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon color="primary">business</mat-icon>
-      </div>
-      <mat-card-title>Organization Information</mat-card-title>
-      <!-- TODO pass organization through to the menu -->
-      <ng-container [ngTemplateOutlet]="organizationMenu"
-                    [ngTemplateOutletContext]="{ }"></ng-container>
-    </mat-card-header>
-    <mat-card-content>
-      <ng-container *ngFor="let prop of getOrganizationProperties()"
-                    [ngTemplateOutlet]="property"
-                    [ngTemplateOutletContext]="{ property: prop }">
-      </ng-container>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-stroked-button
-              type="button"
-              color="primary"
-              (click)="addOrganization()">
-        View/Print Agreement
-      </button>
-    </mat-card-actions>
-  </mat-card>
-
-  <hr class="divider">
-
   <div class="add-site">
     <button mat-button
             type="button"
-            color="primary">
+            color="primary"
+            (click)="addOrganization()">
       <mat-icon>add</mat-icon>
-      Add Site
+      Add Organization
     </button>
   </div>
 
-  <mat-card class="has-hover">
-    <mat-card-header>
-      <div mat-card-avatar>
-        <mat-icon color="primary">store</mat-icon>
-      </div>
-      <mat-card-title>Site Information</mat-card-title>
-      <!-- TODO pass site through to the menu -->
-      <ng-container [ngTemplateOutlet]="siteMenu"
-                    [ngTemplateOutletContext]="{ }"></ng-container>
-    </mat-card-header>
-    <mat-card-content>
-      <ng-container *ngFor="let prop of getSiteProperties()"
-                    [ngTemplateOutlet]="property"
-                    [ngTemplateOutletContext]="{ property: prop }">
-      </ng-container>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-stroked-button
+  <ng-container *ngFor="let organization of organizations">
+
+    <mat-card class="has-hover">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon color="primary">business</mat-icon>
+        </div>
+        <mat-card-title>Organization Information</mat-card-title>
+        <ng-container [ngTemplateOutlet]="organizationMenu"
+                      [ngTemplateOutletContext]="{ organization: organization }"></ng-container>
+      </mat-card-header>
+      <mat-card-content>
+        <ng-container *ngFor="let prop of getOrganizationProperties(organization)"
+                      [ngTemplateOutlet]="property"
+                      [ngTemplateOutletContext]="{ property: prop }">
+        </ng-container>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-stroked-button
+                type="button"
+                color="primary"
+                [disabled]="!organization.acceptedAgreementDate">
+          View/Print Agreement
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <hr class="divider">
+
+    <div class="add-site">
+      <button mat-button
               type="button"
-              color="primary">
-        Update Remote Practitioners
+              color="primary"
+              [disabled]="!organization.completed">
+        <mat-icon>add</mat-icon>
+        Add Site
       </button>
-    </mat-card-actions>
-  </mat-card>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngFor="let site of sites">
+
+    <mat-card class="has-hover">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon color="primary">store</mat-icon>
+        </div>
+        <mat-card-title>Site Information</mat-card-title>
+        <ng-container [ngTemplateOutlet]="siteMenu"
+                      [ngTemplateOutletContext]="{ site: site }"></ng-container>
+      </mat-card-header>
+      <mat-card-content>
+        <ng-container *ngFor="let prop of getSiteProperties(site)"
+                      [ngTemplateOutlet]="property"
+                      [ngTemplateOutletContext]="{ property: prop }">
+        </ng-container>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-stroked-button
+                type="button"
+                color="primary">
+          Update Remote Practitioners
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+  </ng-container>
 
   <ng-template #property
                let-property="property">
@@ -92,18 +109,18 @@
     <mat-menu #menu="matMenu"
               aria-label="Organization actions menu">
       <button mat-menu-item
-              (click)="viewOrganization(organization.id)">
+              (click)="viewOrganization(organization)">
         <span>View/Update Organization</span>
       </button>
       <button mat-menu-item
-              (click)="viewAgreement(organization.id)">
+              [disabled]="!organization.acceptedAgreementDate"
+              (click)="viewAgreement(organization)">
         <span>View/Print Agreement</span>
       </button>
     </mat-menu>
   </ng-template>
 
   <ng-template #siteMenu
-               let-organizationId="organizationId"
                let-site="site">
     <button mat-icon-button
             [matMenuTriggerFor]="menu">
@@ -113,11 +130,11 @@
     <mat-menu #menu="matMenu"
               aria-label="Site actions menu">
       <button mat-menu-item
-              (click)="viewSite(site.id)">
+              (click)="viewSite(site)">
         <span>View/Update Site Information</span>
       </button>
       <button mat-menu-item
-              (click)="viewSiteRemoteUsers(site.id)">
+              (click)="viewSiteRemoteUsers(site)">
         <span>View/Update Remote Practitioners</span>
       </button>
     </mat-menu>

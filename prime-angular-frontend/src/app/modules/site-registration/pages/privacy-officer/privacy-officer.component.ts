@@ -102,7 +102,7 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
   }
 
   public isSameAs() {
-    return this.site.provisioner.userId === this.site.location.privacyOfficer?.userId ||
+    return this.site.provisioner.userId === this.site.privacyOfficer?.userId ||
       this.site.provisioner.userId === this.form.get('userId').value;
   }
 
