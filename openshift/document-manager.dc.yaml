@@ -190,7 +190,8 @@ objects:
         restartPolicy: Always
         volumes:
         - name: ${NAME}${SUFFIX}-pvc
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: '${NAME}${SUFFIX}-pvc'
     test: false
     triggers:
     - type: ConfigChange
