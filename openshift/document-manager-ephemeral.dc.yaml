@@ -198,6 +198,7 @@ objects:
       io.kompose.service: ${NAME}${SUFFIX}-migrate
     name: ${NAME}${SUFFIX}-migrate
   spec:
+    restartPolicy: Never
     containers:
     - command:
         - flask
@@ -277,6 +278,5 @@ objects:
               name: "keycloak"
       image: docker-registry.default.svc:5000/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
       name: ${NAME}${SUFFIX}-migrate
-      restartPolicy: Never
       resources: {}
   status: {}
