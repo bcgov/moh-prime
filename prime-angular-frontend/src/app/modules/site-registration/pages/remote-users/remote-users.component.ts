@@ -57,6 +57,7 @@ export class RemoteUsersComponent implements OnInit {
       this.hasNoRemoteUserError = false;
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
+      // TODO find out how to do this without using closures
       let acceptedOrgAgreement = false;
 
       this.organizationResource
@@ -84,16 +85,17 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['../', SiteRoutes.TECHNICAL_SUPPORT]);
+    this.routeUtils.routeRelativeTo([SiteRoutes.TECHNICAL_SUPPORT]);
   }
 
   public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
     if (!hasSignedOrgAgreement) {
+      // Provide site for redirection after accepting the organization agreement
       this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.SITE_MANAGEMENT), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT], {
         queryParams: { siteId: this.route.snapshot.params.sid }
       });
     } else {
-      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
+      this.routeUtils.routeRelativeTo([SiteRoutes.SITE_REVIEW]);
     }
   }
 
