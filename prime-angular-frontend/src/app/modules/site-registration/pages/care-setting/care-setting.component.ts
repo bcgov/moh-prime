@@ -4,7 +4,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
-import { map, tap, distinctUntilChanged, startWith } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -34,7 +34,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   public doingBusinessAsNames: string[];
   public organizationTypeConfig: Config<number>[];
   public vendorConfig: VendorConfig[];
-  public filteredVendorConfig$: Observable<VendorConfig[]>;
+  public filteredVendorConfig: VendorConfig[];
   public hasNoVendorError: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
@@ -61,7 +61,6 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteFormStateService.json;
       this.siteResource
@@ -110,23 +109,18 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    this.filteredVendorConfig$ = this.organizationTypeCode.valueChanges
+    this.organizationTypeCode.valueChanges
       .pipe(
-        startWith(0),
-        // pairwise(),
-        distinctUntilChanged(),
-        tap((value) => console.log(value)),
         map((organizationTypeCode: number) =>
           this.vendorConfig.filter(
             (vendorConfig: VendorConfig) =>
               vendorConfig.organizationTypeCode === organizationTypeCode
           )
         )
-      );
+      ).subscribe((vendors: VendorConfig[]) => this.filteredVendorConfig = vendors);
 
-    // TODO structured to match in all site views
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteFormStateService.setForm(site);
+    this.siteFormStateService.setForm(site, true);
   }
 }

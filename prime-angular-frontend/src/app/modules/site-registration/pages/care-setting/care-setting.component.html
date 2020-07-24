@@ -26,6 +26,9 @@
                 {{ organizationType.name }}
               </mat-option>
             </mat-select>
+            <mat-error *ngIf="organizationTypeCode.hasError('required')">
+              Required
+            </mat-error>
           </mat-form-field>
 
         </div>
@@ -39,12 +42,11 @@
       </ng-container>
     </app-page-subheader2>
 
-    <section *ngIf="true"
-             class="mb-4">
+    <section class="mb-4">
       <mat-radio-group class="radio-group"
                        formControlName="vendorCode"
                        (change)="onVendorChange()">
-        <mat-radio-button *ngFor="let vendor of filteredVendorConfig$ | async"
+        <mat-radio-button *ngFor="let vendor of filteredVendorConfig"
                           class="radio-button"
                           [value]="vendor.code">
           {{ vendor.name }}

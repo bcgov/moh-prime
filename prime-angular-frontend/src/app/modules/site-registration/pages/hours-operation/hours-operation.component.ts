@@ -52,7 +52,6 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.businessDays)) {
       this.hasNoHours = false;
 
@@ -109,10 +108,8 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO structured to match in all site views
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    // TODO cannot set form each time the view is loaded when updating
     this.siteFormStateService.setForm(site, true);
   }
 

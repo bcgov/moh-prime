@@ -123,7 +123,6 @@ export class SiteManagementComponent implements OnInit {
     this.router.navigate([], { queryParams: { submitted: null } });
   }
 
-  // TODO remove hardcoded organization index for single organization
   private initOrganizationAndSites() {
     this.busy = this.organizationResource.getOrganizations()
       .pipe(

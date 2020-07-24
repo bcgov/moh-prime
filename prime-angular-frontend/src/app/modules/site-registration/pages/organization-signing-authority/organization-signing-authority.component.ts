@@ -136,10 +136,9 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   private initForm() {
-    // TODO structured to match in all site views
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
-    this.organizationFormStateService.setForm(organization);
+    this.organizationFormStateService.setForm(organization, true);
 
     this.organization = organization;
 

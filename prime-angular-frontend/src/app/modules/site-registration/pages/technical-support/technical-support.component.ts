@@ -53,7 +53,6 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     if (isDisabled) {
       this.form.enable();
     }
-    // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
       if (isDisabled) {
         this.form.disable();
@@ -118,10 +117,8 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO structured to match in all site views
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
-    // TODO cannot set form each time the view is loaded when updating
     this.siteFormStateService.setForm(this.site, true);
 
     // TODO temporary fix to disable same as party

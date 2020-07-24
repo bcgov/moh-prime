@@ -71,7 +71,6 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
       const organizationId = this.route.snapshot.params.oid;
       const payload = this.organizationFormStateService.json;
@@ -141,10 +140,9 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO structured to match in all site views
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
-    this.organizationFormStateService.setForm(organization);
+    this.organizationFormStateService.setForm(organization, true);
 
     this.name.valueChanges
       .pipe(

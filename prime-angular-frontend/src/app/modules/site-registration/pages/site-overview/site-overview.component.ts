@@ -45,7 +45,6 @@ export class SiteOverviewComponent implements OnInit, IPage {
 
   public onSubmit() {
     const organizationId = this.route.snapshot.params.oid;
-    // TODO shouldn't come from service when spoking to save updates
     const payload = this.siteService.site;
     const data: DialogOptions = {
       title: 'Save Site',
@@ -88,6 +87,5 @@ export class SiteOverviewComponent implements OnInit, IPage {
 
   public ngOnInit() {
     this.site = this.siteService.site;
-
   }
 }

@@ -117,7 +117,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public ngOnInit(): void {
-    // TODO structured to match in all site views
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);

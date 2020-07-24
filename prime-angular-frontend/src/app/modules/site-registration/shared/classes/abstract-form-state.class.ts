@@ -163,11 +163,7 @@ export abstract class AbstractFormState<T> {
    * @description
    * Convert party JSON to form model for reactive forms.
    */
-  protected toPartyFormModel([formGroup, data]: [FormGroup, Party]) {
-    if (!data) {
-      return;
-    }
-
+  protected toPartyFormModel([formGroup, data]: [FormGroup, Party]): void {
     const { physicalAddress, mailingAddress, ...party } = data;
 
     formGroup.patchValue(party);
@@ -202,10 +198,12 @@ export abstract class AbstractFormState<T> {
       party[addressKey].id = 0;
     }
 
-    // Add the address reference ID to the party
-    party[`${addressKey}Id`] = (party[addressKey]?.id)
-      ? party[addressKey].id
-      : 0;
+    if (party) {
+      // Add the address reference ID to the party
+      party[`${addressKey}Id`] = (!!party[addressKey]?.id)
+        ? party[addressKey].id
+        : 0;
+    }
 
     return party;
   }

@@ -58,15 +58,23 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
     const { remoteUsers } = this.remoteUsersForm.getRawValue();
 
-    const [
-      administratorPharmaNet,
-      privacyOfficer,
-      technicalSupport
-    ] = [
+    console.log(
+      'TEST',
+      [
+        this.administratorPharmaNetForm.getRawValue(),
+        this.privacyOfficerForm.getRawValue(),
+        this.technicalSupportForm.getRawValue()
+      ]
+        .filter((party: Party) => party)
+    );
+
+
+    const [administratorPharmaNet, privacyOfficer, technicalSupport] = [
       this.administratorPharmaNetForm.getRawValue(),
       this.privacyOfficerForm.getRawValue(),
       this.technicalSupportForm.getRawValue()
-    ].map((party: Party) => this.toPartyJson(party));
+    ]
+      .map((party: Party) => this.toPartyJson(party));
 
     // Includes site related keys to uphold relationships, and allow for updates
     // to a site. Keys not for update have been omitted and the type enforced
@@ -176,7 +184,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       [this.administratorPharmaNetForm, site.administratorPharmaNet],
       [this.privacyOfficerForm, site.privacyOfficer],
       [this.technicalSupportForm, site.technicalSupport]
-    ].forEach((formParty: [FormGroup, Party]) => this.toPartyFormModel(formParty));
+    ]
+      .filter(([form, data]: [FormGroup, Party]) => data)
+      .forEach((formParty: [FormGroup, Party]) => this.toPartyFormModel(formParty));
   }
 
   /**
@@ -206,7 +216,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
   private buildCareSettingTypeForm(code: number = null): FormGroup {
     return this.fb.group({
-      organizationTypeCode: [code, [Validators.required]],
+      organizationTypeCode: [
+        code,
+        [Validators.required]
+      ],
       vendorCode: [
         0,
         [FormControlValidators.requiredTruthful]
@@ -328,10 +341,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       ],
       email: [
         null,
-        [
-          Validators.required,
-          FormControlValidators.email
-        ]
+        [Validators.required, FormControlValidators.email]
       ],
       physicalAddress: this.buildAddressForm({
         exclude: ['street2']

@@ -79,8 +79,7 @@ export class RemoteUsersComponent implements OnInit {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
     } else {
-      // TODO only occurs one time
-      this.routeUtils.routeRelativeTo(['../', SiteRoutes.REMOTE_USERS]);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.ORGANIZATION_AGREEMENT]);
     }
   }
 
@@ -111,7 +110,6 @@ export class RemoteUsersComponent implements OnInit {
         this.remoteUsers.updateValueAndValidity({ emitEvent: false });
       });
 
-    // TODO structured to match in all site views
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     // Inform the parent not to patch the form as there are outstanding changes
