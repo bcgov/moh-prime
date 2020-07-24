@@ -49,28 +49,28 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     // TODO temporary fix for allow submissions of disabled forms
-    // const isDisabled = this.form.disabled;
-    // if (isDisabled) {
-    //   this.form.enable();
-    // }
-    // // TODO structured to match in all site views
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   if (isDisabled) {
-    //     this.form.disable();
-    //   }
-    //   // TODO when spoking don't update
-    //   const payload = this.siteFormStateService.site;
-    //   this.siteResource
-    //     .updateSite(payload)
-    //     .subscribe(() => {
-    //       this.form.markAsPristine();
-    this.nextRoute();
-    //     });
-    // } else {
-    //   if (isDisabled) {
-    //     this.form.disable();
-    //   }
-    // }
+    const isDisabled = this.form.disabled;
+    if (isDisabled) {
+      this.form.enable();
+    }
+    // TODO structured to match in all site views
+    if (this.formUtilsService.checkValidity(this.form)) {
+      if (isDisabled) {
+        this.form.disable();
+      }
+      // TODO when spoking don't update
+      const payload = this.siteFormStateService.json;
+      this.siteResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    } else {
+      if (isDisabled) {
+        this.form.disable();
+      }
+    }
   }
 
   public onSelect(party: Party) {

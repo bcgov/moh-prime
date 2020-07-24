@@ -18,11 +18,11 @@
         <div class="col col-sm-10 py-3">
 
           <mat-form-field class="w-100">
-            <mat-label>Organization Type</mat-label>
+            <mat-label>Care Setting</mat-label>
             <mat-select formControlName="organizationTypeCode">
               <mat-option *ngFor="let organizationType of organizationTypeConfig"
                           [value]="organizationType.code"
-                          [disabled]="disableOrganization(organizationType.code)">
+                          [disabled]="disableCareSetting(organizationType.code)">
                 {{ organizationType.name }}
               </mat-option>
             </mat-select>

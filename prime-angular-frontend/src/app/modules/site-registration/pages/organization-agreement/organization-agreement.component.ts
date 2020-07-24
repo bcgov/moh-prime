@@ -56,26 +56,24 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public onSubmit() {
-    // if (this.accepted?.checked || this.hasUploadedFile) {
-    //   const organizationid = this.route.snapshot.params.oid;
-    //   const data: DialogOptions = {
-    //     title: 'Organization Agreement',
-    //     message: 'Are you sure you want to accept the Organization Agreement?',
-    //     actionText: 'Accept Organization Agreement'
-    //   };
-    //   this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-    //     .afterClosed()
-    //     .pipe(
-    //       exhaustMap((result: boolean) =>
-    //         (result)
-    //           ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
-    //           : EMPTY
-    //       )
-    //     )
-    // .subscribe(() =>
-    this.nextRoute()
-    //     );
-    // }
+    if (this.accepted?.checked || this.hasUploadedFile) {
+      const organizationid = this.route.snapshot.params.oid;
+      const data: DialogOptions = {
+        title: 'Organization Agreement',
+        message: 'Are you sure you want to accept the Organization Agreement?',
+        actionText: 'Accept Organization Agreement'
+      };
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
+              : EMPTY
+          )
+        )
+        .subscribe(() => this.nextRoute());
+    }
   }
 
   public onUpload(event: BaseDocument) {

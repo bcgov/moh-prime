@@ -37,11 +37,11 @@ export class BusinessLicenceComponent implements OnInit {
 
   public onSubmit() {
     // TODO validations temporarily turned off
-    // if (this.siteService.site.businessLicenceDocuments.length > 0 || this.uploadedFile) {
-    this.nextRoute();
-    // } else {
-    //   this.hasNoLicenceError = true;
-    // }
+    if (this.siteService.site.businessLicenceDocuments.length > 0 || this.uploadedFile) {
+      this.nextRoute();
+    } else {
+      this.hasNoLicenceError = true;
+    }
   }
 
   public onUpload(event: BaseDocument) {

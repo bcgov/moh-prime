@@ -53,19 +53,18 @@ export class RemoteUsersComponent implements OnInit {
     // TODO should we be saving remote users individually or as wholesale PUT?
     // TODO show validation message if hasRemoteUsers and remoteUsers is empty
     // TODO structured to match in all site views
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   this.hasNoRemoteUserError = false;
-    //   // TODO when spoking don't update
-    //   const payload = this.siteFormStateService.site;
-    //   this.siteResource
-    //     .updateSite(payload)
-    //     .subscribe(() => {
-    //       this.form.markAsPristine();
-    this.nextRoute();
-    //     });
-    // } else {
-    //   this.hasNoRemoteUserError = true;
-    // }
+    if (this.formUtilsService.checkValidity(this.form)) {
+      this.hasNoRemoteUserError = false;
+      const payload = this.siteFormStateService.json;
+      this.siteResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    } else {
+      this.hasNoRemoteUserError = true;
+    }
   }
 
   public onRemove(index: number) {

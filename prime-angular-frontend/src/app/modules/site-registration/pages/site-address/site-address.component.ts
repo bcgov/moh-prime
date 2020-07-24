@@ -72,16 +72,15 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     // TODO structured to match in all site views
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   // TODO when spoking don't update
-    //   const payload = this.siteFormStateService.site;
-    //   this.siteResource
-    //     .updateSite(payload)
-    //     .subscribe(() => {
-    //       this.form.markAsPristine();
-    this.nextRoute();
-    //     });
-    // }
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteFormStateService.json;
+      this.siteResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    }
   }
 
   public onBack() {

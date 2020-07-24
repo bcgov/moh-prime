@@ -85,7 +85,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     this.hasNoVendorError = false;
   }
 
-  public disableOrganization(organizationTypeCode: number): boolean {
+  public disableCareSetting(organizationTypeCode: number): boolean {
     return ![
       // Omit care setting types that are not:
       OrganizationTypeEnum.COMMUNITY_PRACTICE,
