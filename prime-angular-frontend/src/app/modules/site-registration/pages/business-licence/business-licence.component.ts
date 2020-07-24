@@ -20,10 +20,10 @@ export class BusinessLicenceComponent implements OnInit {
   public title: string;
   public routeUtils: RouteUtils;
   public businessLicenceDocuments: BusinessLicenceDocument[];
+  public hasNoBusinessLicenceError: boolean;
+  public uploadedFile: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
-  public hasNoLicenceError: boolean;
-  public uploadedFile: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -33,23 +33,25 @@ export class BusinessLicenceComponent implements OnInit {
   ) {
     this.title = 'Submit Your Business Licence';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.uploadedFile = false;
+    this.businessLicenceDocuments = [];
   }
 
   public onSubmit() {
-    // TODO validations temporarily turned off
-    if (this.siteService.site.businessLicenceDocuments.length > 0 || this.uploadedFile) {
+    if (this.businessLicenceDocuments.length || this.uploadedFile) {
       this.nextRoute();
     } else {
-      this.hasNoLicenceError = true;
+      this.hasNoBusinessLicenceError = true;
     }
   }
 
   public onUpload(event: BaseDocument) {
     const siteId = this.siteService.site.id;
     this.siteResource
-      .createBusinessLicence(siteId, event.documentGuid, event.filename).subscribe(() => {
+      .createBusinessLicence(siteId, event.documentGuid, event.filename)
+      .subscribe(() => {
         this.uploadedFile = true;
-        this.hasNoLicenceError = false;
+        this.hasNoBusinessLicenceError = false;
       });
   }
 
@@ -69,12 +71,12 @@ export class BusinessLicenceComponent implements OnInit {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
 
-    this.uploadedFile = false;
+    this.getBusinessLicences();
   }
 
   private getBusinessLicences() {
     const siteId = this.siteService.site.id;
-    return this.siteResource.getBusinessLicences(siteId)
+    this.busy = this.siteResource.getBusinessLicences(siteId)
       .subscribe((businessLicenses: BusinessLicenceDocument[]) =>
         this.businessLicenceDocuments = businessLicenses
       );

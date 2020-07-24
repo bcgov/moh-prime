@@ -11,7 +11,6 @@ import { Site } from '@registration/shared/models/site.model';
 import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
-import { VendorConfig } from '@config/config.model';
 
 @Injectable({
   providedIn: 'root'
@@ -160,6 +159,8 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     // }
 
     if (site.physicalAddress) {
+      console.log('PHYSICAL_ADDRESS', site.physicalAddress);
+
       this.siteAddressForm.get('physicalAddress').patchValue(site.physicalAddress);
     }
 
