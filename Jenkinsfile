@@ -21,6 +21,7 @@ pipeline {
             steps {
                 script {
                     checkout scm
+                    sh "./player.sh sparsify"
                 }
             }
         }
@@ -160,18 +161,10 @@ pipeline {
             }
         }
         stage('Cleanup') {
-            parallel {
-                stage('Clean Tester') {
-                    agent { label 'code-tests' }
-                    steps {
-                        sh "./player.sh sparsify"
-                    }
-                }
-                stage('Clean Master') {
-                    agent { label 'master' }
-                    steps {
-                        sh "./player.sh zap frontend"
-                    }
+             steps {
+                 agent { label 'code-tests' }
+                 script {
+                     sh "./player.sh sparsify"
                 }
             }
         }
