@@ -100,7 +100,7 @@ export class SiteManagementComponent implements OnInit {
     return [
       { key: 'Case Setting', value: this.configCodePipe.transform(site.organizationTypeCode, 'organizationTypes') },
       { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
-      { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendor') }
+      { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
   }
 
