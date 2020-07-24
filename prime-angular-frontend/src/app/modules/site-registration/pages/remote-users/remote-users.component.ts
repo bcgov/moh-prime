@@ -80,7 +80,7 @@ export class RemoteUsersComponent implements OnInit {
       this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
     } else {
       // TODO only occurs one time
-      this.routeUtils.routeRelativeTo(['../', SiteRoutes.ORGANIZATION_AGREEMENT]);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.REMOTE_USERS]);
     }
   }
 
