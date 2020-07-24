@@ -242,10 +242,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
   private buildSiteAddressForm(): FormGroup {
     return this.fb.group({
-      name: [
-        null,
-        [Validators.required]
-      ],
       physicalAddress: this.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         areDisabled: ['provinceCode', 'countryCode'],
