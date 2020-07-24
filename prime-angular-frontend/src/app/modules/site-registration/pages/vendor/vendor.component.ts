@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
 
+import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -27,7 +28,7 @@ export class VendorComponent implements OnInit, IPage, IForm {
   public form: FormGroup;
   public title: string;
   public routeUtils: RouteUtils;
-  public vendorConfig: { code: number, name: string }[];
+  public vendorConfig: Config<number>[];
   public hasNoVendorError: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;

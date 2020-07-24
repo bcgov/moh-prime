@@ -10,7 +10,7 @@
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>{{ title }}</ng-container>
         <ng-container appPageSubheader2Summary>
-          Identify the organization type (e.g. community health practice).
+          Identify the type of care setting your site operates.
         </ng-container>
       </app-page-subheader2>
 
@@ -18,32 +18,35 @@
         <div class="col col-sm-10 py-3">
 
           <mat-form-field class="w-100">
-            <mat-label>Organization Type</mat-label>
+            <mat-label>Care Setting</mat-label>
             <mat-select formControlName="organizationTypeCode">
-              <mat-option *ngFor="let organizationType of organizationTypes"
+              <mat-option *ngFor="let organizationType of organizationTypeConfig"
                           [value]="organizationType.code"
-                          [disabled]="disableOrganization(organizationType.code)">
+                          [disabled]="disableCareSetting(organizationType.code)">
                 {{ organizationType.name }}
               </mat-option>
             </mat-select>
+            <mat-error *ngIf="organizationTypeCode.hasError('required')">
+              Required
+            </mat-error>
           </mat-form-field>
 
         </div>
       </div>
     </section>
 
-    <!-- <app-page-subheader2>
-      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Vendor</ng-container>
       <ng-container appPageSubheader2Summary>
-        If you have more than one vendor, you will need to complete another site registration.
+        What PharmaNet software vendor does this site use?
       </ng-container>
     </app-page-subheader2>
 
     <section class="mb-4">
       <mat-radio-group class="radio-group"
                        formControlName="vendorCode"
-                       (change)="onChange()">
-        <mat-radio-button *ngFor="let vendor of vendorConfig"
+                       (change)="onVendorChange()">
+        <mat-radio-button *ngFor="let vendor of filteredVendorConfig"
                           class="radio-button"
                           [value]="vendor.code">
           {{ vendor.name }}
@@ -58,12 +61,13 @@
           No vendor has been chosen.
         </ng-container>
       </app-alert>
-    </section> -->
+    </section>
 
   </form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"
+                   primaryActionLabel="Save and Continue"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>
 

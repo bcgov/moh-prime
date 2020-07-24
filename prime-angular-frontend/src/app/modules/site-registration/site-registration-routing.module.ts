@@ -100,7 +100,7 @@ const routes: Routes = [
                   {
                     path: SiteRoutes.CARE_SETTING,
                     component: CareSettingComponent,
-                    canActivate: [OrganizationGuard],
+                    canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Care Setting' }
                   },

@@ -56,26 +56,25 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public onSubmit() {
-    // if (this.accepted?.checked || this.hasUploadedFile) {
-    //   const organizationid = this.route.snapshot.params.oid;
-    //   const data: DialogOptions = {
-    //     title: 'Organization Agreement',
-    //     message: 'Are you sure you want to accept the Organization Agreement?',
-    //     actionText: 'Accept Organization Agreement'
-    //   };
-    //   this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-    //     .afterClosed()
-    //     .pipe(
-    //       exhaustMap((result: boolean) =>
-    //         (result)
-    //           ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
-    //           : EMPTY
-    //       )
-    //     )
-    // .subscribe(() =>
-    this.nextRoute()
-    //     );
-    // }
+    if (this.accepted?.checked || this.hasUploadedFile) {
+      const organizationid = this.route.snapshot.params.oid;
+      const data: DialogOptions = {
+        title: 'Organization Agreement',
+        message: 'Are you sure you want to accept the Organization Agreement?',
+        actionText: 'Accept Organization Agreement'
+      };
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          // TODO mark the site as completed
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
+              : EMPTY
+          )
+        )
+        .subscribe(() => this.nextRoute());
+    }
   }
 
   public onUpload(event: BaseDocument) {
@@ -93,7 +92,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       .getUnsignedOrganizationAgreement()
       .subscribe((base64: string) => {
         const blob = this.utilsService.base64ToBlob(base64);
-        this.utilsService.downloadDocument(blob, 'Organization-Agreement')
+        this.utilsService.downloadDocument(blob, 'Organization-Agreement');
         this.hasDownloadedFile = true;
       });
   }
@@ -103,7 +102,12 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    const siteId = this.route.snapshot.queryParams.siteId;
+    if (siteId) {
+      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.SITE_REVIEW]);
+    } else {
+      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+    }
   }
 
   public showDefaultAgreement() {
@@ -119,7 +123,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public ngOnInit(): void {
-    // TODO structured to match in all site views
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);

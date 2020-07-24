@@ -4,8 +4,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { Config } from '@config/config.model';
+import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
@@ -31,8 +32,10 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   public routeUtils: RouteUtils;
   public organization: string;
   public doingBusinessAsNames: string[];
-  public organizationTypes: Config<number>[];
-  public filteredOrganizationTypes: Config<number>[];
+  public organizationTypeConfig: Config<number>[];
+  public vendorConfig: VendorConfig[];
+  public filteredVendorConfig: VendorConfig[];
+  public hasNoVendorError: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
@@ -48,7 +51,9 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   ) {
     this.title = 'Care Setting';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.organizationTypes = this.configService.organizationTypes;
+    this.organizationTypeConfig = this.configService.organizationTypes;
+    this.vendorConfig = this.configService.vendors;
+    this.hasNoVendorError = false;
   }
 
   public get organizationTypeCode(): FormControl {
@@ -56,15 +61,16 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteFormStateService.json;
       this.siteResource
-        .updateSite(payload, true)
+        .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
         });
+    } else {
+      this.hasNoVendorError = true;
     }
   }
 
@@ -76,8 +82,12 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
 
-  public disableOrganization(organizationTypeCode: number): boolean {
-    return [
+  public onVendorChange() {
+    this.hasNoVendorError = false;
+  }
+
+  public disableCareSetting(organizationTypeCode: number): boolean {
+    return ![
       // Omit care setting types that are not:
       OrganizationTypeEnum.COMMUNITY_PRACTICE,
       OrganizationTypeEnum.COMMUNITY_PHARMACIST
@@ -101,9 +111,18 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO structured to match in all site views
+    this.organizationTypeCode.valueChanges
+      .pipe(
+        map((organizationTypeCode: number) =>
+          this.vendorConfig.filter(
+            (vendorConfig: VendorConfig) =>
+              vendorConfig.organizationTypeCode === organizationTypeCode
+          )
+        )
+      ).subscribe((vendors: VendorConfig[]) => this.filteredVendorConfig = vendors);
+
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteFormStateService.setForm(site);
+    this.siteFormStateService.setForm(site, true);
   }
 }

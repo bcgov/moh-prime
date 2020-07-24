@@ -9,13 +9,13 @@
     </ng-container>
   </app-page-subheader2>
 
-  <app-document-upload (completed)="onUpload($event)"
-                       componentName="business-licence"
+  <app-document-upload componentName="business-licence"
+                       additionalApiSuffix="business-licence"
                        [multiple]="false"
-                       additionalApiSuffix="business-licence">
+                       (completed)="onUpload($event)">
   </app-document-upload>
 
-  <app-alert *ngIf="hasNoLicenceError"
+  <app-alert *ngIf="hasNoBusinessLicenceError"
              type="danger"
              icon="warning">
     <ng-container #alertContent
@@ -26,7 +26,7 @@
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"
-                   primaryActionLabel="Continue"
+                   primaryActionLabel="Save and Continue"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>
 

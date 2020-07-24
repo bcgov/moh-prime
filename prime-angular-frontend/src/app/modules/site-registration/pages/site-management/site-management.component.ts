@@ -78,15 +78,13 @@ export class SiteManagementComponent implements OnInit {
   public viewSite(site: Site) {
     const routePath = (site.completed)
       ? [site.organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
-      : [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS];
+      : [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING];
     this.routeUtils.routeRelativeTo(routePath);
   }
 
   public viewSiteRemoteUsers(site: Site) {
-    if (site.completed) {
-      const routePath = [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.REMOTE_USERS];
-      this.routeUtils.routeRelativeTo(routePath);
-    }
+    const routePath = [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.REMOTE_USERS];
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public getOrganizationProperties(organization: Organization) {
@@ -100,7 +98,7 @@ export class SiteManagementComponent implements OnInit {
     return [
       { key: 'Case Setting', value: this.configCodePipe.transform(site.organizationTypeCode, 'organizationTypes') },
       { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
-      { key: 'Vendor', value: this.configCodePipe.transform(site.vendorCode, 'vendor') }
+      { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
   }
 
@@ -123,7 +121,6 @@ export class SiteManagementComponent implements OnInit {
     this.router.navigate([], { queryParams: { submitted: null } });
   }
 
-  // TODO remove hardcoded organization index for single organization
   private initOrganizationAndSites() {
     this.busy = this.organizationResource.getOrganizations()
       .pipe(
@@ -149,6 +146,6 @@ export class SiteManagementComponent implements OnInit {
 
   private createSite(organizationId: number) {
     this.busy = this.siteResource.createSite(organizationId)
-      .subscribe((site: Site) => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS]));
+      .subscribe((site: Site) => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING]));
   }
 }

@@ -3,17 +3,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
   selector: 'app-remote-users',
@@ -35,6 +37,7 @@ export class RemoteUsersComponent implements OnInit {
     private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
+    private organizationResource: OrganizationResource,
     private formUtilsService: FormUtilsService
   ) {
     this.title = 'Practitioners Requiring Remote PharmaNet Access';
@@ -50,22 +53,30 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onSubmit() {
-    // TODO should we be saving remote users individually or as wholesale PUT?
-    // TODO show validation message if hasRemoteUsers and remoteUsers is empty
-    // TODO structured to match in all site views
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   this.hasNoRemoteUserError = false;
-    //   // TODO when spoking don't update
-    //   const payload = this.siteFormStateService.site;
-    //   this.siteResource
-    //     .updateSite(payload)
-    //     .subscribe(() => {
-    //       this.form.markAsPristine();
-    this.nextRoute();
-    //     });
-    // } else {
-    //   this.hasNoRemoteUserError = true;
-    // }
+    if (this.formUtilsService.checkValidity(this.form)) {
+      this.hasNoRemoteUserError = false;
+      const payload = this.siteFormStateService.json;
+      const organizationId = this.route.snapshot.params.oid;
+      let acceptedOrgAgreement = false;
+
+      this.organizationResource
+        .getOrganizationById(organizationId)
+        .pipe(
+          map((organization: Organization) => !!organization.acceptedAgreementDate),
+          // When the organization agreement has already been signed mark the site as completed
+          exhaustMap((hasSignedOrgAgreement: boolean) => {
+            acceptedOrgAgreement = hasSignedOrgAgreement;
+            return this.siteResource.updateSite(payload, hasSignedOrgAgreement);
+          }),
+          map(() => acceptedOrgAgreement)
+        )
+        .subscribe((hasSignedOrgAgreement: boolean) => {
+          this.form.markAsPristine();
+          this.nextRoute(organizationId, hasSignedOrgAgreement);
+        });
+    } else {
+      this.hasNoRemoteUserError = true;
+    }
   }
 
   public onRemove(index: number) {
@@ -76,12 +87,13 @@ export class RemoteUsersComponent implements OnInit {
     this.routeUtils.routeRelativeTo(['../', SiteRoutes.TECHNICAL_SUPPORT]);
   }
 
-  public nextRoute() {
-    if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
+  public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
+    if (!hasSignedOrgAgreement) {
+      this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.SITE_MANAGEMENT), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT], {
+        queryParams: { siteId: this.route.snapshot.params.sid }
+      });
     } else {
-      // TODO only occurs one time
-      this.routeUtils.routeRelativeTo(['../', SiteRoutes.ORGANIZATION_AGREEMENT]);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
     }
   }
 
@@ -112,7 +124,6 @@ export class RemoteUsersComponent implements OnInit {
         this.remoteUsers.updateValueAndValidity({ emitEvent: false });
       });
 
-    // TODO structured to match in all site views
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     // Inform the parent not to patch the form as there are outstanding changes

@@ -95,7 +95,7 @@ objects:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 value: prime-document-manager
               - name: DOCUMENT_MANAGER_URL
-                value: "${HTTP_SCHEMA}://${VANITY_URL}/api/docman/"
+                value: "https://${VANITY_URL}/api/docman/"
               - name: DOCUMENT_MANAGER_CLIENT_SECRET
                 valueFrom:
                   secretKeyRef:

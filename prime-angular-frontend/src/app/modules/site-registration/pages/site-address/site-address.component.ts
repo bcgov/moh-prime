@@ -21,8 +21,6 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { SiteService } from '@registration/shared/services/site.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 
-// TODO rename to SiteLocationComponent
-// TODO rename form to siteLocationForm in SiteFormStateService
 @Component({
   selector: 'app-site-address',
   templateUrl: './site-address.component.html',
@@ -71,17 +69,15 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // TODO structured to match in all site views
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   // TODO when spoking don't update
-    //   const payload = this.siteFormStateService.site;
-    //   this.siteResource
-    //     .updateSite(payload)
-    //     .subscribe(() => {
-    //       this.form.markAsPristine();
-    this.nextRoute();
-    //     });
-    // }
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteFormStateService.json;
+      this.siteResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
+    }
   }
 
   public onBack() {
@@ -113,10 +109,8 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO structured to match in all site views
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    // TODO cannot set form each time the view is loaded when updating
     this.siteFormStateService.setForm(site, true);
 
     this.busy = this.organizationResource.getOrganizationById(site.organizationId)

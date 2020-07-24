@@ -40,29 +40,7 @@ export class OrganizationOverviewComponent implements OnInit {
   }
 
   public onSubmit() {
-    if (this.organization.acceptedAgreementDate) {
-      return this.nextRoute();
-    }
-
-    // TODO shouldn't come from service when spoking to save updates
-    // const payload = this.organizationService.organization;
-    const data: DialogOptions = {
-      title: 'Save Organization',
-      message: 'When your organization is saved you will be able to register site(s). Are you ready to save your organization?',
-      actionText: 'Save Organization'
-    };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        // TODO not needed until updates are allowed
-        // TODO update only required when spoking
-        // exhaustMap((result: boolean) =>
-        //   (result)
-        //     ? this.organizationResource.submitOrganization(payload)
-        //     : EMPTY
-        // )
-      )
-      .subscribe(() => this.nextRoute());
+    this.nextRoute();
   }
 
   public onBack() {

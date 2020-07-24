@@ -1,4 +1,5 @@
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
+import { VendorConfig } from '@config/config.model';
 import { Address } from '@shared/models/address.model';
 
 import { BusinessLicenceDocument } from './business-licence-document.model';
@@ -14,11 +15,9 @@ export interface Site {
   // Provision is aka the Signing Authority
   provisionerId: number;
   provisioner: Party;
-
-  // TODO change to careSettingTypeCode
+  // Forms -----
   organizationTypeCode: number;
-  vendorCode: number;
-  vendor: Vendor;
+  siteVendors: Vendor[];
   businessLicenceDocuments: BusinessLicenceDocument[];
   physicalAddressId?: number;
   physicalAddress: Address;
@@ -30,9 +29,10 @@ export interface Site {
   privacyOfficer: Party;
   technicalSupportId?: number;
   technicalSupport: Party;
-
+  // States -----
   completed: boolean;
   approvedDate: string;
   submittedDate: string;
+  // Admin -----
   pec: string;
 }
