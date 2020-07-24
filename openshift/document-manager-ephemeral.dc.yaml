@@ -202,7 +202,7 @@ objects:
     - command:
         - /bin/bash
         - -c
-        - 'flask db upgrade && tail -f /dev/null'
+        - 'flask db upgrade && echo "Done" && exit 0'
       env:
         - name: CACHE_REDIS_HOST
           value: "redis${SUFFIX}"
