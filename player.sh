@@ -31,7 +31,7 @@ case "$1" in
     functionTest)
         functionTest $@
         ;;
-    fsparsify)
+    sparsify)
         sparsify $@
         ;;
     notifyGitHub)
