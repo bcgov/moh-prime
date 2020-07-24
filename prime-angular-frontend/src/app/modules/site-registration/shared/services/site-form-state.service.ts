@@ -57,18 +57,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     const { physicalAddress } = this.siteAddressForm.getRawValue();
     const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
     const { remoteUsers } = this.remoteUsersForm.getRawValue();
-
-    console.log(
-      'TEST',
-      [
-        this.administratorPharmaNetForm.getRawValue(),
-        this.privacyOfficerForm.getRawValue(),
-        this.technicalSupportForm.getRawValue()
-      ]
-        .filter((party: Party) => party)
-    );
-
-
     const [administratorPharmaNet, privacyOfficer, technicalSupport] = [
       this.administratorPharmaNetForm.getRawValue(),
       this.privacyOfficerForm.getRawValue(),
@@ -222,7 +210,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       ],
       vendorCode: [
         0,
-        [FormControlValidators.requiredTruthful]
+        [FormControlValidators.requiredIndex]
       ]
     });
   }
