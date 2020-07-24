@@ -85,7 +85,8 @@
         <button mat-stroked-button
                 type="button"
                 color="primary"
-                [disabled]="!site.remoteUsers.length">
+                [disabled]="!site.remoteUsers.length"
+                (click)="viewSiteRemoteUsers(site)">
           Update Remote Practitioners
         </button>
       </mat-card-actions>

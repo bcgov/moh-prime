@@ -83,10 +83,8 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public viewSiteRemoteUsers(site: Site) {
-    if (site.completed) {
-      const routePath = [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.REMOTE_USERS];
-      this.routeUtils.routeRelativeTo(routePath);
-    }
+    const routePath = [site.organizationId, SiteRoutes.SITES, site.id, SiteRoutes.REMOTE_USERS];
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public getOrganizationProperties(organization: Organization) {
