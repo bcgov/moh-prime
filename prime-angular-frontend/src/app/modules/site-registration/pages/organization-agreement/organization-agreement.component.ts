@@ -102,7 +102,12 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    const siteId = this.route.snapshot.queryParams.siteId;
+    if (siteId) {
+      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.SITE_REVIEW]);
+    } else {
+      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+    }
   }
 
   public showDefaultAgreement() {
