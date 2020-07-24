@@ -55,7 +55,8 @@
       <button mat-button
               type="button"
               color="primary"
-              [disabled]="!organization.completed">
+              [disabled]="!organization.completed"
+              (click)="addSite(organization.id)">
         <mat-icon>add</mat-icon>
         Add Site
       </button>

@@ -69,6 +69,8 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
           this.form.markAsPristine();
           this.nextRoute();
         });
+    } else {
+      this.hasNoVendorError = true;
     }
   }
 

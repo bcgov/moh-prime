@@ -52,12 +52,12 @@ export class RemoteUsersComponent implements OnInit {
   public onSubmit() {
     // TODO should we be saving remote users individually or as wholesale PUT?
     // TODO show validation message if hasRemoteUsers and remoteUsers is empty
-    // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
       this.hasNoRemoteUserError = false;
       const payload = this.siteFormStateService.json;
       this.siteResource
-        .updateSite(payload)
+        // TODO completed true only if org has at least one submitted site
+        .updateSite(payload, true)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();

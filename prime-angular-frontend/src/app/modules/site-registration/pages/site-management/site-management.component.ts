@@ -148,6 +148,6 @@ export class SiteManagementComponent implements OnInit {
 
   private createSite(organizationId: number) {
     this.busy = this.siteResource.createSite(organizationId)
-      .subscribe((site: Site) => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.SITE_ADDRESS]));
+      .subscribe((site: Site) => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING]));
   }
 }

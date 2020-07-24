@@ -66,6 +66,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
+          // TODO mark the site as completed
           exhaustMap((result: boolean) =>
             (result)
               ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
