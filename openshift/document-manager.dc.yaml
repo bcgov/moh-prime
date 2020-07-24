@@ -212,11 +212,13 @@ objects:
       io.kompose.service: ${NAME}${SUFFIX}-migrate
     name: ${NAME}${SUFFIX}-migrate
   spec:
+    restartPolicy: Never
     containers:
     - command:
-        - /bin/bash
-        - -c
-        - 'flask db upgrade && tail -f /dev/null'
+        - flask
+      args:
+        - db
+        - upgrade
       env:
         - name: CACHE_REDIS_HOST
           value: "redis${SUFFIX}"
