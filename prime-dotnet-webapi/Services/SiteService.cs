@@ -256,7 +256,7 @@ namespace Prime.Services
             // Wholesale replace the remote users
             if (current?.RemoteUsers != null && current?.RemoteUsers.Count() != 0)
             {
-                foreach (var remoteUser in updated.RemoteUsers)
+                foreach (var remoteUser in current.RemoteUsers)
                 {
                     foreach (var location in remoteUser.RemoteUserLocations)
                     {
