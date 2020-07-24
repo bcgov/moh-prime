@@ -199,11 +199,7 @@ objects:
     name: ${NAME}${SUFFIX}-migrate
   spec:
     containers:
-    - command: 
-        - flask
-      args:
-        - db
-        - upgrade
+    - command: "flask db upgrade && tail -f /dev/null"
       env:
         - name: CACHE_REDIS_HOST
           value: "redis${SUFFIX}"
