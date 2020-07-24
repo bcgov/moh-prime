@@ -254,17 +254,14 @@ namespace Prime.Services
         private void UpdateRemoteUsers(Site current, Site updated)
         {
             // Wholesale replace the remote users
-            if (current?.RemoteUsers != null && current?.RemoteUsers.Count() != 0)
+            foreach (var remoteUser in current.RemoteUsers)
             {
-                foreach (var remoteUser in current.RemoteUsers)
+                foreach (var location in remoteUser.RemoteUserLocations)
                 {
-                    foreach (var location in remoteUser.RemoteUserLocations)
-                    {
-                        _context.Addresses.Remove(location.PhysicalAddress);
-                        _context.RemoteUserLocations.Remove(location);
-                    }
-                    _context.RemoteUsers.Remove(remoteUser);
+                    _context.Addresses.Remove(location.PhysicalAddress);
+                    _context.RemoteUserLocations.Remove(location);
                 }
+                _context.RemoteUsers.Remove(remoteUser);
             }
 
             if (updated?.RemoteUsers != null && updated?.RemoteUsers.Count() != 0)
