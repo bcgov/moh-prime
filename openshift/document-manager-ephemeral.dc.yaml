@@ -200,7 +200,7 @@ objects:
   spec:
     containers:
     - command: 
-        - flask "db upgrade && tail -f /dev/null"
+        - 'flask db upgrade && tail -f /dev/null'
       env:
         - name: CACHE_REDIS_HOST
           value: "redis${SUFFIX}"
