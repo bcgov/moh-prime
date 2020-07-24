@@ -27,6 +27,10 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
   public get json(): Organization {
     const organizationName = this.organizationNameForm.getRawValue();
 
+
+    console.log(this.signingAuthorityForm.getRawValue());
+
+
     // TODO create a helper to reconstruct the party into JSON format
     const [
       signingAuthority
@@ -46,8 +50,8 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
       return party;
     });
 
-    signingAuthority.mailingAddressId = signingAuthority.mailingAddress?.id
-      ? signingAuthority.mailingAddress?.id
+    signingAuthority.mailingAddressId = (signingAuthority?.mailingAddress?.id)
+      ? signingAuthority?.mailingAddress?.id
       : 0;
 
     return {
