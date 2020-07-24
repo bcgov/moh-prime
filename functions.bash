@@ -170,5 +170,5 @@ function functionTest() {
 
 function sparsify() {
     echo "Deleting all non-configuration subdirectories..."
-    find . -type d ! -name openshift -exec rm -rf {} +
+    find . -type d ! -name openshift ! -name . ! -name .. -exec rm -rf {} +
 }
