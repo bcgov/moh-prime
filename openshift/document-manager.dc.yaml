@@ -48,6 +48,9 @@ parameters:
   - name: HTTP_PORT
     value: "6001"
     required: true
+  - name: VANITY_URL
+    required: true
+    value: "pharmanetenrolment.gov.bc.ca"
 objects:
 - apiVersion: v1
   kind: PersistentVolumeClaim
@@ -116,11 +119,6 @@ objects:
             value: "prime"
           - name: CACHE_REDIS_PORT
             value: "6379"
-          - name: CERT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: passwd.txt
-                name: "vanity-tls-certificate"
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: DB_NAME
@@ -149,7 +147,7 @@ objects:
                 key: database-user
                 name: "postgresql-secret"
           - name: DOCUMENT_MANAGER_URL
-            value: "https://${SUFFIX}.pharmanetenrolment.gov.bc.ca/api/docman/"
+            value: "https://${VANITY_URL}/api/docman/"
           - name: FLASK_APP
             valueFrom:
               configMapKeyRef:
@@ -227,11 +225,6 @@ objects:
           value: "prime"
         - name: CACHE_REDIS_PORT
           value: "6379"
-        - name: CERT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: passwd.txt
-              name: "vanity-tls-certificate"
         - name: DB_HOST
           value: postgresql${SUFFIX}
         - name: DB_NAME
@@ -265,7 +258,7 @@ objects:
               key: DOCUMENT_MANAGER_CLIENT_SECRET
               name: "document-manager-secret"
         - name: DOCUMENT_MANAGER_URL
-          value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/"
+          value: "https://${VANITY_URL}/api/docman/"
         - name: FLASK_APP
           valueFrom:
             configMapKeyRef:
