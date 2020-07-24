@@ -4,22 +4,17 @@ import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { Organization } from '@registration/shared/models/organization.model';
-import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
-import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
 @Component({
   selector: 'app-site-address',
@@ -39,11 +34,9 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private organizationResource: OrganizationResource,
     private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
-    private orgBookResource: OrgBookResource,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
@@ -112,25 +105,5 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
-
-    this.busy = this.organizationResource.getOrganizationById(site.organizationId)
-      .pipe(
-        map((organization: Organization) => {
-          this.locationNames.push({
-            group: 'Organization',
-            options: [organization.name]
-          });
-
-          return organization.registrationId;
-        }),
-        this.orgBookResource.doingBusinessAsMap(),
-        map((doingBusinessAs: string[]) => {
-          this.locationNames.push({
-            group: 'Doing Business As',
-            options: doingBusinessAs
-          });
-        })
-      )
-      .subscribe();
   }
 }

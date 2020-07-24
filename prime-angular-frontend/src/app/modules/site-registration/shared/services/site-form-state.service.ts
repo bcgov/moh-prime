@@ -253,6 +253,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
   private remoteUserFormGroup(): FormGroup {
     return this.fb.group({
+      id: [
+        0,
+        []
+      ],
       firstName: [
         null,
         [Validators.required]
