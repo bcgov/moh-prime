@@ -10,6 +10,7 @@ using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
+using Newtonsoft.Json;
 
 namespace Prime.Controllers
 {
@@ -172,6 +173,29 @@ namespace Prime.Controllers
             var result = await _enrolleeService.HpdidLookupAsync(hpdid);
 
             return Ok(ApiResponse.Result(result));
+        }
+
+        // POST: api/provisioner-access/gpids/123456789/validate
+        /// <summary>
+        /// Validates the supplied information against the enrollee record with the given GPID.
+        /// </summary>
+        [HttpPost("gpids/{gpid}/validate", Name = nameof(ValidateGpid))]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<string>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> ValidateGpid(string gpid, GpidValidationParameters parameters)
+        {
+            // var t = 1;
+            // // var result = await _enrolleeService.HpdidLookupAsync(hpdid);
+
+            // return Ok(ApiResponse.Result(new GpidValidationResponse
+            // {
+            //     Key = "ttt"
+            // }));
+            throw new NotImplementedException();
         }
     }
 }
