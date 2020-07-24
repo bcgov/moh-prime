@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, EMPTY, of } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { Subscription, EMPTY } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
-import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -14,9 +13,7 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
-import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
   selector: 'app-site-overview',
@@ -35,8 +32,6 @@ export class SiteOverviewComponent implements OnInit, IPage {
     private router: Router,
     private siteService: SiteService,
     private siteResource: SiteResource,
-    private organizationResource: OrganizationResource,
-    private siteFormStateService: SiteFormStateService,
     private dialog: MatDialog
   ) {
     this.title = 'Site Information Review';
@@ -44,7 +39,6 @@ export class SiteOverviewComponent implements OnInit, IPage {
   }
 
   public onSubmit() {
-    const organizationId = this.route.snapshot.params.oid;
     const payload = this.siteService.site;
     const data: DialogOptions = {
       title: 'Save Site',
@@ -58,27 +52,17 @@ export class SiteOverviewComponent implements OnInit, IPage {
           (result)
             ? this.siteResource.submitSite(payload)
             : EMPTY
-        ),
-        exhaustMap(() => this.organizationResource.getOrganizationById(organizationId)),
-        map((organization: Organization) => !!organization.acceptedAgreementDate)
+        )
       )
-      .subscribe((hasSignedOrgAgreement: boolean) =>
-        this.nextRoute(organizationId, hasSignedOrgAgreement)
-      );
+      .subscribe(() => this.nextRoute());
   }
 
-  public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
-  }
+  public onBack() { }
 
-  public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
-    if (!hasSignedOrgAgreement) {
-      this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.SITE_MANAGEMENT), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT]);
-    } else {
-      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT], {
-        queryParams: { submitted: true }
-      });
-    }
+  public nextRoute() {
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT], {
+      queryParams: { submitted: true }
+    });
   }
 
   public onRoute(routePath: string) {

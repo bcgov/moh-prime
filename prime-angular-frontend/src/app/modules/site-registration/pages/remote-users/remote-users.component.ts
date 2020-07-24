@@ -4,16 +4,16 @@ import { FormGroup, FormArray, FormControl } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { Site } from '@registration/shared/models/site.model';
 import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Component({
   selector: 'app-remote-users',
@@ -50,8 +50,6 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onSubmit() {
-    // TODO should we be saving remote users individually or as wholesale PUT?
-    // TODO show validation message if hasRemoteUsers and remoteUsers is empty
     if (this.formUtilsService.checkValidity(this.form)) {
       this.hasNoRemoteUserError = false;
       const payload = this.siteFormStateService.json;

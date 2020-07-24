@@ -59,8 +59,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
       }
       const payload = this.siteFormStateService.json;
       this.siteResource
-        // TODO only complete if initial registration, otherwise this should occur in organization agreement
-        .updateSite(payload, true)
+        .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
