@@ -159,12 +159,21 @@ pipeline {
                 }
             }
         }
-        // stage('Cleanup') {
-        //     steps {
-        //         script {
-        //             sh "./player.sh sparsify"
-        //         }
-        //     }
-        // }
+        stage('Cleanup') {
+            parallel {
+                stage('Clean Tester') {
+                    agent { label 'code-tests' }
+                    steps {
+                        sh "./player.sh sparsify"
+                    }
+                }
+                stage('Clean Master') {
+                    agent { label 'master' }
+                    steps {
+                        sh "./player.sh zap frontend"
+                    }
+                }
+            }
+        }
     }
 }
