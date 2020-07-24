@@ -3,6 +3,8 @@ import { AbstractControl, FormBuilder, Validators, FormGroup } from '@angular/fo
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
 
+import { Party } from '../models/party.model';
+
 export abstract class AbstractFormState<T> {
   protected patched: boolean;
 
@@ -155,5 +157,56 @@ export abstract class AbstractFormState<T> {
       });
 
     return this.fb.group(controlsConfig);
+  }
+
+  /**
+   * @description
+   * Convert party JSON to form model for reactive forms.
+   */
+  protected toPartyFormModel([formGroup, data]: [FormGroup, Party]) {
+    if (!data) {
+      return;
+    }
+
+    const { physicalAddress, mailingAddress, ...party } = data;
+
+    formGroup.patchValue(party);
+
+    // TODO what will this do?
+    if (physicalAddress) {
+      const physicalAddressFormGroup = formGroup.get('physicalAddress');
+      (physicalAddress)
+        ? physicalAddressFormGroup.patchValue(physicalAddress)
+        : physicalAddressFormGroup.reset({ id: 0 });
+    }
+
+    // TODO what will this do?
+    if (mailingAddress) {
+      const mailingAddressFormGroup = formGroup.get('mailingAddress');
+      (mailingAddress)
+        ? mailingAddressFormGroup.patchValue(mailingAddress)
+        : mailingAddressFormGroup.reset({ id: 0 });
+    }
+  }
+
+  /**
+   * @description
+   * Convert the party form model into JSON.
+   */
+  protected toPartyJson(party: Party, addressKey: 'physicalAddress' | 'mailingAddress' = 'physicalAddress'): Party {
+    if (!party.firstName) {
+      party = null;
+    } else if (party[addressKey] && !party[addressKey].street) {
+      party[addressKey] = null;
+    } else if (party[addressKey].street && !party[addressKey].id) {
+      party[addressKey].id = 0;
+    }
+
+    // Add the address reference ID to the party
+    party[`${addressKey}Id`] = (party[addressKey]?.id)
+      ? party[addressKey].id
+      : 0;
+
+    return party;
   }
 }

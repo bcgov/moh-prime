@@ -3,7 +3,6 @@ import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/fo
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
-import { Party } from '@registration/shared/models/party.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 
@@ -26,29 +25,7 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
    */
   public get json(): Organization {
     const organizationName = this.organizationNameForm.getRawValue();
-
-    // TODO create a helper to reconstruct the party into JSON format
-    const [
-      signingAuthority
-    ] = [
-      this.signingAuthorityForm.getRawValue()
-    ].map((party: Party) => {
-      if (!party.firstName) {
-        party = null;
-      } else if (!party.mailingAddress.street) {
-        party.mailingAddress = null;
-      } else if (party.mailingAddress.street) {
-        if (party.mailingAddress.id == null) {
-          party.mailingAddress.id = 0;
-        }
-      }
-
-      return party;
-    });
-
-    signingAuthority.mailingAddressId = (signingAuthority?.mailingAddress?.id)
-      ? signingAuthority.mailingAddress.id
-      : 0;
+    const signingAuthority = this.toPartyJson(this.signingAuthorityForm.getRawValue(), 'mailingAddress');
 
     return {
       // OrganizationName is the only form that contains the organization ID
@@ -84,36 +61,16 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
    * @description
    * Manage the conversion of JSON to reactive forms.
    */
-  // TODO refactor into separate adapters
   protected patchForm(organization: Organization): Organization {
     if (!organization) {
       return null;
     }
 
     this.organizationNameForm.patchValue(organization);
-
-    // TODO duplicated until services are completely split apart
-    [
-      [this.signingAuthorityForm, organization.signingAuthority]
-    ]
-      .filter(([formGroup, data]: [FormGroup, Party]) => data)
-      .forEach(([formGroup, data]: [FormGroup, Party]) => {
-        const { mailingAddress, physicalAddress, ...party } = data;
-
-        formGroup.patchValue(party);
-
-        const physicalAddressFormGroup = formGroup.get('physicalAddress');
-        (physicalAddress)
-          ? physicalAddressFormGroup.patchValue(physicalAddress)
-          : physicalAddressFormGroup.reset({ id: 0 });
-
-        const mailingAddressFormGroup = formGroup.get('mailingAddress');
-        (mailingAddress)
-          ? mailingAddressFormGroup.patchValue(mailingAddress)
-          : mailingAddressFormGroup.reset({ id: 0 });
-      });
+    this.toPartyFormModel([this.signingAuthorityForm, organization.signingAuthority]);
   }
 
+  // TODO BCSC information is also in enrolments and can have shared form helpers
   private buildSigningAuthorityForm(): FormGroup {
     // Prevent BCSC information from being changed
     return this.fb.group({
@@ -167,8 +124,8 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
 
   private buildOrganizationNameForm(): FormGroup {
     return this.fb.group({
-      // OrganizationName is the only form
-      // that contains the organization ID
+      // OrganizationName is the only form that contains
+      // the organization ID
       id: [
         0,
         []
@@ -178,7 +135,7 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
         [Validators.required]
       ],
       registrationId: [
-        null,
+        { value: null, disabled: true },
         [Validators.required]
       ],
       doingBusinessAs: [

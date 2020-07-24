@@ -3,7 +3,6 @@ import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { Party } from '@registration/shared/models/party.model';
@@ -30,8 +29,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
   constructor(
     protected fb: FormBuilder,
-    private formUtilsService: FormUtilsService,
-    private configService: ConfigService
+    private formUtilsService: FormUtilsService
   ) {
     super(fb);
   }
@@ -54,13 +52,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * @description
    * Convert reactive form abstract controls into JSON.
    */
-  // TODO method constructs the JSON, and attempts to adapt, should
-  // adapt in only one place and separately in method
   public get json(): Site {
-    // TODO clean this up
     const { organizationTypeCode, vendorCode } = this.careSettingTypeForm.getRawValue();
     const { physicalAddress } = this.siteAddressForm.getRawValue();
-    const businessHours = this.hoursOperationForm.getRawValue().businessDays;
+    const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
     const { remoteUsers } = this.remoteUsersForm.getRawValue();
 
     const [
@@ -71,15 +66,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       this.administratorPharmaNetForm.getRawValue(),
       this.privacyOfficerForm.getRawValue(),
       this.technicalSupportForm.getRawValue()
-    ].map((party: Party) => {
-      if (!party.firstName) {
-        party = null;
-      } else if (!party.physicalAddress.street) {
-        party.physicalAddress = null;
-      }
-
-      return party;
-    });
+    ].map((party: Party) => this.toPartyJson(party));
 
     // Includes site related keys to uphold relationships, and allow for updates
     // to a site. Keys not for update have been omitted and the type enforced
@@ -154,13 +141,12 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     }
 
     this.careSettingTypeForm.patchValue(site);
-    // if (site.vendorCode) {
-    //   this.vendorForm.patchValue({ vendorCode: site.vendorCode });
-    // }
+
+    if (site.siteVendors?.length) {
+      this.careSettingTypeForm.get('vendorCode').patchValue(site.siteVendors[0].vendorCode);
+    }
 
     if (site.physicalAddress) {
-      console.log('PHYSICAL_ADDRESS', site.physicalAddress);
-
       this.siteAddressForm.get('physicalAddress').patchValue(site.physicalAddress);
     }
 
@@ -186,23 +172,11 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       });
     }
 
-    // TODO duplicated until services are completely split apart
     [
       [this.administratorPharmaNetForm, site.administratorPharmaNet],
       [this.privacyOfficerForm, site.privacyOfficer],
       [this.technicalSupportForm, site.technicalSupport]
-    ]
-      .filter(([formGroup, data]: [FormGroup, Party]) => data)
-      .forEach(([formGroup, data]: [FormGroup, Party]) => {
-        const { physicalAddress, ...party } = data;
-
-        formGroup.patchValue(party);
-
-        const physicalAddressFormGroup = formGroup.get('physicalAddress');
-        (physicalAddress)
-          ? physicalAddressFormGroup.patchValue(physicalAddress)
-          : physicalAddressFormGroup.reset();
-      });
+    ].forEach((formParty: [FormGroup, Party]) => this.toPartyFormModel(formParty));
   }
 
   /**
@@ -236,7 +210,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       vendorCode: [
         0,
         [FormControlValidators.requiredTruthful]
-      ],
+      ]
     });
   }
 
@@ -269,9 +243,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       ],
       remoteUsers: this.fb.array(
         [],
-        // TODO at least one if has remote users if hasRemoteUsers is checked validator
         []
       )
+      // TODO at least one if has remote users if hasRemoteUsers is checked validator
+      // [FormArrayValidators.atLeast(1)]
     });
   }
 
