@@ -48,6 +48,9 @@ parameters:
   - name: HTTP_PORT
     value: "6001"
     required: true
+  - name: VANITY_URL
+    required: true
+    value: "pharmanetenrolment.gov.bc.ca"
 objects:
 - apiVersion: v1
   kind: Service
@@ -102,11 +105,6 @@ objects:
             value: "prime"
           - name: CACHE_REDIS_PORT
             value: "6379"
-          - name: CERT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: passwd.txt
-                name: "vanity-tls-certificate"
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: DB_NAME
@@ -213,11 +211,6 @@ objects:
           value: "prime"
         - name: CACHE_REDIS_PORT
           value: "6379"
-        - name: CERT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: passwd.txt
-              name: "vanity-tls-certificate"
         - name: DB_HOST
           value: postgresql${SUFFIX}
         - name: DB_NAME
