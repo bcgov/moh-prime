@@ -32,7 +32,6 @@ pipeline {
             steps {
                 script {
                   sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
-
                   echo "Building ..."
                   sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                   sh "./player.sh build frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
@@ -61,7 +60,7 @@ pipeline {
                     echo "Deploy to dev..."
                     sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
-                    sh "./player.sh deploy document-manager-ephemeral dev -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy document-manager-ephemeral dev -p SUFFIX=${SUFFIX} -p VANITY_URL=${VANITY_URL}" 
                     // sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
@@ -87,11 +86,19 @@ pipeline {
                     echo "Deploy to dev..."
                     sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
-                    sh "./player.sh deploy document-manager dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    sh "./player.sh deploy document-manager dev -p SUFFIX=${SUFFIX} -p VANITY_URL=${VANITY_URL} -p VOLUME_CAPACITY=1Gi"
                     // sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
                     sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
+            }
+            post {
+              success {
+                sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
+              }
+              failure {
+                sh "./player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
+              }
             }
         }
         // TODO requires an update to Jenkins and addition of official SonarQube Jenkins plugin
