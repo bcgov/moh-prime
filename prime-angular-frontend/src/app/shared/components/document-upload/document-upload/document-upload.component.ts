@@ -63,7 +63,8 @@ export class DocumentUploadComponent implements OnInit {
         resolve(type);
       }),
       allowFileTypeValidation: true,
-      multiple: !!this.multiple
+      multiple: !!this.multiple,
+      maxFileSize: '2MB'
     };
     if (this.additionalApiSuffix) {
       this.apiSuffix = `${this.apiSuffix}/${this.additionalApiSuffix}`;
