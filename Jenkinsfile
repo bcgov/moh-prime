@@ -143,12 +143,14 @@ pipeline {
                 stage('SonarQube') {
                     agent { label 'code-tests' }
                     steps {
+                        checkout scm
                         sh "./player.sh scan"
                     }
                 }
                 stage('Zap') {
                     agent { label 'code-tests' }
                     steps {
+                        checkout scm
                         sh "./player.sh zap frontend"
                     }
                 }
