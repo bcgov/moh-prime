@@ -82,7 +82,7 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo([SiteRoutes.TECHNICAL_SUPPORT]);
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.TECHNICAL_SUPPORT]);
   }
 
   public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
@@ -92,7 +92,7 @@ export class RemoteUsersComponent implements OnInit {
         queryParams: { siteId: this.route.snapshot.params.sid }
       });
     } else {
-      this.routeUtils.routeRelativeTo([SiteRoutes.SITE_REVIEW]);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
     }
   }
 
