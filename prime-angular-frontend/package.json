@@ -37,6 +37,7 @@
     "classlist.js": "^1.1.20150312",
     "core-js": "^3.6.4",
     "filepond": "^4.13.4",
+    "filepond-plugin-file-validate-size": "^2.2.1",
     "filepond-plugin-file-validate-type": "^1.2.5",
     "keycloak-angular": "^7.0.1",
     "keycloak-js": "^6.0.1",
