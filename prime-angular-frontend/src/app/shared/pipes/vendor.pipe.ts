@@ -2,6 +2,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { ConfigService } from '@config/config.service';
 
+/**
+ * @deprecated
+ * Replaced by the ConfigCodePipe.
+ * @see /config/config-code-pipe.ts
+ */
 @Pipe({
   name: 'vendor'
 })
