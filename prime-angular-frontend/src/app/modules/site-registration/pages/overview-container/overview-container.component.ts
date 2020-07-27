@@ -76,7 +76,9 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
       .subscribe(() => this.nextRoute());
   }
 
-  public onBack() { }
+  public onBack() {
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+  }
 
   public nextRoute() {
     this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT], {
@@ -85,11 +87,12 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
   }
 
   ngOnInit(): void {
-    if (this.route.snapshot.params.oid) {
+    if (this.route.snapshot.routeConfig.path === 'site-review') {
+      this.getSite(this.route.snapshot.params.sid);
+    } else if (this.route.snapshot.routeConfig.path === 'organization-review') {
       this.getOrganization(this.route.snapshot.params.oid);
-    }
-
-    if (this.route.snapshot.params.sid) {
+    } else {
+      this.getOrganization(this.route.snapshot.params.oid);
       this.getSite(this.route.snapshot.params.sid);
     }
   }
