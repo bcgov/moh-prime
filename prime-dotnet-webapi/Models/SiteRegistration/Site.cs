@@ -38,6 +38,7 @@ namespace Prime.Models
 
         public int? OrganizationTypeCode { get; set; }
 
+        [JsonIgnore]
         public OrganizationType OrganizationType { get; set; }
 
         public string PEC { get; set; }
@@ -52,7 +53,6 @@ namespace Prime.Models
 
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
 
-        [JsonIgnore]
         public ICollection<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
 
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }

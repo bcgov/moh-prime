@@ -30,6 +30,7 @@ import { TechnicalSupportComponent } from './pages/technical-support/technical-s
 import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
+import { OverviewContainerComponent } from './pages/overview-container/overview-container.component';
 
 const routes: Routes = [
   {
@@ -77,7 +78,7 @@ const routes: Routes = [
               },
               {
                 path: SiteRoutes.ORGANIZATION_REVIEW,
-                component: OrganizationOverviewComponent,
+                component: OverviewContainerComponent,
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Review' }
@@ -168,7 +169,7 @@ const routes: Routes = [
                   {
                     path: SiteRoutes.SITE_REVIEW,
                     canActivate: [SiteGuard],
-                    component: SiteOverviewComponent,
+                    component: OverviewContainerComponent,
                     data: { title: 'Site Registration Review' }
                   },
                   {

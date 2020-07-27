@@ -205,6 +205,11 @@ namespace Prime.Services
                 {
                     remoteUser.SiteId = current.Id;
                     _context.RemoteUsers.Add(remoteUser);
+                    foreach (var location in remoteUser.RemoteUserLocations)
+                    {
+                        _context.RemoteUserLocations.Add(location);
+                        _context.Addresses.Add(location.PhysicalAddress);
+                    }
                 }
             }
         }
@@ -368,6 +373,7 @@ namespace Prime.Services
                 .Include(s => s.Provisioner)
                 .Include(s => s.SiteVendors)
                     .ThenInclude(v => v.Vendor)
+                .Include(s => s.OrganizationType)
                 .Include(s => s.Organization)
                     .ThenInclude(o => o.SigningAuthority)
                         .ThenInclude(p => p.PhysicalAddress)
