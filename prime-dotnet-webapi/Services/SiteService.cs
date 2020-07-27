@@ -152,7 +152,8 @@ namespace Prime.Services
                     {
                         if (currentParty == null)
                         {
-                            currentParty = updatedParty;
+                            _context.Entry(current).Reference(partyType).CurrentValue = updatedParty;
+                            currentParty = _context.Entry(current).Reference(partyType).CurrentValue as Party;
                         }
                         else
                         {
