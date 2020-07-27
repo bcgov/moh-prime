@@ -1,23 +1,22 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, EMPTY } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
-import { AbstractComponent } from '@shared/classes/abstract-component';
-import { Site } from '@registration/shared/models/site.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { UtilsService } from '@core/services/utils.service';
+import { AbstractComponent } from '@shared/classes/abstract-component';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+
+import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { UtilsService } from '@core/services/utils.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { exhaustMap } from 'rxjs/operators';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { MatDialog } from '@angular/material/dialog';
 import { SiteService } from '@registration/shared/services/site.service';
-
 
 @Component({
   selector: 'app-overview-container',
