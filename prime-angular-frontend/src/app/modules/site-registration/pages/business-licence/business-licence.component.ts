@@ -32,7 +32,7 @@ export class BusinessLicenceComponent implements OnInit {
     private siteService: SiteService,
     private siteResource: SiteResource,
   ) {
-    this.title = 'Submit Your Business Licence';
+    this.title = 'Business Licence';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.uploadedFile = false;
     this.businessLicenceDocuments = [];
