@@ -56,7 +56,12 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     const { organizationTypeCode, vendorCode } = this.careSettingTypeForm.getRawValue();
     const { physicalAddress } = this.siteAddressForm.getRawValue();
     const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
-    const { remoteUsers } = this.remoteUsersForm.getRawValue();
+    const remoteUsers = this.remoteUsersForm.getRawValue().remoteUsers
+      .map((ru: RemoteUser) => {
+        // Remove the ID from the remote user to simplify updates on the server
+        const { id, ...remoteUser } = ru;
+        return remoteUser;
+      });
     const [administratorPharmaNet, privacyOfficer, technicalSupport] = [
       this.administratorPharmaNetForm.getRawValue(),
       this.privacyOfficerForm.getRawValue(),
