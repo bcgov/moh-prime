@@ -113,9 +113,9 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public nextRoute() {
-    const siteId = this.route.snapshot.queryParams.siteId;
-    if (siteId) {
-      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.SITE_REVIEW]);
+    const redirectPath = this.route.snapshot.queryParams.redirect;
+    if (redirectPath) {
+      this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
     } else {
       this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
     }

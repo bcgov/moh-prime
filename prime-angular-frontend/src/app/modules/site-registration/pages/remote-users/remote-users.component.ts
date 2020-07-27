@@ -87,9 +87,10 @@ export class RemoteUsersComponent implements OnInit {
 
   public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
     if (!hasSignedOrgAgreement) {
+      const siteId = this.route.snapshot.params.sid;
       // Provide site for redirection after accepting the organization agreement
       this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.SITE_MANAGEMENT), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT], {
-        queryParams: { siteId: this.route.snapshot.params.sid }
+        queryParams: { redirect: `${SiteRoutes.SITES}/${siteId}`, siteId }
       });
     } else {
       this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
