@@ -76,6 +76,7 @@ import { PartyReviewComponent } from './components/site/party-review/party-revie
 import { DocumentUploadComponent } from './components/document-upload/document-upload/document-upload.component';
 import { OrganizationReviewComponent } from './components/organization-review/organization-review.component';
 import { ImageComponent } from './components/dialogs/content/image/image.component';
+import { OverviewSectionComponent } from './components/overview-section/overview-section.component';
 
 @NgModule({
   declarations: [
@@ -138,7 +139,8 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     PageSubheader2MoreInfoDirective,
     DocumentUploadComponent,
     OrganizationReviewComponent,
-    ImageComponent
+    ImageComponent,
+    OverviewSectionComponent,
   ],
   imports: [
     CommonModule,
@@ -212,6 +214,7 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     PartyReviewComponent,
     DocumentUploadComponent,
     OrganizationReviewComponent,
+    OverviewSectionComponent,
   ],
   providers: [
     FullnamePipe,

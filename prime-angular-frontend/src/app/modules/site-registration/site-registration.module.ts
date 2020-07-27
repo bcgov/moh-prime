@@ -30,6 +30,7 @@ import { TechnicalSupportComponent } from './pages/technical-support/technical-s
 import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
+import { OverviewContainerComponent } from './pages/overview-container/overview-container.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { SiteOverviewComponent } from './pages/site-overview/site-overview.compo
     SiteProgressIndicatorComponent,
     RegistrantProfileFormComponent,
     SameAsComponent,
-    SummaryCardComponent
+    SummaryCardComponent,
+    OverviewContainerComponent
   ],
   imports: [
     SharedModule,
