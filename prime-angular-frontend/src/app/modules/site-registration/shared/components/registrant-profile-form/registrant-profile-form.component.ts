@@ -3,6 +3,7 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 // TODO rename and make it party instead of registrant
 // TODO watch valueChanges/onChange if party contains address then open toggle the address
@@ -50,7 +51,7 @@ export class RegistrantProfileFormComponent implements OnInit {
     this.physicalAddress.get('street')
       .valueChanges
       .pipe(distinctUntilChanged())
-      .subscribe((value) => (value) ? this.togglePhysicalAddress() : null);
+      .subscribe((value: string) => (value) ? this.togglePhysicalAddress() : null);
 
     this.togglePhysicalAddress();
   }

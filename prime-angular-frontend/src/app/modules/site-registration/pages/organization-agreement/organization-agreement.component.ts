@@ -10,7 +10,6 @@ import { FilePondComponent } from 'ngx-filepond/filepond.component';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -49,7 +48,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     private organizationFormStateService: OrganizationFormStateService,
     private dialog: MatDialog,
     private logger: LoggerService,
-    private toastService: ToastService,
     private utilsService: UtilsService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
