@@ -7,6 +7,7 @@ import { Subscription, Observable, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-data-source-utils.class';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -17,7 +18,6 @@ import { NoteComponent } from '@shared/components/dialogs/content/note/note.comp
 import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Site } from '@registration/shared/models/site.model';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({

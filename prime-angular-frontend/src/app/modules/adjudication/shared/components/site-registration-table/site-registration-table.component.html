@@ -32,7 +32,7 @@
         <th mat-header-cell
             *matHeaderCellDef> Vendor </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.vendorCode | vendor | default }} </td>
+            *matCellDef="let row;"> {{ row.vendorCode | configCode: 'vendors' | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="submissionDate">

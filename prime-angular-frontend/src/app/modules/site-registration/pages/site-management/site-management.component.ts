@@ -6,6 +6,7 @@ import { map, exhaustMap } from 'rxjs/operators';
 
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { User } from '@auth/shared/models/user.model';
@@ -17,7 +18,6 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
 @Component({
