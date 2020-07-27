@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
 
+import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -15,7 +16,6 @@ import { IForm } from '@registration/shared/interfaces/form.interface';
 import { Party } from '@registration/shared/models/party.model';
 import { Address } from '@shared/models/address.model';
 import { Site } from '@registration/shared/models/site.model';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 

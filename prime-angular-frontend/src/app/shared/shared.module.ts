@@ -31,7 +31,6 @@ import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SafePipe } from '@shared/pipes/safe.pipe';
-import { VendorPipe } from '@shared/pipes/vendor.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -95,7 +94,6 @@ import { OverviewSectionComponent } from './components/overview-section/overview
     FullnamePipe,
     SafeHtmlPipe,
     SafePipe,
-    VendorPipe,
     CasePipe,
     AddressPipe,
     AddressComponent,
@@ -179,7 +177,6 @@ import { OverviewSectionComponent } from './components/overview-section/overview
     FullnamePipe,
     SafeHtmlPipe,
     SafePipe,
-    VendorPipe,
     AddressPipe,
     AddressComponent,
     DashboardComponent,

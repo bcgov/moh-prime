@@ -9,6 +9,7 @@ import { debounceTime, switchMap, tap, exhaustMap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -20,7 +21,6 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrgBookResource, OrgBookAutocompleteResult } from '@registration/shared/services/org-book-resource.service';
 import { Site } from '@registration/shared/models/site.model';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 
 @Component({
   selector: 'app-organization-name',

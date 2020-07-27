@@ -205,6 +205,11 @@ namespace Prime.Services
                 {
                     remoteUser.SiteId = current.Id;
                     _context.RemoteUsers.Add(remoteUser);
+                    foreach (var location in remoteUser.RemoteUserLocations)
+                    {
+                        _context.RemoteUserLocations.Add(location);
+                        _context.Addresses.Add(location.PhysicalAddress);
+                    }
                 }
             }
         }

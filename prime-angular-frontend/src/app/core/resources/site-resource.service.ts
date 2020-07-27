@@ -14,7 +14,7 @@ import { NoContent } from '@core/resources/abstract-resource';
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
 import { Site } from '@registration/shared/models/site.model';
-import { BusinessLicenceDocument } from '../models/business-licence-document.model';
+import { BusinessLicenceDocument } from '../../modules/site-registration/shared/models/business-licence-document.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -163,7 +163,6 @@ export class SiteResource {
       );
   }
 
-  // TODO probably not the best name or messages for this endpoint
   public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
     const payload = { data: pecCode };
     return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
