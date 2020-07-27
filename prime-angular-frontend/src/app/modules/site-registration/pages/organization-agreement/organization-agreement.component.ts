@@ -20,6 +20,8 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -46,6 +48,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     private organizationService: OrganizationService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
+    private siteResource: SiteResource,
     private dialog: MatDialog,
     private logger: LoggerService,
     private utilsService: UtilsService
@@ -64,12 +67,17 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
-          // TODO mark the site as completed
           exhaustMap((result: boolean) =>
             (result)
               ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
               : EMPTY
-          )
+          ),
+          // TODO organization is only updated once, and we don't want mark the site as
+          // completed before accepting the organization agreement, otherwise the user
+          // won't have a logical routed way to get back and sign the agreement. This
+          // is considered a temporary solution for marking the site a completed.
+          exhaustMap(() => this.siteResource.getSiteById(this.route.snapshot.queryParams.siteId)),
+          exhaustMap((site: Site) => this.siteResource.updateSite(site, true))
         )
         .subscribe(() => this.nextRoute());
     }
@@ -105,9 +113,9 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public nextRoute() {
-    const siteId = this.route.snapshot.queryParams.siteId;
-    if (siteId) {
-      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.SITE_REVIEW]);
+    const redirectPath = this.route.snapshot.queryParams.redirect;
+    if (redirectPath) {
+      this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
     } else {
       this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
     }
