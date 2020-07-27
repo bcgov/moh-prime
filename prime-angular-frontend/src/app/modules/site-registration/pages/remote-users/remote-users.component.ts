@@ -57,19 +57,16 @@ export class RemoteUsersComponent implements OnInit {
       this.hasNoRemoteUserError = false;
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
-      // TODO find out how to do this without using closures
-      let acceptedOrgAgreement = false;
 
       this.organizationResource
         .getOrganizationById(organizationId)
         .pipe(
           map((organization: Organization) => !!organization.acceptedAgreementDate),
           // When the organization agreement has already been signed mark the site as completed
-          exhaustMap((hasSignedOrgAgreement: boolean) => {
-            acceptedOrgAgreement = hasSignedOrgAgreement;
-            return this.siteResource.updateSite(payload, hasSignedOrgAgreement);
-          }),
-          map(() => acceptedOrgAgreement)
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            this.siteResource.updateSite(payload, hasSignedOrgAgreement)
+              .pipe(map(() => hasSignedOrgAgreement))
+          )
         )
         .subscribe((hasSignedOrgAgreement: boolean) => {
           this.form.markAsPristine();
@@ -85,7 +82,7 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo([SiteRoutes.TECHNICAL_SUPPORT]);
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.TECHNICAL_SUPPORT]);
   }
 
   public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
@@ -95,7 +92,7 @@ export class RemoteUsersComponent implements OnInit {
         queryParams: { siteId: this.route.snapshot.params.sid }
       });
     } else {
-      this.routeUtils.routeRelativeTo([SiteRoutes.SITE_REVIEW]);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
     }
   }
 
