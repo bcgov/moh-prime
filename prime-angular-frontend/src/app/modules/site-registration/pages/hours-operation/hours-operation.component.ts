@@ -8,6 +8,7 @@ import { Subscription, Observable } from 'rxjs';
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -15,7 +16,6 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { Site } from '@registration/shared/models/site.model';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 

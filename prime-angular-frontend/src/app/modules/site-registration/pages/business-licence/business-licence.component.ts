@@ -3,12 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
+import { SiteResource } from '@core/resources/site-resource.service';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 @Component({
   selector: 'app-business-licence',

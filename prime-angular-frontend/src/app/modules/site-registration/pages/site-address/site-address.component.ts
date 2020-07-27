@@ -6,13 +6,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 

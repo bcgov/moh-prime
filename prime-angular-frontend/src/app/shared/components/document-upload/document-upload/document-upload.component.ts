@@ -10,10 +10,10 @@ import { environment } from '@env/environment';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 
 export class BaseDocument {
   id: number;

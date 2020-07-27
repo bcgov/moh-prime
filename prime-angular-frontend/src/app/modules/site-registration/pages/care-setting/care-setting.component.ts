@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -16,7 +17,6 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 

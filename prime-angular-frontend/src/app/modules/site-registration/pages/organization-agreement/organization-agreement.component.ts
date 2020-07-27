@@ -11,6 +11,7 @@ import { FilePondComponent } from 'ngx-filepond/filepond.component';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -20,7 +21,6 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { Site } from '@registration/shared/models/site.model';
 
 @Component({
