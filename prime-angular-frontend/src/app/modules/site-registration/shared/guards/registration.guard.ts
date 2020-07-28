@@ -95,13 +95,15 @@ export class RegistrationGuard extends BaseGuard {
 
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
     const currentRoute = this.route(routePath);
+    const childRoute = routePath.split('/').pop();
     // Allow access to a set of routes
     let whiteListedRoutes = SiteRoutes.siteRegistrationRoutes();
 
     if (!organization.completed) {
       // Initial org not completed, use initialRegistration route order
       whiteListedRoutes = whiteListedRoutes
-        .filter((route: string) => SiteRoutes.initialRegistrationRouteOrder().includes(route));
+        .filter((route: string) => SiteRoutes.organizationRegistrationRouteOrder().includes(route));
+      // return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, organization.id);
     }
     // else if (!site.organization.acceptedAgreementDate) {
     //   // No routing beyond the organization agreement without accepting
@@ -114,8 +116,8 @@ export class RegistrationGuard extends BaseGuard {
     // }
 
     // Redirect to an appropriate default route
-    if (!whiteListedRoutes.includes(currentRoute)) {
-      return this.navigate(routePath, `${SiteRoutes.SITE_MANAGEMENT}`);
+    if (!whiteListedRoutes.includes(childRoute)) {
+      return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT);
     }
 
     // Otherwise, allow access to the route
@@ -132,12 +134,17 @@ export class RegistrationGuard extends BaseGuard {
     loopPath: string,
     destinationPath: string = null,
     oid: number = null): boolean {
-    const modulePath = this.config.routes.site;
 
-    if (routePath === `/${modulePath}/${loopPath}`) {
+    const modulePath = this.config.routes.site;
+    let comparePath = `/${modulePath}/${loopPath}`;
+    if (destinationPath && oid) {
+      comparePath = `/${modulePath}/${loopPath}/${oid}/${destinationPath}`;
+    }
+
+    if (routePath === comparePath) {
       return true;
     } else {
-      this.router.navigate([modulePath, loopPath]);
+      this.router.navigate([comparePath]);
       return false;
     }
   }
