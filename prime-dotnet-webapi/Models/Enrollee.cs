@@ -117,8 +117,6 @@ namespace Prime.Models
         [JsonIgnore]
         public Credential Credential { get; set; }
 
-        // TODO remove after testing is completed and replace with a specific
-        // QRCode endpoint to populate the view
         [NotMapped]
         public string Base64QRCode
         {
@@ -161,8 +159,7 @@ namespace Prime.Models
                 return this.EnrolmentStatuses?
                     .OrderByDescending(en => en.StatusDate)
                     .Where(es => es.IsType(StatusType.RequiresToa))
-                    .Where(es => es.StatusDate > this.AppliedDate)
-                    .FirstOrDefault()
+                    .FirstOrDefault(es => es.StatusDate > this.AppliedDate)
                     ?.StatusDate;
             }
         }

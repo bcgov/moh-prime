@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Prime.Models
 {
     public interface ILookup<T>

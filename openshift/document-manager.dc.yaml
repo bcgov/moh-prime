@@ -3,7 +3,7 @@ apiVersion: v1
 labels:
   template: document-manager-template
 metadata:
-  name: document-manager-bc
+  name: document-manager-dc
   creationTimestamp: null
 parameters:
   - name: NAME
@@ -48,6 +48,9 @@ parameters:
   - name: HTTP_PORT
     value: "6001"
     required: true
+  - name: VANITY_URL
+    required: true
+    value: "pharmanetenrolment.gov.bc.ca"
 objects:
 - apiVersion: v1
   kind: PersistentVolumeClaim
@@ -116,11 +119,6 @@ objects:
             value: "prime"
           - name: CACHE_REDIS_PORT
             value: "6379"
-          - name: CERT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: passwd.txt
-                name: "vanity-tls-certificate"
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: DB_NAME
@@ -149,7 +147,7 @@ objects:
                 key: database-user
                 name: "postgresql-secret"
           - name: DOCUMENT_MANAGER_URL
-            value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/"
+            value: "https://${VANITY_URL}/api/docman/"
           - name: FLASK_APP
             valueFrom:
               configMapKeyRef:
@@ -175,8 +173,6 @@ objects:
               configMapKeyRef:
                 key: FLASK_RUN_PORT
                 name: document-manager-backend--env-prime
-          - name: FLASK_RUN_PARAMS
-            value: "--cert=/app/certs/chained.crt --key=/app/certs/private.key"
           - name: JWT_OIDC_WELL_KNOWN_CONFIG
             valueFrom:
               secretKeyRef:
@@ -191,17 +187,11 @@ objects:
           volumeMounts:
           - mountPath: /app/
             name: ${NAME}${SUFFIX}-pvc
-          - mountPath: /app/certs
-            name: vanity-tls-certs
-            readOnly: true
         restartPolicy: Always
         volumes:
         - name: ${NAME}${SUFFIX}-pvc
-          emptyDir: {}
-        - name: vanity-tls-certs
-          secret:
-            defaultMode: 420
-            secretName: vanity-tls-certificate
+          persistentVolumeClaim:
+            claimName: '${NAME}${SUFFIX}-pvc'
     test: false
     triggers:
     - type: ConfigChange
@@ -223,8 +213,9 @@ objects:
       io.kompose.service: ${NAME}${SUFFIX}-migrate
     name: ${NAME}${SUFFIX}-migrate
   spec:
+    restartPolicy: Never
     containers:
-    - command: 
+    - command:
         - flask
       args:
         - db
@@ -236,11 +227,6 @@ objects:
           value: "prime"
         - name: CACHE_REDIS_PORT
           value: "6379"
-        - name: CERT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: passwd.txt
-              name: "vanity-tls-certificate"
         - name: DB_HOST
           value: postgresql${SUFFIX}
         - name: DB_NAME
@@ -274,7 +260,7 @@ objects:
               key: DOCUMENT_MANAGER_CLIENT_SECRET
               name: "document-manager-secret"
         - name: DOCUMENT_MANAGER_URL
-          value: "https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/"
+          value: "https://${VANITY_URL}/api/docman/"
         - name: FLASK_APP
           valueFrom:
             configMapKeyRef:
@@ -300,8 +286,6 @@ objects:
             configMapKeyRef:
               key: FLASK_RUN_PORT
               name: document-manager-backend--env-prime
-        - name: FLASK_RUN_PARAMS
-          value: "--cert=/app/certs/chained.crt --key=/app/certs/private.key"
         - name: JWT_OIDC_WELL_KNOWN_CONFIG
           valueFrom:
             secretKeyRef:
@@ -310,28 +294,4 @@ objects:
       image: docker-registry.default.svc:5000/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
       name: ${NAME}${SUFFIX}-migrate
       resources: {}
-      volumeMounts:
-      - mountPath: /app/certs
-        name: vanity-tls-certs
-        readOnly: true
-    restartPolicy: OnFailure
-    volumes:
-    - name: vanity-tls-certs
-      secret:
-        defaultMode: 420
-        secretName: vanity-tls-certificate
   status: {}
-- apiVersion: v1
-  kind: Route
-  metadata:
-    name: "${NAME}${SUFFIX}"
-  spec:
-    host: "${NAME}${SUFFIX}.pharmanetenrolment.gov.bc.ca"
-    port:
-      targetPort: "${HTTP_PORT}"
-    tls:
-        insecureEdgeTerminationPolicy: Redirect
-        termination: passthrough
-    to:
-      kind: Service
-      name: "${NAME}${SUFFIX}-backend"

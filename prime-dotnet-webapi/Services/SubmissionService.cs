@@ -11,7 +11,6 @@ using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
 using Microsoft.Extensions.Logging;
-using Prime.Services.Clients;
 
 namespace Prime.Services
 {
@@ -27,7 +26,9 @@ namespace Prime.Services
         private readonly IPrivilegeService _privilegeService;
         private readonly ILogger _logger;
 
-        public SubmissionService(ApiDbContext context, IHttpContextAccessor httpContext,
+        public SubmissionService(
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
             IAccessTermService accessTermService,
             ISubmissionRulesService submissionRulesService,
             IBusinessEventService businessEventService,
@@ -73,19 +74,20 @@ namespace Prime.Services
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
 
+            // TODO Verfifiable Credentials commented out for push to prod because prod aries agent is not ready
             // TODO need robust issuance rules to be added since each submission shouldn't create
             // a new connection and issue a new credential
             // TODO when/where should a new credential be issued?
             // TODO check for an active connection
             // TODO check for issued credential
-            try
-            {
-                await _verifiableCredentialService.CreateConnectionAsync(enrollee);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error occurred attempting to create a connection invitation through the Verifiable Credential agent: ", ex);
-            }
+            // try
+            // {
+            //     await _verifiableCredentialService.CreateConnectionAsync(enrollee);
+            // }
+            // catch (Exception ex)
+            // {
+            //     _logger.LogError("Error occurred attempting to create a connection invitation through the Verifiable Credential agent: ${ex}", ex);
+            // }
 
             await this.ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();

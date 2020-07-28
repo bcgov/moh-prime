@@ -69,6 +69,39 @@ namespace Prime.Services
             return entity;
         }
 
+        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
+        {
+            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
+
+            if (isAdmin)
+            {
+                query = query.Include(e => e.Adjudicator)
+                    .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.EnrolmentStatusReference)
+                            .ThenInclude(esan => esan.AdjudicatorNote)
+                    .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.EnrolmentStatusReference)
+                            .ThenInclude(esr => esr.Adjudicator);
+            }
+
+            var entity = await query
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (entity != null)
+            {
+                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
+                // Attach to the enrollee if they have signed the most recent ToA
+                entity.CurrentTOAStatus = await _accessTermService.GetCurrentTOAStatusAsync(entity);
+                // TODO: This is an interm fix for making a different view model for enrollee based on isAdmin
+                if (isAdmin)
+                {
+                    entity.isAdminView = true;
+                }
+            }
+
+            return entity;
+        }
+
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
             IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery()
@@ -273,39 +306,6 @@ namespace Prime.Services
                     .ThenInclude(ap => ap.Privilege)
                 .Include(e => e.AccessTerms)
                 .Include(e => e.Credential);
-        }
-
-        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
-        {
-            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
-
-            if (isAdmin)
-            {
-                query = query.Include(e => e.Adjudicator)
-                    .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.EnrolmentStatusReference)
-                            .ThenInclude(esan => esan.AdjudicatorNote)
-                    .Include(e => e.EnrolmentStatuses)
-                        .ThenInclude(es => es.EnrolmentStatusReference)
-                            .ThenInclude(esr => esr.Adjudicator);
-            }
-
-            var entity = await query
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            if (entity != null)
-            {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-                // Attach to the enrollee if they have signed the most recent ToA
-                entity.CurrentTOAStatus = await _accessTermService.GetCurrentTOAStatusAsync(entity);
-                // TODO: This is an interm fix for making a different view model for enrollee based on isAdmin
-                if (isAdmin)
-                {
-                    entity.isAdminView = true;
-                }
-            }
-
-            return entity;
         }
 
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
