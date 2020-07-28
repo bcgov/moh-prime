@@ -52,6 +52,19 @@ export class OrganizationResource {
       );
   }
 
+  public getOrganizationByUserId(organizationId: number): Observable<Organization> {
+    return this.apiResource.get<Organization>(`organizations/${organizationId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization>) => response.result),
+        tap((organization: Organization) => this.logger.info('ORGANIZATION', organization)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be retrieved');
+          this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public createOrganization(party: Party): Observable<Organization> {
     return this.apiResource.post<Organization>('organizations', party)
       .pipe(

@@ -31,6 +31,7 @@ import { RemoteUsersComponent } from './pages/remote-users/remote-users.componen
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { OverviewContainerComponent } from './pages/overview-container/overview-container.component';
+import { RegistrationGuard } from './shared/guards/registration.guard';
 
 const routes: Routes = [
   {
@@ -40,7 +41,7 @@ const routes: Routes = [
     canActivateChild: [
       AuthenticationGuard,
       RegistrantGuard,
-      // RegistrationGuard
+      RegistrationGuard
     ],
     // Ensure that the configuration is loaded, otherwise
     // if it already exists NOOP
