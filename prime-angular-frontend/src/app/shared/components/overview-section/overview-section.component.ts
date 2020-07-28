@@ -9,6 +9,7 @@ export class OverviewSectionComponent implements OnInit {
   @Input() public title: string;
   @Input() public tooltip: string;
   @Input() public editRoute: string;
+  @Input() public showEditRedirect: boolean;
 
   @Output() public route: EventEmitter<string>;
 

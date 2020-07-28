@@ -29,7 +29,8 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
-import { OverviewContainerComponent } from './pages/overview-container/overview-container.component';
+import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
+import { OverviewComponent } from './pages/overview/overview.component';
 import { RegistrationGuard } from './shared/guards/registration.guard';
 
 const routes: Routes = [
@@ -78,7 +79,7 @@ const routes: Routes = [
               },
               {
                 path: SiteRoutes.ORGANIZATION_REVIEW,
-                component: OverviewContainerComponent,
+                component: OverviewComponent,
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Review' }
@@ -168,8 +169,8 @@ const routes: Routes = [
                   },
                   {
                     path: SiteRoutes.SITE_REVIEW,
-                    canActivate: [SiteGuard],
-                    component: OverviewContainerComponent,
+                    canActivate: [SiteGuard, OrganizationGuard],
+                    component: OverviewComponent,
                     data: { title: 'Site Registration Review' }
                   },
                   {
