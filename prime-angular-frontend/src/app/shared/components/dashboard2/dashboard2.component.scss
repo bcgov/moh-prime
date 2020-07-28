@@ -1,0 +1,51 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+// NOTE: mat-sidenav is modified globally
+// @see ./scss/material/components/_mat-sidenav.scss
+
+.prime-sidenav-container {
+  position: absolute;
+  // Compensate for the application header, and the
+  // progres indicator for HTTP requests and routing
+  top: 73px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.logo {
+  text-align: center;
+
+  img {
+    margin: 3em 0 3.5em;
+    width: 40px;
+    height: auto;
+
+    @include media-breakpoint-up(lg) {
+      width: 90px;
+    }
+  }
+}
+
+.mat-nav-list {
+  &:not(:first-of-type) {
+    padding-top: 0;
+  }
+
+  .mat-list-item.disabled {
+    // Prevent interacting with the link
+    pointer-events: none;
+  }
+
+  .mat-list-item.deemphasize {
+    // De-emphasize the link
+    opacity: 0.4;
+  }
+}
+
+@media print {
+  .mat-sidenav-content {
+    margin-left: 0 !important;
+  }
+}
