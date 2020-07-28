@@ -4,10 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import {
-  Configuration, Config, PracticeConfig, CollegeConfig,
-  LicenseConfig, ProvinceConfig, LicenseWeightedConfig
-} from '@config/config.model';
+import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, LicenseWeightedConfig } from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
