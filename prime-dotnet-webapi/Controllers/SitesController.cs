@@ -179,7 +179,7 @@ namespace Prime.Controllers
         /// Updates a sites state
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPut("{siteId}", Name = nameof(UpdateSite))]
+        [HttpPut("{siteId}/completed", Name = nameof(UpdateSite))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
