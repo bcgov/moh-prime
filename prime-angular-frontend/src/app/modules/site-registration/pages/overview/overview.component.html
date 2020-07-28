@@ -7,6 +7,15 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <!-- <app-site-progress-indicator [inProgress]="!site?.completed"></app-site-progress-indicator> -->
 
+  <div class="mb-5">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Information Review</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Make sure to the information you have provided is correct
+      </ng-container>
+    </app-page-subheader2>
+  </div>
+
   <app-overview-container [showEditRedirect]="true"
                           [site]="site"
                           [organization]="organization"></app-overview-container>

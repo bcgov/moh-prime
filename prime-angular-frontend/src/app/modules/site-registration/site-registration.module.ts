@@ -18,7 +18,6 @@ import { SiteManagementComponent } from './pages/site-management/site-management
 
 import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
-import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
@@ -30,7 +29,6 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
-import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { OverviewComponent } from './pages/overview/overview.component';
 
 @NgModule({
@@ -41,7 +39,6 @@ import { OverviewComponent } from './pages/overview/overview.component';
 
     OrganizationSigningAuthorityComponent,
     OrganizationNameComponent,
-    OrganizationOverviewComponent,
     OrganizationAgreementComponent,
 
     CareSettingComponent,
@@ -53,7 +50,6 @@ import { OverviewComponent } from './pages/overview/overview.component';
     AdministratorComponent,
     PrivacyOfficerComponent,
     TechnicalSupportComponent,
-    SiteOverviewComponent,
 
     SiteRegistrationDashboardComponent,
     SiteProgressIndicatorComponent,

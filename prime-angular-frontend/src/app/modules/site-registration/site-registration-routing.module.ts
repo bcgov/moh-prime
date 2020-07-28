@@ -29,7 +29,6 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
-import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { OverviewComponent } from './pages/overview/overview.component';
 import { RegistrationGuard } from './shared/guards/registration.guard';
 
@@ -41,7 +40,7 @@ const routes: Routes = [
     canActivateChild: [
       AuthenticationGuard,
       RegistrantGuard,
-      RegistrationGuard
+      // RegistrationGuard
     ],
     // Ensure that the configuration is loaded, otherwise
     // if it already exists NOOP
