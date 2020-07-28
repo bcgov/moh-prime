@@ -29,7 +29,13 @@ namespace Prime.Models
         public int SigningAuthorityId { get; set; }
 
         [JsonIgnore]
-        public IEnumerable<Site> Sites { get; set; }
+        public ICollection<Site> Sites { get; set; }
+
+        [NotMapped]
+        public int SiteCount
+        {
+            get => this.Sites == null ? 0 : this.Sites.Count;
+        }
 
         public ICollection<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
     }

@@ -3,7 +3,7 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>{{title}}</ng-container>
 
-    <button *ngIf="editRoute"
+    <button *ngIf="showEditRedirect"
             mat-icon-button
             [matTooltip]="tooltip"
             (click)="onRoute(editRoute)">

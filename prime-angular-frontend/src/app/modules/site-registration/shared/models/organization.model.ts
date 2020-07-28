@@ -14,4 +14,5 @@ export interface Organization {
   acceptedAgreementDate: string;
   signedAgreementDocuments: SignedAgreementDocument[];
   submittedDate: string;
+  siteCount: number;
 }
