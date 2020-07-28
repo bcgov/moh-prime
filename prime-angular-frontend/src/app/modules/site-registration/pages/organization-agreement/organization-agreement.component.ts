@@ -72,12 +72,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
               ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
               : EMPTY
           ),
-          // TODO organization is only updated once, and we don't want mark the site as
-          // completed before accepting the organization agreement, otherwise the user
-          // won't have a logical routed way to get back and sign the agreement. This
-          // is considered a temporary solution for marking the site a completed.
-          exhaustMap(() => this.siteResource.getSiteById(this.route.snapshot.queryParams.siteId)),
-          exhaustMap((site: Site) => this.siteResource.updateSite(site, true))
+          exhaustMap(() => this.siteResource.updateSiteCompleted((this.route.snapshot.queryParams.siteId)))
         )
         .subscribe(() => this.nextRoute());
     }

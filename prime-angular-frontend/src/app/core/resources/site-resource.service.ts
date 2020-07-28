@@ -150,14 +150,26 @@ export class SiteResource {
 
     const params = this.apiResourceUtilsService.makeHttpParams({ isCompleted });
     return this.apiResource.put<NoContent>(`sites/${site.id}`, site, params)
-      // TODO remove pipe when ApiResource handles NoContent
       .pipe(
+        // TODO remove pipe when ApiResource handles NoContent
         map(() => {
           this.toastService.openSuccessToast('Site has been updated');
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updateSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateSiteCompleted(siteId: number): NoContent {
+    return this.apiResource.put<NoContent>(`sites/${siteId}/completed`)
+      .pipe(
+        // TODO remove pipe when ApiResource handles NoContent
+        map(() => { }),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::updateSiteCompleted error has occurred: ', error);
           throw error;
         })
       );
