@@ -5,7 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
-import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { AbstractComponent } from '@shared/classes/abstract-component';
@@ -17,6 +16,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteService } from '@registration/shared/services/site.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 @Component({
   selector: 'app-overview-container',

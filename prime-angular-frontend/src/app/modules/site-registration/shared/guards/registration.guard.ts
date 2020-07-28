@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, Params } from '@angular/router';
 
 import { Observable, from, of } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
@@ -14,8 +14,9 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
-import { SiteRegistrationResource } from '@registration/shared/services/site-registration-resource.service';
-import { SiteRegistrationService } from '@registration/shared/services/site-registration.service';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { Organization } from '../models/organization.model';
+import { OrganizationService } from '../services/organization.service';
 
 // TODO duplication with enrolment.guard should be split out for reuse
 // TODO drop once organization and site guards are in place
@@ -29,85 +30,92 @@ export class RegistrationGuard extends BaseGuard {
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
-    private siteRegistrationResource: SiteRegistrationResource,
-    private siteRegistrationService: SiteRegistrationService
+    private organizationService: OrganizationService,
+    private organizationResource: OrganizationResource
   ) {
     super(authService, logger);
   }
 
-  protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
+  protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
+    const organizationId = params.oid;
     const user$ = from(this.authService.getUser());
-    const createSite$ = user$
+    const createOrganization$ = user$
       .pipe(
         map((user: User) => new Party(user)),
-        exhaustMap((party: Party) => this.siteRegistrationResource.createSite(party)),
-        map((site: Site) => [site, true])
+        exhaustMap((party: Party) => this.organizationResource.createOrganization(party)),
+        map((organization: Organization) => [organization, true])
       );
 
-    return this.siteRegistrationResource.getSites()
+    return this.organizationResource.getOrganizations()
       .pipe(
-        // TODO based on single site per user
-        map((sites: Site[]) => (sites.length) ? sites.shift() : null),
-        exhaustMap((site: Site) =>
-          (site)
-            ? of([site, false])
-            : createSite$
+        // TODO based on single organization per user
+        map((organizations: Organization[]) => (organizations.length) ? organizations.shift() : null),
+        exhaustMap((organization: Organization) =>
+          (organization)
+            ? of([organization, false])
+            : createOrganization$
         ),
-        map(([site, isNewSite]: [Site, boolean]) => {
-          // Store the site for access throughout registration, which
-          // will allows be the most up-to-date site
-          this.siteRegistrationService.site$.next(site);
-          return this.routeDestination(routePath, site, isNewSite);
+        map(([organization, isNewOrganization]: [Organization, boolean]) => {
+          // Store the organization for access throughout registration, which
+          // will allows be the most up-to-date organization
+          this.organizationService.organization = organization;
+          return this.routeDestination(routePath, organization, isNewOrganization);
         })
       );
   }
 
   /**
    * @description
-   * Determine the route destination based on the site status.
+   * Determine the route destination based on the organization status.
    */
-  private routeDestination(routePath: string, site: Site, isNewSite: boolean = false) {
+  private routeDestination(routePath: string, organization: Organization, isNewOrganization: boolean = false) {
     // On login the user will always be redirected to
     // the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
-    } else if (site) {
-      return (site.completed)
-        ? this.manageCompleteSiteRouting(routePath, site)
-        : this.manageIncompleteSiteRouting(routePath, site);
+    } else if (organization) {
+      return (organization.completed)
+        ? this.manageCompleteOrganizationRouting(routePath, organization)
+        : this.manageIncompleteOrganizationRouting(routePath, organization);
     }
 
     // Otherwise, prevent the route from resolving
     return false;
   }
 
-  private manageCompleteSiteRouting(routePath: string, site: Site) {
-    return this.manageRouting(routePath, SiteRoutes.SITE_REVIEW, site);
+  private manageCompleteOrganizationRouting(routePath: string, organization: Organization) {
+    return this.manageRouting(routePath, SiteRoutes.SITE_MANAGEMENT, organization);
   }
 
-  private manageIncompleteSiteRouting(routePath: string, site: Site) {
+  private manageIncompleteOrganizationRouting(routePath: string, organization: Organization) {
     // TODO set to SITE_REVIEW to allow removal of MULTIPLE_SITES, but definitely the wrong route
-    return this.manageRouting(routePath, SiteRoutes.SITE_REVIEW, site);
+    const route = SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
+    return this.manageRouting(routePath, route, organization);
   }
 
-  private manageRouting(routePath: string, defaultRoute: string, site: Site): boolean {
+  private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
     const currentRoute = this.route(routePath);
     // Allow access to a set of routes
-    let whiteListedRoutes = SiteRoutes.registrationRoutes();
+    let whiteListedRoutes = SiteRoutes.siteRegistrationRoutes();
 
-    if (!site.location.organization.acceptedAgreementDate) {
-      // No routing beyond the organization agreement without accepting
+    if (!organization.completed) {
+      // Initial org not completed, use initialRegistration route order
       whiteListedRoutes = whiteListedRoutes
-        .filter((route: string) => SiteRoutes.noOrganizationAgreementRoutes().includes(route));
-    } else if (!site.completed) {
-      // No reviewing without completing the registration
-      whiteListedRoutes = whiteListedRoutes
-        .filter((route: string) => route !== SiteRoutes.SITE_REVIEW);
+        .filter((route: string) => SiteRoutes.initialRegistrationRouteOrder().includes(route));
     }
+    // else if (!site.organization.acceptedAgreementDate) {
+    //   // No routing beyond the organization agreement without accepting
+    //   whiteListedRoutes = whiteListedRoutes
+    //     .filter((route: string) => SiteRoutes.noOrganizationAgreementRoutes().includes(route));
+    // } else if (!site.completed) {
+    //   // No reviewing without completing the registration
+    //   whiteListedRoutes = whiteListedRoutes
+    //     .filter((route: string) => route !== SiteRoutes.SITE_REVIEW);
+    // }
 
     // Redirect to an appropriate default route
     if (!whiteListedRoutes.includes(currentRoute)) {
-      return this.navigate(routePath, defaultRoute);
+      return this.navigate(routePath, `${SiteRoutes.SITE_MANAGEMENT}`);
     }
 
     // Otherwise, allow access to the route
@@ -119,13 +127,17 @@ export class RegistrationGuard extends BaseGuard {
    * Prevent infinite route loops by navigating to a route only
    * when the current route path is not the destination path.
    */
-  private navigate(routePath: string, destinationPath: string): boolean {
+  private navigate(
+    routePath: string,
+    loopPath: string,
+    destinationPath: string = null,
+    oid: number = null): boolean {
     const modulePath = this.config.routes.site;
 
-    if (routePath === `/${modulePath}/${destinationPath}`) {
+    if (routePath === `/${modulePath}/${loopPath}`) {
       return true;
     } else {
-      this.router.navigate([modulePath, destinationPath]);
+      this.router.navigate([modulePath, loopPath]);
       return false;
     }
   }
