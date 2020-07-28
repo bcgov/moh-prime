@@ -7,11 +7,10 @@
 
 <ng-template #content>
 
-  <app-site-review *ngIf="site"
-                   [site]="site"
-                   [showEditRedirect]="false"></app-site-review>
+  <app-overview-container [site]="site"
+                          [showEditRedirect]="false"></app-overview-container>
 
-  <div class="row justify-content-between">
+  <!-- <div class="row justify-content-between">
     <div class="col pt-4">
 
       <button mat-stroked-button
@@ -19,6 +18,6 @@
               (click)="routeRelativeTo(['./'])">Back</button>
 
     </div>
-  </div>
+  </div> -->
 
 </ng-template>

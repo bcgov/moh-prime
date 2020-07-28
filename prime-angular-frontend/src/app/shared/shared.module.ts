@@ -71,7 +71,6 @@ import { ManualFlagNoteComponent } from './components/dialogs/content/manual-fla
 import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
 import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
-import { SiteReviewComponent } from './components/site/site-review/site-review.component';
 import { PartyReviewComponent } from './components/site/party-review/party-review.component';
 import { DocumentUploadComponent } from './components/document-upload/document-upload/document-upload.component';
 import { OrganizationReviewComponent } from './components/organization-review/organization-review.component';
@@ -136,7 +135,6 @@ import { OverviewContainerComponent } from './components/site/overview-container
     ImageComponent,
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
-    SiteReviewComponent,
     PartyReviewComponent,
     DocumentUploadComponent,
     OrganizationReviewComponent,
@@ -212,7 +210,6 @@ import { OverviewContainerComponent } from './components/site/overview-container
     AccessTermComponent,
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
-    SiteReviewComponent,
     PartyReviewComponent,
     DocumentUploadComponent,
     OrganizationReviewComponent,

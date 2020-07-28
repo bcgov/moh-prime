@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
-import { FormGroup } from '@angular/forms';
 import { Organization } from '@registration/shared/models/organization.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 @Component({
-  selector: 'app-admin-organization-information',
-  templateUrl: './admin-organization-information.component.html',
-  styleUrls: ['./admin-organization-information.component.scss']
+  selector: 'app-organization-information',
+  templateUrl: './organization-information.component.html',
+  styleUrls: ['./organization-information.component.scss']
 })
-export class AdminOrganizationInformationComponent implements OnInit {
+export class OrganizationInformationComponent implements OnInit {
+
   public busy: Subscription;
   public hasActions: boolean;
   public refresh: BehaviorSubject<boolean>;
