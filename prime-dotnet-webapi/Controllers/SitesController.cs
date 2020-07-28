@@ -174,6 +174,37 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // PUT: api/Sites/5/completed
+        /// <summary>
+        /// Updates a sites state
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPut("{siteId}", Name = nameof(UpdateSite))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateSiteCompleted(int siteId)
+        {
+            var site = await _siteService.GetSiteNoTrackingAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+
+            if (!User.CanEdit(party))
+            {
+                return Forbid();
+            }
+
+            await _siteService.UpdateSiteCompletedAsync(siteId);
+
+            return NoContent();
+        }
+
         // DELETE: api/Sites/5
         /// <summary>
         /// Deletes a specific Site.

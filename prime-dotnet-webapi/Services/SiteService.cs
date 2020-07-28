@@ -193,8 +193,8 @@ namespace Prime.Services
             {
                 foreach (var location in remoteUser.RemoteUserLocations)
                 {
-                    _context.Addresses.Remove(location.PhysicalAddress);
-                    _context.RemoteUserLocations.Remove(location);
+                    _context.Remove(location.PhysicalAddress);
+                    _context.Remove(location);
                 }
                 _context.RemoteUsers.Remove(remoteUser);
             }
@@ -237,6 +237,24 @@ namespace Prime.Services
                     _context.Entry(siteVendor).State = EntityState.Added;
                 }
             }
+        }
+
+        public async Task<int> UpdateSiteCompletedAsync(int siteId)
+        {
+            var site = await this.GetBaseSiteQuery()
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            site.Completed = true;
+
+            this._context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the site.");
+            }
+
+            return updated;
         }
 
         public async Task<Site> UpdatePecCode(int siteId, string pecCode)

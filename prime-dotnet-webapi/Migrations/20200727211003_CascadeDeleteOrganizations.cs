@@ -11,12 +11,12 @@ namespace Prime.Migrations
                table: "BusinessEvent");
 
             migrationBuilder.AddForeignKey(
-             name: "FK_BusinessEvent_Organization_OrganizationId",
-             table: "BusinessEvent",
-             column: "OrganizationId",
-             principalTable: "Organization",
-             principalColumn: "Id",
-             onDelete: ReferentialAction.Cascade);
+                name: "FK_BusinessEvent_Organization_OrganizationId",
+                table: "BusinessEvent",
+                column: "OrganizationId",
+                principalTable: "Organization",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
