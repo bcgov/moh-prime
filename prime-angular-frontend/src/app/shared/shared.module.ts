@@ -38,6 +38,7 @@ import {
   EnrolmentStatusReasonsComponent
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
+import { Dashboard2Component } from '@shared/components/dashboard2/dashboard2.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -98,14 +99,20 @@ import { OverviewSectionComponent } from './components/overview-section/overview
     AddressPipe,
     AddressComponent,
     DashboardComponent,
+    Dashboard2Component,
     ConfirmDialogComponent,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
     PageComponent,
+    ProgressIndicator2Component,
     PageHeaderComponent,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
+    PageSubheader2Component,
+    PageSubheader2TitleDirective,
+    PageSubheader2SummaryDirective,
+    PageSubheader2MoreInfoDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
@@ -130,15 +137,10 @@ import { OverviewSectionComponent } from './components/overview-section/overview
     FormErrorsComponent,
     SiteReviewComponent,
     PartyReviewComponent,
-    ProgressIndicator2Component,
-    PageSubheader2Component,
-    PageSubheader2TitleDirective,
-    PageSubheader2SummaryDirective,
-    PageSubheader2MoreInfoDirective,
     DocumentUploadComponent,
     OrganizationReviewComponent,
     ImageComponent,
-    OverviewSectionComponent,
+    OverviewSectionComponent
   ],
   imports: [
     CommonModule,
@@ -180,6 +182,7 @@ import { OverviewSectionComponent } from './components/overview-section/overview
     AddressPipe,
     AddressComponent,
     DashboardComponent,
+    Dashboard2Component,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
     PageComponent,
@@ -211,7 +214,7 @@ import { OverviewSectionComponent } from './components/overview-section/overview
     PartyReviewComponent,
     DocumentUploadComponent,
     OrganizationReviewComponent,
-    OverviewSectionComponent,
+    OverviewSectionComponent
   ],
   providers: [
     FullnamePipe,

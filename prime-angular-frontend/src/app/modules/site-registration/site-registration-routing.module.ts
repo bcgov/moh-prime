@@ -4,7 +4,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { ConfigResolver } from '@config/config-resolver';
 import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
-import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
@@ -12,12 +11,13 @@ import { RegistrantGuard } from './shared/guards/registrant.guard';
 import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
 
+import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
+
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { SiteManagementComponent } from './pages/site-management/site-management.component';
 
 import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
-import { OrganizationOverviewComponent } from './pages/organization-overview/organization-overview.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
@@ -29,14 +29,13 @@ import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
-import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { OverviewContainerComponent } from './pages/overview-container/overview-container.component';
 import { RegistrationGuard } from './shared/guards/registration.guard';
 
 const routes: Routes = [
   {
     path: SiteRoutes.MODULE_PATH,
-    component: DashboardComponent,
+    component: SiteRegistrationDashboardComponent,
     canActivate: [UnsupportedGuard],
     canActivateChild: [
       AuthenticationGuard,
