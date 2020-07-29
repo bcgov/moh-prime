@@ -2,13 +2,13 @@
 @model AccessTerm
 
 @{
-  var userClauseClause = Model.UserClause.Clause;
-  var limitsAndConditions = Model.LimitsConditionsClause?.Clause;
+  var primaryText = Model.UserClause.Text;
+  var limitsAndConditions = Model.LimitsConditionsClause?.Text;
 }
 
-@Html.Raw(userClauseClause)
+@Html.Raw(primaryText)
 
-@if(!string.IsNullOrEmpty(limitsAndConditions))
+@if(!string.IsNullOrWhiteSpace(limitsAndConditions))
 {
   <p class="bold underline">Additional Clauses that Apply to You</p>
   <p>@Html.Raw(limitsAndConditions)</p>

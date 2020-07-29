@@ -21,18 +21,12 @@ namespace Prime.Services
         public async Task<AccessTerm> GetEnrolleesAccessTermAsync(int enrolleeId, int accessTermId)
         {
             var accessTerm = await _context.AccessTerms
-                .Include(at => at.GlobalClause)
                 .Include(at => at.UserClause)
-                .Include(at => at.AccessTermLicenseClassClauses)
-                    .ThenInclude(tacc => tacc.LicenseClassClause)
                 .Include(at => at.LimitsConditionsClause)
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .Where(at => at.Id == accessTermId)
                 .Where(at => at.AcceptedDate != null)
                 .FirstOrDefaultAsync();
-
-            accessTerm.LicenseClassClauses = accessTerm.AccessTermLicenseClassClauses
-                .Select(talc => talc.LicenseClassClause).ToList();
 
             return accessTerm;
         }
@@ -43,18 +37,12 @@ namespace Prime.Services
         public async Task<AccessTerm> GetMostRecentNotAcceptedEnrolleesAccessTermAsync(int enrolleeId)
         {
             var accessTerm = await _context.AccessTerms
-                .Include(at => at.GlobalClause)
                 .Include(at => at.UserClause)
-                .Include(at => at.AccessTermLicenseClassClauses)
-                    .ThenInclude(tacc => tacc.LicenseClassClause)
                 .Include(at => at.LimitsConditionsClause)
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .Where(at => at.AcceptedDate == null)
                 .OrderByDescending(at => at.CreatedDate)
                 .FirstOrDefaultAsync();
-
-            accessTerm.LicenseClassClauses = accessTerm.AccessTermLicenseClassClauses
-                .Select(talc => talc.LicenseClassClause).ToList();
 
             return accessTerm;
         }
@@ -65,21 +53,12 @@ namespace Prime.Services
         public async Task<AccessTerm> GetMostRecentAcceptedEnrolleesAccessTermAsync(int enrolleeId)
         {
             var accessTerm = await _context.AccessTerms
-                .Include(at => at.GlobalClause)
                 .Include(at => at.UserClause)
-                .Include(at => at.AccessTermLicenseClassClauses)
-                    .ThenInclude(tacc => tacc.LicenseClassClause)
                 .Include(at => at.LimitsConditionsClause)
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .Where(at => at.AcceptedDate != null)
                 .OrderByDescending(at => at.CreatedDate)
                 .FirstOrDefaultAsync();
-
-            if (accessTerm != null)
-            {
-                accessTerm.LicenseClassClauses = accessTerm?.AccessTermLicenseClassClauses
-                    .Select(talc => talc.LicenseClassClause).ToList();
-            }
 
             return accessTerm;
         }
@@ -90,10 +69,7 @@ namespace Prime.Services
         public async Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId, int year)
         {
             var accessTerms = await _context.AccessTerms
-                .Include(at => at.GlobalClause)
                 .Include(at => at.UserClause)
-                .Include(at => at.AccessTermLicenseClassClauses)
-                    .ThenInclude(tacc => tacc.LicenseClassClause)
                 .Include(at => at.LimitsConditionsClause)
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .Where(at => at.AcceptedDate != null)
@@ -106,13 +82,6 @@ namespace Prime.Services
                     .Where(at => at.AcceptedDate.HasValue && at.AcceptedDate.Value.Year == year)
                     .ToList();
             }
-
-            accessTerms.ForEach(at =>
-            {
-                at.LicenseClassClauses = at.AccessTermLicenseClassClauses
-                    .Select(talc => talc.LicenseClassClause)
-                    .ToList();
-            });
 
             return accessTerms;
         }
@@ -171,39 +140,39 @@ namespace Prime.Services
         /// </summary>
         public async Task<bool> IsCurrentByEnrolleeAsync(Enrollee enrollee)
         {
-            var current = true;
+            // var current = true;
 
-            var accessTerm = await _context.AccessTerms
-                .Include(at => at.AccessTermLicenseClassClauses)
-                .Where(at => at.EnrolleeId == enrollee.Id)
-                .Where(at => at.AcceptedDate != null)
-                .OrderByDescending(at => at.AcceptedDate)
-                .FirstOrDefaultAsync();
+            // var accessTerm = await _context.AccessTerms
+            //     .Include(at => at.AccessTermLicenseClassClauses)
+            //     .Where(at => at.EnrolleeId == enrollee.Id)
+            //     .Where(at => at.AcceptedDate != null)
+            //     .OrderByDescending(at => at.AcceptedDate)
+            //     .FirstOrDefaultAsync();
 
-            if (accessTerm != null)
-            {
-                var currentAccessTerm = await GenerateAccessTermAsync(enrollee);
+            // if (accessTerm != null)
+            // {
+            //     var currentAccessTerm = await GenerateAccessTermAsync(enrollee);
 
-                if (accessTerm.GlobalClauseId != currentAccessTerm.GlobalClause.Id
-                   || accessTerm.UserClauseId != currentAccessTerm.UserClause.Id)
-                {
-                    current = false;
-                }
+            //     if (accessTerm.GlobalClauseId != currentAccessTerm.GlobalClause.Id
+            //        || accessTerm.UserClauseId != currentAccessTerm.UserClause.Id)
+            //     {
+            //         current = false;
+            //     }
 
-                foreach (var lcc in accessTerm.AccessTermLicenseClassClauses)
-                {
-                    if (currentAccessTerm.AccessTermLicenseClassClauses.FindAll(c => c.LicenseClassClause.Id == lcc.LicenseClassClauseId).Count == 0)
-                    {
-                        current = false;
-                    }
-                }
-            }
-            else
-            {
-                return false;
-            }
+            //     foreach (var lcc in accessTerm.AccessTermLicenseClassClauses)
+            //     {
+            //         if (currentAccessTerm.AccessTermLicenseClassClauses.FindAll(c => c.LicenseClassClause.Id == lcc.LicenseClassClauseId).Count == 0)
+            //         {
+            //             current = false;
+            //         }
+            //     }
+            // }
+            // else
+            // {
+            return false;
+            // }
 
-            return current;
+            // return current;
         }
 
         /// <summary>
@@ -248,62 +217,23 @@ namespace Prime.Services
         private async Task<AccessTerm> GenerateAccessTermAsync(Enrollee enrollee)
         {
             var accessTerms = new AccessTerm { Enrollee = enrollee };
-
-            accessTerms.GlobalClause = await GetGlobalClause();
-            accessTerms.UserClause = await GetUserClause(enrollee);
-            accessTerms.AccessTermLicenseClassClauses
-                .AddRange(await GetAccessTermLicenseClassClauses(enrollee, accessTerms));
+            throw new NotImplementedException();
+            // accessTerms.UserClause = await GetUserClause(enrollee);
             accessTerms.LimitsConditionsClause = await GetAccessTermLimitsConditionsClause(enrollee);
 
             return accessTerms;
         }
 
-        private async Task<GlobalClause> GetGlobalClause()
-        {
-            return await _context.GlobalClauses
-                .OrderByDescending(g => g.EffectiveDate)
-                .FirstOrDefaultAsync();
-        }
-
         private async Task<UserClause> GetUserClause(Enrollee enrollee)
         {
+
+            throw new NotImplementedException();
             var classification = enrollee.IsRegulatedUser() ? PrimeConstants.PRIME_RU : PrimeConstants.PRIME_OBO;
 
-            return await _context.UserClauses
-                .Where(g => g.EnrolleeClassification == classification)
-                .OrderByDescending(g => g.EffectiveDate)
-                .FirstAsync();
-        }
-
-        private async Task<IEnumerable<AccessTermLicenseClassClause>> GetAccessTermLicenseClassClauses(Enrollee enrollee, AccessTerm accessTerms)
-        {
-            var licenseClassClauses = new List<LicenseClassClause>();
-
-            if (enrollee.Certifications.Count > 0)
-            {
-                foreach (var org in enrollee.EnrolleeOrganizationTypes)
-                {
-                    foreach (var cert in enrollee.Certifications)
-                    {
-                        var mappings = await _context.LicenseClassClauseMappings
-                            .Include(m => m.LicenseClassClause)
-                            .Where(m => m.LicenseCode == cert.LicenseCode)
-                            .Where(m => m.OrganizatonTypeCode == org.OrganizationTypeCode)
-                            .ToListAsync();
-
-                        foreach (var mapping in mappings)
-                        {
-                            // Check if License Class Clause already in list
-                            if (licenseClassClauses.FindAll(lcc => lcc.Id == mapping.LicenseClassClauseId).Count == 0)
-                            {
-                                licenseClassClauses.Add(mapping.LicenseClassClause);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return licenseClassClauses.Select(lcc => new AccessTermLicenseClassClause { AccessTerm = accessTerms, LicenseClassClause = lcc });
+            // return await _context.UserClauses
+            //     .Where(g => g.EnrolleeClassification == classification)
+            //     .OrderByDescending(g => g.EffectiveDate)
+            //     .FirstAsync();
         }
 
         private async Task<LimitsConditionsClause> GetAccessTermLimitsConditionsClause(Enrollee enrollee)
@@ -316,7 +246,7 @@ namespace Prime.Services
             var newClause = new LimitsConditionsClause
             {
                 EnrolleeId = enrollee.Id,
-                Clause = null,
+                Text = null,
                 EffectiveDate = new DateTimeOffset()
             };
 
@@ -325,7 +255,7 @@ namespace Prime.Services
                 newClause = new LimitsConditionsClause
                 {
                     EnrolleeId = lastNote.EnrolleeId,
-                    Clause = lastNote.Note,
+                    Text = lastNote.Note,
                     EffectiveDate = new DateTimeOffset()
                 };
 
