@@ -79,7 +79,8 @@ export class DocumentUploadComponent implements OnInit {
     const token = await this.keycloakTokenService.token();
     const file = event.file.file; // File for uploading
     const { name: filename, type: filetype } = file;
-    if (this.filePondOptions.acceptedFileTypes.includes(filetype)) {
+    if (this.filePondOptions.acceptedFileTypes.includes(filetype)
+      && file.size <= 2097152) {
       const upload = new tus.Upload(file, {
         endpoint: `${environment.apiEndpoint}${this.apiSuffix}`,
         retryDelays: [0, 3000, 5000, 10000, 20000],
