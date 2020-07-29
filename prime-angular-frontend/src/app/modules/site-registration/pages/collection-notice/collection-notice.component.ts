@@ -35,8 +35,6 @@ export class CollectionNoticeComponent implements OnInit {
     const organization = this.organizationService.organization;
     this.authService.hasJustLoggedIn = true;
 
-    console.log('Collection notice page hit');
-
     // Collection notice is the initial route after login, and used as a hub
     // for redirection to an appropriate view based on the organization
     organization.completed
