@@ -13,8 +13,10 @@ namespace Prime.Models
 
         public int Weight { get; set; }
 
+        [JsonIgnore]
         public bool Manual { get; set; }
 
+        [JsonIgnore]
         public bool Validate { get; set; }
 
         public bool RegulatedUser { get; set; }
@@ -27,6 +29,7 @@ namespace Prime.Models
 
         public ICollection<CollegeLicense> CollegeLicenses { get; set; }
 
+        [JsonIgnore]
         public ICollection<DefaultPrivilege> DefaultPrivileges { get; set; }
     }
 }
