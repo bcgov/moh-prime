@@ -143,6 +143,8 @@ namespace Prime
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             #region Discriminators
             modelBuilder.Entity<Address>()
                 .HasDiscriminator<AddressType>("AddressType")
@@ -164,7 +166,7 @@ namespace Prime
             }
             #endregion
 
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiDbContext).Assembly);
 
             #region Indexes
             modelBuilder.Entity<Admin>()
