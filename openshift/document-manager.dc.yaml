@@ -181,8 +181,8 @@ objects:
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
-                key: pg-password
-                name: '${NAME}-secret'
+                key: database-admin-password
+                name: 'postgresql-secret'
           image: " "
           name: document-manager-backend
           ports:
@@ -299,8 +299,8 @@ objects:
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              key: pg-password
-              name: '${NAME}-secret'
+              key: database-admin-password
+              name: 'postgresql-secret'
       image: docker-registry.default.svc:5000/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
       name: ${NAME}${SUFFIX}-migrate
       resources: {}

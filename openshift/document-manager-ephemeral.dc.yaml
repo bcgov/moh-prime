@@ -164,6 +164,11 @@ objects:
               secretKeyRef:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-admin-password
+                name: 'postgresql-secret'
           image: " "
           name: document-manager-backend
           ports:
@@ -200,6 +205,8 @@ objects:
   spec:
     restartPolicy: Never
     containers:
+    - command:
+        - /
     - command:
         - flask
       args: 
@@ -279,8 +286,8 @@ objects:
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              key: pg-password
-              name: '${NAME}-secret'
+              key: database-admin-password
+              name: 'postgresql-secret'
       image: docker-registry.default.svc:5000/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
       name: ${NAME}${SUFFIX}-migrate
       resources: {}
