@@ -245,7 +245,6 @@ namespace Prime.Services
 
             var newClause = new LimitsConditionsClause
             {
-                EnrolleeId = enrollee.Id,
                 Text = null,
                 EffectiveDate = new DateTimeOffset()
             };
@@ -254,7 +253,6 @@ namespace Prime.Services
             {
                 newClause = new LimitsConditionsClause
                 {
-                    EnrolleeId = lastNote.EnrolleeId,
                     Text = lastNote.Note,
                     EffectiveDate = new DateTimeOffset()
                 };

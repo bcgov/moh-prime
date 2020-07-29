@@ -10,11 +10,6 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        public int EnrolleeId { get; set; }
-
-        [JsonIgnore]
-        public Enrollee Enrollee { get; set; }
-
         [Required]
         public string Text { get; set; }
 
