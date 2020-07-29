@@ -53,10 +53,6 @@ export class SiteManagementComponent implements OnInit {
     this.sites = [];
   }
 
-  public addOrganization() {
-    this.createOrganization();
-  }
-
   public viewOrganization(organization: Organization) {
     const routePath = (!organization.completed)
       ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
@@ -131,16 +127,6 @@ export class SiteManagementComponent implements OnInit {
             : EMPTY
         ),
         map((sites: Site[]) => this.sites = sites)
-      ).subscribe();
-  }
-
-  private createOrganization() {
-    this.busy = from(this.authService.getUser())
-      .pipe(
-        map((user: User) => new Party(user)),
-        exhaustMap((party: Party) => this.organizationResource.createOrganization(party)),
-        map((organization: Organization) => organization.id),
-        map((organizationId: number) => this.routeUtils.routeRelativeTo([`${organizationId}`, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]))
       ).subscribe();
   }
 
