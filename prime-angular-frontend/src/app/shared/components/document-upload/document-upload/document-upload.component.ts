@@ -33,6 +33,7 @@ export class DocumentUploadComponent implements OnInit {
   @Output() public completed: EventEmitter<BaseDocument> = new EventEmitter();
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
   // See https://github.com/pqina/filepond/blob/master/src/js/app/options.js
+  // and https://github.com/pqina/filepond/blob/master/types/index.d.ts
   public filePondOptions: { [key: string]: any };
   public filePondUploadProgress = 0;
   public filePondFiles = [];
