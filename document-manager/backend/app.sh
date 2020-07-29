@@ -28,6 +28,10 @@ case "$1" in
     migrate)
         migrate
         ;;
+    dev)
+        migrate
+        backend
+        ;;
     *)
     echo "You\'re doing it wrong..."
 esac
