@@ -1,17 +1,26 @@
 @import 'palette';
 @import 'bootstrap/bootstrap-imports';
 
-// NOTE: mat-sidenav is modified globally
-// @see ./scss/material/components/_mat-sidenav.scss
-
 .prime-sidenav-container {
   position: absolute;
   // Compensate for the application header, and the
-  // progres indicator for HTTP requests and routing
+  // progress indicator for HTTP requests and routing
   top: 73px;
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+@mixin logo-size($width: 90px) {
+  // Override the default size regardless of viewport size
+  // to match the large breakpoint size of the logo
+  &.fixed {
+    width: $width;
+  }
+
+  @include media-breakpoint-up(lg) {
+    width: $width;
+  }
 }
 
 .logo {
@@ -22,30 +31,6 @@
     width: 40px;
     height: auto;
 
-    @include media-breakpoint-up(lg) {
-      width: 90px;
-    }
-  }
-}
-
-.mat-nav-list {
-  &:not(:first-of-type) {
-    padding-top: 0;
-  }
-
-  .mat-list-item.disabled {
-    // Prevent interacting with the link
-    pointer-events: none;
-  }
-
-  .mat-list-item.deemphasize {
-    // De-emphasize the link
-    opacity: 0.4;
-  }
-}
-
-@media print {
-  .mat-sidenav-content {
-    margin-left: 0 !important;
+    @include logo-size;
   }
 }

@@ -39,6 +39,7 @@ import {
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { Dashboard2Component } from '@shared/components/dashboard2/dashboard2.component';
+import { DashboardNavComponent } from '@shared/components/dashboard-nav/dashboard-nav.component';
 import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -100,6 +101,7 @@ import { OverviewContainerComponent } from './components/site/overview-container
     AddressComponent,
     DashboardComponent,
     Dashboard2Component,
+    DashboardNavComponent,
     ConfirmDialogComponent,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
@@ -183,6 +185,7 @@ import { OverviewContainerComponent } from './components/site/overview-container
     AddressComponent,
     DashboardComponent,
     Dashboard2Component,
+    DashboardNavComponent,
     EnrolmentStatusReasonsComponent,
     HeaderComponent,
     PageComponent,

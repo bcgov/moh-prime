@@ -4,54 +4,25 @@
             (logout)="onLogout()"></app-header>
 
 <mat-sidenav-container class="prime-sidenav-container">
+
   <mat-sidenav #sidenav
                [mode]="sideNavProps.mode"
                [opened]="sideNavProps.opened"
                [fixedInViewport]="sideNavProps.fixedInViewport"
                [fixedTopGap]="0"
                [fixedBottomGap]="0"
-               class="prime-sidenav d-print-none">
+               class="d-print-none">
 
     <div class="logo">
       <img src="/assets/prime_logo.svg"
            alt="PRIME Logo"
-           [ngClass]="{ 'is-deskop': isDesktop }">
+           [class.fixed]="!showNavItemIcons">
     </div>
 
-    <mat-nav-list *ngFor="let dashboardNavSection of dashboardNavSections; let last = last;"
-                  [disableRipple]="true">
-      <h3 mat-subheader
-          *ngIf="dashboardNavSection.showHeader && sideNavProps.showText">
-        {{ dashboardNavSection.header }}
-      </h3>
-
-      <div *ngFor="let item of dashboardNavSection.items">
-
-        <mat-list-item *ngIf="item.showItem"
-                       [routerLink]="item.route"
-                       routerLinkActive="active"
-                       [ngClass]="{
-                         'force-active': item.forceActive,
-                         'disabled': item.disabled,
-                         'deemphasize': item.deemphasize
-                       }"
-                       (click)="onRoute()">
-          <mat-icon mat-list-icon
-                    [ngClass]="{ 'center-sidenav-icon': !isDesktop }">{{ item.icon }}</mat-icon>
-
-          <a matLine
-             [ngClass]="{ 'extend-content-width': isDesktop }">
-            <span *ngIf="sideNavProps.showText">
-              {{ item.name }}
-            </span>
-          </a>
-        </mat-list-item>
-
-      </div>
-
-      <mat-divider *ngIf="!last"
-                   class="my-3"></mat-divider>
-    </mat-nav-list>
+    <app-dashboard-nav [dashboardNavSections]="dashboardNavSections"
+                       [showNavItemIcons]="showNavItemIcons"
+                       [showNavItemLabels]="sideNavProps.showNavItemLabels"
+                       (route)="onRoute()"></app-dashboard-nav>
 
   </mat-sidenav>
 
