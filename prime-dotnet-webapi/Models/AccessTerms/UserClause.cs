@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Prime.Models
 {
     [Table("UserClause")]
-    public class UserClause : BaseAuditable
+    public abstract class UserClause : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
@@ -14,4 +14,11 @@ namespace Prime.Models
 
         public DateTimeOffset EffectiveDate { get; set; }
     }
+
+    public class CommunityPharmacistAgreement : UserClause
+    { }
+    public class RegulatedUserAgreement : UserClause
+    { }
+    public class OboAgreement : UserClause
+    { }
 }
