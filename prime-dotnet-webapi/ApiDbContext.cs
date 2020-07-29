@@ -10,6 +10,7 @@ using Prime.Configuration;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Reflection;
 
 namespace Prime
 {
@@ -70,14 +71,14 @@ namespace Prime
         public DbSet<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
+
         public DbSet<AccessTerm> AccessTerms { get; set; }
-        public DbSet<GlobalClause> GlobalClauses { get; set; }
         public DbSet<UserClause> UserClauses { get; set; }
-        public DbSet<LicenseClassClause> LicenseClassClauses { get; set; }
-        public DbSet<LicenseClassClauseMapping> LicenseClassClauseMappings { get; set; }
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
+
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
+
         // Site Registration
         public DbSet<Location> Locations { get; set; }
         public DbSet<Organization> Organizations { get; set; }
@@ -163,35 +164,7 @@ namespace Prime
             }
             #endregion
 
-            modelBuilder.ApplyConfiguration(new EnrolleeConfiguration());
-            modelBuilder.ApplyConfiguration(new CollegeConfiguration());
-            modelBuilder.ApplyConfiguration(new LicenseConfiguration());
-            modelBuilder.ApplyConfiguration(new CollegeLicenseConfiguration());
-            modelBuilder.ApplyConfiguration(new PracticeConfiguration());
-            modelBuilder.ApplyConfiguration(new CollegePracticeConfiguration());
-            modelBuilder.ApplyConfiguration(new JobNameConfiguration());
-            modelBuilder.ApplyConfiguration(new OrganizationTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new StatusConfiguration());
-            modelBuilder.ApplyConfiguration(new StatusReasonConfiguration());
-            modelBuilder.ApplyConfiguration(new CountryConfiguration());
-            modelBuilder.ApplyConfiguration(new ProvinceConfiguration());
-            modelBuilder.ApplyConfiguration(new SelfDeclarationTypeConfiguration());
-
-            modelBuilder.ApplyConfiguration(new PrivilegeTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new PrivilegeGroupConfiguration());
-            modelBuilder.ApplyConfiguration(new PrivilegeConfiguration());
-            modelBuilder.ApplyConfiguration(new DefaultPrivilegeConfiguration());
-            modelBuilder.ApplyConfiguration(new AssignedPrivilegeConfiguration());
-            modelBuilder.ApplyConfiguration(new EnrolleeProfileVersionConfiguration());
-
-            modelBuilder.ApplyConfiguration(new GlobalClauseConfiguration());
-            modelBuilder.ApplyConfiguration(new UserClauseConfiguration());
-            modelBuilder.ApplyConfiguration(new LicenseClassClauseConfiguration());
-            modelBuilder.ApplyConfiguration(new LicenseClassClauseMappingConfiguration());
-
-            modelBuilder.ApplyConfiguration(new BusinessEventTypeConfiguration());
-
-            modelBuilder.ApplyConfiguration(new VendorConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             #region Indexes
             modelBuilder.Entity<Admin>()
@@ -227,17 +200,6 @@ namespace Prime
                 .HasOne(toa => toa.Enrollee)
                 .WithMany(e => e.AccessTerms)
                 .HasForeignKey(toa => toa.EnrolleeId);
-
-            modelBuilder.Entity<AccessTermLicenseClassClause>()
-                .HasKey(tlic => new { tlic.AccessTermId, tlic.LicenseClassClauseId });
-            modelBuilder.Entity<AccessTermLicenseClassClause>()
-                .HasOne(tlic => tlic.AccessTerm)
-                .WithMany(toa => toa.AccessTermLicenseClassClauses)
-                .HasForeignKey(tlic => tlic.AccessTermId);
-            modelBuilder.Entity<AccessTermLicenseClassClause>()
-                .HasOne(tlic => tlic.LicenseClassClause)
-                .WithMany(lcc => lcc.AccessTermLicenseClassClauses)
-                .HasForeignKey(tlic => tlic.LicenseClassClauseId);
 
             modelBuilder.Entity<BusinessEvent>()
                 .HasOne(be => be.BusinessEventType)
