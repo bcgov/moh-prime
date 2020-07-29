@@ -117,7 +117,11 @@ export class RegistrationGuard extends BaseGuard {
 
     // Redirect to an appropriate default route
     if (!whiteListedRoutes.includes(childRoute)) {
-      return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT);
+      if (!organization.completed) {
+        return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, defaultRoute, organization.id);
+      } else {
+        return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT);
+      }
     }
 
     // Otherwise, allow access to the route

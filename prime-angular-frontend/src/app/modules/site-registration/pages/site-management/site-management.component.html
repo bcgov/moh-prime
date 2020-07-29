@@ -1,6 +1,8 @@
 <app-page [busy]="busy">
   <app-page-header>{{ title }}</app-page-header>
 
+  <app-site-collection-notice [isFull]="false"></app-site-collection-notice>
+
   <div *ngIf="hasSubmittedSite"
        class="alert-message">
     <app-alert type="info">

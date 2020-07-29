@@ -47,6 +47,7 @@ export class SiteRoutes {
   // Used to indicate the routes and order of registration for organizations
   public static organizationRegistrationRouteOrder(): string[] {
     return [
+      this.COLLECTION_NOTICE,
       this.ORGANIZATION_SIGNING_AUTHORITY,
       this.ORGANIZATION_NAME
     ];
