@@ -204,12 +204,31 @@ namespace Prime.Services
                 foreach (var remoteUser in updated.RemoteUsers)
                 {
                     remoteUser.SiteId = current.Id;
-                    _context.RemoteUsers.Add(remoteUser);
+                    var remoteUserLocations = new List<RemoteUserLocation>();
+
                     foreach (var location in remoteUser.RemoteUserLocations)
                     {
-                        _context.RemoteUserLocations.Add(location);
-                        _context.Addresses.Add(location.PhysicalAddress);
+                        var newAddress = new PhysicalAddress
+                        {
+                            CountryCode = location.PhysicalAddress.CountryCode,
+                            ProvinceCode = location.PhysicalAddress.ProvinceCode,
+                            Street = location.PhysicalAddress.Street,
+                            Street2 = location.PhysicalAddress.Street2,
+                            City = location.PhysicalAddress.City,
+                            Postal = location.PhysicalAddress.Postal
+                        };
+                        var newLocation = new RemoteUserLocation
+                        {
+                            RemoteUser = remoteUser,
+                            InternetProvider = location.InternetProvider,
+                            PhysicalAddress = newAddress
+                        };
+                        _context.Entry(newAddress).State = EntityState.Added;
+                        _context.Entry(newLocation).State = EntityState.Added;
+                        remoteUserLocations.Add(newLocation);
                     }
+                    remoteUser.RemoteUserLocations = remoteUserLocations;
+                    _context.Entry(remoteUser).State = EntityState.Added;
                 }
             }
         }
