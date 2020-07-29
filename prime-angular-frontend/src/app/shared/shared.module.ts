@@ -140,7 +140,7 @@ import { OverviewContainerComponent } from './components/site/overview-container
     OrganizationReviewComponent,
     ImageComponent,
     OverviewSectionComponent,
-    OverviewContainerComponent,
+    OverviewContainerComponent
   ],
   imports: [
     CommonModule,
@@ -214,7 +214,7 @@ import { OverviewContainerComponent } from './components/site/overview-container
     DocumentUploadComponent,
     OrganizationReviewComponent,
     OverviewSectionComponent,
-    OverviewContainerComponent,
+    OverviewContainerComponent
   ],
   providers: [
     FullnamePipe,

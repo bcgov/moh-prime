@@ -3,8 +3,10 @@ export class SiteRoutes {
   public static COLLECTION_NOTICE = 'collection-notice';
 
   // Kept as organizations so route paths indicate hierarchy of resources
-  // TODO maybe don't make site management the root so paths make sense...?
+  // TODO maybe don't make site management the root so paths make sense on site management
   public static SITE_MANAGEMENT = 'organizations';
+  // TODO make this the roote path for organizations and sites
+  // public static ORGANIZATIONS = 'organizations';
 
   public static ORGANIZATION_SIGNING_AUTHORITY = 'organization-signing-authority';
   public static ORGANIZATION_NAME = 'organization-name';

@@ -66,8 +66,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       this.administratorPharmaNetForm.getRawValue(),
       this.privacyOfficerForm.getRawValue(),
       this.technicalSupportForm.getRawValue()
-    ]
-      .map((party: Party) => this.toPartyJson(party));
+    ].map((party: Party) => this.toPartyJson(party));
 
     // Includes site related keys to uphold relationships, and allow for updates
     // to a site. Keys not for update have been omitted and the type enforced
