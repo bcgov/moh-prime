@@ -221,10 +221,11 @@ objects:
     restartPolicy: Never
     containers:
     - command:
-        - flask
-      args:
-        - db
-        - upgrade
+        - /bin/bash
+      args: 
+        - '-c'
+        - /opt/app-root/src/app.sh
+        - migrate
       env:
         - name: CACHE_REDIS_HOST
           value: "redis${SUFFIX}"

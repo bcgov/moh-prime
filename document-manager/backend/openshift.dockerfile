@@ -22,4 +22,4 @@ WORKDIR ${APP_ROOT}/src
 ENV FLASK_APP app.py
 # Run the server
 EXPOSE 5001 9191
-ENTRYPOINT /opt/app-root/src/app.sh
+ENTRYPOINT /opt/app-root/src/app.sh backend
