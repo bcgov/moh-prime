@@ -5,7 +5,7 @@ namespace Prime.Configuration
 {
     public class OrganizationTypeConfiguration : SeededTable<OrganizationType>
     {
-        public override ICollection<OrganizationType> SeedData
+        public override IEnumerable<OrganizationType> SeedData
         {
             get
             {

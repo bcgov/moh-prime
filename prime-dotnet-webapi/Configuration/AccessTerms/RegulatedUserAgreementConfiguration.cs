@@ -8,11 +8,11 @@ namespace Prime.Configuration.Agreements
 {
     public class RegulatedUserAgreementConfiguration : SeededTable<RegulatedUserAgreement>
     {
-        public override ICollection<RegulatedUserAgreement> SeedData
+        public override IEnumerable<RegulatedUserAgreement> SeedData
         {
             get
             {
-                return Agreements.SeedData.OfType<RegulatedUserAgreement>().ToList();
+                return Agreements.SeedData.OfType<RegulatedUserAgreement>();
             }
         }
 

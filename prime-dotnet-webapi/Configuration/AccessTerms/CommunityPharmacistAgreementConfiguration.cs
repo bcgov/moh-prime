@@ -8,11 +8,11 @@ namespace Prime.Configuration.Agreements
 {
     public class CommunityPharmacistAgreementConfiguration : SeededTable<CommunityPharmacistAgreement>
     {
-        public override ICollection<CommunityPharmacistAgreement> SeedData
+        public override IEnumerable<CommunityPharmacistAgreement> SeedData
         {
             get
             {
-                return Agreements.SeedData.OfType<CommunityPharmacistAgreement>().ToList();
+                return Agreements.SeedData.OfType<CommunityPharmacistAgreement>();
             }
         }
 

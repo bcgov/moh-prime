@@ -8,11 +8,11 @@ namespace Prime.Configuration.Agreements
 {
     public class OboAgreementConfiguration : SeededTable<OboAgreement>
     {
-        public override ICollection<OboAgreement> SeedData
+        public override IEnumerable<OboAgreement> SeedData
         {
             get
             {
-                return Agreements.SeedData.OfType<OboAgreement>().ToList();
+                return Agreements.SeedData.OfType<OboAgreement>();
             }
         }
 

@@ -5,7 +5,7 @@ namespace Prime.Configuration
 {
     public class VendorConfiguration : SeededTable<Vendor>
     {
-        public override ICollection<Vendor> SeedData
+        public override IEnumerable<Vendor> SeedData
         {
             get
             {

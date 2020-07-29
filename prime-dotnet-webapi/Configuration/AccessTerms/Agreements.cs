@@ -11,7 +11,7 @@ namespace Prime.Configuration.Agreements
     {
         private static DateTime SEEDING_DATE = SeededTable<UserClause>.SEEDING_DATE;
 
-        public static ICollection<UserClause> SeedData
+        public static IEnumerable<UserClause> SeedData
         {
             get
             {
