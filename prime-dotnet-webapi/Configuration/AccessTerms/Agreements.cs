@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Prime.Models;
 using Prime.Configuration.Resources;
