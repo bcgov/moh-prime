@@ -95,7 +95,10 @@ export class RegistrationGuard extends BaseGuard {
 
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
     const currentRoute = this.route(routePath);
-    const childRoute = routePath.split('/').pop();
+    let childRoute = routePath.split('/').pop();
+    if (childRoute.includes('?')) {
+      childRoute = childRoute.split('?')[0];
+    }
     // Allow access to a set of routes
     let whiteListedRoutes = SiteRoutes.siteRegistrationRoutes();
 
@@ -104,16 +107,14 @@ export class RegistrationGuard extends BaseGuard {
       whiteListedRoutes = whiteListedRoutes
         .filter((route: string) => SiteRoutes.organizationRegistrationRouteOrder().includes(route));
       // return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, organization.id);
+    } else {
+      if (!organization.acceptedAgreementDate) {
+        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
+      } else {
+        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
+        whiteListedRoutes.push(SiteRoutes.SITE_REVIEW);
+      }
     }
-    // else if (!site.organization.acceptedAgreementDate) {
-    //   // No routing beyond the organization agreement without accepting
-    //   whiteListedRoutes = whiteListedRoutes
-    //     .filter((route: string) => SiteRoutes.noOrganizationAgreementRoutes().includes(route));
-    // } else if (!site.completed) {
-    //   // No reviewing without completing the registration
-    //   whiteListedRoutes = whiteListedRoutes
-    //     .filter((route: string) => route !== SiteRoutes.SITE_REVIEW);
-    // }
 
     // Redirect to an appropriate default route
     if (!whiteListedRoutes.includes(childRoute)) {
