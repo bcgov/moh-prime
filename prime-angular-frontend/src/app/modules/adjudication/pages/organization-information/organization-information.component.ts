@@ -10,7 +10,6 @@ import { OrganizationResource } from '@core/resources/organization-resource.serv
   styleUrls: ['./organization-information.component.scss']
 })
 export class OrganizationInformationComponent implements OnInit {
-
   public busy: Subscription;
   public hasActions: boolean;
   public refresh: BehaviorSubject<boolean>;

@@ -84,7 +84,7 @@ export class OverviewComponent implements OnInit {
       .subscribe(() => this.nextRoute());
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     if (this.isOrganizationReview()) {
       this.organization = this.organizationService.organization;
       this.submitted = true;
@@ -96,5 +96,4 @@ export class OverviewComponent implements OnInit {
       }
     }
   }
-
 }
