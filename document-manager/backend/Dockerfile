@@ -23,6 +23,7 @@ RUN set -x && \
 WORKDIR ${APP_ROOT}/src
 ENV FLASK_APP app.py
 ENV DB_HOST postgresql${SUFFIX}
+ENV PGPASSWORD postgres
 # Run the server
 EXPOSE 5001 9191
 ENTRYPOINT /opt/app-root/src/app.sh dev
