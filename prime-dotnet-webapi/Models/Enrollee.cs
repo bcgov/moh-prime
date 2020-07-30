@@ -203,16 +203,6 @@ namespace Prime.Models
             CurrentStatus.AddStatusReason(type, statusReasonNote);
         }
 
-        public bool IsRegulatedUser()
-        {
-            if (Certifications == null || Certifications.Any(cert => cert.License == null))
-            {
-                throw new InvalidOperationException("Could not determine Regulated User status; Certifications or Licences were null");
-            }
-
-            return Certifications.Any(cert => cert.License.RegulatedUser);
-        }
-
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Guid.Empty.Equals(this.UserId))
