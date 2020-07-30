@@ -74,12 +74,8 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
 
   public showRemoteAccess(): boolean {
     const enrolment = this.enrolmentStateService.enrolment;
-    return this.enrolleeUtilsService.isRegulatedUser(enrolment);
-  }
-
-  public disableRemoteAccess(): boolean {
-    const enrolment = this.enrolmentStateService.enrolment;
-    return enrolment.certifications.some(c => c.collegeCode === CollegeLicenceClass.CPBC);
+    const isPharmacist = enrolment.certifications.some(c => c.collegeCode === CollegeLicenceClass.CPBC);
+    return this.enrolleeUtilsService.isRegulatedUser(enrolment) && !isPharmacist;
   }
 
   public removeOrganization(index: number) {
