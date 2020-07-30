@@ -11,7 +11,7 @@ import { RegistrantGuard } from './shared/guards/registrant.guard';
 import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
 
-import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
+import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { SiteManagementComponent } from './pages/site-management/site-management.component';
@@ -35,7 +35,7 @@ import { RegistrationGuard } from './shared/guards/registration.guard';
 const routes: Routes = [
   {
     path: SiteRoutes.MODULE_PATH,
-    component: SiteRegistrationDashboardComponent,
+    component: DashboardComponent,
     canActivate: [UnsupportedGuard],
     canActivateChild: [
       AuthenticationGuard,
