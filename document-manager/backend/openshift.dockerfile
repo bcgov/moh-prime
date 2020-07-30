@@ -13,8 +13,8 @@ COPY . .
 RUN set -x && \
     pip3 install --upgrade -U pip setuptools wheel && \
     pip3 install psycopg2 && \
-    apt-get update -yqq && \
-    apt-get install -yqq postgresql-client && \
+    yum update -y && \
+    yum install -y postgresql-client && \
     source /opt/app-root/etc/scl_enable && \
     cd ${APP_ROOT}/src && \ 
     pip3 install -r requirements.txt
