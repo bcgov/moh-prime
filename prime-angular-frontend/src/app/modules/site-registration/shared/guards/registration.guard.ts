@@ -95,7 +95,11 @@ export class RegistrationGuard extends BaseGuard {
 
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
     const currentRoute = this.route(routePath);
-    let childRoute = routePath.split('/').pop();
+
+    let childRoute = routePath.includes('remote-users')
+      ? 'remote-users'
+      : routePath.split('/').pop();
+
     if (childRoute.includes('?')) {
       childRoute = childRoute.split('?')[0];
     }
