@@ -103,7 +103,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     if (siteId) {
       this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
     } else {
-      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+      this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
     }
   }
 
@@ -112,7 +112,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     if (redirectPath) {
       this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
     } else {
-      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+      this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
     }
   }
 
