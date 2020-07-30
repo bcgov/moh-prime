@@ -22,8 +22,7 @@ RUN set -x && \
 # Create working directory
 WORKDIR ${APP_ROOT}/src
 ENV FLASK_APP app.py
-ENV SUFFIX $SUFFIX
-ENV DB_HOST postgresql$SUFFIX
+ENV DB_HOST postgresql${SUFFIX}
 # Run the server
 EXPOSE 5001 9191
 ENTRYPOINT /opt/app-root/src/app.sh backend
