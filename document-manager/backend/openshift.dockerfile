@@ -1,4 +1,4 @@
-FROM docker-registry.default.svc:5000/dqszvc-tools/python-36-rhel7:1-36
+FROM docker-registry.default.svc:5000/dqszvc-tools/python:3.6
 USER 0
 SHELL ["/bin/bash","-c"]
 # Update installation utility
@@ -13,7 +13,8 @@ COPY . .
 RUN set -x && \
     pip3 install --upgrade -U pip setuptools wheel && \
     pip3 install psycopg2 && \
-    yum install -y postgresql-client && \
+    apt-get update -yqq && \
+    apt-get install -yqq postgresql-client && \
     source /opt/app-root/etc/scl_enable && \
     cd ${APP_ROOT}/src && \ 
     pip3 install -r requirements.txt
