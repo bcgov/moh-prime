@@ -221,10 +221,8 @@ objects:
     restartPolicy: Never
     containers:
     - command:
-        - /bin/bash
-      args: 
-        - '-c'
         - /opt/app-root/src/app.sh
+      args: 
         - migrate
       env:
         - name: CACHE_REDIS_HOST
