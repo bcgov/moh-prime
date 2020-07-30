@@ -16,6 +16,7 @@ RUN set -x && \
     pip3 install psycopg2 && \
     apt-get update -yqq && \
     apt-get install -yqq postgresql-client && \
+    find / -type f -name scl_enable && \
     source /opt/app-root/etc/scl_enable && \
     cd /opt/app-root/src && \ 
     pip3 install -r requirements.txt
