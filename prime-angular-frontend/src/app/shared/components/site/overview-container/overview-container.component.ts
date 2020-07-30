@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { AbstractComponent } from '@shared/classes/abstract-component';
@@ -34,7 +34,16 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public onRoute(routePath: string) {
+  public onRoute(routePath: string | (string | number)[]) {
+    let navExtra: NavigationExtras;
+    if (this.site) {
+      navExtra = { queryParams: { redirect: `${SiteRoutes.SITES}/${this.site.id}` } };
+    }
+    this.routeUtils.routeTo(routePath, navExtra);
+  }
+
+  public onRouteRelative(routePath: string) {
+    // queryParams: { redirect: `${SiteRoutes.SITES}/${siteId}`, siteId }
     this.routeUtils.routeRelativeTo(routePath);
   }
 

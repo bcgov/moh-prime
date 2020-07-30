@@ -116,10 +116,15 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
   }
 
   public nextRoute(siteId: number) {
-    if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
+    const redirectPath = this.route.snapshot.queryParams.redirect;
+    if (redirectPath) {
+      this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
     } else {
-      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.CARE_SETTING]);
+      if (this.isCompleted) {
+        this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
+      } else {
+        this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.CARE_SETTING]);
+      }
     }
   }
 

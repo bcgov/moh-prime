@@ -79,7 +79,11 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
+    }
   }
 
   public onVendorChange() {
