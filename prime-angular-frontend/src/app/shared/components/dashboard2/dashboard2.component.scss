@@ -14,6 +14,7 @@
 // Apply minimum amount of spacing to hold the sidenav
 // open when there is no content
 @mixin logo-spacing($width: 90px) {
+  width: $width;
   margin-left: $width / 2;
   margin-right: $width / 2;
 }
@@ -26,7 +27,6 @@
 
   img {
     margin: 3em 0 3.5em;
-    width: $width-small;
     height: auto;
     @include logo-spacing($width-small);
 
