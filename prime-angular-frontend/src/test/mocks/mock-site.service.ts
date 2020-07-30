@@ -4,9 +4,9 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Address } from '@shared/models/address.model';
 import { Site } from '@registration/shared/models/site.model';
-import { ISiteRegistrationService } from '@registration/shared/services/site-registration.service';
+import { ISiteService } from '@registration/shared/services/site.service';
 
-export class MockSiteRegistrationService implements ISiteRegistrationService {
+export class MockSiteService implements ISiteService {
   // tslint:disable-next-line: variable-name
   private _site: BehaviorSubject<Site>;
 
@@ -19,9 +19,14 @@ export class MockSiteRegistrationService implements ISiteRegistrationService {
       addressId: faker.random.number(),
       physicalAddressId: faker.random.number(),
       physicalAddress: address,
+      mailingAddressId: faker.random.number(),
+      mailingAddress: address,
       hpdid: faker.random.uuid(),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
+      preferredFirstName: null,
+      preferredMiddleName: null,
+      preferredLastName: null,
       dateOfBirth: null,
       jobRoleTitle: null,
       email: null,
@@ -31,34 +36,35 @@ export class MockSiteRegistrationService implements ISiteRegistrationService {
     };
     this._site = new BehaviorSubject<Site>({
       id: siteId,
-      locationId: faker.random.number(),
-      location: {
+      administratorPharmaNetId: faker.random.number(),
+      administratorPharmaNet: user,
+      privacyOfficerId: faker.random.number(),
+      privacyOfficer: user,
+      technicalSupportId: faker.random.number(),
+      technicalSupport: user,
+      organizationId: faker.random.number(),
+      organization: {
         id: faker.random.number(),
-        administratorPharmaNetId: faker.random.number(),
-        administratorPharmaNet: user,
-        privacyOfficerId: faker.random.number(),
-        privacyOfficer: user,
-        technicalSupportId: faker.random.number(),
-        technicalSupport: user,
-        organizationId: faker.random.number(),
-        organization: {
-          id: faker.random.number(),
-          signingAuthorityId: faker.random.number(),
-          signingAuthority: user,
-          name: faker.company.companyName(),
-          registrationId: faker.random.number(),
-          doingBusinessAs: null,
-          acceptedAgreementDate: faker.date.past(2).toDateString()
-        },
-        physicalAddressId: faker.random.number(),
-        physicalAddress: address,
-        businessHours: null,
-        doingBusinessAs: null
+        signingAuthorityId: faker.random.number(),
+        signingAuthority: user,
+        name: faker.company.companyName(),
+        registrationId: faker.random.alphaNumeric(),
+        doingBusinessAs: null,
+        completed: false,
+        acceptedAgreementDate: faker.date.past(2).toDateString(),
+        signedAgreementDocuments: [],
+        submittedDate: null,
+        siteCount: faker.random.number()
       },
-      vendorCode: null,
-      vendor: null,
+      physicalAddressId: faker.random.number(),
+      physicalAddress: address,
+      businessHours: null,
+      remoteUsers: null,
+      siteVendors: [],
+      businessLicenceDocuments: [],
       provisionerId: faker.random.number(),
       provisioner: user,
+      organizationTypeCode: faker.random.number(),
       pec: null,
       completed: null,
       approvedDate: faker.date.past(2).toDateString(),
