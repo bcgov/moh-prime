@@ -15,7 +15,7 @@ COPY . .
 
 RUN set -x && \
     pip3 install --upgrade -U pip setuptools wheel && \
-    pip3 install psycopg2 && \
+    pip3 install psycopg2 postgres && \
     cd ${APP_ROOT}/src && \ 
     pip3 install -r requirements.txt
 #    source /opt/app-root/etc/scl_enable && \
