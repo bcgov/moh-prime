@@ -324,7 +324,7 @@ export class DashboardComponent implements OnInit {
       {
         items: [
           {
-            name: 'Administration',
+            name: 'Site Management',
             icon: 'store',
             route: SiteRoutes.SITE_MANAGEMENT,
             showItem: true
