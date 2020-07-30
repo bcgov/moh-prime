@@ -5,7 +5,7 @@ SHELL ["/bin/bash","-c"]
 # Update installation utility
 #RUN apt-get update
 # Install project dependencies
-COPY . ${APP_ROOT}/src
+COPY . /opt/app-root/src
 
 # Install the requirements
 
@@ -17,7 +17,7 @@ RUN set -x && \
     apt-get update -yqq && \
     apt-get install -yqq postgresql-client && \
     source /opt/app-root/etc/scl_enable && \
-    cd ${APP_ROOT}/src && \ 
+    cd /opt/app-root/src && \ 
     pip3 install -r requirements.txt
 
 # Create working directory
