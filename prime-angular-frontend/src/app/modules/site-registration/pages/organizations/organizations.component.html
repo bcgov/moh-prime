@@ -61,7 +61,7 @@
         <mat-card-actions>
           <button mat-stroked-button
                   color="primary"
-                  [disabled]="!organization?.completed"
+                  [disabled]="!organizations[0]?.completed || (organizations[0]?.completed && sites.length > 0)"
                   (click)="addSite(organization.id)">
             Add Site
           </button>
@@ -110,8 +110,11 @@
             {{ organizations[0].locations[0]?.name | default: 'Site Information' }}
           </mat-card-title>
           <ng-container [ngTemplateOutlet]="siteMenu"
-                        [ngTemplateOutletContext]="{ site: site }"></ng-container>
-
+                        [ngTemplateOutletContext]="{
+                          organizationId: organizations[0].id,
+                          site: site
+                        }">
+          </ng-container>
         </mat-card-header>
         <mat-card-content>
           Vendor:
@@ -145,7 +148,7 @@
               aria-label="Organization actions menu">
       <button mat-menu-item
               (click)="addSite(organization.id)"
-              [disabled]="!organization?.completed">
+              [disabled]="!organizations[0]?.completed || (organizations[0]?.completed && sites.length > 0)">
         <mat-icon>add_location_alt</mat-icon>
         <span>Add Site</span>
       </button>
@@ -183,6 +186,7 @@
 
   <!-- TODO only for single organization then remove -->
   <ng-template #siteMenu
+               let-organizationId="organizationId"
                let-site="site">
     <button mat-icon-button
             [matMenuTriggerFor]="menu">
@@ -192,7 +196,7 @@
     <mat-menu #menu="matMenu"
               aria-label="Site actions menu">
       <button mat-menu-item
-              (click)="viewSite(site.id)">
+              (click)="viewSite(organizationId, site.id)">
         <mat-icon>visibility</mat-icon>
         <!-- TODO update to be View/Update Organization when updates are implemented -->
         <span>{{ (!site?.submittedDate) ? 'View/Update Site' : 'View Site' }}</span>

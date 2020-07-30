@@ -8,38 +8,6 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "HasConviction",
-                table: "Enrollee");
-
-            migrationBuilder.DropColumn(
-                name: "HasConvictionDetails",
-                table: "Enrollee");
-
-            migrationBuilder.DropColumn(
-                name: "HasDisciplinaryAction",
-                table: "Enrollee");
-
-            migrationBuilder.DropColumn(
-                name: "HasDisciplinaryActionDetails",
-                table: "Enrollee");
-
-            migrationBuilder.DropColumn(
-                name: "HasPharmaNetSuspended",
-                table: "Enrollee");
-
-            migrationBuilder.DropColumn(
-                name: "HasPharmaNetSuspendedDetails",
-                table: "Enrollee");
-
-            migrationBuilder.DropColumn(
-                name: "HasRegistrationSuspended",
-                table: "Enrollee");
-
-            migrationBuilder.DropColumn(
-                name: "HasRegistrationSuspendedDetails",
-                table: "Enrollee");
-
             migrationBuilder.CreateTable(
                 name: "SelfDeclarationTypeLookup",
                 columns: table => new
@@ -151,6 +119,98 @@ namespace Prime.Migrations
                 name: "IX_SelfDeclarationDocument_SelfDeclarationTypeCode",
                 table: "SelfDeclarationDocument",
                 column: "SelfDeclarationTypeCode");
+
+            migrationBuilder.Sql(@"
+                INSERT INTO ""SelfDeclaration""
+                SELECT
+                    nextval('""SelfDeclaration_Id_seq""') as ""Id"",
+                    e.""CreatedUserId"",
+                    e.""CreatedTimeStamp"",
+                    e.""CreatedUserId"" as ""UpdatedUserId"",
+                    current_timestamp as ""UpdatedTimeStamp"",
+                    e.""Id"" as ""EnrolleeId"",
+                    1 as ""SelfDeclarationTypeCode"",
+                    e.""HasConvictionDetails"" as ""SelfDeclarationDetails""
+                FROM ""Enrollee"" e
+                WHERE e.""HasConviction"" = true;
+            ");
+
+            migrationBuilder.Sql(@"
+                INSERT INTO ""SelfDeclaration""
+                SELECT
+                    nextval('""SelfDeclaration_Id_seq""') as ""Id"",
+                    e.""CreatedUserId"",
+                    e.""CreatedTimeStamp"",
+                    e.""CreatedUserId"" as ""UpdatedUserId"",
+                    current_timestamp as ""UpdatedTimeStamp"",
+                    e.""Id"" as ""EnrolleeId"",
+                    2 as ""SelfDeclarationTypeCode"",
+                    e.""HasRegistrationSuspendedDetails"" as ""SelfDeclarationDetails""
+                FROM ""Enrollee"" e
+                WHERE e.""HasRegistrationSuspended"" = true;
+            ");
+
+            migrationBuilder.Sql(@"
+                INSERT INTO ""SelfDeclaration""
+                SELECT
+                    nextval('""SelfDeclaration_Id_seq""') as ""Id"",
+                    e.""CreatedUserId"",
+                    e.""CreatedTimeStamp"",
+                    e.""CreatedUserId"" as ""UpdatedUserId"",
+                    current_timestamp as ""UpdatedTimeStamp"",
+                    e.""Id"" as ""EnrolleeId"",
+                    3 as ""SelfDeclarationTypeCode"",
+                    e.""HasDisciplinaryActionDetails"" as ""SelfDeclarationDetails""
+                FROM ""Enrollee"" e
+                WHERE e.""HasDisciplinaryAction"" = true;
+            ");
+
+            migrationBuilder.Sql(@"
+                INSERT INTO ""SelfDeclaration""
+                SELECT
+                    nextval('""SelfDeclaration_Id_seq""') as ""Id"",
+                    e.""CreatedUserId"",
+                    e.""CreatedTimeStamp"",
+                    e.""CreatedUserId"" as ""UpdatedUserId"",
+                    current_timestamp as ""UpdatedTimeStamp"",
+                    e.""Id"" as ""EnrolleeId"",
+                    4 as ""SelfDeclarationTypeCode"",
+                    e.""HasPharmaNetSuspendedDetails"" as ""SelfDeclarationDetails""
+                FROM ""Enrollee"" e
+                WHERE e.""HasPharmaNetSuspended"" = true;
+            ");
+
+            migrationBuilder.DropColumn(
+                name: "HasConviction",
+                table: "Enrollee");
+
+            migrationBuilder.DropColumn(
+                name: "HasConvictionDetails",
+                table: "Enrollee");
+
+            migrationBuilder.DropColumn(
+                name: "HasDisciplinaryAction",
+                table: "Enrollee");
+
+            migrationBuilder.DropColumn(
+                name: "HasDisciplinaryActionDetails",
+                table: "Enrollee");
+
+            migrationBuilder.DropColumn(
+                name: "HasPharmaNetSuspended",
+                table: "Enrollee");
+
+            migrationBuilder.DropColumn(
+                name: "HasPharmaNetSuspendedDetails",
+                table: "Enrollee");
+
+            migrationBuilder.DropColumn(
+                name: "HasRegistrationSuspended",
+                table: "Enrollee");
+
+            migrationBuilder.DropColumn(
+                name: "HasRegistrationSuspendedDetails",
+                table: "Enrollee");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

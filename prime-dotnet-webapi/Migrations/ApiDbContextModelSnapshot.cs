@@ -500,7 +500,7 @@ namespace Prime.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Prime.Models.BusinessLicence", b =>
+            modelBuilder.Entity("Prime.Models.BusinessLicenceDocument", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -516,7 +516,7 @@ namespace Prime.Migrations
                     b.Property<Guid>("DocumentGuid")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("Filename")
                         .HasColumnType("text");
 
                     b.Property<int>("SiteId")
@@ -535,7 +535,7 @@ namespace Prime.Migrations
 
                     b.HasIndex("SiteId");
 
-                    b.ToTable("BusinessLicence");
+                    b.ToTable("BusinessLicenceDocument");
                 });
 
             modelBuilder.Entity("Prime.Models.Certification", b =>
@@ -7667,7 +7667,7 @@ namespace Prime.Migrations
                     b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("Filename")
                         .HasColumnType("text");
 
                     b.Property<int>("SelfDeclarationTypeCode")
@@ -7757,7 +7757,7 @@ namespace Prime.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Prime.Models.SignedAgreement", b =>
+            modelBuilder.Entity("Prime.Models.SignedAgreementDocument", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -7773,7 +7773,7 @@ namespace Prime.Migrations
                     b.Property<Guid>("DocumentGuid")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("Filename")
                         .HasColumnType("text");
 
                     b.Property<int>("OrganizationId")
@@ -7792,7 +7792,7 @@ namespace Prime.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("SignedAgreement");
+                    b.ToTable("SignedAgreementDocument");
                 });
 
             modelBuilder.Entity("Prime.Models.Site", b =>
@@ -7844,6 +7844,45 @@ namespace Prime.Migrations
                     b.HasIndex("VendorCode");
 
                     b.ToTable("Site");
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteRegistrationReviewDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DocumentGuid")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Filename")
+                        .HasColumnType("text");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("UploadedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId")
+                        .IsUnique();
+
+                    b.ToTable("SiteRegistrationReviewDocument");
                 });
 
             modelBuilder.Entity("Prime.Models.Status", b =>
@@ -12151,7 +12190,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 6, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            EnrolleeClassification = "OBO",
+                            EnrolleeClassification = "RU",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -12385,10 +12424,10 @@ namespace Prime.Migrations
                         .HasForeignKey("SiteId");
                 });
 
-            modelBuilder.Entity("Prime.Models.BusinessLicence", b =>
+            modelBuilder.Entity("Prime.Models.BusinessLicenceDocument", b =>
                 {
                     b.HasOne("Prime.Models.Site", "Site")
-                        .WithMany("BusinessLicences")
+                        .WithMany("BusinessLicenceDocuments")
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -12734,10 +12773,10 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.SignedAgreement", b =>
+            modelBuilder.Entity("Prime.Models.SignedAgreementDocument", b =>
                 {
                     b.HasOne("Prime.Models.Organization", "Organization")
-                        .WithMany("SignedAgreements")
+                        .WithMany("SignedAgreementDocuments")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -12757,6 +12796,15 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Vendor", "Vendor")
                         .WithMany("Sites")
                         .HasForeignKey("VendorCode");
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteRegistrationReviewDocument", b =>
+                {
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithOne("SiteRegistrationReviewDocument")
+                        .HasForeignKey("Prime.Models.SiteRegistrationReviewDocument", "SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 
-// TODO add logging
 namespace Prime.Services
 {
     public class SiteService : BaseService, ISiteService
@@ -91,7 +90,6 @@ namespace Prime.Services
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
-            // TODO should create a location controller to avoid these kinds of updates
             UpdateLocation(currentSite.Location, updatedSite.Location);
 
             // Wholesale replace the remote users
@@ -126,11 +124,11 @@ namespace Prime.Services
             currentSite.SubmittedDate = submittedDate;
 
             // Registration has been completed
-            currentSite.Completed = (isCompleted == true)
+            currentSite.Completed = (isCompleted)
                 ? isCompleted
                 : currentIsCompleted;
 
-            await _businessEventService.CreateSiteEventAsync(currentSite.Id, (int)currentSite.Provisioner.Id, "Site Updated");
+            await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
             try
             {
@@ -349,17 +347,17 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(v => v.Code == vendorCode);
         }
 
-        public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)
+        public async Task<BusinessLicenceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)
         {
-            var businessLicence = new BusinessLicence
+            var businessLicence = new BusinessLicenceDocument
             {
                 DocumentGuid = documentGuid,
                 SiteId = siteId,
-                FileName = filename,
+                Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };
 
-            _context.BusinessLicences.Add(businessLicence);
+            _context.BusinessLicenceDocuments.Add(businessLicence);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
@@ -370,16 +368,16 @@ namespace Prime.Services
             return businessLicence;
         }
 
-        public async Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId)
+        public async Task<IEnumerable<BusinessLicenceDocument>> GetBusinessLicencesAsync(int siteId)
         {
-            return await _context.BusinessLicences
+            return await _context.BusinessLicenceDocuments
                 .Where(bl => bl.SiteId == siteId)
                 .ToListAsync();
         }
 
-        public async Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId)
+        public async Task<BusinessLicenceDocument> GetLatestBusinessLicenceAsync(int siteId)
         {
-            return await _context.BusinessLicences
+            return await _context.BusinessLicenceDocuments
                 .Where(bl => bl.SiteId == siteId)
                 .OrderByDescending(bl => bl.UploadedDate)
                 .FirstOrDefaultAsync();
@@ -415,7 +413,7 @@ namespace Prime.Services
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserLocations)
                         .ThenInclude(rul => rul.PhysicalAddress)
-                .Include(s => s.BusinessLicences);
+                .Include(s => s.BusinessLicenceDocuments);
         }
     }
 }

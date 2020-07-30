@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 labels:
-  template: postgresql-persistent-template
+  template: postgresql-ephemeral-template
 metadata:
   creationTimestamp: null
   name: postgresql-dc

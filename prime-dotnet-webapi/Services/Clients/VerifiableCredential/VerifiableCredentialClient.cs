@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace Prime.Services.Clients
 {
@@ -12,6 +13,10 @@ namespace Prime.Services.Clients
     {
         private readonly HttpClient _client;
         private readonly ILogger _logger;
+
+        private static readonly string SchemaName = "enrollee";
+        // TODO update version to 2.0 in test agent (and update cred_def_id) so versions are the same between dev and test
+        private static readonly string SchemaVersion = "2.0";
 
         public VerifiableCredentialClient(
             HttpClient client,
@@ -53,8 +58,7 @@ namespace Prime.Services.Clients
 
         public async Task<JObject> IssueCredentialAsync(JObject credentialOffer)
         {
-            var httpContent = new StringContent(credentialOffer.ToString());
-            httpContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            var httpContent = new StringContent(credentialOffer.ToString(), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = null;
             try
@@ -63,17 +67,45 @@ namespace Prime.Services.Clients
             }
             catch (Exception ex)
             {
-                await LogError(httpContent, response, ex);
+                await LogError(response, ex);
                 throw new VerifiableCredentialApiException("Error occurred attempting to issue a credential: ", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                await LogError(httpContent, response);
+                await LogError(response);
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::IssueCredentialAsync");
             }
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
+        }
+
+
+        public async Task<string> GetSchemaId(string did)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.GetAsync($"schemas/created?schema_version={SchemaVersion}&schema_issuer_did={did}&schema_name={SchemaName}");
+            }
+            catch (Exception ex)
+            {
+                await LogError(response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to get the schema id by issuer did: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetSchema");
+            }
+
+            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+            _logger.LogInformation("GET Schema id by issuer id response {@JObject}", JsonConvert.SerializeObject(body));
+            _logger.LogInformation("SCHEMA_ID: {schemaid}", (string)body.SelectToken("schema_ids[0]"));
+
+            return (string)body.SelectToken("schema_ids[0]");
         }
 
         public async Task<JObject> GetSchema(string schemaId)

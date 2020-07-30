@@ -40,7 +40,7 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Awaiting test refactor")]
         public async void testQualifiesForAutomaticAdjudication_NoCerts()
         {
             Enrollee enrollee = TestDb.Has(new EnrolleeFactory().Generate());

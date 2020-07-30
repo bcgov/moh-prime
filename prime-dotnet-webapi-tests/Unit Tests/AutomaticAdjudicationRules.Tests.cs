@@ -52,6 +52,7 @@ namespace PrimeTests.UnitTests
             PHARMANET_SUSPENDED = 4,
             REGISTRATION_SUSPENDED = 8
         }
+
         private void UpdateSelfDeclaration(Enrollee enrollee, SelfDeclarationFlag declarations)
         {
             var updated = new List<SelfDeclaration>();

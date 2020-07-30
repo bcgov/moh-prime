@@ -16,10 +16,10 @@ namespace Prime.Services
 {
     public class RazorConverterService : IRazorConverterService
     {
-        private IRazorViewEngine _viewEngine;
-        private ITempDataProvider _tempDataProvider;
-        private IServiceProvider _serviceProvider;
-        private IHttpContextAccessor _contextAccessor;
+        private readonly IRazorViewEngine _viewEngine;
+        private readonly ITempDataProvider _tempDataProvider;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IHttpContextAccessor _contextAccessor;
 
         public RazorConverterService(
             IRazorViewEngine viewEngine,
@@ -76,7 +76,7 @@ namespace Prime.Services
             var searchedLocations = getViewResult.SearchedLocations.Concat(findViewResult.SearchedLocations);
             var errorMessage = string.Join(
                 Environment.NewLine,
-                new[] { $"Unable to find view '{viewName}'. The following locations were searched:" }.Concat(searchedLocations)); ;
+                new[] { $"Unable to find view '{viewName}'. The following locations were searched:" }.Concat(searchedLocations));
 
             throw new InvalidOperationException(errorMessage);
         }
