@@ -1,14 +1,14 @@
 <ng-container *ngIf="organization">
   <app-overview-section title="Signing Authority"
                         (route)="onRoute($event)"
-                        [editRoute]="SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY"
+                        [editRoute]="[SiteRoutes.MODULE_PATH,SiteRoutes.SITE_MANAGEMENT,organization.id,SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
                         [showEditRedirect]="showEditRedirect">
     <app-enrollee-profile [enrollee]="organization?.signingAuthority"></app-enrollee-profile>
   </app-overview-section>
 
   <app-overview-section title="Organization Information"
                         (route)="onRoute($event)"
-                        [editRoute]="SiteRoutes.ORGANIZATION_NAME"
+                        [editRoute]="[SiteRoutes.MODULE_PATH,SiteRoutes.SITE_MANAGEMENT,organization.id,SiteRoutes.ORGANIZATION_NAME]"
                         [showEditRedirect]="showEditRedirect">
     <app-enrollee-property title="Organization Name (Legal Entity Operating Site)">
       {{ organization?.name | default }}
@@ -28,7 +28,7 @@
 <ng-container *ngIf="site">
 
   <app-overview-section title="Care Setting"
-                        (route)="onRoute($event)"
+                        (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.CARE_SETTING"
                         [showEditRedirect]="showEditRedirect">
     <app-enrollee-property title="Care Setting">
@@ -40,7 +40,7 @@
   </app-overview-section>
 
   <app-overview-section title="Business Licence"
-                        (route)="onRoute($event)"
+                        (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         [showEditRedirect]="showEditRedirect">
     <ng-container *ngIf="site.businessLicenceDocuments[0]">
@@ -57,7 +57,7 @@
   </app-overview-section>
 
   <app-overview-section title="Site Address"
-                        (route)="onRoute($event)"
+                        (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.SITE_ADDRESS"
                         [showEditRedirect]="showEditRedirect">
     <app-enrollee-property title="Address">
@@ -82,8 +82,8 @@
   </app-overview-section>
 
   <app-overview-section title="Hours of Operation"
-                        (route)="onRoute($event)"
-                        editRoute="SiteRoutes.HOURS_OPERATION"
+                        (route)="onRouteRelative($event)"
+                        [editRoute]="SiteRoutes.HOURS_OPERATION"
                         [showEditRedirect]="showEditRedirect">
     <ng-container *ngFor="let businessDay of site?.businessHours">
       <app-enrollee-property [title]="businessDay.day | weekday">
@@ -99,21 +99,21 @@
   </app-overview-section>
 
   <app-overview-section title="PharmaNet Administrator"
-                        (route)="onRoute($event)"
+                        (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.ADMINISTRATOR"
                         [showEditRedirect]="showEditRedirect">
     <app-party-review [party]="site?.administratorPharmaNet"></app-party-review>
   </app-overview-section>
 
   <app-overview-section title="Privacy Officer"
-                        (route)="onRoute($event)"
+                        (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.PRIVACY_OFFICER"
                         [showEditRedirect]="showEditRedirect">
     <app-party-review [party]="site?.privacyOfficer"></app-party-review>
   </app-overview-section>
 
   <app-overview-section title="Technical Support Contact"
-                        (route)="onRoute($event)"
+                        (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.TECHNICAL_SUPPORT"
                         [showEditRedirect]="showEditRedirect">
     <app-party-review [party]="site?.technicalSupport"></app-party-review>
@@ -121,7 +121,7 @@
 
   <ng-container *ngFor="let user of site.remoteUsers">
     <app-overview-section title="Remote User"
-                          (route)="onRoute($event)"
+                          (route)="onRouteRelative($event)"
                           [editRoute]="SiteRoutes.REMOTE_USERS"
                           [showEditRedirect]="showEditRedirect">
 

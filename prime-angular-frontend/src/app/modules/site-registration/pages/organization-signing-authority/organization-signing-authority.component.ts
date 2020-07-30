@@ -112,10 +112,15 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public nextRoute() {
-    if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
+    const redirectPath = this.route.snapshot.queryParams.redirect;
+    if (redirectPath) {
+      this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_NAME);
+      if (this.isCompleted) {
+        this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
+      } else {
+        this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_NAME);
+      }
     }
   }
 
