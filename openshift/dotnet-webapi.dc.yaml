@@ -95,7 +95,7 @@ objects:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 value: prime-document-manager
               - name: DOCUMENT_MANAGER_URL
-                value: 'https://document-manager${SUFFIX}.pharmanetenrolment.gov.bc.ca/'
+                value: "https://${VANITY_URL}/api/docman/"
               - name: DOCUMENT_MANAGER_CLIENT_SECRET
                 valueFrom:
                   secretKeyRef:

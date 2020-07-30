@@ -47,7 +47,7 @@ pipeline {
                     // sh "./player.sh deploy mongo test -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy document-manager test -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    sh "./player.sh deploy document-manager test -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi -p VANITY_URL=${VANITY_URL}"
                     sh "./player.sh toolbelt schemaspy test"
                 }
             }
@@ -119,7 +119,7 @@ pipeline {
                             // sh "./player.sh deploy mongo test -p SUFFIX='-demo'"
                             sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
-                            sh "./player.sh deploy document-manager test -p SUFFIX='-demo' -p VOLUME_CAPACITY=1Gi"                            
+                            sh "./player.sh deploy document-manager test -p SUFFIX='-demo' -p VOLUME_CAPACITY=1Gi -p VANITY_URL=${VANITY_URL}"                            
                         }
                     }
                 }

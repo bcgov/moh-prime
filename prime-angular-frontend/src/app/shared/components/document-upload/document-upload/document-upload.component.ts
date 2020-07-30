@@ -82,6 +82,7 @@ export class DocumentUploadComponent implements OnInit {
         endpoint: `${environment.apiEndpoint}${this.apiSuffix}`,
         retryDelays: [0, 3000, 5000, 10000, 20000],
         metadata: { filename, filetype },
+        chunkSize: 1048576, // 1 MB
         headers: {
           'Access-Control-Allow-Origin': '*',
           Authorization: `Bearer ${token}`,
