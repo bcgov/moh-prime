@@ -34,7 +34,7 @@ namespace Prime.Models
         [NotMapped]
         public int SiteCount
         {
-            get => this.Sites == null ? 0 : this.Sites.Count;
+            get => (this.Sites == null) ? 0 : this.Sites.Count;
         }
 
         public ICollection<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
