@@ -31,7 +31,6 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   public title: string;
   public routeUtils: RouteUtils;
   public organization: string;
-  public doingBusinessAsNames: string[];
   public organizationTypeConfig: Config<number>[];
   public vendorConfig: VendorConfig[];
   public filteredVendorConfig: VendorConfig[];
