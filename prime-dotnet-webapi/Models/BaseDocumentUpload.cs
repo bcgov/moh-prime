@@ -9,7 +9,6 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        [JsonIgnore]
         public Guid DocumentGuid { get; set; }
 
         public string Filename { get; set; }
