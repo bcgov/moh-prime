@@ -111,6 +111,7 @@ export class RegistrationGuard extends BaseGuard {
       if (!organization.acceptedAgreementDate) {
         whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
       } else {
+        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
         whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
         whiteListedRoutes.push(SiteRoutes.SITE_REVIEW);
       }
@@ -118,11 +119,9 @@ export class RegistrationGuard extends BaseGuard {
 
     // Redirect to an appropriate default route
     if (!whiteListedRoutes.includes(childRoute)) {
-      if (!organization.completed) {
-        return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, defaultRoute, organization.id);
-      } else {
-        return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT);
-      }
+      return (organization.completed)
+        ? this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT)
+        : this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, defaultRoute, organization.id);
     }
 
     // Otherwise, allow access to the route
@@ -141,10 +140,9 @@ export class RegistrationGuard extends BaseGuard {
     oid: number = null): boolean {
 
     const modulePath = this.config.routes.site;
-    let comparePath = `/${modulePath}/${loopPath}`;
-    if (destinationPath && oid) {
-      comparePath = `/${modulePath}/${loopPath}/${oid}/${destinationPath}`;
-    }
+    const comparePath = (destinationPath && oid)
+      ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
+      : `/${modulePath}/${loopPath}`;
 
     if (routePath === comparePath) {
       return true;
