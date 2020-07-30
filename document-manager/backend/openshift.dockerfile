@@ -1,5 +1,6 @@
 FROM docker-registry.default.svc:5000/dqszvc-tools/python:3.6
 USER 0
+ENV APP_ROOT /opt/app-root
 SHELL ["/bin/bash","-c"]
 # Update installation utility
 #RUN apt-get update
