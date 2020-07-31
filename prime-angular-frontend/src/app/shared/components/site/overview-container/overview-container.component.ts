@@ -44,7 +44,6 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
   }
 
   public onRouteRelative(routePath: string) {
-    // queryParams: { redirect: `${SiteRoutes.SITES}/${siteId}`, siteId }
     this.routeUtils.routeRelativeTo(routePath);
   }
 
