@@ -20,6 +20,9 @@ import { UtilsService } from '@core/services/utils.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
 import { EnrolleeUtilsService } from '@core/services/enrollee-utils.service';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 @Component({
   selector: 'app-organization',
@@ -71,7 +74,8 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
 
   public showRemoteAccess(): boolean {
     const enrolment = this.enrolmentStateService.enrolment;
-    return this.enrolleeUtilsService.isRegulatedUser(enrolment);
+    const isPharmacist = enrolment.certifications.some(c => c.collegeCode === CollegeLicenceClass.CPBC);
+    return this.enrolleeUtilsService.isRegulatedUser(enrolment) && !isPharmacist;
   }
 
   public removeOrganization(index: number) {
