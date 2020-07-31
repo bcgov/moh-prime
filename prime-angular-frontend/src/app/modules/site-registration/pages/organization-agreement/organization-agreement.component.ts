@@ -7,7 +7,6 @@ import { Subscription, EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
@@ -19,7 +18,6 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -31,17 +29,13 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public routeUtils: RouteUtils;
   public organizationAgreement: string;
   public hasAcceptedAgreement: boolean;
-  public isCompleted: boolean;
-  public SiteRoutes = SiteRoutes;
   public hasDownloadedFile: boolean;
   public hasUploadedFile: boolean;
   public hasNoUploadError: boolean;
+  public isCompleted: boolean;
+  public SiteRoutes = SiteRoutes;
 
-  @ViewChild('accept') accepted: MatCheckbox;
-
-  public filePondOptions: { [key: string]: any };
-  public filePondUploadProgress = 0;
-  public filePondFiles = [];
+  @ViewChild('accept') public accepted: MatCheckbox;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,7 +45,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     private organizationFormStateService: OrganizationFormStateService,
     private siteResource: SiteResource,
     private dialog: MatDialog,
-    private logger: LoggerService,
     private utilsService: UtilsService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);

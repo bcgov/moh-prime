@@ -43,11 +43,10 @@
             <strong>Upload the signed Organization Agreement here.</strong>
           </p>
 
-          <app-document-upload (completed)="onUpload($event)"
-                               componentName="organization-agreement"
-                               [multiple]="false">
+          <app-document-upload componentName="organization-agreement"
+                               [multiple]="false"
+                               (completed)="onUpload($event)">
           </app-document-upload>
-
         </ng-template>
       </section>
     </ng-container>
