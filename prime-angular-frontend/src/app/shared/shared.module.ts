@@ -72,8 +72,9 @@ import { DocumentUploadComponent } from './components/document-upload/document-u
 // TODO split out all related filepond files into a /lib module ie. config and components
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+registerPlugin(FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 import { OrganizationReviewComponent } from './components/organization-review/organization-review.component';
-registerPlugin(FilePondPluginFileValidateType);
 import { ImageComponent } from './components/dialogs/content/image/image.component';
 @NgModule({
   declarations: [
