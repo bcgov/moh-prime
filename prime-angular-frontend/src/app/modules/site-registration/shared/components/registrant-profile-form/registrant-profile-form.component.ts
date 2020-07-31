@@ -6,7 +6,6 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 // TODO rename and make it party instead of registrant
-// TODO watch valueChanges/onChange if party contains address then open toggle the address
 @Component({
   selector: 'app-registrant-profile-form',
   templateUrl: './registrant-profile-form.component.html',
