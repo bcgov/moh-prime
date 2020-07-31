@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
+
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { AbstractComponent } from '@shared/classes/abstract-component';
+
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -22,7 +24,6 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
 
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
-
 
   constructor(
     protected route: ActivatedRoute,
@@ -54,6 +55,5 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
       });
   }
 
-  ngOnInit(): void { }
-
+  public ngOnInit(): void { }
 }
