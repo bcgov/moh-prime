@@ -1,0 +1,168 @@
+<ng-container *ngIf="organization">
+  <app-overview-section title="Signing Authority"
+                        (route)="onRoute($event)"
+                        [editRoute]="[SiteRoutes.MODULE_PATH,SiteRoutes.SITE_MANAGEMENT,organization.id,SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
+                        [showEditRedirect]="showEditRedirect">
+    <app-enrollee-profile [enrollee]="organization?.signingAuthority"></app-enrollee-profile>
+  </app-overview-section>
+
+  <app-overview-section title="Organization Information"
+                        (route)="onRoute($event)"
+                        [editRoute]="[SiteRoutes.MODULE_PATH,SiteRoutes.SITE_MANAGEMENT,organization.id,SiteRoutes.ORGANIZATION_NAME]"
+                        [showEditRedirect]="showEditRedirect">
+    <app-enrollee-property title="Organization Name (Legal Entity Operating Site)">
+      {{ organization?.name | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Organization Registration ID">
+      {{ organization?.registrationId | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Doing Business As">
+      {{ organization?.doingBusinessAs | default }}
+    </app-enrollee-property>
+  </app-overview-section>
+
+</ng-container>
+
+<ng-container *ngIf="site">
+
+  <app-overview-section title="Care Setting"
+                        (route)="onRouteRelative($event)"
+                        [editRoute]="SiteRoutes.CARE_SETTING"
+                        [showEditRedirect]="showEditRedirect">
+    <app-enrollee-property title="Care Setting">
+      {{ site.organizationTypeCode | configCode: 'organizationTypes' | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="Vendor">
+      {{ site.siteVendors[0]?.vendorCode | configCode: 'vendors' | default }}
+    </app-enrollee-property>
+  </app-overview-section>
+
+  <app-overview-section title="Business Licence"
+                        (route)="onRouteRelative($event)"
+                        [editRoute]="SiteRoutes.BUSINESS_LICENCE"
+                        [showEditRedirect]="showEditRedirect">
+    <ng-container *ngIf="site.businessLicenceDocuments[0]">
+
+      <app-enrollee-property title="Filename">
+        <button mat-stroked-button
+                color="primary"
+                (click)="getBusinessLicence()">
+          <mat-icon class="mr-1">attachment</mat-icon>
+          {{ site.businessLicenceDocuments[site.businessLicenceDocuments.length -1].filename | default }}
+        </button>
+      </app-enrollee-property>
+
+    </ng-container>
+  </app-overview-section>
+
+  <app-overview-section title="Site Address"
+                        (route)="onRouteRelative($event)"
+                        [editRoute]="SiteRoutes.SITE_ADDRESS"
+                        [showEditRedirect]="showEditRedirect">
+    <app-enrollee-property title="Address">
+      {{ site?.physicalAddress?.street | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="City">
+      {{ site?.physicalAddress?.city | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Province">
+      {{ site?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Postal Code">
+      {{ site?.physicalAddress?.postal | postal | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Country">
+      {{ site?.physicalAddress?.countryCode | configCode: 'countries' | default }}
+    </app-enrollee-property>
+  </app-overview-section>
+
+  <app-overview-section title="Hours of Operation"
+                        (route)="onRouteRelative($event)"
+                        [editRoute]="SiteRoutes.HOURS_OPERATION"
+                        [showEditRedirect]="showEditRedirect">
+    <ng-container *ngFor="let businessDay of site?.businessHours">
+      <app-enrollee-property [title]="businessDay.day | weekday">
+        <ng-container *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
+          {{ businessDay.startTime | replace: ':00:00' : ':00' }} to
+          {{ businessDay.endTime | replace: ':00:00' : ':00' }}
+        </ng-container>
+        <ng-template #open24Hours>
+          24 hours
+        </ng-template>
+      </app-enrollee-property>
+    </ng-container>
+  </app-overview-section>
+
+  <app-overview-section title="PharmaNet Administrator"
+                        (route)="onRouteRelative($event)"
+                        [editRoute]="SiteRoutes.ADMINISTRATOR"
+                        [showEditRedirect]="showEditRedirect">
+    <app-party-review [party]="site?.administratorPharmaNet"></app-party-review>
+  </app-overview-section>
+
+  <app-overview-section title="Privacy Officer"
+                        (route)="onRouteRelative($event)"
+                        [editRoute]="SiteRoutes.PRIVACY_OFFICER"
+                        [showEditRedirect]="showEditRedirect">
+    <app-party-review [party]="site?.privacyOfficer"></app-party-review>
+  </app-overview-section>
+
+  <app-overview-section title="Technical Support Contact"
+                        (route)="onRouteRelative($event)"
+                        [editRoute]="SiteRoutes.TECHNICAL_SUPPORT"
+                        [showEditRedirect]="showEditRedirect">
+    <app-party-review [party]="site?.technicalSupport"></app-party-review>
+  </app-overview-section>
+
+  <ng-container *ngFor="let user of site.remoteUsers">
+    <app-overview-section title="Remote User"
+                          (route)="onRouteRelative($event)"
+                          [editRoute]="SiteRoutes.REMOTE_USERS"
+                          [showEditRedirect]="showEditRedirect">
+
+      <div class="mb-3">
+        <app-enrollee-property title="Name">
+          {{ user | fullname | default }}
+        </app-enrollee-property>
+      </div>
+
+      <ng-container *ngFor="let location of user.remoteUserLocations">
+        <div class="mb-3">
+          <strong>Remote Address</strong>
+        </div>
+
+        <div class="ml-4 mb-3">
+
+          <app-enrollee-property title="Internet Provider">
+            {{ location?.internetProvider | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Street Address">
+            {{ location?.physicalAddress?.street | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="City">
+            {{ location?.physicalAddress?.city | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Province">
+            {{ location?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Postal Code">
+            {{ location?.physicalAddress?.postal | postal | default }}
+          </app-enrollee-property>
+
+        </div>
+
+      </ng-container>
+    </app-overview-section>
+  </ng-container>
+
+</ng-container>

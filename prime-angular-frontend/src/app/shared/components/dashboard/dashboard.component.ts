@@ -19,7 +19,6 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
-import { EnrolmentStatusReason } from '@shared/enums/enrolment-status-reason.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -149,8 +148,6 @@ export class DashboardComponent implements OnInit {
 
     return [
       {
-        header: 'Enrolment',
-        showHeader: false,
         items: [
           {
             name: 'PRIME Profile',
@@ -304,8 +301,6 @@ export class DashboardComponent implements OnInit {
   private getAdjudicationSideNavSections(): DashboardNavSection[] {
     return [
       {
-        header: 'Adjudication',
-        showHeader: false,
         items: [
           {
             name: 'PRIME Enrollees',
@@ -327,13 +322,11 @@ export class DashboardComponent implements OnInit {
   private getRegistrantSideNavSections(): DashboardNavSection[] {
     return [
       {
-        header: 'Site Registration',
-        showHeader: false,
         items: [
           {
-            name: 'Administration',
+            name: 'Site Management',
             icon: 'store',
-            route: SiteRoutes.ORGANIZATIONS,
+            route: SiteRoutes.SITE_MANAGEMENT,
             showItem: true
           }
         ]

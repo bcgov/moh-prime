@@ -11,10 +11,8 @@ import { Province } from '@shared/enums/province.enum';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { Site } from '@registration/shared/models/site.model';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
-import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
 @Component({
   selector: 'app-remote-user',
@@ -35,7 +33,6 @@ export class RemoteUserComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private siteService: SiteService,
-    private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService
   ) {

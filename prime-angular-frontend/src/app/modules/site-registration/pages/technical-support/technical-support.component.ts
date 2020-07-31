@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -15,7 +16,6 @@ import { IForm } from '@registration/shared/interfaces/form.interface';
 import { Party } from '@registration/shared/models/party.model';
 import { Address } from '@shared/models/address.model';
 import { Site } from '@registration/shared/models/site.model';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 
@@ -53,15 +53,13 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     if (isDisabled) {
       this.form.enable();
     }
-    // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
       if (isDisabled) {
         this.form.disable();
       }
-      // TODO when spoking don't update
-      const payload = this.siteFormStateService.site;
+      const payload = this.siteFormStateService.json;
       this.siteResource
-        .updateSite(payload, true)
+        .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
@@ -94,11 +92,11 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
   }
 
   public isSameAs() {
-    return this.site.provisioner.userId === this.site.location.technicalSupport?.userId ||
+    return this.site.provisioner.userId === this.site.technicalSupport?.userId ||
       this.site.provisioner.userId === this.form.get('userId').value;
   }
 
@@ -119,10 +117,8 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO structured to match in all site views
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
-    // TODO cannot set form each time the view is loaded when updating
     this.siteFormStateService.setForm(this.site, true);
 
     // TODO temporary fix to disable same as party

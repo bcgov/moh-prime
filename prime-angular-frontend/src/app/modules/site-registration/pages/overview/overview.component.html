@@ -1,0 +1,54 @@
+<app-page [busy]="busy">
+
+  <ng-container ngProjectAs="top">
+    <app-site-collection-notice></app-site-collection-notice>
+  </ng-container>
+
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <!-- <app-site-progress-indicator [inProgress]="!site?.completed"></app-site-progress-indicator> -->
+
+  <div class="mb-5">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Information Review</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Make sure to the information you have provided is correct
+      </ng-container>
+    </app-page-subheader2>
+  </div>
+
+  <app-overview-container [showEditRedirect]="true"
+                          [site]="site"
+                          [organization]="organization"></app-overview-container>
+
+  <ng-container *ngIf="!submitted">
+    <div class="footer mb-4">
+      <mat-checkbox #accept>
+        <div class="pl-3">
+          By submitting this form, I hereby certify that all information provided on this form is true and I understand
+          that the Ministry of Health and/or Health Insurance BC (HIBC) may verify this information with my regulatory
+          body, software vendor, and others as required.
+        </div>
+      </mat-checkbox>
+    </div>
+    <div class="row justify-content-end">
+      <div class="col text-right">
+        <button mat-flat-button
+                color="primary"
+                [disabled]="!accept.checked"
+                (click)="onSubmit()">Save Site Information</button>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="submitted">
+    <div class="row justify-content-end">
+      <div class="col">
+        <button mat-stroked-button
+                color="primary"
+                (click)="onBack()">Back</button>
+      </div>
+    </div>
+  </ng-container>
+
+
+</app-page>

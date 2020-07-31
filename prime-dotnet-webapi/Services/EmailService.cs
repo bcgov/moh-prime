@@ -155,7 +155,7 @@ namespace Prime.Services
                 businessLicenceTemplate = "/Views/Helpers/ApologyDocument.cshtml";
             }
 
-            var organization = site.Location.Organization;
+            var organization = site.Organization;
             var organizationAgreementHtml = "";
             if (await _organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
             {

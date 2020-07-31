@@ -1,4 +1,7 @@
+import { Site } from './site.model';
+
 export interface Vendor {
-  code?: number;
-  name: string;
+  id?: number;
+  siteId: number;
+  vendorCode: number;
 }

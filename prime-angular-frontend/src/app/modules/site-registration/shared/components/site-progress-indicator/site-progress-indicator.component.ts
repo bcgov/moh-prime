@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { IProgressIndicator } from '@enrolment/shared/components/progress-indicator/progress-indicator.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
   selector: 'app-site-progress-indicator',
@@ -23,15 +24,22 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   public SiteRoutes = SiteRoutes;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private organizationService: OrganizationService
   ) {
     this.currentRoute = this.getCurrentRoute();
 
     // Possible route pathways within site registration
-    const routePaths = [
+    let routePaths = [
       SiteRoutes.organizationRegistrationRouteOrder(),
       SiteRoutes.siteRegistrationRouteOrder()
     ];
+
+    if (!organizationService.organization.acceptedAgreementDate) {
+      routePaths = [
+        SiteRoutes.siteRegistrationRoutes()
+      ]
+    }
 
     this.routes = routePaths.filter(rp => rp.includes(this.currentRoute)).shift();
     this.prefix = 'Registration';

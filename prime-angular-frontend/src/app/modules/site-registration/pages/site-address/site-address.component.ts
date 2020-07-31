@@ -4,25 +4,18 @@ import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { Organization } from '@registration/shared/models/organization.model';
-import { Site } from '@registration/shared/models/site.model';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
-import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
-// TODO rename to SiteLocationComponent
-// TODO rename form to siteLocationForm in SiteFormStateService
 @Component({
   selector: 'app-site-address',
   templateUrl: './site-address.component.html',
@@ -41,11 +34,9 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private organizationResource: OrganizationResource,
     private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
-    private orgBookResource: OrgBookResource,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
@@ -71,10 +62,8 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
-      const payload = this.siteFormStateService.site;
+      const payload = this.siteFormStateService.json;
       this.siteResource
         .updateSite(payload)
         .subscribe(() => {
@@ -85,14 +74,14 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
+      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
     }
   }
 
@@ -113,30 +102,8 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO structured to match in all site views
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    // TODO cannot set form each time the view is loaded when updating
     this.siteFormStateService.setForm(site, true);
-
-    this.busy = this.organizationResource.getOrganizationById(site.location.organizationId)
-      .pipe(
-        map((organization: Organization) => {
-          this.locationNames.push({
-            group: 'Organization',
-            options: [organization.name]
-          });
-
-          return organization.registrationId;
-        }),
-        this.orgBookResource.doingBusinessAsMap(),
-        map((doingBusinessAs: string[]) => {
-          this.locationNames.push({
-            group: 'Doing Business As',
-            options: doingBusinessAs
-          });
-        })
-      )
-      .subscribe();
   }
 }

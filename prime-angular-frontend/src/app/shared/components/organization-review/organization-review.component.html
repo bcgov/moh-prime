@@ -72,13 +72,13 @@
 
     <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
             mat-icon-button
-            matTooltip="Edit Organization Information"
-            (click)="onRoute(SiteRoutes.ORGANIZATION_INFORMATION)">
+            matTooltip="Edit Organization Name"
+            (click)="onRoute(SiteRoutes.ORGANIZATION_NAME)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader2>
 
-  <app-enrollee-property title="Organization Number (Legal Entity Operating Site)">
+  <app-enrollee-property title="Organization Name (Legal Entity Operating Site)">
     {{ organization?.name | default }}
   </app-enrollee-property>
 
@@ -88,26 +88,6 @@
 
   <app-enrollee-property title="Doing Business As">
     {{ organization?.doingBusinessAs | default }}
-  </app-enrollee-property>
-
-</section>
-
-<section class="mb-4">
-
-  <app-page-subheader2>
-    <ng-container appPageSubheader2Title>Organization Type</ng-container>
-
-    <button *ngIf="showEditRedirect && !organization.acceptedAgreementDate"
-            mat-icon-button
-            matTooltip="Edit Organization Type"
-            (click)="onRoute(SiteRoutes.ORGANIZATION_TYPE)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader2>
-
-  <app-enrollee-property title="Organization Type"
-                         [makeBold]="true">
-    {{ organization?.organizationTypeCode | configCode: 'organizationTypes' | default }}
   </app-enrollee-property>
 
 </section>

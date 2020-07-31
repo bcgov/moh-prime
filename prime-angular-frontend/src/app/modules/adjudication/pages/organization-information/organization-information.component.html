@@ -1,0 +1,15 @@
+<app-site-registration-container [content]="content"
+                                 [hasActions]="hasActions"
+                                 [refresh]="refresh">
+
+  <app-page-header>Site Adjudication</app-page-header>
+
+</app-site-registration-container>
+
+<ng-template #content>
+
+  <app-overview-container *ngIf="organization"
+                          [organization]="organization"
+                          [showEditRedirect]="false"></app-overview-container>
+
+</ng-template>

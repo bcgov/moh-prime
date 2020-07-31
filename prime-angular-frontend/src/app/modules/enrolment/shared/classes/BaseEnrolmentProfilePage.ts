@@ -6,15 +6,15 @@ import { Observable } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { UtilsService } from '@core/services/utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { BaseEnrolmentPage } from './BaseEnrolmentPage';
-import { EnrolmentService } from '../services/enrolment.service';
-import { EnrolmentResource } from '../services/enrolment-resource.service';
-import { EnrolmentStateService } from '../services/enrolment-state.service';
-import { UtilsService } from '@core/services/utils.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 
 export interface IBaseEnrolmentProfilePage {
   form: FormGroup;

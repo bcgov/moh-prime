@@ -1,0 +1,45 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+.alert-message {
+  max-width: 695px;
+  margin-bottom: 1.75rem;
+}
+
+hr.divider {
+  border-top: 2px solid theme-palette(yellow);
+  margin-top: 1.5rem;
+  margin-bottom: .5rem;
+}
+
+div.add-site {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.mat-card {
+  .mat-card-title {
+    color: theme-palette(blue);
+    font-size: 1rem;
+    margin-left: -1rem;
+    padding-top: .2rem;
+  }
+  .mat-card-content {
+    div {
+      color: theme-palette(blue, light);
+      padding-bottom: .4rem;
+
+      strong {
+        color: theme-palette(blue);
+        font-weight: 500;
+
+        &::after {
+          content: ':\00a0\00a0';
+        }
+      }
+    }
+  }
+  .mat-card-actions {
+    text-align: right;
+  }
+}
