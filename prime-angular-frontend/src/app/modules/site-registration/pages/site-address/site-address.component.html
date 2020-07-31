@@ -7,43 +7,11 @@
         novalidate>
 
     <section class="mb-3">
-      <app-page-subheader2>
-        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
-        <ng-container appPageSubheader2Summary>
-          As on business licence; may be the same as organization name or "doing business as" name.
-        </ng-container>
-      </app-page-subheader2>
-
-      <div class="row">
-        <div class="col">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Name"
-                   formControlName="name"
-                   [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete">
-              <mat-optgroup *ngFor="let locationName of locationNames"
-                            [label]="locationName.group">
-                <mat-option *ngFor="let option of locationName.options"
-                            [value]="option">
-                  {{ option }}
-                </mat-option>
-              </mat-optgroup>
-            </mat-autocomplete>
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
-    </section>
-
-    <section class="mb-3">
 
       <app-page-subheader2>
-        <ng-container appPageSubheader2Title>Location Address</ng-container>
+        <ng-container appPageSubheader2Title>Site Address</ng-container>
         <ng-container appPageSubheader2Summary>
-          Provide the address of your location (British Columbia only)
+          Provide the address of your site (British Columbia only)
         </ng-container>
       </app-page-subheader2>
 
@@ -55,6 +23,7 @@
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"
+                   primaryActionLabel="Save and Continue"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>
 

@@ -8,6 +8,7 @@ import { Subscription, Observable } from 'rxjs';
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -15,7 +16,6 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { Site } from '@registration/shared/models/site.model';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 
@@ -52,12 +52,10 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // TODO structured to match in all site views
     if (this.formUtilsService.checkValidity(this.businessDays)) {
-      // TODO when spoking don't update
       this.hasNoHours = false;
 
-      const payload = this.siteFormStateService.site;
+      const payload = this.siteFormStateService.json;
       this.siteResource
         .updateSite(payload)
         .subscribe(() => {
@@ -82,14 +80,14 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.VENDOR);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
     }
   }
 
@@ -110,10 +108,8 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    // TODO structured to match in all site views
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    // TODO cannot set form each time the view is loaded when updating
     this.siteFormStateService.setForm(site, true);
   }
 

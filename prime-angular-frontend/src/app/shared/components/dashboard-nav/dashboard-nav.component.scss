@@ -1,0 +1,28 @@
+// NOTE: mat-sidenav is modified globally
+// @see ./scss/material/components/_mat-sidenav.scss
+
+.mat-nav-list {
+  &:not(:first-of-type) {
+    padding-top: 0;
+  }
+
+  .mat-list-item {
+    &.header a {
+      font-weight: bold;
+    }
+    &.disabled {
+      // Prevent interacting with the link
+      pointer-events: none;
+    }
+    &.deemphasize {
+      // De-emphasize the link
+      opacity: 0.4;
+    }
+  }
+}
+
+@media print {
+  .mat-sidenav-content {
+    margin-left: 0 !important;
+  }
+}

@@ -3,12 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
+import { SiteResource } from '@core/resources/site-resource.service';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 @Component({
   selector: 'app-business-licence',
@@ -20,10 +21,10 @@ export class BusinessLicenceComponent implements OnInit {
   public title: string;
   public routeUtils: RouteUtils;
   public businessLicenceDocuments: BusinessLicenceDocument[];
+  public hasNoBusinessLicenceError: boolean;
+  public uploadedFile: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
-  public hasNoLicenceError: boolean;
-  public uploadedFile: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,37 +32,39 @@ export class BusinessLicenceComponent implements OnInit {
     private siteService: SiteService,
     private siteResource: SiteResource,
   ) {
-    this.title = 'Submit Your Business Licence';
+    this.title = 'Business Licence';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.uploadedFile = false;
+    this.businessLicenceDocuments = [];
   }
 
   public onSubmit() {
-    // TODO validations temporarily turned off
-    // if (this.siteService.site.businessLicenceDocuments.length > 0 || this.uploadedFile) {
-    this.nextRoute();
-    // } else {
-    //   this.hasNoLicenceError = true;
-    // }
+    if (this.businessLicenceDocuments.length || this.uploadedFile) {
+      this.nextRoute();
+    } else {
+      this.hasNoBusinessLicenceError = true;
+    }
   }
 
   public onUpload(event: BaseDocument) {
     const siteId = this.siteService.site.id;
     this.siteResource
-      .createBusinessLicence(siteId, event.documentGuid, event.filename).subscribe(() => {
+      .createBusinessLicence(siteId, event.documentGuid, event.filename)
+      .subscribe(() => {
         this.uploadedFile = true;
-        this.hasNoLicenceError = false;
+        this.hasNoBusinessLicenceError = false;
       });
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+    this.routeUtils.routeRelativeTo(SiteRoutes.CARE_SETTING);
   }
 
   public nextRoute() {
     if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
     }
   }
 
@@ -69,12 +72,12 @@ export class BusinessLicenceComponent implements OnInit {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
 
-    this.uploadedFile = false;
+    this.getBusinessLicences();
   }
 
   private getBusinessLicences() {
     const siteId = this.siteService.site.id;
-    return this.siteResource.getBusinessLicences(siteId)
+    this.busy = this.siteResource.getBusinessLicences(siteId)
       .subscribe((businessLicenses: BusinessLicenceDocument[]) =>
         this.businessLicenceDocuments = businessLicenses
       );
