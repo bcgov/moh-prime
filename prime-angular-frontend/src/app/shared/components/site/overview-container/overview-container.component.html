@@ -49,7 +49,8 @@
         <button mat-stroked-button
                 color="primary"
                 (click)="getBusinessLicence()">
-          <mat-icon class="mr-1">attachment</mat-icon>{{ site.businessLicenceDocuments[0].filename | default }}
+          <mat-icon class="mr-1">attachment</mat-icon>
+          {{ site.businessLicenceDocuments[site.businessLicenceDocuments.length -1].filename | default }}
         </button>
       </app-enrollee-property>
 
