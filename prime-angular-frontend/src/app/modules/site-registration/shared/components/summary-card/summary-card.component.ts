@@ -6,10 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./summary-card.component.scss']
 })
 export class SummaryCardComponent implements OnInit {
-
   constructor() { }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }

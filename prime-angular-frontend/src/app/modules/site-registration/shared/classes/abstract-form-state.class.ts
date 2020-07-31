@@ -168,7 +168,6 @@ export abstract class AbstractFormState<T> {
 
     formGroup.patchValue(party);
 
-    // TODO what will this do?
     if (physicalAddress) {
       const physicalAddressFormGroup = formGroup.get('physicalAddress');
       (physicalAddress)
@@ -176,7 +175,6 @@ export abstract class AbstractFormState<T> {
         : physicalAddressFormGroup.reset({ id: 0 });
     }
 
-    // TODO what will this do?
     if (mailingAddress) {
       const mailingAddressFormGroup = formGroup.get('mailingAddress');
       (mailingAddress)

@@ -10,19 +10,15 @@ export class OverviewSectionComponent implements OnInit {
   @Input() public tooltip: string;
   @Input() public editRoute: string;
   @Input() public showEditRedirect: boolean;
-
   @Output() public route: EventEmitter<string>;
 
   constructor() {
     this.route = new EventEmitter<string>();
   }
 
-  ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 
   public onRoute(routePath: string): void {
     this.route.emit(routePath);
   }
-
-
 }

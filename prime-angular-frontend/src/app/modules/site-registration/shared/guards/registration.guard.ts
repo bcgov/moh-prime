@@ -19,7 +19,6 @@ import { Organization } from '../models/organization.model';
 import { OrganizationService } from '../services/organization.service';
 
 // TODO duplication with enrolment.guard should be split out for reuse
-// TODO drop once organization and site guards are in place
 @Injectable({
   providedIn: 'root'
 })
@@ -48,7 +47,6 @@ export class RegistrationGuard extends BaseGuard {
 
     return this.organizationResource.getOrganizations()
       .pipe(
-        // TODO based on single organization per user
         map((organizations: Organization[]) => (organizations.length) ? organizations.shift() : null),
         exhaustMap((organization: Organization) =>
           (organization)
@@ -69,8 +67,7 @@ export class RegistrationGuard extends BaseGuard {
    * Determine the route destination based on the organization status.
    */
   private routeDestination(routePath: string, organization: Organization, isNewOrganization: boolean = false) {
-    // On login the user will always be redirected to
-    // the collection notice
+    // On login the user will always be redirected to the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
     } else if (organization) {

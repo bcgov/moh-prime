@@ -143,6 +143,11 @@ objects:
           containers:
             - capabilities: {}
               env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: database-admin-password
+                      name: '${NAME}-secret'
                 - name: POSTGRESQL_USER
                   valueFrom:
                     secretKeyRef:
