@@ -6,8 +6,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
-import { FilePondComponent } from 'ngx-filepond/filepond.component';
-
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -40,7 +38,10 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public hasNoUploadError: boolean;
 
   @ViewChild('accept') accepted: MatCheckbox;
-  @ViewChild('filePond') public filePondComponent: FilePondComponent;
+
+  public filePondOptions: { [key: string]: any };
+  public filePondUploadProgress = 0;
+  public filePondFiles = [];
 
   constructor(
     private route: ActivatedRoute,

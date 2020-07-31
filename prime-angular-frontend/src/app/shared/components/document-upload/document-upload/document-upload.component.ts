@@ -36,6 +36,8 @@ export class DocumentUploadComponent implements OnInit {
   @Input() public multiple: boolean;
   @Output() public completed: EventEmitter<BaseDocument> = new EventEmitter();
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
+  // See https://github.com/pqina/filepond/blob/master/src/js/app/options.js
+  // and https://github.com/pqina/filepond/blob/master/types/index.d.ts
   public filePondOptions: { [key: string]: any };
   public filePondUploadProgress = 0;
   public filePondFiles = [];
@@ -66,7 +68,8 @@ export class DocumentUploadComponent implements OnInit {
         resolve(type);
       }),
       allowFileTypeValidation: true,
-      multiple: !!this.multiple
+      multiple: !!this.multiple,
+      maxFileSize: '3MB'
     };
     if (this.additionalApiSuffix) {
       this.apiSuffix = `${this.apiSuffix}/${this.additionalApiSuffix}`;
@@ -81,7 +84,8 @@ export class DocumentUploadComponent implements OnInit {
     const token = await this.keycloakTokenService.token();
     const file = event.file.file; // File for uploading
     const { name: filename, type: filetype } = file;
-    if (this.filePondOptions.acceptedFileTypes.includes(filetype)) {
+    if (this.filePondOptions.acceptedFileTypes.includes(filetype)
+      && file.size <= 3145728) {
       const upload = new tus.Upload(file, {
         endpoint: `${environment.apiEndpoint}${this.apiSuffix}`,
         retryDelays: [0, 3000, 5000, 10000, 20000],
