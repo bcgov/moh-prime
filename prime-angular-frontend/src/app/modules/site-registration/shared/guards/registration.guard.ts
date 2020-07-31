@@ -19,7 +19,6 @@ import { Organization } from '../models/organization.model';
 import { OrganizationService } from '../services/organization.service';
 
 // TODO duplication with enrolment.guard should be split out for reuse
-// TODO drop once organization and site guards are in place
 @Injectable({
   providedIn: 'root'
 })
