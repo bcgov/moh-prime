@@ -56,5 +56,4 @@ export class MockOrganizationService implements IOrganizationService {
   public get organization(): Organization {
     return this._organization.value;
   }
-
 }
