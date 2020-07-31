@@ -17,12 +17,9 @@ export class OverviewSectionComponent implements OnInit {
     this.route = new EventEmitter<string>();
   }
 
-  ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 
   public onRoute(routePath: string): void {
     this.route.emit(routePath);
   }
-
-
 }
