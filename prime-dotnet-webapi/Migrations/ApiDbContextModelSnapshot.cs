@@ -320,7 +320,7 @@ namespace Prime.Migrations
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("interval");
 
-                    b.Property<int>("LocationId")
+                    b.Property<int>("SiteId")
                         .HasColumnType("integer");
 
                     b.Property<TimeSpan>("StartTime")
@@ -334,7 +334,7 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("SiteId");
 
                     b.ToTable("BusinessDay");
                 });
@@ -6139,61 +6139,6 @@ namespace Prime.Migrations
                     b.ToTable("LimitsConditionsClause");
                 });
 
-            modelBuilder.Entity("Prime.Models.Location", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int?>("AdministratorPharmaNetId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("DoingBusinessAs")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("PhysicalAddressId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("PrivacyOfficerId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("TechnicalSupportId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdministratorPharmaNetId");
-
-                    b.HasIndex("OrganizationId");
-
-                    b.HasIndex("PhysicalAddressId");
-
-                    b.HasIndex("PrivacyOfficerId");
-
-                    b.HasIndex("TechnicalSupportId");
-
-                    b.ToTable("Location");
-                });
-
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
                     b.Property<int>("Id")
@@ -6219,9 +6164,6 @@ namespace Prime.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("OrganizationTypeCode")
-                        .HasColumnType("integer");
-
                     b.Property<string>("RegistrationId")
                         .HasColumnType("text");
 
@@ -6238,8 +6180,6 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationTypeCode");
 
                     b.HasIndex("SigningAuthorityId");
 
@@ -7802,6 +7742,9 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int?>("AdministratorPharmaNetId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset?>("ApprovedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -7814,11 +7757,23 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("LocationId")
+                    b.Property<string>("DoingBusinessAs")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("OrganizationTypeCode")
                         .HasColumnType("integer");
 
                     b.Property<string>("PEC")
                         .HasColumnType("text");
+
+                    b.Property<int?>("PhysicalAddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PrivacyOfficerId")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("ProvisionerId")
                         .HasColumnType("integer");
@@ -7826,22 +7781,30 @@ namespace Prime.Migrations
                     b.Property<DateTimeOffset?>("SubmittedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("TechnicalSupportId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("VendorCode")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("AdministratorPharmaNetId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("OrganizationTypeCode");
+
+                    b.HasIndex("PhysicalAddressId");
+
+                    b.HasIndex("PrivacyOfficerId");
 
                     b.HasIndex("ProvisionerId");
 
-                    b.HasIndex("VendorCode");
+                    b.HasIndex("TechnicalSupportId");
 
                     b.ToTable("Site");
                 });
@@ -7879,10 +7842,43 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SiteId")
-                        .IsUnique();
+                    b.HasIndex("SiteId");
 
                     b.ToTable("SiteRegistrationReviewDocument");
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteVendor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("VendorCode")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.HasIndex("VendorCode");
+
+                    b.ToTable("SiteVendor");
                 });
 
             modelBuilder.Entity("Prime.Models.Status", b =>
@@ -12215,6 +12211,9 @@ namespace Prime.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<int>("OrganizationTypeCode")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -12222,6 +12221,8 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Code");
+
+                    b.HasIndex("OrganizationTypeCode");
 
                     b.ToTable("VendorLookup");
 
@@ -12233,6 +12234,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "CareConnect@phsa.ca",
                             Name = "CareConnect",
+                            OrganizationTypeCode = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -12243,6 +12245,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "support@excelleris.com",
                             Name = "Excelleris",
+                            OrganizationTypeCode = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -12253,6 +12256,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "help@iclinicemr.com",
                             Name = "iClinic",
+                            OrganizationTypeCode = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -12263,6 +12267,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "prime@medinet.ca",
                             Name = "Medinet",
+                            OrganizationTypeCode = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -12273,6 +12278,62 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Email = "service@plexia.ca",
                             Name = "Plexia",
+                            OrganizationTypeCode = 2,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = 6,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Email = "",
+                            Name = "Telus Health",
+                            OrganizationTypeCode = 3,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = 7,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Email = "",
+                            Name = "Shoppers Drug Mart",
+                            OrganizationTypeCode = 3,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = 8,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Email = "",
+                            Name = "Applied Robotics",
+                            OrganizationTypeCode = 3,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = 9,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Email = "",
+                            Name = "McKesson",
+                            OrganizationTypeCode = 3,
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = 10,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Email = "",
+                            Name = "Commander Group",
+                            OrganizationTypeCode = 3,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -12388,9 +12449,9 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.BusinessDay", b =>
                 {
-                    b.HasOne("Prime.Models.Location", "Location")
+                    b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("BusinessHours")
-                        .HasForeignKey("LocationId")
+                        .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -12643,37 +12704,8 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.Location", b =>
-                {
-                    b.HasOne("Prime.Models.Party", "AdministratorPharmaNet")
-                        .WithMany()
-                        .HasForeignKey("AdministratorPharmaNetId");
-
-                    b.HasOne("Prime.Models.Organization", "Organization")
-                        .WithMany("Locations")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
-                        .WithMany()
-                        .HasForeignKey("PhysicalAddressId");
-
-                    b.HasOne("Prime.Models.Party", "PrivacyOfficer")
-                        .WithMany()
-                        .HasForeignKey("PrivacyOfficerId");
-
-                    b.HasOne("Prime.Models.Party", "TechnicalSupport")
-                        .WithMany()
-                        .HasForeignKey("TechnicalSupportId");
-                });
-
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
-                    b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
-                        .WithMany()
-                        .HasForeignKey("OrganizationTypeCode");
-
                     b.HasOne("Prime.Models.Party", "SigningAuthority")
                         .WithMany()
                         .HasForeignKey("SigningAuthorityId")
@@ -12784,25 +12816,66 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Site", b =>
                 {
-                    b.HasOne("Prime.Models.Location", "Location")
+                    b.HasOne("Prime.Models.Party", "AdministratorPharmaNet")
+                        .WithMany()
+                        .HasForeignKey("AdministratorPharmaNetId");
+
+                    b.HasOne("Prime.Models.Organization", "Organization")
                         .WithMany("Sites")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
+                        .WithMany()
+                        .HasForeignKey("OrganizationTypeCode");
+
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId");
+
+                    b.HasOne("Prime.Models.Party", "PrivacyOfficer")
+                        .WithMany()
+                        .HasForeignKey("PrivacyOfficerId");
 
                     b.HasOne("Prime.Models.Party", "Provisioner")
                         .WithMany()
                         .HasForeignKey("ProvisionerId");
 
-                    b.HasOne("Prime.Models.Vendor", "Vendor")
-                        .WithMany("Sites")
-                        .HasForeignKey("VendorCode");
+                    b.HasOne("Prime.Models.Party", "TechnicalSupport")
+                        .WithMany()
+                        .HasForeignKey("TechnicalSupportId");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationReviewDocument", b =>
                 {
                     b.HasOne("Prime.Models.Site", "Site")
-                        .WithOne("SiteRegistrationReviewDocument")
-                        .HasForeignKey("Prime.Models.SiteRegistrationReviewDocument", "SiteId")
+                        .WithMany("SiteRegistrationReviewDocuments")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteVendor", b =>
+                {
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithMany("SiteVendors")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Vendor", "Vendor")
+                        .WithMany("SiteVendors")
+                        .HasForeignKey("VendorCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.Vendor", b =>
+                {
+                    b.HasOne("Prime.Models.OrganizationType", "OrganizationType")
+                        .WithMany()
+                        .HasForeignKey("OrganizationTypeCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

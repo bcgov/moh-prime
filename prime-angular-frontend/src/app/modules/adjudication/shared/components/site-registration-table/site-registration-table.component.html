@@ -23,16 +23,16 @@
 
       <ng-container matColumnDef="locationName">
         <th mat-header-cell
-            *matHeaderCellDef> Location Name </th>
+            *matHeaderCellDef> Id </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.location.name | default }} </td>
+            *matCellDef="let row;"> {{ row.id | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="vendor">
         <th mat-header-cell
             *matHeaderCellDef> Vendor </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.vendorCode | vendor | default }} </td>
+            *matCellDef="let row;"> {{ row.siteVendors[0]?.vendorCode | configCode: 'vendors' | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="submissionDate">
@@ -92,7 +92,7 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="onRoute([row.id, AdjudicationRoutes.ORGANIZATION_INFORMATION, row.location.organizationId])">
+                (click)="onRoute([row.id, AdjudicationRoutes.ORGANIZATION_INFORMATION, row.organizationId])">
           <mat-icon>location_city</mat-icon>
           <span>Organization Information</span>
         </button>

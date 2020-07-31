@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { UtilsService } from '@core/services/utils.service';
 
-import { Site } from '@registration/shared/models/site.model';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { UtilsService } from '@core/services/utils.service';
+import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
@@ -25,9 +25,9 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public ngOnInit(): void { }
 
   public getOrganizationAgreement() {
-    this.organizationResource.getOrganizationById(this.site.location.organizationId).subscribe((organization: Organization) => {
+    this.organizationResource.getOrganizationById(this.site.organizationId).subscribe((organization: Organization) => {
       if (organization.signedAgreementDocuments.length > 0) {
-        this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.site.location.organizationId)
+        this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.site.organizationId)
           .subscribe((token: string) => {
             this.utilsService.downloadToken(token);
           });
