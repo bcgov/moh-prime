@@ -117,7 +117,7 @@ services:
       - 6001:6001
     volumes:
       - ./document-manager/backend/:/app/
-    command: /opt/app-root/src/app.sh
+#    command: /opt/app-root/src/app.sh dev
     env_file: ./document-manager/backend/.env-prime-local
     networks:
       - primenet
@@ -126,7 +126,7 @@ services:
     restart: on-failure
     container_name: document-manager-migrate
     build:
-      context: document-manager/backend
+      context: document-manager/backend 
     depends_on:
       - postgres
     volumes:
