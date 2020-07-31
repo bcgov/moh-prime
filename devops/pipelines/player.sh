@@ -1,5 +1,5 @@
 #!/bin/bash
-source project.conf
+source "./conf/project.conf"
 source functions.bash
 source tests.bash
 find . -type d ! -name openshift -exec rm -rf {} +
