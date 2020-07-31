@@ -1,15 +1,19 @@
-/* Jenkinsfile.promotion
+/* Jenkinsfile.production
  *
  * After merging the test branch into the master branch, this will work to 
  * build and deploy changes to the OpenShift production environment. This
  * will also include a deploy to our Demo site.
- * 
- * A deploy to test is not automatically performed - a merge from test
- * into master will need to be done, and then the deploy must be initiated
- * from Jenkins in the 'Release' project.
+ *
+ * Hotfix builds and deploys, although associated as fixes to our master
+ * branch, will be done to the OpenShift test environment.
+ *
+ * Deployments to master are automatically performed when merges from any
+ * external branches are performed. By team rules and standards, only
+ * the test and hotfix branches are allowed to have this privilege.
  *
  * Procedure:
- *  1. Promotion and simultaneous build and deployment of Master
+ *  1. If dealing with a hotfix branch, build and deploy to the test environment.
+ *  2. Promotion and simultaneous build and deployment of Master
  *      a. Build & deploy to Demo environment
  *      b. Build & deploy to Production environment
  *
@@ -18,7 +22,40 @@
 pipeline {
     agent none
     stages {
-        stage('Promote Master to Demo & Production Environment') {
+        stage('Build & Deploy Hotfix (PR)') {
+            options {
+                timeout(time: 60, unit: 'MINUTES')   // timeout on this stage
+            }
+            // Build/deploy if branch is for a PR to master
+            when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
+            environment {
+                    BRANCH_LOWER = BRANCH_NAME.toLowerCase()
+                    VANITY_URL = "${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
+                    SCHEMA = "https"
+                    PORT = "8443"
+                    FRONTEND_ARGS = "-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
+                    API_ARGS = "-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
+                    SUFFIX= "-${BRANCH_LOWER}"
+            }
+            agent { label 'master' }
+            steps {
+                script {
+                    echo "Building Release PR..."
+                    sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh build document-manager test -p SUFFIX=${SUFFIX}"
+
+                    echo "Deploying Release PR..."
+                    sh "./player.sh deploy postgres test -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy redis test -p SUFFIX=${SUFFIX}"
+                    // sh "./player.sh deploy mongo test -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy document-manager test -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi -p VANITY_URL=${VANITY_URL}"
+                }
+            }
+        }
+        stage('Build & Deploy to Demo and Production Environment (MASTER)') {
             options {
                 timeout(time: 120, unit: 'MINUTES')   // timeout on this stage
             }

@@ -5,11 +5,6 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
-import { registerPlugin } from 'ngx-filepond';
-import { FilePondComponent } from 'ngx-filepond/filepond.component';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-
-registerPlugin(FilePondPluginFileValidateType);
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -44,7 +39,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   @ViewChild('accept') accepted: MatCheckbox;
 
-  @ViewChild('filePond') public filePondComponent: FilePondComponent;
   public filePondOptions: { [key: string]: any };
   public filePondUploadProgress = 0;
   public filePondFiles = [];

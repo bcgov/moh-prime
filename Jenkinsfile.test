@@ -3,9 +3,9 @@
  * After merging the develop branch into the test branch, this will work to 
  * build and deploy changes to the OpenShift test environment.
  *
- * A deploy to test is not automatically performed - a merge from develop
- * into test will need to be done, and then the deploy must be initiated
- * from Jenkins in the 'Test' project.
+ * Deployments to test are automatically performed when merges from any
+ * external branches are performed. By team rules and standards, only
+ * the develop branch is allowed to have this privilege.
  *
  * Procedure:
  *  1. Build Test branch
