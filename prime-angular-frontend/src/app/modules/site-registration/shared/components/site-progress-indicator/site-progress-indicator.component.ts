@@ -30,7 +30,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
     this.currentRoute = this.getCurrentRoute();
 
     // Possible route pathways within site registration
-    const routePaths = [
+    let routePaths = [
       SiteRoutes.organizationRegistrationRouteOrder(),
       SiteRoutes.siteRegistrationRouteOrder()
     ];
