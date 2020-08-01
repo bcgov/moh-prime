@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { Dashboard2Component } from './dashboard2.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 describe('Dashboard2Component', () => {
   let component: Dashboard2Component;
@@ -8,9 +11,16 @@ describe('Dashboard2Component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ Dashboard2Component ]
+      declarations: [Dashboard2Component],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+        KeycloakService
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -58,11 +58,11 @@ export class OverviewComponent implements OnInit {
   }
 
   public isSiteReview(): boolean {
-    return this.route.snapshot.routeConfig.path === 'site-review';
+    return this.route.snapshot.routeConfig?.path === 'site-review';
   }
 
   public isOrganizationReview(): boolean {
-    return this.route.snapshot.routeConfig.path === 'organization-review';
+    return this.route.snapshot.routeConfig?.path === 'organization-review';
   }
 
   public onSubmit(): void {

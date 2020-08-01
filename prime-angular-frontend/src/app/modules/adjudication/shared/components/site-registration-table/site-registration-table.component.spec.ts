@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SiteRegistrationTableComponent } from './site-registration-table.component';
+import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('SiteRegistrationTableComponent', () => {
   let component: SiteRegistrationTableComponent;
@@ -8,9 +10,14 @@ describe('SiteRegistrationTableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SiteRegistrationTableComponent ]
+      imports: [
+        AdjudicationModule
+      ],
+      providers: [
+        KeycloakService
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
