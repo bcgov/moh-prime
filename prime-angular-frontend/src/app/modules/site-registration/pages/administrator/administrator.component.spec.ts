@@ -16,8 +16,8 @@ describe('AdministratorComponent', () => {
       imports: [
         BrowserAnimationsModule,
         RouterTestingModule,
-        SiteRegistrationModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        SiteRegistrationModule
       ],
       providers: [
         {

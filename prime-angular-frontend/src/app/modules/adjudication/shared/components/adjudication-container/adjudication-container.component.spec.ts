@@ -4,8 +4,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+
 import { AdjudicationContainerComponent } from './adjudication-container.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 describe('AdjudicationContainerComponent', () => {
@@ -24,6 +27,10 @@ describe('AdjudicationContainerComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
         },
         KeycloakService
       ]

@@ -14,10 +14,10 @@ describe('PrivacyOfficerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
         BrowserAnimationsModule,
-        SiteRegistrationModule,
-        HttpClientTestingModule
+        RouterTestingModule,
+        HttpClientTestingModule,
+        SiteRegistrationModule
       ],
       providers: [
         {

@@ -16,8 +16,8 @@ describe('HoursOperationComponent', () => {
       imports: [
         RouterTestingModule,
         BrowserAnimationsModule,
-        SiteRegistrationModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        SiteRegistrationModule
       ],
       providers: [
         {

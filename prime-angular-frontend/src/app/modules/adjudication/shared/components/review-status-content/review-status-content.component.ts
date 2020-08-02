@@ -6,7 +6,6 @@ import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
@@ -33,7 +32,6 @@ class Reason {
   styleUrls: ['./review-status-content.component.scss']
 })
 export class ReviewStatusContentComponent implements OnInit {
-  // @Input() public enrollee: Enrolment;
   private _enrollee: Enrolment;
   public previousStatuses: Status[];
   public reasons: Reason[];
@@ -54,14 +52,13 @@ export class ReviewStatusContentComponent implements OnInit {
     + ' for a matter that involved improper access to, collection, use, or disclosure of personal information?';
 
 
-  @Input() set enrollee(value: Enrolment) {
-
+  @Input() public set enrollee(value: Enrolment) {
     this._enrollee = value;
     this.reasons = this.generateReasons();
     this.previousStatuses = this.generatePreviousStatuses();
   }
 
-  get enrollee(): Enrolment {
+  public get enrollee(): Enrolment {
 
     return this._enrollee;
 
@@ -79,8 +76,7 @@ export class ReviewStatusContentComponent implements OnInit {
       });
   }
 
-  public ngOnInit() {
-  }
+  public ngOnInit(): void { }
 
   private generatePreviousStatuses(): Status[] {
     if (!this.enrollee) {

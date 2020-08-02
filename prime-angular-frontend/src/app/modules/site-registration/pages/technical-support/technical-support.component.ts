@@ -48,7 +48,6 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    // TODO temporary fix for allow submissions of disabled forms
     const isDisabled = this.form.disabled;
     if (isDisabled) {
       this.form.enable();
@@ -96,8 +95,8 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   }
 
   public isSameAs() {
-    return this.site.provisioner.userId === this.site.technicalSupport?.userId ||
-      this.site.provisioner.userId === this.form.get('userId').value;
+    return this.site.provisioner?.userId === this.site.technicalSupport?.userId ||
+      this.site.provisioner?.userId === this.form.get('userId').value;
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -121,7 +120,6 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
 
-    // TODO temporary fix to disable same as party
     if (this.isSameAs()) {
       this.form.disable();
     }
