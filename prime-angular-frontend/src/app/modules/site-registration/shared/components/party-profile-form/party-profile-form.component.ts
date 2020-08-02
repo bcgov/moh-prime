@@ -1,17 +1,16 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 
-import { FormUtilsService } from '@core/services/form-utils.service';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
-// TODO rename and make it party instead of registrant
+import { FormUtilsService } from '@core/services/form-utils.service';
+
 @Component({
-  selector: 'app-registrant-profile-form',
-  templateUrl: './registrant-profile-form.component.html',
-  styleUrls: ['./registrant-profile-form.component.scss']
+  selector: 'app-party-profile-form',
+  templateUrl: './party-profile-form.component.html',
+  styleUrls: ['./party-profile-form.component.scss']
 })
-export class RegistrantProfileFormComponent implements OnInit {
+export class PartyProfileFormComponent implements OnInit {
   @Input() public title: string;
   @Input() public form: FormGroup;
   public hasPhysicalAddress: boolean;

@@ -5,18 +5,18 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { FormGroup } from '@angular/forms';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockSiteService } from 'test/mocks/mock-site.service';
 
-import { RegistrantProfileFormComponent } from './registrant-profile-form.component';
+import { PartyProfileFormComponent } from './party-profile-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
-import { MockSiteService } from 'test/mocks/mock-site.service';
 
 describe('RegistrantProfileFormComponent', () => {
-  let component: RegistrantProfileFormComponent;
-  let fixture: ComponentFixture<RegistrantProfileFormComponent>;
+  let component: PartyProfileFormComponent;
+  let fixture: ComponentFixture<PartyProfileFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -45,7 +45,7 @@ describe('RegistrantProfileFormComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RegistrantProfileFormComponent);
+    fixture = TestBed.createComponent(PartyProfileFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -54,7 +54,7 @@ describe('RegistrantProfileFormComponent', () => {
     [SiteService, SiteFormStateService],
     (siteService: SiteService, siteFormStateService: SiteFormStateService
     ) => {
-      fixture = TestBed.createComponent(RegistrantProfileFormComponent);
+      fixture = TestBed.createComponent(PartyProfileFormComponent);
       component = fixture.componentInstance;
       siteFormStateService.setForm(siteService.site);
       // Add the bound FormGroup to the component
