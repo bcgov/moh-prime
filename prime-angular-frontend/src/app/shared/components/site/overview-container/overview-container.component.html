@@ -30,7 +30,7 @@
   <app-overview-section title="Care Setting"
                         (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.CARE_SETTING"
-                        [showEditRedirect]="showEditRedirect">
+                        [showEditRedirect]="!site.submittedDate">
     <app-enrollee-property title="Care Setting">
       {{ site.organizationTypeCode | configCode: 'organizationTypes' | default }}
     </app-enrollee-property>
@@ -42,7 +42,7 @@
   <app-overview-section title="Business Licence"
                         (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
-                        [showEditRedirect]="showEditRedirect">
+                        [showEditRedirect]="!site.submittedDate">
     <ng-container *ngIf="site.businessLicenceDocuments[0]">
 
       <app-enrollee-property title="Filename">
@@ -60,7 +60,7 @@
   <app-overview-section title="Site Address"
                         (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.SITE_ADDRESS"
-                        [showEditRedirect]="showEditRedirect">
+                        [showEditRedirect]="!site.submittedDate">
     <app-enrollee-property title="Address">
       {{ site?.physicalAddress?.street | default }}
     </app-enrollee-property>
