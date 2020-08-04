@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
+
+import { from, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+
 import { Role } from '@auth/shared/enum/role.enum';
-import { KeycloakTokenService } from './keycloak-token.service';
-import { User } from '../models/user.model';
-import { Admin } from '../models/admin.model';
+import { User } from '@auth/shared/models/user.model';
+import { Admin } from '@auth/shared/models/admin.model';
+import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
 
 export interface IAuthService {
   checkAssuranceLevel(assuranceLevel: number): Promise<boolean>;
@@ -54,12 +58,31 @@ export class AuthService implements IAuthService {
     return this.keycloakTokenService.login(options);
   }
 
+  /**
+   * @deprecated
+   * Attempting to remove promises from within the application.
+   * @use getUser$
+   */
   public async getUser(forceReload?: boolean): Promise<User> {
     return this.keycloakTokenService.getUser(forceReload);
   }
 
+  // TODO use this as a base method for all other types of users
+  public getUser$(forceReload?: boolean): Observable<User> {
+    return from(this.keycloakTokenService.getUser(forceReload)).pipe(take(1));
+  }
+
+  /**
+   * @deprecated
+   * Attempting to remove promises from within the application.
+   * @use getAdmin$
+   */
   public async getAdmin(forceReload?: boolean): Promise<Admin> {
     return this.keycloakTokenService.getAdmin(forceReload);
+  }
+
+  public getAdmin$(forceReload?: boolean): Observable<Admin> {
+    return from(this.keycloakTokenService.getAdmin(forceReload)).pipe(take(1));
   }
 
   public async checkAssuranceLevel(assuranceLevel: number): Promise<boolean> {

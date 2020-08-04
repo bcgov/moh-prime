@@ -111,6 +111,16 @@ export class FormControlValidators {
 
   /**
    * @description
+   * Checks a form control is a non-zero index (eg. database record ID).
+   */
+  public static requiredIndex(control: AbstractControl): ValidationErrors | null {
+    const regExp = /^[1-9]\d*$/;
+    const valid = (control.valid && regExp.test(control.value));
+    return valid ? null : { index: true };
+  }
+
+  /**
+   * @description
    * Checks a form control is non-empty or false.
    */
   public static requiredTruthful(control: AbstractControl): ValidationErrors | null {

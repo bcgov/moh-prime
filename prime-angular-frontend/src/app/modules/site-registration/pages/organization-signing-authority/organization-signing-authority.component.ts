@@ -23,7 +23,6 @@ import { OrganizationService } from '@registration/shared/services/organization.
   styleUrls: ['./organization-signing-authority.component.scss']
 })
 export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IForm {
-  // TODO Show 2 subheaders (normal one and information button one)
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
@@ -82,10 +81,8 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public onSubmit() {
-    // TODO structured to match in all organization views
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO when spoking don't update
-      const payload = this.organizationFormStateService.organization;
+      const payload = this.organizationFormStateService.json;
       this.organizationResource
         .updateOrganization(payload)
         .subscribe(() => {
@@ -111,14 +108,19 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public onBack() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS]);
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
   }
 
   public nextRoute() {
-    if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
+    const redirectPath = this.route.snapshot.queryParams.redirect;
+    if (redirectPath) {
+      this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_INFORMATION);
+      if (this.isCompleted) {
+        this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
+      } else {
+        this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_NAME);
+      }
     }
   }
 
@@ -139,10 +141,9 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   private initForm() {
-    // TODO structured to match in all site views
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
-    this.organizationFormStateService.setForm(organization);
+    this.organizationFormStateService.setForm(organization, true);
 
     this.organization = organization;
 
@@ -182,8 +183,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     if (!this.hasMailingAddress) {
       this.formUtilsService.resetAndClearValidators(mailingAddress);
     } else {
-      // const id = mailingAddress.get('id') as FormControl;
-      // this.formUtilsService.resetAndClearValidators(id);
       this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
     }
   }

@@ -3,10 +3,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription, Observable, BehaviorSubject } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
 
+import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
 import { Site } from '@registration/shared/models/site.model';
 
 @Component({

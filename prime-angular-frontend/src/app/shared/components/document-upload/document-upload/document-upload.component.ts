@@ -1,15 +1,19 @@
 import { Component, OnInit, ViewChild, Input, Output } from '@angular/core';
-import { FilePondComponent } from 'ngx-filepond/filepond.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SiteService } from '@registration/shared/services/site.service';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
-import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
+import { EventEmitter } from '@angular/core';
+
+import { FilePondComponent } from 'ngx-filepond/filepond.component';
+import tus from 'tus-js-client';
+
+import { environment } from '@env/environment';
+
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { environment } from '@env/environment';
-import tus from 'tus-js-client';
-import { EventEmitter } from '@angular/core';
+import { SiteResource } from '@core/resources/site-resource.service';
+
+import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
+import { SiteService } from '@registration/shared/services/site.service';
 
 export class BaseDocument {
   id: number;
@@ -32,6 +36,8 @@ export class DocumentUploadComponent implements OnInit {
   @Input() public multiple: boolean;
   @Output() public completed: EventEmitter<BaseDocument> = new EventEmitter();
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
+  // See https://github.com/pqina/filepond/blob/master/src/js/app/options.js
+  // and https://github.com/pqina/filepond/blob/master/types/index.d.ts
   public filePondOptions: { [key: string]: any };
   public filePondUploadProgress = 0;
   public filePondFiles = [];
@@ -62,7 +68,8 @@ export class DocumentUploadComponent implements OnInit {
         resolve(type);
       }),
       allowFileTypeValidation: true,
-      multiple: !!this.multiple
+      multiple: !!this.multiple,
+      maxFileSize: '3MB'
     };
     if (this.additionalApiSuffix) {
       this.apiSuffix = `${this.apiSuffix}/${this.additionalApiSuffix}`;
@@ -77,7 +84,8 @@ export class DocumentUploadComponent implements OnInit {
     const token = await this.keycloakTokenService.token();
     const file = event.file.file; // File for uploading
     const { name: filename, type: filetype } = file;
-    if (this.filePondOptions.acceptedFileTypes.includes(filetype)) {
+    if (this.filePondOptions.acceptedFileTypes.includes(filetype)
+      && file.size <= 3145728) {
       const upload = new tus.Upload(file, {
         endpoint: `${environment.apiEndpoint}${this.apiSuffix}`,
         retryDelays: [0, 3000, 5000, 10000, 20000],

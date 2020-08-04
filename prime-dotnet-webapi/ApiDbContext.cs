@@ -80,7 +80,6 @@ namespace Prime
         public DbSet<Feedback> Feedback { get; set; }
 
         // Site Registration
-        public DbSet<Location> Locations { get; set; }
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Party> Parties { get; set; }
         public DbSet<Site> Sites { get; set; }
@@ -209,22 +208,11 @@ namespace Prime
                 .HasForeignKey(be => be.BusinessEventTypeCode);
 
             // Site Registration
-            modelBuilder.Entity<Location>()
+            modelBuilder.Entity<Site>()
                 .HasOne(l => l.Organization)
-                .WithMany(o => o.Locations)
+                .WithMany(o => o.Sites)
                 .HasForeignKey(l => l.OrganizationId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Site>()
-                .HasOne(s => s.Location)
-                .WithMany(l => l.Sites)
-                .HasForeignKey(s => s.LocationId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Site>()
-                .HasOne(s => s.Vendor)
-                .WithMany(v => v.Sites)
-                .HasForeignKey(s => s.VendorCode);
 
             modelBuilder.Entity<BusinessLicenceDocument>()
                 .HasOne(bl => bl.Site)

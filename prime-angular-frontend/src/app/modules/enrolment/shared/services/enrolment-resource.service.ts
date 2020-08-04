@@ -112,8 +112,8 @@ export class EnrolmentResource {
       );
   }
 
-  public getAccessTerm(enrolleeId: number, id: number): Observable<AccessTerm> {
-    return this.apiResource.get<AccessTerm>(`enrollees/${enrolleeId}/access-terms/${id}`)
+  public getAccessTerm(enrolleeId: number, accessTermsId: number): Observable<AccessTerm> {
+    return this.apiResource.get<AccessTerm>(`enrollees/${enrolleeId}/access-terms/${accessTermsId}`)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm>) => response.result),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
