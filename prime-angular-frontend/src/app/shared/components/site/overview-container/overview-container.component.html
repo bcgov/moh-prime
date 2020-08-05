@@ -132,7 +132,7 @@
         </app-enrollee-property>
       </div>
 
-      <ng-container *ngFor="let location of user.remoteUserLocations">
+      <ng-container *ngFor="let remoteUserLocation of user.remoteUserLocations">
         <div class="mb-3">
           <strong>Remote Address</strong>
         </div>
@@ -140,23 +140,23 @@
         <div class="ml-4 mb-3">
 
           <app-enrollee-property title="Internet Provider">
-            {{ location?.internetProvider | default }}
+            {{ remoteUserLocation?.internetProvider | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="Street Address">
-            {{ location?.physicalAddress?.street | default }}
+            {{ remoteUserLocation?.physicalAddress?.street | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="City">
-            {{ location?.physicalAddress?.city | default }}
+            {{ remoteUserLocation?.physicalAddress?.city | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="Province">
-            {{ location?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+            {{ remoteUserLocation?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="Postal Code">
-            {{ location?.physicalAddress?.postal | postal | default }}
+            {{ remoteUserLocation?.physicalAddress?.postal | postal | default }}
           </app-enrollee-property>
 
         </div>
