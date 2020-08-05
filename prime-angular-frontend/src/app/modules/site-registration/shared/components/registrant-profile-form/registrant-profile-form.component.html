@@ -8,6 +8,9 @@
       <ng-container appPageSubheader2Summary>
         <ng-content select="[appPageSubheader2Summary]"></ng-content>
       </ng-container>
+      <ng-container appPageSubheader2MoreInfo>
+        <ng-content select="[appPageSubheader2MoreInfo]"></ng-content>
+      </ng-container>
     </app-page-subheader2>
 
     <ng-content select="app-same-as"></ng-content>
@@ -108,7 +111,7 @@
                       color="primary"
                       [checked]="hasPhysicalAddress"
                       (change)="onPhysicalAddressChange()">
-      My Address if different from Location Address
+      The {{ title }}'s mailing address is different from this site’s address
     </mat-slide-toggle>
   </section>
 
