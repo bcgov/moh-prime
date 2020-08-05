@@ -7,18 +7,7 @@
 
 <ng-template #content>
 
-  <app-site-review *ngIf="site"
-                   [site]="site"
-                   [showEditRedirect]="false"></app-site-review>
-
-  <div class="row justify-content-between">
-    <div class="col pt-4">
-
-      <button mat-stroked-button
-              type="button"
-              (click)="routeRelativeTo(['./'])">Back</button>
-
-    </div>
-  </div>
+  <app-overview-container [site]="site"
+                          [showEditRedirect]="false"></app-overview-container>
 
 </ng-template>

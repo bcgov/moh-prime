@@ -7,6 +7,9 @@ import { Subscription, EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { UtilsService } from '@core/services/utils.service';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -15,11 +18,6 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { LoggerService } from '@core/services/logger.service';
-import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
-import { ToastService } from '@core/services/toast.service';
-import { UtilsService } from '@core/services/utils.service';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -31,17 +29,13 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public routeUtils: RouteUtils;
   public organizationAgreement: string;
   public hasAcceptedAgreement: boolean;
-  public isCompleted: boolean;
-  public SiteRoutes = SiteRoutes;
   public hasDownloadedFile: boolean;
   public hasUploadedFile: boolean;
   public hasNoUploadError: boolean;
+  public isCompleted: boolean;
+  public SiteRoutes = SiteRoutes;
 
-  @ViewChild('accept') accepted: MatCheckbox;
-
-  public filePondOptions: { [key: string]: any };
-  public filePondUploadProgress = 0;
-  public filePondFiles = [];
+  @ViewChild('accept') public accepted: MatCheckbox;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,30 +43,11 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     private organizationService: OrganizationService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
+    private siteResource: SiteResource,
     private dialog: MatDialog,
-    private logger: LoggerService,
-    private keycloakTokenService: KeycloakTokenService,
-    private toastService: ToastService,
     private utilsService: UtilsService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.filePondOptions = {
-      class: 'prime-filepond',
-      multiple: false,
-      labelIdle: 'Click to Browse or Drop files here',
-      acceptedFileTypes: [
-        'image/jpeg',
-        'image/png',
-      ],
-      fileValidateTypeDetectType: (source: any, type: string) => new Promise((resolve, reject) => {
-        if (!type.includes('image')) {
-          this.toastService.openSuccessToast('File must be image');
-          reject(type);
-        }
-        resolve(type);
-      }),
-      allowFileTypeValidation: true
-    };
   }
 
   public onSubmit() {
@@ -90,7 +65,8 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
             (result)
               ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
               : EMPTY
-          )
+          ),
+          exhaustMap(() => this.siteResource.updateSiteCompleted((this.route.snapshot.queryParams.siteId)))
         )
         .subscribe(() => this.nextRoute());
     }
@@ -111,19 +87,27 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       .getUnsignedOrganizationAgreement()
       .subscribe((base64: string) => {
         const blob = this.utilsService.base64ToBlob(base64);
-        this.utilsService.downloadDocument(blob, 'Organization-Agreement')
+        this.utilsService.downloadDocument(blob, 'Organization-Agreement');
         this.hasDownloadedFile = true;
       });
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
+    const siteId = this.route.snapshot.queryParams.siteId;
+    if (siteId) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
+    } else {
+      this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
+    }
   }
 
   public nextRoute() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.ORGANIZATIONS], {
-      queryParams: { submitted: true, signed: true }
-    });
+    const redirectPath = this.route.snapshot.queryParams.redirect;
+    if (redirectPath) {
+      this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
+    } else {
+      this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
+    }
   }
 
   public showDefaultAgreement() {
@@ -139,7 +123,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public ngOnInit(): void {
-    // TODO structured to match in all site views
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);

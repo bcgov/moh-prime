@@ -28,7 +28,7 @@ import {
 import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
 import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
 import { SiteRegistrationActionsComponent } from './shared/components/site-registration-actions/site-registration-actions.component';
-import { AdminOrganizationInformationComponent } from './pages/admin-organization-information/admin-organization-information.component';
+import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,7 @@ import { AdminOrganizationInformationComponent } from './pages/admin-organizatio
     SiteRegistrationTableComponent,
     SiteRegistrationActionsComponent,
     SiteAdjudicationComponent,
-    AdminOrganizationInformationComponent
+    OrganizationInformationComponent
   ],
   imports: [
     SharedModule,

@@ -1,0 +1,43 @@
+<app-header [isMobile]="isMobile"
+            [username]="username"
+            (toggle)="sidenav.toggle()"
+            (logout)="onLogout()"></app-header>
+
+<mat-sidenav-container class="prime-sidenav-container">
+
+  <mat-sidenav #sidenav
+               [mode]="sideNavProps.mode"
+               [opened]="sideNavProps.opened"
+               [fixedInViewport]="sideNavProps.fixedInViewport"
+               [fixedTopGap]="0"
+               [fixedBottomGap]="0"
+               class="d-print-none">
+    <div class="logo">
+      <img src="/assets/prime_logo.svg"
+           alt="PRIME Logo"
+           [class.fixed]="!showNavItemIcons">
+    </div>
+
+    <app-dashboard-nav [dashboardNavSections]="dashboardNavSections"
+                       [showNavItemIcons]="showNavItemIcons"
+                       [showNavItemLabels]="sideNavProps.showNavItemLabels"
+                       (route)="onRoute()"></app-dashboard-nav>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col py-5">
+
+          <router-outlet></router-outlet>
+
+        </div>
+      </div>
+
+    </div>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

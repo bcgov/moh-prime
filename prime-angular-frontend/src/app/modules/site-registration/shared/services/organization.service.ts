@@ -9,7 +9,11 @@ import { Organization } from '@registration/shared/models/organization.model';
  * Service is considered a source of truth and should be set
  * directly from a HTTP response.
  */
-// TODO make an interface for the different services
+export interface IOrganizationService {
+  organization$: BehaviorSubject<Organization>;
+  organization: Organization;
+}
+
 @Injectable({
   providedIn: 'root'
 })

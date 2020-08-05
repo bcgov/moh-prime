@@ -42,7 +42,7 @@ export class AdjudicatorNotesComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.valid) {
-      const request$ = this.adjudicationResource
+      this.adjudicationResource
         .createAdjudicatorNote(this.route.snapshot.params.id, this.note.value)
         .pipe(this.toDateContentPipe())
         .subscribe((adjudicatorNote: DateContent) => {
