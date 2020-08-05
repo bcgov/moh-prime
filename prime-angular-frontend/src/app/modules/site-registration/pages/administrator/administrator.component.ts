@@ -43,12 +43,11 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'Administrator of PharmaNet Onboarding';
+    this.title = 'PharmaNet Administrator';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
   public onSubmit() {
-    // TODO temporary fix for allow submissions of disabled forms
     const isDisabled = this.form.disabled;
     if (isDisabled) {
       this.form.enable();
@@ -128,7 +127,6 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
 
-    // TODO temporary fix to disable same as party
     if (this.isSameAs()) {
       this.form.disable();
     }

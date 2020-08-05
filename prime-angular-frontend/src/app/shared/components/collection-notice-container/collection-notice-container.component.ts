@@ -30,7 +30,7 @@ export class CollectionNoticeContainerComponent extends AbstractCollectionNotice
   }
 
   public get label(): string {
-    return (this.isFull) ? 'Next' : 'Ok';
+    return (this.isFull) ? 'Next' : 'Continue';
   }
 
   public get show(): boolean {
