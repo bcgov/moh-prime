@@ -195,7 +195,7 @@ namespace PrimeTests.Services
             TestUtils.DetachAllEntities(_dbContext);
 
             // update the enrollee through the service layer code
-            EnrolleeProfileViewModel enrolleeProfile = new EnrolleeProfileViewModel
+            EnrolleeUpdateModel enrolleeProfile = new EnrolleeUpdateModel
             {
                 PreferredFirstName = expectedName
             };

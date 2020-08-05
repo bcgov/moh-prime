@@ -156,13 +156,13 @@ namespace PrimeTests.Integration
 
                 Assert.NotEqual(expectedFirstName, enrollee.FirstName);
 
-                var enrolleeProfile = new EnrolleeProfileViewModel
+                var enrolleeProfile = new EnrolleeUpdateModel
                 {
                     PreferredFirstName = expectedFirstName
                 };
 
                 // create a request with an AUTH token
-                var request = TestUtils.CreateRequest<EnrolleeProfileViewModel>(HttpMethod.Put, $"/api/enrollees/{enrollee.Id}", enrollee.UserId, enrolleeProfile);
+                var request = TestUtils.CreateRequest<EnrolleeUpdateModel>(HttpMethod.Put, $"/api/enrollees/{enrollee.Id}", enrollee.UserId, enrolleeProfile);
 
                 // try to update the enrollee
                 var response = await _client.SendAsync(request);

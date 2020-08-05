@@ -71,7 +71,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(enrollees);
         }
 
-        public Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted)
+        public Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted)
         {
             throw new NotImplementedException();
         }
