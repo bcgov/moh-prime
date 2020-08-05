@@ -10,7 +10,6 @@ namespace Prime.Models
     public sealed class EnrolmentCertificate
     {
         public string FirstName { get; set; }
-        public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string PreferredFirstName { get; set; }
         public string PreferredMiddleName { get; set; }
@@ -24,7 +23,6 @@ namespace Prime.Models
             return new EnrolmentCertificate
             {
                 FirstName = enrollee.FirstName,
-                MiddleName = enrollee.MiddleName,
                 LastName = enrollee.LastName,
                 PreferredFirstName = enrollee.PreferredFirstName,
                 PreferredMiddleName = enrollee.PreferredMiddleName,

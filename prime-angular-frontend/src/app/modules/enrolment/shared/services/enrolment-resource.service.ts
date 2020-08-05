@@ -205,7 +205,6 @@ export class EnrolmentResource {
     const {
       userId,
       firstName,
-      middleName,
       lastName,
       givenNames,
       preferredFirstName,
@@ -227,7 +226,6 @@ export class EnrolmentResource {
       enrollee: {
         userId,
         firstName,
-        middleName,
         lastName,
         givenNames,
         preferredFirstName,

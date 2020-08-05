@@ -81,8 +81,8 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
     const {
       userId,
       firstName,
-      middleName,
       lastName,
+      givenNames,
       preferredFirstName,
       preferredMiddleName,
       preferredLastName,
@@ -103,8 +103,8 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       enrollee: {
         userId,
         firstName,
-        middleName,
         lastName,
+        givenNames,
         preferredFirstName,
         preferredMiddleName,
         preferredLastName,

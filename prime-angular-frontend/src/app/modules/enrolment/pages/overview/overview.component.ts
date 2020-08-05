@@ -113,12 +113,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       // Merge BCSC information in for use within the view
       const {
         firstName,
-        middleName,
         lastName,
         dateOfBirth,
         physicalAddress
       } = this.enrolmentService.enrolment.enrollee;
-      enrolment.enrollee = { ...enrolment.enrollee, firstName, middleName, lastName, dateOfBirth, physicalAddress };
+      enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, dateOfBirth, physicalAddress };
     }
 
     // Store a local copy of the enrolment for views
