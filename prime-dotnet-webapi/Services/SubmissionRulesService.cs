@@ -51,7 +51,7 @@ namespace Prime.Services
         /// All rules must pass for an update to be considered minor enough to not warrant going through the (Auto) adjudication proccess.
         /// These rules will not alter the enrollee object.
         /// </summary>
-        public async Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeProfileViewModel profileUpdate)
+        public async Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate)
         {
             var rules = new List<MinorUpdateRule>
             {
