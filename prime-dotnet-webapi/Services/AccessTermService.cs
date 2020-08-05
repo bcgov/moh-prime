@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
+using Prime.Models.Api;
 
 namespace Prime.Services
 {
@@ -12,76 +13,56 @@ namespace Prime.Services
     {
         private static readonly TimeSpan ACCESS_TERM_EXPIRY = TimeSpan.FromDays(365);
 
-        public AccessTermService(ApiDbContext context, IHttpContextAccessor httpContext)
+        private readonly IRazorConverterService _razorConverterService;
+
+        public AccessTermService(ApiDbContext context, IHttpContextAccessor httpContext,
+            IRazorConverterService razorConverterService)
             : base(context, httpContext)
-        { }
+        {
+            _razorConverterService = razorConverterService;
+        }
 
-        /**
-         * Get access term for an enrollee by id if accepted.
-         */
-        public async Task<AccessTerm> GetEnrolleesAccessTermAsync(int enrolleeId, int accessTermId)
+        /// <summary>
+        /// Gets the access term for an enrollee by ID, if it exists (No Tracking).
+        /// </summary>
+        public async Task<AccessTerm> GetEnrolleeAccessTermAsync(int enrolleeId, int accessTermId, bool includeText = false)
         {
             var accessTerm = await _context.AccessTerms
-                .Include(at => at.UserClause)
-                .Include(at => at.LimitsConditionsClause)
-                .Where(at => at.EnrolleeId == enrolleeId)
+                .AsNoTracking()
                 .Where(at => at.Id == accessTermId)
-                .Where(at => at.AcceptedDate != null)
-                .FirstOrDefaultAsync();
-
-            return accessTerm;
-        }
-
-        /**
-         * Get the most recent terms !ACCEPTED access term for an enrollee.
-         */
-        public async Task<AccessTerm> GetMostRecentNotAcceptedEnrolleesAccessTermAsync(int enrolleeId)
-        {
-            var accessTerm = await _context.AccessTerms
-                .Include(at => at.UserClause)
-                .Include(at => at.LimitsConditionsClause)
                 .Where(at => at.EnrolleeId == enrolleeId)
-                .Where(at => at.AcceptedDate == null)
-                .OrderByDescending(at => at.CreatedDate)
-                .FirstOrDefaultAsync();
+                .If(includeText, q => q.Include(at => at.UserClause).Include(at => at.LimitsConditionsClause))
+                .SingleOrDefaultAsync();
 
-            return accessTerm;
-        }
-
-        /**
-         * Get the most recent terms ACCEPTED access term for an enrollee.
-         */
-        public async Task<AccessTerm> GetMostRecentAcceptedEnrolleesAccessTermAsync(int enrolleeId)
-        {
-            var accessTerm = await _context.AccessTerms
-                .Include(at => at.UserClause)
-                .Include(at => at.LimitsConditionsClause)
-                .Where(at => at.EnrolleeId == enrolleeId)
-                .Where(at => at.AcceptedDate != null)
-                .OrderByDescending(at => at.CreatedDate)
-                .FirstOrDefaultAsync();
-
-            return accessTerm;
-        }
-
-        /**
-         *  Get list of ACCEPTED access terms for an enrollee
-         */
-        public async Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId, int year)
-        {
-            var accessTerms = await _context.AccessTerms
-                .Include(at => at.UserClause)
-                .Include(at => at.LimitsConditionsClause)
-                .Where(at => at.EnrolleeId == enrolleeId)
-                .Where(at => at.AcceptedDate != null)
-                .OrderByDescending(at => at.AcceptedDate)
-                .ToListAsync();
-
-            if (year != 0)
+            if (includeText)
             {
-                accessTerms = accessTerms
-                    .Where(at => at.AcceptedDate.HasValue && at.AcceptedDate.Value.Year == year)
-                    .ToList();
+                await RenderHtml(accessTerm);
+            }
+
+            return accessTerm;
+        }
+
+        /// <summary>
+        /// Get the list of access terms for an enrollee, using filters (No Tracking).
+        /// </summary>
+        public async Task<IEnumerable<AccessTerm>> GetAccessTermsAsync(int enrolleeId, AccessTermFilters filters)
+        {
+            filters = filters ?? new AccessTermFilters();
+
+            var accessTerms = await _context.AccessTerms
+                .AsNoTracking()
+                .Where(at => at.EnrolleeId == enrolleeId)
+                .OrderByDescending(at => at.CreatedDate)
+                .If(filters.YearAccepted.HasValue, q => q.Where(at => at.AcceptedDate.HasValue && at.AcceptedDate.Value.Year == filters.YearAccepted))
+                .If(filters.OnlyLatest, q => q.Take(1))
+                .If(filters.Accepted == true, q => q.Where(at => at.AcceptedDate.HasValue))
+                .If(filters.Accepted == false, q => q.Where(at => !at.AcceptedDate.HasValue))
+                .If(filters.IncludeText, q => q.Include(at => at.UserClause).Include(at => at.LimitsConditionsClause))
+                .ToArrayAsync();
+
+            if (filters.IncludeText)
+            {
+                await RenderHtml(accessTerms);
             }
 
             return accessTerms;
@@ -89,51 +70,44 @@ namespace Prime.Services
 
         public async Task CreateEnrolleeAccessTermAsync(Enrollee enrollee)
         {
-            var accessTerm = await GenerateAccessTermAsync(enrollee);
-
-            accessTerm.CreatedDate = DateTimeOffset.Now;
+            var accessTerm = new AccessTerm
+            {
+                EnrolleeId = enrollee.Id,
+                UserClauseId = await GetCurrentAgreementIdForUserAsync(enrollee),
+                LimitsConditionsClause = await GenerateLimitsAndConditionsClause(enrollee.Id),
+                CreatedDate = DateTimeOffset.Now
+            };
 
             _context.Add(accessTerm);
-
             await _context.SaveChangesAsync();
         }
 
-        public async Task AcceptCurrentAccessTermAsync(Enrollee enrollee)
+        public async Task AcceptCurrentAccessTermAsync(int enrolleeId)
         {
             var accessTerm = await _context.AccessTerms
-                .Where(at => at.EnrolleeId == enrollee.Id)
                 .OrderByDescending(at => at.CreatedDate)
-                .FirstAsync();
+                .FirstAsync(at => at.EnrolleeId == enrolleeId);
 
-            accessTerm.AcceptedDate = DateTimeOffset.Now;
-            // Add an Expiry Date of one year in the future.
-            accessTerm.ExpiryDate = DateTimeOffset.Now.Add(ACCESS_TERM_EXPIRY);
+            if (accessTerm.AcceptedDate == null)
+            {
+                accessTerm.AcceptedDate = DateTimeOffset.Now;
+                accessTerm.ExpiryDate = DateTimeOffset.Now.Add(ACCESS_TERM_EXPIRY);
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public async Task ExpireCurrentAccessTermAsync(Enrollee enrollee)
+        public async Task ExpireCurrentAccessTermAsync(int enrolleeId)
         {
             var accessTerm = await _context.AccessTerms
-                .Where(at => at.EnrolleeId == enrollee.Id)
                 .OrderByDescending(at => at.CreatedDate)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(at => at.EnrolleeId == enrolleeId);
 
             if (accessTerm != null)
             {
-                // Set expiry date to now, sudo expirying an access term.
                 accessTerm.ExpiryDate = DateTimeOffset.Now;
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<bool> AccessTermExistsOnEnrolleeAsync(int accessTermId, int enrolleeId)
-        {
-            return await _context.AccessTerms
-                .Where(at => at.Id == accessTermId)
-                .Where(at => at.EnrolleeId == enrolleeId)
-                .AnyAsync();
         }
 
         /// <summary>
@@ -141,7 +115,16 @@ namespace Prime.Services
         /// </summary>
         public async Task<bool> IsCurrentByEnrolleeAsync(Enrollee enrollee)
         {
-            // var current = true;
+            var currentAgreement = await GetCurrentAgreementIdForUserAsync(enrollee);
+
+            if (enrollee.AccessTerms == null)
+            {
+
+            }
+
+            _context.UserClauses.wher
+
+            return enrollee.a
 
             // var accessTerm = await _context.AccessTerms
             //     .Include(at => at.AccessTermLicenseClassClauses)
@@ -212,58 +195,73 @@ namespace Prime.Services
             return toaStatus;
         }
 
-        /**
-         * Generates an Access Term based off of the enrollee
-         */
-        private async Task<AccessTerm> GenerateAccessTermAsync(Enrollee enrollee)
+        /// <summary>
+        /// Renders the HTML text of the Access Term for viewing on the frontend.
+        /// </summary>
+        private async Task RenderHtml(params AccessTerm[] accessTerms)
         {
-            var accessTerms = new AccessTerm { Enrollee = enrollee };
-            throw new NotImplementedException();
-            // accessTerms.UserClause = await GetUserClause(enrollee);
-            accessTerms.LimitsConditionsClause = await GetAccessTermLimitsConditionsClause(enrollee);
-
-            return accessTerms;
-        }
-
-        private async Task<UserClause> GetUserClause(Enrollee enrollee)
-        {
-
-            throw new NotImplementedException();
-            var classification = enrollee.IsRegulatedUser() ? PrimeConstants.PRIME_RU : PrimeConstants.PRIME_OBO;
-
-            // return await _context.UserClauses
-            //     .Where(g => g.EnrolleeClassification == classification)
-            //     .OrderByDescending(g => g.EffectiveDate)
-            //     .FirstAsync();
-        }
-
-        private async Task<LimitsConditionsClause> GetAccessTermLimitsConditionsClause(Enrollee enrollee)
-        {
-            var lastNote = await _context.AccessAgreementNotes
-                                .Where(n => n.EnrolleeId == enrollee.Id)
-                                .OrderByDescending(n => n.CreatedTimeStamp)
-                                .FirstOrDefaultAsync();
-
-            var newClause = new LimitsConditionsClause
+            foreach (var term in accessTerms)
             {
-                Text = null,
-                EffectiveDate = new DateTimeOffset()
-            };
-
-            if (lastNote != null)
-            {
-                newClause = new LimitsConditionsClause
+                if (term != null)
                 {
-                    Text = lastNote.Note,
-                    EffectiveDate = new DateTimeOffset()
-                };
+                    term.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", term);
+                }
+            }
+        }
 
-                _context.LimitsConditionsClauses.Add(newClause);
-                await _context.SaveChangesAsync();
+        /// <summary>
+        /// Gets the ID of the most current Agreement based on the scope of practice of the Enrollee.
+        /// See JIRA PRIME-880
+        /// </summary>
+        private async Task<int> GetCurrentAgreementIdForUserAsync(Enrollee enrollee)
+        {
+            if (!enrollee.IsRegulatedUser())
+            {
+                return await FetchNewestAgreementIdOfType<OboAgreement>();
             }
 
-            return newClause;
+            if (enrollee.HasCareSetting(CareSettingType.CommunityPharmacy))
+            {
+                return await FetchNewestAgreementIdOfType<CommunityPharmacistAgreement>();
+            }
+            else
+            {
+                return await FetchNewestAgreementIdOfType<RegulatedUserAgreement>();
+            }
+        }
 
+        private async Task<int> FetchNewestAgreementIdOfType<T>() where T : UserClause
+        {
+            return await _context.UserClauses
+                .AsNoTracking()
+                .OfType<T>()
+                .OrderByDescending(a => a.EffectiveDate)
+                .Select(a => a.Id)
+                .FirstAsync();
+        }
+
+        /// <summary>
+        /// Generates a Limits and Conditions Clause for the Enrollee, based on the text of any Access Agreement Note they have.
+        /// Does not save to the database.
+        /// </summary>
+        private async Task<LimitsConditionsClause> GenerateLimitsAndConditionsClause(int enrolleeId)
+        {
+            var text = await _context.AccessAgreementNotes
+                .AsNoTracking()
+                .Where(n => n.EnrolleeId == enrolleeId)
+                .Select(n => n.Note)
+                .SingleOrDefaultAsync();
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return null;
+            }
+
+            return new LimitsConditionsClause
+            {
+                Text = text,
+                EffectiveDate = DateTimeOffset.Now
+            };
         }
     }
 }
