@@ -43,7 +43,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'Administrator of PharmaNet Onboarding';
+    this.title = 'PharmaNet Administrator';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
