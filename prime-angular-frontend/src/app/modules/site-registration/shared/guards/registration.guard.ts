@@ -12,7 +12,6 @@ import { User } from '@auth/shared/models/user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { Organization } from '../models/organization.model';
@@ -36,8 +35,7 @@ export class RegistrationGuard extends BaseGuard {
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    const organizationId = params.oid;
-    const user$ = from(this.authService.getUser());
+    const user$ = this.authService.getUser$();
     const createOrganization$ = user$
       .pipe(
         map((user: User) => new Party(user)),
@@ -47,7 +45,10 @@ export class RegistrationGuard extends BaseGuard {
 
     return this.organizationResource.getOrganizations()
       .pipe(
-        map((organizations: Organization[]) => (organizations.length) ? organizations.shift() : null),
+        map((organizations: Organization[]) =>
+          (organizations.length)
+            ? organizations.shift()
+            : null),
         exhaustMap((organization: Organization) =>
           (organization)
             ? of([organization, false])
@@ -104,13 +105,15 @@ export class RegistrationGuard extends BaseGuard {
     let whiteListedRoutes = SiteRoutes.siteRegistrationRoutes();
 
     if (!organization.completed) {
-      // Initial org not completed, use initialRegistration route order
+      // Initial organization is not completed, use initialRegistration route order
       whiteListedRoutes = whiteListedRoutes
-        .filter((route: string) => SiteRoutes.organizationRegistrationRouteOrder().includes(route));
-      // return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, organization.id);
+        .filter((route: string) =>
+          SiteRoutes.organizationRegistrationRouteOrder().includes(route)
+        );
     } else {
       if (!organization.acceptedAgreementDate) {
         whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
+        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
       } else {
         whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
         whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
