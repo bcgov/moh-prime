@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 
-import { Subscription } from 'rxjs';
+import { Subscription, noop, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -64,9 +64,15 @@ export class RemoteUsersComponent implements OnInit {
           map((organization: Organization) => !!organization.acceptedAgreementDate),
           // When the organization agreement has already been signed mark the site as completed
           exhaustMap((hasSignedOrgAgreement: boolean) =>
-            this.siteResource.updateSite(payload, hasSignedOrgAgreement)
+            this.siteResource.updateSite(payload)
               .pipe(map(() => hasSignedOrgAgreement))
-          )
+          ),
+          exhaustMap((hasSignedOrgAgreement: boolean) => {
+            return hasSignedOrgAgreement
+              ? this.siteResource.updateSiteCompleted(this.siteService.site.id)
+                .pipe(map(() => hasSignedOrgAgreement))
+              : of(hasSignedOrgAgreement);
+          })
         )
         .subscribe((hasSignedOrgAgreement: boolean) => {
           this.form.markAsPristine();

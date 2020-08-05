@@ -77,10 +77,9 @@ namespace Prime.Services
             return site.Id;
         }
 
-        public async Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite, bool isCompleted = false)
+        public async Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite)
         {
             var currentSite = await this.GetSiteAsync(siteId);
-            var currentIsCompleted = currentSite.Completed;
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
@@ -93,11 +92,6 @@ namespace Prime.Services
             UpdateParties(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
             UpdateRemoteUsers(currentSite, updatedSite);
-
-            // Registration has been completed
-            currentSite.Completed = (isCompleted)
-                ? isCompleted
-                : currentIsCompleted;
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
@@ -138,9 +132,7 @@ namespace Prime.Services
             {
                 var partyIdName = $"{partyType}Id";
                 Party currentParty = _context.Entry(current).Reference(partyType).CurrentValue as Party;
-
                 Party updatedParty = typeof(SiteUpdateModel).GetProperty(partyType).GetValue(updated) as Party;
-                // Party updatedParty = _context.Entry(updated).Reference(partyType).CurrentValue as Party;
 
                 if (updatedParty != null)
                 {

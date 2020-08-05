@@ -148,14 +148,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="updatedSite"></param>
-        /// <param name="isCompleted"></param>
         [HttpPut("{siteId}", Name = nameof(UpdateSite))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateSite(int siteId, SiteUpdateModel updatedSite, [FromQuery] bool isCompleted)
+        public async Task<IActionResult> UpdateSite(int siteId, SiteUpdateModel updatedSite)
         {
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
@@ -170,7 +169,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _siteService.UpdateSiteAsync(siteId, updatedSite, isCompleted);
+            await _siteService.UpdateSiteAsync(siteId, updatedSite);
 
             return NoContent();
         }
