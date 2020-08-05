@@ -18,8 +18,6 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
-  // TODO replace when Enrolment is refactored out of the EnrolmentModule
-  // public enrolleeProfileVersion: HttpEnrolleeProfileVersion;
   public enrolmentProfileHistory: EnrolmentProfileVersion;
   public enrolment: Enrolment;
 
@@ -46,11 +44,6 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       this.enrolmentProfileHistory = enrolmentProfileHistory;
       this.enrolment = enrolment;
     });
-    // TODO replace when Enrolment is refactored out of the EnrolmentModule
-    // .subscribe((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
-    //   this.enrolleeProfileVersion = enrolleeProfileVersion
-    // );
-
   }
 
   private enrolleeVersionAdapterResponse(
