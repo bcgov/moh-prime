@@ -46,6 +46,15 @@ export class SiteRoutes {
     ];
   }
 
+  // Used to indicate the routes and order of registration for updating
+  // organization, and sites
+  public static editRegistrationRouteOrder(): string[] {
+    return [
+      ...this.organizationRegistrationRouteOrder(),
+      ...this.editSiteRegistrationRouteOrder()
+    ];
+  }
+
   // Used to indicate the routes and order of registration for organizations
   public static organizationRegistrationRouteOrder(): string[] {
     return [
@@ -66,6 +75,18 @@ export class SiteRoutes {
       this.PRIVACY_OFFICER,
       this.TECHNICAL_SUPPORT,
       this.REMOTE_USERS
+    ];
+  }
+
+  // Used to indicate the routes and order for sites for editing
+  public static editSiteRegistrationRouteOrder(): string[] {
+    return [
+      this.HOURS_OPERATION,
+      this.ADMINISTRATOR,
+      this.PRIVACY_OFFICER,
+      this.TECHNICAL_SUPPORT,
+      this.REMOTE_USERS,
+      this.SITE_REVIEW
     ];
   }
 

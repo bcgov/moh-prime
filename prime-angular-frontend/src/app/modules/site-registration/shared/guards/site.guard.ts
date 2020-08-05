@@ -40,9 +40,76 @@ export class SiteGuard extends BaseGuard {
           // Store the site for access throughout creation and updating of a
           // site, which will allows provide the most up-to-date site
           this.siteService.site = site;
-          // TODO always resolve until routes are lock down
-          return true;
+
+          return this.routeDestination(routePath, site);
         })
       );
+  }
+
+  /**
+   * @description
+   * Determine the route destination based on the site status.
+   */
+  private routeDestination(routePath: string, site: Site) {
+    // On login the user will always be redirected to the collection notice
+    if (site) {
+      return (site.submittedDate)
+        ? this.manageSubmittedSiteRouting(routePath, site)
+        : true;
+    }
+
+    // Otherwise, prevent the route from resolving
+    return false;
+  }
+
+  private manageSubmittedSiteRouting(routePath: string, site: Site) {
+    return this.manageRouting(routePath, SiteRoutes.SITE_MANAGEMENT, site);
+  }
+
+  private manageRouting(routePath: string, defaultRoute: string, site: Site): boolean {
+    let childRoute = routePath.includes('remote-users')
+      ? 'remote-users'
+      : routePath.split('/').pop();
+
+    if (childRoute.includes('?')) {
+      childRoute = childRoute.split('?')[0];
+    }
+
+    let whiteListedRoutes = SiteRoutes.siteRegistrationRoutes();
+    if (site.submittedDate) {
+      whiteListedRoutes = SiteRoutes.editRegistrationRouteOrder();
+    }
+
+    // Redirect to an appropriate default route
+    if (!whiteListedRoutes.includes(childRoute)) {
+      return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT);
+    }
+
+    // Otherwise, allow access to the route
+    return true;
+  }
+
+  /**
+   * @description
+   * Prevent infinite route loops by navigating to a route only
+   * when the current route path is not the destination path.
+   */
+  private navigate(
+    routePath: string,
+    loopPath: string,
+    destinationPath: string = null,
+    oid: number = null): boolean {
+
+    const modulePath = this.config.routes.site;
+    const comparePath = (destinationPath && oid)
+      ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
+      : `/${modulePath}/${loopPath}`;
+
+    if (routePath === comparePath) {
+      return true;
+    } else {
+      this.router.navigate([comparePath]);
+      return false;
+    }
   }
 }
