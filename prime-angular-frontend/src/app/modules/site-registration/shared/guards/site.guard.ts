@@ -51,7 +51,6 @@ export class SiteGuard extends BaseGuard {
    * Determine the route destination based on the site status.
    */
   private routeDestination(routePath: string, site: Site) {
-    // On login the user will always be redirected to the collection notice
     if (site) {
       return (site.submittedDate)
         ? this.manageSubmittedSiteRouting(routePath, site)
@@ -96,14 +95,10 @@ export class SiteGuard extends BaseGuard {
    */
   private navigate(
     routePath: string,
-    loopPath: string,
-    destinationPath: string = null,
-    oid: number = null): boolean {
+    loopPath: string): boolean {
 
     const modulePath = this.config.routes.site;
-    const comparePath = (destinationPath && oid)
-      ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
-      : `/${modulePath}/${loopPath}`;
+    const comparePath = `/${modulePath}/${loopPath}`;
 
     if (routePath === comparePath) {
       return true;
