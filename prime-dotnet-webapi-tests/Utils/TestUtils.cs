@@ -70,6 +70,7 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.FirstName, f => f.Name.FirstName())
             .RuleFor(e => e.MiddleName, f => f.Name.FirstName())
             .RuleFor(e => e.LastName, f => f.Name.LastName())
+            .RuleFor(e => e.GivenNames, f => f.Name.FirstName())
             .RuleFor(e => e.DateOfBirth, f => f.Date.Past(20, DateTime.Now.AddYears(-18)))
             .RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
             .RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())

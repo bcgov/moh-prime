@@ -31,6 +31,9 @@ namespace Prime.Models
         [Required]
         public string LastName { get; set; }
 
+        [Required]
+        public string GivenNames { get; set; }
+
         public string PreferredFirstName { get; set; }
 
         public string PreferredMiddleName { get; set; }

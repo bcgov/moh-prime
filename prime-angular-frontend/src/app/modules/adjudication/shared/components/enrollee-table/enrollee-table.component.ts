@@ -33,6 +33,7 @@ export class EnrolleeTableComponent implements OnInit {
     this.columns = [
       'uniqueId',
       'name',
+      'givenNames',
       'appliedDate',
       'status',
       'renewalDate',

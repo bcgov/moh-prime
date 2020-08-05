@@ -15,6 +15,7 @@ export interface KeycloakAttributes {
     streetAddress: string[];
     locality: string[]; // City
     postalCode: string[];
+    givenNames: string[];
   };
 }
 
@@ -78,7 +79,8 @@ export class KeycloakTokenService implements Token {
         region: [provinceCode] = '',
         streetAddress: [street] = '',
         locality: [city] = '',
-        postalCode: [postal] = ''
+        postalCode: [postal] = '',
+        givenNames: [givenNames] = ''
       }
     } = await this.keycloakService.loadUserProfile(forceReload) as Keycloak.KeycloakProfile & KeycloakAttributes;
 
@@ -90,6 +92,7 @@ export class KeycloakTokenService implements Token {
       hpdid,
       firstName,
       lastName,
+      givenNames,
       dateOfBirth,
       physicalAddress: {
         countryCode,
