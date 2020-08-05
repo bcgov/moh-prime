@@ -9,6 +9,7 @@ using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
+using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
@@ -154,7 +155,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateSite(int siteId, Site updatedSite, [FromQuery] bool isCompleted)
+        public async Task<IActionResult> UpdateSite(int siteId, SiteUpdateModel updatedSite, [FromQuery] bool isCompleted)
         {
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
