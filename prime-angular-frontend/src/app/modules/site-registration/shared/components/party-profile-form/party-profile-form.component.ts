@@ -36,7 +36,7 @@ export class PartyProfileFormComponent implements OnInit {
   }
 
   public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
+    return this.form?.get('physicalAddress') as FormGroup;
   }
 
   public onPhysicalAddressChange() {
