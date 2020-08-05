@@ -46,7 +46,7 @@ export class PartyProfileFormComponent implements OnInit {
 
   public ngOnInit() {
     // When the street is populated ensure the address is shown
-    this.physicalAddress.get('street')
+    this.physicalAddress?.get('street')
       .valueChanges
       .pipe(distinctUntilChanged())
       .subscribe((value: string) => (value) ? this.togglePhysicalAddress() : null);
@@ -56,12 +56,12 @@ export class PartyProfileFormComponent implements OnInit {
 
   private togglePhysicalAddress() {
     this.hasPhysicalAddress = !!(
-      this.physicalAddress.get('countryCode').value ||
-      this.physicalAddress.get('provinceCode').value ||
-      this.physicalAddress.get('street').value ||
-      this.physicalAddress.get('street2').value ||
-      this.physicalAddress.get('city').value ||
-      this.physicalAddress.get('postal').value
+      this.physicalAddress?.get('countryCode').value ||
+      this.physicalAddress?.get('provinceCode').value ||
+      this.physicalAddress?.get('street').value ||
+      this.physicalAddress?.get('street2').value ||
+      this.physicalAddress?.get('city').value ||
+      this.physicalAddress?.get('postal').value
     );
 
     this.togglePhysicalAddressValidators(this.physicalAddress, ['id', 'street2']);

@@ -50,9 +50,9 @@ export class FormUtilsService {
       // Assumes that FormGroups will not be deeply nested
       Object.keys(control.controls).forEach((key: string) => this.resetAndClearValidators(control.controls[key] as FormControl));
     } else {
-      control.reset();
-      control.clearValidators();
-      control.updateValueAndValidity();
+      control?.reset();
+      control?.clearValidators();
+      control?.updateValueAndValidity();
     }
   }
 

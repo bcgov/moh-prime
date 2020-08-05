@@ -14,7 +14,7 @@ import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
-describe('RegistrantProfileFormComponent', () => {
+describe('PartyProfileFormComponent', () => {
   let component: PartyProfileFormComponent;
   let fixture: ComponentFixture<PartyProfileFormComponent>;
 

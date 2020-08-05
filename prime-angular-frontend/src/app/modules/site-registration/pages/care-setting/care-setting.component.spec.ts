@@ -8,6 +8,7 @@ import { CareSettingComponent } from './care-setting.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('CareSettingComponent', () => {
   let component: CareSettingComponent;
@@ -18,7 +19,8 @@ describe('CareSettingComponent', () => {
       imports: [
         SiteRegistrationModule,
         RouterTestingModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        BrowserAnimationsModule
       ],
       providers: [
         {

@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { OrganizationSigningAuthorityComponent } from './organization-signing-authority.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SharedModule } from '@shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('OrganizationSigningAuthorityComponent', () => {
   let component: OrganizationSigningAuthorityComponent;
@@ -16,7 +17,8 @@ describe('OrganizationSigningAuthorityComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
-        SharedModule
+        SharedModule,
+        BrowserAnimationsModule
       ],
       providers: [
         {

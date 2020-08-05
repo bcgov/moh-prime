@@ -58,8 +58,8 @@ export class BusinessHoursPickerComponent implements OnChanges, OnInit {
   }
 
   public get unavailableBusinessDays(): boolean[] {
-    const businessDays = this.businessDays.map(b => b.day);
-    return this.days.map((day: number) => businessDays.includes(day));
+    const businessDays = this.businessDays?.map(b => b.day);
+    return this.days.map((day: number) => businessDays?.includes(day));
   }
 
   public onSubmit() {

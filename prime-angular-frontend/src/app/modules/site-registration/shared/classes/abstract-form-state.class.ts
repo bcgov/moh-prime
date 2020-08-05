@@ -164,22 +164,24 @@ export abstract class AbstractFormState<T> {
    * Convert party JSON to form model for reactive forms.
    */
   protected toPartyFormModel([formGroup, data]: [FormGroup, Party]): void {
-    const { physicalAddress, mailingAddress, ...party } = data;
+    if (data) {
+      const { physicalAddress, mailingAddress, ...party } = data;
 
-    formGroup.patchValue(party);
+      formGroup.patchValue(party);
 
-    if (physicalAddress) {
-      const physicalAddressFormGroup = formGroup.get('physicalAddress');
-      (physicalAddress)
-        ? physicalAddressFormGroup.patchValue(physicalAddress)
-        : physicalAddressFormGroup.reset({ id: 0 });
-    }
+      if (physicalAddress) {
+        const physicalAddressFormGroup = formGroup.get('physicalAddress');
+        (physicalAddress)
+          ? physicalAddressFormGroup.patchValue(physicalAddress)
+          : physicalAddressFormGroup.reset({ id: 0 });
+      }
 
-    if (mailingAddress) {
-      const mailingAddressFormGroup = formGroup.get('mailingAddress');
-      (mailingAddress)
-        ? mailingAddressFormGroup.patchValue(mailingAddress)
-        : mailingAddressFormGroup.reset({ id: 0 });
+      if (mailingAddress) {
+        const mailingAddressFormGroup = formGroup.get('mailingAddress');
+        (mailingAddress)
+          ? mailingAddressFormGroup?.patchValue(mailingAddress)
+          : mailingAddressFormGroup?.reset({ id: 0 });
+      }
     }
   }
 
