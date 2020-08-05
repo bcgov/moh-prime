@@ -131,7 +131,7 @@ const routes: Routes = [
                     component: AdministratorComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Administrator of PharmaNet' }
+                    data: { title: 'PharmaNet Administrator' }
                   },
                   {
                     path: SiteRoutes.PRIVACY_OFFICER,
@@ -145,7 +145,7 @@ const routes: Routes = [
                     component: TechnicalSupportComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Technical Support Contact' }
+                    data: { title: 'Technical Support' }
                   },
                   {
                     path: SiteRoutes.REMOTE_USERS,

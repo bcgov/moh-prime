@@ -1,18 +1,32 @@
 <app-page [busy]="busy">
-  <app-page-header>{{ title }}</app-page-header>
+  <app-page-header>PharmaNet Site Registration</app-page-header>
 
   <app-site-collection-notice [isFull]="false"></app-site-collection-notice>
 
   <div *ngIf="hasSubmittedSite"
        class="alert-message">
-    <app-alert type="info">
+    <app-alert type="success">
       <ng-container #alertContent
                     class="alert-content">
-        <strong>You have accepted the Organization Agreement and your application has been submitted.</strong>
-        Use this administration page to update your information or add multiple sites.
+        You have accepted the Organization Agreement for PharmaNet Use. Your application has been submitted for
+        adjudication. The Ministry of Health will contact you once your site has been approved.
+        <strong>Questions: Health Insurance BC at 1-844-397-7463 (toll free)</strong>
       </ng-container>
     </app-alert>
   </div>
+
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Use this management page to update your information or to add multiple sites.
+        <em class="emphasize">
+          A site is the combination of one physical location and one PharmaNet software vendor.
+        </em>
+      </ng-container>
+    </app-page-subheader2>
+  </section>
 
   <ng-container *ngFor="let organization of organizations">
 
@@ -78,7 +92,7 @@
         <button mat-stroked-button
                 type="button"
                 color="primary"
-                [disabled]="!site.remoteUsers.length"
+                [disabled]="!site.completed"
                 (click)="viewSiteRemoteUsers(site)">
           Update Remote Practitioners
         </button>
@@ -130,7 +144,7 @@
         <span>View/Update Site Information</span>
       </button>
       <button mat-menu-item
-              [disabled]="!site.remoteUsers.length"
+              [disabled]="!site.completed"
               (click)="viewSiteRemoteUsers(site)">
         <span>View/Update Remote Practitioners</span>
       </button>
