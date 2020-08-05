@@ -39,19 +39,18 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
         }
 
-        // GET: api/Enrollees/access-terms
+        // GET: api/Enrollees/5/access-terms
         /// <summary>
         /// Get a list of the enrollee's access terms.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="year"></param>
+        /// <param name="filters"></param>
         [HttpGet("{enrolleeId}/access-terms", Name = nameof(GetAccessTerms))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId, [FromQuery] int year)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AccessTerm>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId, [FromQuery] AccessTermFilters filters)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -65,7 +64,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var accessTerms = await _accessTermService.GetAcceptedAccessTerms(enrolleeId, year);
+            var accessTerms = await _accessTermService.GetAccessTermsAsync(enrolleeId, filters);
 
             if (User.IsAdmin())
             {
@@ -75,7 +74,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(accessTerms));
         }
 
-        // GET: api/Enrollees/5/access-terms
+        // GET: api/Enrollees/5/access-terms/2
         /// <summary>
         /// Get a specific access term for an enrollee.
         /// </summary>
@@ -162,7 +161,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAccessTerm(int enrolleeId, int accessTermId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
