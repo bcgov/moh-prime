@@ -13,14 +13,8 @@ namespace Prime.Services
 
         Task CreateEnrolleeAccessTermAsync(Enrollee enrollee);
 
-        Task AcceptCurrentAccessTermAsync(Enrollee enrollee);
+        Task AcceptCurrentAccessTermAsync(int enrolleeId);
 
-        Task ExpireCurrentAccessTermAsync(Enrollee enrollee);
-
-        Task<bool> AccessTermExistsOnEnrolleeAsync(int accessTermId, int enrolleeId);
-
-        Task<bool> IsCurrentByEnrolleeAsync(Enrollee enrollee);
-
-        Task<string> GetCurrentTOAStatusAsync(Enrollee enrollee);
+        Task ExpireCurrentAccessTermAsync(int enrolleeId);
     }
 }

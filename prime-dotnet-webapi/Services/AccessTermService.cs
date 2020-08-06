@@ -15,7 +15,8 @@ namespace Prime.Services
 
         private readonly IRazorConverterService _razorConverterService;
 
-        public AccessTermService(ApiDbContext context, IHttpContextAccessor httpContext,
+        public AccessTermService(
+            ApiDbContext context, IHttpContextAccessor httpContext,
             IRazorConverterService razorConverterService)
             : base(context, httpContext)
         {
@@ -82,6 +83,9 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Accepts the Enrollee's newest Access Term, if it hasn't already been accepted.
+        /// </summary>
         public async Task AcceptCurrentAccessTermAsync(int enrolleeId)
         {
             var accessTerm = await _context.AccessTerms
@@ -97,102 +101,21 @@ namespace Prime.Services
             }
         }
 
+        /// <summary>
+        /// Expires the Enrollee's most recently accepted Access Term.
+        /// </summary>
         public async Task ExpireCurrentAccessTermAsync(int enrolleeId)
         {
             var accessTerm = await _context.AccessTerms
                 .OrderByDescending(at => at.CreatedDate)
-                .FirstOrDefaultAsync(at => at.EnrolleeId == enrolleeId);
+                .Where(at => at.EnrolleeId == enrolleeId)
+                .FirstOrDefaultAsync(at => at.AcceptedDate.HasValue);
 
             if (accessTerm != null)
             {
                 accessTerm.ExpiryDate = DateTimeOffset.Now;
                 await _context.SaveChangesAsync();
             }
-        }
-
-        /// <summary>
-        /// Returns true if the enrollees' most recent accepted access term has no newer versions
-        /// </summary>
-        public async Task<bool> IsCurrentByEnrolleeAsync(Enrollee enrollee)
-        {
-            var currentAgreement = await GetCurrentAgreementIdForUserAsync(enrollee);
-
-            if (enrollee.AccessTerms == null)
-            {
-
-            }
-
-            _context.UserClauses.wher
-
-            return enrollee.a
-
-            // var accessTerm = await _context.AccessTerms
-            //     .Include(at => at.AccessTermLicenseClassClauses)
-            //     .Where(at => at.EnrolleeId == enrollee.Id)
-            //     .Where(at => at.AcceptedDate != null)
-            //     .OrderByDescending(at => at.AcceptedDate)
-            //     .FirstOrDefaultAsync();
-
-            // if (accessTerm != null)
-            // {
-            //     var currentAccessTerm = await GenerateAccessTermAsync(enrollee);
-
-            //     if (accessTerm.GlobalClauseId != currentAccessTerm.GlobalClause.Id
-            //        || accessTerm.UserClauseId != currentAccessTerm.UserClause.Id)
-            //     {
-            //         current = false;
-            //     }
-
-            //     foreach (var lcc in accessTerm.AccessTermLicenseClassClauses)
-            //     {
-            //         if (currentAccessTerm.AccessTermLicenseClassClauses.FindAll(c => c.LicenseClassClause.Id == lcc.LicenseClassClauseId).Count == 0)
-            //         {
-            //             current = false;
-            //         }
-            //     }
-            // }
-            // else
-            // {
-            return false;
-            // }
-
-            // return current;
-        }
-
-        /// <summary>
-        /// Enrollee’s that are:
-        /// Under Review ->  -> Current TOA status: --
-        /// Locked, Declined -> Current TOA status: NA
-        /// Required TOA -> Current TOA status: Pending
-        /// Editable (AND before their renewal date) -> Current TOA status: Is their signed TOA the most current version
-        /// Editable (AND on/after their renewal date) -> Current TOA status: --
-        /// </summary>
-        public async Task<string> GetCurrentTOAStatusAsync(Enrollee enrollee)
-        {
-            var currentStatus = enrollee.CurrentStatus;
-            var toaStatus = "";
-
-            if (currentStatus.IsType(StatusType.Locked) || currentStatus.IsType(StatusType.Declined))
-            {
-                toaStatus = "N/A";
-            }
-            else if (currentStatus.IsType(StatusType.RequiresToa))
-            {
-                toaStatus = "Pending";
-            }
-            else if (currentStatus.IsType(StatusType.Editable))
-            {
-                var accessTerm = await GetMostRecentAcceptedEnrolleesAccessTermAsync(enrollee.Id);
-                var isCurrent = await this.IsCurrentByEnrolleeAsync(enrollee);
-
-                if (accessTerm?.ExpiryDate > DateTimeOffset.Now)
-                {
-                    toaStatus = (accessTerm != null && isCurrent)
-                        ? "Yes"
-                        : "No";
-                }
-            }
-            return toaStatus;
         }
 
         /// <summary>
