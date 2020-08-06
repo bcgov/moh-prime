@@ -19,6 +19,7 @@ export interface Site {
   organizationTypeCode: number;
   siteVendors: Vendor[];
   businessLicenceDocuments: BusinessLicenceDocument[];
+  doingBusinessAs: string;
   physicalAddressId?: number;
   physicalAddress: Address;
   businessHours: BusinessDay[];
