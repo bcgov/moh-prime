@@ -1,8 +1,6 @@
 <section class="mb-3">
 
-  <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
-        novalidate>
+  <ng-container [formGroup]="form">
 
     <div class="weekdays-container">
       <ng-container *ngFor="let weekday of weekdays.controls; let i = index"
@@ -52,10 +50,12 @@
     </div>
 
     <button mat-button
-            color="primary">
+            type="button"
+            color="primary"
+            (click)="onSubmit()">
       <mat-icon>add</mat-icon> Add Hours
     </button>
 
-  </form>
+  </ng-container>
 
 </section>
