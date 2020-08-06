@@ -41,17 +41,17 @@ pipeline {
             steps {
                 script {
                     echo "Building Release PR..."
-                    sh "../player.sh build api test ${apiArgs} -p SUFFIX=${suffix}"
-                    sh "../player.sh build frontend test ${frontendArgs} -p SUFFIX=${suffix}"
-                    sh "../player.sh build document-manager test -p SUFFIX=${suffix}"
+                    sh "./player.sh build api test ${apiArgs} -p SUFFIX=${suffix}"
+                    sh "./player.sh build frontend test ${frontendArgs} -p SUFFIX=${suffix}"
+                    sh "./player.sh build document-manager test -p SUFFIX=${suffix}"
 
                     echo "Deploying Release PR..."
-                    sh "../player.sh deploy postgres test -p SUFFIX=${suffix}"
-                    sh "../player.sh deploy redis test -p SUFFIX=${suffix}"
-                    // sh "../player.sh deploy mongo test -p SUFFIX=${suffix}"
-                    sh "../player.sh deploy api test ${apiArgs} -p SUFFIX=${suffix}"
-                    sh "../player.sh deploy frontend test ${frontendArgs} -p SUFFIX=${suffix}"
-                    sh "../player.sh deploy document-manager test -p SUFFIX=${suffix} -p VOLUME_CAPACITY=1Gi -p VANITY_URL=${vanityUrl}"
+                    sh "./player.sh deploy postgres test -p SUFFIX=${suffix}"
+                    sh "./player.sh deploy redis test -p SUFFIX=${suffix}"
+                    // sh "./player.sh deploy mongo test -p SUFFIX=${suffix}"
+                    sh "./player.sh deploy api test ${apiArgs} -p SUFFIX=${suffix}"
+                    sh "./player.sh deploy frontend test ${frontendArgs} -p SUFFIX=${suffix}"
+                    sh "./player.sh deploy document-manager test -p SUFFIX=${suffix} -p VOLUME_CAPACITY=1Gi -p VANITY_URL=${vanityUrl}"
                 }
             }
         }
@@ -75,17 +75,17 @@ pipeline {
                     steps {
                         script {
                             echo "Building (MASTER) for Demo ..."
-                            sh "../player.sh build api test ${apiArgs} -p SUFFIX=${suffix}"
-                            sh "../player.sh build frontend test ${frontendArgs} -p SUFFIX=${suffix}"
-                            sh "../player.sh build document-manager test -p SUFFIX=${suffix}"
+                            sh "./player.sh build api test ${apiArgs} -p SUFFIX=${suffix}"
+                            sh "./player.sh build frontend test ${frontendArgs} -p SUFFIX=${suffix}"
+                            sh "./player.sh build document-manager test -p SUFFIX=${suffix}"
 
                             echo "Deploying (MASTER) to Demo ..."
-                            sh "../player.sh deploy postgres test -p SUFFIX=${suffix}"
-                            sh "../player.sh deploy redis test -p SUFFIX=${suffix}"
-                            // sh "../player.sh deploy mongo test -p SUFFIX=${suffix}"
-                            sh "../player.sh deploy api test ${apiArgs} -p SUFFIX=${suffix}"
-                            sh "../player.sh deploy frontend test ${frontendArgs} -p SUFFIX=${suffix}"
-                            sh "../player.sh deploy document-manager test -p SUFFIX=${suffix} -p VOLUME_CAPACITY=1Gi -p VANITY_URL=${vanityUrl}"
+                            sh "./player.sh deploy postgres test -p SUFFIX=${suffix}"
+                            sh "./player.sh deploy redis test -p SUFFIX=${suffix}"
+                            // sh "./player.sh deploy mongo test -p SUFFIX=${suffix}"
+                            sh "./player.sh deploy api test ${apiArgs} -p SUFFIX=${suffix}"
+                            sh "./player.sh deploy frontend test ${frontendArgs} -p SUFFIX=${suffix}"
+                            sh "./player.sh deploy document-manager test -p SUFFIX=${suffix} -p VOLUME_CAPACITY=1Gi -p VANITY_URL=${vanityUrl}"
                         }
                     }
                 }
@@ -94,17 +94,17 @@ pipeline {
                     steps {
                         script {
                             echo "Building (MASTER) branch for Production..."
-                            sh "../player.sh build api prod"
-                            sh "../player.sh build frontend prod"
-                            sh "../player.sh build document-manager prod"
+                            sh "./player.sh build api prod"
+                            sh "./player.sh build frontend prod"
+                            sh "./player.sh build document-manager prod"
 
                             echo "Deploying (MASTER) branch to Production..."
-                            sh "../player.sh deploy postgres prod"
-                            sh "../player.sh deploy redis prod"
-                            sh "../player.sh deploy api prod"
-                            sh "../player.sh deploy frontend prod"
-                            sh "../player.sh deploy document-manager prod"
-                            sh "../player.sh toolbelt schemaspy prod"
+                            sh "./player.sh deploy postgres prod"
+                            sh "./player.sh deploy redis prod"
+                            sh "./player.sh deploy api prod"
+                            sh "./player.sh deploy frontend prod"
+                            sh "./player.sh deploy document-manager prod"
+                            sh "./player.sh toolbelt schemaspy prod"
                         }
                     }
                 }

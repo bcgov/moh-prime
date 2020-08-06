@@ -51,19 +51,19 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                  sh "../player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
+                  sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
                   echo "Building ..."
-                  sh "../player.sh build api dev ${apiArgs} -p SUFFIX=${suffix}"
-                  sh "../player.sh build frontend dev ${frontendArgs} -p SUFFIX=${suffix}"
-                  sh "../player.sh build document-manager dev -p SUFFIX=${suffix}"
+                  sh "./player.sh build api dev ${apiArgs} -p SUFFIX=${suffix}"
+                  sh "./player.sh build frontend dev ${frontendArgs} -p SUFFIX=${suffix}"
+                  sh "./player.sh build document-manager dev -p SUFFIX=${suffix}"
                 }
             }
             post {
               success {
-                sh "../player.sh notifyGitHub success build $GITHUB_CREDENTIAL"
+                sh "./player.sh notifyGitHub success build $GITHUB_CREDENTIAL"
               }
               failure {
-                sh "../player.sh notifyGitHub failure build $GITHUB_CREDENTIAL"
+                sh "./player.sh notifyGitHub failure build $GITHUB_CREDENTIAL"
               }
             }
         }
@@ -75,23 +75,23 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    sh "../player.sh notifyGitHub pending deployment $GITHUB_CREDENTIAL"
+                    sh "./player.sh notifyGitHub pending deployment $GITHUB_CREDENTIAL"
 
                     echo "Deploy to dev..."
-                    sh "../player.sh deploy redis dev -p SUFFIX=${suffix}"
-                    sh "../player.sh deploy postgres-ephemeral dev -p SUFFIX=${suffix} -p VOLUME_CAPACITY=256Mi"
-                    sh "../player.sh deploy document-manager-ephemeral dev -p SUFFIX=${suffix} -p VANITY_URL=${vanityUrl}" 
-                    // sh "../player.sh deploy mongo-ephemeral dev -p SUFFIX=${suffix} -p VOLUME_CAPACITY=256Mi"
-                    sh "../player.sh deploy api dev ${apiArgs} -p SUFFIX=${suffix}"
-                    sh "../player.sh deploy frontend dev ${frontendArgs} -p SUFFIX=${suffix}"
+                    sh "./player.sh deploy redis dev -p SUFFIX=${suffix}"
+                    sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${suffix} -p VOLUME_CAPACITY=256Mi"
+                    sh "./player.sh deploy document-manager-ephemeral dev -p SUFFIX=${suffix} -p VANITY_URL=${vanityUrl}" 
+                    // sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${suffix} -p VOLUME_CAPACITY=256Mi"
+                    sh "./player.sh deploy api dev ${apiArgs} -p SUFFIX=${suffix}"
+                    sh "./player.sh deploy frontend dev ${frontendArgs} -p SUFFIX=${suffix}"
                 }
             }
             post {
               success {
-                sh "../player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
+                sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
               }
               failure {
-                sh "../player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
+                sh "./player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
               }
             }
         }
@@ -104,20 +104,20 @@ pipeline {
             steps {
                 script {
                     echo "Deploy to dev..."
-                    sh "../player.sh deploy redis dev -p SUFFIX=${suffix}"
-                    sh "../player.sh deploy postgres dev -p SUFFIX=${suffix} -p VOLUME_CAPACITY=1Gi"
-                    sh "../player.sh deploy document-manager dev -p SUFFIX=${suffix} -p VANITY_URL=${vanityUrl} -p VOLUME_CAPACITY=1Gi"
-                    // sh "../player.sh deploy mongo dev -p SUFFIX=${suffix} -p VOLUME_CAPACITY=1Gi"
-                    sh "../player.sh deploy api dev ${apiArgs} -p SUFFIX=${suffix}"
-                    sh "../player.sh deploy frontend dev ${frontendArgs} -p SUFFIX=${suffix}"
+                    sh "./player.sh deploy redis dev -p SUFFIX=${suffix}"
+                    sh "./player.sh deploy postgres dev -p SUFFIX=${suffix} -p VOLUME_CAPACITY=1Gi"
+                    sh "./player.sh deploy document-manager dev -p SUFFIX=${suffix} -p VANITY_URL=${vanityUrl} -p VOLUME_CAPACITY=1Gi"
+                    // sh "./player.sh deploy mongo dev -p SUFFIX=${suffix} -p VOLUME_CAPACITY=1Gi"
+                    sh "./player.sh deploy api dev ${apiArgs} -p SUFFIX=${suffix}"
+                    sh "./player.sh deploy frontend dev ${frontendArgs} -p SUFFIX=${suffix}"
                 }
             }
             post {
               success {
-                sh "../player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
+                sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
               }
               failure {
-                sh "../player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
+                sh "./player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
               }
             }
         }
@@ -126,11 +126,11 @@ pipeline {
           agent { label 'master' }
           when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
           steps {
-        //     sh "../player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+        //     sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
         //
         //     timeout(time: 10, unit: 'MINUTES') {
         //       withSonarQubeEnv('SonarQube Server') {
-                sh "../player.sh scan" // ???
+                sh "./player.sh scan" // ???
         //       }
         //     }
           }
@@ -146,10 +146,10 @@ pipeline {
         //   }
         //   post {
         //     success {
-        //       sh "../player.sh notifyGitHub success continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
+        //       sh "./player.sh notifyGitHub success continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
         //     }
         //     failure {
-        //       sh "../player.sh notifyGitHub failure continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
+        //       sh "./player.sh notifyGitHub failure continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
         //     }
         //   }
         // }
@@ -162,19 +162,19 @@ pipeline {
                 stage('SonarQube') {
                     agent { label 'code-tests' }
                     steps {
-                        sh "../player.sh scan"
+                        sh "./player.sh scan"
                     }
                 }
                 stage('Zap') {
                     agent { label 'code-tests' }
                     steps {
-                        sh "../player.sh zap frontend"
+                        sh "./player.sh zap frontend"
                     }
                 }
                 stage('SchemaSpy') {
                     agent { label 'master' }
                     steps {
-                        sh "../player.sh toolbelt schemaspy dev"
+                        sh "./player.sh toolbelt schemaspy dev"
                     }
                 }
             }
@@ -182,7 +182,7 @@ pipeline {
         // stage('Cleanup') {
         //     steps {
         //         script {
-        //             sh "../player.sh sparsify"
+        //             sh "./player.sh sparsify"
         //         }
         //     }
         // }
