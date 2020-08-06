@@ -13,10 +13,10 @@ namespace Prime.Models
         [JsonIgnore]
         public int Id { get; set; }
 
-        public int LocationId { get; set; }
+        public int SiteId { get; set; }
 
         [JsonIgnore]
-        public Location Location { get; set; }
+        public Site Site { get; set; }
 
         public DayOfWeek Day { get; set; }
 

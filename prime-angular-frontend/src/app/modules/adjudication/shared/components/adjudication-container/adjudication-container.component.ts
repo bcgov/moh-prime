@@ -273,7 +273,7 @@ export class AdjudicationContainerComponent implements OnInit {
           }),
           exhaustMap(() => this.adjudicationResource.deleteEnrollee(enrolleeId)),
         )
-        .subscribe(() => this.routeUtils.routeRelativeTo([AdjudicationRoutes.ENROLLEES]));
+        .subscribe(() => this.routeUtils.routeTo(AdjudicationRoutes.MODULE_PATH));
     }
   }
 
@@ -289,11 +289,11 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result) => {
-          return result
+        exhaustMap((result: boolean) =>
+          (result)
             ? of(noop)
-            : EMPTY;
-        }),
+            : EMPTY
+        ),
         exhaustMap(() =>
           this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, !enrollee.alwaysManual)
         ),

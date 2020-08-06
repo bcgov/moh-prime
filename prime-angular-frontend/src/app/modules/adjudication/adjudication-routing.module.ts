@@ -21,8 +21,7 @@ import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/en
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
 import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
 import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
-import { OrganizationAgreementComponent } from '@registration/pages/organization-agreement/organization-agreement.component';
-import { AdminOrganizationInformationComponent } from './pages/admin-organization-information/admin-organization-information.component';
+import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 
 const routes: Routes = [
   {
@@ -126,7 +125,7 @@ const routes: Routes = [
                 children: [
                   {
                     path: ':oid',
-                    component: AdminOrganizationInformationComponent,
+                    component: OrganizationInformationComponent,
                     data: { title: 'Site Adjudication' }
                   },
                 ]

@@ -1,0 +1,17 @@
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>{{title}}</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            [matTooltip]="tooltip"
+            (click)="onRoute(editRoute)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+  <div class="pl-2">
+    <ng-content></ng-content>
+  </div>
+  
+</section>

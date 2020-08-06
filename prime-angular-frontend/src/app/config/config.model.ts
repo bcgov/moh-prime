@@ -1,16 +1,16 @@
 export interface Configuration {
-  countries: Config<string>[];
+  practices: PracticeConfig[];
   colleges: CollegeConfig[];
+  countries: Config<string>[];
   jobNames: Config<number>[];
   licenses: LicenseWeightedConfig[];
   organizationTypes: Config<number>[];
-  practices: PracticeConfig[];
   provinces: ProvinceConfig[];
   statuses: Config<number>[];
-  statusReasons: Config<number>[];
   privilegeGroups: PrivilegeGroupConfig[];
   privilegeTypes: Config<number>[];
-  vendors: Config<number>[];
+  statusReasons: Config<number>[];
+  vendors: VendorConfig[];
 }
 
 export class Config<T> {
@@ -51,4 +51,9 @@ export interface CollegeConfig extends LicenseConfig, PracticeConfig {
 
 export interface PrivilegeGroupConfig extends Config<number> {
   privilegeTypeCode: number;
+}
+
+export interface VendorConfig extends Config<number> {
+  organizationTypeCode: number;
+  organizationType: Config<number>;
 }
