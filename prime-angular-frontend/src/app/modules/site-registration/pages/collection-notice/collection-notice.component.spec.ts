@@ -24,8 +24,7 @@ describe('CollectionNoticeComponent', () => {
         },
         KeycloakService
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

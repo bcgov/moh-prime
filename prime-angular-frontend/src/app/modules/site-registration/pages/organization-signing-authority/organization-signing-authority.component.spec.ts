@@ -1,11 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { OrganizationSigningAuthorityComponent } from './organization-signing-authority.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { SharedModule } from '@shared/shared.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ConfigCodePipe } from '@config/config-code.pipe';
+import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { FullnamePipe } from '@shared/pipes/fullname.pipe';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+import { PostalPipe } from '@shared/pipes/postal.pipe';
 
 describe('OrganizationSigningAuthorityComponent', () => {
   let component: OrganizationSigningAuthorityComponent;
@@ -13,21 +20,29 @@ describe('OrganizationSigningAuthorityComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [OrganizationSigningAuthorityComponent],
+      declarations: [
+        OrganizationSigningAuthorityComponent,
+        DefaultPipe,
+        FullnamePipe,
+        FormatDatePipe,
+        ConfigCodePipe,
+        PostalPipe
+      ],
       imports: [
-        RouterTestingModule,
+        BrowserAnimationsModule,
         HttpClientTestingModule,
-        SharedModule,
-        BrowserAnimationsModule
+        RouterTestingModule,
+        ReactiveFormsModule,
+        NgxMaterialModule
       ],
       providers: [
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         }
-      ]
-    })
-      .compileComponents();
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
