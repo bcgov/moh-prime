@@ -8,9 +8,8 @@ describe('ProgressIndicator2Component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProgressIndicator2Component ]
-    })
-    .compileComponents();
+      declarations: [ProgressIndicator2Component]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

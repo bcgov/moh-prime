@@ -30,16 +30,9 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
     this.currentRoute = this.getCurrentRoute();
 
     // Possible route pathways within site registration
-    let routePaths = [
-      SiteRoutes.organizationRegistrationRouteOrder(),
-      SiteRoutes.siteRegistrationRouteOrder()
-    ];
-
-    if (!organizationService.organization.acceptedAgreementDate) {
-      routePaths = [
-        SiteRoutes.siteRegistrationRoutes()
-      ]
-    }
+    const routePaths = (!organizationService.organization.acceptedAgreementDate)
+      ? [SiteRoutes.siteRegistrationRoutes()]
+      : [SiteRoutes.organizationRegistrationRouteOrder(), SiteRoutes.siteRegistrationRouteOrder()];
 
     this.routes = routePaths.filter(rp => rp.includes(this.currentRoute)).shift();
     this.prefix = 'Registration';
