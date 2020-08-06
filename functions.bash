@@ -35,6 +35,7 @@ function determineMode() {
 }
 
 function build() {
+    chmod +x ./devops/pipelines/conf/$2.conf
     source "./devops/pipelines/conf/$2.conf"
     echo "Building $2 ($APP_NAME$SUFFIX) to $PROJECT_PREFIX-$3..."
     buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true | wc -l)
@@ -58,6 +59,7 @@ function build() {
 }
 
 function deploy() {
+    chmod +x ./devops/pipelines/conf/$2.conf
     source "./devops/pipelines/conf/$2.conf"
     echo "Deploying $2 $APP_NAME to $3 ..."
     export deployPresent=$(oc get dc/$APP_NAME$SUFFIX --ignore-not-found=true | wc -l)
@@ -77,6 +79,7 @@ function deploy() {
 }
 
 function toolbelt() {
+    chmod +x ./devops/pipelines/conf/$2.conf
     source "./devops/pipelines/conf/$2.conf"
     #OC_APP=tools
     buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true)

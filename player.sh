@@ -1,4 +1,5 @@
 #!/bin/bash
+chmod +x ./devops/pipelines/conf/project.conf
 source "./devops/pipelines/conf/project.conf"
 source functions.bash
 source tests.bash

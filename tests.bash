@@ -13,6 +13,7 @@ function dotnetTests()
 {
     curl "http://sonarqube:9000/api/qualitygates/show"
 
+    chmod +x ./devops/pipelines/conf/api.conf    
     source "./devops/pipelines/conf/api.conf"
     echo "Building .NET application..."
     dotnet build
@@ -31,6 +32,7 @@ function dotnetTests()
 function angularTests()
 {
     headless
+    chmod +x ./devops/pipelines/conf/frontend.conf
     source "./devops/pipelines/conf/frontend.conf"
     cd prime-angular-frontend
     echo "Pull NPM dependencies..."
@@ -51,6 +53,7 @@ function scan()
 function zap()
 {
     mkdir -p zap
+    chmod +x ./devops/pipelines/conf/frontend.conf
     source "./devops/pipelines/conf/frontend.conf"
     /zap/zap.sh -cmd -quickurl ${SCHEMA}://${VANITY_URL} -quickout /tmp/${APP_NAME}.${uuid}.xml -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config spider.maxDuration=5 -addonupdate -addoninstall pscanrulesBeta -config connection.timeoutInSecs=600 -port 8080 -host 127.0.0.1
     /sonarscanner/bin/sonar-scanner -Dsonar.projectName=${APP_NAME}.zap -Dsonar.projectKey=${APP_NAME}.zap -Dsonar.sources=${SOURCE_CONTEXT_DIR} -Dsonar.host.url=${SONAR_URL} -Dsonar.zaproxy.reportPath=/tmp/${APP_NAME}.${uuid}.xml
