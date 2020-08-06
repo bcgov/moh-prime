@@ -12,7 +12,7 @@ namespace Prime.Configuration.Agreements
         {
             get
             {
-                return Agreements.SeedData.OfType<CommunityPharmacistAgreement>();
+                return AgreementConfiguration.SeedData.OfType<CommunityPharmacistAgreement>();
             }
         }
 

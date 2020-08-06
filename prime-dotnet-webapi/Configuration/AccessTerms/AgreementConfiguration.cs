@@ -7,7 +7,7 @@ using Prime.Configuration.Resources;
 
 namespace Prime.Configuration.Agreements
 {
-    public static class Agreements
+    public static class AgreementConfiguration
     {
         private static DateTime SEEDING_DATE = SeededTable<UserClause>.SEEDING_DATE;
 
