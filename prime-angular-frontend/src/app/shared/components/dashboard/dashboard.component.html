@@ -20,12 +20,7 @@
 
     <mat-nav-list *ngFor="let dashboardNavSection of dashboardNavSections; let last = last;"
                   [disableRipple]="true">
-      <h3 mat-subheader
-          *ngIf="dashboardNavSection.showHeader && sideNavProps.showText">
-        {{ dashboardNavSection.header }}
-      </h3>
-
-      <div *ngFor="let item of dashboardNavSection.items">
+      <ng-container *ngFor="let item of dashboardNavSection.items">
 
         <mat-list-item *ngIf="item.showItem"
                        [routerLink]="item.route"
@@ -47,7 +42,7 @@
           </a>
         </mat-list-item>
 
-      </div>
+      </ng-container>
 
       <mat-divider *ngIf="!last"
                    class="my-3"></mat-divider>
