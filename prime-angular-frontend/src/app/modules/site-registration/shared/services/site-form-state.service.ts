@@ -232,7 +232,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     return this.fb.group({
       doingBusinessAs: [
         '',
-        [Validators.required]
+        []
       ]
     });
   }
