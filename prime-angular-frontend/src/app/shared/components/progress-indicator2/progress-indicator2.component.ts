@@ -134,9 +134,9 @@ export class ProgressIndicator2Component implements OnInit, OnChanges, IProgress
   }
 
   private calculatePercentComplete() {
-    const currentRouteIndex = this.routes?.findIndex(r => r === this.currentRoute);
+    const currentRouteIndex = this.routes.findIndex(r => r === this.currentRoute);
     const currentPage = (currentRouteIndex > -1) ? currentRouteIndex : 0;
-    const totalPages = this.routes?.length - 1;
+    const totalPages = this.routes.length - 1;
 
     return Math.trunc(currentPage / totalPages * 100);
   }

@@ -46,8 +46,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
    * that can't be mapped to existing module routes.
    */
   private getCurrentRoute(): string {
-    const routerUrl = this.router.url;
-    return routerUrl
+    return this.router.url
       // Truncate query parameters
       .split('?')
       .shift()

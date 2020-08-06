@@ -1,31 +1,30 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { OrganizationNameComponent } from './organization-name.component';
-import { SiteRegistrationModule } from '@registration/site-registration.module';
-import { SiteRoutes } from '@registration/site-registration.routes';
+import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
 describe('OrganizationNameComponent', () => {
   let component: OrganizationNameComponent;
   let fixture: ComponentFixture<OrganizationNameComponent>;
-  let router: Router;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        OrganizationNameComponent
+      ],
       imports: [
         BrowserAnimationsModule,
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
-          {
-            path: SiteRoutes.ORGANIZATION_NAME,
-            component: OrganizationNameComponent
-          }
-        ]),
-        SiteRegistrationModule
+        RouterTestingModule,
+        ReactiveFormsModule,
+        NgxMaterialModule
       ],
       providers: [
         {
@@ -33,19 +32,17 @@ describe('OrganizationNameComponent', () => {
           useValue: APP_DI_CONFIG
         }
       ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
   beforeEach(fakeAsync(() => {
-    router = TestBed.inject(Router);
     fixture = TestBed.createComponent(OrganizationNameComponent);
     component = fixture.componentInstance;
-    router.navigateByUrl(`/${SiteRoutes.ORGANIZATION_NAME}`);
-    flush();
     fixture.detectChanges();
   }));
 
-  it('should create', () => {
+  it('should create', fakeAsync(() => {
     expect(component).toBeTruthy();
-  });
+  }));
 });
