@@ -16,10 +16,6 @@ describe('AdjudicatorActionsComponent', () => {
       ],
       declarations: [],
       providers: [
-        // {
-        //   provide: APP_CONFIG,
-        //   useValue: APP_DI_CONFIG
-        // },
         KeycloakService
       ]
     }).compileComponents();

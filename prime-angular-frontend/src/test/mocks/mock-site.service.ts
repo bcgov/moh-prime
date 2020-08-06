@@ -36,6 +36,7 @@ export class MockSiteService implements ISiteService {
     };
     this._site = new BehaviorSubject<Site>({
       id: siteId,
+      doingBusinessAs: faker.random.word(),
       administratorPharmaNetId: faker.random.number(),
       administratorPharmaNet: user,
       privacyOfficerId: faker.random.number(),

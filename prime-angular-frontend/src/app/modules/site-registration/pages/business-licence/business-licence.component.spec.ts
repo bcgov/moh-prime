@@ -5,6 +5,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { BusinessLicenceComponent } from './business-licence.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { KeycloakService } from 'keycloak-angular';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('BusinessLicenceComponent', () => {
   let component: BusinessLicenceComponent;
@@ -16,13 +19,16 @@ describe('BusinessLicenceComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        SiteRegistrationModule,
+        BrowserAnimationsModule
       ],
       providers: [
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        KeycloakService
       ]
     })
       .compileComponents();
