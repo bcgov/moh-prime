@@ -1,13 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
-import { exhaustMap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-import { from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
-import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { Admin } from '@auth/shared/models/admin.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
