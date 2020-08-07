@@ -177,9 +177,7 @@ export class SiteResource {
   public sendRemoteUsersEmail(siteId: number): NoContent {
     return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email`)
       .pipe(
-        map(() => {
-          this.toastService.openErrorToast('Remote Users Updated email bas been sent to HIBC');
-        }),
+        map(() => ),
         catchError((error: any) => {
           this.toastService.openErrorToast('Remote Users Updated email could not be sent');
           this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmail error has occurred: ', error);
