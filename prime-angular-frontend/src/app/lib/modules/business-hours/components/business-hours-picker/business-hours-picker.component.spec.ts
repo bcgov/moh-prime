@@ -16,13 +16,13 @@ describe('BusinessHoursPickerComponent', () => {
         BrowserAnimationsModule,
         ReactiveFormsModule
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BusinessHoursPickerComponent);
     component = fixture.componentInstance;
+    component.businessDays = [];
     fixture.detectChanges();
   });
 

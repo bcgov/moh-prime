@@ -16,6 +16,7 @@ import { RemoteUserLocation } from '@registration/shared/models/remote-user-loca
 })
 export class SiteFormStateService extends AbstractFormState<Site> {
   public careSettingTypeForm: FormGroup;
+  public businessForm: FormGroup;
   public siteAddressForm: FormGroup;
   public hoursOperationForm: FormGroup;
   public remoteUsersForm: FormGroup;
@@ -54,6 +55,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    */
   public get json(): Site {
     const { organizationTypeCode, vendorCode } = this.careSettingTypeForm.getRawValue();
+    const { doingBusinessAs } = this.businessForm.getRawValue();
     const { physicalAddress } = this.siteAddressForm.getRawValue();
     const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
     const remoteUsers = this.remoteUsersForm.getRawValue().remoteUsers
@@ -83,6 +85,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         vendorCode
       }],
       // businessLicenceDocuments (N/A)
+      doingBusinessAs,
       physicalAddressId: physicalAddress?.id,
       physicalAddress,
       businessHours,
@@ -107,6 +110,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   public get forms(): AbstractControl[] {
     return [
       this.careSettingTypeForm,
+      this.businessForm,
       this.siteAddressForm,
       this.hoursOperationForm,
       this.remoteUsersForm,
@@ -123,6 +127,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    */
   public init() {
     this.careSettingTypeForm = this.buildCareSettingTypeForm();
+    this.businessForm = this.buildBusinessForm();
     this.siteAddressForm = this.buildSiteAddressForm();
     this.hoursOperationForm = this.buildHoursOperationForm();
     this.remoteUsersForm = this.buildRemoteUsersForm();
@@ -144,6 +149,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
     if (site.siteVendors?.length) {
       this.careSettingTypeForm.get('vendorCode').patchValue(site.siteVendors[0].vendorCode);
+    }
+
+    if (site.doingBusinessAs) {
+      this.businessForm.get('doingBusinessAs').patchValue(site.doingBusinessAs);
     }
 
     if (site.physicalAddress) {
@@ -215,6 +224,15 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       vendorCode: [
         0,
         [FormControlValidators.requiredIndex]
+      ]
+    });
+  }
+
+  private buildBusinessForm(): FormGroup {
+    return this.fb.group({
+      doingBusinessAs: [
+        '',
+        []
       ]
     });
   }

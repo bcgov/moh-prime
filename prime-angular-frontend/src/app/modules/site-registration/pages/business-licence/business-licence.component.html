@@ -2,27 +2,65 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <app-page-subheader2>
-    <ng-container appPageSubheader2Title>{{ title }}</ng-container>
-    <ng-container appPageSubheader2Summary>
-      Scan and upload.
-    </ng-container>
-  </app-page-subheader2>
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
 
-  <app-document-upload componentName="business-licence"
-                       additionalApiSuffix="business-licence"
-                       [multiple]="false"
-                       (completed)="onUpload($event)">
-  </app-document-upload>
+    <section class="mb-4">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Scan and upload.
+        </ng-container>
+      </app-page-subheader2>
 
-  <app-alert *ngIf="hasNoBusinessLicenceError"
-             type="danger"
-             icon="warning">
-    <ng-container #alertContent
-                  class="alert-content">
-      No business licence has been uploaded.
-    </ng-container>
-  </app-alert>
+      <app-document-upload componentName="business-licence"
+                           additionalApiSuffix="business-licence"
+                           [multiple]="false"
+                           (completed)="onUpload($event)">
+      </app-document-upload>
+
+      <app-alert *ngIf="hasNoBusinessLicenceError"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          No business licence has been uploaded.
+        </ng-container>
+      </app-alert>
+    </section>
+
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Doing Business As</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Enter the site name if it is different from the organization name. It must match the name on the site business
+          licence.
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Doing Business As (Optional)"
+                   formControlName="doingBusinessAs"
+                   [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let doingBusinessAsName of doingBusinessAsNames"
+                          [value]="doingBusinessAsName">
+                {{ doingBusinessAsName }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+    </section>
+
+  </form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"
