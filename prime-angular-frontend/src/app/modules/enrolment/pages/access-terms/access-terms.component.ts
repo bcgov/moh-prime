@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
-import { AccessTerm } from '@shared/models/access-term.model';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { Subscription } from 'rxjs';
+
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
+import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-access-terms',

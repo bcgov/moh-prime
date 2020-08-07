@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Token } from './token.interface';
+
 import { KeycloakService } from 'keycloak-angular';
-import { LoggerService } from '@core/services/logger.service';
-import { User } from '../models/user.model';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Admin } from '../models/admin.model';
-import { Role } from '../enum/role.enum';
+
+import { LoggerService } from '@core/services/logger.service';
+import { Token } from '@auth/shared/services/token.interface';
+import { User } from '@auth/shared/models/user.model';
+import { Admin } from '@auth/shared/models/admin.model';
 
 export interface KeycloakAttributes {
   attributes: {
@@ -107,7 +108,7 @@ export class KeycloakTokenService implements Token {
       firstName,
       lastName,
       email
-    } = await this.keycloakService.loadUserProfile(forceReload) as Keycloak.KeycloakProfile;
+    } = await this.keycloakService.loadUserProfile(forceReload);
 
     const userId = await this.getUserId();
     const idir = await this._getPreferredUsername();
