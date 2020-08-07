@@ -170,12 +170,42 @@ export class EnrolmentResource {
   private enrolleeVersionAdapterResponse(
     { id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion
   ): EnrolmentProfileVersion {
+    // Compensate for updates to the current enrolment model
+    // that don't match enrolment versioning
+    this.enrolleeVersionSnapshotAdapter(profileSnapshot);
+
     return {
       id,
       enrolleeId,
       profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
       createdDate
     };
+  }
+
+  private enrolleeVersionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
+    // Key index aligns with SelfDeclarationTypeEnum
+    const selfDeclarations = {
+      hasConviction: 'Has Conviction',
+      hasRegistrationSuspended: 'Has Registration Suspended',
+      hasDisciplinaryAction: 'Has Disciplinary Action',
+      hasPharmaNetSuspended: 'Has PharmaNet Suspended'
+    };
+    const keys = Object.keys(selfDeclarations);
+
+    if (keys.every((key: string) => profileSnapshot.hasOwnProperty(key))) {
+      profileSnapshot.selfDeclarations = [];
+      keys.map((key: string, index: number) => {
+        if (profileSnapshot[key]) {
+          profileSnapshot.selfDeclarations.push({
+            selfDeclarationDetails: profileSnapshot[`${key}Details`],
+            selfDeclarationTypeCode: index + 1
+          });
+        }
+
+        delete profileSnapshot[key];
+        delete profileSnapshot[`${key}Details`];
+      });
+    }
   }
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
@@ -197,7 +227,6 @@ export class EnrolmentResource {
     }
 
     // Reorganize the shape of the enrollee into an enrolment
-    // TODO refactor this adapter out of the application
     return this.enrolmentAdapter(enrollee);
   }
 
