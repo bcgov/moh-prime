@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 
-import { Subscription, noop, of } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { FormArrayValidators } from '@lib/validators/form-array.validators';

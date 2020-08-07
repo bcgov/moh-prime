@@ -14,7 +14,8 @@ import { EnrolmentGuard } from './shared/guards/enrolment.guard';
 import { OverviewComponent } from './pages/overview/overview.component';
 import { DemographicComponent } from './pages/demographic/demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
-import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
+// TODO Temporary removal of device provider for Community Practice
+// import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 import { JobComponent } from './pages/job/job.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { OrganizationComponent } from './pages/organization/organization.component';
@@ -24,7 +25,6 @@ import { CollectionNoticeComponent } from './pages/collection-notice/collection-
 import { AccessLockedComponent } from './pages/access-locked/access-locked.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { PharmanetEnrolmentSummaryComponent } from './pages/pharmanet-enrolment-summary/pharmanet-enrolment-summary.component';
-import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
 import {
@@ -150,12 +150,6 @@ const routes: Routes = [
         component: NotificationConfirmationComponent,
         data: { title: 'Notification Confirmation' }
       },
-      // TODO removed until the page has been implemented
-      // {
-      //   path: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-      //   component: PharmanetTransactionsComponent,
-      //   data: { title: 'PharmaNet Transactions' }
-      // },
       {
         path: EnrolmentRoutes.ACCESS_TERMS,
         children: [
