@@ -15,7 +15,6 @@ namespace Prime.Services
         private readonly ISubmissionRulesService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
         private readonly IPrivilegeService _privilegeService;
-        private readonly IAccessTermService _accessTermService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IBusinessEventService _businessEventService;
 
@@ -25,7 +24,6 @@ namespace Prime.Services
             ISubmissionRulesService automaticAdjudicationService,
             IEmailService emailService,
             IPrivilegeService privilegeService,
-            IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enroleeProfileVersionService,
             IBusinessEventService businessEventService)
             : base(context, httpContext)
@@ -33,7 +31,6 @@ namespace Prime.Services
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
             _privilegeService = privilegeService;
-            _accessTermService = accessTermService;
             _enroleeProfileVersionService = enroleeProfileVersionService;
             _businessEventService = businessEventService;
         }
