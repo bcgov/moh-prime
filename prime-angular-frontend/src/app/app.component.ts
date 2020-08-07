@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     // const onNavStart = this.routeStateService.onNavigationStart();
     // const onNavStop = this.routeStateService.onNavigationStop();
-    const onNavEnd = this.routeStateService.onNavigationEnd() as Observable<RouterEvent>;
+    const onNavEnd = this.routeStateService.onNavigationEnd();
 
     this.scrollTop(onNavEnd);
     this.setPageTitle(onNavEnd);
