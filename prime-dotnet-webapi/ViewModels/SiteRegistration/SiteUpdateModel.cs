@@ -27,9 +27,6 @@ namespace Prime.ViewModels
 
         public int? OrganizationTypeCode { get; set; }
 
-        [JsonIgnore]
-        public OrganizationType OrganizationType { get; set; }
-
         public string DoingBusinessAs { get; set; }
 
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
