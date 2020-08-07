@@ -179,7 +179,7 @@ export class SiteResource {
       .pipe(
         map(() => { }),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Remote Users Updated email could not be sent');
+          this.toastService.openErrorToast('Remote users update email could not be sent');
           this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmail error has occurred: ', error);
           throw error;
         })
