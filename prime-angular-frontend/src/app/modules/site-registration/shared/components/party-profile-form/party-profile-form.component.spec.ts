@@ -52,8 +52,7 @@ describe('PartyProfileFormComponent', () => {
 
   beforeEach(inject(
     [SiteService, SiteFormStateService],
-    (siteService: SiteService, siteFormStateService: SiteFormStateService
-    ) => {
+    (siteService: SiteService, siteFormStateService: SiteFormStateService) => {
       fixture = TestBed.createComponent(PartyProfileFormComponent);
       component = fixture.componentInstance;
       siteFormStateService.setForm(siteService.site);

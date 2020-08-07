@@ -176,11 +176,14 @@ export abstract class AbstractFormState<T> {
           : physicalAddressFormGroup.reset({ id: 0 });
       }
 
+      console.log('MAILING_ADDRESS', mailingAddress);
+
+
       if (mailingAddress) {
         const mailingAddressFormGroup = formGroup.get('mailingAddress');
         (mailingAddress)
-          ? mailingAddressFormGroup?.patchValue(mailingAddress)
-          : mailingAddressFormGroup?.reset({ id: 0 });
+          ? mailingAddressFormGroup.patchValue(mailingAddress)
+          : mailingAddressFormGroup.reset({ id: 0 });
       }
     }
   }

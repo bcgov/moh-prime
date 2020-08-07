@@ -5,6 +5,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { MockSiteService } from 'test/mocks/mock-site.service';
+
 import { OrganizationSigningAuthorityComponent } from './organization-signing-authority.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigCodePipe } from '@config/config-code.pipe';
@@ -13,6 +15,7 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
+import { SiteService } from '@registration/shared/services/site.service';
 
 describe('OrganizationSigningAuthorityComponent', () => {
   let component: OrganizationSigningAuthorityComponent;
@@ -39,6 +42,10 @@ describe('OrganizationSigningAuthorityComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: SiteService,
+          useClass: MockSiteService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]

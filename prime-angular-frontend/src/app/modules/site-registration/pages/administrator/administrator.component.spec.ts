@@ -5,9 +5,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { MockSiteService } from 'test/mocks/mock-site.service';
+
 import { AdministratorComponent } from './administrator.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { SiteService } from '@registration/shared/services/site.service';
 
 describe('AdministratorComponent', () => {
   let component: AdministratorComponent;
@@ -29,6 +32,10 @@ describe('AdministratorComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: SiteService,
+          useClass: MockSiteService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]

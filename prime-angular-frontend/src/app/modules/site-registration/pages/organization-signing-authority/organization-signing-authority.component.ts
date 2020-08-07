@@ -55,7 +55,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public get physicalAddress() {
-    return (this.organization && this.organization?.signingAuthority?.physicalAddress)
+    return (this.organization && this.organization.signingAuthority.physicalAddress)
       ? this.organization.signingAuthority.physicalAddress
       : null;
   }
