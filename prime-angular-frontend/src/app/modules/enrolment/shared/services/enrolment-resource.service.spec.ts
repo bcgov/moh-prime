@@ -3,22 +3,28 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { EnrolmentResource } from './enrolment-resource.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { SharedModule } from '@shared/shared.module';
 
 describe('EnrolmentResource', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [
-      HttpClientTestingModule
-    ],
-    providers: [
-      {
-        provide: APP_CONFIG,
-        useValue: APP_DI_CONFIG
-      }
-    ]
-  }));
+  let service: EnrolmentResource;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        SharedModule
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
+      ]
+    });
+    service = TestBed.inject(EnrolmentResource);
+  });
 
   it('should create', () => {
-    const service: EnrolmentResource = TestBed.inject(EnrolmentResource);
     expect(service).toBeTruthy();
   });
 });
