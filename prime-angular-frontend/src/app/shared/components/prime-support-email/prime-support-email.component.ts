@@ -1,4 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
+
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 
 @Component({
@@ -6,7 +7,7 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
   templateUrl: './prime-support-email.component.html',
   styleUrls: ['./prime-support-email.component.scss']
 })
-export class PrimeSupportEmailComponent {
+export class PrimeSupportEmailComponent implements OnInit {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig
   ) { }
@@ -18,4 +19,6 @@ export class PrimeSupportEmailComponent {
   public get primeEmailHref() {
     return `mailto:${this.primeEmail}`;
   }
+
+  public ngOnInit(): void { }
 }

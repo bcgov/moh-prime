@@ -17,7 +17,6 @@ import { AccessAgreementComponent } from './pages/access-agreement/access-agreem
 import { PharmanetEnrolmentSummaryComponent } from './pages/pharmanet-enrolment-summary/pharmanet-enrolment-summary.component';
 import { AccessLockedComponent } from './pages/access-locked/access-locked.component';
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
-import { PharmanetTransactionsComponent } from './pages/pharmanet-transactions/pharmanet-transactions.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
 import {
@@ -52,7 +51,6 @@ import { ProgressIndicatorComponent } from './shared/components/progress-indicat
     AccessLockedComponent,
     AccessAgreementHistoryComponent,
     PharmanetEnrolmentSummaryComponent,
-    PharmanetTransactionsComponent,
     AccessTermsComponent,
     CollegeCertificationFormComponent,
     JobFormComponent,

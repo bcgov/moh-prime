@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { debounceTime, tap } from 'rxjs/operators';
+
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-note',
