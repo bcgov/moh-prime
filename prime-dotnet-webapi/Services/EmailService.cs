@@ -201,8 +201,8 @@ namespace Prime.Services
         // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
         public async Task SendRemoteUsersUpdatedAsync(Site site)
         {
-            var subject = "PRIME Site Registration Remote Users Updated";
-            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/UpdateRemoteUsersEmail.cshtml", new EmailParams(site));
+            var subject = "Remote Practioners added";
+            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/UpdateRemoteUsersEmail.cshtml", site);
 
             Document businessLicenceDoc = null;
             string businessLicenceTemplate = "/Views/Helpers/Document.cshtml";
