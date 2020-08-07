@@ -56,9 +56,9 @@ namespace Prime.Services.Rules
     /// </summary>
     public class AllowableChangesRule : MinorUpdateRule
     {
-        private readonly EnrolleeProfileViewModel _updatedProfile;
+        private readonly EnrolleeUpdateModel _updatedProfile;
 
-        public AllowableChangesRule(EnrolleeProfileViewModel updatedProfile)
+        public AllowableChangesRule(EnrolleeUpdateModel updatedProfile)
         {
             _updatedProfile = updatedProfile;
         }

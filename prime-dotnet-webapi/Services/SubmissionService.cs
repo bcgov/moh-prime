@@ -51,7 +51,7 @@ namespace Prime.Services
             _logger = logger;
         }
 
-        public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeProfileViewModel updatedProfile)
+        public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.MailingAddress)

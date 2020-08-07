@@ -60,7 +60,7 @@ namespace PrimeTests.UnitTests
             };
         }
 
-        private async Task AssertAllowableChanges(bool expected, Enrollee enrollee, EnrolleeProfileViewModel profile)
+        private async Task AssertAllowableChanges(bool expected, Enrollee enrollee, EnrolleeUpdateModel profile)
         {
             var rule = new AllowableChangesRule(profile);
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
@@ -71,7 +71,7 @@ namespace PrimeTests.UnitTests
         public async void testAllowableChangesRule_AllowedUpdates()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToViewModel();
 
             profile.ContactEmail += "change";
             profile.ContactPhone += "change";
@@ -85,7 +85,7 @@ namespace PrimeTests.UnitTests
         public async void testAllowableChangesRule_SimpleDissallowedChange_SimpleProperty()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToViewModel();
             profile.PreferredFirstName = "BIG CHANGES";
 
             await AssertAllowableChanges(false, enrollee, profile);
@@ -95,7 +95,7 @@ namespace PrimeTests.UnitTests
         public async void testAllowableChangesRule_SimpleDissallowedChange_RemoveChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToViewModel();
             profile.MailingAddress = null;
 
             await AssertAllowableChanges(false, enrollee, profile);
@@ -105,7 +105,7 @@ namespace PrimeTests.UnitTests
         public async void testAllowableChangesRule_SimpleDissallowedChange_PropertyOnChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToViewModel();
             profile.MailingAddress.City = "Flavortown, USA";
 
             await AssertAllowableChanges(false, enrollee, profile);
@@ -115,7 +115,7 @@ namespace PrimeTests.UnitTests
         public async void testAllowableChangesRule_SimpleDissallowedChange_AddChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToViewModel();
             enrollee.MailingAddress = null;
 
             await AssertAllowableChanges(false, enrollee, profile);
@@ -127,7 +127,7 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
             // New cert
-            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToViewModel();
             profile.Certifications.Add(new Certification { CollegeCode = 1 });
             await AssertAllowableChanges(false, enrollee, profile);
 
@@ -167,7 +167,7 @@ namespace PrimeTests.UnitTests
             }
 
             // New job
-            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToViewModel();
             profile.Jobs.Add(new Job { Title = "Snake sweater knitter" });
             await AssertAllowableChanges(expected, enrollee, profile);
 
@@ -188,7 +188,7 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
             // New org
-            EnrolleeProfileViewModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToViewModel();
             profile.EnrolleeOrganizationTypes.Add(new EnrolleeOrganizationType { OrganizationTypeCode = 1 });
             await AssertAllowableChanges(false, enrollee, profile);
 
@@ -221,13 +221,13 @@ namespace PrimeTests.UnitTests
                 typeof(ICollection<SelfDeclarationDocument>),
             };
 
-            var unknownTypes = typeof(EnrolleeProfileViewModel)
+            var unknownTypes = typeof(EnrolleeUpdateModel)
                 .GetProperties()
                 .Select(p => p.PropertyType)
                 .Distinct()
                 .Except(knownTypes);
 
-            Assert.False(unknownTypes.Any(), $"At least one new type has been added to {nameof(EnrolleeProfileViewModel)}. Please update {nameof(AllowableChangesRule)} and/or {nameof(testAllowableChangesRule_SPEC)}");
+            Assert.False(unknownTypes.Any(), $"At least one new type has been added to {nameof(EnrolleeUpdateModel)}. Please update {nameof(AllowableChangesRule)} and/or {nameof(testAllowableChangesRule_SPEC)}");
         }
     }
 }
