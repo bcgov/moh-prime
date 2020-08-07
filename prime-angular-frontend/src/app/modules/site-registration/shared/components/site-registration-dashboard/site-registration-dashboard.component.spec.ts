@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { SiteRegistrationDashboardComponent } from './site-registration-dashboard.component';
 
@@ -8,9 +9,12 @@ describe('SiteRegistrationDashboardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SiteRegistrationDashboardComponent ]
+      declarations: [SiteRegistrationDashboardComponent],
+      imports: [
+        RouterTestingModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

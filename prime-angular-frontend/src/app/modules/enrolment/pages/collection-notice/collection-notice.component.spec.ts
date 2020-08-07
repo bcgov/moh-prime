@@ -16,6 +16,8 @@ import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.mod
 import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { OverviewComponent } from '@enrolment/pages/overview/overview.component';
 
 describe('CollectionNoticeComponent', () => {
   let component: CollectionNoticeComponent;
@@ -26,7 +28,12 @@ describe('CollectionNoticeComponent', () => {
       {
         imports: [
           HttpClientTestingModule,
-          RouterTestingModule,
+          RouterTestingModule.withRoutes([
+            {
+              path: EnrolmentRoutes.OVERVIEW,
+              component: OverviewComponent
+            }
+          ]),
           NgxMaterialModule,
           NgxBusyModule,
           EnrolmentModule,

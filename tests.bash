@@ -44,8 +44,8 @@ function scan()
 {
     echo "Running .NET tests..."
     dotnetTests
-    # echo "Running Angular tests..."
-    # angularTests
+    echo "Running Angular tests..."
+    angularTests
 }
 
 function zap()
