@@ -12,16 +12,13 @@ namespace Prime.Services
     public class SubmissionRulesService : BaseService, ISubmissionRulesService
     {
         private readonly ICollegeLicenceClient _collegeLicenceClient;
-        private readonly IAccessTermService _accessTermService;
 
         public SubmissionRulesService(
             ApiDbContext context, IHttpContextAccessor httpContext,
-            ICollegeLicenceClient collegeLicenceClient,
-            IAccessTermService accessTermService)
+            ICollegeLicenceClient collegeLicenceClient)
             : base(context, httpContext)
         {
             _collegeLicenceClient = collegeLicenceClient;
-            _accessTermService = accessTermService;
         }
 
         /// <summary>
@@ -56,7 +53,7 @@ namespace Prime.Services
             var rules = new List<MinorUpdateRule>
             {
                 new DateRule(),
-                new CurrentToaRule(_accessTermService),
+                new CurrentToaRule(),
                 new AllowableChangesRule(profileUpdate)
             };
 
