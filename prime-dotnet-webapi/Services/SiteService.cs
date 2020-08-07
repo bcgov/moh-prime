@@ -123,9 +123,9 @@ namespace Prime.Services
         private void UpdateParties(Site current, SiteUpdateModel updated)
         {
             string[] partyTypes = new string[] {
-                "AdministratorPharmaNet",
-                "PrivacyOfficer",
-                "TechnicalSupport"
+                nameof(current.AdministratorPharmaNet),
+                nameof(current.PrivacyOfficer),
+                nameof(current.TechnicalSupport)
             };
 
             foreach (var partyType in partyTypes)

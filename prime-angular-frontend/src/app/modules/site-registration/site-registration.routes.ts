@@ -47,7 +47,7 @@ export class SiteRoutes {
     ];
   }
 
-  // Used to indicate the routes and order of registration for updating
+  // Used to indicate the routes for updating
   // organization, and sites
   public static editRegistrationRouteAccess(): string[] {
     return [
