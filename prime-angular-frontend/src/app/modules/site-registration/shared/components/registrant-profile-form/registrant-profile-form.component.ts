@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { distinctUntilChanged } from 'rxjs/operators';
@@ -40,7 +41,11 @@ export class RegistrantProfileFormComponent implements OnInit {
     return this.form.get('physicalAddress') as FormGroup;
   }
 
-  public onPhysicalAddressChange() {
+  public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
+    if (!checked) {
+      this.physicalAddress.reset();
+    }
+
     this.hasPhysicalAddress = !this.hasPhysicalAddress;
     this.togglePhysicalAddressValidators(this.physicalAddress, ['id', 'street2']);
   }

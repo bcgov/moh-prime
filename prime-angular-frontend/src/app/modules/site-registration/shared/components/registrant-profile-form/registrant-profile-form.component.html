@@ -110,7 +110,7 @@
     <mat-slide-toggle class="mb-3"
                       color="primary"
                       [checked]="hasPhysicalAddress"
-                      (change)="onPhysicalAddressChange()">
+                      (change)="onPhysicalAddressChange($event)">
       The {{ title }}'s mailing address is different from this site’s address
     </mat-slide-toggle>
   </section>
