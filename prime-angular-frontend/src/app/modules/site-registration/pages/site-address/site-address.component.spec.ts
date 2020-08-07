@@ -1,15 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { SiteAddressComponent } from './site-address.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
-import { SiteRegistrationModule } from '@registration/site-registration.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from '@shared/shared.module';
+import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
 
 describe('SiteAddressComponent', () => {
   let component: SiteAddressComponent;
@@ -17,12 +18,15 @@ describe('SiteAddressComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        SiteAddressComponent
+      ],
       imports: [
         BrowserAnimationsModule,
-        RouterTestingModule,
         HttpClientTestingModule,
-        SiteRegistrationModule,
-        SharedModule
+        RouterTestingModule,
+        ReactiveFormsModule,
+        NgxMaterialModule
       ],
       providers: [
         {
@@ -33,9 +37,9 @@ describe('SiteAddressComponent', () => {
           provide: ConfigService,
           useClass: MockConfigService
         }
-      ]
-    })
-      .compileComponents();
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
