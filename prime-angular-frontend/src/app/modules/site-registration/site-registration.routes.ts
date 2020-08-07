@@ -23,6 +23,7 @@ export class SiteRoutes {
   public static PRIVACY_OFFICER = 'privacy-officer';
   public static TECHNICAL_SUPPORT = 'technical-support';
   public static REMOTE_USERS = 'remote-users';
+  public static REMOTE_USER = 'remote-user';
   public static SITE_REVIEW = 'site-review';
 
   public static MODULE_PATH = SiteRoutes.SITE_REGISTRATION;
@@ -48,7 +49,7 @@ export class SiteRoutes {
 
   // Used to indicate the routes and order of registration for updating
   // organization, and sites
-  public static editRegistrationRouteOrder(): string[] {
+  public static editRegistrationRouteAccess(): string[] {
     return [
       ...this.organizationRegistrationRouteOrder(),
       ...this.editSiteRegistrationRouteOrder()
@@ -86,6 +87,7 @@ export class SiteRoutes {
       this.PRIVACY_OFFICER,
       this.TECHNICAL_SUPPORT,
       this.REMOTE_USERS,
+      this.REMOTE_USER, // included because it is the child of remote_users
       this.SITE_REVIEW
     ];
   }
