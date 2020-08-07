@@ -24,7 +24,12 @@ describe('RemoteUserComponent', () => {
       imports: [
         BrowserAnimationsModule,
         HttpClientTestingModule,
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([
+          {
+            path: 'new',
+            component: RemoteUserComponent
+          }
+        ]),
         ReactiveFormsModule,
         NgxMaterialModule
       ],
