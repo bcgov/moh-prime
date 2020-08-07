@@ -100,13 +100,12 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (!await _accessTermService.AccessTermExistsOnEnrolleeAsync(accessTermId, enrolleeId))
-            {
-                return NotFound(ApiResponse.Message($"Access term not found with id {accessTermId} for enrollee id: {enrolleeId}"));
-            }
+            AccessTerm accessTerm = await _accessTermService.GetEnrolleeAccessTermAsync(enrolleeId, accessTermId, true);
 
-            AccessTerm accessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
-            accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", accessTerm);
+            if (accessTerm == null)
+            {
+                return NotFound(ApiResponse.Message($"Access term not found with id {accessTermId} on enrollee with id {enrolleeId}"));
+            }
 
             if (User.IsAdmin())
             {
@@ -116,43 +115,9 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(accessTerm));
         }
 
-        // GET: api/Enrollees/5/access-terms/latest?signed=true
-        /// <summary>
-        /// Get the latest access term for an enrollee.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        /// <param name="signed"></param>
-        [HttpGet("{enrolleeId}/access-terms/latest", Name = nameof(GetAccessTermLatest))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<AccessTerm>> GetAccessTermLatest(int enrolleeId, [FromQuery] bool signed)
-        {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
-            {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
-            }
-
-            if (!User.CanView(enrollee))
-            {
-                return Forbid();
-            }
-
-            AccessTerm accessTerm = (signed)
-                ? await _accessTermService.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrolleeId)
-                : await _accessTermService.GetMostRecentNotAcceptedEnrolleesAccessTermAsync(enrolleeId);
-            accessTerm.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", accessTerm);
-
-            return Ok(ApiResponse.Result(accessTerm));
-        }
-
         // GET: api/Enrollees/5/access-terms/3/enrolment
         /// <summary>
-        /// Get the enrolment used for the given access term.
+        /// Get the Profile Snapshot used for the given access term.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="accessTermId"></param>
@@ -176,15 +141,13 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            AccessTerm acceptedAccessTerm = await _accessTermService.GetEnrolleesAccessTermAsync(enrolleeId, accessTermId);
-            if (acceptedAccessTerm == null)
+            AccessTerm accessTerm = await _accessTermService.GetEnrolleeAccessTermAsync(enrolleeId, accessTermId);
+            if (accessTerm == null || accessTerm.AcceptedDate == null)
             {
                 return NotFound(ApiResponse.Message($"Accepted Access Term not found with id {accessTermId} for enrollee with id {enrolleeId}"));
             }
 
-            var enrolleeProfileHistory = await _enrolleeProfileVersionService
-                    .GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, (DateTimeOffset)acceptedAccessTerm.AcceptedDate);
-
+            var enrolleeProfileHistory = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, accessTerm.AcceptedDate.Value);
             if (enrolleeProfileHistory == null)
             {
                 return NotFound(ApiResponse.Message($"No enrolment profile history found for Access Term with id {accessTermId} for enrollee with id {enrolleeId}."));
