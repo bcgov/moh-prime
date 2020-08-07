@@ -1,6 +1,5 @@
 #!/bin/bash
-chmod +x ./devops/pipelines/conf/project.conf
-source "./devops/pipelines/conf/project.conf"
+source project.conf
 source functions.bash
 source tests.bash
 find . -type d ! -name openshift -exec rm -rf {} +
