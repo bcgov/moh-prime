@@ -75,16 +75,13 @@ namespace Prime.Services
 
         public void UpdatePartyAddress(Party current, Party updated)
         {
-            if (updated.PhysicalAddress != null)
+            if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
             {
-                if (current.PhysicalAddress == null)
-                {
-                    current.PhysicalAddress = updated.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
-                }
+                this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+            }
+            else
+            {
+                current.PhysicalAddress = updated.PhysicalAddress;
             }
         }
 
