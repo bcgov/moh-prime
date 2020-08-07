@@ -1,0 +1,50 @@
+@using Prime.Models
+@model Site
+
+
+<p>
+  Notification: The list of Remote Practitioners at @Model.PhysicalAddress.Street of @Model.Organization.Name (PEC: @Model.PEC) has been updated. The Remote Practitioners at this site are:
+</p>
+
+@* Remote Users *@
+<h2 class="mb-2">Remote Users</h2>
+
+@foreach(var user in @Model.RemoteUsers )
+{
+  <div class="ml-2 mb-2">
+    <h5>Name</h5>
+    <span class="ml-2">@user.FirstName @user.LastName</span>
+  </div>
+
+  @foreach(var location in @user.RemoteUserLocations )
+  {
+    <div class="ml-2 mb-2">
+      <strong>Remote Address</strong>
+    </div>
+
+    <div class="ml-2 mb-2">
+      <h5>Internet Provider</h5>
+      <span class="ml-2">@location.InternetProvider</span>
+    </div>
+
+    <div class="ml-2 mb-2">
+      <h5>Street Address</h5>
+      <span class="ml-2">@location.PhysicalAddress.Street</span>
+    </div>
+
+    <div class="ml-2 mb-2">
+      <h5>City</h5>
+      <span class="ml-2">@location.PhysicalAddress.City</span>
+    </div>
+
+    <div class="ml-2 mb-2">
+      <h5>Provice</h5>
+      <span class="ml-2">@location.PhysicalAddress.ProvinceCode</span>
+    </div>
+
+    <div class="ml-2 mb-2">
+      <h5>Postal Code</h5>
+      <span class="ml-2">@location.PhysicalAddress.Postal</span>
+    </div>
+  }
+}

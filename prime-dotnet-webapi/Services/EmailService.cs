@@ -197,6 +197,70 @@ namespace Prime.Services
             await SaveSiteRegistrationReview(site.Id, registrationReviewFilename, siteRegReviewPdf);
         }
 
+        // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
+        // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
+        public async Task SendRemoteUsersUpdatedAsync(Site site)
+        {
+            var subject = "PRIME Site Registration Remote Users Updated";
+            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/UpdateRemoteUsersEmail.cshtml", new EmailParams(site));
+
+            Document businessLicenceDoc = null;
+            string businessLicenceTemplate = "/Views/Helpers/Document.cshtml";
+            try
+            {
+                var stream = await _documentService.GetStreamForLatestBusinessLicenceDocument(site.Id);
+                MemoryStream ms = new MemoryStream();
+                stream.CopyTo(ms);
+                businessLicenceDoc = new Document("BusinessLicence.pdf", ms.ToArray());
+            }
+            catch (NullReferenceException)
+            {
+                businessLicenceDoc = new Document("BusinessLicence.pdf", new byte[20]);
+                businessLicenceTemplate = "/Views/Helpers/ApologyDocument.cshtml";
+            }
+
+            var organization = site.Organization;
+            var organizationAgreementHtml = "";
+            if (await _organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
+            {
+                Document organizationAgreementDoc = null;
+                string organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
+                try
+                {
+                    var stream = await _documentService.GetStreamForLatestSignedAgreementDocument(organization.Id);
+                    MemoryStream ms = new MemoryStream();
+                    stream.CopyTo(ms);
+                    organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", ms.ToArray());
+                }
+                catch (NullReferenceException)
+                {
+                    organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", new byte[20]);
+                    organizationAgreementTemplate = "/Views/Helpers/ApologyDocument.cshtml";
+                }
+
+                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync(organizationAgreementTemplate, organizationAgreementDoc);
+            }
+            else
+            {
+                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
+            }
+
+            string registrationReviewFilename = "SiteRegistrationReview.pdf";
+
+            var attachments = new (string Filename, string HtmlContent)[]
+            {
+                ("OrganizationAgreement.pdf", organizationAgreementHtml),
+                (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
+                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(businessLicenceTemplate, businessLicenceDoc))
+            }
+            .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
+
+            await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
+
+            var siteRegReviewPdf = attachments.Single(a => a.Filename == registrationReviewFilename).Content;
+            await SaveSiteRegistrationReview(site.Id, registrationReviewFilename, siteRegReviewPdf);
+        }
+
         private async Task SaveSiteRegistrationReview(int siteId, string filename, byte[] pdf)
         {
             var documentGuid = await _documentManagerClient.SendFileAsync(new MemoryStream(pdf), filename, $"sites/{siteId}/site_registration_reviews");
