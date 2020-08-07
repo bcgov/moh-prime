@@ -48,7 +48,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> Submit(int enrolleeId, EnrolleeProfileViewModel updatedProfile)
+        public async Task<ActionResult<Enrollee>> Submit(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             if (enrollee == null)
@@ -62,7 +62,7 @@ namespace Prime.Controllers
 
             if (updatedProfile == null)
             {
-                this.ModelState.AddModelError("EnrolleeProfileViewModel", "New profile cannot be null.");
+                this.ModelState.AddModelError("EnrolleeUpdateModel", "New profile cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
             if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable)))

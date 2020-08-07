@@ -451,14 +451,14 @@ namespace PrimeTests.Controllers
         //         string expectedFirstName = "NewFirstName";
         //         string expectedLastName = "NewLastName";
 
-        //         var enrolleeProfile = new EnrolleeProfileViewModel
+        //         var enrolleeProfile = new EnrolleeUpdateModel
         //         {
         //             PreferredFirstName = expectedFirstName,
         //             PreferredLastName = expectedLastName
         //         };
 
         //         // create a request with an AUTH token
-        //         var request = TestUtils.CreateRequest<EnrolleeProfileViewModel>(HttpMethod.Put, $"/api/enrollees/{enrolleeId}", enrollee.UserId, enrolleeProfile);
+        //         var request = TestUtils.CreateRequest<EnrolleeUpdateModel>(HttpMethod.Put, $"/api/enrollees/{enrolleeId}", enrollee.UserId, enrolleeProfile);
 
         //         // call the controller to update the enrollee
         //         var response = await _client.SendAsync(request);
