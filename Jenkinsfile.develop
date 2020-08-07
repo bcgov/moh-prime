@@ -21,7 +21,8 @@
 pipeline {
     agent none
     environment {
-        branchLower = BRANCH_NAME.toLowerCase()
+        // branchLower = BRANCH_NAME.toLowerCase()
+        branchLower = "pr-731"
         vanityUrl = "${branchLower}.pharmanetenrolment.gov.bc.ca"
         schema = "https"
         port = "8443"
