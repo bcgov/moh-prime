@@ -3,6 +3,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
@@ -11,7 +13,6 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
-
 
 describe('PharmanetEnrolmentSummaryComponent', () => {
   let component: PharmanetEnrolmentSummaryComponent;
@@ -38,9 +39,9 @@ describe('PharmanetEnrolmentSummaryComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
-          }
+          },
+          KeycloakService
         ]
-
       }
     ).compileComponents();
   }));

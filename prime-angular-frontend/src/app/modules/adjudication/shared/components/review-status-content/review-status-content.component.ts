@@ -39,7 +39,7 @@ export class ReviewStatusContentComponent implements OnInit {
   public reasons: Reason[];
 
   // TODO: Currenty we just store this in this place and in the self declaration form
-  // Later on this would be best to be brought out and stored better!
+  // and should be centralize for reuse so it doesn't have to changed in multiple places
   private registrationQ = 'Are you, or have you ever been, the subject of an order or a conviction under'
     + ' legislation in any jurisdiction for a matter that involved improper access to, collection,'
     + ' use, or disclosure of personal information?';
