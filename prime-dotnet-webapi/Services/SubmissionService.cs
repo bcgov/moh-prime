@@ -147,7 +147,7 @@ namespace Prime.Services
             if (accept)
             {
                 await SetGpid(enrollee);
-                await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
+                await _accessTermService.AcceptCurrentAccessTermAsync(enrollee.Id);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
 
@@ -187,7 +187,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Declined);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
-            await _accessTermService.ExpireCurrentAccessTermAsync(enrollee);
+            await _accessTermService.ExpireCurrentAccessTermAsync(enrollee.Id);
         }
 
         private async Task EnableProfileAsync(Enrollee enrollee)
