@@ -44,22 +44,14 @@ describe('PartyProfileFormComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(inject([SiteService, SiteFormStateService], (siteService: SiteService, siteFormStateService: SiteFormStateService) => {
     fixture = TestBed.createComponent(PartyProfileFormComponent);
     component = fixture.componentInstance;
+    siteFormStateService.setForm(siteService.site);
+    // Add the bound FormGroup to the component
+    component.form = siteFormStateService.administratorPharmaNetForm as FormGroup;
     fixture.detectChanges();
-  });
-
-  beforeEach(inject(
-    [SiteService, SiteFormStateService],
-    (siteService: SiteService, siteFormStateService: SiteFormStateService) => {
-      fixture = TestBed.createComponent(PartyProfileFormComponent);
-      component = fixture.componentInstance;
-      siteFormStateService.setForm(siteService.site);
-      // Add the bound FormGroup to the component
-      component.form = siteFormStateService.administratorPharmaNetForm as FormGroup;
-      fixture.detectChanges();
-    }));
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();

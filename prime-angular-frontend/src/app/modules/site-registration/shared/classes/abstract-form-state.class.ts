@@ -176,10 +176,8 @@ export abstract class AbstractFormState<T> {
           : physicalAddressFormGroup.reset({ id: 0 });
       }
 
-      console.log('MAILING_ADDRESS', mailingAddress);
-
-
-      if (mailingAddress) {
+      // Parties don't always have a mailing address section in the form
+      if (formGroup.get('mailingAddress') && mailingAddress) {
         const mailingAddressFormGroup = formGroup.get('mailingAddress');
         (mailingAddress)
           ? mailingAddressFormGroup.patchValue(mailingAddress)
