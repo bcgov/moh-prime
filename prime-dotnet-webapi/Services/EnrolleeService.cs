@@ -90,8 +90,7 @@ namespace Prime.Services
             if (entity != null)
             {
                 entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-                // Attach to the enrollee if they have signed the most recent ToA
-                entity.CurrentTOAStatus = await _accessTermService.GetCurrentTOAStatusAsync(entity);
+
                 // TODO: This is an interm fix for making a different view model for enrollee based on isAdmin
                 if (isAdmin)
                 {
@@ -133,8 +132,6 @@ namespace Prime.Services
             foreach (var item in items)
             {
                 item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
-                // Attach to the enrollee if they have signed the most recent ToA
-                item.CurrentTOAStatus = await _accessTermService.GetCurrentTOAStatusAsync(item);
             }
 
             return items;
