@@ -5,7 +5,7 @@ using Prime.Models;
 
 namespace Prime.ViewModels
 {
-    public class EnrolleeProfileViewModel
+    public class EnrolleeUpdateModel
     {
         public string PreferredFirstName { get; set; }
 

@@ -9,10 +9,10 @@ namespace PrimeTests
 {
     public static class EnrolleeExtensions
     {
-        public static EnrolleeProfileViewModel ToViewModel(this Enrollee enrollee)
+        public static EnrolleeUpdateModel ToViewModel(this Enrollee enrollee)
         {
             var serialized = JsonConvert.SerializeObject(enrollee);
-            EnrolleeProfileViewModel profile = JsonConvert.DeserializeObject<EnrolleeProfileViewModel>(serialized);
+            EnrolleeUpdateModel profile = JsonConvert.DeserializeObject<EnrolleeUpdateModel>(serialized);
             profile.IdentityAssuranceLevel = enrollee.IdentityAssuranceLevel;
             return profile;
         }

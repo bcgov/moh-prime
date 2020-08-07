@@ -57,5 +57,5 @@ namespace PrimeTests.UnitTests
 //     {
 //         Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee);
 
-//         Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeProfileViewModel profileUpdate);
+//         Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate);
 //     }
