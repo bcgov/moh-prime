@@ -36,7 +36,7 @@ namespace Prime.Services
         public async Task<IEnumerable<Site>> GetSitesAsync(int organizationId)
         {
             return await this.GetBaseSiteQuery()
-                .Where(s => s.Location.OrganizationId == organizationId)
+                .Where(s => s.OrganizationId == organizationId)
                 .ToListAsync();
         }
 
@@ -55,18 +55,11 @@ namespace Prime.Services
                 throw new ArgumentNullException(nameof(organization), "Could not create a site, the passed in Organization doesnt exist.");
             }
 
-            var location = await this.GetLocationByOrganizationIdAsync(organizationId);
-
-            if (location == null)
-            {
-                location = new Location { OrganizationId = organization.Id };
-            }
-
             // Site provisionerId should be equal to organization signingAuthorityId
             var site = new Site
             {
                 ProvisionerId = organization.SigningAuthorityId,
-                Location = location
+                OrganizationId = organization.Id
             };
 
             _context.Sites.Add(site);
@@ -90,35 +83,15 @@ namespace Prime.Services
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
-            UpdateLocation(currentSite.Location, updatedSite.Location);
+            UpdateAddress(currentSite, updatedSite);
 
-            // Wholesale replace the remote users
-            if (currentSite?.RemoteUsers != null && currentSite?.RemoteUsers.Count() != 0)
-            {
-                foreach (var remoteUser in currentSite.RemoteUsers)
-                {
-                    foreach (var location in remoteUser.RemoteUserLocations)
-                    {
-                        _context.Addresses.Remove(location.PhysicalAddress);
-                        _context.RemoteUserLocations.Remove(location);
-                    }
-                    _context.RemoteUsers.Remove(remoteUser);
-                }
-            }
+            UpdateParties(currentSite, updatedSite);
 
-            if (updatedSite?.RemoteUsers != null && updatedSite?.RemoteUsers.Count() != 0)
-            {
-                foreach (var remoteUser in updatedSite.RemoteUsers)
-                {
-                    remoteUser.SiteId = currentSite.Id;
-                    _context.RemoteUsers.Add(remoteUser);
-                }
-            }
+            UpdateBusinessHours(currentSite, updatedSite);
 
-            // Update foreign key only if not null
-            currentSite.VendorCode = (updatedSite.VendorCode != 0)
-                ? updatedSite.VendorCode
-                : null;
+            UpdateRemoteUsers(currentSite, updatedSite);
+
+            UpdateVendors(currentSite, updatedSite);
 
             // Managed through separate API endpoint, and should never be updated
             currentSite.SubmittedDate = submittedDate;
@@ -140,18 +113,8 @@ namespace Prime.Services
             }
         }
 
-        private async Task<Location> GetLocationByOrganizationIdAsync(int organizationId)
+        private void UpdateAddress(Site current, Site updated)
         {
-            // assmuing an organization only has 1 location
-            return await _context.Locations
-                .Where(l => l.OrganizationId == organizationId)
-                .FirstOrDefaultAsync();
-        }
-
-        private void UpdateLocation(Location current, Location updated)
-        {
-            this._context.Entry(current).CurrentValues.SetValues(updated);
-
             if (updated?.PhysicalAddress != null)
             {
                 if (current.PhysicalAddress == null)
@@ -163,70 +126,48 @@ namespace Prime.Services
                     this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
                 }
             }
+        }
 
-            if (updated?.AdministratorPharmaNet != null)
+        private void UpdateParties(Site current, Site updated)
+        {
+            string[] partyTypes = new string[] {
+                "AdministratorPharmaNet",
+                "PrivacyOfficer",
+                "TechnicalSupport"
+            };
+
+            foreach (var partyType in partyTypes)
             {
-                if (updated?.AdministratorPharmaNet?.UserId != Guid.Empty)
+                var partyIdName = $"{partyType}Id";
+                Party currentParty = _context.Entry(current).Reference(partyType).CurrentValue as Party;
+                Party updatedParty = _context.Entry(updated).Reference(partyType).CurrentValue as Party;
+
+                if (updatedParty != null)
                 {
-                    current.AdministratorPharmaNetId = updated.AdministratorPharmaNetId;
-                }
-                else
-                {
-                    if (current.AdministratorPharmaNet == null)
+                    if (updatedParty.UserId != Guid.Empty)
                     {
-                        current.AdministratorPharmaNet = updated.AdministratorPharmaNet;
+                        _context.Entry(current).Property(partyIdName).CurrentValue = _context.Entry(updated).Property(partyIdName).CurrentValue;
                     }
                     else
                     {
-                        this._context.Entry(current.AdministratorPharmaNet).CurrentValues.SetValues(updated.AdministratorPharmaNet);
-                    }
+                        if (currentParty == null)
+                        {
+                            _context.Entry(current).Reference(partyType).CurrentValue = updatedParty;
+                            currentParty = _context.Entry(current).Reference(partyType).CurrentValue as Party;
+                        }
+                        else
+                        {
+                            this._context.Entry(currentParty).CurrentValues.SetValues(updatedParty);
+                        }
 
-                    _partyService.UpdatePartyAddress(current.AdministratorPharmaNet, updated.AdministratorPharmaNet);
+                        _partyService.UpdatePartyAddress(currentParty, updatedParty);
+                    }
                 }
             }
+        }
 
-            if (updated?.PrivacyOfficer != null)
-            {
-                if (updated?.PrivacyOfficer?.UserId != Guid.Empty)
-                {
-                    current.PrivacyOfficerId = updated.PrivacyOfficerId;
-                }
-                else
-                {
-                    if (current.PrivacyOfficer == null)
-                    {
-                        current.PrivacyOfficer = updated.PrivacyOfficer;
-                    }
-                    else
-                    {
-                        this._context.Entry(current.PrivacyOfficer).CurrentValues.SetValues(updated.PrivacyOfficer);
-                    }
-
-                    _partyService.UpdatePartyAddress(current.PrivacyOfficer, updated.PrivacyOfficer);
-                }
-            }
-
-            if (updated?.TechnicalSupport != null)
-            {
-                if (updated?.TechnicalSupport?.UserId != Guid.Empty)
-                {
-                    current.TechnicalSupportId = updated.TechnicalSupportId;
-                }
-                else
-                {
-                    if (current.TechnicalSupport == null)
-                    {
-                        current.TechnicalSupport = updated.TechnicalSupport;
-                    }
-                    else
-                    {
-                        this._context.Entry(current.TechnicalSupport).CurrentValues.SetValues(updated.TechnicalSupport);
-                    }
-
-                    _partyService.UpdatePartyAddress(current.TechnicalSupport, updated.TechnicalSupport);
-                }
-            }
-
+        private void UpdateBusinessHours(Site current, Site updated)
+        {
             if (updated?.BusinessHours != null)
             {
                 if (current.BusinessHours != null)
@@ -239,10 +180,100 @@ namespace Prime.Services
 
                 foreach (var businessHour in updated.BusinessHours)
                 {
-                    businessHour.LocationId = current.Id;
+                    businessHour.SiteId = current.Id;
                     _context.Entry(businessHour).State = EntityState.Added;
                 }
             }
+        }
+
+        private void UpdateRemoteUsers(Site current, Site updated)
+        {
+            // Wholesale replace the remote users
+            foreach (var remoteUser in current.RemoteUsers)
+            {
+                foreach (var location in remoteUser.RemoteUserLocations)
+                {
+                    _context.Remove(location.PhysicalAddress);
+                    _context.Remove(location);
+                }
+                _context.RemoteUsers.Remove(remoteUser);
+            }
+
+            if (updated?.RemoteUsers != null && updated?.RemoteUsers.Count() != 0)
+            {
+                foreach (var remoteUser in updated.RemoteUsers)
+                {
+                    remoteUser.SiteId = current.Id;
+                    var remoteUserLocations = new List<RemoteUserLocation>();
+
+                    foreach (var location in remoteUser.RemoteUserLocations)
+                    {
+                        var newAddress = new PhysicalAddress
+                        {
+                            CountryCode = location.PhysicalAddress.CountryCode,
+                            ProvinceCode = location.PhysicalAddress.ProvinceCode,
+                            Street = location.PhysicalAddress.Street,
+                            Street2 = location.PhysicalAddress.Street2,
+                            City = location.PhysicalAddress.City,
+                            Postal = location.PhysicalAddress.Postal
+                        };
+                        var newLocation = new RemoteUserLocation
+                        {
+                            RemoteUser = remoteUser,
+                            InternetProvider = location.InternetProvider,
+                            PhysicalAddress = newAddress
+                        };
+                        _context.Entry(newAddress).State = EntityState.Added;
+                        _context.Entry(newLocation).State = EntityState.Added;
+                        remoteUserLocations.Add(newLocation);
+                    }
+                    remoteUser.RemoteUserLocations = remoteUserLocations;
+                    _context.Entry(remoteUser).State = EntityState.Added;
+                }
+            }
+        }
+
+        private void UpdateVendors(Site current, Site updated)
+        {
+            if (updated?.SiteVendors != null)
+            {
+                if (current.SiteVendors != null)
+                {
+                    foreach (var vendor in current.SiteVendors)
+                    {
+                        _context.Remove(vendor);
+                    }
+                }
+
+                foreach (var vendor in updated.SiteVendors)
+                {
+                    var siteVendor = new SiteVendor
+                    {
+                        SiteId = current.Id,
+                        VendorCode = vendor.VendorCode
+                    };
+
+                    _context.Entry(siteVendor).State = EntityState.Added;
+                }
+            }
+        }
+
+        public async Task<int> UpdateSiteCompletedAsync(int siteId)
+        {
+            var site = await this.GetBaseSiteQuery()
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            site.Completed = true;
+
+            this._context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the site.");
+            }
+
+            return updated;
         }
 
         public async Task<Site> UpdatePecCode(int siteId, string pecCode)
@@ -268,38 +299,28 @@ namespace Prime.Services
             var site = await this.GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
-            var provisionerId = site.ProvisionerId;
-
-            if (site == null)
+            if (site != null)
             {
-                return;
-            }
+                var provisionerId = site.ProvisionerId;
 
-            _context.Sites.Remove(site);
-
-            await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
-
-            await _context.SaveChangesAsync();
-        }
-
-        private void DeleteLocation(Site site)
-        {
-            // Check if relation exists before delete to allow delete of incomplete registrations
-            if (site.Location != null)
-            {
-                if (site.Location.PhysicalAddress != null)
+                if (site.PhysicalAddress != null)
                 {
-                    _context.Addresses.Remove(site.Location.PhysicalAddress);
+                    _context.Addresses.Remove(site.PhysicalAddress);
                 }
-                _context.Locations.Remove(site.Location);
 
-                DeletePartyFromLocation(site.Location.AdministratorPharmaNet);
-                DeletePartyFromLocation(site.Location.TechnicalSupport);
-                DeletePartyFromLocation(site.Location.PrivacyOfficer);
+                DeletePartyFromSite(site.AdministratorPharmaNet);
+                DeletePartyFromSite(site.TechnicalSupport);
+                DeletePartyFromSite(site.PrivacyOfficer);
+
+                _context.Sites.Remove(site);
+
+                await _businessEventService.CreateSiteEventAsync(siteId, (int)provisionerId, "Site Deleted");
+
+                await _context.SaveChangesAsync();
             }
         }
 
-        private void DeletePartyFromLocation(Party party)
+        private void DeletePartyFromSite(Party party)
         {
             if (party != null)
             {
@@ -387,29 +408,23 @@ namespace Prime.Services
         {
             return _context.Sites
                 .Include(s => s.Provisioner)
-                // .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Vendor)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.Organization)
-                        .ThenInclude(o => o.SigningAuthority)
-                            .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.Organization)
-                        .ThenInclude(o => o.SigningAuthority)
-                            .ThenInclude(p => p.MailingAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.PhysicalAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.PrivacyOfficer)
+                .Include(s => s.SiteVendors)
+                    .ThenInclude(v => v.Vendor)
+                .Include(s => s.OrganizationType)
+                .Include(s => s.Organization)
+                    .ThenInclude(o => o.SigningAuthority)
                         .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.AdministratorPharmaNet)
-                        .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.TechnicalSupport)
-                        .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Location)
-                    .ThenInclude(l => l.BusinessHours)
+                .Include(s => s.Organization)
+                    .ThenInclude(o => o.SigningAuthority)
+                        .ThenInclude(p => p.MailingAddress)
+                .Include(s => s.PhysicalAddress)
+                .Include(s => s.PrivacyOfficer)
+                    .ThenInclude(p => p.PhysicalAddress)
+                .Include(s => s.AdministratorPharmaNet)
+                    .ThenInclude(p => p.PhysicalAddress)
+                .Include(s => s.TechnicalSupport)
+                    .ThenInclude(p => p.PhysicalAddress)
+                .Include(s => s.BusinessHours)
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserLocations)
                         .ThenInclude(rul => rul.PhysicalAddress)

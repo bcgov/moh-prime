@@ -26,45 +26,37 @@
 
   <h1 class="mb-4">SITE REGISTRATION REVIEW</h1>
 
-  @* Location Information *@
-  <h2 class="mb-2">Location Information</h2>
-
-  <div class="ml-2 mb-2">
-    <h5>Location Name</h5>
-    <span class="ml-2">@Model.Location.Name</span>
-  </div>
-
-  @* Location Address *@
-  <h2 class="mb-2">Location Address</h2>
+  @* Site Address *@
+  <h2 class="mb-2">Site Address</h2>
 
   <div class="ml-2 mb-2">
     <h5>Address</h5>
-    <span class="ml-2">@Model.Location.PhysicalAddress.Street</span>
+    <span class="ml-2">@Model.PhysicalAddress.Street</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Address 2</h5>
-    <span class="ml-2">@Model.Location.PhysicalAddress.Street2</span>
+    <span class="ml-2">@Model.PhysicalAddress.Street2</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>City</h5>
-    <span class="ml-2">@Model.Location.PhysicalAddress.City</span>
+    <span class="ml-2">@Model.PhysicalAddress.City</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Province</h5>
-    <span class="ml-2">@Model.Location.PhysicalAddress.ProvinceCode</span>
+    <span class="ml-2">@Model.PhysicalAddress.ProvinceCode</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Postal Code</h5>
-    <span class="ml-2">@Model.Location.PhysicalAddress.Postal</span>
+    <span class="ml-2">@Model.PhysicalAddress.Postal</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Country</h5>
-    <span class="ml-2">@Model.Location.PhysicalAddress.CountryCode</span>
+    <span class="ml-2">@Model.PhysicalAddress.CountryCode</span>
   </div>
 
   @* Business Licences *@
@@ -81,7 +73,7 @@
   @* Hours of Operation *@
   <h2 class="mb-2">Hours of Operation</h2>
 
-  @foreach (var BusinessHour in Model.Location.BusinessHours) {
+  @foreach (var BusinessHour in Model.BusinessHours) {
     <div class="ml-2 mb-2">
       <h5>@BusinessHour.Day</h5>
       <span class="ml-2">@BusinessHour.StartTime - @BusinessHour.EndTime</span>
@@ -91,15 +83,18 @@
   @* Vendor *@
   <h2 class="mb-2">Vendors</h2>
 
-  <div class="ml-2 mb-2">
-    <h5>Vendor Name</h5>
-    <span class="ml-2">@Model.Vendor.Name</span>
-  </div>
+  @foreach (var SiteVendor in Model.SiteVendors) {
 
-  <div class="ml-2 mb-2">
-    <h5>Vendor Email</h5>
-    <span class="ml-2">@Model.Vendor.Email</span>
-  </div>
+    <div class="ml-2 mb-2">
+      <h5>Vendor Name</h5>
+      <span class="ml-2">@SiteVendor.Vendor.Name</span>
+    </div>
+
+    <div class="ml-2 mb-2">
+      <h5>Vendor Email</h5>
+      <span class="ml-2">@SiteVendor.Vendor.Email</span>
+    </div>
+  }
 
   @* Remote Users *@
   <h2 class="mb-2">Remote Users</h2>
@@ -181,96 +176,96 @@
 
   <div class="ml-2 mb-2">
     <h5>Job or Role Title</h5>
-    <span class="ml-2">@Model.Location.AdministratorPharmaNet.JobRoleTitle</span>
+    <span class="ml-2">@Model.AdministratorPharmaNet.JobRoleTitle</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Name</h5>
-    <span class="ml-2">@Model.Location.AdministratorPharmaNet.FirstName @Model.Location.AdministratorPharmaNet.LastName</span>
+    <span class="ml-2">@Model.AdministratorPharmaNet.FirstName @Model.AdministratorPharmaNet.LastName</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Phone</h5>
-    <span class="ml-2">@Model.Location.AdministratorPharmaNet.Phone</span>
+    <span class="ml-2">@Model.AdministratorPharmaNet.Phone</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Fax</h5>
-    <span class="ml-2">@Model.Location.AdministratorPharmaNet.Fax</span>
+    <span class="ml-2">@Model.AdministratorPharmaNet.Fax</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>SMS Phone</h5>
-    <span class="ml-2">@Model.Location.AdministratorPharmaNet.SMSPhone</span>
+    <span class="ml-2">@Model.AdministratorPharmaNet.SMSPhone</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Email</h5>
-    <span class="ml-2">@Model.Location.AdministratorPharmaNet.Email</span>
+    <span class="ml-2">@Model.AdministratorPharmaNet.Email</span>
   </div>
 
   <h2 class="mb-2">Privacy Officer</h2>
 
   <div class="ml-2 mb-2">
     <h5>Job or Role Title</h5>
-    <span class="ml-2">@Model.Location.PrivacyOfficer.JobRoleTitle</span>
+    <span class="ml-2">@Model.PrivacyOfficer.JobRoleTitle</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Name</h5>
-    <span class="ml-2">@Model.Location.PrivacyOfficer.FirstName @Model.Location.PrivacyOfficer.LastName</span>
+    <span class="ml-2">@Model.PrivacyOfficer.FirstName @Model.PrivacyOfficer.LastName</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Phone</h5>
-    <span class="ml-2">@Model.Location.PrivacyOfficer.Phone</span>
+    <span class="ml-2">@Model.PrivacyOfficer.Phone</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Fax</h5>
-    <span class="ml-2">@Model.Location.PrivacyOfficer.Fax</span>
+    <span class="ml-2">@Model.PrivacyOfficer.Fax</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>SMS Phone</h5>
-    <span class="ml-2">@Model.Location.PrivacyOfficer.SMSPhone</span>
+    <span class="ml-2">@Model.PrivacyOfficer.SMSPhone</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Email</h5>
-    <span class="ml-2">@Model.Location.PrivacyOfficer.Email</span>
+    <span class="ml-2">@Model.PrivacyOfficer.Email</span>
   </div>
 
   <h2 class="mb-2">Technical Support</h2>
 
   <div class="ml-2 mb-2">
     <h5>Job or Role Title</h5>
-    <span class="ml-2">@Model.Location.TechnicalSupport.JobRoleTitle</span>
+    <span class="ml-2">@Model.TechnicalSupport.JobRoleTitle</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Name</h5>
-    <span class="ml-2">@Model.Location.TechnicalSupport.FirstName @Model.Location.TechnicalSupport.LastName</span>
+    <span class="ml-2">@Model.TechnicalSupport.FirstName @Model.TechnicalSupport.LastName</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Phone</h5>
-    <span class="ml-2">@Model.Location.TechnicalSupport.Phone</span>
+    <span class="ml-2">@Model.TechnicalSupport.Phone</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Fax</h5>
-    <span class="ml-2">@Model.Location.TechnicalSupport.Fax</span>
+    <span class="ml-2">@Model.TechnicalSupport.Fax</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>SMS Phone</h5>
-    <span class="ml-2">@Model.Location.TechnicalSupport.SMSPhone</span>
+    <span class="ml-2">@Model.TechnicalSupport.SMSPhone</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Email</h5>
-    <span class="ml-2">@Model.Location.TechnicalSupport.Email</span>
+    <span class="ml-2">@Model.TechnicalSupport.Email</span>
   </div>
 
   @* End? *@

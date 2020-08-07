@@ -1,0 +1,36 @@
+<mat-nav-list *ngFor="let dashboardNavSection of dashboardNavSections; let last = last;"
+              [disableRipple]="true">
+  <!-- <mat-list-item *ngIf="dashboardNavSection?.header"
+                 class="sidenav-section-header">
+    <a matLine
+       [class]="{ 'extend-content-width': isDesktop }">
+      {{ dashboardNavSection.header }}
+    </a>
+  </mat-list-item> -->
+
+  <ng-container *ngFor="let item of dashboardNavSection.items">
+    <mat-list-item [routerLink]="item.route"
+                   routerLinkActive="active"
+                   [routerLinkActiveOptions]="{ exact: true }"
+                   [class]="{
+                     'force-active': item.forceActive,
+                     'disabled': item.disabled,
+                     'deemphasize': item.deemphasize
+                   }"
+                   (click)="onRoute()">
+      <mat-icon mat-list-icon
+                *ngIf="showNavItemIcons && item?.icon"
+                [class.center-sidenav-icon]="!isDesktop">{{ item.icon }}</mat-icon>
+
+      <a matLine
+         [class.extend-content-width]="isDesktop">
+        <span *ngIf="showNavItemLabels || !item?.icon">
+          {{ item.name }}
+        </span>
+      </a>
+    </mat-list-item>
+  </ng-container>
+
+  <!-- <mat-divider *ngIf="!last"
+               class="my-3"></mat-divider> -->
+</mat-nav-list>

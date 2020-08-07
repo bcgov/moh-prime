@@ -4,8 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 
 import { BusinessHoursComponent } from './business-hours.component';
-import { SiteRegistrationStateService } from '@registration/shared/services/site-registration-state.service';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
 describe('BusinessHoursComponent', () => {
   let component: BusinessHoursComponent;
@@ -20,16 +20,16 @@ describe('BusinessHoursComponent', () => {
         ReactiveFormsModule
       ],
       providers: [
-        SiteRegistrationStateService
+        SiteFormStateService
       ]
     }).compileComponents();
   }));
 
-  beforeEach(inject([SiteRegistrationStateService], (siteRegistrationStateService: SiteRegistrationStateService) => {
+  beforeEach(inject([SiteFormStateService], (siteFormStateService: SiteFormStateService) => {
     fixture = TestBed.createComponent(BusinessHoursComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
-    component.form = siteRegistrationStateService.hoursOperationForm as FormGroup;
+    component.form = siteFormStateService.hoursOperationForm as FormGroup;
     fixture.detectChanges();
   }));
 
