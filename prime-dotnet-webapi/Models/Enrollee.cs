@@ -242,6 +242,16 @@ namespace Prime.Models
             CurrentStatus.AddStatusReason(type, statusReasonNote);
         }
 
+        public bool HasCareSetting(CareSettingType type)
+        {
+            if (EnrolleeOrganizationTypes == null)
+            {
+                throw new InvalidOperationException($"{nameof(EnrolleeOrganizationTypes)} cannnot be null");
+            }
+
+            return EnrolleeOrganizationTypes.Any(o => o.IsType(type));
+        }
+
         /// <summary>
         /// Returns true if the Enrollee's most recently accepted Agreement has no newer versions.
         /// Makes no determination if said Agreement is of the correct type for the Enrollee.
@@ -263,6 +273,19 @@ namespace Prime.Models
             }
 
             return UserClause.NewestAgreementIds().Contains(currentAgreement.UserClauseId);
+        }
+
+        /// <summary>
+        /// Returns true if the Enrollee has at least one Certification with a regulated Licence
+        /// </summary>
+        public bool IsRegulatedUser()
+        {
+            if (Certifications == null)
+            {
+                throw new InvalidOperationException($"{nameof(Certifications)} cannnot be null");
+            }
+
+            return Certifications.Any(cert => cert.License?.RegulatedUser == true);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
