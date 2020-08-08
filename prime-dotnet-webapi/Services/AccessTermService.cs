@@ -54,12 +54,19 @@ namespace Prime.Services
                 .AsNoTracking()
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .OrderByDescending(at => at.CreatedDate)
-                .If(filters.YearAccepted.HasValue, q => q.Where(at => at.AcceptedDate.HasValue && at.AcceptedDate.Value.Year == filters.YearAccepted))
                 .If(filters.OnlyLatest, q => q.Take(1))
-                .If(filters.Accepted == true, q => q.Where(at => at.AcceptedDate.HasValue))
+                .If(filters.Accepted == true || filters.YearAccepted.HasValue, q => q.Where(at => at.AcceptedDate.HasValue))
                 .If(filters.Accepted == false, q => q.Where(at => !at.AcceptedDate.HasValue))
                 .If(filters.IncludeText, q => q.Include(at => at.UserClause).Include(at => at.LimitsConditionsClause))
                 .ToArrayAsync();
+
+            if (filters.YearAccepted.HasValue)
+            {
+                // NpgSQL does not support DateTimeOffset operations, this filtering must be done after fetching all the data :(
+                accessTerms = accessTerms
+                    .Where(at => at.AcceptedDate.Value.Year == filters.YearAccepted)
+                    .ToArray();
+            }
 
             if (filters.IncludeText)
             {
