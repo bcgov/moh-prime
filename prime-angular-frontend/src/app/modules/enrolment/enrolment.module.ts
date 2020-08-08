@@ -1,4 +1,7 @@
 import { NgModule } from '@angular/core';
+
+import { NgxProgressModule } from '@lib/modules/ngx-progress/ngx-progress.module';
+
 import { SharedModule } from '@shared/shared.module';
 
 import { EnrolmentRoutingModule } from './enrolment-routing.module';
@@ -71,7 +74,8 @@ import { ProgressIndicatorComponent } from './shared/components/progress-indicat
   ],
   imports: [
     SharedModule,
-    EnrolmentRoutingModule
+    EnrolmentRoutingModule,
+    NgxProgressModule
   ]
 })
 export class EnrolmentModule { }

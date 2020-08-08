@@ -11,10 +11,9 @@ registerPlugin(FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 import { NgxMaskModule } from 'ngx-mask';
 
 import { ConfigModule } from '@config/config.module';
-import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
-import { NgxProgressModule } from '@shared/modules/ngx-progress/ngx-progress.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
+import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
@@ -145,7 +144,6 @@ import { OverviewContainerComponent } from './components/site/overview-container
     NgxContextualHelpModule,
     NgxMaskModule.forRoot(),
     NgxMaterialModule,
-    NgxProgressModule,
     FilePondModule,
     ReactiveFormsModule
   ],
@@ -156,7 +154,6 @@ import { OverviewContainerComponent } from './components/site/overview-container
     NgxContextualHelpModule,
     NgxMaterialModule,
     NgxMaskModule,
-    NgxProgressModule,
     ReactiveFormsModule,
     CapitalizePipe,
     CasePipe,

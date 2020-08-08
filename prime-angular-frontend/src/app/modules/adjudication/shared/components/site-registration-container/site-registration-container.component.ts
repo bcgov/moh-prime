@@ -6,14 +6,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
+
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-data-source-utils.class';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
