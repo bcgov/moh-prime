@@ -5,18 +5,18 @@ import { KeycloakService } from 'keycloak-angular';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
-import { Dashboard2Component } from './dashboard2.component';
+import { DashboardComponent } from './dashboard.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-describe('Dashboard2Component', () => {
-  let component: Dashboard2Component;
-  let fixture: ComponentFixture<Dashboard2Component>;
+describe('DashboardComponent', () => {
+  let component: DashboardComponent;
+  let fixture: ComponentFixture<DashboardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [Dashboard2Component],
+      declarations: [DashboardComponent],
       providers: [
         {
           provide: APP_CONFIG,
@@ -37,7 +37,7 @@ describe('Dashboard2Component', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(Dashboard2Component);
+    fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -6,19 +6,19 @@ import { DashboardMenuItem, DashboardRouteMenuItem } from '@lib/modules/dashboar
 import { IDashboard } from '@lib/modules/dashboard/interfaces/dashboard.interface';
 
 import { AuthRoutes } from '@auth/auth.routes';
-import { SiteRoutes } from '@registration/site-registration.routes';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-site-registration-dashboard',
-  templateUrl: './site-registration-dashboard.component.html',
-  styleUrls: ['./site-registration-dashboard.component.scss']
+  selector: 'app-adjudication-dashboard',
+  templateUrl: './adjudication-dashboard.component.html',
+  styleUrls: ['./adjudication-dashboard.component.scss']
 })
-export class SiteRegistrationDashboardComponent implements OnInit, IDashboard {
+export class AdjudicationDashboardComponent implements OnInit, IDashboard {
   public dashboardMenuItems: Observable<DashboardMenuItem[]>;
   public logoutRedirectUrl: string;
 
   constructor() {
-    this.logoutRedirectUrl = AuthRoutes.routePath(AuthRoutes.SITE);
+    this.logoutRedirectUrl = AuthRoutes.routePath(AuthRoutes.ADMIN);
   }
 
   public ngOnInit(): void {
@@ -27,7 +27,8 @@ export class SiteRegistrationDashboardComponent implements OnInit, IDashboard {
 
   private getDashboardMenuItems(): Observable<DashboardMenuItem[]> {
     return of([
-      new DashboardRouteMenuItem('Site Management', SiteRoutes.SITE_MANAGEMENT, 'store', true)
+      new DashboardRouteMenuItem('PRIME Enrollees', AdjudicationRoutes.ENROLLEES, 'people'),
+      new DashboardRouteMenuItem('Site Registrations', AdjudicationRoutes.SITE_REGISTRATIONS, 'store')
     ]);
   }
 }

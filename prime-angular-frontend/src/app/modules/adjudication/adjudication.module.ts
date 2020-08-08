@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { EditorModule } from '@tinymce/tinymce-angular';
 
+import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
+
 import { SharedModule } from '@shared/shared.module';
 
 import { AdjudicationRoutingModule } from './adjudication-routing.module';
@@ -19,6 +21,7 @@ import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/en
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
 import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
 import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
+import { AdjudicationDashboardComponent } from './shared/components/adjudication-dashboard/adjudication-dashboard.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
@@ -53,12 +56,13 @@ import { OrganizationInformationComponent } from './pages/organization-informati
     SiteRegistrationTableComponent,
     SiteRegistrationActionsComponent,
     SiteAdjudicationComponent,
-    OrganizationInformationComponent
+    AdjudicationDashboardComponent
   ],
   imports: [
+    AdjudicationRoutingModule,
     SharedModule,
-    EditorModule,
-    AdjudicationRoutingModule
+    DashboardModule,
+    EditorModule
   ]
 })
 export class AdjudicationModule { }
