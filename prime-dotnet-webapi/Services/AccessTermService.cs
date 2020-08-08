@@ -32,7 +32,7 @@ namespace Prime.Services
                 .AsNoTracking()
                 .Where(at => at.Id == accessTermId)
                 .Where(at => at.EnrolleeId == enrolleeId)
-                .If(includeText, q => q.Include(at => at.UserClause).Include(at => at.LimitsConditionsClause))
+                .If(includeText, q => q.Include(at => at.Agreement).Include(at => at.LimitsConditionsClause))
                 .SingleOrDefaultAsync();
 
             if (includeText)
@@ -57,7 +57,7 @@ namespace Prime.Services
                 .If(filters.OnlyLatest, q => q.Take(1))
                 .If(filters.Accepted == true || filters.YearAccepted.HasValue, q => q.Where(at => at.AcceptedDate.HasValue))
                 .If(filters.Accepted == false, q => q.Where(at => !at.AcceptedDate.HasValue))
-                .If(filters.IncludeText, q => q.Include(at => at.UserClause).Include(at => at.LimitsConditionsClause))
+                .If(filters.IncludeText, q => q.Include(at => at.Agreement).Include(at => at.LimitsConditionsClause))
                 .ToArrayAsync();
 
             if (filters.YearAccepted.HasValue)
@@ -81,7 +81,7 @@ namespace Prime.Services
             var accessTerm = new AccessTerm
             {
                 EnrolleeId = enrollee.Id,
-                UserClauseId = await GetCurrentAgreementIdForUserAsync(enrollee),
+                AgreementId = await GetCurrentAgreementIdForUserAsync(enrollee),
                 LimitsConditionsClause = await GenerateLimitsAndConditionsClause(enrollee.Id),
                 CreatedDate = DateTimeOffset.Now
             };
@@ -160,9 +160,9 @@ namespace Prime.Services
             }
         }
 
-        private async Task<int> FetchNewestAgreementIdOfType<T>() where T : UserClause
+        private async Task<int> FetchNewestAgreementIdOfType<T>() where T : Agreement
         {
-            return await _context.UserClauses
+            return await _context.Agreements
                 .AsNoTracking()
                 .OfType<T>()
                 .OrderByDescending(a => a.EffectiveDate)

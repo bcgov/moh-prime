@@ -73,7 +73,7 @@ namespace Prime
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
 
         public DbSet<AccessTerm> AccessTerms { get; set; }
-        public DbSet<UserClause> UserClauses { get; set; }
+        public DbSet<Agreement> Agreements { get; set; }
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
 
         public DbSet<BusinessEvent> BusinessEvents { get; set; }

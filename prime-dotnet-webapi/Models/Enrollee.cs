@@ -272,7 +272,7 @@ namespace Prime.Models
                 return false;
             }
 
-            return UserClause.NewestAgreementIds().Contains(currentAgreement.UserClauseId);
+            return Agreement.NewestAgreementIds().Contains(currentAgreement.AgreementId);
         }
 
         /// <summary>

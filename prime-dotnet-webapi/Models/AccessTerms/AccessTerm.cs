@@ -18,10 +18,10 @@ namespace Prime.Models
         public Enrollee Enrollee { get; set; }
 
         [JsonIgnore]
-        public int UserClauseId { get; set; }
+        public int AgreementId { get; set; }
 
         [JsonIgnore]
-        public UserClause UserClause { get; set; }
+        public Agreement Agreement { get; set; }
 
         [JsonIgnore]
         public int? LimitsConditionsClauseId { get; set; }
