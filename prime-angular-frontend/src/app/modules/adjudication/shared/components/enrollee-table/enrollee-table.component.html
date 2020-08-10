@@ -19,6 +19,13 @@
             *matCellDef="let row;"> {{ row.lastName }}, {{ row.firstName }} </td>
       </ng-container>
 
+      <ng-container matColumnDef="givenNames">
+        <th mat-header-cell
+            *matHeaderCellDef> Given Names </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.givenNames | default }} </td>
+      </ng-container>
+
       <ng-container matColumnDef="appliedDate">
         <th mat-header-cell
             *matHeaderCellDef> Submission Date </th>
