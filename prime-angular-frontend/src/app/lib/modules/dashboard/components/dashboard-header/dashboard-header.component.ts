@@ -19,11 +19,11 @@ export class DashboardHeaderComponent implements OnInit {
     this.logout = new EventEmitter<void>();
   }
 
-  public toggleSidenav() {
+  public toggleSidenav(): void {
     this.toggle.emit();
   }
 
-  public onLogout() {
+  public onLogout(): void {
     this.logout.emit();
   }
 
