@@ -1,7 +1,7 @@
-<app-header [isMobile]="isMobile"
-            [username]="username"
-            (toggle)="sidenav.toggle()"
-            (logout)="onLogout()"></app-header>
+<app-dashboard-header [isMobile]="isMobile"
+                      [username]="username"
+                      (toggle)="sidenav.toggle()"
+                      (logout)="onLogout()"></app-dashboard-header>
 
 <mat-sidenav-container class="prime-sidenav-container">
 
@@ -15,14 +15,14 @@
     <div class="logo">
       <img src="/assets/prime_logo.svg"
            alt="PRIME Logo"
-           [class.fixed]="!showNavItemIcons">
+           [class.fixed]="!responsiveMenuItems">
     </div>
 
-    <app-dashboard-nav [dashboardNavSections]="dashboardNavSections"
-                       [showNavItemIcons]="showNavItemIcons"
-                       [showNavItemLabels]="sideNavProps.showNavItemLabels"
-                       (route)="onRoute()"></app-dashboard-nav>
-
+    <app-dashboard-menu [dashboardMenuItems]="dashboardMenuItems"
+                        [responsiveMenuItems]="responsiveMenuItems"
+                        [showMenuItemIcons]="showMenuItemIcons"
+                        (action)="onAction($event)">
+    </app-dashboard-menu>
   </mat-sidenav>
 
   <mat-sidenav-content>
