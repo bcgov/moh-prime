@@ -6,7 +6,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subscription, EMPTY, of, noop, concat, pipe } from 'rxjs';
 import { map, exhaustMap, tap } from 'rxjs/operators';
 
-import { AbstractComponent } from '@shared/classes/abstract-component';
+import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
+
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
@@ -18,7 +19,6 @@ import {
   ClaimEnrolleeAction,
   ClaimActionEnum
 } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
-import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-data-source-utils.class';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';

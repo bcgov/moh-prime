@@ -11,24 +11,35 @@ import { ViewportService } from '@core/services/viewport.service';
 import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { DashboardNavSection } from '@shared/models/dashboard.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { AuthRoutes } from '@auth/auth.routes';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { SiteRoutes } from 'app/modules/site-registration/site-registration.routes';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+
+interface DashboardNavSectionV1 {
+  items: DashboardNavSectionItemV1[];
+}
+
+interface DashboardNavSectionItemV1 {
+  name: string;
+  route: string | (string | number)[];
+  icon?: string;
+  showItem?: boolean;
+  disabled?: boolean;
+  deemphasize?: boolean; // Reduce opacity
+  forceActive?: boolean;
+}
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  selector: 'app-dashboardv1',
+  templateUrl: './dashboardv1.component.html',
+  styleUrls: ['./dashboardv1.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardV1Component implements OnInit {
   @ViewChild('sidenav') public sideNav: MatSidenav;
 
-  public dashboardNavSections: DashboardNavSection[];
+  public dashboardNavSections: DashboardNavSectionV1[];
   public sideNavProps: {
     mode: string,
     opened: boolean,
@@ -116,19 +127,11 @@ export class DashboardComponent implements OnInit {
     this.username = `${user.firstName} ${user.lastName}`;
   }
 
-  private getSideNavSections(): DashboardNavSection[] {
-    const currentBaseRoute = this.router.url.slice(1).split('/')[0];
-    if (this.authService.hasAdminView()) {
-      return this.getAdjudicationSideNavSections();
-      // TODO use of routes creates coupling between modules
-    } else if (this.authService.isRegistrant() && currentBaseRoute === SiteRoutes.MODULE_PATH) {
-      return this.getRegistrantSideNavSections();
-    } else {
-      return this.getEnrolleeSideNavSections();
-    }
+  private getSideNavSections(): DashboardNavSectionV1[] {
+    return this.getEnrolleeSideNavSections();
   }
 
-  private getEnrolleeSideNavSections(): DashboardNavSection[] {
+  private getEnrolleeSideNavSections(): DashboardNavSectionV1[] {
     const enrolment = this.enrolmentService.enrolment;
     const enrolmentStatus = (enrolment)
       ? enrolment.currentStatus.statusCode
@@ -197,29 +200,6 @@ export class DashboardComponent implements OnInit {
       },
       {
         items: [
-          // TODO removed until the page has been implemented
-          // {
-          //   name: 'PharmaNet Transactions',
-          //   icon: (
-          //     !hasAcceptedAtLeastOneToa ||
-          //     [
-          //       EnrolmentStatus.LOCKED,
-          //       EnrolmentStatus.DECLINED
-          //     ].includes(enrolmentStatus)
-          //   )
-          //     ? 'lock'
-          //     : 'date_range',
-          //   route: EnrolmentRoutes.PHARMANET_TRANSACTIONS,
-          //   showItem: true,
-          //   disabled: (
-          //     !hasAcceptedAtLeastOneToa ||
-          //     [
-          //       EnrolmentStatus.LOCKED,
-          //       EnrolmentStatus.DECLINED
-          //     ].includes(enrolmentStatus)
-          //   ),
-          //   deemphasize: this.enrolmentService.isInitialEnrolment
-          // },
           {
             name: 'PRIME History',
             icon: (
@@ -296,42 +276,6 @@ export class DashboardComponent implements OnInit {
     }
 
     return { enrollee, accessAgreement, certificate };
-  }
-
-  private getAdjudicationSideNavSections(): DashboardNavSection[] {
-    return [
-      {
-        items: [
-          {
-            name: 'PRIME Enrollees',
-            icon: 'people',
-            route: AdjudicationRoutes.ENROLLEES,
-            showItem: true
-          },
-          {
-            name: 'Site Registrations',
-            icon: 'store',
-            route: AdjudicationRoutes.SITE_REGISTRATIONS,
-            showItem: true
-          }
-        ]
-      }
-    ];
-  }
-
-  private getRegistrantSideNavSections(): DashboardNavSection[] {
-    return [
-      {
-        items: [
-          {
-            name: 'Site Management',
-            icon: 'store',
-            route: SiteRoutes.SITE_MANAGEMENT,
-            showItem: true
-          }
-        ]
-      }
-    ];
   }
 
   private setSideNavProps(device: string) {

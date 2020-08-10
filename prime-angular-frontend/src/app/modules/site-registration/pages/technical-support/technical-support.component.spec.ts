@@ -9,7 +9,7 @@ import { MockSiteService } from 'test/mocks/mock-site.service';
 
 import { TechnicalSupportComponent } from './technical-support.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SiteService } from '@registration/shared/services/site.service';
 
 describe('TechnicalSupportComponent', () => {

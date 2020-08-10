@@ -12,8 +12,8 @@ import { CollegeCertificationFormComponent } from './college-certification-form.
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { CollegeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 

@@ -4,12 +4,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { ConfigResolver } from '@config/config-resolver';
 import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
-import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { EnrolmentRoutes } from './enrolment.routes';
 import { EnrolleeGuard } from './shared/guards/enrollee.guard';
 import { EnrolmentGuard } from './shared/guards/enrolment.guard';
+import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.component';
 
 import { OverviewComponent } from './pages/overview/overview.component';
 import { DemographicComponent } from './pages/demographic/demographic.component';
@@ -37,7 +37,7 @@ import { NotificationConfirmationComponent } from './pages/notification-confirma
 const routes: Routes = [
   {
     path: EnrolmentRoutes.MODULE_PATH,
-    component: DashboardComponent,
+    component: DashboardV1Component,
     canActivate: [UnsupportedGuard],
     canActivateChild: [
       AuthenticationGuard,
