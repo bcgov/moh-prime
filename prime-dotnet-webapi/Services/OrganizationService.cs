@@ -63,10 +63,10 @@ namespace Prime.Services
             signingAuthority = await _partyService.GetPartyForUserIdAsync(userId);
 
             var organizations = await GetOrganizationsAsync(signingAuthority.Id);
-            // if (organizations.Count() != 0)
-            // {
-            //     throw new InvalidOperationException("Could not create Organization. Only one organization can exist for a party.");
-            // }
+            if (organizations.Count() != 0)
+            {
+                throw new InvalidOperationException("Could not create Organization. Only one organization can exist for a party.");
+            }
 
             var organization = new Organization
             { SigningAuthorityId = signingAuthority.Id };
@@ -97,29 +97,9 @@ namespace Prime.Services
             this._context.Entry(currentOrganization).CurrentValues.SetValues(updatedOrganization);
             this._context.Entry(currentOrganization.SigningAuthority).CurrentValues.SetValues(updatedOrganization.SigningAuthority);
 
-            if (updatedOrganization.SigningAuthority?.PhysicalAddress != null)
-            {
-                if (currentOrganization.SigningAuthority?.PhysicalAddress == null)
-                {
-                    currentOrganization.SigningAuthority.PhysicalAddress = updatedOrganization.SigningAuthority.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(currentOrganization.SigningAuthority.PhysicalAddress).CurrentValues.SetValues(updatedOrganization.SigningAuthority.PhysicalAddress);
-                }
-            }
+            _partyService.UpdatePartyPhysicalAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority);
 
-            if (updatedOrganization.SigningAuthority?.MailingAddress != null)
-            {
-                if (currentOrganization.SigningAuthority?.MailingAddress == null)
-                {
-                    currentOrganization.SigningAuthority.MailingAddress = updatedOrganization.SigningAuthority.MailingAddress;
-                }
-                else
-                {
-                    this._context.Entry(currentOrganization.SigningAuthority.MailingAddress).CurrentValues.SetValues(updatedOrganization.SigningAuthority.MailingAddress);
-                }
-            }
+            _partyService.UpdatePartyMailingAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority);
 
             // Keep userId the same from BCSC card, do not update
             currentOrganization.SigningAuthority.UserId = userId;

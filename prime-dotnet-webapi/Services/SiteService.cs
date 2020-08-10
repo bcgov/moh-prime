@@ -152,7 +152,7 @@ namespace Prime.Services
                             this._context.Entry(currentParty).CurrentValues.SetValues(updatedParty);
                         }
 
-                        _partyService.UpdatePartyAddress(currentParty, updatedParty);
+                        _partyService.UpdatePartyPhysicalAddress(currentParty, updatedParty);
                     }
                 }
             }
