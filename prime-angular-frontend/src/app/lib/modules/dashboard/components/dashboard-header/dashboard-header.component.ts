@@ -27,5 +27,5 @@ export class DashboardHeaderComponent implements OnInit {
     this.logout.emit();
   }
 
-  public ngOnInit() { }
+  public ngOnInit(): void { }
 }
