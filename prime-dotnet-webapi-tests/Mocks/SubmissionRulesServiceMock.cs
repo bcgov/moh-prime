@@ -27,7 +27,7 @@ namespace PrimeTests.Mocks
             throw new System.NotImplementedException();
         }
 
-        public Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeProfileViewModel profileUpdate)
+        public Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate)
         {
             throw new System.NotImplementedException();
         }
