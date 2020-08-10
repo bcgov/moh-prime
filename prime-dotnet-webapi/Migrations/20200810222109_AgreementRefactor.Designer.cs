@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200808061504_AgreementRefactor")]
+    [Migration("20200810222109_AgreementRefactor")]
     partial class AgreementRefactor
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -4697,6 +4697,10 @@ namespace Prime.Migrations
                         .HasColumnType("character varying(20)")
                         .HasMaxLength(20);
 
+                    b.Property<string>("GivenNames")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("HPDID")
                         .HasColumnType("character varying(255)")
                         .HasMaxLength(255);
@@ -4716,9 +4720,6 @@ namespace Prime.Migrations
 
                     b.Property<int?>("MailingAddressId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("MiddleName")
-                        .HasColumnType("text");
 
                     b.Property<int>("PhysicalAddressId")
                         .HasColumnType("integer");
