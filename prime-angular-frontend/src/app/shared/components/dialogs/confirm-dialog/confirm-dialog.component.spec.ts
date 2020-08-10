@@ -27,7 +27,7 @@ describe('ConfirmDialogComponent', () => {
           {
             provide: MAT_DIALOG_DATA,
             useValue: {}
-          },
+          }
         ]
       }
     ).compileComponents();

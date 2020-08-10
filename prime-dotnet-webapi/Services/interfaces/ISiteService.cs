@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -11,7 +12,7 @@ namespace Prime.Services
         Task<IEnumerable<Site>> GetSitesAsync(int organizationId);
         Task<Site> GetSiteAsync(int siteId);
         Task<int> CreateSiteAsync(int organizationId);
-        Task<int> UpdateSiteAsync(int siteId, Site updatedSite, bool isCompleted = false);
+        Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite);
         Task<int> UpdateSiteCompletedAsync(int siteId);
         Task<Site> UpdatePecCode(int siteId, string pecCode);
         Task DeleteSiteAsync(int siteId);

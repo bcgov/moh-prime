@@ -9,11 +9,9 @@ import { OrganizationResource } from '@core/resources/organization-resource.serv
 import { SiteResource } from '@core/resources/site-resource.service';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
-import { User } from '@auth/shared/models/user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Party } from '@registration/shared/models/party.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';

@@ -54,7 +54,7 @@ namespace PrimeTests.UnitTests
 
 //         Task<int> CreateEnrolleeAsync(Enrollee enrollee);
 
-//         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false);
+//         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
 
 //         Task DeleteEnrolleeAsync(int enrolleeId);
 
