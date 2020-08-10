@@ -11,6 +11,8 @@ namespace Prime.Services.Clients
 
         Task<string> CreateDownloadTokenAsync(Guid documentGuid);
 
+        Task<string> CreateDownloadUrlAsync(Guid documentGuid);
+
         Task<Guid> SendFileAsync(Stream document, string filename, string destinationFolder);
 
         Task<Stream> GetFileAsync(Guid documentGuid);

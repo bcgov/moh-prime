@@ -16,6 +16,7 @@ namespace Prime.Services
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string TokenUrl { get; set; }
+        public string DocumentUrl { get; set; }
         public int MaxViews { get => EnrolmentCertificateAccessToken.MaxViews; }
         public int ExpiryDays { get => EnrolmentCertificateAccessToken.Lifespan.Days; }
         public string ProvisionerName { get; set; }
@@ -34,11 +35,9 @@ namespace Prime.Services
             ProvisionerName = provisionerName;
         }
 
-        public EmailParams(Site site)
+        public EmailParams(Site site, string documentUrl)
         {
-            // TODO what does the email body need?
-            // TODO split out into specific email params for different emails
-            // TODO if only used to render razor views then rename
+            this.DocumentUrl = documentUrl;
         }
     }
 
@@ -138,22 +137,8 @@ namespace Prime.Services
         public async Task SendSiteRegistrationAsync(Site site)
         {
             var subject = "PRIME Site Registration Submission";
-            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
-
-            Document businessLicenceDoc = null;
-            string businessLicenceTemplate = "/Views/Helpers/Document.cshtml";
-            try
-            {
-                var stream = await _documentService.GetStreamForLatestBusinessLicenceDocument(site.Id);
-                MemoryStream ms = new MemoryStream();
-                stream.CopyTo(ms);
-                businessLicenceDoc = new Document("BusinessLicence.pdf", ms.ToArray());
-            }
-            catch (NullReferenceException)
-            {
-                businessLicenceDoc = new Document("BusinessLicence.pdf", new byte[20]);
-                businessLicenceTemplate = "/Views/Helpers/ApologyDocument.cshtml";
-            }
+            var businessLicenceDocumentUrl = await this._documentService.GetDownloadUrlForBusinessLicenceDocument(site.Id);
+            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site, businessLicenceDocumentUrl));
 
             var organization = site.Organization;
             var organizationAgreementHtml = "";
@@ -186,8 +171,7 @@ namespace Prime.Services
             var attachments = new (string Filename, string HtmlContent)[]
             {
                 ("OrganizationAgreement.pdf", organizationAgreementHtml),
-                (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
-                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(businessLicenceTemplate, businessLicenceDoc))
+                (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site))
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
 

@@ -33,6 +33,14 @@ namespace Prime.Services.Clients
             return downloadToken?.token;
         }
 
+        public async Task<string> CreateDownloadUrlAsync(Guid documentGuid)
+        {
+            var response = await _client.PostAsync($"documents/{documentGuid}/download-url", null);
+            var downloadUrl = await response.Content.ReadAsAsync<DownloadUrl>();
+
+            return downloadUrl?.url;
+        }
+
         public async Task<Guid> SendFileAsync(Stream document, string filename, string destinationFolder)
         {
             var url = UploadMetadata.AsQueryStringUrl("documents", filename, destinationFolder);
@@ -75,6 +83,11 @@ namespace Prime.Services.Clients
         private class DownloadToken
         {
             public string token { get; set; }
+        }
+
+        private class DownloadUrl
+        {
+            public string url { get; set; }
         }
 
         private class DocumentResponse

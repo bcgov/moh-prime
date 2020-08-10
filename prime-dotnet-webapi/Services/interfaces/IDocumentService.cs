@@ -12,5 +12,6 @@ namespace Prime.Services
         Task<Stream> GetStreamForLatestSignedAgreementDocument(int organizationId);
 
         Task<string> GetDownloadTokenForSelfDeclarationDocument(int selfDeclarationDocumentId);
+        Task<string> GetDownloadUrlForBusinessLicenceDocument(int siteId);
     }
 }

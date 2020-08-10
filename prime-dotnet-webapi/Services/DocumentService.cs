@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +13,6 @@ namespace Prime.Services
     {
         private readonly ISiteService _siteService;
         private readonly IOrganizationService _organizationService;
-
         private readonly IDocumentManagerClient _documentManagerClient;
 
         public DocumentService(
@@ -58,5 +58,10 @@ namespace Prime.Services
             return await _documentManagerClient.CreateDownloadTokenAsync(selfDeclarationDocument.DocumentGuid);
         }
 
+        public async Task<string> GetDownloadUrlForBusinessLicenceDocument(int siteId)
+        {
+            var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
+            return await _documentManagerClient.CreateDownloadUrlAsync(licence.DocumentGuid);
+        }
     }
 }
