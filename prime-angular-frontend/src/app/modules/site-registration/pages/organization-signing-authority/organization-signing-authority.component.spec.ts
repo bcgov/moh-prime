@@ -12,7 +12,7 @@ import { OrganizationSigningAuthorityComponent } from './organization-signing-au
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { ConfigCodePipe } from '@config/config-code.pipe';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';

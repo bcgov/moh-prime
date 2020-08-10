@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { NgProgressModule } from 'ngx-progressbar';
 import { NgProgressHttpModule } from 'ngx-progressbar/http';
-
-import { ProgressConfig } from '@shared/modules/ngx-progress/ngx-progress.config';
+import { ProgressConfig } from './ngx-progress.config';
 
 @NgModule({
   imports: [
