@@ -136,7 +136,7 @@ namespace Prime.Migrations
                 columns: new[] { "Discriminator" },
                 values: new object[] { "RegulatedUserAgreement" });
 
-            #region Insert new Comunity Pharmacy Agreement
+            #region Insert new Community Pharmacy Agreement
             migrationBuilder.InsertData(
                 table: "UserClause",
                 columns: new[] { "Id", "CreatedTimeStamp", "CreatedUserId", "Discriminator", "EffectiveDate", "Text", "UpdatedTimeStamp", "UpdatedUserId" },
