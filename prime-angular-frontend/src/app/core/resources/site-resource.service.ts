@@ -162,7 +162,7 @@ export class SiteResource {
       );
   }
 
-  public updateSiteCompleted(siteId: number): NoContent {
+  public updateCompleted(siteId: number): NoContent {
     return this.apiResource.put<NoContent>(`sites/${siteId}/completed`)
       .pipe(
         // TODO remove pipe when ApiResource handles NoContent

@@ -88,7 +88,6 @@ namespace Prime.Services
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization, bool isCompleted = false)
         {
             var currentOrganization = await this.GetOrganizationAsync(organizationId);
-            var currentIsCompleted = currentOrganization.Completed;
 
             // BCSC Fields
             var userId = currentOrganization.SigningAuthority.UserId;
@@ -103,11 +102,6 @@ namespace Prime.Services
             // Keep userId the same from BCSC card, do not update
             currentOrganization.SigningAuthority.UserId = userId;
 
-            // Registration has been completed
-            currentOrganization.Completed = (isCompleted)
-                ? isCompleted
-                : currentIsCompleted;
-
             await _businessEventService.CreateOrganizationEventAsync(currentOrganization.Id, currentOrganization.SigningAuthorityId, "Organization Updated");
 
             try
@@ -118,6 +112,24 @@ namespace Prime.Services
             {
                 return 0;
             }
+        }
+
+        public async Task<int> UpdateCompletedAsync(int organizationId)
+        {
+            var organization = await this.GetBaseOrganizationQuery()
+                .SingleOrDefaultAsync(o => o.Id == organizationId);
+
+            organization.Completed = true;
+
+            this._context.Update(organization);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the organization.");
+            }
+
+            return updated;
         }
 
         public async Task DeleteOrganizationAsync(int organizationId)

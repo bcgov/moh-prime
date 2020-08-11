@@ -151,6 +151,37 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // PUT: api/Organizations/5/completed
+        /// <summary>
+        /// Updates an organizations state
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpPut("{organizationId}/completed", Name = nameof(UpdateOrganizationCompleted))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateOrganizationCompleted(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+
+            if (!User.CanEdit(party))
+            {
+                return Forbid();
+            }
+
+            await _organizationService.UpdateCompletedAsync(organizationId);
+
+            return NoContent();
+        }
+
         // DELETE: api/Organizations/5
         /// <summary>
         /// Deletes a specific Organization.

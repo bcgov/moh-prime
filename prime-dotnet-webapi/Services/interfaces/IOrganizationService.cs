@@ -13,6 +13,7 @@ namespace Prime.Services
         Task<Organization> GetOrganizationAsync(int organizationId);
         Task<int> CreateOrganizationAsync(Party signingAuthority);
         Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization, bool isCompleted = false);
+        Task<int> UpdateCompletedAsync(int organizationId);
         Task DeleteOrganizationAsync(int organizationId);
         Task<Organization> SubmitRegistrationAsync(int organizationId);
         Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);

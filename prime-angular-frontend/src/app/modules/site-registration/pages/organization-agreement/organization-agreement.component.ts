@@ -66,7 +66,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
               ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
               : EMPTY
           ),
-          exhaustMap(() => this.siteResource.updateSiteCompleted((this.route.snapshot.queryParams.siteId)))
+          exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.queryParams.siteId)))
         )
         .subscribe(() => this.nextRoute());
     }
