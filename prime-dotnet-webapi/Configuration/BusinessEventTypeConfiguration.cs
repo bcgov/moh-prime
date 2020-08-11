@@ -5,7 +5,7 @@ namespace Prime.Configuration
 {
     public class BusinessEventTypeConfiguration : SeededTable<BusinessEventType>
     {
-        public override ICollection<BusinessEventType> SeedData
+        public override IEnumerable<BusinessEventType> SeedData
         {
             get
             {

@@ -226,8 +226,8 @@ export class AdjudicationResource {
   // Access Terms
   // ---
 
-  public getAccessTerms(enrolleeId: number, year: number): Observable<AccessTerm[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ year });
+  public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<AccessTerm[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
     return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),

@@ -6,8 +6,8 @@ namespace PrimeTests.ModelFactories
 {
     public static class OrganizationTypeLookup
     {
-        private static ICollection<OrganizationType> _seedData = new OrganizationTypeConfiguration().SeedData;
+        private static IEnumerable<OrganizationType> _seedData = new OrganizationTypeConfiguration().SeedData;
 
-        public static ICollection<OrganizationType> All { get { return _seedData; } }
+        public static IEnumerable<OrganizationType> All { get { return _seedData; } }
     }
 }

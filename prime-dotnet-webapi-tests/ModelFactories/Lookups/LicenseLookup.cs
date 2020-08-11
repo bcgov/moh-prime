@@ -7,9 +7,9 @@ namespace PrimeTests.ModelFactories
 {
     public static class LicenseLookup
     {
-        private static ICollection<License> _seedData = new LicenseConfiguration().SeedData;
+        private static IEnumerable<License> _seedData = new LicenseConfiguration().SeedData;
 
-        public static ICollection<License> All { get { return _seedData; } }
+        public static IEnumerable<License> All { get { return _seedData; } }
 
         public static IEnumerable<License> AllowedFor(int collegeCode)
         {

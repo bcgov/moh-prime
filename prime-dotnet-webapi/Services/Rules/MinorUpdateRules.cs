@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using KellermanSoftware.CompareNetObjects;
 using Prime.Models;
@@ -23,30 +23,14 @@ namespace Prime.Services.Rules
     /// </summary>
     public class CurrentToaRule : MinorUpdateRule
     {
-        private readonly IAccessTermService _accessTermService;
-
-        public CurrentToaRule(IAccessTermService accessTermService)
-        {
-            _accessTermService = accessTermService;
-        }
-
-        public override async Task<bool> ProcessRule(Enrollee enrollee)
+        public override Task<bool> ProcessRule(Enrollee enrollee)
         {
             if (enrollee.AccessTerms == null)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
-            var signedToa = enrollee.AccessTerms
-                .OrderByDescending(at => at.AcceptedDate)
-                .FirstOrDefault(at => at.AcceptedDate != null);
-
-            if (signedToa == null)
-            {
-                return false;
-            }
-
-            return await _accessTermService.IsCurrentByEnrolleeAsync(enrollee);
+            return Task.FromResult(enrollee.HasLatestAgreement());
         }
     }
 
