@@ -11,6 +11,7 @@ using Prime.Services;
 using Prime.Configuration.Agreements;
 using PrimeTests.Utils;
 using PrimeTests.ModelFactories;
+using Microsoft.EntityFrameworkCore;
 
 namespace PrimeTests.UnitTests
 {
@@ -27,24 +28,27 @@ namespace PrimeTests.UnitTests
             );
         }
 
-        private void AssertAgreementGeneration(Enrollee enrollee, int expectedAgreementId, bool expectedHasLimitsClause = false)
+        private void AssertAgreementGeneration(Enrollee enrollee, int? expectedAgreementId = null, string expectedLimitsClauseText = null)
         {
-            Assert.Single(TestDb.AccessTerms.Where(at => at.EnrolleeId == enrollee.Id));
+            Assert.Single(enrollee.AccessTerms);
 
-            var accessTerm = TestDb.AccessTerms.Single(at => at.EnrolleeId == enrollee.Id);
+            var accessTerm = enrollee.AccessTerms.Single();
 
             Assert.True(accessTerm.CreatedDate > DateTimeOffset.MinValue);
             Assert.Null(accessTerm.AcceptedDate);
-            Assert.Equal(accessTerm.AgreementId, expectedAgreementId);
 
-            if (expectedHasLimitsClause)
+            if (expectedAgreementId.HasValue)
             {
-                Assert.NotNull(accessTerm.LimitsConditionsClauseId);
+                Assert.Equal(accessTerm.AgreementId, expectedAgreementId.Value);
+            }
 
+            if (expectedLimitsClauseText == null)
+            {
+                Assert.Null(accessTerm.LimitsConditionsClauseId);
             }
             else
             {
-                Assert.Null(accessTerm.LimitsConditionsClauseId);
+                Assert.Equal(accessTerm.LimitsConditionsClause.Text, expectedLimitsClauseText);
             }
         }
 
@@ -57,7 +61,9 @@ namespace PrimeTests.UnitTests
             var service = CreateService();
             var enrollee = new EnrolleeFactory().Generate();
             enrollee.EnrolleeOrganizationTypes.Single().OrganizationTypeCode = (int)careSetting;
-            enrollee.Certifications = new Certification[] { };
+            enrollee.Certifications.Clear();
+            enrollee.AccessAgreementNote = null;
+            TestDb.Has(enrollee);
 
             var expectedAgreementId = TestDb.Agreements.GetNewestIdOfType<OboAgreement>();
 
@@ -78,6 +84,9 @@ namespace PrimeTests.UnitTests
             var enrollee = new EnrolleeFactory().Generate();
             enrollee.EnrolleeOrganizationTypes.Single().OrganizationTypeCode = (int)careSetting;
             enrollee.Certifications = new CertificationFactory(enrollee).Generate(1, "default,licence.nonRegulated");
+            enrollee.AccessAgreementNote = null;
+            TestDb.Has(enrollee);
+            TestDb.Entry(enrollee.Certifications.Single()).Reference(c => c.License).Load();
 
             var expectedAgreementId = TestDb.Agreements.GetNewestIdOfType<OboAgreement>();
 
@@ -98,6 +107,9 @@ namespace PrimeTests.UnitTests
             var enrollee = new EnrolleeFactory().Generate();
             enrollee.EnrolleeOrganizationTypes.Single().OrganizationTypeCode = (int)careSetting;
             enrollee.Certifications = new CertificationFactory(enrollee).Generate(1, "default,licence.regulated");
+            enrollee.AccessAgreementNote = null;
+            TestDb.Has(enrollee);
+            TestDb.Entry(enrollee.Certifications.Single()).Reference(c => c.License).Load();
 
             int expectedAgreementId = 0;
             switch (careSetting)
@@ -115,6 +127,23 @@ namespace PrimeTests.UnitTests
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
+        }
+
+        [Fact]
+        public async void TestCreateAccessTerm_WithLimitsClause()
+        {
+            // Arrange
+            var service = CreateService();
+            var enrollee = new EnrolleeFactory().Generate();
+            var noteText = "oh dear";
+            enrollee.AccessAgreementNote = new AccessAgreementNote { Note = noteText };
+            TestDb.Has(enrollee);
+
+            // Act
+            await service.CreateEnrolleeAccessTermAsync(enrollee);
+
+            // Assert
+            AssertAgreementGeneration(enrollee, expectedLimitsClauseText: noteText);
         }
     }
 

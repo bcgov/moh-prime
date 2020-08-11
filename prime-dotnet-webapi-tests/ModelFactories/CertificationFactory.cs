@@ -1,5 +1,6 @@
 using System.Linq;
 using Bogus;
+using Prime;
 using Prime.Models;
 
 namespace PrimeTests.ModelFactories
@@ -19,33 +20,33 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.RenewalDate, f => f.Date.Future());
             RuleFor(x => x.College, f => f.PickRandom(CollegeLookup.All));
             RuleFor(x => x.CollegeCode, (f, x) => x.College.Code);
-            RuleFor(x => x.License, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode)));
-            RuleFor(x => x.Practice, (f, x) => f.PickRandom(PracticeLookup.AllowedFor(x.CollegeCode)));
-            RuleFor(x => x.PracticeCode, (f, x) => x.Practice?.Code);
+            RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode)).Code);
+            RuleFor(x => x.PracticeCode, (f, x) => f.PickRandom(PracticeLookup.AllowedFor(x.CollegeCode))?.Code);
 
-            // Finish With
-            Ignore(x => x.LicenseCode);
+            Ignore(x => x.License);
+            Ignore(x => x.Practice);
 
             RuleSet("licence.manual", (set) =>
             {
-                RuleFor(x => x.License, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.Manual)));
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.Manual)).Code);
             });
             RuleSet("licence.auto", (set) =>
             {
-                RuleFor(x => x.License, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.Manual)));
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.Manual)).Code);
             });
             RuleSet("licence.regulated", (set) =>
             {
-                RuleFor(x => x.License, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.RegulatedUser)));
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.RegulatedUser)).Code);
             });
             RuleSet("licence.nonRegulated", (set) =>
             {
-                RuleFor(x => x.License, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.RegulatedUser)));
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.RegulatedUser)).Code);
             });
 
             FinishWith((f, x) =>
             {
-                RuleFor(x => x.LicenseCode, (f, x) => x.License.Code);
+                // Clear lookup navigation properties
+                x.College = null;
             });
         }
     }
