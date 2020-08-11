@@ -35,6 +35,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             code: 1,
             name: 'College of Physicians and Surgeons of BC (CPSBC)',
             prefix: '91',
+            regulatedUser: false,
             collegeLicenses: [
               { collegeCode: 1, licenseCode: 3 },
               { collegeCode: 1, licenseCode: 2 }
@@ -50,6 +51,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             code: 2,
             name: 'College of Pharmacists of BC (CPBC)',
             prefix: 'P1',
+            regulatedUser: true,
             collegeLicenses: [
               { collegeCode: 2, licenseCode: 5 },
               { collegeCode: 2, licenseCode: 4 }
@@ -65,6 +67,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             code: 3,
             name: 'College of Registered Nurses of BC (CRNBC)',
             prefix: '96',
+            regulatedUser: false,
             collegeLicenses: [
               { collegeCode: 3, licenseCode: 5 },
               { collegeCode: 3, licenseCode: 1 }
@@ -80,6 +83,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             code: 4,
             name: 'None',
             prefix: null,
+            regulatedUser: false,
             collegeLicenses: [],
             collegePractices: []
           }
@@ -99,6 +103,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             code: 1,
             name: 'Full - General',
             weight: 1,
+            regulatedUser: false,
             collegeLicenses: [
               { collegeCode: 3, licenseCode: 1 }
             ]
@@ -107,6 +112,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             code: 2,
             name: 'Full - Pharmacist',
             weight: 2,
+            regulatedUser: false,
             collegeLicenses: [
               { collegeCode: 1, licenseCode: 2 }
             ]
@@ -115,6 +121,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             code: 3,
             name: 'Full - Specialty',
             weight: 3,
+            regulatedUser: false,
             collegeLicenses: [
               { collegeCode: 1, licenseCode: 3 }
             ]
@@ -123,6 +130,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             code: 4,
             name: 'Registered Nurse',
             weight: 4,
+            regulatedUser: false,
             collegeLicenses: [
               { collegeCode: 2, licenseCode: 4 }
             ]
@@ -131,6 +139,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             code: 5,
             name: 'Temporary Registered Nurse',
             weight: 5,
+            regulatedUser: false,
             collegeLicenses: [
               { collegeCode: 2, licenseCode: 5 },
               { collegeCode: 3, licenseCode: 5 }
@@ -220,6 +229,9 @@ export class MockConfigService extends ConfigService implements IConfigService {
         privilegeTypes: [
           { code: 1, name: 'Allowable Role' },
           { code: 2, name: 'Allowable Transaction' }
+        ],
+        vendors: [
+          { code: 1, organizationTypeCode: 1, organizationType: null, name: 'CareConnect' }
         ]
       };
 

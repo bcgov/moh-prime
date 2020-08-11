@@ -5,7 +5,7 @@ namespace Prime.Configuration
 {
     public class SelfDeclarationTypeConfiguration : SeededTable<SelfDeclarationType>
     {
-        public override ICollection<SelfDeclarationType> SeedData
+        public override IEnumerable<SelfDeclarationType> SeedData
         {
             get
             {

@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { NextStepsInfographicComponent } from './next-steps-infographic.component';
 import { SharedModule } from '@shared/shared.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
@@ -14,7 +16,9 @@ describe('NextStepsInfographicComponent', () => {
         SharedModule,
         EnrolmentModule
       ],
-      declarations: []
+      providers: [
+        KeycloakService
+      ]
     })
       .compileComponents();
   }));

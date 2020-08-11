@@ -9,6 +9,7 @@ using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
+using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
@@ -23,7 +24,6 @@ namespace Prime.Controllers
         private readonly IOrganizationService _organizationService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailService _emailService;
-
         private readonly IDocumentService _documentService;
         public SitesController(
             ISiteService siteService,
@@ -148,14 +148,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="updatedSite"></param>
-        /// <param name="isCompleted"></param>
         [HttpPut("{siteId}", Name = nameof(UpdateSite))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateSite(int siteId, Site updatedSite, [FromQuery] bool isCompleted)
+        public async Task<IActionResult> UpdateSite(int siteId, SiteUpdateModel updatedSite)
         {
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
@@ -170,7 +169,38 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _siteService.UpdateSiteAsync(siteId, updatedSite, isCompleted);
+            await _siteService.UpdateSiteAsync(siteId, updatedSite);
+
+            return NoContent();
+        }
+
+        // PUT: api/Sites/5/completed
+        /// <summary>
+        /// Updates a sites state
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPut("{siteId}/completed", Name = nameof(UpdateSiteCompleted))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateSiteCompleted(int siteId)
+        {
+            var site = await _siteService.GetSiteNoTrackingAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+
+            if (!User.CanEdit(party))
+            {
+                return Forbid();
+            }
+
+            await _siteService.UpdateSiteCompletedAsync(siteId);
 
             return NoContent();
         }

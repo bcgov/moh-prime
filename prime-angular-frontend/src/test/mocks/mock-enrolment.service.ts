@@ -21,8 +21,8 @@ export class MockEnrolmentService implements IEnrolmentService {
         id: faker.random.number(),
         userId: faker.random.uuid(),
         firstName: faker.name.firstName(),
-        middleName: faker.name.findName(),
         lastName: faker.name.lastName(),
+        givenNames: faker.name.firstName(),
         preferredFirstName: null,
         preferredMiddleName: null,
         preferredLastName: null,
@@ -43,14 +43,8 @@ export class MockEnrolmentService implements IEnrolmentService {
       deviceProviderNumber: null,
       isInsulinPumpProvider: null,
       jobs: [],
-      hasConviction: null,
-      hasConvictionDetails: null,
-      hasRegistrationSuspended: null,
-      hasRegistrationSuspendedDetails: null,
-      hasDisciplinaryAction: null,
-      hasDisciplinaryActionDetails: null,
-      hasPharmaNetSuspended: null,
-      hasPharmaNetSuspendedDetails: null,
+      selfDeclarations: [],
+      selfDeclarationDocuments: [],
       organizations: [
         {
           id: faker.random.number(),
@@ -112,8 +106,10 @@ export class MockEnrolmentService implements IEnrolmentService {
       profileCompleted: true,
       collectionNoticeAccepted: false,
       alwaysManual: false,
+      requestingRemoteAccess: false,
       adjudicatorId: null,
-      adjudicator: null
+      adjudicator: null,
+      base64QRCode: null
     });
   }
 

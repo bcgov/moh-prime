@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup, ValidatorFn, Validator, Validators, ValidationErrors } from '@angular/forms';
+import { AbstractControl, ValidatorFn, Validators, ValidationErrors } from '@angular/forms';
 
 export class FormControlValidators {
 
@@ -107,6 +107,16 @@ export class FormControlValidators {
     const regExp = /^([0-9]|([1-9][0-9])|100)(\.[\d]{0,2})?$/;
     const valid = (control.valid && regExp.test(control.value));
     return valid ? null : { percent: true };
+  }
+
+  /**
+   * @description
+   * Checks a form control is a non-zero index (eg. database record ID).
+   */
+  public static requiredIndex(control: AbstractControl): ValidationErrors | null {
+    const regExp = /^[1-9]\d*$/;
+    const valid = (control.valid && regExp.test(control.value));
+    return valid ? null : { index: true };
   }
 
   /**

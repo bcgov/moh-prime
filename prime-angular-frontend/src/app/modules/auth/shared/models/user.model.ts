@@ -3,6 +3,7 @@ export interface User {
   hpdid: string;
   firstName: string;
   lastName: string;
+  givenNames: string;
   dateOfBirth: string;
   physicalAddress: {
     countryCode: string;

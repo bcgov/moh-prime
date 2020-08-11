@@ -1,5 +1,3 @@
-import { Component } from '@angular/compiler/src/core';
-
 export interface DialogOptions {
   icon?: string;
   imageSrc?: string; // Alternative to an icon

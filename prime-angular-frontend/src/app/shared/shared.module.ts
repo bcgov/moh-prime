@@ -3,13 +3,17 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+// TODO split out all related filepond files into a /lib module ie. config and components
+import { FilePondModule, registerPlugin } from 'ngx-filepond';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+registerPlugin(FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 import { NgxMaskModule } from 'ngx-mask';
 
 import { ConfigModule } from '@config/config.module';
-import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
-import { NgxProgressModule } from '@shared/modules/ngx-progress/ngx-progress.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
+import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
@@ -27,14 +31,12 @@ import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SafePipe } from '@shared/pipes/safe.pipe';
-import { VendorPipe } from '@shared/pipes/vendor.pipe';
+import { AddressPipe } from '@shared/pipes/address.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import {
   EnrolmentStatusReasonsComponent
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
-import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
-import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { ProgressIndicator2Component } from './components/progress-indicator2/progress-indicator2.component';
@@ -66,16 +68,13 @@ import { ManualFlagNoteComponent } from './components/dialogs/content/manual-fla
 import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
 import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
-import { SiteReviewComponent } from './components/site/site-review/site-review.component';
 import { PartyReviewComponent } from './components/site/party-review/party-review.component';
 import { DocumentUploadComponent } from './components/document-upload/document-upload/document-upload.component';
-// TODO split out all related filepond files into a /lib module ie. config and components
-import { FilePondModule, registerPlugin } from 'ngx-filepond';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-registerPlugin(FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 import { OrganizationReviewComponent } from './components/organization-review/organization-review.component';
 import { ImageComponent } from './components/dialogs/content/image/image.component';
+import { OverviewSectionComponent } from './components/overview-section/overview-section.component';
+import { OverviewContainerComponent } from './components/site/overview-container/overview-container.component';
+
 @NgModule({
   declarations: [
     CapitalizePipe,
@@ -93,18 +92,21 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     FullnamePipe,
     SafeHtmlPipe,
     SafePipe,
-    VendorPipe,
     CasePipe,
+    AddressPipe,
     AddressComponent,
-    DashboardComponent,
     ConfirmDialogComponent,
     EnrolmentStatusReasonsComponent,
-    HeaderComponent,
     PageComponent,
+    ProgressIndicator2Component,
     PageHeaderComponent,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,
+    PageSubheader2Component,
+    PageSubheader2TitleDirective,
+    PageSubheader2SummaryDirective,
+    PageSubheader2MoreInfoDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
@@ -127,16 +129,12 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     ImageComponent,
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
-    SiteReviewComponent,
     PartyReviewComponent,
-    ProgressIndicator2Component,
-    PageSubheader2Component,
-    PageSubheader2TitleDirective,
-    PageSubheader2SummaryDirective,
-    PageSubheader2MoreInfoDirective,
     DocumentUploadComponent,
     OrganizationReviewComponent,
-    ImageComponent
+    ImageComponent,
+    OverviewSectionComponent,
+    OverviewContainerComponent
   ],
   imports: [
     CommonModule,
@@ -146,7 +144,6 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     NgxContextualHelpModule,
     NgxMaskModule.forRoot(),
     NgxMaterialModule,
-    NgxProgressModule,
     FilePondModule,
     ReactiveFormsModule
   ],
@@ -157,7 +154,6 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     NgxContextualHelpModule,
     NgxMaterialModule,
     NgxMaskModule,
-    NgxProgressModule,
     ReactiveFormsModule,
     CapitalizePipe,
     CasePipe,
@@ -175,11 +171,9 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     FullnamePipe,
     SafeHtmlPipe,
     SafePipe,
-    VendorPipe,
+    AddressPipe,
     AddressComponent,
-    DashboardComponent,
     EnrolmentStatusReasonsComponent,
-    HeaderComponent,
     PageComponent,
     PageHeaderComponent,
     ProgressIndicator2Component,
@@ -205,10 +199,15 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
     AccessTermComponent,
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
-    SiteReviewComponent,
     PartyReviewComponent,
     DocumentUploadComponent,
     OrganizationReviewComponent,
+    OverviewSectionComponent,
+    OverviewContainerComponent
+  ],
+  providers: [
+    FullnamePipe,
+    AddressPipe
   ]
 })
 export class SharedModule { }

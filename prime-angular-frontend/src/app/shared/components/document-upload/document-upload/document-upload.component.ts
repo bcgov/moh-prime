@@ -1,15 +1,19 @@
 import { Component, OnInit, ViewChild, Input, Output } from '@angular/core';
-import { FilePondComponent } from 'ngx-filepond/filepond.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SiteService } from '@registration/shared/services/site.service';
-import { SiteResource } from '@registration/shared/services/site-resource.service';
-import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
+import { EventEmitter } from '@angular/core';
+
+import { FilePondComponent } from 'ngx-filepond/filepond.component';
+import tus from 'tus-js-client';
+
+import { environment } from '@env/environment';
+
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { environment } from '@env/environment';
-import tus from 'tus-js-client';
-import { EventEmitter } from '@angular/core';
+import { SiteResource } from '@core/resources/site-resource.service';
+
+import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
+import { SiteService } from '@registration/shared/services/site.service';
 
 export class BaseDocument {
   id: number;
