@@ -1,4 +1,7 @@
 import { NgModule } from '@angular/core';
+
+import { NgxProgressModule } from '@lib/modules/ngx-progress/ngx-progress.module';
+
 import { SharedModule } from '@shared/shared.module';
 
 import { EnrolmentRoutingModule } from './enrolment-routing.module';
@@ -27,6 +30,8 @@ import { JobFormComponent } from './shared/components/job-form/job-form.componen
 import { EnrolleePageComponent } from './shared/components/enrollee-page/enrollee-page.component';
 import { NextStepsInfographicComponent } from './shared/components/next-steps-infographic/next-steps-infographic.component';
 import { EnrolmentCollectionNoticeComponent } from './shared/components/enrolment-collection-notice/enrolment-collection-notice.component';
+import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.component';
+import { HeaderComponent } from './shared/components/header/header.component';
 import {
   EnrolmentProgressIndicatorComponent
 } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
@@ -36,6 +41,8 @@ import { ProgressIndicatorComponent } from './shared/components/progress-indicat
 
 @NgModule({
   declarations: [
+    DashboardV1Component,
+    HeaderComponent,
     CollectionNoticeComponent,
     DemographicComponent,
     RegulatoryComponent,
@@ -65,7 +72,8 @@ import { ProgressIndicatorComponent } from './shared/components/progress-indicat
   ],
   imports: [
     SharedModule,
-    EnrolmentRoutingModule
+    EnrolmentRoutingModule,
+    NgxProgressModule
   ]
 })
 export class EnrolmentModule { }

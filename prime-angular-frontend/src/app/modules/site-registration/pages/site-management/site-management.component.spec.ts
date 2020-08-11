@@ -12,7 +12,7 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { SiteManagementComponent } from './site-management.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { ConfigCodePipe } from '@config/config-code.pipe';

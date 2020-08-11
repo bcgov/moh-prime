@@ -4,6 +4,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { SiteRegistrationRoutingModule } from './site-registration-routing.module';
 
+import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
 import { BusinessHoursModule } from '@lib/modules/business-hours/business-hours.module';
 
 import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
@@ -59,8 +60,9 @@ import { OverviewComponent } from './pages/overview/overview.component';
     OverviewComponent
   ],
   imports: [
-    SharedModule,
     SiteRegistrationRoutingModule,
+    SharedModule,
+    DashboardModule,
     BusinessHoursModule
   ],
 })
