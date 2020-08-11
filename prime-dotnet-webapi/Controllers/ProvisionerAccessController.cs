@@ -10,7 +10,6 @@ using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
-using Newtonsoft.Json;
 
 namespace Prime.Controllers
 {
@@ -185,7 +184,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<string>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<GpidValidationResponse>), StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> ValidateGpid(string gpid, GpidValidationParameters parameters)
         {
             if (parameters == null)
