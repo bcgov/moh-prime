@@ -141,7 +141,7 @@ namespace Prime.Services
         {
             var subject = "PRIME Site Registration Submission";
             var businessLicenceDoc = await _siteService.GetLatestBusinessLicenceAsync(site.Id);
-            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessToken(businessLicenceDoc.DocumentGuid);
+            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicenceDoc.DocumentGuid);
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site, documentAccessToken.FrontendUrl));
 
             var organization = site.Organization;
