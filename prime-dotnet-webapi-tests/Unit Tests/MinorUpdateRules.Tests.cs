@@ -153,7 +153,7 @@ namespace PrimeTests.UnitTests
 
             if (isObo)
             {
-                enrollee.Certifications = new Certification[] { };
+                enrollee.Certifications.Clear();
             }
             else
             {
