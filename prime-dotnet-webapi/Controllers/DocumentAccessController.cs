@@ -81,21 +81,5 @@ namespace Prime.Controllers
 
             return Ok(ApiResponse.Result(document));
         }
-
-        //         var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-        //             if (enrollee == null)
-        //             {
-        //                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
-        //             }
-
-        //             if (!User.CanEdit(enrollee))
-        //             {
-        //                 return Forbid();
-        // }
-
-        // await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
-
-        // return Ok(ApiResponse.Result(enrollee));
     }
 }
