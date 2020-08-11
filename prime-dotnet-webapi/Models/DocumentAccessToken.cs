@@ -16,7 +16,7 @@ namespace Prime.Models
         [NotMapped]
         public string FrontendUrl
         {
-            get => $"{PrimeConstants.FRONTEND_URL}/file-download/{Id}";
+            get => $"{PrimeConstants.FRONTEND_URL}/document-access/file-download/{Id}";
         }
     }
 }
