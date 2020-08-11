@@ -16,7 +16,12 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<DocumentAccessToken> CreateDocumentAccessToken(Guid documentGuid)
+        public async Task<DocumentAccessToken> GetDocumentAccessAsync(Guid documentAccessTokenId)
+        {
+            return await _context.DocumentAccessToken.SingleOrDefaultAsync(e => e.Id == documentAccessTokenId);
+        }
+
+        public async Task<DocumentAccessToken> CreateDocumentAccessTokenAsync(Guid documentGuid)
         {
             var documentAccessToken = new DocumentAccessToken { DocumentGuid = documentGuid };
             _context.Add(documentAccessToken);
@@ -29,7 +34,7 @@ namespace Prime.Services
             return documentAccessToken;
         }
 
-        public async Task DeleteDocumentAccessToken(Guid documentAccessTokenId)
+        public async Task DeleteDocumentAccessTokenAsync(Guid documentAccessTokenId)
         {
             var documentAccessToken = await _context.DocumentAccessToken.SingleOrDefaultAsync(e => e.Id == documentAccessTokenId);
 
@@ -39,11 +44,7 @@ namespace Prime.Services
             }
 
             _context.DocumentAccessToken.Remove(documentAccessToken);
-
-            if (await _context.SaveChangesAsync() < 1)
-            {
-                throw new InvalidOperationException("Could not delete Document Access Token.");
-            }
+            await _context.SaveChangesAsync();
         }
     }
 }
