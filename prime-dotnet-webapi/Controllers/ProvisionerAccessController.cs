@@ -181,21 +181,26 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("gpids/{gpid}/validate", Name = nameof(ValidateGpid))]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<string>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> ValidateGpid(string gpid, GpidValidationParameters parameters)
         {
-            // var t = 1;
-            // // var result = await _enrolleeService.HpdidLookupAsync(hpdid);
+            if (parameters == null)
+            {
+                return BadRequest(ApiResponse.Message($"Must supply validation parameters"));
+            }
 
-            // return Ok(ApiResponse.Result(new GpidValidationResponse
-            // {
-            //     Key = "ttt"
-            // }));
-            throw new NotImplementedException();
+            var response = await _enrolleeService.ValidateProvisionerDataAsync(gpid, parameters);
+
+            if (response == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with GPID {gpid}"));
+            }
+
+            return Ok(ApiResponse.Result(response));
         }
     }
 }
