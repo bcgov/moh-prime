@@ -39,7 +39,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'Location Name';
+    this.title = 'Site Address';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
 
     this.formControlNames = [
