@@ -36,6 +36,7 @@ export class MockKeycloakTokenService implements Token {
       hpdid: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
+      givenNames: faker.name.firstName(),
       dateOfBirth: faker.date.past().toISOString(),
       physicalAddress: {
         countryCode: faker.address.countryCode(),
