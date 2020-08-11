@@ -20,5 +20,10 @@ namespace Prime.Models
 
         [JsonIgnore]
         public OrganizationType OrganizationType { get; set; }
+
+        public bool IsType(CareSettingType type)
+        {
+            return OrganizationTypeCode == (int)type;
+        }
     }
 }

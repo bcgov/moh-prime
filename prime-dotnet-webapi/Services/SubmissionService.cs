@@ -59,7 +59,6 @@ namespace Prime.Services
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeOrganizationTypes)
                 .Include(e => e.AccessTerms)
-                    .ThenInclude(at => at.UserClause)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             bool minorUpdate = await _submissionRulesService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
@@ -147,7 +146,7 @@ namespace Prime.Services
             if (accept)
             {
                 await SetGpid(enrollee);
-                await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
+                await _accessTermService.AcceptCurrentAccessTermAsync(enrollee.Id);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
 
@@ -187,7 +186,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Declined);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
-            await _accessTermService.ExpireCurrentAccessTermAsync(enrollee);
+            await _accessTermService.ExpireCurrentAccessTermAsync(enrollee.Id);
         }
 
         private async Task EnableProfileAsync(Enrollee enrollee)

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Prime;
 using Prime.Models;
 using Prime.Configuration;
+using Prime.Configuration.Agreements;
 
 namespace PrimeTests.Utils
 {
@@ -44,11 +45,8 @@ namespace PrimeTests.Utils
             TestDb.AddRange(new CollegePracticeConfiguration().SeedData);
             TestDb.AddRange(new CountryConfiguration().SeedData);
             TestDb.AddRange(new DefaultPrivilegeConfiguration().SeedData);
-            TestDb.AddRange(new GlobalClauseConfiguration().SeedData);
             TestDb.AddRange(new JobNameConfiguration().SeedData);
             TestDb.AddRange(new LicenseConfiguration().SeedData);
-            TestDb.AddRange(new LicenseClassClauseConfiguration().SeedData);
-            TestDb.AddRange(new LicenseClassClauseMappingConfiguration().SeedData);
             TestDb.AddRange(new OrganizationTypeConfiguration().SeedData);
             TestDb.AddRange(new PracticeConfiguration().SeedData);
             TestDb.AddRange(new PrivilegeConfiguration().SeedData);
@@ -59,14 +57,7 @@ namespace PrimeTests.Utils
             TestDb.AddRange(new StatusReasonConfiguration().SeedData);
             TestDb.AddRange(new VendorConfiguration().SeedData);
 
-            // Dont import the user class clause resources
-            DateTime SEEDING_DATE = new DateTime(2019, 9, 16);
-            TestDb.AddRange(new[]{
-                new UserClause { Id = 1, Clause = "oboClause1", EnrolleeClassification = PrimeConstants.PRIME_OBO, EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                new UserClause { Id = 2, Clause = "ruClause1", EnrolleeClassification = PrimeConstants.PRIME_RU, EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                new UserClause { Id = 3, Clause = "oboClause2", EnrolleeClassification = PrimeConstants.PRIME_OBO, EffectiveDate = DateTimeOffset.Parse("2020-03-05 00:00:00"), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                new UserClause { Id = 4, Clause = "ruClause2", EnrolleeClassification = PrimeConstants.PRIME_RU, EffectiveDate = DateTimeOffset.Parse("2020-03-05 00:00:00"), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-            });
+            TestDb.AddRange(AgreementConfiguration.SeedData);
 
             TestDb.SaveChanges();
         }
