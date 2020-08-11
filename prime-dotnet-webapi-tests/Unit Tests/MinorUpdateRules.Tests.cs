@@ -9,6 +9,7 @@ using Prime.Models;
 using Prime.ViewModels;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
+using PrimeTests.ModelFactories;
 
 namespace PrimeTests.UnitTests
 {
@@ -38,6 +39,7 @@ namespace PrimeTests.UnitTests
             {
                 new AccessTerm
                 {
+                    AcceptedDate = DateTimeOffset.Now,
                     ExpiryDate = expiryDate
                 }
             };
@@ -145,25 +147,17 @@ namespace PrimeTests.UnitTests
         [Theory(Skip = "Awaiting test refactor")]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        [InlineData(null, false)]
-        public async void testAllowableChangesRule_Jobs(bool? isObo, bool expected)
+        public async void testAllowableChangesRule_Jobs(bool isObo, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            // Set the enrollee's user class via the access term
-            if (isObo.HasValue)
+
+            if (isObo)
             {
-                enrollee.AccessTerms = new[]
-                {
-                    new AccessTerm
-                    {
-                        AcceptedDate = DateTimeOffset.Now,
-                        UserClause = new UserClause { EnrolleeClassification = isObo == true ? PrimeConstants.PRIME_OBO : PrimeConstants.PRIME_RU }
-                    }
-                };
+                enrollee.Certifications = new Certification[] { };
             }
             else
             {
-                enrollee.AccessTerms = new AccessTerm[] { };
+                enrollee.Certifications = new CertificationFactory(enrollee).Generate(1);
             }
 
             // New job

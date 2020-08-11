@@ -14,11 +14,13 @@ namespace PrimeTests.UnitTests
     public class AccessTermServiceTests : InMemoryDbTest
     {
         public AccessTermService CreateService(
-            IHttpContextAccessor httpContext = null)
+            IHttpContextAccessor httpContext = null,
+            IRazorConverterService razorConverterService = null)
         {
             return new AccessTermService(
                 TestDb,
-                httpContext ?? A.Fake<IHttpContextAccessor>()
+                httpContext ?? A.Fake<IHttpContextAccessor>(),
+                razorConverterService ?? A.Fake<IRazorConverterService>()
             );
         }
     }
