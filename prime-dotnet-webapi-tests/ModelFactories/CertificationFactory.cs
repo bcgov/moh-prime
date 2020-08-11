@@ -1,6 +1,5 @@
 using System.Linq;
 using Bogus;
-using Prime;
 using Prime.Models;
 
 namespace PrimeTests.ModelFactories

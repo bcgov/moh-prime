@@ -5,13 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Xunit;
 using FakeItEasy;
 
-using Prime;
 using Prime.Models;
 using Prime.Services;
-using Prime.Configuration.Agreements;
 using PrimeTests.Utils;
 using PrimeTests.ModelFactories;
-using Microsoft.EntityFrameworkCore;
 
 namespace PrimeTests.UnitTests
 {
