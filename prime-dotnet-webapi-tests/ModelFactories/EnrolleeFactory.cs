@@ -53,7 +53,6 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.isAdminView, f => true);
             RuleFor(x => x.RequestingRemoteAccess, f => false);
             // TODO: fix these ignores
-            Ignore(x => x.CurrentTOAStatus);
             Ignore(x => x.AccessTerms);
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
