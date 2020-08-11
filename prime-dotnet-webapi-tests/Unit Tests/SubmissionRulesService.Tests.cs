@@ -16,14 +16,12 @@ namespace PrimeTests.UnitTests
     {
         public SubmissionRulesService CreateService(
             IHttpContextAccessor httpContext = null,
-            ICollegeLicenceClient collegeLicenceClient = null,
-            IAccessTermService accessTermService = null)
+            ICollegeLicenceClient collegeLicenceClient = null)
         {
             return new SubmissionRulesService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
-                collegeLicenceClient ?? A.Fake<ICollegeLicenceClient>(),
-                accessTermService ?? A.Fake<IAccessTermService>()
+                collegeLicenceClient ?? A.Fake<ICollegeLicenceClient>()
             );
         }
 
@@ -57,5 +55,5 @@ namespace PrimeTests.UnitTests
 //     {
 //         Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee);
 
-//         Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeProfileViewModel profileUpdate);
+//         Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate);
 //     }

@@ -22,7 +22,6 @@ namespace PrimeTests.Services
             new SubmissionRulesServiceMock(),
             new EmailServiceMock(),
             new PrivilegeServiceMock(),
-            new AccessTermServiceMock(),
             new EnrolleeProfileVersionServiceMock(),
             new BusinessEventServiceMock()
         })
@@ -195,7 +194,7 @@ namespace PrimeTests.Services
             TestUtils.DetachAllEntities(_dbContext);
 
             // update the enrollee through the service layer code
-            EnrolleeProfileViewModel enrolleeProfile = new EnrolleeProfileViewModel
+            EnrolleeUpdateModel enrolleeProfile = new EnrolleeUpdateModel
             {
                 PreferredFirstName = expectedName
             };

@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { HoursOperationComponent } from './hours-operation.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
 describe('HoursOperationComponent', () => {
   let component: HoursOperationComponent;

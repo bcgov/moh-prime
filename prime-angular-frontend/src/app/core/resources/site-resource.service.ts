@@ -131,7 +131,7 @@ export class SiteResource {
       );
   }
 
-  public updateSite(site: Site, isCompleted?: boolean): NoContent {
+  public updateSite(site: Site): NoContent {
     // TODO separate this out into a proper adapter
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
@@ -148,8 +148,7 @@ export class SiteResource {
       site.businessHours = null;
     }
 
-    const params = this.apiResourceUtilsService.makeHttpParams({ isCompleted });
-    return this.apiResource.put<NoContent>(`sites/${site.id}`, site, params)
+    return this.apiResource.put<NoContent>(`sites/${site.id}`, site)
       .pipe(
         // TODO remove pipe when ApiResource handles NoContent
         map(() => {

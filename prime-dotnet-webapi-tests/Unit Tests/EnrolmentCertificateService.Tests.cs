@@ -26,30 +26,11 @@ namespace PrimeTests.UnitTests
             );
         }
 
-        public EnrolmentCertificateService CreateWithMocks(Enrollee enrollee)
-        {
-            var accessTermServiceFake = A.Fake<IAccessTermService>();
-            A.CallTo(() => accessTermServiceFake.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrollee.Id))
-                .Returns(new AccessTerm
-                {
-                    AcceptedDate = DateTimeOffset.Now
-                });
-
-            var versionServiceFake = A.Fake<IEnrolleeProfileVersionService>();
-            A.CallTo(() => versionServiceFake.GetEnrolleeProfileVersionBeforeDateAsync(enrollee.Id, A<DateTimeOffset>.Ignored))
-                .Returns(new EnrolleeProfileVersion
-                {
-                    ProfileSnapshot = JObject.FromObject(enrollee),
-                });
-
-            return CreateService(null);
-        }
-
         [Fact]
         public async void testHappyPathCertificateAccess()
         {
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
-            var service = CreateWithMocks(enrollee);
+            var service = CreateService();
 
             EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
             Assert.NotNull(token);
@@ -85,7 +66,7 @@ namespace PrimeTests.UnitTests
             TimeSpan tokenLifespan = TimeSpan.FromDays(7);
             TimeSpan tolerance = TimeSpan.FromSeconds(1);
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
-            var service = CreateWithMocks(enrollee);
+            var service = CreateService();
 
             EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
             Assert.NotNull(token);

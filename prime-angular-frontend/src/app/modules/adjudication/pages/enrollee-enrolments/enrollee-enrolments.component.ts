@@ -57,7 +57,7 @@ export class EnrolleeEnrolmentsComponent implements OnInit {
 
   private getAccessTerms(year: number = null) {
     const enrolleeId = this.route.snapshot.params.id;
-    this.busy = this.adjudicationResource.getAccessTerms(enrolleeId, year)
+    this.busy = this.adjudicationResource.getAcceptedAccessTermsByYear(enrolleeId, year)
       .subscribe((accessTerms: AccessTerm[]) => this.accessTerms = accessTerms);
   }
 

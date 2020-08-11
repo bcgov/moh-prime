@@ -1,0 +1,52 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+// NOTE: mat-sidenav is modified globally
+// @see ./scss/material/components/_mat-sidenav.scss
+
+.prime-sidenav-container {
+  position: absolute;
+  // Compensate for the application header, and the
+  // progress indicator for HTTP requests and routing
+  top: 73px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+// Apply minimum amount of spacing to hold the sidenav
+// open when there is no content
+@mixin logo-spacing($width: 90px) {
+  width: $width;
+  margin-left: $width / 2;
+  margin-right: $width / 2;
+}
+
+.logo {
+  $width-small: 40px;
+  $width-large: 90px;
+
+  text-align: center;
+
+  img {
+    margin: 3em 0 3.5em;
+    height: auto;
+    @include logo-spacing($width-small);
+
+    // Override the default size regardless of viewport size
+    // to match the large breakpoint size of the logo
+    &.fixed {
+      @include logo-spacing($width-large);
+    }
+
+    @include media-breakpoint-up(lg) {
+      @include logo-spacing($width-large);
+    }
+  }
+}
+
+@media print {
+  .mat-sidenav-content {
+    margin-left: 0 !important;
+  }
+}

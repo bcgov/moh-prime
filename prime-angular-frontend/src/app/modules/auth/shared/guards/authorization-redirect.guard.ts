@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
-import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({

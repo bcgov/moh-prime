@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared/shared.module';
 
+import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
+
 import { AuthRoutingModule } from './auth-routing.module';
 import { AuthComponent } from './shared/components/auth/auth.component';
 import { InfoComponent } from './pages/info/info.component';
@@ -18,8 +20,9 @@ import { SiteComponent } from './pages/site/site.component';
     SiteComponent
   ],
   imports: [
+    AuthRoutingModule,
     SharedModule,
-    AuthRoutingModule
+    DashboardModule
   ]
 })
 export class AuthModule { }

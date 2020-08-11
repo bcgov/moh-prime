@@ -11,7 +11,7 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { AddressComponent } from './address.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 
 describe('AddressComponent', () => {
