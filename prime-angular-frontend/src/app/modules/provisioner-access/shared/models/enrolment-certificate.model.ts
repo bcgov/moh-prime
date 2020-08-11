@@ -3,7 +3,6 @@ import { Config } from '@config/config.model';
 export interface EnrolmentCertificate {
   // TODO duplicate of EnrolleeProfile
   firstName: string;
-  middleName: string;
   lastName: string;
   preferredFirstName: string;
   preferredMiddleName: string;

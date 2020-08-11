@@ -12,16 +12,13 @@ namespace Prime.Services
     public class SubmissionRulesService : BaseService, ISubmissionRulesService
     {
         private readonly ICollegeLicenceClient _collegeLicenceClient;
-        private readonly IAccessTermService _accessTermService;
 
         public SubmissionRulesService(
             ApiDbContext context, IHttpContextAccessor httpContext,
-            ICollegeLicenceClient collegeLicenceClient,
-            IAccessTermService accessTermService)
+            ICollegeLicenceClient collegeLicenceClient)
             : base(context, httpContext)
         {
             _collegeLicenceClient = collegeLicenceClient;
-            _accessTermService = accessTermService;
         }
 
         /// <summary>
@@ -51,12 +48,12 @@ namespace Prime.Services
         /// All rules must pass for an update to be considered minor enough to not warrant going through the (Auto) adjudication proccess.
         /// These rules will not alter the enrollee object.
         /// </summary>
-        public async Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeProfileViewModel profileUpdate)
+        public async Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate)
         {
             var rules = new List<MinorUpdateRule>
             {
                 new DateRule(),
-                new CurrentToaRule(_accessTermService),
+                new CurrentToaRule(),
                 new AllowableChangesRule(profileUpdate)
             };
 

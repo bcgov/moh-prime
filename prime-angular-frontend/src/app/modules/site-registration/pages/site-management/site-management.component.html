@@ -1,0 +1,155 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+
+  <app-site-collection-notice [isFull]="false"></app-site-collection-notice>
+
+  <div *ngIf="hasSubmittedSite"
+       class="alert-message">
+    <app-alert type="success">
+      <ng-container #alertContent
+                    class="alert-content">
+        You have accepted the Organization Agreement for PharmaNet Use. Your application has been submitted for
+        adjudication. The Ministry of Health will contact you once your site has been approved.
+        <strong>Questions: Health Insurance BC at 1-844-397-7463 (toll free)</strong>
+      </ng-container>
+    </app-alert>
+  </div>
+
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Use this management page to update your information or to add multiple sites.
+        <em class="emphasize">
+          A site is the combination of one physical location and one PharmaNet software vendor.
+        </em>
+      </ng-container>
+    </app-page-subheader2>
+  </section>
+
+  <ng-container *ngFor="let organization of organizations">
+
+    <mat-card class="has-hover">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon color="primary">business</mat-icon>
+        </div>
+        <mat-card-title>Organization Information</mat-card-title>
+        <ng-container [ngTemplateOutlet]="organizationMenu"
+                      [ngTemplateOutletContext]="{ organization: organization }"></ng-container>
+      </mat-card-header>
+      <mat-card-content>
+        <ng-container *ngFor="let prop of getOrganizationProperties(organization)"
+                      [ngTemplateOutlet]="property"
+                      [ngTemplateOutletContext]="{ property: prop }">
+        </ng-container>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-stroked-button
+                type="button"
+                color="primary"
+                [disabled]="!organization.acceptedAgreementDate"
+                (click)="viewAgreement(organization)">
+          View/Print Agreement
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <hr class="divider">
+
+    <div class="add-site">
+      <button mat-button
+              type="button"
+              color="primary"
+              [disabled]="!organization.completed"
+              (click)="addSite(organization.id)">
+        <mat-icon>add</mat-icon>
+        Add Site
+      </button>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngFor="let site of sites">
+
+    <mat-card class="has-hover">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <mat-icon color="primary">store</mat-icon>
+        </div>
+        <mat-card-title>Site Information</mat-card-title>
+        <ng-container [ngTemplateOutlet]="siteMenu"
+                      [ngTemplateOutletContext]="{ site: site }"></ng-container>
+      </mat-card-header>
+      <mat-card-content>
+        <ng-container *ngFor="let prop of getSiteProperties(site)"
+                      [ngTemplateOutlet]="property"
+                      [ngTemplateOutletContext]="{ property: prop }">
+        </ng-container>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-stroked-button
+                type="button"
+                color="primary"
+                [disabled]="!site.completed"
+                (click)="viewSiteRemoteUsers(site)">
+          Update Remote Practitioners
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+  </ng-container>
+
+  <ng-template #property
+               let-property="property">
+    <div>
+      <strong>{{ property.key }}</strong>
+      {{ property.value | default }}
+    </div>
+  </ng-template>
+
+  <ng-template #organizationMenu
+               let-organization="organization">
+    <button mat-icon-button
+            [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu"
+              aria-label="Organization actions menu">
+      <button mat-menu-item
+              (click)="viewOrganization(organization)">
+        <span>View/Update Organization</span>
+      </button>
+      <button mat-menu-item
+              [disabled]="!organization.acceptedAgreementDate"
+              (click)="viewAgreement(organization)">
+        <span>View/Print Agreement</span>
+      </button>
+    </mat-menu>
+  </ng-template>
+
+  <ng-template #siteMenu
+               let-site="site">
+    <button mat-icon-button
+            [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu"
+              aria-label="Site actions menu">
+      <button mat-menu-item
+              (click)="viewSite(site)">
+        <span>View/Update Site Information</span>
+      </button>
+      <button mat-menu-item
+              [disabled]="!site.completed"
+              (click)="viewSiteRemoteUsers(site)">
+        <span>View/Update Remote Practitioners</span>
+      </button>
+    </mat-menu>
+
+  </ng-template>
+
+</app-page>

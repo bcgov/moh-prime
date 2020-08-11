@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { EditorModule } from '@tinymce/tinymce-angular';
 
+import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
+
 import { SharedModule } from '@shared/shared.module';
 
 import { AdjudicationRoutingModule } from './adjudication-routing.module';
@@ -19,16 +21,17 @@ import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/en
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
 import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
 import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
+import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
+import { AdjudicationDashboardComponent } from './shared/components/adjudication-dashboard/adjudication-dashboard.component';
+import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
-import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 import {
   ReviewStatusContentComponent
 } from './shared/components/review-status-content/review-status-content.component';
 import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
 import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
 import { SiteRegistrationActionsComponent } from './shared/components/site-registration-actions/site-registration-actions.component';
-import { AdminOrganizationInformationComponent } from './pages/admin-organization-information/admin-organization-information.component';
 
 @NgModule({
   declarations: [
@@ -53,12 +56,14 @@ import { AdminOrganizationInformationComponent } from './pages/admin-organizatio
     SiteRegistrationTableComponent,
     SiteRegistrationActionsComponent,
     SiteAdjudicationComponent,
-    AdminOrganizationInformationComponent
+    OrganizationInformationComponent,
+    AdjudicationDashboardComponent
   ],
   imports: [
+    AdjudicationRoutingModule,
     SharedModule,
-    EditorModule,
-    AdjudicationRoutingModule
+    DashboardModule,
+    EditorModule
   ]
 })
 export class AdjudicationModule { }

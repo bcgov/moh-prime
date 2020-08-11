@@ -87,7 +87,7 @@ export class EnrolmentStateService {
    * @description
    * Get the enrolment as JSON for submission.
    */
-  public get enrolment() {
+  public get enrolment(): Enrolment {
     const id = this.enrolleeId;
     const userId = this.userId;
 

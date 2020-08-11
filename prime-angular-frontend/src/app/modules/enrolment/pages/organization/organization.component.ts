@@ -10,16 +10,18 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { EnrolleeUtilsService } from '@core/services/enrollee-utils.service';
+import { UtilsService } from '@core/services/utils.service';
+import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
+
+import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Organization } from '@enrolment/shared/models/organization.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { UtilsService } from '@core/services/utils.service';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
-import { EnrolleeUtilsService } from '@core/services/enrollee-utils.service';
 
 @Component({
   selector: 'app-organization',
@@ -61,17 +63,18 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
 
   public disableOrganization(organizationTypeCode: number): boolean {
     if (this.authService.isCommunityPharmacist()) {
-      // If feature flagged enable "Community Practice" & "Community Pharmacist"
-      return !(organizationTypeCode === OrganizationTypeEnum.COMMUNITY_PRACTICE
+      // If feature flagged enable "Private Community Health Practice" & "Community Pharmacist"
+      return !(organizationTypeCode === OrganizationTypeEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
         || organizationTypeCode === OrganizationTypeEnum.COMMUNITY_PHARMACIST);
     }
-    // Omit organizations types that are not "Community Practices" for ComPap
-    return (organizationTypeCode !== OrganizationTypeEnum.COMMUNITY_PRACTICE);
+    // Omit organizations types that are not "Private Community Health Practices" for ComPap
+    return (organizationTypeCode !== OrganizationTypeEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
   }
 
   public showRemoteAccess(): boolean {
     const enrolment = this.enrolmentStateService.enrolment;
-    return this.enrolleeUtilsService.isRegulatedUser(enrolment);
+    const isPharmacist = enrolment.certifications.some(c => c.collegeCode === CollegeLicenceClass.CPBC);
+    return this.enrolleeUtilsService.isRegulatedUser(enrolment) && !isPharmacist;
   }
 
   public removeOrganization(index: number) {

@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 
+import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
+
 import { SharedModule } from '@shared/shared.module';
 
 import { ProvisionerAccessRoutingModule } from '@certificate/provisioner-access-routing.module';
@@ -12,8 +14,9 @@ import { ProvisionerAccessComponent } from '@certificate/shared/components/provi
     ProvisionerAccessComponent
   ],
   imports: [
+    ProvisionerAccessRoutingModule,
     SharedModule,
-    ProvisionerAccessRoutingModule
+    DashboardModule
   ]
 })
 export class ProvisionerAccessModule { }

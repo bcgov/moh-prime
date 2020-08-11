@@ -2,9 +2,9 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <app-registrant-profile-form [title]="title"
-                               [form]="form"
-                               (submit)="onSubmit()">
+  <app-party-profile-form [title]="title"
+                          [form]="form"
+                          (submit)="onSubmit()">
 
     <app-same-as selectFor="administratorPharmaNet"
                  (selected)="onSelect($event)">
@@ -18,14 +18,18 @@
     </app-same-as>
 
     <ng-container appPageSubheader2Summary>
-      Sets up individual PharmaNet access accounts at the location or requests setups by the software vendor. They may
-      be the location’s office administrator, HR lead, operational manager, medical office assistant (MOA), a
-      practitioner, or the software vendor. May also be the Signing Authority.
+      Directly sets up individual PharmaNet access accounts at a site or has the authority to request accounts from the
+      site's PharmaNet software vendor. May be the Signing Authority.
     </ng-container>
-  </app-registrant-profile-form>
+    <ng-container appPageSubheader2MoreInfo>
+      The PharmaNet Administrator could be the site's administrator, manager, HR lead, medical office assistant (MOA), a
+      practitioner, software vendor, etc.
+    </ng-container>
+  </app-party-profile-form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"
+                   primaryActionLabel="Save and Continue"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>
 

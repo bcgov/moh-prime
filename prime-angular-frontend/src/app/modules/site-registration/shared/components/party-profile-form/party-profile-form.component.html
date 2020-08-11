@@ -1,0 +1,130 @@
+<form [formGroup]="form"
+      novalidate>
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <!-- Work around for ngProjectAs not passing directive reference to subheader2 when applied to ng-content -->
+      <ng-container appPageSubheader2Summary>
+        <ng-content select="[appPageSubheader2Summary]"></ng-content>
+      </ng-container>
+      <ng-container appPageSubheader2MoreInfo>
+        <ng-content select="[appPageSubheader2MoreInfo]"></ng-content>
+      </ng-container>
+    </app-page-subheader2>
+
+    <ng-content select="app-same-as"></ng-content>
+
+    <div class="row">
+      <div class="col-12">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="First Name"
+                 formControlName="firstName">
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col-12">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Last Name"
+                 formControlName="lastName">
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col-12">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Job or Role Title"
+                 formControlName="jobRoleTitle">
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }} Contact Information</ng-container>
+    </app-page-subheader2>
+
+    <div class="row">
+      <div class="col-12">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Phone"
+                 formControlName="phone"
+                 mask="(000) 000-0000"
+                 [showMaskTyped]="false">
+          <mat-error *ngIf="phone.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="phone.hasError('phone')">Must be a valid phone number</mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col-12">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Fax"
+                 formControlName="fax"
+                 mask="(000) 000-0000"
+                 [showMaskTyped]="false">
+          <mat-error *ngIf="fax.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="fax.hasError('phone')">Must be a valid phone number</mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col-12">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="SMS Phone"
+                 formControlName="smsPhone"
+                 mask="(000) 000-0000"
+                 [showMaskTyped]="false">
+          <mat-error *ngIf="smsPhone.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="smsPhone.hasError('phone')">Must be a valid phone number</mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col-12">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Email"
+                 formControlName="email">
+          <mat-error *ngIf="email.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+    <mat-slide-toggle class="mb-3"
+                      color="primary"
+                      [checked]="hasPhysicalAddress"
+                      (change)="onPhysicalAddressChange($event)">
+      The {{ title }}'s mailing address is different from this site’s address
+    </mat-slide-toggle>
+  </section>
+
+  <ng-container *ngIf="hasPhysicalAddress">
+
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>My Address</ng-container>
+      </app-page-subheader2>
+
+      <app-address [form]="physicalAddress"></app-address>
+    </section>
+
+  </ng-container>
+
+</form>

@@ -226,8 +226,8 @@ export class AdjudicationResource {
   // Access Terms
   // ---
 
-  public getAccessTerms(enrolleeId: number, year: number): Observable<AccessTerm[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ year });
+  public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<AccessTerm[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
     return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
@@ -385,13 +385,44 @@ export class AdjudicationResource {
     return enrollee;
   }
 
-  private enrolleeVersionAdapterResponse():
-    ({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion) => HttpEnrolleeProfileVersion {
-    return ({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion) => ({
-      id,
-      enrolleeId,
-      profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
-      createdDate
-    });
+  private enrolleeVersionAdapterResponse(): (enrolleeProfileVersion: HttpEnrolleeProfileVersion) => HttpEnrolleeProfileVersion {
+    return ({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion) => {
+      // Compensate for updates to the current enrolment model
+      // that don't match enrolment versioning
+      this.enrolleeVersionSnapshotAdapter(profileSnapshot);
+
+      return {
+        id,
+        enrolleeId,
+        profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+        createdDate
+      };
+    };
+  }
+
+  private enrolleeVersionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
+    // Key index aligns with SelfDeclarationTypeEnum
+    const selfDeclarations = {
+      hasConviction: 'Has Conviction',
+      hasRegistrationSuspended: 'Has Registration Suspended',
+      hasDisciplinaryAction: 'Has Disciplinary Action',
+      hasPharmaNetSuspended: 'Has PharmaNet Suspended'
+    };
+    const keys = Object.keys(selfDeclarations);
+
+    if (keys.every((key: string) => profileSnapshot.hasOwnProperty(key))) {
+      profileSnapshot.selfDeclarations = [];
+      keys.map((key: string, index: number) => {
+        if (profileSnapshot[key]) {
+          profileSnapshot.selfDeclarations.push({
+            selfDeclarationDetails: profileSnapshot[`${key}Details`],
+            selfDeclarationTypeCode: index + 1
+          });
+        }
+
+        delete profileSnapshot[key];
+        delete profileSnapshot[`${key}Details`];
+      });
+    }
   }
 }

@@ -2,9 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AuthComponent } from './auth.component';
-import { HeaderComponent } from '@shared/components/header/header.component';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { NgxProgressModule } from '@shared/modules/ngx-progress/ngx-progress.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { NgxProgressModule } from '@lib/modules/ngx-progress/ngx-progress.module';
+import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
 
 describe('AuthComponent', () => {
   let component: AuthComponent;
@@ -13,14 +13,14 @@ describe('AuthComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule(
       {
+        declarations: [
+          AuthComponent
+        ],
         imports: [
+          RouterTestingModule,
           NgxMaterialModule,
           NgxProgressModule,
-          RouterTestingModule
-        ],
-        declarations: [
-          AuthComponent,
-          HeaderComponent
+          DashboardModule
         ]
       }
     ).compileComponents();
