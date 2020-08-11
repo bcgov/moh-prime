@@ -28,12 +28,6 @@ namespace Prime.Services
             _documentManagerClient = documentManagerClient;
         }
 
-        public async Task<Stream> GetDocumentByAccessToken(Guid accessToken)
-        {
-            var documentAccessToken = await _context.DocumentAccessToken.SingleOrDefaultAsync(dat => dat.Id == accessToken);
-            return await _documentManagerClient.GetFileAsync(documentAccessToken.DocumentGuid);
-        }
-
         public async Task<string> GetDownloadTokenForLatestBusinessLicenceDocument(int siteId)
         {
             var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
@@ -46,6 +40,13 @@ namespace Prime.Services
             return await _documentManagerClient.CreateDownloadTokenAsync(agreement.DocumentGuid);
         }
 
+        public async Task<string> GetDownloadTokenForSelfDeclarationDocument(int selfDeclarationDocumentId)
+        {
+            var selfDeclarationDocument = await _context.SelfDeclarationDocuments
+                .Where(sa => sa.Id == selfDeclarationDocumentId).SingleAsync();
+            return await _documentManagerClient.CreateDownloadTokenAsync(selfDeclarationDocument.DocumentGuid);
+        }
+
         public async Task<Stream> GetStreamForLatestBusinessLicenceDocument(int siteId)
         {
             var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
@@ -56,13 +57,6 @@ namespace Prime.Services
         {
             var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
             return await _documentManagerClient.GetFileAsync(agreement.DocumentGuid);
-        }
-
-        public async Task<string> GetDownloadTokenForSelfDeclarationDocument(int selfDeclarationDocumentId)
-        {
-            var selfDeclarationDocument = await _context.SelfDeclarationDocuments
-                .Where(sa => sa.Id == selfDeclarationDocumentId).SingleAsync();
-            return await _documentManagerClient.CreateDownloadTokenAsync(selfDeclarationDocument.DocumentGuid);
         }
     }
 }
