@@ -7,9 +7,9 @@ namespace PrimeTests.ModelFactories
 {
     public static class StatusReasonLookup
     {
-        private static ICollection<StatusReason> _seedData = new StatusReasonConfiguration().SeedData;
+        private static IEnumerable<StatusReason> _seedData = new StatusReasonConfiguration().SeedData;
 
-        public static ICollection<StatusReason> All { get { return _seedData; } }
+        public static IEnumerable<StatusReason> All { get { return _seedData; } }
 
         public static IEnumerable<StatusReason> ManualReasons
         {

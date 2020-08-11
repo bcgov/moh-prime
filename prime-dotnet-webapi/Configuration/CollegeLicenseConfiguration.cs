@@ -6,7 +6,7 @@ namespace Prime.Configuration
 {
     public class CollegeLicenseConfiguration : SeededTable<CollegeLicense>
     {
-        public override ICollection<CollegeLicense> SeedData
+        public override IEnumerable<CollegeLicense> SeedData
         {
             get
             {

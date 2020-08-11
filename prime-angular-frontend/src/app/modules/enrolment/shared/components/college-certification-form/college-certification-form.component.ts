@@ -117,7 +117,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private loadLicenses(collegeCode: number) {
     this.filteredLicenses = this.filterLicenses(collegeCode);
-    this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
+    this.licensePrefix = this.colleges.find(c => c.code === collegeCode).prefix;
     this.licenseCode.patchValue(this.licenseCode.value || null);
   }
 
