@@ -174,6 +174,18 @@ export class SiteResource {
       );
   }
 
+  public sendRemoteUsersEmail(siteId: number): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email`)
+      .pipe(
+        map(() => { }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Remote users update email could not be sent');
+          this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmail error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
     const payload = { data: pecCode };
     return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
