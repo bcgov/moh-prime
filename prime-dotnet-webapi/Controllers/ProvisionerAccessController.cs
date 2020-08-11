@@ -185,7 +185,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<GpidValidationResponse>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> ValidateGpid(string gpid, GpidValidationParameters parameters)
+        public async Task<ActionResult<GpidValidationResponse>> ValidateGpid(string gpid, GpidValidationParameters parameters)
         {
             if (parameters == null)
             {

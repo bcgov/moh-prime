@@ -27,7 +27,14 @@ namespace Prime.Models.Api
 
         public class CollegeRecord
         {
+            /// <summary>
+            /// The two-character College Prefix, such as "P1" for the College of Pharmacists of BC
+            /// </summary>
             public string CollegeName { get; set; }
+
+            /// <summary>
+            /// The Licence Number, typically 5 digits.
+            /// </summary>
             public string CollegeId { get; set; }
 
             public bool Equals(Certification cert)
