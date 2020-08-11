@@ -104,11 +104,11 @@ export class RemoteUserComponent implements OnInit {
     }
   }
 
-  public onAdd() {
+  public addLocation() {
     this.addRemoteUserLocation();
   }
 
-  public onRemove(index: number) {
+  public removeLocation(index: number) {
     this.remoteUserLocations.removeAt(index);
 
     if (!this.remoteUserLocations.controls.length) {

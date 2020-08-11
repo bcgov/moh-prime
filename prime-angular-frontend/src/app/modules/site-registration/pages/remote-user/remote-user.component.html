@@ -84,7 +84,7 @@
       <ng-container [formGroup]="remoteUserLocation">
 
         <app-form-icon-group [show]="true"
-                             (event)="onRemove(i)">
+                             (event)="removeLocation(i)">
 
           <section [class.mb-4]="!last">
             <div class="row">
@@ -114,7 +114,7 @@
             type="button"
             color="primary"
             class="mb-3"
-            (click)="onAdd()">
+            (click)="addLocation()">
       <mat-icon class="add-icon">add</mat-icon>
       Add Remote Address
     </button>
