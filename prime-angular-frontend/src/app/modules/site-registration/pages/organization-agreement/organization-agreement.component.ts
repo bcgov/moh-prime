@@ -95,7 +95,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public onBack() {
     const siteId = this.route.snapshot.queryParams.siteId;
     if (siteId) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
+      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.REMOTE_USERS]);
     } else {
       this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
     }
