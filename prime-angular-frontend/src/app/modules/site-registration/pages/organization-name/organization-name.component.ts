@@ -74,8 +74,11 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
       const organizationId = this.route.snapshot.params.oid;
       const payload = this.organizationFormStateService.json;
       this.organizationResource
-        .updateOrganization(payload, true)
+        .updateOrganization(payload)
         .pipe(
+          exhaustMap(() =>
+            this.organizationResource.updateCompleted(organizationId)
+          ),
           exhaustMap(
             // Check the organization wasn't completed before the update, and
             // if not then this is the initial registration wizard

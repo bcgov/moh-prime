@@ -200,7 +200,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _siteService.UpdateSiteCompletedAsync(siteId);
+            await _siteService.UpdateCompletedAsync(siteId);
 
             return NoContent();
         }

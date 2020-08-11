@@ -70,7 +70,7 @@ export class RemoteUsersComponent implements OnInit {
           ),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
             return hasSignedOrgAgreement
-              ? this.siteResource.updateSiteCompleted(this.siteService.site.id)
+              ? this.siteResource.updateCompleted(this.siteService.site.id)
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
           }),
