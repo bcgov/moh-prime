@@ -1,0 +1,34 @@
+---
+name: Bump tag on push to master
+
+# Bump version up automatically for the master branch via `git tag`. This action
+# is based on semantic versioning (i.e. v[major].[minor].[patch]) system. To use, 
+# add either of the following to a commit message:
+#   - #major
+#   - #minor
+#   - #patch
+# The action is set by default to automatically bump #minor, so ensure that your
+# commit message contains the above prior to pushing any merge commit into master.
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+    # Leveraging @anothrNick/github-tag-action GitHub action: https://github.com/marketplace/actions/github-tag-bump 
+    - name: Bump version and push tag
+      uses: anothrNick/github-tag-action@1.26.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEFAULT_BUMP: minor
+        WITH_V: true
+        RELEASE_BRANCHES: master
+        
+
