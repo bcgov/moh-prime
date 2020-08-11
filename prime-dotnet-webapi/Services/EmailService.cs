@@ -133,13 +133,35 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
 
-        // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
-        // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
         public async Task SendSiteRegistrationAsync(Site site)
         {
             var subject = "PRIME Site Registration Submission";
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
 
+            string registrationReviewFilename = "SiteRegistrationReview.pdf";
+
+            var attachments = await getSiteRegistrationAttachments(site);
+
+            await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
+
+            var siteRegReviewPdf = attachments.Single(a => a.Filename == registrationReviewFilename).Content;
+            await SaveSiteRegistrationReview(site.Id, registrationReviewFilename, siteRegReviewPdf);
+        }
+
+        public async Task SendRemoteUsersUpdatedAsync(Site site)
+        {
+            var subject = "Remote Practioners added";
+            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/UpdateRemoteUsersEmail.cshtml", site);
+
+            var attachments = await getSiteRegistrationAttachments(site);
+
+            await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
+        }
+
+        // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
+        // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
+        private async Task<IEnumerable<(string Filename, byte[] Content)>> getSiteRegistrationAttachments(Site site)
+        {
             Document businessLicenceDoc = null;
             string businessLicenceTemplate = "/Views/Helpers/Document.cshtml";
             try
@@ -183,18 +205,13 @@ namespace Prime.Services
 
             string registrationReviewFilename = "SiteRegistrationReview.pdf";
 
-            var attachments = new (string Filename, string HtmlContent)[]
+            return new (string Filename, string HtmlContent)[]
             {
                 ("OrganizationAgreement.pdf", organizationAgreementHtml),
                 (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
                 ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(businessLicenceTemplate, businessLicenceDoc))
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
-
-            await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
-
-            var siteRegReviewPdf = attachments.Single(a => a.Filename == registrationReviewFilename).Content;
-            await SaveSiteRegistrationReview(site.Id, registrationReviewFilename, siteRegReviewPdf);
         }
 
         private async Task SaveSiteRegistrationReview(int siteId, string filename, byte[] pdf)
