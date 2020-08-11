@@ -76,7 +76,7 @@ namespace Prime.Models.Api
                 return null;
             }
 
-            if (HasZeroRecords(records))
+            if (HasNoData(records))
             {
                 return "not-available";
             }
@@ -103,7 +103,7 @@ namespace Prime.Models.Api
                 return null;
             }
 
-            if (HasZeroRecords(records))
+            if (HasNoData(records))
             {
                 return "not-available";
             }
@@ -112,7 +112,7 @@ namespace Prime.Models.Api
                 .ToString().ToLower();
         }
 
-        private bool HasZeroRecords<T>(IEnumerable<T> records)
+        private bool HasNoData<T>(IEnumerable<T> records)
         {
             return records == null || !records.Any() || records.All(r => r == null);
         }
