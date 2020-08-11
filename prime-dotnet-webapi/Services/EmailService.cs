@@ -51,11 +51,10 @@ namespace Prime.Services
         private readonly IPdfService _pdfService;
         private readonly IOrganizationService _organizationService;
         private readonly IChesClient _chesClient;
-
         private readonly ISmtpEmailClient _smtpEmailClient;
-
         private readonly IDocumentManagerClient _documentManagerClient;
-
+        private readonly IDocumentAccessTokenService _documentAccessTokenService;
+        private readonly ISiteService _siteService;
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
@@ -65,7 +64,9 @@ namespace Prime.Services
             IOrganizationService organizationService,
             IChesClient chesClient,
             ISmtpEmailClient smtpEmailClient,
-            IDocumentManagerClient documentManagerClient)
+            IDocumentManagerClient documentManagerClient,
+            IDocumentAccessTokenService documentAccessTokenService,
+            ISiteService siteService)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
@@ -74,7 +75,9 @@ namespace Prime.Services
             _organizationService = organizationService;
             _chesClient = chesClient;
             _documentManagerClient = documentManagerClient;
+            _documentAccessTokenService = documentAccessTokenService;
             _smtpEmailClient = smtpEmailClient;
+            _siteService = siteService;
         }
 
         public static bool IsValidEmail(string email)
@@ -137,8 +140,9 @@ namespace Prime.Services
         public async Task SendSiteRegistrationAsync(Site site)
         {
             var subject = "PRIME Site Registration Submission";
-            var businessLicenceDocumentUrl = await this._documentService.GetDownloadUrlForBusinessLicenceDocument(site.Id);
-            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site, businessLicenceDocumentUrl));
+            var businessLicenceDoc = await _siteService.GetLatestBusinessLicenceAsync(site.Id);
+            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessToken(businessLicenceDoc.DocumentGuid);
+            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site, documentAccessToken.FrontendUrl));
 
             var organization = site.Organization;
             var organizationAgreementHtml = "";

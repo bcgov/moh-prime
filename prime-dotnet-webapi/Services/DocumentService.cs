@@ -28,6 +28,12 @@ namespace Prime.Services
             _documentManagerClient = documentManagerClient;
         }
 
+        public async Task<Stream> GetDocumentByAccessToken(Guid accessToken)
+        {
+            var documentAccessToken = await _context.DocumentAccessToken.SingleOrDefaultAsync(dat => dat.Id == accessToken);
+            return await _documentManagerClient.GetFileAsync(documentAccessToken.DocumentGuid);
+        }
+
         public async Task<string> GetDownloadTokenForLatestBusinessLicenceDocument(int siteId)
         {
             var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
@@ -45,6 +51,7 @@ namespace Prime.Services
             var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
             return await _documentManagerClient.GetFileAsync(licence.DocumentGuid);
         }
+
         public async Task<Stream> GetStreamForLatestSignedAgreementDocument(int organizationId)
         {
             var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
@@ -56,12 +63,6 @@ namespace Prime.Services
             var selfDeclarationDocument = await _context.SelfDeclarationDocuments
                 .Where(sa => sa.Id == selfDeclarationDocumentId).SingleAsync();
             return await _documentManagerClient.CreateDownloadTokenAsync(selfDeclarationDocument.DocumentGuid);
-        }
-
-        public async Task<string> GetDownloadUrlForBusinessLicenceDocument(int siteId)
-        {
-            var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
-            return await _documentManagerClient.CreateDownloadUrlAsync(licence.DocumentGuid);
         }
     }
 }
