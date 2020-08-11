@@ -85,7 +85,7 @@ namespace Prime.Services
             return organization.Id;
         }
 
-        public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization, bool isCompleted = false)
+        public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
             var currentOrganization = await this.GetOrganizationAsync(organizationId);
 

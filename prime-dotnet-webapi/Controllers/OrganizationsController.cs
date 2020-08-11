@@ -124,14 +124,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="updatedOrganization"></param>
-        /// <param name="isCompleted"></param>
         [HttpPut("{organizationId}", Name = nameof(UpdateOrganization))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateOrganization(int organizationId, OrganizationUpdateModel updatedOrganization, [FromQuery] bool isCompleted)
+        public async Task<IActionResult> UpdateOrganization(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
@@ -146,7 +145,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _organizationService.UpdateOrganizationAsync(organizationId, updatedOrganization, isCompleted);
+            await _organizationService.UpdateOrganizationAsync(organizationId, updatedOrganization);
 
             return NoContent();
         }
