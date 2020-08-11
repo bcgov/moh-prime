@@ -60,23 +60,6 @@ export class RemoteUserComponent implements OnInit {
       .map((certification: RemoteUserCertification) => +certification.collegeCode);
   }
 
-  public addCertification() {
-    const remoteUserCertification = this.siteFormStateService.remoteUserCertificationFormGroup();
-    this.remoteUserCertifications.push(remoteUserCertification);
-  }
-
-  /**
-   * @description
-   * Removes a certification from the list in response to an
-   * emitted event from college certifications. Does not allow
-   * the list of certifications to empty.
-   *
-   * @param index to be removed
-   */
-  public removeCertification(index: number) {
-    this.remoteUserCertifications.removeAt(index);
-  }
-
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
 
@@ -131,6 +114,23 @@ export class RemoteUserComponent implements OnInit {
     if (!this.remoteUserLocations.controls.length) {
       this.addRemoteUserLocation();
     }
+  }
+
+  public addCertification() {
+    const remoteUserCertification = this.siteFormStateService.remoteUserCertificationFormGroup();
+    this.remoteUserCertifications.push(remoteUserCertification);
+  }
+
+  /**
+   * @description
+   * Removes a certification from the list in response to an
+   * emitted event from college certifications. Does not allow
+   * the list of certifications to empty.
+   *
+   * @param index to be removed
+   */
+  public removeCertification(index: number) {
+    this.remoteUserCertifications.removeAt(index);
   }
 
   public onBack() {
