@@ -20,8 +20,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public index: number;
   @Input() public total: number;
   @Input() public selectedColleges: number[];
-  @Output() public remove: EventEmitter<number>;
   @Input() public condensed: boolean;
+  @Output() public remove: EventEmitter<number>;
 
   public colleges: CollegeConfig[];
   public licenses: LicenseConfig[];
