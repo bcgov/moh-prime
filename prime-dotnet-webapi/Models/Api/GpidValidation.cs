@@ -30,57 +30,91 @@ namespace Prime.Models.Api
             public string CollegeName { get; set; }
             public string CollegeId { get; set; }
 
-            public bool Equals(CollegeRecord other)
+            public bool Equals(Certification cert)
             {
-                if (other == null)
+                if (CollegeName == null || CollegeId == null || cert == null)
                 {
                     return false;
                 }
 
-                return CollegeName == other.CollegeName
-                    && CollegeId == other.CollegeId;
+                return CollegeName.Equals(cert.College.Prefix, StringComparison.OrdinalIgnoreCase)
+                    && CollegeId.Equals(cert.LicenseNumber, StringComparison.OrdinalIgnoreCase);
             }
         }
 
         public GpidValidationResponse ValidateAgainst(Enrollee enrollee)
         {
-            var enrolleeCerts = enrollee.Certifications.Select(c => new CollegeRecord
+            if (enrollee == null
+                || enrollee.Certifications == null
+                || enrollee.Certifications.Any(cert => cert.College == null))
             {
-                CollegeName = c.College.Prefix,
-                CollegeId = c.LicenseNumber
-            });
+                throw new ArgumentException("Could not validate against enrollee; enrollee or certs were null");
+            }
 
             return new GpidValidationResponse
             {
-                FirstName = Match(FirstName, enrollee.FirstName),
-                LastName = Match(LastName, enrollee.LastName),
-                DateOfBirth = Match(DateOfBirth?.Date, enrollee.DateOfBirth.Date),
-                Email = Match(Email, enrollee.ContactEmail),
-                Phone = Match(Phone, enrollee.VoicePhone),
-                PhoneExtension = Match(PhoneExtension, enrollee.VoiceExtension),
-                MobilePhone = Match(MobilePhone, enrollee.ContactPhone),
-                CollegeRecords = CollegeRecords.Select(record => new GpidValidationResponse.CollegeRecordResponse
+                FirstName = MatchAny(FirstName, enrollee.FirstName, enrollee.PreferredFirstName),
+                LastName = MatchAny(LastName, enrollee.LastName, enrollee.PreferredLastName),
+                DateOfBirth = MatchDate(DateOfBirth, enrollee.DateOfBirth),
+                Email = MatchAny(Email, enrollee.ContactEmail),
+                Phone = MatchAny(Phone, enrollee.VoicePhone),
+                PhoneExtension = MatchAny(PhoneExtension, enrollee.VoiceExtension),
+                MobilePhone = MatchAny(MobilePhone, enrollee.ContactPhone),
+                CollegeRecords = CollegeRecords?.Select(record => new GpidValidationResponse.CollegeRecordResponse
                 {
                     CollegeName = record.CollegeName,
                     CollegeId = record.CollegeId,
-                    Match = enrolleeCerts.Any(cer => cer.Equals(record)) ? "yes" : "no"
+                    Match = MatchAny(record, enrollee.Certifications)
                 })
             };
         }
 
-        private string Match<T>(T query, T record)
+        private string MatchAny(string query, params string[] records)
         {
             if (query == null)
             {
                 return null;
             }
 
-            if (record == null)
+            if (HasZeroRecords(records))
             {
                 return "not-available";
             }
 
-            return query.Equals(record) ? "yes" : "no";
+            return records.Any(record => query.Equals(record, StringComparison.OrdinalIgnoreCase))
+                .ToString().ToLower();
+        }
+
+        private string MatchDate(DateTime? query, DateTime record)
+        {
+            if (!query.HasValue)
+            {
+                return null;
+            }
+
+            return query.Value.Date.Equals(record.Date)
+                .ToString().ToLower();
+        }
+
+        private string MatchAny(CollegeRecord query, IEnumerable<Certification> records)
+        {
+            if (query == null)
+            {
+                return null;
+            }
+
+            if (HasZeroRecords(records))
+            {
+                return "not-available";
+            }
+
+            return records.Any(cert => query.Equals(cert))
+                .ToString().ToLower();
+        }
+
+        private bool HasZeroRecords<T>(IEnumerable<T> records)
+        {
+            return records == null || !records.Any() || records.All(r => r == null);
         }
     }
 
