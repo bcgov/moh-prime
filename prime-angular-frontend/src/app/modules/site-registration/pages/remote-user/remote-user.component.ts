@@ -222,7 +222,7 @@ export class RemoteUserComponent implements OnInit {
         }
       });
 
-    // Always have a single cerfication available, and it prevents
+    // Always have a single certification available, and it prevents
     // the page from jumping too much when routing
     if (!noEmptyCert && !this.remoteUserCertifications.controls.length) {
       this.addCertification();
