@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -84,11 +85,9 @@ namespace Prime.Services
             return organization.Id;
         }
 
-        public async Task<int> UpdateOrganizationAsync(int organizationId, Organization updatedOrganization, bool isCompleted = false)
+        public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization, bool isCompleted = false)
         {
             var currentOrganization = await this.GetOrganizationAsync(organizationId);
-            var acceptedAgreementDate = currentOrganization.AcceptedAgreementDate;
-            var submittedDate = currentOrganization.SubmittedDate;
             var currentIsCompleted = currentOrganization.Completed;
 
             // BCSC Fields
@@ -103,10 +102,6 @@ namespace Prime.Services
 
             // Keep userId the same from BCSC card, do not update
             currentOrganization.SigningAuthority.UserId = userId;
-
-            // Managed through separate API endpoint, and should never be updated
-            currentOrganization.AcceptedAgreementDate = acceptedAgreementDate;
-            currentOrganization.SubmittedDate = submittedDate;
 
             // Registration has been completed
             currentOrganization.Completed = (isCompleted)

@@ -12,6 +12,7 @@ using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
+using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
@@ -130,7 +131,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateOrganization(int organizationId, Organization updatedOrganization, [FromQuery] bool isCompleted)
+        public async Task<IActionResult> UpdateOrganization(int organizationId, OrganizationUpdateModel updatedOrganization, [FromQuery] bool isCompleted)
         {
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
