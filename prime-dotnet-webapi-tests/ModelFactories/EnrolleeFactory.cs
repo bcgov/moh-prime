@@ -20,7 +20,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.UserId, f => Guid.NewGuid());
             RuleFor(x => x.FirstName, f => f.Name.FirstName());
             RuleFor(x => x.LastName, f => f.Name.LastName());
-            RuleFor(x => x.GivenNames, f => f.Name.FirstName());
+            RuleFor(x => x.GivenNames, (f, x) => $"{x.FirstName} {f.Name.FirstName()}");
             RuleFor(x => x.PreferredFirstName, f => f.Name.FirstName().OrNull(f));
             RuleFor(x => x.PreferredMiddleName, (f, x) => x.PreferredFirstName == null ? null : f.Name.FirstName());
             RuleFor(x => x.PreferredLastName, (f, x) => x.PreferredFirstName == null ? null : f.Name.LastName());
