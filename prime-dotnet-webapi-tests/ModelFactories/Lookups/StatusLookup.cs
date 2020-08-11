@@ -7,9 +7,9 @@ namespace PrimeTests.ModelFactories
 {
     public static class StatusLookup
     {
-        private static ICollection<Status> _seedData = new StatusConfiguration().SeedData;
+        private static IEnumerable<Status> _seedData = new StatusConfiguration().SeedData;
 
-        public static ICollection<Status> All { get { return _seedData; } }
+        public static IEnumerable<Status> All { get { return _seedData; } }
 
         public static Status ByCode(int statusCode)
         {

@@ -10,7 +10,7 @@ namespace Prime.Configuration
 {
     public class PrivilegeConfiguration : SeededTable<Privilege>
     {
-        public override ICollection<Privilege> SeedData
+        public override IEnumerable<Privilege> SeedData
         {
             get
             {

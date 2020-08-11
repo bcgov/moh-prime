@@ -7,9 +7,9 @@ namespace PrimeTests.ModelFactories
 {
     public static class PracticeLookup
     {
-        private static ICollection<Practice> _seedData = new PracticeConfiguration().SeedData;
+        private static IEnumerable<Practice> _seedData = new PracticeConfiguration().SeedData;
 
-        public static ICollection<Practice> All { get { return _seedData; } }
+        public static IEnumerable<Practice> All { get { return _seedData; } }
 
         public static IEnumerable<Practice> AllowedFor(int collegeCode)
         {

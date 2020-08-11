@@ -14,6 +14,7 @@ namespace PrimeTests
             var serialized = JsonConvert.SerializeObject(enrollee);
             EnrolleeUpdateModel profile = JsonConvert.DeserializeObject<EnrolleeUpdateModel>(serialized);
             profile.IdentityAssuranceLevel = enrollee.IdentityAssuranceLevel;
+            profile.IdentityProvider = enrollee.IdentityProvider;
             return profile;
         }
     }
