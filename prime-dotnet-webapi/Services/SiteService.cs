@@ -152,7 +152,7 @@ namespace Prime.Services
                             this._context.Entry(currentParty).CurrentValues.SetValues(updatedParty);
                         }
 
-                        _partyService.UpdatePartyAddress(currentParty, updatedParty);
+                        _partyService.UpdatePartyPhysicalAddress(currentParty, updatedParty);
                     }
                 }
             }
@@ -271,7 +271,7 @@ namespace Prime.Services
             }
         }
 
-        public async Task<int> UpdateSiteCompletedAsync(int siteId)
+        public async Task<int> UpdateCompletedAsync(int siteId)
         {
             var site = await this.GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
