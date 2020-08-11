@@ -35,6 +35,37 @@
 
         </div>
       </div>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3"
+             formArrayName="remoteUserCertifications">
+
+          <ng-container *ngFor="let certificate of remoteUserCertifications.controls; let i = index;"
+                        [formGroupName]="i">
+
+            <app-college-certification-form [form]="certificate"
+                                            [index]="i"
+                                            [total]="remoteUserCertifications.controls.length"
+                                            [selectedColleges]="selectedCollegeCodes"
+                                            (remove)="removeCertification($event)"
+                                            [condensed]="true">
+            </app-college-certification-form>
+
+          </ng-container>
+
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="addCertification()">
+            <mat-icon>add</mat-icon>
+            Add Additional Licences
+          </button>
+
+        </div>
+      </div>
+
+
+
     </section>
 
     <app-page-subheader2>
