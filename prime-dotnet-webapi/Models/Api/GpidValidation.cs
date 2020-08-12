@@ -85,11 +85,12 @@ namespace Prime.Models.Api
 
             if (HasNoData(records))
             {
-                return "not-available";
+                return GpidValidationResponse.MissingText;
             }
 
             return records.Any(record => query.Equals(record, StringComparison.OrdinalIgnoreCase))
-                .ToString().ToLower();
+                ? GpidValidationResponse.MatchText
+                : GpidValidationResponse.NoMatchText;
         }
 
         private string MatchDate(DateTime? query, DateTime record)
@@ -100,7 +101,8 @@ namespace Prime.Models.Api
             }
 
             return query.Value.Date.Equals(record.Date)
-                .ToString().ToLower();
+                ? GpidValidationResponse.MatchText
+                : GpidValidationResponse.NoMatchText;
         }
 
         private string MatchAny(CollegeRecord query, IEnumerable<Certification> records)
@@ -112,11 +114,12 @@ namespace Prime.Models.Api
 
             if (HasNoData(records))
             {
-                return "not-available";
+                return GpidValidationResponse.MissingText;
             }
 
             return records.Any(cert => query.Equals(cert))
-                .ToString().ToLower();
+                ? GpidValidationResponse.MatchText
+                : GpidValidationResponse.NoMatchText;
         }
 
         private bool HasNoData<T>(IEnumerable<T> records)
@@ -129,6 +132,10 @@ namespace Prime.Models.Api
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class GpidValidationResponse
     {
+        public static readonly string MatchText = "true";
+        public static readonly string NoMatchText = "false";
+        public static readonly string MissingText = "missing";
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
