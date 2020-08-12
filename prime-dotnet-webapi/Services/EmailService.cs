@@ -138,9 +138,9 @@ namespace Prime.Services
         public async Task SendSiteRegistrationAsync(Site site)
         {
             var subject = "PRIME Site Registration Submission";
-            var businessLicenceDoc = await _siteService.GetLatestBusinessLicenceAsync(site.Id);
-            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicenceDoc.DocumentGuid);
-            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site, documentAccessToken.DownloadUrl));
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/SiteRegistrationSubmissionEmail.cshtml",
+                new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
 
             string registrationReviewFilename = "SiteRegistrationReview.pdf";
 
@@ -155,11 +155,20 @@ namespace Prime.Services
         public async Task SendRemoteUsersUpdatedAsync(Site site)
         {
             var subject = "Remote Practioners Added";
-            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/UpdateRemoteUsersEmail.cshtml", site);
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/UpdateRemoteUsersEmail.cshtml",
+                new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
 
             var attachments = await getSiteRegistrationAttachments(site);
 
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
+        }
+
+        private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
+        {
+            var businessLicenceDoc = await _siteService.GetLatestBusinessLicenceAsync(siteId);
+            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicenceDoc.DocumentGuid);
+            return documentAccessToken.DownloadUrl;
         }
 
         // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
