@@ -10,7 +10,7 @@ import { MockConfigService } from 'test/mocks/mock-config.service';
 import { CareSettingComponent } from './care-setting.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
 describe('CareSettingComponent', () => {
   let component: CareSettingComponent;

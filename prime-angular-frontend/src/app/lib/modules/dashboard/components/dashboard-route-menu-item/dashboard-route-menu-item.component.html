@@ -1,0 +1,17 @@
+<mat-list-item [routerLink]="routeMenuItem.route"
+               routerLinkActive="ng-active"
+               [routerLinkActiveOptions]="{ exact: routeMenuItem?.exact }"
+               [class]="routeMenuItem.getOptions()"
+               (click)="onRoute(routeMenuItem)">
+  <mat-icon *ngIf="showMenuItemIcons"
+            mat-list-icon
+            [class.center-sidenav-icon]="responsiveMenuItems && !isDesktop">
+    {{ routeMenuItem.icon }}
+  </mat-icon>
+  <a matLine
+     [class.extend-content-width]="!responsiveMenuItems || isDesktop">
+    <span *ngIf="!responsiveMenuItems || isDesktop">
+      {{ routeMenuItem.label }}
+    </span>
+  </a>
+</mat-list-item>

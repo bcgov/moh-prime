@@ -35,7 +35,7 @@ export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
 
   private getAccessTerms() {
     const enrolleeId = this.enrolmentService.enrolment.id;
-    this.busy = this.enrolmentResource.getAccessTerms(enrolleeId)
+    this.busy = this.enrolmentResource.getAcceptedAccessTerms(enrolleeId)
       .subscribe(
         (accessTerms: AccessTerm[]) => {
           this.logger.info('ACCESS TERMS', accessTerms);

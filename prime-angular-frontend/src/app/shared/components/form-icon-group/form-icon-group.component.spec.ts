@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FormIconGroupComponent } from './form-icon-group.component';
-import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
 describe('FormIconGroupComponent', () => {
   let component: FormIconGroupComponent;

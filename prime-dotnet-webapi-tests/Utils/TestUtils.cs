@@ -83,8 +83,7 @@ namespace PrimeTests.Utils
 
         public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()
             .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
-            .RuleFor(x => x.GlobalClauseId, f => f.Random.Int(1, 5))
-            .RuleFor(x => x.UserClauseId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.AgreementId, f => f.Random.Int(1, 5))
             .RuleFor(x => x.LimitsConditionsClauseId, f => f.Random.Int(1, 5))
             .RuleFor(es => es.CreatedDate, f => DateTime.Now.AddDays(-5))
             .RuleFor(es => es.AcceptedDate, f => DateTime.Now)

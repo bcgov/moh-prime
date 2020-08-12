@@ -11,10 +11,9 @@ registerPlugin(FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 import { NgxMaskModule } from 'ngx-mask';
 
 import { ConfigModule } from '@config/config.module';
-import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
-import { NgxProgressModule } from '@shared/modules/ngx-progress/ngx-progress.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { NgxContextualHelpModule } from '@shared/modules/ngx-contextual-help/ngx-contextual-help.module';
+import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
@@ -38,10 +37,6 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import {
   EnrolmentStatusReasonsComponent
 } from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
-import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
-import { Dashboard2Component } from '@shared/components/dashboard2/dashboard2.component';
-import { DashboardNavComponent } from '@shared/components/dashboard-nav/dashboard-nav.component';
-import { HeaderComponent } from '@shared/components/header/header.component';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { ProgressIndicator2Component } from './components/progress-indicator2/progress-indicator2.component';
@@ -100,12 +95,8 @@ import { OverviewContainerComponent } from './components/site/overview-container
     CasePipe,
     AddressPipe,
     AddressComponent,
-    DashboardComponent,
-    Dashboard2Component,
-    DashboardNavComponent,
     ConfirmDialogComponent,
     EnrolmentStatusReasonsComponent,
-    HeaderComponent,
     PageComponent,
     ProgressIndicator2Component,
     PageHeaderComponent,
@@ -153,7 +144,6 @@ import { OverviewContainerComponent } from './components/site/overview-container
     NgxContextualHelpModule,
     NgxMaskModule.forRoot(),
     NgxMaterialModule,
-    NgxProgressModule,
     FilePondModule,
     ReactiveFormsModule
   ],
@@ -164,7 +154,6 @@ import { OverviewContainerComponent } from './components/site/overview-container
     NgxContextualHelpModule,
     NgxMaterialModule,
     NgxMaskModule,
-    NgxProgressModule,
     ReactiveFormsModule,
     CapitalizePipe,
     CasePipe,
@@ -184,11 +173,7 @@ import { OverviewContainerComponent } from './components/site/overview-container
     SafePipe,
     AddressPipe,
     AddressComponent,
-    DashboardComponent,
-    Dashboard2Component,
-    DashboardNavComponent,
     EnrolmentStatusReasonsComponent,
-    HeaderComponent,
     PageComponent,
     PageHeaderComponent,
     ProgressIndicator2Component,

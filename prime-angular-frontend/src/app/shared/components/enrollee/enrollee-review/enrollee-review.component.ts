@@ -113,14 +113,13 @@ export class EnrolleeReviewComponent {
   }
 
   private hasSelfDeclaration(type: SelfDeclarationTypeEnum): boolean {
-    return !!this.enrolment?.selfDeclarations
-      .filter((decl) => decl.selfDeclarationTypeCode === type).length;
+    return this.enrolment?.selfDeclarations
+      .some(decl => decl.selfDeclarationTypeCode === type);
   }
 
   private getSelfDeclarationDetailsIfExist(type: SelfDeclarationTypeEnum): string {
-    const declaration = this.enrolment?.selfDeclarations
-      .filter((decl) => decl.selfDeclarationTypeCode === type).pop();
-    return declaration?.selfDeclarationDetails ?? '';
+    return this.enrolment?.selfDeclarations
+      .find(decl => decl.selfDeclarationTypeCode === type)
+      ?.selfDeclarationDetails ?? '';
   }
-
 }

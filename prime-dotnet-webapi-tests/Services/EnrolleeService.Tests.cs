@@ -22,7 +22,6 @@ namespace PrimeTests.Services
             new SubmissionRulesServiceMock(),
             new EmailServiceMock(),
             new PrivilegeServiceMock(),
-            new AccessTermServiceMock(),
             new EnrolleeProfileVersionServiceMock(),
             new BusinessEventServiceMock()
         })

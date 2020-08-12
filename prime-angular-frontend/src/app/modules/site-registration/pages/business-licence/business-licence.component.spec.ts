@@ -9,7 +9,7 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { BusinessLicenceComponent } from './business-licence.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
 describe('BusinessLicenceComponent', () => {
   let component: BusinessLicenceComponent;

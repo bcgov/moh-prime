@@ -2,22 +2,15 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
-using Prime.Models.AccessAgreement;
-
 namespace Prime.Models
 {
     [Table("LimitsConditionsClause")]
-    public class LimitsConditionsClause : BaseAuditable, IAccessClause
+    public class LimitsConditionsClause : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
 
-        public int EnrolleeId { get; set; }
-
-        [JsonIgnore]
-        public Enrollee Enrollee { get; set; }
-
-        public string Clause { get; set; }
+        public string Text { get; set; }
 
         public DateTimeOffset EffectiveDate { get; set; }
     }
