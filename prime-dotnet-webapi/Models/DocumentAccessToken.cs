@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 
 namespace Prime.Models
 {
@@ -16,7 +17,7 @@ namespace Prime.Models
         [NotMapped]
         public string DownloadUrl
         {
-            get => $"{PrimeConstants.BACKEND_URL}/file-download/{Id}";
+            get => Path.Join(PrimeConstants.BACKEND_URL, "file-download", Id);
         }
     }
 }
