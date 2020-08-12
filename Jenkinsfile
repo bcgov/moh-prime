@@ -163,11 +163,9 @@ pipeline {
             }
         }
         stage('Cleanup') {
-             steps {
-                 agent { label 'code-tests' }
-                 script {
-                     sh "./player.sh sparsify"
-                }
+            agent { label 'code-tests' }
+            steps {
+                sh "./player.sh sparsify"
             }
         }
     }
