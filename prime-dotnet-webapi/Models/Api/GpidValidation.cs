@@ -128,13 +128,17 @@ namespace Prime.Models.Api
         }
     }
 
+    /// <summary>
+    /// The results of matching the parameters against the Enrollee.
+    /// Returned text is "true" if the parameter matches, "false" if it does not, or "missing" if the enrollee has no data for that parameter.
+    /// </summary>
     [NotMapped]
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class GpidValidationResponse
     {
-        public static readonly string MatchText = "true";
-        public static readonly string NoMatchText = "false";
-        public static readonly string MissingText = "missing";
+        public const string MatchText = "true";
+        public const string NoMatchText = "false";
+        public const string MissingText = "missing";
 
         public string FirstName { get; set; }
 
