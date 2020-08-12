@@ -57,6 +57,5 @@ namespace Prime.Services
                 .Where(sa => sa.Id == selfDeclarationDocumentId).SingleAsync();
             return await _documentManagerClient.CreateDownloadTokenAsync(selfDeclarationDocument.DocumentGuid);
         }
-
     }
 }

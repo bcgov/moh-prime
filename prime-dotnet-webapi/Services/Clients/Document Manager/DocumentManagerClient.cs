@@ -28,8 +28,13 @@ namespace Prime.Services.Clients
         public async Task<string> CreateDownloadTokenAsync(Guid documentGuid)
         {
             var response = await _client.PostAsync($"documents/{documentGuid}/download-token", null);
-            var downloadToken = await response.Content.ReadAsAsync<DownloadToken>();
 
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var downloadToken = await response.Content.ReadAsAsync<DownloadToken>();
             return downloadToken?.token;
         }
 
