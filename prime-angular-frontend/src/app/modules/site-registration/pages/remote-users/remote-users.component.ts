@@ -30,6 +30,7 @@ export class RemoteUsersComponent implements OnInit {
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
   public hasNoRemoteUserError: boolean;
+  public submitButtonText: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +43,7 @@ export class RemoteUsersComponent implements OnInit {
   ) {
     this.title = 'Practitioners Requiring Remote PharmaNet Access';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.submitButtonText = 'Save and Continue';
   }
 
   public get remoteUsers(): FormArray {
@@ -68,7 +70,13 @@ export class RemoteUsersComponent implements OnInit {
           ),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
             return hasSignedOrgAgreement
-              ? this.siteResource.updateSiteCompleted(this.siteService.site.id)
+              ? this.siteResource.updateCompleted(this.siteService.site.id)
+                .pipe(map(() => hasSignedOrgAgreement))
+              : of(hasSignedOrgAgreement);
+          }),
+          exhaustMap((hasSignedOrgAgreement: boolean) => {
+            return this.siteService.site.submittedDate
+              ? this.siteResource.sendRemoteUsersEmail(this.route.snapshot.params.sid)
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
           })
@@ -105,6 +113,9 @@ export class RemoteUsersComponent implements OnInit {
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
+    if (this.siteService.site.submittedDate) {
+      this.submitButtonText = 'Save and Submit';
+    }
   }
 
   private createFormInstance() {

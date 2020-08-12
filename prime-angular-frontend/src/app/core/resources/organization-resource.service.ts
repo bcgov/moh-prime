@@ -68,9 +68,8 @@ export class OrganizationResource {
       );
   }
 
-  public updateOrganization(organization: Organization, isCompleted?: boolean): NoContent {
-    const params = this.apiResourceUtilsService.makeHttpParams({ isCompleted });
-    return this.apiResource.put<NoContent>(`organizations/${organization.id}`, organization, params)
+  public updateOrganization(organization: Organization): NoContent {
+    return this.apiResource.put<NoContent>(`organizations/${organization.id}`, organization)
       // TODO remove pipe when ApiResource handles NoContent
       .pipe(
         map(() => {
@@ -79,6 +78,18 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be updated');
           this.logger.error('[SiteRegistration] OrganizationResource::updateOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateCompleted(organizationId: number): NoContent {
+    return this.apiResource.put<NoContent>(`organizations/${organizationId}/completed`)
+      .pipe(
+        // TODO remove pipe when ApiResource handles NoContent
+        map(() => { }),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] OrganizationResource::updateCompleted error has occurred: ', error);
           throw error;
         })
       );

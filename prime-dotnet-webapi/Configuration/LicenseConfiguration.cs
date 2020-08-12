@@ -5,7 +5,7 @@ namespace Prime.Configuration
 {
     public class LicenseConfiguration : SeededTable<License>
     {
-        public override ICollection<License> SeedData
+        public override IEnumerable<License> SeedData
         {
             get
             {

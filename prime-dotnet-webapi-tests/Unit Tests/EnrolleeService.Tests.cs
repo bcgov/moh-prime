@@ -18,7 +18,6 @@ namespace PrimeTests.UnitTests
             ISubmissionRulesService automaticAdjudicationService = null,
             IEmailService emailService = null,
             IPrivilegeService privilegeService = null,
-            IAccessTermService accessTermService = null,
             IEnrolleeProfileVersionService enroleeProfileVersionService = null,
             IBusinessEventService businessEventService = null)
         {
@@ -28,7 +27,6 @@ namespace PrimeTests.UnitTests
                 automaticAdjudicationService ?? A.Fake<ISubmissionRulesService>(),
                 emailService ?? A.Fake<IEmailService>(),
                 privilegeService ?? A.Fake<IPrivilegeService>(),
-                accessTermService ?? A.Fake<IAccessTermService>(),
                 enroleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>(),
                 businessEventService ?? A.Fake<IBusinessEventService>()
             );

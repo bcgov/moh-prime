@@ -12,8 +12,8 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { CollectionNoticeComponent } from './collection-notice.component';
 import { SharedModule } from '@shared/shared.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
-import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';

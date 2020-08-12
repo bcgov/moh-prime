@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
