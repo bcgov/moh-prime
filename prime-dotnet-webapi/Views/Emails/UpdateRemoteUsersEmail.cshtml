@@ -1,4 +1,4 @@
-@using Prime.Models
+@using Prime.Services
 @model EmailParams
 
 @{
@@ -7,8 +7,8 @@
 }
 
 <p>
-  Notification: The list of Remote Practitioners at @Model.PhysicalAddress.Street of
-  @Model.Organization.Name (PEC: @Model.PEC) has been updated. The Remote Practitioners
+  Notification: The list of Remote Practitioners at @site.PhysicalAddress.Street of
+  @site.Organization.Name (PEC: @site.PEC) has been updated. The Remote Practitioners
   at this site are:
 </p>
 
