@@ -13,14 +13,14 @@ namespace Prime.Services
 {
     public class EmailParams
     {
-        public int MaxViews { get => EnrolmentCertificateAccessToken.MaxViews; }
-        public int ExpiryDays { get => EnrolmentCertificateAccessToken.Lifespan.Days; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string TokenUrl { get; set; }
         public string ProvisionerName { get; set; }
         public Site Site { get; set; }
         public string DocumentUrl { get; set; }
+        public int MaxViews { get => EnrolmentCertificateAccessToken.MaxViews; }
+        public int ExpiryDays { get => EnrolmentCertificateAccessToken.Lifespan.Days; }
 
         public EmailParams()
         {
