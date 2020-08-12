@@ -30,7 +30,7 @@ namespace Prime.Models
         [NotMapped]
         public string FrontendUrl
         {
-            get => Path.Join(PrimeConstants.FRONTEND_URL, "provisioner-access", Id);
+            get => Path.Join(PrimeConstants.FRONTEND_URL, "provisioner-access", Id.ToString());
         }
     }
 }

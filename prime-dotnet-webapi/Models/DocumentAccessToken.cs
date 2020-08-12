@@ -17,7 +17,7 @@ namespace Prime.Models
         [NotMapped]
         public string DownloadUrl
         {
-            get => Path.Join(PrimeConstants.BACKEND_URL, "file-download", Id);
+            get => Path.Join(PrimeConstants.BACKEND_URL, "file-download", Id.ToString());
         }
     }
 }
