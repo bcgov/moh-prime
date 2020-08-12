@@ -10,6 +10,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
+import { RemoteUserCertification } from '../models/remote-user-certification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -198,7 +199,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
     const group = this.remoteUserFormGroup() as FormGroup;
     if (remoteUser) {
-      const { id, firstName, lastName, remoteUserLocations } = remoteUser;
+      const { id, firstName, lastName, remoteUserLocations, remoteUserCertifications } = remoteUser;
       group.patchValue({ id, firstName, lastName });
       const array = group.get('remoteUserLocations') as FormArray;
       remoteUserLocations
@@ -209,6 +210,16 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         })
         .forEach((remoteUserLocationFormGroup: FormGroup) =>
           array.push(remoteUserLocationFormGroup)
+        );
+
+      const certs = group.get('remoteUserCertifications') as FormArray;
+      remoteUserCertifications.map((cert: RemoteUserCertification) => {
+        const formGroup = this.remoteUserCertificationFormGroup();
+        formGroup.patchValue(cert);
+        return formGroup;
+      })
+        .forEach((remoteUserLocationFormGroup: FormGroup) =>
+          certs.push(remoteUserLocationFormGroup)
         );
     }
 
@@ -287,6 +298,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         null,
         [Validators.required]
       ],
+      remoteUserCertifications: this.fb.array([]),
       remoteUserLocations: this.fb.array(
         [],
         [FormArrayValidators.atLeast(1)]
@@ -304,6 +316,16 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         exclude: ['street2']
       })
+    });
+  }
+
+  public remoteUserCertificationFormGroup(): FormGroup {
+    return this.fb.group({
+      // Force selection of "None" on new certifications
+      collegeCode: ['', []],
+      // Validators are applied at the component-level when
+      // fields are made visible to allow empty submissions
+      licenseNumber: [null, []],
     });
   }
 
