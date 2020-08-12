@@ -188,6 +188,11 @@ namespace Prime.Services
                     _context.Remove(location.PhysicalAddress);
                     _context.Remove(location);
                 }
+
+                foreach (var certification in remoteUser.RemoteUserCertifications)
+                {
+                    _context.Remove(certification);
+                }
                 _context.RemoteUsers.Remove(remoteUser);
             }
 
@@ -220,6 +225,22 @@ namespace Prime.Services
                         remoteUserLocations.Add(newLocation);
                     }
                     remoteUser.RemoteUserLocations = remoteUserLocations;
+
+                    var remoteUserCertifications = new List<RemoteUserCertification>();
+
+                    foreach (var certification in remoteUser.RemoteUserCertifications)
+                    {
+                        var newCertification = new RemoteUserCertification
+                        {
+                            RemoteUser = remoteUser,
+                            CollegeCode = certification.CollegeCode,
+                            LicenseNumber = certification.LicenseNumber
+                        };
+                        _context.Entry(newCertification).State = EntityState.Added;
+                        remoteUserCertifications.Add(newCertification);
+                    }
+                    remoteUser.RemoteUserCertifications = remoteUserCertifications;
+
                     _context.Entry(remoteUser).State = EntityState.Added;
                 }
             }
@@ -420,6 +441,8 @@ namespace Prime.Services
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserLocations)
                         .ThenInclude(rul => rul.PhysicalAddress)
+                .Include(s => s.RemoteUsers)
+                    .ThenInclude(r => r.RemoteUserCertifications)
                 .Include(s => s.BusinessLicenceDocuments);
         }
     }
