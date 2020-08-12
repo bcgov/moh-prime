@@ -7,7 +7,7 @@ namespace Prime.Services
 {
     public interface IDocumentAccessTokenService
     {
-        Task<DocumentAccessToken> GetDocumentAccessAsync(Guid documentAccessTokenId);
+        Task<DocumentAccessToken> GetDocumentAccessNoTrackingAsync(Guid documentAccessTokenId);
         Task<DocumentAccessToken> CreateDocumentAccessTokenAsync(Guid documentGuid);
         Task DeleteDocumentAccessTokenAsync(Guid documentAccessTokenId);
     }

@@ -16,9 +16,11 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<DocumentAccessToken> GetDocumentAccessAsync(Guid documentAccessTokenId)
+        public async Task<DocumentAccessToken> GetDocumentAccessNoTrackingAsync(Guid documentAccessTokenId)
         {
-            return await _context.DocumentAccessToken.SingleOrDefaultAsync(e => e.Id == documentAccessTokenId);
+            return await _context.DocumentAccessToken
+                .AsNoTracking()
+                .SingleOrDefaultAsync(e => e.Id == documentAccessTokenId);
         }
 
         public async Task<DocumentAccessToken> CreateDocumentAccessTokenAsync(Guid documentGuid)
@@ -36,7 +38,8 @@ namespace Prime.Services
 
         public async Task DeleteDocumentAccessTokenAsync(Guid documentAccessTokenId)
         {
-            var documentAccessToken = await _context.DocumentAccessToken.SingleOrDefaultAsync(e => e.Id == documentAccessTokenId);
+            var documentAccessToken = await _context.DocumentAccessToken
+                .SingleOrDefaultAsync(e => e.Id == documentAccessTokenId);
 
             if (documentAccessToken == null)
             {
