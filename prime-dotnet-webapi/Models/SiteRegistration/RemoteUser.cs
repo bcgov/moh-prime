@@ -24,5 +24,7 @@ namespace Prime.Models
 
         [Required]
         public IEnumerable<RemoteUserLocation> RemoteUserLocations { get; set; }
+
+        public ICollection<RemoteUserCertification> RemoteUserCertifications { get; set; }
     }
 }
