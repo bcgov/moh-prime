@@ -6,6 +6,7 @@ namespace Prime
     {
         public readonly static string ENVIRONMENT_NAME = Environment.GetEnvironmentVariable("OC_APP") ?? "local";
         public readonly static string FRONTEND_URL = Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "localhost:4200";
+        public readonly static string BACKEND_URL = Environment.GetEnvironmentVariable("BACKEND_URL") ?? "localhost:5000";
         public readonly static string KEYCLOAK_TOKEN_URL = Environment.GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
 
         // Enrollee Classifications

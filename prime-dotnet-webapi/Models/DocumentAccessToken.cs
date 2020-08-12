@@ -14,9 +14,9 @@ namespace Prime.Models
         public Guid DocumentGuid { get; set; }
 
         [NotMapped]
-        public string FrontendUrl
+        public string DownloadUrl
         {
-            get => $"{PrimeConstants.FRONTEND_URL}/document-access/file-download/{Id}";
+            get => $"{PrimeConstants.BACKEND_URL}/file-download/{Id}";
         }
     }
 }

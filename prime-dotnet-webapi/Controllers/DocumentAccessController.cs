@@ -19,7 +19,6 @@ namespace Prime.Controllers
         private readonly IDocumentAccessTokenService _documentAccessTokenService;
         private readonly IDocumentManagerClient _documentManagerClient;
 
-
         public DocumentAccessController(
             IDocumentService documentService,
             IDocumentAccessTokenService documentAccessTokenService,
@@ -35,21 +34,29 @@ namespace Prime.Controllers
         /// Gets the Document for downloading based on the supplied Document Access Token GUID.
         /// </summary>
         /// <remarks>This endpoint is not authenticated.</remarks>
-        [HttpGet("file-download/{accessTokenId}", Name = nameof(GetDocumentByAccessToken))]
+        [HttpGet("/file-download/{accessTokenId}", Name = nameof(GetDocumentByAccessToken))]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        // [ProducesResponseType(typeof(ApiResultResponse<File>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDocumentByAccessToken(Guid accessTokenId)
         {
             var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessNoTrackingAsync(accessTokenId);
 
             if (documentAccessToken == null)
             {
-                return NotFound(ApiResponse.Message($"No valid Document Access Token was found with id {accessTokenId}"));
+                return NotFound();
             }
 
-            var document = await _documentManagerClient.GetFileAsync(documentAccessToken.DocumentGuid);
-            return File(document, "application/octet-stream");
+            var response = await _documentManagerClient.GetFileAsync(documentAccessToken.DocumentGuid);
+
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            Response.Headers.Add("Content-Disposition", response.Content.Headers.ContentDisposition.ToString());
+
+            return File(await response.Content.ReadAsStreamAsync(), "application/octet-stream");
         }
 
         // DELETE: api/document-access/{accessTokenId}
