@@ -176,10 +176,10 @@ namespace Prime.Controllers
 
         // POST: api/provisioner-access/gpids/123456789/validate
         /// <summary>
-        /// Validates the supplied information against the enrollee record with the given GPID.
+        /// Validates the supplied information against the enrollee record with the given GPID. Requires a valid direct access grant token.
         /// </summary>
         [HttpPost("gpids/{gpid}/validate", Name = nameof(ValidateGpid))]
-        [AllowAnonymous]
+        [Authorize(Policy = AuthConstants.EXTERNAL_GPID_VALIDATION_POLICY)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
