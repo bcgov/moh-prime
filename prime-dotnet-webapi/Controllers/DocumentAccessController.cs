@@ -15,16 +15,13 @@ namespace Prime.Controllers
     [ApiController]
     public class DocumentAccessController : ControllerBase
     {
-        private readonly IDocumentService _documentService;
         private readonly IDocumentAccessTokenService _documentAccessTokenService;
         private readonly IDocumentManagerClient _documentManagerClient;
 
         public DocumentAccessController(
-            IDocumentService documentService,
             IDocumentAccessTokenService documentAccessTokenService,
             IDocumentManagerClient documentManagerClient)
         {
-            _documentService = documentService;
             _documentAccessTokenService = documentAccessTokenService;
             _documentManagerClient = documentManagerClient;
         }
