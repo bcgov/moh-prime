@@ -12,6 +12,7 @@ using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
+using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
@@ -123,14 +124,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="updatedOrganization"></param>
-        /// <param name="isCompleted"></param>
         [HttpPut("{organizationId}", Name = nameof(UpdateOrganization))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateOrganization(int organizationId, Organization updatedOrganization, [FromQuery] bool isCompleted)
+        public async Task<IActionResult> UpdateOrganization(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
@@ -145,7 +145,38 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _organizationService.UpdateOrganizationAsync(organizationId, updatedOrganization, isCompleted);
+            await _organizationService.UpdateOrganizationAsync(organizationId, updatedOrganization);
+
+            return NoContent();
+        }
+
+        // PUT: api/Organizations/5/completed
+        /// <summary>
+        /// Updates an organizations state
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpPut("{organizationId}/completed", Name = nameof(UpdateOrganizationCompleted))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateOrganizationCompleted(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+
+            if (!User.CanEdit(party))
+            {
+                return Forbid();
+            }
+
+            await _organizationService.UpdateCompletedAsync(organizationId);
 
             return NoContent();
         }
