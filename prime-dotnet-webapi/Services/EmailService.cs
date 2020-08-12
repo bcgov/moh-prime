@@ -154,7 +154,7 @@ namespace Prime.Services
 
         public async Task SendRemoteUsersUpdatedAsync(Site site)
         {
-            var subject = "Remote Practioners added";
+            var subject = "Remote Practioners Added";
             var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/UpdateRemoteUsersEmail.cshtml", site);
 
             var attachments = await getSiteRegistrationAttachments(site);
@@ -166,21 +166,6 @@ namespace Prime.Services
         // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
         private async Task<IEnumerable<(string Filename, byte[] Content)>> getSiteRegistrationAttachments(Site site)
         {
-            Document businessLicenceDoc = null;
-            string businessLicenceTemplate = "/Views/Helpers/Document.cshtml";
-            try
-            {
-                var stream = await _documentService.GetStreamForLatestBusinessLicenceDocument(site.Id);
-                MemoryStream ms = new MemoryStream();
-                stream.CopyTo(ms);
-                businessLicenceDoc = new Document("BusinessLicence.pdf", ms.ToArray());
-            }
-            catch (NullReferenceException)
-            {
-                businessLicenceDoc = new Document("BusinessLicence.pdf", new byte[20]);
-                businessLicenceTemplate = "/Views/Helpers/ApologyDocument.cshtml";
-            }
-
             var organization = site.Organization;
             var organizationAgreementHtml = "";
             if (await _organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
