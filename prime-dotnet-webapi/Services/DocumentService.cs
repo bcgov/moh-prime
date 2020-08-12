@@ -50,13 +50,13 @@ namespace Prime.Services
         public async Task<Stream> GetStreamForLatestBusinessLicenceDocument(int siteId)
         {
             var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
-            return await _documentManagerClient.GetFileAsync(licence.DocumentGuid);
+            return await _documentManagerClient.GetFileStreamAsync(licence.DocumentGuid);
         }
 
         public async Task<Stream> GetStreamForLatestSignedAgreementDocument(int organizationId)
         {
             var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
-            return await _documentManagerClient.GetFileAsync(agreement.DocumentGuid);
+            return await _documentManagerClient.GetFileStreamAsync(agreement.DocumentGuid);
         }
     }
 }
