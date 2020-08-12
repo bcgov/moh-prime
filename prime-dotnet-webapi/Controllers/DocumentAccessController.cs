@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Prime.Auth;
-using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.Services.Clients;
@@ -39,10 +38,10 @@ namespace Prime.Controllers
         [HttpGet("file-download/{accessTokenId}", Name = nameof(GetDocumentByAccessToken))]
         [AllowAnonymous]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetDocumentByAccessToken(Guid accessTokenId)
+        // [ProducesResponseType(typeof(ApiResultResponse<File>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDocumentByAccessToken(Guid accessTokenId)
         {
-            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessAsync(accessTokenId);
+            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessNoTrackingAsync(accessTokenId);
 
             if (documentAccessToken == null)
             {
@@ -50,32 +49,21 @@ namespace Prime.Controllers
             }
 
             var document = await _documentManagerClient.GetFileAsync(documentAccessToken.DocumentGuid);
-
-            // TODO download the document
-            // var net = new System.Net.WebClient();
-            // var data = net.DownloadData(link);
-            // var content = new System.IO.MemoryStream(data);
-            // var contentType = "application/octet-stream";
-            // var fileName = "something.bin";
-            // return File(content, contentType, fileName);
-
-            return Ok(true);
+            return File(document, "application/octet-stream");
         }
 
         // DELETE: api/document-access/{accessTokenId}
         /// <summary>
-        /// Delete the Document Access Token for downloading a Document.
+        /// Delete a Document Access Token.
         /// </summary>
         [HttpDelete("{accessTokenId}", Name = nameof(DeleteDocumentAccessToken))]
         [Authorize(Policy = AuthConstants.SUPER_ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        // [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        // TODO delete tends to provide the resource it deletes, but that exposes a DocumentGuid so NoContent?
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<EnrolmentCertificate>> DeleteDocumentAccessToken(Guid accessTokenId)
+        public async Task<IActionResult> DeleteDocumentAccessToken(Guid accessTokenId)
         {
-            var documentAccessToken = _documentAccessTokenService.GetDocumentAccessAsync(accessTokenId);
+            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessNoTrackingAsync(accessTokenId);
 
             if (documentAccessToken == null)
             {
@@ -84,7 +72,6 @@ namespace Prime.Controllers
 
             await _documentAccessTokenService.DeleteDocumentAccessTokenAsync(accessTokenId);
 
-            // return Ok(ApiResponse.Result(documentAccessToken));
             return NoContent();
         }
     }
