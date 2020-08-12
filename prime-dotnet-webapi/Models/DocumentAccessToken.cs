@@ -11,13 +11,12 @@ namespace Prime.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-
         public Guid DocumentGuid { get; set; }
 
         [NotMapped]
         public string DownloadUrl
         {
-            get => Path.Join(PrimeConstants.BACKEND_URL, "file-download", Id.ToString());
+            get => Path.Join(PrimeConstants.BACKEND_URL, "document-access/file-download", Id.ToString());
         }
     }
 }
