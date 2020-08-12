@@ -111,12 +111,10 @@ export class RegistrationGuard extends BaseGuard {
           SiteRoutes.organizationRegistrationRouteOrder().includes(route)
         );
     } else {
-      if (!organization.acceptedAgreementDate) {
-        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
-        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
-      } else {
-        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
-        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
+      whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
+      whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
+
+      if (organization.acceptedAgreementDate) {
         whiteListedRoutes.push(SiteRoutes.SITE_REVIEW);
       }
     }
