@@ -74,6 +74,7 @@ import { OrganizationReviewComponent } from './components/organization-review/or
 import { ImageComponent } from './components/dialogs/content/image/image.component';
 import { OverviewSectionComponent } from './components/overview-section/overview-section.component';
 import { OverviewContainerComponent } from './components/site/overview-container/overview-container.component';
+import { CollegeCertificationFormComponent } from './components/college-certification-form/college-certification-form.component';
 
 @NgModule({
   declarations: [
@@ -134,7 +135,8 @@ import { OverviewContainerComponent } from './components/site/overview-container
     OrganizationReviewComponent,
     ImageComponent,
     OverviewSectionComponent,
-    OverviewContainerComponent
+    OverviewContainerComponent,
+    CollegeCertificationFormComponent
   ],
   imports: [
     CommonModule,
@@ -203,7 +205,8 @@ import { OverviewContainerComponent } from './components/site/overview-container
     DocumentUploadComponent,
     OrganizationReviewComponent,
     OverviewSectionComponent,
-    OverviewContainerComponent
+    OverviewContainerComponent,
+    CollegeCertificationFormComponent
   ],
   providers: [
     FullnamePipe,
