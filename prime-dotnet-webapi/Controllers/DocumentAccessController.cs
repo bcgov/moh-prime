@@ -31,7 +31,7 @@ namespace Prime.Controllers
         /// Gets the Document for downloading based on the supplied Document Access Token GUID.
         /// </summary>
         /// <remarks>This endpoint is not authenticated.</remarks>
-        [HttpGet("/file-download/{accessTokenId}", Name = nameof(GetDocumentByAccessToken))]
+        [HttpGet("file-download/{accessTokenId}", Name = nameof(GetDocumentByAccessToken))]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
