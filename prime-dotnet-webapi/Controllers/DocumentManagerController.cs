@@ -27,7 +27,7 @@ namespace Prime.Controllers
 
         // POST: api/Document
         /// <summary>
-        /// Initiate uploading a file with the Document Manager.
+        /// Initiate uploading of a file with the Document Manager.
         /// </summary>
         [HttpPost(Name = nameof(InitializeFileUploadWithDocumentManager))]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
