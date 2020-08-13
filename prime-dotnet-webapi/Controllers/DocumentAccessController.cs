@@ -26,7 +26,7 @@ namespace Prime.Controllers
             _documentManagerClient = documentManagerClient;
         }
 
-        // GET: api/document-access/file-download/{accessTokenId}
+        // GET: api/document-access/{accessTokenId}
         /// <summary>
         /// Gets the Document for downloading based on the supplied Document Access Token GUID.
         /// </summary>
