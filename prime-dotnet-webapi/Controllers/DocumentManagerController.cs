@@ -10,7 +10,6 @@ using Prime.Auth;
 using Prime.Models.Api;
 using Prime.Services.Clients;
 
-
 namespace Prime.Controllers
 {
     [Produces("application/json")]
