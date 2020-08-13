@@ -83,6 +83,7 @@ namespace Prime.Auth
                 options.AddPolicy(AuthConstants.SUPER_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_SUPER_ADMIN_ROLE));
                 options.AddPolicy(AuthConstants.READONLY_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_READONLY_ADMIN));
                 options.AddPolicy(AuthConstants.EXTERNAL_HPDID_ACCESS_POLICY, policy => policy.RequireRole(AuthConstants.EXTERNAL_HPDID_ACCESS_ROLE));
+                options.AddPolicy(AuthConstants.EXTERNAL_GPID_VALIDATION_POLICY, policy => policy.RequireRole(AuthConstants.EXTERNAL_GPID_VALIDATION_ROLE));
             });
         }
 
