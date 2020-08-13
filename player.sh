@@ -2,7 +2,6 @@
 source project.conf
 source functions.bash
 source tests.bash
-find . -type d ! -name openshift -exec rm -rf {} +
 
 case "$1" in
     build)
@@ -32,7 +31,7 @@ case "$1" in
     functionTest)
         functionTest $@
         ;;
-    fsparsify)
+    sparsify)
         sparsify $@
         ;;
     notifyGitHub)
