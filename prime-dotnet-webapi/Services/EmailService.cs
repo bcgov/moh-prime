@@ -16,10 +16,11 @@ namespace Prime.Services
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string TokenUrl { get; set; }
+        public string ProvisionerName { get; set; }
+        public Site Site { get; set; }
+        public string DocumentUrl { get; set; }
         public int MaxViews { get => EnrolmentCertificateAccessToken.MaxViews; }
         public int ExpiryDays { get => EnrolmentCertificateAccessToken.Lifespan.Days; }
-        public string ProvisionerName { get; set; }
-        public byte[] BusinessLicenceDoc { get; set; }
 
         public EmailParams()
         {
@@ -34,11 +35,10 @@ namespace Prime.Services
             ProvisionerName = provisionerName;
         }
 
-        public EmailParams(Site site)
+        public EmailParams(Site site, string documentUrl)
         {
-            // TODO what does the email body need?
-            // TODO split out into specific email params for different emails
-            // TODO if only used to render razor views then rename
+            Site = site;
+            DocumentUrl = documentUrl;
         }
     }
 
@@ -52,11 +52,10 @@ namespace Prime.Services
         private readonly IPdfService _pdfService;
         private readonly IOrganizationService _organizationService;
         private readonly IChesClient _chesClient;
-
         private readonly ISmtpEmailClient _smtpEmailClient;
-
         private readonly IDocumentManagerClient _documentManagerClient;
-
+        private readonly IDocumentAccessTokenService _documentAccessTokenService;
+        private readonly ISiteService _siteService;
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
@@ -66,7 +65,9 @@ namespace Prime.Services
             IOrganizationService organizationService,
             IChesClient chesClient,
             ISmtpEmailClient smtpEmailClient,
-            IDocumentManagerClient documentManagerClient)
+            IDocumentManagerClient documentManagerClient,
+            IDocumentAccessTokenService documentAccessTokenService,
+            ISiteService siteService)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
@@ -75,7 +76,9 @@ namespace Prime.Services
             _organizationService = organizationService;
             _chesClient = chesClient;
             _documentManagerClient = documentManagerClient;
+            _documentAccessTokenService = documentAccessTokenService;
             _smtpEmailClient = smtpEmailClient;
+            _siteService = siteService;
         }
 
         public static bool IsValidEmail(string email)
@@ -136,7 +139,9 @@ namespace Prime.Services
         public async Task SendSiteRegistrationAsync(Site site)
         {
             var subject = "PRIME Site Registration Submission";
-            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml", new EmailParams(site));
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/SiteRegistrationSubmissionEmail.cshtml",
+                new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
 
             string registrationReviewFilename = "SiteRegistrationReview.pdf";
 
@@ -150,33 +155,27 @@ namespace Prime.Services
 
         public async Task SendRemoteUsersUpdatedAsync(Site site)
         {
-            var subject = "Remote Practioners added";
-            var body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/UpdateRemoteUsersEmail.cshtml", site);
+            var subject = "Remote Practioners Added";
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/UpdateRemoteUsersEmail.cshtml",
+                new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
 
             var attachments = await getSiteRegistrationAttachments(site);
 
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
         }
 
+        private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
+        {
+            var businessLicenceDoc = await _siteService.GetLatestBusinessLicenceAsync(siteId);
+            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicenceDoc.DocumentGuid);
+            return documentAccessToken.DownloadUrl;
+        }
+
         // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
         // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
         private async Task<IEnumerable<(string Filename, byte[] Content)>> getSiteRegistrationAttachments(Site site)
         {
-            Document businessLicenceDoc = null;
-            string businessLicenceTemplate = "/Views/Helpers/Document.cshtml";
-            try
-            {
-                var stream = await _documentService.GetStreamForLatestBusinessLicenceDocument(site.Id);
-                MemoryStream ms = new MemoryStream();
-                stream.CopyTo(ms);
-                businessLicenceDoc = new Document("BusinessLicence.pdf", ms.ToArray());
-            }
-            catch (NullReferenceException)
-            {
-                businessLicenceDoc = new Document("BusinessLicence.pdf", new byte[20]);
-                businessLicenceTemplate = "/Views/Helpers/ApologyDocument.cshtml";
-            }
-
             var organization = site.Organization;
             var organizationAgreementHtml = "";
             if (await _organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
@@ -208,8 +207,7 @@ namespace Prime.Services
             return new (string Filename, string HtmlContent)[]
             {
                 ("OrganizationAgreement.pdf", organizationAgreementHtml),
-                (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site)),
-                ("BusinessLicence.pdf", await _razorConverterService.RenderViewToStringAsync(businessLicenceTemplate, businessLicenceDoc))
+                (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site))
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
         }

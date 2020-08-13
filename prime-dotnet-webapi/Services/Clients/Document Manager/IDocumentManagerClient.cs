@@ -13,6 +13,8 @@ namespace Prime.Services.Clients
 
         Task<Guid> SendFileAsync(Stream document, string filename, string destinationFolder);
 
-        Task<Stream> GetFileAsync(Guid documentGuid);
+        Task<HttpResponseMessage> GetFileAsync(Guid documentGuid);
+
+        Task<Stream> GetFileStreamAsync(Guid documentGuid);
     }
 }
