@@ -90,6 +90,8 @@ objects:
                 value: "prime-application-${OC_APP}"
               - name: JWT_AUDIENCE
                 value: "prime-web-api"
+              - name: BACKEND_URL
+                value: "https://${VANITY_URL}/api/v1/"
               - name: DB_HOST
                 value: "postgresql${SUFFIX}"
               - name: DOCUMENT_MANAGER_CLIENT_ID
