@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
@@ -13,6 +13,7 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
+import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 
 @Component({
   selector: 'app-remote-user',
@@ -30,6 +31,7 @@ export class RemoteUserComponent implements OnInit {
   public SiteRoutes = SiteRoutes;
 
   constructor(
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private siteService: SiteService,
@@ -49,14 +51,27 @@ export class RemoteUserComponent implements OnInit {
     return this.form.get('remoteUserLocations') as FormArray;
   }
 
+  public get remoteUserCertifications(): FormArray {
+    return this.form.get('remoteUserCertifications') as FormArray;
+  }
+
+  public get selectedCollegeCodes(): number[] {
+    return this.remoteUserCertifications.value
+      .map((certification: RemoteUserCertification) => +certification.collegeCode);
+  }
+
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
+
+      this.removeIncompleteCertifications(true);
+
       const remoteUserIndex = this.route.snapshot.params.index;
       const remoteUsersFormArray = this.parent.get('remoteUsers') as FormArray;
 
       if (remoteUserIndex !== 'new') {
         const remoteUserFormGroup = remoteUsersFormArray.at(remoteUserIndex);
         const remoteUserLocationsFormArray = remoteUserFormGroup.get('remoteUserLocations') as FormArray;
+        const certificationFormArray = remoteUserFormGroup.get('remoteUserCertifications') as FormArray;
 
         // Changes in the amount of locations requires adjusting the number of
         // locations in the parent, which is not handled automatically
@@ -66,6 +81,16 @@ export class RemoteUserComponent implements OnInit {
           Object.keys(this.remoteUserLocations.controls)
             .map(() => this.siteFormStateService.remoteUserLocationFormGroup())
             .forEach((group: FormGroup) => remoteUserLocationsFormArray.push(group));
+        }
+
+        // Changes in the amount of locations requires adjusting the number of
+        // locations in the parent, which is not handled automatically
+        if (this.remoteUserCertifications.length !== certificationFormArray.length) {
+          certificationFormArray.clear();
+
+          Object.keys(this.remoteUserCertifications.controls)
+            .map(() => this.siteFormStateService.remoteUserCertificationFormGroup())
+            .forEach((group: FormGroup) => certificationFormArray.push(group));
         }
 
         // Replace the updated remote user in the parent form for submission
@@ -79,16 +104,33 @@ export class RemoteUserComponent implements OnInit {
     }
   }
 
-  public onAdd() {
+  public addLocation() {
     this.addRemoteUserLocation();
   }
 
-  public onRemove(index: number) {
+  public removeLocation(index: number) {
     this.remoteUserLocations.removeAt(index);
 
     if (!this.remoteUserLocations.controls.length) {
       this.addRemoteUserLocation();
     }
+  }
+
+  public addCertification() {
+    const remoteUserCertification = this.siteFormStateService.remoteUserCertificationFormGroup();
+    this.remoteUserCertifications.push(remoteUserCertification);
+  }
+
+  /**
+   * @description
+   * Removes a certification from the list in response to an
+   * emitted event from college certifications. Does not allow
+   * the list of certifications to empty.
+   *
+   * @param index to be removed
+   */
+  public removeCertification(index: number) {
+    this.remoteUserCertifications.removeAt(index);
   }
 
   public onBack() {
@@ -141,6 +183,10 @@ export class RemoteUserComponent implements OnInit {
     (remoteUserIndex !== 'new' && remoteUser)
       ? this.disableProvince(this.remoteUserLocations.controls as FormGroup[])
       : this.addRemoteUserLocation();
+
+    if (!this.remoteUserCertifications.length) {
+      this.addCertification();
+    }
   }
 
   private addRemoteUserLocation(): void {
@@ -160,5 +206,26 @@ export class RemoteUserComponent implements OnInit {
     (Array.isArray(remoteUserLocationFormGroups))
       ? remoteUserLocationFormGroups.forEach(group => this.disableProvince(group))
       : remoteUserLocationFormGroups.get('physicalAddress.provinceCode').disable();
+  }
+
+  /**
+   * @description
+   * Removes incomplete certifications from the list in preparation
+   * for submission, and allows for an empty list of certifications.
+   */
+  private removeIncompleteCertifications(noEmptyCert: boolean = false) {
+    this.remoteUserCertifications.controls
+      .forEach((control: FormGroup, index: number) => {
+        // Remove if college code is "None" or the group is invalid
+        if (!control.get('collegeCode').value || control.invalid) {
+          this.removeCertification(index);
+        }
+      });
+
+    // Always have a single certification available, and it prevents
+    // the page from jumping too much when routing
+    if (!noEmptyCert && !this.remoteUserCertifications.controls.length) {
+      this.addCertification();
+    }
   }
 }
