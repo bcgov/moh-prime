@@ -10,7 +10,6 @@ using Prime.Auth;
 using Prime.Models.Api;
 using Prime.Services.Clients;
 
-
 namespace Prime.Controllers
 {
     [Produces("application/json")]
@@ -28,7 +27,7 @@ namespace Prime.Controllers
 
         // POST: api/Document
         /// <summary>
-        ///
+        /// Initialize uploading of a file with the Document Manager.
         /// </summary>
         [HttpPost(Name = nameof(InitializeFileUploadWithDocumentManager))]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]

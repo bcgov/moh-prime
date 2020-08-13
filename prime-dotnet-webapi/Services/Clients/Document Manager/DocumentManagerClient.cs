@@ -44,9 +44,14 @@ namespace Prime.Services.Clients
             return documentResponse?.document_guid ?? Guid.Empty;
         }
 
-        public async Task<Stream> GetFileAsync(Guid documentGuid)
+        public async Task<HttpResponseMessage> GetFileAsync(Guid documentGuid)
         {
-            var response = await _client.GetAsync($"documents/{documentGuid}");
+            return await _client.GetAsync($"documents/{documentGuid}");
+        }
+
+        public async Task<Stream> GetFileStreamAsync(Guid documentGuid)
+        {
+            var response = await this.GetFileAsync(documentGuid);
             return await response.Content.ReadAsStreamAsync();
         }
 
