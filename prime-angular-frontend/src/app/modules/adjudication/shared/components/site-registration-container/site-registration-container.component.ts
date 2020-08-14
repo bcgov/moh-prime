@@ -18,6 +18,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Site } from '@registration/shared/models/site.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -81,6 +82,23 @@ export class SiteRegistrationContainerComponent implements OnInit {
           ),
           exhaustMap(() => this.siteResource.deleteSite(siteId)),
           map((site: Site) => this.dataSource.data = MatTableDataSourceUtils.delete<Site>(this.dataSource, 'id', site.id))
+        )
+        .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
+    }
+  }
+
+  public onDeleteOrganization(organizationId: number) {
+    const data = this.defaultOptions.delete('organization');
+    if (this.authService.isSuperAdmin()) {
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => this.organizationResource.deleteOrganization(organizationId)),
         )
         .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
     }
