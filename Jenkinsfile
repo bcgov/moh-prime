@@ -21,6 +21,7 @@ pipeline {
             steps {
                 script {
                     checkout scm
+                    sh "./player.sh sparsify"
                 }
             }
         }
@@ -142,12 +143,14 @@ pipeline {
                 stage('SonarQube') {
                     agent { label 'code-tests' }
                     steps {
+                        checkout scm
                         sh "./player.sh scan"
                     }
                 }
                 stage('Zap') {
                     agent { label 'code-tests' }
                     steps {
+                        checkout scm
                         sh "./player.sh zap frontend"
                     }
                 }
@@ -159,11 +162,11 @@ pipeline {
                 }
             }
         }
+        // BUG (2020-08-13): Currently not working, failing to find files
         // stage('Cleanup') {
+        //     agent { label 'code-tests' }
         //     steps {
-        //         script {
-        //             sh "./player.sh sparsify"
-        //         }
+        //         sh "./player.sh sparsify"
         //     }
         // }
     }

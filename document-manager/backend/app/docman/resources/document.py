@@ -229,7 +229,7 @@ class DocumentResource(Resource):
 
         return send_file(filename_or_fp=doc.full_storage_path,
                          attachment_filename=doc.filename,
-                         as_attachment=False)
+                         as_attachment=True)
 
 
 @api.route(f'/documents/<string:document_guid>/download-token')

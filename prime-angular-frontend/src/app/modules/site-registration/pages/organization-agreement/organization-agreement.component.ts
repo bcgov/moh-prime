@@ -66,7 +66,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
               ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
               : EMPTY
           ),
-          exhaustMap(() => this.siteResource.updateSiteCompleted((this.route.snapshot.queryParams.siteId)))
+          exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.queryParams.siteId)))
         )
         .subscribe(() => this.nextRoute());
     }
@@ -95,7 +95,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public onBack() {
     const siteId = this.route.snapshot.queryParams.siteId;
     if (siteId) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
+      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.REMOTE_USERS]);
     } else {
       this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
     }

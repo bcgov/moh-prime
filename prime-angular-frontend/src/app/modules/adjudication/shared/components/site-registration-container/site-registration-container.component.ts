@@ -6,19 +6,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
+
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-data-source-utils.class';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Site } from '@registration/shared/models/site.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -82,6 +82,23 @@ export class SiteRegistrationContainerComponent implements OnInit {
           ),
           exhaustMap(() => this.siteResource.deleteSite(siteId)),
           map((site: Site) => this.dataSource.data = MatTableDataSourceUtils.delete<Site>(this.dataSource, 'id', site.id))
+        )
+        .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
+    }
+  }
+
+  public onDeleteOrganization(organizationId: number) {
+    const data = this.defaultOptions.delete('organization');
+    if (this.authService.isSuperAdmin()) {
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => this.organizationResource.deleteOrganization(organizationId)),
         )
         .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
     }

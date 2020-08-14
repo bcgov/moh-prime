@@ -92,7 +92,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   public disableCareSetting(organizationTypeCode: number): boolean {
     return ![
       // Omit care setting types that are not:
-      OrganizationTypeEnum.COMMUNITY_PRACTICE,
+      OrganizationTypeEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
       OrganizationTypeEnum.COMMUNITY_PHARMACIST
     ].includes(organizationTypeCode);
   }

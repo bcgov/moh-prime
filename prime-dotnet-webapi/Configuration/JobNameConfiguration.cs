@@ -5,7 +5,7 @@ namespace Prime.Configuration
 {
     public class JobNameConfiguration : SeededTable<JobName>
     {
-        public override ICollection<JobName> SeedData
+        public override IEnumerable<JobName> SeedData
         {
             get
             {

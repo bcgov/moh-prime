@@ -71,7 +71,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(enrollees);
         }
 
-        public Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted)
+        public Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted)
         {
             throw new NotImplementedException();
         }
@@ -197,6 +197,11 @@ namespace PrimeTests.Mocks
         }
 
         Task<SelfDeclarationDocument> IEnrolleeService.AddSelfDeclarationDocumentAsync(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)
         {
             throw new NotImplementedException();
         }

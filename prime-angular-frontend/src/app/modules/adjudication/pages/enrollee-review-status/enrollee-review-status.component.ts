@@ -12,5 +12,5 @@ export class EnrolleeReviewStatusComponent implements OnInit {
     this.hasActions = true;
   }
 
-  public ngOnInit() { }
+  public ngOnInit(): void { }
 }

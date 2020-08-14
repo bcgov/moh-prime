@@ -26,10 +26,11 @@ namespace Prime.Models
         [Required]
         public string FirstName { get; set; }
 
-        public string MiddleName { get; set; }
-
         [Required]
         public string LastName { get; set; }
+
+        [Required]
+        public string GivenNames { get; set; }
 
         public string PreferredFirstName { get; set; }
 
@@ -66,9 +67,6 @@ namespace Prime.Models
 
         public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
 
-        [NotMapped]
-        public string CurrentTOAStatus { get; set; }
-
         [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
@@ -76,11 +74,6 @@ namespace Prime.Models
         public ICollection<Privilege> Privileges { get; set; }
 
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
-
-        public bool ShouldSerializeEnrolmentStatuses()
-        {
-            return (isAdminView != null && (bool)isAdminView);
-        }
 
         [NotMapped]
         [JsonIgnore]
@@ -123,61 +116,108 @@ namespace Prime.Models
             get => this.Credential?.Base64QRCode;
         }
 
+        /// <summary>
+        /// Gets the most recent Enrolment Status on the Enrollee.
+        /// </summary>
         [NotMapped]
         public EnrolmentStatus CurrentStatus
         {
-            get => this.EnrolmentStatuses?
-                .OrderByDescending(es => es.StatusDate)
-                .ThenByDescending(es => es.Id)
+            get => GetStatusTimeline()
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets the *second* most recent Enrolment Status on the Enrollee.
+        /// </summary>
         [NotMapped]
         public EnrolmentStatus PreviousStatus
         {
-            get => this.EnrolmentStatuses?
-                .OrderByDescending(es => es.StatusDate)
-                .ThenByDescending(es => es.Id)
+            get => GetStatusTimeline()
                 .Skip(1)
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// The date of the Enrollee's most recent applicaiton.
+        /// </summary>
         [NotMapped]
         public DateTimeOffset? AppliedDate
         {
-            get => this.EnrolmentStatuses?
-                .OrderByDescending(en => en.StatusDate)
+            get => GetStatusTimeline()
                 .FirstOrDefault(es => es.IsType(StatusType.UnderReview))
                 ?.StatusDate;
         }
 
+        /// <summary>
+        /// The date of the Enrollee's most recent manual or automatic approval.
+        /// </summary>
         [NotMapped]
         public DateTimeOffset? ApprovedDate
         {
-            get
-            {
-                return this.EnrolmentStatuses?
-                    .OrderByDescending(en => en.StatusDate)
-                    .Where(es => es.IsType(StatusType.RequiresToa))
-                    .FirstOrDefault(es => es.StatusDate > this.AppliedDate)
-                    ?.StatusDate;
-            }
+            get => GetStatusTimeline()
+                .FirstOrDefault(es => es.IsType(StatusType.RequiresToa))
+                ?.StatusDate;
         }
 
+        /// <summary>
+        /// The expiry date of the Enrollee's most recently accepted Access Term.
+        /// </summary>
         [NotMapped]
         public DateTimeOffset? ExpiryDate
         {
-            // This applies to the expiry date of the most recent accepted ToA
-            get => this.AccessTerms?
-                .OrderByDescending(at => at.AcceptedDate)
-                .FirstOrDefault(at => at.ExpiryDate != null)?
-                .ExpiryDate;
+            get => AccessTerms
+                ?.OrderByDescending(at => at.CreatedDate)
+                .FirstOrDefault(at => at.AcceptedDate.HasValue)
+                ?.ExpiryDate;
         }
 
         [NotMapped]
         public int DisplayId
         {
             get => Id + DISPLAY_OFFSET;
+        }
+
+        /// <summary>
+        /// Under Review -> ""
+        /// Locked, Declined -> "NA"
+        /// Required TOA -> "Pending"
+        /// Editable (AND on/after their renewal date) -> ""
+        /// Editable (AND before their renewal date) -> Is their signed TOA the most current version -> "Yes"/"No"
+        /// </summary>
+        [NotMapped]
+        public string CurrentTOAStatus
+        {
+            get
+            {
+                if (CurrentStatus == null)
+                {
+                    // Bail if Statuses are not loaded
+                    return null;
+                }
+
+                switch (CurrentStatus.GetStatusType())
+                {
+                    case StatusType.UnderReview:
+                        return "";
+                    case StatusType.Locked:
+                    case StatusType.Declined:
+                        return "N/A";
+                    case StatusType.RequiresToa:
+                        return "Pending";
+                    case StatusType.Editable:
+                        if (ExpiryDate == null || ExpiryDate <= DateTimeOffset.Now)
+                        {
+                            return "";
+                        }
+                        else
+                        {
+                            return HasLatestAgreement() ? "Yes" : "No";
+                        }
+
+                    default:
+                        return null;
+                }
+            }
         }
 
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
@@ -203,14 +243,50 @@ namespace Prime.Models
             CurrentStatus.AddStatusReason(type, statusReasonNote);
         }
 
-        public bool IsRegulatedUser()
+        public bool HasCareSetting(CareSettingType type)
         {
-            if (Certifications == null || Certifications.Any(cert => cert.License == null))
+            if (EnrolleeOrganizationTypes == null)
             {
-                throw new InvalidOperationException("Could not determine Regulated User status; Certifications or Licences were null");
+                throw new InvalidOperationException($"{nameof(EnrolleeOrganizationTypes)} cannnot be null");
             }
 
-            return Certifications.Any(cert => cert.License.RegulatedUser);
+            return EnrolleeOrganizationTypes.Any(o => o.IsType(type));
+        }
+
+        /// <summary>
+        /// Returns true if the Enrollee's most recently accepted Agreement has no newer versions.
+        /// Makes no determination if said Agreement is of the correct type for the Enrollee.
+        /// </summary>
+        public bool HasLatestAgreement()
+        {
+            if (AccessTerms == null)
+            {
+                throw new InvalidOperationException($"Cannot determine latest agreement, {nameof(AccessTerms)} is null");
+            }
+
+            var currentAgreement = AccessTerms
+                .OrderByDescending(a => a.CreatedDate)
+                .FirstOrDefault(a => a.AcceptedDate != null);
+
+            if (currentAgreement == null)
+            {
+                return false;
+            }
+
+            return Agreement.NewestAgreementIds().Contains(currentAgreement.AgreementId);
+        }
+
+        /// <summary>
+        /// Returns true if the Enrollee has at least one Certification with a regulated Licence
+        /// </summary>
+        public bool IsRegulatedUser()
+        {
+            if (Certifications == null)
+            {
+                throw new InvalidOperationException($"{nameof(Certifications)} cannnot be null");
+            }
+
+            return Certifications.Any(cert => cert.License?.RegulatedUser == true);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
@@ -219,6 +295,18 @@ namespace Prime.Models
             {
                 yield return new ValidationResult($"UserId cannot be the empty value: {this.UserId.ToString()}");
             }
+        }
+
+        /// <summary>
+        /// Sorts the Enrolment Statuses by date and ID (in case two statuses are created with the same timestamp).
+        /// </summary>
+        /// <returns> This enrollee's time-ordered Enrolment Statuses, or an empty list if not loaded. </returns>
+        private IOrderedEnumerable<EnrolmentStatus> GetStatusTimeline()
+        {
+            var statuses = EnrolmentStatuses ?? Enumerable.Empty<EnrolmentStatus>();
+            return statuses
+                .OrderByDescending(s => s.StatusDate)
+                .ThenByDescending(s => s.Id);
         }
     }
 }

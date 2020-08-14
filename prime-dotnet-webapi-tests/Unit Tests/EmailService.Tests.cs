@@ -22,8 +22,10 @@ namespace PrimeTests.UnitTests
             IOrganizationService organizationService = null,
             IChesClient chesClient = null,
             ISmtpEmailClient smtpEmailClient = null,
-            IDocumentManagerClient documentManagerClient = null
-        )
+            IDocumentManagerClient documentManagerClient = null,
+            IDocumentAccessTokenService documentAccessTokenService = null,
+            ISiteService siteService = null
+            )
         {
             return new EmailService(
                 TestDb,
@@ -34,7 +36,9 @@ namespace PrimeTests.UnitTests
                 organizationService,
                 chesClient,
                 smtpEmailClient,
-                documentManagerClient
+                documentManagerClient,
+                documentAccessTokenService,
+                siteService
             );
         }
     }

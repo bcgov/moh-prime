@@ -73,6 +73,7 @@ export class ProgressIndicator2Component implements OnInit, OnChanges, IProgress
    * Calculated percent complete.
    */
   public percentComplete: number;
+
   constructor() {
     this.routes = [];
   }

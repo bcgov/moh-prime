@@ -23,6 +23,7 @@ namespace Prime.Auth
         public const string PRIME_ENROLLEE_ROLE = "prime_user";
         public const string PRIME_READONLY_ADMIN = "prime_readonly_admin";
         public const string EXTERNAL_HPDID_ACCESS_ROLE = "external_hpdid_access";
+        public const string EXTERNAL_GPID_VALIDATION_ROLE = "external_gpid_validation";
 
         // Feature Flags
         public const string FEATURE_SITE_REGISTRATION = "feature_site_registration";
@@ -33,5 +34,6 @@ namespace Prime.Auth
         public const string ADMIN_POLICY = "admin-policy";
         public const string USER_POLICY = "user-policy";
         public const string EXTERNAL_HPDID_ACCESS_POLICY = "external-hpdid-access-policy";
+        public const string EXTERNAL_GPID_VALIDATION_POLICY = "external-gpid-validation-policy";
     }
 }

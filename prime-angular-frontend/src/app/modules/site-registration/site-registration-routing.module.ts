@@ -11,7 +11,7 @@ import { RegistrantGuard } from './shared/guards/registrant.guard';
 import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
 
-import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
+import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { SiteManagementComponent } from './pages/site-management/site-management.component';
@@ -35,7 +35,7 @@ import { RegistrationGuard } from './shared/guards/registration.guard';
 const routes: Routes = [
   {
     path: SiteRoutes.MODULE_PATH,
-    component: DashboardComponent,
+    component: SiteRegistrationDashboardComponent,
     canActivate: [UnsupportedGuard],
     canActivateChild: [
       AuthenticationGuard,
@@ -131,7 +131,7 @@ const routes: Routes = [
                     component: AdministratorComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Administrator of PharmaNet' }
+                    data: { title: 'PharmaNet Administrator' }
                   },
                   {
                     path: SiteRoutes.PRIVACY_OFFICER,
@@ -145,7 +145,7 @@ const routes: Routes = [
                     component: TechnicalSupportComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Technical Support Contact' }
+                    data: { title: 'Technical Support' }
                   },
                   {
                     path: SiteRoutes.REMOTE_USERS,

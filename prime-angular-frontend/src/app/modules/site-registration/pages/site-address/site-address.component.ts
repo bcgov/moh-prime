@@ -27,7 +27,6 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   public title: string;
   public routeUtils: RouteUtils;
   public formControlNames: string[];
-  public locationNames: { group: string, options: string[] }[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
@@ -40,7 +39,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'Location Name';
+    this.title = 'Site Address';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
 
     this.formControlNames = [
@@ -49,8 +48,6 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
       'provinceCode',
       'postal'
     ];
-
-    this.locationNames = [];
   }
 
   public get name(): FormGroup {

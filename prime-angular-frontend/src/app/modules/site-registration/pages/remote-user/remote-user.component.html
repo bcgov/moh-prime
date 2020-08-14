@@ -35,6 +35,37 @@
 
         </div>
       </div>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3"
+             formArrayName="remoteUserCertifications">
+
+          <ng-container *ngFor="let certificate of remoteUserCertifications.controls; let i = index;"
+                        [formGroupName]="i">
+
+            <app-college-certification-form [form]="certificate"
+                                            [index]="i"
+                                            [total]="remoteUserCertifications.controls.length"
+                                            [selectedColleges]="selectedCollegeCodes"
+                                            (remove)="removeCertification($event)"
+                                            [condensed]="true">
+            </app-college-certification-form>
+
+          </ng-container>
+
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="addCertification()">
+            <mat-icon>add</mat-icon>
+            Add Additional Licences
+          </button>
+
+        </div>
+      </div>
+
+
+
     </section>
 
     <app-page-subheader2>
@@ -42,9 +73,9 @@
         Remote Address
       </ng-container>
       <ng-container appPageSubheader2Summary>
-        The remote address is the location the practitioner will be accessing PharmaNet outside the physical boundaries
-        of the authorized community practice location (e.g., from their home). The remote address cannot be another
-        healthcare practice setting.
+        List every location where practitioners will access PharmaNet remotely. Remote locations are outside the
+        physical boundaries of the community health practice site (e.g., private homes). They cannot be another
+        healthcare setting.
       </ng-container>
     </app-page-subheader2>
 
@@ -53,7 +84,7 @@
       <ng-container [formGroup]="remoteUserLocation">
 
         <app-form-icon-group [show]="true"
-                             (event)="onRemove(i)">
+                             (event)="removeLocation(i)">
 
           <section [class.mb-4]="!last">
             <div class="row">
@@ -83,7 +114,7 @@
             type="button"
             color="primary"
             class="mb-3"
-            (click)="onAdd()">
+            (click)="addLocation()">
       <mat-icon class="add-icon">add</mat-icon>
       Add Remote Address
     </button>

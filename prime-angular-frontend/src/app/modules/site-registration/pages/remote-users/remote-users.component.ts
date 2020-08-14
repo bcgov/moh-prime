@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -30,6 +30,7 @@ export class RemoteUsersComponent implements OnInit {
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
   public hasNoRemoteUserError: boolean;
+  public submitButtonText: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +43,7 @@ export class RemoteUsersComponent implements OnInit {
   ) {
     this.title = 'Practitioners Requiring Remote PharmaNet Access';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.submitButtonText = 'Save and Continue';
   }
 
   public get remoteUsers(): FormArray {
@@ -62,11 +64,22 @@ export class RemoteUsersComponent implements OnInit {
         .getOrganizationById(organizationId)
         .pipe(
           map((organization: Organization) => !!organization.acceptedAgreementDate),
-          // When the organization agreement has already been signed mark the site as completed
           exhaustMap((hasSignedOrgAgreement: boolean) =>
-            this.siteResource.updateSite(payload, hasSignedOrgAgreement)
+            this.siteResource.updateSite(payload)
               .pipe(map(() => hasSignedOrgAgreement))
-          )
+          ),
+          exhaustMap((hasSignedOrgAgreement: boolean) => {
+            return hasSignedOrgAgreement
+              ? this.siteResource.updateCompleted(this.siteService.site.id)
+                .pipe(map(() => hasSignedOrgAgreement))
+              : of(hasSignedOrgAgreement);
+          }),
+          exhaustMap((hasSignedOrgAgreement: boolean) => {
+            return this.siteService.site.submittedDate
+              ? this.siteResource.sendRemoteUsersEmail(this.route.snapshot.params.sid)
+                .pipe(map(() => hasSignedOrgAgreement))
+              : of(hasSignedOrgAgreement);
+          })
         )
         .subscribe((hasSignedOrgAgreement: boolean) => {
           this.form.markAsPristine();
@@ -100,6 +113,9 @@ export class RemoteUsersComponent implements OnInit {
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
+    if (this.siteService.site.submittedDate) {
+      this.submitButtonText = 'Save and Submit';
+    }
   }
 
   private createFormInstance() {

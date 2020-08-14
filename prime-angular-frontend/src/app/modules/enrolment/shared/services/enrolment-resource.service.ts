@@ -104,11 +104,21 @@ export class EnrolmentResource {
   // Access Terms
   // ---
 
-  public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
-    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`)
+  public getAcceptedAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ accepted: true });
+    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
         tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERMS', accessTerms))
+      );
+  }
+
+  public getLatestAccessTerm(enrolleeId: number, accepted: boolean): Observable<AccessTerm> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ onlyLatest: true, accepted, includeText: true });
+    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
+      .pipe(
+        map((response: ApiHttpResponse<AccessTerm[]>) => response.result.pop()),
+        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM_LATEST', accessTerm))
       );
   }
 
@@ -117,15 +127,6 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<AccessTerm>) => response.result),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
-      );
-  }
-
-  public getAccessTermLatest(enrolleeId: number, signed: boolean): Observable<AccessTerm> {
-    const params = new HttpParams({ fromObject: { signed: signed.toString() } });
-    return this.apiResource.get<AccessTerm>(`enrollees/${enrolleeId}/access-terms/latest`, params)
-      .pipe(
-        map((response: ApiHttpResponse<AccessTerm>) => response.result),
-        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM_LATEST', accessTerm))
       );
   }
 
@@ -234,8 +235,8 @@ export class EnrolmentResource {
     const {
       userId,
       firstName,
-      middleName,
       lastName,
+      givenNames,
       preferredFirstName,
       preferredMiddleName,
       preferredLastName,
@@ -255,8 +256,8 @@ export class EnrolmentResource {
       enrollee: {
         userId,
         firstName,
-        middleName,
         lastName,
+        givenNames,
         preferredFirstName,
         preferredMiddleName,
         preferredLastName,

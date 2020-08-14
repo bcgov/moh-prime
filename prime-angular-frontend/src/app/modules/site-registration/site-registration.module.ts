@@ -4,10 +4,11 @@ import { SharedModule } from '@shared/shared.module';
 
 import { SiteRegistrationRoutingModule } from './site-registration-routing.module';
 
+import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
 import { BusinessHoursModule } from '@lib/modules/business-hours/business-hours.module';
 
 import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
-import { RegistrantProfileFormComponent } from './shared/components/registrant-profile-form/registrant-profile-form.component';
+import { PartyProfileFormComponent } from './shared/components/party-profile-form/party-profile-form.component';
 import { SameAsComponent } from './shared/components/same-as/same-as.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 import { SiteCollectionNoticeComponent } from './shared/components/site-collection-notice/site-collection-notice.component';
@@ -53,14 +54,15 @@ import { OverviewComponent } from './pages/overview/overview.component';
 
     SiteRegistrationDashboardComponent,
     SiteProgressIndicatorComponent,
-    RegistrantProfileFormComponent,
+    PartyProfileFormComponent,
     SameAsComponent,
     SummaryCardComponent,
     OverviewComponent
   ],
   imports: [
-    SharedModule,
     SiteRegistrationRoutingModule,
+    SharedModule,
+    DashboardModule,
     BusinessHoursModule
   ],
 })

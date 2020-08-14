@@ -131,7 +131,7 @@ export class SiteResource {
       );
   }
 
-  public updateSite(site: Site, isCompleted?: boolean): NoContent {
+  public updateSite(site: Site): NoContent {
     // TODO separate this out into a proper adapter
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
@@ -148,8 +148,7 @@ export class SiteResource {
       site.businessHours = null;
     }
 
-    const params = this.apiResourceUtilsService.makeHttpParams({ isCompleted });
-    return this.apiResource.put<NoContent>(`sites/${site.id}`, site, params)
+    return this.apiResource.put<NoContent>(`sites/${site.id}`, site)
       .pipe(
         // TODO remove pipe when ApiResource handles NoContent
         map(() => {
@@ -163,13 +162,25 @@ export class SiteResource {
       );
   }
 
-  public updateSiteCompleted(siteId: number): NoContent {
+  public updateCompleted(siteId: number): NoContent {
     return this.apiResource.put<NoContent>(`sites/${siteId}/completed`)
       .pipe(
         // TODO remove pipe when ApiResource handles NoContent
         map(() => { }),
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] SiteResource::updateSiteCompleted error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public sendRemoteUsersEmail(siteId: number): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email`)
+      .pipe(
+        map(() => { }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Remote users update email could not be sent');
+          this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmail error has occurred: ', error);
           throw error;
         })
       );

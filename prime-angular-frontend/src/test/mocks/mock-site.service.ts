@@ -62,6 +62,7 @@ export class MockSiteService implements ISiteService {
       remoteUsers: null,
       siteVendors: [],
       businessLicenceDocuments: [],
+      doingBusinessAs: faker.company.companyName(),
       provisionerId: faker.random.number(),
       provisioner: user,
       organizationTypeCode: faker.random.number(),

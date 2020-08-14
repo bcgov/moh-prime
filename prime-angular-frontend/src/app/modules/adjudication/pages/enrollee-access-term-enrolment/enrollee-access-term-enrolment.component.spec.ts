@@ -4,8 +4,8 @@ import { EnrolleeAccessTermEnrolmentComponent } from './enrollee-access-term-enr
 import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
 import { SharedModule } from '@shared/shared.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
-import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
-import { NgxMaterialModule } from '@shared/modules/ngx-material/ngx-material.module';
+import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 

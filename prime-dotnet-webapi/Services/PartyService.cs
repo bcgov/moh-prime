@@ -61,7 +61,8 @@ namespace Prime.Services
 
             _context.Entry(currentParty).CurrentValues.SetValues(party);
 
-            UpdatePartyAddress(currentParty, party);
+            UpdatePartyPhysicalAddress(currentParty, party);
+            UpdatePartyMailingAddress(currentParty, party);
 
             try
             {
@@ -73,18 +74,27 @@ namespace Prime.Services
             }
         }
 
-        public void UpdatePartyAddress(Party current, Party updated)
+        public void UpdatePartyPhysicalAddress(Party current, Party updated)
         {
-            if (updated.PhysicalAddress != null)
+            if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
             {
-                if (current.PhysicalAddress == null)
-                {
-                    current.PhysicalAddress = updated.PhysicalAddress;
-                }
-                else
-                {
-                    this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
-                }
+                this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+            }
+            else
+            {
+                current.PhysicalAddress = updated.PhysicalAddress;
+            }
+        }
+
+        public void UpdatePartyMailingAddress(Party current, Party updated)
+        {
+            if (updated.MailingAddress != null && current.MailingAddress != null)
+            {
+                this._context.Entry(current.MailingAddress).CurrentValues.SetValues(updated.MailingAddress);
+            }
+            else
+            {
+                current.MailingAddress = updated.MailingAddress;
             }
         }
 

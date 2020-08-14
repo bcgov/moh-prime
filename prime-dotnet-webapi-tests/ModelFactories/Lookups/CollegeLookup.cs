@@ -6,8 +6,8 @@ namespace PrimeTests.ModelFactories
 {
     public static class CollegeLookup
     {
-        private static ICollection<College> _seedData = new CollegeConfiguration().SeedData;
+        private static IEnumerable<College> _seedData = new CollegeConfiguration().SeedData;
 
-        public static ICollection<College> All { get { return _seedData; } }
+        public static IEnumerable<College> All { get { return _seedData; } }
     }
 }

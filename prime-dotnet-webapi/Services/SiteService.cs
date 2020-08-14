@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -75,31 +77,21 @@ namespace Prime.Services
             return site.Id;
         }
 
-        public async Task<int> UpdateSiteAsync(int siteId, Site updatedSite, bool isCompleted = false)
+        public async Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite)
         {
             var currentSite = await this.GetSiteAsync(siteId);
-            var submittedDate = currentSite.SubmittedDate;
-            var currentIsCompleted = currentSite.Completed;
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
-            UpdateAddress(currentSite, updatedSite);
+            if (currentSite.SubmittedDate == null)
+            {
+                UpdateAddress(currentSite, updatedSite);
+                UpdateVendors(currentSite, updatedSite);
+            }
 
             UpdateParties(currentSite, updatedSite);
-
             UpdateBusinessHours(currentSite, updatedSite);
-
             UpdateRemoteUsers(currentSite, updatedSite);
-
-            UpdateVendors(currentSite, updatedSite);
-
-            // Managed through separate API endpoint, and should never be updated
-            currentSite.SubmittedDate = submittedDate;
-
-            // Registration has been completed
-            currentSite.Completed = (isCompleted)
-                ? isCompleted
-                : currentIsCompleted;
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
@@ -113,7 +105,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateAddress(Site current, Site updated)
+        private void UpdateAddress(Site current, SiteUpdateModel updated)
         {
             if (updated?.PhysicalAddress != null)
             {
@@ -128,25 +120,25 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateParties(Site current, Site updated)
+        private void UpdateParties(Site current, SiteUpdateModel updated)
         {
             string[] partyTypes = new string[] {
-                "AdministratorPharmaNet",
-                "PrivacyOfficer",
-                "TechnicalSupport"
+                nameof(current.AdministratorPharmaNet),
+                nameof(current.PrivacyOfficer),
+                nameof(current.TechnicalSupport)
             };
 
             foreach (var partyType in partyTypes)
             {
                 var partyIdName = $"{partyType}Id";
                 Party currentParty = _context.Entry(current).Reference(partyType).CurrentValue as Party;
-                Party updatedParty = _context.Entry(updated).Reference(partyType).CurrentValue as Party;
+                Party updatedParty = typeof(SiteUpdateModel).GetProperty(partyType).GetValue(updated) as Party;
 
                 if (updatedParty != null)
                 {
                     if (updatedParty.UserId != Guid.Empty)
                     {
-                        _context.Entry(current).Property(partyIdName).CurrentValue = _context.Entry(updated).Property(partyIdName).CurrentValue;
+                        _context.Entry(current).Property(partyIdName).CurrentValue = updatedParty.Id;
                     }
                     else
                     {
@@ -160,13 +152,13 @@ namespace Prime.Services
                             this._context.Entry(currentParty).CurrentValues.SetValues(updatedParty);
                         }
 
-                        _partyService.UpdatePartyAddress(currentParty, updatedParty);
+                        _partyService.UpdatePartyPhysicalAddress(currentParty, updatedParty);
                     }
                 }
             }
         }
 
-        private void UpdateBusinessHours(Site current, Site updated)
+        private void UpdateBusinessHours(Site current, SiteUpdateModel updated)
         {
             if (updated?.BusinessHours != null)
             {
@@ -186,7 +178,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateRemoteUsers(Site current, Site updated)
+        private void UpdateRemoteUsers(Site current, SiteUpdateModel updated)
         {
             // Wholesale replace the remote users
             foreach (var remoteUser in current.RemoteUsers)
@@ -195,6 +187,11 @@ namespace Prime.Services
                 {
                     _context.Remove(location.PhysicalAddress);
                     _context.Remove(location);
+                }
+
+                foreach (var certification in remoteUser.RemoteUserCertifications)
+                {
+                    _context.Remove(certification);
                 }
                 _context.RemoteUsers.Remove(remoteUser);
             }
@@ -228,12 +225,28 @@ namespace Prime.Services
                         remoteUserLocations.Add(newLocation);
                     }
                     remoteUser.RemoteUserLocations = remoteUserLocations;
+
+                    var remoteUserCertifications = new List<RemoteUserCertification>();
+
+                    foreach (var certification in remoteUser.RemoteUserCertifications)
+                    {
+                        var newCertification = new RemoteUserCertification
+                        {
+                            RemoteUser = remoteUser,
+                            CollegeCode = certification.CollegeCode,
+                            LicenseNumber = certification.LicenseNumber
+                        };
+                        _context.Entry(newCertification).State = EntityState.Added;
+                        remoteUserCertifications.Add(newCertification);
+                    }
+                    remoteUser.RemoteUserCertifications = remoteUserCertifications;
+
                     _context.Entry(remoteUser).State = EntityState.Added;
                 }
             }
         }
 
-        private void UpdateVendors(Site current, Site updated)
+        private void UpdateVendors(Site current, SiteUpdateModel updated)
         {
             if (updated?.SiteVendors != null)
             {
@@ -258,7 +271,7 @@ namespace Prime.Services
             }
         }
 
-        public async Task<int> UpdateSiteCompletedAsync(int siteId)
+        public async Task<int> UpdateCompletedAsync(int siteId)
         {
             var site = await this.GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
@@ -428,6 +441,8 @@ namespace Prime.Services
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserLocations)
                         .ThenInclude(rul => rul.PhysicalAddress)
+                .Include(s => s.RemoteUsers)
+                    .ThenInclude(r => r.RemoteUserCertifications)
                 .Include(s => s.BusinessLicenceDocuments);
         }
     }

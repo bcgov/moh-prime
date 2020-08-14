@@ -13,7 +13,8 @@
   <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
                                [dataSource]="dataSource"
                                (route)="onRoute($event)"
-                               (delete)="onDelete($event)"></app-site-registration-table>
+                               (delete)="onDelete($event)"
+                               (deleteOrg)="onDeleteOrganization($event)"></app-site-registration-table>
 
   <ng-container *ngIf="content">
 
@@ -28,7 +29,8 @@
            class="col-auto py-5">
 
         <app-site-registration-actions [site]="dataSource?.data[0]"
-                                       (delete)="onDelete($event)"></app-site-registration-actions>
+                                       (delete)="onDelete($event)">
+        </app-site-registration-actions>
 
       </div>
     </div>
