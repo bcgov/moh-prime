@@ -112,6 +112,12 @@
           <mat-icon>delete</mat-icon>
           <span>Delete Site</span>
         </button>
+        <button mat-menu-item
+                [disabled]="!canEdit"
+                (click)="deleteOrganization(row.organizationId)">
+          <mat-icon>delete</mat-icon>
+          <span>Delete Organization</span>
+        </button>
       </mat-menu>
     </ng-template>
 

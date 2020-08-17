@@ -1,9 +1,9 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Prime.Models;
 using Prime.Services.Clients;
 
 namespace Prime.Services
@@ -12,7 +12,6 @@ namespace Prime.Services
     {
         private readonly ISiteService _siteService;
         private readonly IOrganizationService _organizationService;
-
         private readonly IDocumentManagerClient _documentManagerClient;
 
         public DocumentService(
@@ -40,17 +39,6 @@ namespace Prime.Services
             return await _documentManagerClient.CreateDownloadTokenAsync(agreement.DocumentGuid);
         }
 
-        public async Task<Stream> GetStreamForLatestBusinessLicenceDocument(int siteId)
-        {
-            var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
-            return await _documentManagerClient.GetFileAsync(licence.DocumentGuid);
-        }
-        public async Task<Stream> GetStreamForLatestSignedAgreementDocument(int organizationId)
-        {
-            var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
-            return await _documentManagerClient.GetFileAsync(agreement.DocumentGuid);
-        }
-
         public async Task<string> GetDownloadTokenForSelfDeclarationDocument(int selfDeclarationDocumentId)
         {
             var selfDeclarationDocument = await _context.SelfDeclarationDocuments
@@ -58,5 +46,16 @@ namespace Prime.Services
             return await _documentManagerClient.CreateDownloadTokenAsync(selfDeclarationDocument.DocumentGuid);
         }
 
+        public async Task<Stream> GetStreamForLatestBusinessLicenceDocument(int siteId)
+        {
+            var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
+            return await _documentManagerClient.GetFileStreamAsync(licence.DocumentGuid);
+        }
+
+        public async Task<Stream> GetStreamForLatestSignedAgreementDocument(int organizationId)
+        {
+            var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
+            return await _documentManagerClient.GetFileStreamAsync(agreement.DocumentGuid);
+        }
     }
 }

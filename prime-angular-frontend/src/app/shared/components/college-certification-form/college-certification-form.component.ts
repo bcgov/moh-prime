@@ -79,7 +79,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   // Only show College of Physicians and Surgeons or College or Nurses for remote user cert.
   public getDisplayedColleges(): CollegeConfig[] {
     return this.filteredColleges
-      .filter(c => !this.condensed || (c.code === CollegeLicenceClass.CPBC || c.code === CollegeLicenceClass.BCCNP));
+      .filter(c => !this.condensed || (c.code === CollegeLicenceClass.CPSBC || c.code === CollegeLicenceClass.BCCNP));
   }
 
   public removeCertification() {

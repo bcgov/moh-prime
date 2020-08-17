@@ -64,6 +64,7 @@ namespace Prime
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
+            services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
 
             ConfigureClients(services);
 

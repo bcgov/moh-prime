@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using Newtonsoft.Json;
 
 namespace Prime.Models
@@ -29,7 +30,7 @@ namespace Prime.Models
         [NotMapped]
         public string FrontendUrl
         {
-            get => $"{PrimeConstants.FRONTEND_URL}/provisioner-access/{Id}";
+            get => Path.Join(PrimeConstants.FRONTEND_URL, "provisioner-access", Id.ToString());
         }
     }
 }
