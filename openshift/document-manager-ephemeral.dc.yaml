@@ -247,7 +247,7 @@ objects:
           valueFrom:
             secretKeyRef:
               key: DOCUMENT_MANAGER_CLIENT_SECRET
-              name: "document-manager-secret"
+              name: "document-manager-secrets"
         - name: DOCUMENT_MANAGER_URL
           value: "https://${VANITY_URL}/api/docman/"
         - name: FLASK_APP
