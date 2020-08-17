@@ -30,7 +30,7 @@
 
   <ng-container *ngFor="let organization of organizations">
 
-    <mat-card class="has-hover">
+    <!-- <mat-card class="has-hover">
       <mat-card-header>
         <div mat-card-avatar>
           <mat-icon color="primary">business</mat-icon>
@@ -54,7 +54,19 @@
           View/Print Agreement
         </button>
       </mat-card-actions>
-    </mat-card>
+    </mat-card> -->
+
+    <app-summary-card [icon]="'business'"
+                      [title]="'Organization Information'"
+                      [id]="organization.id"
+                      [actionButtonTitle]="'View/Print Agreement'"
+                      [actionDisabled]="!organization.acceptedAgreementDate"
+                      [properties]="getOrganizationProperties(organization)"
+                      [menu]="organizationMenu"
+                      [outletContext]="{ organization: organization }"
+                      (action)=viewAgreement(organization)>
+
+    </app-summary-card>
 
     <hr class="divider">
 
@@ -73,7 +85,7 @@
 
   <ng-container *ngFor="let site of sites">
 
-    <mat-card class="has-hover">
+    <!-- <mat-card class="has-hover">
       <mat-card-header>
         <div mat-card-avatar>
           <mat-icon color="primary">store</mat-icon>
@@ -97,12 +109,23 @@
           Update Remote Practitioners
         </button>
       </mat-card-actions>
-    </mat-card>
+    </mat-card> -->
+
+    <app-summary-card [icon]="'store'"
+                      [title]="'Site Information'"
+                      [id]="site.id"
+                      [actionButtonTitle]="'Update Remote Practitioners'"
+                      [actionDisabled]="!site.completed"
+                      [properties]="getSiteProperties(site)"
+                      [menu]="siteMenu"
+                      [outletContext]="{ site: site }"
+                      (action)="viewSiteRemoteUsers(site)"></app-summary-card>
 
   </ng-container>
 
   <ng-template #property
-               let-property="property">
+               let-property="
+                      property">
     <div>
       <strong>{{ property.key }}</strong>
       {{ property.value | default }}

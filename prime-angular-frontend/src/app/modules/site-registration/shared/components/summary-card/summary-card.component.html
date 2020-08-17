@@ -1,1 +1,33 @@
-<p>summary-card works!</p>
+<mat-card class="has-hover">
+  <mat-card-header>
+    <div mat-card-avatar>
+      <mat-icon color="primary">{{ icon }}</mat-icon>
+    </div>
+    <mat-card-title>{{ title }}</mat-card-title>
+    <ng-container [ngTemplateOutlet]="menu"
+                  [ngTemplateOutletContext]="outletContext"></ng-container>
+  </mat-card-header>
+  <mat-card-content>
+    <ng-container *ngFor="let prop of properties"
+                  [ngTemplateOutlet]="property"
+                  [ngTemplateOutletContext]="{ property: prop }">
+    </ng-container>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-stroked-button
+            type="button"
+            color="primary"
+            [disabled]="actionDisabled"
+            (click)="onClick(id)">
+      {{ actionButtonTitle }}
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<ng-template #property
+             let-property="property">
+  <div>
+    <strong>{{ property.key }}</strong>
+    {{ property.value | default }}
+  </div>
+</ng-template>

@@ -16,6 +16,10 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { Organization } from '@registration/shared/models/organization.model';
+import { FullnamePipe } from '@shared/pipes/fullname.pipe';
+import { AddressPipe } from '@shared/pipes/address.pipe';
+import { ConfigCodePipe } from '@config/config-code.pipe';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-remote-users',
@@ -39,7 +43,10 @@ export class RemoteUsersComponent implements OnInit {
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
     private organizationResource: OrganizationResource,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private fullnamePipe: FullnamePipe,
+    private addressPipe: AddressPipe,
+    private configCodePipe: ConfigCodePipe
   ) {
     this.title = 'Practitioners Requiring Remote PharmaNet Access';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -52,6 +59,35 @@ export class RemoteUsersComponent implements OnInit {
 
   public get hasRemoteUsers(): FormControl {
     return this.form.get('hasRemoteUsers') as FormControl;
+  }
+
+  public getRemoteUserProperties(remoteUser: FormGroup) {
+    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
+    const remoteUserLocations = remoteUser.controls?.remoteUserLocations as FormArray;
+
+    const firstLocation = remoteUserLocations.value[0].physicalAddress;
+    firstLocation.provinceCode = 'BC';
+
+    const collegeLicence = remoteUserCertifications.length > 1
+      ? 'more than one college licence'
+      : remoteUserCertifications.length === 0
+        ? 'no college licence'
+        : remoteUserCertifications.value[0].licenseNumber;
+
+    const remoteAddress = remoteUserLocations.controls?.length > 1
+      ? 'more than one remote address'
+      : this.addressPipe.transform(firstLocation);
+
+    return [
+      {
+        key: 'college licence: ',
+        value: collegeLicence
+      },
+      {
+        key: 'remote address: ',
+        value: remoteAddress
+      },
+    ];
   }
 
   public onSubmit() {
@@ -92,6 +128,10 @@ export class RemoteUsersComponent implements OnInit {
 
   public onRemove(index: number) {
     this.remoteUsers.removeAt(index);
+  }
+
+  public onEdit(index: number) {
+    this.routeUtils.routeRelativeTo(['./', index]);
   }
 
   public onBack() {

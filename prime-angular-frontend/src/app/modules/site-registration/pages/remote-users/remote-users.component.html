@@ -18,13 +18,13 @@
 
     <mat-slide-toggle class="mb-3"
                       color="primary"
-                      formControlName="hasRemoteUsers">Site Has Remote Users</mat-slide-toggle>
+                      formControlName="hasRemoteUsers">This site has remote practitioners</mat-slide-toggle>
 
   </form>
 
   <section>
     <ng-container *ngFor="let remoteUser of remoteUsers.controls; let i = index; let last = last">
-      <mat-card class="has-hover"
+      <!-- <mat-card class="has-hover"
                 [class.mb-3]="last">
         <mat-card-header class="no-avatar">
           <mat-card-title>{{ remoteUser.value.firstName }} {{ remoteUser.value.lastName }}</mat-card-title>
@@ -41,13 +41,32 @@
                   color="primary"
                   [routerLink]="[i]">View or Edit User's Details</button>
         </mat-card-actions>
-      </mat-card>
+      </mat-card> -->
+
+      <app-summary-card [icon]="'account_circle'"
+                        [title]="remoteUser.value.firstName + ' ' +remoteUser.value.lastName"
+                        [id]="i"
+                        [actionButtonTitle]="'update information'"
+                        [actionDisabled]="false"
+                        [properties]="getRemoteUserProperties(remoteUser)"
+                        [menu]="remoteUserMenu"
+                        (remove)="onRemove($event)"
+                        (action)=onEdit($event)>
+        <ng-content></ng-content>
+      </app-summary-card>
+
+      <ng-template #remoteUserMenu
+                   let-remoteUser="remoteUser">
+        <button type="button"
+                mat-icon-button
+                color="primary"
+                matTooltip="Remove Remote User"
+                (click)="onRemove(i)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </ng-template>
     </ng-container>
 
-    <p *ngIf="hasRemoteUsers.value && !remoteUsers?.length"
-       class="lead text-muted">
-      No Remote Users
-    </p>
   </section>
 
   <app-alert *ngIf="hasNoRemoteUserError"
@@ -66,7 +85,7 @@
           class="mb-3"
           [routerLink]="['new']">
     <mat-icon class="add-icon">add</mat-icon>
-    Add Remote User
+    add remote practitioners
   </button>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
