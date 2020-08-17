@@ -479,6 +479,21 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)
+        {
+            var enrollee = await _context.Enrollees
+                .Include(e => e.Certifications)
+                    .ThenInclude(c => c.College)
+                .SingleOrDefaultAsync(e => e.GPID == gpid);
+
+            if (enrollee == null)
+            {
+                return null;
+            }
+
+            return parameters.ValidateAgainst(enrollee);
+        }
+
         public async Task<SelfDeclarationDocument> AddSelfDeclarationDocumentAsync(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument)
         {
             selfDeclarationDocument.EnrolleeId = enrolleeId;
