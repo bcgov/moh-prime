@@ -13,8 +13,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class SiteRegistrationTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<Site>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
-  @Output() public delete: EventEmitter<number>;
-  @Output() public deleteOrg: EventEmitter<number>;
+  @Output() public delete: EventEmitter<{ [key: string]: number }>;
 
   public columns: string[];
 
@@ -24,17 +23,19 @@ export class SiteRegistrationTableComponent implements OnInit {
     private authService: AuthService
   ) {
     this.columns = [
-      'locationName',
-      'vendor',
+      'referenceId',
+      'organizationName',
+      'signingAuthority',
+      'doingBusinessAs',
       'submissionDate',
       'siteAdjudication',
-      'pecCode',
+      'siteId',
+      'careSetting',
       'actions'
     ];
     this.dataSource = new MatTableDataSource<Site>([]);
     this.route = new EventEmitter<string | (string | number)[]>();
-    this.delete = new EventEmitter<number>();
-    this.deleteOrg = new EventEmitter<number>();
+    this.delete = new EventEmitter<{ [key: string]: number }>();
   }
 
   public get canEdit(): boolean {
@@ -45,12 +46,8 @@ export class SiteRegistrationTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  public deleteSite(siteId: number) {
-    this.delete.emit(siteId);
-  }
-
-  public deleteOrganization(organizationId: number) {
-    this.deleteOrg.emit(organizationId);
+  public deleteRecord(record: { [key: string]: number }) {
+    this.delete.emit(record);
   }
 
   public ngOnInit(): void { }

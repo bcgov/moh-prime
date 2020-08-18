@@ -5,34 +5,32 @@
            [dataSource]="dataSource"
            class="w-100">
 
-      <!-- TODO change in requirements dropped organization -->
-      <!-- <ng-container matColumnDef="referenceId">
+      <ng-container matColumnDef="referenceId">
         <th mat-header-cell
             *matHeaderCellDef> Reference ID </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.referenceId }} </td>
-      </ng-container> -->
+      </ng-container>
 
-      <!-- TODO change in requirements dropped organization -->
-      <!-- <ng-container matColumnDef="organizationName">
+      <ng-container matColumnDef="organizationName">
         <th mat-header-cell
             *matHeaderCellDef> Organization Name </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.name }} </td>
-      </ng-container> -->
-
-      <ng-container matColumnDef="locationName">
-        <th mat-header-cell
-            *matHeaderCellDef> Id </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.id | default }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="vendor">
+      <ng-container matColumnDef="signingAuthority">
         <th mat-header-cell
-            *matHeaderCellDef> Vendor </th>
+            *matHeaderCellDef> Signing Authority </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.siteVendors[0]?.vendorCode | configCode: 'vendors' | default }} </td>
+            *matCellDef="let row;"> {{ row.name }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="doingBusinessAs">
+        <th mat-header-cell
+            *matHeaderCellDef> Doing Business As </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.id | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="submissionDate">
@@ -44,7 +42,7 @@
 
       <ng-container matColumnDef="siteAdjudication">
         <th mat-header-cell
-            *matHeaderCellDef> State </th>
+            *matHeaderCellDef> Site Adjudication </th>
         <td mat-cell
             *matCellDef="let row;"
             class="status"
@@ -52,9 +50,16 @@
             [class.under-review]="!row.pec"> {{ (row.pec) ? 'Approved' : 'Under Review' | default }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="pecCode">
+      <ng-container matColumnDef="siteId">
         <th mat-header-cell
-            *matHeaderCellDef> PEC Code </th>
+            *matHeaderCellDef> Site ID </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.pec | default }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="careSetting">
+        <th mat-header-cell
+            *matHeaderCellDef> Care Setting </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.pec | default }} </td>
       </ng-container>
@@ -102,21 +107,37 @@
           <span>Site Information</span>
         </button>
         <button mat-menu-item
+                [disabled]="true">
+          <mat-icon>rate_review</mat-icon>
+          <span>Remote Practitioners</span>
+        </button>
+
+        <mat-divider [inset]="true"></mat-divider>
+
+        <button mat-menu-item
                 (click)="onRoute([row.id, AdjudicationRoutes.SITE_ADJUDICATION])">
           <mat-icon>rate_review</mat-icon>
           <span>Site Adjudication</span>
         </button>
         <button mat-menu-item
+                [disabled]="true">
+          <mat-icon>rate_review</mat-icon>
+          <span>Claim Site</span>
+        </button>
+
+        <mat-divider [inset]="true"></mat-divider>
+
+        <button mat-menu-item
                 [disabled]="!canEdit"
-                (click)="deleteSite(row.id)">
+                (click)="deleteRecord({ organizationId: row.organizationId})">
           <mat-icon>delete</mat-icon>
-          <span>Delete Site</span>
+          <span>Delete Organization</span>
         </button>
         <button mat-menu-item
                 [disabled]="!canEdit"
-                (click)="deleteOrganization(row.organizationId)">
+                (click)="deleteRecord({ siteId: row.id })">
           <mat-icon>delete</mat-icon>
-          <span>Delete Organization</span>
+          <span>Delete Site</span>
         </button>
       </mat-menu>
     </ng-template>
