@@ -22,10 +22,7 @@ namespace Prime.Services.Clients
 
         public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
         {
-            if (certification == null)
-            {
-                throw new ArgumentNullException(nameof(certification));
-            }
+            certification.ThrowIfNull(nameof(certification));
 
             var requestParams = new CollegeRecordRequestParams(certification);
 
