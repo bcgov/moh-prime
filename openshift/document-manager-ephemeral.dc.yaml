@@ -216,7 +216,7 @@ objects:
           valueFrom:
             secretKeyRef:
               key: CACHE_REDIS_PASS
-              name: "redis-secrets"
+              name: 'redis-secrets'
         - name: CACHE_REDIS_PORT
           value: "6379"
         - name: DB_HOST
@@ -247,29 +247,29 @@ objects:
           valueFrom:
             secretKeyRef:
               key: DOCUMENT_MANAGER_CLIENT_SECRET
-              name: "document-manager-secrets"
+              name: 'document-manager-secrets'
         - name: DOCUMENT_MANAGER_URL
           value: "https://${VANITY_URL}/api/docman/"
         - name: FLASK_APP
           valueFrom:
             secretKeyRef:
               key: FLASK_APP
-              name: "document-manager-secrets"
+              name: 'document-manager-secrets'
         - name: FLASK_DEBUG
           valueFrom:
             secretKeyRef:
               key: FLASK_DEBUG
-              name: "document-manager-secrets"
+              name: 'document-manager-secrets'
         - name: FLASK_ENV
           valueFrom:
             secretKeyRef:
               key: FLASK_ENV
-              name: "document-manager-secrets"
+              name: 'document-manager-secrets'
         - name: FLASK_RUN_HOST
           valueFrom:
             secretKeyRef:
               key: FLASK_RUN_HOST
-              name: "document-manager-secrets"
+              name: 'document-manager-secrets'
         - name: FLASK_RUN_PORT
           value: "6001"
         - name: JWT_OIDC_WELL_KNOWN_CONFIG
