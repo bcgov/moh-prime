@@ -69,43 +69,14 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.getDataset(this.route.snapshot.queryParams);
   }
 
-  public onDelete(siteId: number) {
-    const data = this.defaultOptions.delete('site');
-    if (this.authService.isSuperAdmin()) {
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? of(noop)
-              : EMPTY
-          ),
-          exhaustMap(() => this.siteResource.deleteSite(siteId)),
-          map((site: Site) => this.dataSource.data = MatTableDataSourceUtils.delete<Site>(this.dataSource, 'id', site.id))
-        )
-        .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
-    }
-  }
-
-  public onDeleteOrganization(organizationId: number) {
-    const data = this.defaultOptions.delete('organization');
-    if (this.authService.isSuperAdmin()) {
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? of(noop)
-              : EMPTY
-          ),
-          exhaustMap(() => this.organizationResource.deleteOrganization(organizationId)),
-        )
-        .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
-    }
-  }
-
   public onRoute(routePath: string | (string | number)[]) {
     this.routeUtils.routeWithin(routePath);
+  }
+
+  public onDelete(record: { [key: string]: number }) {
+    (record.organizationId)
+      ? this.deleteOrganization(record?.organizationId)
+      : this.deleteSite(record?.siteId);
   }
 
   public ngOnInit(): void {
@@ -175,5 +146,49 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .pipe(
         map((site: Site) => [site])
       );
+  }
+
+  // TODO compress these down into a single method using params
+  private deleteOrganization(organizationId: number) {
+    if (!organizationId) {
+      return;
+    }
+
+    if (this.authService.isSuperAdmin()) {
+      const data = this.defaultOptions.delete('organization');
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => this.organizationResource.deleteOrganization(organizationId)),
+        )
+        .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
+    }
+  }
+
+  private deleteSite(siteId: number) {
+    if (!siteId) {
+      return;
+    }
+
+    if (this.authService.isSuperAdmin()) {
+      const data = this.defaultOptions.delete('site');
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => this.siteResource.deleteSite(siteId)),
+          map((site: Site) => this.dataSource.data = MatTableDataSourceUtils.delete<Site>(this.dataSource, 'id', site.id))
+        )
+        .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
+    }
   }
 }

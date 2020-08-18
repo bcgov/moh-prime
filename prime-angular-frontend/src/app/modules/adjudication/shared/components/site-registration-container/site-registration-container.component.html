@@ -13,8 +13,7 @@
   <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
                                [dataSource]="dataSource"
                                (route)="onRoute($event)"
-                               (delete)="onDelete($event)"
-                               (deleteOrg)="onDeleteOrganization($event)"></app-site-registration-table>
+                               (delete)="onDelete($event)"></app-site-registration-table>
 
   <ng-container *ngIf="content">
 
