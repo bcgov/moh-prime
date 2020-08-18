@@ -65,7 +65,13 @@ export class SiteGuard extends BaseGuard {
 
   private manageRouting(routePath: string, defaultRoute: string, site: Site): boolean {
 
-    const childRoute = routePath.split('?').shift().split('/').pop();
+    let childRoute = routePath.includes('remote-users')
+      ? 'remote-users'
+      : routePath.split('/').pop();
+
+    if (childRoute.includes('?')) {
+      childRoute = childRoute.split('?')[0];
+    }
 
     const whiteListedRoutes = site.submittedDate
       ? SiteRoutes.editRegistrationRouteAccess()

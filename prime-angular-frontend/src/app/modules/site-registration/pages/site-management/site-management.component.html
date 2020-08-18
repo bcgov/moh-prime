@@ -30,43 +30,14 @@
 
   <ng-container *ngFor="let organization of organizations">
 
-    <!-- <mat-card class="has-hover">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <mat-icon color="primary">business</mat-icon>
-        </div>
-        <mat-card-title>Organization Information</mat-card-title>
-        <ng-container [ngTemplateOutlet]="organizationMenu"
-                      [ngTemplateOutletContext]="{ organization: organization }"></ng-container>
-      </mat-card-header>
-      <mat-card-content>
-        <ng-container *ngFor="let prop of getOrganizationProperties(organization)"
-                      [ngTemplateOutlet]="property"
-                      [ngTemplateOutletContext]="{ property: prop }">
-        </ng-container>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-stroked-button
-                type="button"
-                color="primary"
-                [disabled]="!organization.acceptedAgreementDate"
-                (click)="viewAgreement(organization)">
-          View/Print Agreement
-        </button>
-      </mat-card-actions>
-    </mat-card> -->
-
-    <app-summary-card [icon]="'business'"
-                      [title]="'Organization Information'"
-                      [id]="organization.id"
+    <app-summary-card icon="business"
+                      title="Organization Information"
+                      [menu]="organizationMenu"
+                      [menuOutletContext]="{ organization: organization }"
+                      [properties]="getOrganizationProperties(organization)"
                       [actionButtonTitle]="'View/Print Agreement'"
                       [actionDisabled]="!organization.acceptedAgreementDate"
-                      [properties]="getOrganizationProperties(organization)"
-                      [menu]="organizationMenu"
-                      [outletContext]="{ organization: organization }"
-                      (action)=viewAgreement(organization)>
-
-    </app-summary-card>
+                      (action)=viewAgreement(organization)></app-summary-card>
 
     <hr class="divider">
 
@@ -85,40 +56,13 @@
 
   <ng-container *ngFor="let site of sites">
 
-    <!-- <mat-card class="has-hover">
-      <mat-card-header>
-        <div mat-card-avatar>
-          <mat-icon color="primary">store</mat-icon>
-        </div>
-        <mat-card-title>Site Information</mat-card-title>
-        <ng-container [ngTemplateOutlet]="siteMenu"
-                      [ngTemplateOutletContext]="{ site: site }"></ng-container>
-      </mat-card-header>
-      <mat-card-content>
-        <ng-container *ngFor="let prop of getSiteProperties(site)"
-                      [ngTemplateOutlet]="property"
-                      [ngTemplateOutletContext]="{ property: prop }">
-        </ng-container>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-stroked-button
-                type="button"
-                color="primary"
-                [disabled]="!site.completed"
-                (click)="viewSiteRemoteUsers(site)">
-          Update Remote Practitioners
-        </button>
-      </mat-card-actions>
-    </mat-card> -->
-
-    <app-summary-card [icon]="'store'"
-                      [title]="'Site Information'"
-                      [id]="site.id"
-                      [actionButtonTitle]="'Update Remote Practitioners'"
-                      [actionDisabled]="!site.completed"
-                      [properties]="getSiteProperties(site)"
+    <app-summary-card icon="store"
+                      title="Site Information"
                       [menu]="siteMenu"
-                      [outletContext]="{ site: site }"
+                      [menuOutletContext]="{ site: site }"
+                      [properties]="getSiteProperties(site)"
+                      actionButtonTitle="Update Remote Practitioners"
+                      [actionDisabled]="!site.completed"
                       (action)="viewSiteRemoteUsers(site)"></app-summary-card>
 
   </ng-container>

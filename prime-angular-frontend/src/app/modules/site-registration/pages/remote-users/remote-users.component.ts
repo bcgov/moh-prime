@@ -131,7 +131,7 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onEdit(index: number) {
-    this.routeUtils.routeRelativeTo(['./', index]);
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.REMOTE_USERS, index]);
   }
 
   public onBack() {

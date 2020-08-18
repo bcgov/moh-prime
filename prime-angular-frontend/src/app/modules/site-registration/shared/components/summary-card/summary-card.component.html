@@ -5,7 +5,7 @@
     </div>
     <mat-card-title>{{ title }}</mat-card-title>
     <ng-container [ngTemplateOutlet]="menu"
-                  [ngTemplateOutletContext]="outletContext"></ng-container>
+                  [ngTemplateOutletContext]="menuOutletContext"></ng-container>
   </mat-card-header>
   <mat-card-content>
     <ng-container *ngFor="let prop of properties"
@@ -18,7 +18,7 @@
             type="button"
             color="primary"
             [disabled]="actionDisabled"
-            (click)="onClick(id)">
+            (click)="onClick()">
       {{ actionButtonTitle }}
     </button>
   </mat-card-actions>

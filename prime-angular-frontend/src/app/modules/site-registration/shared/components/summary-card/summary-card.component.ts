@@ -9,12 +9,11 @@ import { Template } from '@angular/compiler/src/render3/r3_ast';
 export class SummaryCardComponent implements OnInit {
   @Input() public icon: string;
   @Input() public title: string;
-  @Input() public id: number;
+  @Input() public menu: Template;
+  @Input() public menuOutletContext: object;
+  @Input() public properties: [string, string];
   @Input() public actionButtonTitle: string;
   @Input() public actionDisabled: boolean;
-  @Input() public properties: [string, string];
-  @Input() public menu: Template;
-  @Input() public outletContext: object;
 
   @Output() public action: EventEmitter<number>;
   @Output() public remove: EventEmitter<number>;
@@ -24,12 +23,12 @@ export class SummaryCardComponent implements OnInit {
     this.remove = new EventEmitter<number>();
   }
 
-  public onClick(id: number) {
-    this.action.emit(id);
+  public onClick() {
+    this.action.emit();
   }
 
-  public onRemove(id: number) {
-    this.remove.emit(id);
+  public onRemove() {
+    this.remove.emit();
   }
 
   public ngOnInit(): void { }

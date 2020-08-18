@@ -24,36 +24,15 @@
 
   <section>
     <ng-container *ngFor="let remoteUser of remoteUsers.controls; let i = index; let last = last">
-      <!-- <mat-card class="has-hover"
-                [class.mb-3]="last">
-        <mat-card-header class="no-avatar">
-          <mat-card-title>{{ remoteUser.value.firstName }} {{ remoteUser.value.lastName }}</mat-card-title>
-          <button type="button"
-                  mat-icon-button
-                  color="primary"
-                  matTooltip="Remove Remote User"
-                  (click)="onRemove(i)">
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-card-header>
-        <mat-card-actions>
-          <button mat-button
-                  color="primary"
-                  [routerLink]="[i]">View or Edit User's Details</button>
-        </mat-card-actions>
-      </mat-card> -->
 
-      <app-summary-card [icon]="'account_circle'"
+      <app-summary-card icon="account_circle"
                         [title]="remoteUser.value.firstName + ' ' +remoteUser.value.lastName"
-                        [id]="i"
-                        [actionButtonTitle]="'update information'"
-                        [actionDisabled]="false"
-                        [properties]="getRemoteUserProperties(remoteUser)"
                         [menu]="remoteUserMenu"
-                        (remove)="onRemove($event)"
-                        (action)=onEdit($event)>
-        <ng-content></ng-content>
-      </app-summary-card>
+                        [properties]="getRemoteUserProperties(remoteUser)"
+                        actionButtonTitle="update information"
+                        [actionDisabled]="false"
+                        (remove)="onRemove(i)"
+                        (action)="onEdit(i)"></app-summary-card>
 
       <ng-template #remoteUserMenu
                    let-remoteUser="remoteUser">
