@@ -46,6 +46,7 @@ export class DocumentUploadComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
+    // Keys are the excepted mime types, values are the human-readable expected type labels.
     const fileValidateTypeLabelExpectedTypesMap = {
       'image/jpeg': '.jpeg, .jpg',
       'image/png': '.png'
