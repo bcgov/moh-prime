@@ -87,10 +87,7 @@ export class DocumentUploadComponent implements OnInit {
         chunkSize: 1048576, // 1 MB
         removeFingerprintOnSuccess: true,
         retryDelays: [100, 3000],
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          Authorization: `Bearer ${this.jwt}`,
-        },
+        headers: { Authorization: `Bearer ${this.jwt}` },
         onError: (err: Error) => {
           this.logger.error('DocumentUpload::onFilePondAddFile', err);
           error(err.message);
