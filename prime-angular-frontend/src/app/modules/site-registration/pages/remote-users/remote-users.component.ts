@@ -16,10 +16,7 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { Organization } from '@registration/shared/models/organization.model';
-import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
-import { ConfigCodePipe } from '@config/config-code.pipe';
-import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-remote-users',
@@ -44,9 +41,7 @@ export class RemoteUsersComponent implements OnInit {
     private siteFormStateService: SiteFormStateService,
     private organizationResource: OrganizationResource,
     private formUtilsService: FormUtilsService,
-    private fullnamePipe: FullnamePipe,
-    private addressPipe: AddressPipe,
-    private configCodePipe: ConfigCodePipe
+    private addressPipe: AddressPipe
   ) {
     this.title = 'Practitioners Requiring Remote PharmaNet Access';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
