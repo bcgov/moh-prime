@@ -339,22 +339,23 @@ namespace Prime.Services
 
             private static EnrolleeState FromEnrollee(Enrollee enrollee)
             {
-                if (enrollee == null || enrollee.CurrentStatus == null)
+                enrollee.ThrowIfNull(nameof(enrollee));
+                if (enrollee.CurrentStatus == null)
                 {
-                    throw new ArgumentNullException(nameof(enrollee));
+                    throw new ArgumentException("Enrollee must have a CurrentStatus", nameof(enrollee));
                 }
 
-                switch (enrollee.CurrentStatus.StatusCode)
+                switch (enrollee.CurrentStatus.GetStatusType())
                 {
-                    case (int)StatusType.Editable:
+                    case StatusType.Editable:
                         return EnrolleeState.Editable;
-                    case (int)StatusType.UnderReview:
+                    case StatusType.UnderReview:
                         return EnrolleeState.UnderReview;
-                    case (int)StatusType.RequiresToa:
+                    case StatusType.RequiresToa:
                         return EnrolleeState.RequiresToa;
-                    case (int)StatusType.Locked:
+                    case StatusType.Locked:
                         return EnrolleeState.Locked;
-                    case (int)StatusType.Declined:
+                    case StatusType.Declined:
                         return EnrolleeState.Declined;
                     default:
                         throw new ArgumentException($"State machine cannot recognize status code {enrollee.CurrentStatus.StatusCode}");
