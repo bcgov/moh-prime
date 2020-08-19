@@ -130,7 +130,7 @@ namespace Prime.Controllers
             }
 
             // Check to see if this userId is already an enrollee, if so, reject creating another
-            if (await _enrolleeService.EnrolleeUserIdExistsAsync(enrollee.UserId))
+            if (await _enrolleeService.UserIdExistsAsync(enrollee.UserId))
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));

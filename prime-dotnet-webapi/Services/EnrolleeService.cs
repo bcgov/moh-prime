@@ -38,32 +38,32 @@ namespace Prime.Services
         public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
         {
             return await _context.Enrollees
+                .AsNoTracking()
                 .AnyAsync(e => e.Id == enrolleeId);
         }
 
-        public async Task<bool> EnrolleeUserIdExistsAsync(Guid userId)
+        public async Task<bool> UserIdExistsAsync(Guid userId)
         {
             return await _context.Enrollees
+                .AsNoTracking()
                 .AnyAsync(e => e.UserId == userId);
         }
 
-        public async Task<bool> EnrolleeGpidExistsAsync(string gpid)
+        public async Task<bool> GpidExistsAsync(string gpid)
         {
             return await _context.Enrollees
+                .AsNoTracking()
                 .AnyAsync(e => e.GPID == gpid);
         }
 
-        public async Task<Enrollee> GetEnrolleeAsync(Guid userId)
+        public async Task<Guid?> GetUserIdAsync(int enrolleeId)
         {
-            var entity = await this.GetBaseEnrolleeQuery()
-                .SingleOrDefaultAsync(e => e.UserId == userId);
-
-            if (entity != null)
-            {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-            }
-
-            return entity;
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => e.UserId)
+                .Cast<Guid?>() // Want null instead of Guid.Empty if enrollee doesn't exist
+                .SingleOrDefaultAsync();
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)

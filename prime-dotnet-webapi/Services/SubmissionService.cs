@@ -214,7 +214,7 @@ namespace Prime.Services
                 {
                     enrollee.GPID = GenerateGpid();
                 }
-                while (await _enrolleeService.EnrolleeGpidExistsAsync(enrollee.GPID));
+                while (await _enrolleeService.GpidExistsAsync(enrollee.GPID));
             }
         }
 
