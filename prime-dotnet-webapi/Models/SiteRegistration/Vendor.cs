@@ -11,7 +11,7 @@ namespace Prime.Models
         [Key]
         public int Code { get; set; }
 
-        public int OrganizationTypeCode { get; set; }
+        public int CareSettingCode { get; set; }
 
         public CareSetting CareSetting { get; set; }
 

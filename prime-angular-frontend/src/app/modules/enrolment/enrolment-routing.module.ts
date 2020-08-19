@@ -18,7 +18,7 @@ import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 // import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 import { JobComponent } from './pages/job/job.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
-import { OrganizationComponent } from './pages/organization/organization.component';
+import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -93,8 +93,8 @@ const routes: Routes = [
         data: { title: 'PRIME Enrolment' }
       },
       {
-        path: EnrolmentRoutes.ORGANIZATION,
-        component: OrganizationComponent,
+        path: EnrolmentRoutes.CARE_SETTING,
+        component: CareSettingComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
