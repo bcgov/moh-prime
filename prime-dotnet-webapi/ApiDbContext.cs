@@ -56,8 +56,8 @@ namespace Prime
 
         public DbSet<Certification> Certifications { get; set; }
         public DbSet<Job> Jobs { get; set; }
-        public DbSet<EnrolleeOrganizationType> EnrolleeOrganizationTypes { get; set; }
-        public DbSet<OrganizationType> OrganizationTypes { get; set; }
+        public DbSet<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
+        public DbSet<CareSetting> CareSettings { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Address> Addresses { get; set; }

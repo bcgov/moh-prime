@@ -13,7 +13,7 @@ namespace Prime.Models
 
         public int OrganizationTypeCode { get; set; }
 
-        public OrganizationType OrganizationType { get; set; }
+        public CareSetting CareSetting { get; set; }
 
         public string Name { get; set; }
 

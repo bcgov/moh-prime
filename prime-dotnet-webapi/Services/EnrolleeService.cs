@@ -176,7 +176,7 @@ namespace Prime.Services
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
-                .Include(e => e.EnrolleeOrganizationTypes)
+                .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.SelfDeclarations)
                 .SingleAsync(e => e.Id == enrolleeId);
 
@@ -185,7 +185,7 @@ namespace Prime.Services
             UpdateMailingAddress(enrollee, enrolleeProfile.MailingAddress);
             ReplaceExistingItems(enrollee.Certifications, enrolleeProfile.Certifications, enrolleeId);
             ReplaceExistingItems(enrollee.Jobs, enrolleeProfile.Jobs, enrolleeId);
-            ReplaceExistingItems(enrollee.EnrolleeOrganizationTypes, enrolleeProfile.EnrolleeOrganizationTypes, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeCareSettings, enrolleeProfile.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, enrolleeProfile.SelfDeclarations, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
@@ -287,7 +287,7 @@ namespace Prime.Services
                     .ThenInclude(c => c.License)
                         .ThenInclude(l => l.DefaultPrivileges)
                 .Include(e => e.Jobs)
-                .Include(e => e.EnrolleeOrganizationTypes)
+                .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.Status)
                 .Include(e => e.EnrolmentStatuses)
