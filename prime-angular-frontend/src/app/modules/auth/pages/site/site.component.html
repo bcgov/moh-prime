@@ -20,22 +20,54 @@
           <button mat-flat-button
                   color="primary"
                   class="large"
-                  (click)="loginUsingBCSC()">Access Site Registration</button>
+                  (click)="loginUsingBCSC()">Access Registration</button>
 
         </div>
       </div>
 
     </div>
-    <div class="col-sm-12 col-md-6 steps">
+    <div class="col-sm-12 col-md-4 steps">
 
       <div class="step-container">
         <section class="content">
-          <h2>Signing Authority</h2>
+          <h2>BC Services Card</h2>
 
           <p>
-            A site must be registered by the organization’s Signing Authority. The Signing Authority is responsible for
-            PharmaNet use, and can legally bind the organization to the terms of the registration and the Organization
-            Agreement for PharmaNet Use.
+            To register a site, you need to set up your BC Services Card on your mobile device. This is a one-time
+            process.
+
+            <br>
+            <br>
+
+            <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/log-in-with-card/setup"
+                   target="_blank"
+                   rel="noopener noreferrer">
+              How to set up a Mobile Card
+            </a>
+          </p>
+        </section>
+
+        <div class="info-graphic">
+          <img src="/assets/bc_services_card.svg"
+               alt="BC Services Card Icon">
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-md-4 steps">
+
+      <div class="step-container">
+        <section class="content">
+          <h2>Who can register a site?</h2>
+
+          <p>
+            The person legally responsible for an organization’s PharmaNet use registers the site.
+
+            <app-contextual-help>
+              A site must be registered by the organization's Signing Authority. The Signing Authority is responsible
+              for PharmaNet use, and can legally bind the organization to the terms of the registration and the
+              Organization Agreement for PharmaNet Use.
+            </app-contextual-help>
           </p>
         </section>
 
@@ -46,30 +78,30 @@
       </div>
 
     </div>
-    <div class="col-sm-12 col-md-6 steps">
+    <div class="col-sm-12 col-md-4 steps">
 
       <div class="step-container">
         <section class="content">
-          <h2>BC Services Card</h2>
+          <h2>What you need</h2>
 
-          <p>
-            The Signing Authority needs to have their BC Services Card set up on their mobile device (this is a one-time
-            process). Once their card is set up, the Signing Authority can register a site.
+          <ul>
+            <li>
+              Your mobile BC Services Card
+            </li>
+            <li>
+              A scan of your business licence
+            </li>
+            <li>
+              Contact details for the person(s) who oversee(s) your organization’s PharmaNet connections and related
+              privacy, security and technical issues
+            </li>
+          </ul>
 
-            <br>
-            <br>
-
-            <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/log-in-with-card/setup"
-               target="_blank"
-               rel="noopener noreferrer">
-              How to set up a Mobile Card
-            </a>
-          </p>
         </section>
 
         <div class="info-graphic">
-          <img src="/assets/bc_services_card.svg"
-               alt="BC Services Card Icon">
+          <img src="/assets/enrolment.svg"
+               alt="Enrolment Icon">
         </div>
       </div>
 
