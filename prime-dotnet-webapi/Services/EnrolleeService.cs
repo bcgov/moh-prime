@@ -151,10 +151,7 @@ namespace Prime.Services
 
         public async Task<int> CreateEnrolleeAsync(Enrollee enrollee)
         {
-            if (enrollee == null)
-            {
-                throw new ArgumentNullException(nameof(enrollee), "Could not create an enrollee, the passed in Enrollee cannot be null.");
-            }
+            enrollee.ThrowIfNull(nameof(enrollee));
 
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             _context.Enrollees.Add(enrollee);
@@ -464,10 +461,7 @@ namespace Prime.Services
 
         public async Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids)
         {
-            if (hpdids == null)
-            {
-                throw new ArgumentNullException(nameof(hpdids));
-            }
+            hpdids.ThrowIfNull(nameof(hpdids));
 
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 

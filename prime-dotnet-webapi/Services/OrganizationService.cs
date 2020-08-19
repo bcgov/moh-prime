@@ -46,11 +46,7 @@ namespace Prime.Services
 
         public async Task<int> CreateOrganizationAsync(Party signingAuthority)
         {
-
-            if (signingAuthority == null)
-            {
-                throw new ArgumentNullException(nameof(signingAuthority), "Could not create a site, the passed in Party cannot be null.");
-            }
+            signingAuthority.ThrowIfNull(nameof(signingAuthority));
 
             var userId = _httpContext.HttpContext.User.GetPrimeUserId();
 
