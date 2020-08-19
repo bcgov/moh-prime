@@ -162,11 +162,12 @@ pipeline {
                 }
             }
         }
-        stage('Cleanup') {
-            agent { label 'code-tests' }
-            steps {
-                sh "./player.sh sparsify"
-            }
-        }
+        // BUG (2020-08-13): Currently not working, failing to find files
+        // stage('Cleanup') {
+        //     agent { label 'code-tests' }
+        //     steps {
+        //         sh "./player.sh sparsify"
+        //     }
+        // }
     }
 }

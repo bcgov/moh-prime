@@ -24,20 +24,9 @@ namespace Prime.Auth
             IHostEnvironment environment
             )
         {
-            if (services is null)
-            {
-                throw new System.ArgumentNullException(nameof(services));
-            }
-
-            if (configuration is null)
-            {
-                throw new System.ArgumentNullException(nameof(configuration));
-            }
-
-            if (environment is null)
-            {
-                throw new System.ArgumentNullException(nameof(environment));
-            }
+            services.ThrowIfNull(nameof(services));
+            configuration.ThrowIfNull(nameof(configuration));
+            environment.ThrowIfNull(nameof(environment));
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

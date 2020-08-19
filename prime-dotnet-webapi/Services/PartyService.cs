@@ -38,10 +38,7 @@ namespace Prime.Services
 
         public async Task<int> CreatePartyAsync(Party party)
         {
-            if (party == null)
-            {
-                throw new ArgumentNullException(nameof(party), "Could not create an party, the passed in Party cannot be null.");
-            }
+            party.ThrowIfNull(nameof(party));
 
             _context.Parties.Add(party);
 

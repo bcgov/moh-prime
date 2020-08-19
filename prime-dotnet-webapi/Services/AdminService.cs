@@ -29,10 +29,7 @@ namespace Prime.Services
 
         public async Task<int> CreateAdminAsync(Admin admin)
         {
-            if (admin == null)
-            {
-                throw new ArgumentNullException(nameof(admin), "Could not create an admin, the passed in Admin cannot be null.");
-            }
+            admin.ThrowIfNull(nameof(admin));
 
             _context.Admins.Add(admin);
 

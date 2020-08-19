@@ -15,10 +15,7 @@ namespace Prime.Infrastructure
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader == null)
-            {
-                throw new ArgumentNullException(nameof(reader), "The passed in JsonReader cannot be null.");
-            }
+            reader.ThrowIfNull(nameof(reader));
 
             string value = (string)reader.Value;
             return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
