@@ -54,7 +54,7 @@ namespace Prime.Services
 
             if (organization == null)
             {
-                throw new ArgumentNullException(nameof(organization), "Could not create a site, the passed in Organization doesnt exist.");
+                throw new ArgumentException("Could not create a site, the passed in Organization doesnt exist.", nameof(organizationId));
             }
 
             // Site provisionerId should be equal to organization signingAuthorityId
