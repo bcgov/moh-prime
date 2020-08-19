@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using Prime.Models;
 
 namespace Prime.ViewModels
 {
-    public class OrganizationGetModel
+    public class OrganizationViewModel
     {
         public int Id { get; set; }
 
@@ -15,6 +13,6 @@ namespace Prime.ViewModels
 
         public Party SigningAuthority { get; set; }
 
-        public ICollection<SiteGetModel> Sites { get; set; }
+        public IEnumerable<SiteViewModel> Sites { get; set; }
     }
 }

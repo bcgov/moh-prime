@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Reflection;
+
+using AutoMapper;
 
 using Prime.Auth;
 using Prime.Models;
@@ -22,17 +24,20 @@ namespace Prime.Controllers
     [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
     public class OrganizationsController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
         private readonly IPartyService _partyService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
 
         public OrganizationsController(
+            IMapper mapper,
             IOrganizationService organizationService,
             IPartyService partyService,
             IDocumentService documentService,
             IRazorConverterService razorConverterService)
         {
+            _mapper = mapper;
             _organizationService = organizationService;
             _partyService = partyService;
             _razorConverterService = razorConverterService;
@@ -46,8 +51,8 @@ namespace Prime.Controllers
         [HttpGet(Name = nameof(GetOrganizations))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Organization>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizations()
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<OrganizationViewModel>>> GetOrganizations()
         {
             IEnumerable<Organization> organizations = null;
 
@@ -64,7 +69,7 @@ namespace Prime.Controllers
                     : new List<Organization>();
             }
 
-            return Ok(ApiResponse.Result(organizations));
+            return Ok(ApiResponse.Result(_mapper.Map<OrganizationViewModel[]>(organizations)));
         }
 
         // GET: api/Organizations/5
