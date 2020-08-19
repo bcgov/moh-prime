@@ -67,15 +67,6 @@
 
   </ng-container>
 
-  <ng-template #property
-               let-property="
-                      property">
-    <div>
-      <strong>{{ property.key }}</strong>
-      {{ property.value | default }}
-    </div>
-  </ng-template>
-
   <ng-template #organizationMenu
                let-organization="organization">
     <button mat-icon-button

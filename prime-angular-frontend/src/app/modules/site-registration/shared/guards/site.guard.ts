@@ -65,8 +65,8 @@ export class SiteGuard extends BaseGuard {
 
   private manageRouting(routePath: string, defaultRoute: string, site: Site): boolean {
 
-    let childRoute = routePath.includes('remote-users')
-      ? 'remote-users'
+    let childRoute = routePath.includes(SiteRoutes.REMOTE_USERS)
+      ? SiteRoutes.REMOTE_USERS
       : routePath.split('/').pop();
 
     if (childRoute.includes('?')) {

@@ -4,7 +4,8 @@
       <mat-icon color="primary">{{ icon }}</mat-icon>
     </div>
     <mat-card-title>{{ title }}</mat-card-title>
-    <ng-container [ngTemplateOutlet]="menu"
+    <ng-container *ngIf="menu"
+                  [ngTemplateOutlet]="menu"
                   [ngTemplateOutletContext]="menuOutletContext"></ng-container>
   </mat-card-header>
   <mat-card-content>

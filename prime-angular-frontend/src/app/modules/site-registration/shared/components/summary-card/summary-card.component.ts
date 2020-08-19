@@ -1,5 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { Template } from '@angular/compiler/src/render3/r3_ast';
+import { Component, OnInit, Output, EventEmitter, Input, TemplateRef } from '@angular/core';
 
 @Component({
   selector: 'app-summary-card',
@@ -9,18 +8,18 @@ import { Template } from '@angular/compiler/src/render3/r3_ast';
 export class SummaryCardComponent implements OnInit {
   @Input() public icon: string;
   @Input() public title: string;
-  @Input() public menu: Template;
-  @Input() public menuOutletContext: object;
+  @Input() public menu: TemplateRef<any>;
+  @Input() public menuOutletContext: { [key: string]: any } | null;
   @Input() public properties: [string, string];
   @Input() public actionButtonTitle: string;
   @Input() public actionDisabled: boolean;
 
-  @Output() public action: EventEmitter<number>;
-  @Output() public remove: EventEmitter<number>;
+  @Output() public action: EventEmitter<void>;
+  @Output() public remove: EventEmitter<void>;
 
   constructor() {
-    this.action = new EventEmitter<number>();
-    this.remove = new EventEmitter<number>();
+    this.action = new EventEmitter<void>();
+    this.remove = new EventEmitter<void>();
   }
 
   public onClick() {
