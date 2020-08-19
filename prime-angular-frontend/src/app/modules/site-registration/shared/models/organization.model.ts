@@ -3,6 +3,7 @@ import { SignedAgreementDocument } from './signed-agreement-document.model';
 
 export interface Organization {
   id?: number;
+  displayId?: number;
   // Forms -----
   signingAuthorityId?: number;
   signingAuthority: Party;
