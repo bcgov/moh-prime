@@ -1,8 +1,11 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
+import { map, exhaustMap } from 'rxjs/operators';
+
 import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
+
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
@@ -22,29 +25,30 @@ export class SiteRegistrationActionsComponent implements OnInit {
     private organizationResource: OrganizationResource,
   ) { }
 
-  public ngOnInit(): void { }
-
   public getOrganizationAgreement() {
-    this.organizationResource.getOrganizationById(this.site.organizationId).subscribe((organization: Organization) => {
-      if (organization.signedAgreementDocuments.length > 0) {
-        this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.site.organizationId)
-          .subscribe((token: string) => {
-            this.utilsService.downloadToken(token);
-          });
-      } else {
-        this.organizationResource.getUnsignedOrganizationAgreement()
-          .subscribe((base64: string) => {
-            const blob = this.utilsService.base64ToBlob(base64);
-            this.utilsService.downloadDocument(blob, 'Organization-Agreement');
-          });
-      }
-    });
+    this.organizationResource.getOrganizationById(this.site.organizationId)
+      .pipe(
+        exhaustMap((organization: Organization) =>
+          (organization.signedAgreementDocuments.length > 0)
+            ? this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.site.organizationId)
+              .pipe(
+                map((token: string) => this.utilsService.downloadToken(token))
+              )
+            : this.organizationResource.getUnsignedOrganizationAgreement()
+              .pipe(
+                map((base64: string) => this.utilsService.base64ToBlob(base64)),
+                map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
+              )
+        )
+      ).subscribe();
   }
 
   public getBusinessLicence() {
     this.siteResource.getBusinessLicenceDownloadToken(this.site.id)
-      .subscribe((token: string) => {
-        this.utilsService.downloadToken(token);
-      });
+      .subscribe((token: string) =>
+        this.utilsService.downloadToken(token)
+      );
   }
+
+  public ngOnInit(): void { }
 }
