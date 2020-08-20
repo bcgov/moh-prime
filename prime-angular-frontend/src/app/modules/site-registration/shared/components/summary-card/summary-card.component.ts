@@ -22,7 +22,7 @@ export class SummaryCardComponent implements OnInit {
     this.remove = new EventEmitter<void>();
   }
 
-  public onClick() {
+  public onAction() {
     this.action.emit();
   }
 
