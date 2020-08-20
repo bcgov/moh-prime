@@ -87,7 +87,7 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-            if (!CompareCollections(comparitor, enrollee.EnrolleeOrganizationTypes, _updatedProfile.EnrolleeOrganizationTypes))
+            if (!CompareCollections(comparitor, enrollee.EnrolleeCareSettings, _updatedProfile.EnrolleeCareSettings))
             {
                 return Task.FromResult(false);
             }
@@ -144,10 +144,10 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<MailingAddress>(x => x.Country);
             config.IgnoreProperty<MailingAddress>(x => x.Province);
 
-            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.Id);
-            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.Enrollee);
-            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.EnrolleeId);
-            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.OrganizationType);
+            config.IgnoreProperty<EnrolleeCareSetting>(x => x.Id);
+            config.IgnoreProperty<EnrolleeCareSetting>(x => x.Enrollee);
+            config.IgnoreProperty<EnrolleeCareSetting>(x => x.EnrolleeId);
+            config.IgnoreProperty<EnrolleeCareSetting>(x => x.CareSetting);
 
             config.IgnoreProperty<SelfDeclaration>(x => x.Id);
             config.IgnoreProperty<SelfDeclaration>(x => x.SelfDeclarationType);

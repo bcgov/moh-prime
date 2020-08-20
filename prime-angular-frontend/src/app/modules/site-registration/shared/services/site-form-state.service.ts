@@ -55,7 +55,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * Convert reactive form abstract controls into JSON.
    */
   public get json(): Site {
-    const { organizationTypeCode, vendorCode } = this.careSettingTypeForm.getRawValue();
+    const { careSettingCode, vendorCode } = this.careSettingTypeForm.getRawValue();
     const { doingBusinessAs } = this.businessForm.getRawValue();
     const { physicalAddress } = this.siteAddressForm.getRawValue();
     const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
@@ -79,7 +79,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       // organization (N/A)
       provisionerId: this.provisionerId,
       // provisioner (N/A)
-      organizationTypeCode,
+      careSettingCode,
       // Only using single vendors for now
       siteVendors: [{
         siteId: this.siteId,
@@ -228,7 +228,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
   private buildCareSettingTypeForm(code: number = null): FormGroup {
     return this.fb.group({
-      organizationTypeCode: [
+      careSettingCode: [
         code,
         [Validators.required]
       ],

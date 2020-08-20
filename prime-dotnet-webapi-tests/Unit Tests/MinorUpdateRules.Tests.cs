@@ -177,23 +177,23 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testAllowableChangesRule_EnrolleeOrganizationTypes()
+        public async void testAllowableChangesRule_EnrolleeCareSettings()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
             // New org
             EnrolleeUpdateModel profile = enrollee.ToViewModel();
-            profile.EnrolleeOrganizationTypes.Add(new EnrolleeOrganizationType { OrganizationTypeCode = 1 });
+            profile.EnrolleeCareSettings.Add(new EnrolleeCareSetting { CareSettingCode = 1 });
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Edit org
             profile = enrollee.ToViewModel();
-            profile.EnrolleeOrganizationTypes.First().OrganizationTypeCode++;
+            profile.EnrolleeCareSettings.First().CareSettingCode++;
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Remove org
             profile = enrollee.ToViewModel();
-            profile.EnrolleeOrganizationTypes = profile.EnrolleeOrganizationTypes.Skip(1).ToList();
+            profile.EnrolleeCareSettings = profile.EnrolleeCareSettings.Skip(1).ToList();
             await AssertAllowableChanges(false, enrollee, profile);
         }
 
@@ -210,7 +210,7 @@ namespace PrimeTests.UnitTests
                 typeof(MailingAddress),
                 typeof(ICollection<Certification>),
                 typeof(ICollection<Job>),
-                typeof(ICollection<EnrolleeOrganizationType>),
+                typeof(ICollection<EnrolleeCareSetting>),
                 typeof(ICollection<SelfDeclaration>),
                 typeof(ICollection<SelfDeclarationDocument>),
             };

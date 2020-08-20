@@ -57,7 +57,7 @@ namespace Prime.Services
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
-                .Include(e => e.EnrolleeOrganizationTypes)
+                .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.AccessTerms)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 

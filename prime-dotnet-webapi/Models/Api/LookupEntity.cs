@@ -7,7 +7,7 @@ namespace Prime.Models.Api
         public List<College> Colleges { get; set; }
         public List<JobName> JobNames { get; set; }
         public List<License> Licenses { get; set; }
-        public List<OrganizationType> OrganizationTypes { get; set; }
+        public List<CareSetting> CareSettings { get; set; }
         public List<Practice> Practices { get; set; }
         public List<Status> Statuses { get; set; }
         public List<Country> Countries { get; set; }

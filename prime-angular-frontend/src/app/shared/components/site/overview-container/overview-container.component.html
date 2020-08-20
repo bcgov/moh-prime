@@ -32,7 +32,7 @@
                         [editRoute]="SiteRoutes.CARE_SETTING"
                         [showEditRedirect]="!site.submittedDate">
     <app-enrollee-property title="Care Setting">
-      {{ site.organizationTypeCode | configCode: 'organizationTypes' | default }}
+      {{ site.careSettingCode | configCode: 'careSettings' | default }}
     </app-enrollee-property>
     <app-enrollee-property title="Vendor">
       {{ site.siteVendors[0]?.vendorCode | configCode: 'vendors' | default }}
