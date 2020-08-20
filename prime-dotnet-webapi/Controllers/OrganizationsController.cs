@@ -51,7 +51,7 @@ namespace Prime.Controllers
         {
             IEnumerable<Organization> organizations = null;
 
-            if (User.IsAdmin() || User.HasAdminView())
+            if (User.HasAdminView())
             {
                 organizations = await _organizationService.GetOrganizationsAsync();
             }
@@ -82,7 +82,7 @@ namespace Prime.Controllers
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
-            if (!User.CanEdit(organization.SigningAuthority))
+            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -138,12 +138,8 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-
-            if (!User.CanEdit(party))
-            {
-                return Forbid();
-            }
+            // TODO: fix
+            // return Forbid();
 
             await _organizationService.UpdateOrganizationAsync(organizationId, updatedOrganization);
 
@@ -169,12 +165,8 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-
-            if (!User.CanEdit(party))
-            {
-                return Forbid();
-            }
+            // TODO: fix
+            // return Forbid();
 
             await _organizationService.UpdateCompletedAsync(organizationId);
 
@@ -194,13 +186,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<Organization>> DeleteOrganization(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
-
             if (organization == null)
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-
-            if (!User.CanEdit(organization.SigningAuthority))
+            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -224,7 +214,6 @@ namespace Prime.Controllers
         public async Task<ActionResult<string>> GetOrganizationAgreement(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
-
             if (organization == null)
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
@@ -249,13 +238,11 @@ namespace Prime.Controllers
         public async Task<IActionResult> AcceptCurrentOrganizationAgreement(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
-
             if (organization == null)
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-
-            if (!User.CanEdit(organization.SigningAuthority))
+            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -278,13 +265,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<Organization>> SubmitOrganizationRegistration(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
-
             if (organization == null)
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-
-            if (!User.CanEdit(organization.SigningAuthority))
+            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -308,13 +293,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<SignedAgreementDocument>> CreateSignedAgreement(int organizationId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
-
             if (organization == null)
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-
-            if (!User.CanEdit(organization.SigningAuthority))
+            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -341,13 +324,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<SignedAgreementDocument>>> GetSignedAgreement(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
-
             if (organization == null)
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-
-            if (!User.CanEdit(organization.SigningAuthority))
+            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -371,13 +352,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<SignedAgreementDocument>>> GetLatestSignedAgreement(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
-
             if (organization == null)
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-
-            if (!User.CanEdit(organization.SigningAuthority))
+            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }

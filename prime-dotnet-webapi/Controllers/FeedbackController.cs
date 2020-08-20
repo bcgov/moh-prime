@@ -39,14 +39,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Feedback>> CreateFeedback(Feedback feedback)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(feedback.EnrolleeId);
-
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(feedback.EnrolleeId);
+            if (record == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {feedback.EnrolleeId}"));
             }
-
-            if (!User.CanView(enrollee))
+            if (!record.ViewableBy(User))
             {
                 return Forbid();
             }
