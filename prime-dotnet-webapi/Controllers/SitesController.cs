@@ -41,24 +41,6 @@ namespace Prime.Controllers
             _documentService = documentService;
         }
 
-        // Temporary endpoint for admins until fruit loops
-        // James avert your eyes!  This is not the code you're looking for...
-        // GET: api/Sites
-        /// <summary>
-        /// Gets all of the Sites.
-        /// </summary>
-        [HttpGet(Name = nameof(GetAllSites))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetAllSites()
-        {
-            // JAMES! Why are you still looking at this code :)
-            // If you see this code, and you're not James, and fruitloops is released, and this code still exists, DELETE IT QUICK!
-            return Ok(ApiResponse.Result(await _siteService.GetSitesAsync()));
-        }
-
         // GET: api/Sites
         /// <summary>
         /// Gets all of the Sites for an organization, or all sites if user has ADMIN role

@@ -10,7 +10,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
 
-import { Organization } from '@registration/shared/models/organization.model';
+import { Organization, OrganizationViewModel } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
 
 // TODO use ApiResourceUtils to build URLs
@@ -26,11 +26,11 @@ export class OrganizationResource {
     private logger: LoggerService
   ) { }
 
-  public getOrganizations(): Observable<Organization[]> {
-    return this.apiResource.get<Organization[]>('organizations')
+  public getOrganizations(): Observable<OrganizationViewModel[]> {
+    return this.apiResource.get<OrganizationViewModel[]>('organizations')
       .pipe(
-        map((response: ApiHttpResponse<Organization[]>) => response.result),
-        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        map((response: ApiHttpResponse<OrganizationViewModel[]>) => response.result),
+        tap((organizations: OrganizationViewModel[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
           this.logger.error('[SiteRegistration] OrganizationResource::getOrganizations error has occurred: ', error);
