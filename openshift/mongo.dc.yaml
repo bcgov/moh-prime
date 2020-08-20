@@ -1,10 +1,22 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 metadata:
   name: mongodb
   annotations:
     description: "MongoDB deployment template."
     tags: "MongoDB"
+  description: >-
+    Main deployment configuration template for PRIME's Mongo database server.
+    Currently not in use (as of 2020-08-19), but is retained due to its
+    potential future use.
+
+    NOTE: This configuration template contains a persistent volume claim, and
+    is required in this version of PRIME's Mongo deployment templates. It is 
+    used only used in deployments to develop, test, and master branches.
+    
+    For all deployments of PRs to develop, please refer to 
+    `mongo-ephemeral.dc.yaml`.
 parameters:
   - name: NAME
     displayName: Name

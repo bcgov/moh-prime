@@ -3,8 +3,15 @@ kind: Template
 labels:
   template: postgresql-ephemeral-template
 metadata:
-  creationTimestamp: null
   name: postgresql-dc
+  creationTimestamp: null
+  description: >-
+    Ephemeral deployment configuration template for PRIME's PostgreSQL database
+    server.
+
+    NOTE: This configuration template does not contain a persistent volume 
+    claim, and is only for PRs to develop. For all other deployments to 
+    develop, test, and master branches, please refer to `postgresql.dc.yaml`
 parameters:
   - description: The name of the OpenShift Service exposed for the database.
     displayName: Database Service Name

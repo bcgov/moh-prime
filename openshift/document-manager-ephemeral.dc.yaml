@@ -1,10 +1,24 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 labels:
   template: document-manager-template
 metadata:
   name: document-manager-dc
   creationTimestamp: null
+  description: >-
+    Ephemeral version of the main deployment configuration template for PRIME's
+    Document Manager component.
+    
+    WARNING: This configuration is only used for development purposes 
+    (i.e. only in PR branches to develop), as it lacks persistent volume claims
+    and therefore all data is lost on pod destruction. For all other 
+    environments, utilize `document-manager.dc.yaml`.
+
+    A secondary pod, document-manager-${SUFFIX}-migrate, is also created to 
+    perform database migrations when any changes to the PostgreSQL database are
+    made. This occurs on every single deployment, regardless if there are 
+    changes to the database or not. Upon completion, the pod destroys itself.
 parameters:
   - name: NAME
     displayName: Name

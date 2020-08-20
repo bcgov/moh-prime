@@ -1,10 +1,25 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 labels:
   template: document-manager-template
 metadata:
   name: document-manager-dc
   creationTimestamp: null
+  description: >-
+    Main version of the deployment configuration template for PRIME's Document
+    Manager component. 
+    
+    WARNING: This configuration is used in deployments to all branches and 
+    environments apart for PR branches to develop. For the latter, please refer
+    to `document-manager-ephemeral.dc.yaml`.
+
+    The deployment utilizes a persistent volume claim to store all uploaded 
+    documents from users until the application is requested to retrieve them. 
+    A secondary pod, document-manager-${SUFFIX}-migrate, is also created to 
+    perform database migrations when any changes to the PostgreSQL database are
+    made. This occurs on every single deployment, regardless if there are 
+    changes to the database or not. Upon completion, the pod destroys itself.
 parameters:
   - name: NAME
     displayName: Name
@@ -66,6 +81,8 @@ objects:
       requests:
         storage: ${VOLUME_CAPACITY}
   status: {}
+
+# Document Manager OpenShift Service
 - apiVersion: v1
   kind: Service
   metadata:
@@ -88,6 +105,8 @@ objects:
       io.kompose.service: "${NAME}${SUFFIX}-backend"
   status:
     loadBalancer: {}
+
+# Document Manager - Core Deployment
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -113,6 +132,7 @@ objects:
       spec:
         containers:
         - env:
+          # Redis related environment variables
           - name: CACHE_REDIS_HOST
             value: "redis${SUFFIX}"
           - name: CACHE_REDIS_PASS
@@ -122,6 +142,8 @@ objects:
                 name: "redis-secrets"
           - name: CACHE_REDIS_PORT
             value: "6379"
+          
+          # PostgreSQL related environment variables
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: DB_NAME
@@ -146,6 +168,8 @@ objects:
               secretKeyRef:
                 key: database-user
                 name: "postgresql-secret"
+          
+          # Document Manager (incl. Flask) related environment variables
           - name: DOCUMENT_MANAGER_URL
             value: "https://${VANITY_URL}/api/docman/"
           - name: FLASK_APP
@@ -206,6 +230,12 @@ objects:
           name: "${NAME}${SUFFIX}:latest"
       type: ImageChange
   status: {}
+
+# Document Manager - Migration Pod Deployment
+#
+# Used for Alembic to run database migrations against the PostgreSQL database 
+# for all Document Manager related tables. This pod will run once PostgreSQL 
+# is verified to be open to query connections.
 - apiVersion: v1
   kind: Pod
   metadata:
@@ -218,6 +248,7 @@ objects:
     restartPolicy: Never
     containers:
     - command:
+        # Force wait migration pod execution until PostgreSQL is verified to be open to query connections.
         - /opt/app-root/src/app.sh
       args: 
         - migrate

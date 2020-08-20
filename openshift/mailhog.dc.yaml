@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Template
 labels:
@@ -5,6 +6,9 @@ labels:
 metadata:
   creationTimestamp: null
   name: -mailhog-server-dc
+  description: >-
+    Deployment configuration template for Mailhog, a service used to capture 
+    emails sent out in development and test environments only.
 parameters:
   - name: SOURCE_REPOSITORY_URL
     required: true

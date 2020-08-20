@@ -1,8 +1,15 @@
+---
 apiVersion: v1
 kind: Template
 metadata:
   name: metabase-dc
-  creationTimestamp: 
+  creationTimestamp:
+  description: >-
+    This is a PostgreSQL backed Metabase (http://www.metabase.com/) deployment. Metabase is the
+    easy, open source way for everyone in your company to ask questions and learn from data.
+  openshift.io/long-description: >-
+      This template provides a Metabase instance backed by a standalone PostgreSQL
+      server. The database is stored on persistent storage.
 parameters:
   - name: OC_NAMESPACE
     required: true

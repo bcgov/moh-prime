@@ -1,8 +1,11 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 metadata:
   name: dotnet-webapi-dc
   creationTimestamp: null
+  description: >-
+    Deployment configuration template for PRIME's .NET web API.
 parameters:
 - name: NAME
   displayName: Name

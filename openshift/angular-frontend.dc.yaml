@@ -1,8 +1,11 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 metadata:
   name: angular-frontend-dc
   creationTimestamp:
+  description: >-
+    Deployment configuration template for PRIME's Angular frontend component.
 parameters:
 - name: NAME
   displayName: Name
