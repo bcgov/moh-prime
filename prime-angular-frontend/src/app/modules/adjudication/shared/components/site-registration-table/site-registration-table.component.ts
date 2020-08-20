@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { Site } from '@registration/shared/models/site.model';
 import { SiteRegistrationViewModel } from '@adjudication/shared/models/site-registration.model';
 
 @Component({
