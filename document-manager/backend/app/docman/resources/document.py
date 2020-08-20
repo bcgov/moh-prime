@@ -239,6 +239,13 @@ class DownloadTokenCreationResource(Resource):
         if not document_guid:
             raise BadRequest('Must specify document GUID')
 
+        doc = Document.find_by_document_guid(document_guid)
+        if not doc:
+            raise NotFound('Could not find document')
+
+        if not doc.upload_completed_date:
+            raise BadRequest('File upload not complete')
+
         token = str(uuid.uuid4())
         cache.set(DOWNLOAD_TOKEN(token), document_guid, TIMEOUT_5_MINUTES)
 
