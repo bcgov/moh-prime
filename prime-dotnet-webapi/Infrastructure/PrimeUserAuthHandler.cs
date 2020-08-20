@@ -10,10 +10,7 @@ namespace Prime.Infrastructure
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, PrimeUserRequirement requirement)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context), "The passed in AuthorizationHandlerContext cannot be null.");
-            }
+            context.ThrowIfNull(nameof(context));
 
             if (context.User.HasAdminView()
                 || context.User.IsInRole(AuthConstants.PRIME_ENROLLEE_ROLE))
