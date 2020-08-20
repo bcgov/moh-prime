@@ -108,7 +108,9 @@ const routes: Routes = [
             data: { title: 'Site Registrations' }
           },
           {
-            path: ':sid',
+            // Each view contains a table of result(s) that require
+            // both Organization and Site information
+            path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
             children: [
               {
                 path: '',
@@ -116,19 +118,14 @@ const routes: Routes = [
                 data: { title: 'Site Registration' }
               },
               {
-                path: AdjudicationRoutes.SITE_ADJUDICATION,
+                path: AdjudicationRoutes.ADJUDICATION,
                 component: SiteAdjudicationComponent,
                 data: { title: 'Site Adjudication' }
               },
               {
                 path: AdjudicationRoutes.ORGANIZATION_INFORMATION,
-                children: [
-                  {
-                    path: ':oid',
-                    component: OrganizationInformationComponent,
-                    data: { title: 'Site Adjudication' }
-                  },
-                ]
+                component: OrganizationInformationComponent,
+                data: { title: 'Organization Information' }
               }
             ]
           }
