@@ -20,6 +20,7 @@ import { Site } from '@registration/shared/models/site.model';
 
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 @Injectable({
   providedIn: 'root'
@@ -378,8 +379,8 @@ export class AdjudicationResource {
       enrollee.jobs = [];
     }
 
-    if (!enrollee.enrolleeOrganizationTypes) {
-      enrollee.enrolleeOrganizationTypes = [];
+    if (!enrollee.enrolleeCareSettings) {
+      enrollee.enrolleeCareSettings = [];
     }
 
     return enrollee;
@@ -423,6 +424,19 @@ export class AdjudicationResource {
         delete profileSnapshot[key];
         delete profileSnapshot[`${key}Details`];
       });
+    }
+
+    // Update enrolleeOrganizationTypes to enrolleeCareSettings
+    if (profileSnapshot.hasOwnProperty('enrolleeOrganizationTypes')) {
+      profileSnapshot.enrolleeCareSettings = [];
+      const enrolleeOrganizationTypes = profileSnapshot[`enrolleeOrganizationTypes`];
+      enrolleeOrganizationTypes.map(({ id, organizationTypeCode }) => {
+        profileSnapshot.enrolleeCareSettings.push({
+          id,
+          careSettingCode: organizationTypeCode
+        });
+      });
+      delete profileSnapshot[`enrolleeOrganizationTypes`];
     }
   }
 }

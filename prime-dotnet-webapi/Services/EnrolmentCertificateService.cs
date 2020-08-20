@@ -21,8 +21,8 @@ namespace Prime.Services
             var token = await _context.EnrolmentCertificateAccessTokens
                 .Where(t => t.Id == accessTokenId)
                 .Include(t => t.Enrollee)
-                    .ThenInclude(e => e.EnrolleeOrganizationTypes)
-                        .ThenInclude(org => org.OrganizationType)
+                    .ThenInclude(e => e.EnrolleeCareSettings)
+                        .ThenInclude(org => org.CareSetting)
                 .Include(t => t.Enrollee)
                     .ThenInclude(e => e.AccessTerms)
                 .SingleOrDefaultAsync();

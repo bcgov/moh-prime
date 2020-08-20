@@ -65,7 +65,7 @@ export class MockSiteService implements ISiteService {
       doingBusinessAs: faker.company.companyName(),
       provisionerId: faker.random.number(),
       provisioner: user,
-      organizationTypeCode: faker.random.number(),
+      careSettingCode: faker.random.number(),
       pec: null,
       completed: null,
       approvedDate: faker.date.past(2).toDateString(),

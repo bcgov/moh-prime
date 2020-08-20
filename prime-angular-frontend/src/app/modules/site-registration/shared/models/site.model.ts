@@ -15,7 +15,7 @@ export interface Site {
   provisionerId: number;
   provisioner: Party;
   // Forms -----
-  organizationTypeCode: number;
+  careSettingCode: number;
   siteVendors: Vendor[];
   businessLicenceDocuments: BusinessLicenceDocument[];
   doingBusinessAs: string;

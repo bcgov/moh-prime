@@ -90,7 +90,7 @@ export class SiteManagementComponent implements OnInit {
 
   public getSiteProperties(site: Site) {
     return [
-      { key: 'Case Setting', value: this.configCodePipe.transform(site.organizationTypeCode, 'organizationTypes') },
+      { key: 'Case Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
       { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];

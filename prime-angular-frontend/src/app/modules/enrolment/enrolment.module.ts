@@ -12,7 +12,7 @@ import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 import { JobComponent } from './pages/job/job.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
-import { OrganizationComponent } from './pages/organization/organization.component';
+import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 import { OverviewComponent } from './pages/overview/overview.component';
 import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
@@ -49,7 +49,7 @@ import { ProgressIndicatorComponent } from './shared/components/progress-indicat
     DeviceProviderComponent,
     JobComponent,
     SelfDeclarationComponent,
-    OrganizationComponent,
+    CareSettingComponent,
     OverviewComponent,
     MinorUpdateConfirmationComponent,
     SubmissionConfirmationComponent,

@@ -13,25 +13,25 @@ import { LoggerService } from '@core/services/logger.service';
 import { EnrolleeUtilsService } from '@core/services/enrollee-utils.service';
 import { UtilsService } from '@core/services/utils.service';
 import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
-import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-organization',
-  templateUrl: './organization.component.html',
-  styleUrls: ['./organization.component.scss']
+  selector: 'app-care-setting',
+  templateUrl: './care-setting.component.html',
+  styleUrls: ['./care-setting.component.scss']
 })
-export class OrganizationComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
-  public organizationCtrl: FormControl;
-  public organizationTypes: Config<number>[];
-  public filteredOrganizationTypes: Config<number>[];
+export class CareSettingComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
+  public careSettingCtrl: FormControl;
+  public careSettingTypes: Config<number>[];
+  public filteredCareSettingTypes: Config<number>[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -49,26 +49,26 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
   ) {
     super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
-    this.organizationTypes = this.configService.organizationTypes;
+    this.careSettingTypes = this.configService.careSettings;
   }
 
-  public get organizations(): FormArray {
-    return this.form.get('organizations') as FormArray;
+  public get careSettings(): FormArray {
+    return this.form.get('careSettings') as FormArray;
   }
 
-  public addOrganization() {
-    const organization = this.enrolmentStateService.buildOrganizationForm();
-    this.organizations.push(organization);
+  public addCareSetting() {
+    const careSetting = this.enrolmentStateService.buildCareSettingForm();
+    this.careSettings.push(careSetting);
   }
 
-  public disableOrganization(organizationTypeCode: number): boolean {
+  public disableCareSetting(careSettingCode: number): boolean {
     if (this.authService.isCommunityPharmacist()) {
       // If feature flagged enable "Private Community Health Practice" & "Community Pharmacist"
-      return !(organizationTypeCode === OrganizationTypeEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
-        || organizationTypeCode === OrganizationTypeEnum.COMMUNITY_PHARMACIST);
+      return !(careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
+        || careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
     }
-    // Omit organizations types that are not "Private Community Health Practices" for ComPap
-    return (organizationTypeCode !== OrganizationTypeEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
+    // Omit care settings that are not "Private Community Health Practices" for ComPap
+    return (careSettingCode !== CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
   }
 
   public showRemoteAccess(): boolean {
@@ -77,34 +77,34 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
     return this.enrolleeUtilsService.isRegulatedUser(enrolment) && !isPharmacist;
   }
 
-  public removeOrganization(index: number) {
-    this.organizations.removeAt(index);
+  public removeCareSetting(index: number) {
+    this.careSettings.removeAt(index);
   }
 
-  public filterOrganizationTypes(organization: FormGroup) {
-    // Create a list of filtered organization types
-    if (this.organizations.length) {
-      // All the currently chosen organizations
-      const selectedOrganizationTypeCodes = this.organizations.value
-        .map((o: Organization) => o.organizationTypeCode);
-      // Current organization type selected
-      const currentOrganization = this.organizationTypes
-        .find(o => o.code === organization.get('organizationTypeCode').value);
-      // Filter the list of possible organizations using the selected organizations
-      const filteredOrganizationTypes = this.organizationTypes
-        .filter((c: Config<number>) => !selectedOrganizationTypeCodes.includes(c.code));
+  public filterCareSettingTypes(careSetting: FormGroup) {
+    // Create a list of filtered care settings
+    if (this.careSettings.length) {
+      // All the currently chosen care settings
+      const selectedCareSettingCodes = this.careSettings.value
+        .map((cs: CareSetting) => cs.careSettingCode);
+      // Current care setting selected
+      const currentCareSetting = this.careSettingTypes
+        .find(cs => cs.code === careSetting.get('careSettingCode').value);
+      // Filter the list of possible care settings using the selected care setting
+      const filteredCareSettingTypes = this.careSettingTypes
+        .filter((c: Config<number>) => !selectedCareSettingCodes.includes(c.code));
 
-      if (currentOrganization) {
-        // Add the current organization to the list of filtered
-        // organizations so it remains visible
-        filteredOrganizationTypes.unshift(currentOrganization);
+      if (currentCareSetting) {
+        // Add the current careSetting to the list of filtered
+        // careSettings so it remains visible
+        filteredCareSettingTypes.unshift(currentCareSetting);
       }
 
-      return filteredOrganizationTypes;
+      return filteredCareSettingTypes;
     }
 
-    // Otherwise, provide the entire list of organization types
-    return this.organizationTypes;
+    // Otherwise, provide the entire list of care setting types
+    return this.careSettingTypes;
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -126,14 +126,14 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentStateService.organizationForm;
+    this.form = this.enrolmentStateService.careSettingsForm;
   }
 
   protected initForm() {
-    // Always have at least one organization ready for
+    // Always have at least one care setting ready for
     // the enrollee to fill out
-    if (!this.organizations.length) {
-      this.addOrganization();
+    if (!this.careSettings.length) {
+      this.addCareSetting();
     }
   }
 
@@ -147,20 +147,20 @@ export class OrganizationComponent extends BaseEnrolmentProfilePage implements O
   }
 
   private removeIncompleteOrganizations() {
-    this.organizations.controls
+    this.careSettings.controls
       .forEach((control: FormGroup, index: number) => {
-        const value = control.get('organizationTypeCode').value;
+        const value = control.get('careSettingCode').value;
 
-        // Remove if organization is empty or the group is invalid
+        // Remove if care setting is empty or the group is invalid
         if (!value || control.invalid) {
-          this.removeOrganization(index);
+          this.removeCareSetting(index);
         }
       });
 
-    // Always have a single organization available, and it prevents
+    // Always have a single care setting available, and it prevents
     // the page from jumping too much when routing
-    if (!this.organizations.controls.length) {
-      this.addOrganization();
+    if (!this.careSettings.controls.length) {
+      this.addCareSetting();
     }
   }
 
