@@ -63,6 +63,7 @@ export class DocumentUploadComponent implements OnInit {
       maxTotalFileSize: null,
       server: this.constructServer()
     };
+    
     if (this.additionalApiSuffix) {
       this.apiSuffix = `${this.apiSuffix}/${this.additionalApiSuffix}`;
     }
