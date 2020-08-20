@@ -23,6 +23,7 @@ parameters:
     required: true
     value: 'tools'
 objects:
+  # Mailhog service (endpoint for internal routing to related pods)
   - kind: Service
     apiVersion: v1
     metadata:
@@ -63,6 +64,8 @@ objects:
         name: latest
     status:
       dockerImageRepository: ""
+  
+  # Mailhog - Deployment configuration
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:

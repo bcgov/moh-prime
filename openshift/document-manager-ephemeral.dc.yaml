@@ -66,6 +66,7 @@ parameters:
     required: true
     value: "pharmanetenrolment.gov.bc.ca"
 objects:
+# Document Manager service (endpoint for internal routing to related pods)
 - apiVersion: v1
   kind: Service
   metadata:
@@ -88,6 +89,8 @@ objects:
       io.kompose.service: "${NAME}${SUFFIX}-backend"
   status:
     loadBalancer: {}
+
+# Document Manager - Deployment Configuration
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -113,6 +116,7 @@ objects:
       spec:
         containers:
         - env:
+          # Redis related environment variables
           - name: CACHE_REDIS_HOST
             value: "redis${SUFFIX}"
           - name: CACHE_REDIS_PASS
@@ -122,6 +126,8 @@ objects:
                 name: "redis-secrets"
           - name: CACHE_REDIS_PORT
             value: "6379"
+
+          # PostgreSQL related environment variables
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: DB_NAME
@@ -146,6 +152,8 @@ objects:
               secretKeyRef:
                 key: database-user
                 name: "postgresql-secret"
+          
+          # Document Manager (incl. Flask) related environment variables
           - name: DOCUMENT_MANAGER_URL
             value: "https://${VANITY_URL}/api/docman/"
           - name: FLASK_APP
@@ -170,11 +178,15 @@ objects:
                 name: "document-manager-secrets"
           - name: FLASK_RUN_PORT
             value: "6001"
+          
+          # JWT environment variable
           - name: JWT_OIDC_WELL_KNOWN_CONFIG
             valueFrom:
               secretKeyRef:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
+          
+          # PostgreSQL environment variable for database migration bash script
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
@@ -187,6 +199,7 @@ objects:
           - containerPort: 9191
           resources: {}
           volumeMounts:
+          # Create directory and mount Document Manager app to it
           - mountPath: /app/
             name: ${NAME}${SUFFIX}-pvc
         restartPolicy: Always
@@ -205,6 +218,12 @@ objects:
           name: "${NAME}${SUFFIX}:latest"
       type: ImageChange
   status: {}
+
+# Document Manager - Migration Pod Deployment
+#
+# Used for Alembic to run database migrations against the PostgreSQL database 
+# for all Document Manager related tables. This pod will run once PostgreSQL 
+# is verified to be open to query connections.
 - apiVersion: v1
   kind: Pod
   metadata:
@@ -217,10 +236,13 @@ objects:
     restartPolicy: Never
     containers:
     - command:
+        # Script force waits migration pod execution until PostgreSQL is verified to 
+        # be open to query connections.
         - /opt/app-root/src/app.sh
       args: 
         - migrate
       env:
+        # Redis related environment variables
         - name: CACHE_REDIS_HOST
           value: "redis${SUFFIX}"
         - name: CACHE_REDIS_PASS
@@ -230,6 +252,8 @@ objects:
               name: "redis-secrets"
         - name: CACHE_REDIS_PORT
           value: "6379"
+        
+        # PostgreSQL related environment variables
         - name: DB_HOST
           value: postgresql${SUFFIX}
         - name: DB_NAME
@@ -254,6 +278,8 @@ objects:
             secretKeyRef:
               key: database-user
               name: "postgresql-secret"
+        
+        # Document Manager (incl. Flask) related environment variables
         - name: DOCUMENT_MANAGER_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
@@ -288,6 +314,8 @@ objects:
             secretKeyRef:
               key: JWT_WELL_KNOWN_CONFIG
               name: "keycloak"
+        
+        # Environment variable for database migration bash script
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:

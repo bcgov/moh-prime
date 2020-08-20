@@ -67,6 +67,10 @@ parameters:
     required: true
     value: "pharmanetenrolment.gov.bc.ca"
 objects:
+# PVC for Document Manager to persist data of documents stored. This is only
+# for deploys to develop, test, and master branches. PRs to develop do not 
+# utilize PVCs and rely on `document-manager-ephemeral.dc.yaml` for their
+# deployment strategy.
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
@@ -82,7 +86,7 @@ objects:
         storage: ${VOLUME_CAPACITY}
   status: {}
 
-# Document Manager OpenShift Service
+# Document Manager service (endpoint for internal routing to related pods)
 - apiVersion: v1
   kind: Service
   metadata:
@@ -106,7 +110,7 @@ objects:
   status:
     loadBalancer: {}
 
-# Document Manager - Core Deployment
+# Document Manager - Deployment Configuration
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -194,11 +198,15 @@ objects:
                 name: "document-manager-secrets"
           - name: FLASK_RUN_PORT
             value: "6001"
+          
+          # JWT environment variable
           - name: JWT_OIDC_WELL_KNOWN_CONFIG
             valueFrom:
               secretKeyRef:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
+          
+          # PostgreSQL environment variable for database migration bash script
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
@@ -211,10 +219,12 @@ objects:
           - containerPort: 9191
           resources: {}
           volumeMounts:
+          # Create directory and mount Document Manager app to it
           - mountPath: /app/
             name: ${NAME}${SUFFIX}-pvc
         restartPolicy: Always
         volumes:
+        # Attach Document Manager PVC to deployed pod
         - name: ${NAME}${SUFFIX}-pvc
           persistentVolumeClaim:
             claimName: '${NAME}${SUFFIX}-pvc'
@@ -232,7 +242,6 @@ objects:
   status: {}
 
 # Document Manager - Migration Pod Deployment
-#
 # Used for Alembic to run database migrations against the PostgreSQL database 
 # for all Document Manager related tables. This pod will run once PostgreSQL 
 # is verified to be open to query connections.
@@ -248,11 +257,13 @@ objects:
     restartPolicy: Never
     containers:
     - command:
-        # Force wait migration pod execution until PostgreSQL is verified to be open to query connections.
+        # Script force waits migration pod execution until PostgreSQL is verified to 
+        # be open to query connections.
         - /opt/app-root/src/app.sh
       args: 
         - migrate
       env:
+        # Redis related environment variables
         - name: CACHE_REDIS_HOST
           value: "redis${SUFFIX}"
         - name: CACHE_REDIS_PASS
@@ -262,6 +273,8 @@ objects:
               name: "redis-secrets"
         - name: CACHE_REDIS_PORT
           value: "6379"
+        
+        # PostgreSQL related environment variables
         - name: DB_HOST
           value: postgresql${SUFFIX}
         - name: DB_NAME
@@ -286,6 +299,8 @@ objects:
             secretKeyRef:
               key: database-user
               name: "postgresql-secret"
+        
+        # Document Manager (incl. Flask) related environment variables
         - name: DOCUMENT_MANAGER_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
@@ -315,11 +330,15 @@ objects:
               name: "document-manager-secrets"
         - name: FLASK_RUN_PORT
           value: "6001"
+        
+        # JWT environment variable
         - name: JWT_OIDC_WELL_KNOWN_CONFIG
           valueFrom:
             secretKeyRef:
               key: JWT_WELL_KNOWN_CONFIG
               name: "keycloak"
+        
+        # PostgreSQL environment variable for database migration bash script
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:

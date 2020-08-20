@@ -38,6 +38,8 @@ objects:
       app: metabase
       service: ${APP_NAME}
   type: Opaque
+
+# Metabase service (endpoint for internal routing to related pods)
 - apiVersion: v1
   kind: Service
   metadata:
@@ -58,6 +60,8 @@ objects:
       deploymentconfig: ${APP_NAME}
     sessionAffinity: None
     type: ClusterIP
+
+# Metabase route definition to direct external traffic to frontend component
 - apiVersion: v1
   kind: Route
   metadata:
@@ -73,6 +77,8 @@ objects:
     to:
       kind: Service
       name: ${APP_NAME}
+
+# Metabase - Deployment Configuration
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:

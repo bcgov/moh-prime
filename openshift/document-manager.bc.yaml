@@ -46,6 +46,8 @@ objects:
     lookupPolicy:
       local: false
     tags: []
+
+# Document Manager - Build Configuration
 - kind: BuildConfig
   apiVersion: v1
   metadata:

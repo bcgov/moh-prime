@@ -71,6 +71,8 @@ objects:
         as-copy-of: 'template.${NAME}-secret'
     stringData:
       database-password: '${REDIS_PASSWORD}'
+  
+  # Redis service (endpoint for internal routing to related pods)
   - kind: Service
     apiVersion: v1
     metadata:
@@ -88,6 +90,8 @@ objects:
         name: '${NAME}${SUFFIX}'
       type: ClusterIP
       sessionAffinity: None
+  
+  # Redis - Deployment configuration
   - kind: DeploymentConfig
     apiVersion: v1
     metadata:

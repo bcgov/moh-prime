@@ -44,6 +44,7 @@ parameters:
   required: true
   value: "passthrough"
 objects:
+# .NET Web API - Deployment Configuration
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -71,6 +72,7 @@ objects:
       spec:
         containers:
           - env:
+              # Explicit environment variables
               - name: OC_APP
                 value: "${OC_APP}"
               - name: SUFFIX
@@ -97,15 +99,8 @@ objects:
                 value: "https://${VANITY_URL}/api/v1/"
               - name: DB_HOST
                 value: "postgresql${SUFFIX}"
-              - name: DOCUMENT_MANAGER_CLIENT_ID
-                value: prime-document-manager
-              - name: DOCUMENT_MANAGER_URL
-                value: "https://${VANITY_URL}/api/docman/"
-              - name: DOCUMENT_MANAGER_CLIENT_SECRET
-                valueFrom:
-                  secretKeyRef:
-                    key: DOCUMENT_MANAGER_CLIENT_SECRET
-                    name: "document-manager-secret"
+              
+              # CHES (Common Hosted Email Service) related environment variables
               - name: CHES_API_URL
                 valueFrom:
                   secretKeyRef:
@@ -126,6 +121,65 @@ objects:
                   secretKeyRef:
                     key: CHES_TOKEN_URL
                     name: "ches-secrets"
+              
+              # Document Manager related environment variables
+              - name: DOCUMENT_MANAGER_CLIENT_ID
+                value: prime-document-manager
+              - name: DOCUMENT_MANAGER_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: DOCUMENT_MANAGER_CLIENT_SECRET
+                    name: "document-manager-secret"
+              - name: DOCUMENT_MANAGER_URL
+                value: "https://${VANITY_URL}/api/docman/"
+
+              # JWT environment variable
+              - name: JWT_WELL_KNOWN_CONFIG
+                valueFrom:
+                  secretKeyRef:
+                    key: JWT_WELL_KNOWN_CONFIG
+                    name: "keycloak"
+
+              # Keycloak related environment variables
+              - name: KEYCLOAK_CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    key: KEYCLOAK_CLIENT_ID
+                    name: "keycloak"
+              - name: KEYCLOAK_REALM
+                valueFrom:
+                  secretKeyRef:
+                    key: KEYCLOAK_REALM
+                    name: "keycloak"
+              - name: KEYCLOAK_TOKEN_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: KEYCLOAK_TOKEN_URL
+                    name: "keycloak"
+              - name: KEYCLOAK_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: KEYCLOAK_URL
+                    name: "keycloak"
+              
+              # Mail server environment variables
+              - name: MAIL_SERVER_PORT
+                valueFrom:
+                  secretKeyRef:
+                    key: MAIL_SERVER_PORT
+                    name: "mailserver"
+              - name: MAIL_SERVER_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: MAIL_SERVER_URL
+                    name: "mailserver"
+              
+              # Pharmanet API environment variables
+              - name: PHARMANET_API_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: API_PASSWORD
+                    name: "pharmanet-api"
               - name: PHARMANET_API_URL
                 valueFrom:
                   secretKeyRef:
@@ -136,11 +190,6 @@ objects:
                   secretKeyRef:
                     key: API_USERNAME
                     name: "pharmanet-api"
-              - name: PHARMANET_API_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    key: API_PASSWORD
-                    name: "pharmanet-api"
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: "/opt/app-root/etc/certs/pharmanet-api-cert.pfx"
               - name: PHARMANET_SSL_CERT_PASSWORD
@@ -148,16 +197,8 @@ objects:
                   secretKeyRef:
                     key: SSL_CERT_PASSWORD
                     name: "pharmanet-api"
-              - name: MAIL_SERVER_URL
-                valueFrom:
-                  secretKeyRef:
-                    key: MAIL_SERVER_URL
-                    name: "mailserver"
-              - name: MAIL_SERVER_PORT
-                valueFrom:
-                  secretKeyRef:
-                    key: MAIL_SERVER_PORT
-                    name: "mailserver"
+
+              # PostgreSQL related environment variables
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
@@ -183,31 +224,8 @@ objects:
                   secretKeyRef:
                     key: database-name
                     name: "postgresql-secret"
-              - name: KEYCLOAK_URL
-                valueFrom:
-                  secretKeyRef:
-                    key: KEYCLOAK_URL
-                    name: "keycloak"
-              - name: KEYCLOAK_REALM
-                valueFrom:
-                  secretKeyRef:
-                    key: KEYCLOAK_REALM
-                    name: "keycloak"
-              - name: KEYCLOAK_CLIENT_ID
-                valueFrom:
-                  secretKeyRef:
-                    key: KEYCLOAK_CLIENT_ID
-                    name: "keycloak"
-              - name: JWT_WELL_KNOWN_CONFIG
-                valueFrom:
-                  secretKeyRef:
-                    key: JWT_WELL_KNOWN_CONFIG
-                    name: "keycloak"
-              - name: KEYCLOAK_TOKEN_URL
-                valueFrom:
-                  secretKeyRef:
-                    key: KEYCLOAK_TOKEN_URL
-                    name: "keycloak"
+              
+              # Verifiable Credential related environment variables
               - name: VERIFIABLE_CREDENTIAL_API_KEY
                 valueFrom:
                   secretKeyRef:
@@ -240,10 +258,12 @@ objects:
               successThreshold: 1
               timeoutSeconds: 10
             volumeMounts:
+              # Create directory for storing .NET Web API SSL certificate
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs
                 readOnly: true
         volumes:
+          # Placement of .NET Web API SSL certificate
           - name: cert-volume
             secret:
               secretName: ssl-certs
@@ -260,6 +280,8 @@ objects:
             name: "${NAME}${SUFFIX}:latest"
         type: ImageChange
   status: {}
+
+# .NET Web API service (endpoint for internal routing to related pods)
 - apiVersion: v1
   kind: Service
   metadata:

@@ -48,6 +48,7 @@ parameters:
   - name: SOURCE_REPOSITORY_REF
     required: true
 objects:
+  # MongoDB - Deployment configuration
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
@@ -169,6 +170,11 @@ objects:
       readyReplicas: 1
       unavailableReplicas: 0
       updatedReplicas: 1
+  
+  # PVC for MongoDB to persist all data across deployments. This is only for 
+  # deploys to develop, test, and master branches. PRs to develop do not 
+  # utilize PVCs and rely on `mongo-ephemeral.dc.yaml` for their deployment 
+  # strategy.
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:

@@ -43,6 +43,8 @@ parameters:
   required: true
   value: "https://pharmanetenrolment.gov.bc.ca"
 objects:
+
+# Frontend deployment configuration
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -126,6 +128,8 @@ objects:
             name: "${NAME}${SUFFIX}:latest"
         type: ImageChange
   status: {}
+
+# Angular route definition to direct external traffic to frontend component
 - apiVersion: v1
   kind: Route
   metadata:
@@ -140,6 +144,8 @@ objects:
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"
+
+# Angular service (endpoint definition for internal routing to related pods)
 - apiVersion: v1
   kind: Service
   metadata:

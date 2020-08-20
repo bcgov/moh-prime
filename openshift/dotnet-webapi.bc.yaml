@@ -53,6 +53,7 @@ objects:
     spec:
       sourceStrategy:
         env:
+          # Explicit environment variables
           - name: OC_APP
             value: "${OC_APP}"
           - name: SUFFIX
@@ -73,8 +74,38 @@ objects:
             value: "prime-application-${OC_APP}"
           - name: JWT_AUDIENCE
             value: "prime-web-api"
+          
+          # .NET database connection environment variables
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
+          - name: DB_CONNECTION_STRING
+            value: DB_CONNECTION_STRING "host=$DB_HOST;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
+          
+          # JWT environment variable
+          - name: JWT_WELL_KNOWN_CONFIG
+            valueFrom:
+              secretKeyRef:
+                key: JWT_WELL_KNOWN_CONFIG
+                name: "keycloak"
+
+          # Keycloak related environment variables
+          - name: KEYCLOAK_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_CLIENT_ID
+                name: "keycloak"
+          - name: KEYCLOAK_REALM
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_REALM
+                name: "keycloak"
+          - name: KEYCLOAK_URL
+            valueFrom:
+              secretKeyRef:
+                key: KEYCLOAK_URL
+                name: "keycloak"
+          
+          # PostgreSQL related environment variables
           - name: POSTGRESQL_USER
             valueFrom:
               secretKeyRef:
@@ -94,29 +125,7 @@ objects:
             valueFrom:
               secretKeyRef:
                 key: database-name
-                name: "postgresql-secret"
-          - name: KEYCLOAK_URL
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_URL
-                name: "keycloak"
-          - name: KEYCLOAK_REALM
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_REALM
-                name: "keycloak"
-          - name: KEYCLOAK_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_CLIENT_ID
-                name: "keycloak"
-          - name: JWT_WELL_KNOWN_CONFIG
-            valueFrom:
-              secretKeyRef:
-                key: JWT_WELL_KNOWN_CONFIG
-                name: "keycloak"
-          - name: DB_CONNECTION_STRING
-            value: DB_CONNECTION_STRING "host=$DB_HOST;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
+                name: "postgresql-secret"     
       tags:
         - annotations: null
           from:
@@ -135,6 +144,8 @@ objects:
     runPolicy: Serial
     status:
       dockerImageRepository: ""
+  
+  # .NET Web API - Build Configuration
   - apiVersion: v1
     kind: BuildConfig
     metadata:
@@ -173,6 +184,7 @@ objects:
           noCache: true
           dockerfilePath: openshift.dockerfile
           env:
+          # PostgreSQL related environment variables
           - name: POSTGRESQL_USER
             valueFrom:
               secretKeyRef:

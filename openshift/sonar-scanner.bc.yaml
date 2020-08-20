@@ -40,6 +40,8 @@ objects:
     spec: {}
     status:
       dockerImageRepository: ""
+  
+  # SonarScanner - Build configuration
   - apiVersion: v1
     kind: BuildConfig
     metadata:

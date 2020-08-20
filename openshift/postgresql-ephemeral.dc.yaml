@@ -74,6 +74,7 @@ parameters:
     value: ReadWriteOnce
     required: true
 objects:
+  # PostgreSQL service (endpoint for internal routing to related pods)
   - apiVersion: v1
     kind: Service
     metadata:
