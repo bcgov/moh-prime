@@ -16,7 +16,7 @@ namespace Prime.Models
         public string PreferredLastName { get; set; }
         public string GPID { get; set; }
         public DateTimeOffset? ExpiryDate { get; set; }
-        public IEnumerable<OrganizationType> OrganizationTypes { get; set; }
+        public IEnumerable<CareSetting> CareSettings { get; set; }
 
         public static EnrolmentCertificate Create(Enrollee enrollee)
         {
@@ -29,7 +29,7 @@ namespace Prime.Models
                 PreferredLastName = enrollee.PreferredLastName,
                 GPID = enrollee.GPID,
                 ExpiryDate = enrollee.ExpiryDate,
-                OrganizationTypes = enrollee.EnrolleeOrganizationTypes.Select(org => org.OrganizationType)
+                CareSettings = enrollee.EnrolleeCareSettings.Select(org => org.CareSetting)
             };
         }
     }

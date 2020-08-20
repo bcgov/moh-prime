@@ -4,7 +4,7 @@
 
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
                                     [inProgress]="isInitialEnrolment"
-                                    [currentRoute]="EnrolmentRoutes.ORGANIZATION"></app-enrolment-progress-indicator>
+                                    [currentRoute]="EnrolmentRoutes.CARE_SETTING"></app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -13,38 +13,38 @@
     <section class="mb-3">
 
       <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+        <ng-container appPageSubheaderTitle>Care Type Setting</ng-container>
         <ng-container appPageSubheaderSummary>
-          Identify all of the organizational types (work settings) where you will be accessing PharmaNet. (Note:
+          Identify all of the work settings where you will be accessing PharmaNet. (Note:
           Private Community Health Practice is the only setting currently available in PRIME.)
         </ng-container>
       </app-page-subheader>
 
       <div class="row">
         <div class="col col-sm-10 py-3"
-             formArrayName="organizations">
+             formArrayName="careSettings">
 
-          <ng-container *ngFor="let organization of organizations.controls; let i = index;"
+          <ng-container *ngFor="let careSetting of careSettings.controls; let i = index;"
                         [formGroupName]="i">
 
-            <app-form-icon-group [show]="organizations.length > 1"
-                                 (event)="removeOrganization(i)">
+            <app-form-icon-group [show]="careSettings.length > 1"
+                                 (event)="removeCareSetting(i)">
               <app-form-icon-group>
                 <mat-form-field class="w-100">
-                  <mat-label>Organization Type</mat-label>
-                  <mat-select formControlName="organizationTypeCode">
-                    <mat-option *ngFor="let organizationType of filterOrganizationTypes(organization)"
-                                [value]="organizationType.code"
-                                [disabled]="disableOrganization(organizationType.code)">
-                      {{ organizationType.name }}
+                  <mat-label>Care Setting</mat-label>
+                  <mat-select formControlName="careSettingCode">
+                    <mat-option *ngFor="let careSettingType of filterCareSettingTypes(careSetting)"
+                                [value]="careSettingType.code"
+                                [disabled]="disableCareSetting(careSettingType.code)">
+                      {{ careSettingType.name }}
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="organization.get('organizationTypeCode').hasError('required')">Required
+                  <mat-error *ngIf="careSetting.get('careSettingCode').hasError('required')">Required
                   </mat-error>
                 </mat-form-field>
 
                 <ng-container appContextualContent>
-                  Organization type is the location where you access PharmaNet to deliver patient care.
+                  Care Setting type is the location where you access PharmaNet to deliver patient care.
                 </ng-container>
               </app-form-icon-group>
             </app-form-icon-group>
@@ -54,9 +54,9 @@
           <button mat-button
                   type="button"
                   color="primary"
-                  (click)="addOrganization()">
+                  (click)="addCareSetting()">
             <mat-icon>add</mat-icon>
-            Add Additional Organization
+            Add Additional Care Setting
           </button>
 
         </div>

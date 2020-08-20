@@ -232,9 +232,10 @@ namespace Prime.Services
         // Create the credential proposal attributes.
         private async Task<JArray> CreateCredentialAttributesAsync(int enrolleeId)
         {
+            // TODO Update schema to rename organization_type to care_setting
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            var enrolleeOrgType = enrollee.EnrolleeOrganizationTypes.Single();
-            await _context.Entry(enrolleeOrgType).Reference(o => o.OrganizationType).LoadAsync();
+            var enrolleeCareSetting = enrollee.EnrolleeCareSettings.Single();
+            await _context.Entry(enrolleeCareSetting).Reference(o => o.CareSetting).LoadAsync();
 
             JArray attributes = new JArray
             {
@@ -251,7 +252,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "organization_type" },
-                    { "value", enrolleeOrgType.OrganizationType.Name }
+                    { "value", enrolleeCareSetting.CareSetting.Name }
                 },
                 new JObject
                 {

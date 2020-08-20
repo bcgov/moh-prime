@@ -36,10 +36,10 @@ namespace Prime.Models
 
         public Party Provisioner { get; set; }
 
-        public int? OrganizationTypeCode { get; set; }
+        public int? CareSettingCode { get; set; }
 
         [JsonIgnore]
-        public OrganizationType OrganizationType { get; set; }
+        public CareSetting CareSetting { get; set; }
 
         public string PEC { get; set; }
 
