@@ -9,21 +9,21 @@
         <th mat-header-cell
             *matHeaderCellDef> Reference ID </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.displayId | default }} </td>
+            *matCellDef="let row;"> {{ row.displayId | default: '' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="organizationName">
         <th mat-header-cell
             *matHeaderCellDef> Organization Name </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.name | default }} </td>
+            *matCellDef="let row;"> {{ row.name | default: '' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="signingAuthority">
         <th mat-header-cell
             *matHeaderCellDef> Signing Authority </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.signingAuthority | fullname | default }} </td>
+            *matCellDef="let row;"> {{ row.signingAuthority | fullname | default: '' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="doingBusinessAs">
