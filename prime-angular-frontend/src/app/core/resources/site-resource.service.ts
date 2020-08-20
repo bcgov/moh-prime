@@ -207,9 +207,7 @@ export class SiteResource {
     return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licence`, { siteId }, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicenceDocument>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Business licence has been added')),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Business Licence could not be added');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::createBusinessLicence error has occurred: ', error);
           throw error;
         })

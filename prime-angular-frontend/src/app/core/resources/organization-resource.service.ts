@@ -179,9 +179,7 @@ export class OrganizationResource {
     return this.apiResource.post<string>(`organizations/${organizationId}/signed-agreement`, { organizationId }, params)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Signed agreement has been added')),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Signed agreement could not be added');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::addSignedAgreement error has occurred: ', error);
           throw error;
         })
