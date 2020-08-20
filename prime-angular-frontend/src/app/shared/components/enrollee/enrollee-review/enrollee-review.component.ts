@@ -4,7 +4,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 @Component({
@@ -64,16 +64,16 @@ export class EnrolleeReviewComponent {
     return (this.hasJob) ? this.enrolment.jobs : [];
   }
 
-  public get hasOrganization(): boolean {
-    return (this.enrolment && !!this.enrolment.organizations.length);
+  public get hasCareSetting(): boolean {
+    return (this.enrolment && !!this.enrolment.careSettings.length);
   }
 
   public get isRequestingRemoteAccess(): boolean {
     return (this.enrolment && !!this.enrolment.requestingRemoteAccess);
   }
 
-  public get organizations(): Organization[] {
-    return (this.hasOrganization) ? this.enrolment.organizations : [];
+  public get careSettings(): CareSetting[] {
+    return (this.hasCareSetting) ? this.enrolment.careSettings : [];
   }
 
   public onRoute(routePath: string): void {

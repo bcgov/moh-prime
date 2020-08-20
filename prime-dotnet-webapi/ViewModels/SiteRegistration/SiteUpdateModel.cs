@@ -23,7 +23,7 @@ namespace Prime.ViewModels
 
         public Party TechnicalSupport { get; set; }
 
-        public int? OrganizationTypeCode { get; set; }
+        public int? CareSettingCode { get; set; }
 
         public string DoingBusinessAs { get; set; }
 
