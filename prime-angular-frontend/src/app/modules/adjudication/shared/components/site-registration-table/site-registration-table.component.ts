@@ -2,8 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { Site } from '@registration/shared/models/site.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { Site } from '@registration/shared/models/site.model';
+import { SiteRegistrationViewModel } from '@adjudication/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-site-registration-table',
@@ -11,7 +12,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
   styleUrls: ['./site-registration-table.component.scss']
 })
 export class SiteRegistrationTableComponent implements OnInit {
-  @Input() public dataSource: MatTableDataSource<Site>;
+  @Input() public dataSource: MatTableDataSource<SiteRegistrationViewModel>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
 
@@ -23,7 +24,7 @@ export class SiteRegistrationTableComponent implements OnInit {
     private authService: AuthService
   ) {
     this.columns = [
-      'referenceId',
+      'displayId',
       'organizationName',
       'signingAuthority',
       'doingBusinessAs',
@@ -33,7 +34,7 @@ export class SiteRegistrationTableComponent implements OnInit {
       'careSetting',
       'actions'
     ];
-    this.dataSource = new MatTableDataSource<Site>([]);
+    this.dataSource = new MatTableDataSource<SiteRegistrationViewModel>([]);
     this.route = new EventEmitter<string | (string | number)[]>();
     this.delete = new EventEmitter<{ [key: string]: number }>();
   }
@@ -46,7 +47,7 @@ export class SiteRegistrationTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  public deleteRecord(record: { [key: string]: number }) {
+  public onDelete(record: { [key: string]: number }) {
     this.delete.emit(record);
   }
 
