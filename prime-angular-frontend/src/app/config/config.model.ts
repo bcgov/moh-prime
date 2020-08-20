@@ -4,7 +4,7 @@ export interface Configuration {
   countries: Config<string>[];
   jobNames: Config<number>[];
   licenses: LicenseWeightedConfig[];
-  organizationTypes: Config<number>[];
+  careSettings: Config<number>[];
   provinces: ProvinceConfig[];
   statuses: Config<number>[];
   privilegeGroups: PrivilegeGroupConfig[];
@@ -54,6 +54,6 @@ export interface PrivilegeGroupConfig extends Config<number> {
 }
 
 export interface VendorConfig extends Config<number> {
-  organizationTypeCode: number;
-  organizationType: Config<number>;
+  careSettingCode: number;
+  careSetting: Config<number>;
 }

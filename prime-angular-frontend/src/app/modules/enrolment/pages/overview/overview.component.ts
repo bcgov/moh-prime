@@ -80,7 +80,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       this.logger.warn('JOBS', this.enrolmentStateService.isJobsValid());
       this.logger.warn('HAS_REG_OR_JOB', this.enrolmentStateService.hasRegOrJob());
       this.logger.warn('SELF DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
-      this.logger.warn('ORGANIZATION', this.enrolmentStateService.isOrganizationValid());
+      this.logger.warn('CARE_SETTING', this.enrolmentStateService.isCareSettingValid());
     }
   }
 

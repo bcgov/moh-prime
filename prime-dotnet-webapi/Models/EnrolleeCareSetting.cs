@@ -4,8 +4,8 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("EnrolleeOrganizationType")]
-    public class EnrolleeOrganizationType : BaseAuditable, IEnrolleeNavigationProperty
+    [Table("EnrolleeCareSetting")]
+    public class EnrolleeCareSetting : BaseAuditable, IEnrolleeNavigationProperty
     {
         [Key]
         public int Id { get; set; }
@@ -16,14 +16,14 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        public int OrganizationTypeCode { get; set; }
+        public int CareSettingCode { get; set; }
 
         [JsonIgnore]
-        public OrganizationType OrganizationType { get; set; }
+        public CareSetting CareSetting { get; set; }
 
         public bool IsType(CareSettingType type)
         {
-            return OrganizationTypeCode == (int)type;
+            return CareSettingCode == (int)type;
         }
     }
 }

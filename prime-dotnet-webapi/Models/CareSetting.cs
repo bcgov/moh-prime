@@ -5,8 +5,8 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("OrganizationTypeLookup")]
-    public class OrganizationType : BaseAuditable, ILookup<int>
+    [Table("CareSettingLookup")]
+    public class CareSetting : BaseAuditable, ILookup<int>
     {
         [Key]
         public int Code { get; set; }
@@ -15,6 +15,6 @@ namespace Prime.Models
         public string Name { get; set; }
 
         [JsonIgnore]
-        public ICollection<EnrolleeOrganizationType> EnrolleeOrganizationTypes { get; set; }
+        public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
     }
 }

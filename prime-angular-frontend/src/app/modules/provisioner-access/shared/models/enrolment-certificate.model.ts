@@ -8,6 +8,6 @@ export interface EnrolmentCertificate {
   preferredMiddleName: string;
   preferredLastName: string;
   gpid: string;
-  organizationTypes: Config<number>[];
+  careSettings: Config<number>[];
   expiryDate: string;
 }
