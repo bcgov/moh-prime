@@ -263,16 +263,6 @@ namespace Prime
                 .AddNpgSql(connectionString);
         }
 
-        // protected virtual void ConfigureAutoMapper()
-        // {
-        //     var mapperConfig = new MappingConfig(mc =>
-        //     {
-        //         mc.AddProfile(new MappingProfile());
-        //     });
-
-        //     IMapper mapper = mapperConfig.CreateMapper();
-        // }
-
         protected virtual void ConfigureLogging(IApplicationBuilder app)
         {
             // Only logs components that appear after it in the pipeline, which
