@@ -56,13 +56,12 @@ namespace Prime.Services
                 .AnyAsync(e => e.GPID == gpid);
         }
 
-        public async Task<Guid?> GetUserIdAsync(int enrolleeId)
+        public async Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId)
         {
             return await _context.Enrollees
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
-                .Select(e => e.UserId)
-                .Cast<Guid?>() // Want null instead of Guid.Empty if enrollee doesn't exist
+                .Select(e => new PermissionsRecord { UserId = e.UserId })
                 .SingleOrDefaultAsync();
         }
 
