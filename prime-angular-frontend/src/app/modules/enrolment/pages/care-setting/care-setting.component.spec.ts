@@ -10,7 +10,7 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
-import { OrganizationComponent } from './organization.component';
+import { CareSettingComponent } from './care-setting.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
@@ -20,9 +20,9 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 
-describe('OrganizationComponent', () => {
-  let component: OrganizationComponent;
-  let fixture: ComponentFixture<OrganizationComponent>;
+describe('CareSettingComponent', () => {
+  let component: CareSettingComponent;
+  let fixture: ComponentFixture<CareSettingComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule(
@@ -62,7 +62,7 @@ describe('OrganizationComponent', () => {
 
 
   beforeEach(inject([EnrolmentService], (enrolmentService: EnrolmentService) => {
-    fixture = TestBed.createComponent(OrganizationComponent);
+    fixture = TestBed.createComponent(CareSettingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

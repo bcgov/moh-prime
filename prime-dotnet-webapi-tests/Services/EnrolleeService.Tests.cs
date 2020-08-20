@@ -184,7 +184,7 @@ namespace PrimeTests.Services
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
-                .Include(e => e.EnrolleeOrganizationTypes)
+                .Include(e => e.EnrolleeCareSettings)
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
                 .SingleOrDefaultAsync();

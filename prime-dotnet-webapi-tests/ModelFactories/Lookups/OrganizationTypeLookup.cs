@@ -4,10 +4,10 @@ using Prime.Configuration;
 
 namespace PrimeTests.ModelFactories
 {
-    public static class OrganizationTypeLookup
+    public static class CareSettingLookup
     {
-        private static IEnumerable<OrganizationType> _seedData = new OrganizationTypeConfiguration().SeedData;
+        private static IEnumerable<CareSetting> _seedData = new CareSettingConfiguration().SeedData;
 
-        public static IEnumerable<OrganizationType> All { get { return _seedData; } }
+        public static IEnumerable<CareSetting> All { get { return _seedData; } }
     }
 }
