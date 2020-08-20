@@ -1,5 +1,5 @@
 // TODO update name of interface this is being merged into site registration Organization
-export interface Organization {
+export interface CareSetting {
   id?: number;
-  organizationTypeCode: number;
+  careSettingCode: number;
 }

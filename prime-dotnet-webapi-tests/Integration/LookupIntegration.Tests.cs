@@ -32,7 +32,7 @@ namespace PrimeTests.Integration
                 Assert.NotEmpty(apiResponse.Result.Colleges);
                 Assert.NotEmpty(apiResponse.Result.JobNames);
                 Assert.NotEmpty(apiResponse.Result.Licenses);
-                Assert.NotEmpty(apiResponse.Result.OrganizationTypes);
+                Assert.NotEmpty(apiResponse.Result.CareSettings);
                 Assert.NotEmpty(apiResponse.Result.Practices);
                 Assert.NotEmpty(apiResponse.Result.Statuses);
             }

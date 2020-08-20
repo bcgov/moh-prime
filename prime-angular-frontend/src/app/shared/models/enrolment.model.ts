@@ -5,7 +5,7 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { SelfDeclaration } from './self-declarations.model';
@@ -25,7 +25,7 @@ export interface HttpEnrollee extends Enrollee {
   jobs: Job[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
-  enrolleeOrganizationTypes: Organization[];
+  enrolleeCareSettings: CareSetting[];
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
@@ -63,7 +63,7 @@ export interface Enrolment {
 
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
-  organizations: Organization[];
+  careSettings: CareSetting[];
   privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;

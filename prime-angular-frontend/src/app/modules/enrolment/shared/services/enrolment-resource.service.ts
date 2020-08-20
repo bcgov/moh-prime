@@ -16,7 +16,7 @@ import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/mod
 
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
@@ -223,8 +223,8 @@ export class EnrolmentResource {
       enrollee.jobs = [];
     }
 
-    if (!enrollee.enrolleeOrganizationTypes) {
-      enrollee.enrolleeOrganizationTypes = [];
+    if (!enrollee.enrolleeCareSettings) {
+      enrollee.enrolleeCareSettings = [];
     }
 
     // Reorganize the shape of the enrollee into an enrolment
@@ -273,7 +273,7 @@ export class EnrolmentResource {
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
-      organizations: enrollee.enrolleeOrganizationTypes,
+      careSettings: enrollee.enrolleeCareSettings,
       ...remainder
     };
   }
@@ -287,7 +287,7 @@ export class EnrolmentResource {
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
     enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
-    enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
+    enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
 
     return this.enrolleeAdapter(enrolment);
   }
@@ -300,7 +300,7 @@ export class EnrolmentResource {
 
     return {
       ...enrollee,
-      enrolleeOrganizationTypes: enrolment.organizations,
+      enrolleeCareSettings: enrolment.careSettings,
       ...remainder
     };
   }
@@ -328,7 +328,7 @@ export class EnrolmentResource {
     return jobs.filter((job: Job) => (job.title !== ''));
   }
 
-  private removeIncompleteOrganizations(organizations: Organization[]) {
-    return organizations.filter((organization: Organization) => organization.organizationTypeCode);
+  private removeIncompleteCareSettings(careSettings: CareSetting[]) {
+    return careSettings.filter((careSetting: CareSetting) => careSetting.careSettingCode);
   }
 }

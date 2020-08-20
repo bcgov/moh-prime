@@ -19,14 +19,14 @@
 
           <mat-form-field class="w-100">
             <mat-label>Care Setting</mat-label>
-            <mat-select formControlName="organizationTypeCode">
-              <mat-option *ngFor="let organizationType of organizationTypeConfig"
-                          [value]="organizationType.code"
-                          [disabled]="disableCareSetting(organizationType.code)">
-                {{ organizationType.name }}
+            <mat-select formControlName="careSettingCode">
+              <mat-option *ngFor="let careSetting of careSettingConfig"
+                          [value]="careSetting.code"
+                          [disabled]="disableCareSetting(careSetting.code)">
+                {{ careSetting.name }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="organizationTypeCode.hasError('required')">
+            <mat-error *ngIf="careSettingCode.hasError('required')">
               Required
             </mat-error>
           </mat-form-field>

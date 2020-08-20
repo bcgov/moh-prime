@@ -10,7 +10,7 @@ import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { OrganizationTypeEnum } from '@shared/enums/organization-type.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -31,7 +31,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   public title: string;
   public routeUtils: RouteUtils;
   public organization: string;
-  public organizationTypeConfig: Config<number>[];
+  public careSettingConfig: Config<number>[];
   public vendorConfig: VendorConfig[];
   public filteredVendorConfig: VendorConfig[];
   public hasNoVendorError: boolean;
@@ -50,13 +50,13 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   ) {
     this.title = 'Care Setting';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.organizationTypeConfig = this.configService.organizationTypes;
+    this.careSettingConfig = this.configService.careSettings;
     this.vendorConfig = this.configService.vendors;
     this.hasNoVendorError = false;
   }
 
-  public get organizationTypeCode(): FormControl {
-    return this.form.get('organizationTypeCode') as FormControl;
+  public get careSettingCode(): FormControl {
+    return this.form.get('careSettingCode') as FormControl;
   }
 
   public onSubmit() {
@@ -89,12 +89,12 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     this.hasNoVendorError = false;
   }
 
-  public disableCareSetting(organizationTypeCode: number): boolean {
+  public disableCareSetting(careSettingCode: number): boolean {
     return ![
       // Omit care setting types that are not:
-      OrganizationTypeEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
-      OrganizationTypeEnum.COMMUNITY_PHARMACIST
-    ].includes(organizationTypeCode);
+      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
+      CareSettingEnum.COMMUNITY_PHARMACIST
+    ].includes(careSettingCode);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -114,12 +114,12 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   }
 
   private initForm() {
-    this.organizationTypeCode.valueChanges
+    this.careSettingCode.valueChanges
       .pipe(
-        map((organizationTypeCode: number) =>
+        map((careSettingCode: number) =>
           this.vendorConfig.filter(
             (vendorConfig: VendorConfig) =>
-              vendorConfig.organizationTypeCode === organizationTypeCode
+              vendorConfig.careSettingCode === careSettingCode
           )
         )
       ).subscribe((vendors: VendorConfig[]) => this.filteredVendorConfig = vendors);

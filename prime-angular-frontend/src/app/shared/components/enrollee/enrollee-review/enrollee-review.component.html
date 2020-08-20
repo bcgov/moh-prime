@@ -228,27 +228,27 @@
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Organization Information</ng-container>
+    <ng-container appPageSubheaderTitle>Care Type Setting</ng-container>
 
     <button *ngIf="showEditRedirect"
             mat-icon-button
-            matTooltip="Edit Organizations"
-            (click)="onRoute(EnrolmentRoutes.ORGANIZATION)">
+            matTooltip="Edit Care Setting"
+            (click)="onRoute(EnrolmentRoutes.CARE_SETTING)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
 
-  <ng-container *ngFor="let organization of organizations">
+  <ng-container *ngFor="let careSetting of careSettings">
 
-    <app-enrollee-property title="Organization Type"
+    <app-enrollee-property title="Care Setting"
                            [makeBold]="true">
-      {{ organization.organizationTypeCode | configCode: 'organizationTypes' }}
+      {{ careSetting.careSettingCode | configCode: 'careSettings' }}
     </app-enrollee-property>
 
   </ng-container>
 
-  <app-enrollee-property *ngIf="!hasOrganization"
-                         title="Organization Type"
+  <app-enrollee-property *ngIf="!hasCareSetting"
+                         title="Care Setting"
                          [makeBold]="true">
     None
   </app-enrollee-property>

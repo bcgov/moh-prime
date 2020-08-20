@@ -57,7 +57,7 @@ namespace Prime.Models
 
         public ICollection<Job> Jobs { get; set; }
 
-        public ICollection<EnrolleeOrganizationType> EnrolleeOrganizationTypes { get; set; }
+        public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
         public string DeviceProviderNumber { get; set; }
 
@@ -245,12 +245,12 @@ namespace Prime.Models
 
         public bool HasCareSetting(CareSettingType type)
         {
-            if (EnrolleeOrganizationTypes == null)
+            if (EnrolleeCareSettings == null)
             {
-                throw new InvalidOperationException($"{nameof(EnrolleeOrganizationTypes)} cannnot be null");
+                throw new InvalidOperationException($"{nameof(EnrolleeCareSettings)} cannnot be null");
             }
 
-            return EnrolleeOrganizationTypes.Any(o => o.IsType(type));
+            return EnrolleeCareSettings.Any(o => o.IsType(type));
         }
 
         /// <summary>
