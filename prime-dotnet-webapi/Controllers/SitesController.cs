@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using AutoMapper;
+
 using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
@@ -19,6 +21,7 @@ namespace Prime.Controllers
     [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
     public class SitesController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly ISiteService _siteService;
         private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
@@ -26,6 +29,7 @@ namespace Prime.Controllers
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
         public SitesController(
+            IMapper mapper,
             ISiteService siteService,
             IPartyService partyService,
             IOrganizationService organizationService,
@@ -33,6 +37,7 @@ namespace Prime.Controllers
             IEmailService emailService,
             IDocumentService documentService)
         {
+            _mapper = mapper;
             _siteService = siteService;
             _partyService = partyService;
             _organizationService = organizationService;
@@ -77,13 +82,14 @@ namespace Prime.Controllers
         /// Gets a specific Site.
         /// </summary>
         /// <param name="siteId"></param>
+        /// <param name="verbose"></param>
         [HttpGet("{siteId}", Name = nameof(GetSiteById))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Site>> GetSiteById(int siteId)
+        public async Task<ActionResult<Site>> GetSiteById(int siteId, [FromQuery] bool verbose)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
@@ -92,7 +98,14 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(ApiResponse.Result(site));
+            if (verbose)
+            {
+                return Ok(ApiResponse.Result(site));
+            }
+            else
+            {
+                return Ok(ApiResponse.Result(_mapper.Map<SiteViewModel>(site)));
+            }
         }
 
         // POST: api/Sites

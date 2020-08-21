@@ -48,15 +48,16 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets all of the Organizations for a user, or all organizations if user has ADMIN role
         /// </summary>
+        /// <param name="verbose"></param>
         [HttpGet(Name = nameof(GetOrganizations))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<OrganizationViewModel>>> GetOrganizations()
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Organization>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizations([FromQuery] bool verbose)
         {
             IEnumerable<Organization> organizations = null;
 
-            if (User.IsAdmin() || User.HasAdminView())
+            if (User.HasAdminView())
             {
                 organizations = await _organizationService.GetOrganizationsAsync();
             }
@@ -66,10 +67,17 @@ namespace Prime.Controllers
 
                 organizations = (party != null)
                     ? await _organizationService.GetOrganizationsAsync(party.Id)
-                    : new List<Organization>();
+                    : Enumerable.Empty<Organization>();
             }
 
-            return Ok(ApiResponse.Result(_mapper.Map<OrganizationViewModel[]>(organizations)));
+            if (verbose)
+            {
+                return Ok(ApiResponse.Result(organizations));
+            }
+            else
+            {
+                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<OrganizationViewModel>>(organizations)));
+            }
         }
 
         // GET: api/Organizations/5
@@ -77,13 +85,14 @@ namespace Prime.Controllers
         /// Gets a specific Organization.
         /// </summary>
         /// <param name="organizationId"></param>
+        /// <param name="verbose"></param>
         [HttpGet("{organizationId}", Name = nameof(GetOrganizationById))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Organization>> GetOrganizationById(int organizationId)
+        public async Task<ActionResult<Organization>> GetOrganizationById(int organizationId, [FromQuery] bool verbose)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
@@ -92,7 +101,14 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(ApiResponse.Result(organization));
+            if (verbose)
+            {
+                return Ok(ApiResponse.Result(organization));
+            }
+            else
+            {
+                return Ok(ApiResponse.Result(_mapper.Map<OrganizationViewModel>(organization)));
+            }
         }
 
         // POST: api/Organizations
