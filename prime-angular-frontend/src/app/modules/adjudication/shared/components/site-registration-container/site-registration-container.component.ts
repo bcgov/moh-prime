@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable, EMPTY, of, noop } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 
@@ -113,14 +113,22 @@ export class SiteRegistrationContainerComponent implements OnInit {
   }
 
   private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<OrganizationViewModel[]> {
-    return this.organizationResource.getOrganizations();
+    return this.organizationResource.getOrganizations()
+      .pipe(
+        tap(() => this.showSearchFilter = true)
+      );
   }
 
   private getOrganizationById(organizationId: number): Observable<Organization[]> {
     return this.organizationResource.getOrganizationById(organizationId)
       .pipe(
-        map((organization: Organization) => [organization])
+        map((organization: Organization) => [organization]),
+        tap(() => this.showSearchFilter = false)
       );
+  }
+
+  private getSiteById(siteId: number): Observable<Site> {
+    return this.siteResource.getSiteById(siteId);
   }
 
   private deleteOrganization(organizationId: number) {

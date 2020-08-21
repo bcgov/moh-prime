@@ -23,7 +23,7 @@ export class OrganizationInformationComponent implements OnInit {
     this.hasActions = true;
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.busy = this.getOrganization()
       .subscribe((organization: Organization) => {
         this.organization = organization;
@@ -34,5 +34,4 @@ export class OrganizationInformationComponent implements OnInit {
     const organizationId = this.route.snapshot.params.oid;
     return this.organizationResource.getOrganizationById(organizationId);
   }
-
 }

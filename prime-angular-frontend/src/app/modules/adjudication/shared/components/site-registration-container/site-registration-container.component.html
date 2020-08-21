@@ -5,7 +5,7 @@
 
   <ng-content select="app-page-subheader"></ng-content>
 
-  <app-search-form [disabled]="true"
+  <app-search-form *ngIf="showSearchFilter"
                    (search)="onSearch($event)"
                    (filter)="onFilter($event)"
                    (refresh)="onRefresh()"></app-search-form>
