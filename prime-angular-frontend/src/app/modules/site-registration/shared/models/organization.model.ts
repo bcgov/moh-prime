@@ -6,6 +6,7 @@ export interface Organization {
   id?: number;
   displayId?: number;
   sites: Site[];
+  siteCount: number;
   // Forms -----
   signingAuthorityId?: number;
   signingAuthority: Party;
@@ -17,9 +18,9 @@ export interface Organization {
   acceptedAgreementDate: string;
   signedAgreementDocuments: SignedAgreementDocument[];
   submittedDate: string;
-  siteCount: number;
 }
 
-export interface OrganizationViewModel extends Pick<Organization, 'id' | 'displayId' | 'name' | 'signingAuthorityId' | 'signingAuthority'> {
+export interface OrganizationViewModel extends
+  Pick<Organization, 'id' | 'displayId' | 'name' | 'signingAuthorityId' | 'signingAuthority' | 'signedAgreementDocuments'> {
   sites: SiteViewModel[];
 }
