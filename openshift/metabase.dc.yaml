@@ -1,8 +1,15 @@
+---
 apiVersion: v1
 kind: Template
 metadata:
   name: metabase-dc
-  creationTimestamp: 
+  creationTimestamp:
+  description: >-
+    This is a PostgreSQL backed Metabase (http://www.metabase.com/) deployment. Metabase is the
+    easy, open source way for everyone in your company to ask questions and learn from data.
+  openshift.io/long-description: >-
+      This template provides a Metabase instance backed by a standalone PostgreSQL
+      server. The database is stored on persistent storage.
 parameters:
   - name: OC_NAMESPACE
     required: true
@@ -31,6 +38,8 @@ objects:
       app: metabase
       service: ${APP_NAME}
   type: Opaque
+
+# Metabase service (endpoint for internal routing to related pods)
 - apiVersion: v1
   kind: Service
   metadata:
@@ -51,6 +60,8 @@ objects:
       deploymentconfig: ${APP_NAME}
     sessionAffinity: None
     type: ClusterIP
+
+# Metabase route definition to direct external traffic to frontend component
 - apiVersion: v1
   kind: Route
   metadata:
@@ -66,6 +77,8 @@ objects:
     to:
       kind: Service
       name: ${APP_NAME}
+
+# Metabase - Deployment Configuration
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:

@@ -1,5 +1,6 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 metadata:
   name: schemaspy-dc
   annotations:
