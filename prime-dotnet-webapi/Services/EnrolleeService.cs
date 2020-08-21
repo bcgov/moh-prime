@@ -504,5 +504,10 @@ namespace Prime.Services
             return selfDeclarationDocument;
         }
 
+        public async Task ImportEnrollees(IEnumerable<Enrollee> enrollees)
+        {
+            _context.Enrollees.AddRange(enrollees);
+            await _context.SaveChangesAsync();
+        }
     }
 }

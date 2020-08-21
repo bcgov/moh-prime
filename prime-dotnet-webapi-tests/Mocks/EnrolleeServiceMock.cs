@@ -205,5 +205,10 @@ namespace PrimeTests.Mocks
         {
             throw new NotImplementedException();
         }
+
+        public Task ImportEnrollees(IEnumerable<Enrollee> enrollees)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
