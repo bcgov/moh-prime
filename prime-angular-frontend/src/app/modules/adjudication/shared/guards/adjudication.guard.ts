@@ -33,7 +33,7 @@ export class AdjudicationGuard extends BaseGuard {
   // TODO update to be two observables merged and resolved using combineLatest,
   // but requires wrapping the Keycloak service so it uses obseravables first
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
-    const admin$ = from(this.authService.getAdmin())
+    const admin$ = this.authService.getAdmin$()
       .pipe(
         exhaustMap(({ userId, firstName, lastName, email, idir }: Admin) => {
           const admin = {

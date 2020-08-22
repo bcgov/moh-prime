@@ -9,7 +9,7 @@ import { OrganizationViewModel } from '@registration/shared/models/organization.
  * NOTE: should only be used within the SiteRegistrationContainer,
  * SiteRegistrationTable, and SiteRegistrationActions
  */
-export interface SiteRegistration extends Omit<OrganizationViewModel, 'id'>, Omit<SiteViewModel, 'id'> {
+export interface SiteRegistrationViewModel extends Omit<OrganizationViewModel, 'id' | 'sites'>, Omit<SiteViewModel, 'id'> {
   organizationId: number;
   siteId: number;
 }
