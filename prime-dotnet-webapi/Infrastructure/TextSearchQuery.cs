@@ -48,17 +48,5 @@ namespace Prime.Infrastructure
 
             return _originalQuery.AsExpandable().Where(predicate);
         }
-
-        // public IQueryable<T> StartsWith(string term)
-        // {
-        //     var predicate = PredicateBuilder.New<T>();
-
-        //     foreach (var selector in _propertySelectors)
-        //     {
-        //         predicate.Or(x => selector.Invoke(x).ToLower().StartsWith(term.ToLower()));
-        //     }
-
-        //     return _originalQuery.AsExpandable().Where(predicate);
-        // }
     }
 }
