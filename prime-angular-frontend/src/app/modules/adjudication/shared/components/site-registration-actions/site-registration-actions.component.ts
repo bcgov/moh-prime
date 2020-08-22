@@ -6,7 +6,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 
-import { SiteRegistrationViewModel } from '@adjudication/shared/models/site-registration.model';
+import { SiteRegistrationViewModel } from '@registration/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-site-registration-actions',

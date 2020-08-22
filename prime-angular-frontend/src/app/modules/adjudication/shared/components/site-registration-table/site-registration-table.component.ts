@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { SiteRegistrationViewModel } from '@adjudication/shared/models/site-registration.model';
+import { SiteRegistrationViewModel } from '@registration/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-site-registration-table',
@@ -33,7 +33,6 @@ export class SiteRegistrationTableComponent implements OnInit {
       'careSetting',
       'actions'
     ];
-    this.dataSource = new MatTableDataSource<SiteRegistrationViewModel>([]);
     this.route = new EventEmitter<string | (string | number)[]>();
     this.delete = new EventEmitter<{ [key: string]: number }>();
   }

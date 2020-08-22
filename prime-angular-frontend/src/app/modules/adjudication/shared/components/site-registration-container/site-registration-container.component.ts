@@ -19,8 +19,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Organization, OrganizationViewModel } from '@registration/shared/models/organization.model';
 import { Site, SiteViewModel } from '@registration/shared/models/site.model';
+import { SiteRegistrationViewModel } from '@registration/shared/models/site-registration.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { SiteRegistrationViewModel } from '@adjudication/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-site-registration-container',
