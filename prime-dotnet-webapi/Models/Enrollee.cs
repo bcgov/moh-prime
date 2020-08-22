@@ -4,6 +4,7 @@ using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+using DelegateDecompiler;
 
 namespace Prime.Models
 {
@@ -120,9 +121,12 @@ namespace Prime.Models
         /// Gets the most recent Enrolment Status on the Enrollee.
         /// </summary>
         [NotMapped]
+        [Computed]
         public EnrolmentStatus CurrentStatus
         {
-            get => GetStatusTimeline()
+            get => EnrolmentStatuses
+                .OrderByDescending(s => s.StatusDate)
+                .ThenByDescending(s => s.Id)
                 .FirstOrDefault();
         }
 
@@ -172,6 +176,7 @@ namespace Prime.Models
         }
 
         [NotMapped]
+        [Computed]
         public int DisplayId
         {
             get => Id + DISPLAY_OFFSET;
@@ -303,8 +308,7 @@ namespace Prime.Models
         /// <returns> This enrollee's time-ordered Enrolment Statuses, or an empty list if not loaded. </returns>
         private IOrderedEnumerable<EnrolmentStatus> GetStatusTimeline()
         {
-            var statuses = EnrolmentStatuses ?? Enumerable.Empty<EnrolmentStatus>();
-            return statuses
+            return (EnrolmentStatuses ?? Enumerable.Empty<EnrolmentStatus>())
                 .OrderByDescending(s => s.StatusDate)
                 .ThenByDescending(s => s.Id);
         }
