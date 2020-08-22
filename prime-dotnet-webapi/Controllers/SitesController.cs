@@ -98,14 +98,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (verbose)
-            {
-                return Ok(ApiResponse.Result(site));
-            }
-            else
-            {
-                return Ok(ApiResponse.Result(_mapper.Map<SiteViewModel>(site)));
-            }
+            return Ok(ApiResponse.Result(site));
         }
 
         // POST: api/Sites

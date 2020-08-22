@@ -76,7 +76,7 @@ namespace Prime.Controllers
             }
             else
             {
-                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<OrganizationViewModel>>(organizations)));
+                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<OrganizationListViewModel>>(organizations)));
             }
         }
 
@@ -101,14 +101,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (verbose)
-            {
-                return Ok(ApiResponse.Result(organization));
-            }
-            else
-            {
-                return Ok(ApiResponse.Result(_mapper.Map<OrganizationViewModel>(organization)));
-            }
+            return Ok(ApiResponse.Result(organization));
         }
 
         // POST: api/Organizations

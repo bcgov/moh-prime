@@ -11,7 +11,7 @@ public class AutoMapping : Profile
 {
     public AutoMapping()
     {
-        CreateMap<Organization, OrganizationViewModel>();
-        CreateMap<Site, SiteViewModel>();
+        CreateMap<Organization, OrganizationListViewModel>();
+        CreateMap<Site, SiteListViewModel>();
     }
 }

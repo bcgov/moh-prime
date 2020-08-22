@@ -3,7 +3,7 @@ using Prime.Models;
 
 namespace Prime.ViewModels
 {
-    public class OrganizationViewModel
+    public class OrganizationListViewModel
     {
         public int Id { get; set; }
 
@@ -13,7 +13,7 @@ namespace Prime.ViewModels
 
         public Party SigningAuthority { get; set; }
 
-        public IEnumerable<SiteViewModel> Sites { get; set; }
+        public IEnumerable<SiteListViewModel> Sites { get; set; }
 
         public int DisplayId { get; set; }
     }
