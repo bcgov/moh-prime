@@ -28,6 +28,7 @@ namespace Prime.Controllers
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
+
         public SitesController(
             IMapper mapper,
             ISiteService siteService,
@@ -46,50 +47,18 @@ namespace Prime.Controllers
             _documentService = documentService;
         }
 
-        // GET: api/Sites
-        /// <summary>
-        /// Gets all of the Sites for an organization, or all sites if user has ADMIN role
-        /// </summary>
-        /// <param name="organizationId"></param>
-        [HttpGet("/api/organizations/{organizationId:int}/sites", Name = nameof(GetSites))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSites(int organizationId)
-        {
-            var organization = await _organizationService.GetOrganizationAsync(organizationId);
-            if (organization == null)
-            {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
-            }
-
-            IEnumerable<Site> sites = null;
-
-            if (User.IsAdmin() || User.HasAdminView())
-            {
-                sites = await _siteService.GetSitesAsync();
-            }
-            else
-            {
-                sites = await _siteService.GetSitesAsync(organizationId);
-            }
-
-            return Ok(ApiResponse.Result(sites));
-        }
-
         // GET: api/Sites/5
         /// <summary>
         /// Gets a specific Site.
         /// </summary>
         /// <param name="siteId"></param>
-        /// <param name="verbose"></param>
         [HttpGet("{siteId}", Name = nameof(GetSiteById))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Site>> GetSiteById(int siteId, [FromQuery] bool verbose)
+        public async Task<ActionResult<Site>> GetSiteById(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 

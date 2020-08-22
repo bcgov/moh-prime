@@ -48,12 +48,11 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets all of the Organizations for a user, or all organizations if user has ADMIN role
         /// </summary>
-        /// <param name="verbose"></param>
         [HttpGet(Name = nameof(GetOrganizations))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Organization>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizations([FromQuery] bool verbose)
+        public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizations()
         {
             IEnumerable<Organization> organizations = null;
 
@@ -70,14 +69,7 @@ namespace Prime.Controllers
                     : Enumerable.Empty<Organization>();
             }
 
-            if (verbose)
-            {
-                return Ok(ApiResponse.Result(organizations));
-            }
-            else
-            {
-                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<OrganizationListViewModel>>(organizations)));
-            }
+            return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<OrganizationListViewModel>>(organizations)));
         }
 
         // GET: api/Organizations/5
@@ -85,14 +77,13 @@ namespace Prime.Controllers
         /// Gets a specific Organization.
         /// </summary>
         /// <param name="organizationId"></param>
-        /// <param name="verbose"></param>
         [HttpGet("{organizationId}", Name = nameof(GetOrganizationById))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Organization>> GetOrganizationById(int organizationId, [FromQuery] bool verbose)
+        public async Task<ActionResult<Organization>> GetOrganizationById(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
