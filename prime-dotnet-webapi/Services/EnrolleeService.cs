@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Prime.Services
 {
@@ -99,38 +100,41 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery()
+            searchOptions = searchOptions ?? new EnrolleeSearchOptions();
+
+            IQueryable<Enrollee> query = _context.Enrollees
+                .AsNoTracking()
+                .Include(e => e.EnrolmentStatuses)
+                    .ThenInclude(es => es.Status)
+                .Include(e => e.AccessTerms)
                 .Include(e => e.Adjudicator);
 
-            if (searchOptions != null && searchOptions.TextSearch != null)
+            if (!string.IsNullOrWhiteSpace(searchOptions.TextSearch))
             {
-                query = query.Where(e =>
-                    e.FirstName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    || e.LastName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    || e.ContactEmail.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    || e.VoicePhone.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    // Since DisplayId is a derived field we can not query on it. And we
-                    // don't want to have to grab all Enrollees and filter on the front end.
-                    || (e.Id + Enrollee.DISPLAY_OFFSET).ToString().Equals(searchOptions.TextSearch)
-                    || e.FirstName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    || e.Certifications.Any(c => c.LicenseNumber.ToLower().StartsWith(searchOptions.TextSearch.ToLower()))
-                );
+                query = query
+                    .Search(e => e.FirstName,
+                        e => e.LastName,
+                        e => e.ContactEmail,
+                        e => e.VoicePhone,
+                        e => e.Id.ToString()) // TODO: display ID not ID
+                    .SearchCollections(e => e.Certifications.Select(c => c.LicenseNumber))
+                    .Containing(searchOptions.TextSearch);
             }
 
-            IEnumerable<Enrollee> items = await query.ToListAsync();
-
-            if (searchOptions?.StatusCode != null)
+            if (searchOptions.StatusCode.HasValue)
             {
-                // TODO refactor see Jira PRIME-251
-                items = items.Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode);
+                query = query
+                    .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
+                    .DecompileAsync();
             }
 
-            foreach (var item in items)
-            {
-                item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
-            }
+            // TODO: update when Privileges become a thing again
+            // foreach (var item in items)
+            // {
+            //     item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
+            // }
 
-            return items;
+            return await query.ToListAsync();
         }
 
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
@@ -264,14 +268,12 @@ namespace Prime.Services
                 .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            if (enrollee == null)
+            if (enrollee == null || enrollee.CurrentStatus == null)
             {
                 return false;
             }
 
-            var currentStatusCode = enrollee.CurrentStatus?.StatusCode ?? -1;
-
-            return statusCodesToCheck.Cast<int>().Contains(currentStatusCode);
+            return statusCodesToCheck.Contains(enrollee.CurrentStatus.GetStatusType());
         }
 
         private IQueryable<Enrollee> GetBaseEnrolleeQuery()
