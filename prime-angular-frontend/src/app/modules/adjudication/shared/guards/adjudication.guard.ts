@@ -49,7 +49,7 @@ export class AdjudicationGuard extends BaseGuard {
             ? this.adjudicationResource.createAdmin(admin)
             : Promise.resolve(admin);
         })
-      ).toPromise();
+      );
 
     const redirect$ = new Promise(async (resolve, reject) => {
       const authenticated = await this.authService.isLoggedIn();
@@ -66,7 +66,7 @@ export class AdjudicationGuard extends BaseGuard {
       return reject(false);
     });
 
-    return Promise.all([admin$, redirect$])
+    return Promise.all([admin$.toPromise(), redirect$])
       .then(([admin, result]: [Admin, boolean]) => result);
   }
 }

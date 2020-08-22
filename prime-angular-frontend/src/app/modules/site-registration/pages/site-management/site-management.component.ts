@@ -11,7 +11,7 @@ import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Organization } from '@registration/shared/models/organization.model';
+import { Organization, OrganizationViewModel } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
@@ -25,7 +25,7 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 export class SiteManagementComponent implements OnInit {
   public busy: Subscription;
   public title: string;
-  public organizations: Organization[];
+  public organizations: OrganizationViewModel[];
   public sites: Site[];
   public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
@@ -116,13 +116,7 @@ export class SiteManagementComponent implements OnInit {
   private initOrganizationAndSites() {
     this.busy = this.organizationResource.getOrganizations()
       .pipe(
-        map((organizations: Organization[]) => this.organizations = organizations),
-        exhaustMap((organizations: Organization[]) =>
-          (organizations.length)
-            ? this.siteResource.getSites(organizations[0].id)
-            : EMPTY
-        ),
-        map((sites: Site[]) => this.sites = sites)
+        map((organizations: OrganizationViewModel[]) => this.organizations = organizations)
       ).subscribe();
   }
 

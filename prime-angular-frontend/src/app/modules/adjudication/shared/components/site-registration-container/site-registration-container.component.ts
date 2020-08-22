@@ -202,16 +202,35 @@ export class SiteRegistrationContainerComponent implements OnInit {
   }
 
   private toSiteRegistration([organization, site]: [Organization, Site]): SiteRegistrationViewModel[] {
-    const { id: organizationId, displayId, name, signingAuthorityId, signingAuthority, signedAgreementDocuments } = organization;
-    const { id: siteId, physicalAddress, doingBusinessAs, submittedDate, careSettingCode, siteVendors, pec } = site;
+    const {
+      id: organizationId,
+      displayId,
+      signingAuthorityId,
+      signingAuthority,
+      name,
+      signedAgreementDocuments,
+      completed,
+      acceptedAgreementDate
+    } = organization;
+    const {
+      id: siteId,
+      physicalAddress,
+      doingBusinessAs,
+      submittedDate,
+      careSettingCode,
+      siteVendors,
+      pec
+    } = site;
 
     return [{
       organizationId,
       displayId,
-      name,
       signingAuthorityId,
       signingAuthority,
+      name,
       signedAgreementDocuments,
+      completed,
+      acceptedAgreementDate,
       siteId,
       physicalAddress,
       doingBusinessAs,

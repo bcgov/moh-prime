@@ -21,6 +21,6 @@ export interface Organization {
 }
 
 export interface OrganizationViewModel extends
-  Pick<Organization, 'id' | 'displayId' | 'name' | 'signingAuthorityId' | 'signingAuthority' | 'signedAgreementDocuments'> {
+  Omit<Organization, 'sites' | 'siteCount' | 'registrationId' | 'doingBusinessAs'> {
   sites: SiteViewModel[];
 }
