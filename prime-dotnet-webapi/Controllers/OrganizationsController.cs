@@ -48,11 +48,12 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets all of the Organizations for a user, or all organizations if user has ADMIN role
         /// </summary>
+        /// <param name="verbose"></param>
         [HttpGet(Name = nameof(GetOrganizations))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Organization>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizations()
+        public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizations([FromQuery] bool verbose)
         {
             IEnumerable<Organization> organizations = null;
 
@@ -69,8 +70,46 @@ namespace Prime.Controllers
                     : Enumerable.Empty<Organization>();
             }
 
-            return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<OrganizationListViewModel>>(organizations)));
+            if (verbose)
+            {
+                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<Organization>>(organizations)));
+            }
+            else
+            {
+                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<OrganizationListViewModel>>(organizations)));
+            }
         }
+
+        // GET: api/Sites
+        /// <summary>
+        /// Gets all of the Sites for an organization, or all sites if user has ADMIN role
+        /// </summary>
+        /// <param name="organizationId"></param>
+        // [HttpGet("{organizationId}/sites", Name = nameof(GetSites))]
+        // [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        // [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
+        // public async Task<ActionResult<IEnumerable<Site>>> GetOrganizationSites(int organizationId)
+        // {
+        //     var organization = await _organizationService.GetOrganizationAsync(organizationId);
+        //     if (organization == null)
+        //     {
+        //         return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+        //     }
+
+        //     IEnumerable<Site> sites = null;
+
+        //     if (User.HasAdminView())
+        //     {
+        //         sites = await _siteService.GetSitesAsync();
+        //     }
+        //     else
+        //     {
+        //         sites = await _siteService.GetSitesAsync(organizationId);
+        //     }
+
+        //     return Ok(ApiResponse.Result(sites));
+        // }
 
         // GET: api/Organizations/5
         /// <summary>

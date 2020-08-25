@@ -43,7 +43,7 @@ export class RegistrationGuard extends BaseGuard {
         map((organization: Organization) => [organization, true])
       );
 
-    return this.organizationResource.getOrganizations()
+    return this.organizationResource.getOrganizations({ verbose: true })
       .pipe(
         map((organizations: Organization[]) =>
           (organizations.length)

@@ -25,7 +25,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   ) { }
 
   public getOrganizationAgreement() {
-    const request$ = (this.siteRegistration.signedAgreementDocuments.length)
+    const request$ = (this.siteRegistration.signedAgreementDocumentCount)
       ? this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.siteRegistration.organizationId)
         .pipe(
           map((token: string) => this.utilsService.downloadToken(token))

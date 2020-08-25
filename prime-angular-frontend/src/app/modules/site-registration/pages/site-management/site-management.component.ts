@@ -12,6 +12,7 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization, OrganizationViewModel } from '@registration/shared/models/organization.model';
+import { Site } from '@registration/shared/models/site.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -94,7 +95,7 @@ export class SiteManagementComponent implements OnInit {
   public ngOnInit(): void {
     this.resetFormStates();
     this.checkQueryParams();
-    this.initOrganizationAndSites();
+    this.getOrganizations();
   }
 
   private resetFormStates() {
@@ -109,11 +110,9 @@ export class SiteManagementComponent implements OnInit {
     this.router.navigate([], { queryParams: { submitted: null } });
   }
 
-  private initOrganizationAndSites() {
+  private getOrganizations() {
     this.busy = this.organizationResource.getOrganizations()
-      .pipe(
-        map((organizations: OrganizationViewModel[]) => this.organizations = organizations)
-      ).subscribe();
+      .subscribe((organizations: OrganizationViewModel[]) => this.organizations = organizations);
   }
 
   private createSite(organizationId: number) {

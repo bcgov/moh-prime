@@ -21,6 +21,7 @@ export interface Organization {
 }
 
 export interface OrganizationViewModel extends
-  Omit<Organization, 'sites' | 'siteCount' | 'registrationId' | 'doingBusinessAs'> {
+  Omit<Organization, 'sites' | 'siteCount' | 'registrationId' | 'doingBusinessAs' | 'signedAgreementDocuments'> {
   sites: SiteViewModel[];
+  signedAgreementDocumentCount: number;
 }

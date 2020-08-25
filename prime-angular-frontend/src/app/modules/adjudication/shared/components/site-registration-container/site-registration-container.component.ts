@@ -228,7 +228,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       signingAuthorityId,
       signingAuthority,
       name,
-      signedAgreementDocuments,
+      signedAgreementDocumentCount: signedAgreementDocuments.length,
       completed,
       acceptedAgreementDate,
       siteId,

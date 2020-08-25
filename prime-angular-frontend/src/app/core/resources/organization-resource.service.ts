@@ -26,11 +26,20 @@ export class OrganizationResource {
     private logger: LoggerService
   ) { }
 
-  public getOrganizations(): Observable<OrganizationViewModel[]> {
-    return this.apiResource.get<OrganizationViewModel[]>('organizations')
+  /**
+   * @description
+   * Request a list of organizations and determine the model in the
+   * response based on the verbose query parameter, which defaults
+   * to using the view model.
+   */
+  public getOrganizations(): Observable<OrganizationViewModel[]>;
+  public getOrganizations(queryParams: { verbose: boolean }): Observable<OrganizationViewModel[] | Organization[]>;
+  public getOrganizations(queryParams: { verbose: boolean } = null): Observable<OrganizationViewModel[] | Organization[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParams);
+    return this.apiResource.get<OrganizationViewModel[] | Organization[]>('organizations', params)
       .pipe(
-        map((response: ApiHttpResponse<OrganizationViewModel[]>) => response.result),
-        tap((organizations: OrganizationViewModel[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        map((response: ApiHttpResponse<OrganizationViewModel[] | Organization[]>) => response.result),
+        tap((organizations: OrganizationViewModel[] | Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
           this.logger.error('[SiteRegistration] OrganizationResource::getOrganizations error has occurred: ', error);
