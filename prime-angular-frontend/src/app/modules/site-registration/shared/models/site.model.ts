@@ -38,4 +38,4 @@ export interface Site {
 }
 
 export interface SiteViewModel extends
-  Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'pec'> { }
+  Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec'> { }

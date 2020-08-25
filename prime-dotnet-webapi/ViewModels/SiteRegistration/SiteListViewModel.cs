@@ -8,6 +8,8 @@ namespace Prime.ViewModels
     {
         public int Id { get; set; }
 
+        public int? CareSettingCode { get; set; }
+
         public PhysicalAddress PhysicalAddress { get; set; }
 
         public string DoingBusinessAs { get; set; }
@@ -17,6 +19,8 @@ namespace Prime.ViewModels
         public int? OrganizationTypeCode { get; set; }
 
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
+
+        public bool Completed { get; set; }
 
         public string PEC { get; set; }
     }
