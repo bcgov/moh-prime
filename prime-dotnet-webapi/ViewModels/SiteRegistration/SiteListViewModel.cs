@@ -12,9 +12,9 @@ namespace Prime.ViewModels
 
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
 
-        public PhysicalAddress PhysicalAddress { get; set; }
-
         public string DoingBusinessAs { get; set; }
+
+        public PhysicalAddress PhysicalAddress { get; set; }
 
         public DateTimeOffset? SubmittedDate { get; set; }
 

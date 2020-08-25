@@ -25,16 +25,18 @@ namespace Prime.Services
             _partyService = partyService;
         }
 
-        public async Task<IEnumerable<Organization>> GetOrganizationsAsync()
+        public async Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId)
         {
-            return await this.GetBaseOrganizationQuery()
-                .ToListAsync();
-        }
+            var query = this.GetBaseOrganizationQuery();
 
-        public async Task<IEnumerable<Organization>> GetOrganizationsAsync(int partyId)
-        {
-            return await this.GetBaseOrganizationQuery()
-                .Where(o => o.SigningAuthorityId == partyId)
+            if (partyId != null)
+            {
+                query.Where(o => o.SigningAuthorityId == partyId);
+            }
+
+            return await query
+                .Include(o => o.Sites).ThenInclude(s => s.SiteVendors)
+                .Include(o => o.Sites).ThenInclude(s => s.PhysicalAddress)
                 .ToListAsync();
         }
 
@@ -219,7 +221,6 @@ namespace Prime.Services
         private IQueryable<Organization> GetBaseOrganizationQuery()
         {
             return _context.Organizations
-                .Include(o => o.Sites)
                 .Include(o => o.SignedAgreementDocuments)
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(p => p.PhysicalAddress)

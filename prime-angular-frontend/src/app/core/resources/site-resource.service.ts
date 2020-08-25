@@ -13,7 +13,7 @@ import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
-import { Site } from '@registration/shared/models/site.model';
+import { Site, SiteViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '../../modules/site-registration/shared/models/business-licence-document.model';
 
 // TODO use ApiResourceUtils to build URLs
@@ -29,27 +29,11 @@ export class SiteResource {
     private logger: LoggerService
   ) { }
 
-  public getSites(organizationId: number): Observable<Site[]> {
-    return this.apiResource.get<Site[]>(`organizations/${organizationId}/sites`)
+  public getSites(organizationId: number): Observable<SiteViewModel[]> {
+    return this.apiResource.get<SiteViewModel[]>(`organizations/${organizationId}/sites`)
       .pipe(
-        map((response: ApiHttpResponse<Site[]>) => response.result),
-        // TODO split out into proper adapter
-        map((sites: Site[]) => {
-          sites.map((site: Site) => {
-            site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
-              businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
-              businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
-
-              if (businessDay.endTime === '24') {
-                businessDay.startTime = null;
-                businessDay.endTime = null;
-              }
-              return businessDay;
-            });
-          });
-          return sites;
-        }),
-        tap((sites: Site[]) => this.logger.info('SITES', sites)),
+        map((response: ApiHttpResponse<SiteViewModel[]>) => response.result),
+        tap((sites: SiteViewModel[]) => this.logger.info('SITES', sites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);

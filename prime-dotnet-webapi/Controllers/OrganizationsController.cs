@@ -58,7 +58,7 @@ namespace Prime.Controllers
 
             if (User.HasAdminView())
             {
-                organizations = await _organizationService.GetOrganizationsAsync();
+                organizations = await _organizationService.GetOrganizationsAsync(null);
             }
             else
             {
