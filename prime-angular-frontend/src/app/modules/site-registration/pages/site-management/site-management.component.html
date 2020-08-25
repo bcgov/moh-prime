@@ -52,18 +52,18 @@
       </button>
     </div>
 
-  </ng-container>
+    <ng-container *ngFor="let site of organization.sites">
 
-  <ng-container *ngFor="let site of sites">
+      <app-summary-card icon="store"
+                        title="Site Information"
+                        [menu]="siteMenu"
+                        [menuOutletContext]="{ site: site }"
+                        [properties]="getSiteProperties(site)"
+                        actionButtonTitle="Update Remote Practitioners"
+                        [actionDisabled]="!site.completed"
+                        (action)="viewSiteRemoteUsers(site)"></app-summary-card>
 
-    <app-summary-card icon="store"
-                      title="Site Information"
-                      [menu]="siteMenu"
-                      [menuOutletContext]="{ site: site }"
-                      [properties]="getSiteProperties(site)"
-                      actionButtonTitle="Update Remote Practitioners"
-                      [actionDisabled]="!site.completed"
-                      (action)="viewSiteRemoteUsers(site)"></app-summary-card>
+    </ng-container>
 
   </ng-container>
 

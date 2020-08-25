@@ -26,7 +26,6 @@ export class SiteManagementComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: OrganizationViewModel[];
-  public sites: Site[];
   public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
@@ -46,7 +45,6 @@ export class SiteManagementComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
 
     this.organizations = [];
-    this.sites = [];
   }
 
   public viewOrganization(organization: Organization) {
@@ -63,10 +61,6 @@ export class SiteManagementComponent implements OnInit {
     this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
   }
 
-  public addSite(organizationId: number) {
-    this.createSite(organizationId);
-  }
-
   public viewSite(site: Site) {
     const routePath = (site.completed)
       ? [site.organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
@@ -79,6 +73,10 @@ export class SiteManagementComponent implements OnInit {
     this.routeUtils.routeRelativeTo(routePath);
   }
 
+  public addSite(organizationId: number) {
+    this.createSite(organizationId);
+  }
+
   public getOrganizationProperties(organization: Organization) {
     return [
       { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
@@ -87,8 +85,10 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public getSiteProperties(site: Site) {
+    console.log('TEST', site);
+
     return [
-      { key: 'Case Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
+      { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
       { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
