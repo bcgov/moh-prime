@@ -12,7 +12,6 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization, OrganizationViewModel } from '@registration/shared/models/organization.model';
-import { Site } from '@registration/shared/models/site.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -85,8 +84,6 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public getSiteProperties(site: Site) {
-    console.log('TEST', site);
-
     return [
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
       { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
@@ -100,7 +97,6 @@ export class SiteManagementComponent implements OnInit {
     this.initOrganizationAndSites();
   }
 
-  // TODO move into a guard or resolver to allow clearing of form states
   private resetFormStates() {
     // Clear the organization and site form states so new organizations, and
     // sites aren't filled with previous information
