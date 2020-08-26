@@ -10,8 +10,8 @@ import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { OrganizationViewModel } from '@registration/shared/models/organization.model';
-import { SiteViewModel, Site } from '@registration/shared/models/site.model';
+import { OrganizationListViewModel } from '@registration/shared/models/organization.model';
+import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -24,7 +24,7 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 export class SiteManagementComponent implements OnInit {
   public busy: Subscription;
   public title: string;
-  public organizations: OrganizationViewModel[];
+  public organizations: OrganizationListViewModel[];
   public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
@@ -46,28 +46,28 @@ export class SiteManagementComponent implements OnInit {
     this.organizations = [];
   }
 
-  public viewOrganization(organization: OrganizationViewModel) {
+  public viewOrganization(organization: OrganizationListViewModel) {
     const routePath = (!organization.completed)
       ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
       : []; // Defaults to overview
     this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
   }
 
-  public viewAgreement(organization: OrganizationViewModel) {
+  public viewAgreement(organization: OrganizationListViewModel) {
     const routePath = (organization.acceptedAgreementDate)
       ? [SiteRoutes.ORGANIZATION_AGREEMENT]
       : []; // Defaults to overview
     this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
   }
 
-  public viewSite(organizationId: number, site: SiteViewModel) {
+  public viewSite(organizationId: number, site: SiteListViewModel) {
     const routePath = (site.completed)
       ? [organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
       : [organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING];
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  public viewSiteRemoteUsers(organizationId: number, site: SiteViewModel): void {
+  public viewSiteRemoteUsers(organizationId: number, site: SiteListViewModel): void {
     const routePath = [organizationId, SiteRoutes.SITES, site.id, SiteRoutes.REMOTE_USERS];
     this.routeUtils.routeRelativeTo(routePath);
   }
@@ -76,14 +76,14 @@ export class SiteManagementComponent implements OnInit {
     this.createSite(organizationId);
   }
 
-  public getOrganizationProperties(organization: OrganizationViewModel): { key: string, value: string }[] {
+  public getOrganizationProperties(organization: OrganizationListViewModel): { key: string, value: string }[] {
     return [
       { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
       { key: 'Organization Name', value: organization.name }
     ];
   }
 
-  public getSiteProperties(site: SiteViewModel): { key: string, value: string }[] {
+  public getSiteProperties(site: SiteListViewModel): { key: string, value: string }[] {
     return [
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
       { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
@@ -111,7 +111,7 @@ export class SiteManagementComponent implements OnInit {
 
   private getOrganizations(): void {
     this.busy = this.organizationResource.getOrganizations()
-      .subscribe((organizations: OrganizationViewModel[]) => this.organizations = organizations);
+      .subscribe((organizations: OrganizationListViewModel[]) => this.organizations = organizations);
   }
 
   private createSite(organizationId: number): void {

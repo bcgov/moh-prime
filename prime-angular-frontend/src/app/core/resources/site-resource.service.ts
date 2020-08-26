@@ -13,7 +13,7 @@ import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
-import { Site, SiteViewModel } from '@registration/shared/models/site.model';
+import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '../../modules/site-registration/shared/models/business-licence-document.model';
 
 // TODO use ApiResourceUtils to build URLs
@@ -29,14 +29,14 @@ export class SiteResource {
     private logger: LoggerService
   ) { }
 
-  public getSites(organizationId: number): Observable<SiteViewModel[]>;
-  public getSites(organizationId: number, queryParams: { verbose: boolean }): Observable<SiteViewModel[] | Site[]>;
-  public getSites(organizationId: number, queryParams: { verbose: boolean } = null): Observable<SiteViewModel[] | Site[]> {
+  public getSites(organizationId: number): Observable<SiteListViewModel[]>;
+  public getSites(organizationId: number, queryParams: { verbose: boolean }): Observable<SiteListViewModel[] | Site[]>;
+  public getSites(organizationId: number, queryParams: { verbose: boolean } = null): Observable<SiteListViewModel[] | Site[]> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParams);
-    return this.apiResource.get<SiteViewModel[] | Site[]>(`organizations/${organizationId}/sites`, params)
+    return this.apiResource.get<SiteListViewModel[] | Site[]>(`organizations/${organizationId}/sites`, params)
       .pipe(
-        map((response: ApiHttpResponse<SiteViewModel[] | Site[]>) => response.result),
-        tap((sites: SiteViewModel[] | Site[]) => this.logger.info('SITES', sites)),
+        map((response: ApiHttpResponse<SiteListViewModel[] | Site[]>) => response.result),
+        tap((sites: SiteListViewModel[] | Site[]) => this.logger.info('SITES', sites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);

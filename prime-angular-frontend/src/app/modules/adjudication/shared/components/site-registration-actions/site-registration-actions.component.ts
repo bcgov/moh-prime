@@ -6,7 +6,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 
-import { SiteRegistrationViewModel } from '@registration/shared/models/site-registration.model';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-site-registration-actions',
@@ -14,7 +14,7 @@ import { SiteRegistrationViewModel } from '@registration/shared/models/site-regi
   styleUrls: ['./site-registration-actions.component.scss']
 })
 export class SiteRegistrationActionsComponent implements OnInit {
-  @Input() siteRegistration: SiteRegistrationViewModel;
+  @Input() siteRegistration: SiteRegistrationListViewModel;
   @Output() public approve: EventEmitter<number>;
   @Output() public decline: EventEmitter<number>;
 

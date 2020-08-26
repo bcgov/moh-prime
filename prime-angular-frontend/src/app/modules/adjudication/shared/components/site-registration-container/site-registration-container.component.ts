@@ -17,9 +17,9 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { Organization, OrganizationViewModel } from '@registration/shared/models/organization.model';
-import { Site, SiteViewModel } from '@registration/shared/models/site.model';
-import { SiteRegistrationViewModel } from '@registration/shared/models/site-registration.model';
+import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
+import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
@@ -35,7 +35,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   public busy: Subscription;
   public columns: string[];
-  public dataSource: MatTableDataSource<SiteRegistrationViewModel>;
+  public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -56,7 +56,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.action = new EventEmitter<void>();
 
     this.hasActions = false;
-    this.dataSource = new MatTableDataSource<SiteRegistrationViewModel>([]);
+    this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
   }
 
   public onSearch(search: string | null): void {
@@ -116,10 +116,10 @@ export class SiteRegistrationContainerComponent implements OnInit {
         );
 
     this.busy = request$
-      .subscribe((siteRegistrations: SiteRegistrationViewModel[]) => this.dataSource.data = siteRegistrations);
+      .subscribe((siteRegistrations: SiteRegistrationListViewModel[]) => this.dataSource.data = siteRegistrations);
   }
 
-  private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<OrganizationViewModel[]> {
+  private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<OrganizationListViewModel[]> {
     return this.organizationResource.getOrganizations()
       .pipe(
         tap(() => this.showSearchFilter = true)
@@ -144,7 +144,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       this.busy = this.deleteResource<Organization>(this.defaultOptions.delete('organization'), request$)
         .subscribe((organization: Organization) =>
           this.dataSource.data = MatTableDataSourceUtils
-            .delete<SiteRegistrationViewModel>(this.dataSource, 'organizationId', organization.id)
+            .delete<SiteRegistrationListViewModel>(this.dataSource, 'organizationId', organization.id)
         );
     }
   }
@@ -155,7 +155,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       this.busy = this.deleteResource<Site>(this.defaultOptions.delete('site'), request$)
         .subscribe((site: Site) => {
           this.dataSource.data = MatTableDataSourceUtils
-            .delete<SiteRegistrationViewModel>(this.dataSource, 'siteId', site.id);
+            .delete<SiteRegistrationListViewModel>(this.dataSource, 'siteId', site.id);
         });
     }
   }
@@ -184,10 +184,10 @@ export class SiteRegistrationContainerComponent implements OnInit {
     }
   }
 
-  private toSiteRegistrations(organizations: OrganizationViewModel[]): SiteRegistrationViewModel[] {
+  private toSiteRegistrations(organizations: OrganizationListViewModel[]): SiteRegistrationListViewModel[] {
     const siteRegistrations = organizations.reduce((registrations, ovm) => {
       const { id: organizationId, sites, ...organization } = ovm;
-      const registration = sites.map((svm: SiteViewModel, index: number) => {
+      const registration = sites.map((svm: SiteListViewModel, index: number) => {
         const { id: siteId, ...site } = svm;
         return (!index)
           ? { organizationId, ...organization, siteId, ...site }
@@ -200,7 +200,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     return [].concat(...siteRegistrations);
   }
 
-  private toSiteRegistration([organization, site]: [Organization, Site]): SiteRegistrationViewModel[] {
+  private toSiteRegistration([organization, site]: [Organization, Site]): SiteRegistrationListViewModel[] {
     const {
       id: organizationId,
       displayId,

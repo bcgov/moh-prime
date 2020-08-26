@@ -10,7 +10,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
 
-import { Organization, OrganizationViewModel } from '@registration/shared/models/organization.model';
+import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
 
 // TODO use ApiResourceUtils to build URLs
@@ -26,14 +26,14 @@ export class OrganizationResource {
     private logger: LoggerService
   ) { }
 
-  public getOrganizations(): Observable<OrganizationViewModel[]>;
-  public getOrganizations(queryParams: { verbose: boolean }): Observable<OrganizationViewModel[] | Organization[]>;
-  public getOrganizations(queryParams: { verbose: boolean } = null): Observable<OrganizationViewModel[] | Organization[]> {
+  public getOrganizations(): Observable<OrganizationListViewModel[]>;
+  public getOrganizations(queryParams: { verbose: boolean }): Observable<OrganizationListViewModel[] | Organization[]>;
+  public getOrganizations(queryParams: { verbose: boolean } = null): Observable<OrganizationListViewModel[] | Organization[]> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParams);
-    return this.apiResource.get<OrganizationViewModel[] | Organization[]>('organizations', params)
+    return this.apiResource.get<OrganizationListViewModel[] | Organization[]>('organizations', params)
       .pipe(
-        map((response: ApiHttpResponse<OrganizationViewModel[] | Organization[]>) => response.result),
-        tap((organizations: OrganizationViewModel[] | Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        map((response: ApiHttpResponse<OrganizationListViewModel[] | Organization[]>) => response.result),
+        tap((organizations: OrganizationListViewModel[] | Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
           this.logger.error('[SiteRegistration] OrganizationResource::getOrganizations error has occurred: ', error);
