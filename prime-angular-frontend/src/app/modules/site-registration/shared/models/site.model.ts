@@ -37,5 +37,5 @@ export interface Site {
   pec: string;
 }
 
-export interface SiteViewModel extends
+export interface SiteListViewModel extends
   Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec'> { }

@@ -1,4 +1,4 @@
-import { Site, SiteViewModel } from './site.model';
+import { Site, SiteListViewModel } from './site.model';
 import { Party } from './party.model';
 import { SignedAgreementDocument } from './signed-agreement-document.model';
 
@@ -20,8 +20,8 @@ export interface Organization {
   submittedDate: string;
 }
 
-export interface OrganizationViewModel extends
+export interface OrganizationListViewModel extends
   Omit<Organization, 'sites' | 'siteCount' | 'registrationId' | 'doingBusinessAs' | 'signedAgreementDocuments'> {
-  sites: SiteViewModel[];
+  sites: SiteListViewModel[];
   signedAgreementDocumentCount: number;
 }

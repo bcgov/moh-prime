@@ -1,5 +1,5 @@
-import { SiteViewModel } from '@registration/shared/models/site.model';
-import { OrganizationViewModel } from '@registration/shared/models/organization.model';
+import { SiteListViewModel } from '@registration/shared/models/site.model';
+import { OrganizationListViewModel } from '@registration/shared/models/organization.model';
 
 /**
  * View model specifically created to combine multiple models to allow use
@@ -9,7 +9,8 @@ import { OrganizationViewModel } from '@registration/shared/models/organization.
  * NOTE: should only be used within the SiteRegistrationContainer,
  * SiteRegistrationTable, and SiteRegistrationActions
  */
-export interface SiteRegistrationViewModel extends Omit<OrganizationViewModel, 'id' | 'sites'>, Omit<SiteViewModel, 'id'> {
+export interface SiteRegistrationListViewModel extends
+  Omit<OrganizationListViewModel, 'id' | 'sites'>, Omit<SiteListViewModel, 'id'> {
   organizationId: number;
   siteId: number;
 }
