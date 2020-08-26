@@ -16,6 +16,9 @@ export interface HttpEnrollee extends Enrollee {
   id?: number;
   displayId?: number;
   hpdid: string;
+  firstName: string;
+  lastName: string;
+  givenNames: string;
   appliedDate: string;
   approvedDate: string;
   expiryDate?: string;
@@ -44,7 +47,6 @@ export interface HttpEnrollee extends Enrollee {
   base64QRCode: string;
 }
 
-
 /**
  * @deprecated
  */
@@ -59,7 +61,6 @@ export interface Enrolment {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
-
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
   careSettings: CareSetting[];
