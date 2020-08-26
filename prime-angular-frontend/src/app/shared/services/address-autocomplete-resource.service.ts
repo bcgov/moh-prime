@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiResource } from '../../core/resources/api-resource.service';
-import { ApiResourceUtilsService } from '../../core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { map, tap, catchError } from 'rxjs/operators';
@@ -15,7 +14,6 @@ export class AddressAutocompleteResource {
 
   constructor(
     private apiResource: ApiResource,
-    private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
     private logger: LoggerService
   ) { }
