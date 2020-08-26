@@ -8,11 +8,14 @@ using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
 using DelegateDecompiler.EntityFrameworkCore;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
 {
     public class EnrolleeService : BaseService, IEnrolleeService
     {
+        private readonly IMapper _mapper;
         private readonly ISubmissionRulesService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
         private readonly IPrivilegeService _privilegeService;
@@ -22,6 +25,7 @@ namespace Prime.Services
         public EnrolleeService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
+            IMapper mapper,
             ISubmissionRulesService automaticAdjudicationService,
             IEmailService emailService,
             IPrivilegeService privilegeService,
@@ -29,6 +33,7 @@ namespace Prime.Services
             IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
+            _mapper = mapper;
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
             _privilegeService = privilegeService;
@@ -98,43 +103,33 @@ namespace Prime.Services
             return entity;
         }
 
-        public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
+        public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
             searchOptions = searchOptions ?? new EnrolleeSearchOptions();
 
-            IQueryable<Enrollee> query = _context.Enrollees
+            return await _context.Enrollees
                 .AsNoTracking()
-                .Include(e => e.EnrolmentStatuses)
-                    .ThenInclude(es => es.Status)
-                .Include(e => e.AccessTerms)
-                .Include(e => e.Adjudicator);
-
-            if (!string.IsNullOrWhiteSpace(searchOptions.TextSearch))
-            {
-                query = query
+                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(e => e.FirstName,
                         e => e.LastName,
                         e => e.ContactEmail,
                         e => e.VoicePhone,
-                        e => e.Id.ToString()) // TODO: display ID not ID
+                        e => e.DisplayId.ToString())
                     .SearchCollections(e => e.Certifications.Select(c => c.LicenseNumber))
-                    .Containing(searchOptions.TextSearch);
-            }
-
-            if (searchOptions.StatusCode.HasValue)
-            {
-                query = query
-                    .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
-                    .DecompileAsync();
-            }
+                    .Containing(searchOptions.TextSearch)
+                )
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider)
+                .If(searchOptions.StatusCode.HasValue, q => q
+                    .Where(e => e.CurrentStatusCode == searchOptions.StatusCode.Value)
+                )
+                .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
+                .ToListAsync();
 
             // TODO: update when Privileges become a thing again
             // foreach (var item in items)
             // {
             //     item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
             // }
-
-            return await query.ToListAsync();
         }
 
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
