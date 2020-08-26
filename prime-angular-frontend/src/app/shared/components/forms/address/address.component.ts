@@ -86,7 +86,6 @@ export class AddressComponent implements OnInit {
   }
 
   public onAutocomplete(address: Address) {
-    console.log('address : ', address);
     this.street.setValue(address.street);
     this.street2.setValue(address.street2);
     this.city.setValue(address.city);

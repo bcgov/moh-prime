@@ -45,13 +45,8 @@ namespace Prime
         public readonly static string VERIFIABLE_CREDENTIAL_WEBHOOK_KEY = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_WEBHOOK_KEY") ?? "0ce755d5-1fb1-483a-ba22-439061aa8f67";
 
         // Canada Post Address Validation
-        public readonly static string ADDRESS_VALIDATION_API_URL = Environment.GetEnvironmentVariable("ADDRESS_VALIDATION_API_URL") ?? "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/";
-        public readonly static string ADDRESS_VALIDATION_API_KEY = Environment.GetEnvironmentVariable("ADDRESS_VALIDATION_API_KEY") ?? "XC95-NM62-BR64-TG37";
+        public readonly static string ADDRESS_VALIDATION_API_URL = Environment.GetEnvironmentVariable("ADDRESS_AUTOCOMPLETE_API_URL") ?? "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/";
+        public readonly static string ADDRESS_VALIDATION_API_KEY = Environment.GetEnvironmentVariable("ADDRESS_AUTOCOMPLETE_API_KEY") ?? "XC95-NM62-BR64-TG37";
 
-        // HSIMIT_TEST key
-        // FH65-NU91-TM33-MK77
-
-        // HSIMIT_PRODUCTION key
-        // BZ559-PE28-EF79-CE96
     }
 }
