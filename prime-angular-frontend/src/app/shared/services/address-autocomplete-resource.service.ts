@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
-import { ApiResource } from '../../core/resources/api-resource.service';
+import { map, tap, catchError } from 'rxjs/operators';
+
+import { ApiResource } from '@core/resources/api-resource.service';
+import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { map, tap, catchError } from 'rxjs/operators';
-import { ApiHttpResponse } from '@core/models/api-http-response.model';
+
 import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } from '@shared/models/address-autocomplete.model';
 
 @Injectable({
