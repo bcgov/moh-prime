@@ -130,7 +130,10 @@ namespace Prime.Controllers
             }
 
             enrollee.IdentityAssuranceLevel = User.GetIdentityAssuranceLevel();
+            enrollee.IdentityProvider = User.GetIdentityProvider();
+
             var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(enrollee);
+            enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
 
             return CreatedAtAction(
                 nameof(GetEnrolleeById),

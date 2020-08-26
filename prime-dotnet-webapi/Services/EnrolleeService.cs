@@ -113,18 +113,12 @@ namespace Prime.Services
                     .SearchCollections(e => e.Certifications.Select(c => c.LicenseNumber))
                     .Containing(searchOptions.TextSearch)
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider)
                 .If(searchOptions.StatusCode.HasValue, q => q
-                    .Where(e => e.CurrentStatusCode == searchOptions.StatusCode.Value)
+                    .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
                 )
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .ToListAsync();
-
-            // TODO: update when Privileges become a thing again
-            // foreach (var item in items)
-            // {
-            //     item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
-            // }
         }
 
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
