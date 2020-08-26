@@ -168,8 +168,7 @@ namespace Prime
 
             services.AddHttpClient<IAddressAutocompleteClient, AddressAutocompleteClient>(client =>
             {
-                client.BaseAddress = new Uri(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_URL);
-                client.DefaultRequestHeaders.Add("Key", PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY);
+                client.BaseAddress = new Uri(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_URL.EnsureTrailingSlash());
             });
         }
 
