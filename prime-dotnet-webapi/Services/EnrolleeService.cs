@@ -14,7 +14,6 @@ namespace Prime.Services
     {
         private readonly ISubmissionRulesService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
-        private readonly IPrivilegeService _privilegeService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IBusinessEventService _businessEventService;
 
@@ -23,14 +22,12 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             ISubmissionRulesService automaticAdjudicationService,
             IEmailService emailService,
-            IPrivilegeService privilegeService,
             IEnrolleeProfileVersionService enroleeProfileVersionService,
             IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
-            _privilegeService = privilegeService;
             _enroleeProfileVersionService = enroleeProfileVersionService;
             _businessEventService = businessEventService;
         }
@@ -55,15 +52,8 @@ namespace Prime.Services
 
         public async Task<Enrollee> GetEnrolleeAsync(Guid userId)
         {
-            var entity = await this.GetBaseEnrolleeQuery()
+            return await this.GetBaseEnrolleeQuery()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
-
-            if (entity != null)
-            {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-            }
-
-            return entity;
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
@@ -86,8 +76,6 @@ namespace Prime.Services
 
             if (entity != null)
             {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-
                 // TODO: This is an interm fix for making a different view model for enrollee based on isAdmin
                 if (isAdmin)
                 {
@@ -126,11 +114,6 @@ namespace Prime.Services
                 items = items.Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode);
             }
 
-            foreach (var item in items)
-            {
-                item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
-            }
-
             return items;
         }
 
@@ -145,7 +128,6 @@ namespace Prime.Services
                 return null;
             }
 
-            enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             return enrollee;
         }
 
@@ -304,11 +286,6 @@ namespace Prime.Services
             var entity = await this.GetBaseEnrolleeQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            if (entity != null)
-            {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-            }
 
             return entity;
         }
