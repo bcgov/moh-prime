@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -56,21 +57,18 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
-            IEnumerable<Enrollee> enrollees = null;
-
             if (User.HasAdminView())
             {
-                enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+                return Ok(ApiResponse.Result(await _enrolleeService.GetEnrolleesAsync(searchOptions)));
             }
             else
             {
                 var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
-                enrollees = (enrollee != null) ? new[] { enrollee } : new Enrollee[0];
+                return Ok(ApiResponse.Result(enrollee == null ? Enumerable.Empty<Enrollee>() : new[] { enrollee }));
             }
-
-            return Ok(ApiResponse.Result(enrollees));
         }
 
         // GET: api/Enrollees/5
