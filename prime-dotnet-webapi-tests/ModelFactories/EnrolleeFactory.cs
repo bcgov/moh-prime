@@ -48,7 +48,6 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.AccessAgreementNote, f => null);
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AssignedPrivileges, f => null);
-            RuleFor(x => x.Privileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
             RuleFor(x => x.isAdminView, f => true);
             RuleFor(x => x.RequestingRemoteAccess, f => false);
@@ -97,7 +96,6 @@ namespace PrimeTests.ModelFactories
                             .Distinct()
                             .Select(privilegeId => new AssignedPrivilegeFactory(x, privilegeId).Generate())
                             .ToList();
-                        x.Privileges = x.AssignedPrivileges.Select(p => p.Privilege).ToList();
                     }
                 }
             });

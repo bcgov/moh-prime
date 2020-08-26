@@ -1,5 +1,4 @@
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
-import { VendorConfig } from '@config/config.model';
 import { Address } from '@shared/models/address.model';
 
 import { BusinessLicenceDocument } from './business-licence-document.model';
@@ -37,3 +36,6 @@ export interface Site {
   // Admin -----
   pec: string;
 }
+
+export interface SiteListViewModel extends
+  Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec'> { }

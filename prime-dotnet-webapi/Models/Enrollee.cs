@@ -70,9 +70,6 @@ namespace Prime.Models
         [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
-        [NotMapped]
-        public ICollection<Privilege> Privileges { get; set; }
-
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         [NotMapped]

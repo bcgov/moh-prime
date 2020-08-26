@@ -12,19 +12,20 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
-using Wkhtmltopdf.NetCore;
+
+using AutoMapper;
+using IdentityModel.Client;
 using Newtonsoft.Json;
 using Serilog;
+using Wkhtmltopdf.NetCore;
 
 using Prime.Auth;
 using Prime.Services;
 using Prime.Services.Clients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
-using System.Net.Http.Headers;
-using IdentityModel.Client;
-using Microsoft.Extensions.FileProviders;
 
 namespace Prime
 {
@@ -106,6 +107,7 @@ namespace Prime
             services.AddWkhtmltopdf("./Resources/wkhtmltopdf");
 
             services.AddHttpContextAccessor();
+            services.AddAutoMapper(typeof(Startup));
             services.AddRazorPages();
 
             this.ConfigureDatabase(services);

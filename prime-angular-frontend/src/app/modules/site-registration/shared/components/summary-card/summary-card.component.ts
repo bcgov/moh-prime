@@ -31,5 +31,4 @@ export class SummaryCardComponent implements OnInit {
   }
 
   public ngOnInit(): void { }
-
 }

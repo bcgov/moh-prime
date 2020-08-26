@@ -9,6 +9,7 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { AddressPipe } from '@shared/pipes/address.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
@@ -16,7 +17,6 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { Organization } from '@registration/shared/models/organization.model';
-import { AddressPipe } from '@shared/pipes/address.pipe';
 
 @Component({
   selector: 'app-remote-users',
@@ -64,22 +64,22 @@ export class RemoteUsersComponent implements OnInit {
     firstLocation.provinceCode = 'BC';
 
     const collegeLicence = remoteUserCertifications.length > 1
-      ? 'more than one college licence'
+      ? 'More than one college licence'
       : remoteUserCertifications.length === 0
-        ? 'no college licence'
+        ? 'No college licence'
         : remoteUserCertifications.value[0].licenseNumber;
 
     const remoteAddress = remoteUserLocations.controls?.length > 1
-      ? 'more than one remote address'
+      ? 'More than one remote address'
       : this.addressPipe.transform(firstLocation);
 
     return [
       {
-        key: 'college licence: ',
+        key: 'College Licence',
         value: collegeLicence
       },
       {
-        key: 'remote address: ',
+        key: 'Remote Address',
         value: remoteAddress
       },
     ];
