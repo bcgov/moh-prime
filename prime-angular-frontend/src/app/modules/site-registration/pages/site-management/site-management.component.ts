@@ -54,7 +54,7 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public viewAgreement(organization: OrganizationViewModel) {
-    const routePath = (organization.signedAgreementDocumentCount)
+    const routePath = (organization.acceptedAgreementDate)
       ? [SiteRoutes.ORGANIZATION_AGREEMENT]
       : []; // Defaults to overview
     this.routeUtils.routeRelativeTo([organization.id, ...routePath]);

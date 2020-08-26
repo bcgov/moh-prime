@@ -80,37 +80,6 @@ namespace Prime.Controllers
             }
         }
 
-        // GET: api/Sites
-        /// <summary>
-        /// Gets all of the Sites for an organization, or all sites if user has ADMIN role
-        /// </summary>
-        /// <param name="organizationId"></param>
-        // [HttpGet("{organizationId}/sites", Name = nameof(GetSites))]
-        // [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        // [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        // public async Task<ActionResult<IEnumerable<Site>>> GetOrganizationSites(int organizationId)
-        // {
-        //     var organization = await _organizationService.GetOrganizationAsync(organizationId);
-        //     if (organization == null)
-        //     {
-        //         return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
-        //     }
-
-        //     IEnumerable<Site> sites = null;
-
-        //     if (User.HasAdminView())
-        //     {
-        //         sites = await _siteService.GetSitesAsync();
-        //     }
-        //     else
-        //     {
-        //         sites = await _siteService.GetSitesAsync(organizationId);
-        //     }
-
-        //     return Ok(ApiResponse.Result(sites));
-        // }
-
         // GET: api/Organizations/5
         /// <summary>
         /// Gets a specific Organization.
