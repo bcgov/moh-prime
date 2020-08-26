@@ -5,10 +5,6 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Data;
-using System.Xml;
-using System.IO;
-using System.Xml.Serialization;
 
 namespace Prime.Services.Clients
 {
@@ -58,7 +54,7 @@ namespace Prime.Services.Clients
             return body;
         }
 
-        public async Task<JObject> Retrieve(string Id)
+        public async Task<IEnumerable<AddressAutocompleteRetrieveResponse>> Retrieve(string Id)
         {
             //Build the url
             var url = "Retrieve/v2.11/json3ex.ws?";
@@ -83,43 +79,68 @@ namespace Prime.Services.Clients
             }
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+            var items = body.Property("Items").Value;
+
+            var autocompleteResponse = new List<AddressAutocompleteRetrieveResponse>();
+
+            foreach (var item in items)
+            {
+                autocompleteResponse.Add(item.ToObject<AddressAutocompleteRetrieveResponse>());
+            }
 
             _logger.LogInformation("GET autocomplete retrieve {@JObject}", JsonConvert.SerializeObject(body));
 
-            return body;
+            return autocompleteResponse;
         }
 
         public class AutoCompleteResponse
         {
-            public string xmlns { get; set; }
             public string Id { get; set; } // The Id to use as the SearchTerm with the Find method if IsRetrievable is false. If IsRetrievable is true, use this Id with the RetrieveById method. If blank, provide a more detailed SearchTerm.
             public string Text { get; set; } // The found item.
             public string Highlight { get; set; } // A series of number pairs that indicates which characters in the Text property have matched the SearchTerm.
             public string Cursor { get; set; } // A zero-based position in the Text response indicating the suggested position of the cursor if this item is selected. A -1 response indicates no suggestion is available.
             public string Description { get; set; } // Additional information about this result.
             public string Next { get; set; } // The next step of the search process. (Find, Retrieve)
+        }
 
-            public AutoCompleteResponse()
-            {
-                xmlns = "";
-                Id = "";
-                Text = "";
-                Highlight = "";
-                Cursor = "";
-                Description = "";
-                Next = "Find";
-            }
-            public AutoCompleteResponse(JObject response)
-            {
-                xmlns = "";
-                Id = "";
-                Text = "";
-                Highlight = "";
-                Cursor = "";
-                Description = "";
-                Next = "Find";
-            }
-
+        public class AddressAutocompleteRetrieveResponse
+        {
+            public string Id { get; set; }
+            public string DomesticId { get; set; }
+            public string Language { get; set; }
+            public string LanguageAlternatives { get; set; }
+            public string Department { get; set; }
+            public string Company { get; set; }
+            public string SubBuilding { get; set; }
+            public string BuildingNumber { get; set; }
+            public string BuildingName { get; set; }
+            public string SecondaryStreet { get; set; }
+            public string Street { get; set; }
+            public string Block { get; set; }
+            public string Neighbourhood { get; set; }
+            public string District { get; set; }
+            public string City { get; set; }
+            public string Line1 { get; set; }
+            public string Line2 { get; set; }
+            public string Line3 { get; set; }
+            public string Line4 { get; set; }
+            public string Line5 { get; set; }
+            public string AdminAreaName { get; set; }
+            public string AdminAreaCode { get; set; }
+            public string Province { get; set; }
+            public string ProvinceName { get; set; }
+            public string ProvinceCode { get; set; }
+            public string PostalCode { get; set; }
+            public string CountryName { get; set; }
+            public string CountryIso2 { get; set; }
+            public string CountryIso3 { get; set; }
+            public int CountryIsoNumber { get; set; }
+            public string SortingNumber1 { get; set; }
+            public string SortingNumber2 { get; set; }
+            public string Barcode { get; set; }
+            public string PoBoxNumber { get; set; }
+            public string Label { get; set; }
+            public string DataLevel { get; set; }
         }
 
         private async Task LogError(HttpResponseMessage response, Exception exception = null)

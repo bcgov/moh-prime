@@ -10,6 +10,7 @@ using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
 using Prime.Services.Clients;
+using static Prime.Services.Clients.AddressValidationClient;
 
 namespace Prime.Controllers
 {
@@ -51,7 +52,7 @@ namespace Prime.Controllers
         [HttpGet("retrieve", Name = nameof(Retrieve))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<object>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AddressAutocompleteRetrieveResponse>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> Retrieve([FromQuery] string id)
         {
             var result = await _addressValidationClient.Retrieve(id);
