@@ -54,7 +54,8 @@ export class MockSiteService implements ISiteService {
         acceptedAgreementDate: faker.date.past(2).toDateString(),
         signedAgreementDocuments: [],
         submittedDate: null,
-        siteCount: faker.random.number()
+        siteCount: faker.random.number(),
+        sites: []
       },
       physicalAddressId: faker.random.number(),
       physicalAddress: address,

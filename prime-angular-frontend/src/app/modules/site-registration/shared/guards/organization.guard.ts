@@ -36,8 +36,8 @@ export class OrganizationGuard extends BaseGuard {
     return this.organizationResource.getOrganizationById(organizationId)
       .pipe(
         map((organization: Organization) => {
-          // Store the site for access throughout creation and updating of a
-          // site, which will allows provide the most up-to-date site
+          // Store the organization for access throughout creation and updating of a
+          // organization, which will allows provide the most up-to-date organization
           this.organizationService.organization = organization;
           // TODO always resolve until routes are lock down
           return true;

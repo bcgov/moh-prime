@@ -29,17 +29,16 @@ namespace Prime.Services
             _organizationService = organizationService;
         }
 
-        public async Task<IEnumerable<Site>> GetSitesAsync()
+        public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
         {
-            return await this.GetBaseSiteQuery()
-                .ToListAsync();
-        }
+            IQueryable<Site> query = this.GetBaseSiteQuery();
 
-        public async Task<IEnumerable<Site>> GetSitesAsync(int organizationId)
-        {
-            return await this.GetBaseSiteQuery()
-                .Where(s => s.OrganizationId == organizationId)
-                .ToListAsync();
+            if (organizationId != null)
+            {
+                query = query.Where(s => s.OrganizationId == organizationId);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Site> GetSiteAsync(int siteId)

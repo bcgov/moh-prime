@@ -32,6 +32,9 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
+                  echo "Reducing files to minimum for build and deploy..."
+                  sh "./player.sh sparsify"
+                  echo "Priming GitHub for notification..."
                   sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
                   echo "Building ..."
                   sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"

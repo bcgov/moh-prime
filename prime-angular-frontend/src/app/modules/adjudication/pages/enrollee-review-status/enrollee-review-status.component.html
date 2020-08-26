@@ -3,12 +3,11 @@
 
   <app-page-header>Review Status Reasons</app-page-header>
 
-  <ng-template #content
-               let-enrollee="enrollee">
-    <!-- TODO temporary and should go back into review status content eventually -->
-    <h3 class="mb-4">Status: {{ enrollee?.currentStatus.status.name }}</h3>
-
-    <app-review-status-content [enrollee]="enrollee"></app-review-status-content>
-  </ng-template>
-
 </app-adjudication-container>
+
+<ng-template #content
+             let-enrollee="enrollee">
+  <h3 class="mb-4">Status: {{ enrollee?.currentStatus.status.name }}</h3>
+
+  <app-review-status-content [enrollee]="enrollee"></app-review-status-content>
+</ng-template>

@@ -132,6 +132,26 @@
         </app-enrollee-property>
       </div>
 
+      <ng-container *ngFor="let remoteUserCertification of user.remoteUserCertifications">
+
+        <div class="mb-3">
+          <strong>Certification</strong>
+        </div>
+
+        <div class="ml-4 mb-3">
+
+          <app-enrollee-property title="College">
+            {{ remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Licence">
+            {{ remoteUserCertification.licenseNumber | default }}
+          </app-enrollee-property>
+
+        </div>
+
+      </ng-container>
+
       <ng-container *ngFor="let remoteUserLocation of user.remoteUserLocations">
         <div class="mb-3">
           <strong>Remote Address</strong>

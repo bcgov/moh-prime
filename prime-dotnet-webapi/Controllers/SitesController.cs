@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using AutoMapper;
+
 using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
@@ -19,13 +21,16 @@ namespace Prime.Controllers
     [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
     public class SitesController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly ISiteService _siteService;
         private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
+
         public SitesController(
+            IMapper mapper,
             ISiteService siteService,
             IPartyService partyService,
             IOrganizationService organizationService,
@@ -33,6 +38,7 @@ namespace Prime.Controllers
             IEmailService emailService,
             IDocumentService documentService)
         {
+            _mapper = mapper;
             _siteService = siteService;
             _partyService = partyService;
             _organizationService = organizationService;
@@ -41,34 +47,17 @@ namespace Prime.Controllers
             _documentService = documentService;
         }
 
-        // Temporary endpoint for admins until fruit loops
-        // James avert your eyes!  This is not the code you're looking for...
-        // GET: api/Sites
-        /// <summary>
-        /// Gets all of the Sites.
-        /// </summary>
-        [HttpGet(Name = nameof(GetAllSites))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetAllSites()
-        {
-            // JAMES! Why are you still looking at this code :)
-            // If you see this code, and you're not James, and fruitloops is released, and this code still exists, DELETE IT QUICK!
-            return Ok(ApiResponse.Result(await _siteService.GetSitesAsync()));
-        }
-
         // GET: api/Sites
         /// <summary>
         /// Gets all of the Sites for an organization, or all sites if user has ADMIN role
         /// </summary>
         /// <param name="organizationId"></param>
+        /// <param name="verbose"></param>
         [HttpGet("/api/organizations/{organizationId:int}/sites", Name = nameof(GetSites))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSites(int organizationId)
+        public async Task<ActionResult<IEnumerable<Site>>> GetSites(int organizationId, [FromQuery] bool verbose)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
@@ -76,18 +65,18 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            IEnumerable<Site> sites = null;
+            var sites = (User.HasAdminView())
+                ? await _siteService.GetSitesAsync()
+                : await _siteService.GetSitesAsync(organizationId);
 
-            if (User.IsAdmin() || User.HasAdminView())
+            if (verbose)
             {
-                sites = await _siteService.GetSitesAsync();
+                return Ok(ApiResponse.Result(sites));
             }
             else
             {
-                sites = await _siteService.GetSitesAsync(organizationId);
+                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<SiteListViewModel>>(sites)));
             }
-
-            return Ok(ApiResponse.Result(sites));
         }
 
         // GET: api/Sites/5

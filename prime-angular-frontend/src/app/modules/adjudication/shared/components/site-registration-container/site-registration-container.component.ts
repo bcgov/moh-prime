@@ -3,22 +3,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable, EMPTY, of, noop } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { Subscription, Observable, EMPTY, of, noop, combineLatest } from 'rxjs';
+import { exhaustMap, map, tap, withLatestFrom, take } from 'rxjs/operators';
 
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { Site } from '@registration/shared/models/site.model';
+import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
+import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -33,7 +35,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   public busy: Subscription;
   public columns: string[];
-  public dataSource: MatTableDataSource<Site>;
+  public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -54,7 +56,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.action = new EventEmitter<void>();
 
     this.hasActions = false;
-    this.dataSource = new MatTableDataSource<Site>([]);
+    this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
   }
 
   public onSearch(search: string | null): void {
@@ -69,43 +71,14 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.getDataset(this.route.snapshot.queryParams);
   }
 
-  public onDelete(siteId: number) {
-    const data = this.defaultOptions.delete('site');
-    if (this.authService.isSuperAdmin()) {
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? of(noop)
-              : EMPTY
-          ),
-          exhaustMap(() => this.siteResource.deleteSite(siteId)),
-          map((site: Site) => this.dataSource.data = MatTableDataSourceUtils.delete<Site>(this.dataSource, 'id', site.id))
-        )
-        .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
-    }
-  }
-
-  public onDeleteOrganization(organizationId: number) {
-    const data = this.defaultOptions.delete('organization');
-    if (this.authService.isSuperAdmin()) {
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? of(noop)
-              : EMPTY
-          ),
-          exhaustMap(() => this.organizationResource.deleteOrganization(organizationId)),
-        )
-        .subscribe(() => this.routeUtils.routeRelativeTo(['../']));
-    }
-  }
-
   public onRoute(routePath: string | (string | number)[]) {
     this.routeUtils.routeWithin(routePath);
+  }
+
+  public onDelete(record: { [key: string]: number }) {
+    (record.organizationId)
+      ? this.deleteOrganization(record.organizationId)
+      : this.deleteSite(record.siteId);
   }
 
   public ngOnInit(): void {
@@ -126,54 +99,144 @@ export class SiteRegistrationContainerComponent implements OnInit {
     }
   }
 
-  // private getDataset(queryParams: { search?: string, status?: number }): void {
-  //   const organizationId = this.route.snapshot.params.id;
-  //   const results$ = (organizationId)
-  //     ? this.getOrganizationById(organizationId)
-  //     : this.getOrganizations(queryParams);
-
-  //   this.busy = results$
-  //     .pipe(
-  //       map((organizations: Organization[]) => {
-  //         organizations.map((organization: Organization) => {
-
-  //         });
-  //       })
-  //     )
-  //     .subscribe((organizations: Organization[]) => this.dataSource.data = organizations);
-  // }
-
-  // private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<Organization[]> {
-  //   return this.organizationResource.getOrganizations();
-  // }
-
-  // private getOrganizationById(organizationId: number): Observable<Organization[]> {
-  //   return this.organizationResource
-  //     .getOrganizationById(organizationId)
-  //     .pipe(
-  //       map((organization: Organization) => [organization])
-  //     );
-  // }
-
   private getDataset(queryParams: { search?: string, status?: number }): void {
-    const siteId = this.route.snapshot.params.sid;
-    const results$ = (siteId)
-      ? this.getSiteById(siteId)
-      : this.getSites(queryParams);
+    const { oid, sid } = this.route.snapshot.params;
+    const request$ = (oid)
+      ? combineLatest([
+        this.getOrganizationById(oid),
+        this.getSiteById(sid)
+      ])
+        .pipe(
+          take(1),
+          map(this.toSiteRegistration)
+        )
+      : this.getOrganizations(queryParams)
+        .pipe(
+          map(this.toSiteRegistrations)
+        );
 
-    this.busy = results$
-      .subscribe((sites: Site[]) => this.dataSource.data = sites);
+    this.busy = request$
+      .subscribe((siteRegistrations: SiteRegistrationListViewModel[]) => this.dataSource.data = siteRegistrations);
   }
 
-  private getSites({ search, status }: { search?: string, status?: number }): Observable<Site[]> {
-    return this.siteResource.getAllSites();
-  }
-
-  private getSiteById(siteId: number): Observable<Site[]> {
-    return this.siteResource
-      .getSiteById(siteId)
+  private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<OrganizationListViewModel[]> {
+    return this.organizationResource.getOrganizations()
       .pipe(
-        map((site: Site) => [site])
+        tap(() => this.showSearchFilter = true)
       );
+  }
+
+  private getOrganizationById(organizationId: number): Observable<Organization> {
+    return this.organizationResource.getOrganizationById(organizationId)
+      .pipe(
+        map((organization: Organization) => organization),
+        tap(() => this.showSearchFilter = false)
+      );
+  }
+
+  private getSiteById(siteId: number): Observable<Site> {
+    return this.siteResource.getSiteById(siteId);
+  }
+
+  private deleteOrganization(organizationId: number) {
+    if (organizationId) {
+      const request$ = this.organizationResource.deleteOrganization(organizationId);
+      this.busy = this.deleteResource<Organization>(this.defaultOptions.delete('organization'), request$)
+        .subscribe((organization: Organization) =>
+          this.dataSource.data = MatTableDataSourceUtils
+            .delete<SiteRegistrationListViewModel>(this.dataSource, 'organizationId', organization.id)
+        );
+    }
+  }
+
+  private deleteSite(siteId: number) {
+    if (siteId) {
+      const request$ = this.siteResource.deleteSite(siteId);
+      this.busy = this.deleteResource<Site>(this.defaultOptions.delete('site'), request$)
+        .subscribe((site: Site) => {
+          this.dataSource.data = MatTableDataSourceUtils
+            .delete<SiteRegistrationListViewModel>(this.dataSource, 'siteId', site.id);
+        });
+    }
+  }
+
+  private deleteResource<T>(dialogOptions: DialogOptions, deleteRequest$: Observable<T>): Observable<T> {
+    if (this.authService.isSuperAdmin()) {
+      return this.dialog.open(ConfirmDialogComponent, { data: dialogOptions })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? of(noop)
+              : EMPTY
+          ),
+          exhaustMap(() => deleteRequest$),
+          exhaustMap((resource: T) => {
+            // Route on singular resource views after deletion to refresh results
+            if (this.route.snapshot.data.oid) {
+              this.routeUtils.routeTo(AdjudicationRoutes.SITE_REGISTRATIONS);
+              return EMPTY;
+            }
+            // Otherwise, stay on the list resource view and remove locally
+            return of(resource);
+          })
+        );
+    }
+  }
+
+  private toSiteRegistrations(organizations: OrganizationListViewModel[]): SiteRegistrationListViewModel[] {
+    const siteRegistrations = organizations.reduce((registrations, ovm) => {
+      const { id: organizationId, sites, ...organization } = ovm;
+      const registration = sites.map((svm: SiteListViewModel, index: number) => {
+        const { id: siteId, ...site } = svm;
+        return (!index)
+          ? { organizationId, ...organization, siteId, ...site }
+          : { organizationId, siteId, ...site };
+      });
+      registrations.push(registration);
+      return registrations;
+    }, []);
+
+    return [].concat(...siteRegistrations);
+  }
+
+  private toSiteRegistration([organization, site]: [Organization, Site]): SiteRegistrationListViewModel[] {
+    const {
+      id: organizationId,
+      displayId,
+      signingAuthorityId,
+      signingAuthority,
+      name,
+      signedAgreementDocuments,
+      completed,
+      acceptedAgreementDate
+    } = organization;
+    const {
+      id: siteId,
+      physicalAddress,
+      doingBusinessAs,
+      submittedDate,
+      careSettingCode,
+      siteVendors,
+      pec
+    } = site;
+
+    return [{
+      organizationId,
+      displayId,
+      signingAuthorityId,
+      signingAuthority,
+      name,
+      signedAgreementDocumentCount: signedAgreementDocuments.length,
+      completed,
+      acceptedAgreementDate,
+      siteId,
+      physicalAddress,
+      doingBusinessAs,
+      submittedDate,
+      careSettingCode,
+      siteVendors,
+      pec
+    }];
   }
 }
