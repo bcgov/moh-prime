@@ -108,7 +108,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.ORGANIZATION;
+      nextRoutePath = EnrolmentRoutes.CARE_SETTING;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

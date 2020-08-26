@@ -41,6 +41,7 @@ pipeline {
             steps {
                 script {
                     echo "Building Release PR..."
+                    sh "./player.sh sparsify"
                     sh "./player.sh build api test ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh build document-manager test -p SUFFIX=${SUFFIX}"
@@ -75,6 +76,7 @@ pipeline {
                     steps {
                         script {
                             echo "Building (MASTER) for Demo ..."
+                            sh "./player.sh sparsify"
                             sh "./player.sh build api test ${API_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh build frontend test ${FRONTEND_ARGS} -p SUFFIX='-demo'"
                             sh "./player.sh build document-manager test -p SUFFIX='-demo'"
@@ -94,6 +96,7 @@ pipeline {
                     steps {
                         script {
                             echo "Building (MASTER) branch for Production..."
+                            sh "./player.sh sparsify"
                             sh "./player.sh build api prod"
                             sh "./player.sh build frontend prod"
                             sh "./player.sh build document-manager prod"

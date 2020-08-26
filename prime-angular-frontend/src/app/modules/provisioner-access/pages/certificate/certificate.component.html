@@ -29,16 +29,16 @@
 
     </div>
 
-    <ng-container *ngFor="let organizationType of certificate.organizationTypes">
+    <ng-container *ngFor="let careSetting of certificate.careSettings">
 
       <app-enrollee-property title="Organization Type"
                              [makeBold]="true">
-        {{ organizationType.name }}
+        {{ careSetting.name }}
       </app-enrollee-property>
 
     </ng-container>
 
-    <app-enrollee-property *ngIf="certificate.organizationTypes.length == 0"
+    <app-enrollee-property *ngIf="certificate.careSettings.length == 0"
                            title="Organization Type"
                            [makeBold]="true">
       None

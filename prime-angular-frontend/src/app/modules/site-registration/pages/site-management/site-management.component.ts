@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription, from, EMPTY } from 'rxjs';
+import { Subscription, EMPTY } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
 import { ConfigCodePipe } from '@config/config-code.pipe';
@@ -9,7 +9,6 @@ import { OrganizationResource } from '@core/resources/organization-resource.serv
 import { SiteResource } from '@core/resources/site-resource.service';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
-import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
@@ -35,7 +34,6 @@ export class SiteManagementComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private siteResource: SiteResource,
@@ -90,7 +88,7 @@ export class SiteManagementComponent implements OnInit {
 
   public getSiteProperties(site: Site) {
     return [
-      { key: 'Case Setting', value: this.configCodePipe.transform(site.organizationTypeCode, 'organizationTypes') },
+      { key: 'Case Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
       { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
