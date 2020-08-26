@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Bogus;
 
 using Prime.Models;
@@ -52,7 +53,7 @@ namespace PrimeTests.Mocks
             return Task.FromResult(this.GetHolder<int, Enrollee>().ContainsKey(enrolleeId));
         }
 
-        public Task<bool> EnrolleeUserIdExistsAsync(Guid userId)
+        public Task<bool> UserIdExistsAsync(Guid userId)
         {
             var enrollees = this.GetHolder<int, Enrollee>().Values;
             return Task.FromResult(enrollees.Any(e => e.UserId == userId));
@@ -65,10 +66,16 @@ namespace PrimeTests.Mocks
             return Task.FromResult(enrollee);
         }
 
-        public Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions)
+        public Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions)
         {
             IEnumerable<Enrollee> enrollees = this.GetHolder<int, Enrollee>().Values;
-            return Task.FromResult(enrollees);
+
+            var mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapping());
+            }).CreateMapper();
+
+            return Task.FromResult(mapper.Map<IEnumerable<Enrollee>, IEnumerable<EnrolleeListViewModel>>(enrollees));
         }
 
         public Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted)
@@ -176,7 +183,7 @@ namespace PrimeTests.Mocks
             throw new NotImplementedException();
         }
 
-        public Task<bool> EnrolleeGpidExistsAsync(string gpid)
+        public Task<bool> GpidExistsAsync(string gpid)
         {
             throw new NotImplementedException();
         }
@@ -204,6 +211,13 @@ namespace PrimeTests.Mocks
         public Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId)
+        {
+            var enrollee = this.GetHolder<int, Enrollee>()[enrolleeId];
+
+            return Task.FromResult(new PermissionsRecord { UserId = enrollee.UserId });
         }
     }
 }
