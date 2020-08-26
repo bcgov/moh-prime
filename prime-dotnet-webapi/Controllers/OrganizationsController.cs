@@ -72,7 +72,7 @@ namespace Prime.Controllers
 
             if (verbose)
             {
-                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<Organization>>(organizations)));
+                return Ok(ApiResponse.Result(organizations));
             }
             else
             {

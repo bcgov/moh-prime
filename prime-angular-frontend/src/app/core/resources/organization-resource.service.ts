@@ -26,12 +26,6 @@ export class OrganizationResource {
     private logger: LoggerService
   ) { }
 
-  /**
-   * @description
-   * Request a list of organizations and determine the model in the
-   * response based on the verbose query parameter, which defaults
-   * to using the view model.
-   */
   public getOrganizations(): Observable<OrganizationViewModel[]>;
   public getOrganizations(queryParams: { verbose: boolean }): Observable<OrganizationViewModel[] | Organization[]>;
   public getOrganizations(queryParams: { verbose: boolean } = null): Observable<OrganizationViewModel[] | Organization[]> {

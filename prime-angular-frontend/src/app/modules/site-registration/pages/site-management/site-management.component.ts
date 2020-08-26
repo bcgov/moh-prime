@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription, EMPTY } from 'rxjs';
-import { map, exhaustMap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
