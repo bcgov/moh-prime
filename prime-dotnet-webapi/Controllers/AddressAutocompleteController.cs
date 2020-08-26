@@ -24,7 +24,6 @@ namespace Prime.Controllers
             _addressAutocompleteClient = addressAutocompleteClient;
         }
 
-
         // GET: api/AddressAutocomplete/find
         /// <summary>
         /// Gets autocomplete results
