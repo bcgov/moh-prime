@@ -42,6 +42,14 @@ export class MatTableDataSourceUtils {
     );
   }
 
+  /**
+   * @description
+   * Remove nested item(s) from a datasource by ID.
+   *
+   * @example
+   * this.dataSource.data = MatTableDataSourceUtils
+   *   .deleteRelatedById(this.dataSource, parent.id, child.id);
+   */
   public static deleteRelatedById<T, S>(
     dataSource: MatTableDataSource<T>,
     parentValue: any,
@@ -50,6 +58,15 @@ export class MatTableDataSourceUtils {
     return MatTableDataSourceUtils.deleteRelated<T, S>(dataSource, 'id', parentValue, relationKey, 'id', deletionValue);
   }
 
+
+  /**
+   * @description
+   * Remove nested item(s) from a datasource based on a predicate.
+   *
+   * @example
+   * this.dataSource.data = MatTableDataSourceUtils
+   *   .deleteRelated(this.dataSource, 'id', parent.id, 'id', child.id);
+   */
   public static deleteRelated<T, S>(
     dataSource: MatTableDataSource<T>,
     parentKey: string,
