@@ -8,10 +8,7 @@ namespace Prime.ViewModels
     {
         public int Id { get; set; }
 
-        public int DisplayId
-        {
-            get => Id + Enrollee.DISPLAY_OFFSET;
-        }
+        public int DisplayId { get; set; }
 
         public string FirstName { get; set; }
 
@@ -19,15 +16,17 @@ namespace Prime.ViewModels
 
         public string GivenNames { get; set; }
 
+        public int CurrentStatusCode { get; set; }
+
         public DateTimeOffset? AppliedDate { get; set; }
 
-        public EnrolmentStatus CurrentStatus { get; set; }
+        public DateTimeOffset? ApprovedDate { get; set; }
 
         public DateTimeOffset? ExpiryDate { get; set; }
 
-        public string CurrentTOAStatus { get; set; }
+        // public string CurrentTOAStatus { get; set; }
 
-        public Admin Adjudicator { get; set; }
+        public string AdjudicatorIdir { get; set; }
 
         public bool AlwaysManual { get; set; }
     }

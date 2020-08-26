@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+
 using AutoMapper;
 
 using Prime.Models;
@@ -13,5 +16,8 @@ public class AutoMapping : Profile
     {
         // CreateMap<Organization, OrganizationViewModel>();
         // CreateMap<Site, SiteViewModel>();
+        CreateMap<Enrollee, EnrolleeListViewModel>()
+            .ForMember(dest => dest.CurrentStatusCode, dest => dest.MapFrom(src => src.CurrentStatus.StatusCode))
+            .ForMember(dest => dest.AdjudicatorIdir, dest => dest.MapFrom(src => src.Adjudicator.IDIR));
     }
 }
