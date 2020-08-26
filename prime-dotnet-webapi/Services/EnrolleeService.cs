@@ -18,7 +18,6 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly ISubmissionRulesService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
-        private readonly IPrivilegeService _privilegeService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IBusinessEventService _businessEventService;
 
@@ -28,7 +27,6 @@ namespace Prime.Services
             IMapper mapper,
             ISubmissionRulesService automaticAdjudicationService,
             IEmailService emailService,
-            IPrivilegeService privilegeService,
             IEnrolleeProfileVersionService enroleeProfileVersionService,
             IBusinessEventService businessEventService)
             : base(context, httpContext)
@@ -36,7 +34,6 @@ namespace Prime.Services
             _mapper = mapper;
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
-            _privilegeService = privilegeService;
             _enroleeProfileVersionService = enroleeProfileVersionService;
             _businessEventService = businessEventService;
         }
@@ -91,8 +88,6 @@ namespace Prime.Services
 
             if (entity != null)
             {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-
                 // TODO: This is an interm fix for making a different view model for enrollee based on isAdmin
                 if (isAdmin)
                 {
@@ -143,7 +138,6 @@ namespace Prime.Services
                 return null;
             }
 
-            enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             return enrollee;
         }
 
@@ -300,11 +294,6 @@ namespace Prime.Services
             var entity = await this.GetBaseEnrolleeQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            if (entity != null)
-            {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-            }
 
             return entity;
         }

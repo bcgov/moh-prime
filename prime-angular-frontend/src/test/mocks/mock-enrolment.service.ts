@@ -51,7 +51,6 @@ export class MockEnrolmentService implements IEnrolmentService {
           careSettingCode: 1
         }
       ],
-      privileges: [],
       enrolmentStatuses: null,
       currentStatus: {
         id: faker.random.number(),
