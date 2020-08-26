@@ -5,30 +5,27 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
-using Prime.Models;
 using Prime.Models.Api;
-using Prime.Services;
-using Prime.ViewModels;
 using Prime.Services.Clients;
-using static Prime.Services.Clients.AddressValidationClient;
+using static Prime.Services.Clients.AddressAutocompleteClient;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize(Policy = AuthConstants.USER_POLICY)]
-    public class AddressValidationController : ControllerBase
+    [Authorize(Policy = AuthConstants.USER_POLICY)]
+    public class AddressAutocompleteController : ControllerBase
     {
-        private readonly IAddressValidationClient _addressValidationClient;
+        private readonly IAddressAutocompleteClient _addressAutocompleteClient;
 
-        public AddressValidationController(IAddressValidationClient addressValidationClient)
+        public AddressAutocompleteController(IAddressAutocompleteClient addressAutocompleteClient)
         {
-            _addressValidationClient = addressValidationClient;
+            _addressAutocompleteClient = addressAutocompleteClient;
         }
 
 
-        // GET: api/AddressValidation/find
+        // GET: api/AddressAutocomplete/find
         /// <summary>
         /// Gets autocomplete results
         /// </summary>
@@ -37,14 +34,14 @@ namespace Prime.Controllers
         [HttpGet("find", Name = nameof(Find))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<object>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> Find([FromQuery] string searchTerm, [FromQuery] string lastId = "0")
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AddressAutocompleteFindResponse>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> Find([FromQuery] string searchTerm, [FromQuery] string lastId = null)
         {
-            var result = await _addressValidationClient.Find(searchTerm, lastId);
-            return Ok(ApiResponse.Result(result.Property("Items").Value));
+            var result = await _addressAutocompleteClient.Find(searchTerm, lastId);
+            return Ok(ApiResponse.Result(result));
         }
 
-        // GET: api/AddressValidation/retrieve
+        // GET: api/AddressAutocomplete/retrieve
         /// <summary>
         /// Gets autocomplete retrieve result
         /// </summary>
@@ -55,7 +52,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AddressAutocompleteRetrieveResponse>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> Retrieve([FromQuery] string id)
         {
-            var result = await _addressValidationClient.Retrieve(id);
+            var result = await _addressAutocompleteClient.Retrieve(id);
             return Ok(ApiResponse.Result(result));
         }
     }

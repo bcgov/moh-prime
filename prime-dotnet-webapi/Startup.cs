@@ -166,7 +166,7 @@ namespace Prime
 
             services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
 
-            services.AddHttpClient<IAddressValidationClient, AddressValidationClient>(client =>
+            services.AddHttpClient<IAddressAutocompleteClient, AddressAutocompleteClient>(client =>
             {
                 client.BaseAddress = new Uri(PrimeConstants.ADDRESS_VALIDATION_API_URL);
                 client.DefaultRequestHeaders.Add("Key", PrimeConstants.ADDRESS_VALIDATION_API_KEY);

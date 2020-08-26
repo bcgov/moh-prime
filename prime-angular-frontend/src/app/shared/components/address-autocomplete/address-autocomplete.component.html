@@ -12,10 +12,10 @@
                [matAutocomplete]="auto">
         <mat-autocomplete #auto="matAutocomplete">
           <mat-option *ngFor="let field of addressAutocompleteFields"
-                      [value]="field.Text"
-                      (click)="onAutocomplete(field.Id)">
-            {{ field.Text }}
-            {{ field.Description }}
+                      [value]="field.text"
+                      (click)="onAutocomplete(field.id)">
+            {{ field.text }}
+            {{ field.description }}
           </mat-option>
         </mat-autocomplete>
         <mat-error>Required</mat-error>

@@ -8,21 +8,21 @@ using Newtonsoft.Json.Linq;
 
 namespace Prime.Services.Clients
 {
-    public class AddressValidationClient : IAddressValidationClient
+    public class AddressAutocompleteClient : IAddressAutocompleteClient
     {
         private readonly HttpClient _client;
         private readonly ILogger _logger;
 
-        public AddressValidationClient(
+        public AddressAutocompleteClient(
             HttpClient client,
-            ILogger<AddressValidationClient> logger)
+            ILogger<AddressAutocompleteClient> logger)
         {
             // Auth header and api-key are injected in Startup.cs
             _client = client;
             _logger = logger;
         }
 
-        public async Task<JObject> Find(string searchTerm, string lastId)
+        public async Task<IEnumerable<AddressAutocompleteFindResponse>> Find(string searchTerm, string lastId)
         {
             //Build the url
             var url = "Find/v2.10/json3ex.ws?";
@@ -38,20 +38,28 @@ namespace Prime.Services.Clients
             catch (Exception ex)
             {
                 await LogError(response, ex);
-                throw new AddressValidationApiException("Error occurred attempting to get the autocomplete find response: ", ex);
+                throw new AddressAutocompleteApiException("Error occurred attempting to get the autocomplete find response: ", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(response);
-                throw new AddressValidationApiException($"Error code {response.StatusCode} was provided when calling AddressValidationClient::Find");
+                throw new AddressAutocompleteApiException($"Error code {response.StatusCode} was provided when calling AddressAutocompleteClient::Find");
             }
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+            var items = body.Property("Items").Value;
+
+            var autocompleteResponse = new List<AddressAutocompleteFindResponse>();
+
+            foreach (var item in items)
+            {
+                autocompleteResponse.Add(item.ToObject<AddressAutocompleteFindResponse>());
+            }
 
             _logger.LogInformation("GET autocomplete find {@JObject}", JsonConvert.SerializeObject(body));
 
-            return body;
+            return autocompleteResponse;
         }
 
         public async Task<IEnumerable<AddressAutocompleteRetrieveResponse>> Retrieve(string Id)
@@ -69,13 +77,13 @@ namespace Prime.Services.Clients
             catch (Exception ex)
             {
                 await LogError(response, ex);
-                throw new AddressValidationApiException("Error occurred attempting to get the autocomplete retrieve response: ", ex);
+                throw new AddressAutocompleteApiException("Error occurred attempting to get the autocomplete retrieve response: ", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(response);
-                throw new AddressValidationApiException($"Error code {response.StatusCode} was provided when calling AddressValidationClient::Retrieve");
+                throw new AddressAutocompleteApiException($"Error code {response.StatusCode} was provided when calling AddressAutocompleteClient::Retrieve");
             }
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
@@ -93,7 +101,7 @@ namespace Prime.Services.Clients
             return autocompleteResponse;
         }
 
-        public class AutoCompleteResponse
+        public class AddressAutocompleteFindResponse
         {
             public string Id { get; set; } // The Id to use as the SearchTerm with the Find method if IsRetrievable is false. If IsRetrievable is true, use this Id with the RetrieveById method. If blank, provide a more detailed SearchTerm.
             public string Text { get; set; } // The found item.
@@ -169,10 +177,10 @@ namespace Prime.Services.Clients
         }
     }
 
-    public class AddressValidationApiException : Exception
+    public class AddressAutocompleteApiException : Exception
     {
-        public AddressValidationApiException() : base() { }
-        public AddressValidationApiException(string message) : base(message) { }
-        public AddressValidationApiException(string message, Exception inner) : base(message, inner) { }
+        public AddressAutocompleteApiException() : base() { }
+        public AddressAutocompleteApiException(string message) : base(message) { }
+        public AddressAutocompleteApiException(string message, Exception inner) : base(message, inner) { }
     }
 }

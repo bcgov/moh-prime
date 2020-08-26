@@ -11,7 +11,7 @@ import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } 
 @Injectable({
   providedIn: 'root'
 })
-export class AddressValidationResource {
+export class AddressAutocompleteResource {
 
   constructor(
     private apiResource: ApiResource,
@@ -21,7 +21,7 @@ export class AddressValidationResource {
   ) { }
 
   public find(searchTerm: string): Observable<AddressAutocompleteFindResponse[]> {
-    return this.apiResource.get<AddressAutocompleteFindResponse[]>(`AddressValidation/find?searchTerm=${searchTerm}`)
+    return this.apiResource.get<AddressAutocompleteFindResponse[]>(`AddressAutocomplete/find?searchTerm=${searchTerm}`)
       .pipe(
         map((response: ApiHttpResponse<any[]>) => response.result),
         // TODO split out into proper adapter
@@ -29,14 +29,14 @@ export class AddressValidationResource {
         tap((response: AddressAutocompleteFindResponse[]) => this.logger.info('AUTOCOMPLETE_FIND', response)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Autocomplete could not be retrieved');
-          this.logger.error('[Shared] AddressValidationResource::find error has occurred: ', error);
+          this.logger.error('[Shared] AddressAutocompleteResource::find error has occurred: ', error);
           throw error;
         })
       );
   }
 
   public retrieve(id: string): Observable<AddressAutocompleteRetrieveResponse[]> {
-    return this.apiResource.get<AddressAutocompleteRetrieveResponse[]>(`AddressValidation/retrieve?id=${id}`)
+    return this.apiResource.get<AddressAutocompleteRetrieveResponse[]>(`AddressAutocomplete/retrieve?id=${id}`)
       .pipe(
         map((response: ApiHttpResponse<any[]>) => response.result),
         // TODO split out into proper adapter
@@ -44,7 +44,7 @@ export class AddressValidationResource {
         tap((response: AddressAutocompleteRetrieveResponse[]) => this.logger.info('AUTOCOMPLETE_RETRIEVE', response)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Autocomplete could not be retrieved');
-          this.logger.error('[Shared] AddressValidationResource::find error has occurred: ', error);
+          this.logger.error('[Shared] AddressAutocompleteResource::find error has occurred: ', error);
           throw error;
         })
       );

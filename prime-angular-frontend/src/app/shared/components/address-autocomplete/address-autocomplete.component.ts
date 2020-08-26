@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } from '@shared/models/address-autocomplete.model';
-import { AddressValidationResource } from '@shared/services/address-validation-resource.service';
+import { AddressAutocompleteResource } from '@shared/services/address-autocomplete-resource.service';
 import { Address } from '@shared/models/address.model';
 
 @Component({
@@ -18,7 +18,7 @@ export class AddressAutocompleteComponent implements OnInit {
   public form: FormGroup;
 
   constructor(
-    private addressValidationResource: AddressValidationResource
+    private addressAutocompleteResource: AddressAutocompleteResource
   ) {
     this.autocompleteAddress = new EventEmitter<Address>();
   }
@@ -28,7 +28,7 @@ export class AddressAutocompleteComponent implements OnInit {
   }
 
   public onAutocomplete(id: string) {
-    this.addressValidationResource.retrieve(id)
+    this.addressAutocompleteResource.retrieve(id)
       .subscribe((response: AddressAutocompleteRetrieveResponse[]) => {
         response.map((field) => {
           if (field.language === 'ENG') {
@@ -51,7 +51,7 @@ export class AddressAutocompleteComponent implements OnInit {
 
     this.autocomplete.valueChanges
       .subscribe(() => {
-        this.addressValidationResource.find(this.autocomplete.value)
+        this.addressAutocompleteResource.find(this.autocomplete.value)
           .subscribe((response: AddressAutocompleteFindResponse[]) => {
             this.addressAutocompleteFields = response;
           });

@@ -8,8 +8,6 @@ import { ConfigService } from '@config/config.service';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
-import { AddressValidationResource } from '@shared/services/address-validation-resource.service';
-import { AddressAutocompleteFindResponse } from '@shared/models/address-autocomplete.model';
 import { Address } from '@shared/models/address.model';
 
 @Component({
