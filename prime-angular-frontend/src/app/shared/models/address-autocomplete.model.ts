@@ -1,4 +1,3 @@
-
 export interface AddressAutocompleteFindResponse {
   id: string;
   text: string;
@@ -7,7 +6,6 @@ export interface AddressAutocompleteFindResponse {
   description: string;
   next: string;
 }
-
 
 export interface AddressAutocompleteRetrieveResponse {
   id: string;
