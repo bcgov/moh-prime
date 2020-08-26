@@ -10,6 +10,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
 import { AddressValidationResource } from '@shared/services/address-validation-resource.service';
 import { AddressAutocompleteFindResponse } from '@shared/models/address-autocomplete.model';
+import { Address } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-address',
@@ -53,6 +54,14 @@ export class AddressComponent implements OnInit {
     return this.form.get('street') as FormControl;
   }
 
+  public get street2(): FormControl {
+    return this.form.get('street2') as FormControl;
+  }
+
+  public get city(): FormControl {
+    return this.form.get('city') as FormControl;
+  }
+
   public get countryCode(): FormControl {
     return this.form.get('countryCode') as FormControl;
   }
@@ -76,6 +85,16 @@ export class AddressComponent implements OnInit {
 
   public isRequired(path: string): boolean {
     return this.formUtilsService.isRequired(this.form, path);
+  }
+
+  public onAutocomplete(address: Address) {
+    console.log('address : ', address);
+    this.street.setValue(address.street);
+    this.street2.setValue(address.street2);
+    this.city.setValue(address.city);
+    this.provinceCode.setValue(address.provinceCode);
+    this.countryCode.setValue(address.countryCode);
+    this.postal.setValue(address.postal);
   }
 
   public ngOnInit() {

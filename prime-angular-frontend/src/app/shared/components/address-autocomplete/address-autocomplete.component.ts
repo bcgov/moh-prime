@@ -1,7 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+
 import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } from '@shared/models/address-autocomplete.model';
 import { AddressValidationResource } from '@shared/services/address-validation-resource.service';
+import { Address } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-address-autocomplete',
@@ -9,25 +11,39 @@ import { AddressValidationResource } from '@shared/services/address-validation-r
   styleUrls: ['./address-autocomplete.component.scss']
 })
 export class AddressAutocompleteComponent implements OnInit {
-  @Input() public form: FormGroup;
-  @Output()
+  @Output() autocompleteAddress: EventEmitter<Address>;
 
   public addressAutocompleteFields: AddressAutocompleteFindResponse[];
   public addressRetrieved: AddressAutocompleteRetrieveResponse;
+  public form: FormGroup;
 
   constructor(
     private addressValidationResource: AddressValidationResource
-  ) { }
+  ) {
+    this.autocompleteAddress = new EventEmitter<Address>();
+  }
 
   public get autocomplete(): FormControl {
     return this.form.get('autocomplete') as FormControl;
   }
 
-  public onAutocomplete(id: string){
+  public onAutocomplete(id: string) {
     this.addressValidationResource.retrieve(id)
-      .subscribe((response: AddressAutocompleteRetrieveResponse) =>
-          this.addressRetrieved = response
-      );
+      .subscribe((response: AddressAutocompleteRetrieveResponse[]) => {
+        response.map((field) => {
+          if (field.language === 'ENG') {
+            this.addressRetrieved = field;
+          }
+        });
+        const address = new Address();
+        address.countryCode = this.addressRetrieved.countryIso2;
+        address.provinceCode = this.addressRetrieved.provinceCode;
+        address.city = this.addressRetrieved.city;
+        address.street = this.addressRetrieved.line1;
+        address.street2 = this.addressRetrieved.line2;
+        address.postal = this.addressRetrieved.postalCode;
+        this.autocompleteAddress.emit(address);
+      });
   }
 
   ngOnInit(): void {
@@ -37,7 +53,7 @@ export class AddressAutocompleteComponent implements OnInit {
       .subscribe(() => {
         this.addressValidationResource.find(this.autocomplete.value)
           .subscribe((response: AddressAutocompleteFindResponse[]) => {
-              this.addressAutocompleteFields = response;
+            this.addressAutocompleteFields = response;
           });
       });
   }

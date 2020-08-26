@@ -35,13 +35,13 @@ export class AddressValidationResource {
       );
   }
 
-  public retrieve(id: string): Observable<AddressAutocompleteRetrieveResponse> {
-    return this.apiResource.get<AddressAutocompleteRetrieveResponse>(`AddressValidation/retrieve?id=${id}`)
+  public retrieve(id: string): Observable<AddressAutocompleteRetrieveResponse[]> {
+    return this.apiResource.get<AddressAutocompleteRetrieveResponse[]>(`AddressValidation/retrieve?id=${id}`)
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result),
+        map((response: ApiHttpResponse<any[]>) => response.result),
         // TODO split out into proper adapter
 
-        tap((response: AddressAutocompleteRetrieveResponse) => this.logger.info('AUTOCOMPLETE_RETRIEVE', response)),
+        tap((response: AddressAutocompleteRetrieveResponse[]) => this.logger.info('AUTOCOMPLETE_RETRIEVE', response)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Autocomplete could not be retrieved');
           this.logger.error('[Shared] AddressValidationResource::find error has occurred: ', error);
