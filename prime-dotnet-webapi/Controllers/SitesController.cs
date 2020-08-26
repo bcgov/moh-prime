@@ -96,7 +96,7 @@ namespace Prime.Controllers
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
             {
                 return Forbid();
             }
@@ -153,8 +153,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            // TODO: Fix access
-            // return Forbid();
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            {
+                return Forbid();
+            }
 
             await _siteService.UpdateSiteAsync(siteId, updatedSite);
 
@@ -180,8 +182,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            // TODO: Fix access
-            // return Forbid();
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            {
+                return Forbid();
+            }
 
             await _siteService.UpdateCompletedAsync(siteId);
 
@@ -289,7 +293,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
             {
                 return Forbid();
             }
@@ -325,8 +329,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            // TODO: Fix access
-            // return Forbid();
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            {
+                return Forbid();
+            }
 
             var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
 
