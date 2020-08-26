@@ -48,7 +48,8 @@ export class RegistrationGuard extends BaseGuard {
         map((organizations: Organization[]) =>
           (organizations.length)
             ? organizations.shift()
-            : null),
+            : null
+        ),
         exhaustMap((organization: Organization) =>
           (organization)
             ? of([organization, false])

@@ -75,11 +75,11 @@ export class RemoteUsersComponent implements OnInit {
 
     return [
       {
-        key: 'college licence',
+        key: 'College Licence',
         value: collegeLicence
       },
       {
-        key: 'remote address',
+        key: 'Remote Address',
         value: remoteAddress
       },
     ];
