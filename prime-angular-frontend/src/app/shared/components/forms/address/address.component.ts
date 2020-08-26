@@ -82,7 +82,6 @@ export class AddressComponent implements OnInit {
   }
 
   private initForm() {
-
     this.setAddress(this.countryCode.value);
     this.countryCode.valueChanges
       .pipe(

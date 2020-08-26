@@ -46,7 +46,7 @@ export class AddressAutocompleteComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.form = new FormGroup({ autocomplete: new FormControl() });
 
     this.autocomplete.valueChanges
@@ -57,5 +57,4 @@ export class AddressAutocompleteComponent implements OnInit {
           });
       });
   }
-
 }
