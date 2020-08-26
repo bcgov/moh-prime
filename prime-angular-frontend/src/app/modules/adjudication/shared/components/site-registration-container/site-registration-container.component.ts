@@ -35,6 +35,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   public busy: Subscription;
   public columns: string[];
+  public siteRegistrations: SiteRegistrationViewModel[];
   public dataSource: MatTableDataSource<SiteRegistrationViewModel>;
 
   public showSearchFilter: boolean;
@@ -116,6 +117,9 @@ export class SiteRegistrationContainerComponent implements OnInit {
         );
 
     this.busy = request$
+      .pipe(
+        map((siteRegistrations: SiteRegistrationViewModel[]) => this.siteRegistrations = siteRegistrations)
+      )
       .subscribe((siteRegistrations: SiteRegistrationViewModel[]) => this.dataSource.data = siteRegistrations);
   }
 
@@ -144,7 +148,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       this.busy = this.deleteResource<Organization>(this.defaultOptions.delete('organization'), request$)
         .subscribe((organization: Organization) =>
           this.dataSource.data = MatTableDataSourceUtils
-            .deleteById<SiteRegistrationViewModel>(this.dataSource, organization.id)
+            .delete<SiteRegistrationViewModel>(this.dataSource, 'organizationId', organizationId)
         );
     }
   }
@@ -155,7 +159,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       this.busy = this.deleteResource<Site>(this.defaultOptions.delete('site'), request$)
         .subscribe((site: Site) => {
           this.dataSource.data = MatTableDataSourceUtils
-            .deleteRelatedById<SiteRegistrationViewModel, Site>(this.dataSource, site.organizationId, 'sites', site.id);
+            .delete<SiteRegistrationViewModel>(this.dataSource, 'siteId', siteId);
         });
     }
   }
@@ -187,12 +191,9 @@ export class SiteRegistrationContainerComponent implements OnInit {
   private toSiteRegistrations(organizations: OrganizationViewModel[]): SiteRegistrationViewModel[] {
     const siteRegistrations = organizations.reduce((registrations, ovm) => {
       const { id: organizationId, sites, ...organization } = ovm;
-      const registration = sites.map((svm: SiteViewModel, index: number) => {
+      const registration = sites.map((svm: SiteViewModel) => {
         const { id: siteId, ...site } = svm;
-        // Only provide organization information on the first registration
-        return (!index)
-          ? { organizationId, ...organization, siteId, ...site }
-          : { organizationId, siteId, ...site };
+        return { organizationId, ...organization, siteId, ...site };
       });
       registrations.push(registration);
       return registrations;
