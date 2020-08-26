@@ -26,7 +26,7 @@ namespace Prime.Services.Clients
         {
             //Build the url
             var url = "Find/v2.10/json3ex.ws?";
-            url += "Key=" + System.Web.HttpUtility.UrlEncode(PrimeConstants.ADDRESS_VALIDATION_API_KEY);
+            url += "Key=" + System.Web.HttpUtility.UrlEncode(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY);
             url += "&SearchTerm=" + System.Web.HttpUtility.UrlEncode(searchTerm);
             url += "&LastId=" + System.Web.HttpUtility.UrlEncode(lastId);
 
@@ -66,7 +66,7 @@ namespace Prime.Services.Clients
         {
             //Build the url
             var url = "Retrieve/v2.11/json3ex.ws?";
-            url += "Key=" + System.Web.HttpUtility.UrlEncode(PrimeConstants.ADDRESS_VALIDATION_API_KEY);
+            url += "Key=" + System.Web.HttpUtility.UrlEncode(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY);
             url += "&Id=" + System.Web.HttpUtility.UrlEncode(Id);
 
             HttpResponseMessage response = null;
