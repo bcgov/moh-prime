@@ -103,11 +103,11 @@ namespace Prime.Services.Clients
 
         public class AddressAutocompleteFindResponse
         {
-            public string Id { get; set; } // The Id to use as the SearchTerm with the Find method if IsRetrievable is false. If IsRetrievable is true, use this Id with the RetrieveById method. If blank, provide a more detailed SearchTerm.
+            public string Id { get; set; } // The Id to use as the SearchTerm with the Find method.
             public string Text { get; set; } // The found item.
             public string Highlight { get; set; } // A series of number pairs that indicates which characters in the Text property have matched the SearchTerm.
             public string Cursor { get; set; } // A zero-based position in the Text response indicating the suggested position of the cursor if this item is selected. A -1 response indicates no suggestion is available.
-            public string Description { get; set; } // Additional information about this result.
+            public string Description { get; set; } // Descriptive information about the found item, typically if it's a container.
             public string Next { get; set; } // The next step of the search process. (Find, Retrieve)
         }
 
