@@ -45,7 +45,8 @@ export class MockOrganizationService implements IOrganizationService {
       acceptedAgreementDate: faker.date.past(2).toDateString(),
       signedAgreementDocuments: [],
       submittedDate: null,
-      siteCount: faker.random.number()
+      siteCount: faker.random.number(),
+      sites: []
     });
   }
 

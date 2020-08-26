@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RemoteUsersComponent } from './remote-users.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { AddressPipe } from '@shared/pipes/address.pipe';
 
 describe('RemoteUsersComponent', () => {
   let component: RemoteUsersComponent;
@@ -27,7 +28,8 @@ describe('RemoteUsersComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        AddressPipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
