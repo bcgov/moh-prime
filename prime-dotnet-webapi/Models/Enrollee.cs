@@ -114,7 +114,7 @@ namespace Prime.Models
         [NotMapped]
         public string Base64QRCode
         {
-            get => this.Credential?.Base64QRCode;
+            get => Credential?.Base64QRCode;
         }
 
         /// <summary>
@@ -134,9 +134,12 @@ namespace Prime.Models
         /// Gets the *second* most recent Enrolment Status on the Enrollee.
         /// </summary>
         [NotMapped]
+        [Computed]
         public EnrolmentStatus PreviousStatus
         {
-            get => GetStatusTimeline()
+            get => EnrolmentStatuses
+                .OrderByDescending(s => s.StatusDate)
+                .ThenByDescending(s => s.Id)
                 .Skip(1)
                 .FirstOrDefault();
         }
@@ -145,34 +148,44 @@ namespace Prime.Models
         /// The date of the Enrollee's most recent applicaiton.
         /// </summary>
         [NotMapped]
+        [Computed]
         public DateTimeOffset? AppliedDate
         {
-            get => GetStatusTimeline()
-                .FirstOrDefault(es => es.IsType(StatusType.UnderReview))
-                ?.StatusDate;
+            get => EnrolmentStatuses
+                .OrderByDescending(es => es.StatusDate)
+                .ThenByDescending(es => es.Id)
+                .Where(es => es.StatusCode == (int)StatusType.UnderReview)
+                .Select(es => (DateTimeOffset?)es.StatusDate)
+                .FirstOrDefault();
         }
 
         /// <summary>
         /// The date of the Enrollee's most recent manual or automatic approval.
         /// </summary>
         [NotMapped]
+        [Computed]
         public DateTimeOffset? ApprovedDate
         {
-            get => GetStatusTimeline()
-                .FirstOrDefault(es => es.IsType(StatusType.RequiresToa))
-                ?.StatusDate;
+            get => EnrolmentStatuses
+                .OrderByDescending(es => es.StatusDate)
+                .ThenByDescending(es => es.Id)
+                .Where(es => es.StatusCode == (int)StatusType.RequiresToa)
+                .Select(es => (DateTimeOffset?)es.StatusDate)
+                .FirstOrDefault();
         }
 
         /// <summary>
         /// The expiry date of the Enrollee's most recently accepted Access Term.
         /// </summary>
         [NotMapped]
+        [Computed]
         public DateTimeOffset? ExpiryDate
         {
             get => AccessTerms
-                ?.OrderByDescending(at => at.CreatedDate)
-                .FirstOrDefault(at => at.AcceptedDate.HasValue)
-                ?.ExpiryDate;
+                .OrderByDescending(at => at.CreatedDate)
+                .Where(at => at.AcceptedDate.HasValue)
+                .Select(at => (DateTimeOffset?)at.ExpiryDate)
+                .FirstOrDefault();
         }
 
         [NotMapped]
@@ -300,17 +313,6 @@ namespace Prime.Models
             {
                 yield return new ValidationResult($"UserId cannot be the empty value: {this.UserId.ToString()}");
             }
-        }
-
-        /// <summary>
-        /// Sorts the Enrolment Statuses by date and ID (in case two statuses are created with the same timestamp).
-        /// </summary>
-        /// <returns> This enrollee's time-ordered Enrolment Statuses, or an empty list if not loaded. </returns>
-        private IOrderedEnumerable<EnrolmentStatus> GetStatusTimeline()
-        {
-            return (EnrolmentStatuses ?? Enumerable.Empty<EnrolmentStatus>())
-                .OrderByDescending(s => s.StatusDate)
-                .ThenByDescending(s => s.Id);
         }
     }
 }
