@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
@@ -17,6 +17,7 @@ import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
+import { WeekDay } from '@angular/common';
 
 @Component({
   selector: 'app-hours-operation',
@@ -31,6 +32,14 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public hasNoHours: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+
+  public hasSunday: boolean;
+  public hasMonday: boolean;
+  public hasTuesday: boolean;
+  public hasWednesday: boolean;
+  public hasThursday: boolean;
+  public hasFriday: boolean;
+  public hasSaturday: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,17 +59,50 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     return this.form.get('businessDays') as FormArray;
   }
 
-  public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.businessDays)) {
-      this.hasNoHours = false;
+  public onSundayChange() {
+    this.hasSunday = !this.hasSunday;
+  }
 
-      const payload = this.siteFormStateService.json;
-      this.siteResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
+  public onMondayChange() {
+    this.hasMonday = !this.hasMonday;
+  }
+
+  public onTuedayChange() {
+    this.hasTuesday = !this.hasTuesday;
+  }
+
+  public onWednesdayChange() {
+    this.hasWednesday = !this.hasWednesday;
+  }
+
+  public onThursdayChange() {
+    this.hasThursday = !this.hasThursday;
+  }
+
+  public onFridayChange() {
+    this.hasFriday = !this.hasFriday;
+  }
+
+  public onSaturdayChange() {
+    this.hasSaturday = !this.hasSaturday;
+  }
+
+  public getWeekDay(num: number) {
+    return WeekDay[num];
+  }
+
+  public onSubmit() {
+    console.log(this.siteFormStateService.json);
+    if (this.formUtilsService.checkValidity(this.businessDays)) {
+      // this.hasNoHours = false;
+
+      // const payload = this.siteFormStateService.json;
+      // this.siteResource
+      //   .updateSite(payload)
+      //   .subscribe(() => {
+      //     this.form.markAsPristine();
+      //     this.nextRoute();
+      //   });
     } else {
       this.hasNoHours = true;
     }

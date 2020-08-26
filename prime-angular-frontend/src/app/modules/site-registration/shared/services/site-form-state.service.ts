@@ -11,6 +11,7 @@ import { AbstractFormState } from '@registration/shared/classes/abstract-form-st
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
 import { RemoteUserCertification } from '../models/remote-user-certification.model';
+import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +59,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     const { careSettingCode, vendorCode } = this.careSettingTypeForm.getRawValue();
     const { doingBusinessAs } = this.businessForm.getRawValue();
     const { physicalAddress } = this.siteAddressForm.getRawValue();
-    const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
+    const businessHours = this.generateBusinessHoursJson();
     const remoteUsers = this.remoteUsersForm.getRawValue().remoteUsers
       .map((ru: RemoteUser) => {
         // Remove the ID from the remote user to simplify updates on the server
@@ -261,9 +262,43 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
   private buildHoursOperationForm(): FormGroup {
     return this.fb.group({
-      businessDays: this.fb.array(
-        [],
-        [Validators.required])
+      businessDays: this.fb.array([
+        this.fb.group({
+          open: [null, []],
+          close: [null, []],
+        }),
+        this.fb.group({
+          open: [null, []],
+          close: [null, []],
+        }),
+        this.fb.group({
+          open: [null, []],
+          close: [null, []],
+        }),
+        this.fb.group({
+          open: [null, []],
+          close: [null, []],
+        }),
+        this.fb.group({
+          open: [null, []],
+          close: [null, []],
+        }),
+        this.fb.group({
+          open: [null, []],
+          close: [null, []],
+        }),
+        this.fb.group({
+          open: [null, []],
+          close: [null, []],
+        }),
+      ])
+    });
+  }
+
+  private generateBusinessHoursJson(): BusinessDay[] {
+    const { businessDays } = this.hoursOperationForm.getRawValue();
+    return businessDays.map((item, index) => {
+      return new BusinessDay(index, item.open, item.close);
     });
   }
 
