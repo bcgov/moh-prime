@@ -27,11 +27,11 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId)
         {
-            var query = this.GetBaseOrganizationQuery();
+            IQueryable<Organization> query = this.GetBaseOrganizationQuery();
 
             if (partyId != null)
             {
-                query.Where(o => o.SigningAuthorityId == partyId);
+                query = query.Where(o => o.SigningAuthorityId == partyId);
             }
 
             return await query
