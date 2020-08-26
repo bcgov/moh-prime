@@ -11,6 +11,13 @@ namespace Prime.Models
     [Table("Enrollee")]
     public class Enrollee : BaseAuditable, IValidatableObject, IUserBoundModel
     {
+        public Enrollee()
+        {
+            // Initialize collections to prevent null exception on computed properties like CurrrentStatus and ExpiryDate
+            EnrolmentStatuses = new List<EnrolmentStatus>();
+            AccessTerms = new List<AccessTerm>();
+        }
+
         public const int DISPLAY_OFFSET = 1000;
 
         [Key]
