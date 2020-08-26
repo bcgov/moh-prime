@@ -82,3 +82,18 @@ export interface Enrolment {
   adjudicator: Admin;
   base64QRCode: string;
 }
+
+export interface EnrolleeListViewModel {
+  id: number;
+  displayId: number;
+  firstName: string;
+  lastName: string;
+  givenNames: string;
+  appliedDate: string;
+  approvedDate: string;
+  expiryDate: string;
+  currentStatusCode: number;
+  previousStatus: EnrolmentStatus;
+  adjudicatorIdir: string;
+  alwaysManual: boolean;
+}
