@@ -48,18 +48,6 @@ export class AddressComponent implements OnInit {
     this.setAddressLabels();
   }
 
-  public get street(): FormControl {
-    return this.form.get('street') as FormControl;
-  }
-
-  public get street2(): FormControl {
-    return this.form.get('street2') as FormControl;
-  }
-
-  public get city(): FormControl {
-    return this.form.get('city') as FormControl;
-  }
-
   public get countryCode(): FormControl {
     return this.form.get('countryCode') as FormControl;
   }
@@ -86,12 +74,7 @@ export class AddressComponent implements OnInit {
   }
 
   public onAutocomplete(address: Address) {
-    this.street.setValue(address.street);
-    this.street2.setValue(address.street2);
-    this.city.setValue(address.city);
-    this.provinceCode.setValue(address.provinceCode);
-    this.countryCode.setValue(address.countryCode);
-    this.postal.setValue(address.postal);
+    this.form.patchValue(address);
   }
 
   public ngOnInit() {

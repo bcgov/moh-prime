@@ -21,9 +21,7 @@ export class AddressAutocompleteResource {
   public find(searchTerm: string): Observable<AddressAutocompleteFindResponse[]> {
     return this.apiResource.get<AddressAutocompleteFindResponse[]>(`AddressAutocomplete/find?searchTerm=${searchTerm}`)
       .pipe(
-        map((response: ApiHttpResponse<any[]>) => response.result),
-        // TODO split out into proper adapter
-
+        map((response: ApiHttpResponse<AddressAutocompleteFindResponse[]>) => response.result),
         tap((response: AddressAutocompleteFindResponse[]) => this.logger.info('AUTOCOMPLETE_FIND', response)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Autocomplete could not be retrieved');
@@ -36,9 +34,7 @@ export class AddressAutocompleteResource {
   public retrieve(id: string): Observable<AddressAutocompleteRetrieveResponse[]> {
     return this.apiResource.get<AddressAutocompleteRetrieveResponse[]>(`AddressAutocomplete/retrieve?id=${id}`)
       .pipe(
-        map((response: ApiHttpResponse<any[]>) => response.result),
-        // TODO split out into proper adapter
-
+        map((response: ApiHttpResponse<AddressAutocompleteRetrieveResponse[]>) => response.result),
         tap((response: AddressAutocompleteRetrieveResponse[]) => this.logger.info('AUTOCOMPLETE_RETRIEVE', response)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Autocomplete could not be retrieved');
