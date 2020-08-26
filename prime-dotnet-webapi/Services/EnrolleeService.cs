@@ -55,15 +55,8 @@ namespace Prime.Services
 
         public async Task<Enrollee> GetEnrolleeAsync(Guid userId)
         {
-            var entity = await this.GetBaseEnrolleeQuery()
+            return await this.GetBaseEnrolleeQuery()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
-
-            if (entity != null)
-            {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-            }
-
-            return entity;
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
@@ -86,8 +79,6 @@ namespace Prime.Services
 
             if (entity != null)
             {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-
                 // TODO: This is an interm fix for making a different view model for enrollee based on isAdmin
                 if (isAdmin)
                 {
@@ -126,11 +117,6 @@ namespace Prime.Services
                 items = items.Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode);
             }
 
-            foreach (var item in items)
-            {
-                item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
-            }
-
             return items;
         }
 
@@ -145,7 +131,6 @@ namespace Prime.Services
                 return null;
             }
 
-            enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             return enrollee;
         }
 
@@ -304,11 +289,6 @@ namespace Prime.Services
             var entity = await this.GetBaseEnrolleeQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            if (entity != null)
-            {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-            }
 
             return entity;
         }
