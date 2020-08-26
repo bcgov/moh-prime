@@ -108,8 +108,6 @@ const routes: Routes = [
             data: { title: 'Site Registrations' }
           },
           {
-            // Each view contains a table of result(s) that require
-            // both Organization and Site information
             path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
             children: [
               {
