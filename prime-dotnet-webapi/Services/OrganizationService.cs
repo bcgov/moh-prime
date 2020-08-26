@@ -25,7 +25,7 @@ namespace Prime.Services
             _partyService = partyService;
         }
 
-        public async Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId)
+        public async Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId = null)
         {
             IQueryable<Organization> query = this.GetBaseOrganizationQuery();
 

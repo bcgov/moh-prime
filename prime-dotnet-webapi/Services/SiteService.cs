@@ -29,7 +29,7 @@ namespace Prime.Services
             _organizationService = organizationService;
         }
 
-        public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId)
+        public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
         {
             IQueryable<Site> query = this.GetBaseSiteQuery();
 

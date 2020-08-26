@@ -66,7 +66,7 @@ namespace Prime.Controllers
             }
 
             var sites = (User.HasAdminView())
-                ? await _siteService.GetSitesAsync(null)
+                ? await _siteService.GetSitesAsync()
                 : await _siteService.GetSitesAsync(organizationId);
 
             if (verbose)
