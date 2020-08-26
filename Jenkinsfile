@@ -143,7 +143,7 @@ pipeline {
             steps {
                 script {
                     checkout scm
-                    sh "./player.sh scan"
+                    sh "./player.sh scan $BRANCH_LOWER"
                 }
             }
         }
@@ -157,7 +157,7 @@ pipeline {
                     agent { label 'code-tests' }
                     steps {
                         checkout scm
-                        sh "./player.sh scan"
+                        sh "./player.sh scan $BRANCH_LOWER"
                     }
                 }
                 stage('Zap') {
@@ -177,7 +177,7 @@ pipeline {
         }
         // BUG (2020-08-13): Currently not working, failing to find files
         // stage('Cleanup') {
-        //     agent { label 'code-tests' }
+        //     agent { label 'master' }
         //     steps {
         //         sh "./player.sh sparsify"
         //     }

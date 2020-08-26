@@ -17,10 +17,10 @@ function dotnetTests()
     echo "Building .NET application..."
     dotnet build
     echo "Start .NET code coverage scan..."
-    ~/.dotnet/tools/coverlet "./bin/Debug/netcoreapp3.1/PrimeTests.dll" --target "dotnet" --targetargs 'test . --no-build --logger "trx;LogFileName=TestResults.trx" --logger "xunit;LogFileName=TestResults.xml" --results-directory ../BuildReports/UnitTests' -f opencover -o ./BuildReports/Coverage/coverage
+    coverlet "./prime-dotnet-webapi-tests/bin/Debug/netcoreapp3.1/PrimeTests.dll" --target "dotnet" --targetargs 'test . --no-build --logger "trx;LogFileName=TestResults.trx" --logger "xunit;LogFileName=TestResults.xml" --results-directory ./BuildReports/UnitTests' -f opencover -o ./BuildReports/Coverage/coverage
     dotnet build-server shutdown
     echo "Start .NET sonar scan..."
-    dotnet sonarscanner begin /k:${APP_NAME} /n:${APP_NAME} /d:sonar.host.url=${SONAR_URL} /d:sonar.cs.opencover.reportsPaths="./BuildReports/Coverage/coverage.opencover.xml" /d:sonar.exclusions="**/Migrations/*" /d:sonar.coverage.exclusions="**Tests*.cs","**/Migrations/*","**/Program.cs" /d:sonar.cpd.exclusions="**/Migrations/*" /d:sonar.cs.vstest.reportsPaths="./BuildReports/UnitTests/TestResults.trx" /d:sonar.cs.nunit.reportsPaths="./BuildReports/UnitTests/TestResults.xml"
+    dotnet sonarscanner begin /k:${APP_NAME}-$2 /n:${APP_NAME} [$2] /d:sonar.host.url=${SONAR_URL} /d:sonar.cs.opencover.reportsPaths="./BuildReports/Coverage/coverage.opencover.xml" /d:sonar.exclusions="**/Migrations/*" /d:sonar.coverage.exclusions="**Tests*.cs","**/Migrations/*","**/Program.cs" /d:sonar.cpd.exclusions="**/Migrations/*" /d:sonar.cs.vstest.reportsPaths="./BuildReports/UnitTests/TestResults.trx" /d:sonar.cs.nunit.reportsPaths="./BuildReports/UnitTests/TestResults.xml"
     dotnet build -v n
     dotnet sonarscanner end
     dotnet build-server shutdown
@@ -43,7 +43,7 @@ function angularTests()
 function scan()
 {
     echo "Running .NET tests..."
-    dotnetTests
+    dotnetTests $2
     echo "Running Angular tests..."
     angularTests
 }

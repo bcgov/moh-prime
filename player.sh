@@ -17,7 +17,7 @@ case "$1" in
         echo "Extra params= ${@:4}"
         ;;
     scan)
-        scan
+        scan $@
         ;;
     zap)
         zap $@
