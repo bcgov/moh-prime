@@ -1,10 +1,17 @@
+---
 apiVersion: v1
 kind: Template
 labels:
   template: postgresql-persistent-template
 metadata:
-  creationTimestamp: null
   name: postgresql-dc
+  creationTimestamp: null
+  description: >-
+    Deployment configuration template for PRIME's PostgreSQL database server.
+
+    NOTE: This configuration template contains a persistent volume claim, and 
+    is only for all deployments to develop, test, and master branches. For PRs
+    to develop, please refer to `postgres-ephemeral.dc.yaml`
 parameters:
   - description: The name of the OpenShift Service exposed for the database.
     displayName: Database Service Name
@@ -67,6 +74,7 @@ parameters:
     value: ReadWriteOnce
     required: true
 objects:
+  # PostgreSQL service (endpoint for internal routing to related pods)
   - apiVersion: v1
     kind: Service
     metadata:
@@ -87,6 +95,10 @@ objects:
       type: ClusterIP
     status:
       loadBalancer: {}
+  
+  # PVC for PostgreSQL to persist all of its data across deployments. This is only 
+  # for deploys to develop, test, and master branches. PRs to develop do not utilize
+  # PVCs and rely on `postgresql-ephemeral.dc.yaml` for their deployment strategy.
   - apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
@@ -110,6 +122,8 @@ objects:
     spec:
       lookupPolicy:
         local: false
+  
+  # PostgreSQL - Deployment Configuration
   - kind: DeploymentConfig
     apiVersion: v1
     metadata:
@@ -143,6 +157,10 @@ objects:
           containers:
             - capabilities: {}
               env:
+                - name: DB_HOST
+                  value: '${NAME}${SUFFIX}'
+                
+                # PostgreSQL environment variables
                 - name: PGPASSWORD
                   valueFrom:
                     secretKeyRef:
@@ -168,8 +186,6 @@ objects:
                     secretKeyRef:
                       key: database-name
                       name: '${NAME}-secret'
-                - name: DB_HOST
-                  value: '${NAME}${SUFFIX}'
               image: ' '
               imagePullPolicy: IfNotPresent
               livenessProbe:
@@ -198,6 +214,7 @@ objects:
                 privileged: false
               terminationMessagePath: /dev/termination-log
               volumeMounts:
+                # Create directories to store PostgreSQL data and execution path
                 - mountPath: /var/lib/pgsql/data
                   name: '${NAME}${SUFFIX}-data'
                 - mountPath: /var/run/postgresql
@@ -205,6 +222,7 @@ objects:
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           volumes:
+            # Attach PostgreSQL PVC to deployed pod
             - name: '${NAME}${SUFFIX}-data'
               persistentVolumeClaim:
                 claimName: '${NAME}${SUFFIX}'
