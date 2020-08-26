@@ -1,5 +1,7 @@
 <div [formGroup]="form">
 
+  <app-address-autocomplete [formGroup]="form"></app-address-autocomplete>
+
   <div class="row">
     <div *ngIf="showFormControl('countryCode')"
          class="col-12"

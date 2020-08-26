@@ -165,6 +165,12 @@ namespace Prime
             });
 
             services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
+
+            services.AddHttpClient<IAddressValidationClient, AddressValidationClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeConstants.ADDRESS_VALIDATION_API_URL);
+                client.DefaultRequestHeaders.Add("Key", PrimeConstants.ADDRESS_VALIDATION_API_KEY);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,6 +8,8 @@ import { ConfigService } from '@config/config.service';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
+import { AddressValidationResource } from '@shared/services/address-validation-resource.service';
+import { AddressAutocompleteFindResponse } from '@shared/models/address-autocomplete.model';
 
 @Component({
   selector: 'app-address',
@@ -47,6 +49,10 @@ export class AddressComponent implements OnInit {
     this.setAddressLabels();
   }
 
+  public get street(): FormControl {
+    return this.form.get('street') as FormControl;
+  }
+
   public get countryCode(): FormControl {
     return this.form.get('countryCode') as FormControl;
   }
@@ -77,6 +83,7 @@ export class AddressComponent implements OnInit {
   }
 
   private initForm() {
+
     this.setAddress(this.countryCode.value);
     this.countryCode.valueChanges
       .pipe(
