@@ -26,7 +26,6 @@ export interface HttpEnrollee extends Enrollee {
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
   enrolleeCareSettings: CareSetting[];
-  privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -64,7 +63,6 @@ export interface Enrolment {
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
   careSettings: CareSetting[];
-  privileges: Privilege[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;

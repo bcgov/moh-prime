@@ -5,7 +5,7 @@
 
   <ng-content select="app-page-subheader"></ng-content>
 
-  <app-search-form [disabled]="true"
+  <app-search-form *ngIf="showSearchFilter"
                    (search)="onSearch($event)"
                    (filter)="onFilter($event)"
                    (refresh)="onRefresh()"></app-search-form>
@@ -13,8 +13,7 @@
   <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
                                [dataSource]="dataSource"
                                (route)="onRoute($event)"
-                               (delete)="onDelete($event)"
-                               (deleteOrg)="onDeleteOrganization($event)"></app-site-registration-table>
+                               (delete)="onDelete($event)"></app-site-registration-table>
 
   <ng-container *ngIf="content">
 
@@ -22,15 +21,14 @@
       <div class="col py-5">
 
         <ng-container [ngTemplateOutlet]="content"
-                      [ngTemplateOutletContext]="{ site: dataSource?.data[0] }"></ng-container>
+                      [ngTemplateOutletContext]="{ siteRegistration: dataSource?.data[0] }"></ng-container>
 
       </div>
       <div *ngIf="hasActions"
            class="col-auto py-5">
 
-        <app-site-registration-actions [site]="dataSource?.data[0]"
-                                       (delete)="onDelete($event)">
-        </app-site-registration-actions>
+        <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
+                                       (delete)="onDelete($event)"></app-site-registration-actions>
 
       </div>
     </div>

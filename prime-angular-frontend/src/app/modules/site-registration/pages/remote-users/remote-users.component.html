@@ -26,10 +26,10 @@
     <ng-container *ngFor="let remoteUser of remoteUsers.controls; let i = index; let last = last">
 
       <app-summary-card icon="account_circle"
-                        [title]="remoteUser.value.firstName + ' ' +remoteUser.value.lastName"
+                        [title]="remoteUser.value | fullname"
                         [menu]="remoteUserMenu"
                         [properties]="getRemoteUserProperties(remoteUser)"
-                        actionButtonTitle="update information"
+                        actionButtonTitle="Update Information"
                         [actionDisabled]="false"
                         (remove)="onRemove(i)"
                         (action)="onEdit(i)"></app-summary-card>
@@ -64,7 +64,7 @@
           class="mb-3"
           [routerLink]="['new']">
     <mat-icon class="add-icon">add</mat-icon>
-    add remote practitioners
+    Add Remote Practitioners
   </button>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"

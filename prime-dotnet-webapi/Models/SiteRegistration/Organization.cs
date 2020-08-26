@@ -9,6 +9,8 @@ namespace Prime.Models
     [Table("Organization")]
     public class Organization : BaseAuditable
     {
+        public const int DISPLAY_OFFSET = 1000;
+
         [Key]
         public int Id { get; set; }
 
@@ -38,5 +40,11 @@ namespace Prime.Models
         }
 
         public ICollection<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
+
+        [NotMapped]
+        public int DisplayId
+        {
+            get => Id + DISPLAY_OFFSET;
+        }
     }
 }
