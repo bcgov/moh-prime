@@ -52,11 +52,12 @@ namespace Prime.Controllers
         /// Gets all of the Sites for an organization, or all sites if user has ADMIN role
         /// </summary>
         /// <param name="organizationId"></param>
+        /// <param name="verbose"></param>
         [HttpGet("/api/organizations/{organizationId:int}/sites", Name = nameof(GetSites))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSites(int organizationId)
+        public async Task<ActionResult<IEnumerable<Site>>> GetSites(int organizationId, [FromQuery] bool verbose)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
@@ -64,18 +65,18 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            IEnumerable<Site> sites = null;
+            var sites = (User.HasAdminView())
+                ? await _siteService.GetSitesAsync(null)
+                : await _siteService.GetSitesAsync(organizationId);
 
-            if (User.HasAdminView())
+            if (verbose)
             {
-                sites = await _siteService.GetSitesAsync();
+                return Ok(ApiResponse.Result(sites));
             }
             else
             {
-                sites = await _siteService.GetSitesAsync(organizationId);
+                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<SiteListViewModel>>(sites)));
             }
-
-            return Ok(ApiResponse.Result(sites));
         }
 
         // GET: api/Sites/5

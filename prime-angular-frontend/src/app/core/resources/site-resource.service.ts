@@ -29,11 +29,14 @@ export class SiteResource {
     private logger: LoggerService
   ) { }
 
-  public getSites(organizationId: number): Observable<SiteViewModel[]> {
-    return this.apiResource.get<SiteViewModel[]>(`organizations/${organizationId}/sites`)
+  public getSites(organizationId: number): Observable<SiteViewModel[]>;
+  public getSites(organizationId: number, queryParams: { verbose: boolean }): Observable<SiteViewModel[] | Site[]>;
+  public getSites(organizationId: number, queryParams: { verbose: boolean } = null): Observable<SiteViewModel[] | Site[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParams);
+    return this.apiResource.get<SiteViewModel[] | Site[]>(`organizations/${organizationId}/sites`, params)
       .pipe(
-        map((response: ApiHttpResponse<SiteViewModel[]>) => response.result),
-        tap((sites: SiteViewModel[]) => this.logger.info('SITES', sites)),
+        map((response: ApiHttpResponse<SiteViewModel[] | Site[]>) => response.result),
+        tap((sites: SiteViewModel[] | Site[]) => this.logger.info('SITES', sites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);
