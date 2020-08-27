@@ -66,5 +66,10 @@ namespace Prime
 
             return identityProviderClaim?.Value;
         }
+
+        public static bool hasVCIssuance(this ClaimsPrincipal User)
+        {
+            return User.IsInRole(AuthConstants.FEATURE_VC_ISSUANCE);
+        }
     }
 }
