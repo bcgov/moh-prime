@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
@@ -33,13 +33,11 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
-  public hasSunday: boolean;
-  public hasMonday: boolean;
-  public hasTuesday: boolean;
-  public hasWednesday: boolean;
-  public hasThursday: boolean;
-  public hasFriday: boolean;
-  public hasSaturday: boolean;
+  public customPattern = {
+    A: { pattern: new RegExp('\[0-2\]') },
+    B: { pattern: new RegExp('\[0-9\]') },
+    C: { pattern: new RegExp('\[0-5\]') },
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -59,61 +57,35 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     return this.form.get('businessDays') as FormArray;
   }
 
-  public onSundayChange() {
-    this.hasSunday = !this.hasSunday;
-  }
-
-  public onMondayChange() {
-    this.hasMonday = !this.hasMonday;
-  }
-
-  public onTuedayChange() {
-    this.hasTuesday = !this.hasTuesday;
-  }
-
-  public onWednesdayChange() {
-    this.hasWednesday = !this.hasWednesday;
-  }
-
-  public onThursdayChange() {
-    this.hasThursday = !this.hasThursday;
-  }
-
-  public onFridayChange() {
-    this.hasFriday = !this.hasFriday;
-  }
-
-  public onSaturdayChange() {
-    this.hasSaturday = !this.hasSaturday;
+  public onDayToggle(control: FormControl, index: number) {
+    if (this.hasDay(index)) {
+      this.formUtilsService.resetAndClearValidators(control);
+    } else {
+      this.formUtilsService.setValidators(control, [Validators.required]);
+      // TODO: Maybe a better way to trigger open
+      control.value.startTime = '0000';
+    }
   }
 
   public getWeekDay(num: number) {
     return WeekDay[num];
   }
 
+  public hasDay(index: number): boolean {
+    return (this.businessDays.value[index].startTime) ? true : false;
+  }
+
   public onSubmit() {
     console.log(this.siteFormStateService.json);
     if (this.formUtilsService.checkValidity(this.businessDays)) {
-      // this.hasNoHours = false;
-
-      // const payload = this.siteFormStateService.json;
-      // this.siteResource
-      //   .updateSite(payload)
-      //   .subscribe(() => {
-      //     this.form.markAsPristine();
-      //     this.nextRoute();
-      //   });
-    } else {
-      this.hasNoHours = true;
+      const payload = this.siteFormStateService.json;
+      this.siteResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
     }
-  }
-
-  public onAdd(businessDay: BusinessDay[]) {
-    this.hasNoHours = false;
-
-    this.formUtilsService.formArrayPush(this.businessDays, businessDay);
-    const sorted = this.businessDays.value.sort(this.sortConfigByDay());
-    this.businessDays.patchValue(sorted);
   }
 
   public onRemove(index: number) {
@@ -154,12 +126,4 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     this.siteFormStateService.setForm(site, true);
   }
 
-  /**
-   * @description
-   * Sort by day of the week.
-   */
-  private sortConfigByDay(): (a: BusinessDay, b: BusinessDay) => SortWeight {
-    return (a: BusinessDay, b: BusinessDay) =>
-      this.utilsService.sortByKey<BusinessDay>(a, b, 'day');
-  }
 }

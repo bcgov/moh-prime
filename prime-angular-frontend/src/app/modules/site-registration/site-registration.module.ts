@@ -63,7 +63,7 @@ import { OverviewComponent } from './pages/overview/overview.component';
     SiteRegistrationRoutingModule,
     SharedModule,
     DashboardModule,
-    BusinessHoursModule
+    BusinessHoursModule,
   ],
 })
 export class SiteRegistrationModule { }

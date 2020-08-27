@@ -21,222 +21,34 @@
           <span class="col-md-2 col-4 mt-3">{{getWeekDay(i)}}</span>
           <mat-slide-toggle class="col-md-2 col-4 mt-3"
                             color="primary"
-                            (change)="onSundayChange()"
-                            [checked]="hasSunday">
-            {{ (hasSunday) ? "Open" : "Closed" }}
+                            (change)="onDayToggle(businessDay, i)"
+                            [checked]="hasDay(i)">
+            {{ (hasDay(i)) ? "Open" : "Closed" }}
           </mat-slide-toggle>
           <ng-container [formGroupName]="i">
             <mat-form-field class="col-md-3 col-12"
-                            [class.hide]="!hasSunday">
+                            [class.hide]="!hasDay(i)">
               <mat-label>Opens at</mat-label>
               <input matInput
-                     mask="00:00"
-                     formControlName="open"
+                     mask="AB:CB"
+                     [patterns]="customPattern"
+                     [dropSpecialCharacters]="false"
+                     formControlName="startTime"
                      placeholder="00:00">
             </mat-form-field>
             <mat-form-field class="col-md-3 col-12"
-                            [class.hide]="!hasSunday">
+                            [class.hide]="!hasDay(i)">
               <mat-label>Closes at</mat-label>
               <input matInput
-                     mask="00:00"
-                     formControlName="close"
+                     mask="AB:CB"
+                     [patterns]="customPattern"
+                     [dropSpecialCharacters]="false"
+                     formControlName="endTime"
                      placeholder="00:00">
             </mat-form-field>
           </ng-container>
         </div>
       </ng-container>
-
-
-      <!-- <div class="row">
-        <span class="col-md-2 col-4 mt-3">Sunday</span>
-        <mat-slide-toggle class="col-md-2 col-4 mt-3"
-                          color="primary"
-                          (change)="onSundayChange()"
-                          [checked]="hasSunday">
-          {{ (hasSunday) ? "Open" : "Closed" }}
-        </mat-slide-toggle>
-        <ng-container formGroupName="sunday">
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasSunday">
-            <mat-label>Opens at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="open"
-                   placeholder="00:00">
-          </mat-form-field>
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasSunday">
-            <mat-label>Closes at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="close"
-                   placeholder="00:00">
-          </mat-form-field>
-        </ng-container>
-      </div>
-
-      <div class="row">
-        <span class="col-md-2 col-4 mt-3">Monday</span>
-        <mat-slide-toggle class="col-md-2 col-4 mt-3"
-                          color="primary"
-                          (change)="onMondayChange()"
-                          [checked]="hasMonday">
-          {{ (hasMonday) ? "Open" : "Closed" }}
-        </mat-slide-toggle>
-        <ng-container formGroupName="monday">
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasMonday">
-            <mat-label>Opens at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="open"
-                   placeholder="00:00">
-          </mat-form-field>
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasMonday">
-            <mat-label>Closes at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="close"
-                   placeholder="00:00">
-          </mat-form-field>
-        </ng-container>
-      </div>
-      <div class="row">
-        <span class="col-md-2 col-4 mt-3">Tuesday</span>
-        <mat-slide-toggle class="col-md-2 col-4 mt-3"
-                          color="primary"
-                          (change)="onTuedayChange()"
-                          [checked]="hasTuesday">
-          {{ (hasTuesday) ? "Open" : "Closed" }}
-        </mat-slide-toggle>
-        <ng-container formGroupName="tuesday">
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasTuesday">
-            <mat-label>Opens at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="open"
-                   placeholder="00:00">
-          </mat-form-field>
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasTuesday">
-            <mat-label>Closes at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="close"
-                   placeholder="00:00">
-          </mat-form-field>
-        </ng-container>
-      </div>
-      <div class="row">
-        <span class="col-md-2 col-4 mt-3">Wednesday</span>
-        <mat-slide-toggle class="col-md-2 col-4 mt-3"
-                          color="primary"
-                          (change)="onWednesdayChange()"
-                          [checked]="hasWednesday">
-          {{ (hasWednesday) ? "Open" : "Closed" }}
-        </mat-slide-toggle>
-        <ng-container formGroupName="wednesday">
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasWednesday">
-            <mat-label>Opens at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="open"
-                   placeholder="00:00">
-          </mat-form-field>
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasWednesday">
-            <mat-label>Closes at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="close"
-                   placeholder="00:00">
-          </mat-form-field>
-        </ng-container>
-      </div>
-      <div class="row">
-        <span class="col-md-2 col-4 mt-3">Thursday</span>
-        <mat-slide-toggle class="col-md-2 col-4 mt-3"
-                          color="primary"
-                          (change)="onThursdayChange()"
-                          [checked]="hasThursday">
-          {{ (hasThursday) ? "Open" : "Closed" }}
-        </mat-slide-toggle>
-        <ng-container formGroupName="thursday">
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasThursday">
-            <mat-label>Opens at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="open"
-                   placeholder="00:00">
-          </mat-form-field>
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasThursday">
-            <mat-label>Closes at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="close"
-                   placeholder="00:00">
-          </mat-form-field>
-        </ng-container>
-      </div>
-      <div class="row">
-        <span class="col-md-2 col-4 mt-3">Friday</span>
-        <mat-slide-toggle class="col-md-2 col-4 mt-3"
-                          color="primary"
-                          (change)="onFridayChange()"
-                          [checked]="hasFriday">
-          {{ (hasFriday) ? "Open" : "Closed" }}
-        </mat-slide-toggle>
-        <ng-container formGroupName="friday">
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasFriday">
-            <mat-label>Opens at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="open"
-                   placeholder="00:00">
-          </mat-form-field>
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasFriday">
-            <mat-label>Closes at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="close"
-                   placeholder="00:00">
-          </mat-form-field>
-        </ng-container>
-      </div>
-      <div class="row">
-        <span class="col-md-2 col-4 mt-3">Saturday</span>
-        <mat-slide-toggle class="col-md-2 col-4 mt-3"
-                          color="primary"
-                          (change)="onSaturdayChange()"
-                          [checked]="hasSaturday">
-          {{ (hasSaturday) ? "Open" : "Closed" }}
-        </mat-slide-toggle>
-        <ng-container formGroupName="saturday">
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasSaturday">
-            <mat-label>Opens at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="open"
-                   placeholder="00:00">
-          </mat-form-field>
-          <mat-form-field class="col-md-3 col-12"
-                          [class.hide]="!hasSaturday">
-            <mat-label>Closes at</mat-label>
-            <input matInput
-                   mask="00:00"
-                   formControlName="close"
-                   placeholder="00:00">
-          </mat-form-field>
-        </ng-container>
-      </div> -->
 
     </section>
 

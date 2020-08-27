@@ -162,9 +162,16 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     }
 
     if (site.businessHours?.length) {
-      const array = this.hoursOperationForm.get('businessDays') as FormArray;
-      array.clear(); // Clear out existing indices
-      this.formUtilsService.formArrayPush(array, site.businessHours);
+      const array = [];
+      for (let index = 0; index < 7; index++) {
+        const day = site.businessHours.filter(y => y.day === index).pop();
+        if (day) {
+          array.push(day);
+        } else {
+          array.push({});
+        }
+      }
+      this.hoursOperationForm.get('businessDays').patchValue(array);
     }
 
     if (site.remoteUsers?.length) {
@@ -264,32 +271,32 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     return this.fb.group({
       businessDays: this.fb.array([
         this.fb.group({
-          open: [null, []],
-          close: [null, []],
+          startTime: [null, [Validators.required]],
+          endTime: [null, []],
         }),
         this.fb.group({
-          open: [null, []],
-          close: [null, []],
+          startTime: [null, []],
+          endTime: [null, []],
         }),
         this.fb.group({
-          open: [null, []],
-          close: [null, []],
+          startTime: [null, []],
+          endTime: [null, []],
         }),
         this.fb.group({
-          open: [null, []],
-          close: [null, []],
+          startTime: [null, []],
+          endTime: [null, []],
         }),
         this.fb.group({
-          open: [null, []],
-          close: [null, []],
+          startTime: [null, []],
+          endTime: [null, []],
         }),
         this.fb.group({
-          open: [null, []],
-          close: [null, []],
+          startTime: [null, []],
+          endTime: [null, []],
         }),
         this.fb.group({
-          open: [null, []],
-          close: [null, []],
+          startTime: [null, []],
+          endTime: [null, []],
         }),
       ])
     });
@@ -298,8 +305,11 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   private generateBusinessHoursJson(): BusinessDay[] {
     const { businessDays } = this.hoursOperationForm.getRawValue();
     return businessDays.map((item, index) => {
-      return new BusinessDay(index, item.open, item.close);
-    });
+      if (item.startTime !== null) {
+        return new BusinessDay(index, item.startTime, item.endTime);
+      }
+      return new BusinessDay(index, null, null);
+    }).filter((day: BusinessDay) => day.startTime !== null);
   }
 
   private buildRemoteUsersForm(): FormGroup {

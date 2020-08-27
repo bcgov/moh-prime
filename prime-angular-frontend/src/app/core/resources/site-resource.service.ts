@@ -52,13 +52,8 @@ export class SiteResource {
         // TODO split out into proper adapter
         map((site: Site) => {
           site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
-            businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
-            businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
-
-            if (businessDay.endTime === '24') {
-              businessDay.startTime = null;
-              businessDay.endTime = null;
-            }
+            businessDay.startTime = businessDay.startTime.slice(0, -3);
+            businessDay.endTime = businessDay.endTime.slice(0, -3);
             return businessDay;
           });
           return site;
@@ -93,12 +88,8 @@ export class SiteResource {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          if (businessDay.startTime === null && businessDay.endTime === null) {
-            businessDay.startTime = '0';
-            businessDay.endTime = '1.00';
-          }
-          businessDay.startTime = `${businessDay.startTime}:00:00`;
-          businessDay.endTime = `${businessDay.endTime}:00:00`;
+          businessDay.startTime = `${businessDay.startTime}:00`;
+          businessDay.endTime = `${businessDay.endTime}:00`;
           return businessDay;
         });
     } else {
