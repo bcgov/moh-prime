@@ -14,25 +14,24 @@ namespace Prime.Services.Clients
         private readonly HttpClient _client;
         private readonly ILogger _logger;
 
+        private readonly AddressAutocompleteClientCredentials _credentials;
+
         public AddressAutocompleteClient(
             HttpClient client,
-            ILogger<AddressAutocompleteClient> logger)
+            ILogger<AddressAutocompleteClient> logger,
+            AddressAutocompleteClientCredentials credentials)
         {
             // Auth header and api-key are injected in Startup.cs
             _client = client;
             _logger = logger;
+            _credentials = credentials;
         }
 
         public async Task<IEnumerable<AddressAutocompleteFindResponse>> Find(string searchTerm, string lastId)
         {
-            // var url = "Find/v2.10/json3ex.ws?";
-            // url += "Key=" + System.Web.HttpUtility.UrlEncode(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY);
-            // url += "&SearchTerm=" + System.Web.HttpUtility.UrlEncode(searchTerm);
-            // url += "&LastId=" + System.Web.HttpUtility.UrlEncode(lastId);
-
             var dict = new Dictionary<string, string>()
             {
-                { "Key", PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY },
+                { "Key", _credentials.apiKey },
                 { "SearchTerm", searchTerm }
             };
 
@@ -42,7 +41,6 @@ namespace Prime.Services.Clients
             }
 
             var url = QueryHelpers.AddQueryString("Find/v2.10/json3ex.ws", dict);
-
 
             HttpResponseMessage response = null;
             try
@@ -70,9 +68,13 @@ namespace Prime.Services.Clients
 
         public async Task<IEnumerable<AddressAutocompleteRetrieveResponse>> Retrieve(string Id)
         {
-            var url = "Retrieve/v2.11/json3ex.ws?";
-            url += "Key=" + System.Web.HttpUtility.UrlEncode(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY);
-            url += "&Id=" + System.Web.HttpUtility.UrlEncode(Id);
+            var dict = new Dictionary<string, string>()
+            {
+                { "Key", _credentials.apiKey },
+                { "Id", Id }
+            };
+
+            var url = QueryHelpers.AddQueryString("Retrieve/v2.11/json3ex.ws", dict);
 
             HttpResponseMessage response = null;
             try

@@ -26,6 +26,7 @@ using Prime.Services;
 using Prime.Services.Clients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
+using System.Collections.Generic;
 
 namespace Prime
 {
@@ -167,6 +168,11 @@ namespace Prime
             });
 
             services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
+
+            services.AddSingleton(new AddressAutocompleteClientCredentials
+            {
+                apiKey = PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY
+            });
 
             services.AddHttpClient<IAddressAutocompleteClient, AddressAutocompleteClient>(client =>
             {

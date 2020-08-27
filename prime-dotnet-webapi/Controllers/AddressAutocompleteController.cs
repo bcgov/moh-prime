@@ -27,6 +27,7 @@ namespace Prime.Controllers
         // GET: api/AddressAutocomplete/find
         /// <summary>
         /// Gets autocomplete results
+        /// Find addresses matching the search term.
         /// </summary>
         /// <param name="searchTerm"></param>
         /// <param name="lastId"></param>
@@ -47,6 +48,7 @@ namespace Prime.Controllers
         // GET: api/AddressAutocomplete/retrieve
         /// <summary>
         /// Gets autocomplete retrieve result
+        /// Returns the full address details based on the Id.
         /// </summary>
         /// <param name="id"></param>
         [HttpGet("retrieve", Name = nameof(Retrieve))]
@@ -55,6 +57,10 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AddressAutocompleteRetrieveResponse>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> Retrieve([FromQuery] string id)
         {
+            if (id == null)
+            {
+                return BadRequest();
+            }
             var result = await _addressAutocompleteClient.Retrieve(id);
             return Ok(ApiResponse.Result(result));
         }
