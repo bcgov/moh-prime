@@ -585,5 +585,14 @@ namespace Prime.Controllers
 
             return Ok(ApiResponse.Result(token));
         }
+
+        [HttpPut(Name = nameof(ImportEnrollees))]
+        [Authorize(Policy = AuthConstants.SUPER_ADMIN_POLICY)]
+        public async Task<ActionResult> ImportEnrollees(IEnumerable<Enrollee> enrollees)
+        {
+            await _enrolleeService.ImportEnrollees(enrollees);
+
+            return Ok();
+        }
     }
 }
