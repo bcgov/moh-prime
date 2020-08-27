@@ -46,19 +46,11 @@ namespace Prime.Services.Clients
                 throw new AddressAutocompleteApiException($"Error code {response.StatusCode} was provided when calling AddressAutocompleteClient::Find");
             }
 
-            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
-            var items = body.Property("Items").Value;
+            string body = await response.Content.ReadAsStringAsync();
 
-            var autocompleteResponse = new List<AddressAutocompleteFindResponse>();
+            _logger.LogInformation($"GET autocomplete find {body}");
 
-            foreach (var item in items)
-            {
-                autocompleteResponse.Add(item.ToObject<AddressAutocompleteFindResponse>());
-            }
-
-            _logger.LogInformation("GET autocomplete find {@JObject}", JsonConvert.SerializeObject(body));
-
-            return autocompleteResponse;
+            return JsonConvert.DeserializeObject<ApiResponse<AddressAutocompleteFindResponse>>(body).Items;
         }
 
         public async Task<IEnumerable<AddressAutocompleteRetrieveResponse>> Retrieve(string Id)
@@ -84,19 +76,16 @@ namespace Prime.Services.Clients
                 throw new AddressAutocompleteApiException($"Error code {response.StatusCode} was provided when calling AddressAutocompleteClient::Retrieve");
             }
 
-            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
-            var items = body.Property("Items").Value;
+            string body = await response.Content.ReadAsStringAsync();
 
-            var autocompleteResponse = new List<AddressAutocompleteRetrieveResponse>();
+            _logger.LogInformation($"GET autocomplete retrieve {body}");
 
-            foreach (var item in items)
-            {
-                autocompleteResponse.Add(item.ToObject<AddressAutocompleteRetrieveResponse>());
-            }
+            return JsonConvert.DeserializeObject<ApiResponse<AddressAutocompleteRetrieveResponse>>(body).Items;
+        }
 
-            _logger.LogInformation("GET autocomplete retrieve {@JObject}", JsonConvert.SerializeObject(body));
-
-            return autocompleteResponse;
+        private class ApiResponse<T>
+        {
+            public IEnumerable<T> Items { get; set; }
         }
 
         public class AddressAutocompleteFindResponse
