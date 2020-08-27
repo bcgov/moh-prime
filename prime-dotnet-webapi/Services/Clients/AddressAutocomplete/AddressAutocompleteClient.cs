@@ -24,7 +24,6 @@ namespace Prime.Services.Clients
 
         public async Task<IEnumerable<AddressAutocompleteFindResponse>> Find(string searchTerm, string lastId)
         {
-            //Build the url
             var url = "Find/v2.10/json3ex.ws?";
             url += "Key=" + System.Web.HttpUtility.UrlEncode(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY);
             url += "&SearchTerm=" + System.Web.HttpUtility.UrlEncode(searchTerm);
@@ -64,7 +63,6 @@ namespace Prime.Services.Clients
 
         public async Task<IEnumerable<AddressAutocompleteRetrieveResponse>> Retrieve(string Id)
         {
-            //Build the url
             var url = "Retrieve/v2.11/json3ex.ws?";
             url += "Key=" + System.Web.HttpUtility.UrlEncode(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY);
             url += "&Id=" + System.Web.HttpUtility.UrlEncode(Id);
