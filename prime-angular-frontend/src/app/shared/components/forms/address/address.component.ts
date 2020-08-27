@@ -21,6 +21,8 @@ export class AddressComponent implements OnInit {
   @Input() public form: FormGroup;
   // List of controls that should be displayed
   @Input() public formControlNames: string[];
+  // Only BC addresses can be selected from autocomplete
+  @Input() bcOnly: boolean;
 
   public countries: Config<string>[];
   // Includes provinces and states

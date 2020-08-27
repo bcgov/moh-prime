@@ -1,9 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } from '@shared/models/address-autocomplete.model';
 import { AddressAutocompleteResource } from '@shared/services/address-autocomplete-resource.service';
 import { Address } from '@shared/models/address.model';
+import { ToastService } from '@core/services/toast.service';
 
 @Component({
   selector: 'app-address-autocomplete',
@@ -12,15 +13,18 @@ import { Address } from '@shared/models/address.model';
 })
 export class AddressAutocompleteComponent implements OnInit {
   @Output() autocompleteAddress: EventEmitter<Address>;
+  @Input() bcOnly: boolean;
 
   public addressAutocompleteFields: AddressAutocompleteFindResponse[];
   public addressRetrieved: AddressAutocompleteRetrieveResponse;
   public form: FormGroup;
 
   constructor(
-    private addressAutocompleteResource: AddressAutocompleteResource
+    private addressAutocompleteResource: AddressAutocompleteResource,
+    private toastService: ToastService
   ) {
     this.autocompleteAddress = new EventEmitter<Address>();
+    this.bcOnly = false;
   }
 
   public get autocomplete(): FormControl {
@@ -28,6 +32,7 @@ export class AddressAutocompleteComponent implements OnInit {
   }
 
   public onAutocomplete(id: string) {
+    this.addressRetrieved = null;
     this.addressAutocompleteResource.retrieve(id)
       .subscribe((response: AddressAutocompleteRetrieveResponse[]) => {
         response.map((field) => {
@@ -42,7 +47,10 @@ export class AddressAutocompleteComponent implements OnInit {
         address.street = this.addressRetrieved.line1;
         address.street2 = this.addressRetrieved.line2;
         address.postal = this.addressRetrieved.postalCode;
-        this.autocompleteAddress.emit(address);
+
+        (!this.bcOnly || address.provinceCode === 'BC')
+          ? this.autocompleteAddress.emit(address)
+          : this.toastService.openErrorToast('Address must be in BC');
       });
   }
 
