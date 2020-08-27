@@ -36,6 +36,10 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AddressAutocompleteFindResponse>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> Find([FromQuery] string searchTerm, [FromQuery] string lastId = null)
         {
+            if (searchTerm == null)
+            {
+                return BadRequest();
+            }
             var result = await _addressAutocompleteClient.Find(searchTerm, lastId);
             return Ok(ApiResponse.Result(result));
         }

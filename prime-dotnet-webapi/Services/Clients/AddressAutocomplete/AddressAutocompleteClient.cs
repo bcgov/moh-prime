@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace Prime.Services.Clients
 {
@@ -24,10 +25,24 @@ namespace Prime.Services.Clients
 
         public async Task<IEnumerable<AddressAutocompleteFindResponse>> Find(string searchTerm, string lastId)
         {
-            var url = "Find/v2.10/json3ex.ws?";
-            url += "Key=" + System.Web.HttpUtility.UrlEncode(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY);
-            url += "&SearchTerm=" + System.Web.HttpUtility.UrlEncode(searchTerm);
-            url += "&LastId=" + System.Web.HttpUtility.UrlEncode(lastId);
+            // var url = "Find/v2.10/json3ex.ws?";
+            // url += "Key=" + System.Web.HttpUtility.UrlEncode(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY);
+            // url += "&SearchTerm=" + System.Web.HttpUtility.UrlEncode(searchTerm);
+            // url += "&LastId=" + System.Web.HttpUtility.UrlEncode(lastId);
+
+            var dict = new Dictionary<string, string>()
+            {
+                { "Key", PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY },
+                { "SearchTerm", searchTerm }
+            };
+
+            if (lastId != null)
+            {
+                dict.Add("LastId", lastId);
+            }
+
+            var url = QueryHelpers.AddQueryString("Find/v2.10/json3ex.ws", dict);
+
 
             HttpResponseMessage response = null;
             try

@@ -51,10 +51,12 @@ export class AddressAutocompleteComponent implements OnInit {
 
     this.autocomplete.valueChanges
       .subscribe(() => {
-        this.addressAutocompleteResource.find(this.autocomplete.value)
-          .subscribe((response: AddressAutocompleteFindResponse[]) => {
-            this.addressAutocompleteFields = response;
-          });
+        if (this.autocomplete.value) {
+          this.addressAutocompleteResource.find(this.autocomplete.value)
+            .subscribe((response: AddressAutocompleteFindResponse[]) => {
+              this.addressAutocompleteFields = response;
+            });
+        }
       });
   }
 }
