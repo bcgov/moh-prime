@@ -219,10 +219,5 @@ namespace PrimeTests.Mocks
 
             return Task.FromResult(new PermissionsRecord { UserId = enrollee.UserId });
         }
-
-        public Task ImportEnrollees(IEnumerable<Enrollee> enrollees)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
