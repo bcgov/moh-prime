@@ -116,7 +116,7 @@ namespace Prime.Services
                 .If(searchOptions.StatusCode.HasValue, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreements = _context.NewestAgreements })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .ToListAsync();
         }
@@ -124,6 +124,7 @@ namespace Prime.Services
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
             Enrollee enrollee = await this.GetBaseEnrolleeQuery()
+                .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
 
             if (enrollee == null

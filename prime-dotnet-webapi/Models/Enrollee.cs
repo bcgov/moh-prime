@@ -179,6 +179,20 @@ namespace Prime.Models
         }
 
         /// <summary>
+        /// The ID of the Enrollee's most recently accepted Agreement.
+        /// </summary>
+        [NotMapped]
+        [Computed]
+        public int? CurrentAgreementId
+        {
+            get => AccessTerms
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.AcceptedDate != null)
+                .Select(a => (int?)a.Id)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
         /// The expiry date of the Enrollee's most recently accepted Access Term.
         /// </summary>
         [NotMapped]
@@ -197,49 +211,6 @@ namespace Prime.Models
         public int DisplayId
         {
             get => Id + DISPLAY_OFFSET;
-        }
-
-        /// <summary>
-        /// Under Review -> ""
-        /// Locked, Declined -> "NA"
-        /// Required TOA -> "Pending"
-        /// Editable (AND on/after their renewal date) -> ""
-        /// Editable (AND before their renewal date) -> Is their signed TOA the most current version -> "Yes"/"No"
-        /// </summary>
-        [NotMapped]
-        public string CurrentTOAStatus
-        {
-            get
-            {
-                if (CurrentStatus == null)
-                {
-                    // Bail if Statuses are not loaded
-                    return null;
-                }
-
-                switch (CurrentStatus.GetStatusType())
-                {
-                    case StatusType.UnderReview:
-                        return "";
-                    case StatusType.Locked:
-                    case StatusType.Declined:
-                        return "N/A";
-                    case StatusType.RequiresToa:
-                        return "Pending";
-                    case StatusType.Editable:
-                        if (ExpiryDate == null || ExpiryDate <= DateTimeOffset.Now)
-                        {
-                            return "";
-                        }
-                        else
-                        {
-                            return HasLatestAgreement() ? "Yes" : "No";
-                        }
-
-                    default:
-                        return null;
-                }
-            }
         }
 
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
