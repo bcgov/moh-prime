@@ -1,5 +1,6 @@
 export class AdjudicationRoutes {
   public static ADJUDICATION = 'adjudication';
+
   public static ENROLLEES = 'enrollees';
   public static ENROLLEE_ENROLMENTS = 'enrolments';
   public static ENROLLEE_CURRENT_ENROLMENT = 'current-enrolment';
@@ -10,9 +11,10 @@ export class AdjudicationRoutes {
   public static ENROLLEE_ADJUDICATOR_NOTES = 'notes';
   public static ENROLLEE_EVENT_LOG = 'event-log';
 
+  // SITE_REGISTRATIONS is an alias for ORGANIZATIONS in the routing hierarchy
   public static SITE_REGISTRATIONS = 'site-registrations';
+  // SITE_REGISTRATION is an alias for SITES in the routing hierarchy
   public static SITE_REGISTRATION = 'site-registration';
-  public static SITE_ADJUDICATION = 'site-adjudication';
 
   public static ORGANIZATION_INFORMATION = 'organization-information';
 

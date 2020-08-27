@@ -67,7 +67,6 @@ namespace Prime.Services
                     }
                 }
 
-                _enrolleeDb.Privileges = await this.GetPrivilegesForEnrolleeAsync(enrollee);
                 _context.Entry(_enrolleeDb).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();

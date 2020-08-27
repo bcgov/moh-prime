@@ -38,5 +38,6 @@ case "$1" in
         notifyGitHub $@
         ;;
     *)
-    echo "You\'re doing it wrong..."
+    echo "You are doing it wrong..."
+    ;;
 esac

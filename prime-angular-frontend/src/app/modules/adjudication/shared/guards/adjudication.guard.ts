@@ -33,7 +33,7 @@ export class AdjudicationGuard extends BaseGuard {
   // TODO update to be two observables merged and resolved using combineLatest,
   // but requires wrapping the Keycloak service so it uses obseravables first
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
-    const admin$ = from(this.authService.getAdmin())
+    const admin$ = this.authService.getAdmin$()
       .pipe(
         exhaustMap(({ userId, firstName, lastName, email, idir }: Admin) => {
           const admin = {
@@ -49,7 +49,7 @@ export class AdjudicationGuard extends BaseGuard {
             ? this.adjudicationResource.createAdmin(admin)
             : Promise.resolve(admin);
         })
-      ).toPromise();
+      );
 
     const redirect$ = new Promise(async (resolve, reject) => {
       const authenticated = await this.authService.isLoggedIn();
@@ -66,7 +66,7 @@ export class AdjudicationGuard extends BaseGuard {
       return reject(false);
     });
 
-    return Promise.all([admin$, redirect$])
+    return Promise.all([admin$.toPromise(), redirect$])
       .then(([admin, result]: [Admin, boolean]) => result);
   }
 }
