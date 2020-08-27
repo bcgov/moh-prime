@@ -1,6 +1,9 @@
+<app-address-autocomplete (autocompleteAddress)="onAutocomplete($event)"></app-address-autocomplete>
+
 <div [formGroup]="form">
 
   <div class="row">
+
     <div *ngIf="showFormControl('countryCode')"
          class="col-12"
          [class]="getFormControlOrder('countryCode')">

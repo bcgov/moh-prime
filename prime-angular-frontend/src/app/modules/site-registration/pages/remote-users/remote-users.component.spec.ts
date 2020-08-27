@@ -16,7 +16,10 @@ describe('RemoteUsersComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RemoteUsersComponent],
+      declarations: [
+        RemoteUsersComponent,
+        AddressPipe
+      ],
       imports: [
         BrowserAnimationsModule,
         HttpClientTestingModule,
