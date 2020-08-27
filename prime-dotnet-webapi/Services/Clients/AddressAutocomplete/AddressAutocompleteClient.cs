@@ -61,8 +61,6 @@ namespace Prime.Services.Clients
 
             string body = await response.Content.ReadAsStringAsync();
 
-            _logger.LogInformation($"GET autocomplete find {body}");
-
             return JsonConvert.DeserializeObject<ApiResponse<AddressAutocompleteFindResponse>>(body).Items;
         }
 
@@ -94,8 +92,6 @@ namespace Prime.Services.Clients
             }
 
             string body = await response.Content.ReadAsStringAsync();
-
-            _logger.LogInformation($"GET autocomplete retrieve {body}");
 
             return JsonConvert.DeserializeObject<ApiResponse<AddressAutocompleteRetrieveResponse>>(body).Items;
         }

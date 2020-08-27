@@ -73,8 +73,8 @@ export class AddressComponent implements OnInit {
     return this.formUtilsService.isRequired(this.form, path);
   }
 
-  public onAutocomplete(address: Address) {
-    this.form.patchValue(address);
+  public onAutocomplete({ id, ...remainder }: Address) {
+    this.form.patchValue(remainder);
   }
 
   public ngOnInit() {
@@ -94,7 +94,6 @@ export class AddressComponent implements OnInit {
           this.provinceCode.reset();
           this.postal.reset();
         }
-
         this.setAddress(nextCountry);
       });
   }
