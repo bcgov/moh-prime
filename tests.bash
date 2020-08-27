@@ -13,6 +13,10 @@ function dotnetTests()
 {
     curl "http://sonarqube:9000/api/qualitygates/show"
 
+    # Clean out previous test runs
+    rm -rf "./sonarqube"
+    rm -rf "./BuildReports"
+    
     source api.conf
     echo "Building .NET application..."
     dotnet build
