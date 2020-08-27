@@ -146,7 +146,7 @@ pipeline {
             steps {
                 script {
                     checkout scm
-                    sh "./player.sh scan $BRANCH_LOWER"
+                    sh "./player.sh scan"
                 }
             }
         }
@@ -160,7 +160,7 @@ pipeline {
                     agent { label 'code-tests' }
                     steps {
                         checkout scm
-                        sh "./player.sh scan $BRANCH_LOWER"
+                        sh "./player.sh scan"
                     }
                 }
                 stage('Zap') {
