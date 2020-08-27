@@ -75,6 +75,7 @@ import { ImageComponent } from './components/dialogs/content/image/image.compone
 import { OverviewSectionComponent } from './components/overview-section/overview-section.component';
 import { OverviewContainerComponent } from './components/site/overview-container/overview-container.component';
 import { CollegeCertificationFormComponent } from './components/college-certification-form/college-certification-form.component';
+import { AddressAutocompleteComponent } from './components/address-autocomplete/address-autocomplete.component';
 
 @NgModule({
   declarations: [
@@ -136,7 +137,8 @@ import { CollegeCertificationFormComponent } from './components/college-certific
     ImageComponent,
     OverviewSectionComponent,
     OverviewContainerComponent,
-    CollegeCertificationFormComponent
+    CollegeCertificationFormComponent,
+    AddressAutocompleteComponent
   ],
   imports: [
     CommonModule,
