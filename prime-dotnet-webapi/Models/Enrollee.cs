@@ -269,7 +269,7 @@ namespace Prime.Models
         {
             if (EnrolleeCareSettings == null)
             {
-                throw new InvalidOperationException($"{nameof(EnrolleeCareSettings)} cannnot be null");
+                throw new InvalidOperationException($"{nameof(EnrolleeCareSettings)} cannot be null");
             }
 
             return EnrolleeCareSettings.Any(o => o.IsType(type));
