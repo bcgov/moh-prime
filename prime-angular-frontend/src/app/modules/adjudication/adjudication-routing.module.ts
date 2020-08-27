@@ -27,10 +27,12 @@ const routes: Routes = [
   {
     path: AdjudicationRoutes.MODULE_PATH,
     component: AdjudicationDashboardComponent,
-    canActivate: [UnsupportedGuard],
-    canActivateChild: [
-      AuthenticationGuard,
+    canActivate: [
+      UnsupportedGuard,
       AdjudicationGuard
+    ],
+    canActivateChild: [
+      AuthenticationGuard
     ],
     resolve: [ConfigResolver],
     children: [
