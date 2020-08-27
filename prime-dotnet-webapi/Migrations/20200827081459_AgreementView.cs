@@ -12,14 +12,14 @@ namespace Prime.Migrations
                 SELECT DISTINCT ON(""Discriminator"")
 	                ""Id""
                 FROM public.""Agreement""
-                ORDER BY ""Discriminator"", ""EffectiveDate"" DESC
+                ORDER BY ""Discriminator"", ""EffectiveDate"" DESC;
             ");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(@"
-                DROP VIEW public.""NewestAgreements""
+                DROP VIEW public.""NewestAgreements"";
             ");
         }
     }
