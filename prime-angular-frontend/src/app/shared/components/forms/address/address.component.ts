@@ -8,6 +8,7 @@ import { ConfigService } from '@config/config.service';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
+import { Address } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-address',
@@ -70,6 +71,10 @@ export class AddressComponent implements OnInit {
 
   public isRequired(path: string): boolean {
     return this.formUtilsService.isRequired(this.form, path);
+  }
+
+  public onAutocomplete(address: Address) {
+    this.form.patchValue(address);
   }
 
   public ngOnInit() {

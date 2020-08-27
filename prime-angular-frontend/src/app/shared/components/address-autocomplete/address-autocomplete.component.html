@@ -1,0 +1,28 @@
+<div [formGroup]="form">
+
+  <div class="row">
+
+    <div class="col-12">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Address Autocomplete"
+               formControlName="autocomplete"
+               required="false"
+               [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let field of addressAutocompleteFields"
+                      [value]="field.text"
+                      (click)="onAutocomplete(field.id)">
+            {{ field.text }}
+            {{ field.description }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+    </div>
+
+  </div>
+
+</div>
