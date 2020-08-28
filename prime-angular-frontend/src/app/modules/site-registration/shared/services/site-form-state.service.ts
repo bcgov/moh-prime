@@ -13,6 +13,7 @@ import { RemoteUserLocation } from '@registration/shared/models/remote-user-loca
 import { RemoteUserCertification } from '../models/remote-user-certification.model';
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
+import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 
 @Injectable({
   providedIn: 'root'
@@ -163,16 +164,12 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     }
 
     if (site.businessHours?.length) {
-      const array = [];
-      for (let index = 0; index < 7; index++) {
-        const day = site.businessHours.filter(y => y.day === index).pop();
-        if (day) {
-          array.push(day);
-        } else {
-          array.push({});
-        }
-      }
-      this.hoursOperationForm.get('businessDays').patchValue(array);
+      const businessDays = [...Array(7).keys()]
+        .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
+          days.push(site.businessHours.find(bh => bh.day === dayOfWeek) ?? {});
+          return days;
+        }, []);
+      this.hoursOperationForm.get('businessDays').patchValue(businessDays);
     }
 
     if (site.remoteUsers?.length) {
@@ -269,48 +266,25 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   }
 
   private buildHoursOperationForm(): FormGroup {
+    const groups = [...new Array(7)].map(() =>
+      this.fb.group({
+        startTime: [null, []],
+        endTime: [null, []],
+      }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') })
+    );
+
     return this.fb.group({
-      businessDays: this.fb.array([
-        this.fb.group({
-          startTime: [null, [Validators.required]],
-          endTime: [null, []],
-        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
-        this.fb.group({
-          startTime: [null, []],
-          endTime: [null, []],
-        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
-        this.fb.group({
-          startTime: [null, []],
-          endTime: [null, []],
-        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
-        this.fb.group({
-          startTime: [null, []],
-          endTime: [null, []],
-        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
-        this.fb.group({
-          startTime: [null, []],
-          endTime: [null, []],
-        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
-        this.fb.group({
-          startTime: [null, []],
-          endTime: [null, []],
-        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
-        this.fb.group({
-          startTime: [null, []],
-          endTime: [null, []],
-        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
-      ])
+      businessDays: this.fb.array(groups)
     });
   }
 
   private generateBusinessHoursJson(): BusinessDay[] {
     const { businessDays } = this.hoursOperationForm.getRawValue();
-    return businessDays.map((item, index) => {
-      if (item.startTime !== null) {
-        return new BusinessDay(index, item.startTime, item.endTime);
-      }
-      return new BusinessDay(index, null, null);
-    }).filter((day: BusinessDay) => day.startTime !== null);
+    return businessDays
+      .map((hours: BusinessDayHours, dayOfWeek: number) =>
+        new BusinessDay(dayOfWeek, hours.startTime ?? null, hours.endTime ?? null)
+      )
+      .filter((day: BusinessDay) => day.startTime !== null);
   }
 
   private buildRemoteUsersForm(): FormGroup {
