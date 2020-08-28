@@ -11,10 +11,10 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
-import { BusinessLicenceDocument } from '../../modules/site-registration/shared/models/business-licence-document.model';
+import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
+import { BusinessDay } from '@registration/shared/models/business-day.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -86,7 +86,6 @@ export class SiteResource {
   public updateSite(site: Site): NoContent {
     // TODO separate this out into a proper adapter
     if (site.businessHours?.length) {
-      console.log(site.businessHours)
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
           businessDay.startTime = `${businessDay.startTime.substring(0, 2)}:${businessDay.startTime.substring(2, 4)}:00`;

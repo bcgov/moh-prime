@@ -15,19 +15,28 @@
         </ng-container>
       </app-page-subheader2>
 
+      <app-alert *ngIf="hasNoBusinessHoursError"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          No hours of operation have been chosen.
+        </ng-container>
+      </app-alert>
+
       <ng-container formArrayName="businessDays"
                     *ngFor="let businessDay of businessDays.controls; let i = index;">
         <div class="row">
-          <span class="col-md-2 col-4 mt-3">{{getWeekDay(i)}}</span>
+          <span class="col-md-2 col-4 mt-3">{{ WeekDay[i] }}</span>
           <mat-slide-toggle class="col-md-2 col-4 mt-3"
                             color="primary"
-                            (change)="onDayToggle(businessDay, i)"
-                            [checked]="hasDay(i)">
-            {{ (hasDay(i)) ? "Open" : "Closed" }}
+                            (change)="onDayToggle(businessDay, $event)"
+                            [checked]="hasDay(businessDay)">
+            {{ (hasDay(businessDay)) ? "Open" : "Closed" }}
           </mat-slide-toggle>
           <ng-container [formGroup]="businessDay">
             <mat-form-field class="col-md-3 col-12"
-                            [class.hide]="!hasDay(i)">
+                            [class.hide]="!hasDay(businessDay)">
               <mat-label>Opens at</mat-label>
               <input matInput
                      mask="AB:CB"
@@ -45,7 +54,7 @@
               </mat-error>
             </mat-form-field>
             <mat-form-field class="col-md-3 col-12"
-                            [class.hide]="!hasDay(i)">
+                            [class.hide]="!hasDay(businessDay)">
               <mat-label>Closes at</mat-label>
               <input matInput
                      mask="AB:CB"
