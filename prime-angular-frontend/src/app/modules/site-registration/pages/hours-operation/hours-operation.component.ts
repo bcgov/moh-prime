@@ -57,12 +57,15 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     return this.form.get('businessDays') as FormArray;
   }
 
-  public onDayToggle(group: FormGroup, index: number) {
-    if (this.hasDay(index)) {
-      this.formUtilsService.resetAndClearValidators(group);
-    } else {
-      this.formUtilsService.setValidators(group, [Validators.required]);
-      group.patchValue({ startTime: '0900', endTime: '1700' });
+  public onSubmit() {
+    if (this.formUtilsService.checkValidity(this.businessDays)) {
+      const payload = this.siteFormStateService.json;
+      this.siteResource
+        .updateSite(payload)
+        .subscribe(() => {
+          this.form.markAsPristine();
+          this.nextRoute();
+        });
     }
   }
 
@@ -74,16 +77,12 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     return (this.businessDays.value[index].startTime) ? true : false;
   }
 
-  public onSubmit() {
-    console.log(this.siteFormStateService.json);
-    if (this.formUtilsService.checkValidity(this.businessDays)) {
-      const payload = this.siteFormStateService.json;
-      this.siteResource
-        .updateSite(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
+  public onDayToggle(group: FormGroup, index: number) {
+    if (this.hasDay(index)) {
+      this.formUtilsService.resetAndClearValidators(group);
+    } else {
+      this.formUtilsService.setValidators(group, [Validators.required]);
+      group.patchValue({ startTime: '0900', endTime: '1700' });
     }
   }
 
