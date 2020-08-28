@@ -71,7 +71,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
 
   public onSubmit() {
     const payload = this.siteFormStateService.json;
-    if (this.formUtilsService.checkValidity(this.businessDays) && !payload.businessHours) {
+    if (this.formUtilsService.checkValidity(this.businessDays) && payload.businessHours.length) {
       this.hasNoBusinessHoursError = false;
       this.siteResource
         .updateSite(payload)
