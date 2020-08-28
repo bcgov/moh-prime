@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
+import { WeekDay } from '@angular/common';
 
 import { Subscription, Observable } from 'rxjs';
 
-import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
-import { UtilsService, SortWeight } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -17,9 +17,6 @@ import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { WeekDay } from '@angular/common';
-import { FormGroupValidators } from '@lib/validators/form-group.validators';
-import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 
 export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -44,6 +41,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public hasNoHours: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public WeekDay = WeekDay;
   public busDayHoursErrStateMatcher: BusinessDayHoursErrorStateMatcher;
 
   public customPattern = {
@@ -58,7 +56,6 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
-    private utilsService: UtilsService,
     private dialog: MatDialog,
     public formUtilsService: FormUtilsService,
   ) {
@@ -82,16 +79,12 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     }
   }
 
-  public getWeekDay(num: number) {
-    return WeekDay[num];
-  }
-
-  public hasDay(index: number): boolean {
-    return (this.businessDays.value[index].startTime !== null) ? true : false;
+  public hasDay(group: FormGroup): boolean {
+    return !!group.get('startTime').value;
   }
 
   public onDayToggle(group: FormGroup, index: number): void {
-    if (this.hasDay(index)) {
+    if (this.hasDay(group)) {
       this.formUtilsService.resetAndClearValidators(group);
     } else {
       group.patchValue({ startTime: '0900', endTime: '1700' });
