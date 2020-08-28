@@ -58,12 +58,13 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onDayToggle(control: FormControl, index: number) {
+    console.log(control.value, index);
+
     if (this.hasDay(index)) {
       this.formUtilsService.resetAndClearValidators(control);
     } else {
       this.formUtilsService.setValidators(control, [Validators.required]);
-      // TODO: Maybe a better way to trigger open
-      control.value.startTime = '0000';
+      control.patchValue({ startTime: '0000' });
     }
   }
 
@@ -86,10 +87,6 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
           this.nextRoute();
         });
     }
-  }
-
-  public onRemove(index: number) {
-    this.businessDays.removeAt(index);
   }
 
   public onBack() {
@@ -125,5 +122,4 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
   }
-
 }
