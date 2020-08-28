@@ -28,7 +28,6 @@ namespace PrimeTests.UnitTests
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 automaticAdjudicationService ?? A.Fake<ISubmissionRulesService>(),
                 emailService ?? A.Fake<IEmailService>(),
-                privilegeService ?? A.Fake<IPrivilegeService>(),
                 enroleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>(),
                 businessEventService ?? A.Fake<IBusinessEventService>()
             );
