@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
@@ -19,6 +19,17 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { SiteService } from '@registration/shared/services/site.service';
 import { WeekDay } from '@angular/common';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
+import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+
+export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
+  public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
+    const invalidCtrl = super.isErrorState(control, form);
+    // Apply custom validation from parent form group
+    const dirtyOrSubmitted = (control?.dirty || form?.submitted);
+    const invalidParent = !!(control?.parent && control?.parent.hasError('lessthan') && dirtyOrSubmitted);
+    return (invalidCtrl || invalidParent);
+  }
+}
 
 @Component({
   selector: 'app-hours-operation',
@@ -33,6 +44,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public hasNoHours: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public busDayHoursErrStateMatcher: BusinessDayHoursErrorStateMatcher;
 
   public customPattern = {
     A: { pattern: new RegExp('\[0-2\]') },
@@ -113,6 +125,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
 
   private createFormInstance() {
     this.form = this.siteFormStateService.hoursOperationForm;
+    this.busDayHoursErrStateMatcher = new BusinessDayHoursErrorStateMatcher();
   }
 
   private initForm() {

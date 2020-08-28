@@ -33,8 +33,14 @@
                      mask="AB:CB"
                      [patterns]="customPattern"
                      formControlName="startTime"
-                     placeholder="00:00">
-              <mat-error>
+                     placeholder="00:00"
+                     [errorStateMatcher]="busDayHoursErrStateMatcher">
+              <mat-error *ngIf="businessDay.hasError('lessthan')">
+                Invalid
+                <!-- TODO need better error message, but width makes messaging hard due to wrapping -->
+                <!-- Opening hours must be earlier than closing hours -->
+              </mat-error>
+              <mat-error *ngIf="businessDay.get('startTime').hasError('required')">
                 Required
               </mat-error>
             </mat-form-field>
@@ -45,8 +51,14 @@
                      mask="AB:CB"
                      [patterns]="customPattern"
                      formControlName="endTime"
-                     placeholder="00:00">
-              <mat-error>
+                     placeholder="00:00"
+                     [errorStateMatcher]="busDayHoursErrStateMatcher">
+              <mat-error *ngIf="businessDay.hasError('lessthan')">
+                Invalid
+                <!-- TODO need better error message, but width makes messaging hard due to wrapping -->
+                <!-- Opening hours must be earlier than closing hours -->
+              </mat-error>
+              <mat-error *ngIf="businessDay.get('endTime').hasError('required')">
                 Required
               </mat-error>
             </mat-form-field>
