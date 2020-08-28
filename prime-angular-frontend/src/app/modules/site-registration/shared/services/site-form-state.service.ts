@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
@@ -10,9 +11,8 @@ import { Site } from '@registration/shared/models/site.model';
 import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
-import { RemoteUserCertification } from '../models/remote-user-certification.model';
-import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
-import { FormGroupValidators } from '@lib/validators/form-group.validators';
+import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 
 @Injectable({

@@ -1,7 +1,7 @@
-import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 import { Address } from '@shared/models/address.model';
 
 import { BusinessLicenceDocument } from './business-licence-document.model';
+import { BusinessDay } from './business-day.model';
 import { Organization } from './organization.model';
 import { Party } from './party.model';
 import { RemoteUser } from './remote-user.model';
