@@ -1,4 +1,5 @@
-<app-address-autocomplete (autocompleteAddress)="onAutocomplete($event)"></app-address-autocomplete>
+<app-address-autocomplete [bcOnly]="bcOnly"
+                          (autocompleteAddress)="onAutocomplete($event)"></app-address-autocomplete>
 
 <div [formGroup]="form">
 
