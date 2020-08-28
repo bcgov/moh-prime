@@ -64,7 +64,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
       this.formUtilsService.resetAndClearValidators(control);
     } else {
       this.formUtilsService.setValidators(control, [Validators.required]);
-      control.patchValue({ startTime: '0000' });
+      control.patchValue({ startTime: '0900', endTime: '1700' });
     }
   }
 
