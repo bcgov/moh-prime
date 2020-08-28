@@ -21,7 +21,6 @@ namespace PrimeTests.Services
         public EnrolleeServiceTests() : base(new object[] {
             new SubmissionRulesServiceMock(),
             new EmailServiceMock(),
-            new PrivilegeServiceMock(),
             new EnrolleeProfileVersionServiceMock(),
             new BusinessEventServiceMock()
         })
