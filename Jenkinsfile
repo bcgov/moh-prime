@@ -137,19 +137,6 @@ pipeline {
         //     }
         //   }
         // }
-        stage('Quality Check (PR)') {
-            options {
-                timeout(time: 30, unit: 'MINUTES') // timeout on this stage
-            }
-            when { expression { ( BRANCH_NAME != 'develop' ) } }
-            agent { label 'code-tests' }
-            steps {
-                script {
-                    checkout scm
-                    sh "./player.sh scan"
-                }
-            }
-        }
         stage('Quality Check') {
             options {
                 timeout(time: 30, unit: 'MINUTES') // timeout on this stage
