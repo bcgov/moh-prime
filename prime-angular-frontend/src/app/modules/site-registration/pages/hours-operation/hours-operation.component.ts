@@ -17,6 +17,7 @@ import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -43,6 +44,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public SiteRoutes = SiteRoutes;
   public WeekDay = WeekDay;
   public busDayHoursErrStateMatcher: BusinessDayHoursErrorStateMatcher;
+  public hasNoBusinessHoursError: boolean;
 
   public customPattern = {
     A: { pattern: new RegExp('\[0-2\]') },
@@ -68,14 +70,17 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.businessDays)) {
-      const payload = this.siteFormStateService.json;
+    const payload = this.siteFormStateService.json;
+    if (this.formUtilsService.checkValidity(this.businessDays) && !payload.businessHours) {
+      this.hasNoBusinessHoursError = false;
       this.siteResource
         .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
         });
+    } else {
+      this.hasNoBusinessHoursError = true;
     }
   }
 
@@ -83,7 +88,11 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     return !!group.get('startTime').value;
   }
 
-  public onDayToggle(group: FormGroup, index: number): void {
+  public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
+    if (change.checked) {
+      this.hasNoBusinessHoursError = false;
+    }
+
     if (this.hasDay(group)) {
       this.formUtilsService.resetAndClearValidators(group);
     } else {

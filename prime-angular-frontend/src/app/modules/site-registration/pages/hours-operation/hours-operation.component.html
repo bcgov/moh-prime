@@ -15,13 +15,22 @@
         </ng-container>
       </app-page-subheader2>
 
+      <app-alert *ngIf="hasNoBusinessHoursError"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          No hours of operation have been chosen.
+        </ng-container>
+      </app-alert>
+
       <ng-container formArrayName="businessDays"
                     *ngFor="let businessDay of businessDays.controls; let i = index;">
         <div class="row">
           <span class="col-md-2 col-4 mt-3">{{ WeekDay[i] }}</span>
           <mat-slide-toggle class="col-md-2 col-4 mt-3"
                             color="primary"
-                            (change)="onDayToggle(businessDay, i)"
+                            (change)="onDayToggle(businessDay, $event)"
                             [checked]="hasDay(businessDay)">
             {{ (hasDay(businessDay)) ? "Open" : "Closed" }}
           </mat-slide-toggle>
