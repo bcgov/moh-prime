@@ -10,7 +10,7 @@ namespace Prime.Migrations
             migrationBuilder.InsertData(
                 table: "Agreement",
                 columns: new[] { "Id", "CreatedTimeStamp", "CreatedUserId", "Discriminator", "EffectiveDate", "Text", "UpdatedTimeStamp", "UpdatedUserId" },
-                values: new object[] { 10, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), "CommunityPharmacistAgreement", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), @"<p class=""bold"">
+                values: new object[] { 10, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), "CommunityPharmacistAgreement", new DateTimeOffset(new DateTime(2020, 8, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), @"<p class=""bold"">
   By enrolling for PharmaNet access, you agree to the following terms (the “Agreement”). Please read them carefully.
 </p>
 

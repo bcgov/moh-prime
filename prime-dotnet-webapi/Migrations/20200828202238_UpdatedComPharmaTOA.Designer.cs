@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200828180306_UpdatedComPharmaTOA")]
+    [Migration("20200828202238_UpdatedComPharmaTOA")]
     partial class UpdatedComPharmaTOA
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -8915,7 +8915,7 @@ namespace Prime.Migrations
                             Id = 10,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            EffectiveDate = new DateTimeOffset(new DateTime(2020, 8, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             Text = @"<p class=""bold"">
   By enrolling for PharmaNet access, you agree to the following terms (the “Agreement”). Please read them carefully.
 </p>
