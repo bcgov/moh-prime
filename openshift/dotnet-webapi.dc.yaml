@@ -100,6 +100,18 @@ objects:
               - name: DB_HOST
                 value: "postgresql${SUFFIX}"
               
+              # Canada Post AddressComplete API related environment variables
+              - name: ADDRESS_AUTOCOMPLETE_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: ADDRESS_AUTOCOMPLETE_API_KEY
+                    name: "canada-post-addresscomplete-secrets"
+              - name: ADDRESS_AUTOCOMPLETE_API_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: ADDRESS_AUTOCOMPLETE_API_URL
+                    name: "canada-post-addresscomplete-secrets"
+
               # CHES (Common Hosted Email Service) related environment variables
               - name: CHES_API_URL
                 valueFrom:
