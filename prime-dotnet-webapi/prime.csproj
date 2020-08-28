@@ -37,6 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v1.html" />
+    <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v2.html" />
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v1.html" />
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v2.html" />
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v3.html" />
