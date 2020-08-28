@@ -49,7 +49,6 @@ export class SiteResource {
     return this.apiResource.get<Site>(`sites/${siteId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
-        // TODO split out into proper adapter
         map((site: Site) => {
           site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
             businessDay.startTime = businessDay.startTime.slice(0, -3).replace(':', '');
@@ -84,7 +83,6 @@ export class SiteResource {
   }
 
   public updateSite(site: Site): NoContent {
-    // TODO separate this out into a proper adapter
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
