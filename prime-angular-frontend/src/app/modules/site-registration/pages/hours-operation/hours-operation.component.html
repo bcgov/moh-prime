@@ -32,9 +32,11 @@
               <input matInput
                      mask="AB:CB"
                      [patterns]="customPattern"
-                     [dropSpecialCharacters]="false"
                      formControlName="startTime"
                      placeholder="00:00">
+              <mat-error *ngIf="businessDay.hasError('lessthan')">
+                Invalid
+              </mat-error>
             </mat-form-field>
             <mat-form-field class="col-md-3 col-12"
                             [class.hide]="!hasDay(i)">
@@ -42,9 +44,11 @@
               <input matInput
                      mask="AB:CB"
                      [patterns]="customPattern"
-                     [dropSpecialCharacters]="false"
                      formControlName="endTime"
                      placeholder="00:00">
+              <mat-error *ngIf="businessDay.hasError('lessthan')">
+                Invalid
+              </mat-error>
             </mat-form-field>
           </ng-container>
         </div>

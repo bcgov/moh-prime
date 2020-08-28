@@ -12,6 +12,7 @@ import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
 import { RemoteUserCertification } from '../models/remote-user-certification.model';
 import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
+import { FormGroupValidators } from '@lib/validators/form-group.validators';
 
 @Injectable({
   providedIn: 'root'
@@ -273,31 +274,31 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         this.fb.group({
           startTime: [null, [Validators.required]],
           endTime: [null, []],
-        }),
+        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
         this.fb.group({
           startTime: [null, []],
           endTime: [null, []],
-        }),
+        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
         this.fb.group({
           startTime: [null, []],
           endTime: [null, []],
-        }),
+        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
         this.fb.group({
           startTime: [null, []],
           endTime: [null, []],
-        }),
+        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
         this.fb.group({
           startTime: [null, []],
           endTime: [null, []],
-        }),
+        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
         this.fb.group({
           startTime: [null, []],
           endTime: [null, []],
-        }),
+        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
         this.fb.group({
           startTime: [null, []],
           endTime: [null, []],
-        }),
+        }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') }),
       ])
     });
   }
