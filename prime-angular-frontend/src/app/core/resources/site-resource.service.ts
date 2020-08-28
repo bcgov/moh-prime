@@ -86,7 +86,6 @@ export class SiteResource {
   public updateSite(site: Site): NoContent {
     // TODO separate this out into a proper adapter
     if (site.businessHours?.length) {
-      console.log(site.businessHours)
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
           businessDay.startTime = `${businessDay.startTime.substring(0, 2)}:${businessDay.startTime.substring(2, 4)}:00`;
