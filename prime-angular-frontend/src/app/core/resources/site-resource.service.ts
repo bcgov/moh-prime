@@ -11,10 +11,10 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
-import { BusinessLicenceDocument } from '../../modules/site-registration/shared/models/business-licence-document.model';
+import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
+import { BusinessDay } from '@registration/shared/models/business-day.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -52,13 +52,8 @@ export class SiteResource {
         // TODO split out into proper adapter
         map((site: Site) => {
           site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
-            businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
-            businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
-
-            if (businessDay.endTime === '24') {
-              businessDay.startTime = null;
-              businessDay.endTime = null;
-            }
+            businessDay.startTime = businessDay.startTime.slice(0, -3).replace(':', '');
+            businessDay.endTime = businessDay.endTime.slice(0, -3).replace(':', '');
             return businessDay;
           });
           return site;
@@ -93,12 +88,8 @@ export class SiteResource {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          if (businessDay.startTime === null && businessDay.endTime === null) {
-            businessDay.startTime = '0';
-            businessDay.endTime = '1.00';
-          }
-          businessDay.startTime = `${businessDay.startTime}:00:00`;
-          businessDay.endTime = `${businessDay.endTime}:00:00`;
+          businessDay.startTime = `${businessDay.startTime.substring(0, 2)}:${businessDay.startTime.substring(2, 4)}:00`;
+          businessDay.endTime = `${businessDay.endTime.substring(0, 2)}:${businessDay.endTime.substring(2, 4)}:00`;
           return businessDay;
         });
     } else {

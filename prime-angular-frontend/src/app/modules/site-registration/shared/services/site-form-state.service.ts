@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
@@ -10,7 +11,9 @@ import { Site } from '@registration/shared/models/site.model';
 import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
-import { RemoteUserCertification } from '../models/remote-user-certification.model';
+import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { BusinessDay } from '@registration/shared/models/business-day.model';
+import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 
 @Injectable({
   providedIn: 'root'
@@ -58,7 +61,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     const { careSettingCode, vendorCode } = this.careSettingTypeForm.getRawValue();
     const { doingBusinessAs } = this.businessForm.getRawValue();
     const { physicalAddress } = this.siteAddressForm.getRawValue();
-    const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
+    const businessHours = this.generateBusinessHoursJson();
     const remoteUsers = this.remoteUsersForm.getRawValue().remoteUsers
       .map((ru: RemoteUser) => {
         // Remove the ID from the remote user to simplify updates on the server
@@ -161,9 +164,12 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     }
 
     if (site.businessHours?.length) {
-      const array = this.hoursOperationForm.get('businessDays') as FormArray;
-      array.clear(); // Clear out existing indices
-      this.formUtilsService.formArrayPush(array, site.businessHours);
+      const businessDays = [...Array(7).keys()]
+        .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
+          days.push(site.businessHours.find(bh => bh.day === dayOfWeek) ?? {});
+          return days;
+        }, []);
+      this.hoursOperationForm.get('businessDays').patchValue(businessDays);
     }
 
     if (site.remoteUsers?.length) {
@@ -260,11 +266,25 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   }
 
   private buildHoursOperationForm(): FormGroup {
+    const groups = [...new Array(7)].map(() =>
+      this.fb.group({
+        startTime: [null, []],
+        endTime: [null, []],
+      }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') })
+    );
+
     return this.fb.group({
-      businessDays: this.fb.array(
-        [],
-        [Validators.required])
+      businessDays: this.fb.array(groups)
     });
+  }
+
+  private generateBusinessHoursJson(): BusinessDay[] {
+    const { businessDays } = this.hoursOperationForm.getRawValue();
+    return businessDays
+      .map((hours: BusinessDayHours, dayOfWeek: number) =>
+        new BusinessDay(dayOfWeek, hours.startTime ?? null, hours.endTime ?? null)
+      )
+      .filter((day: BusinessDay) => day.startTime !== null);
   }
 
   private buildRemoteUsersForm(): FormGroup {
