@@ -85,7 +85,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public hasDay(group: FormGroup): boolean {
-    return !!group.get('startTime').value;
+    return group.get('startTime').value !== null;
   }
 
   public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
