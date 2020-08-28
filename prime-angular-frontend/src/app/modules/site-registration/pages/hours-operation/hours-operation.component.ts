@@ -46,9 +46,9 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
-    private formUtilsService: FormUtilsService,
     private utilsService: UtilsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public formUtilsService: FormUtilsService,
   ) {
     this.title = 'Hours of Operation';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
@@ -75,15 +75,15 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public hasDay(index: number): boolean {
-    return (this.businessDays.value[index].startTime) ? true : false;
+    return (this.businessDays.value[index].startTime !== null) ? true : false;
   }
 
-  public onDayToggle(group: FormGroup, index: number) {
+  public onDayToggle(group: FormGroup, index: number): void {
     if (this.hasDay(index)) {
       this.formUtilsService.resetAndClearValidators(group);
     } else {
-      this.formUtilsService.setValidators(group, [Validators.required]);
       group.patchValue({ startTime: '0900', endTime: '1700' });
+      this.formUtilsService.setValidators(group, [Validators.required]);
     }
   }
 

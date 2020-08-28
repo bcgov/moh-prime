@@ -25,7 +25,7 @@
                             [checked]="hasDay(i)">
             {{ (hasDay(i)) ? "Open" : "Closed" }}
           </mat-slide-toggle>
-          <ng-container [formGroupName]="i">
+          <ng-container [formGroup]="businessDay">
             <mat-form-field class="col-md-3 col-12"
                             [class.hide]="!hasDay(i)">
               <mat-label>Opens at</mat-label>
@@ -34,8 +34,8 @@
                      [patterns]="customPattern"
                      formControlName="startTime"
                      placeholder="00:00">
-              <mat-error *ngIf="businessDay.hasError('lessthan')">
-                Invalid
+              <mat-error>
+                Required
               </mat-error>
             </mat-form-field>
             <mat-form-field class="col-md-3 col-12"
@@ -46,8 +46,8 @@
                      [patterns]="customPattern"
                      formControlName="endTime"
                      placeholder="00:00">
-              <mat-error *ngIf="businessDay.hasError('lessthan')">
-                Invalid
+              <mat-error>
+                Required
               </mat-error>
             </mat-form-field>
           </ng-container>
