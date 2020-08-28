@@ -57,14 +57,12 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     return this.form.get('businessDays') as FormArray;
   }
 
-  public onDayToggle(control: FormControl, index: number) {
-    console.log(control.value, index);
-
+  public onDayToggle(group: FormGroup, index: number) {
     if (this.hasDay(index)) {
-      this.formUtilsService.resetAndClearValidators(control);
+      this.formUtilsService.resetAndClearValidators(group);
     } else {
-      this.formUtilsService.setValidators(control, [Validators.required]);
-      control.patchValue({ startTime: '0900', endTime: '1700' });
+      this.formUtilsService.setValidators(group, [Validators.required]);
+      group.patchValue({ startTime: '0900', endTime: '1700' });
     }
   }
 
