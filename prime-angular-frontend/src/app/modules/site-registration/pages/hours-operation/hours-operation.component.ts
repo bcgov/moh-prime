@@ -18,6 +18,7 @@ import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -97,7 +98,10 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
       this.formUtilsService.resetAndClearValidators(group);
     } else {
       group.patchValue({ startTime: '0900', endTime: '1700' });
-      this.formUtilsService.setValidators(group, [Validators.required]);
+      this.formUtilsService.setValidators(group, [
+        Validators.required,
+        FormControlValidators.requiredLength(4)
+      ]);
     }
   }
 
