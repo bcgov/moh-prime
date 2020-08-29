@@ -127,5 +127,6 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
+    this.form.markAsPristine();
   }
 }

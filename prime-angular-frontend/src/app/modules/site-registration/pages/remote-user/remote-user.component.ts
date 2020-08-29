@@ -161,6 +161,7 @@ export class RemoteUserComponent implements OnInit {
     // Attempt to patch if needed on a refresh, otherwise do not forceably
     // update the form state as it will drop unsaved updates
     this.siteFormStateService.setForm(site);
+    this.form.markAsPristine();
 
     const remoteUserIndex = this.route.snapshot.params.index;
     const remoteUser = this.parent.getRawValue().remoteUsers[remoteUserIndex] as RemoteUser;
