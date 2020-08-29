@@ -131,7 +131,7 @@ namespace Prime.Services
             var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
             newStatus.AddStatusReason(StatusReasonType.Manual);
 
-            await _accessTermService.CreateEnrolleeAccessTermAsync(enrolleeId);
+            await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
             await _context.SaveChangesAsync();
