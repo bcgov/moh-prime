@@ -60,9 +60,6 @@ export class SiteResource {
 
               return businessDay;
             });
-
-          console.log('RESPONSE', site.businessHours);
-
           return site;
         }),
         tap((site: Site) => this.logger.info('SITE', site)),
@@ -104,10 +101,6 @@ export class SiteResource {
     } else {
       site.businessHours = null;
     }
-
-    console.log('REQUEST', site.businessHours);
-
-
     return this.apiResource.put<NoContent>(`sites/${site.id}`, site)
       .pipe(
         // TODO remove pipe when ApiResource handles NoContent
