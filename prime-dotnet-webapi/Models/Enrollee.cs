@@ -188,7 +188,7 @@ namespace Prime.Models
             get => AccessTerms
                 .OrderByDescending(a => a.CreatedDate)
                 .Where(a => a.AcceptedDate != null)
-                .Select(a => (int?)a.Id)
+                .Select(a => (int?)a.AgreementId)
                 .FirstOrDefault();
         }
 
