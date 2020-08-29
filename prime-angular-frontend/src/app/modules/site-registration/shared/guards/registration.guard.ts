@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router, Params } from '@angular/router';
 
-import { Observable, from, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
 import { BaseGuard } from '@core/guards/base.guard';

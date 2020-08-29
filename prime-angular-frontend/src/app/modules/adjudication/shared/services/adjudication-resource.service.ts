@@ -20,7 +20,6 @@ import { Site } from '@registration/shared/models/site.model';
 
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 @Injectable({
   providedIn: 'root'
@@ -413,7 +412,7 @@ export class AdjudicationResource {
 
     if (keys.every((key: string) => profileSnapshot.hasOwnProperty(key))) {
       profileSnapshot.selfDeclarations = [];
-      keys.map((key: string, index: number) => {
+      keys.forEach((key: string, index: number) => {
         if (profileSnapshot[key]) {
           profileSnapshot.selfDeclarations.push({
             selfDeclarationDetails: profileSnapshot[`${key}Details`],

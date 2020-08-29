@@ -262,10 +262,6 @@ export class DashboardV1Component implements OnInit {
           accessAgreement = 'schedule';
           break;
         case EnrolmentStatus.LOCKED:
-          enrollee = 'lock';
-          accessAgreement = 'lock';
-          certificate = 'lock';
-          break;
         case EnrolmentStatus.DECLINED:
           enrollee = 'lock';
           accessAgreement = 'lock';

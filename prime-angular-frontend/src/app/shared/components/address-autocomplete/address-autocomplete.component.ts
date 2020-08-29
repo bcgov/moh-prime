@@ -1,10 +1,10 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
+import { ToastService } from '@core/services/toast.service';
 import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } from '@shared/models/address-autocomplete.model';
 import { AddressAutocompleteResource } from '@shared/services/address-autocomplete-resource.service';
 import { Address } from '@shared/models/address.model';
-import { ToastService } from '@core/services/toast.service';
 
 @Component({
   selector: 'app-address-autocomplete',
@@ -35,7 +35,7 @@ export class AddressAutocompleteComponent implements OnInit {
     this.addressRetrieved = null;
     this.addressAutocompleteResource.retrieve(id)
       .subscribe((response: AddressAutocompleteRetrieveResponse[]) => {
-        response.map((field) => {
+        response.forEach((field) => {
           if (field.language === 'ENG') {
             this.addressRetrieved = field;
           }

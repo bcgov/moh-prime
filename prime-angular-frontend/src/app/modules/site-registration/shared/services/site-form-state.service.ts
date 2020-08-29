@@ -182,7 +182,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       // TODO component-level add control on init and remove control on submission to drop from state service
       form.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
 
-      site.remoteUsers.map((remoteUser: RemoteUser) => {
+      site.remoteUsers.forEach((remoteUser: RemoteUser) => {
         const group = this.createEmptyRemoteUserFormAndPatch(remoteUser);
         remoteUsersFormArray.push(group);
       });
@@ -203,7 +203,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * it with a remote user if provided.
    */
   public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
-    const group = this.remoteUserFormGroup() as FormGroup;
+    const group = this.remoteUserFormGroup();
     if (remoteUser) {
       const { id, firstName, lastName, remoteUserLocations, remoteUserCertifications } = remoteUser;
       group.patchValue({ id, firstName, lastName });
