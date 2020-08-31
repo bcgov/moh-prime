@@ -8,6 +8,7 @@ import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
 import { RegistrantGuard } from './shared/guards/registrant.guard';
+import { RegistrationGuard } from './shared/guards/registration.guard';
 import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
 
@@ -30,7 +31,6 @@ import { TechnicalSupportComponent } from './pages/technical-support/technical-s
 import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { OverviewComponent } from './pages/overview/overview.component';
-import { RegistrationGuard } from './shared/guards/registration.guard';
 
 const routes: Routes = [
   {
