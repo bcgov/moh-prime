@@ -48,14 +48,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    const isDisabled = this.form.disabled;
-    if (isDisabled) {
-      this.form.enable();
-    }
     if (this.formUtilsService.checkValidity(this.form)) {
-      if (isDisabled) {
-        this.form.disable();
-      }
       const payload = this.siteFormStateService.json;
       this.siteResource
         .updateSite(payload)
@@ -63,10 +56,6 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
           this.form.markAsPristine();
           this.nextRoute();
         });
-    } else {
-      if (isDisabled) {
-        this.form.disable();
-      }
     }
   }
 
@@ -76,14 +65,6 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     }
     this.form.patchValue(party);
     this.form.disable();
-  }
-
-  public onClear() {
-    this.form.reset({
-      id: 0,
-      userId: '00000000-0000-0000-0000-000000000000'
-    });
-    this.form.enable();
   }
 
   public onBack() {
@@ -96,11 +77,6 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     } else {
       this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
     }
-  }
-
-  public isSameAs() {
-    return this.site.provisioner.userId === this.site.technicalSupport?.userId ||
-      this.site.provisioner.userId === this.form.get('userId').value;
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -124,9 +100,5 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
     this.form.markAsPristine();
-
-    if (this.isSameAs()) {
-      this.form.disable();
-    }
   }
 }

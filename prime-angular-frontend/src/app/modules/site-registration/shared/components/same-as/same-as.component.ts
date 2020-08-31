@@ -32,27 +32,24 @@ export class SameAsComponent implements OnInit {
         display: 'Signing Authority',
         data: site?.provisioner
       },
-      // TODO commented out since you can't determine same-as between parties within sites
-      // {
-      //   key: 'administratorPharmaNet',
-      //   display: 'Administrator of PharmaNet Onboarding',
-      //   data: site?.location?.administratorPharmaNet
-      // },
-      // {
-      //   key: 'privacyOfficer',
-      //   display: 'Privacy Officer',
-      //   data: site?.location?.privacyOfficer
-      // },
-      // {
-      //   key: 'technicalSupport',
-      //   display: 'Technical Support',
-      //   data: site?.location?.technicalSupport
-      // }
+      {
+        key: 'administratorPharmaNet',
+        display: 'Administrator of PharmaNet Onboarding',
+        data: site?.administratorPharmaNet
+      },
+      {
+        key: 'privacyOfficer',
+        display: 'Privacy Officer',
+        data: site?.privacyOfficer
+      },
+      {
+        key: 'technicalSupport',
+        display: 'Technical Support',
+        data: site?.technicalSupport
+      }
     ];
 
-    // TODO commented out since you can't determine same-as between parties within sites
-    // Order of parties is dependent on the order of routing
-    // const index = this.parties.findIndex(p => p.key === this.selectFor);
-    // this.parties = this.parties.slice(0, index);
+    const index = this.parties.findIndex(p => p.key === this.selectFor);
+    this.parties = this.parties.slice(0, index);
   }
 }
