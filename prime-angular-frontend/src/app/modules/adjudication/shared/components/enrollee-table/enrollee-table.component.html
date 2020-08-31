@@ -16,7 +16,7 @@
         <th mat-header-cell
             *matHeaderCellDef> Enrollee Name </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.lastName }}, {{ row.firstName }} </td>
+            *matCellDef="let row;"> {{ row | fullname }} </td>
       </ng-container>
 
       <ng-container matColumnDef="givenNames">
@@ -30,14 +30,14 @@
         <th mat-header-cell
             *matHeaderCellDef> Submission Date </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.appliedDate | formatDate }} </td>
+            *matCellDef="let row;"> {{ row.appliedDate | formatDate | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="renewalDate">
         <th mat-header-cell
             *matHeaderCellDef> Renewal Date </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.expiryDate | formatDate }} </td>
+            *matCellDef="let row;"> {{ row.expiryDate | formatDate | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="currentTOAStatus">
@@ -57,8 +57,8 @@
         <td mat-cell
             *matCellDef="let row;"
             class="status"
-            [class]="row.currentStatus.status.name | case: 'space' : 'kebab'">
-          {{ row.currentStatus.status.name }}
+            [class]="row.currentStatusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
+          {{ row.currentStatusCode | configCode: 'statuses' | default }}
           <mat-icon *ngIf="row.alwaysManual"
                     matTooltip="Enrollee flagged for manual adjudication"
                     matTooltipPosition="after">flag</mat-icon>
@@ -69,7 +69,7 @@
         <th mat-header-cell
             *matHeaderCellDef> Adjudicator </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.adjudicator?.idir | replace: '@idir': '' | default }} </td>
+            *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -134,14 +134,14 @@
           <span>Send Reminder</span>
         </button>
         <button mat-menu-item
-                *ngIf="!row?.adjudicatorId"
+                *ngIf="!row?.adjudicatorIdir"
                 [disabled]="!canEdit"
                 (click)="onClaim(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>Claim Enrolment</span>
         </button>
         <button mat-menu-item
-                *ngIf="row?.adjudicatorId"
+                *ngIf="row?.adjudicatorIdir"
                 [disabled]="!canEdit"
                 (click)="onDisclaim(row.id)">
           <mat-icon>pan_tool</mat-icon>

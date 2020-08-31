@@ -11,7 +11,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { Address } from '@shared/models/address.model';
 import { AccessTerm } from '@shared/models/access-term.model';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
@@ -33,13 +33,12 @@ export class AdjudicationResource {
     private logger: LoggerService
   ) { }
 
-  public getEnrollees(textSearch?: string, statusCode?: number): Observable<HttpEnrollee[]> {
+  public getEnrollees(textSearch?: string, statusCode?: number): Observable<EnrolleeListViewModel[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode });
-    return this.apiResource.get<HttpEnrollee[]>('enrollees', params)
+    return this.apiResource.get<EnrolleeListViewModel[]>('enrollees', params)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee[]>) => response.result),
-        tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees)),
-        map((enrollees: HttpEnrollee[]) => this.enrolleesAdapterResponse(enrollees)),
+        map((response: ApiHttpResponse<EnrolleeListViewModel[]>) => response.result),
+        tap((enrollees: EnrolleeListViewModel[]) => this.logger.info('ENROLLEES', enrollees)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolments could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrollees error has occurred: ', error);

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Bogus;
@@ -79,7 +80,8 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
             .RuleFor(e => e.EnrolleeCareSettings, f => EnrolleeCareSettingFaker.Generate(2))
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
-            .RuleFor(e => e.IdentityAssuranceLevel, f => 3);
+            .RuleFor(e => e.IdentityAssuranceLevel, f => 3)
+            .RuleFor(e => e.AccessTerms, f => new List<AccessTerm>());
 
         public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()
             .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))

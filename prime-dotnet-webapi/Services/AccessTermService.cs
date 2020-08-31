@@ -76,13 +76,21 @@ namespace Prime.Services
             return accessTerms;
         }
 
-        public async Task CreateEnrolleeAccessTermAsync(Enrollee enrollee)
+        public async Task CreateEnrolleeAccessTermAsync(int enrolleeId)
         {
+            var enrollee = await _context.Enrollees
+                .AsNoTracking()
+                .Include(e => e.EnrolleeCareSettings)
+                .Include(e => e.Certifications)
+                    .ThenInclude(c => c.License)
+                .Include(e => e.AccessAgreementNote)
+                .SingleAsync(e => e.Id == enrolleeId);
+
             var accessTerm = new AccessTerm
             {
-                EnrolleeId = enrollee.Id,
+                EnrolleeId = enrolleeId,
                 AgreementId = await GetCurrentAgreementIdForUserAsync(enrollee),
-                LimitsConditionsClause = await GenerateLimitsAndConditionsClause(enrollee.Id),
+                LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(enrollee.AccessAgreementNote),
                 CreatedDate = DateTimeOffset.Now
             };
 
@@ -168,30 +176,6 @@ namespace Prime.Services
                 .OrderByDescending(a => a.EffectiveDate)
                 .Select(a => a.Id)
                 .FirstAsync();
-        }
-
-        /// <summary>
-        /// Generates a Limits and Conditions Clause for the Enrollee, based on the text of any Access Agreement Note they have.
-        /// Does not save to the database.
-        /// </summary>
-        private async Task<LimitsConditionsClause> GenerateLimitsAndConditionsClause(int enrolleeId)
-        {
-            var text = await _context.AccessAgreementNotes
-                .AsNoTracking()
-                .Where(n => n.EnrolleeId == enrolleeId)
-                .Select(n => n.Note)
-                .SingleOrDefaultAsync();
-
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                return null;
-            }
-
-            return new LimitsConditionsClause
-            {
-                Text = text,
-                EffectiveDate = DateTimeOffset.Now
-            };
         }
     }
 }

@@ -82,10 +82,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // Use existing query params for initial search
-    this.getDataset(this.route.snapshot.queryParams);
-
-    // Update results on query param change
+    // Use existing query params for initial search, and
+    // update results on query param change
     this.route.queryParams
       .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
 
