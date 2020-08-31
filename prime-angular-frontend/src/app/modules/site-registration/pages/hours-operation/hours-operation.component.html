@@ -1,4 +1,4 @@
-<app-page>
+<app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
@@ -40,7 +40,7 @@
               <mat-label>Opens at</mat-label>
               <input matInput
                      mask="AB:CB"
-                     [patterns]="customPattern"
+                     [patterns]="busyHoursTimePattern"
                      formControlName="startTime"
                      placeholder="00:00"
                      [errorStateMatcher]="busDayHoursErrStateMatcher">
@@ -58,7 +58,7 @@
               <mat-label>Closes at</mat-label>
               <input matInput
                      mask="AB:CB"
-                     [patterns]="customPattern"
+                     [patterns]="busyHoursTimePattern"
                      formControlName="endTime"
                      placeholder="00:00"
                      [errorStateMatcher]="busDayHoursErrStateMatcher">
