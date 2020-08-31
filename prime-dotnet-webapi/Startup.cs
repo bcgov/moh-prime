@@ -12,19 +12,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
-using Wkhtmltopdf.NetCore;
+
+using AutoMapper;
+using IdentityModel.Client;
 using Newtonsoft.Json;
 using Serilog;
+using Wkhtmltopdf.NetCore;
 
 using Prime.Auth;
 using Prime.Services;
 using Prime.Services.Clients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
-using System.Net.Http.Headers;
-using IdentityModel.Client;
-using Microsoft.Extensions.FileProviders;
+using System.Collections.Generic;
 
 namespace Prime
 {
@@ -106,6 +108,7 @@ namespace Prime
             services.AddWkhtmltopdf("./Resources/wkhtmltopdf");
 
             services.AddHttpContextAccessor();
+            services.AddAutoMapper(typeof(Startup));
             services.AddRazorPages();
 
             this.ConfigureDatabase(services);
@@ -165,6 +168,16 @@ namespace Prime
             });
 
             services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
+
+            services.AddSingleton(new AddressAutocompleteClientCredentials
+            {
+                apiKey = PrimeConstants.ADDRESS_AUTOCOMPLETE_API_KEY
+            });
+
+            services.AddHttpClient<IAddressAutocompleteClient, AddressAutocompleteClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeConstants.ADDRESS_AUTOCOMPLETE_API_URL.EnsureTrailingSlash());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

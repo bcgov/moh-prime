@@ -32,6 +32,9 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
+                  echo "Reducing files to minimum for build and deploy..."
+                  sh "./player.sh sparsify"
+                  echo "Priming GitHub for notification..."
                   sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
                   echo "Building ..."
                   sh "./player.sh build api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
@@ -164,7 +167,7 @@ pipeline {
         }
         // BUG (2020-08-13): Currently not working, failing to find files
         // stage('Cleanup') {
-        //     agent { label 'code-tests' }
+        //     agent { label 'master' }
         //     steps {
         //         sh "./player.sh sparsify"
         //     }

@@ -57,7 +57,7 @@ namespace PrimeTests.UnitTests
             // Arrange
             var service = CreateService();
             var enrollee = new EnrolleeFactory().Generate();
-            enrollee.EnrolleeOrganizationTypes.Single().OrganizationTypeCode = (int)careSetting;
+            enrollee.EnrolleeCareSettings.Single().CareSettingCode = (int)careSetting;
             enrollee.Certifications.Clear();
             enrollee.AccessAgreementNote = null;
             TestDb.Has(enrollee);
@@ -65,7 +65,7 @@ namespace PrimeTests.UnitTests
             var expectedAgreementId = TestDb.Agreements.GetNewestIdOfType<OboAgreement>();
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee);
+            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
@@ -79,7 +79,7 @@ namespace PrimeTests.UnitTests
             // Arrange
             var service = CreateService();
             var enrollee = new EnrolleeFactory().Generate();
-            enrollee.EnrolleeOrganizationTypes.Single().OrganizationTypeCode = (int)careSetting;
+            enrollee.EnrolleeCareSettings.Single().CareSettingCode = (int)careSetting;
             enrollee.Certifications = new CertificationFactory(enrollee).Generate(1, "default,licence.nonRegulated");
             enrollee.AccessAgreementNote = null;
             TestDb.Has(enrollee);
@@ -88,7 +88,7 @@ namespace PrimeTests.UnitTests
             var expectedAgreementId = TestDb.Agreements.GetNewestIdOfType<OboAgreement>();
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee);
+            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
@@ -102,7 +102,7 @@ namespace PrimeTests.UnitTests
             // Arrange
             var service = CreateService();
             var enrollee = new EnrolleeFactory().Generate();
-            enrollee.EnrolleeOrganizationTypes.Single().OrganizationTypeCode = (int)careSetting;
+            enrollee.EnrolleeCareSettings.Single().CareSettingCode = (int)careSetting;
             enrollee.Certifications = new CertificationFactory(enrollee).Generate(1, "default,licence.regulated");
             enrollee.AccessAgreementNote = null;
             TestDb.Has(enrollee);
@@ -120,7 +120,7 @@ namespace PrimeTests.UnitTests
             }
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee);
+            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
@@ -137,7 +137,7 @@ namespace PrimeTests.UnitTests
             TestDb.Has(enrollee);
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee);
+            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedLimitsClauseText: noteText);

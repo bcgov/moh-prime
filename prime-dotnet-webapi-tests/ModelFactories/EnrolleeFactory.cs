@@ -44,11 +44,10 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.MailingAddress, f => new MailingAddressFactory().Generate().OrNull(f));
             RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).GenerateBetween(1, 2).OrDefault(f, .75f, new List<Certification>()));
             RuleFor(x => x.Jobs, (f, x) => x.Certifications.Any() ? new List<Job>() : new JobFactory(x).Generate(1));
-            RuleFor(x => x.EnrolleeOrganizationTypes, (f, x) => new EnrolleeOrganizationTypeFactory(x).Generate(1));
+            RuleFor(x => x.EnrolleeCareSettings, (f, x) => new EnrolleeCareSettingFactory(x).Generate(1));
             RuleFor(x => x.AccessAgreementNote, f => null);
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AssignedPrivileges, f => null);
-            RuleFor(x => x.Privileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
             RuleFor(x => x.isAdminView, f => true);
             RuleFor(x => x.RequestingRemoteAccess, f => false);
@@ -97,7 +96,6 @@ namespace PrimeTests.ModelFactories
                             .Distinct()
                             .Select(privilegeId => new AssignedPrivilegeFactory(x, privilegeId).Generate())
                             .ToList();
-                        x.Privileges = x.AssignedPrivileges.Select(p => p.Privilege).ToList();
                     }
                 }
             });

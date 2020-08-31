@@ -9,7 +9,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
@@ -27,7 +27,7 @@ export class EnrolmentStateService {
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
-  public organizationForm: FormGroup;
+  public careSettingsForm: FormGroup;
 
   private patched: boolean;
   private enrolleeId: number;
@@ -43,7 +43,7 @@ export class EnrolmentStateService {
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
-    this.organizationForm = this.buildOrganizationsForm();
+    this.careSettingsForm = this.buildCareSettingsForm();
 
     // Initial state of the form is unpatched and ready for
     // enrolment information
@@ -97,7 +97,7 @@ export class EnrolmentStateService {
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
-    const organization = this.organizationForm.getRawValue();
+    const careSettings = this.careSettingsForm.getRawValue();
 
     return {
       id,
@@ -109,7 +109,7 @@ export class EnrolmentStateService {
       ...regulatory,
       ...deviceProvider,
       ...jobs,
-      ...organization
+      ...careSettings
     };
   }
 
@@ -167,7 +167,7 @@ export class EnrolmentStateService {
       // this.isDeviceProviderValid() &&
       this.isJobsValid() &&
       this.isSelfDeclarationValid() &&
-      this.isOrganizationValid() &&
+      this.isCareSettingValid() &&
       this.hasRegOrJob()
     );
   }
@@ -192,8 +192,8 @@ export class EnrolmentStateService {
     return this.selfDeclarationForm.valid;
   }
 
-  public isOrganizationValid(): boolean {
-    return this.organizationForm.valid;
+  public isCareSettingValid(): boolean {
+    return this.careSettingsForm.valid;
   }
 
   public hasRegOrJob(): boolean {
@@ -258,15 +258,15 @@ export class EnrolmentStateService {
         }, {});
 
       this.selfDeclarationForm.patchValue(selfDeclarations);
-      this.organizationForm.patchValue(enrolment);
+      this.careSettingsForm.patchValue(enrolment);
 
-      if (enrolment.organizations.length) {
-        const organizations = this.organizationForm.get('organizations') as FormArray;
-        organizations.clear();
-        enrolment.organizations.forEach((o: Organization) => {
-          const organization = this.buildOrganizationForm();
-          organization.patchValue(o);
-          organizations.push(organization);
+      if (enrolment.careSettings.length) {
+        const careSettings = this.careSettingsForm.get('careSettings') as FormArray;
+        careSettings.clear();
+        enrolment.careSettings.forEach((s: CareSetting) => {
+          const careSetting = this.buildCareSettingForm();
+          careSetting.patchValue(s);
+          careSettings.push(careSetting);
         });
       }
 
@@ -282,7 +282,7 @@ export class EnrolmentStateService {
       this.regulatoryForm,
       this.jobsForm,
       this.deviceProviderForm,
-      this.organizationForm,
+      this.careSettingsForm,
       this.selfDeclarationForm
     ];
   }
@@ -356,16 +356,16 @@ export class EnrolmentStateService {
     });
   }
 
-  private buildOrganizationsForm(): FormGroup {
+  private buildCareSettingsForm(): FormGroup {
     return this.fb.group({
-      organizations: this.fb.array([]),
+      careSettings: this.fb.array([]),
       requestingRemoteAccess: [false, []]
     });
   }
 
-  public buildOrganizationForm(code: number = null): FormGroup {
+  public buildCareSettingForm(code: number = null): FormGroup {
     return this.fb.group({
-      organizationTypeCode: [code, [Validators.required]]
+      careSettingCode: [code, [Validators.required]]
     });
   }
 

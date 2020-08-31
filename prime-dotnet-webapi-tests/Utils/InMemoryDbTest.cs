@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 
 using Prime;
-using Prime.Models;
+using Prime.ViewModels;
 using Prime.Configuration;
 using Prime.Configuration.Agreements;
+
+using AutoMapper;
 
 namespace PrimeTests.Utils
 {
@@ -47,7 +49,7 @@ namespace PrimeTests.Utils
             TestDb.AddRange(new DefaultPrivilegeConfiguration().SeedData);
             TestDb.AddRange(new JobNameConfiguration().SeedData);
             TestDb.AddRange(new LicenseConfiguration().SeedData);
-            TestDb.AddRange(new OrganizationTypeConfiguration().SeedData);
+            TestDb.AddRange(new CareSettingConfiguration().SeedData);
             TestDb.AddRange(new PracticeConfiguration().SeedData);
             TestDb.AddRange(new PrivilegeConfiguration().SeedData);
             TestDb.AddRange(new PrivilegeGroupConfiguration().SeedData);
@@ -66,6 +68,14 @@ namespace PrimeTests.Utils
         {
             TestDb.Database.EnsureDeleted();
             TestDb.Dispose();
+        }
+
+        public IMapper DefaultMapper()
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapping());
+            }).CreateMapper();
         }
     }
 }

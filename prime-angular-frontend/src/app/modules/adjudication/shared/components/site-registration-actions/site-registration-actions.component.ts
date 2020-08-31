@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
+import { map } from 'rxjs/operators';
+
 import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
-import { Site } from '@registration/shared/models/site.model';
-import { Organization } from '@registration/shared/models/organization.model';
+
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-site-registration-actions',
@@ -12,39 +14,38 @@ import { Organization } from '@registration/shared/models/organization.model';
   styleUrls: ['./site-registration-actions.component.scss']
 })
 export class SiteRegistrationActionsComponent implements OnInit {
-  @Input() site: Site;
+  @Input() siteRegistration: SiteRegistrationListViewModel;
   @Output() public approve: EventEmitter<number>;
   @Output() public decline: EventEmitter<number>;
 
   constructor(
-    private siteResource: SiteResource,
-    private utilsService: UtilsService,
     private organizationResource: OrganizationResource,
+    private siteResource: SiteResource,
+    private utilsService: UtilsService
   ) { }
 
-  public ngOnInit(): void { }
-
   public getOrganizationAgreement() {
-    this.organizationResource.getOrganizationById(this.site.organizationId).subscribe((organization: Organization) => {
-      if (organization.signedAgreementDocuments.length > 0) {
-        this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.site.organizationId)
-          .subscribe((token: string) => {
-            this.utilsService.downloadToken(token);
-          });
-      } else {
-        this.organizationResource.getUnsignedOrganizationAgreement()
-          .subscribe((base64: string) => {
-            const blob = this.utilsService.base64ToBlob(base64);
-            this.utilsService.downloadDocument(blob, 'Organization-Agreement');
-          });
-      }
-    });
+    const request$ = (this.siteRegistration.signedAgreementDocumentCount)
+      ? this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.siteRegistration.organizationId)
+        .pipe(
+          map((token: string) => this.utilsService.downloadToken(token))
+        )
+      : this.organizationResource.getUnsignedOrganizationAgreement()
+        .pipe(
+          map((base64: string) => this.utilsService.base64ToBlob(base64)),
+          map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
+        );
+
+    request$.subscribe();
   }
 
   public getBusinessLicence() {
-    this.siteResource.getBusinessLicenceDownloadToken(this.site.id)
-      .subscribe((token: string) => {
-        this.utilsService.downloadToken(token);
-      });
+    this.siteResource.getBusinessLicenceDownloadToken(this.siteRegistration.siteId)
+      .pipe(
+        map((token: string) => this.utilsService.downloadToken(token))
+      )
+      .subscribe();
   }
+
+  public ngOnInit(): void { }
 }

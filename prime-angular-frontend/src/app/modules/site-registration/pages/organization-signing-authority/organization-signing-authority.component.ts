@@ -144,6 +144,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization, true);
+    this.form.markAsPristine();
 
     this.organization = organization;
 

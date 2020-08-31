@@ -11,10 +11,10 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
 
-import { Site } from '@registration/shared/models/site.model';
-import { BusinessLicenceDocument } from '../../modules/site-registration/shared/models/business-licence-document.model';
+import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
+import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
+import { BusinessDay } from '@registration/shared/models/business-day.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -29,57 +29,14 @@ export class SiteResource {
     private logger: LoggerService
   ) { }
 
-  // TODO Temporary endpoint for admins until fruit loops!!!
-  public getAllSites(): Observable<Site[]> {
-    return this.apiResource.get<Site[]>(`sites`)
+  public getSites(organizationId: number): Observable<SiteListViewModel[]>;
+  public getSites(organizationId: number, queryParams: { verbose: boolean }): Observable<SiteListViewModel[] | Site[]>;
+  public getSites(organizationId: number, queryParams: { verbose: boolean } = null): Observable<SiteListViewModel[] | Site[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParams);
+    return this.apiResource.get<SiteListViewModel[] | Site[]>(`organizations/${organizationId}/sites`, params)
       .pipe(
-        map((response: ApiHttpResponse<Site[]>) => response.result),
-        // TODO split out into proper adapter
-        map((sites: Site[]) => {
-          sites.map((site: Site) => {
-            site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
-              businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
-              businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
-
-              if (businessDay.endTime === '24') {
-                businessDay.startTime = null;
-                businessDay.endTime = null;
-              }
-              return businessDay;
-            });
-          });
-          return sites;
-        }),
-        tap((sites: Site[]) => this.logger.info('SITES', sites)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Sites could not be retrieved');
-          this.logger.error('[SiteRegistration] SiteResource::getAllSites error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getSites(organizationId: number): Observable<Site[]> {
-    return this.apiResource.get<Site[]>(`organizations/${organizationId}/sites`)
-      .pipe(
-        map((response: ApiHttpResponse<Site[]>) => response.result),
-        // TODO split out into proper adapter
-        map((sites: Site[]) => {
-          sites.map((site: Site) => {
-            site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
-              businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
-              businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
-
-              if (businessDay.endTime === '24') {
-                businessDay.startTime = null;
-                businessDay.endTime = null;
-              }
-              return businessDay;
-            });
-          });
-          return sites;
-        }),
-        tap((sites: Site[]) => this.logger.info('SITES', sites)),
+        map((response: ApiHttpResponse<SiteListViewModel[] | Site[]>) => response.result),
+        tap((sites: SiteListViewModel[] | Site[]) => this.logger.info('SITES', sites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);
@@ -92,18 +49,17 @@ export class SiteResource {
     return this.apiResource.get<Site>(`sites/${siteId}`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
-        // TODO split out into proper adapter
         map((site: Site) => {
-          site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
-            businessDay.startTime = `${moment.duration(businessDay.startTime).asHours()}`;
-            businessDay.endTime = `${moment.duration(businessDay.endTime).asHours()}`;
+          site.businessHours = site.businessHours
+            .map((businessDay: BusinessDay) => {
+              // Convert timespan to hours and minutes
+              businessDay.startTime = businessDay.startTime.slice(0, -3);
+              businessDay.endTime = (moment.duration(businessDay.endTime).asHours() === 24)
+                ? '24:00' // Convert timespan of 1.00:00:00 to hours and minutes
+                : businessDay.endTime.slice(0, -3);
 
-            if (businessDay.endTime === '24') {
-              businessDay.startTime = null;
-              businessDay.endTime = null;
-            }
-            return businessDay;
-          });
+              return businessDay;
+            });
           return site;
         }),
         tap((site: Site) => this.logger.info('SITE', site)),
@@ -132,22 +88,19 @@ export class SiteResource {
   }
 
   public updateSite(site: Site): NoContent {
-    // TODO separate this out into a proper adapter
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          if (businessDay.startTime === null && businessDay.endTime === null) {
-            businessDay.startTime = '0';
-            businessDay.endTime = '1.00';
-          }
-          businessDay.startTime = `${businessDay.startTime}:00:00`;
-          businessDay.endTime = `${businessDay.endTime}:00:00`;
+          // Convert hours and minutes to timespan
+          businessDay.startTime = `${businessDay.startTime}:00`;
+          businessDay.endTime = (businessDay.endTime === '24:00')
+            ? businessDay.endTime = '1.00:00' // Convert to 24 hours to 1 day
+            : `${businessDay.endTime}:00`;
           return businessDay;
         });
     } else {
       site.businessHours = null;
     }
-
     return this.apiResource.put<NoContent>(`sites/${site.id}`, site)
       .pipe(
         // TODO remove pipe when ApiResource handles NoContent
@@ -237,9 +190,7 @@ export class SiteResource {
     return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licence`, { siteId }, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicenceDocument>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Business licence has been added')),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Business Licence could not be added');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::createBusinessLicence error has occurred: ', error);
           throw error;
         })

@@ -45,13 +45,12 @@ export class MockEnrolmentService implements IEnrolmentService {
       jobs: [],
       selfDeclarations: [],
       selfDeclarationDocuments: [],
-      organizations: [
+      careSettings: [
         {
           id: faker.random.number(),
-          organizationTypeCode: 1
+          careSettingCode: 1
         }
       ],
-      privileges: [],
       enrolmentStatuses: null,
       currentStatus: {
         id: faker.random.number(),

@@ -8,8 +8,7 @@ namespace Prime.Services
 {
     public interface ISiteService
     {
-        Task<IEnumerable<Site>> GetSitesAsync();
-        Task<IEnumerable<Site>> GetSitesAsync(int organizationId);
+        Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null);
         Task<Site> GetSiteAsync(int siteId);
         Task<int> CreateSiteAsync(int organizationId);
         Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite);

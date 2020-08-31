@@ -1,8 +1,7 @@
-import { BusinessDay } from '@lib/modules/business-hours/models/business-day.model';
-import { VendorConfig } from '@config/config.model';
 import { Address } from '@shared/models/address.model';
 
 import { BusinessLicenceDocument } from './business-licence-document.model';
+import { BusinessDay } from './business-day.model';
 import { Organization } from './organization.model';
 import { Party } from './party.model';
 import { RemoteUser } from './remote-user.model';
@@ -16,7 +15,7 @@ export interface Site {
   provisionerId: number;
   provisioner: Party;
   // Forms -----
-  organizationTypeCode: number;
+  careSettingCode: number;
   siteVendors: Vendor[];
   businessLicenceDocuments: BusinessLicenceDocument[];
   doingBusinessAs: string;
@@ -37,3 +36,6 @@ export interface Site {
   // Admin -----
   pec: string;
 }
+
+export interface SiteListViewModel extends
+  Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec'> { }

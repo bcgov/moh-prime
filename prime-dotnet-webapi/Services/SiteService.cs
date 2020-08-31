@@ -29,17 +29,16 @@ namespace Prime.Services
             _organizationService = organizationService;
         }
 
-        public async Task<IEnumerable<Site>> GetSitesAsync()
+        public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
         {
-            return await this.GetBaseSiteQuery()
-                .ToListAsync();
-        }
+            IQueryable<Site> query = this.GetBaseSiteQuery();
 
-        public async Task<IEnumerable<Site>> GetSitesAsync(int organizationId)
-        {
-            return await this.GetBaseSiteQuery()
-                .Where(s => s.OrganizationId == organizationId)
-                .ToListAsync();
+            if (organizationId != null)
+            {
+                query = query.Where(s => s.OrganizationId == organizationId);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Site> GetSiteAsync(int siteId)
@@ -54,7 +53,7 @@ namespace Prime.Services
 
             if (organization == null)
             {
-                throw new ArgumentNullException(nameof(organization), "Could not create a site, the passed in Organization doesnt exist.");
+                throw new ArgumentException("Could not create a site, the passed in Organization doesnt exist.", nameof(organizationId));
             }
 
             // Site provisionerId should be equal to organization signingAuthorityId
@@ -423,7 +422,7 @@ namespace Prime.Services
                 .Include(s => s.Provisioner)
                 .Include(s => s.SiteVendors)
                     .ThenInclude(v => v.Vendor)
-                .Include(s => s.OrganizationType)
+                .Include(s => s.CareSetting)
                 .Include(s => s.Organization)
                     .ThenInclude(o => o.SigningAuthority)
                         .ThenInclude(p => p.PhysicalAddress)

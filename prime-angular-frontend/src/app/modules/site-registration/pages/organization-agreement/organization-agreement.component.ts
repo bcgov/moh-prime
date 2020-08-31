@@ -92,6 +92,18 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       });
   }
 
+  public showDefaultAgreement() {
+    return this.organizationService.organization.signedAgreementDocuments?.length < 1 ?? true;
+  }
+
+  public downloadSignedAgreement() {
+    this.organizationResource
+      .getDownloadTokenForLatestSignedAgreement(this.organizationService.organization.id)
+      .subscribe((token: string) => {
+        this.utilsService.downloadToken(token);
+      });
+  }
+
   public onBack() {
     const siteId = this.route.snapshot.queryParams.siteId;
     if (siteId) {
@@ -108,18 +120,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     } else {
       this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
     }
-  }
-
-  public showDefaultAgreement() {
-    return this.organizationService.organization.signedAgreementDocuments?.length < 1 ?? true;
-  }
-
-  public downloadSignedAgreement() {
-    this.organizationResource
-      .getDownloadTokenForLatestSignedAgreement(this.organizationService.organization.id)
-      .subscribe((token: string) => {
-        this.utilsService.downloadToken(token);
-      });
   }
 
   public ngOnInit(): void {

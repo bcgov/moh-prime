@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using AutoMapper;
+
 using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
@@ -19,13 +21,16 @@ namespace Prime.Controllers
     [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
     public class SitesController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly ISiteService _siteService;
         private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
+
         public SitesController(
+            IMapper mapper,
             ISiteService siteService,
             IPartyService partyService,
             IOrganizationService organizationService,
@@ -33,6 +38,7 @@ namespace Prime.Controllers
             IEmailService emailService,
             IDocumentService documentService)
         {
+            _mapper = mapper;
             _siteService = siteService;
             _partyService = partyService;
             _organizationService = organizationService;
@@ -41,34 +47,17 @@ namespace Prime.Controllers
             _documentService = documentService;
         }
 
-        // Temporary endpoint for admins until fruit loops
-        // James avert your eyes!  This is not the code you're looking for...
-        // GET: api/Sites
-        /// <summary>
-        /// Gets all of the Sites.
-        /// </summary>
-        [HttpGet(Name = nameof(GetAllSites))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetAllSites()
-        {
-            // JAMES! Why are you still looking at this code :)
-            // If you see this code, and you're not James, and fruitloops is released, and this code still exists, DELETE IT QUICK!
-            return Ok(ApiResponse.Result(await _siteService.GetSitesAsync()));
-        }
-
         // GET: api/Sites
         /// <summary>
         /// Gets all of the Sites for an organization, or all sites if user has ADMIN role
         /// </summary>
         /// <param name="organizationId"></param>
+        /// <param name="verbose"></param>
         [HttpGet("/api/organizations/{organizationId:int}/sites", Name = nameof(GetSites))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSites(int organizationId)
+        public async Task<ActionResult<IEnumerable<Site>>> GetSites(int organizationId, [FromQuery] bool verbose)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
@@ -76,18 +65,16 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            IEnumerable<Site> sites = null;
+            var sites = await _siteService.GetSitesAsync(organizationId);
 
-            if (User.IsAdmin() || User.HasAdminView())
+            if (verbose)
             {
-                sites = await _siteService.GetSitesAsync();
+                return Ok(ApiResponse.Result(sites));
             }
             else
             {
-                sites = await _siteService.GetSitesAsync(organizationId);
+                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<SiteListViewModel>>(sites)));
             }
-
-            return Ok(ApiResponse.Result(sites));
         }
 
         // GET: api/Sites/5
@@ -105,7 +92,7 @@ namespace Prime.Controllers
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
             {
                 return Forbid();
             }
@@ -162,9 +149,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-
-            if (!User.CanEdit(party))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -193,9 +178,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-
-            if (!User.CanEdit(party))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -218,13 +201,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<Site>> DeleteSite(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -247,13 +228,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<Site>> SubmitSiteRegistration(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -279,13 +258,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<BusinessLicenceDocument>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -308,13 +285,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<BusinessLicenceDocument>>> GetBusinessLicence(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
             {
                 return Forbid();
             }
@@ -350,9 +325,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-
-            if (!User.CanEdit(party))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -375,13 +348,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<string>> GetLatestBusinessLicenceDownloadToken(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -405,7 +376,6 @@ namespace Prime.Controllers
         public async Task<ActionResult> sendRemoteUsersEmail(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));

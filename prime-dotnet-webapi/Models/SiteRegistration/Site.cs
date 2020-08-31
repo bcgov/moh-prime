@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+
 using Newtonsoft.Json;
 
 namespace Prime.Models
@@ -36,10 +37,10 @@ namespace Prime.Models
 
         public Party Provisioner { get; set; }
 
-        public int? OrganizationTypeCode { get; set; }
+        public int? CareSettingCode { get; set; }
 
         [JsonIgnore]
-        public OrganizationType OrganizationType { get; set; }
+        public CareSetting CareSetting { get; set; }
 
         public string PEC { get; set; }
 

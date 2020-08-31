@@ -17,7 +17,6 @@ import { OrganizationResource } from '@core/resources/organization-resource.serv
 import { Organization } from '../models/organization.model';
 import { OrganizationService } from '../services/organization.service';
 
-// TODO duplication with enrolment.guard should be split out for reuse
 @Injectable({
   providedIn: 'root'
 })
@@ -43,12 +42,13 @@ export class RegistrationGuard extends BaseGuard {
         map((organization: Organization) => [organization, true])
       );
 
-    return this.organizationResource.getOrganizations()
+    return this.organizationResource.getOrganizations({ verbose: true })
       .pipe(
         map((organizations: Organization[]) =>
           (organizations.length)
             ? organizations.shift()
-            : null),
+            : null
+        ),
         exhaustMap((organization: Organization) =>
           (organization)
             ? of([organization, false])
@@ -86,16 +86,14 @@ export class RegistrationGuard extends BaseGuard {
   }
 
   private manageIncompleteOrganizationRouting(routePath: string, organization: Organization) {
-    // TODO set to SITE_REVIEW to allow removal of MULTIPLE_SITES, but definitely the wrong route
-    const route = SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
-    return this.manageRouting(routePath, route, organization);
+    return this.manageRouting(routePath, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, organization);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
     const currentRoute = this.route(routePath);
 
-    let childRoute = routePath.includes('remote-users')
-      ? 'remote-users'
+    let childRoute = routePath.includes(SiteRoutes.REMOTE_USERS)
+      ? SiteRoutes.REMOTE_USERS
       : routePath.split('/').pop();
 
     if (childRoute.includes('?')) {
@@ -139,8 +137,8 @@ export class RegistrationGuard extends BaseGuard {
     routePath: string,
     loopPath: string,
     destinationPath: string = null,
-    oid: number = null): boolean {
-
+    oid: number = null
+  ): boolean {
     const modulePath = this.config.routes.site;
     const comparePath = (destinationPath && oid)
       ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
@@ -153,4 +151,19 @@ export class RegistrationGuard extends BaseGuard {
       return false;
     }
   }
+
+  // TODO use in a proper fix after pushing in a temporary fix
+  // private getChildRoute(routePath: string): string {
+  //   return this.router.url
+  //     // Truncate query parameters
+  //     .split('?')
+  //     .shift()
+  //     // List the remaining URI params
+  //     .split('/')
+  //     // Remove URI params that are numbers
+  //     .filter(p => !/^\d+$/.test(p))
+  //     // Remove blacklisted URI params
+  //     .filter(p => !['new'].includes(p))
+  //     .pop(); // Current route is the last index
+  // }
 }

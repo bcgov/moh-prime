@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Bogus;
@@ -57,8 +58,8 @@ namespace PrimeTests.Utils
         public static Faker<Job> JobFaker = new Faker<Job>()
             .RuleFor(j => j.Title, f => f.Random.Word());
 
-        public static Faker<EnrolleeOrganizationType> EnrolleeOrganizationTypeFaker = new Faker<EnrolleeOrganizationType>()
-            .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Int(1, 2));
+        public static Faker<EnrolleeCareSetting> EnrolleeCareSettingFaker = new Faker<EnrolleeCareSetting>()
+            .RuleFor(o => o.CareSettingCode, f => f.Random.Int(1, 2));
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
             .RuleFor(es => es.StatusCode, f => (int)StatusType.Editable)
@@ -77,9 +78,10 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
             .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
             .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
-            .RuleFor(e => e.EnrolleeOrganizationTypes, f => EnrolleeOrganizationTypeFaker.Generate(2))
+            .RuleFor(e => e.EnrolleeCareSettings, f => EnrolleeCareSettingFaker.Generate(2))
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
-            .RuleFor(e => e.IdentityAssuranceLevel, f => 3);
+            .RuleFor(e => e.IdentityAssuranceLevel, f => 3)
+            .RuleFor(e => e.AccessTerms, f => new List<AccessTerm>());
 
         public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()
             .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
@@ -166,10 +168,10 @@ namespace PrimeTests.Utils
                 db.AddRange(new JobName { Code = 4, Name = "Ward Clerk" });
             }
 
-            if (!db.Set<OrganizationType>().Any())
+            if (!db.Set<CareSetting>().Any())
             {
-                db.AddRange(new OrganizationType { Code = 1, Name = "Health Authority" });
-                db.AddRange(new OrganizationType { Code = 2, Name = "Pharmacy" });
+                db.AddRange(new CareSetting { Code = 1, Name = "Health Authority" });
+                db.AddRange(new CareSetting { Code = 2, Name = "Pharmacy" });
             }
 
             if (!db.Set<Status>().Any())

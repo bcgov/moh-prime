@@ -7,30 +7,33 @@ using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
+using DelegateDecompiler.EntityFrameworkCore;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
 {
     public class EnrolleeService : BaseService, IEnrolleeService
     {
+        private readonly IMapper _mapper;
         private readonly ISubmissionRulesService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
-        private readonly IPrivilegeService _privilegeService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IBusinessEventService _businessEventService;
 
         public EnrolleeService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
+            IMapper mapper,
             ISubmissionRulesService automaticAdjudicationService,
             IEmailService emailService,
-            IPrivilegeService privilegeService,
             IEnrolleeProfileVersionService enroleeProfileVersionService,
             IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
+            _mapper = mapper;
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
-            _privilegeService = privilegeService;
             _enroleeProfileVersionService = enroleeProfileVersionService;
             _businessEventService = businessEventService;
         }
@@ -38,32 +41,31 @@ namespace Prime.Services
         public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
         {
             return await _context.Enrollees
+                .AsNoTracking()
                 .AnyAsync(e => e.Id == enrolleeId);
         }
 
-        public async Task<bool> EnrolleeUserIdExistsAsync(Guid userId)
+        public async Task<bool> UserIdExistsAsync(Guid userId)
         {
             return await _context.Enrollees
+                .AsNoTracking()
                 .AnyAsync(e => e.UserId == userId);
         }
 
-        public async Task<bool> EnrolleeGpidExistsAsync(string gpid)
+        public async Task<bool> GpidExistsAsync(string gpid)
         {
             return await _context.Enrollees
+                .AsNoTracking()
                 .AnyAsync(e => e.GPID == gpid);
         }
 
-        public async Task<Enrollee> GetEnrolleeAsync(Guid userId)
+        public async Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId)
         {
-            var entity = await this.GetBaseEnrolleeQuery()
-                .SingleOrDefaultAsync(e => e.UserId == userId);
-
-            if (entity != null)
-            {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-            }
-
-            return entity;
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => new PermissionsRecord { UserId = e.UserId })
+                .SingleOrDefaultAsync();
         }
 
         public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
@@ -86,8 +88,6 @@ namespace Prime.Services
 
             if (entity != null)
             {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-
                 // TODO: This is an interm fix for making a different view model for enrollee based on isAdmin
                 if (isAdmin)
                 {
@@ -98,45 +98,33 @@ namespace Prime.Services
             return entity;
         }
 
-        public async Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
+        public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery()
-                .Include(e => e.Adjudicator);
+            searchOptions = searchOptions ?? new EnrolleeSearchOptions();
 
-            if (searchOptions != null && searchOptions.TextSearch != null)
-            {
-                query = query.Where(e =>
-                    e.FirstName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    || e.LastName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    || e.ContactEmail.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    || e.VoicePhone.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    // Since DisplayId is a derived field we can not query on it. And we
-                    // don't want to have to grab all Enrollees and filter on the front end.
-                    || (e.Id + Enrollee.DISPLAY_OFFSET).ToString().Equals(searchOptions.TextSearch)
-                    || e.FirstName.ToLower().StartsWith(searchOptions.TextSearch.ToLower())
-                    || e.Certifications.Any(c => c.LicenseNumber.ToLower().StartsWith(searchOptions.TextSearch.ToLower()))
-                );
-            }
-
-            IEnumerable<Enrollee> items = await query.ToListAsync();
-
-            if (searchOptions?.StatusCode != null)
-            {
-                // TODO refactor see Jira PRIME-251
-                items = items.Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode);
-            }
-
-            foreach (var item in items)
-            {
-                item.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(item);
-            }
-
-            return items;
+            return await _context.Enrollees
+                .AsNoTracking()
+                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
+                    .Search(e => e.FirstName,
+                        e => e.LastName,
+                        e => e.ContactEmail,
+                        e => e.VoicePhone,
+                        e => e.DisplayId.ToString())
+                    .SearchCollections(e => e.Certifications.Select(c => c.LicenseNumber))
+                    .Containing(searchOptions.TextSearch)
+                )
+                .If(searchOptions.StatusCode.HasValue, q => q
+                    .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
+                )
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreements = _context.NewestAgreements })
+                .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
+                .ToListAsync();
         }
 
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
             Enrollee enrollee = await this.GetBaseEnrolleeQuery()
+                .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
 
             if (enrollee == null
@@ -145,16 +133,12 @@ namespace Prime.Services
                 return null;
             }
 
-            enrollee.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(enrollee);
             return enrollee;
         }
 
         public async Task<int> CreateEnrolleeAsync(Enrollee enrollee)
         {
-            if (enrollee == null)
-            {
-                throw new ArgumentNullException(nameof(enrollee), "Could not create an enrollee, the passed in Enrollee cannot be null.");
-            }
+            enrollee.ThrowIfNull(nameof(enrollee));
 
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             _context.Enrollees.Add(enrollee);
@@ -176,7 +160,7 @@ namespace Prime.Services
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
-                .Include(e => e.EnrolleeOrganizationTypes)
+                .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.SelfDeclarations)
                 .SingleAsync(e => e.Id == enrolleeId);
 
@@ -185,7 +169,7 @@ namespace Prime.Services
             UpdateMailingAddress(enrollee, enrolleeProfile.MailingAddress);
             ReplaceExistingItems(enrollee.Certifications, enrolleeProfile.Certifications, enrolleeId);
             ReplaceExistingItems(enrollee.Jobs, enrolleeProfile.Jobs, enrolleeId);
-            ReplaceExistingItems(enrollee.EnrolleeOrganizationTypes, enrolleeProfile.EnrolleeOrganizationTypes, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeCareSettings, enrolleeProfile.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, enrolleeProfile.SelfDeclarations, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
@@ -268,14 +252,12 @@ namespace Prime.Services
                 .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            if (enrollee == null)
+            if (enrollee == null || enrollee.CurrentStatus == null)
             {
                 return false;
             }
 
-            var currentStatusCode = enrollee.CurrentStatus?.StatusCode ?? -1;
-
-            return statusCodesToCheck.Cast<int>().Contains(currentStatusCode);
+            return statusCodesToCheck.Contains(enrollee.CurrentStatus.GetStatusType());
         }
 
         private IQueryable<Enrollee> GetBaseEnrolleeQuery()
@@ -287,7 +269,7 @@ namespace Prime.Services
                     .ThenInclude(c => c.License)
                         .ThenInclude(l => l.DefaultPrivileges)
                 .Include(e => e.Jobs)
-                .Include(e => e.EnrolleeOrganizationTypes)
+                .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.Status)
                 .Include(e => e.EnrolmentStatuses)
@@ -307,11 +289,6 @@ namespace Prime.Services
             var entity = await this.GetBaseEnrolleeQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            if (entity != null)
-            {
-                entity.Privileges = await _privilegeService.GetPrivilegesForEnrolleeAsync(entity);
-            }
 
             return entity;
         }
@@ -464,10 +441,7 @@ namespace Prime.Services
 
         public async Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids)
         {
-            if (hpdids == null)
-            {
-                throw new ArgumentNullException(nameof(hpdids));
-            }
+            hpdids.ThrowIfNull(nameof(hpdids));
 
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 

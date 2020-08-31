@@ -32,7 +32,7 @@
                         [editRoute]="SiteRoutes.CARE_SETTING"
                         [showEditRedirect]="!site.submittedDate">
     <app-enrollee-property title="Care Setting">
-      {{ site.organizationTypeCode | configCode: 'organizationTypes' | default }}
+      {{ site.careSettingCode | configCode: 'careSettings' | default }}
     </app-enrollee-property>
     <app-enrollee-property title="Vendor">
       {{ site.siteVendors[0]?.vendorCode | configCode: 'vendors' | default }}
@@ -88,13 +88,9 @@
                         [showEditRedirect]="showEditRedirect">
     <ng-container *ngFor="let businessDay of site?.businessHours">
       <app-enrollee-property [title]="businessDay.day | weekday">
-        <ng-container *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
-          {{ businessDay.startTime | replace: ':00:00' : ':00' }} to
-          {{ businessDay.endTime | replace: ':00:00' : ':00' }}
+        <ng-container *ngIf="businessDay.startTime && businessDay.endTime">
+          {{ businessDay.startTime }} to {{ businessDay.endTime }}
         </ng-container>
-        <ng-template #open24Hours>
-          24 hours
-        </ng-template>
       </app-enrollee-property>
     </ng-container>
   </app-overview-section>
@@ -131,6 +127,26 @@
           {{ user | fullname | default }}
         </app-enrollee-property>
       </div>
+
+      <ng-container *ngFor="let remoteUserCertification of user.remoteUserCertifications">
+
+        <div class="mb-3">
+          <strong>Certification</strong>
+        </div>
+
+        <div class="ml-4 mb-3">
+
+          <app-enrollee-property title="College">
+            {{ remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Licence">
+            {{ remoteUserCertification.licenseNumber | default }}
+          </app-enrollee-property>
+
+        </div>
+
+      </ng-container>
 
       <ng-container *ngFor="let remoteUserLocation of user.remoteUserLocations">
         <div class="mb-3">

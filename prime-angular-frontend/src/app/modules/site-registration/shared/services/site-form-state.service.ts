@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
+import { StringUtils } from '@lib/utils/string-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
@@ -10,7 +12,9 @@ import { Site } from '@registration/shared/models/site.model';
 import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
-import { RemoteUserCertification } from '../models/remote-user-certification.model';
+import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { BusinessDay } from '@registration/shared/models/business-day.model';
+import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 
 @Injectable({
   providedIn: 'root'
@@ -55,10 +59,18 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * Convert reactive form abstract controls into JSON.
    */
   public get json(): Site {
-    const { organizationTypeCode, vendorCode } = this.careSettingTypeForm.getRawValue();
+    const { careSettingCode, vendorCode } = this.careSettingTypeForm.getRawValue();
     const { doingBusinessAs } = this.businessForm.getRawValue();
     const { physicalAddress } = this.siteAddressForm.getRawValue();
-    const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
+    const businessHours = this.hoursOperationForm.getRawValue().businessDays
+      .map((hours: BusinessDayHours, dayOfWeek: number) => {
+        if (hours.startTime && hours.endTime) {
+          hours.startTime = StringUtils.splice(hours.startTime, 2, ':');
+          hours.endTime = StringUtils.splice(hours.endTime, 2, ':');
+        }
+        return new BusinessDay(dayOfWeek, hours.startTime, hours.endTime);
+      })
+      .filter((day: BusinessDay) => day.startTime !== null);
     const remoteUsers = this.remoteUsersForm.getRawValue().remoteUsers
       .map((ru: RemoteUser) => {
         // Remove the ID from the remote user to simplify updates on the server
@@ -79,7 +91,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       // organization (N/A)
       provisionerId: this.provisionerId,
       // provisioner (N/A)
-      organizationTypeCode,
+      careSettingCode,
       // Only using single vendors for now
       siteVendors: [{
         siteId: this.siteId,
@@ -161,9 +173,17 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     }
 
     if (site.businessHours?.length) {
-      const array = this.hoursOperationForm.get('businessDays') as FormArray;
-      array.clear(); // Clear out existing indices
-      this.formUtilsService.formArrayPush(array, site.businessHours);
+      const businessDays = [...Array(7).keys()]
+        .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
+          const day = site.businessHours.find(bh => bh.day === dayOfWeek);
+          if (day) {
+            day.startTime = day.startTime.replace(':', '');
+            day.endTime = day.endTime.replace(':', '');
+          }
+          days.push(day ?? {});
+          return days;
+        }, []);
+      this.hoursOperationForm.get('businessDays').patchValue(businessDays);
     }
 
     if (site.remoteUsers?.length) {
@@ -173,7 +193,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
       // Omitted from payload, but provided in the form to allow for
       // validation to occur when "Have Remote Users" is toggled
-      // TODO component-level add control on init and remove control on submission to drop from state service
       form.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
 
       site.remoteUsers.map((remoteUser: RemoteUser) => {
@@ -228,7 +247,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
   private buildCareSettingTypeForm(code: number = null): FormGroup {
     return this.fb.group({
-      organizationTypeCode: [
+      careSettingCode: [
         code,
         [Validators.required]
       ],
@@ -260,10 +279,17 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   }
 
   private buildHoursOperationForm(): FormGroup {
+    const groups = [...new Array(7)].map(() =>
+      this.fb.group({
+        startTime: [null, []],
+        endTime: [null, []],
+      }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') })
+    );
+
     return this.fb.group({
-      businessDays: this.fb.array(
-        [],
-        [Validators.required])
+      businessDays: this.fb.array(groups)
+      // TODO at least one business hours is required
+      // [FormArrayValidators.atLeast(1)]
     });
   }
 
@@ -279,7 +305,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         [],
         []
       )
-      // TODO at least one if has remote users if hasRemoteUsers is checked validator
+      // TODO at least one remote users is required
       // [FormArrayValidators.atLeast(1)]
     });
   }

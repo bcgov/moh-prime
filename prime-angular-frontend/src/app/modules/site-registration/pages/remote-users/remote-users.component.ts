@@ -9,6 +9,7 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { AddressPipe } from '@shared/pipes/address.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
@@ -39,7 +40,8 @@ export class RemoteUsersComponent implements OnInit {
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
     private organizationResource: OrganizationResource,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private addressPipe: AddressPipe
   ) {
     this.title = 'Practitioners Requiring Remote PharmaNet Access';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -54,13 +56,42 @@ export class RemoteUsersComponent implements OnInit {
     return this.form.get('hasRemoteUsers') as FormControl;
   }
 
+  public getRemoteUserProperties(remoteUser: FormGroup) {
+    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
+    const remoteUserLocations = remoteUser.controls?.remoteUserLocations as FormArray;
+
+    const firstLocation = remoteUserLocations.value[0].physicalAddress;
+    firstLocation.provinceCode = 'BC';
+
+    const collegeLicence = remoteUserCertifications.length > 1
+      ? 'More than one college licence'
+      : remoteUserCertifications.length === 0
+        ? 'No college licence'
+        : remoteUserCertifications.value[0].licenseNumber;
+
+    const remoteAddress = remoteUserLocations.controls?.length > 1
+      ? 'More than one remote address'
+      : this.addressPipe.transform(firstLocation);
+
+    return [
+      {
+        key: 'College Licence',
+        value: collegeLicence
+      },
+      {
+        key: 'Remote Address',
+        value: remoteAddress
+      },
+    ];
+  }
+
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       this.hasNoRemoteUserError = false;
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
 
-      this.organizationResource
+      this.busy = this.organizationResource
         .getOrganizationById(organizationId)
         .pipe(
           map((organization: Organization) => !!organization.acceptedAgreementDate),
@@ -70,13 +101,13 @@ export class RemoteUsersComponent implements OnInit {
           ),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
             return hasSignedOrgAgreement
-              ? this.siteResource.updateCompleted(this.siteService.site.id)
+              ? (this.siteResource.updateCompleted(this.siteService.site.id))
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
           }),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
             return this.siteService.site.submittedDate
-              ? this.siteResource.sendRemoteUsersEmail(this.route.snapshot.params.sid)
+              ? (this.siteResource.sendRemoteUsersEmail(this.route.snapshot.params.sid))
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
           })
@@ -92,6 +123,10 @@ export class RemoteUsersComponent implements OnInit {
 
   public onRemove(index: number) {
     this.remoteUsers.removeAt(index);
+  }
+
+  public onEdit(index: number) {
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.REMOTE_USERS, index]);
   }
 
   public onBack() {
@@ -148,5 +183,6 @@ export class RemoteUsersComponent implements OnInit {
     // Remove query param from URL without refreshing
     this.router.navigate([], { queryParams: { fromRemoteUser: null } });
     this.siteFormStateService.setForm(site, !fromRemoteUser);
+    this.form.markAsPristine();
   }
 }

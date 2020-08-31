@@ -10,6 +10,7 @@ using Prime.Models.Api;
 using Prime.Services;
 using PrimeTests.Utils;
 using PrimeTests.ModelFactories;
+using AutoMapper;
 
 namespace PrimeTests.UnitTests
 {
@@ -17,18 +18,18 @@ namespace PrimeTests.UnitTests
     {
         public EnrolleeService CreateService(
             IHttpContextAccessor httpContext = null,
+            IMapper mapper = null,
             ISubmissionRulesService automaticAdjudicationService = null,
             IEmailService emailService = null,
-            IPrivilegeService privilegeService = null,
             IEnrolleeProfileVersionService enroleeProfileVersionService = null,
             IBusinessEventService businessEventService = null)
         {
             return new EnrolleeService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
+                mapper ?? DefaultMapper(),
                 automaticAdjudicationService ?? A.Fake<ISubmissionRulesService>(),
                 emailService ?? A.Fake<IEmailService>(),
-                privilegeService ?? A.Fake<IPrivilegeService>(),
                 enroleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>(),
                 businessEventService ?? A.Fake<IBusinessEventService>()
             );
