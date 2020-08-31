@@ -183,5 +183,6 @@ export class RemoteUsersComponent implements OnInit {
     // Remove query param from URL without refreshing
     this.router.navigate([], { queryParams: { fromRemoteUser: null } });
     this.siteFormStateService.setForm(site, !fromRemoteUser);
+    this.form.markAsPristine();
   }
 }
