@@ -15,6 +15,7 @@ import { SiteListViewModel, Site } from '@registration/shared/models/site.model'
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
   selector: 'app-site-management',
@@ -38,7 +39,9 @@ export class SiteManagementComponent implements OnInit {
     private siteFormStateService: SiteFormStateService,
     private fullnamePipe: FullnamePipe,
     private addressPipe: AddressPipe,
-    private configCodePipe: ConfigCodePipe
+    private configCodePipe: ConfigCodePipe,
+    // Temporary hack to show success message until guards can be refactored
+    private organizationService: OrganizationService
   ) {
     this.title = 'Site Management';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -93,7 +96,10 @@ export class SiteManagementComponent implements OnInit {
 
   public ngOnInit(): void {
     this.resetFormStates();
-    this.checkQueryParams();
+    // this.checkQueryParams();
+    // Temporary hack to show success message until guards can be refactored
+    this.hasSubmittedSite = (this.organizationService.showSuccess) ? true : false;
+    this.organizationService.showSuccess = false;
     this.getOrganizations();
   }
 
