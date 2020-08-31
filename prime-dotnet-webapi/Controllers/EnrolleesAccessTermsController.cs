@@ -52,14 +52,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AccessTerm>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId, [FromQuery] AccessTermFilters filters)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-
-            if (!User.CanView(enrollee))
+            if (!record.ViewableBy(User))
             {
                 return Forbid();
             }
@@ -68,7 +66,7 @@ namespace Prime.Controllers
 
             if (User.IsAdmin())
             {
-                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing PRIME History");
+                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
             }
 
             return Ok(ApiResponse.Result(accessTerms));
@@ -88,14 +86,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
         public async Task<ActionResult<AccessTerm>> GetAccessTerm(int enrolleeId, int accessTermId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-
-            if (!User.CanView(enrollee))
+            if (!record.ViewableBy(User))
             {
                 return Forbid();
             }
@@ -109,7 +105,7 @@ namespace Prime.Controllers
 
             if (User.IsAdmin())
             {
-                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing Terms of Access");
+                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Terms of Access");
             }
 
             return Ok(ApiResponse.Result(accessTerm));
@@ -129,14 +125,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAccessTerm(int enrolleeId, int accessTermId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-
-            if (!User.CanView(enrollee))
+            if (!record.ViewableBy(User))
             {
                 return Forbid();
             }
@@ -155,7 +149,7 @@ namespace Prime.Controllers
 
             if (User.IsAdmin())
             {
-                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing Enrolment in PRIME History");
+                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Enrolment in PRIME History");
             }
 
             return Ok(ApiResponse.Result(enrolleeProfileHistory));

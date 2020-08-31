@@ -131,7 +131,7 @@ namespace Prime.Services
             var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
             newStatus.AddStatusReason(StatusReasonType.Manual);
 
-            await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
+            await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
             await _context.SaveChangesAsync();
@@ -214,7 +214,7 @@ namespace Prime.Services
                 {
                     enrollee.GPID = GenerateGpid();
                 }
-                while (await _enrolleeService.EnrolleeGpidExistsAsync(enrollee.GPID));
+                while (await _enrolleeService.GpidExistsAsync(enrollee.GPID));
             }
         }
 
@@ -250,8 +250,8 @@ namespace Prime.Services
                 var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
                 newStatus.AddStatusReason(StatusReasonType.Automatic);
 
-                await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
-                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
+                await _accessTermService.CreateEnrolleeAccessTermAsync(enrolleeId);
+                await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Automatically Approved");
             }
         }
 

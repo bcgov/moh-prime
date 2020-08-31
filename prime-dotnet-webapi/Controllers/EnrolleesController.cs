@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -56,22 +57,18 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Enrollee>>> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
-            IEnumerable<Enrollee> enrollees = null;
-
-            // User must have the RO_ADMIN or ADMIN role to see all enrollees
-            if (User.IsAdmin() || User.HasAdminView())
+            if (User.HasAdminView())
             {
-                enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+                return Ok(ApiResponse.Result(await _enrolleeService.GetEnrolleesAsync(searchOptions)));
             }
             else
             {
                 var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
-                enrollees = (enrollee != null) ? new[] { enrollee } : new Enrollee[0];
+                return Ok(ApiResponse.Result(enrollee == null ? Enumerable.Empty<Enrollee>() : new[] { enrollee }));
             }
-
-            return Ok(ApiResponse.Result(enrollees));
         }
 
         // GET: api/Enrollees/5
@@ -88,20 +85,18 @@ namespace Prime.Controllers
         public async Task<ActionResult<Enrollee>> GetEnrolleeById(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.HasAdminView());
-
             if (enrollee == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-
-            if (!User.CanView(enrollee))
+            if (!enrollee.PermissionsRecord().ViewableBy(User))
             {
                 return Forbid();
             }
 
             if (User.IsAdmin())
             {
-                await _businessEventService.CreateAdminViewEventAsync(enrollee.Id, "Admin viewing the current Enrolment");
+                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing the current Enrolment");
             }
 
             return Ok(ApiResponse.Result(enrollee));
@@ -123,21 +118,22 @@ namespace Prime.Controllers
                 this.ModelState.AddModelError("Enrollee", "Could not create an enrollee, the passed in Enrollee cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
-
-            if (!User.CanEdit(enrollee))
+            if (!enrollee.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
 
-            // Check to see if this userId is already an enrollee, if so, reject creating another
-            if (await _enrolleeService.EnrolleeUserIdExistsAsync(enrollee.UserId))
+            if (await _enrolleeService.UserIdExistsAsync(enrollee.UserId))
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
             enrollee.IdentityAssuranceLevel = User.GetIdentityAssuranceLevel();
+            enrollee.IdentityProvider = User.GetIdentityProvider();
+
             var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(enrollee);
+            enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
 
             return CreatedAtAction(
                 nameof(GetEnrolleeById),
@@ -161,13 +157,12 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateEnrollee(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, [FromQuery] bool beenThroughTheWizard)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeNoTrackingAsync(enrolleeId);
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-
-            if (!User.CanEdit(enrollee))
+            if (!record.EditableBy(User))
             {
                 return Forbid();
             }
@@ -204,11 +199,6 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            if (!User.CanEdit(enrollee))
-            {
-                return Forbid();
-            }
-
             await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
 
             return Ok(ApiResponse.Result(enrollee));
@@ -227,14 +217,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<EnrolmentStatus>>> GetEnrolmentStatuses(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-
-            if (!User.CanView(enrollee))
+            if (!record.ViewableBy(User))
             {
                 return Forbid();
             }
@@ -259,7 +247,6 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<AdjudicatorNote>>> GetAdjudicatorNotes(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
             if (enrollee == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
@@ -290,14 +277,13 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-
             if (string.IsNullOrWhiteSpace(note))
             {
                 this.ModelState.AddModelError("note", "Adjudicator notes can't be null or empty.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var createdAdjudicatorNote = await _enrolleeService.CreateEnrolleeAdjudicatorNoteAsync(enrolleeId, note, admin.Id);
 
             if (link)
@@ -334,7 +320,7 @@ namespace Prime.Controllers
             }
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
-            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var createdEnrolmentStatusReference = await _enrolleeService.CreateEnrolmentStatusReferenceAsync(enrollee.CurrentStatus.Id, admin.Id);
 
             return CreatedAtAction(
@@ -453,7 +439,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, admin);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin claimed enrollee");
 
@@ -534,7 +520,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            var admin = await _adminService.GetAdminForUserIdAsync(User.GetPrimeUserId());
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var username = admin.IDIR.Replace("@idir", "");
             await _emailService.SendReminderEmailAsync(enrollee);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Email reminder sent to Enrollee by {username}");
@@ -556,14 +542,12 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<SelfDeclarationDocument>> createSelfDeclarationDocument(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-
-            if (!User.CanEdit(enrollee))
+            if (!record.EditableBy(User))
             {
                 return Forbid();
             }
@@ -587,14 +571,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> getSelfDeclarationDocument(int enrolleeId, int selfDeclarationDocumentId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-
-            if (!User.CanView(enrollee))
+            if (!record.ViewableBy(User))
             {
                 return Forbid();
             }

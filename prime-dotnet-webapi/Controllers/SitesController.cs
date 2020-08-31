@@ -65,9 +65,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            var sites = (User.HasAdminView())
-                ? await _siteService.GetSitesAsync()
-                : await _siteService.GetSitesAsync(organizationId);
+            var sites = await _siteService.GetSitesAsync(organizationId);
 
             if (verbose)
             {
@@ -94,7 +92,7 @@ namespace Prime.Controllers
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
             {
                 return Forbid();
             }
@@ -151,9 +149,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-
-            if (!User.CanEdit(party))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -182,9 +178,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-
-            if (!User.CanEdit(party))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -207,13 +201,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<Site>> DeleteSite(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -236,13 +228,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<Site>> SubmitSiteRegistration(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -268,13 +258,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<BusinessLicenceDocument>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -297,13 +285,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<BusinessLicenceDocument>>> GetBusinessLicence(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
             {
                 return Forbid();
             }
@@ -339,9 +325,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-
-            if (!User.CanEdit(party))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -364,13 +348,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<string>> GetLatestBusinessLicenceDownloadToken(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-
-            if (!User.CanEdit(site.Provisioner))
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
             }
@@ -394,7 +376,6 @@ namespace Prime.Controllers
         public async Task<ActionResult> sendRemoteUsersEmail(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
