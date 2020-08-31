@@ -3,10 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { WeekDay } from '@angular/common';
 
 import { Subscription, Observable } from 'rxjs';
 
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -17,7 +19,6 @@ import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -97,7 +98,10 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
       this.formUtilsService.resetAndClearValidators(group);
     } else {
       group.patchValue({ startTime: '0900', endTime: '1700' });
-      this.formUtilsService.setValidators(group, [Validators.required]);
+      this.formUtilsService.setValidators(group, [
+        Validators.required,
+        FormControlValidators.requiredLength(4)
+      ]);
     }
   }
 
@@ -134,5 +138,6 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
+    this.form.markAsPristine();
   }
 }

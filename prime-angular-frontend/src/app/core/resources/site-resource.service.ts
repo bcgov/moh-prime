@@ -50,11 +50,16 @@ export class SiteResource {
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         map((site: Site) => {
-          site.businessHours = site.businessHours.map((businessDay: BusinessDay) => {
-            businessDay.startTime = businessDay.startTime.slice(0, -3).replace(':', '');
-            businessDay.endTime = businessDay.endTime.slice(0, -3).replace(':', '');
-            return businessDay;
-          });
+          site.businessHours = site.businessHours
+            .map((businessDay: BusinessDay) => {
+              // Convert timespan to hours and minutes
+              businessDay.startTime = businessDay.startTime.slice(0, -3);
+              businessDay.endTime = (moment.duration(businessDay.endTime).asHours() === 24)
+                ? '24:00' // Convert timespan of 1.00:00:00 to hours and minutes
+                : businessDay.endTime.slice(0, -3);
+
+              return businessDay;
+            });
           return site;
         }),
         tap((site: Site) => this.logger.info('SITE', site)),
@@ -86,14 +91,16 @@ export class SiteResource {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          businessDay.startTime = `${businessDay.startTime.substring(0, 2)}:${businessDay.startTime.substring(2, 4)}:00`;
-          businessDay.endTime = `${businessDay.endTime.substring(0, 2)}:${businessDay.endTime.substring(2, 4)}:00`;
+          // Convert hours and minutes to timespan
+          businessDay.startTime = `${businessDay.startTime}:00`;
+          businessDay.endTime = (businessDay.endTime === '24:00')
+            ? businessDay.endTime = '1.00:00' // Convert to 24 hours to 1 day
+            : `${businessDay.endTime}:00`;
           return businessDay;
         });
     } else {
       site.businessHours = null;
     }
-
     return this.apiResource.put<NoContent>(`sites/${site.id}`, site)
       .pipe(
         // TODO remove pipe when ApiResource handles NoContent
