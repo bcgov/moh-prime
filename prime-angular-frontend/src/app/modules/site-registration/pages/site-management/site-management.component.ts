@@ -98,7 +98,8 @@ export class SiteManagementComponent implements OnInit {
     this.resetFormStates();
     // this.checkQueryParams();
     // Temporary hack to show success message until guards can be refactored
-    this.hasSubmittedSite = this.organizationService.showSuccess;
+    this.hasSubmittedSite = (this.organizationService.showSuccess) ? true : false;
+    this.organizationService.showSuccess = false;
     this.getOrganizations();
   }
 
