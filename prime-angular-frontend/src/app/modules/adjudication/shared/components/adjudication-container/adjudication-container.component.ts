@@ -10,7 +10,7 @@ import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-dat
 
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
@@ -39,7 +39,7 @@ export class AdjudicationContainerComponent implements OnInit {
   @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
-  public dataSource: MatTableDataSource<HttpEnrollee>;
+  public dataSource: MatTableDataSource<EnrolleeListViewModel>;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -59,7 +59,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.action = new EventEmitter<void>();
 
     this.hasActions = false;
-    this.dataSource = new MatTableDataSource<HttpEnrollee>([]);
+    this.dataSource = new MatTableDataSource<EnrolleeListViewModel>([]);
 
     this.showSearchFilter = false;
   }
@@ -113,7 +113,7 @@ export class AdjudicationContainerComponent implements OnInit {
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
-  public onApprove(enrollee: HttpEnrollee) {
+  public onApprove(enrollee: EnrolleeListViewModel) {
     const data: DialogOptions = {
       title: 'Approve Enrolment',
       message: 'Are you sure you want to approve this enrolment?',
@@ -277,7 +277,7 @@ export class AdjudicationContainerComponent implements OnInit {
     }
   }
 
-  public onToggleManualAdj(enrollee: HttpEnrollee) {
+  public onToggleManualAdj(enrollee: EnrolleeListViewModel) {
     const flagText = enrollee.alwaysManual ? 'Unflag' : 'Flag';
     const data: DialogOptions = {
       title: `${flagText} Enrollee`,
@@ -323,14 +323,15 @@ export class AdjudicationContainerComponent implements OnInit {
       : this.getEnrollees(queryParams);
 
     this.busy = results$
-      .subscribe((enrollees: HttpEnrollee[]) => this.dataSource.data = enrollees);
+      .subscribe((enrollees: EnrolleeListViewModel[]) => this.dataSource.data = enrollees);
   }
 
-  private getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee[]> {
+  private getEnrolleeById(enrolleeId: number): Observable<EnrolleeListViewModel[]> {
     return this.adjudicationResource
       .getEnrolleeById(enrolleeId)
       .pipe(
-        map((enrollee: HttpEnrollee) => [enrollee]),
+        map(this.toEnrolleeListViewModel),
+        map((enrollee: EnrolleeListViewModel) => [enrollee]),
         tap(() => this.showSearchFilter = false)
       );
   }
@@ -344,12 +345,12 @@ export class AdjudicationContainerComponent implements OnInit {
 
   private updateEnrollee(enrollee: HttpEnrollee) {
     this.dataSource.data = MatTableDataSourceUtils
-      .update<HttpEnrollee>(this.dataSource, 'id', enrollee);
+      .update<EnrolleeListViewModel>(this.dataSource, 'id', this.toEnrolleeListViewModel(enrollee));
   }
 
-  private removeEnrollee(enrollee: HttpEnrollee) {
+  private removeEnrollee(enrollee: EnrolleeListViewModel) {
     this.dataSource.data = MatTableDataSourceUtils
-      .delete<HttpEnrollee>(this.dataSource, 'id', enrollee.id);
+      .delete<EnrolleeListViewModel>(this.dataSource, 'id', enrollee.id);
   }
 
   private adjudicationActionPipe(enrolleeId: number, action: SubmissionAction) {
@@ -374,5 +375,36 @@ export class AdjudicationContainerComponent implements OnInit {
       ),
       exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
     );
+  }
+
+  private toEnrolleeListViewModel(enrollee: HttpEnrollee): EnrolleeListViewModel {
+    const {
+      id,
+      displayId,
+      firstName,
+      lastName,
+      givenNames,
+      appliedDate,
+      approvedDate,
+      expiryDate,
+      currentStatus,
+      previousStatus,
+      adjudicator,
+      alwaysManual
+    } = enrollee;
+    return {
+      id,
+      displayId,
+      firstName,
+      lastName,
+      givenNames,
+      appliedDate,
+      approvedDate,
+      expiryDate,
+      currentStatusCode: currentStatus?.statusCode,
+      previousStatus,
+      adjudicatorIdir: adjudicator?.idir,
+      alwaysManual
+    };
   }
 }

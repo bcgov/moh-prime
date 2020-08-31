@@ -11,7 +11,7 @@ namespace Prime.Services
 
         Task<IEnumerable<AccessTerm>> GetAccessTermsAsync(int enrolleeId, AccessTermFilters filters);
 
-        Task CreateEnrolleeAccessTermAsync(Enrollee enrollee);
+        Task CreateEnrolleeAccessTermAsync(int enrolleeId);
 
         Task AcceptCurrentAccessTermAsync(int enrolleeId);
 
