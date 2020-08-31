@@ -44,7 +44,7 @@
                      formControlName="startTime"
                      placeholder="00:00"
                      [errorStateMatcher]="busDayHoursErrStateMatcher">
-              <mat-error *ngIf="businessDay.hasError('lessthan')">
+              <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('startTime').hasError('length')">
                 Invalid
                 <!-- TODO need better error message, but width makes messaging hard due to wrapping -->
                 <!-- Opening hours must be earlier than closing hours -->
@@ -62,7 +62,7 @@
                      formControlName="endTime"
                      placeholder="00:00"
                      [errorStateMatcher]="busDayHoursErrStateMatcher">
-              <mat-error *ngIf="businessDay.hasError('lessthan')">
+              <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('endTime').hasError('length')">
                 Invalid
                 <!-- TODO need better error message, but width makes messaging hard due to wrapping -->
                 <!-- Opening hours must be earlier than closing hours -->

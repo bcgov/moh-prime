@@ -105,6 +105,7 @@ export class BusinessLicenceComponent implements OnInit {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
+    this.form.markAsPristine();
 
     this.getBusinessLicences(site);
     this.getDoingBusinessAs(site);
