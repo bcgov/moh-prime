@@ -167,7 +167,7 @@ pipeline {
         }
         // BUG (2020-08-13): Currently not working, failing to find files
         // stage('Cleanup') {
-        //     agent { label 'code-tests' }
+        //     agent { label 'master' }
         //     steps {
         //         sh "./player.sh sparsify"
         //     }
