@@ -65,7 +65,7 @@ namespace PrimeTests.UnitTests
             var expectedAgreementId = TestDb.Agreements.GetNewestIdOfType<OboAgreement>();
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee);
+            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
@@ -88,7 +88,7 @@ namespace PrimeTests.UnitTests
             var expectedAgreementId = TestDb.Agreements.GetNewestIdOfType<OboAgreement>();
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee);
+            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
@@ -120,7 +120,7 @@ namespace PrimeTests.UnitTests
             }
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee);
+            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
@@ -137,7 +137,7 @@ namespace PrimeTests.UnitTests
             TestDb.Has(enrollee);
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee);
+            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedLimitsClauseText: noteText);

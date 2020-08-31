@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -13,7 +13,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
   styleUrls: ['./enrollee-table.component.scss']
 })
 export class EnrolleeTableComponent implements OnInit {
-  @Input() public dataSource: MatTableDataSource<HttpEnrollee>;
+  @Input() public dataSource: MatTableDataSource<EnrolleeListViewModel>;
   @Output() public notify: EventEmitter<number>;
   @Output() public claim: EventEmitter<number>;
   @Output() public disclaim: EventEmitter<number>;
@@ -41,35 +41,34 @@ export class EnrolleeTableComponent implements OnInit {
       'adjudicator',
       'actions'
     ];
-    this.dataSource = new MatTableDataSource<HttpEnrollee>([]);
   }
 
   public get canEdit(): boolean {
     return this.authService.isAdmin();
   }
 
-  public canReviewStatusReasons(enrollee: HttpEnrollee): boolean {
+  public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
     return (
-      enrollee.currentStatus?.statusCode === EnrolmentStatus.UNDER_REVIEW ||
+      enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW ||
       enrollee.previousStatus?.statusCode === EnrolmentStatus.UNDER_REVIEW
     );
   }
 
-  public onNotify(enrolleeId: number) {
+  public onNotify(enrolleeId: number): void {
     this.notify.emit(enrolleeId);
   }
 
-  public onClaim(enrolleeId: number) {
+  public onClaim(enrolleeId: number): void {
     this.claim.emit(enrolleeId);
   }
 
-  public onDisclaim(enrolleeId: number) {
+  public onDisclaim(enrolleeId: number): void {
     this.disclaim.emit(enrolleeId);
   }
 
-  public onRoute(routePath: string | (string | number)[]) {
+  public onRoute(routePath: string | (string | number)[]): void {
     this.route.emit(routePath);
   }
 
-  public ngOnInit() { }
+  public ngOnInit(): void { }
 }

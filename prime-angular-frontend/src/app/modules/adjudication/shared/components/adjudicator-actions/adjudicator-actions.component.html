@@ -23,22 +23,22 @@
       <span>Decline Enrollee</span>
     </button>
     <button mat-menu-item
-            *ngIf="enrollee.currentStatus.statusCode !== EnrolmentStatus.LOCKED &&
-                   enrollee.currentStatus.statusCode !== EnrolmentStatus.DECLINED"
+            *ngIf="enrollee.currentStatusCode !== EnrolmentStatus.LOCKED &&
+                   enrollee.currentStatusCode !== EnrolmentStatus.DECLINED"
             [disabled]="!canEdit"
             (click)="onLock()">
       <mat-icon>lock</mat-icon>
       <span>Lock Enrollee</span>
     </button>
     <button mat-menu-item
-            *ngIf="enrollee.currentStatus.statusCode === EnrolmentStatus.LOCKED"
+            *ngIf="enrollee.currentStatusCode === EnrolmentStatus.LOCKED"
             [disabled]="!canEdit"
             (click)="onUnlock()">
       <mat-icon>lock_open</mat-icon>
       <span>Unlock Enrollee</span>
     </button>
     <button mat-menu-item
-            *ngIf="enrollee.currentStatus.statusCode === EnrolmentStatus.DECLINED"
+            *ngIf="enrollee.currentStatusCode === EnrolmentStatus.DECLINED"
             [disabled]="!canEdit"
             (click)="onEnableEnrollee()">
       <mat-icon>thumb_up</mat-icon>
@@ -46,7 +46,7 @@
     </button>
     <button mat-menu-item
             [disabled]="!canEdit"
-            *ngIf="enrollee.currentStatus.statusCode === EnrolmentStatus.UNDER_REVIEW"
+            *ngIf="enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
             (click)="onEnableEditing()">
       <mat-icon>lock_open</mat-icon>
       <span>Enable Editing</span>
@@ -60,7 +60,7 @@
     </button>
     <button mat-menu-item
             [disabled]="!canEdit"
-            *ngIf="enrollee.currentStatus.statusCode === EnrolmentStatus.UNDER_REVIEW"
+            *ngIf="enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
             (click)="onRerunRules()">
       <mat-icon>redo</mat-icon>
       <span>Rerun Rules</span>
