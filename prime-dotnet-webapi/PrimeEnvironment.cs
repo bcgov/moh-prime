@@ -2,16 +2,13 @@ using System;
 
 namespace Prime
 {
-    public static class PrimeConstants
+    public static class PrimeEnvironment
     {
         public readonly static string ENVIRONMENT_NAME = Environment.GetEnvironmentVariable("OC_APP") ?? "local";
         public readonly static string FRONTEND_URL = Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "localhost:4200";
         public readonly static string BACKEND_URL = Environment.GetEnvironmentVariable("BACKEND_URL") ?? "http://localhost:5000/api";
         public readonly static string KEYCLOAK_TOKEN_URL = Environment.GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
-
-        // Enrollee Classifications
-        public const string PRIME_OBO = "OBO";
-        public const string PRIME_RU = "RU";
+        public readonly static string LOG_FILE_PATH = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
         // Mail server
         public readonly static string MAIL_SERVER_URL = Environment.GetEnvironmentVariable("MAIL_SERVER_URL") ?? "localhost";
@@ -31,9 +28,6 @@ namespace Prime
         public readonly static string CHES_CLIENT_SECRET = Environment.GetEnvironmentVariable("CHES_CLIENT_SECRET") ?? "88e123a6-80cb-46a0-96d3-e2edae076ae7";
         public readonly static string CHES_TOKEN_URL = Environment.GetEnvironmentVariable("CHES_TOKEN_URL") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect";
 
-        // Logging
-        public readonly static string LOG_FILE_PATH = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
-
         // Document Manager
         public readonly static string DOCUMENT_MANAGER_URL = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_URL") ?? "http://localhost:6001/";
         public readonly static string DOCUMENT_MANAGER_CLIENT_ID = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_ID") ?? "prime-document-manager-local";
@@ -47,6 +41,5 @@ namespace Prime
         // Canada Post Address Validation
         public readonly static string ADDRESS_AUTOCOMPLETE_API_URL = Environment.GetEnvironmentVariable("ADDRESS_AUTOCOMPLETE_API_URL") ?? "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/";
         public readonly static string ADDRESS_AUTOCOMPLETE_API_KEY = Environment.GetEnvironmentVariable("ADDRESS_AUTOCOMPLETE_API_KEY") ?? "XC95-NM62-BR64-TG37";
-
     }
 }

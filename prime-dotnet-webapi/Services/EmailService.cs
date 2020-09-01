@@ -257,13 +257,13 @@ namespace Prime.Services
                 throw new ArgumentException("Must specify at least one \"To\" email address.");
             }
 
-            if (PrimeConstants.ENVIRONMENT_NAME != "prod")
+            if (PrimeEnvironment.ENVIRONMENT_NAME != "prod")
             {
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }
 
             // If CHES Email Service is running and CHES_ENABLED = true, else send through smtp
-            if (PrimeConstants.CHES_ENABLED == "true" && await _chesClient.HealthCheckAsync())
+            if (PrimeEnvironment.CHES_ENABLED == "true" && await _chesClient.HealthCheckAsync())
             {
                 await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
             }
