@@ -47,7 +47,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public busDayHoursErrStateMatcher: BusinessDayHoursErrorStateMatcher;
   public hasNoBusinessHoursError: boolean;
 
-  public customPattern = {
+  public busyHoursTimePattern = {
     A: { pattern: new RegExp('\[0-2\]') },
     B: { pattern: new RegExp('\[0-9\]') },
     C: { pattern: new RegExp('\[0-5\]') },
@@ -74,7 +74,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     const payload = this.siteFormStateService.json;
     if (this.formUtilsService.checkValidity(this.businessDays) && payload.businessHours.length) {
       this.hasNoBusinessHoursError = false;
-      this.siteResource
+      this.busy = this.siteResource
         .updateSite(payload)
         .subscribe(() => {
           this.form.markAsPristine();
