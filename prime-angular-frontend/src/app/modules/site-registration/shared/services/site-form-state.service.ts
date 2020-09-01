@@ -373,10 +373,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         0,
         []
       ],
-      userId: [
-        '00000000-0000-0000-0000-000000000000',
-        []
-      ],
       firstName: [
         { value: null, disabled },
         [Validators.required]

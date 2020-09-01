@@ -43,7 +43,7 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'PharmaNet Administrator';
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -64,7 +64,6 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
       party.physicalAddress = new Address();
     }
     this.form.patchValue(party);
-    this.form.disable();
   }
 
   public onBack() {
