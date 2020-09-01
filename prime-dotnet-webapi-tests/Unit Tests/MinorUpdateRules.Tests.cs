@@ -10,6 +10,7 @@ using Prime.ViewModels;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
 using PrimeTests.ModelFactories;
+using Prime.Configuration;
 
 namespace PrimeTests.UnitTests
 {
@@ -73,7 +74,7 @@ namespace PrimeTests.UnitTests
         public async void testAllowableChangesRule_AllowedUpdates()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
 
             profile.ContactEmail += "change";
             profile.ContactPhone += "change";
@@ -87,7 +88,7 @@ namespace PrimeTests.UnitTests
         public async void testAllowableChangesRule_SimpleDissallowedChange_SimpleProperty()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
             profile.PreferredFirstName = "BIG CHANGES";
 
             await AssertAllowableChanges(false, enrollee, profile);
@@ -97,7 +98,7 @@ namespace PrimeTests.UnitTests
         public async void testAllowableChangesRule_SimpleDissallowedChange_RemoveChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
             profile.MailingAddress = null;
 
             await AssertAllowableChanges(false, enrollee, profile);
@@ -107,7 +108,7 @@ namespace PrimeTests.UnitTests
         public async void testAllowableChangesRule_SimpleDissallowedChange_PropertyOnChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
             profile.MailingAddress.City = "Flavortown, USA";
 
             await AssertAllowableChanges(false, enrollee, profile);
@@ -117,7 +118,7 @@ namespace PrimeTests.UnitTests
         public async void testAllowableChangesRule_SimpleDissallowedChange_AddChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
             enrollee.MailingAddress = null;
 
             await AssertAllowableChanges(false, enrollee, profile);
@@ -129,22 +130,22 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
             // New cert
-            EnrolleeUpdateModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
             profile.Certifications.Add(new Certification { CollegeCode = 1 });
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Edit cert
-            profile = enrollee.ToViewModel();
+            profile = enrollee.ToUpdateModel();
             profile.Certifications.First().LicenseNumber += "6";
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Remove cert
-            profile = enrollee.ToViewModel();
+            profile = enrollee.ToUpdateModel();
             profile.Certifications = profile.Certifications.Skip(1).ToList();
             await AssertAllowableChanges(false, enrollee, profile);
         }
 
-        [Theory(Skip = "Awaiting test refactor")]
+        [Theory]
         [InlineData(true, true)]
         [InlineData(false, false)]
         public async void testAllowableChangesRule_Jobs(bool isObo, bool expected)
@@ -157,21 +158,21 @@ namespace PrimeTests.UnitTests
             }
             else
             {
-                enrollee.Certifications = new CertificationFactory(enrollee).Generate(1);
+                enrollee.Certifications = new Certification[] { new Certification() };
             }
 
             // New job
-            EnrolleeUpdateModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
             profile.Jobs.Add(new Job { Title = "Snake sweater knitter" });
             await AssertAllowableChanges(expected, enrollee, profile);
 
             // Edit job
-            profile = enrollee.ToViewModel();
+            profile = enrollee.ToUpdateModel();
             profile.Jobs.First().Title = "Bespoke lifehack crafter";
             await AssertAllowableChanges(expected, enrollee, profile);
 
             // Remove job
-            profile = enrollee.ToViewModel();
+            profile = enrollee.ToUpdateModel();
             profile.Jobs = profile.Jobs.Skip(1).ToList();
             await AssertAllowableChanges(expected, enrollee, profile);
         }
@@ -182,18 +183,75 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
             // New org
-            EnrolleeUpdateModel profile = enrollee.ToViewModel();
+            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
             profile.EnrolleeCareSettings.Add(new EnrolleeCareSetting { CareSettingCode = 1 });
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Edit org
-            profile = enrollee.ToViewModel();
+            profile = enrollee.ToUpdateModel();
             profile.EnrolleeCareSettings.First().CareSettingCode++;
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Remove org
-            profile = enrollee.ToViewModel();
+            profile = enrollee.ToUpdateModel();
             profile.EnrolleeCareSettings = profile.EnrolleeCareSettings.Skip(1).ToList();
+            await AssertAllowableChanges(false, enrollee, profile);
+        }
+
+        public static IEnumerable<object[]> SelfDeclarationData()
+        {
+            foreach (var declarationType in new SelfDeclarationTypeConfiguration().SeedData)
+            {
+                yield return new[] { declarationType };
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(SelfDeclarationData))]
+        public async void testAllowableChangesRule_SelfDeclarations_AddToEmpty(SelfDeclarationType declarationType)
+        {
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            enrollee.SelfDeclarations = new List<SelfDeclaration>();
+
+            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
+            profile.SelfDeclarations.Add(new SelfDeclaration
+            {
+                SelfDeclarationTypeCode = declarationType.Code,
+                SelfDeclarationDetails = "I did stuffs"
+            });
+
+            await AssertAllowableChanges(false, enrollee, profile);
+        }
+
+        [Theory]
+        [MemberData(nameof(SelfDeclarationData))]
+        public async void testAllowableChangesRule_SelfDeclarations_ModifySingle(SelfDeclarationType declarationType)
+        {
+            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+            var declaration = new SelfDeclaration
+            {
+                SelfDeclarationType = declarationType,
+                SelfDeclarationTypeCode = declarationType.Code,
+                SelfDeclarationDetails = "I did a thing"
+            };
+            enrollee.SelfDeclarations = new[] { declaration };
+
+            // New declaration
+            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
+            profile.SelfDeclarations.Add(new SelfDeclaration
+            {
+                SelfDeclarationTypeCode = (declaration.SelfDeclarationTypeCode % 4) + 1 // Pick a different code that exists
+            });
+            await AssertAllowableChanges(false, enrollee, profile);
+
+            // Edit declaration
+            profile = enrollee.ToUpdateModel();
+            profile.SelfDeclarations.Single().SelfDeclarationDetails += "and another thing...";
+            await AssertAllowableChanges(false, enrollee, profile);
+
+            // Remove declaration
+            profile = enrollee.ToUpdateModel();
+            profile.SelfDeclarations.Clear();
             await AssertAllowableChanges(false, enrollee, profile);
         }
 
@@ -212,7 +270,6 @@ namespace PrimeTests.UnitTests
                 typeof(ICollection<Job>),
                 typeof(ICollection<EnrolleeCareSetting>),
                 typeof(ICollection<SelfDeclaration>),
-                typeof(ICollection<SelfDeclarationDocument>),
             };
 
             var unknownTypes = typeof(EnrolleeUpdateModel)
