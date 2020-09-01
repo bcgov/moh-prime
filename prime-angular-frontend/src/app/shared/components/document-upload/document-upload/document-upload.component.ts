@@ -79,7 +79,7 @@ export class DocumentUploadComponent implements OnInit {
   }
 
   private getIdleText(allowedFileTypesMap: { [key: string]: string }): string {
-    const baseText = 'Click to Browse or Drop files here.';
+    const baseText = 'Click to Browse or Drop files here';
     if (allowedFileTypesMap == null) {
       return baseText;
     }
@@ -92,7 +92,7 @@ export class DocumentUploadComponent implements OnInit {
       typeText = `${allButLast} or ${typeText}`;
     }
 
-    return `${baseText} Files must be ${typeText}`;
+    return `${baseText}. Files must be ${typeText}`;
   }
 
   private constructServer() {
