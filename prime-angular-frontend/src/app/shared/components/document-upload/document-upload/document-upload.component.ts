@@ -54,7 +54,7 @@ export class DocumentUploadComponent implements OnInit {
 
     this.filePondOptions = {
       className: `prime-filepond-${this.componentName}`,
-      labelIdle: 'Click to Browse or Drop files here',
+      labelIdle: this.getIdleText(fileValidateTypeLabelExpectedTypesMap),
       fileValidateTypeLabelExpectedTypesMap,
       acceptedFileTypes: Object.keys(fileValidateTypeLabelExpectedTypesMap),
       allowFileTypeValidation: true,
@@ -63,7 +63,7 @@ export class DocumentUploadComponent implements OnInit {
       maxTotalFileSize: null,
       server: this.constructServer()
     };
-    
+
     if (this.additionalApiSuffix) {
       this.apiSuffix = `${this.apiSuffix}/${this.additionalApiSuffix}`;
     }
@@ -76,6 +76,23 @@ export class DocumentUploadComponent implements OnInit {
   public async onFilePondAddFile() {
     // Can't get token synchronously inside server.process(), so refresh token on file add.
     this.jwt = await this.keycloakTokenService.token();
+  }
+
+  private getIdleText(allowedFileTypesMap: { [key: string]: string }): string {
+    const baseText = 'Click to Browse or Drop files here.';
+    if (allowedFileTypesMap == null) {
+      return baseText;
+    }
+
+    const types = Object.values(allowedFileTypesMap);
+    let typeText = types.pop();
+
+    if (types.length > 0) {
+      const allButLast = types.join(', ');
+      typeText = `${allButLast} or ${typeText}`;
+    }
+
+    return `${baseText} Files must be ${typeText}`;
   }
 
   private constructServer() {
