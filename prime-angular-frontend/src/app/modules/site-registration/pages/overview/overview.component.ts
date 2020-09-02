@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Subscription, EMPTY, of } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { Subscription, EMPTY } from 'rxjs';
+import { exhaustMap, tap } from 'rxjs/operators';
 
 import { SiteResource } from '@core/resources/site-resource.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -57,8 +57,10 @@ export class OverviewComponent implements OnInit {
         exhaustMap((result: boolean) =>
           (result)
             ? this.siteResource.submitSite(payload)
-            : of(result)
-        )
+            : EMPTY
+        ),
+        // Temporary hack to show success message until guards can be refactored
+        tap(() => this.organizationService.showSuccess = true)
       )
       .subscribe(() => this.nextRoute());
   }

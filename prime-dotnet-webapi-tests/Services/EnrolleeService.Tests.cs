@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
+using AutoMapper;
 using SimpleBase;
 
 using Prime.Models;
@@ -16,9 +17,11 @@ namespace PrimeTests.Services
 {
     public class EnrolleeServiceTests : BaseServiceTests<EnrolleeService>
     {
-        private static EnrolleeSearchOptions EMPTY_ENROLLEE_SEARCH_OPTIONS = new EnrolleeSearchOptions();
-
         public EnrolleeServiceTests() : base(new object[] {
+            new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new AutoMapping());
+            }).CreateMapper(),
             new SubmissionRulesServiceMock(),
             new EmailServiceMock(),
             new EnrolleeProfileVersionServiceMock(),
@@ -41,7 +44,7 @@ namespace PrimeTests.Services
             await _dbContext.SaveChangesAsync();
 
             // get the enrollees through the service layer code
-            var enrollees = await _service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+            var enrollees = await _service.GetEnrolleesAsync();
             Assert.NotNull(enrollees);
             Assert.Equal(3, enrollees.Count());
         }

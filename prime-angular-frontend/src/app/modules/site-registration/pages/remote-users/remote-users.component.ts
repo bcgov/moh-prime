@@ -111,7 +111,7 @@ export class RemoteUsersComponent implements OnInit {
       });
 
 
-      this.organizationResource
+      this.busy = this.organizationResource
         .getOrganizationById(organizationId)
         .pipe(
           map((organization: Organization) => !!organization.acceptedAgreementDate),
@@ -219,5 +219,6 @@ export class RemoteUsersComponent implements OnInit {
     // Remove query param from URL without refreshing
     this.router.navigate([], { queryParams: { fromRemoteUser: null } });
     this.siteFormStateService.setForm(site, !fromRemoteUser);
+    this.form.markAsPristine();
   }
 }

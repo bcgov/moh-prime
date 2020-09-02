@@ -1,6 +1,8 @@
+using System.Linq;
 using AutoMapper;
 
 using Prime.Models;
+using Prime.Models.DbViews;
 using Prime.ViewModels;
 
 /**
@@ -12,7 +14,13 @@ public class AutoMapping : Profile
     public AutoMapping()
     {
         CreateMap<Organization, OrganizationListViewModel>()
-            .ForMember(vm => vm.SignedAgreementDocumentCount, opt => opt.MapFrom(src => src.SignedAgreementDocuments.Count));
+            .ForMember(dest => dest.SignedAgreementDocumentCount, opt => opt.MapFrom(src => src.SignedAgreementDocuments.Count));
         CreateMap<Site, SiteListViewModel>();
+
+        IQueryable<NewestAgreement> newestAgreements = null;
+        CreateMap<Enrollee, EnrolleeListViewModel>()
+            .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
+            .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
+            .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreements.Any(n => n.Id == src.CurrentAgreementId)));
     }
 }

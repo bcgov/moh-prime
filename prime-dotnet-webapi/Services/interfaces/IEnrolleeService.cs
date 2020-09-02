@@ -14,15 +14,17 @@ namespace Prime.Services
 
         Task<bool> EnrolleeExistsAsync(int enrolleeId);
 
-        Task<bool> EnrolleeUserIdExistsAsync(Guid userId);
+        Task<bool> UserIdExistsAsync(Guid userId);
 
-        Task<bool> EnrolleeGpidExistsAsync(string gpid);
+        Task<bool> GpidExistsAsync(string gpid);
+
+        Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
 
         Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false);
 
         Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
 
-        Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
+        Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
 
         Task<int> CreateEnrolleeAsync(Enrollee enrollee);
 

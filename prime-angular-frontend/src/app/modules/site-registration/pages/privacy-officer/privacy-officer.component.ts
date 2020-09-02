@@ -123,6 +123,7 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
+    this.form.markAsPristine();
 
     if (this.isSameAs()) {
       this.form.disable();

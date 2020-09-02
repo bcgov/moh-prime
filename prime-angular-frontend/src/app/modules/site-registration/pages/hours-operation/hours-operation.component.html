@@ -1,4 +1,4 @@
-<app-page>
+<app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
@@ -40,11 +40,11 @@
               <mat-label>Opens at</mat-label>
               <input matInput
                      mask="AB:CB"
-                     [patterns]="customPattern"
+                     [patterns]="busyHoursTimePattern"
                      formControlName="startTime"
                      placeholder="00:00"
                      [errorStateMatcher]="busDayHoursErrStateMatcher">
-              <mat-error *ngIf="businessDay.hasError('lessthan')">
+              <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('startTime').hasError('length')">
                 Invalid
                 <!-- TODO need better error message, but width makes messaging hard due to wrapping -->
                 <!-- Opening hours must be earlier than closing hours -->
@@ -58,11 +58,11 @@
               <mat-label>Closes at</mat-label>
               <input matInput
                      mask="AB:CB"
-                     [patterns]="customPattern"
+                     [patterns]="busyHoursTimePattern"
                      formControlName="endTime"
                      placeholder="00:00"
                      [errorStateMatcher]="busDayHoursErrStateMatcher">
-              <mat-error *ngIf="businessDay.hasError('lessthan')">
+              <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('endTime').hasError('length')">
                 Invalid
                 <!-- TODO need better error message, but width makes messaging hard due to wrapping -->
                 <!-- Opening hours must be earlier than closing hours -->
