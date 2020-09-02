@@ -44,7 +44,9 @@ namespace Prime
             public readonly static string ClientSecret = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_SECRET") ?? "b515de16-419b-49b1-bca9-f97eafc95d41";
         }
 
-        // Aries Prime Agent
+        /// <summary>
+        /// Aries Prime Agent
+        /// </summary>
         public static class VerifiableCredentialApi
         {
             public readonly static string Url = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "https://prime-agent-admin-dev.pathfinder.gov.bc.ca/";
@@ -52,7 +54,9 @@ namespace Prime
             public readonly static string WebhookKey = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_WEBHOOK_KEY") ?? "0ce755d5-1fb1-483a-ba22-439061aa8f67";
         }
 
-        // Canada Post Address Validation
+        /// <summary>
+        /// Canada Post Address Validation
+        /// </summary>
         public static class AddressAutocompleteApi
         {
             public readonly static string Url = Environment.GetEnvironmentVariable("ADDRESS_AUTOCOMPLETE_API_URL") ?? "https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/";
