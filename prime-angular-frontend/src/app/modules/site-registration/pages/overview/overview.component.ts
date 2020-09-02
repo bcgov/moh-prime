@@ -58,13 +58,7 @@ export class OverviewComponent implements OnInit {
           (result)
             ? this.siteResource.submitSite(payload)
             : of(result)
-        ),
-        exhaustMap((hasSignedOrgAgreement: boolean) => {
-          return this.siteService.site.submittedDate
-            ? this.siteResource.sendRemoteUsersEmailUser(this.siteService.site, newRemoteUsers)
-              .pipe(map(() => hasSignedOrgAgreement))
-            : of(hasSignedOrgAgreement);
-        })
+        )
       )
       .subscribe(() => this.nextRoute());
   }

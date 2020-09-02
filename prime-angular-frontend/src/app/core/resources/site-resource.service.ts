@@ -136,7 +136,7 @@ export class SiteResource {
   }
 
   public sendRemoteUsersEmailUser(siteId: number, newRemoteUsers: RemoteUser[]): NoContent {
-    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-user`)
+    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-user`, newRemoteUsers)
       .pipe(
         map(() => { }),
         catchError((error: any) => {

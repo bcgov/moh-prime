@@ -3,8 +3,14 @@
 
 @{
   var site = Model.Site;
-  var documentUrl = Model.DocumentUrl;
 }
 
-The Ministry of Health has been notified that you require Remote Access at Organization Name: @site.Organization.Name at site address: @site.PhysicalAddress.Street . To complete your approval for Remote Access, please ensure you have indicated you require Remote Access on our profile at
+The Ministry of Health has been notified that you require Remote Access at
+<br>
+Organization Name: @site.Organization.Name
+<br>
+Site Address: @site.PhysicalAddress.Street, @site.PhysicalAddress.City
+<br>
+<br>
+To complete your approval for Remote Access, please ensure you have indicated you require Remote Access on our profile at
 <a href="https://pharmanetenrolment.gov.bc.ca/info">https://pharmanetenrolment.gov.bc.ca/info</a>.

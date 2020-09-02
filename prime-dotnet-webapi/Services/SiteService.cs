@@ -179,8 +179,6 @@ namespace Prime.Services
 
         private void UpdateRemoteUsers(Site current, SiteUpdateModel updated)
         {
-            // FindNewRemoteUsers(current, updated);
-
             // Wholesale replace the remote users
             foreach (var remoteUser in current.RemoteUsers)
             {
@@ -246,22 +244,6 @@ namespace Prime.Services
                 }
             }
         }
-
-        // public Task FindNewRemoteUsersAsync(Site current, SiteUpdateModel updated)
-        // {
-        //     foreach (var updatedUser in updated.RemoteUsers)
-        //     {
-        //         var userExists = current.RemoteUsers.Any(
-        //             currentUser => currentUser.FirstName == updatedUser.FirstName
-        //             && currentUser.LastName == updatedUser.LastName
-        //             && currentUser.Email == updatedUser.Email);
-
-        //         if (!userExists)
-        //         {
-        //             _emailService.
-        //         }
-        //     }
-        // }
 
         private void UpdateVendors(Site current, SiteUpdateModel updated)
         {

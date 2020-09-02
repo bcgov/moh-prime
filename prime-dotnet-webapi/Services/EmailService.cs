@@ -40,6 +40,11 @@ namespace Prime.Services
             Site = site;
             DocumentUrl = documentUrl;
         }
+
+        public EmailParams(Site site)
+        {
+            Site = site;
+        }
     }
 
     public class EmailService : BaseService, IEmailService
@@ -165,13 +170,18 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
         }
 
-        public async Task SendRemoteUserNotificationAsync(RemoteUser remoteUser)
+        public async Task SendRemoteUsersNotificationAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
         {
             var subject = "Remote Practitionner Notification";
-            var body = await _razorConverterService.RenderViewToStringAsync(
-                "/Views/Emails/RemoteUserNotificationEmail.cshtml", remoteUser.Site);
 
-            await Send(PRIME_EMAIL, remoteUser.Email, subject, body);
+            foreach (var remoteUser in remoteUsers)
+            {
+                var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/RemoteUserNotificationEmail.cshtml",
+                new EmailParams(site));
+                await Send(PRIME_EMAIL, remoteUser.Email, subject, body);
+            }
+
         }
 
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)

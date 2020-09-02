@@ -14,7 +14,7 @@ namespace Prime.Services
 
         Task SendRemoteUsersUpdatedAsync(Site site);
 
-        Task SendRemoteUserNotificationAsync(RemoteUser remoteUser);
+        Task SendRemoteUsersNotificationAsync(Site site, IEnumerable<RemoteUser> remoteUsers);
 
         Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName);
 

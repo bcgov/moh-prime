@@ -249,6 +249,7 @@ namespace Prime.Controllers
 
             site = await _siteService.SubmitRegistrationAsync(siteId);
             await _emailService.SendSiteRegistrationAsync(site);
+            await _emailService.SendRemoteUsersNotificationAsync(site, site.RemoteUsers);
 
             return Ok(ApiResponse.Result(site));
         }
@@ -401,6 +402,56 @@ namespace Prime.Controllers
             }
 
             await _emailService.SendRemoteUsersUpdatedAsync(site);
+            return NoContent();
+        }
+
+        // POST: api/Sites/5/remote-users-email-admin
+        /// <summary>
+        /// Send HIBC an email when remote users are updated for a submitted site
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPost("{siteId}/remote-users-email-admin", Name = nameof(sendRemoteUsersEmailAdmin))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> sendRemoteUsersEmailAdmin(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            await _emailService.SendRemoteUsersUpdatedAsync(site);
+            return NoContent();
+        }
+
+        // POST: api/Sites/5/remote-users-email-user
+        /// <summary>
+        /// Send user an email when they are declared as a remote user against a site
+        /// so they can sequence requesting Remote Access on their PRIME practitionner enrolment
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="remoteUsers"></param>
+        [HttpPost("{siteId}/remote-users-email-user", Name = nameof(sendRemoteUsersEmailUser))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> sendRemoteUsersEmailUser(int siteId, IEnumerable<RemoteUser> remoteUsers)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            await _emailService.SendRemoteUsersNotificationAsync(site, remoteUsers);
             return NoContent();
         }
 
