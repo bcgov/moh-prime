@@ -262,8 +262,7 @@ namespace Prime.Services
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }
 
-            // If CHES Email Service is running and CHES_ENABLED = true, else send through smtp
-            if (PrimeEnvironment.ChesApi.Enabled == "true" && await _chesClient.HealthCheckAsync())
+            if (PrimeEnvironment.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
             {
                 await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
             }

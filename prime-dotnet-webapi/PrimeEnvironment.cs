@@ -30,7 +30,7 @@ namespace Prime
 
         public static class ChesApi
         {
-            public readonly static string Enabled = Environment.GetEnvironmentVariable("CHES_ENABLED") ?? "false";
+            public readonly static bool Enabled = bool.Parse(Environment.GetEnvironmentVariable("CHES_ENABLED") ?? "false");
             public readonly static string Url = Environment.GetEnvironmentVariable("CHES_API_URL") ?? "https://ches-master-9f0fbe-dev.pathfinder.gov.bc.ca/api/v1";
             public readonly static string ClientId = "PRIME_SERVICE_CLIENT";
             public readonly static string ClientSecret = Environment.GetEnvironmentVariable("CHES_CLIENT_SECRET") ?? "88e123a6-80cb-46a0-96d3-e2edae076ae7";
