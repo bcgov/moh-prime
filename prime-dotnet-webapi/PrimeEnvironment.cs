@@ -8,7 +8,7 @@ namespace Prime
         public readonly static string FrontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "localhost:4200";
         public readonly static string BackendUrl = Environment.GetEnvironmentVariable("BACKEND_URL") ?? "http://localhost:5000/api";
         public readonly static string KeycloakTokenUrl = Environment.GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
-        public readonly static string LogFilePath = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
+        public readonly static string LogFile = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
         public static class MailServer
         {
