@@ -31,6 +31,7 @@ export class RemoteUsersComponent implements OnInit {
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
   public hasNoRemoteUserError: boolean;
+  public hasNoEmailError: boolean;
   public submitButtonText: string;
 
   constructor(
@@ -88,8 +89,26 @@ export class RemoteUsersComponent implements OnInit {
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       this.hasNoRemoteUserError = false;
+      this.hasNoEmailError = false;
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
+
+      const newRemoteUsers: RemoteUser[] = [];
+
+      this.siteFormStateService.remoteUsersForm.value.remoteUsers.map((updated: RemoteUser) => {
+        this.siteService.site.remoteUsers.find((current: RemoteUser) => {
+          if (
+            current.firstName === updated.firstName &&
+            current.lastName === updated.lastName &&
+            current.email === updated.email
+          ) {
+            return current;
+          } else {
+            newRemoteUsers.push(updated);
+          }
+        });
+      });
+
 
       this.organizationResource
         .getOrganizationById(organizationId)
@@ -117,7 +136,17 @@ export class RemoteUsersComponent implements OnInit {
           this.nextRoute(organizationId, hasSignedOrgAgreement);
         });
     } else {
-      this.hasNoRemoteUserError = true;
+      const remoteUserFormValue = this.siteFormStateService.remoteUsersForm.value;
+      if (remoteUserFormValue.remoteUsers.length > 0) {
+        remoteUserFormValue.remoteUsers.map((remoteUser: RemoteUser) => {
+          if (!remoteUser.email) {
+            this.hasNoEmailError = true;
+          }
+        })
+      } else {
+        this.hasNoEmailError = false;
+        this.hasNoRemoteUserError = true;
+      }
     }
   }
 
