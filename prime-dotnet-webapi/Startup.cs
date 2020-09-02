@@ -171,7 +171,7 @@ namespace Prime
 
             services.AddSingleton(new AddressAutocompleteClientCredentials
             {
-                apiKey = PrimeEnvironment.AddressAutocompleteApi.Key
+                ApiKey = PrimeEnvironment.AddressAutocompleteApi.Key
             });
 
             services.AddHttpClient<IAddressAutocompleteClient, AddressAutocompleteClient>(client =>
