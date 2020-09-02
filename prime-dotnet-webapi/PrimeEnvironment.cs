@@ -41,6 +41,7 @@ namespace Prime
             public readonly static string ClientSecret = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_SECRET") ?? "b515de16-419b-49b1-bca9-f97eafc95d41";
         }
 
+        // Aries Prime Agent
         public static class VerifiableCredentialApi
         {
             public readonly static string Url = Environment.GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "https://prime-agent-admin-dev.pathfinder.gov.bc.ca/";
