@@ -96,15 +96,11 @@ export class RemoteUsersComponent implements OnInit {
       const newRemoteUsers: RemoteUser[] = [];
 
       this.siteFormStateService.remoteUsersForm.value.remoteUsers.map((updated: RemoteUser) => {
-        const found = this.siteService.site.remoteUsers.find((current: RemoteUser) => {
-          if (
-            current.firstName === updated.firstName &&
-            current.lastName === updated.lastName &&
-            current.email === updated.email
-          ) {
-            return current;
-          }
-        });
+        const found = this.siteService.site.remoteUsers.find((current: RemoteUser) =>
+          current.firstName === updated.firstName &&
+          current.lastName === updated.lastName &&
+          current.email === updated.email
+        );
         if (!found) {
           newRemoteUsers.push(updated);
         }
