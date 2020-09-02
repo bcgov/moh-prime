@@ -165,6 +165,15 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
         }
 
+        public async Task SendRemoteUserNotificationAsync(RemoteUser remoteUser)
+        {
+            var subject = "Remote Practitionner Notification";
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/RemoteUserNotificationEmail.cshtml", remoteUser.Site);
+
+            await Send(PRIME_EMAIL, remoteUser.Email, subject, body);
+        }
+
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
         {
             var businessLicenceDoc = await _siteService.GetLatestBusinessLicenceAsync(siteId);

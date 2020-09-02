@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Subscription, EMPTY } from 'rxjs';
+import { Subscription, EMPTY, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -57,8 +57,14 @@ export class OverviewComponent implements OnInit {
         exhaustMap((result: boolean) =>
           (result)
             ? this.siteResource.submitSite(payload)
-            : EMPTY
-        )
+            : of(result)
+        ),
+        exhaustMap((hasSignedOrgAgreement: boolean) => {
+          return this.siteService.site.submittedDate
+            ? this.siteResource.sendRemoteUsersEmailUser(this.siteService.site, newRemoteUsers)
+              .pipe(map(() => hasSignedOrgAgreement))
+            : of(hasSignedOrgAgreement);
+        })
       )
       .subscribe(() => this.nextRoute());
   }

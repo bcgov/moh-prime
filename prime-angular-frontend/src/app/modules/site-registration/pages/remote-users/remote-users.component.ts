@@ -92,21 +92,22 @@ export class RemoteUsersComponent implements OnInit {
       this.hasNoEmailError = false;
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
-
+      const siteId = this.siteService.site.id;
       const newRemoteUsers: RemoteUser[] = [];
 
       this.siteFormStateService.remoteUsersForm.value.remoteUsers.map((updated: RemoteUser) => {
-        this.siteService.site.remoteUsers.find((current: RemoteUser) => {
+        const found = this.siteService.site.remoteUsers.find((current: RemoteUser) => {
           if (
             current.firstName === updated.firstName &&
             current.lastName === updated.lastName &&
             current.email === updated.email
           ) {
             return current;
-          } else {
-            newRemoteUsers.push(updated);
           }
         });
+        if (!found) {
+          newRemoteUsers.push(updated);
+        }
       });
 
 
@@ -120,13 +121,19 @@ export class RemoteUsersComponent implements OnInit {
           ),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
             return hasSignedOrgAgreement
-              ? this.siteResource.updateCompleted(this.siteService.site.id)
+              ? this.siteResource.updateCompleted(siteId)
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
           }),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
             return this.siteService.site.submittedDate
-              ? this.siteResource.sendRemoteUsersEmail(this.route.snapshot.params.sid)
+              ? this.siteResource.sendRemoteUsersEmailAdmin(siteId)
+                .pipe(map(() => hasSignedOrgAgreement))
+              : of(hasSignedOrgAgreement);
+          }),
+          exhaustMap((hasSignedOrgAgreement: boolean) => {
+            return this.siteService.site.submittedDate
+              ? this.siteResource.sendRemoteUsersEmailUser(siteId, newRemoteUsers)
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
           })

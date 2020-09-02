@@ -1,0 +1,10 @@
+@using Prime.Services
+@model EmailParams
+
+@{
+  var site = Model.Site;
+  var documentUrl = Model.DocumentUrl;
+}
+
+The Ministry of Health has been notified that you require Remote Access at Organization Name: @site.Organization.Name at site address: @site.PhysicalAddress.Street . To complete your approval for Remote Access, please ensure you have indicated you require Remote Access on our profile at
+<a href="https://pharmanetenrolment.gov.bc.ca/info">https://pharmanetenrolment.gov.bc.ca/info</a>.
