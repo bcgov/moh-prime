@@ -20,7 +20,7 @@ export class OrganizationInformationComponent implements OnInit {
     private route: ActivatedRoute,
     private organizationResource: OrganizationResource
   ) {
-    this.hasActions = true;
+    this.hasActions = false;
   }
 
   public ngOnInit(): void {

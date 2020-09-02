@@ -21,6 +21,7 @@ import { Organization, OrganizationListViewModel } from '@registration/shared/mo
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -79,6 +80,71 @@ export class SiteRegistrationContainerComponent implements OnInit {
     (record.organizationId)
       ? this.deleteOrganization(record.organizationId)
       : this.deleteSite(record.siteId);
+  }
+
+  public onApprove(siteId: number) {
+    const data: DialogOptions = {
+      title: 'Approve Site Registration',
+      message: 'Are you sure you want to approve this Registration?',
+      actionText: 'Approve Site Registration',
+      component: NoteComponent
+    };
+
+    let note: string;
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => {
+          if (result?.output) {
+            note = result.output;
+          }
+
+          return (result)
+            ? of(noop)
+            : EMPTY;
+        }),
+        exhaustMap(() => this.siteResource.approveSite(siteId)),
+        exhaustMap(() =>
+          (note)
+            ? this.siteResource.createSiteRegistrationNote(siteId, note)
+            : of(noop)
+        ),
+      )
+      .subscribe();
+  }
+
+  public onDecline(siteId: number) {
+    const data: DialogOptions = {
+      title: 'Decline Site Registration',
+      message: 'Are you sure you want to Decline this Site Registration?',
+      actionText: 'Decline Site Registration',
+      component: NoteComponent
+    };
+
+    let note: string;
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => {
+          if (result?.output) {
+            note = result.output;
+          }
+
+          return (result)
+            ? of(noop)
+            : EMPTY;
+        }),
+        // TODO: Implement Decline pathway
+        // exhaustMap(() => this.siteResource.declineSite(siteId)),
+        exhaustMap(() =>
+          (note)
+            ? this.siteResource.createSiteRegistrationNote(siteId, note)
+            : of(noop)
+        ),
+      )
+      .subscribe();
   }
 
   public ngOnInit(): void {

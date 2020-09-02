@@ -15,6 +15,7 @@ import { NoContent } from '@core/resources/abstract-resource';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { BusinessDay } from '@registration/shared/models/business-day.model';
+import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -218,6 +219,40 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Business Licence token could not be Retrieved');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicenceDownloadToken error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public approveSite(siteId: number): Observable<string> {
+    return this.apiResource.post<string>(`sites/${siteId}/approval`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Site registration has been approved')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site registration could not be approved');
+          this.logger.error('[SiteRegistration] SiteResource::approveSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public declineSite(): void {
+    // TODO: Future implementation
+  }
+
+  public createSiteRegistrationNote(siteId: number, note: string): Observable<SiteRegistrationNote> {
+    const payload = { data: note };
+    return this.apiResource.post(`sites/${siteId}/site-registration-notes`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<SiteRegistrationNote>) => response.result),
+        tap((adjudicatorNote: SiteRegistrationNote) => {
+          this.toastService.openErrorToast('Site Registration Note has been saved');
+          this.logger.info('NEW_SITE_REGISTRATION_NOTE', adjudicatorNote);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site Registration note could not be saved');
+          this.logger.error('[SiteRegistration] SiteResource::createSiteRegistrationNote error has occurred: ', error);
           throw error;
         })
       );

@@ -4,19 +4,27 @@
           color="primary"
           [disabled]="!siteRegistration"
           [matMenuTriggerFor]="menu">
-    Site Information Actions <mat-icon>keyboard_arrow_down</mat-icon>
+    Site Adjudication Actions <mat-icon>keyboard_arrow_down</mat-icon>
   </button>
 
   <mat-menu #menu>
     <button mat-menu-item
-            (click)="getOrganizationAgreement()">
-      <mat-icon>get_app</mat-icon>
-      <span>Organization Agreement</span>
+            [disabled]="!canEdit"
+            (click)="approveSite()">
+      <mat-icon>check_circle_outline</mat-icon>
+      <span>Approve Site</span>
     </button>
     <button mat-menu-item
-            (click)="getBusinessLicence()">
-      <mat-icon>get_app</mat-icon>
-      <span>Business Licence</span>
+            [disabled]="!canEdit"
+            (click)="declineSite()">
+      <mat-icon>block</mat-icon>
+      <span>Decline Site</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="contactSigningAuthorityForSite()">
+      <mat-icon>mail</mat-icon>
+      <span>Contact Signing Authority</span>
     </button>
   </mat-menu>
 
