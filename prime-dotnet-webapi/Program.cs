@@ -44,7 +44,7 @@ namespace Prime
 
         private static void CreateLogger()
         {
-            string path = PrimeEnvironment.LOG_FILE_PATH;
+            string path = PrimeEnvironment.LogFilePath;
 
             try
             {

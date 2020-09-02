@@ -47,7 +47,7 @@ namespace Prime.Services
                 mail.CC.Add(address);
             }
 
-            SmtpClient smtp = new SmtpClient(PrimeEnvironment.MAIL_SERVER_URL, PrimeEnvironment.MAIL_SERVER_PORT);
+            SmtpClient smtp = new SmtpClient(PrimeEnvironment.MailServer.Url, PrimeEnvironment.MailServer.Port);
             try
             {
                 await smtp.SendMailAsync(mail);
