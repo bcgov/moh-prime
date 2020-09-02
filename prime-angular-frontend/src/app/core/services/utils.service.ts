@@ -133,4 +133,27 @@ export class UtilsService {
   public downloadToken(token: string): void {
     window.location.assign(`${this.config.documentManagerUrl}/documents/downloads/${token}`);
   }
+
+  /**
+   * @description
+   * Opens a mailto href from your current window
+   */
+  public mailTo(recipient: string, subject: string = null, body: string = null) {
+    let href = 'mailto:';
+    if (recipient) {
+      href += recipient;
+
+      const params = [];
+      if (subject) {
+        params.push(`subject=${encodeURI(subject)}`);
+      }
+      if (body) {
+        params.push(`body=${encodeURI(body)}`);
+      }
+      if (params.length > 0) {
+        href += `?${params.join('&')}`;
+      }
+      window.location.href = href;
+    }
+  }
 }

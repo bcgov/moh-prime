@@ -2,6 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-site-registration-actions',
@@ -14,7 +15,8 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public decline: EventEmitter<number>;
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private utilService: UtilsService
   ) {
     this.approve = new EventEmitter<number>();
     this.decline = new EventEmitter<number>();
@@ -37,10 +39,10 @@ export class SiteRegistrationActionsComponent implements OnInit {
   }
 
   public contactSigningAuthorityForSite() {
-    const email = this.siteRegistration?.signingAuthority?.email;
-    if (email) {
-      // TODO: Do we want to attach a cookie cutter subject?
-      window.location.href = `mailto:${email}`;
+    const signingAuthority = this.siteRegistration?.signingAuthority;
+    if (signingAuthority) {
+      this.utilService.mailTo(signingAuthority.email, `PRIME Site Registration - ${this.siteRegistration.name}`,
+        `Dear ${signingAuthority.firstName} ${signingAuthority.lastName},`);
     }
   }
 
