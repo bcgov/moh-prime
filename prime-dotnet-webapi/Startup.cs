@@ -118,7 +118,7 @@ namespace Prime
 
         protected void ConfigureClients(IServiceCollection services)
         {
-            if (PrimeEnvironment.Name == "local")
+            if (PrimeEnvironment.IsLocal)
             {
                 services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
             }

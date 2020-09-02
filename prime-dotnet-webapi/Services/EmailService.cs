@@ -257,7 +257,7 @@ namespace Prime.Services
                 throw new ArgumentException("Must specify at least one \"To\" email address.");
             }
 
-            if (PrimeEnvironment.Name != "prod")
+            if (!PrimeEnvironment.IsProduction)
             {
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }

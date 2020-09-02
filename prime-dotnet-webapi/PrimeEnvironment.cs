@@ -10,6 +10,9 @@ namespace Prime
         public readonly static string KeycloakTokenUrl = Environment.GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
         public readonly static string LogFile = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
+        public static bool IsProduction { get => Name == "prod"; }
+        public static bool IsLocal { get => Name == "local"; }
+
         public static class MailServer
         {
             public readonly static string Url = Environment.GetEnvironmentVariable("MAIL_SERVER_URL") ?? "localhost";
