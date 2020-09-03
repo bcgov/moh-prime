@@ -151,7 +151,6 @@ namespace Prime.Services
                             this._context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
                         }
 
-                        // TODO in C# how do you make a generic method that extends from a type
                         if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
                         {
                             this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);

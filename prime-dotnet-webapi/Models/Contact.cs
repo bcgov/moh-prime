@@ -10,11 +10,6 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        public int siteId { get; set; }
-
-        [JsonIgnore]
-        public Site Site { get; set; }
-
         [Required]
         public string FirstName { get; set; }
 
