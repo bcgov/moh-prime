@@ -88,7 +88,7 @@ namespace Prime.Services
                 UpdateVendors(currentSite, updatedSite);
             }
 
-            UpdateParties(currentSite, updatedSite);
+            UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
             UpdateRemoteUsers(currentSite, updatedSite);
 
@@ -119,7 +119,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateParties(Site current, SiteUpdateModel updated)
+        private void UpdateContacts(Site current, SiteUpdateModel updated)
         {
             string[] contactTypes = new string[] {
                 nameof(current.AdministratorPharmaNet),
