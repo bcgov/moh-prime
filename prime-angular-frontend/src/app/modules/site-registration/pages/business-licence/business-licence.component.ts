@@ -18,6 +18,7 @@ import { BusinessLicenceDocument } from '@registration/shared/models/business-li
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-business-licence',
@@ -44,7 +45,8 @@ export class BusinessLicenceComponent implements OnInit {
     private organizationResource: OrganizationResource,
     private orgBookResource: OrgBookResource,
     private siteResource: SiteResource,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private utilsService: UtilsService
   ) {
     this.title = 'Business Licence';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -116,6 +118,14 @@ export class BusinessLicenceComponent implements OnInit {
       .subscribe((businessLicenses: BusinessLicenceDocument[]) =>
         this.businessLicenceDocuments = businessLicenses
       );
+  }
+
+  public getBusinessLicence(event: Event) {
+    event.preventDefault();
+    this.siteResource.getBusinessLicenceDownloadToken(this.siteService.site.id)
+      .subscribe((token: string) => {
+        this.utilsService.downloadToken(token);
+      });
   }
 
   private getDoingBusinessAs(site: Site) {
