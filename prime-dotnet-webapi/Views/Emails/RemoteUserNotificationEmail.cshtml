@@ -1,8 +1,10 @@
+@using Prime
 @using Prime.Services
 @model EmailParams
 
 @{
   var site = Model.Site;
+  var url = PrimeConstants.FRONTEND_URL;
 }
 
 The Ministry of Health has been notified that you require Remote Access at
@@ -13,4 +15,4 @@ Site Address: @site.PhysicalAddress.Street, @site.PhysicalAddress.City
 <br>
 <br>
 To complete your approval for Remote Access, please ensure you have indicated you require Remote Access on your profile at
-<a href="https://pharmanetenrolment.gov.bc.ca/info">https://pharmanetenrolment.gov.bc.ca/info</a>.
+<a href="@url">@url</a>.
