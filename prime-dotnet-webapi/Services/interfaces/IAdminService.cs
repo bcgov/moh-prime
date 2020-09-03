@@ -7,13 +7,13 @@ namespace Prime.Services
 {
     public interface IAdminService
     {
-        Task<Admin> GetAdminForUserIdAsync(Guid userId);
-
         Task<bool> AdminExistsAsync(int adminId);
 
-        Task<bool> AdminUserIdExistsAsync(Guid userId);
+        Task<bool> UserIdExistsAsync(Guid userId);
 
         Task<Admin> GetAdminAsync(int adminId);
+
+        Task<Admin> GetAdminAsync(Guid userId);
 
         Task<IEnumerable<Admin>> GetAdminsAsync();
 

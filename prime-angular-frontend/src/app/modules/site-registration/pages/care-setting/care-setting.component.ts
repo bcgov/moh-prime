@@ -73,18 +73,6 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     }
   }
 
-  public onBack() {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
-  }
-
-  public nextRoute() {
-    if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
-    } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
-    }
-  }
-
   public onVendorChange() {
     this.hasNoVendorError = false;
   }
@@ -95,6 +83,18 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
       CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
       CareSettingEnum.COMMUNITY_PHARMACIST
     ].includes(careSettingCode);
+  }
+
+  public onBack() {
+    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+  }
+
+  public nextRoute() {
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
+    }
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -127,5 +127,6 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
+    this.form.markAsPristine();
   }
 }

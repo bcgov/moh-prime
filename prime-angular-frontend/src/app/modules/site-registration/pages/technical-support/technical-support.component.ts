@@ -91,7 +91,11 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   }
 
   public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
+    }
   }
 
   public isSameAs() {
@@ -119,6 +123,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
+    this.form.markAsPristine();
 
     if (this.isSameAs()) {
       this.form.disable();

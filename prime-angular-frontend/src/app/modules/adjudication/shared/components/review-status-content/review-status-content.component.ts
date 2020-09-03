@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { UtilsService } from '@core/services/utils.service';
-import { Enrolment } from '@shared/models/enrolment.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { EnrolmentStatus as EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -34,7 +34,7 @@ class Reason {
   styleUrls: ['./review-status-content.component.scss']
 })
 export class ReviewStatusContentComponent implements OnInit {
-  private _enrollee: Enrolment;
+  private _enrollee: HttpEnrollee;
   public previousStatuses: Status[];
   public reasons: Reason[];
 
@@ -58,13 +58,14 @@ export class ReviewStatusContentComponent implements OnInit {
     private enrolmentResource: EnrolmentResource,
   ) { }
 
-  @Input() public set enrollee(value: Enrolment) {
+  @Input()
+  public set enrollee(value: HttpEnrollee) {
     this._enrollee = value;
     this.reasons = this.generateReasons();
     this.previousStatuses = this.generatePreviousStatuses();
   }
 
-  public get enrollee(): Enrolment {
+  public get enrollee(): HttpEnrollee {
     return this._enrollee;
   }
 
@@ -123,11 +124,11 @@ export class ReviewStatusContentComponent implements OnInit {
     }, []);
   }
 
-  private getDocumentsForSelfDeclaration(enrollee: Enrolment, code: SelfDeclarationTypeEnum) {
+  private getDocumentsForSelfDeclaration(enrollee: HttpEnrollee, code: SelfDeclarationTypeEnum) {
     return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
   }
 
-  private parseSelfDeclarations(enrollee: Enrolment): Reason[] {
+  private parseSelfDeclarations(enrollee: HttpEnrollee): Reason[] {
     return enrollee.selfDeclarations.reduce((acc, decl: SelfDeclaration) => {
       if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_CONVICTION) {
         const conviction = new Reason();

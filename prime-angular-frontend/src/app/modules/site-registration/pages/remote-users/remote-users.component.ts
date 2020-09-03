@@ -91,7 +91,7 @@ export class RemoteUsersComponent implements OnInit {
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
 
-      this.organizationResource
+      this.busy = this.organizationResource
         .getOrganizationById(organizationId)
         .pipe(
           map((organization: Organization) => !!organization.acceptedAgreementDate),
@@ -101,13 +101,13 @@ export class RemoteUsersComponent implements OnInit {
           ),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
             return hasSignedOrgAgreement
-              ? this.siteResource.updateCompleted(this.siteService.site.id)
+              ? (this.siteResource.updateCompleted(this.siteService.site.id))
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
           }),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
             return this.siteService.site.submittedDate
-              ? this.siteResource.sendRemoteUsersEmail(this.route.snapshot.params.sid)
+              ? (this.siteResource.sendRemoteUsersEmail(this.route.snapshot.params.sid))
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
           })
@@ -183,5 +183,6 @@ export class RemoteUsersComponent implements OnInit {
     // Remove query param from URL without refreshing
     this.router.navigate([], { queryParams: { fromRemoteUser: null } });
     this.siteFormStateService.setForm(site, !fromRemoteUser);
+    this.form.markAsPristine();
   }
 }

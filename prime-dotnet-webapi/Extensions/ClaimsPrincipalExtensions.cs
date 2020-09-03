@@ -15,29 +15,7 @@ namespace Prime
         public static Guid GetPrimeUserId(this ClaimsPrincipal User)
         {
             string userId = User?.Identity?.Name;
-            return userId != null ? new Guid(userId) : Guid.Empty;
-        }
-
-        /// <summary>
-        /// Returns true if the logged in user is an admin, or if the user has the same UserId as the record
-        /// </summary>
-        public static bool CanEdit(this ClaimsPrincipal User, IUserBoundModel party)
-        {
-            if (User.IsAdmin())
-            {
-                return true;
-            }
-
-            Guid PrimeUserId = User.GetPrimeUserId();
-            return !PrimeUserId.Equals(Guid.Empty) && PrimeUserId.Equals(party.UserId);
-        }
-
-        /// <summary>
-        /// Returns true if the logged in user is an RO_admin, admin, or if the user has the same UserId as the record
-        /// </summary>
-        public static bool CanView(this ClaimsPrincipal User, Enrollee enrollee)
-        {
-            return User.HasAdminView() || User.CanEdit(enrollee);
+            return userId == null ? Guid.Empty : new Guid(userId);
         }
 
         public static bool IsAdmin(this ClaimsPrincipal User)

@@ -50,22 +50,22 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Enrollee>> Submit(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!User.CanEdit(enrollee))
+            if (!record.EditableBy(User))
             {
                 return Forbid();
             }
-
             if (updatedProfile == null)
             {
                 this.ModelState.AddModelError("EnrolleeUpdateModel", "New profile cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable)))
+
+            if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Application can not be submitted when the current status is not 'Active'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
@@ -75,7 +75,7 @@ namespace Prime.Controllers
             updatedProfile.IdentityProvider = User.GetIdentityProvider();
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
 
-            enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             return Ok(ApiResponse.Result(enrollee));
         }
 
@@ -91,12 +91,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Enrollee>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!User.CanEdit(enrollee))
+            if (!record.EditableBy(User))
             {
                 return Forbid();
             }
@@ -104,12 +104,12 @@ namespace Prime.Controllers
             try
             {
                 await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin());
-                enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+                var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
                 return Ok(ApiResponse.Result(enrollee));
             }
             catch (SubmissionService.InvalidActionException)
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", $"Action could not be performed.");
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Action could not be performed.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
         }

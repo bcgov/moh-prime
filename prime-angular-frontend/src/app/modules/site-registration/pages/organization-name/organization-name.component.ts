@@ -148,6 +148,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization, true);
+    this.form.markAsPristine();
 
     this.usedOrgBook = !!organization?.registrationId;
 

@@ -22,8 +22,6 @@ namespace PrimeTests.Controllers
     {
         private readonly ITestOutputHelper output;
 
-        private static EnrolleeSearchOptions EMPTY_ENROLLEE_SEARCH_OPTIONS = new EnrolleeSearchOptions();
-
         public EnrolleesControllerTests(CustomWebApplicationFactory<TestStartup> factory, ITestOutputHelper output) : base(factory)
         {
             this.output = output;
@@ -40,11 +38,11 @@ namespace PrimeTests.Controllers
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                var enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 //pick off an enrollee to get the userId from
-                Enrollee expectedEnrollee = enrollees.First();
+                Enrollee expectedEnrollee = await service.GetEnrolleeAsync(1);
                 output.WriteLine(expectedEnrollee.UserId.ToString());
 
                 // create a request with an AUTH token
@@ -101,7 +99,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 //pick off an enrollee to get the userId from
-                Enrollee expectedEnrollee = enrollees.First();
+                Enrollee expectedEnrollee = await service.GetEnrolleeAsync(1);
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrollees", expectedEnrollee.UserId);
@@ -129,12 +127,12 @@ namespace PrimeTests.Controllers
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                var enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // pick off an enrollee to get
-                Enrollee expectedEnrollee = enrollees.First();
-                int expectedEnrolleeId = (int)expectedEnrollee.Id;
+                int expectedEnrolleeId = 1;
+                Enrollee expectedEnrollee = await service.GetEnrolleeAsync(expectedEnrolleeId);
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get,
@@ -150,7 +148,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(expectedEnrolleeId, enrollee.Id);
 
                 // make sure the same amount of enrollees exist
-                enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
         }
@@ -165,7 +163,7 @@ namespace PrimeTests.Controllers
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                var enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // get an enrollee id that does not exist
@@ -179,7 +177,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
                 // make sure the same amount of enrollees exist
-                enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
         }
@@ -194,12 +192,12 @@ namespace PrimeTests.Controllers
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                var enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // pick off an enrollee to get
-                Enrollee expectedEnrollee = enrollees.First();
-                int expectedEnrolleeId = (int)expectedEnrollee.Id;
+                int expectedEnrolleeId = 1;
+                Enrollee expectedEnrollee = await service.GetEnrolleeAsync(expectedEnrolleeId);
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrollees/{expectedEnrolleeId}", Guid.NewGuid());
@@ -209,7 +207,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
 
                 // make sure the same amount of enrollees exist
-                enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
         }
@@ -224,12 +222,12 @@ namespace PrimeTests.Controllers
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                var enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // pick off an enrollee to get
-                Enrollee expectedEnrollee = enrollees.First();
-                int expectedEnrolleeId = (int)expectedEnrollee.Id;
+                int expectedEnrolleeId = 1;
+                Enrollee expectedEnrollee = await service.GetEnrolleeAsync(expectedEnrolleeId);
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get,
@@ -243,7 +241,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
 
                 // make sure the same amount of enrollees exist
-                enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
         }
@@ -311,11 +309,11 @@ namespace PrimeTests.Controllers
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                var enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // pick off an enrollee to use for the userId
-                Enrollee existingEnrollee = enrollees.First();
+                Enrollee existingEnrollee = await service.GetEnrolleeAsync(1);
 
                 // make a new enrollee object
                 var testEnrollee = TestUtils.EnrolleeFaker.Generate();
@@ -333,7 +331,7 @@ namespace PrimeTests.Controllers
                 Assert.Contains("An enrollee already exists for this User Id, only one enrollee is allowed per User Id.", body);
 
                 // make sure the same amount of enrollees exist
-                enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
         }
@@ -349,7 +347,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to delete
@@ -365,7 +363,7 @@ namespace PrimeTests.Controllers
         //         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         //         // check that the enrollee was removed
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE - 1, enrollees.Count());
         //     }
         // }
@@ -380,7 +378,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // get an enrollee id that does not exist
@@ -394,7 +392,7 @@ namespace PrimeTests.Controllers
         //         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -409,12 +407,12 @@ namespace PrimeTests.Controllers
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                var enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // pick off an enrollee to delete
-                Enrollee expectedEnrollee = enrollees.First();
-                int expectedEnrolleeId = (int)expectedEnrollee.Id;
+                int expectedEnrolleeId = 1;
+                Enrollee expectedEnrollee = await service.GetEnrolleeAsync(expectedEnrolleeId);
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Delete, $"/api/enrollees/{expectedEnrolleeId}", Guid.NewGuid());
@@ -425,7 +423,7 @@ namespace PrimeTests.Controllers
 
                 // check that the enrollee was not removed
                 Assert.True(await service.EnrolleeExistsAsync(expectedEnrolleeId));
-                enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
         }
@@ -440,7 +438,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to update
@@ -465,7 +463,7 @@ namespace PrimeTests.Controllers
         //         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // check the updated enrollee in the database
@@ -488,7 +486,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to update
@@ -510,7 +508,7 @@ namespace PrimeTests.Controllers
         //         Assert.Contains("Enrollee Id does not match with the payload.", body);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -525,7 +523,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to update
@@ -547,7 +545,7 @@ namespace PrimeTests.Controllers
         //         Assert.Contains("Enrollee Id is required to make updates.", body);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -562,7 +560,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to update
@@ -585,7 +583,7 @@ namespace PrimeTests.Controllers
         //         Assert.Contains("Enrollee not found with id " + notFoundEnrolleeId, body);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -600,7 +598,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to update
@@ -624,7 +622,7 @@ namespace PrimeTests.Controllers
         //         Assert.Contains("Enrollee can not be updated when the current status is not 'Editable'.", body);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -639,12 +637,12 @@ namespace PrimeTests.Controllers
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                var enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // pick off an enrollee to update
-                Enrollee enrollee = enrollees.First();
-                int enrolleeId = (int)enrollee.Id;
+                int enrolleeId = 1;
+                Enrollee enrollee = await service.GetEnrolleeAsync(enrolleeId);
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest<Enrollee>(HttpMethod.Put,
@@ -655,7 +653,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
 
                 // make sure the same amount of enrollees exist
-                enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
         }
@@ -670,7 +668,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to get
@@ -691,7 +689,7 @@ namespace PrimeTests.Controllers
         //         Assert.Contains(new Status { Code = Status.UNDER_REVIEW_CODE }, statuses);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -706,7 +704,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // get an enrollee id that does not exist
@@ -721,7 +719,7 @@ namespace PrimeTests.Controllers
         //         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -736,7 +734,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to get
@@ -752,7 +750,7 @@ namespace PrimeTests.Controllers
         //         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -768,13 +766,12 @@ namespace PrimeTests.Controllers
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                var enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // pick off an enrollee to get
-                Enrollee expectedEnrollee = enrollees.First();
-                int expectedEnrolleeId = (int)expectedEnrollee.Id;
-
+                int expectedEnrolleeId = 1;
+                Enrollee expectedEnrollee = await service.GetEnrolleeAsync(expectedEnrolleeId);
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get,
                  $"/api/enrollees/{expectedEnrolleeId}/statuses", expectedEnrollee.UserId);
@@ -790,40 +787,40 @@ namespace PrimeTests.Controllers
                 Assert.True(enrolleeStatuses.First().IsType(StatusType.Editable));
 
                 // make sure the same amount of enrollees exist
-                enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
         }
 
-        [Fact]
-        public async void testGetEnrolmentStatuses_404_NotFound()
-        {
-            using (var scope = _factory.Server.Host.Services.CreateScope())
-            {
-                // initialize the data
-                var service = scope.ServiceProvider.GetRequiredService<IEnrolleeService>();
-                ((EnrolleeServiceMock)service).InitializeDb();
+        // [Fact]
+        // public async void testGetEnrolmentStatuses_404_NotFound()
+        // {
+        //     using (var scope = _factory.Server.Host.Services.CreateScope())
+        //     {
+        //         // initialize the data
+        //         var service = scope.ServiceProvider.GetRequiredService<IEnrolleeService>();
+        //         ((EnrolleeServiceMock)service).InitializeDb();
 
-                // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
-                Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
+        //         // check the initial state
+        //         var enrollees = await service.GetEnrolleesAsync();
+        //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
-                // get an enrollee id that does not exist
-                int notFoundEnrolleeId = enrollees.Max(e => e.Id) + 1;
+        //         // get an enrollee id that does not exist
+        //         int notFoundEnrolleeId = enrollees.Max(e => e.Id) + 1;
 
-                // create a request with an AUTH token
-                var request = TestUtils.CreateRequest(HttpMethod.Get,
-                 $"/api/enrollees/{notFoundEnrolleeId}/statuses", Guid.NewGuid());
+        //         // create a request with an AUTH token
+        //         var request = TestUtils.CreateRequest(HttpMethod.Get,
+        //          $"/api/enrollees/{notFoundEnrolleeId}/statuses", Guid.NewGuid());
 
-                // try to get an enrollee that does not exist
-                var response = await _client.SendAsync(request);
-                Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        //         // try to get an enrollee that does not exist
+        //         var response = await _client.SendAsync(request);
+        //         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
-                // make sure the same amount of enrollees exist
-                enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
-                Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
-            }
-        }
+        //         // make sure the same amount of enrollees exist
+        //         enrollees = await service.GetEnrolleesAsync();
+        //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
+        //     }
+        // }
 
         [Fact]
         public async void testGetEnrolmentStatuses_403_Forbidden()
@@ -835,12 +832,12 @@ namespace PrimeTests.Controllers
                 ((EnrolleeServiceMock)service).InitializeDb();
 
                 // check the initial state
-                var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                var enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
                 // pick off an enrollee to get
-                Enrollee expectedEnrollee = enrollees.First();
-                int expectedEnrolleeId = (int)expectedEnrollee.Id;
+                int expectedEnrolleeId = 1;
+                Enrollee expectedEnrollee = await service.GetEnrolleeAsync(expectedEnrolleeId);
 
                 // create a request with an AUTH token
                 var request = TestUtils.CreateRequest(HttpMethod.Get,
@@ -851,7 +848,7 @@ namespace PrimeTests.Controllers
                 Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
 
                 // make sure the same amount of enrollees exist
-                enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+                enrollees = await service.GetEnrolleesAsync();
                 Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
             }
         }
@@ -866,7 +863,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to get
@@ -887,7 +884,7 @@ namespace PrimeTests.Controllers
         //         Assert.Equal(Status.UNDER_REVIEW_CODE, enrolleeStatus.StatusCode);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -902,7 +899,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // try to get an enrollee that does not exist
@@ -917,7 +914,7 @@ namespace PrimeTests.Controllers
         //         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -932,7 +929,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to get
@@ -952,7 +949,7 @@ namespace PrimeTests.Controllers
         //         Assert.Contains("Status Code is required to create statuses.", body);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -967,7 +964,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to get
@@ -994,7 +991,7 @@ namespace PrimeTests.Controllers
         //         Assert.Contains("Cannot change from current Status Code: " + Status.ACTIVE_CODE + " to the new Status Code: " + Status.REQUIRES_TOA_CODE, body);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
@@ -1009,7 +1006,7 @@ namespace PrimeTests.Controllers
         //         ((EnrolleeServiceMock)service).InitializeDb();
 
         //         // check the initial state
-        //         var enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         var enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
 
         //         // pick off an enrollee to get
@@ -1025,7 +1022,7 @@ namespace PrimeTests.Controllers
         //         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
 
         //         // make sure the same amount of enrollees exist
-        //         enrollees = await service.GetEnrolleesAsync(EMPTY_ENROLLEE_SEARCH_OPTIONS);
+        //         enrollees = await service.GetEnrolleesAsync();
         //         Assert.Equal(EnrolleeServiceMock.DEFAULT_ENROLLEES_SIZE, enrollees.Count());
         //     }
         // }
