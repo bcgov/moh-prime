@@ -13,8 +13,8 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
-import { Party } from '@registration/shared/models/party.model';
 import { Address } from '@shared/models/address.model';
+import { Contact } from '@registration/shared/models/contact.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
@@ -59,11 +59,11 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     }
   }
 
-  public onSelect(party: Party) {
-    if (!party.physicalAddress) {
-      party.physicalAddress = new Address();
+  public onSelect(contact: Contact) {
+    if (!contact.physicalAddress) {
+      contact.physicalAddress = new Address();
     }
-    this.form.patchValue(party);
+    this.form.patchValue(contact);
   }
 
   public onBack() {
