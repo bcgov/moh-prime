@@ -528,6 +528,35 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // POST: api/Enrollees/5/email-initiated
+        /// <summary>
+        /// Logs a business event for email initiated
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/email-initiated", Name = nameof(logEmailInitiated))]
+        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> logEmailInitiated(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var username = admin.IDIR.Replace("@idir", "");
+
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Email Initiated to Enrollee by {username}");
+
+            return NoContent();
+        }
+
         // POST: api/Enrollees/5/self-declaration-document
         /// <summary>
         /// Create Self Declaration Document Link

@@ -27,6 +27,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -52,7 +53,8 @@ export class AdjudicationContainerComponent implements OnInit {
     protected router: Router,
     private authService: AuthService,
     private adjudicationResource: AdjudicationResource,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private utilsService: UtilsService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
 
@@ -77,9 +79,14 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onNotify(enrolleeId: number) {
-    this.adjudicationResource
-      .sendEnrolleeReminderEmail(enrolleeId)
-      .subscribe();
+    this.adjudicationResource.getEnrolleeById(enrolleeId)
+      .pipe(
+        exhaustMap((enrollee: HttpEnrollee) => this.adjudicationResource.logEmailInitiated(enrollee.id)
+          .pipe(map(() => enrollee)))
+      )
+      .subscribe((enrollee: HttpEnrollee) => {
+        this.utilsService.mailTo(enrollee.contactEmail);
+      });
   }
 
   public onClaim(enrolleeId: number) {
