@@ -24,6 +24,5 @@ namespace Prime.Models
         public string Note { get; set; }
 
         public DateTimeOffset NoteDate { get; set; }
-
     }
 }
