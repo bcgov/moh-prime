@@ -4,6 +4,7 @@ export interface Person {
   id?: number;
   firstName: string;
   lastName: string;
+  jobRoleTitle: string;
   email: string;
   phone: string;
   fax?: string;

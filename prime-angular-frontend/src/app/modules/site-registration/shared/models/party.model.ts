@@ -23,6 +23,7 @@ export class Party implements Person {
   public mailingAddressId?: number;
   public mailingAddress?: Address;
 
+  // TODO should be a public static factory
   constructor(user: User) {
     this.userId = user.userId;
     this.physicalAddress = user.physicalAddress;
