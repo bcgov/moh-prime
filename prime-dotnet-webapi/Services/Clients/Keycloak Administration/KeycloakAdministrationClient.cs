@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -27,13 +28,13 @@ namespace Prime.Services.Clients
             return await response.Content.ReadAsAsync<Role>();
         }
 
-        public async Task AssignRole(Guid userId, string role)
+        public async Task AssignRealmRole(Guid userId, string role)
         {
             // Keycloak expects an array of roles to assign, of which we need both the name and ID
             var keycloakRole = await GetRoleByName(role);
             string serialized = JsonConvert.SerializeObject(new[] { keycloakRole });
 
-            var response = await _client.PostAsync($"users/{userId}/role-mappings/realm", new StringContent(serialized));
+            var response = await _client.PostAsync($"users/{userId}/role-mappings/realm", new StringContent(serialized, Encoding.UTF8, "application/json"));
 
             response.EnsureSuccessStatusCode();
         }

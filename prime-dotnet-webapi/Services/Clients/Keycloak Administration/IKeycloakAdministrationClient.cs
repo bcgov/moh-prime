@@ -9,6 +9,6 @@ namespace Prime.Services.Clients
     {
         Task<Role> GetRoleByName(string role);
 
-        Task AssignRole(Guid userId, string role);
+        Task AssignRealmRole(Guid userId, string role);
     }
 }
