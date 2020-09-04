@@ -28,7 +28,7 @@
     </app-page-subheader2>
   </section>
 
-  <ng-container *ngFor="let organization of organizations">
+  <ng-container *ngFor="let organization of organizations; let first = first">
 
     <app-summary-card icon="business"
                       title="Organization Information"
@@ -39,9 +39,11 @@
                       [actionDisabled]="!organization.acceptedAgreementDate"
                       (action)="viewAgreement(organization)"></app-summary-card>
 
-    <hr class="divider">
+    <hr *ngIf="first"
+        class="divider">
 
-    <div class="add-site">
+    <div *ngIf="first"
+         class="add-site">
       <button mat-button
               type="button"
               color="primary"
