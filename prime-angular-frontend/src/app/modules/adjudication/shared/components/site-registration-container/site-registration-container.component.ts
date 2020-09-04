@@ -90,22 +90,12 @@ export class SiteRegistrationContainerComponent implements OnInit {
       component: NoteComponent
     };
 
-    let note: string;
-
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: string }) => {
-          if (result?.output) {
-            note = result.output;
-          }
-
-          return (result)
-            ? of(noop)
-            : EMPTY;
-        }),
-        exhaustMap(() => this.siteResource.approveSite(siteId)),
-        exhaustMap(() =>
+        exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
+        exhaustMap((note: string) => this.siteResource.approveSite(siteId).pipe(map(() => note))),
+        exhaustMap((note: string) =>
           (note)
             ? this.siteResource.createSiteRegistrationNote(siteId, note)
             : of(noop)
@@ -122,23 +112,13 @@ export class SiteRegistrationContainerComponent implements OnInit {
       component: NoteComponent
     };
 
-    let note: string;
-
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: string }) => {
-          if (result?.output) {
-            note = result.output;
-          }
-
-          return (result)
-            ? of(noop)
-            : EMPTY;
-        }),
+        exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
         // TODO: Implement Decline pathway
-        // exhaustMap(() => this.siteResource.declineSite(siteId)),
-        exhaustMap(() =>
+        // exhaustMap((note: string) => this.siteResource.declineSite(siteId).pipe(map(() => note))),,
+        exhaustMap((note: string) =>
           (note)
             ? this.siteResource.createSiteRegistrationNote(siteId, note)
             : of(noop)

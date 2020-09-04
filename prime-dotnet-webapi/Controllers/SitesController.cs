@@ -399,13 +399,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         public async Task<ActionResult<Site>> ApproveSite(int siteId)
         {
-            if (!User.IsAdmin())
-            {
-                return Unauthorized();
-            }
-
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
