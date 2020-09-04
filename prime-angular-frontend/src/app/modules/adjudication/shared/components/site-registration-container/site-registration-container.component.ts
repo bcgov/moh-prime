@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable, EMPTY, of, noop, combineLatest } from 'rxjs';
-import { exhaustMap, map, tap, withLatestFrom, take } from 'rxjs/operators';
+import { exhaustMap, map, tap, take } from 'rxjs/operators';
 
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 
@@ -16,11 +16,11 @@ import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-site-registration-container',
