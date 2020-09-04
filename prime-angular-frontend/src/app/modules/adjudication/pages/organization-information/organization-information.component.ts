@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 import { Organization } from '@registration/shared/models/organization.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 @Component({
