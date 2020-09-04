@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -7,6 +6,10 @@ import { map, tap } from 'rxjs/operators';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
+import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { Address } from '@shared/models/address.model';
 import { AccessTerm } from '@shared/models/access-term.model';
 import { Enrollee } from '@shared/models/enrollee.model';
@@ -14,13 +17,9 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 @Injectable({
   providedIn: 'root'
@@ -195,7 +194,7 @@ export class EnrolmentResource {
 
     if (keys.every((key: string) => profileSnapshot.hasOwnProperty(key))) {
       profileSnapshot.selfDeclarations = [];
-      keys.map((key: string, index: number) => {
+      keys.forEach((key: string, index: number) => {
         if (profileSnapshot[key]) {
           profileSnapshot.selfDeclarations.push({
             selfDeclarationDetails: profileSnapshot[`${key}Details`],
