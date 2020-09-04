@@ -116,19 +116,19 @@ export class RemoteUsersComponent implements OnInit {
               .pipe(map(() => hasSignedOrgAgreement))
           ),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
-            return hasSignedOrgAgreement
+            return (hasSignedOrgAgreement)
               ? this.siteResource.updateCompleted(siteId)
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
           }),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
-            return this.siteService.site.submittedDate
+            return (this.siteService.site.submittedDate)
               ? this.siteResource.sendRemoteUsersEmailAdmin(siteId)
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
           }),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
-            return this.siteService.site.submittedDate
+            return (this.siteService.site.submittedDate)
               ? this.siteResource.sendRemoteUsersEmailUser(siteId, newRemoteUsers)
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
