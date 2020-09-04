@@ -2,15 +2,33 @@
 @model Organization
 
 @{
+  var day = @DateTime.Now.Day.ToString("dd");
+  var month = @DateTime.Now.Month.ToString("MMMM");
+  var year = @DateTime.Now.Year.ToString("yyyy");
   var organizationName = Model.Name;
 }
+
+<p>
+  This Agreement is made the @day day of @month, @year
+</p>
 
 <h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>
 
 <p>
-  This Organization Agreement for PharmaNet Use (the &quot;Agreement&quot;) is executed by @organizationName
-  (&quot;Organization&quot;) for the benefit of HER MAJESTY THE QUEEN IN RIGHT OF THE PROVINCE OF BRITISH COLUMBIA, as
-  represented by the Minister of Health (the &quot;Province&quot;).
+  <strong>BETWEEN:</strong>
+</p>
+
+<p>
+  <strong>HER MAJESTY THE QUEEN IN RIGHT OF THE PROVINCE OF BRITISH COLUMBIA</strong>,
+  represented by the Minister of Health (the <strong>&quot;Province&quot;</strong>)
+</p>
+
+<p>
+  <strong>AND:</strong>
+</p>
+
+<p>
+  @organizationName (&quot;Organization&quot;)
 </p>
 
 <p>
@@ -40,11 +58,9 @@
 </ol>
 
 <p>
-  <strong>NOW THEREFORE</strong> Organization makes this Agreement knowing that the Province will rely on it
-  in permitting access to and use of PharmaNet from Sites operated by Organization. Organization conclusively
-  acknowledges that reliance by the Province on this Agreement is in every respect justifiable and that it
-  received fair and valuable consideration for this Agreement, the receipt and adequacy of which is hereby
-  acknowledged. Organization hereby agrees as follows:
+  <strong>NOW THEREFORE</strong> in consideration of the promises and the covenants, agreements, representations
+  and warranties set out in this Agreement (the receipt and sufficiency of which is hereby acknowledged by each
+  party), the parties agree as follows:
 </p>
 
 <p>
@@ -122,10 +138,10 @@
 
             <ol type="i">
               <li>
-                is the subject of a Site Request submitted to the Provience, and
+                is the subject of a Site Request submitted to the Province, and
               </li>
               <li>
-                has been approved for Site Access by the Provience in writing
+                has been approved for Site Access by the Province in writing
               </li>
             </ol>
 
@@ -185,8 +201,7 @@
     <ol type="1">
       <li>
         <p>
-          Organization represents and warrants to the Province, as of the date Organization first accepted the terms of this
-          Agreement and throughout its term, that:
+          Organization represents and warrants to the Province, as of the date of this Agreement and throughout its term, that:
         </p>
 
         <ol type="a">
@@ -194,23 +209,11 @@
             the information contained in the Site Request for each Site is true and correct;
           </li>
           <li>
-            <p>
-              if Organization is not an individual:
-            </p>
-
-            <ol type="i">
-              <li>
-                Organization has the power and capacity to enter into this Agreement and to comply with its terms;
-              </li>
-              <li>
-                all necessary corporate or other proceedings have been taken to authorize the execution and delivery
-                of this Agreement by, or on behalf of, Organization; and
-              </li>
-              <li>
-                this Agreement has been legally and properly executed by, or on behalf of, the Organization and is
-                legally binding upon and enforceable against Organization in accordance with its terms.
-              </li>
-            </ol>
+            if Organization is not an individual: (i) Organization has the power and capacity to enter into this Agreement
+            and to comply with its terms; (ii) all necessary corporate or other proceedings have been taken to authorize the
+            execution and delivery of this Agreement by, or on behalf of, Organization; and (iii) this Agreement has been
+            legally and properly executed by, or on behalf of, the Organization and is legally binding upon and enforceable
+            against Organization in accordance with its terms.
           </li>
         </ol>
       </li>
@@ -344,7 +347,7 @@
         <ol type="a">
           <li>
             taking all reasonable physical, technical and operational measures necessary to ensure Site Access operates in
-            accordance with sections 3.1 to 3.9 above: and
+            accordance with sections 3.1 to 3.9 above, and
           </li>
           <li>
             complying with the requirements of Schedule A.
@@ -437,7 +440,7 @@
   <li>
     <ol type="1">
       <li>
-        The term of this Agreement begins on the date first accepted the terms of this Agreement and continues until it is terminated
+        The term of this Agreement begins on the date first noted above and continues until it is terminated
         in accordance with this Article 6.
       </li>
       <li>
@@ -557,8 +560,8 @@
         </p>
 
         <p>
-          If Organization does not agree with any amendment for which notice has been provided by the Province in
-          accordance with this section, Organization must promptly (and in any event prior to the effective date)
+          If Organization does not agree with any amendment for which notice has been provided by the Province
+          in accordance with this section, Organization must promptly (and in any event prior to the effective date)
           cease Site Access at all Sites and take the steps necessary to terminate this Agreement in accordance
           with Article 6.
         </p>
@@ -572,6 +575,30 @@
     </ol>
   </li>
 </ol>
+
+IN WITNESS WHEREOF the parties have executed this Agreement as of the date first written above.
+
+
+SIGNED on behalf of Her Majesty   )
+the Queen in right of the         )
+Province of British Columbia by   )
+a duly authorized representative  )
+of the Minister of Health         )
+in the presence of:               )
+__________________________________)
+(Witness)
+
+__________________________________
+For the Minister of Health
+
+SIGNED AND DELIVERED by           )
+@@ORGANIZATION                    )
+in the presence of:               )
+__________________________________)
+(Witness)
+
+__________________________________
+@@ORGANIZATION
 
 <p>
   <strong>SCHEDULE A – SPECIFIC PRIVACY AND SECURITY MEASURES</strong>
@@ -618,7 +645,7 @@
       </li>
       <li>
         <p>
-          Policy for Access to PharmaNet Applications via Virtual Private Network
+          Policy for Secure Remote Access to PharmaNet
         </p>
 
         <a href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards"
