@@ -2,6 +2,13 @@
 @model Organization
 
 @{
+  /**
+   * Organization Agreement that is downloaded and rendered in the
+   * web client by the signing authority.
+   *
+   * NOTE: The downloadable and signable copy of the Organization Agreement is
+   * located in /documents.
+   */
   var day = @DateTime.Now.Day.ToString("dd");
   var month = @DateTime.Now.Month.ToString("MMMM");
   var year = @DateTime.Now.Year.ToString("yyyy");

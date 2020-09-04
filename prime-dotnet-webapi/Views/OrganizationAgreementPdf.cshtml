@@ -2,6 +2,17 @@
 @model Organization
 
 @{
+  /**
+   * Organization Agreement that is a copy of the downloaded version used for
+   * rendering as a PDF on site submission and attached to emails.
+   * @see OrganizationAgreement.cshtml
+   *
+   * The BEGIN/END of the Organization Agreement copy is marked with
+   * comment delimiters
+   *
+   * NOTE: The downloadable and signable copy of the Organization Agreement is
+   * located in /documents.
+   */
   var day = @DateTime.Now.Day.ToString("dd");
   var month = @DateTime.Now.Month.ToString("MMMM");
   var year = @DateTime.Now.Year.ToString("yyyy");
@@ -85,6 +96,8 @@ ol[type="1"].decimal ol[type="1"] > li::before {
 
   @* TODO figure out why partial isn't working... likely need to pull in a package??? *@
   @* <partial name="OrganizationAgreement.cshtml" /> *@
+
+  @* BEGIN of Organization Agreement copied from OrganizationAgreement.cshtml *@
 
   <p class="text-center">
     This Agreement is made the @day day of @month, @year
@@ -735,5 +748,7 @@ ol[type="1"].decimal ol[type="1"] > li::before {
       and reporting mechanisms available to Authorized Users for this purpose.
     </li>
   </ol>
+
+  @* END of Organization Agreement copied from OrganizationAgreement.cshtml *@
 
 </div>
