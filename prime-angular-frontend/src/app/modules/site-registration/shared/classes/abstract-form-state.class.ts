@@ -140,7 +140,7 @@ export abstract class AbstractFormState<T> {
 
     Object.keys(controlsConfig)
       .filter((key: string) => !options?.exclude?.includes(key))
-      .map((key: string, index: number) => {
+      .forEach((key: string, index: number) => {
         const control = controlsConfig[key];
         if (options?.areDisabled?.includes(key)) {
           control[0].disabled = true;

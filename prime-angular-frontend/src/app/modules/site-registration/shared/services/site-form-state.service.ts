@@ -196,7 +196,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       // validation to occur when "Have Remote Users" is toggled
       form.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
 
-      site.remoteUsers.map((remoteUser: RemoteUser) => {
+      site.remoteUsers.forEach((remoteUser: RemoteUser) => {
         const group = this.createEmptyRemoteUserFormAndPatch(remoteUser);
         remoteUsersFormArray.push(group);
       });
@@ -217,7 +217,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * it with a remote user if provided.
    */
   public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
-    const group = this.remoteUserFormGroup() as FormGroup;
+    const group = this.remoteUserFormGroup();
     if (remoteUser) {
       const { id, firstName, lastName, remoteUserLocations, remoteUserCertifications } = remoteUser;
       group.patchValue({ id, firstName, lastName });
