@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { ViewportService } from '@core/services/viewport.service';
 
-import { DashboardRouteMenuItem, DashboardMenuItemOptions } from '../../models/dashboard-menu-item.model';
+import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
 
 @Component({
   selector: 'app-dashboard-route-menu-item',
