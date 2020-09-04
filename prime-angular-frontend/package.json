@@ -6,6 +6,7 @@
     "start": "ng serve",
     "start:ie": "ng serve --configuration es5",
     "build": "ng build --subresource-integrity",
+    "audit": "npm install && npm audit fix && ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
