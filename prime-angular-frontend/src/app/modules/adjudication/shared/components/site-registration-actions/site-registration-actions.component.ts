@@ -41,8 +41,11 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public contactSigningAuthorityForSite() {
     const signingAuthority = this.siteRegistration?.signingAuthority;
     if (signingAuthority) {
-      this.utilService.mailTo(signingAuthority.email, `PRIME Site Registration - ${this.siteRegistration.name}`,
-        `Dear ${signingAuthority.firstName} ${signingAuthority.lastName},`);
+      this.utilService.mailTo(
+        signingAuthority.email, 
+        `PRIME Site Registration - ${this.siteRegistration.name}`,
+        `Dear ${signingAuthority.firstName} ${signingAuthority.lastName},`
+      );
     }
   }
 
