@@ -411,7 +411,7 @@ export class AdjudicationResource {
 
     if (keys.every((key: string) => profileSnapshot.hasOwnProperty(key))) {
       profileSnapshot.selfDeclarations = [];
-      keys.map((key: string, index: number) => {
+      keys.forEach((key: string, index: number) => {
         if (profileSnapshot[key]) {
           profileSnapshot.selfDeclarations.push({
             selfDeclarationDetails: profileSnapshot[`${key}Details`],
