@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { SiteResource } from '@core/resources/site-resource.service';
+import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
@@ -18,7 +19,6 @@ import { BusinessLicenceDocument } from '@registration/shared/models/business-li
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
-import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-business-licence',
@@ -123,9 +123,9 @@ export class BusinessLicenceComponent implements OnInit {
   public getBusinessLicence(event: Event) {
     event.preventDefault();
     this.siteResource.getBusinessLicenceDownloadToken(this.siteService.site.id)
-      .subscribe((token: string) => {
-        this.utilsService.downloadToken(token);
-      });
+      .subscribe((token: string) => 
+        this.utilsService.downloadToken(token)
+      );
   }
 
   private getDoingBusinessAs(site: Site) {
