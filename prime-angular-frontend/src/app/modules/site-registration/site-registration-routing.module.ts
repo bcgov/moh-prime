@@ -145,7 +145,7 @@ const routes: Routes = [
                     component: TechnicalSupportComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Technical Support' }
+                    data: { title: 'Technical Support Contact' }
                   },
                   {
                     path: SiteRoutes.REMOTE_USERS,

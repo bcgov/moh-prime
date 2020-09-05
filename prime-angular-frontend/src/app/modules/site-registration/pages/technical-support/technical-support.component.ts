@@ -43,7 +43,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'Technical Support';
+    this.title = 'Technical Support Contact';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
   }
 
