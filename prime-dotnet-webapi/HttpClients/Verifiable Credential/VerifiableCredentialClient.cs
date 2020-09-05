@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public class VerifiableCredentialClient : IVerifiableCredentialClient
     {

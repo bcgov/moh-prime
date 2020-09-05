@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public class BearerTokenHandler<T> : DelegatingHandler where T : ClientCredentialsTokenRequest
     {

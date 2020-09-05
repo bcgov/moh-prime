@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 
-using Prime.Services.Clients.KeycloakApiDefinitions;
+using Prime.HttpClients.KeycloakApiDefinitions;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public interface IKeycloakAdministrationClient
     {
