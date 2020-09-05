@@ -23,7 +23,7 @@ using Wkhtmltopdf.NetCore;
 
 using Prime.Auth;
 using Prime.Services;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
 using System.Collections.Generic;

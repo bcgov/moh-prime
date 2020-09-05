@@ -1,6 +1,6 @@
 using IdentityModel.Client;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public class DocumentManagerClientCredentials : ClientCredentialsTokenRequest { }
 

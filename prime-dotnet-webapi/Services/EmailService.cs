@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using Prime.Models;
 using System.IO;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
