@@ -21,6 +21,8 @@ namespace Prime.Services.Clients
 
         public async Task<Role> GetRoleByName(string role)
         {
+            throw new NotImplementedException("Environment variables and Keycloak Client have not yet been set up.");
+
             var response = await _client.GetAsync($"roles/{WebUtility.UrlEncode(role)}");
 
             response.EnsureSuccessStatusCode();
@@ -30,6 +32,8 @@ namespace Prime.Services.Clients
 
         public async Task AssignRealmRole(Guid userId, string role)
         {
+            throw new NotImplementedException("Environment variables and Keycloak Client have not yet been set up.");
+
             // Keycloak expects an array of roles to assign, of which we need both the name and ID
             var keycloakRole = await GetRoleByName(role);
             string serialized = JsonConvert.SerializeObject(new[] { keycloakRole });
