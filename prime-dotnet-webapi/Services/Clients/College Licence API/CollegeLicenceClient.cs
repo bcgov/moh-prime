@@ -29,7 +29,7 @@ namespace Prime.Services.Clients
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.PostAsync(PrimeConstants.PHARMANET_API_URL, requestParams.ToRequestContent());
+                response = await _client.PostAsync(PrimeEnvironment.PharmanetApi.Url, requestParams.ToRequestContent());
             }
             catch (Exception ex)
             {
@@ -102,7 +102,7 @@ namespace Prime.Services.Clients
     {
         public CollegeLicenceClientHandler()
         {
-            ClientCertificates.Add(new X509Certificate2(PrimeConstants.PHARMANET_SSL_CERT_FILENAME, PrimeConstants.PHARMANET_SSL_CERT_PASSWORD));
+            ClientCertificates.Add(new X509Certificate2(PrimeEnvironment.PharmanetApi.SslCertFilename, PrimeEnvironment.PharmanetApi.SslCertPassword));
             ClientCertificateOptions = ClientCertificateOption.Manual;
         }
     }

@@ -31,7 +31,7 @@ namespace Prime.Services.Clients
         {
             var dict = new Dictionary<string, string>()
             {
-                { "Key", _credentials.apiKey },
+                { "Key", _credentials.ApiKey },
                 { "SearchTerm", searchTerm }
             };
 
@@ -68,7 +68,7 @@ namespace Prime.Services.Clients
         {
             var dict = new Dictionary<string, string>()
             {
-                { "Key", _credentials.apiKey },
+                { "Key", _credentials.ApiKey },
                 { "Id", Id }
             };
 
