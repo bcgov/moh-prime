@@ -43,7 +43,7 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.title = this.route.snapshot.data.title;;
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
   }
 
