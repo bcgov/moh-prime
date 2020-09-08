@@ -6,6 +6,7 @@ import { Organization } from './organization.model';
 import { Party } from './party.model';
 import { RemoteUser } from './remote-user.model';
 import { Vendor } from './vendor.model';
+import { Contact } from './contact.model';
 
 export interface Site {
   id?: number;
@@ -24,11 +25,11 @@ export interface Site {
   businessHours: BusinessDay[];
   remoteUsers: RemoteUser[];
   administratorPharmaNetId?: number;
-  administratorPharmaNet: Party;
+  administratorPharmaNet: Contact;
   privacyOfficerId?: number;
-  privacyOfficer: Party;
+  privacyOfficer: Contact;
   technicalSupportId?: number;
-  technicalSupport: Party;
+  technicalSupport: Contact;
   // States -----
   completed: boolean;
   approvedDate: string;

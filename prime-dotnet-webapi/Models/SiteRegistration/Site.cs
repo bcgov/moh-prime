@@ -23,15 +23,15 @@ namespace Prime.Models
 
         public int? AdministratorPharmaNetId { get; set; }
 
-        public Party AdministratorPharmaNet { get; set; }
+        public Contact AdministratorPharmaNet { get; set; }
 
         public int? PrivacyOfficerId { get; set; }
 
-        public Party PrivacyOfficer { get; set; }
+        public Contact PrivacyOfficer { get; set; }
 
         public int? TechnicalSupportId { get; set; }
 
-        public Party TechnicalSupport { get; set; }
+        public Contact TechnicalSupport { get; set; }
 
         public int? ProvisionerId { get; set; }
 

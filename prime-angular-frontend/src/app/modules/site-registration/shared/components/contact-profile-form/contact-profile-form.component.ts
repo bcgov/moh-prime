@@ -7,11 +7,11 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 @Component({
-  selector: 'app-party-profile-form',
-  templateUrl: './party-profile-form.component.html',
-  styleUrls: ['./party-profile-form.component.scss']
+  selector: 'app-contact-profile-form',
+  templateUrl: './contact-profile-form.component.html',
+  styleUrls: ['./contact-profile-form.component.scss']
 })
-export class PartyProfileFormComponent implements OnInit {
+export class ContactProfileFormComponent implements OnInit {
   @Input() public title: string;
   @Input() public form: FormGroup;
   public hasPhysicalAddress: boolean;
