@@ -89,22 +89,22 @@ export class RemoteUsersComponent implements OnInit {
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       this.hasNoRemoteUserError = false;
-      this.hasNoEmailError = false;
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
       const siteId = this.siteService.site.id;
-      const newRemoteUsers: RemoteUser[] = [];
+      let newRemoteUsers: RemoteUser[];
 
-      this.siteFormStateService.remoteUsersForm.value.remoteUsers.map((updated: RemoteUser) => {
-        const found = this.siteService.site.remoteUsers.find((current: RemoteUser) =>
+      newRemoteUsers = this.siteFormStateService.remoteUsersForm.value.remoteUsers.reduce((
+        newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
+        if (!this.siteService.site.remoteUsers.find((current: RemoteUser) =>
           current.firstName === updated.firstName &&
           current.lastName === updated.lastName &&
           current.email === updated.email
-        );
-        if (!found) {
-          newRemoteUsers.push(updated);
+        )) {
+          newRemoteUsersAcc.push(updated);
         }
-      });
+        return newRemoteUsersAcc;
+      }, []);
 
 
       this.busy = this.organizationResource
@@ -128,7 +128,7 @@ export class RemoteUsersComponent implements OnInit {
               : of(hasSignedOrgAgreement);
           }),
           exhaustMap((hasSignedOrgAgreement: boolean) => {
-            return (this.siteService.site.submittedDate)
+            return (this.siteService.site.submittedDate && newRemoteUsers)
               ? this.siteResource.sendRemoteUsersEmailUser(siteId, newRemoteUsers)
                 .pipe(map(() => hasSignedOrgAgreement))
               : of(hasSignedOrgAgreement);
@@ -139,17 +139,7 @@ export class RemoteUsersComponent implements OnInit {
           this.nextRoute(organizationId, hasSignedOrgAgreement);
         });
     } else {
-      const remoteUserFormValue = this.siteFormStateService.remoteUsersForm.value;
-      if (remoteUserFormValue.remoteUsers.length > 0) {
-        remoteUserFormValue.remoteUsers.map((remoteUser: RemoteUser) => {
-          if (!remoteUser.email) {
-            this.hasNoEmailError = true;
-          }
-        })
-      } else {
-        this.hasNoEmailError = false;
-        this.hasNoRemoteUserError = true;
-      }
+      this.hasNoRemoteUserError = true;
     }
   }
 
