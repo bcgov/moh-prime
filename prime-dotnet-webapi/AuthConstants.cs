@@ -27,6 +27,7 @@ namespace Prime.Auth
 
         // Feature Flags
         public const string FEATURE_SITE_REGISTRATION = "feature_site_registration";
+        public const string FEATURE_VC_ISSUANCE = "feature_vc_issuance";
 
         // Policies
         public const string SUPER_ADMIN_POLICY = "super-admin-policy";
