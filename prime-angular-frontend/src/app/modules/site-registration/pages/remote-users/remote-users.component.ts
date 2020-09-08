@@ -92,9 +92,8 @@ export class RemoteUsersComponent implements OnInit {
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
       const site = this.siteService.site;
-      let newRemoteUsers: RemoteUser[];
 
-      newRemoteUsers = this.siteFormStateService.remoteUsersForm.value.remoteUsers.reduce((
+      const newRemoteUsers = this.siteFormStateService.remoteUsersForm.value.remoteUsers.reduce((
         newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
         if (!this.siteService.site.remoteUsers.find((current: RemoteUser) =>
           current.firstName === updated.firstName &&
