@@ -442,11 +442,7 @@ namespace Prime.Controllers
 
             var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
 
-            return CreatedAtAction(
-                nameof(CreateSiteRegistrationNote),
-                new { siteId = siteId },
-                ApiResponse.Result(createdSiteRegistrationNote)
-            );
+            return Ok(ApiResponse.Result(createdSiteRegistrationNote));
         }
     }
 }
