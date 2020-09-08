@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { SiteResource } from '@core/resources/site-resource.service';
+import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
@@ -44,7 +45,8 @@ export class BusinessLicenceComponent implements OnInit {
     private organizationResource: OrganizationResource,
     private orgBookResource: OrgBookResource,
     private siteResource: SiteResource,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private utilsService: UtilsService
   ) {
     this.title = 'Business Licence';
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -115,6 +117,14 @@ export class BusinessLicenceComponent implements OnInit {
     this.busy = this.siteResource.getBusinessLicences(site.id)
       .subscribe((businessLicenses: BusinessLicenceDocument[]) =>
         this.businessLicenceDocuments = businessLicenses
+      );
+  }
+
+  public getBusinessLicence(event: Event) {
+    event.preventDefault();
+    this.siteResource.getBusinessLicenceDownloadToken(this.siteService.site.id)
+      .subscribe((token: string) => 
+        this.utilsService.downloadToken(token)
       );
   }
 
