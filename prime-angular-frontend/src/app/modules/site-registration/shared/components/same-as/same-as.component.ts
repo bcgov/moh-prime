@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
-import { Party } from '@registration/shared/models/party.model';
 import { SiteService } from '@registration/shared/services/site.service';
+import { Party } from '@registration/shared/models/party.model';
+import { Contact } from '@registration/shared/models/contact.model';
+import { Person } from '@registration/shared/models/person.model';
 
 @Component({
   selector: 'app-same-as',
@@ -11,48 +13,63 @@ import { SiteService } from '@registration/shared/services/site.service';
 export class SameAsComponent implements OnInit {
   // When not provided selections are not displayed
   @Input() public selectFor: string;
-  @Output() public selected: EventEmitter<Party>;
-  public parties: { key: string, display: string, data: Party }[];
+  @Output() public selected: EventEmitter<Contact>;
+  public contacts: { key: string, display: string, data: Contact }[];
 
   constructor(
     private siteService: SiteService
   ) {
-    this.selected = new EventEmitter<Party>();
+    this.selected = new EventEmitter<Contact>();
   }
 
-  public onSelect(party: Party) {
-    this.selected.emit(party);
+  public onSelect(contact: Contact) {
+    this.selected.emit(contact);
   }
 
   public ngOnInit(): void {
     const site = this.siteService.site;
-    this.parties = [
+    this.contacts = [
       {
         key: 'signingAuthority',
         display: 'Signing Authority',
-        data: site?.provisioner
+        data: this.removeContactIds(site?.provisioner)
       },
-      // TODO commented out since you can't determine same-as between parties within sites
-      // {
-      //   key: 'administratorPharmaNet',
-      //   display: 'Administrator of PharmaNet Onboarding',
-      //   data: site?.location?.administratorPharmaNet
-      // },
-      // {
-      //   key: 'privacyOfficer',
-      //   display: 'Privacy Officer',
-      //   data: site?.location?.privacyOfficer
-      // },
-      // {
-      //   key: 'technicalSupport',
-      //   display: 'Technical Support',
-      //   data: site?.location?.technicalSupport
-      // }
+      {
+        key: 'administratorPharmaNet',
+        display: 'Administrator of PharmaNet Onboarding',
+        data: this.removeContactIds(site?.administratorPharmaNet)
+      },
+      {
+        key: 'privacyOfficer',
+        display: 'Privacy Officer',
+        data: this.removeContactIds(site?.privacyOfficer)
+      },
+      {
+        key: 'technicalSupport',
+        display: 'Technical Support',
+        data: this.removeContactIds(site?.technicalSupport)
+      }
     ];
 
-    // TODO commented out since you can't determine same-as between parties within sites
-    // Order of parties is dependent on the order of routing
-    // const index = this.parties.findIndex(p => p.key === this.selectFor);
-    // this.parties = this.parties.slice(0, index);
+    const index = this.contacts.findIndex(p => p.key === this.selectFor);
+    this.contacts = this.contacts.slice(0, index);
+  }
+
+  private removeContactIds(person: Person): Person {
+    if (!person) {
+      return null;
+    }
+
+    person.id = 0;
+    if (person.physicalAddress) {
+      person.physicalAddressId = 0;
+      person.physicalAddress.id = 0;
+    }
+    if (person.mailingAddress) {
+      person.mailingAddressId = 0;
+      person.mailingAddress.id = 0;
+    }
+
+    return person;
   }
 }
