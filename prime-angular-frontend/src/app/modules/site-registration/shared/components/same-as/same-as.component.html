@@ -10,11 +10,11 @@
   </button>
 
   <mat-menu #menu>
-    <ng-container *ngFor="let party of parties">
+    <ng-container *ngFor="let contact of contacts">
       <button mat-menu-item
               type="button"
-              (click)="onSelect(party.data)">
-        <span>{{ party.display }}</span>
+              (click)="onSelect(contact.data)">
+        <span>{{ contact.display }}</span>
       </button>
     </ng-container>
   </mat-menu>
