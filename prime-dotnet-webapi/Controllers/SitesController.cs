@@ -406,6 +406,11 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
+            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            {
+                return Forbid();
+            }
+
             await _emailService.SendRemoteUsersUpdatedAsync(site);
             return NoContent();
         }
@@ -430,6 +435,11 @@ namespace Prime.Controllers
             if (site == null)
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            {
+                return Forbid();
             }
 
             await _emailService.SendRemoteUsersNotificationAsync(site, remoteUsers);
