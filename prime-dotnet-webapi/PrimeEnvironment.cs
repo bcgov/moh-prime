@@ -7,7 +7,6 @@ namespace Prime
         public readonly static string Name = Environment.GetEnvironmentVariable("OC_APP") ?? "local";
         public readonly static string FrontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "localhost:4200";
         public readonly static string BackendUrl = Environment.GetEnvironmentVariable("BACKEND_URL") ?? "http://localhost:5000/api";
-        public readonly static string KeycloakTokenUrl = Environment.GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
         public readonly static string LogFile = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
         public static bool IsProduction { get => Name == "prod"; }
@@ -18,6 +17,15 @@ namespace Prime
             public readonly static string Url = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_URL") ?? "http://localhost:6001/";
             public readonly static string ClientId = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_ID") ?? "prime-document-manager-local";
             public readonly static string ClientSecret = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_SECRET") ?? "b515de16-419b-49b1-bca9-f97eafc95d41";
+        }
+
+        // TODO: Environment variables and service client. Client needs manage-users and view-realm roles to get and assign roles.
+        public static class Keycloak
+        {
+            public readonly static string TokenUrl = Environment.GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
+            public readonly static string AdministrationUrl = Environment.GetEnvironmentVariable("") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/admin/realms/v4mbqqas/";
+            public readonly static string AdministrationClientId = Environment.GetEnvironmentVariable("") ?? "";
+            public readonly static string AdministrationClientSecret = Environment.GetEnvironmentVariable("") ?? "";
         }
 
         public static class MailServer
