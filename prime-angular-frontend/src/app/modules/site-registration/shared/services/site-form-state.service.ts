@@ -7,14 +7,15 @@ import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
-import { Party } from '@registration/shared/models/party.model';
 import { Site } from '@registration/shared/models/site.model';
-import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
+import { Party } from '@registration/shared/models/party.model';
+import { Contact } from '@registration/shared/models/contact.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
-import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
+import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
+import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -81,7 +82,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       this.administratorPharmaNetForm.getRawValue(),
       this.privacyOfficerForm.getRawValue(),
       this.technicalSupportForm.getRawValue()
-    ].map((party: Party) => this.toPartyJson(party));
+    ].map((contact: Contact) => this.toPersonJson<Contact>(contact));
 
     // Includes site related keys to uphold relationships, and allow for updates
     // to a site. Keys not for update have been omitted and the type enforced
@@ -207,7 +208,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       [this.technicalSupportForm, site.technicalSupport]
     ]
       .filter(([form, data]: [FormGroup, Party]) => data)
-      .forEach((formParty: [FormGroup, Party]) => this.toPartyFormModel(formParty));
+      .forEach((formParty: [FormGroup, Party]) => this.toPersonFormModel<Contact>(formParty));
   }
 
   /**
@@ -371,10 +372,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     return this.fb.group({
       id: [
         0,
-        []
-      ],
-      userId: [
-        '00000000-0000-0000-0000-000000000000',
         []
       ],
       firstName: [
