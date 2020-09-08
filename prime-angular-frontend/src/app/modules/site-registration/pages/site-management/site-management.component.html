@@ -1,8 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
 
-  <app-site-collection-notice [isFull]="false"></app-site-collection-notice>
-
   <div *ngIf="hasSubmittedSite"
        class="alert-message">
     <app-alert type="success">
