@@ -413,7 +413,7 @@ namespace Prime.Controllers
         // POST: api/Sites/5/remote-users-email-user
         /// <summary>
         /// Send user an email when they are declared as a remote user against a site
-        /// so they can sequence requesting Remote Access on their PRIME practitionner enrolment
+        /// so they can sequence requesting Remote Access on their PRIME practitioner enrolment
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="remoteUsers"></param>

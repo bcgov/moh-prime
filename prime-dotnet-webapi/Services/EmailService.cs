@@ -172,7 +172,7 @@ namespace Prime.Services
 
         public async Task SendRemoteUsersNotificationAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
         {
-            var subject = "Remote Practitionner Notification";
+            var subject = "Remote Practitioner Notification";
             var body = await _razorConverterService.RenderViewToStringAsync(
                 "/Views/Emails/RemoteUserNotificationEmail.cshtml",
                 new EmailParams(site));
