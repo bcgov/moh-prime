@@ -6,12 +6,12 @@ using IdentityModel.Client;
 
 namespace Prime.Services.Clients
 {
-    public class ChesBearerTokenHandler : DelegatingHandler
+    public class BearerTokenHandler<T> : DelegatingHandler where T : ClientCredentialsTokenRequest
     {
         private readonly IAccessTokenClient _tokenClient;
-        private readonly ChesClientCredentials _credentials;
+        private readonly ClientCredentialsTokenRequest _credentials;
 
-        public ChesBearerTokenHandler(IAccessTokenClient accessTokenClient, ChesClientCredentials credentials)
+        public BearerTokenHandler(IAccessTokenClient accessTokenClient, T credentials)
         {
             _tokenClient = accessTokenClient ?? throw new ArgumentNullException(nameof(accessTokenClient));
             _credentials = credentials ?? throw new ArgumentNullException(nameof(credentials));
