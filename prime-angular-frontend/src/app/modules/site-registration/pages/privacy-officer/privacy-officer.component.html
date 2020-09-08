@@ -2,20 +2,11 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <app-party-profile-form [title]="title"
-                          [form]="form"
-                          (submit)="onSubmit()">
-
+  <app-contact-profile-form [title]="title"
+                            [form]="form"
+                            (submit)="onSubmit()">
     <app-same-as selectFor="privacyOfficer"
-                 (selected)="onSelect($event)">
-      <button *ngIf="isSameAs()"
-              mat-stroked-button
-              type="button"
-              color="primary"
-              (click)="onClear()">
-        Enable Editing
-      </button>
-    </app-same-as>
+                 (selected)="onSelect($event)"></app-same-as>
 
     <ng-container appPageSubheader2Summary>
       Ensures the site adheres to the requirements of applicable privacy and security legislation and responds on the
@@ -25,7 +16,7 @@
     <ng-container appPageSubheader2MoreInfo>
       The Privacy Officer’s mailing address is different from this site’s address
     </ng-container>
-  </app-party-profile-form>
+  </app-contact-profile-form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
                    [hasSecondaryAction]="true"

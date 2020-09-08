@@ -34,12 +34,13 @@
     <app-enrollee-property title="Care Setting">
       {{ site.careSettingCode | configCode: 'careSettings' | default }}
     </app-enrollee-property>
-    <app-enrollee-property title="Vendor">
+
+    <app-enrollee-property title="PharmaNet Software Vendor">
       {{ site.siteVendors[0]?.vendorCode | configCode: 'vendors' | default }}
     </app-enrollee-property>
   </app-overview-section>
 
-  <app-overview-section title="Business Licence"
+  <app-overview-section title="Site Business Licence"
                         (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         [showEditRedirect]="!site.submittedDate">
