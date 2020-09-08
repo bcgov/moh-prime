@@ -91,7 +91,7 @@ export class RemoteUsersComponent implements OnInit {
       this.hasNoRemoteUserError = false;
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
-      const siteId = this.siteService.site.id;
+      const site = this.siteService.site;
       let newRemoteUsers: RemoteUser[];
 
       newRemoteUsers = this.siteFormStateService.remoteUsersForm.value.remoteUsers.reduce((
@@ -115,24 +115,24 @@ export class RemoteUsersComponent implements OnInit {
             this.siteResource.updateSite(payload)
               .pipe(map(() => hasSignedOrgAgreement))
           ),
-          exhaustMap((hasSignedOrgAgreement: boolean) => {
-            return (hasSignedOrgAgreement)
-              ? this.siteResource.updateCompleted(siteId)
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            (hasSignedOrgAgreement)
+              ? this.siteResource.updateCompleted(site.id)
                 .pipe(map(() => hasSignedOrgAgreement))
-              : of(hasSignedOrgAgreement);
-          }),
-          exhaustMap((hasSignedOrgAgreement: boolean) => {
-            return (this.siteService.site.submittedDate)
-              ? this.siteResource.sendRemoteUsersEmailAdmin(siteId)
+              : of(hasSignedOrgAgreement)
+          ),
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            (this.siteService.site.submittedDate)
+              ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
                 .pipe(map(() => hasSignedOrgAgreement))
-              : of(hasSignedOrgAgreement);
-          }),
-          exhaustMap((hasSignedOrgAgreement: boolean) => {
-            return (this.siteService.site.submittedDate && newRemoteUsers)
-              ? this.siteResource.sendRemoteUsersEmailUser(siteId, newRemoteUsers)
+              : of(hasSignedOrgAgreement)
+          ),
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            (this.siteService.site.submittedDate && newRemoteUsers)
+              ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
                 .pipe(map(() => hasSignedOrgAgreement))
-              : of(hasSignedOrgAgreement);
-          })
+              : of(hasSignedOrgAgreement)
+          )
         )
         .subscribe((hasSignedOrgAgreement: boolean) => {
           this.form.markAsPristine();
