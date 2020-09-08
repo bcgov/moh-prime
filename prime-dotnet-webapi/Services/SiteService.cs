@@ -348,8 +348,6 @@ namespace Prime.Services
             {
                 site.ApprovedDate = DateTimeOffset.Now;
 
-                this._context.Update(site);
-
                 var updated = await _context.SaveChangesAsync();
                 if (updated < 1)
                 {
