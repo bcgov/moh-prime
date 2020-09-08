@@ -84,6 +84,7 @@ namespace Prime
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Party> Parties { get; set; }
         public DbSet<Site> Sites { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<RemoteUser> RemoteUsers { get; set; }
         public DbSet<RemoteUserLocation> RemoteUserLocations { get; set; }
@@ -234,6 +235,8 @@ namespace Prime
                 .HasForeignKey(rul => rul.RemoteUserId);
 
             #endregion
+
+            modelBuilder.Ignore<NewestAgreement>();
         }
 
         // Uncomment for DB logging

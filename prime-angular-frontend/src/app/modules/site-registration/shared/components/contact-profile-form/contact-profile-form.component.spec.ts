@@ -8,20 +8,20 @@ import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockSiteService } from 'test/mocks/mock-site.service';
 
-import { PartyProfileFormComponent } from './party-profile-form.component';
+import { ContactProfileFormComponent } from './contact-profile-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
-describe('PartyProfileFormComponent', () => {
-  let component: PartyProfileFormComponent;
-  let fixture: ComponentFixture<PartyProfileFormComponent>;
+describe('ContactProfileFormComponent', () => {
+  let component: ContactProfileFormComponent;
+  let fixture: ComponentFixture<ContactProfileFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        PartyProfileFormComponent
+        ContactProfileFormComponent
       ],
       imports: [
         BrowserAnimationsModule,
@@ -51,7 +51,7 @@ describe('PartyProfileFormComponent', () => {
   beforeEach(inject(
     [SiteService, SiteFormStateService],
     (siteService: SiteService, siteFormStateService: SiteFormStateService) => {
-      fixture = TestBed.createComponent(PartyProfileFormComponent);
+      fixture = TestBed.createComponent(ContactProfileFormComponent);
       component = fixture.componentInstance;
       siteFormStateService.setForm(siteService.site);
       // Add the bound FormGroup to the component

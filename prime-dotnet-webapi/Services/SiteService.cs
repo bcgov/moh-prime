@@ -88,7 +88,7 @@ namespace Prime.Services
                 UpdateVendors(currentSite, updatedSite);
             }
 
-            UpdateParties(currentSite, updatedSite);
+            UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
             UpdateRemoteUsers(currentSite, updatedSite);
 
@@ -119,39 +119,46 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateParties(Site current, SiteUpdateModel updated)
+        private void UpdateContacts(Site current, SiteUpdateModel updated)
         {
-            string[] partyTypes = new string[] {
+            string[] contactTypes = new string[] {
                 nameof(current.AdministratorPharmaNet),
                 nameof(current.PrivacyOfficer),
                 nameof(current.TechnicalSupport)
             };
 
-            foreach (var partyType in partyTypes)
+            foreach (var contactType in contactTypes)
             {
-                var partyIdName = $"{partyType}Id";
-                Party currentParty = _context.Entry(current).Reference(partyType).CurrentValue as Party;
-                Party updatedParty = typeof(SiteUpdateModel).GetProperty(partyType).GetValue(updated) as Party;
+                var contactIdName = $"{contactType}Id";
+                Contact currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
+                Contact updatedContact = typeof(SiteUpdateModel).GetProperty(contactType).GetValue(updated) as Contact;
 
-                if (updatedParty != null)
+                if (updatedContact != null)
                 {
-                    if (updatedParty.UserId != Guid.Empty)
+                    if (updatedContact.Id != 0)
                     {
-                        _context.Entry(current).Property(partyIdName).CurrentValue = updatedParty.Id;
+                        _context.Entry(current).Property(contactIdName).CurrentValue = updatedContact.Id;
                     }
                     else
                     {
-                        if (currentParty == null)
+                        if (currentContact == null)
                         {
-                            _context.Entry(current).Reference(partyType).CurrentValue = updatedParty;
-                            currentParty = _context.Entry(current).Reference(partyType).CurrentValue as Party;
+                            _context.Entry(current).Reference(contactType).CurrentValue = updatedContact;
+                            currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
                         }
                         else
                         {
-                            this._context.Entry(currentParty).CurrentValues.SetValues(updatedParty);
+                            this._context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
                         }
 
-                        _partyService.UpdatePartyPhysicalAddress(currentParty, updatedParty);
+                        if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
+                        {
+                            this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                        }
+                        else
+                        {
+                            current.PhysicalAddress = updated.PhysicalAddress;
+                        }
                     }
                 }
             }
@@ -320,9 +327,9 @@ namespace Prime.Services
                     _context.Addresses.Remove(site.PhysicalAddress);
                 }
 
-                DeletePartyFromSite(site.AdministratorPharmaNet);
-                DeletePartyFromSite(site.TechnicalSupport);
-                DeletePartyFromSite(site.PrivacyOfficer);
+                DeleteContactFromSite(site.AdministratorPharmaNet);
+                DeleteContactFromSite(site.TechnicalSupport);
+                DeleteContactFromSite(site.PrivacyOfficer);
 
                 _context.Sites.Remove(site);
 
@@ -332,15 +339,15 @@ namespace Prime.Services
             }
         }
 
-        private void DeletePartyFromSite(Party party)
+        private void DeleteContactFromSite(Contact contact)
         {
-            if (party != null)
+            if (contact != null)
             {
-                if (party.PhysicalAddress != null)
+                if (contact.PhysicalAddress != null)
                 {
-                    _context.Addresses.Remove(party.PhysicalAddress);
+                    _context.Addresses.Remove(contact.PhysicalAddress);
                 }
-                _context.Parties.Remove(party);
+                _context.Contacts.Remove(contact);
             }
         }
 
