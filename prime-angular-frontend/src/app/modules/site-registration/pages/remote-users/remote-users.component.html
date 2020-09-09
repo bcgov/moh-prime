@@ -57,6 +57,15 @@
     </ng-container>
   </app-alert>
 
+  <app-alert *ngIf="hasNoEmailError"
+             type="danger"
+             icon="warning">
+    <ng-container #alertContent
+                  class="alert-content">
+      One or more remote users are missing an email.
+    </ng-container>
+  </app-alert>
+
   <button mat-button
           *ngIf="hasRemoteUsers.value"
           type="button"
