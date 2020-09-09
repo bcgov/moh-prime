@@ -31,6 +31,7 @@ export class RemoteUsersComponent implements OnInit {
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
   public hasNoRemoteUserError: boolean;
+  public hasNoEmailError: boolean;
   public submitButtonText: string;
 
   constructor(
@@ -43,7 +44,7 @@ export class RemoteUsersComponent implements OnInit {
     private formUtilsService: FormUtilsService,
     private addressPipe: AddressPipe
   ) {
-    this.title = 'Practitioners Requiring Remote PharmaNet Access';
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.submitButtonText = 'Save and Continue';
   }
@@ -90,6 +91,20 @@ export class RemoteUsersComponent implements OnInit {
       this.hasNoRemoteUserError = false;
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
+      const site = this.siteService.site;
+
+      const newRemoteUsers = this.siteFormStateService.remoteUsersForm.value.remoteUsers.reduce((
+        newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
+        if (!this.siteService.site.remoteUsers.find((current: RemoteUser) =>
+          current.firstName === updated.firstName &&
+          current.lastName === updated.lastName &&
+          current.email === updated.email
+        )) {
+          newRemoteUsersAcc.push(updated);
+        }
+        return newRemoteUsersAcc;
+      }, []);
+
 
       this.busy = this.organizationResource
         .getOrganizationById(organizationId)
@@ -99,18 +114,24 @@ export class RemoteUsersComponent implements OnInit {
             this.siteResource.updateSite(payload)
               .pipe(map(() => hasSignedOrgAgreement))
           ),
-          exhaustMap((hasSignedOrgAgreement: boolean) => {
-            return hasSignedOrgAgreement
-              ? (this.siteResource.updateCompleted(this.siteService.site.id))
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            (hasSignedOrgAgreement)
+              ? this.siteResource.updateCompleted(site.id)
                 .pipe(map(() => hasSignedOrgAgreement))
-              : of(hasSignedOrgAgreement);
-          }),
-          exhaustMap((hasSignedOrgAgreement: boolean) => {
-            return this.siteService.site.submittedDate
-              ? (this.siteResource.sendRemoteUsersEmail(this.route.snapshot.params.sid))
+              : of(hasSignedOrgAgreement)
+          ),
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            (this.siteService.site.submittedDate)
+              ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
                 .pipe(map(() => hasSignedOrgAgreement))
-              : of(hasSignedOrgAgreement);
-          })
+              : of(hasSignedOrgAgreement)
+          ),
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            (this.siteService.site.submittedDate && newRemoteUsers)
+              ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
+                .pipe(map(() => hasSignedOrgAgreement))
+              : of(hasSignedOrgAgreement)
+          )
         )
         .subscribe((hasSignedOrgAgreement: boolean) => {
           this.form.markAsPristine();

@@ -14,7 +14,7 @@
                   [ngTemplateOutletContext]="{ property: prop }">
     </ng-container>
   </mat-card-content>
-  <mat-card-actions>
+  <mat-card-actions *ngIf="actionButtonTitle">
     <button mat-stroked-button
             type="button"
             color="primary"

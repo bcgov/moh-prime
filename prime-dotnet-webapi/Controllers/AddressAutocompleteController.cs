@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Models.Api;
-using Prime.Services.Clients;
-using static Prime.Services.Clients.AddressAutocompleteClient;
+using Prime.HttpClients;
+using static Prime.HttpClients.AddressAutocompleteClient;
 
 namespace Prime.Controllers
 {

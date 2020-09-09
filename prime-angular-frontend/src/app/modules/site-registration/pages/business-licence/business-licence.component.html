@@ -16,6 +16,7 @@
 
       <app-document-upload componentName="business-licence"
                            additionalApiSuffix="business-licence"
+                           labelMessage="Drag and drop your business licence or browse"
                            [multiple]="false"
                            (completed)="onUpload($event)">
       </app-document-upload>
@@ -28,6 +29,19 @@
           No business licence has been uploaded.
         </ng-container>
       </app-alert>
+
+      <ng-container *ngIf="businessLicenceDocuments.length">
+
+        <app-enrollee-property title="Filename">
+          <button mat-stroked-button
+                  color="primary"
+                  (click)="getBusinessLicence($event)">
+            <mat-icon class="mr-1">attachment</mat-icon>
+            {{ businessLicenceDocuments[businessLicenceDocuments.length - 1].filename | default }}
+          </button>
+        </app-enrollee-property>
+
+      </ng-container>
     </section>
 
     <section class="mb-3">

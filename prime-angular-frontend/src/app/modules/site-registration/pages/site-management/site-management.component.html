@@ -1,8 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
 
-  <app-site-collection-notice [isFull]="false"></app-site-collection-notice>
-
   <div *ngIf="hasSubmittedSite"
        class="alert-message">
     <app-alert type="success">
@@ -22,7 +20,8 @@
       <ng-container appPageSubheader2Summary>
         Use this management page to update your information or to add multiple sites.
         <em class="emphasize">
-          A site is the combination of one physical location and one PharmaNet software vendor.
+          A site is a physical address in combination with a PharmaNet software vendor. If you use multiple vendors at one
+          location, you have multiple sites.
         </em>
       </ng-container>
     </app-page-subheader2>
@@ -35,8 +34,6 @@
                       [menu]="organizationMenu"
                       [menuOutletContext]="{ organization: organization }"
                       [properties]="getOrganizationProperties(organization)"
-                      [actionButtonTitle]="'View/Print Agreement'"
-                      [actionDisabled]="!organization.acceptedAgreementDate"
                       (action)="viewAgreement(organization)"></app-summary-card>
 
     <hr *ngIf="first"
@@ -61,8 +58,6 @@
                         [menu]="siteMenu"
                         [menuOutletContext]="{ site: site, organizationId: organization.id }"
                         [properties]="getSiteProperties(site)"
-                        actionButtonTitle="Update Remote Practitioners"
-                        [actionDisabled]="!site.completed"
                         (action)="viewSiteRemoteUsers(organization.id, site)"></app-summary-card>
 
     </ng-container>
