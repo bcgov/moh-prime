@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Prime.Services
+namespace Prime.HttpClients
 {
     public interface ISmtpEmailClient
     {

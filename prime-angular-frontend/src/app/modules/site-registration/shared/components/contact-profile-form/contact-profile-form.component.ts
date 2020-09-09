@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ContentChildren, QueryList } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { distinctUntilChanged } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { PageSubheader2MoreInfoDirective } from '@shared/components/page-subheader2/page-subheader2-more-info.directive';
 
 @Component({
   selector: 'app-contact-profile-form',
@@ -15,10 +16,16 @@ export class ContactProfileFormComponent implements OnInit {
   @Input() public title: string;
   @Input() public form: FormGroup;
   public hasPhysicalAddress: boolean;
+  @ContentChildren(PageSubheader2MoreInfoDirective, { descendants: true })
+  public pageSubheaderMoreInfoChildren: QueryList<PageSubheader2MoreInfoDirective>;
 
   constructor(
     private formUtilsService: FormUtilsService
   ) { }
+
+  public get hasPageSubheaderMoreInfo(): boolean {
+    return !!this.pageSubheaderMoreInfoChildren.length;
+  }
 
   public get phone(): FormControl {
     return this.form.get('phone') as FormControl;
