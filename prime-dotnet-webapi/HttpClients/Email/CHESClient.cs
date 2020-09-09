@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Prime.Services
+namespace Prime.HttpClients
 {
     public class ChesClient : IChesClient
     {

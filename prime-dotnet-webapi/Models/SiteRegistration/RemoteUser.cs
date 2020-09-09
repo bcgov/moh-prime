@@ -23,6 +23,9 @@ namespace Prime.Models
         public string LastName { get; set; }
 
         [Required]
+        public string Email { get; set; }
+
+        [Required]
         public IEnumerable<RemoteUserLocation> RemoteUserLocations { get; set; }
 
         public ICollection<RemoteUserCertification> RemoteUserCertifications { get; set; }

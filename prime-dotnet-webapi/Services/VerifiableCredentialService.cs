@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using QRCoder;
 
 using Prime.Models;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services

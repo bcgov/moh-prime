@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public interface IVerifiableCredentialClient
     {

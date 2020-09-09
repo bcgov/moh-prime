@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Models.Api;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 
 namespace Prime.Controllers
 {
