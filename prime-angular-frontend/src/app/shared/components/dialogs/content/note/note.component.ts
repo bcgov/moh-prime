@@ -15,8 +15,8 @@ export class NoteComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-  ) { 
-      this.output = new EventEmitter<string>();
+  ) {
+    this.output = new EventEmitter<string>();
   }
 
   public get note(): FormControl {
