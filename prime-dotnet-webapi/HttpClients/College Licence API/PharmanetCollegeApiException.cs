@@ -1,6 +1,6 @@
 using System;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public class PharmanetCollegeApiException : Exception
     {

@@ -5,7 +5,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Prime.Services
+namespace Prime.HttpClients
 {
     public class SmtpEmailClient : ISmtpEmailClient
     {
