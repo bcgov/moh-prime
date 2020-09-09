@@ -219,8 +219,8 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
     const group = this.remoteUserFormGroup();
     if (remoteUser) {
-      const { id, firstName, lastName, remoteUserLocations, remoteUserCertifications } = remoteUser;
-      group.patchValue({ id, firstName, lastName });
+      const { id, firstName, lastName, email, remoteUserLocations, remoteUserCertifications } = remoteUser;
+      group.patchValue({ id, firstName, lastName, email });
       const array = group.get('remoteUserLocations') as FormArray;
       remoteUserLocations
         .map((rul: RemoteUserLocation) => {
@@ -322,6 +322,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         [Validators.required]
       ],
       lastName: [
+        null,
+        [Validators.required]
+      ],
+      email: [
         null,
         [Validators.required]
       ],
