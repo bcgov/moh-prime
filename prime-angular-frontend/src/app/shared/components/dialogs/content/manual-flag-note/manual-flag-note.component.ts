@@ -16,7 +16,7 @@ export class ManualFlagNoteOutput {
   styleUrls: ['./manual-flag-note.component.scss']
 })
 export class ManualFlagNoteComponent implements OnInit {
-  @Output() output = new EventEmitter<ManualFlagNoteOutput>();
+  @Output() public output: EventEmitter<ManualFlagNoteOutput>;
 
   public form: FormGroup;
   public isEmpty: boolean;
@@ -25,7 +25,9 @@ export class ManualFlagNoteComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-  ) { }
+  ) {
+    this.output = new EventEmitter<ManualFlagNoteOutput>();
+  }
 
   @Input() public set data({ enrollee }: { enrollee: HttpEnrollee }) {
     this.enrollee = enrollee;
@@ -68,12 +70,16 @@ export class ManualFlagNoteComponent implements OnInit {
     this.outputValue.note = this.note.value;
     this.outputValue.alwaysManual = this.alwaysManual.value;
 
-    this.note.valueChanges.pipe(
-      debounceTime(250),
-    ).subscribe((note: string) => this.outputValue.note = note);
-    this.alwaysManual.valueChanges.pipe(
-      debounceTime(250)
-    ).subscribe((flag: boolean) => this.outputValue.alwaysManual = flag);
+    this.note.valueChanges
+      .pipe(
+        debounceTime(250),
+      )
+      .subscribe((note: string) => this.outputValue.note = note);
+    this.alwaysManual.valueChanges
+      .pipe(
+        debounceTime(250)
+      )
+      .subscribe((flag: boolean) => this.outputValue.alwaysManual = flag);
 
     this.output.emit(this.outputValue);
   }

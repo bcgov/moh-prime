@@ -21,8 +21,8 @@
   <mat-menu #menu="matMenu">
     <button mat-menu-item
             (click)="onClaim(adjudicator.id)"
-            *ngFor="let adjudicator of adjudicators$ | async">{{ adjudicator.lastName }},
-      {{ adjudicator.firstName }}
+            *ngFor="let adjudicator of adjudicators$ | async">
+      {{ adjudicator.lastName }}, {{ adjudicator.firstName }}
     </button>
   </mat-menu>
 </mat-dialog-content>

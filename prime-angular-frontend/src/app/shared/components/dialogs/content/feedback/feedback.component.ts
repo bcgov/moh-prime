@@ -13,11 +13,13 @@ import { Feedback } from '@shared/models/feedback.model';
 export class FeedbackComponent implements OnInit {
   public form: FormGroup;
   public feedback: Feedback;
-  @Output() output = new EventEmitter<Feedback>();
+  @Output() public output: EventEmitter<Feedback>;
 
   constructor(
     private fb: FormBuilder,
-  ) { }
+  ) {
+    this.output = new EventEmitter<Feedback>();
+  }
 
   public get comment(): FormControl {
     return this.form.get('comment') as FormControl;
