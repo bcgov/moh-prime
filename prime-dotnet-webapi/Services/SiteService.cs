@@ -295,12 +295,8 @@ namespace Prime.Services
             return updated;
         }
 
-        public async Task<Site> UpdateSiteAdjudicator(int siteId, Admin admin = null)
+        public async Task<Site> UpdateSiteAdjudicator(Site site, Admin admin = null)
         {
-            var site = await GetBaseSiteQuery()
-                .Include(s => s.Adjudicator)
-                .SingleOrDefaultAsync(s => s.Id == siteId);
-
             site.Adjudicator = admin;
 
             var updated = await _context.SaveChangesAsync();
