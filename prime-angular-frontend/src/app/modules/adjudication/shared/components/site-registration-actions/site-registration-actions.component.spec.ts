@@ -6,6 +6,8 @@ import { KeycloakService } from 'keycloak-angular';
 import { SiteRegistrationActionsComponent } from './site-registration-actions.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { MockConfigService } from 'test/mocks/mock-config.service';
+import { ConfigService } from '@config/config.service';
 
 describe('SiteRegistrationActionsComponent', () => {
   let component: SiteRegistrationActionsComponent;
@@ -21,6 +23,10 @@ describe('SiteRegistrationActionsComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
         },
         KeycloakService
       ]
