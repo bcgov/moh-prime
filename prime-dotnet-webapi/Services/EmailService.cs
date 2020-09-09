@@ -191,8 +191,6 @@ namespace Prime.Services
             return documentAccessToken.DownloadUrl;
         }
 
-        // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
-        // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
         private async Task<IEnumerable<(string Filename, byte[] Content)>> getSiteRegistrationAttachments(Site site)
         {
             var organization = site.Organization;
@@ -247,7 +245,7 @@ namespace Prime.Services
             return new (string Filename, string HtmlContent)[]
             {
                 (organizationAgreementFilename, organizationAgreementHtml),
-                (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site))
+                (registrationReviewFilename, siteRegistrationReviewHtml)
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
         }
