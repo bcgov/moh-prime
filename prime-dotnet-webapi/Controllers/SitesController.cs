@@ -215,16 +215,16 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
             }
 
-            if ((adjudicatorId.HasValue && !await _adminService.AdminExistsAsync(adjudicatorId.Value)))
-            {
-                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
-            }
-
             Admin admin = (adjudicatorId.HasValue)
                 ? await _adminService.GetAdminAsync(adjudicatorId.Value)
                 : await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
-            var updatedSite = await _siteService.UpdateSiteAdjudicator(site, admin);
+            if (admin == null)
+            {
+                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
+            }
+
+            var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id, admin.Id);
             // TODO implement business events for sites
             // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin claimed site");
 
@@ -251,7 +251,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
             }
 
-            var updatedSite = await _siteService.UpdateSiteAdjudicator(site);
+            var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id);
             // TODO implement business events for sites
             // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin disclaimed site");
 

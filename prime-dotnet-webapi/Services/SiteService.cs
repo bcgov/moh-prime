@@ -295,9 +295,11 @@ namespace Prime.Services
             return updated;
         }
 
-        public async Task<Site> UpdateSiteAdjudicator(Site site, Admin admin = null)
+        public async Task<Site> UpdateSiteAdjudicator(int siteId, Nullable<int> adminId = null)
         {
-            site.Adjudicator = admin;
+            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
+
+            site.AdjudicatorId = adminId;
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
