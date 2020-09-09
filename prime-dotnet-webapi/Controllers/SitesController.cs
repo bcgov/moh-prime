@@ -251,7 +251,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
             }
 
-            var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id);
+            var updatedSite = await _siteService.UpdateSiteAdjudicator(site);
             // TODO implement business events for sites
             // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin disclaimed site");
 
