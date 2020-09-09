@@ -23,7 +23,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
-import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -171,13 +171,12 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   private updateSite(updatedSite: Site) {
     const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.siteId === updatedSite.id);
-    const updatedSiteRegistration = { ...siteRegistration, ...updatedSite };
-    console.log('BEFORE', [...this.dataSource.data], updatedSiteRegistration);
-
+    const updatedSiteRegistration = {
+      ...siteRegistration,
+      ...this.toSiteViewModelPartial(updatedSite)
+    };
     this.dataSource.data = MatTableDataSourceUtils
-      .update<SiteRegistrationListViewModel>(this.dataSource, 'id', updatedSiteRegistration);
-
-    console.log('AFTER', [...this.dataSource.data]);
+      .update<SiteRegistrationListViewModel>(this.dataSource, 'siteId', updatedSiteRegistration);
   }
 
   private deleteOrganization(organizationId: number) {
@@ -250,9 +249,22 @@ export class SiteRegistrationContainerComponent implements OnInit {
       signingAuthority,
       name,
       signedAgreementDocuments,
-      completed,
       acceptedAgreementDate
     } = organization;
+
+    return [{
+      organizationId,
+      displayId,
+      signingAuthorityId,
+      signingAuthority,
+      name,
+      signedAgreementDocumentCount: signedAgreementDocuments.length,
+      acceptedAgreementDate,
+      ...this.toSiteViewModelPartial(site)
+    }];
+  }
+
+  private toSiteViewModelPartial(site: Site): SiteListViewModelPartial {
     const {
       id: siteId,
       physicalAddress,
@@ -264,23 +276,15 @@ export class SiteRegistrationContainerComponent implements OnInit {
       pec
     } = site;
 
-    return [{
-      organizationId,
-      displayId,
-      signingAuthorityId,
-      signingAuthority,
-      name,
-      signedAgreementDocumentCount: signedAgreementDocuments.length,
-      completed,
-      acceptedAgreementDate,
+    return {
       siteId,
       physicalAddress,
       doingBusinessAs,
       submittedDate,
       careSettingCode,
       siteVendors,
-      adjudicatorIdir: adjudicator.idir,
+      adjudicatorIdir: adjudicator?.idir,
       pec
-    }];
+    };
   }
 }

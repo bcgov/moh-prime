@@ -20,8 +20,6 @@ namespace Prime.ViewModels
 
         public int SignedAgreementDocumentCount { get; set; }
 
-        public bool Completed { get; set; }
-
         public DateTimeOffset? AcceptedAgreementDate { get; set; }
     }
 }
