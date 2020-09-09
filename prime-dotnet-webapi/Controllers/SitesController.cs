@@ -216,13 +216,13 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
             }
 
-            if ((adjudicatorId.HasValue && !await _adminService.AdminExistsAsync((int)adjudicatorId)))
+            if ((adjudicatorId.HasValue && !await _adminService.AdminExistsAsync(adjudicatorId.Value)))
             {
-                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId}."));
+                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
             }
 
             Admin admin = (adjudicatorId.HasValue)
-                ? await _adminService.GetAdminAsync((int)adjudicatorId)
+                ? await _adminService.GetAdminAsync(adjudicatorId.Value)
                 : await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
             var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id, admin);
