@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Prime.Models;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public interface ICollegeLicenceClient
     {

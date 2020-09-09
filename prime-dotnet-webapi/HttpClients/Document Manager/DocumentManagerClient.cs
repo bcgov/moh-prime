@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public class DocumentManagerClient : IDocumentManagerClient
     {

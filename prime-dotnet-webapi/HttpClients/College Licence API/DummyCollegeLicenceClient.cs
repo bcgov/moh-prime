@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Prime.Models;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     /// <summary>
     /// Pharmanet API is not availible in local dev, so a dummy client is used instead to return test data.

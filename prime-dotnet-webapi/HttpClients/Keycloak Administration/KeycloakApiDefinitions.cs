@@ -1,4 +1,4 @@
-namespace Prime.Services.Clients.KeycloakApiDefinitions
+namespace Prime.HttpClients.KeycloakApiDefinitions
 {
     public class Role
     {

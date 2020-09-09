@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 using Prime.Models;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public class CollegeLicenceClient : ICollegeLicenceClient
     {

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace Prime.Services
+namespace Prime.HttpClients
 {
     public interface IChesClient
     {
