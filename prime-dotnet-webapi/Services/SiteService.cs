@@ -468,7 +468,8 @@ namespace Prime.Services
                         .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserCertifications)
-                .Include(s => s.BusinessLicenceDocuments);
+                .Include(s => s.BusinessLicenceDocuments)
+                .Include(s => s.Adjudicator);
         }
     }
 }

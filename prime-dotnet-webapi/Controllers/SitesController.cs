@@ -217,7 +217,8 @@ namespace Prime.Controllers
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id, admin);
-            await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin claimed site");
+            // TODO implement business events for sites
+            // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin claimed site");
 
             return Ok(ApiResponse.Result(updatedSite));
         }
@@ -244,7 +245,8 @@ namespace Prime.Controllers
             }
 
             var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id);
-            await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin disclaimed site");
+            // TODO implement business events for sites
+            // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin disclaimed site");
 
             return Ok(ApiResponse.Result(updatedSite));
         }
