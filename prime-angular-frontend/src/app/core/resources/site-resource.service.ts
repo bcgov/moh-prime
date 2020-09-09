@@ -46,8 +46,9 @@ export class SiteResource {
       );
   }
 
-  public getSiteById(siteId: number): Observable<Site> {
-    return this.apiResource.get<Site>(`sites/${siteId}`)
+  public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
+    return this.apiResource.get<Site>(`sites/${siteId}`, params)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         map((site: Site) => {
