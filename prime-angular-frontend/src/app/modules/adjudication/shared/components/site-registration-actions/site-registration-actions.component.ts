@@ -4,8 +4,8 @@ import { SiteRegistrationListViewModel } from '@registration/shared/models/site-
 import { AuthService } from '@auth/shared/services/auth.service';
 import { UtilsService } from '@core/services/utils.service';
 
-import { AuthService } from '@auth/shared/services/auth.service';
-import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { map } from 'rxjs/operators';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 @Component({
   selector: 'app-site-registration-actions',
@@ -20,7 +20,6 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   constructor(
     private organizationResource: OrganizationResource,
-    private siteResource: SiteResource,
     private authService: AuthService,
     private utilsService: UtilsService
   ) {
@@ -51,6 +50,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
           map((base64: string) => this.utilsService.base64ToBlob(base64)),
           map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
         );
+  }
 
   public approveSite(): void {
     if (this.canEdit) {
@@ -60,15 +60,15 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public declineSite(): void {
     if (this.canEdit) {
-      this.approve.emit(this.siteRegistration.siteId);
+      this.decline.emit(this.siteRegistration.siteId);
     }
   }
 
   public contactSigningAuthorityForSite() {
     const signingAuthority = this.siteRegistration?.signingAuthority;
     if (signingAuthority) {
-      this.utilService.mailTo(
-        signingAuthority.email, 
+      this.utilsService.mailTo(
+        signingAuthority.email,
         `PRIME Site Registration - ${this.siteRegistration.name}`,
         `Dear ${signingAuthority.firstName} ${signingAuthority.lastName},`
       );
