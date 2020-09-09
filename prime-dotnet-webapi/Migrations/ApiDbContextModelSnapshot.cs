@@ -1457,6 +1457,18 @@ namespace Prime.Migrations
                     b.ToTable("Credential");
                 });
 
+            modelBuilder.Entity("Prime.Models.DbViews.NewestAgreement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewestAgreements");
+                });
+
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
                 {
                     b.Property<int>("PrivilegeId")

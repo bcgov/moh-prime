@@ -235,8 +235,6 @@ namespace Prime
                 .HasForeignKey(rul => rul.RemoteUserId);
 
             #endregion
-
-            modelBuilder.Ignore<NewestAgreement>();
         }
 
         // Uncomment for DB logging
