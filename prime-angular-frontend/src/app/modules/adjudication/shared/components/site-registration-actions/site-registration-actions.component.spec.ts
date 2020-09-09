@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { SiteRegistrationActionsComponent } from './site-registration-actions.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
@@ -19,7 +21,8 @@ describe('SiteRegistrationActionsComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        KeycloakService
       ]
     })
       .compileComponents();
