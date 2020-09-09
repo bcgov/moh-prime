@@ -82,8 +82,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   public onDisclaim(siteId: number) {
     const data: DialogOptions = {
-      title: 'Disclaim Site',
-      component: NoteComponent
+      title: 'Disclaim Site'
     };
 
     this.busy = this.dialog.open(ClaimSiteComponent, { data })
@@ -97,7 +96,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
           } else if (result.output.action === ClaimActionEnum.Claim) {
             return concat(
               this.siteResource.removeSiteAdjudicator(siteId),
-              this.siteResource.setSiteAdjudicator(siteId)
+              this.siteResource.setSiteAdjudicator(siteId, result.output.adjudicatorId)
             );
           }
         })
@@ -173,9 +172,12 @@ export class SiteRegistrationContainerComponent implements OnInit {
   private updateSite(updatedSite: Site) {
     const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.siteId === updatedSite.id);
     const updatedSiteRegistration = { ...siteRegistration, ...updatedSite };
+    console.log('BEFORE', [...this.dataSource.data], updatedSiteRegistration);
 
     this.dataSource.data = MatTableDataSourceUtils
       .update<SiteRegistrationListViewModel>(this.dataSource, 'id', updatedSiteRegistration);
+
+    console.log('AFTER', [...this.dataSource.data]);
   }
 
   private deleteOrganization(organizationId: number) {

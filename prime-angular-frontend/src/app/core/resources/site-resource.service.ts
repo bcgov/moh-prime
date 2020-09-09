@@ -170,8 +170,9 @@ export class SiteResource {
       );
   }
 
-  public setSiteAdjudicator(siteId: number): Observable<Site> {
-    return this.apiResource.put<Site>(`sites/${siteId}/adjudicator`)
+  public setSiteAdjudicator(siteId: number, adjudicatorId?: number): Observable<Site> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
+    return this.apiResource.put<Site>(`sites/${siteId}/adjudicator`, null, params)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         map((site: Site) => site),

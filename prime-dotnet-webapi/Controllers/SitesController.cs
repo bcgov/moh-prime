@@ -199,6 +199,7 @@ namespace Prime.Controllers
         /// Add a site's assigned adjudicator.
         /// </summary>
         /// <param name="siteId"></param>
+        /// <param name="adjudicatorId"></param>
         [HttpPut("{siteId}/adjudicator", Name = nameof(SetSiteAdjudicator))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -206,7 +207,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Site>> SetSiteAdjudicator(int siteId)
+        public async Task<ActionResult<Site>> SetSiteAdjudicator(int siteId, [FromQuery] int adjudicatorId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
@@ -215,7 +216,15 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            if ((adjudicatorId != 0 && !await _adminService.AdminExistsAsync(adjudicatorId)))
+            {
+                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId}."));
+            }
+
+            Admin admin = (adjudicatorId != 0)
+                ? await _adminService.GetAdminAsync(adjudicatorId)
+                : await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
             var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id, admin);
             // TODO implement business events for sites
             // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin claimed site");
