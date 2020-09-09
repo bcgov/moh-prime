@@ -298,14 +298,8 @@ namespace Prime.Services
         public async Task<Site> UpdateSiteAdjudicator(int siteId, Nullable<int> adminId = null)
         {
             var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
-
             site.AdjudicatorId = adminId;
-
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the site adjudicator.");
-            }
+            await _context.SaveChangesAsync();
 
             return site;
         }
