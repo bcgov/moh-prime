@@ -295,6 +295,15 @@ namespace Prime.Services
             return updated;
         }
 
+        public async Task<Site> UpdateSiteAdjudicator(int siteId, Nullable<int> adminId = null)
+        {
+            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
+            site.AdjudicatorId = adminId;
+            await _context.SaveChangesAsync();
+
+            return site;
+        }
+
         public async Task<Site> UpdatePecCode(int siteId, string pecCode)
         {
             var site = await this.GetBaseSiteQuery()
@@ -489,7 +498,8 @@ namespace Prime.Services
                         .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserCertifications)
-                .Include(s => s.BusinessLicenceDocuments);
+                .Include(s => s.BusinessLicenceDocuments)
+                .Include(s => s.Adjudicator);
         }
     }
 }

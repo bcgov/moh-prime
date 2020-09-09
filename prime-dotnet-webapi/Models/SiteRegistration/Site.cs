@@ -58,6 +58,10 @@ namespace Prime.Models
 
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }
 
+        public int? AdjudicatorId { get; set; }
+
+        public Admin Adjudicator { get; set; }
+
         [JsonIgnore]
         public ICollection<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
 

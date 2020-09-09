@@ -1,17 +1,17 @@
 <h2 mat-dialog-title
     class="d-flex align-items-stretch">
   <span class="flex-grow-1">
-    Disclaim Enrollee
+    {{ this.title }}
   </span>
 </h2>
 <mat-dialog-content>
-  <span>You can unclaim the enrollee or assign them to a colleague.</span>
+  <span>You can unclaim the site or assign them to a colleague.</span>
 
   <div class="mt-4">
     <button mat-flat-button
             color="primary"
             (click)="onDisclaim()"
-            class="mr-4">Disclaim Enrollee</button>
+            class="mr-4">Disclaim Site</button>
     <button mat-flat-button
             color="primary"
             [matMenuTriggerFor]="menu"
