@@ -8,7 +8,8 @@
       <ng-container appPageSubheader2Summary>
         <ng-content select="[appPageSubheader2Summary]"></ng-content>
       </ng-container>
-      <ng-container appPageSubheader2MoreInfo>
+      <ng-container appPageSubheader2MoreInfo
+                    *ngIf="hasPageSubheaderMoreInfo">
         <ng-content select="[appPageSubheader2MoreInfo]"></ng-content>
       </ng-container>
     </app-page-subheader2>
@@ -40,7 +41,7 @@
 
         <mat-form-field class="w-100">
           <input matInput
-                 placeholder="Job or Role Title"
+                 placeholder="Job Title"
                  formControlName="jobRoleTitle">
           <mat-error>Required</mat-error>
         </mat-form-field>
