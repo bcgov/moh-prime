@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable, EMPTY, of, noop, combineLatest } from 'rxjs';
+import { Subscription, Observable, EMPTY, of, noop, combineLatest, concat } from 'rxjs';
 import { exhaustMap, map, tap, take } from 'rxjs/operators';
 
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
@@ -71,7 +71,11 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.getDataset(this.route.snapshot.queryParams);
   }
 
-  public onClaim(siteId: number) { }
+  public onClaim(siteId: number) {
+    this.siteResource
+      .setSiteAdjudicator(siteId)
+      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
+  }
 
   public onDisclaim(siteId: number) { }
 
@@ -138,6 +142,14 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   private getSiteById(siteId: number): Observable<Site> {
     return this.siteResource.getSiteById(siteId);
+  }
+
+  private updateSite(updatedSite: Site) {
+    const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.siteId === updatedSite.id);
+    const updatedSiteRegistration = { ...siteRegistration, ...updatedSite };
+
+    this.dataSource.data = MatTableDataSourceUtils
+      .update<SiteRegistrationListViewModel>(this.dataSource, 'id', updatedSiteRegistration);
   }
 
   private deleteOrganization(organizationId: number) {
