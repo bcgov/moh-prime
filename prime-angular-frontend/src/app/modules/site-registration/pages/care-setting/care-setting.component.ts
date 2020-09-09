@@ -48,7 +48,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     private dialog: MatDialog,
     private configService: ConfigService,
   ) {
-    this.title = 'Care Setting';
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.careSettingConfig = this.configService.careSettings;
     this.vendorConfig = this.configService.vendors;

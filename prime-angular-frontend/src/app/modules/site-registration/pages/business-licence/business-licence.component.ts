@@ -48,7 +48,7 @@ export class BusinessLicenceComponent implements OnInit {
     private formUtilsService: FormUtilsService,
     private utilsService: UtilsService
   ) {
-    this.title = 'Business Licence';
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.uploadedFile = false;
     this.businessLicenceDocuments = [];
