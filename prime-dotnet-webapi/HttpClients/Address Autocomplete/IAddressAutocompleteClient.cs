@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using static Prime.Services.Clients.AddressAutocompleteClient;
+using static Prime.HttpClients.AddressAutocompleteClient;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public interface IAddressAutocompleteClient
     {

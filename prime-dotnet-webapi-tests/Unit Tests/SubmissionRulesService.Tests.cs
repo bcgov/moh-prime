@@ -6,7 +6,7 @@ using FakeItEasy;
 
 using Prime.Models;
 using Prime.Services;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 using PrimeTests.Utils;
 using PrimeTests.ModelFactories;
 
