@@ -32,6 +32,7 @@ export class DocumentUploadComponent implements OnInit {
   @Input() public componentName: string;
   @Input() public multiple: boolean;
   @Input() public additionalApiSuffix: string;
+  @Input() public labelMessage: string;
   @Output() public completed: EventEmitter<BaseDocument> = new EventEmitter();
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
   public filePondOptions: FilePondOptions & FilePondPluginFileValidateSizeProps & FilePondPluginFileValidateTypeProps;
@@ -43,7 +44,9 @@ export class DocumentUploadComponent implements OnInit {
   constructor(
     private keycloakTokenService: KeycloakTokenService,
     private logger: LoggerService,
-  ) { }
+  ) {
+    this.labelMessage = 'Click to Browse or Drop files here';
+  }
 
   public ngOnInit(): void {
     // Keys are the excepted mime types, values are the human-readable expected type labels.
@@ -79,20 +82,18 @@ export class DocumentUploadComponent implements OnInit {
   }
 
   private getIdleText(allowedFileTypesMap: { [key: string]: string }): string {
-    const baseText = 'Click to Browse or Drop files here';
-    if (allowedFileTypesMap == null) {
-      return baseText;
+    if (!allowedFileTypesMap) {
+      return this.labelMessage;
     }
 
-    const types = Object.values(allowedFileTypesMap);
-    let typeText = types.pop();
+    const [initialFileType, ...fileTypes] = Object.values(allowedFileTypesMap);
+    const allowedFileTypes = fileTypes.reduce((concat, fileType, index) =>
+      (index === fileTypes.length - 1)
+        ? `${concat}, or ${fileType}`
+        : `${concat}, ${fileType}`
+      , initialFileType);
 
-    if (types.length > 0) {
-      const allButLast = types.join(', ');
-      typeText = `${allButLast} or ${typeText}`;
-    }
-
-    return `${baseText}. Files must be ${typeText}`;
+    return `${this.labelMessage}. Files must be ${allowedFileTypes}`;
   }
 
   private constructServer() {
