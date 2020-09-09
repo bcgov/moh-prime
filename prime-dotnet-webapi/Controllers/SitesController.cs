@@ -202,7 +202,6 @@ namespace Prime.Controllers
         /// <param name="adjudicatorId"></param>
         [HttpPut("{siteId}/adjudicator", Name = nameof(SetSiteAdjudicator))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -239,7 +238,6 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         [HttpDelete("{siteId}/adjudicator", Name = nameof(RemoveSiteAdjudicator))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

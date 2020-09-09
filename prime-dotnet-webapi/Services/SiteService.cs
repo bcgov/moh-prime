@@ -303,8 +303,6 @@ namespace Prime.Services
 
             site.Adjudicator = admin;
 
-            _context.Update(site);
-
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
             {
