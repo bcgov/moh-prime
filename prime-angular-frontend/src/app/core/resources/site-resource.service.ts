@@ -170,6 +170,35 @@ export class SiteResource {
       );
   }
 
+  public setSiteAdjudicator(siteId: number, adjudicatorId?: number): Observable<Site> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
+    return this.apiResource.put<Site>(`sites/${siteId}/adjudicator`, null, params)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        map((site: Site) => site),
+        tap((site: Site) => this.logger.info('UPDATED_SITE', site)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Adjudicator could not be assigned');
+          this.logger.error('[Adjudication] AdjudicationResource::setSiteAdjudicator error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public removeSiteAdjudicator(siteId: number): Observable<Site> {
+    return this.apiResource.delete<Site>(`sites/${siteId}/adjudicator`)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        map((site: Site) => site),
+        tap((site: Site) => this.logger.info('UPDATED_SITE', site)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Adjudicator could not be unassigned');
+          this.logger.error('[Adjudication] AdjudicationResource::removeSiteAdjudicator error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public deleteSite(siteId: number): Observable<Site> {
     return this.apiResource.delete<Site>(`sites/${siteId}`)
       .pipe(

@@ -6,6 +6,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 
+import { AuthService } from '@auth/shared/services/auth.service';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 
 @Component({
@@ -17,12 +18,24 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Input() siteRegistration: SiteRegistrationListViewModel;
   @Output() public approve: EventEmitter<number>;
   @Output() public decline: EventEmitter<number>;
+  @Output() public delete: EventEmitter<{ [key: string]: number }>;
 
   constructor(
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource,
+    private authService: AuthService,
     private utilsService: UtilsService
-  ) { }
+  ) {
+    this.delete = new EventEmitter<{ [key: string]: number }>();
+  }
+
+  public get canDelete(): boolean {
+    return this.authService.isSuperAdmin();
+  }
+
+  public onDelete(record: { [key: string]: number }) {
+    this.delete.emit(record);
+  }
 
   public getOrganizationAgreement() {
     const request$ = (this.siteRegistration.signedAgreementDocumentCount)

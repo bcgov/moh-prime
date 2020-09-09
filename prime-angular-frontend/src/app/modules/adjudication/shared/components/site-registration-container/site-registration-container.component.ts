@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable, EMPTY, of, noop, combineLatest } from 'rxjs';
+import { Subscription, Observable, EMPTY, of, noop, combineLatest, concat } from 'rxjs';
 import { exhaustMap, map, tap, take } from 'rxjs/operators';
 
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
@@ -14,13 +14,16 @@ import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-proper
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { ClaimSiteComponent, ClaimSiteAction } from '@shared/components/dialogs/content/claim-site/claim-site.component';
+import { ClaimActionEnum } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
-import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -69,6 +72,36 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   public onRefresh(): void {
     this.getDataset(this.route.snapshot.queryParams);
+  }
+
+  public onClaim(siteId: number) {
+    this.siteResource
+      .setSiteAdjudicator(siteId)
+      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
+  }
+
+  public onDisclaim(siteId: number) {
+    const data: DialogOptions = {
+      title: 'Disclaim Site'
+    };
+
+    this.busy = this.dialog.open(ClaimSiteComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: ClaimSiteAction }) => {
+          if (!result) { return EMPTY; }
+
+          if (result.output.action === ClaimActionEnum.Disclaim) {
+            return this.siteResource.removeSiteAdjudicator(siteId);
+          } else if (result.output.action === ClaimActionEnum.Claim) {
+            return concat(
+              this.siteResource.removeSiteAdjudicator(siteId),
+              this.siteResource.setSiteAdjudicator(siteId, result.output.adjudicatorId)
+            );
+          }
+        })
+      )
+      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
   }
 
   public onRoute(routePath: string | (string | number)[]) {
@@ -134,6 +167,16 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   private getSiteById(siteId: number): Observable<Site> {
     return this.siteResource.getSiteById(siteId);
+  }
+
+  private updateSite(updatedSite: Site) {
+    const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.siteId === updatedSite.id);
+    const updatedSiteRegistration = {
+      ...siteRegistration,
+      ...this.toSiteViewModelPartial(updatedSite)
+    };
+    this.dataSource.data = MatTableDataSourceUtils
+      .update<SiteRegistrationListViewModel>(this.dataSource, 'siteId', updatedSiteRegistration);
   }
 
   private deleteOrganization(organizationId: number) {
@@ -206,18 +249,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       signingAuthority,
       name,
       signedAgreementDocuments,
-      completed,
       acceptedAgreementDate
     } = organization;
-    const {
-      id: siteId,
-      physicalAddress,
-      doingBusinessAs,
-      submittedDate,
-      careSettingCode,
-      siteVendors,
-      pec
-    } = site;
 
     return [{
       organizationId,
@@ -226,15 +259,32 @@ export class SiteRegistrationContainerComponent implements OnInit {
       signingAuthority,
       name,
       signedAgreementDocumentCount: signedAgreementDocuments.length,
-      completed,
       acceptedAgreementDate,
+      ...this.toSiteViewModelPartial(site)
+    }];
+  }
+
+  private toSiteViewModelPartial(site: Site): SiteListViewModelPartial {
+    const {
+      id: siteId,
+      physicalAddress,
+      doingBusinessAs,
+      submittedDate,
+      careSettingCode,
+      siteVendors,
+      adjudicator,
+      pec
+    } = site;
+
+    return {
       siteId,
       physicalAddress,
       doingBusinessAs,
       submittedDate,
       careSettingCode,
       siteVendors,
+      adjudicatorIdir: adjudicator?.idir,
       pec
-    }];
+    };
   }
 }
