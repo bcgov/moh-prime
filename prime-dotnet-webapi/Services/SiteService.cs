@@ -295,6 +295,25 @@ namespace Prime.Services
             return updated;
         }
 
+        public async Task<Site> UpdateSiteAdjudicator(int siteId, Admin admin = null)
+        {
+            var site = await GetBaseSiteQuery()
+                .Include(s => s.Adjudicator)
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            site.Adjudicator = admin;
+
+            _context.Update(site);
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the site adjudicator.");
+            }
+
+            return site;
+        }
+
         public async Task<Site> UpdatePecCode(int siteId, string pecCode)
         {
             var site = await this.GetBaseSiteQuery()
