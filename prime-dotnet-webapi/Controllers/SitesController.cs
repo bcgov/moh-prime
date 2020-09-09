@@ -207,7 +207,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Site>> SetSiteAdjudicator(int siteId, [FromQuery] int adjudicatorId)
+        public async Task<ActionResult<Site>> SetSiteAdjudicator(int siteId, [FromQuery] int? adjudicatorId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
@@ -216,13 +216,13 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
             }
 
-            if ((adjudicatorId != 0 && !await _adminService.AdminExistsAsync(adjudicatorId)))
+            if ((adjudicatorId.HasValue && !await _adminService.AdminExistsAsync((int)adjudicatorId)))
             {
                 return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId}."));
             }
 
-            Admin admin = (adjudicatorId != 0)
-                ? await _adminService.GetAdminAsync(adjudicatorId)
+            Admin admin = (adjudicatorId.HasValue)
+                ? await _adminService.GetAdminAsync((int)adjudicatorId)
                 : await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
             var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id, admin);
