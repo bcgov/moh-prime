@@ -65,6 +65,8 @@ namespace Prime.Models
         [JsonIgnore]
         public ICollection<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
 
+        public ICollection<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
+
         public ICollection<BusinessDay> BusinessHours { get; set; }
         /// <summary>
         /// Days in which the business has any business hours.

@@ -354,21 +354,11 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   private adjudicationActionPipe(enrolleeId: number, action: SubmissionAction) {
-    let note: string;
-
     return pipe(
-      exhaustMap((result: { output: string }) => {
-        if (result?.output) {
-          note = result.output;
-        }
-
-        return (result)
-          ? of(noop)
-          : EMPTY;
-      }),
-      exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, action)),
-      exhaustMap(() => this.adjudicationResource.createEnrolmentReference(enrolleeId)),
-      exhaustMap(() =>
+      exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
+      exhaustMap((note: string) => this.adjudicationResource.submissionAction(enrolleeId, action).pipe(map(() => note))),
+      exhaustMap((note: string) => this.adjudicationResource.createEnrolmentReference(enrolleeId).pipe(map(() => note))),
+      exhaustMap((note: string) =>
         (note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, note, true)
           : of(noop)
