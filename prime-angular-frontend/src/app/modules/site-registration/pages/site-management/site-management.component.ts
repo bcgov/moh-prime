@@ -43,7 +43,7 @@ export class SiteManagementComponent implements OnInit {
     // Temporary hack to show success message until guards can be refactored
     private organizationService: OrganizationService
   ) {
-    this.title = 'Site Management';
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
 
     this.organizations = [];
