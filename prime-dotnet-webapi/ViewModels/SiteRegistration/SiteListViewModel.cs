@@ -18,6 +18,8 @@ namespace Prime.ViewModels
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
+        public bool Completed { get; set; }
+
         public string AdjudicatorIdir { get; set; }
 
         public string PEC { get; set; }
