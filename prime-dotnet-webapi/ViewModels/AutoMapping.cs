@@ -15,7 +15,8 @@ public class AutoMapping : Profile
     {
         CreateMap<Organization, OrganizationListViewModel>()
             .ForMember(dest => dest.SignedAgreementDocumentCount, opt => opt.MapFrom(src => src.SignedAgreementDocuments.Count));
-        CreateMap<Site, SiteListViewModel>();
+        CreateMap<Site, SiteListViewModel>()
+            .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR));
 
         IQueryable<NewestAgreement> newestAgreements = null;
         CreateMap<Enrollee, EnrolleeListViewModel>()
