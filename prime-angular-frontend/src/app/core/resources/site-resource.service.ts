@@ -16,7 +16,6 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
-import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 
 // TODO use ApiResourceUtils to build URLs
