@@ -43,7 +43,7 @@ export class RemoteUsersComponent implements OnInit {
     private formUtilsService: FormUtilsService,
     private addressPipe: AddressPipe
   ) {
-    this.title = 'Practitioners Requiring Remote PharmaNet Access';
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.submitButtonText = 'Save and Continue';
   }

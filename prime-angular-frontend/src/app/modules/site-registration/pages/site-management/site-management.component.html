@@ -34,8 +34,6 @@
                       [menu]="organizationMenu"
                       [menuOutletContext]="{ organization: organization }"
                       [properties]="getOrganizationProperties(organization)"
-                      [actionButtonTitle]="'View/Print Agreement'"
-                      [actionDisabled]="!organization.acceptedAgreementDate"
                       (action)="viewAgreement(organization)"></app-summary-card>
 
     <hr *ngIf="first"
@@ -60,8 +58,6 @@
                         [menu]="siteMenu"
                         [menuOutletContext]="{ site: site, organizationId: organization.id }"
                         [properties]="getSiteProperties(site)"
-                        actionButtonTitle="Update Remote Practitioners"
-                        [actionDisabled]="!site.completed"
                         (action)="viewSiteRemoteUsers(organization.id, site)"></app-summary-card>
 
     </ng-container>

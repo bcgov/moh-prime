@@ -62,7 +62,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     private dialog: MatDialog,
     public formUtilsService: FormUtilsService,
   ) {
-    this.title = 'Hours of Operation';
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
   }
 
