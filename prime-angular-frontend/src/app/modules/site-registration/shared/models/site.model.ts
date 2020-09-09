@@ -1,4 +1,5 @@
 import { Address } from '@shared/models/address.model';
+import { Admin } from '@auth/shared/models/admin.model';
 
 import { BusinessLicenceDocument } from './business-licence-document.model';
 import { BusinessDay } from './business-day.model';
@@ -35,8 +36,12 @@ export interface Site {
   approvedDate: string;
   submittedDate: string;
   // Admin -----
+  adjudicatorId: number;
+  adjudicator: Admin;
   pec: string;
 }
 
 export interface SiteListViewModel extends
-  Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec'> { }
+  Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec'> {
+  adjudicatorIdir: string;
+}

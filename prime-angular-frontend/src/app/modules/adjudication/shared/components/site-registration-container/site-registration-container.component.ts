@@ -71,6 +71,10 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.getDataset(this.route.snapshot.queryParams);
   }
 
+  public onClaim(siteId: number) { }
+
+  public onDisclaim(siteId: number) { }
+
   public onRoute(routePath: string | (string | number)[]) {
     this.routeUtils.routeWithin(routePath);
   }
@@ -216,6 +220,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       submittedDate,
       careSettingCode,
       siteVendors,
+      adjudicator,
       pec
     } = site;
 
@@ -234,6 +239,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       submittedDate,
       careSettingCode,
       siteVendors,
+      adjudicatorIdir: adjudicator.idir,
       pec
     }];
   }

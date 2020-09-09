@@ -9,7 +9,7 @@
         <th mat-header-cell
             *matHeaderCellDef> Reference ID </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.displayId | default: '' }} </td>
+            *matCellDef="let row;"> {{ row.displayId }} </td>
       </ng-container>
 
       <ng-container matColumnDef="organizationName">
@@ -38,6 +38,13 @@
             *matHeaderCellDef> Submission Date </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.submittedDate | formatDate | default }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="adjudicator">
+        <th mat-header-cell
+            *matHeaderCellDef> Adjudicator </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="siteAdjudication">
@@ -120,24 +127,18 @@
           <span>Site Adjudication</span>
         </button>
         <button mat-menu-item
-                [disabled]="true">
-          <mat-icon>rate_review</mat-icon>
-          <span>Claim Site</span>
-        </button>
-
-        <mat-divider [inset]="true"></mat-divider>
-
-        <button mat-menu-item
+                *ngIf="!row?.adjudicatorIdir"
                 [disabled]="!canEdit"
-                (click)="onDelete({ organizationId: row.organizationId })">
-          <mat-icon>delete</mat-icon>
-          <span>Delete Organization</span>
+                (click)="onClaim(row.id)">
+          <mat-icon>pan_tool</mat-icon>
+          <span>Claim Enrolment</span>
         </button>
         <button mat-menu-item
+                *ngIf="row?.adjudicatorIdir"
                 [disabled]="!canEdit"
-                (click)="onDelete({ siteId: row.siteId })">
-          <mat-icon>delete</mat-icon>
-          <span>Delete Site</span>
+                (click)="onDisclaim(row.id)">
+          <mat-icon>pan_tool</mat-icon>
+          <span>Disclaim Enrolment</span>
         </button>
       </mat-menu>
     </ng-template>
