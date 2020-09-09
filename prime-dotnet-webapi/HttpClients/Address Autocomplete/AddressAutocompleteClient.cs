@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public class AddressAutocompleteClient : IAddressAutocompleteClient
     {

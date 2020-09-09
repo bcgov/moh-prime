@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 
-using Prime.Services.Clients.KeycloakApiDefinitions;
+using Prime.HttpClients.KeycloakApiDefinitions;
 
-namespace Prime.Services.Clients
+namespace Prime.HttpClients
 {
     public class KeycloakAdministrationClient : IKeycloakAdministrationClient
     {
