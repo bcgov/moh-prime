@@ -66,7 +66,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
   }
 
   public getOrgBookLink(orgId: string) {
-    return `https://www.orgbook.gov.bc.ca/en/organization/${orgId}`;
+    return `https://www.orgbook.gov.bc.ca/en/organization/registration.registries.ca/${orgId}`;
   }
 
   public onSubmit() {
