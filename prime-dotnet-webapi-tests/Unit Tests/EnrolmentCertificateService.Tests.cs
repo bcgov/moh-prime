@@ -32,7 +32,7 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
             var service = CreateService();
 
-            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
             Assert.NotNull(token);
 
             EnrolmentCertificate cert = await service.GetEnrolmentCertificateAsync(token.Id);
@@ -47,7 +47,7 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
             var service = CreateService();
 
-            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
             Assert.NotNull(token);
             Assert.Equal(0, token.ViewCount);
 
@@ -68,7 +68,7 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
             var service = CreateService();
 
-            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
             Assert.NotNull(token);
             // Assert that the difference between the computed and actual expiry date is less than some tolerance.
             Assert.True((DateTimeOffset.Now.Add(tokenLifespan) - token.Expires).Duration() < tolerance);
