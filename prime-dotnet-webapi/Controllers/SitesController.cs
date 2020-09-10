@@ -28,6 +28,8 @@ namespace Prime.Controllers
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
+        private readonly IAdminService _adminService;
+        private readonly IBusinessEventService _businessEventService;
 
         public SitesController(
             IMapper mapper,
@@ -36,7 +38,9 @@ namespace Prime.Controllers
             IOrganizationService organizationService,
             IRazorConverterService razorConverterService,
             IEmailService emailService,
-            IDocumentService documentService)
+            IDocumentService documentService,
+            IAdminService adminService,
+            IBusinessEventService businessEventService)
         {
             _mapper = mapper;
             _siteService = siteService;
@@ -45,6 +49,8 @@ namespace Prime.Controllers
             _razorConverterService = razorConverterService;
             _emailService = emailService;
             _documentService = documentService;
+            _adminService = adminService;
+            _businessEventService = businessEventService;
         }
 
         // GET: api/Sites
@@ -186,6 +192,70 @@ namespace Prime.Controllers
             await _siteService.UpdateCompletedAsync(siteId);
 
             return NoContent();
+        }
+
+        // PUT: api/Sites/5/adjudicator
+        /// <summary>
+        /// Add a site's assigned adjudicator.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="adjudicatorId"></param>
+        [HttpPut("{siteId}/adjudicator", Name = nameof(SetSiteAdjudicator))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Site>> SetSiteAdjudicator(int siteId, [FromQuery] int? adjudicatorId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
+            }
+
+            Admin admin = (adjudicatorId.HasValue)
+                ? await _adminService.GetAdminAsync(adjudicatorId.Value)
+                : await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            if (admin == null)
+            {
+                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
+            }
+
+            var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id, admin.Id);
+            // TODO implement business events for sites
+            // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin claimed site");
+
+            return Ok(ApiResponse.Result(updatedSite));
+        }
+
+        // DELETE: api/Site/5/adjudicator
+        /// <summary>
+        /// Remove an site's assigned adjudicator.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpDelete("{siteId}/adjudicator", Name = nameof(RemoveSiteAdjudicator))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Site>> RemoveSiteAdjudicator(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
+            }
+
+            var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id);
+            // TODO implement business events for sites
+            // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin disclaimed site");
+
+            return Ok(ApiResponse.Result(updatedSite));
         }
 
         // DELETE: api/Sites/5
@@ -446,5 +516,61 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // POST: api/Sites/5/approval
+        /// <summary>
+        /// Approved a site, setting it's approval date
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPost("{siteId}/approval", Name = nameof(ApproveSite))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        public async Task<ActionResult<Site>> ApproveSite(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var result = await _siteService.ApproveSite(siteId);
+            return Ok(ApiResponse.Result(result));
+        }
+
+        // POST: api/Sites/5/site-registration-notes
+        /// <summary>
+        /// Creates a new site registration note on an enrollee.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="note"></param>
+        [HttpPost("{siteId}/site-registration-notes", Name = nameof(CreateSiteRegistrationNote))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<AdjudicatorNote>> CreateSiteRegistrationNote(int siteId, FromBodyText note)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+            if (string.IsNullOrWhiteSpace(note))
+            {
+                this.ModelState.AddModelError("note", "site registration notes can't be null or empty.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
+
+            return Ok(ApiResponse.Result(createdSiteRegistrationNote));
+        }
     }
 }

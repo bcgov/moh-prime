@@ -154,7 +154,7 @@ export class OrganizationResource {
   }
 
   public getSignedOrganizationAgreement(organizationId: number): Observable<string> {
-    return this.apiResource.get<string>(`organizations/${organizationId}/organization-agreement`)
+    return this.apiResource.get<string>(`organizations/${organizationId}/organization-agreement-digital-signed`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {

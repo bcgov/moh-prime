@@ -69,6 +69,8 @@ export class MockSiteService implements ISiteService {
       careSettingCode: faker.random.number(),
       pec: null,
       completed: null,
+      adjudicatorId: null,
+      adjudicator: null,
       approvedDate: faker.date.past(2).toDateString(),
       submittedDate: faker.date.past(2).toDateString()
     });
