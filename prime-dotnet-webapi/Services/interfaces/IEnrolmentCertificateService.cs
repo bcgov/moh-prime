@@ -9,7 +9,7 @@ namespace Prime.Services
     {
         Task<EnrolmentCertificate> GetEnrolmentCertificateAsync(Guid accessTokenId);
 
-        Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee);
+        Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(int enrolleeId);
 
         Task<IEnumerable<EnrolmentCertificateAccessToken>> GetCertificateAccessTokensForUserIdAsync(Guid userId);
     }
