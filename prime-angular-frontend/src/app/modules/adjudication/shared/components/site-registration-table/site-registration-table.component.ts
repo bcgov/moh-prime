@@ -12,8 +12,9 @@ import { SiteRegistrationListViewModel } from '@registration/shared/models/site-
 })
 export class SiteRegistrationTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
+  @Output() public claim: EventEmitter<number>;
+  @Output() public disclaim: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
-  @Output() public delete: EventEmitter<{ [key: string]: number }>;
 
   public columns: string[];
 
@@ -28,25 +29,31 @@ export class SiteRegistrationTableComponent implements OnInit {
       'signingAuthority',
       'doingBusinessAs',
       'submissionDate',
+      'adjudicator',
       'siteAdjudication',
       'siteId',
       'careSetting',
       'actions'
     ];
+    this.claim = new EventEmitter<number>();
+    this.disclaim = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
-    this.delete = new EventEmitter<{ [key: string]: number }>();
   }
 
   public get canEdit(): boolean {
     return this.authService.isAdmin();
   }
 
-  public onRoute(routePath: string | (string | number)[]) {
-    this.route.emit(routePath);
+  public onClaim(siteId: number): void {
+    this.claim.emit(siteId);
   }
 
-  public onDelete(record: { [key: string]: number }) {
-    this.delete.emit(record);
+  public onDisclaim(siteId: number): void {
+    this.disclaim.emit(siteId);
+  }
+
+  public onRoute(routePath: string | (string | number)[]) {
+    this.route.emit(routePath);
   }
 
   public ngOnInit(): void { }
