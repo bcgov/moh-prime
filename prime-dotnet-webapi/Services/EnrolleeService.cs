@@ -411,7 +411,7 @@ namespace Prime.Services
                 .CountAsync();
         }
 
-        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Nullable<int> adminId = null)
+        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null)
         {
             var enrollee = await _context.Enrollees.Where(e => e.Id == enrolleeId).SingleOrDefaultAsync();
             enrollee.AdjudicatorId = adminId;
