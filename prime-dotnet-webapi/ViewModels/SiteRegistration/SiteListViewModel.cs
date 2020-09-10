@@ -20,6 +20,8 @@ namespace Prime.ViewModels
 
         public bool Completed { get; set; }
 
+        public string AdjudicatorIdir { get; set; }
+
         public string PEC { get; set; }
     }
 }

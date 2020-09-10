@@ -12,8 +12,9 @@
 
   <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
                                [dataSource]="dataSource"
-                               (route)="onRoute($event)"
-                               (delete)="onDelete($event)"></app-site-registration-table>
+                               (claim)="onClaim($event)"
+                               (disclaim)="onDisclaim($event)"
+                               (route)="onRoute($event)"></app-site-registration-table>
 
   <ng-container *ngIf="content">
 
@@ -28,7 +29,10 @@
            class="col-auto py-5">
 
         <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
-                                       (delete)="onDelete($event)"></app-site-registration-actions>
+                                       (delete)="onDelete($event)"
+                                       (decline)="onDecline($event)"
+                                       (approve)="onApprove($event)">
+        </app-site-registration-actions>
 
       </div>
     </div>
