@@ -45,7 +45,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
         .pipe(
           map((token: string) => this.utilsService.downloadToken(token))
         )
-      : this.organizationResource.getUnsignedOrganizationAgreement()
+      : this.organizationResource.getSignedOrganizationAgreement(this.siteRegistration.organizationId)
         .pipe(
           map((base64: string) => this.utilsService.base64ToBlob(base64)),
           map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
