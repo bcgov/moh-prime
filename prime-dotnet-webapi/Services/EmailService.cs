@@ -191,14 +191,35 @@ namespace Prime.Services
             return documentAccessToken.DownloadUrl;
         }
 
-        // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
-        // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
         private async Task<IEnumerable<(string Filename, byte[] Content)>> getSiteRegistrationAttachments(Site site)
         {
             var organization = site.Organization;
             var organizationAgreementHtml = "";
-            if (await _organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
+
+            string organizationAgreementFilename = "OrganizationAgreement.pdf";
+            string registrationReviewFilename = "SiteRegistrationReview.pdf";
+
+            var siteRegistrationReviewHtml = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
+
+            var signedOrganizationAgreementDocument = await _organizationService.GetLatestSignedAgreementAsync(organization.Id);
+            if (signedOrganizationAgreementDocument != null)
             {
+                var fileExt = signedOrganizationAgreementDocument.Filename.Split(".").Last();
+
+                if (fileExt.Equals("pdf"))
+                {
+                    // If the file is already a pdf we can skip the conversion steps and return it.
+                    var stream = await _documentService.GetStreamForLatestSignedAgreementDocument(organization.Id);
+                    MemoryStream ms = new MemoryStream();
+                    stream.CopyTo(ms);
+
+                    return new (string Filename, byte[] HtmlContent)[]
+                    {
+                        (organizationAgreementFilename, ms.ToArray()),
+                        (registrationReviewFilename, _pdfService.Generate(siteRegistrationReviewHtml))
+                    };
+                }
+
                 Document organizationAgreementDoc = null;
                 string organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
                 try
@@ -221,12 +242,10 @@ namespace Prime.Services
                 organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
             }
 
-            string registrationReviewFilename = "SiteRegistrationReview.pdf";
-
             return new (string Filename, string HtmlContent)[]
             {
-                ("OrganizationAgreement.pdf", organizationAgreementHtml),
-                (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site))
+                (organizationAgreementFilename, organizationAgreementHtml),
+                (registrationReviewFilename, siteRegistrationReviewHtml)
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
         }
