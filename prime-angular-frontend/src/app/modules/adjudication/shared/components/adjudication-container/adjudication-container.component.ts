@@ -81,7 +81,7 @@ export class AdjudicationContainerComponent implements OnInit {
   public onNotify(enrolleeId: number) {
     this.adjudicationResource.getEnrolleeById(enrolleeId)
       .pipe(
-        exhaustMap((enrollee: HttpEnrollee) => this.adjudicationResource.logEmailInitiated(enrollee.id)
+        exhaustMap((enrollee: HttpEnrollee) => this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
           .pipe(map(() => enrollee)))
       )
       .subscribe((enrollee: HttpEnrollee) => {

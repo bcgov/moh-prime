@@ -529,13 +529,13 @@ namespace Prime.Controllers
         /// Logs a business event for email initiated
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/events/email-initiated", Name = nameof(logEmailInitiated))]
+        [HttpPost("{enrolleeId}/events/email-initiated", Name = nameof(CreateInitiatedEnrolleeEmailEvent))]
         [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> logEmailInitiated(int enrolleeId)
+        public async Task<ActionResult> CreateInitiatedEnrolleeEmailEvent(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
