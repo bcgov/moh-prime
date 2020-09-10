@@ -44,7 +44,7 @@ namespace Prime.Services
 
         Task<int> GetEnrolleeCountAsync();
 
-        Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Nullable<int> adminId = null);
+        Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null);
 
         Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId);
 
