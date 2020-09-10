@@ -184,7 +184,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       ])
         .pipe(
           take(1),
-          map(this.toSiteRegistration)
+          map(this.toSiteRegistration())
         )
       : this.getOrganizations(queryParams)
         .pipe(
@@ -286,27 +286,29 @@ export class SiteRegistrationContainerComponent implements OnInit {
     return [].concat(...siteRegistrations);
   }
 
-  private toSiteRegistration([organization, site]: [Organization, Site]): SiteRegistrationListViewModel[] {
-    const {
-      id: organizationId,
-      displayId,
-      signingAuthorityId,
-      signingAuthority,
-      name,
-      signedAgreementDocuments,
-      acceptedAgreementDate
-    } = organization;
+  private toSiteRegistration(): ([organization, site]: [Organization, Site]) => SiteRegistrationListViewModel[] {
+    return ([organization, site]: [Organization, Site]) => {
+      const {
+        id: organizationId,
+        displayId,
+        signingAuthorityId,
+        signingAuthority,
+        name,
+        signedAgreementDocuments,
+        acceptedAgreementDate
+      } = organization;
 
-    return [{
-      organizationId,
-      displayId,
-      signingAuthorityId,
-      signingAuthority,
-      name,
-      signedAgreementDocumentCount: signedAgreementDocuments.length,
-      acceptedAgreementDate,
-      ...this.toSiteViewModelPartial(site)
-    }];
+      return [{
+        organizationId,
+        displayId,
+        signingAuthorityId,
+        signingAuthority,
+        name,
+        signedAgreementDocumentCount: signedAgreementDocuments.length,
+        acceptedAgreementDate,
+        ...this.toSiteViewModelPartial(site)
+      }];
+    };
   }
 
   private toSiteViewModelPartial(site: Site): SiteListViewModelPartial {
