@@ -12,7 +12,6 @@ import { Contact } from './contact.model';
 export interface Site {
   id?: number;
   organizationId: number;
-  organization: Organization;
   // Provision is aka the Signing Authority
   provisionerId: number;
   provisioner: Party;

@@ -105,7 +105,6 @@ export class RemoteUsersComponent implements OnInit {
         return newRemoteUsersAcc;
       }, []);
 
-
       this.busy = this.organizationResource
         .getOrganizationById(organizationId)
         .pipe(
