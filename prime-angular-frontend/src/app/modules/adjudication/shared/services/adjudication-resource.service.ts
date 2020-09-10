@@ -170,6 +170,21 @@ export class AdjudicationResource {
       );
   }
 
+  public createInitiatedEnrolleeEmailEvent(enrolleeId: number): NoContent {
+    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/events/email-initiated`)
+      .pipe(
+        map(() => {
+          this.toastService.openErrorToast('Enrollee initiated email event has been created');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee initiated email event could not be created');
+          this.logger.error('[Enrolment] EnrolmentResource::createInitiatedEnrolleeEmailEvent error has occurred: ', error);
+          throw error;
+        })
+      );
+
+  }
+
   public getAdjudicatorNotes(enrolleeId: number): Observable<AdjudicationNote[]> {
     return this.apiResource.get(`enrollees/${enrolleeId}/adjudicator-notes`)
       .pipe(
