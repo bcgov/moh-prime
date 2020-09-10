@@ -1,11 +1,8 @@
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-using Prime.Services;
-using PrimeTests.Mocks;
 using PrimeTests.Utils;
 
 namespace PrimeTests.Controllers
@@ -21,8 +18,7 @@ namespace PrimeTests.Controllers
                 {
                     builder.ConfigureTestServices(services =>
                     {
-                        // Add the mock service mapping, so that we are only testing the controllers
-                        services.AddSingleton<IEnrolleeService, EnrolleeServiceMock>();
+
                     });
                 });
             _client = _factory.CreateClient();

@@ -6,8 +6,8 @@ using Xunit;
 using Prime.Models;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
-using PrimeTests.Mocks;
-using static PrimeTests.Mocks.CollegeLicenceClientMock;
+using PrimeTests.HttpClientMocks;
+using static PrimeTests.HttpClientMocks.CollegeLicenceClientMock;
 using PrimeTests.ModelFactories;
 
 namespace PrimeTests.UnitTests
