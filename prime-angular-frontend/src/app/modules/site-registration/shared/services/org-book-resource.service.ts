@@ -64,7 +64,7 @@ export class OrgBookResource {
   }
 
   public getOrganizationDetail(sourceId: string): Observable<OrgBookDetailHttpResponse> {
-    return this.http.get<OrgBookDetailHttpResponse>(`${this.ORGBOOK_API_URL}/topic/ident/registration/${sourceId}/formatted`)
+    return this.http.get<OrgBookDetailHttpResponse>(`${this.ORGBOOK_API_URL}/topic/ident/registration.registries.ca/${sourceId}/formatted`)
       .pipe(
         map((response: OrgBookDetailHttpResponse) => response),
         tap((response: OrgBookDetailHttpResponse) => this.logger.info('ORGBOOK_DETAIL', response)),
