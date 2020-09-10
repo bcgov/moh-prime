@@ -13,10 +13,16 @@
    * NOTE: The downloadable and signable copy of the Organization Agreement is
    * located in /documents.
    */
+  var organizationName = Model.Name;
   var day = @DateTime.Now.ToString("dd");
   var month = @DateTime.Now.ToString("MMMM");
   var year = @DateTime.Now.ToString("yyyy");
-  var organizationName = Model.Name;
+
+  if(Model.AcceptedAgreementDate.HasValue) {
+    day = Model.AcceptedAgreementDate.Value.ToString("dd");
+    month = Model.AcceptedAgreementDate.Value.ToString("MMMM");
+    year = Model.AcceptedAgreementDate.Value.ToString("yyyy");
+  }
 }
 
 <link rel="stylesheet"
