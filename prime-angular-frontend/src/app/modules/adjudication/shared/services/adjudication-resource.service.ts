@@ -178,7 +178,7 @@ export class AdjudicationResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee initiated email event could not be created');
-          this.logger.error('[Enrolment] EnrolmentResource::sendEnrolleeReminderEmail error has occurred: ', error);
+          this.logger.error('[Enrolment] EnrolmentResource::createInitiatedEnrolleeEmailEvent error has occurred: ', error);
           throw error;
         })
       );
