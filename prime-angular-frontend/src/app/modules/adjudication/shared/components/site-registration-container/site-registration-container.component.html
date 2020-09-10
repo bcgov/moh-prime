@@ -29,7 +29,10 @@
            class="col-auto py-5">
 
         <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
-                                       (delete)="onDelete($event)"></app-site-registration-actions>
+                                       (delete)="onDelete($event)"
+                                       (decline)="onDecline($event)"
+                                       (approve)="onApprove($event)">
+        </app-site-registration-actions>
 
       </div>
     </div>
