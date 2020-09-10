@@ -30,18 +30,22 @@ namespace Prime.Controllers
         private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
 
+        private readonly IPdfService _pdfService;
+
         public OrganizationsController(
             IMapper mapper,
             IOrganizationService organizationService,
             IPartyService partyService,
             IDocumentService documentService,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
+            IPdfService pdfService)
         {
             _mapper = mapper;
             _organizationService = organizationService;
             _partyService = partyService;
             _razorConverterService = razorConverterService;
             _documentService = documentService;
+            _pdfService = pdfService;
         }
 
         // GET: api/Organizations
@@ -377,6 +381,31 @@ namespace Prime.Controllers
             var token = await _documentService.GetDownloadTokenForLatestSignedAgreementDocument(organizationId);
 
             return Ok(ApiResponse.Result(token));
+        }
+
+        // GET: api/Organizations/organization-agreement-digital-signed
+        /// <summary>
+        /// Get the digitally signed organization agreement.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpGet("{organizationId}/organization-agreement-digital-signed", Name = nameof(GetSignedDigitalOrganizationAgreement))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetSignedDigitalOrganizationAgreement(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            var html = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
+            var agreement = _pdfService.Generate(html);
+
+            return Ok(ApiResponse.Result(agreement));
         }
 
         // GET: api/Organizations/organization-agreement-document
