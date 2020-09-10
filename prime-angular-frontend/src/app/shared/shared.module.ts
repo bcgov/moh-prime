@@ -34,9 +34,6 @@ import { SafePipe } from '@shared/pipes/safe.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import {
-  EnrolmentStatusReasonsComponent
-} from '@shared/components/dialogs/content/enrolment-status-reasons/enrolment-status-reasons.component';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { ProgressIndicator2Component } from './components/progress-indicator2/progress-indicator2.component';
@@ -62,9 +59,9 @@ import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/ap
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
 import { AccessTermComponent } from './components/access-term/access-term.component';
-import { NoteComponent } from './components/dialogs/content/note/note.component';
 import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { NoteComponent } from './components/dialogs/content/note/note.component';
 import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
 import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
 import { FormErrorsComponent } from './components/form-errors/form-errors.component';
@@ -76,6 +73,7 @@ import { OverviewSectionComponent } from './components/overview-section/overview
 import { OverviewContainerComponent } from './components/site/overview-container/overview-container.component';
 import { CollegeCertificationFormComponent } from './components/college-certification-form/college-certification-form.component';
 import { AddressAutocompleteComponent } from './components/address-autocomplete/address-autocomplete.component';
+import { ClaimSiteComponent } from './components/dialogs/content/claim-site/claim-site.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +96,6 @@ import { AddressAutocompleteComponent } from './components/address-autocomplete/
     AddressPipe,
     AddressComponent,
     ConfirmDialogComponent,
-    EnrolmentStatusReasonsComponent,
     PageComponent,
     ProgressIndicator2Component,
     PageHeaderComponent,
@@ -138,7 +135,8 @@ import { AddressAutocompleteComponent } from './components/address-autocomplete/
     OverviewSectionComponent,
     OverviewContainerComponent,
     CollegeCertificationFormComponent,
-    AddressAutocompleteComponent
+    AddressAutocompleteComponent,
+    ClaimSiteComponent
   ],
   imports: [
     CommonModule,
@@ -177,7 +175,6 @@ import { AddressAutocompleteComponent } from './components/address-autocomplete/
     SafePipe,
     AddressPipe,
     AddressComponent,
-    EnrolmentStatusReasonsComponent,
     PageComponent,
     PageHeaderComponent,
     ProgressIndicator2Component,
@@ -208,7 +205,8 @@ import { AddressAutocompleteComponent } from './components/address-autocomplete/
     OrganizationReviewComponent,
     OverviewSectionComponent,
     OverviewContainerComponent,
-    CollegeCertificationFormComponent
+    CollegeCertificationFormComponent,
+    ClaimSiteComponent
   ],
   providers: [
     FullnamePipe,

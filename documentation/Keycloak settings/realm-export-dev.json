@@ -384,6 +384,7 @@
       "prime-pos-gpid": [],
       "admin-cli": [],
       "prime-application-enrolment": [],
+      "pnet-sample-client": [],
       "account": [
         {
           "id": "aef42980-e6b7-4f69-85f8-ebea0fcf7e73",
@@ -514,6 +515,29 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "users": [
+    {
+      "id": "cdf81b90-d124-486a-9b15-662cddaa93bb",
+      "createdTimestamp": 1599606099409,
+      "username": "service-account-pnet-sample-client",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "serviceAccountClientId": "pnet-sample-client",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "offline_access",
+        "uma_authorization"
+      ],
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
+      "notBefore": 0,
+      "groups": []
+    },
     {
       "id": "a6444174-f2d5-401c-b475-3b8baaa08fb6",
       "createdTimestamp": 1585181029028,
@@ -806,6 +830,110 @@
         "phone",
         "offline_access",
         "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "df0f47f4-9e9a-417b-a241-1332bef4deee",
+      "clientId": "pnet-sample-client",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [],
+      "webOrigins": [],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "23c86ef2-75fc-48f2-b8e0-7e1b50884627",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientId",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientId",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "05545656-f88d-4248-8af3-a0e36f562d1e",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "e8f595dc-d87a-4655-b89c-a12d9e2a73ba",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "7babc1c6-9f8f-449a-ac42-a7c90329a71f",
+          "name": "set audience to pharmanet",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "consentRequired": false,
+          "config": {
+            "claim.value": "pharmanet",
+            "userinfo.token.claim": "false",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "aud",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "defaultClientScopes": [],
+      "optionalClientScopes": [
+        "system/MedicationRequest.write",
+        "system/MedicationRequest.read",
+        "system/MedicationStatement.read"
       ]
     },
     {
@@ -2680,6 +2808,36 @@
           }
         }
       ]
+    },
+    {
+      "id": "eea1bcf4-9c6b-48fd-87c9-2bb5fa97be6e",
+      "name": "system/MedicationRequest.write",
+      "description": "Scope requested as part of eRX integration",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      }
+    },
+    {
+      "id": "4f892d60-8926-496e-9332-8176466c8ba3",
+      "name": "system/MedicationRequest.read",
+      "description": "Scope requested as part of eRX integration",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      }
+    },
+    {
+      "id": "4158fb77-5760-4725-91cc-fb06c4e55b8b",
+      "name": "system/MedicationStatement.read",
+      "description": "Scope requested as part of eRX integration",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      }
     }
   ],
   "defaultDefaultClientScopes": [

@@ -1320,6 +1320,58 @@ namespace Prime.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Prime.Models.Contact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Fax")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobRoleTitle")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("PhysicalAddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SMSPhone")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhysicalAddressId");
+
+                    b.ToTable("Contact");
+                });
+
             modelBuilder.Entity("Prime.Models.Country", b =>
                 {
                     b.Property<string>("Code")
@@ -7352,6 +7404,10 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -7643,6 +7699,9 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int?>("AdjudicatorId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("AdministratorPharmaNetId")
                         .HasColumnType("integer");
 
@@ -7692,6 +7751,8 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdjudicatorId");
 
                     b.HasIndex("AdministratorPharmaNetId");
 
@@ -13893,6 +13954,13 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Prime.Models.Contact", b =>
+                {
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId");
+                });
+
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
                 {
                     b.HasOne("Prime.Models.License", "License")
@@ -14145,7 +14213,11 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Site", b =>
                 {
-                    b.HasOne("Prime.Models.Party", "AdministratorPharmaNet")
+                    b.HasOne("Prime.Models.Admin", "Adjudicator")
+                        .WithMany()
+                        .HasForeignKey("AdjudicatorId");
+
+                    b.HasOne("Prime.Models.Contact", "AdministratorPharmaNet")
                         .WithMany()
                         .HasForeignKey("AdministratorPharmaNetId");
 
@@ -14163,7 +14235,7 @@ namespace Prime.Migrations
                         .WithMany()
                         .HasForeignKey("PhysicalAddressId");
 
-                    b.HasOne("Prime.Models.Party", "PrivacyOfficer")
+                    b.HasOne("Prime.Models.Contact", "PrivacyOfficer")
                         .WithMany()
                         .HasForeignKey("PrivacyOfficerId");
 
@@ -14171,7 +14243,7 @@ namespace Prime.Migrations
                         .WithMany()
                         .HasForeignKey("ProvisionerId");
 
-                    b.HasOne("Prime.Models.Party", "TechnicalSupport")
+                    b.HasOne("Prime.Models.Contact", "TechnicalSupport")
                         .WithMany()
                         .HasForeignKey("TechnicalSupportId");
                 });

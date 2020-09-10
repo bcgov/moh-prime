@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using Prime.Models;
 using System.IO;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
@@ -39,6 +39,11 @@ namespace Prime.Services
         {
             Site = site;
             DocumentUrl = documentUrl;
+        }
+
+        public EmailParams(Site site)
+        {
+            Site = site;
         }
     }
 
@@ -165,6 +170,20 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
         }
 
+        public async Task SendRemoteUsersNotificationAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
+        {
+            var subject = "Remote Practitioner Notification";
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/RemoteUserNotificationEmail.cshtml",
+                new EmailParams(site));
+
+            foreach (var remoteUser in remoteUsers)
+            {
+                await Send(PRIME_EMAIL, remoteUser.Email, subject, body);
+            }
+
+        }
+
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
         {
             var businessLicenceDoc = await _siteService.GetLatestBusinessLicenceAsync(siteId);
@@ -257,13 +276,12 @@ namespace Prime.Services
                 throw new ArgumentException("Must specify at least one \"To\" email address.");
             }
 
-            if (PrimeConstants.ENVIRONMENT_NAME != "prod")
+            if (!PrimeEnvironment.IsProduction)
             {
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }
 
-            // If CHES Email Service is running and CHES_ENABLED = true, else send through smtp
-            if (PrimeConstants.CHES_ENABLED == "true" && await _chesClient.HealthCheckAsync())
+            if (PrimeEnvironment.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
             {
                 await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
             }

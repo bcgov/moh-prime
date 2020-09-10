@@ -136,12 +136,12 @@ export class UtilsService {
 
   /**
    * @description
-   * Opens a mailto href from your current window
+   * Open an email using the user's default mail client.
    */
   public mailTo(recipient: string, subject: string = null, body: string = null) {
-    let href = 'mailto:';
+
     if (recipient) {
-      href += recipient;
+      let href = `mailto:${recipient}`;
 
       const params = [];
       if (subject) {

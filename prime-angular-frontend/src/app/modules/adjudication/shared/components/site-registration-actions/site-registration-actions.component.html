@@ -26,6 +26,21 @@
       <mat-icon>mail</mat-icon>
       <span>Contact Signing Authority</span>
     </button>
+
+    <mat-divider [inset]="true"></mat-divider>
+
+    <button mat-menu-item
+            [disabled]="!canDelete"
+            (click)="onDelete({ organizationId: siteRegistration.organizationId })">
+      <mat-icon>delete</mat-icon>
+      <span>Delete Organization</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canDelete"
+            (click)="onDelete({ siteId: siteRegistration.siteId })">
+      <mat-icon>delete</mat-icon>
+      <span>Delete Site</span>
+    </button>
   </mat-menu>
 
 </ng-container>

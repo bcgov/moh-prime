@@ -31,7 +31,7 @@ export class EnrolleeTableComponent implements OnInit {
     this.disclaim = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.columns = [
-      'uniqueId',
+      'displayId',
       'name',
       'givenNames',
       'appliedDate',

@@ -29,6 +29,7 @@ namespace Prime.Controllers
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
         private readonly IAdminService _adminService;
+        private readonly IBusinessEventService _businessEventService;
 
         public SitesController(
             IMapper mapper,
@@ -38,7 +39,8 @@ namespace Prime.Controllers
             IRazorConverterService razorConverterService,
             IEmailService emailService,
             IDocumentService documentService,
-            IAdminService adminService)
+            IAdminService adminService,
+            IBusinessEventService businessEventService)
         {
             _mapper = mapper;
             _siteService = siteService;
@@ -48,6 +50,7 @@ namespace Prime.Controllers
             _emailService = emailService;
             _documentService = documentService;
             _adminService = adminService;
+            _businessEventService = businessEventService;
         }
 
         // GET: api/Sites
@@ -191,6 +194,70 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // PUT: api/Sites/5/adjudicator
+        /// <summary>
+        /// Add a site's assigned adjudicator.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="adjudicatorId"></param>
+        [HttpPut("{siteId}/adjudicator", Name = nameof(SetSiteAdjudicator))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Site>> SetSiteAdjudicator(int siteId, [FromQuery] int? adjudicatorId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
+            }
+
+            Admin admin = (adjudicatorId.HasValue)
+                ? await _adminService.GetAdminAsync(adjudicatorId.Value)
+                : await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            if (admin == null)
+            {
+                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
+            }
+
+            var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id, admin.Id);
+            // TODO implement business events for sites
+            // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin claimed site");
+
+            return Ok(ApiResponse.Result(updatedSite));
+        }
+
+        // DELETE: api/Site/5/adjudicator
+        /// <summary>
+        /// Remove an site's assigned adjudicator.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpDelete("{siteId}/adjudicator", Name = nameof(RemoveSiteAdjudicator))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Site>> RemoveSiteAdjudicator(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
+            }
+
+            var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id);
+            // TODO implement business events for sites
+            // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin disclaimed site");
+
+            return Ok(ApiResponse.Result(updatedSite));
+        }
+
         // DELETE: api/Sites/5
         /// <summary>
         /// Deletes a specific Site.
@@ -242,6 +309,7 @@ namespace Prime.Controllers
 
             site = await _siteService.SubmitRegistrationAsync(siteId);
             await _emailService.SendSiteRegistrationAsync(site);
+            await _emailService.SendRemoteUsersNotificationAsync(site, site.RemoteUsers);
 
             return Ok(ApiResponse.Result(site));
         }
@@ -388,6 +456,66 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // POST: api/Sites/5/remote-users-email-admin
+        /// <summary>
+        /// Send HIBC an email when remote users are updated for a submitted site
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPost("{siteId}/remote-users-email-admin", Name = nameof(sendRemoteUsersEmailAdmin))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> sendRemoteUsersEmailAdmin(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _emailService.SendRemoteUsersUpdatedAsync(site);
+            return NoContent();
+        }
+
+        // POST: api/Sites/5/remote-users-email-user
+        /// <summary>
+        /// Send user an email when they are declared as a remote user against a site
+        /// so they can sequence requesting Remote Access on their PRIME practitioner enrolment
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="remoteUsers"></param>
+        [HttpPost("{siteId}/remote-users-email-user", Name = nameof(sendRemoteUsersEmailUser))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> sendRemoteUsersEmailUser(int siteId, IEnumerable<RemoteUser> remoteUsers)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _emailService.SendRemoteUsersNotificationAsync(site, remoteUsers);
+            return NoContent();
+        }
+
         // POST: api/Sites/5/approval
         /// <summary>
         /// Approved a site, setting it's approval date
@@ -399,13 +527,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         public async Task<ActionResult<Site>> ApproveSite(int siteId)
         {
-            if (!User.IsAdmin())
-            {
-                return Unauthorized();
-            }
-
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
@@ -446,11 +570,7 @@ namespace Prime.Controllers
 
             var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
 
-            return CreatedAtAction(
-                nameof(CreateSiteRegistrationNote),
-                new { siteId = siteId },
-                ApiResponse.Result(createdSiteRegistrationNote)
-            );
+            return Ok(ApiResponse.Result(createdSiteRegistrationNote));
         }
     }
 }

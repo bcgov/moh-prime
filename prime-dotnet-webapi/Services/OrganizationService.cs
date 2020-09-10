@@ -37,6 +37,7 @@ namespace Prime.Services
             return await query
                 .Include(o => o.Sites).ThenInclude(s => s.SiteVendors)
                 .Include(o => o.Sites).ThenInclude(s => s.PhysicalAddress)
+                .Include(o => o.Sites).ThenInclude(s => s.Adjudicator)
                 .ToListAsync();
         }
 

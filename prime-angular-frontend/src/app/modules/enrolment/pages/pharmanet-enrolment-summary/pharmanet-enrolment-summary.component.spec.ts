@@ -5,12 +5,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { PharmanetEnrolmentSummaryComponent } from './pharmanet-enrolment-summary.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 
@@ -31,6 +33,10 @@ describe('PharmanetEnrolmentSummaryComponent', () => {
           {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
           },
           {
             provide: EnrolmentService,

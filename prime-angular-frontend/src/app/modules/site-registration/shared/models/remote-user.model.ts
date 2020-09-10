@@ -5,6 +5,7 @@ export interface RemoteUser {
   id?: number;
   firstName: string;
   lastName: string;
+  email: string;
   remoteUserLocations: RemoteUserLocation[];
   remoteUserCertifications: RemoteUserCertification[];
 }
