@@ -537,9 +537,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> CreateInitiatedEnrolleeEmailEvent(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!_enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
