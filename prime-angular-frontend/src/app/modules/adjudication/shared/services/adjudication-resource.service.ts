@@ -171,7 +171,7 @@ export class AdjudicationResource {
   }
 
   public logEmailInitiated(enrolleeId: number): NoContent {
-    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/email-initiated`)
+    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/events/email-initiated`)
       .pipe(
         map(() => {
           this.toastService.openErrorToast('Enrollee Email Initiated has been sent');

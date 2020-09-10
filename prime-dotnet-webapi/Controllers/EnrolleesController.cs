@@ -524,14 +524,13 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/Enrollees/5/email-initiated
+        // POST: api/Enrollees/5/events/email-initiated
         /// <summary>
         /// Logs a business event for email initiated
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/email-initiated", Name = nameof(logEmailInitiated))]
+        [HttpPost("{enrolleeId}/events/email-initiated", Name = nameof(logEmailInitiated))]
         [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
