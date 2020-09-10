@@ -30,6 +30,10 @@ spec:
         - name: POSTGRES_USERNAME
           value: postgres
         image: ' '
+        lifecycle:
+          preStop:
+            exec:
+              command: ['pg_ctl', 'stop']
         name: primedb
         ports:
         - containerPort: 5432

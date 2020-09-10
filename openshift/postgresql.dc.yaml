@@ -188,6 +188,10 @@ objects:
                       name: '${NAME}-secret'
               image: ' '
               imagePullPolicy: IfNotPresent
+              lifecycle:
+                preStop:
+                  exec:
+                    command: ['pg_ctl', 'stop']
               livenessProbe:
                 initialDelaySeconds: 30
                 tcpSocket:

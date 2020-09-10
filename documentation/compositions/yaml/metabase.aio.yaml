@@ -152,6 +152,10 @@ objects:
               secretKeyRef:
                 name: ${METABASE_SERVICE_NAME}-database-credentials
                 key: password
+          lifecycle:
+            preStop:
+              exec:
+                command: ['pg_ctl', 'stop']
           livenessProbe:
             exec:
               command:
