@@ -44,5 +44,10 @@ namespace PrimeTests.Mocks
         {
             throw new System.NotImplementedException();
         }
+
+        public Task SendRemoteUsersNotificationAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
