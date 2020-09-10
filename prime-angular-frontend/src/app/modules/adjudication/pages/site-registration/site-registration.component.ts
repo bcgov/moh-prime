@@ -24,7 +24,7 @@ export class SiteRegistrationComponent extends AbstractComponent implements OnIn
   ) {
     super(route, router);
 
-    this.hasActions = true;
+    this.hasActions = false;
   }
 
   public ngOnInit(): void {

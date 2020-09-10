@@ -71,6 +71,7 @@ namespace Prime
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
         public DbSet<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
         public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
+        public DbSet<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
 
         public DbSet<AccessTerm> AccessTerms { get; set; }

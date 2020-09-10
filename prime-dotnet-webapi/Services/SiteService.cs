@@ -348,6 +348,24 @@ namespace Prime.Services
             }
         }
 
+        public async Task<Site> ApproveSite(int siteId)
+        {
+            var site = await this.GetBaseSiteQuery()
+                .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            if (site != null && site.ApprovedDate == null)
+            {
+                site.ApprovedDate = DateTimeOffset.Now;
+
+                var updated = await _context.SaveChangesAsync();
+                if (updated < 1)
+                {
+                    throw new InvalidOperationException($"Could not update the site.");
+                }
+            }
+            return site;
+        }
+
         private void DeleteContactFromSite(Contact contact)
         {
             if (contact != null)
@@ -430,6 +448,28 @@ namespace Prime.Services
                 .Where(bl => bl.SiteId == siteId)
                 .OrderByDescending(bl => bl.UploadedDate)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
+        {
+            var SiteRegistrationNote = new SiteRegistrationNote
+            {
+                SiteId = siteId,
+                AdjudicatorId = adminId,
+                Note = note,
+                NoteDate = DateTimeOffset.Now
+            };
+
+            _context.SiteRegistrationNotes.Add(SiteRegistrationNote);
+
+            var created = await _context.SaveChangesAsync();
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create site registration note.");
+            }
+            // TODO: Business events for sites?
+
+            return SiteRegistrationNote;
         }
 
         private IQueryable<Site> GetBaseSiteQuery()
