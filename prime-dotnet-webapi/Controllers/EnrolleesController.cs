@@ -537,7 +537,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> CreateInitiatedEnrolleeEmailEvent(int enrolleeId)
         {
-            if (!_enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
@@ -545,7 +545,7 @@ namespace Prime.Controllers
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var username = admin.IDIR.Replace("@idir", "");
 
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Email Initiated to Enrollee by {username}");
+            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Email Initiated to Enrollee by {username}");
 
             return NoContent();
         }
