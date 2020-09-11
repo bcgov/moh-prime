@@ -133,13 +133,16 @@ export class SiteRegistrationContainerComponent implements OnInit {
         ),
         exhaustMap((note: string) =>
           this.siteResource.approveSite(siteId)
-            .pipe(map(() => note))
+            .pipe(
+              map((updatedSite: Site) => this.updateSite(updatedSite)),
+              map(() => note)
+            )
         ),
         exhaustMap((note: string) =>
           (note)
             ? this.siteResource.createSiteRegistrationNote(siteId, note)
             : of(noop)
-        ),
+        )
       )
       .subscribe();
   }
@@ -163,13 +166,16 @@ export class SiteRegistrationContainerComponent implements OnInit {
         ),
         exhaustMap((note: string) =>
           this.siteResource.declineSite(siteId)
-            .pipe(map(() => note))
+            .pipe(
+              map((updatedSite: Site) => this.updateSite(updatedSite)),
+              map(() => note)
+            )
         ),
         exhaustMap((note: string) =>
           (note)
             ? this.siteResource.createSiteRegistrationNote(siteId, note)
             : of(noop)
-        ),
+        )
       )
       .subscribe();
   }

@@ -267,10 +267,10 @@ export class SiteResource {
       );
   }
 
-  public approveSite(siteId: number): Observable<string> {
-    return this.apiResource.put<string>(`sites/${siteId}/approve`)
+  public approveSite(siteId: number): Observable<Site> {
+    return this.apiResource.put<Site>(`sites/${siteId}/approve`)
       .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
+        map((response: ApiHttpResponse<Site>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been approved')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration could not be approved');
@@ -280,10 +280,10 @@ export class SiteResource {
       );
   }
 
-  public declineSite(siteId: number): Observable<string> {
-    return this.apiResource.put<string>(`sites/${siteId}/decline`)
+  public declineSite(siteId: number): Observable<Site> {
+    return this.apiResource.put<Site>(`sites/${siteId}/decline`)
       .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
+        map((response: ApiHttpResponse<Site>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been declined')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration could not be declined');
