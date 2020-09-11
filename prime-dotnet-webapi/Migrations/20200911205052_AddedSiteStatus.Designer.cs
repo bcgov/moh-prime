@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200911200512_AddedSiteStatus")]
+    [Migration("20200911205052_AddedSiteStatus")]
     partial class AddedSiteStatus
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
