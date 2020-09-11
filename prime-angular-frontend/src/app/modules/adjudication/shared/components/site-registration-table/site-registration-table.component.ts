@@ -58,6 +58,7 @@ export class SiteRegistrationTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
+  // TODO status lookup for sites would remove the need for this method and only require pipes
   public displayStatus(status: SiteStatusType) {
     return (status === SiteStatusType.APPROVED)
       ? 'Approved'
