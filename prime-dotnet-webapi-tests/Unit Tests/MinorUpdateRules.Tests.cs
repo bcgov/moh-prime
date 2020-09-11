@@ -33,7 +33,7 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(DateRuleData))]
-        public async void testDateRule(DateTimeOffset? expiryDate, bool expected)
+        public async void TestDateRule(DateTimeOffset? expiryDate, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             enrollee.AccessTerms = new[]
@@ -71,7 +71,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testAllowableChangesRule_AllowedUpdates()
+        public async void TestAllowableChangesRule_AllowedUpdates()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
@@ -85,7 +85,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testAllowableChangesRule_SimpleDissallowedChange_SimpleProperty()
+        public async void TestAllowableChangesRule_SimpleDissallowedChange_SimpleProperty()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
@@ -95,7 +95,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testAllowableChangesRule_SimpleDissallowedChange_RemoveChildObject()
+        public async void TestAllowableChangesRule_SimpleDissallowedChange_RemoveChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
@@ -105,7 +105,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testAllowableChangesRule_SimpleDissallowedChange_PropertyOnChildObject()
+        public async void TestAllowableChangesRule_SimpleDissallowedChange_PropertyOnChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
@@ -115,7 +115,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testAllowableChangesRule_SimpleDissallowedChange_AddChildObject()
+        public async void TestAllowableChangesRule_SimpleDissallowedChange_AddChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
@@ -125,7 +125,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testAllowableChangesRule_Certifications()
+        public async void TestAllowableChangesRule_Certifications()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
@@ -148,7 +148,7 @@ namespace PrimeTests.UnitTests
         [Theory]
         [InlineData(true, true)]
         [InlineData(false, false)]
-        public async void testAllowableChangesRule_Jobs(bool isObo, bool expected)
+        public async void TestAllowableChangesRule_Jobs(bool isObo, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
@@ -178,7 +178,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testAllowableChangesRule_EnrolleeCareSettings()
+        public async void TestAllowableChangesRule_EnrolleeCareSettings()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
@@ -208,7 +208,7 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SelfDeclarationData))]
-        public async void testAllowableChangesRule_SelfDeclarations_AddToEmpty(SelfDeclarationType declarationType)
+        public async void TestAllowableChangesRule_SelfDeclarations_AddToEmpty(SelfDeclarationType declarationType)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             enrollee.SelfDeclarations = new List<SelfDeclaration>();
@@ -225,7 +225,7 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SelfDeclarationData))]
-        public async void testAllowableChangesRule_SelfDeclarations_ModifySingle(SelfDeclarationType declarationType)
+        public async void TestAllowableChangesRule_SelfDeclarations_ModifySingle(SelfDeclarationType declarationType)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             var declaration = new SelfDeclaration
@@ -256,7 +256,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public void testAllowableChangesRule_SPEC()
+        public void TestAllowableChangesRule_SPEC()
         {
             // Make sure there are no new types we don't know how to compare
             var knownTypes = new[]
@@ -278,7 +278,7 @@ namespace PrimeTests.UnitTests
                 .Distinct()
                 .Except(knownTypes);
 
-            Assert.False(unknownTypes.Any(), $"At least one new type has been added to {nameof(EnrolleeUpdateModel)}. Please update {nameof(AllowableChangesRule)} and/or {nameof(testAllowableChangesRule_SPEC)}");
+            Assert.False(unknownTypes.Any(), $"At least one new type has been added to {nameof(EnrolleeUpdateModel)}. Please update {nameof(AllowableChangesRule)} and/or {nameof(TestAllowableChangesRule_SPEC)}");
         }
     }
 }
