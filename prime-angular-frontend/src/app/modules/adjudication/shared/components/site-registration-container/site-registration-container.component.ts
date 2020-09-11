@@ -335,7 +335,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       careSettingCode,
       siteVendors,
       adjudicator,
-      pec
+      pec,
+      status
     } = site;
 
     return {
@@ -346,7 +347,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       careSettingCode,
       siteVendors,
       adjudicatorIdir: adjudicator?.idir,
-      pec
+      pec,
+      status
     };
   }
 }
