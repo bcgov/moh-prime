@@ -516,12 +516,12 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/Sites/5/approve
+        // PUT: api/Sites/5/approve
         /// <summary>
         /// Approve a site.
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/approve", Name = nameof(ApproveSite))]
+        [HttpPut("{siteId}/approve", Name = nameof(ApproveSite))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -539,12 +539,12 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(result));
         }
 
-        // POST: api/Sites/5/decline
+        // PUT: api/Sites/5/decline
         /// <summary>
         /// Decline a site.
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/decline", Name = nameof(DeclineSite))]
+        [HttpPut("{siteId}/decline", Name = nameof(DeclineSite))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
