@@ -32,6 +32,7 @@ import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@regist
 })
 export class SiteRegistrationContainerComponent implements OnInit {
   @Input() public hasActions: boolean;
+  @Input() public actions: TemplateRef<any>;
   @Input() public content: TemplateRef<any>;
   @Input() public refresh: Observable<boolean>;
   @Output() public action: EventEmitter<void>;
