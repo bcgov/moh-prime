@@ -149,6 +149,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       title: 'Decline Site Registration',
       message: 'Are you sure you want to Decline this Site Registration?',
       actionText: 'Decline Site Registration',
+      actionType: 'warn',
       component: NoteComponent
     };
 
