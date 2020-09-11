@@ -10,19 +10,19 @@
   <mat-menu #menu>
     <button mat-menu-item
             [disabled]="!canEdit"
-            (click)="approveSite()">
+            (click)="onApprove()">
       <mat-icon>check_circle_outline</mat-icon>
       <span>Approve Site</span>
     </button>
     <button mat-menu-item
             [disabled]="!canEdit"
-            (click)="declineSite()">
+            (click)="onDecline()">
       <mat-icon>block</mat-icon>
       <span>Decline Site</span>
     </button>
     <button mat-menu-item
             [disabled]="!canEdit"
-            (click)="contactSigningAuthorityForSite()">
+            (click)="onContactSigningAuthority()">
       <mat-icon>mail</mat-icon>
       <span>Contact Signing Authority</span>
     </button>

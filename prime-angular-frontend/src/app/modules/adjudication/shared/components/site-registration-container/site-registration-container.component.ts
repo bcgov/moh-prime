@@ -16,6 +16,7 @@ import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ClaimSiteComponent, ClaimSiteAction } from '@shared/components/dialogs/content/claim-site/claim-site.component';
 import { ClaimActionEnum } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -23,7 +24,6 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';
-import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -32,6 +32,7 @@ import { NoteComponent } from '@shared/components/dialogs/content/note/note.comp
 })
 export class SiteRegistrationContainerComponent implements OnInit {
   @Input() public hasActions: boolean;
+  @Input() public actions: TemplateRef<any>;
   @Input() public content: TemplateRef<any>;
   @Input() public refresh: Observable<boolean>;
   @Output() public action: EventEmitter<void>;
