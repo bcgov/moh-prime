@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-site-registration-table',
@@ -18,6 +19,7 @@ export class SiteRegistrationTableComponent implements OnInit {
 
   public columns: string[];
 
+  public SiteStatusType = SiteStatusType;
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
@@ -56,5 +58,17 @@ export class SiteRegistrationTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  public ngOnInit(): void { }
+  // TODO status lookup for sites would remove the need for this method and only require pipes
+  public displayStatus(status: SiteStatusType) {
+    return (status === SiteStatusType.APPROVED)
+      ? 'Approved'
+      : (status === SiteStatusType.DECLINED)
+        ? 'Declined'
+        : 'Under Review';
+  }
+
+  public ngOnInit(): void {
+    console.log(SiteStatusType.APPROVED, SiteStatusType[1]);
+
+  }
 }
