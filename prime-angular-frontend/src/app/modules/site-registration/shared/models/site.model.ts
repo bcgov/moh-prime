@@ -44,4 +44,5 @@ export interface Site {
 export interface SiteListViewModel extends
   Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec'> {
   adjudicatorIdir: string;
+  remoteUserCount: number;
 }
