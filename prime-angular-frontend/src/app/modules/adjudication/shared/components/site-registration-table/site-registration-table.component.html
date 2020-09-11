@@ -54,7 +54,9 @@
             *matCellDef="let row;"
             class="status"
             [class.approved]="row.status"
-            [class.under-review]="!row.status"> {{ row.status | default }} </td>
+            [class.under-review]="!row.status">
+          {{ SiteStatusType[row.status] | case: 'snake' : 'space' | capitalize | default }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="siteId">

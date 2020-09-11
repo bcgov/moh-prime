@@ -1,5 +1,5 @@
 export enum SiteStatusType {
-  UnderReview = 1,
-  Approved = 2,
-  Declined = 3
+  UNDER_REVIEW = 1,
+  APPROVED = 2,
+  DECLINED = 3
 }
