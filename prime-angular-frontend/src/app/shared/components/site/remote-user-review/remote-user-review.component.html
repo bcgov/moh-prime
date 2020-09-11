@@ -1,0 +1,64 @@
+<ng-container *ngFor="let remoteUser of remoteUsers">
+  <app-overview-section title="Remote User"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="editRoute"
+                        (route)="onRoute($event)">
+
+    <div class="mb-3">
+      <app-enrollee-property title="Name">
+        {{ remoteUser | fullname | default }}
+      </app-enrollee-property>
+    </div>
+
+    <ng-container *ngFor="let remoteUserCertification of remoteUser.remoteUserCertifications">
+
+      <div class="mb-3">
+        <strong>Certification</strong>
+      </div>
+
+      <div class="ml-4 mb-3">
+
+        <app-enrollee-property title="College">
+          {{ remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Licence">
+          {{ remoteUserCertification.licenseNumber | default }}
+        </app-enrollee-property>
+
+      </div>
+
+    </ng-container>
+
+    <ng-container *ngFor="let remoteUserLocation of remoteUser.remoteUserLocations">
+      <div class="mb-3">
+        <strong>Remote Address</strong>
+      </div>
+
+      <div class="ml-4 mb-3">
+
+        <app-enrollee-property title="Internet Provider">
+          {{ remoteUserLocation?.internetProvider | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Street Address">
+          {{ remoteUserLocation?.physicalAddress?.street | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="City">
+          {{ remoteUserLocation?.physicalAddress?.city | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Province">
+          {{ remoteUserLocation?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Postal Code">
+          {{ remoteUserLocation?.physicalAddress?.postal | postal | default }}
+        </app-enrollee-property>
+
+      </div>
+
+    </ng-container>
+  </app-overview-section>
+</ng-container>
