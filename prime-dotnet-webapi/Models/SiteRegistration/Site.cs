@@ -50,7 +50,7 @@ namespace Prime.Models
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
-        public SiteStatusType Status { get; set; }
+        public SiteStatusType Status { get; set; } = SiteStatusType.UnderReview;
 
         public DateTimeOffset? ApprovedDate { get; set; }
 
