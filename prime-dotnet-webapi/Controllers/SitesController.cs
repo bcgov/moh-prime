@@ -522,11 +522,11 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/approve", Name = nameof(ApproveSite))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         public async Task<ActionResult<Site>> ApproveSite(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
@@ -545,11 +545,11 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/decline", Name = nameof(DeclineSite))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         public async Task<ActionResult<Site>> DeclineSite(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
