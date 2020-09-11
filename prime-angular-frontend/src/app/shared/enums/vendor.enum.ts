@@ -1,4 +1,4 @@
-export enum Vendor {
+export enum VendorEnum {
   CARECONNECT = 1,
   EXCELLERIS,
   ICLINIC,
