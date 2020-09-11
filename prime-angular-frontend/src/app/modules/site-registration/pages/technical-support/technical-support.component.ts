@@ -3,10 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, of } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -18,6 +20,7 @@ import { Contact } from '@registration/shared/models/contact.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
   selector: 'app-technical-support',
@@ -40,6 +43,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
+    private organizationResource: OrganizationResource,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
@@ -50,11 +54,27 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteFormStateService.json;
-      this.siteResource
-        .updateSite(payload)
-        .subscribe(() => {
+      const organizationId = this.route.snapshot.params.oid;
+      const site = this.siteService.site;
+
+      this.busy = this.organizationResource
+        .getOrganizationById(organizationId)
+        .pipe(
+          map((organization: Organization) => !!organization.acceptedAgreementDate),
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            this.siteResource.updateSite(payload)
+              .pipe(map(() => hasSignedOrgAgreement))
+          ),
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            (hasSignedOrgAgreement)
+              ? this.siteResource.updateCompleted(site.id)
+                .pipe(map(() => hasSignedOrgAgreement))
+              : of(hasSignedOrgAgreement)
+          )
+        )
+        .subscribe((hasSignedOrgAgreement: boolean) => {
           this.form.markAsPristine();
-          this.nextRoute();
+          this.nextRoute(organizationId, hasSignedOrgAgreement);
         });
     }
   }
@@ -70,11 +90,15 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     this.routeUtils.routeRelativeTo(SiteRoutes.PRIVACY_OFFICER);
   }
 
-  public nextRoute() {
-    if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+  public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
+    if (!hasSignedOrgAgreement) {
+      const siteId = this.route.snapshot.params.sid;
+      // Provide site for redirection after accepting the organization agreement
+      this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.SITE_MANAGEMENT), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT], {
+        queryParams: { redirect: `${SiteRoutes.SITES}/${siteId}`, siteId }
+      });
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
     }
   }
 

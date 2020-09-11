@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 
-import { Subscription, of } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { Subscription, of, noop } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -16,7 +15,7 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { Organization } from '@registration/shared/models/organization.model';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-remote-users',
@@ -40,7 +39,6 @@ export class RemoteUsersComponent implements OnInit {
     private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
-    private organizationResource: OrganizationResource,
     private formUtilsService: FormUtilsService,
     private addressPipe: AddressPipe
   ) {
@@ -90,12 +88,10 @@ export class RemoteUsersComponent implements OnInit {
     if (this.formUtilsService.checkValidity(this.form)) {
       this.hasNoRemoteUserError = false;
       const payload = this.siteFormStateService.json;
-      const organizationId = this.route.snapshot.params.oid;
       const site = this.siteService.site;
-
       const newRemoteUsers = this.siteFormStateService.remoteUsersForm.value.remoteUsers.reduce((
         newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
-        if (!this.siteService.site.remoteUsers.find((current: RemoteUser) =>
+        if (!site.remoteUsers.find((current: RemoteUser) =>
           current.firstName === updated.firstName &&
           current.lastName === updated.lastName &&
           current.email === updated.email
@@ -105,36 +101,23 @@ export class RemoteUsersComponent implements OnInit {
         return newRemoteUsersAcc;
       }, []);
 
-      this.busy = this.organizationResource
-        .getOrganizationById(organizationId)
+      this.busy = this.siteResource
+        .updateSite(payload)
         .pipe(
-          map((organization: Organization) => !!organization.acceptedAgreementDate),
-          exhaustMap((hasSignedOrgAgreement: boolean) =>
-            this.siteResource.updateSite(payload)
-              .pipe(map(() => hasSignedOrgAgreement))
-          ),
-          exhaustMap((hasSignedOrgAgreement: boolean) =>
-            (hasSignedOrgAgreement)
-              ? this.siteResource.updateCompleted(site.id)
-                .pipe(map(() => hasSignedOrgAgreement))
-              : of(hasSignedOrgAgreement)
-          ),
-          exhaustMap((hasSignedOrgAgreement: boolean) =>
-            (this.siteService.site.submittedDate)
+          exhaustMap(() =>
+            (site.submittedDate)
               ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
-                .pipe(map(() => hasSignedOrgAgreement))
-              : of(hasSignedOrgAgreement)
+              : of(noop)
           ),
-          exhaustMap((hasSignedOrgAgreement: boolean) =>
-            (this.siteService.site.submittedDate && newRemoteUsers)
+          exhaustMap(() =>
+            (site.submittedDate && newRemoteUsers)
               ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
-                .pipe(map(() => hasSignedOrgAgreement))
-              : of(hasSignedOrgAgreement)
+              : of(noop)
           )
         )
-        .subscribe((hasSignedOrgAgreement: boolean) => {
+        .subscribe(() => {
           this.form.markAsPristine();
-          this.nextRoute(organizationId, hasSignedOrgAgreement);
+          this.nextRoute();
         });
     } else {
       this.hasNoRemoteUserError = true;
@@ -150,18 +133,14 @@ export class RemoteUsersComponent implements OnInit {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['../', SiteRoutes.TECHNICAL_SUPPORT]);
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.HOURS_OPERATION]);
   }
 
-  public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
-    if (!hasSignedOrgAgreement) {
-      const siteId = this.route.snapshot.params.sid;
-      // Provide site for redirection after accepting the organization agreement
-      this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.SITE_MANAGEMENT), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT], {
-        queryParams: { redirect: `${SiteRoutes.SITES}/${siteId}`, siteId }
-      });
+  public nextRoute() {
+    if (this.isCompleted) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
+      this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
     }
   }
 
