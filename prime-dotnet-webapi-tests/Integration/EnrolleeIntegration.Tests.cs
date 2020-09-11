@@ -46,7 +46,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void testGetEnrollees()
+        public async void TestGetEnrollees()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -60,7 +60,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void testGetEnrollees2()
+        public async void TestGetEnrollees2()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -78,7 +78,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void createEnrollee()
+        public async void TestCreateEnrollee()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -102,7 +102,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void getSingleEnrollee()
+        public async void TestGetSingleEnrollee()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -125,7 +125,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void getAllEnrollees()
+        public async void TestGetAllEnrollees()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -147,7 +147,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void updateSingleEnrollee()
+        public async void TestUpdateSingleEnrollee()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {

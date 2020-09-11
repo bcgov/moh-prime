@@ -22,6 +22,8 @@ namespace Prime.ViewModels
 
         public string AdjudicatorIdir { get; set; }
 
+        public SiteStatusType Status { get; set; }
+
         public string PEC { get; set; }
     }
 }

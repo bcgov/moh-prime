@@ -46,7 +46,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testGetLookups()
+        public async void TestGetLookups()
         {
             var service = CreateService();
 

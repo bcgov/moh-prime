@@ -6,8 +6,8 @@ using Xunit;
 using Prime.Models;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
-using PrimeTests.Mocks;
-using static PrimeTests.Mocks.CollegeLicenceClientMock;
+using PrimeTests.HttpClientMocks;
+using static PrimeTests.HttpClientMocks.CollegeLicenceClientMock;
 using PrimeTests.ModelFactories;
 
 namespace PrimeTests.UnitTests
@@ -123,7 +123,7 @@ namespace PrimeTests.UnitTests
         [InlineData(SelfDeclarationFlag.PHARMANET_SUSPENDED, false)]
         [InlineData(SelfDeclarationFlag.REGISTRATION_SUSPENDED, false)]
         [InlineData((SelfDeclarationFlag.CONVICTION | SelfDeclarationFlag.DISCIPLINARY | SelfDeclarationFlag.PHARMANET_SUSPENDED | SelfDeclarationFlag.REGISTRATION_SUSPENDED), false)]
-        public async void testSelfDeclarationRule(SelfDeclarationFlag declaration, bool expected)
+        public async void TestSelfDeclarationRule(SelfDeclarationFlag declaration, bool expected)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateSelfDeclaration(enrollee, declaration);
@@ -147,7 +147,7 @@ namespace PrimeTests.UnitTests
         [InlineData(true, false, false)]
         [InlineData(false, true, false)]
         [InlineData(false, false, false)]
-        public async void testAddressRule(bool physInBc, bool? mailInBc, bool expected)
+        public async void TestAddressRule(bool physInBc, bool? mailInBc, bool expected)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateAddresses(enrollee, physInBc, mailInBc);
@@ -166,7 +166,7 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(CertificationRuleData))]
-        public async void testCertificationRule(OperationMode[] apiModes, bool expected, StatusReasonType[] expectedReasons)
+        public async void TestCertificationRule(OperationMode[] apiModes, bool expected, StatusReasonType[] expectedReasons)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateCertifications(enrollee, apiModes.Length);
@@ -258,7 +258,7 @@ namespace PrimeTests.UnitTests
         [InlineData(true, false, false)]
         [InlineData(false, true, false)]
         [InlineData(true, true, false)]
-        public async void testPumpProviderRule(bool isProvider, bool isPumpProvider, bool expected)
+        public async void TestPumpProviderRule(bool isProvider, bool isPumpProvider, bool expected)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateDeviceProvider(enrollee, isProvider, isPumpProvider);
@@ -281,7 +281,7 @@ namespace PrimeTests.UnitTests
         // TODO Get Licence loaded onto Certificate
         // [InlineData(1, false, true)]
         // [InlineData(1, true, false)]
-        public async void testLicenceClassRule(int licenseCount, bool isManual, bool expected)
+        public async void TestLicenceClassRule(int licenseCount, bool isManual, bool expected)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateCertifications(enrollee, licenseCount, isManual);
@@ -304,7 +304,7 @@ namespace PrimeTests.UnitTests
         [InlineData(1, false)]
         [InlineData(2, false)]
         [InlineData(3, true)]
-        public async void testIdentityAssuranceLevelRule(int assuranceLevel, bool expected)
+        public async void TestIdentityAssuranceLevelRule(int assuranceLevel, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             enrollee.IdentityAssuranceLevel = assuranceLevel;
