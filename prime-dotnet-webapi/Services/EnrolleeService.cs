@@ -411,21 +411,11 @@ namespace Prime.Services
                 .CountAsync();
         }
 
-        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Admin admin = null)
+        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null)
         {
-            var enrollee = await GetBaseEnrolleeQuery()
-                .Include(e => e.Adjudicator)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            enrollee.Adjudicator = admin;
-
-            _context.Update(enrollee);
-
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the enrollee adjudicator.");
-            }
+            var enrollee = await _context.Enrollees.Where(e => e.Id == enrolleeId).SingleOrDefaultAsync();
+            enrollee.AdjudicatorId = adminId;
+            await _context.SaveChangesAsync();
 
             return enrollee;
         }
