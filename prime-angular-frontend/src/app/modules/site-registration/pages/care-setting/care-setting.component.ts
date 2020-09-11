@@ -41,6 +41,8 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
+  public vendorChangeDialogOptions: DialogOptions;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -56,6 +58,12 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     this.careSettingConfig = this.configService.careSettings;
     this.vendorConfig = this.configService.vendors;
     this.hasNoVendorError = false;
+    this.vendorChangeDialogOptions = {
+      title: 'Vendor Change',
+      message: `CareConnect does not support remote access to PharmaNet, all the remote
+                  practitioners you have submitted in the application will be deleted and
+                  do not have permission to access PharmaNet remotely.`
+    };
   }
 
   public get careSettingCode(): FormControl {
@@ -66,10 +74,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteFormStateService.json;
       const data: DialogOptions = {
-        title: 'Vendor Change',
-        message: `CareConnect does not support remote access to PharmaNet, all the remote
-                  practitioners you have submitted in the application will be deleted and
-                  do not have permission to access PharmaNet remotely.`,
+        ...this.vendorChangeDialogOptions,
         actionType: 'warn',
         actionText: 'Continue'
       };
@@ -105,10 +110,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     if (change.value === VendorEnum.CARECONNECT && this.siteFormStateService.json.remoteUsers.length) {
       const data: DialogOptions = {
         icon: 'announcement',
-        title: 'Vendor Change',
-        message: `CareConnect does not support remote access to PharmaNet, all the remote
-                  practitioners you have submitted in the application will be deleted and
-                  do not have permission to access PharmaNet remotely.`,
+        ...this.vendorChangeDialogOptions,
         actionText: 'Ok',
         cancelHide: true
       };
