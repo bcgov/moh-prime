@@ -350,7 +350,7 @@ namespace Prime.Services
 
         public async Task<Site> ApproveSite(int siteId)
         {
-            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
+            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
 
             if (site.Status != SiteStatusType.Approved)
             {
@@ -364,7 +364,7 @@ namespace Prime.Services
 
         public async Task<Site> DeclineSite(int siteId)
         {
-            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
+            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
             site.Status = SiteStatusType.Declined;
             site.ApprovedDate = null;
             await _context.SaveChangesAsync();
