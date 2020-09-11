@@ -421,13 +421,14 @@ namespace Prime.Controllers
         /// Add an enrollee's assigned adjudicator.
         /// </summary>
         /// <param name="enrolleeId"></param>
+        /// <param name="adjudicatorId"></param>
         [HttpPut("{enrolleeId}/adjudicator", Name = nameof(SetEnrolleeAdjudicator))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> SetEnrolleeAdjudicator(int enrolleeId)
+        public async Task<ActionResult<Enrollee>> SetEnrolleeAdjudicator(int enrolleeId, [FromQuery] int? adjudicatorId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -436,8 +437,16 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
-            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, admin);
+            Admin admin = (adjudicatorId.HasValue)
+                ? await _adminService.GetAdminAsync(adjudicatorId.Value)
+                : await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            if (admin == null)
+            {
+                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
+            }
+
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, admin.Id);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin claimed enrollee");
 
             return Ok(ApiResponse.Result(updatedEnrollee));
