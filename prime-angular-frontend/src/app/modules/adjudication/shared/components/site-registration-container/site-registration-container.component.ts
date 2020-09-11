@@ -32,6 +32,7 @@ import { NoteComponent } from '@shared/components/dialogs/content/note/note.comp
 })
 export class SiteRegistrationContainerComponent implements OnInit {
   @Input() public hasActions: boolean;
+  @Input() public actions: TemplateRef<any>;
   @Input() public content: TemplateRef<any>;
   @Input() public refresh: Observable<boolean>;
   @Output() public action: EventEmitter<void>;
