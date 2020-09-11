@@ -50,6 +50,8 @@ namespace Prime.Models
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
+        public SiteStatusType Status { get; set; }
+
         public DateTimeOffset? ApprovedDate { get; set; }
 
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
