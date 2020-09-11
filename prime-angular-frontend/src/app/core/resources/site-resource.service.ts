@@ -268,7 +268,7 @@ export class SiteResource {
   }
 
   public approveSite(siteId: number): Observable<string> {
-    return this.apiResource.post<string>(`sites/${siteId}/approval`)
+    return this.apiResource.post<string>(`sites/${siteId}/approve`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been approved')),
@@ -280,8 +280,17 @@ export class SiteResource {
       );
   }
 
-  public declineSite(): void {
-    // TODO: Future implementation
+  public declineSite(siteId: number): Observable<string> {
+    return this.apiResource.post<string>(`sites/${siteId}/decline`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Site registration has been declined')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site registration could not be declined');
+          this.logger.error('[SiteRegistration] SiteResource::declineSite error has occurred: ', error);
+          throw error;
+        })
+      );
   }
 
   public createSiteRegistrationNote(siteId: number, note: string): Observable<SiteRegistrationNote> {

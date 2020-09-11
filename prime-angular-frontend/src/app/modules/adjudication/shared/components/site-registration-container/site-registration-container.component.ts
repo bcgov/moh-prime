@@ -126,8 +126,15 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
-        exhaustMap((note: string) => this.siteResource.approveSite(siteId).pipe(map(() => note))),
+        exhaustMap((result: { output: string }) =>
+          (result)
+            ? of(result.output ?? null)
+            : EMPTY
+        ),
+        exhaustMap((note: string) =>
+          this.siteResource.approveSite(siteId)
+            .pipe(map(() => note))
+        ),
         exhaustMap((note: string) =>
           (note)
             ? this.siteResource.createSiteRegistrationNote(siteId, note)
@@ -148,9 +155,15 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
-        // TODO: Implement Decline pathway
-        // exhaustMap((note: string) => this.siteResource.declineSite(siteId).pipe(map(() => note))),,
+        exhaustMap((result: { output: string }) =>
+          (result)
+            ? of(result.output ?? null)
+            : EMPTY
+        ),
+        exhaustMap((note: string) =>
+          this.siteResource.declineSite(siteId)
+            .pipe(map(() => note))
+        ),
         exhaustMap((note: string) =>
           (note)
             ? this.siteResource.createSiteRegistrationNote(siteId, note)
