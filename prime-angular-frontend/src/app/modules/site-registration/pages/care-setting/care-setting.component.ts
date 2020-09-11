@@ -4,8 +4,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatRadioChange } from '@angular/material/radio';
 
-import { Subscription, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subscription, Observable, EMPTY } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -65,8 +65,31 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteFormStateService.json;
-      this.siteResource
-        .updateSite(payload)
+      const data: DialogOptions = {
+        title: 'Vendor Change',
+        message: `CareConnect does not support remote access to PharmaNet, all the remote
+                  practitioners you have submitted in the application will be deleted and
+                  do not have permission to access PharmaNet remotely.`,
+        actionType: 'warn',
+        actionText: 'Continue'
+      };
+      const update$ = this.siteResource.updateSite(payload);
+      const request$ = (payload.siteVendors[0].vendorCode === VendorEnum.CARECONNECT && payload.remoteUsers.length)
+        ? this.dialog.open(ConfirmDialogComponent, { data })
+          .afterClosed()
+          .pipe(
+            exhaustMap((result: boolean) => {
+              if (!result) {
+                return EMPTY;
+              }
+
+              payload.remoteUsers = [];
+              return update$;
+            })
+          )
+        : update$;
+
+      request$
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
