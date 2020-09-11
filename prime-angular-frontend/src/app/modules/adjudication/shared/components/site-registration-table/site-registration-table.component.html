@@ -54,7 +54,7 @@
             *matCellDef="let row;"
             class="status"
             [class.approved]="row.pec"
-            [class.under-review]="!row.pec"> {{ (row.pec) ? 'Approved' : 'Under Review' | default }} </td>
+            [class.under-review]="!row.pec"> {{ row.pec | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="siteId">
