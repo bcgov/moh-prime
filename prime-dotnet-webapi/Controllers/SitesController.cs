@@ -535,8 +535,8 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            var result = await _siteService.ApproveSite(siteId);
-            return Ok(ApiResponse.Result(result));
+            var updatedSite = await _siteService.ApproveSite(siteId);
+            return Ok(ApiResponse.Result(updatedSite));
         }
 
         // PUT: api/Sites/5/decline
@@ -558,8 +558,8 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            var result = await _siteService.DeclineSite(siteId);
-            return Ok(ApiResponse.Result(result));
+            var updatedSite = await _siteService.DeclineSite(siteId);
+            return Ok(ApiResponse.Result(updatedSite));
         }
 
         // POST: api/Sites/5/site-registration-notes
