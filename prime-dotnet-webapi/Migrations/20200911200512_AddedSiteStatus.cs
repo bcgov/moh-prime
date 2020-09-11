@@ -12,7 +12,7 @@ namespace Prime.Migrations
                 name: "Status",
                 table: "Site",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 1);
 
             migrationBuilder.CreateTable(
                 name: "NewestAgreements",
