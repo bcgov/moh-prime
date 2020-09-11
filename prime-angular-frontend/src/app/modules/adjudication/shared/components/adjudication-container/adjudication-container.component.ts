@@ -28,6 +28,7 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { UtilsService } from '@core/services/utils.service';
+import { ToastService } from '@core/services/toast.service';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -55,6 +56,7 @@ export class AdjudicationContainerComponent implements OnInit {
     private adjudicationResource: AdjudicationResource,
     private dialog: MatDialog,
     private utilsService: UtilsService,
+    private toastService: ToastService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
 
@@ -81,6 +83,13 @@ export class AdjudicationContainerComponent implements OnInit {
   public onNotify(enrolleeId: number) {
     this.adjudicationResource.getEnrolleeById(enrolleeId)
       .pipe(
+        exhaustMap((enrollee: HttpEnrollee) => {
+          if (enrollee.contactEmail) {
+            return of(enrollee);
+          }
+          this.toastService.openErrorToast('Enrollee does not contain a Contact Email');
+          return EMPTY;
+        }),
         exhaustMap((enrollee: HttpEnrollee) => this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
           .pipe(map(() => enrollee)))
       )
