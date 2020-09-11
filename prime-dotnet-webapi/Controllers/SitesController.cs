@@ -516,13 +516,12 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/Sites/5/approval
+        // POST: api/Sites/5/approve
         /// <summary>
-        /// Approved a site, setting it's approval date
+        /// Approve a site.
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/approval", Name = nameof(ApproveSite))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [HttpPost("{siteId}/approve", Name = nameof(ApproveSite))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -537,6 +536,29 @@ namespace Prime.Controllers
             }
 
             var result = await _siteService.ApproveSite(siteId);
+            return Ok(ApiResponse.Result(result));
+        }
+
+        // POST: api/Sites/5/decline
+        /// <summary>
+        /// Decline a site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPost("{siteId}/decline", Name = nameof(DeclineSite))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        public async Task<ActionResult<Site>> DeclineSite(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var result = await _siteService.DeclineSite(siteId);
             return Ok(ApiResponse.Result(result));
         }
 
