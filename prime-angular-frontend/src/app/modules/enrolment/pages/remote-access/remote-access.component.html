@@ -1,0 +1,43 @@
+<app-enrollee-page [busy]="busy">
+
+  <app-page-header>PRIME Enrolment</app-page-header>
+
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    [inProgress]="isInitialEnrolment"
+                                    [currentRoute]="EnrolmentRoutes.CARE_SETTING"></app-enrolment-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Remote Access</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Remote access is use of PharmaNet outside your Ministry-approved site.
+          <app-contextual-help class="help">
+            “Approved Practice Site” means the physical practice site where you provide direct patient care, and which
+            is approved by the Province for PharmaNet access. “Approved Practice Site” is never the location (e.g.,
+            home) where PharmaNet is accessed remotely. If needed, contact your PharmaNet software vendor for support.
+          </app-contextual-help>
+
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="col pt-2">
+
+        <button mat-stroked-button
+                type="button"
+                color="primary"
+                (click)="onClick()">
+          Request remote access
+        </button>
+
+      </div>
+
+    </section>
+
+  </form>
+
+</app-enrollee-page>

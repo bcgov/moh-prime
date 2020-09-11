@@ -38,6 +38,7 @@ import {
 import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
 import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
 import { ProgressIndicatorComponent } from './shared/components/progress-indicator/progress-indicator.component';
+import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { ProgressIndicatorComponent } from './shared/components/progress-indicat
     // TODO drop this component and reimplement using ProgressIndicator2Component
     ProgressIndicatorComponent,
     AccessDeclinedComponent,
-    NotificationConfirmationComponent
+    NotificationConfirmationComponent,
+    RemoteAccessComponent
   ],
   imports: [
     SharedModule,
