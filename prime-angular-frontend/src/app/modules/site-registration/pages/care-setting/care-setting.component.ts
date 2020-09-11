@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatRadioChange } from '@angular/material/radio';
 
 import { Subscription, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -11,6 +12,8 @@ import { ConfigService } from '@config/config.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { VendorEnum } from '@shared/enums/vendor.enum';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -46,7 +49,7 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog,
-    private configService: ConfigService,
+    private configService: ConfigService
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -73,8 +76,21 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     }
   }
 
-  public onVendorChange() {
+  public onVendorChange(change: MatRadioChange) {
     this.hasNoVendorError = false;
+
+    if (change.value === VendorEnum.CARECONNECT && this.siteFormStateService.json.remoteUsers.length) {
+      const data: DialogOptions = {
+        icon: 'announcement',
+        title: 'Vendor Change',
+        message: `CareConnect does not support remote access to PharmaNet, all the remote
+                  practitioners you have submitted in the application will be deleted and
+                  do not have permission to access PharmaNet remotely.`,
+        actionText: 'Ok',
+        cancelHide: true
+      };
+      this.dialog.open(ConfirmDialogComponent, { data });
+    }
   }
 
   public disableCareSetting(careSettingCode: number): boolean {
