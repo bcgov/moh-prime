@@ -58,5 +58,16 @@ export class SiteRegistrationTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  public ngOnInit(): void { }
+  public displayStatus(status: SiteStatusType) {
+    return (status === SiteStatusType.APPROVED)
+      ? 'Approved'
+      : (status === SiteStatusType.DECLINED)
+        ? 'Declined'
+        : 'Under Review';
+  }
+
+  public ngOnInit(): void {
+    console.log(SiteStatusType.APPROVED, SiteStatusType[1]);
+
+  }
 }

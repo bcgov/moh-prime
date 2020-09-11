@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 export type CaseType = 'snake' | 'kebab' | 'camel' | 'pascal' | 'space';
 
