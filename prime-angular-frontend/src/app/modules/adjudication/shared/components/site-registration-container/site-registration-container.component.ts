@@ -126,13 +126,23 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
-        exhaustMap((note: string) => this.siteResource.approveSite(siteId).pipe(map(() => note))),
+        exhaustMap((result: { output: string }) =>
+          (result)
+            ? of(result.output ?? null)
+            : EMPTY
+        ),
+        exhaustMap((note: string) =>
+          this.siteResource.approveSite(siteId)
+            .pipe(
+              map((updatedSite: Site) => this.updateSite(updatedSite)),
+              map(() => note)
+            )
+        ),
         exhaustMap((note: string) =>
           (note)
             ? this.siteResource.createSiteRegistrationNote(siteId, note)
             : of(noop)
-        ),
+        )
       )
       .subscribe();
   }
@@ -142,20 +152,30 @@ export class SiteRegistrationContainerComponent implements OnInit {
       title: 'Decline Site Registration',
       message: 'Are you sure you want to Decline this Site Registration?',
       actionText: 'Decline Site Registration',
+      actionType: 'warn',
       component: NoteComponent
     };
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
-        // TODO: Implement Decline pathway
-        // exhaustMap((note: string) => this.siteResource.declineSite(siteId).pipe(map(() => note))),,
+        exhaustMap((result: { output: string }) =>
+          (result)
+            ? of(result.output ?? null)
+            : EMPTY
+        ),
+        exhaustMap((note: string) =>
+          this.siteResource.declineSite(siteId)
+            .pipe(
+              map((updatedSite: Site) => this.updateSite(updatedSite)),
+              map(() => note)
+            )
+        ),
         exhaustMap((note: string) =>
           (note)
             ? this.siteResource.createSiteRegistrationNote(siteId, note)
             : of(noop)
-        ),
+        )
       )
       .subscribe();
   }
@@ -322,7 +342,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       siteVendors,
       remoteUsers,
       adjudicator,
-      pec
+      pec,
+      status
     } = site;
 
     return {
@@ -334,7 +355,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       siteVendors,
       remoteUserCount: remoteUsers.length,
       adjudicatorIdir: adjudicator?.idir,
-      pec
+      pec,
+      status
     };
   }
 }

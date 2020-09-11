@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { ActivatedRoute } from '@angular/router';
 
@@ -20,6 +21,7 @@ export class SiteRegistrationTableComponent implements OnInit {
 
   public columns: string[];
 
+  public SiteStatusType = SiteStatusType;
   public CareSettingEnum = CareSettingEnum;
   public AdjudicationRoutes = AdjudicationRoutes;
 
@@ -59,6 +61,15 @@ export class SiteRegistrationTableComponent implements OnInit {
 
   public onRoute(routePath: string | (string | number)[]) {
     this.route.emit(routePath);
+  }
+
+  // TODO status lookup for sites would remove the need for this method and only require pipes
+  public displayStatus(status: SiteStatusType) {
+    return (status === SiteStatusType.APPROVED)
+      ? 'Approved'
+      : (status === SiteStatusType.DECLINED)
+        ? 'Declined'
+        : 'Under Review';
   }
 
   public remoteUsers(siteRegistration: SiteRegistrationListViewModel): number | 'Yes' | 'No' | 'N/A' {
