@@ -110,14 +110,14 @@ const routes: Routes = [
                     component: BusinessLicenceComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Submit Your Business Licence' }
+                    data: { title: 'Business Licence' }
                   },
                   {
                     path: SiteRoutes.SITE_ADDRESS,
                     component: SiteAddressComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Site Name' }
+                    data: { title: 'Site Address' }
                   },
                   {
                     path: SiteRoutes.HOURS_OPERATION,
@@ -145,7 +145,7 @@ const routes: Routes = [
                     component: TechnicalSupportComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Technical Support' }
+                    data: { title: 'Technical Support Contact' }
                   },
                   {
                     path: SiteRoutes.REMOTE_USERS,

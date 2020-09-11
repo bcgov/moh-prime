@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Services.Rules;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {

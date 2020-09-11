@@ -59,6 +59,7 @@ namespace Prime.Services
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.AccessTerms)
+                .Include(e => e.SelfDeclarations)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             bool minorUpdate = await _submissionRulesService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
@@ -73,20 +74,22 @@ namespace Prime.Services
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
 
-            // TODO Verfifiable Credentials commented out for push to prod because prod aries agent is not ready
             // TODO need robust issuance rules to be added since each submission shouldn't create
             // a new connection and issue a new credential
             // TODO when/where should a new credential be issued?
             // TODO check for an active connection
             // TODO check for issued credential
-            // try
-            // {
-            //     await _verifiableCredentialService.CreateConnectionAsync(enrollee);
-            // }
-            // catch (Exception ex)
-            // {
-            //     _logger.LogError("Error occurred attempting to create a connection invitation through the Verifiable Credential agent: ${ex}", ex);
-            // }
+            if (_httpContext.HttpContext.User.hasVCIssuance())
+            {
+                try
+                {
+                    await _verifiableCredentialService.CreateConnectionAsync(enrollee);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Error occurred attempting to create a connection invitation through the Verifiable Credential agent: ${ex}", ex);
+                }
+            }
 
             await this.ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();

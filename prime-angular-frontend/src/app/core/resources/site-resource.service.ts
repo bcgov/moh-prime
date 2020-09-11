@@ -11,10 +11,12 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
+import { BusinessDay } from '@registration/shared/models/business-day.model';
+import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
-import { BusinessDay } from '@registration/shared/models/business-day.model';
+import { RemoteUser } from '@registration/shared/models/remote-user.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -45,8 +47,9 @@ export class SiteResource {
       );
   }
 
-  public getSiteById(siteId: number): Observable<Site> {
-    return this.apiResource.get<Site>(`sites/${siteId}`)
+  public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
+    return this.apiResource.get<Site>(`sites/${siteId}`, params)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         map((site: Site) => {
@@ -127,13 +130,25 @@ export class SiteResource {
       );
   }
 
-  public sendRemoteUsersEmail(siteId: number): NoContent {
-    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email`)
+  public sendRemoteUsersEmailAdmin(siteId: number): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-admin`)
       .pipe(
         map(() => { }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Remote users update email could not be sent');
-          this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmail error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmailAdmin error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public sendRemoteUsersEmailUser(siteId: number, newRemoteUsers: RemoteUser[]): NoContent {
+    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-user`, newRemoteUsers)
+      .pipe(
+        map(() => { }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Remote users email could not be sent');
+          this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmailUser error has occurred: ', error);
           throw error;
         })
       );
@@ -151,6 +166,35 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updatePecCode error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public setSiteAdjudicator(siteId: number, adjudicatorId?: number): Observable<Site> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
+    return this.apiResource.put<Site>(`sites/${siteId}/adjudicator`, null, params)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        map((site: Site) => site),
+        tap((site: Site) => this.logger.info('UPDATED_SITE', site)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Adjudicator could not be assigned');
+          this.logger.error('[Adjudication] AdjudicationResource::setSiteAdjudicator error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public removeSiteAdjudicator(siteId: number): Observable<Site> {
+    return this.apiResource.delete<Site>(`sites/${siteId}/adjudicator`)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        map((site: Site) => site),
+        tap((site: Site) => this.logger.info('UPDATED_SITE', site)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Adjudicator could not be unassigned');
+          this.logger.error('[Adjudication] AdjudicationResource::removeSiteAdjudicator error has occurred: ', error);
           throw error;
         })
       );
@@ -218,6 +262,40 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Business Licence token could not be Retrieved');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicenceDownloadToken error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public approveSite(siteId: number): Observable<string> {
+    return this.apiResource.post<string>(`sites/${siteId}/approval`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Site registration has been approved')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site registration could not be approved');
+          this.logger.error('[SiteRegistration] SiteResource::approveSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public declineSite(): void {
+    // TODO: Future implementation
+  }
+
+  public createSiteRegistrationNote(siteId: number, note: string): Observable<SiteRegistrationNote> {
+    const payload = { data: note };
+    return this.apiResource.post(`sites/${siteId}/site-registration-notes`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<SiteRegistrationNote>) => response.result),
+        tap((adjudicatorNote: SiteRegistrationNote) => {
+          this.toastService.openErrorToast('Site Registration Note has been saved');
+          this.logger.info('NEW_SITE_REGISTRATION_NOTE', adjudicatorNote);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site Registration note could not be saved');
+          this.logger.error('[SiteRegistration] SiteResource::createSiteRegistrationNote error has occurred: ', error);
           throw error;
         })
       );

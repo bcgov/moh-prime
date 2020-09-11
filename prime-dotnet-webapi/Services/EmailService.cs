@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using Prime.Models;
 using System.IO;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
@@ -39,6 +39,11 @@ namespace Prime.Services
         {
             Site = site;
             DocumentUrl = documentUrl;
+        }
+
+        public EmailParams(Site site)
+        {
+            Site = site;
         }
     }
 
@@ -165,6 +170,20 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
         }
 
+        public async Task SendRemoteUsersNotificationAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
+        {
+            var subject = "Remote Practitioner Notification";
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/RemoteUserNotificationEmail.cshtml",
+                new EmailParams(site));
+
+            foreach (var remoteUser in remoteUsers)
+            {
+                await Send(PRIME_EMAIL, remoteUser.Email, subject, body);
+            }
+
+        }
+
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
         {
             var businessLicenceDoc = await _siteService.GetLatestBusinessLicenceAsync(siteId);
@@ -172,14 +191,35 @@ namespace Prime.Services
             return documentAccessToken.DownloadUrl;
         }
 
-        // TODO currently the front-end restricts uploads to images, but when that changes to include PDF uploads
-        // this method needs to be refactored to check for mimetype (PDF vs image) to skip PDF generation
         private async Task<IEnumerable<(string Filename, byte[] Content)>> getSiteRegistrationAttachments(Site site)
         {
             var organization = site.Organization;
             var organizationAgreementHtml = "";
-            if (await _organizationService.GetLatestSignedAgreementAsync(organization.Id) != null)
+
+            string organizationAgreementFilename = "OrganizationAgreement.pdf";
+            string registrationReviewFilename = "SiteRegistrationReview.pdf";
+
+            var siteRegistrationReviewHtml = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
+
+            var signedOrganizationAgreementDocument = await _organizationService.GetLatestSignedAgreementAsync(organization.Id);
+            if (signedOrganizationAgreementDocument != null)
             {
+                var fileExt = signedOrganizationAgreementDocument.Filename.Split(".").Last();
+
+                if (fileExt.Equals("pdf"))
+                {
+                    // If the file is already a pdf we can skip the conversion steps and return it.
+                    var stream = await _documentService.GetStreamForLatestSignedAgreementDocument(organization.Id);
+                    MemoryStream ms = new MemoryStream();
+                    stream.CopyTo(ms);
+
+                    return new (string Filename, byte[] HtmlContent)[]
+                    {
+                        (organizationAgreementFilename, ms.ToArray()),
+                        (registrationReviewFilename, _pdfService.Generate(siteRegistrationReviewHtml))
+                    };
+                }
+
                 Document organizationAgreementDoc = null;
                 string organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
                 try
@@ -202,12 +242,10 @@ namespace Prime.Services
                 organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
             }
 
-            string registrationReviewFilename = "SiteRegistrationReview.pdf";
-
             return new (string Filename, string HtmlContent)[]
             {
-                ("OrganizationAgreement.pdf", organizationAgreementHtml),
-                (registrationReviewFilename, await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site))
+                (organizationAgreementFilename, organizationAgreementHtml),
+                (registrationReviewFilename, siteRegistrationReviewHtml)
             }
             .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
         }
@@ -257,13 +295,12 @@ namespace Prime.Services
                 throw new ArgumentException("Must specify at least one \"To\" email address.");
             }
 
-            if (PrimeConstants.ENVIRONMENT_NAME != "prod")
+            if (!PrimeEnvironment.IsProduction)
             {
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }
 
-            // If CHES Email Service is running and CHES_ENABLED = true, else send through smtp
-            if (PrimeConstants.CHES_ENABLED == "true" && await _chesClient.HealthCheckAsync())
+            if (PrimeEnvironment.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
             {
                 await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
             }

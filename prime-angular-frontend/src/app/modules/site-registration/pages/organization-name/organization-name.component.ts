@@ -49,7 +49,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'Organization Name';
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -66,7 +66,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
   }
 
   public getOrgBookLink(orgId: string) {
-    return `https://www.orgbook.gov.bc.ca/en/organization/${orgId}`;
+    return `https://www.orgbook.gov.bc.ca/en/organization/registration.registries.ca/${orgId}`;
   }
 
   public onSubmit() {

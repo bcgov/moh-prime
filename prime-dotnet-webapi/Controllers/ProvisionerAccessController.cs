@@ -121,7 +121,7 @@ namespace Prime.Controllers
                 this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in an editable state.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
-            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
+            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
 
             // Only a few provisioners want emails sent directly, otherwise sent only to managers
             if (provisionerName == "iClinic" || provisionerName == "MediNet" || provisionerName == "Other")

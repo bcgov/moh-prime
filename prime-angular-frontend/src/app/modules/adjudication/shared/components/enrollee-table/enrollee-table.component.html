@@ -5,9 +5,9 @@
            [dataSource]="dataSource"
            class="w-100">
 
-      <ng-container matColumnDef="uniqueId">
+      <ng-container matColumnDef="displayId">
         <th mat-header-cell
-            *matHeaderCellDef> Unique ID </th>
+            *matHeaderCellDef> Reference ID </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.displayId }} </td>
       </ng-container>
@@ -126,12 +126,12 @@
           <span>Add and View Notes</span>
         </button>
 
-        <mat-divider></mat-divider>
+        <mat-divider [inset]="true"></mat-divider>
 
         <button mat-menu-item
                 (click)="onNotify(row.id)">
           <mat-icon>email</mat-icon>
-          <span>Send Reminder</span>
+          <span>Send Email</span>
         </button>
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"

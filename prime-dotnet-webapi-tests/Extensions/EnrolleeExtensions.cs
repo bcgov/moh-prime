@@ -11,7 +11,7 @@ namespace PrimeTests
 {
     public static class EnrolleeExtensions
     {
-        public static EnrolleeUpdateModel ToViewModel(this Enrollee enrollee)
+        public static EnrolleeUpdateModel ToUpdateModel(this Enrollee enrollee)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings
             {

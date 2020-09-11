@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {

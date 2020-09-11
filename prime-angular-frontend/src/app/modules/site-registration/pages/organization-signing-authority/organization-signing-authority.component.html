@@ -1,5 +1,4 @@
 <app-page [busy]="busy">
-  <app-site-collection-notice [isFull]="false"></app-site-collection-notice>
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
@@ -10,8 +9,8 @@
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Signing Authority Information</ng-container>
         <ng-container appPageSubheader2Summary>
-          This information comes from your BC Services Card. If you use a different name professionally, select "I have
-          a preferred name."
+          This information comes from your BC Services Card. If you have a name that is different than your legal name,
+          enter your full preferred name.
           <em class="emphasize">
             Entering a preferred name in Site Registration will not change your BC Services Card name.
           </em>
@@ -163,8 +162,7 @@
           <ng-container appPageSubheader2Title>Mailing Address</ng-container>
         </app-page-subheader2>
 
-        <app-address [form]="mailingAddress"
-                     [bcOnly]="true"></app-address>
+        <app-address [form]="mailingAddress"></app-address>
       </section>
 
     </ng-container>
@@ -182,7 +180,7 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="Job or Role Title"
+                   placeholder="Job Title"
                    formControlName="jobRoleTitle">
             <mat-error>Required</mat-error>
           </mat-form-field>

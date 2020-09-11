@@ -239,7 +239,6 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudicator-notes", Name = nameof(GetAdjudicatorNotes))]
         [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -266,7 +265,6 @@ namespace Prime.Controllers
         /// <param name="link"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -423,14 +421,14 @@ namespace Prime.Controllers
         /// Add an enrollee's assigned adjudicator.
         /// </summary>
         /// <param name="enrolleeId"></param>
+        /// <param name="adjudicatorId"></param>
         [HttpPut("{enrolleeId}/adjudicator", Name = nameof(SetEnrolleeAdjudicator))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> SetEnrolleeAdjudicator(int enrolleeId)
+        public async Task<ActionResult<Enrollee>> SetEnrolleeAdjudicator(int enrolleeId, [FromQuery] int? adjudicatorId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -439,8 +437,16 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
-            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, admin);
+            Admin admin = (adjudicatorId.HasValue)
+                ? await _adminService.GetAdminAsync(adjudicatorId.Value)
+                : await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            if (admin == null)
+            {
+                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
+            }
+
+            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, admin.Id);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin claimed enrollee");
 
             return Ok(ApiResponse.Result(updatedEnrollee));
@@ -453,7 +459,6 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/adjudicator", Name = nameof(RemoveEnrolleeAdjudicator))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -524,6 +529,32 @@ namespace Prime.Controllers
             var username = admin.IDIR.Replace("@idir", "");
             await _emailService.SendReminderEmailAsync(enrollee);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Email reminder sent to Enrollee by {username}");
+
+            return NoContent();
+        }
+
+        // POST: api/Enrollees/5/events/email-initiated
+        /// <summary>
+        /// Logs a business event for email initiated
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/events/email-initiated", Name = nameof(CreateInitiatedEnrolleeEmailEvent))]
+        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> CreateInitiatedEnrolleeEmailEvent(int enrolleeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var username = admin.IDIR.Replace("@idir", "");
+
+            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Email Initiated to Enrollee by {username}");
 
             return NoContent();
         }

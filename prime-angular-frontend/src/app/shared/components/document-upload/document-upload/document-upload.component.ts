@@ -32,6 +32,7 @@ export class DocumentUploadComponent implements OnInit {
   @Input() public componentName: string;
   @Input() public multiple: boolean;
   @Input() public additionalApiSuffix: string;
+  @Input() public labelMessage: string;
   @Output() public completed: EventEmitter<BaseDocument> = new EventEmitter();
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
   public filePondOptions: FilePondOptions & FilePondPluginFileValidateSizeProps & FilePondPluginFileValidateTypeProps;
@@ -43,18 +44,21 @@ export class DocumentUploadComponent implements OnInit {
   constructor(
     private keycloakTokenService: KeycloakTokenService,
     private logger: LoggerService,
-  ) { }
+  ) {
+    this.labelMessage = 'Click to Browse or Drop files here';
+  }
 
   public ngOnInit(): void {
     // Keys are the excepted mime types, values are the human-readable expected type labels.
     const fileValidateTypeLabelExpectedTypesMap = {
       'image/jpeg': '.jpeg, .jpg',
-      'image/png': '.png'
+      'image/png': '.png',
+      'application/pdf': '.pdf'
     };
 
     this.filePondOptions = {
       className: `prime-filepond-${this.componentName}`,
-      labelIdle: 'Click to Browse or Drop files here',
+      labelIdle: this.getIdleText(fileValidateTypeLabelExpectedTypesMap),
       fileValidateTypeLabelExpectedTypesMap,
       acceptedFileTypes: Object.keys(fileValidateTypeLabelExpectedTypesMap),
       allowFileTypeValidation: true,
@@ -63,7 +67,7 @@ export class DocumentUploadComponent implements OnInit {
       maxTotalFileSize: null,
       server: this.constructServer()
     };
-    
+
     if (this.additionalApiSuffix) {
       this.apiSuffix = `${this.apiSuffix}/${this.additionalApiSuffix}`;
     }
@@ -76,6 +80,21 @@ export class DocumentUploadComponent implements OnInit {
   public async onFilePondAddFile() {
     // Can't get token synchronously inside server.process(), so refresh token on file add.
     this.jwt = await this.keycloakTokenService.token();
+  }
+
+  private getIdleText(allowedFileTypesMap: { [key: string]: string }): string {
+    if (!allowedFileTypesMap) {
+      return this.labelMessage;
+    }
+
+    const [initialFileType, ...fileTypes] = Object.values(allowedFileTypesMap);
+    const allowedFileTypes = fileTypes.reduce((concat, fileType, index) =>
+      (index === fileTypes.length - 1)
+        ? `${concat}, or ${fileType}`
+        : `${concat}, ${fileType}`
+      , initialFileType);
+
+    return `${this.labelMessage}. Files must be ${allowedFileTypes}`;
   }
 
   private constructServer() {

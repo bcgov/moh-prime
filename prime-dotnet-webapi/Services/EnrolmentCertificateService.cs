@@ -42,11 +42,11 @@ namespace Prime.Services
             return null;
         }
 
-        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
+        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(int enrolleeId)
         {
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
-                Enrollee = enrollee,
+                EnrolleeId = enrolleeId,
                 ViewCount = 0,
                 Expires = DateTimeOffset.Now.Add(EnrolmentCertificateAccessToken.Lifespan),
                 Active = true

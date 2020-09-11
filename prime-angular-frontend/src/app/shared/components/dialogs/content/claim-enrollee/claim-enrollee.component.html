@@ -1,7 +1,7 @@
 <h2 mat-dialog-title
     class="d-flex align-items-stretch">
   <span class="flex-grow-1">
-    Disclaim Enrolment
+    Disclaim Enrollee
   </span>
 </h2>
 <mat-dialog-content>
@@ -21,8 +21,8 @@
   <mat-menu #menu="matMenu">
     <button mat-menu-item
             (click)="onClaim(adjudicator.id)"
-            *ngFor="let adjudicator of adjudicators$ | async">{{ adjudicator.lastName }},
-      {{ adjudicator.firstName }}
+            *ngFor="let adjudicator of adjudicators$ | async">
+      {{ adjudicator.lastName }}, {{ adjudicator.firstName }}
     </button>
   </mat-menu>
 </mat-dialog-content>

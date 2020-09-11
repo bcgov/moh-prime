@@ -7,14 +7,15 @@ import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
-import { Party } from '@registration/shared/models/party.model';
 import { Site } from '@registration/shared/models/site.model';
-import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
+import { Party } from '@registration/shared/models/party.model';
+import { Contact } from '@registration/shared/models/contact.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
-import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
+import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
+import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -81,7 +82,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       this.administratorPharmaNetForm.getRawValue(),
       this.privacyOfficerForm.getRawValue(),
       this.technicalSupportForm.getRawValue()
-    ].map((party: Party) => this.toPartyJson(party));
+    ].map((contact: Contact) => this.toPersonJson<Contact>(contact));
 
     // Includes site related keys to uphold relationships, and allow for updates
     // to a site. Keys not for update have been omitted and the type enforced
@@ -195,7 +196,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       // validation to occur when "Have Remote Users" is toggled
       form.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
 
-      site.remoteUsers.map((remoteUser: RemoteUser) => {
+      site.remoteUsers.forEach((remoteUser: RemoteUser) => {
         const group = this.createEmptyRemoteUserFormAndPatch(remoteUser);
         remoteUsersFormArray.push(group);
       });
@@ -207,7 +208,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       [this.technicalSupportForm, site.technicalSupport]
     ]
       .filter(([form, data]: [FormGroup, Party]) => data)
-      .forEach((formParty: [FormGroup, Party]) => this.toPartyFormModel(formParty));
+      .forEach((formParty: [FormGroup, Party]) => this.toPersonFormModel<Contact>(formParty));
   }
 
   /**
@@ -216,10 +217,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * it with a remote user if provided.
    */
   public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
-    const group = this.remoteUserFormGroup() as FormGroup;
+    const group = this.remoteUserFormGroup();
     if (remoteUser) {
-      const { id, firstName, lastName, remoteUserLocations, remoteUserCertifications } = remoteUser;
-      group.patchValue({ id, firstName, lastName });
+      const { id, firstName, lastName, email, remoteUserLocations, remoteUserCertifications } = remoteUser;
+      group.patchValue({ id, firstName, lastName, email });
       const array = group.get('remoteUserLocations') as FormArray;
       remoteUserLocations
         .map((rul: RemoteUserLocation) => {
@@ -324,6 +325,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         null,
         [Validators.required]
       ],
+      email: [
+        null,
+        [Validators.required]
+      ],
       remoteUserCertifications: this.fb.array([]),
       remoteUserLocations: this.fb.array(
         [],
@@ -371,10 +376,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     return this.fb.group({
       id: [
         0,
-        []
-      ],
-      userId: [
-        '00000000-0000-0000-0000-000000000000',
         []
       ],
       firstName: [

@@ -1320,6 +1320,58 @@ namespace Prime.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Prime.Models.Contact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Fax")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("JobRoleTitle")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("PhysicalAddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SMSPhone")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhysicalAddressId");
+
+                    b.ToTable("Contact");
+                });
+
             modelBuilder.Entity("Prime.Models.Country", b =>
                 {
                     b.Property<string>("Code")
@@ -1403,6 +1455,18 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Credential");
+                });
+
+            modelBuilder.Entity("Prime.Models.DbViews.NewestAgreement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewestAgreements");
                 });
 
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
@@ -7340,6 +7404,10 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -7631,6 +7699,9 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int?>("AdjudicatorId")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("AdministratorPharmaNetId")
                         .HasColumnType("integer");
 
@@ -7681,6 +7752,8 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AdjudicatorId");
+
                     b.HasIndex("AdministratorPharmaNetId");
 
                     b.HasIndex("CareSettingCode");
@@ -7696,6 +7769,47 @@ namespace Prime.Migrations
                     b.HasIndex("TechnicalSupportId");
 
                     b.ToTable("Site");
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("AdjudicatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("NoteDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdjudicatorId");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("SiteRegistrationNote");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationReviewDocument", b =>
@@ -13840,6 +13954,13 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Prime.Models.Contact", b =>
+                {
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId");
+                });
+
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
                 {
                     b.HasOne("Prime.Models.License", "License")
@@ -14092,7 +14213,11 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Site", b =>
                 {
-                    b.HasOne("Prime.Models.Party", "AdministratorPharmaNet")
+                    b.HasOne("Prime.Models.Admin", "Adjudicator")
+                        .WithMany()
+                        .HasForeignKey("AdjudicatorId");
+
+                    b.HasOne("Prime.Models.Contact", "AdministratorPharmaNet")
                         .WithMany()
                         .HasForeignKey("AdministratorPharmaNetId");
 
@@ -14110,7 +14235,7 @@ namespace Prime.Migrations
                         .WithMany()
                         .HasForeignKey("PhysicalAddressId");
 
-                    b.HasOne("Prime.Models.Party", "PrivacyOfficer")
+                    b.HasOne("Prime.Models.Contact", "PrivacyOfficer")
                         .WithMany()
                         .HasForeignKey("PrivacyOfficerId");
 
@@ -14118,9 +14243,24 @@ namespace Prime.Migrations
                         .WithMany()
                         .HasForeignKey("ProvisionerId");
 
-                    b.HasOne("Prime.Models.Party", "TechnicalSupport")
+                    b.HasOne("Prime.Models.Contact", "TechnicalSupport")
                         .WithMany()
                         .HasForeignKey("TechnicalSupportId");
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>
+                {
+                    b.HasOne("Prime.Models.Admin", "Adjudicator")
+                        .WithMany()
+                        .HasForeignKey("AdjudicatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithMany("SiteRegistrationNotes")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationReviewDocument", b =>

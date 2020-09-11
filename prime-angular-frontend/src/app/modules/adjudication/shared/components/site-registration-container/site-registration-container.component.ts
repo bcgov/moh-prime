@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable, EMPTY, of, noop, combineLatest } from 'rxjs';
-import { exhaustMap, map, tap, withLatestFrom, take } from 'rxjs/operators';
+import { Subscription, Observable, EMPTY, of, noop, combineLatest, concat } from 'rxjs';
+import { exhaustMap, map, tap, take } from 'rxjs/operators';
 
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 
@@ -14,13 +14,16 @@ import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-proper
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { ClaimSiteComponent, ClaimSiteAction } from '@shared/components/dialogs/content/claim-site/claim-site.component';
+import { ClaimActionEnum } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
-import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -29,6 +32,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class SiteRegistrationContainerComponent implements OnInit {
   @Input() public hasActions: boolean;
+  @Input() public actions: TemplateRef<any>;
   @Input() public content: TemplateRef<any>;
   @Input() public refresh: Observable<boolean>;
   @Output() public action: EventEmitter<void>;
@@ -71,6 +75,36 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.getDataset(this.route.snapshot.queryParams);
   }
 
+  public onClaim(siteId: number) {
+    this.siteResource
+      .setSiteAdjudicator(siteId)
+      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
+  }
+
+  public onDisclaim(siteId: number) {
+    const data: DialogOptions = {
+      title: 'Disclaim Site'
+    };
+
+    this.busy = this.dialog.open(ClaimSiteComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: ClaimSiteAction }) => {
+          if (!result) { return EMPTY; }
+
+          if (result.output.action === ClaimActionEnum.Disclaim) {
+            return this.siteResource.removeSiteAdjudicator(siteId);
+          } else if (result.output.action === ClaimActionEnum.Claim) {
+            return concat(
+              this.siteResource.removeSiteAdjudicator(siteId),
+              this.siteResource.setSiteAdjudicator(siteId, result.output.adjudicatorId)
+            );
+          }
+        })
+      )
+      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
+  }
+
   public onRoute(routePath: string | (string | number)[]) {
     this.routeUtils.routeWithin(routePath);
   }
@@ -79,6 +113,51 @@ export class SiteRegistrationContainerComponent implements OnInit {
     (record.organizationId)
       ? this.deleteOrganization(record.organizationId)
       : this.deleteSite(record.siteId);
+  }
+
+  public onApprove(siteId: number) {
+    const data: DialogOptions = {
+      title: 'Approve Site Registration',
+      message: 'Are you sure you want to approve this Registration?',
+      actionText: 'Approve Site Registration',
+      component: NoteComponent
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
+        exhaustMap((note: string) => this.siteResource.approveSite(siteId).pipe(map(() => note))),
+        exhaustMap((note: string) =>
+          (note)
+            ? this.siteResource.createSiteRegistrationNote(siteId, note)
+            : of(noop)
+        ),
+      )
+      .subscribe();
+  }
+
+  public onDecline(siteId: number) {
+    const data: DialogOptions = {
+      title: 'Decline Site Registration',
+      message: 'Are you sure you want to Decline this Site Registration?',
+      actionText: 'Decline Site Registration',
+      component: NoteComponent
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
+        // TODO: Implement Decline pathway
+        // exhaustMap((note: string) => this.siteResource.declineSite(siteId).pipe(map(() => note))),,
+        exhaustMap((note: string) =>
+          (note)
+            ? this.siteResource.createSiteRegistrationNote(siteId, note)
+            : of(noop)
+        ),
+      )
+      .subscribe();
   }
 
   public ngOnInit(): void {
@@ -106,7 +185,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       ])
         .pipe(
           take(1),
-          map(this.toSiteRegistration)
+          map(this.toSiteRegistration())
         )
       : this.getOrganizations(queryParams)
         .pipe(
@@ -134,6 +213,16 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   private getSiteById(siteId: number): Observable<Site> {
     return this.siteResource.getSiteById(siteId);
+  }
+
+  private updateSite(updatedSite: Site) {
+    const siteRegistration = this.dataSource.data.find((siteReg: SiteRegistrationListViewModel) => siteReg.siteId === updatedSite.id);
+    const updatedSiteRegistration = {
+      ...siteRegistration,
+      ...this.toSiteViewModelPartial(updatedSite)
+    };
+    this.dataSource.data = MatTableDataSourceUtils
+      .update<SiteRegistrationListViewModel>(this.dataSource, 'siteId', updatedSiteRegistration);
   }
 
   private deleteOrganization(organizationId: number) {
@@ -198,17 +287,32 @@ export class SiteRegistrationContainerComponent implements OnInit {
     return [].concat(...siteRegistrations);
   }
 
-  private toSiteRegistration([organization, site]: [Organization, Site]): SiteRegistrationListViewModel[] {
-    const {
-      id: organizationId,
-      displayId,
-      signingAuthorityId,
-      signingAuthority,
-      name,
-      signedAgreementDocuments,
-      completed,
-      acceptedAgreementDate
-    } = organization;
+  private toSiteRegistration(): ([organization, site]: [Organization, Site]) => SiteRegistrationListViewModel[] {
+    return ([organization, site]: [Organization, Site]) => {
+      const {
+        id: organizationId,
+        displayId,
+        signingAuthorityId,
+        signingAuthority,
+        name,
+        signedAgreementDocuments,
+        acceptedAgreementDate
+      } = organization;
+
+      return [{
+        organizationId,
+        displayId,
+        signingAuthorityId,
+        signingAuthority,
+        name,
+        signedAgreementDocumentCount: signedAgreementDocuments.length,
+        acceptedAgreementDate,
+        ...this.toSiteViewModelPartial(site)
+      }];
+    };
+  }
+
+  private toSiteViewModelPartial(site: Site): SiteListViewModelPartial {
     const {
       id: siteId,
       physicalAddress,
@@ -216,25 +320,19 @@ export class SiteRegistrationContainerComponent implements OnInit {
       submittedDate,
       careSettingCode,
       siteVendors,
+      adjudicator,
       pec
     } = site;
 
-    return [{
-      organizationId,
-      displayId,
-      signingAuthorityId,
-      signingAuthority,
-      name,
-      signedAgreementDocumentCount: signedAgreementDocuments.length,
-      completed,
-      acceptedAgreementDate,
+    return {
       siteId,
       physicalAddress,
       doingBusinessAs,
       submittedDate,
       careSettingCode,
       siteVendors,
+      adjudicatorIdir: adjudicator?.idir,
       pec
-    }];
+    };
   }
 }

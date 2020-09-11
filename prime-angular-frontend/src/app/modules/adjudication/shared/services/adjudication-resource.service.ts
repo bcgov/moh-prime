@@ -78,8 +78,9 @@ export class AdjudicationResource {
       );
   }
 
-  public setEnrolleeAdjudicator(enrolleeId: number): Observable<HttpEnrollee> {
-    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`)
+  public setEnrolleeAdjudicator(enrolleeId: number, adjudicatorId?: number): Observable<HttpEnrollee> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
+    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`, null, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         map((enrollee: HttpEnrollee) => enrollee),
@@ -168,6 +169,21 @@ export class AdjudicationResource {
           throw error;
         })
       );
+  }
+
+  public createInitiatedEnrolleeEmailEvent(enrolleeId: number): NoContent {
+    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/events/email-initiated`)
+      .pipe(
+        map(() => {
+          this.toastService.openErrorToast('Enrollee initiated email event has been created');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee initiated email event could not be created');
+          this.logger.error('[Enrolment] EnrolmentResource::createInitiatedEnrolleeEmailEvent error has occurred: ', error);
+          throw error;
+        })
+      );
+
   }
 
   public getAdjudicatorNotes(enrolleeId: number): Observable<AdjudicationNote[]> {
@@ -307,62 +323,8 @@ export class AdjudicationResource {
   }
 
   // ---
-  // Site Registration
-  // ---
-
-  public getSites(textSearch?: string, statusCode?: number): Observable<Site[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode });
-    return this.apiResource.get<Site[]>('sites', params)
-      .pipe(
-        map((response: ApiHttpResponse<Site[]>) => response.result),
-        tap((sites: Site[]) => this.logger.info('SITES', sites)),
-        map((sites: Site[]) => sites),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Sites could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getSites error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
-    return this.apiResource.get<Site>(`sites/${siteId}`, params)
-      .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap((site: Site) => this.logger.info('SITE', site)),
-        map((site: Site) => site),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Site could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getSiteById error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public deleteSite(siteId: number): Observable<Site> {
-    return this.apiResource.delete<Site>(`sites/${siteId}`)
-      .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap((site: Site) => {
-          this.toastService.openSuccessToast('Site has been deleted');
-          this.logger.info('DELETED_SITE', site);
-        }),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Site could not be deleted');
-          this.logger.error('[Adjudication] AdjudicationResource::deleteSite error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  // ---
   // Enrollee and Enrolment Adapters
   // ---
-
-  private enrolleesAdapterResponse(enrollees: HttpEnrollee[]): HttpEnrollee[] {
-    return enrollees.map((enrollee: HttpEnrollee): HttpEnrollee => this.enrolleeAdapterResponse(enrollee));
-  }
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): HttpEnrollee {
     if (!enrollee.mailingAddress) {
@@ -411,7 +373,7 @@ export class AdjudicationResource {
 
     if (keys.every((key: string) => profileSnapshot.hasOwnProperty(key))) {
       profileSnapshot.selfDeclarations = [];
-      keys.map((key: string, index: number) => {
+      keys.forEach((key: string, index: number) => {
         if (profileSnapshot[key]) {
           profileSnapshot.selfDeclarations.push({
             selfDeclarationDetails: profileSnapshot[`${key}Details`],

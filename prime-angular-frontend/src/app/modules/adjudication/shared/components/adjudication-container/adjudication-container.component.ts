@@ -27,6 +27,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -52,7 +53,8 @@ export class AdjudicationContainerComponent implements OnInit {
     protected router: Router,
     private authService: AuthService,
     private adjudicationResource: AdjudicationResource,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private utilsService: UtilsService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
 
@@ -77,9 +79,14 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onNotify(enrolleeId: number) {
-    this.adjudicationResource
-      .sendEnrolleeReminderEmail(enrolleeId)
-      .subscribe();
+    this.adjudicationResource.getEnrolleeById(enrolleeId)
+      .pipe(
+        exhaustMap((enrollee: HttpEnrollee) => this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
+          .pipe(map(() => enrollee)))
+      )
+      .subscribe((enrollee: HttpEnrollee) => {
+        this.utilsService.mailTo(enrollee.contactEmail);
+      });
   }
 
   public onClaim(enrolleeId: number) {
@@ -105,7 +112,7 @@ export class AdjudicationContainerComponent implements OnInit {
           } else if (result.output.action === ClaimActionEnum.Claim) {
             return concat(
               this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId),
-              this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId)
+              this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, result.output.adjudicatorId)
             );
           }
         })
@@ -354,21 +361,11 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   private adjudicationActionPipe(enrolleeId: number, action: SubmissionAction) {
-    let note: string;
-
     return pipe(
-      exhaustMap((result: { output: string }) => {
-        if (result?.output) {
-          note = result.output;
-        }
-
-        return (result)
-          ? of(noop)
-          : EMPTY;
-      }),
-      exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, action)),
-      exhaustMap(() => this.adjudicationResource.createEnrolmentReference(enrolleeId)),
-      exhaustMap(() =>
+      exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
+      exhaustMap((note: string) => this.adjudicationResource.submissionAction(enrolleeId, action).pipe(map(() => note))),
+      exhaustMap((note: string) => this.adjudicationResource.createEnrolmentReference(enrolleeId).pipe(map(() => note))),
+      exhaustMap((note: string) =>
         (note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, note, true)
           : of(noop)

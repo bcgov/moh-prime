@@ -8,7 +8,7 @@ using Prime;
 using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 
 namespace PrimeTests.UnitTests
 {

@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
+import { SiteResource } from '@core/resources/site-resource.service';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { Site } from '@registration/shared/models/site.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
   selector: 'app-site-registration',
@@ -20,11 +20,11 @@ export class SiteRegistrationComponent extends AbstractComponent implements OnIn
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
-    private adjudicationResource: AdjudicationResource
+    private siteResource: SiteResource
   ) {
     super(route, router);
 
-    this.hasActions = true;
+    this.hasActions = false;
   }
 
   public ngOnInit(): void {
@@ -32,7 +32,7 @@ export class SiteRegistrationComponent extends AbstractComponent implements OnIn
   }
 
   private getSite(siteId: number, statusCode?: number): void {
-    this.busy = this.adjudicationResource.getSiteById(siteId, statusCode)
+    this.busy = this.siteResource.getSiteById(siteId, statusCode)
       .subscribe((site: Site) => this.site = site);
   }
 }
