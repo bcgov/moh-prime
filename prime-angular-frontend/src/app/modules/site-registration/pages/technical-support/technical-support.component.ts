@@ -98,7 +98,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
         queryParams: { redirect: `${SiteRoutes.SITES}/${siteId}`, siteId }
       });
     } else {
-      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     }
   }
 

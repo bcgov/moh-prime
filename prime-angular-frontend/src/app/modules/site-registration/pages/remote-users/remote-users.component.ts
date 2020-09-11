@@ -138,9 +138,9 @@ export class RemoteUsersComponent implements OnInit {
 
   public nextRoute() {
     if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.SITE_REVIEW]);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
+      this.routeUtils.routeRelativeTo(['../', SiteRoutes.ADMINISTRATOR]);
     }
   }
 
