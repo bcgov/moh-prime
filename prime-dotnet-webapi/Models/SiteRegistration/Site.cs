@@ -56,7 +56,7 @@ namespace Prime.Models
 
         public ICollection<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
 
-        public IEnumerable<RemoteUser> RemoteUsers { get; set; }
+        public ICollection<RemoteUser> RemoteUsers { get; set; }
 
         public int? AdjudicatorId { get; set; }
 
