@@ -4,52 +4,59 @@
     <table mat-table
            [dataSource]="dataSource"
            class="w-100">
-      s
+
       <ng-container matColumnDef="displayId">
         <th mat-header-cell
-            *matHeaderCellDef> Reference ID </th>
+            *matHeaderCellDef
+            scope="col"> Reference ID </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.displayId }} </td>
       </ng-container>
 
       <ng-container matColumnDef="organizationName">
         <th mat-header-cell
-            *matHeaderCellDef> Organization Name </th>
+            *matHeaderCellDef
+            scope="col"> Organization Name </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.name | default: '' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="signingAuthority">
         <th mat-header-cell
-            *matHeaderCellDef> Signing Authority </th>
+            *matHeaderCellDef
+            scope="col"> Signing Authority </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.signingAuthority | fullname | default: '' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="doingBusinessAs">
         <th mat-header-cell
-            *matHeaderCellDef> Doing Business As </th>
+            *matHeaderCellDef
+            scope="col"> Doing Business As </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.doingBusinessAs | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="submissionDate">
         <th mat-header-cell
-            *matHeaderCellDef> Submission Date </th>
+            *matHeaderCellDef
+            scope="col"> Submission Date </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.submittedDate | formatDate | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="adjudicator">
         <th mat-header-cell
-            *matHeaderCellDef> Adjudicator </th>
+            *matHeaderCellDef
+            scope="col"> Adjudicator </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="siteAdjudication">
         <th mat-header-cell
-            *matHeaderCellDef> Site Adjudication </th>
+            *matHeaderCellDef
+            scope="col"> Site Adjudication </th>
         <td mat-cell
             *matCellDef="let row;"
             class="status"
@@ -62,7 +69,8 @@
 
       <ng-container matColumnDef="siteId">
         <th mat-header-cell
-            *matHeaderCellDef> Site ID </th>
+            *matHeaderCellDef
+            scope="col"> Site ID </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.pec | default }} </td>
       </ng-container>
@@ -76,14 +84,16 @@
 
       <ng-container matColumnDef="careSetting">
         <th mat-header-cell
-            *matHeaderCellDef> Care Setting </th>
+            *matHeaderCellDef
+            scope="col"> Care Setting </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.careSettingCode | configCode: 'careSettings' | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell
-            *matHeaderCellDef>&nbsp;</th>
+            *matHeaderCellDef
+            scope="col">&nbsp;</th>
         <td mat-cell
             *matCellDef="let row;"
             class="text-right">

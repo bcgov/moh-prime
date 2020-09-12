@@ -45,7 +45,7 @@
     <section class="mb-4">
       <mat-radio-group class="radio-group"
                        formControlName="vendorCode"
-                       (change)="onVendorChange()">
+                       (change)="onVendorChange($event)">
         <mat-radio-button *ngFor="let vendor of filteredVendorConfig"
                           class="radio-button"
                           [value]="vendor.code">

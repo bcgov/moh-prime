@@ -13,7 +13,6 @@ import { SiteStatusType } from '../enum/site-status.enum';
 export interface Site {
   id?: number;
   organizationId: number;
-  organization: Organization;
   // Provision is aka the Signing Authority
   provisionerId: number;
   provisioner: Party;

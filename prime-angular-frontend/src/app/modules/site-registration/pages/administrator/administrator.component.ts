@@ -8,6 +8,7 @@ import { Subscription, Observable } from 'rxjs';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { VendorEnum } from '@shared/enums/vendor.enum';
 import { Address } from '@shared/models/address.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -67,7 +68,11 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+    if (this.siteService.site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
+    }
   }
 
   public nextRoute() {
