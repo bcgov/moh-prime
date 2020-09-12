@@ -10,6 +10,7 @@ namespace Prime
         public readonly static string LogFile = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
         public static bool IsProduction { get => Name == "prod"; }
+        public static bool IsDevelopment { get => Name == "dev"; }
         public static bool IsLocal { get => Name == "local"; }
 
         public static class DocumentManager

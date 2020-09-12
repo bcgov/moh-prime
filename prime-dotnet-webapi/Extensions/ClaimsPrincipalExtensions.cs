@@ -20,34 +20,37 @@ namespace Prime
 
         public static bool IsAdmin(this ClaimsPrincipal User)
         {
-            return User.IsInRole(AuthConstants.PRIME_ADMIN_ROLE);
+            return User.IsInRole(Roles.Admin);
         }
 
         public static bool HasAdminView(this ClaimsPrincipal User)
         {
-            return User.IsInRole(AuthConstants.PRIME_READONLY_ADMIN);
+            return User.IsInRole(Roles.ReadonlyAdmin);
+        }
+
+        public static string GetAuthorizedParty(this ClaimsPrincipal User)
+        {
+            return User.FindFirstValue(Claims.AuthorizedParty);
         }
 
         public static int GetIdentityAssuranceLevel(this ClaimsPrincipal User)
         {
-            Claim assuranceLevelClaim = User?.Claims?.SingleOrDefault(c => c.Type == AuthConstants.ASSURANCE_LEVEL_CLAIM_TYPE);
+            var claimValue = User.FindFirstValue(Claims.AssuranceLevel);
 
             int assuranceLevel = 0;
-            Int32.TryParse(assuranceLevelClaim?.Value, out assuranceLevel);
+            Int32.TryParse(claimValue, out assuranceLevel);
 
             return assuranceLevel;
         }
 
         public static string GetIdentityProvider(this ClaimsPrincipal User)
         {
-            Claim identityProviderClaim = User?.Claims?.SingleOrDefault(c => c.Type == AuthConstants.IDENTITY_PROVIDER_CLAIM_TYPE);
-
-            return identityProviderClaim?.Value;
+            return User.FindFirstValue(Claims.IdentityProvider);
         }
 
-        public static bool hasVCIssuance(this ClaimsPrincipal User)
+        public static bool HasVCIssuance(this ClaimsPrincipal User)
         {
-            return User.IsInRole(AuthConstants.FEATURE_VC_ISSUANCE);
+            return User.IsInRole(FeatureFlags.CredentialIssuance);
         }
     }
 }

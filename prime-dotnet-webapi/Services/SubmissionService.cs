@@ -79,7 +79,7 @@ namespace Prime.Services
             // TODO when/where should a new credential be issued?
             // TODO check for an active connection
             // TODO check for issued credential
-            if (_httpContext.HttpContext.User.hasVCIssuance())
+            if (_httpContext.HttpContext.User.HasVCIssuance())
             {
                 try
                 {

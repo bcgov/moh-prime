@@ -48,7 +48,7 @@ namespace Prime
 
             try
             {
-                if (isDevelopment())
+                if (PrimeEnvironment.IsLocal || PrimeEnvironment.IsDevelopment)
                 {
                     Directory.CreateDirectory(path);
                 }
@@ -84,8 +84,5 @@ namespace Prime
                     rollingInterval: RollingInterval.Day))
                 .CreateLogger();
         }
-
-        private static bool isDevelopment() =>
-            Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development;
     }
 }

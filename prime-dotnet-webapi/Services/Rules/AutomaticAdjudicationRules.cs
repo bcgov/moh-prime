@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
+using Prime.Auth;
 using Prime.Models;
 using Prime.HttpClients;
 
@@ -182,7 +183,7 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.IdentityProvider != Auth.AuthConstants.BC_SERVICES_CARD)
+            if (enrollee.IdentityProvider != AuthConstants.BCServicesCard)
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.IdentityProvider, $"Method used: {enrollee.IdentityProvider}");
                 return Task.FromResult(false);

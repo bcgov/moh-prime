@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -13,8 +13,10 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using Prime.Infrastructure;
+using System.Security.Claims;
 
+
+using Prime.Auth.Requirements;
 namespace Prime.Auth
 {
     public static class AuthenticationSetup
@@ -22,8 +24,7 @@ namespace Prime.Auth
         public static void Initialize(
             IServiceCollection services,
             IConfiguration configuration,
-            IHostEnvironment environment
-            )
+            IHostEnvironment environment)
         {
             services.ThrowIfNull(nameof(services));
             configuration.ThrowIfNull(nameof(configuration));
@@ -44,18 +45,8 @@ namespace Prime.Auth
                     options.RequireHttpsMetadata = false;
                 }
 
+                options.Audience = AuthConstants.ApiAudience;
                 options.MetadataAddress = Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG") ?? configuration["Jwt:WellKnown"];
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidAudiences = new List<string>
-                    {
-                        AuthConstants.ENROLMENT_AUDIENCE,
-                        AuthConstants.ADMIN_AUDIENCE,
-                        AuthConstants.SITE_AUDIENCE,
-                        "prime-web-api" // TODO: remove
-                    }
-                };
                 options.Events = new JwtBearerEvents
                 {
                     OnAuthenticationFailed = c =>
@@ -74,34 +65,38 @@ namespace Prime.Auth
                 };
             });
 
-            services.AddSingleton<IAuthorizationHandler, PrimeUserAuthHandler>();
+            services.AddSingleton<IAuthorizationHandler, AdminUserTypeRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, EnrolleeUserTypeRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, SiteUserTypeRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, CanEditRequirementHandler>();
+            services.AddSingleton<IAuthorizationHandler, AuthorizedPartyRequirementHandler>();
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(AuthConstants.USER_POLICY, policy => policy.AddRequirements(new PrimeUserRequirement()));
-                options.AddPolicy(AuthConstants.ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_ADMIN_ROLE));
-                options.AddPolicy(AuthConstants.SUPER_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_SUPER_ADMIN_ROLE));
-                options.AddPolicy(AuthConstants.READONLY_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_READONLY_ADMIN));
-                options.AddPolicy(AuthConstants.EXTERNAL_HPDID_ACCESS_POLICY, policy => policy.RequireRole(AuthConstants.EXTERNAL_HPDID_ACCESS_ROLE));
-                options.AddPolicy(AuthConstants.EXTERNAL_GPID_VALIDATION_POLICY, policy => policy.RequireRole(AuthConstants.EXTERNAL_GPID_VALIDATION_ROLE));
+                options.AddPolicy(Policies.EnrolleeOnly, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Enrollee)));
+                options.AddPolicy(Policies.AdminOnly, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Admin)));
+                options.AddPolicy(Policies.SiteRegistrantOnly, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Site)));
+                options.AddPolicy(Policies.EnrolleeOrAdmin, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Enrollee, UserType.Admin)));
+                options.AddPolicy(Policies.SiteRegistrantOrAdmin, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Site, UserType.Admin)));
+                options.AddPolicy(Policies.AnyUser, policy => policy.AddRequirements(new UserTypeRequirement(UserType.Enrollee, UserType.Site, UserType.Admin)));
+
+                options.AddPolicy(Policies.CanEdit, policy => policy.AddRequirements(new CanEditRequirement()));
+
+                // External Clientss
+                options.AddPolicy(Policies.CareConnectAccess, policy => policy.AddRequirements(new AuthorizedPartyRequirement(AuthorizedParties.CareConnect)));
+                options.AddPolicy(Policies.PosGpidAccess, policy => policy.AddRequirements(new AuthorizedPartyRequirement(AuthorizedParties.PosGpid)));
             });
         }
 
         private static Task OnTokenValidatedAsync(TokenValidatedContext context)
         {
             if (context.SecurityToken is JwtSecurityToken accessToken
-                    && context.Principal.Identity is ClaimsIdentity identity
-                    && identity.IsAuthenticated)
+                && context.Principal.Identity is ClaimsIdentity identity
+                && identity.IsAuthenticated)
             {
-                // add the access token to the identity claims in case it is needed later
-                identity.AddClaim(new Claim(AuthConstants.PRIME_ACCESS_TOKEN_KEY, accessToken.RawData));
                 identity.AddClaim(new Claim(ClaimTypes.Name, accessToken.Subject));
 
-                // flatten realm_access because Microsoft identity model doesn't support nested claims
                 AddRolesForRealmAccessClaims(identity);
-
-                // flatten resource_access because Microsoft identity model doesn't support nested claims
-                AddRolesForResourceAccessClaims(identity);
             }
 
             return Task.CompletedTask;
@@ -110,43 +105,22 @@ namespace Prime.Auth
         private static void AddRolesForRealmAccessClaims(ClaimsIdentity identity)
         {
             // flatten realm_access because Microsoft identity model doesn't support nested claims
-            if (identity.HasClaim((claim) => claim.Type == AuthConstants.KEYCLOAK_REALM_ACCESS_KEY))
-            {
-                var realmAccessClaim = identity.Claims.Single((claim) => claim.Type == AuthConstants.KEYCLOAK_REALM_ACCESS_KEY);
-                var realmAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(realmAccessClaim.Value);
+            var realmAccessClaim = identity.Claims.SingleOrDefault(claim => claim.Type == Claims.RealmAccess);
 
-                if (realmAccessAsDict.ContainsKey(AuthConstants.KEYCLOAK_ROLES_KEY))
+            if (realmAccessClaim != null)
+            {
+                var realmAccess = JsonConvert.DeserializeObject<RealmAccess>(realmAccessClaim.Value);
+
+                foreach (var role in realmAccess.roles)
                 {
-                    foreach (var role in realmAccessAsDict[AuthConstants.KEYCLOAK_ROLES_KEY])
-                    {
-                        identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                    }
+                    identity.AddClaim(new Claim(ClaimTypes.Role, role));
                 }
             }
         }
 
-        private static void AddRolesForResourceAccessClaims(ClaimsIdentity identity)
+        private class RealmAccess
         {
-            // flatten resource_access because Microsoft identity model doesn't support nested claims
-            if (identity.HasClaim((claim) => claim.Type == AuthConstants.KEYCLOAK_RESOURCE_ACCESS_KEY))
-            {
-                var resourceAccessClaim = identity.Claims.Single((claim) => claim.Type == AuthConstants.KEYCLOAK_RESOURCE_ACCESS_KEY);
-                var resourceAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string[]>>>(resourceAccessClaim.Value);
-
-                // get the roles from each potential client key that we care about
-                foreach (var clientId in AuthConstants.PRIME_CLIENT_IDS)
-                {
-                    Dictionary<string, string[]> clientKeyValue;
-                    if (resourceAccessAsDict.TryGetValue(clientId, out clientKeyValue)
-                            && clientKeyValue.ContainsKey(AuthConstants.KEYCLOAK_ROLES_KEY))
-                    {
-                        foreach (var role in clientKeyValue[AuthConstants.KEYCLOAK_ROLES_KEY])
-                        {
-                            identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                        }
-                    }
-                }
-            }
+            public string[] roles { get; set; }
         }
     }
 }
