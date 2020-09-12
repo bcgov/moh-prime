@@ -1,0 +1,12 @@
+<app-site-registration-container [content]="content"
+                                 [hasActions]="hasActions">
+
+  <app-page-header>{{ title }}</app-page-header>
+
+</app-site-registration-container>
+
+<ng-template #content>
+
+  <app-remote-user-review [remoteUsers]="remoteUsers | async"></app-remote-user-review>
+
+</ng-template>
