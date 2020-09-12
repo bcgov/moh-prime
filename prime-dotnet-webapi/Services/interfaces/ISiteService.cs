@@ -13,10 +13,11 @@ namespace Prime.Services
         Task<int> CreateSiteAsync(int organizationId);
         Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite);
         Task<int> UpdateCompletedAsync(int siteId);
-        Task<Site> UpdateSiteAdjudicator(int siteId, Nullable<int> adminId = null);
+        Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null);
         Task<Site> UpdatePecCode(int siteId, string pecCode);
         Task DeleteSiteAsync(int siteId);
         Task<Site> ApproveSite(int siteId);
+        Task<Site> DeclineSite(int siteId);
         Task<Site> SubmitRegistrationAsync(int siteId);
         Task<Site> GetSiteNoTrackingAsync(int siteId);
         Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId);

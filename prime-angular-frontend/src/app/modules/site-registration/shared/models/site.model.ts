@@ -8,6 +8,7 @@ import { Party } from './party.model';
 import { RemoteUser } from './remote-user.model';
 import { Vendor } from './vendor.model';
 import { Contact } from './contact.model';
+import { SiteStatusType } from '../enum/site-status.enum';
 
 export interface Site {
   id?: number;
@@ -38,10 +39,12 @@ export interface Site {
   // Admin -----
   adjudicatorId: number;
   adjudicator: Admin;
+  status: SiteStatusType;
   pec: string;
 }
 
 export interface SiteListViewModel extends
-  Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec'> {
+  Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'status'> {
   adjudicatorIdir: string;
+  remoteUserCount: number;
 }
