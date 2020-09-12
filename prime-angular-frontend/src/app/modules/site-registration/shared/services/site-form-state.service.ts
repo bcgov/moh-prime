@@ -173,9 +173,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       this.siteAddressForm.get('physicalAddress').patchValue(site.physicalAddress);
     }
 
-    const hoursOperationForm = this.hoursOperationForm;
-    const hoursOperationFormArray = hoursOperationForm.get('businessDays') as FormArray;
-    hoursOperationFormArray.clear(); // Clear out existing indices
     if (site.businessHours?.length) {
       const businessDays = [...Array(7).keys()]
         .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
