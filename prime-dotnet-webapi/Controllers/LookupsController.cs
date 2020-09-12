@@ -14,8 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // User needs at least the READONLY ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = AuthConstants.USER_POLICY)]
+    [Authorize(Policy = Policies.AnyUser)]
     public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;
@@ -45,7 +44,7 @@ namespace Prime.Controllers
         /// For testing college licence validation
         /// </summary>
         [HttpPost("validate-licence", Name = nameof(LicenceCodeTest))]
-        [Authorize(Policy = AuthConstants.SUPER_ADMIN_POLICY)]
+        [Authorize(Roles = AuthConstants.PRIME_SUPER_ADMIN_ROLE)]
         public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string licenceNumber)
         {
             Certification cert = new Certification

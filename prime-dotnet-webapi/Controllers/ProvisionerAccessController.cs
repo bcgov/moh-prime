@@ -59,7 +59,7 @@ namespace Prime.Controllers
         /// Gets all of the access tokens for the user.
         /// </summary>
         [HttpGet("token", Name = nameof(GetAccessTokens))]
-        [Authorize(Policy = AuthConstants.USER_POLICY)]
+        [Authorize(Policy = Policies.EnrolleeOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
@@ -76,7 +76,7 @@ namespace Prime.Controllers
         /// then sends the link to a recipient by email.
         /// </summary>
         [HttpPost("send-link/{provisionerName}", Name = nameof(SendProvisionerLink))]
-        [Authorize(Policy = AuthConstants.USER_POLICY)]
+        [Authorize(Policy = Policies.EnrolleeOnly)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -145,10 +145,10 @@ namespace Prime.Controllers
 
         // GET: api/provisioner-access/gpid
         /// <summary>
-        /// Gets the GPID for the user. Only a valid token is required, no role is required.
+        /// Gets the GPID for the user.
         /// </summary>
         [HttpGet("gpid", Name = nameof(GetGpid))]
-        [Authorize]
+        [Authorize(Policy = Policies.PosGpidAccess)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> GetGpid()
@@ -160,10 +160,10 @@ namespace Prime.Controllers
 
         // GET: api/provisioner-access/gpids?hpdid=11111&hpdid=22222
         /// <summary>
-        /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid direct access grant token.
+        /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid CareConnect direct access grant token.
         /// </summary>
         [HttpGet("gpids", Name = nameof(HpdidLookup))]
-        [Authorize(Policy = AuthConstants.EXTERNAL_HPDID_ACCESS_POLICY)]
+        [Authorize(Policy = Policies.CareConnectAccess)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HpdidLookup>>), StatusCodes.Status200OK)]

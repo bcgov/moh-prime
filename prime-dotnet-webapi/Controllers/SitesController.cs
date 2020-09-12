@@ -18,7 +18,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
+    [Authorize(Policy = Policies.SiteRegistrantOrAdmin, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
     public class SitesController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -112,6 +112,7 @@ namespace Prime.Controllers
         /// <param name="organizationId"></param>
         /// </summary>
         [HttpPost("/api/organizations/{organizationId:int}/sites", Name = nameof(CreateSite))]
+        [Authorize(Policy = Policies.CanEdit)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -142,6 +143,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="updatedSite"></param>
         [HttpPut("{siteId}", Name = nameof(UpdateSite))]
+        [Authorize(Policy = Policies.CanEdit)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -264,6 +266,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpDelete("{siteId}", Name = nameof(DeleteSite))]
+        [Authorize(Policy = Policies.CanEdit)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -290,6 +293,7 @@ namespace Prime.Controllers
         /// Submits the given site for adjudication.
         /// </summary>
         [HttpPost("{siteId}/submission", Name = nameof(SubmitSiteRegistration))]
+        [Authorize(Policy = Policies.SiteRegistrantOnly)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -322,6 +326,7 @@ namespace Prime.Controllers
         /// <param name="filename"></param>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/business-licence", Name = nameof(CreateBusinessLicence))]
+        [Authorize(Policy = Policies.SiteRegistrantOnly)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -345,10 +350,10 @@ namespace Prime.Controllers
 
         // Get: api/sites/5/business-licence
         /// <summary>
-        /// Gets a new Business Licence for a site.
+        /// Gets the Business Licences for a site.
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpGet("{siteId}/business-licence", Name = nameof(CreateBusinessLicence))]
+        [HttpGet("{siteId}/business-licence", Name = nameof(GetBusinessLicences))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -377,6 +382,8 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="pecCode"></param>
         [HttpPut("{siteId}/pec", Name = nameof(UpdatePecCode))]
+        [Authorize(Policy = Policies.AdminOnly)]
+        [Authorize(Policy = Policies.CanEdit)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

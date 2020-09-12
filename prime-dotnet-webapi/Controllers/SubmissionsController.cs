@@ -15,7 +15,8 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    [Authorize(Policy = AuthConstants.USER_POLICY)]
+    [Authorize(Policy = Policies.EnrolleeOrAdmin)]
+    [Authorize(Policy = Policies.CanEdit)]
     public class SubmissionsController : ControllerBase
     {
         private readonly ISubmissionService _submissionService;
@@ -43,6 +44,7 @@ namespace Prime.Controllers
         /// Submits the given enrollee through Auto/manual adjudication.
         /// </summary>
         [HttpPost("{enrolleeId}/submission", Name = nameof(Submit))]
+        [Authorize(Policy = Policies.EnrolleeOnly)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -120,7 +122,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPut("{enrolleeId}/always-manual", Name = nameof(SetEnrolleeManualFlag))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.AdminOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -136,7 +138,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/always-manual", Name = nameof(RemoveEnrolleeManualFlag))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.AdminOnly)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
