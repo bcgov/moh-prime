@@ -31,6 +31,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public hasPractices: boolean;
   public licensePrefix: string;
   public minRenewalDate: moment.Moment;
+  public CollegeLicenceClass = CollegeLicenceClass;
 
   constructor(
     private configService: ConfigService,

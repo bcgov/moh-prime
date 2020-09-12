@@ -20,6 +20,8 @@ namespace Prime.ViewModels
 
         public bool Completed { get; set; }
 
+        public int RemoteUserCount { get; set; }
+
         public string AdjudicatorIdir { get; set; }
 
         public SiteStatusType Status { get; set; }

@@ -5,6 +5,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-site-registration-table',
@@ -20,9 +22,11 @@ export class SiteRegistrationTableComponent implements OnInit {
   public columns: string[];
 
   public SiteStatusType = SiteStatusType;
+  public CareSettingEnum = CareSettingEnum;
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private authService: AuthService
   ) {
     this.columns = [
@@ -34,6 +38,7 @@ export class SiteRegistrationTableComponent implements OnInit {
       'adjudicator',
       'siteAdjudication',
       'siteId',
+      'remoteUsers',
       'careSetting',
       'actions'
     ];
@@ -67,8 +72,15 @@ export class SiteRegistrationTableComponent implements OnInit {
         : 'Under Review';
   }
 
-  public ngOnInit(): void {
-    console.log(SiteStatusType.APPROVED, SiteStatusType[1]);
+  public remoteUsers(siteRegistration: SiteRegistrationListViewModel): number | 'Yes' | 'No' | 'N/A' {
+    const count = siteRegistration.remoteUserCount;
 
+    return (siteRegistration.careSettingCode !== CareSettingEnum.COMMUNITY_PHARMACIST)
+      ? (!this.activatedRoute.snapshot.params.sid)
+        ? (count) ? 'Yes' : 'No'
+        : count
+      : 'N/A';
   }
+
+  public ngOnInit(): void { }
 }
