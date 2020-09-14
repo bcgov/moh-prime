@@ -87,7 +87,7 @@ export class AdjudicationContainerComponent implements OnInit {
           if (enrollee.contactEmail) {
             return of(enrollee);
           }
-          this.toastService.openErrorToast('Enrollee does not contain a Contact Email');
+          this.toastService.openErrorToast('Enrollee does not have a contact email.');
           return EMPTY;
         }),
         exhaustMap((enrollee: HttpEnrollee) => this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
