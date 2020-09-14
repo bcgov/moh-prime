@@ -12,6 +12,7 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { VendorEnum } from '@shared/enums/vendor.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
@@ -110,10 +111,12 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public nextRoute() {
-    if (this.isCompleted) {
+    if (this.siteService.site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
+    } else if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
+      this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
     }
   }
 

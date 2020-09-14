@@ -46,8 +46,6 @@
                      [errorStateMatcher]="busDayHoursErrStateMatcher">
               <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('startTime').hasError('length')">
                 Invalid
-                <!-- TODO need better error message, but width makes messaging hard due to wrapping -->
-                <!-- Opening hours must be earlier than closing hours -->
               </mat-error>
               <mat-error *ngIf="businessDay.get('startTime').hasError('required')">
                 Required
@@ -64,8 +62,6 @@
                      [errorStateMatcher]="busDayHoursErrStateMatcher">
               <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('endTime').hasError('length')">
                 Invalid
-                <!-- TODO need better error message, but width makes messaging hard due to wrapping -->
-                <!-- Opening hours must be earlier than closing hours -->
               </mat-error>
               <mat-error *ngIf="businessDay.get('endTime').hasError('required')">
                 Required

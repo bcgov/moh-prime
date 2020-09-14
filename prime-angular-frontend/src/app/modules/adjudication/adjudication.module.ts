@@ -32,6 +32,7 @@ import {
 import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
 import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
 import { SiteRegistrationActionsComponent } from './shared/components/site-registration-actions/site-registration-actions.component';
+import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-users.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { SiteRegistrationActionsComponent } from './shared/components/site-regis
     SiteRegistrationActionsComponent,
     SiteAdjudicationComponent,
     OrganizationInformationComponent,
+    SiteRemoteUsersComponent,
     AdjudicationDashboardComponent
   ],
   imports: [

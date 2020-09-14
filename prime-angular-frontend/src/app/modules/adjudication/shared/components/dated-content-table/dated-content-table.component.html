@@ -2,7 +2,8 @@
   <table class="table">
     <tbody>
       <tr *ngFor="let item of items$ | async">
-        <th class="text-right">
+        <th class="text-right"
+            scope="row">
           <div class="text-nowrap">
             {{ item.date | formatDate }}
           </div>
