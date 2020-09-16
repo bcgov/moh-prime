@@ -1,8 +1,11 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 metadata:
   name: angular-frontend-dc
   creationTimestamp:
+  description: >-
+    Deployment configuration template for PRIME's Angular frontend component.
 parameters:
 - name: NAME
   displayName: Name
@@ -40,6 +43,8 @@ parameters:
   required: true
   value: "https://pharmanetenrolment.gov.bc.ca"
 objects:
+
+# Frontend deployment configuration
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -123,6 +128,8 @@ objects:
             name: "${NAME}${SUFFIX}:latest"
         type: ImageChange
   status: {}
+
+# Angular route definition to direct external traffic to frontend component
 - apiVersion: v1
   kind: Route
   metadata:
@@ -137,6 +144,8 @@ objects:
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"
+
+# Angular service (endpoint definition for internal routing to related pods)
 - apiVersion: v1
   kind: Service
   metadata:

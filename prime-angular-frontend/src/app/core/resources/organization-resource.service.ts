@@ -10,7 +10,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent } from '@core/resources/abstract-resource';
 
-import { Organization } from '@registration/shared/models/organization.model';
+import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
 
 // TODO use ApiResourceUtils to build URLs
@@ -26,11 +26,14 @@ export class OrganizationResource {
     private logger: LoggerService
   ) { }
 
-  public getOrganizations(): Observable<Organization[]> {
-    return this.apiResource.get<Organization[]>('organizations')
+  public getOrganizations(): Observable<OrganizationListViewModel[]>;
+  public getOrganizations(queryParams: { verbose: boolean }): Observable<OrganizationListViewModel[] | Organization[]>;
+  public getOrganizations(queryParams: { verbose: boolean } = null): Observable<OrganizationListViewModel[] | Organization[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParams);
+    return this.apiResource.get<OrganizationListViewModel[] | Organization[]>('organizations', params)
       .pipe(
-        map((response: ApiHttpResponse<Organization[]>) => response.result),
-        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        map((response: ApiHttpResponse<OrganizationListViewModel[] | Organization[]>) => response.result),
+        tap((organizations: OrganizationListViewModel[] | Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
           this.logger.error('[SiteRegistration] OrganizationResource::getOrganizations error has occurred: ', error);
@@ -68,9 +71,8 @@ export class OrganizationResource {
       );
   }
 
-  public updateOrganization(organization: Organization, isCompleted?: boolean): NoContent {
-    const params = this.apiResourceUtilsService.makeHttpParams({ isCompleted });
-    return this.apiResource.put<NoContent>(`organizations/${organization.id}`, organization, params)
+  public updateOrganization(organization: Organization): NoContent {
+    return this.apiResource.put<NoContent>(`organizations/${organization.id}`, organization)
       // TODO remove pipe when ApiResource handles NoContent
       .pipe(
         map(() => {
@@ -79,6 +81,18 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be updated');
           this.logger.error('[SiteRegistration] OrganizationResource::updateOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateCompleted(organizationId: number): NoContent {
+    return this.apiResource.put<NoContent>(`organizations/${organizationId}/completed`)
+      .pipe(
+        // TODO remove pipe when ApiResource handles NoContent
+        map(() => { }),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] OrganizationResource::updateCompleted error has occurred: ', error);
           throw error;
         })
       );
@@ -140,7 +154,7 @@ export class OrganizationResource {
   }
 
   public getSignedOrganizationAgreement(organizationId: number): Observable<string> {
-    return this.apiResource.get<string>(`organizations/${organizationId}/organization-agreement`)
+    return this.apiResource.get<string>(`organizations/${organizationId}/organization-agreement-digital-signed`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
@@ -168,9 +182,7 @@ export class OrganizationResource {
     return this.apiResource.post<string>(`organizations/${organizationId}/signed-agreement`, { organizationId }, params)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Signed agreement has been added')),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Signed agreement could not be added');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::addSignedAgreement error has occurred: ', error);
           throw error;
         })

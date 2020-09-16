@@ -1,21 +1,28 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
+import { StringUtils } from '@lib/utils/string-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
-import { Party } from '@registration/shared/models/party.model';
 import { Site } from '@registration/shared/models/site.model';
-import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
+import { Party } from '@registration/shared/models/party.model';
+import { Contact } from '@registration/shared/models/contact.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
+import { BusinessDay } from '@registration/shared/models/business-day.model';
+import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
+import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteFormStateService extends AbstractFormState<Site> {
   public careSettingTypeForm: FormGroup;
+  public businessForm: FormGroup;
   public siteAddressForm: FormGroup;
   public hoursOperationForm: FormGroup;
   public remoteUsersForm: FormGroup;
@@ -53,9 +60,18 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * Convert reactive form abstract controls into JSON.
    */
   public get json(): Site {
-    const { organizationTypeCode, vendorCode } = this.careSettingTypeForm.getRawValue();
+    const { careSettingCode, vendorCode } = this.careSettingTypeForm.getRawValue();
+    const { doingBusinessAs } = this.businessForm.getRawValue();
     const { physicalAddress } = this.siteAddressForm.getRawValue();
-    const { businessDays: businessHours } = this.hoursOperationForm.getRawValue();
+    const businessHours = this.hoursOperationForm.getRawValue().businessDays
+      .map((hours: BusinessDayHours, dayOfWeek: number) => {
+        if (hours.startTime && hours.endTime) {
+          hours.startTime = StringUtils.splice(hours.startTime, 2, ':');
+          hours.endTime = StringUtils.splice(hours.endTime, 2, ':');
+        }
+        return new BusinessDay(dayOfWeek, hours.startTime, hours.endTime);
+      })
+      .filter((day: BusinessDay) => day.startTime !== null);
     const remoteUsers = this.remoteUsersForm.getRawValue().remoteUsers
       .map((ru: RemoteUser) => {
         // Remove the ID from the remote user to simplify updates on the server
@@ -66,7 +82,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       this.administratorPharmaNetForm.getRawValue(),
       this.privacyOfficerForm.getRawValue(),
       this.technicalSupportForm.getRawValue()
-    ].map((party: Party) => this.toPartyJson(party));
+    ].map((contact: Contact) => this.toPersonJson<Contact>(contact));
 
     // Includes site related keys to uphold relationships, and allow for updates
     // to a site. Keys not for update have been omitted and the type enforced
@@ -76,13 +92,14 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       // organization (N/A)
       provisionerId: this.provisionerId,
       // provisioner (N/A)
-      organizationTypeCode,
+      careSettingCode,
       // Only using single vendors for now
       siteVendors: [{
         siteId: this.siteId,
         vendorCode
       }],
       // businessLicenceDocuments (N/A)
+      doingBusinessAs,
       physicalAddressId: physicalAddress?.id,
       physicalAddress,
       businessHours,
@@ -107,6 +124,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   public get forms(): AbstractControl[] {
     return [
       this.careSettingTypeForm,
+      this.businessForm,
       this.siteAddressForm,
       this.hoursOperationForm,
       this.remoteUsersForm,
@@ -123,6 +141,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    */
   public init() {
     this.careSettingTypeForm = this.buildCareSettingTypeForm();
+    this.businessForm = this.buildBusinessForm();
     this.siteAddressForm = this.buildSiteAddressForm();
     this.hoursOperationForm = this.buildHoursOperationForm();
     this.remoteUsersForm = this.buildRemoteUsersForm();
@@ -146,14 +165,26 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       this.careSettingTypeForm.get('vendorCode').patchValue(site.siteVendors[0].vendorCode);
     }
 
+    if (site.doingBusinessAs) {
+      this.businessForm.get('doingBusinessAs').patchValue(site.doingBusinessAs);
+    }
+
     if (site.physicalAddress) {
       this.siteAddressForm.get('physicalAddress').patchValue(site.physicalAddress);
     }
 
     if (site.businessHours?.length) {
-      const array = this.hoursOperationForm.get('businessDays') as FormArray;
-      array.clear(); // Clear out existing indices
-      this.formUtilsService.formArrayPush(array, site.businessHours);
+      const businessDays = [...Array(7).keys()]
+        .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
+          const day = site.businessHours.find(bh => bh.day === dayOfWeek);
+          if (day) {
+            day.startTime = day.startTime.replace(':', '');
+            day.endTime = day.endTime.replace(':', '');
+          }
+          days.push(day ?? {});
+          return days;
+        }, []);
+      this.hoursOperationForm.get('businessDays').patchValue(businessDays);
     }
 
     if (site.remoteUsers?.length) {
@@ -163,10 +194,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
       // Omitted from payload, but provided in the form to allow for
       // validation to occur when "Have Remote Users" is toggled
-      // TODO component-level add control on init and remove control on submission to drop from state service
       form.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
 
-      site.remoteUsers.map((remoteUser: RemoteUser) => {
+      site.remoteUsers.forEach((remoteUser: RemoteUser) => {
         const group = this.createEmptyRemoteUserFormAndPatch(remoteUser);
         remoteUsersFormArray.push(group);
       });
@@ -178,7 +208,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       [this.technicalSupportForm, site.technicalSupport]
     ]
       .filter(([form, data]: [FormGroup, Party]) => data)
-      .forEach((formParty: [FormGroup, Party]) => this.toPartyFormModel(formParty));
+      .forEach((formParty: [FormGroup, Party]) => this.toPersonFormModel<Contact>(formParty));
   }
 
   /**
@@ -187,10 +217,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * it with a remote user if provided.
    */
   public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
-    const group = this.remoteUserFormGroup() as FormGroup;
+    const group = this.remoteUserFormGroup();
     if (remoteUser) {
-      const { id, firstName, lastName, remoteUserLocations } = remoteUser;
-      group.patchValue({ id, firstName, lastName });
+      const { id, firstName, lastName, email, remoteUserLocations, remoteUserCertifications } = remoteUser;
+      group.patchValue({ id, firstName, lastName, email });
       const array = group.get('remoteUserLocations') as FormArray;
       remoteUserLocations
         .map((rul: RemoteUserLocation) => {
@@ -201,6 +231,16 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         .forEach((remoteUserLocationFormGroup: FormGroup) =>
           array.push(remoteUserLocationFormGroup)
         );
+
+      const certs = group.get('remoteUserCertifications') as FormArray;
+      remoteUserCertifications.map((cert: RemoteUserCertification) => {
+        const formGroup = this.remoteUserCertificationFormGroup();
+        formGroup.patchValue(cert);
+        return formGroup;
+      })
+        .forEach((remoteUserLocationFormGroup: FormGroup) =>
+          certs.push(remoteUserLocationFormGroup)
+        );
     }
 
     return group;
@@ -208,13 +248,22 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
   private buildCareSettingTypeForm(code: number = null): FormGroup {
     return this.fb.group({
-      organizationTypeCode: [
+      careSettingCode: [
         code,
         [Validators.required]
       ],
       vendorCode: [
         0,
         [FormControlValidators.requiredIndex]
+      ]
+    });
+  }
+
+  private buildBusinessForm(): FormGroup {
+    return this.fb.group({
+      doingBusinessAs: [
+        '',
+        []
       ]
     });
   }
@@ -231,10 +280,17 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   }
 
   private buildHoursOperationForm(): FormGroup {
+    const groups = [...new Array(7)].map(() =>
+      this.fb.group({
+        startTime: [null, []],
+        endTime: [null, []],
+      }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') })
+    );
+
     return this.fb.group({
-      businessDays: this.fb.array(
-        [],
-        [Validators.required])
+      businessDays: this.fb.array(groups)
+      // TODO at least one business hours is required
+      // [FormArrayValidators.atLeast(1)]
     });
   }
 
@@ -250,7 +306,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         [],
         []
       )
-      // TODO at least one if has remote users if hasRemoteUsers is checked validator
+      // TODO at least one remote users is required
       // [FormArrayValidators.atLeast(1)]
     });
   }
@@ -269,6 +325,11 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         null,
         [Validators.required]
       ],
+      email: [
+        null,
+        [Validators.required]
+      ],
+      remoteUserCertifications: this.fb.array([]),
       remoteUserLocations: this.fb.array(
         [],
         [FormArrayValidators.atLeast(1)]
@@ -289,6 +350,16 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     });
   }
 
+  public remoteUserCertificationFormGroup(): FormGroup {
+    return this.fb.group({
+      // Force selection of "None" on new certifications
+      collegeCode: ['', []],
+      // Validators are applied at the component-level when
+      // fields are made visible to allow empty submissions
+      licenseNumber: [null, []],
+    });
+  }
+
   private buildAdministratorPharmaNetForm(): FormGroup {
     return this.partyFormGroup();
   }
@@ -305,10 +376,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     return this.fb.group({
       id: [
         0,
-        []
-      ],
-      userId: [
-        '00000000-0000-0000-0000-000000000000',
         []
       ],
       firstName: [

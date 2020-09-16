@@ -22,7 +22,7 @@ namespace PrimeTests.ModelFactories
                 throw new ArgumentOutOfRangeException(nameof(otherWeight), $".{nameof(OrOther)}() {nameof(otherWeight)} of '{otherWeight}' must be between 1.0f and 0.0f.");
             }
 
-            return new string(f.Random.Float() > otherWeight ? value : other);
+            return f.Random.Float() > otherWeight ? value : other;
         }
     }
 }

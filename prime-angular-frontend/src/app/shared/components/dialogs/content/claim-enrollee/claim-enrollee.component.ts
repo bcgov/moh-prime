@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { Admin } from '@auth/shared/models/admin.model';
-import { BehaviorSubject } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
+
+import { BehaviorSubject } from 'rxjs';
+
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { Admin } from '@auth/shared/models/admin.model';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 export enum ClaimActionEnum {
   Disclaim = 0,

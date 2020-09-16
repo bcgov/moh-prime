@@ -8,10 +8,11 @@ import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
 import { RegistrantGuard } from './shared/guards/registrant.guard';
+import { RegistrationGuard } from './shared/guards/registration.guard';
 import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
 
-import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
+import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 import { SiteManagementComponent } from './pages/site-management/site-management.component';
@@ -30,12 +31,11 @@ import { TechnicalSupportComponent } from './pages/technical-support/technical-s
 import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { OverviewComponent } from './pages/overview/overview.component';
-import { RegistrationGuard } from './shared/guards/registration.guard';
 
 const routes: Routes = [
   {
     path: SiteRoutes.MODULE_PATH,
-    component: DashboardComponent,
+    component: SiteRegistrationDashboardComponent,
     canActivate: [UnsupportedGuard],
     canActivateChild: [
       AuthenticationGuard,
@@ -110,14 +110,14 @@ const routes: Routes = [
                     component: BusinessLicenceComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Submit Your Business Licence' }
+                    data: { title: 'Business Licence' }
                   },
                   {
                     path: SiteRoutes.SITE_ADDRESS,
                     component: SiteAddressComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Site Name' }
+                    data: { title: 'Site Address' }
                   },
                   {
                     path: SiteRoutes.HOURS_OPERATION,
@@ -131,7 +131,7 @@ const routes: Routes = [
                     component: AdministratorComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Administrator of PharmaNet' }
+                    data: { title: 'PharmaNet Administrator' }
                   },
                   {
                     path: SiteRoutes.PRIVACY_OFFICER,

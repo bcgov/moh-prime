@@ -21,8 +21,8 @@ export class MockEnrolmentService implements IEnrolmentService {
         id: faker.random.number(),
         userId: faker.random.uuid(),
         firstName: faker.name.firstName(),
-        middleName: faker.name.findName(),
         lastName: faker.name.lastName(),
+        givenNames: faker.name.firstName(),
         preferredFirstName: null,
         preferredMiddleName: null,
         preferredLastName: null,
@@ -45,13 +45,12 @@ export class MockEnrolmentService implements IEnrolmentService {
       jobs: [],
       selfDeclarations: [],
       selfDeclarationDocuments: [],
-      organizations: [
+      careSettings: [
         {
           id: faker.random.number(),
-          organizationTypeCode: 1
+          careSettingCode: 1
         }
       ],
-      privileges: [],
       enrolmentStatuses: null,
       currentStatus: {
         id: faker.random.number(),

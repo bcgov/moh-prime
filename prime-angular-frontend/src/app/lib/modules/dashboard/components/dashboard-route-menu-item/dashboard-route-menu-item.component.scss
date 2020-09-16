@@ -1,0 +1,10 @@
+.mat-list-item {
+  &.disabled {
+    // Prevent interacting with the link
+    pointer-events: none;
+  }
+  &.deemphasize {
+    // De-emphasize the link
+    opacity: 0.4;
+  }
+}

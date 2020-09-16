@@ -1,9 +1,11 @@
 ---
-kind: Template
 apiVersion: v1
+kind: Template
 metadata:
   name: angular-frontend-bc
   creationTimestamp: 
+  description: >-
+    Build configuration template for PRIME's Angular frontend component.
 parameters:
 - name: NAME
   displayName: Name

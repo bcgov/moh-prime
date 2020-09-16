@@ -3,7 +3,6 @@ import * as faker from 'faker';
 import { BehaviorSubject } from 'rxjs';
 
 import { Address } from '@shared/models/address.model';
-import { Site } from '@registration/shared/models/site.model';
 import { IOrganizationService } from '@registration/shared/services/organization.service';
 import { Organization } from '@registration/shared/models/organization.model';
 
@@ -45,7 +44,8 @@ export class MockOrganizationService implements IOrganizationService {
       acceptedAgreementDate: faker.date.past(2).toDateString(),
       signedAgreementDocuments: [],
       submittedDate: null,
-      siteCount: faker.random.number()
+      siteCount: faker.random.number(),
+      sites: []
     });
   }
 

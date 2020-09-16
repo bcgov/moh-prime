@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router, Params } from '@angular/router';
 
-import { Observable, from, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
 import { BaseGuard } from '@core/guards/base.guard';
@@ -12,13 +12,11 @@ import { User } from '@auth/shared/models/user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { Organization } from '../models/organization.model';
 import { OrganizationService } from '../services/organization.service';
 
-// TODO duplication with enrolment.guard should be split out for reuse
 @Injectable({
   providedIn: 'root'
 })
@@ -36,8 +34,7 @@ export class RegistrationGuard extends BaseGuard {
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    const organizationId = params.oid;
-    const user$ = from(this.authService.getUser());
+    const user$ = this.authService.getUser$();
     const createOrganization$ = user$
       .pipe(
         map((user: User) => new Party(user)),
@@ -45,9 +42,13 @@ export class RegistrationGuard extends BaseGuard {
         map((organization: Organization) => [organization, true])
       );
 
-    return this.organizationResource.getOrganizations()
+    return this.organizationResource.getOrganizations({ verbose: true })
       .pipe(
-        map((organizations: Organization[]) => (organizations.length) ? organizations.shift() : null),
+        map((organizations: Organization[]) =>
+          (organizations.length)
+            ? organizations.shift()
+            : null
+        ),
         exhaustMap((organization: Organization) =>
           (organization)
             ? of([organization, false])
@@ -85,16 +86,14 @@ export class RegistrationGuard extends BaseGuard {
   }
 
   private manageIncompleteOrganizationRouting(routePath: string, organization: Organization) {
-    // TODO set to SITE_REVIEW to allow removal of MULTIPLE_SITES, but definitely the wrong route
-    const route = SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
-    return this.manageRouting(routePath, route, organization);
+    return this.manageRouting(routePath, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, organization);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
     const currentRoute = this.route(routePath);
 
-    let childRoute = routePath.includes('remote-users')
-      ? 'remote-users'
+    let childRoute = routePath.includes(SiteRoutes.REMOTE_USERS)
+      ? SiteRoutes.REMOTE_USERS
       : routePath.split('/').pop();
 
     if (childRoute.includes('?')) {
@@ -104,16 +103,16 @@ export class RegistrationGuard extends BaseGuard {
     let whiteListedRoutes = SiteRoutes.siteRegistrationRoutes();
 
     if (!organization.completed) {
-      // Initial org not completed, use initialRegistration route order
+      // Initial organization is not completed, use initialRegistration route order
       whiteListedRoutes = whiteListedRoutes
-        .filter((route: string) => SiteRoutes.organizationRegistrationRouteOrder().includes(route));
-      // return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, organization.id);
+        .filter((route: string) =>
+          SiteRoutes.organizationRegistrationRouteOrder().includes(route)
+        );
     } else {
-      if (!organization.acceptedAgreementDate) {
-        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
-      } else {
-        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
-        whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
+      whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
+      whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
+
+      if (organization.acceptedAgreementDate) {
         whiteListedRoutes.push(SiteRoutes.SITE_REVIEW);
       }
     }
@@ -138,8 +137,8 @@ export class RegistrationGuard extends BaseGuard {
     routePath: string,
     loopPath: string,
     destinationPath: string = null,
-    oid: number = null): boolean {
-
+    oid: number = null
+  ): boolean {
     const modulePath = this.config.routes.site;
     const comparePath = (destinationPath && oid)
       ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
@@ -152,4 +151,19 @@ export class RegistrationGuard extends BaseGuard {
       return false;
     }
   }
+
+  // TODO use in a proper fix after pushing in a temporary fix
+  // private getChildRoute(routePath: string): string {
+  //   return this.router.url
+  //     // Truncate query parameters
+  //     .split('?')
+  //     .shift()
+  //     // List the remaining URI params
+  //     .split('/')
+  //     // Remove URI params that are numbers
+  //     .filter(p => !/^\d+$/.test(p))
+  //     // Remove blacklisted URI params
+  //     .filter(p => !['new'].includes(p))
+  //     .pop(); // Current route is the last index
+  // }
 }

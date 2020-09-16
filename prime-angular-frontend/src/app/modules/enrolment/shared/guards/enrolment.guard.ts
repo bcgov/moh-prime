@@ -39,9 +39,10 @@ export class EnrolmentGuard extends BaseGuard {
    */
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
     const user$ = from(this.authService.getUser());
+    console.log(user$);
     const createEnrollee$ = user$
       .pipe(
-        exhaustMap(({ userId, hpdid, firstName, lastName, dateOfBirth, physicalAddress }: User) => {
+        exhaustMap(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
           // Enforced the enrolment type instead of using Partial<Enrolment>
           // to avoid creating constructors and partials for every model
           const enrollee = {
@@ -50,6 +51,7 @@ export class EnrolmentGuard extends BaseGuard {
             hpdid,
             firstName,
             lastName,
+            givenNames,
             dateOfBirth,
             physicalAddress,
             voicePhone: null,

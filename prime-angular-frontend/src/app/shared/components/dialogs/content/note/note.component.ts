@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
-import { debounceTime, tap } from 'rxjs/operators';
+
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-note',
@@ -10,17 +11,19 @@ import { debounceTime, tap } from 'rxjs/operators';
 export class NoteComponent implements OnInit {
   public form: FormGroup;
   public isEmpty: boolean;
-  @Output() output = new EventEmitter<string>();
+  @Output() public output: EventEmitter<string>;
 
   constructor(
     private fb: FormBuilder,
-  ) { }
+  ) {
+    this.output = new EventEmitter<string>();
+  }
 
   public get note(): FormControl {
     return this.form.get('note') as FormControl;
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
   }
@@ -38,9 +41,10 @@ export class NoteComponent implements OnInit {
   }
 
   protected initForm() {
-    this.note.valueChanges.pipe(
-      debounceTime(250)
-    ).subscribe((note: string) => this.output.emit(note));
+    this.note.valueChanges
+      .pipe(
+        debounceTime(250)
+      )
+      .subscribe((note: string) => this.output.emit(note));
   }
-
 }

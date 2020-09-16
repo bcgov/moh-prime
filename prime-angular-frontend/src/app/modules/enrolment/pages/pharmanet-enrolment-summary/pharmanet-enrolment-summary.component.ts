@@ -54,12 +54,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return (this.enrollee) ? this.enrollee.mailingAddress : null;
   }
 
-  public get privileges() {
-    return (this.enrolment) ? this.enrolment.privileges : null;
-  }
-
-  public get organizations() {
-    return (this.enrolment) ? this.enrolment.organizations : null;
+  public get careSettings() {
+    return (this.enrolment) ? this.enrolment.careSettings : null;
   }
 
   public get enrolmentCertificateNote() {

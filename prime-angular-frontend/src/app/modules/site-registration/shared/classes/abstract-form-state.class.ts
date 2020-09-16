@@ -4,6 +4,7 @@ import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
 
 import { Party } from '../models/party.model';
+import { Person } from '../models/person.model';
 
 export abstract class AbstractFormState<T> {
   protected patched: boolean;
@@ -139,7 +140,7 @@ export abstract class AbstractFormState<T> {
 
     Object.keys(controlsConfig)
       .filter((key: string) => !options?.exclude?.includes(key))
-      .map((key: string, index: number) => {
+      .forEach((key: string, index: number) => {
         const control = controlsConfig[key];
         if (options?.areDisabled?.includes(key)) {
           control[0].disabled = true;
@@ -163,23 +164,26 @@ export abstract class AbstractFormState<T> {
    * @description
    * Convert party JSON to form model for reactive forms.
    */
-  protected toPartyFormModel([formGroup, data]: [FormGroup, Party]): void {
-    const { physicalAddress, mailingAddress, ...party } = data;
+  protected toPersonFormModel<P extends Person>([formGroup, data]: [FormGroup, P]): void {
+    if (data) {
+      const { physicalAddress, mailingAddress, ...person } = data;
 
-    formGroup.patchValue(party);
+      formGroup.patchValue(person);
 
-    if (physicalAddress) {
-      const physicalAddressFormGroup = formGroup.get('physicalAddress');
-      (physicalAddress)
-        ? physicalAddressFormGroup.patchValue(physicalAddress)
-        : physicalAddressFormGroup.reset({ id: 0 });
-    }
+      if (physicalAddress) {
+        const physicalAddressFormGroup = formGroup.get('physicalAddress');
+        (physicalAddress)
+          ? physicalAddressFormGroup.patchValue(physicalAddress)
+          : physicalAddressFormGroup.reset({ id: 0 });
+      }
 
-    if (mailingAddress) {
-      const mailingAddressFormGroup = formGroup.get('mailingAddress');
-      (mailingAddress)
-        ? mailingAddressFormGroup.patchValue(mailingAddress)
-        : mailingAddressFormGroup.reset({ id: 0 });
+      // Parties don't always have a mailing address section in the form
+      if (formGroup.get('mailingAddress') && mailingAddress) {
+        const mailingAddressFormGroup = formGroup.get('mailingAddress');
+        (mailingAddress)
+          ? mailingAddressFormGroup.patchValue(mailingAddress)
+          : mailingAddressFormGroup.reset({ id: 0 });
+      }
     }
   }
 
@@ -187,22 +191,22 @@ export abstract class AbstractFormState<T> {
    * @description
    * Convert the party form model into JSON.
    */
-  protected toPartyJson(party: Party, addressKey: 'physicalAddress' | 'mailingAddress' = 'physicalAddress'): Party {
-    if (!party.firstName) {
-      party = null;
-    } else if (party[addressKey] && !party[addressKey].street) {
-      party[addressKey] = null;
-    } else if (party[addressKey].street && !party[addressKey].id) {
-      party[addressKey].id = 0;
+  protected toPersonJson<P extends Person>(person: P, addressKey: 'physicalAddress' | 'mailingAddress' = 'physicalAddress'): P {
+    if (!person.firstName) {
+      person = null;
+    } else if (person[addressKey] && !person[addressKey].street) {
+      person[addressKey] = null;
+    } else if (person[addressKey].street && !person[addressKey].id) {
+      person[addressKey].id = 0;
     }
 
-    if (party) {
+    if (person) {
       // Add the address reference ID to the party
-      party[`${addressKey}Id`] = (!!party[addressKey]?.id)
-        ? party[addressKey].id
+      person[`${addressKey}Id`] = (!!person[addressKey]?.id)
+        ? person[addressKey].id
         : 0;
     }
 
-    return party;
+    return person;
   }
 }

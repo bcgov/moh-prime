@@ -6,8 +6,8 @@ namespace PrimeTests.ModelFactories
 {
     public static class CollegePracticeLookup
     {
-        private static ICollection<CollegePractice> _seedData = new CollegePracticeConfiguration().SeedData;
+        private static IEnumerable<CollegePractice> _seedData = new CollegePracticeConfiguration().SeedData;
 
-        public static ICollection<CollegePractice> All { get { return _seedData; } }
+        public static IEnumerable<CollegePractice> All { get { return _seedData; } }
     }
 }

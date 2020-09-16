@@ -35,7 +35,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Webhook(string apiKey, string topic, [FromBody] JObject data)
         {
-            if (apiKey != PrimeConstants.VERIFIABLE_CREDENTIAL_WEBHOOK_KEY)
+            if (apiKey != PrimeEnvironment.VerifiableCredentialApi.WebhookKey)
             {
                 return Forbid();
             }

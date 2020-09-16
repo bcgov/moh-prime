@@ -5,7 +5,7 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { SelfDeclaration } from './self-declarations.model';
@@ -16,6 +16,9 @@ export interface HttpEnrollee extends Enrollee {
   id?: number;
   displayId?: number;
   hpdid: string;
+  firstName: string;
+  lastName: string;
+  givenNames: string;
   appliedDate: string;
   approvedDate: string;
   expiryDate?: string;
@@ -25,8 +28,7 @@ export interface HttpEnrollee extends Enrollee {
   jobs: Job[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
-  enrolleeOrganizationTypes: Organization[];
-  privileges: Privilege[];
+  enrolleeCareSettings: CareSetting[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -45,7 +47,6 @@ export interface HttpEnrollee extends Enrollee {
   base64QRCode: string;
 }
 
-
 /**
  * @deprecated
  */
@@ -60,11 +61,9 @@ export interface Enrolment {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
-
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
-  organizations: Organization[];
-  privileges: Privilege[];
+  careSettings: CareSetting[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -81,4 +80,19 @@ export interface Enrolment {
   adjudicatorId: number;
   adjudicator: Admin;
   base64QRCode: string;
+}
+
+export interface EnrolleeListViewModel {
+  id: number;
+  displayId: number;
+  firstName: string;
+  lastName: string;
+  givenNames: string;
+  appliedDate: string;
+  approvedDate: string;
+  expiryDate: string;
+  currentStatusCode: number;
+  previousStatus: EnrolmentStatus;
+  adjudicatorIdir: string;
+  alwaysManual: boolean;
 }

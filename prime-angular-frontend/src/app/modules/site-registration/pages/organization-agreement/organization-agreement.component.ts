@@ -66,7 +66,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
               ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
               : EMPTY
           ),
-          exhaustMap(() => this.siteResource.updateSiteCompleted((this.route.snapshot.queryParams.siteId)))
+          exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.queryParams.siteId)))
         )
         .subscribe(() => this.nextRoute());
     }
@@ -92,10 +92,22 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
       });
   }
 
+  public showDefaultAgreement() {
+    return this.organizationService.organization.signedAgreementDocuments?.length < 1 ?? true;
+  }
+
+  public downloadSignedAgreement() {
+    this.organizationResource
+      .getDownloadTokenForLatestSignedAgreement(this.organizationService.organization.id)
+      .subscribe((token: string) => {
+        this.utilsService.downloadToken(token);
+      });
+  }
+
   public onBack() {
     const siteId = this.route.snapshot.queryParams.siteId;
     if (siteId) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
+      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.REMOTE_USERS]);
     } else {
       this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
     }
@@ -108,18 +120,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     } else {
       this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
     }
-  }
-
-  public showDefaultAgreement() {
-    return this.organizationService.organization.signedAgreementDocuments?.length < 1 ?? true;
-  }
-
-  public downloadSignedAgreement() {
-    this.organizationResource
-      .getDownloadTokenForLatestSignedAgreement(this.organizationService.organization.id)
-      .subscribe((token: string) => {
-        this.utilsService.downloadToken(token);
-      });
   }
 
   public ngOnInit(): void {

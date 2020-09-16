@@ -25,7 +25,6 @@ namespace Prime.Models
 
         public ICollection<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
 
-
         public EnrolmentStatusReference EnrolmentStatusReference { get; set; }
 
         public void AddStatusReason(StatusReasonType type, string reasonNote = null)
@@ -45,7 +44,12 @@ namespace Prime.Models
 
         public bool IsType(StatusType statusType)
         {
-            return this.StatusCode == (int)statusType;
+            return StatusCode == (int)statusType;
+        }
+
+        public StatusType GetStatusType()
+        {
+            return (StatusType)StatusCode;
         }
 
         public static EnrolmentStatus FromType(StatusType statusType, int enrolleeId)

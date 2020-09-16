@@ -7,9 +7,9 @@ namespace PrimeTests.ModelFactories
 {
     public static class CountryLookup
     {
-        private static ICollection<Country> _seedData = new CountryConfiguration().SeedData;
+        private static IEnumerable<Country> _seedData = new CountryConfiguration().SeedData;
 
-        public static ICollection<Country> All { get { return _seedData; } }
+        public static IEnumerable<Country> All { get { return _seedData; } }
 
         public static Country Canada { get { return All.Single(c => c.Code == Country.CANADA); } }
 

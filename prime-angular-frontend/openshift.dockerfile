@@ -41,7 +41,6 @@ RUN echo "Populating environment..." && \
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
   npm install @angular/cli  -g --silent && \
   npm install && \
-  npm audit fix && \
   ng build --prod && \
   echo "NPM packages installed..."
 

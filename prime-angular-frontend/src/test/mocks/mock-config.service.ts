@@ -146,7 +146,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
             ]
           }
         ],
-        organizationTypes: [
+        careSettings: [
           { code: 1, name: 'Health Authority' },
           { code: 2, name: 'Pharmacy' }
         ],
@@ -231,7 +231,7 @@ export class MockConfigService extends ConfigService implements IConfigService {
           { code: 2, name: 'Allowable Transaction' }
         ],
         vendors: [
-          { code: 1, organizationTypeCode: 1, organizationType: null, name: 'CareConnect' }
+          { code: 1, careSettingCode: 1, careSetting: null, name: 'CareConnect' }
         ]
       };
 

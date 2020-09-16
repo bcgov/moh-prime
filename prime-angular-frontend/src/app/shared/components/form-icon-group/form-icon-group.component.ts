@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, QueryList, ContentChildren } from '@angular/core';
-import { ContextualContentDirective } from '@shared/modules/ngx-contextual-help/contextual-content.directive';
+
+import { ContextualContentDirective } from '@lib/modules/ngx-contextual-help/contextual-content.directive';
 
 @Component({
   selector: 'app-form-icon-group',

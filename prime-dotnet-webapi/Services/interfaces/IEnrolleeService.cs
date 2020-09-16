@@ -14,19 +14,21 @@ namespace Prime.Services
 
         Task<bool> EnrolleeExistsAsync(int enrolleeId);
 
-        Task<bool> EnrolleeUserIdExistsAsync(Guid userId);
+        Task<bool> UserIdExistsAsync(Guid userId);
 
-        Task<bool> EnrolleeGpidExistsAsync(string gpid);
+        Task<bool> GpidExistsAsync(string gpid);
+
+        Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
 
         Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false);
 
         Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
 
-        Task<IEnumerable<Enrollee>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
+        Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
 
         Task<int> CreateEnrolleeAsync(Enrollee enrollee);
 
-        Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeProfileViewModel enrolleeProfile, bool profileCompleted = false);
+        Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
 
         Task DeleteEnrolleeAsync(int enrolleeId);
 
@@ -42,11 +44,13 @@ namespace Prime.Services
 
         Task<int> GetEnrolleeCountAsync();
 
-        Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, Admin admin = null);
+        Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null);
 
         Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId);
 
         Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids);
+
+        Task<GpidValidationResponse> ValidateProvisionerDataAsync(string gpid, GpidValidationParameters parameters);
 
         Task<EnrolmentStatusReference> CreateEnrolmentStatusReferenceAsync(int statusId, int adminId);
 

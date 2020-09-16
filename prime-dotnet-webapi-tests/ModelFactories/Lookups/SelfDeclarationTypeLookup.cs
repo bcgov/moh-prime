@@ -6,9 +6,9 @@ namespace PrimeTests.ModelFactories
 {
     public static class SelfDeclarationTypeLookup
     {
-        private static ICollection<SelfDeclarationType> _seedData = new SelfDeclarationTypeConfiguration().SeedData;
+        private static IEnumerable<SelfDeclarationType> _seedData = new SelfDeclarationTypeConfiguration().SeedData;
 
-        public static ICollection<SelfDeclarationType> All { get { return _seedData; } }
+        public static IEnumerable<SelfDeclarationType> All { get { return _seedData; } }
 
     }
 }

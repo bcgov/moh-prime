@@ -80,7 +80,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       this.logger.warn('JOBS', this.enrolmentStateService.isJobsValid());
       this.logger.warn('HAS_REG_OR_JOB', this.enrolmentStateService.hasRegOrJob());
       this.logger.warn('SELF DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
-      this.logger.warn('ORGANIZATION', this.enrolmentStateService.isOrganizationValid());
+      this.logger.warn('CARE_SETTING', this.enrolmentStateService.isCareSettingValid());
     }
   }
 
@@ -113,12 +113,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       // Merge BCSC information in for use within the view
       const {
         firstName,
-        middleName,
         lastName,
         dateOfBirth,
         physicalAddress
       } = this.enrolmentService.enrolment.enrollee;
-      enrolment.enrollee = { ...enrolment.enrollee, firstName, middleName, lastName, dateOfBirth, physicalAddress };
+      enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, dateOfBirth, physicalAddress };
     }
 
     // Store a local copy of the enrolment for views

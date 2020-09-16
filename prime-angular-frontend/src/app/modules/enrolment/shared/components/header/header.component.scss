@@ -1,0 +1,30 @@
+@import 'palette';
+
+.mat-toolbar {
+  height: 70px;
+
+  img {
+    margin-top: -15px;
+
+    &.hasMobileSidemenu {
+      // Provide space between sidemenu toggle and BC Gov. logo
+      margin-left: 15px;
+    }
+  }
+
+  .username {
+    font-size: .8rem;
+  }
+
+  .mat-icon {
+    cursor: pointer;
+    font-size: 20px;
+    margin-top: .4em;
+    user-select: none;
+  }
+
+  .logout {
+    margin-left: 1.2em;
+    margin-right: .2em;
+  }
+}

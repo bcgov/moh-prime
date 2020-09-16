@@ -51,15 +51,15 @@ namespace Prime.Services
             _logger = logger;
         }
 
-        public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeProfileViewModel updatedProfile)
+        public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
-                .Include(e => e.EnrolleeOrganizationTypes)
+                .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.AccessTerms)
-                    .ThenInclude(at => at.UserClause)
+                .Include(e => e.SelfDeclarations)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             bool minorUpdate = await _submissionRulesService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
@@ -74,20 +74,22 @@ namespace Prime.Services
             await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
 
-            // TODO Verfifiable Credentials commented out for push to prod because prod aries agent is not ready
             // TODO need robust issuance rules to be added since each submission shouldn't create
             // a new connection and issue a new credential
             // TODO when/where should a new credential be issued?
             // TODO check for an active connection
             // TODO check for issued credential
-            // try
-            // {
-            //     await _verifiableCredentialService.CreateConnectionAsync(enrollee);
-            // }
-            // catch (Exception ex)
-            // {
-            //     _logger.LogError("Error occurred attempting to create a connection invitation through the Verifiable Credential agent: ${ex}", ex);
-            // }
+            if (_httpContext.HttpContext.User.hasVCIssuance())
+            {
+                try
+                {
+                    await _verifiableCredentialService.CreateConnectionAsync(enrollee);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Error occurred attempting to create a connection invitation through the Verifiable Credential agent: ${ex}", ex);
+                }
+            }
 
             await this.ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();
@@ -132,7 +134,7 @@ namespace Prime.Services
             var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
             newStatus.AddStatusReason(StatusReasonType.Manual);
 
-            await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
+            await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee.Id);
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
             await _context.SaveChangesAsync();
@@ -147,7 +149,7 @@ namespace Prime.Services
             if (accept)
             {
                 await SetGpid(enrollee);
-                await _accessTermService.AcceptCurrentAccessTermAsync(enrollee);
+                await _accessTermService.AcceptCurrentAccessTermAsync(enrollee.Id);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
 
@@ -187,7 +189,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Declined);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
-            await _accessTermService.ExpireCurrentAccessTermAsync(enrollee);
+            await _accessTermService.ExpireCurrentAccessTermAsync(enrollee.Id);
         }
 
         private async Task EnableProfileAsync(Enrollee enrollee)
@@ -215,7 +217,7 @@ namespace Prime.Services
                 {
                     enrollee.GPID = GenerateGpid();
                 }
-                while (await _enrolleeService.EnrolleeGpidExistsAsync(enrollee.GPID));
+                while (await _enrolleeService.GpidExistsAsync(enrollee.GPID));
             }
         }
 
@@ -251,8 +253,8 @@ namespace Prime.Services
                 var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
                 newStatus.AddStatusReason(StatusReasonType.Automatic);
 
-                await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee);
-                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Automatically Approved");
+                await _accessTermService.CreateEnrolleeAccessTermAsync(enrolleeId);
+                await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Automatically Approved");
             }
         }
 
@@ -340,22 +342,23 @@ namespace Prime.Services
 
             private static EnrolleeState FromEnrollee(Enrollee enrollee)
             {
-                if (enrollee == null || enrollee.CurrentStatus == null)
+                enrollee.ThrowIfNull(nameof(enrollee));
+                if (enrollee.CurrentStatus == null)
                 {
-                    throw new ArgumentNullException(nameof(enrollee));
+                    throw new ArgumentException("Enrollee must have a CurrentStatus", nameof(enrollee));
                 }
 
-                switch (enrollee.CurrentStatus.StatusCode)
+                switch (enrollee.CurrentStatus.GetStatusType())
                 {
-                    case (int)StatusType.Editable:
+                    case StatusType.Editable:
                         return EnrolleeState.Editable;
-                    case (int)StatusType.UnderReview:
+                    case StatusType.UnderReview:
                         return EnrolleeState.UnderReview;
-                    case (int)StatusType.RequiresToa:
+                    case StatusType.RequiresToa:
                         return EnrolleeState.RequiresToa;
-                    case (int)StatusType.Locked:
+                    case StatusType.Locked:
                         return EnrolleeState.Locked;
-                    case (int)StatusType.Declined:
+                    case StatusType.Declined:
                         return EnrolleeState.Declined;
                     default:
                         throw new ArgumentException($"State machine cannot recognize status code {enrollee.CurrentStatus.StatusCode}");

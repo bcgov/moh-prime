@@ -21,7 +21,9 @@ export interface IAuthService {
 
   logout(redirectUri?: string): Promise<void>;
   login(options?: any): Promise<void>;
+  getUser$(forceReload?: boolean): Observable<User>;
   getUser(forceReload?: boolean): Promise<User>;
+  getAdmin$(forceReload?: boolean): Observable<Admin>;
   getAdmin(forceReload?: boolean): Promise<Admin>;
 }
 

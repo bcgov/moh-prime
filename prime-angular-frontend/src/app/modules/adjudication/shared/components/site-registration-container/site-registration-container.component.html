@@ -5,15 +5,17 @@
 
   <ng-content select="app-page-subheader"></ng-content>
 
-  <app-search-form [disabled]="true"
+  <app-search-form *ngIf="showSearchFilter"
+                   [disabled]="true"
                    (search)="onSearch($event)"
                    (filter)="onFilter($event)"
                    (refresh)="onRefresh()"></app-search-form>
 
   <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
                                [dataSource]="dataSource"
-                               (route)="onRoute($event)"
-                               (delete)="onDelete($event)"></app-site-registration-table>
+                               (claim)="onClaim($event)"
+                               (disclaim)="onDisclaim($event)"
+                               (route)="onRoute($event)"></app-site-registration-table>
 
   <ng-container *ngIf="content">
 
@@ -21,14 +23,28 @@
       <div class="col py-5">
 
         <ng-container [ngTemplateOutlet]="content"
-                      [ngTemplateOutletContext]="{ site: dataSource?.data[0] }"></ng-container>
+                      [ngTemplateOutletContext]="{ siteRegistration: dataSource?.data[0] }"></ng-container>
 
       </div>
       <div *ngIf="hasActions"
            class="col-auto py-5">
 
-        <app-site-registration-actions [site]="dataSource?.data[0]"
-                                       (delete)="onDelete($event)"></app-site-registration-actions>
+        <ng-container *ngIf="actions; else defaultActions">
+
+          <ng-container [ngTemplateOutlet]="actions"
+                        [ngTemplateOutletContext]="{ siteRegistration: dataSource?.data[0] }"></ng-container>
+
+        </ng-container>
+
+        <ng-template #defaultActions>
+
+          <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
+                                         (approve)="onApprove($event)"
+                                         (decline)="onDecline($event)"
+                                         (delete)="onDelete($event)">
+          </app-site-registration-actions>
+
+        </ng-template>
 
       </div>
     </div>

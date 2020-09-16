@@ -52,8 +52,8 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
       enrollee.jobs = [];
     }
 
-    if (!enrollee.enrolleeOrganizationTypes) {
-      enrollee.enrolleeOrganizationTypes = [];
+    if (!enrollee.enrolleeCareSettings) {
+      enrollee.enrolleeCareSettings = [];
     }
 
     return this.enrolmentAdapter(enrollee);
@@ -63,8 +63,8 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
     const {
       userId,
       firstName,
-      middleName,
       lastName,
+      givenNames,
       preferredFirstName,
       preferredMiddleName,
       preferredLastName,
@@ -84,8 +84,8 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
       enrollee: {
         userId,
         firstName,
-        middleName,
         lastName,
+        givenNames,
         preferredFirstName,
         preferredMiddleName,
         preferredLastName,
@@ -101,7 +101,7 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
-      organizations: enrollee.enrolleeOrganizationTypes,
+      careSettings: enrollee.enrolleeCareSettings,
       ...remainder
     };
   }

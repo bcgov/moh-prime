@@ -21,9 +21,8 @@ export class CertificatePipe implements PipeTransform {
 
   private getFullName(certificate: any) {
     const firstName = (certificate.firstName) ? certificate.firstName : '';
-    const middleName = (certificate.middleName) ? certificate.middleName : '';
     const lastName = (certificate.lastName) ? certificate.lastName : '';
-    return ` ${firstName} ${middleName} ${lastName} `;
+    return ` ${firstName} ${lastName} `;
   }
 
   private getPreferredName(certificate: any) {

@@ -8,6 +8,16 @@
     </ng-container>
   </app-page-subheader>
 
+  <div *ngIf="enrolment?.enrollee?.gpid"
+       class="row mb-3">
+    <div class="col-6 mb-3">
+      GPID
+    </div>
+    <div class="col-6 text-right mb-3">
+      {{ enrolment?.enrollee?.gpid | default }}
+    </div>
+  </div>
+
   <app-enrollee-review [enrolment]="enrolmentProfileHistory?.profileSnapshot"></app-enrollee-review>
 
   <div class="row justify-content-between">

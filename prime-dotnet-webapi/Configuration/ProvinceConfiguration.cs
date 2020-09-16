@@ -5,7 +5,7 @@ namespace Prime.Configuration
 {
     public class ProvinceConfiguration : SeededTable<Province>
     {
-        public override ICollection<Province> SeedData
+        public override IEnumerable<Province> SeedData
         {
             get
             {

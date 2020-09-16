@@ -33,6 +33,7 @@ $header-height: 73px;
 
 .content {
   .text-muted {
+    font-size: .85rem;
     font-style: italic;
   }
 
@@ -43,8 +44,4 @@ $header-height: 73px;
   ul {
     padding-left: 1.5em;
   }
-}
-
-.content .text-muted {
-  font-size: .85rem;
 }

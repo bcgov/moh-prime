@@ -21,8 +21,8 @@ namespace Prime.Services
             var token = await _context.EnrolmentCertificateAccessTokens
                 .Where(t => t.Id == accessTokenId)
                 .Include(t => t.Enrollee)
-                    .ThenInclude(e => e.EnrolleeOrganizationTypes)
-                        .ThenInclude(org => org.OrganizationType)
+                    .ThenInclude(e => e.EnrolleeCareSettings)
+                        .ThenInclude(org => org.CareSetting)
                 .Include(t => t.Enrollee)
                     .ThenInclude(e => e.AccessTerms)
                 .SingleOrDefaultAsync();
@@ -42,11 +42,11 @@ namespace Prime.Services
             return null;
         }
 
-        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(Enrollee enrollee)
+        public async Task<EnrolmentCertificateAccessToken> CreateCertificateAccessTokenAsync(int enrolleeId)
         {
             EnrolmentCertificateAccessToken token = new EnrolmentCertificateAccessToken()
             {
-                Enrollee = enrollee,
+                EnrolleeId = enrolleeId,
                 ViewCount = 0,
                 Expires = DateTimeOffset.Now.Add(EnrolmentCertificateAccessToken.Lifespan),
                 Active = true

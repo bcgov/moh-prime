@@ -4,12 +4,20 @@ using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+using DelegateDecompiler;
 
 namespace Prime.Models
 {
     [Table("Enrollee")]
     public class Enrollee : BaseAuditable, IValidatableObject, IUserBoundModel
     {
+        public Enrollee()
+        {
+            // Initialize collections to prevent null exception on computed properties like CurrrentStatus and ExpiryDate
+            EnrolmentStatuses = new List<EnrolmentStatus>();
+            AccessTerms = new List<AccessTerm>();
+        }
+
         public const int DISPLAY_OFFSET = 1000;
 
         [Key]
@@ -26,10 +34,11 @@ namespace Prime.Models
         [Required]
         public string FirstName { get; set; }
 
-        public string MiddleName { get; set; }
-
         [Required]
         public string LastName { get; set; }
+
+        [Required]
+        public string GivenNames { get; set; }
 
         public string PreferredFirstName { get; set; }
 
@@ -56,7 +65,7 @@ namespace Prime.Models
 
         public ICollection<Job> Jobs { get; set; }
 
-        public ICollection<EnrolleeOrganizationType> EnrolleeOrganizationTypes { get; set; }
+        public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
         public string DeviceProviderNumber { get; set; }
 
@@ -66,21 +75,10 @@ namespace Prime.Models
 
         public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
 
-        [NotMapped]
-        public string CurrentTOAStatus { get; set; }
-
         [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
-        [NotMapped]
-        public ICollection<Privilege> Privileges { get; set; }
-
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
-
-        public bool ShouldSerializeEnrolmentStatuses()
-        {
-            return (isAdminView != null && (bool)isAdminView);
-        }
 
         [NotMapped]
         [JsonIgnore]
@@ -120,61 +118,96 @@ namespace Prime.Models
         [NotMapped]
         public string Base64QRCode
         {
-            get => this.Credential?.Base64QRCode;
+            get => Credential?.Base64QRCode;
         }
 
+        /// <summary>
+        /// Gets the most recent Enrolment Status on the Enrollee.
+        /// </summary>
         [NotMapped]
+        [Computed]
         public EnrolmentStatus CurrentStatus
         {
-            get => this.EnrolmentStatuses?
-                .OrderByDescending(es => es.StatusDate)
-                .ThenByDescending(es => es.Id)
+            get => EnrolmentStatuses
+                .OrderByDescending(s => s.StatusDate)
+                .ThenByDescending(s => s.Id)
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Gets the *second* most recent Enrolment Status on the Enrollee.
+        /// </summary>
         [NotMapped]
+        [Computed]
         public EnrolmentStatus PreviousStatus
         {
-            get => this.EnrolmentStatuses?
-                .OrderByDescending(es => es.StatusDate)
-                .ThenByDescending(es => es.Id)
+            get => EnrolmentStatuses
+                .OrderByDescending(s => s.StatusDate)
+                .ThenByDescending(s => s.Id)
                 .Skip(1)
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// The date of the Enrollee's most recent applicaiton.
+        /// </summary>
         [NotMapped]
+        [Computed]
         public DateTimeOffset? AppliedDate
         {
-            get => this.EnrolmentStatuses?
-                .OrderByDescending(en => en.StatusDate)
-                .FirstOrDefault(es => es.IsType(StatusType.UnderReview))
-                ?.StatusDate;
+            get => EnrolmentStatuses
+                .OrderByDescending(es => es.StatusDate)
+                .ThenByDescending(es => es.Id)
+                .Where(es => es.StatusCode == (int)StatusType.UnderReview)
+                .Select(es => (DateTimeOffset?)es.StatusDate)
+                .FirstOrDefault();
         }
 
+        /// <summary>
+        /// The date of the Enrollee's most recent manual or automatic approval.
+        /// </summary>
         [NotMapped]
+        [Computed]
         public DateTimeOffset? ApprovedDate
         {
-            get
-            {
-                return this.EnrolmentStatuses?
-                    .OrderByDescending(en => en.StatusDate)
-                    .Where(es => es.IsType(StatusType.RequiresToa))
-                    .FirstOrDefault(es => es.StatusDate > this.AppliedDate)
-                    ?.StatusDate;
-            }
+            get => EnrolmentStatuses
+                .OrderByDescending(es => es.StatusDate)
+                .ThenByDescending(es => es.Id)
+                .Where(es => es.StatusCode == (int)StatusType.RequiresToa)
+                .Select(es => (DateTimeOffset?)es.StatusDate)
+                .FirstOrDefault();
         }
 
+        /// <summary>
+        /// The ID of the Enrollee's most recently accepted Agreement.
+        /// </summary>
         [NotMapped]
+        [Computed]
+        public int? CurrentAgreementId
+        {
+            get => AccessTerms
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.AcceptedDate != null)
+                .Select(a => (int?)a.AgreementId)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// The expiry date of the Enrollee's most recently accepted Access Term.
+        /// </summary>
+        [NotMapped]
+        [Computed]
         public DateTimeOffset? ExpiryDate
         {
-            // This applies to the expiry date of the most recent accepted ToA
-            get => this.AccessTerms?
-                .OrderByDescending(at => at.AcceptedDate)
-                .FirstOrDefault(at => at.ExpiryDate != null)?
-                .ExpiryDate;
+            get => AccessTerms
+                .OrderByDescending(at => at.CreatedDate)
+                .Where(at => at.AcceptedDate.HasValue)
+                .Select(at => (DateTimeOffset?)at.ExpiryDate)
+                .FirstOrDefault();
         }
 
         [NotMapped]
+        [Computed]
         public int DisplayId
         {
             get => Id + DISPLAY_OFFSET;
@@ -203,14 +236,50 @@ namespace Prime.Models
             CurrentStatus.AddStatusReason(type, statusReasonNote);
         }
 
-        public bool IsRegulatedUser()
+        public bool HasCareSetting(CareSettingType type)
         {
-            if (Certifications == null || Certifications.Any(cert => cert.License == null))
+            if (EnrolleeCareSettings == null)
             {
-                throw new InvalidOperationException("Could not determine Regulated User status; Certifications or Licences were null");
+                throw new InvalidOperationException($"{nameof(EnrolleeCareSettings)} cannot be null");
             }
 
-            return Certifications.Any(cert => cert.License.RegulatedUser);
+            return EnrolleeCareSettings.Any(o => o.IsType(type));
+        }
+
+        /// <summary>
+        /// Returns true if the Enrollee's most recently accepted Agreement has no newer versions.
+        /// Makes no determination if said Agreement is of the correct type for the Enrollee.
+        /// </summary>
+        public bool HasLatestAgreement()
+        {
+            if (AccessTerms == null)
+            {
+                throw new InvalidOperationException($"Cannot determine latest agreement, {nameof(AccessTerms)} is null");
+            }
+
+            var currentAgreement = AccessTerms
+                .OrderByDescending(a => a.CreatedDate)
+                .FirstOrDefault(a => a.AcceptedDate != null);
+
+            if (currentAgreement == null)
+            {
+                return false;
+            }
+
+            return Agreement.NewestAgreementIds().Contains(currentAgreement.AgreementId);
+        }
+
+        /// <summary>
+        /// Returns true if the Enrollee has at least one Certification with a regulated Licence
+        /// </summary>
+        public bool IsRegulatedUser()
+        {
+            if (Certifications == null)
+            {
+                throw new InvalidOperationException($"{nameof(Certifications)} cannnot be null");
+            }
+
+            return Certifications.Any(cert => cert.License?.RegulatedUser == true);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

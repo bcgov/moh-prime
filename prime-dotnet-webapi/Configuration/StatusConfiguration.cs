@@ -5,7 +5,7 @@ namespace Prime.Configuration
 {
     public class StatusConfiguration : SeededTable<Status>
     {
-        public override ICollection<Status> SeedData
+        public override IEnumerable<Status> SeedData
         {
             get
             {

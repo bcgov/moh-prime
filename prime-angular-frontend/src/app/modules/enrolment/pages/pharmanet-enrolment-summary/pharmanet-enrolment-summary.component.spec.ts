@@ -3,15 +3,18 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
+import { KeycloakService } from 'keycloak-angular';
+
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { PharmanetEnrolmentSummaryComponent } from './pharmanet-enrolment-summary.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
-
 
 describe('PharmanetEnrolmentSummaryComponent', () => {
   let component: PharmanetEnrolmentSummaryComponent;
@@ -32,15 +35,19 @@ describe('PharmanetEnrolmentSummaryComponent', () => {
             useValue: APP_DI_CONFIG
           },
           {
+            provide: AuthService,
+            useClass: MockAuthService
+          },
+          {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
           },
           {
             provide: ConfigService,
             useClass: MockConfigService
-          }
+          },
+          KeycloakService
         ]
-
       }
     ).compileComponents();
   }));

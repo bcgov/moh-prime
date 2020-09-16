@@ -6,10 +6,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subscription, EMPTY, of, noop, concat, pipe } from 'rxjs';
 import { map, exhaustMap, tap } from 'rxjs/operators';
 
-import { AbstractComponent } from '@shared/classes/abstract-component';
+import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
+
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
@@ -18,7 +19,6 @@ import {
   ClaimEnrolleeAction,
   ClaimActionEnum
 } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
-import { MatTableDataSourceUtils } from '@shared/modules/ngx-material/mat-table-data-source-utils.class';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -27,6 +27,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -39,7 +40,7 @@ export class AdjudicationContainerComponent implements OnInit {
   @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
-  public dataSource: MatTableDataSource<HttpEnrollee>;
+  public dataSource: MatTableDataSource<EnrolleeListViewModel>;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -52,14 +53,15 @@ export class AdjudicationContainerComponent implements OnInit {
     protected router: Router,
     private authService: AuthService,
     private adjudicationResource: AdjudicationResource,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private utilsService: UtilsService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
 
     this.action = new EventEmitter<void>();
 
     this.hasActions = false;
-    this.dataSource = new MatTableDataSource<HttpEnrollee>([]);
+    this.dataSource = new MatTableDataSource<EnrolleeListViewModel>([]);
 
     this.showSearchFilter = false;
   }
@@ -77,9 +79,14 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onNotify(enrolleeId: number) {
-    this.adjudicationResource
-      .sendEnrolleeReminderEmail(enrolleeId)
-      .subscribe();
+    this.adjudicationResource.getEnrolleeById(enrolleeId)
+      .pipe(
+        exhaustMap((enrollee: HttpEnrollee) => this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
+          .pipe(map(() => enrollee)))
+      )
+      .subscribe((enrollee: HttpEnrollee) => {
+        this.utilsService.mailTo(enrollee.contactEmail);
+      });
   }
 
   public onClaim(enrolleeId: number) {
@@ -105,7 +112,7 @@ export class AdjudicationContainerComponent implements OnInit {
           } else if (result.output.action === ClaimActionEnum.Claim) {
             return concat(
               this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId),
-              this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId)
+              this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, result.output.adjudicatorId)
             );
           }
         })
@@ -113,7 +120,7 @@ export class AdjudicationContainerComponent implements OnInit {
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
-  public onApprove(enrollee: HttpEnrollee) {
+  public onApprove(enrollee: EnrolleeListViewModel) {
     const data: DialogOptions = {
       title: 'Approve Enrolment',
       message: 'Are you sure you want to approve this enrolment?',
@@ -273,11 +280,11 @@ export class AdjudicationContainerComponent implements OnInit {
           }),
           exhaustMap(() => this.adjudicationResource.deleteEnrollee(enrolleeId)),
         )
-        .subscribe(() => this.routeUtils.routeRelativeTo([AdjudicationRoutes.ENROLLEES]));
+        .subscribe(() => this.routeUtils.routeTo(AdjudicationRoutes.MODULE_PATH));
     }
   }
 
-  public onToggleManualAdj(enrollee: HttpEnrollee) {
+  public onToggleManualAdj(enrollee: EnrolleeListViewModel) {
     const flagText = enrollee.alwaysManual ? 'Unflag' : 'Flag';
     const data: DialogOptions = {
       title: `${flagText} Enrollee`,
@@ -289,11 +296,11 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result) => {
-          return result
+        exhaustMap((result: boolean) =>
+          (result)
             ? of(noop)
-            : EMPTY;
-        }),
+            : EMPTY
+        ),
         exhaustMap(() =>
           this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, !enrollee.alwaysManual)
         ),
@@ -323,14 +330,15 @@ export class AdjudicationContainerComponent implements OnInit {
       : this.getEnrollees(queryParams);
 
     this.busy = results$
-      .subscribe((enrollees: HttpEnrollee[]) => this.dataSource.data = enrollees);
+      .subscribe((enrollees: EnrolleeListViewModel[]) => this.dataSource.data = enrollees);
   }
 
-  private getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee[]> {
+  private getEnrolleeById(enrolleeId: number): Observable<EnrolleeListViewModel[]> {
     return this.adjudicationResource
       .getEnrolleeById(enrolleeId)
       .pipe(
-        map((enrollee: HttpEnrollee) => [enrollee]),
+        map(this.toEnrolleeListViewModel),
+        map((enrollee: EnrolleeListViewModel) => [enrollee]),
         tap(() => this.showSearchFilter = false)
       );
   }
@@ -344,35 +352,56 @@ export class AdjudicationContainerComponent implements OnInit {
 
   private updateEnrollee(enrollee: HttpEnrollee) {
     this.dataSource.data = MatTableDataSourceUtils
-      .update<HttpEnrollee>(this.dataSource, 'id', enrollee);
+      .update<EnrolleeListViewModel>(this.dataSource, 'id', this.toEnrolleeListViewModel(enrollee));
   }
 
-  private removeEnrollee(enrollee: HttpEnrollee) {
+  private removeEnrollee(enrollee: EnrolleeListViewModel) {
     this.dataSource.data = MatTableDataSourceUtils
-      .delete<HttpEnrollee>(this.dataSource, 'id', enrollee.id);
+      .delete<EnrolleeListViewModel>(this.dataSource, 'id', enrollee.id);
   }
 
   private adjudicationActionPipe(enrolleeId: number, action: SubmissionAction) {
-    let note: string;
-
     return pipe(
-      exhaustMap((result: { output: string }) => {
-        if (result?.output) {
-          note = result.output;
-        }
-
-        return (result)
-          ? of(noop)
-          : EMPTY;
-      }),
-      exhaustMap(() => this.adjudicationResource.submissionAction(enrolleeId, action)),
-      exhaustMap(() => this.adjudicationResource.createEnrolmentReference(enrolleeId)),
-      exhaustMap(() =>
+      exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
+      exhaustMap((note: string) => this.adjudicationResource.submissionAction(enrolleeId, action).pipe(map(() => note))),
+      exhaustMap((note: string) => this.adjudicationResource.createEnrolmentReference(enrolleeId).pipe(map(() => note))),
+      exhaustMap((note: string) =>
         (note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, note, true)
           : of(noop)
       ),
       exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
     );
+  }
+
+  private toEnrolleeListViewModel(enrollee: HttpEnrollee): EnrolleeListViewModel {
+    const {
+      id,
+      displayId,
+      firstName,
+      lastName,
+      givenNames,
+      appliedDate,
+      approvedDate,
+      expiryDate,
+      currentStatus,
+      previousStatus,
+      adjudicator,
+      alwaysManual
+    } = enrollee;
+    return {
+      id,
+      displayId,
+      firstName,
+      lastName,
+      givenNames,
+      appliedDate,
+      approvedDate,
+      expiryDate,
+      currentStatusCode: currentStatus?.statusCode,
+      previousStatus,
+      adjudicatorIdir: adjudicator?.idir,
+      alwaysManual
+    };
   }
 }

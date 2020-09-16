@@ -46,7 +46,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testGetLookups()
+        public async void TestGetLookups()
         {
             var service = CreateService();
 
@@ -56,7 +56,7 @@ namespace PrimeTests.UnitTests
             Assert.NotEmpty(results.Colleges);
             Assert.NotEmpty(results.JobNames);
             Assert.NotEmpty(results.Licenses);
-            Assert.NotEmpty(results.OrganizationTypes);
+            Assert.NotEmpty(results.CareSettings);
             Assert.NotEmpty(results.Practices);
             Assert.NotEmpty(results.Statuses);
             Assert.NotEmpty(results.Countries);

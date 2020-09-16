@@ -9,7 +9,6 @@ import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
-import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-overview-container',

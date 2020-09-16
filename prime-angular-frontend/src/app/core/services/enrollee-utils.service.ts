@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfigService } from '@config/config.service';
 

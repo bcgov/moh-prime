@@ -1,9 +1,10 @@
 import { Component, OnInit, ContentChildren, QueryList, Input } from '@angular/core';
 
+import { ContextualTitleDirective } from '@lib/modules/ngx-contextual-help/contextual-title.directive';
+import { ContextualContentDirective } from '@lib/modules/ngx-contextual-help/contextual-content.directive';
+
 import { PageSubheaderTitleDirective } from '../page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '../page-subheader/page-subheader-summary.directive';
-import { ContextualTitleDirective } from '@shared/modules/ngx-contextual-help/contextual-title.directive';
-import { ContextualContentDirective } from '@shared/modules/ngx-contextual-help/contextual-content.directive';
 
 @Component({
   selector: 'app-page-subheader',

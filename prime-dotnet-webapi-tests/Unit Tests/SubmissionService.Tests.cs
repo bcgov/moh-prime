@@ -45,7 +45,7 @@ namespace PrimeTests.UnitTests
 
 //     public interface ISubmissionService
 //     {
-//         Task SubmitApplicationAsync(int enrolleeId, EnrolleeProfileViewModel enrolleProfile);
+//         Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel enrolleProfile);
 
 //         Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin);
 

@@ -18,11 +18,15 @@ export interface IOrganizationService {
   providedIn: 'root'
 })
 export class OrganizationService {
+  // Temporary hack to show success message until guards can be refactored
+  public showSuccess: boolean;
+
   // tslint:disable-next-line: variable-name
   private _organization: BehaviorSubject<Organization>;
 
   constructor() {
     this._organization = new BehaviorSubject<Organization>(null);
+    this.showSuccess = false;
   }
 
   public set organization(organization: Organization) {

@@ -65,7 +65,7 @@
 
   <div *ngIf="hasReadAgreement"
        class="row">
-    <div class="col-12 col-sm-8 order-sm-12 col-md-7 text-md-right">
+    <div class="col-12 text-md-right">
 
       <button mat-flat-button
               color="primary"
@@ -74,19 +74,6 @@
               (click)="onSubmit(true)">
         Accept Terms of Access
       </button>
-
-    </div>
-    <div class="col-12 col-sm-4 order-sm-1 col-md-5">
-
-      <!-- <button *ngIf="hasReadAgreement"
-              mat-button
-              color="warn"
-              class="mb-2"
-              [ngClass]="(!isMobile) ? 'mr-2' : 'w-100'"
-              [disabled]="!hasAgreed"
-              (click)="onSubmit()">
-        Decline Agreement
-      </button> -->
 
     </div>
   </div>

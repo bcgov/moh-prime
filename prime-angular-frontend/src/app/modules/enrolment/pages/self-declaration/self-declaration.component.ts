@@ -112,7 +112,6 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected initForm() {
-    // TODO make YES/NO into own component to encapsulate toggling and markup
     this.hasConviction.valueChanges
       .subscribe((value: boolean) => {
         this.toggleSelfDeclarationValidators(value, this.hasConvictionDetails);

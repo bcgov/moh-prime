@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -11,13 +11,13 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
   styleUrls: ['./adjudicator-actions.component.scss']
 })
 export class AdjudicatorActionsComponent implements OnInit {
-  @Input() public enrollee: HttpEnrollee;
-  @Output() public approve: EventEmitter<HttpEnrollee>;
+  @Input() public enrollee: EnrolleeListViewModel;
+  @Output() public approve: EventEmitter<EnrolleeListViewModel>;
   @Output() public decline: EventEmitter<number>;
   @Output() public lock: EventEmitter<number>;
   @Output() public unlock: EventEmitter<number>;
   @Output() public enableEnrollee: EventEmitter<number>;
-  @Output() public toggleManualAdj: EventEmitter<HttpEnrollee>;
+  @Output() public toggleManualAdj: EventEmitter<EnrolleeListViewModel>;
   @Output() public enableEditing: EventEmitter<number>;
   @Output() public rerunRules: EventEmitter<number>;
   @Output() public delete: EventEmitter<number>;
@@ -29,7 +29,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   constructor(
     private authService: AuthService
   ) {
-    this.approve = new EventEmitter<HttpEnrollee>();
+    this.approve = new EventEmitter<EnrolleeListViewModel>();
     this.decline = new EventEmitter<number>();
     this.lock = new EventEmitter<number>();
     this.unlock = new EventEmitter<number>();
@@ -37,7 +37,7 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.enableEditing = new EventEmitter<number>();
     this.rerunRules = new EventEmitter<number>();
     this.delete = new EventEmitter<number>();
-    this.toggleManualAdj = new EventEmitter<HttpEnrollee>();
+    this.toggleManualAdj = new EventEmitter<EnrolleeListViewModel>();
     this.route = new EventEmitter<string | (string | number)[]>();
   }
 
@@ -50,7 +50,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   }
 
   public get isUnderReview(): boolean {
-    return (this.enrollee && this.enrollee.currentStatus.statusCode === EnrolmentStatus.UNDER_REVIEW);
+    return (this.enrollee && this.enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
   public onApprove() {

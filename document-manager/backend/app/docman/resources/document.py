@@ -229,7 +229,7 @@ class DocumentResource(Resource):
 
         return send_file(filename_or_fp=doc.full_storage_path,
                          attachment_filename=doc.filename,
-                         as_attachment=False)
+                         as_attachment=True)
 
 
 @api.route(f'/documents/<string:document_guid>/download-token')
@@ -238,6 +238,13 @@ class DownloadTokenCreationResource(Resource):
     def post(self, document_guid):
         if not document_guid:
             raise BadRequest('Must specify document GUID')
+
+        doc = Document.find_by_document_guid(document_guid)
+        if not doc:
+            raise NotFound('Could not find document')
+
+        if not doc.upload_completed_date:
+            raise BadRequest('File upload not complete')
 
         token = str(uuid.uuid4())
         cache.set(DOWNLOAD_TOKEN(token), document_guid, TIMEOUT_5_MINUTES)

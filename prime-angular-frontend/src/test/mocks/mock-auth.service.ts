@@ -5,6 +5,7 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { IAuthService } from '@auth/shared/services/auth.service';
 import { User } from '@auth/shared/models/user.model';
 import { Admin } from '@auth/shared/models/admin.model';
+import { of, Observable } from 'rxjs';
 
 export class MockAuthService implements IAuthService {
   // tslint:disable-next-line: variable-name
@@ -31,12 +32,32 @@ export class MockAuthService implements IAuthService {
     throw new Error('Method not implemented.');
   }
 
+  public getUser$(forceReload?: boolean): Observable<User> {
+    return of({
+      userId: `${faker.random.uuid()}`,
+      hpdid: `${faker.random.uuid()}`,
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      givenNames: faker.name.firstName(),
+      dateOfBirth: faker.date.past().toISOString(),
+      physicalAddress: {
+        countryCode: faker.address.countryCode(),
+        provinceCode: faker.address.stateAbbr(),
+        street: faker.address.streetAddress(),
+        city: faker.address.city(),
+        postal: faker.address.zipCode()
+      },
+      contactEmail: faker.internet.email()
+    });
+  }
+
   public getUser(forceReload?: boolean): Promise<User> {
     return new Promise((resolve, reject) => resolve({
       userId: `${faker.random.uuid()}`,
       hpdid: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
+      givenNames: faker.name.firstName(),
       dateOfBirth: faker.date.past().toISOString(),
       physicalAddress: {
         countryCode: faker.address.countryCode(),
@@ -47,6 +68,16 @@ export class MockAuthService implements IAuthService {
       },
       contactEmail: faker.internet.email()
     }));
+  }
+
+  public getAdmin$(forceReload?: boolean): Observable<Admin> {
+    return of({
+      userId: `${faker.random.uuid()}`,
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      idir: `${faker.random.uuid()}`,
+    });
   }
 
   public getAdmin(forceReload?: boolean): Promise<Admin> {

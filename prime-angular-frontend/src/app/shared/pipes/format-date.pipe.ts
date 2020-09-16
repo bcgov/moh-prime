@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 
-import { APP_DATE_FORMAT } from '@shared/modules/ngx-material/ngx-material.module';
+import { APP_DATE_FORMAT } from '@lib/modules/ngx-material/ngx-material.module';
 
 @Pipe({
   name: 'formatDate'

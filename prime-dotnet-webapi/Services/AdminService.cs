@@ -21,7 +21,7 @@ namespace Prime.Services
                 .AnyAsync(a => a.Id == adminId);
         }
 
-        public async Task<bool> AdminUserIdExistsAsync(Guid userId)
+        public async Task<bool> UserIdExistsAsync(Guid userId)
         {
             return await _context.Admins
                 .AnyAsync(a => a.UserId == userId);
@@ -29,10 +29,7 @@ namespace Prime.Services
 
         public async Task<int> CreateAdminAsync(Admin admin)
         {
-            if (admin == null)
-            {
-                throw new ArgumentNullException(nameof(admin), "Could not create an admin, the passed in Admin cannot be null.");
-            }
+            admin.ThrowIfNull(nameof(admin));
 
             _context.Admins.Add(admin);
 
@@ -65,7 +62,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(a => a.Id == adminId);
         }
 
-        public async Task<Admin> GetAdminForUserIdAsync(Guid userId)
+        public async Task<Admin> GetAdminAsync(Guid userId)
         {
             return await _context.Admins
                 .SingleOrDefaultAsync(a => a.UserId == userId);

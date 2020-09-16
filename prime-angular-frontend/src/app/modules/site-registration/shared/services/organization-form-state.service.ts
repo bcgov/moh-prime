@@ -5,6 +5,7 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 import { Organization } from '@registration/shared/models/organization.model';
 import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
+import { Party } from '@registration/shared/models/party.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
    */
   public get json(): Organization {
     const organizationName = this.organizationNameForm.getRawValue();
-    const signingAuthority = this.toPartyJson(this.signingAuthorityForm.getRawValue(), 'mailingAddress');
+    const signingAuthority = this.toPersonJson<Party>(this.signingAuthorityForm.getRawValue(), 'mailingAddress');
 
     return {
       // OrganizationName is the only form that contains the organization ID
@@ -67,7 +68,7 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
     }
 
     this.organizationNameForm.patchValue(organization);
-    this.toPartyFormModel([this.signingAuthorityForm, organization.signingAuthority]);
+    this.toPersonFormModel<Party>([this.signingAuthorityForm, organization.signingAuthority]);
   }
 
   // TODO BCSC information is also in enrolments and can have shared form helpers

@@ -1,8 +1,12 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 metadata:
   name: mailhog-server-bc
   creationTimestamp: null
+  description: >-
+    Build configuration template for Mailhog, a service used to capture emails
+    sent out in development and test environments only.
 parameters:
   - name: SOURCE_REPOSITORY_URL
     required: true

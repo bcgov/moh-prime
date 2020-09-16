@@ -29,18 +29,23 @@
     color: theme-palette(blue) !important;
   }
 
+  // Active class applied by Angular based on the current route
+  .ng-active,
+  .ng-active:focus,
+  // Alias for ng-active for forcing an equivalent to "routerLinkActive"
+  // for dashboard navigation that are associated to multiple views.
+  // The order of operations in view rendering between [class]
+  // and router bindings where ".ng-active" is removed immediately
   .active,
   .active:focus,
-  // Alias for active for forcing an equivalent to "routerLinkActive"
-  // for dashboard navigation that are associated to multiple views.
-  // The order of operations in view rendering between ngClass
-  // and router bindings where ".active" is removed immediately
+  // TODO remove after DashboardV1Component is removed
   .force-active,
   .force-active:focus,
   .mat-list-item:focus {
     background-color: theme-palette(blue, lighter) !important;
   }
 
+  .ng-active,
   .active,
   .force-active {
     a {

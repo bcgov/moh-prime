@@ -6,8 +6,8 @@ namespace PrimeTests.ModelFactories
 {
     public static class PrivilegeTypeLookup
     {
-        private static ICollection<PrivilegeType> _seedData = new PrivilegeTypeConfiguration().SeedData;
+        private static IEnumerable<PrivilegeType> _seedData = new PrivilegeTypeConfiguration().SeedData;
 
-        public static ICollection<PrivilegeType> All { get { return _seedData; } }
+        public static IEnumerable<PrivilegeType> All { get { return _seedData; } }
     }
 }

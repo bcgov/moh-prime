@@ -11,7 +11,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { Address } from '@shared/models/address.model';
 import { AccessTerm } from '@shared/models/access-term.model';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
@@ -33,13 +33,12 @@ export class AdjudicationResource {
     private logger: LoggerService
   ) { }
 
-  public getEnrollees(textSearch?: string, statusCode?: number): Observable<HttpEnrollee[]> {
+  public getEnrollees(textSearch?: string, statusCode?: number): Observable<EnrolleeListViewModel[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode });
-    return this.apiResource.get<HttpEnrollee[]>('enrollees', params)
+    return this.apiResource.get<EnrolleeListViewModel[]>('enrollees', params)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee[]>) => response.result),
-        tap((enrollees: HttpEnrollee[]) => this.logger.info('ENROLLEES', enrollees)),
-        map((enrollees: HttpEnrollee[]) => this.enrolleesAdapterResponse(enrollees)),
+        map((response: ApiHttpResponse<EnrolleeListViewModel[]>) => response.result),
+        tap((enrollees: EnrolleeListViewModel[]) => this.logger.info('ENROLLEES', enrollees)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolments could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrollees error has occurred: ', error);
@@ -79,8 +78,9 @@ export class AdjudicationResource {
       );
   }
 
-  public setEnrolleeAdjudicator(enrolleeId: number): Observable<HttpEnrollee> {
-    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`)
+  public setEnrolleeAdjudicator(enrolleeId: number, adjudicatorId?: number): Observable<HttpEnrollee> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
+    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`, null, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         map((enrollee: HttpEnrollee) => enrollee),
@@ -171,6 +171,21 @@ export class AdjudicationResource {
       );
   }
 
+  public createInitiatedEnrolleeEmailEvent(enrolleeId: number): NoContent {
+    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/events/email-initiated`)
+      .pipe(
+        map(() => {
+          this.toastService.openErrorToast('Enrollee initiated email event has been created');
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee initiated email event could not be created');
+          this.logger.error('[Enrolment] EnrolmentResource::createInitiatedEnrolleeEmailEvent error has occurred: ', error);
+          throw error;
+        })
+      );
+
+  }
+
   public getAdjudicatorNotes(enrolleeId: number): Observable<AdjudicationNote[]> {
     return this.apiResource.get(`enrollees/${enrolleeId}/adjudicator-notes`)
       .pipe(
@@ -226,8 +241,8 @@ export class AdjudicationResource {
   // Access Terms
   // ---
 
-  public getAccessTerms(enrolleeId: number, year: number): Observable<AccessTerm[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ year });
+  public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<AccessTerm[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
     return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
@@ -308,62 +323,8 @@ export class AdjudicationResource {
   }
 
   // ---
-  // Site Registration
-  // ---
-
-  public getSites(textSearch?: string, statusCode?: number): Observable<Site[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch, statusCode });
-    return this.apiResource.get<Site[]>('sites', params)
-      .pipe(
-        map((response: ApiHttpResponse<Site[]>) => response.result),
-        tap((sites: Site[]) => this.logger.info('SITES', sites)),
-        map((sites: Site[]) => sites),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Sites could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getSites error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
-    return this.apiResource.get<Site>(`sites/${siteId}`, params)
-      .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap((site: Site) => this.logger.info('SITE', site)),
-        map((site: Site) => site),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Site could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getSiteById error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public deleteSite(siteId: number): Observable<Site> {
-    return this.apiResource.delete<Site>(`sites/${siteId}`)
-      .pipe(
-        map((response: ApiHttpResponse<Site>) => response.result),
-        tap((site: Site) => {
-          this.toastService.openSuccessToast('Site has been deleted');
-          this.logger.info('DELETED_SITE', site);
-        }),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Site could not be deleted');
-          this.logger.error('[Adjudication] AdjudicationResource::deleteSite error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  // ---
   // Enrollee and Enrolment Adapters
   // ---
-
-  private enrolleesAdapterResponse(enrollees: HttpEnrollee[]): HttpEnrollee[] {
-    return enrollees.map((enrollee: HttpEnrollee): HttpEnrollee => this.enrolleeAdapterResponse(enrollee));
-  }
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): HttpEnrollee {
     if (!enrollee.mailingAddress) {
@@ -378,8 +339,8 @@ export class AdjudicationResource {
       enrollee.jobs = [];
     }
 
-    if (!enrollee.enrolleeOrganizationTypes) {
-      enrollee.enrolleeOrganizationTypes = [];
+    if (!enrollee.enrolleeCareSettings) {
+      enrollee.enrolleeCareSettings = [];
     }
 
     return enrollee;
@@ -412,7 +373,7 @@ export class AdjudicationResource {
 
     if (keys.every((key: string) => profileSnapshot.hasOwnProperty(key))) {
       profileSnapshot.selfDeclarations = [];
-      keys.map((key: string, index: number) => {
+      keys.forEach((key: string, index: number) => {
         if (profileSnapshot[key]) {
           profileSnapshot.selfDeclarations.push({
             selfDeclarationDetails: profileSnapshot[`${key}Details`],
@@ -423,6 +384,19 @@ export class AdjudicationResource {
         delete profileSnapshot[key];
         delete profileSnapshot[`${key}Details`];
       });
+    }
+
+    // Update enrolleeOrganizationTypes to enrolleeCareSettings
+    if (profileSnapshot.hasOwnProperty('enrolleeOrganizationTypes')) {
+      profileSnapshot.enrolleeCareSettings = [];
+      const enrolleeOrganizationTypes = profileSnapshot[`enrolleeOrganizationTypes`];
+      enrolleeOrganizationTypes.map(({ id, organizationTypeCode }) => {
+        profileSnapshot.enrolleeCareSettings.push({
+          id,
+          careSettingCode: organizationTypeCode
+        });
+      });
+      delete profileSnapshot[`enrolleeOrganizationTypes`];
     }
   }
 }

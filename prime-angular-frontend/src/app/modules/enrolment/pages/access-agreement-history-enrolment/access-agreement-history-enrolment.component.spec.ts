@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessAgreementHistoryEnrolmentComponent } from './access-agreement-history-enrolment.component';
-import { NgxBusyModule } from '@shared/modules/ngx-busy/ngx-busy.module';
+import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterModule } from '@angular/router';

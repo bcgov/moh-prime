@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+
 using Newtonsoft.Json;
 
 namespace Prime.Models
@@ -22,24 +23,24 @@ namespace Prime.Models
 
         public int? AdministratorPharmaNetId { get; set; }
 
-        public Party AdministratorPharmaNet { get; set; }
+        public Contact AdministratorPharmaNet { get; set; }
 
         public int? PrivacyOfficerId { get; set; }
 
-        public Party PrivacyOfficer { get; set; }
+        public Contact PrivacyOfficer { get; set; }
 
         public int? TechnicalSupportId { get; set; }
 
-        public Party TechnicalSupport { get; set; }
+        public Contact TechnicalSupport { get; set; }
 
         public int? ProvisionerId { get; set; }
 
         public Party Provisioner { get; set; }
 
-        public int? OrganizationTypeCode { get; set; }
+        public int? CareSettingCode { get; set; }
 
         [JsonIgnore]
-        public OrganizationType OrganizationType { get; set; }
+        public CareSetting CareSetting { get; set; }
 
         public string PEC { get; set; }
 
@@ -49,6 +50,8 @@ namespace Prime.Models
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
+        public SiteStatusType Status { get; set; }
+
         public DateTimeOffset? ApprovedDate { get; set; }
 
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
@@ -57,8 +60,14 @@ namespace Prime.Models
 
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }
 
+        public int? AdjudicatorId { get; set; }
+
+        public Admin Adjudicator { get; set; }
+
         [JsonIgnore]
         public ICollection<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
+
+        public ICollection<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
 
         public ICollection<BusinessDay> BusinessHours { get; set; }
         /// <summary>

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -7,6 +6,10 @@ import { map, tap } from 'rxjs/operators';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
+import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { Address } from '@shared/models/address.model';
 import { AccessTerm } from '@shared/models/access-term.model';
 import { Enrollee } from '@shared/models/enrollee.model';
@@ -14,13 +17,9 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Organization } from '@enrolment/shared/models/organization.model';
-import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 @Injectable({
   providedIn: 'root'
@@ -104,11 +103,21 @@ export class EnrolmentResource {
   // Access Terms
   // ---
 
-  public getAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
-    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`)
+  public getAcceptedAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ accepted: true });
+    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
         tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERMS', accessTerms))
+      );
+  }
+
+  public getLatestAccessTerm(enrolleeId: number, accepted: boolean): Observable<AccessTerm> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ onlyLatest: true, accepted, includeText: true });
+    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
+      .pipe(
+        map((response: ApiHttpResponse<AccessTerm[]>) => response.result.pop()),
+        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM_LATEST', accessTerm))
       );
   }
 
@@ -117,15 +126,6 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<AccessTerm>) => response.result),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
-      );
-  }
-
-  public getAccessTermLatest(enrolleeId: number, signed: boolean): Observable<AccessTerm> {
-    const params = new HttpParams({ fromObject: { signed: signed.toString() } });
-    return this.apiResource.get<AccessTerm>(`enrollees/${enrolleeId}/access-terms/latest`, params)
-      .pipe(
-        map((response: ApiHttpResponse<AccessTerm>) => response.result),
-        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM_LATEST', accessTerm))
       );
   }
 
@@ -194,7 +194,7 @@ export class EnrolmentResource {
 
     if (keys.every((key: string) => profileSnapshot.hasOwnProperty(key))) {
       profileSnapshot.selfDeclarations = [];
-      keys.map((key: string, index: number) => {
+      keys.forEach((key: string, index: number) => {
         if (profileSnapshot[key]) {
           profileSnapshot.selfDeclarations.push({
             selfDeclarationDetails: profileSnapshot[`${key}Details`],
@@ -222,8 +222,8 @@ export class EnrolmentResource {
       enrollee.jobs = [];
     }
 
-    if (!enrollee.enrolleeOrganizationTypes) {
-      enrollee.enrolleeOrganizationTypes = [];
+    if (!enrollee.enrolleeCareSettings) {
+      enrollee.enrolleeCareSettings = [];
     }
 
     // Reorganize the shape of the enrollee into an enrolment
@@ -234,8 +234,8 @@ export class EnrolmentResource {
     const {
       userId,
       firstName,
-      middleName,
       lastName,
+      givenNames,
       preferredFirstName,
       preferredMiddleName,
       preferredLastName,
@@ -255,8 +255,8 @@ export class EnrolmentResource {
       enrollee: {
         userId,
         firstName,
-        middleName,
         lastName,
+        givenNames,
         preferredFirstName,
         preferredMiddleName,
         preferredLastName,
@@ -272,7 +272,7 @@ export class EnrolmentResource {
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
-      organizations: enrollee.enrolleeOrganizationTypes,
+      careSettings: enrollee.enrolleeCareSettings,
       ...remainder
     };
   }
@@ -286,7 +286,7 @@ export class EnrolmentResource {
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
     enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
-    enrolment.organizations = this.removeIncompleteOrganizations(enrolment.organizations);
+    enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
 
     return this.enrolleeAdapter(enrolment);
   }
@@ -299,7 +299,7 @@ export class EnrolmentResource {
 
     return {
       ...enrollee,
-      enrolleeOrganizationTypes: enrolment.organizations,
+      enrolleeCareSettings: enrolment.careSettings,
       ...remainder
     };
   }
@@ -327,7 +327,7 @@ export class EnrolmentResource {
     return jobs.filter((job: Job) => (job.title !== ''));
   }
 
-  private removeIncompleteOrganizations(organizations: Organization[]) {
-    return organizations.filter((organization: Organization) => organization.organizationTypeCode);
+  private removeIncompleteCareSettings(careSettings: CareSetting[]) {
+    return careSettings.filter((careSetting: CareSetting) => careSetting.careSettingCode);
   }
 }

@@ -16,5 +16,6 @@
   "git.ignoreLimitWarning": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
   "typescript.preferences.quoteStyle": "single",
-  // "typescript.tsserver.experimental.enableProjectDiagnostics": true
+  "files.insertFinalNewline": true,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

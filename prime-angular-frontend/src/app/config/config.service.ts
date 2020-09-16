@@ -50,11 +50,11 @@ export class ConfigService implements IConfigService {
       .sort(this.sortConfigByWeight());
   }
 
-  public get organizationTypes(): Config<number>[] {
-    const communityPractice = this.configuration.organizationTypes
+  public get careSettings(): Config<number>[] {
+    const communityPractice = this.configuration.careSettings
       .find(o => o.code === 2);
 
-    return [...this.configuration.organizationTypes]
+    return [...this.configuration.careSettings]
       .sort(this.sortConfigByName())
       // Move community practice to the top
       // TODO remove after community practice

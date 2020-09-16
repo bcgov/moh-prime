@@ -1,13 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Enrolment } from '@shared/models/enrolment.model';
+import { UtilsService } from '@core/services/utils.service';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
-import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+import { EnrolmentStatus as EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
-import { UtilsService } from '@core/services/utils.service';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 class Status {
@@ -33,13 +34,12 @@ class Reason {
   styleUrls: ['./review-status-content.component.scss']
 })
 export class ReviewStatusContentComponent implements OnInit {
-  // @Input() public enrollee: Enrolment;
-  private _enrollee: Enrolment;
+  private _enrollee: HttpEnrollee;
   public previousStatuses: Status[];
   public reasons: Reason[];
 
   // TODO: Currenty we just store this in this place and in the self declaration form
-  // Later on this would be best to be brought out and stored better!
+  // and should be centralize for reuse so it doesn't have to changed in multiple places
   private registrationQ = 'Are you, or have you ever been, the subject of an order or a conviction under'
     + ' legislation in any jurisdiction for a matter that involved improper access to, collection,'
     + ' use, or disclosure of personal information?';
@@ -53,24 +53,21 @@ export class ReviewStatusContentComponent implements OnInit {
   private disciplinaryQ = 'Have you ever been disciplined or fired by an employer, or had a contract for your services terminated,'
     + ' for a matter that involved improper access to, collection, use, or disclosure of personal information?';
 
+  constructor(
+    private utilsService: UtilsService,
+    private enrolmentResource: EnrolmentResource,
+  ) { }
 
-  @Input() set enrollee(value: Enrolment) {
-
+  @Input()
+  public set enrollee(value: HttpEnrollee) {
     this._enrollee = value;
     this.reasons = this.generateReasons();
     this.previousStatuses = this.generatePreviousStatuses();
   }
 
-  get enrollee(): Enrolment {
-
+  public get enrollee(): HttpEnrollee {
     return this._enrollee;
-
   }
-
-  constructor(
-    private utilsService: UtilsService,
-    private enrolmentResource: EnrolmentResource,
-  ) { }
 
   public downloadDocument(document: SelfDeclarationDocument) {
     this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, document.id)
@@ -79,8 +76,7 @@ export class ReviewStatusContentComponent implements OnInit {
       });
   }
 
-  public ngOnInit() {
-  }
+  public ngOnInit(): void { }
 
   private generatePreviousStatuses(): Status[] {
     if (!this.enrollee) {
@@ -103,10 +99,10 @@ export class ReviewStatusContentComponent implements OnInit {
   }
 
   private generateReasons(): Reason[] {
-    // If not under review return []
-    if (!this.enrollee || this.enrollee.currentStatus.statusCode !== 2) {
+    if (!this.enrollee || this.enrollee.currentStatus.statusCode !== EnrolmentStatusEnum.UNDER_REVIEW) {
       return [];
     }
+
     return this.parseReasons(this.enrollee.currentStatus);
   }
 
@@ -114,25 +110,25 @@ export class ReviewStatusContentComponent implements OnInit {
     if (!enrolmentStatus || !enrolmentStatus.enrolmentStatusReasons) {
       return [];
     }
+
     return enrolmentStatus.enrolmentStatusReasons.reduce((acc: Reason[], esr: EnrolmentStatusReason) => {
-      // Self declaration
       if (esr.statusReasonCode === 10) {
-        return acc.concat(this.parseDeclarations(this.enrollee));
+        return acc.concat(this.parseSelfDeclarations(this.enrollee));
       }
       const reason = new Reason();
       reason.name = esr.statusReason.name;
       reason.note = esr.reasonNote;
       acc.push(reason);
+
       return acc;
     }, []);
   }
 
-  private getDocumentsForSelfDeclaration(enrollee: Enrolment, code: SelfDeclarationTypeEnum) {
+  private getDocumentsForSelfDeclaration(enrollee: HttpEnrollee, code: SelfDeclarationTypeEnum) {
     return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
   }
 
-
-  private parseDeclarations(enrollee: Enrolment): Reason[] {
+  private parseSelfDeclarations(enrollee: HttpEnrollee): Reason[] {
     return enrollee.selfDeclarations.reduce((acc, decl: SelfDeclaration) => {
       if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_CONVICTION) {
         const conviction = new Reason();
@@ -143,6 +139,7 @@ export class ReviewStatusContentComponent implements OnInit {
         conviction.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_CONVICTION);
         acc.push(conviction);
       }
+
       if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED) {
         const registationSuspended = new Reason();
         registationSuspended.name = 'User Answered Yes to a Self Declaration Question:';
@@ -172,8 +169,8 @@ export class ReviewStatusContentComponent implements OnInit {
         pharmaNetSuspended.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED);
         acc.push(pharmaNetSuspended);
       }
+
       return acc;
     }, []);
-
   }
 }

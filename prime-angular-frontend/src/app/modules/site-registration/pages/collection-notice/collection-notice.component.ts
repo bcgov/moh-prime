@@ -26,14 +26,9 @@ export class CollectionNoticeComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public onAccept() {
+  public onAccept(): void {
     this.authService.hasJustLoggedIn = false;
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_MANAGEMENT);
-  }
-
-  public ngOnInit() {
     const organization = this.organizationService.organization;
-    this.authService.hasJustLoggedIn = true;
 
     // Collection notice is the initial route after login, and used as a hub
     // for redirection to an appropriate view based on the organization
@@ -43,5 +38,9 @@ export class CollectionNoticeComponent implements OnInit {
         [SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY],
         { relativeTo: this.route.parent }
       );
+  }
+
+  public ngOnInit(): void {
+    this.authService.hasJustLoggedIn = true;
   }
 }

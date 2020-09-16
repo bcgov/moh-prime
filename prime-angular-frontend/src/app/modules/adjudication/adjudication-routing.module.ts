@@ -3,11 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { ConfigResolver } from '@config/config-resolver';
 import { UnsupportedGuard } from '@core/guards/unsupported.guard';
-import { DashboardComponent } from '@shared/components/dashboard/dashboard.component';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { AdjudicationRoutes } from './adjudication.routes';
 import { AdjudicationGuard } from './shared/guards/adjudication.guard';
+import { AdjudicationDashboardComponent } from './shared/components/adjudication-dashboard/adjudication-dashboard.component';
 
 import { EnrolleesComponent } from './pages/enrollees/enrollees.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
@@ -21,17 +21,18 @@ import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/en
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
 import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
 import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
-import { OrganizationAgreementComponent } from '@registration/pages/organization-agreement/organization-agreement.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 
 const routes: Routes = [
   {
     path: AdjudicationRoutes.MODULE_PATH,
-    component: DashboardComponent,
-    canActivate: [UnsupportedGuard],
-    canActivateChild: [
-      AuthenticationGuard,
+    component: AdjudicationDashboardComponent,
+    canActivate: [
+      UnsupportedGuard,
       AdjudicationGuard
+    ],
+    canActivateChild: [
+      AuthenticationGuard
     ],
     resolve: [ConfigResolver],
     children: [
@@ -109,7 +110,7 @@ const routes: Routes = [
             data: { title: 'Site Registrations' }
           },
           {
-            path: ':sid',
+            path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
             children: [
               {
                 path: '',
@@ -117,19 +118,14 @@ const routes: Routes = [
                 data: { title: 'Site Registration' }
               },
               {
-                path: AdjudicationRoutes.SITE_ADJUDICATION,
+                path: AdjudicationRoutes.ADJUDICATION,
                 component: SiteAdjudicationComponent,
                 data: { title: 'Site Adjudication' }
               },
               {
                 path: AdjudicationRoutes.ORGANIZATION_INFORMATION,
-                children: [
-                  {
-                    path: ':oid',
-                    component: OrganizationInformationComponent,
-                    data: { title: 'Site Adjudication' }
-                  },
-                ]
+                component: OrganizationInformationComponent,
+                data: { title: 'Organization Information' }
               }
             ]
           }

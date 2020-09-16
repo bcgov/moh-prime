@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Prime;
+using Prime.Models;
+using PrimeTests.ModelFactories;
 
 namespace PrimeTests
 {
@@ -17,6 +19,11 @@ namespace PrimeTests
             context.AddRange(things);
             context.SaveChanges();
             return things;
+        }
+
+        public static Enrollee HasAnEnrollee(this ApiDbContext context, string ruleSets = null)
+        {
+            return context.Has(new EnrolleeFactory().Generate(ruleSets));
         }
     }
 }

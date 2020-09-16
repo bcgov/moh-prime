@@ -7,9 +7,9 @@ namespace PrimeTests.ModelFactories
 {
     public static class ProvinceLookup
     {
-        private static ICollection<Province> _seedData = new ProvinceConfiguration().SeedData;
+        private static IEnumerable<Province> _seedData = new ProvinceConfiguration().SeedData;
 
-        public static ICollection<Province> All {get {return _seedData;}}
+        public static IEnumerable<Province> All { get { return _seedData; } }
 
         public static Province BC
         {

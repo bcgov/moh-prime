@@ -2,8 +2,28 @@
 @model Organization
 
 @{
+  /**
+   * Organization Agreement that is downloaded and rendered in the
+   * web client by the signing authority.
+   *
+   * NOTE: The downloadable and signable copy of the Organization Agreement is
+   * located in /documents.
+   */
   var organizationName = Model.Name;
+  var day = @DateTime.Now.ToString("dd");
+  var month = @DateTime.Now.ToString("MMMM");
+  var year = @DateTime.Now.ToString("yyyy");
+
+  if(Model.AcceptedAgreementDate.HasValue) {
+    day = Model.AcceptedAgreementDate.Value.ToString("dd");
+    month = Model.AcceptedAgreementDate.Value.ToString("MMMM");
+    year = Model.AcceptedAgreementDate.Value.ToString("yyyy");
+  }
 }
+
+<p class="text-center">
+  This Agreement is made the @day day of @month, @year
+</p>
 
 <h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>
 
@@ -47,7 +67,7 @@
   acknowledged. Organization hereby agrees as follows:
 </p>
 
-<p>
+<p class="text-center">
   <strong>ARTICLE 1 – INTERPRETATION</strong>
 </p>
 
@@ -122,10 +142,10 @@
 
             <ol type="i">
               <li>
-                is the subject of a Site Request submitted to the Provience, and
+                is the subject of a Site Request submitted to the Province, and
               </li>
               <li>
-                has been approved for Site Access by the Provience in writing
+                has been approved for Site Access by the Province in writing
               </li>
             </ol>
 
@@ -174,7 +194,7 @@
   </li>
 </ol>
 
-<p>
+<p class="text-center">
   <strong>ARTICLE 2 – REPRESENTATIONS AND WARRANTIES</strong>
 </p>
 
@@ -185,7 +205,7 @@
     <ol type="1">
       <li>
         <p>
-          Organization represents and warrants to the Province, as of the date Organization first accepted the terms of this
+          Organization represents and warrants to the Province, as of the date of this
           Agreement and throughout its term, that:
         </p>
 
@@ -226,7 +246,7 @@
   </li>
 </ol>
 
-<p>
+<p class="text-center">
   <strong>ARTICLE 3 – SITE ACCESS REQUIREMENTS</strong>
 </p>
 
@@ -344,7 +364,7 @@
         <ol type="a">
           <li>
             taking all reasonable physical, technical and operational measures necessary to ensure Site Access operates in
-            accordance with sections 3.1 to 3.9 above: and
+            accordance with sections 3.1 to 3.9 above, and
           </li>
           <li>
             complying with the requirements of Schedule A.
@@ -355,7 +375,7 @@
   </li>
 </ol>
 
-<p>
+<p class="text-center">
   <strong>ARTICLE 4 – NON-COMPLIANCE AND INVESTIGATIONS</strong>
 </p>
 
@@ -385,7 +405,7 @@
   </li>
 </ol>
 
-<p>
+<p class="text-center">
   <strong>ARTICLE 5 – SITE TERMINATION</strong>
 </p>
 
@@ -427,7 +447,7 @@
   </li>
 </ol>
 
-<p>
+<p class="text-center">
   <strong>ARTICLE 6 – TERM AND TERMINATION</strong>
 </p>
 
@@ -437,7 +457,7 @@
   <li>
     <ol type="1">
       <li>
-        The term of this Agreement begins on the date first accepted the terms of this Agreement and continues until it is terminated
+        The term of this Agreement begins on the date first noted above and continues until it is terminated
         in accordance with this Article 6.
       </li>
       <li>
@@ -461,7 +481,7 @@
   </li>
 </ol>
 
-<p>
+<p class="text-center">
   <strong>ARTICLE 7 – DISCLAIMER AND INDEMNITY</strong>
 </p>
 
@@ -495,7 +515,7 @@
   </li>
 </ol>
 
-<p>
+<p class="text-center">
   <strong>ARTICLE 8 – GENERAL</strong>
 </p>
 
@@ -573,7 +593,7 @@
   </li>
 </ol>
 
-<p>
+<p class="text-center">
   <strong>SCHEDULE A – SPECIFIC PRIVACY AND SECURITY MEASURES</strong>
 </p>
 

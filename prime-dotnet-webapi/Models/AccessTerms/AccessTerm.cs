@@ -9,12 +9,6 @@ namespace Prime.Models
     [Table("AccessTerm")]
     public class AccessTerm : BaseAuditable
     {
-        public AccessTerm()
-        {
-            // Create lists so they don't have be instantiated when items need to be added
-            AccessTermLicenseClassClauses = new List<AccessTermLicenseClassClause>();
-        }
-
         [Key]
         public int Id { get; set; }
 
@@ -24,23 +18,10 @@ namespace Prime.Models
         public Enrollee Enrollee { get; set; }
 
         [JsonIgnore]
-        public int GlobalClauseId { get; set; }
+        public int AgreementId { get; set; }
 
         [JsonIgnore]
-        public GlobalClause GlobalClause { get; set; }
-
-        [JsonIgnore]
-        public int UserClauseId { get; set; }
-
-        [JsonIgnore]
-        public UserClause UserClause { get; set; }
-
-        [NotMapped]
-        [JsonIgnore]
-        public List<LicenseClassClause> LicenseClassClauses { get; set; }
-
-        [JsonIgnore]
-        public List<AccessTermLicenseClassClause> AccessTermLicenseClassClauses { get; set; }
+        public Agreement Agreement { get; set; }
 
         [JsonIgnore]
         public int? LimitsConditionsClauseId { get; set; }

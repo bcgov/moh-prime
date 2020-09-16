@@ -26,32 +26,13 @@ namespace PrimeTests.UnitTests
             );
         }
 
-        public EnrolmentCertificateService CreateWithMocks(Enrollee enrollee)
-        {
-            var accessTermServiceFake = A.Fake<IAccessTermService>();
-            A.CallTo(() => accessTermServiceFake.GetMostRecentAcceptedEnrolleesAccessTermAsync(enrollee.Id))
-                .Returns(new AccessTerm
-                {
-                    AcceptedDate = DateTimeOffset.Now
-                });
-
-            var versionServiceFake = A.Fake<IEnrolleeProfileVersionService>();
-            A.CallTo(() => versionServiceFake.GetEnrolleeProfileVersionBeforeDateAsync(enrollee.Id, A<DateTimeOffset>.Ignored))
-                .Returns(new EnrolleeProfileVersion
-                {
-                    ProfileSnapshot = JObject.FromObject(enrollee),
-                });
-
-            return CreateService(null);
-        }
-
         [Fact]
-        public async void testHappyPathCertificateAccess()
+        public async void TestHappyPathCertificateAccess()
         {
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
-            var service = CreateWithMocks(enrollee);
+            var service = CreateService();
 
-            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
             Assert.NotNull(token);
 
             EnrolmentCertificate cert = await service.GetEnrolmentCertificateAsync(token.Id);
@@ -60,13 +41,13 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact(Skip = "Max views are temporarily disabled in the app")]
-        public async void testMaxViews()
+        public async void TestMaxViews()
         {
             int tokenMaxViews = 3;
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
             var service = CreateService();
 
-            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
             Assert.NotNull(token);
             Assert.Equal(0, token.ViewCount);
 
@@ -80,14 +61,14 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testExpiryDate()
+        public async void TestExpiryDate()
         {
             TimeSpan tokenLifespan = TimeSpan.FromDays(7);
             TimeSpan tolerance = TimeSpan.FromSeconds(1);
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
-            var service = CreateWithMocks(enrollee);
+            var service = CreateService();
 
-            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee);
+            EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
             Assert.NotNull(token);
             // Assert that the difference between the computed and actual expiry date is less than some tolerance.
             Assert.True((DateTimeOffset.Now.Add(tokenLifespan) - token.Expires).Duration() < tolerance);

@@ -30,7 +30,7 @@ export class AccessAgreementCurrentComponent implements OnInit {
 
   private getAccessTermLatestSigned() {
     const enrolleeId = this.enrolmentService.enrolment.id;
-    this.busy = this.enrolmentResource.getAccessTermLatest(enrolleeId, true)
+    this.busy = this.enrolmentResource.getLatestAccessTerm(enrolleeId, true)
       .subscribe(
         (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
         (error: any) => {

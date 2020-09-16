@@ -12,19 +12,21 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
-using Wkhtmltopdf.NetCore;
+
+using AutoMapper;
+using IdentityModel.Client;
 using Newtonsoft.Json;
 using Serilog;
+using Wkhtmltopdf.NetCore;
 
 using Prime.Auth;
 using Prime.Services;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
-using System.Net.Http.Headers;
-using IdentityModel.Client;
-using Microsoft.Extensions.FileProviders;
+using System.Collections.Generic;
 
 namespace Prime
 {
@@ -64,6 +66,7 @@ namespace Prime
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
+            services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
 
             ConfigureClients(services);
 
@@ -105,6 +108,7 @@ namespace Prime
             services.AddWkhtmltopdf("./Resources/wkhtmltopdf");
 
             services.AddHttpContextAccessor();
+            services.AddAutoMapper(typeof(Startup));
             services.AddRazorPages();
 
             this.ConfigureDatabase(services);
@@ -114,7 +118,38 @@ namespace Prime
 
         protected void ConfigureClients(IServiceCollection services)
         {
-            if (PrimeConstants.ENVIRONMENT_NAME == "local")
+            // Token Handlers and Credentials
+            services.AddSingleton(new AddressAutocompleteClientCredentials
+            {
+                ApiKey = PrimeEnvironment.AddressAutocompleteApi.Key
+            })
+            .AddTransient<BearerTokenHandler<ChesClientCredentials>>()
+            .AddSingleton(new ChesClientCredentials
+            {
+                Address = $"{PrimeEnvironment.ChesApi.TokenUrl}/token",
+                ClientId = PrimeEnvironment.ChesApi.ClientId,
+                ClientSecret = PrimeEnvironment.ChesApi.ClientSecret
+            })
+            .AddTransient<BearerTokenHandler<DocumentManagerClientCredentials>>()
+            .AddSingleton(new DocumentManagerClientCredentials
+            {
+                Address = PrimeEnvironment.Keycloak.TokenUrl,
+                ClientId = PrimeEnvironment.DocumentManager.ClientId,
+                ClientSecret = PrimeEnvironment.DocumentManager.ClientSecret,
+            })
+            .AddTransient<BearerTokenHandler<KeycloakAdministrationClientCredentials>>()
+            .AddSingleton(new KeycloakAdministrationClientCredentials
+            {
+                Address = PrimeEnvironment.Keycloak.TokenUrl,
+                ClientId = PrimeEnvironment.Keycloak.AdministrationClientId,
+                ClientSecret = PrimeEnvironment.Keycloak.AdministrationClientSecret,
+            });
+
+            // Clients
+            services.AddTransient<ISmtpEmailClient, SmtpEmailClient>()
+            .AddHttpClient<IAccessTokenClient, AccessTokenClient>();
+
+            if (PrimeEnvironment.IsLocal)
             {
                 services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
             }
@@ -123,47 +158,39 @@ namespace Prime
                 services.AddTransient<CollegeLicenceClientHandler>()
                 .AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
                 {
-                    client.SetBasicAuthentication(PrimeConstants.PHARMANET_API_USERNAME, PrimeConstants.PHARMANET_API_PASSWORD);
+                    client.SetBasicAuthentication(PrimeEnvironment.PharmanetApi.Username, PrimeEnvironment.PharmanetApi.Password);
                 })
                 .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
             }
 
-            services.AddTransient<DocumentManagerBearerTokenHandler>()
-            .AddHttpClient<IDocumentManagerClient, DocumentManagerClient>(client =>
+            services.AddHttpClient<IDocumentManagerClient, DocumentManagerClient>(client =>
             {
-                client.BaseAddress = new Uri(PrimeConstants.DOCUMENT_MANAGER_URL.EnsureTrailingSlash());
+                client.BaseAddress = new Uri(PrimeEnvironment.DocumentManager.Url.EnsureTrailingSlash());
             })
-            .AddHttpMessageHandler<DocumentManagerBearerTokenHandler>();
+            .AddHttpMessageHandler<BearerTokenHandler<DocumentManagerClientCredentials>>();
 
-            services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
-            services.AddSingleton(new DocumentManagerClientCredentials
+            services.AddHttpClient<IKeycloakAdministrationClient, KeycloakAdministrationClient>(client =>
             {
-                Address = PrimeConstants.KEYCLOAK_TOKEN_URL,
-                ClientId = PrimeConstants.DOCUMENT_MANAGER_CLIENT_ID,
-                ClientSecret = PrimeConstants.DOCUMENT_MANAGER_CLIENT_SECRET,
-            });
+                client.BaseAddress = new Uri(PrimeEnvironment.Keycloak.AdministrationUrl.EnsureTrailingSlash());
+            })
+            .AddHttpMessageHandler<BearerTokenHandler<KeycloakAdministrationClientCredentials>>();
 
             services.AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
             {
-                client.BaseAddress = new Uri(PrimeConstants.VERIFIABLE_CREDENTIAL_API_URL.EnsureTrailingSlash());
-                client.DefaultRequestHeaders.Add("x-api-key", PrimeConstants.VERIFIABLE_CREDENTIAL_API_KEY);
+                client.BaseAddress = new Uri(PrimeEnvironment.VerifiableCredentialApi.Url.EnsureTrailingSlash());
+                client.DefaultRequestHeaders.Add("x-api-key", PrimeEnvironment.VerifiableCredentialApi.Key);
             });
 
-            services.AddTransient<ChesBearerTokenHandler>()
-            .AddHttpClient<IChesClient, ChesClient>(client =>
+            services.AddHttpClient<IChesClient, ChesClient>(client =>
             {
-                client.BaseAddress = new Uri(PrimeConstants.CHES_API_URL.EnsureTrailingSlash());
+                client.BaseAddress = new Uri(PrimeEnvironment.ChesApi.Url.EnsureTrailingSlash());
             })
-            .AddHttpMessageHandler<ChesBearerTokenHandler>();
+            .AddHttpMessageHandler<BearerTokenHandler<ChesClientCredentials>>();
 
-            services.AddSingleton(new ChesClientCredentials
+            services.AddHttpClient<IAddressAutocompleteClient, AddressAutocompleteClient>(client =>
             {
-                Address = $"{PrimeConstants.CHES_TOKEN_URL}/token",
-                ClientId = PrimeConstants.CHES_CLIENT_ID,
-                ClientSecret = PrimeConstants.CHES_CLIENT_SECRET
+                client.BaseAddress = new Uri(PrimeEnvironment.AddressAutocompleteApi.Url.EnsureTrailingSlash());
             });
-
-            services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,27 +1,29 @@
 import { Address } from '@shared/models/address.model';
 import { User } from '@auth/shared/models/user.model';
+import { Person } from '@registration/shared/models/person.model';
 
-export class Party {
-  id?: number;
-  userId: string;
-  addressId?: number;
-  physicalAddressId?: number;
-  physicalAddress: Address;
-  mailingAddressId?: number;
-  mailingAddress: Address;
-  hpdid: string;
-  firstName: string;
-  lastName: string;
-  preferredFirstName: string;
-  preferredMiddleName: string;
-  preferredLastName: string;
-  dateOfBirth: string; // TODO why are we storing this?
-  jobRoleTitle: string = null;
-  email: string = null;
-  phone: string = null;
-  fax?: string = null;
-  smsPhone?: string = null;
+export class Party implements Person {
+  public id?: number;
+  public userId: string;
+  public addressId?: number;
+  public hpdid: string;
+  public firstName: string;
+  public lastName: string;
+  public preferredFirstName?: string = null;
+  public preferredMiddleName?: string = null;
+  public preferredLastName?: string = null;
+  public dateOfBirth: string;
+  public email: string = null;
+  public phone: string = null;
+  public fax?: string = null;
+  public smsPhone?: string = null;
+  public jobRoleTitle: string = null;
+  public physicalAddressId?: number;
+  public physicalAddress: Address;
+  public mailingAddressId?: number;
+  public mailingAddress?: Address;
 
+  // TODO should be a public static factory
   constructor(user: User) {
     this.userId = user.userId;
     this.physicalAddress = user.physicalAddress;

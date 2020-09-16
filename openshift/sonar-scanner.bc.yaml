@@ -1,8 +1,11 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 metadata:
   name: sonar-scanner-bc
   creationTimestamp: null
+  description: >-
+    Build configuration template for PRIME's SonarQube SonarScanner instance.
 parameters:
   - name: SOURCE_REPOSITORY_URL
     required: true
@@ -37,6 +40,8 @@ objects:
     spec: {}
     status:
       dockerImageRepository: ""
+  
+  # SonarScanner - Build configuration
   - apiVersion: v1
     kind: BuildConfig
     metadata:

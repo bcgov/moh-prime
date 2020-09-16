@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -27,17 +29,16 @@ namespace Prime.Services
             _organizationService = organizationService;
         }
 
-        public async Task<IEnumerable<Site>> GetSitesAsync()
+        public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
         {
-            return await this.GetBaseSiteQuery()
-                .ToListAsync();
-        }
+            IQueryable<Site> query = this.GetBaseSiteQuery();
 
-        public async Task<IEnumerable<Site>> GetSitesAsync(int organizationId)
-        {
-            return await this.GetBaseSiteQuery()
-                .Where(s => s.OrganizationId == organizationId)
-                .ToListAsync();
+            if (organizationId != null)
+            {
+                query = query.Where(s => s.OrganizationId == organizationId);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Site> GetSiteAsync(int siteId)
@@ -52,7 +53,7 @@ namespace Prime.Services
 
             if (organization == null)
             {
-                throw new ArgumentNullException(nameof(organization), "Could not create a site, the passed in Organization doesnt exist.");
+                throw new ArgumentException("Could not create a site, the passed in Organization doesnt exist.", nameof(organizationId));
             }
 
             // Site provisionerId should be equal to organization signingAuthorityId
@@ -75,31 +76,21 @@ namespace Prime.Services
             return site.Id;
         }
 
-        public async Task<int> UpdateSiteAsync(int siteId, Site updatedSite, bool isCompleted = false)
+        public async Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite)
         {
             var currentSite = await this.GetSiteAsync(siteId);
-            var submittedDate = currentSite.SubmittedDate;
-            var currentIsCompleted = currentSite.Completed;
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
-            UpdateAddress(currentSite, updatedSite);
+            if (currentSite.SubmittedDate == null)
+            {
+                UpdateAddress(currentSite, updatedSite);
+                UpdateVendors(currentSite, updatedSite);
+            }
 
-            UpdateParties(currentSite, updatedSite);
-
+            UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
-
             UpdateRemoteUsers(currentSite, updatedSite);
-
-            UpdateVendors(currentSite, updatedSite);
-
-            // Managed through separate API endpoint, and should never be updated
-            currentSite.SubmittedDate = submittedDate;
-
-            // Registration has been completed
-            currentSite.Completed = (isCompleted)
-                ? isCompleted
-                : currentIsCompleted;
 
             await _businessEventService.CreateSiteEventAsync(currentSite.Id, currentSite.Provisioner.Id, "Site Updated");
 
@@ -113,7 +104,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateAddress(Site current, Site updated)
+        private void UpdateAddress(Site current, SiteUpdateModel updated)
         {
             if (updated?.PhysicalAddress != null)
             {
@@ -128,45 +119,52 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateParties(Site current, Site updated)
+        private void UpdateContacts(Site current, SiteUpdateModel updated)
         {
-            string[] partyTypes = new string[] {
-                "AdministratorPharmaNet",
-                "PrivacyOfficer",
-                "TechnicalSupport"
+            string[] contactTypes = new string[] {
+                nameof(current.AdministratorPharmaNet),
+                nameof(current.PrivacyOfficer),
+                nameof(current.TechnicalSupport)
             };
 
-            foreach (var partyType in partyTypes)
+            foreach (var contactType in contactTypes)
             {
-                var partyIdName = $"{partyType}Id";
-                Party currentParty = _context.Entry(current).Reference(partyType).CurrentValue as Party;
-                Party updatedParty = _context.Entry(updated).Reference(partyType).CurrentValue as Party;
+                var contactIdName = $"{contactType}Id";
+                Contact currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
+                Contact updatedContact = typeof(SiteUpdateModel).GetProperty(contactType).GetValue(updated) as Contact;
 
-                if (updatedParty != null)
+                if (updatedContact != null)
                 {
-                    if (updatedParty.UserId != Guid.Empty)
+                    if (updatedContact.Id != 0)
                     {
-                        _context.Entry(current).Property(partyIdName).CurrentValue = _context.Entry(updated).Property(partyIdName).CurrentValue;
+                        _context.Entry(current).Property(contactIdName).CurrentValue = updatedContact.Id;
                     }
                     else
                     {
-                        if (currentParty == null)
+                        if (currentContact == null)
                         {
-                            _context.Entry(current).Reference(partyType).CurrentValue = updatedParty;
-                            currentParty = _context.Entry(current).Reference(partyType).CurrentValue as Party;
+                            _context.Entry(current).Reference(contactType).CurrentValue = updatedContact;
+                            currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
                         }
                         else
                         {
-                            this._context.Entry(currentParty).CurrentValues.SetValues(updatedParty);
+                            this._context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
                         }
 
-                        _partyService.UpdatePartyAddress(currentParty, updatedParty);
+                        if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
+                        {
+                            this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                        }
+                        else
+                        {
+                            current.PhysicalAddress = updated.PhysicalAddress;
+                        }
                     }
                 }
             }
         }
 
-        private void UpdateBusinessHours(Site current, Site updated)
+        private void UpdateBusinessHours(Site current, SiteUpdateModel updated)
         {
             if (updated?.BusinessHours != null)
             {
@@ -186,7 +184,7 @@ namespace Prime.Services
             }
         }
 
-        private void UpdateRemoteUsers(Site current, Site updated)
+        private void UpdateRemoteUsers(Site current, SiteUpdateModel updated)
         {
             // Wholesale replace the remote users
             foreach (var remoteUser in current.RemoteUsers)
@@ -195,6 +193,11 @@ namespace Prime.Services
                 {
                     _context.Remove(location.PhysicalAddress);
                     _context.Remove(location);
+                }
+
+                foreach (var certification in remoteUser.RemoteUserCertifications)
+                {
+                    _context.Remove(certification);
                 }
                 _context.RemoteUsers.Remove(remoteUser);
             }
@@ -228,12 +231,28 @@ namespace Prime.Services
                         remoteUserLocations.Add(newLocation);
                     }
                     remoteUser.RemoteUserLocations = remoteUserLocations;
+
+                    var remoteUserCertifications = new List<RemoteUserCertification>();
+
+                    foreach (var certification in remoteUser.RemoteUserCertifications)
+                    {
+                        var newCertification = new RemoteUserCertification
+                        {
+                            RemoteUser = remoteUser,
+                            CollegeCode = certification.CollegeCode,
+                            LicenseNumber = certification.LicenseNumber
+                        };
+                        _context.Entry(newCertification).State = EntityState.Added;
+                        remoteUserCertifications.Add(newCertification);
+                    }
+                    remoteUser.RemoteUserCertifications = remoteUserCertifications;
+
                     _context.Entry(remoteUser).State = EntityState.Added;
                 }
             }
         }
 
-        private void UpdateVendors(Site current, Site updated)
+        private void UpdateVendors(Site current, SiteUpdateModel updated)
         {
             if (updated?.SiteVendors != null)
             {
@@ -258,7 +277,7 @@ namespace Prime.Services
             }
         }
 
-        public async Task<int> UpdateSiteCompletedAsync(int siteId)
+        public async Task<int> UpdateCompletedAsync(int siteId)
         {
             var site = await this.GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
@@ -274,6 +293,15 @@ namespace Prime.Services
             }
 
             return updated;
+        }
+
+        public async Task<Site> UpdateSiteAdjudicator(int siteId, int? adminId = null)
+        {
+            var site = await _context.Sites.Where(s => s.Id == siteId).SingleOrDefaultAsync();
+            site.AdjudicatorId = adminId;
+            await _context.SaveChangesAsync();
+
+            return site;
         }
 
         public async Task<Site> UpdatePecCode(int siteId, string pecCode)
@@ -308,9 +336,9 @@ namespace Prime.Services
                     _context.Addresses.Remove(site.PhysicalAddress);
                 }
 
-                DeletePartyFromSite(site.AdministratorPharmaNet);
-                DeletePartyFromSite(site.TechnicalSupport);
-                DeletePartyFromSite(site.PrivacyOfficer);
+                DeleteContactFromSite(site.AdministratorPharmaNet);
+                DeleteContactFromSite(site.TechnicalSupport);
+                DeleteContactFromSite(site.PrivacyOfficer);
 
                 _context.Sites.Remove(site);
 
@@ -320,15 +348,39 @@ namespace Prime.Services
             }
         }
 
-        private void DeletePartyFromSite(Party party)
+        public async Task<Site> ApproveSite(int siteId)
         {
-            if (party != null)
+            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+
+            if (site.Status != SiteStatusType.Approved)
             {
-                if (party.PhysicalAddress != null)
+                site.Status = SiteStatusType.Approved;
+                site.ApprovedDate = DateTimeOffset.Now;
+                await _context.SaveChangesAsync();
+            }
+
+            return site;
+        }
+
+        public async Task<Site> DeclineSite(int siteId)
+        {
+            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            site.Status = SiteStatusType.Declined;
+            site.ApprovedDate = null;
+            await _context.SaveChangesAsync();
+
+            return site;
+        }
+
+        private void DeleteContactFromSite(Contact contact)
+        {
+            if (contact != null)
+            {
+                if (contact.PhysicalAddress != null)
                 {
-                    _context.Addresses.Remove(party.PhysicalAddress);
+                    _context.Addresses.Remove(contact.PhysicalAddress);
                 }
-                _context.Parties.Remove(party);
+                _context.Contacts.Remove(contact);
             }
         }
 
@@ -404,13 +456,35 @@ namespace Prime.Services
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
+        {
+            var SiteRegistrationNote = new SiteRegistrationNote
+            {
+                SiteId = siteId,
+                AdjudicatorId = adminId,
+                Note = note,
+                NoteDate = DateTimeOffset.Now
+            };
+
+            _context.SiteRegistrationNotes.Add(SiteRegistrationNote);
+
+            var created = await _context.SaveChangesAsync();
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not create site registration note.");
+            }
+            // TODO: Business events for sites?
+
+            return SiteRegistrationNote;
+        }
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
                 .Include(s => s.Provisioner)
                 .Include(s => s.SiteVendors)
                     .ThenInclude(v => v.Vendor)
-                .Include(s => s.OrganizationType)
+                .Include(s => s.CareSetting)
                 .Include(s => s.Organization)
                     .ThenInclude(o => o.SigningAuthority)
                         .ThenInclude(p => p.PhysicalAddress)
@@ -428,7 +502,10 @@ namespace Prime.Services
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserLocations)
                         .ThenInclude(rul => rul.PhysicalAddress)
-                .Include(s => s.BusinessLicenceDocuments);
+                .Include(s => s.RemoteUsers)
+                    .ThenInclude(r => r.RemoteUserCertifications)
+                .Include(s => s.BusinessLicenceDocuments)
+                .Include(s => s.Adjudicator);
         }
     }
 }

@@ -8,6 +8,7 @@ import { ConfigService } from '@config/config.service';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
+import { Address } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-address',
@@ -20,6 +21,8 @@ export class AddressComponent implements OnInit {
   @Input() public form: FormGroup;
   // List of controls that should be displayed
   @Input() public formControlNames: string[];
+  // Only BC addresses can be selected from autocomplete
+  @Input() bcOnly: boolean;
 
   public countries: Config<string>[];
   // Includes provinces and states
@@ -72,6 +75,10 @@ export class AddressComponent implements OnInit {
     return this.formUtilsService.isRequired(this.form, path);
   }
 
+  public onAutocomplete({ id, ...remainder }: Address) {
+    this.form.patchValue(remainder);
+  }
+
   public ngOnInit() {
     this.initForm();
   }
@@ -89,7 +96,6 @@ export class AddressComponent implements OnInit {
           this.provinceCode.reset();
           this.postal.reset();
         }
-
         this.setAddress(nextCountry);
       });
   }

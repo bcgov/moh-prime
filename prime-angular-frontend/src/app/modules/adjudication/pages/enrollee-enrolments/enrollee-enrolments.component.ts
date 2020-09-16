@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import moment from 'moment';
 
 import { AccessTerm } from '@shared/models/access-term.model';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -36,9 +36,9 @@ export class EnrolleeEnrolmentsComponent implements OnInit {
     this.hasActions = true;
   }
 
-  public isUnderAdjudication(enrollee: HttpEnrollee): boolean {
+  public isUnderAdjudication(enrollee: EnrolleeListViewModel): boolean {
     return [EnrolmentStatus.UNDER_REVIEW, EnrolmentStatus.REQUIRES_TOA]
-      .includes(enrollee?.currentStatus.statusCode);
+      .includes(enrollee?.currentStatusCode);
   }
 
   public onAction() {
@@ -57,7 +57,7 @@ export class EnrolleeEnrolmentsComponent implements OnInit {
 
   private getAccessTerms(year: number = null) {
     const enrolleeId = this.route.snapshot.params.id;
-    this.busy = this.adjudicationResource.getAccessTerms(enrolleeId, year)
+    this.busy = this.adjudicationResource.getAcceptedAccessTermsByYear(enrolleeId, year)
       .subscribe((accessTerms: AccessTerm[]) => this.accessTerms = accessTerms);
   }
 

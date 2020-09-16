@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Bogus;
@@ -57,8 +58,8 @@ namespace PrimeTests.Utils
         public static Faker<Job> JobFaker = new Faker<Job>()
             .RuleFor(j => j.Title, f => f.Random.Word());
 
-        public static Faker<EnrolleeOrganizationType> EnrolleeOrganizationTypeFaker = new Faker<EnrolleeOrganizationType>()
-            .RuleFor(o => o.OrganizationTypeCode, f => f.Random.Int(1, 2));
+        public static Faker<EnrolleeCareSetting> EnrolleeCareSettingFaker = new Faker<EnrolleeCareSetting>()
+            .RuleFor(o => o.CareSettingCode, f => f.Random.Int(1, 2));
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
             .RuleFor(es => es.StatusCode, f => (int)StatusType.Editable)
@@ -68,8 +69,8 @@ namespace PrimeTests.Utils
         public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
             .RuleFor(e => e.UserId, f => Guid.NewGuid())
             .RuleFor(e => e.FirstName, f => f.Name.FirstName())
-            .RuleFor(e => e.MiddleName, f => f.Name.FirstName())
             .RuleFor(e => e.LastName, f => f.Name.LastName())
+            .RuleFor(e => e.GivenNames, f => f.Name.FirstName())
             .RuleFor(e => e.DateOfBirth, f => f.Date.Past(20, DateTime.Now.AddYears(-18)))
             .RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
             .RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
@@ -77,14 +78,14 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
             .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
             .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
-            .RuleFor(e => e.EnrolleeOrganizationTypes, f => EnrolleeOrganizationTypeFaker.Generate(2))
+            .RuleFor(e => e.EnrolleeCareSettings, f => EnrolleeCareSettingFaker.Generate(2))
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
-            .RuleFor(e => e.IdentityAssuranceLevel, f => 3);
+            .RuleFor(e => e.IdentityAssuranceLevel, f => 3)
+            .RuleFor(e => e.AccessTerms, f => new List<AccessTerm>());
 
         public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()
             .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
-            .RuleFor(x => x.GlobalClauseId, f => f.Random.Int(1, 5))
-            .RuleFor(x => x.UserClauseId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.AgreementId, f => f.Random.Int(1, 5))
             .RuleFor(x => x.LimitsConditionsClauseId, f => f.Random.Int(1, 5))
             .RuleFor(es => es.CreatedDate, f => DateTime.Now.AddDays(-5))
             .RuleFor(es => es.AcceptedDate, f => DateTime.Now)
@@ -167,10 +168,10 @@ namespace PrimeTests.Utils
                 db.AddRange(new JobName { Code = 4, Name = "Ward Clerk" });
             }
 
-            if (!db.Set<OrganizationType>().Any())
+            if (!db.Set<CareSetting>().Any())
             {
-                db.AddRange(new OrganizationType { Code = 1, Name = "Health Authority" });
-                db.AddRange(new OrganizationType { Code = 2, Name = "Pharmacy" });
+                db.AddRange(new CareSetting { Code = 1, Name = "Health Authority" });
+                db.AddRange(new CareSetting { Code = 2, Name = "Pharmacy" });
             }
 
             if (!db.Set<Status>().Any())

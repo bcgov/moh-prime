@@ -2,7 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Prime.Models;
-using Prime.Services.Clients;
+using Prime.HttpClients;
 
 namespace Prime.Services.Rules
 {

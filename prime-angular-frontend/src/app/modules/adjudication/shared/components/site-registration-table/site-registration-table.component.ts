@@ -2,8 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { Site } from '@registration/shared/models/site.model';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-site-registration-table',
@@ -11,41 +12,63 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
   styleUrls: ['./site-registration-table.component.scss']
 })
 export class SiteRegistrationTableComponent implements OnInit {
-  @Input() public dataSource: MatTableDataSource<Site>;
+  @Input() public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
+  @Output() public claim: EventEmitter<number>;
+  @Output() public disclaim: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
-  @Output() public delete: EventEmitter<number>;
 
   public columns: string[];
 
+  public SiteStatusType = SiteStatusType;
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     private authService: AuthService
   ) {
     this.columns = [
-      'locationName',
-      'vendor',
+      'displayId',
+      'organizationName',
+      'signingAuthority',
+      'doingBusinessAs',
       'submissionDate',
+      'adjudicator',
       'siteAdjudication',
-      'pecCode',
+      'siteId',
+      'careSetting',
       'actions'
     ];
-    this.dataSource = new MatTableDataSource<Site>([]);
+    this.claim = new EventEmitter<number>();
+    this.disclaim = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
-    this.delete = new EventEmitter<number>();
   }
 
   public get canEdit(): boolean {
     return this.authService.isAdmin();
   }
 
+  public onClaim(siteId: number): void {
+    this.claim.emit(siteId);
+  }
+
+  public onDisclaim(siteId: number): void {
+    this.disclaim.emit(siteId);
+  }
+
   public onRoute(routePath: string | (string | number)[]) {
     this.route.emit(routePath);
   }
 
-  public deleteSite(siteId: number) {
-    this.delete.emit(siteId);
+  // TODO status lookup for sites would remove the need for this method and only require pipes
+  public displayStatus(status: SiteStatusType) {
+    return (status === SiteStatusType.APPROVED)
+      ? 'Approved'
+      : (status === SiteStatusType.DECLINED)
+        ? 'Declined'
+        : 'Under Review';
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    console.log(SiteStatusType.APPROVED, SiteStatusType[1]);
+
+  }
 }

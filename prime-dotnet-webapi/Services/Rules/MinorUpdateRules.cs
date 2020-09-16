@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using KellermanSoftware.CompareNetObjects;
 using Prime.Models;
@@ -23,30 +23,14 @@ namespace Prime.Services.Rules
     /// </summary>
     public class CurrentToaRule : MinorUpdateRule
     {
-        private readonly IAccessTermService _accessTermService;
-
-        public CurrentToaRule(IAccessTermService accessTermService)
-        {
-            _accessTermService = accessTermService;
-        }
-
-        public override async Task<bool> ProcessRule(Enrollee enrollee)
+        public override Task<bool> ProcessRule(Enrollee enrollee)
         {
             if (enrollee.AccessTerms == null)
             {
-                return false;
+                return Task.FromResult(false);
             }
 
-            var signedToa = enrollee.AccessTerms
-                .OrderByDescending(at => at.AcceptedDate)
-                .FirstOrDefault(at => at.AcceptedDate != null);
-
-            if (signedToa == null)
-            {
-                return false;
-            }
-
-            return await _accessTermService.IsCurrentByEnrolleeAsync(enrollee);
+            return Task.FromResult(enrollee.HasLatestAgreement());
         }
     }
 
@@ -72,9 +56,9 @@ namespace Prime.Services.Rules
     /// </summary>
     public class AllowableChangesRule : MinorUpdateRule
     {
-        private readonly EnrolleeProfileViewModel _updatedProfile;
+        private readonly EnrolleeUpdateModel _updatedProfile;
 
-        public AllowableChangesRule(EnrolleeProfileViewModel updatedProfile)
+        public AllowableChangesRule(EnrolleeUpdateModel updatedProfile)
         {
             _updatedProfile = updatedProfile;
         }
@@ -103,17 +87,12 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-            if (!CompareCollections(comparitor, enrollee.EnrolleeOrganizationTypes, _updatedProfile.EnrolleeOrganizationTypes))
+            if (!CompareCollections(comparitor, enrollee.EnrolleeCareSettings, _updatedProfile.EnrolleeCareSettings))
             {
                 return Task.FromResult(false);
             }
 
             if (!CompareCollections(comparitor, enrollee.SelfDeclarations, _updatedProfile.SelfDeclarations))
-            {
-                return Task.FromResult(false);
-            }
-
-            if (!CompareCollections(comparitor, enrollee.SelfDeclarationDocuments, _updatedProfile.SelfDeclarationDocuments))
             {
                 return Task.FromResult(false);
             }
@@ -160,20 +139,15 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<MailingAddress>(x => x.Country);
             config.IgnoreProperty<MailingAddress>(x => x.Province);
 
-            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.Id);
-            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.Enrollee);
-            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.EnrolleeId);
-            config.IgnoreProperty<EnrolleeOrganizationType>(x => x.OrganizationType);
+            config.IgnoreProperty<EnrolleeCareSetting>(x => x.Id);
+            config.IgnoreProperty<EnrolleeCareSetting>(x => x.Enrollee);
+            config.IgnoreProperty<EnrolleeCareSetting>(x => x.EnrolleeId);
+            config.IgnoreProperty<EnrolleeCareSetting>(x => x.CareSetting);
 
             config.IgnoreProperty<SelfDeclaration>(x => x.Id);
             config.IgnoreProperty<SelfDeclaration>(x => x.SelfDeclarationType);
             config.IgnoreProperty<SelfDeclaration>(x => x.EnrolleeId);
             config.IgnoreProperty<SelfDeclaration>(x => x.Enrollee);
-
-            config.IgnoreProperty<SelfDeclarationDocument>(x => x.Id);
-            config.IgnoreProperty<SelfDeclarationDocument>(x => x.SelfDeclarationType);
-            config.IgnoreProperty<SelfDeclarationDocument>(x => x.EnrolleeId);
-            config.IgnoreProperty<SelfDeclarationDocument>(x => x.Enrollee);
 
             return new CompareLogic(config);
         }

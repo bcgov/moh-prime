@@ -33,6 +33,14 @@ namespace PrimeTests.ModelFactories
             {
                 RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.Manual)).Code);
             });
+            RuleSet("licence.regulated", (set) =>
+            {
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.RegulatedUser)).Code);
+            });
+            RuleSet("licence.nonRegulated", (set) =>
+            {
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.RegulatedUser)).Code);
+            });
 
             FinishWith((f, x) =>
             {

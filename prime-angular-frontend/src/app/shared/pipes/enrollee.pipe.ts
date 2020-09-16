@@ -20,9 +20,8 @@ export class EnrolleePipe implements PipeTransform {
 
   private getFullName(enrollee: Enrollee) {
     const firstName = (enrollee.firstName) ? enrollee.firstName : '';
-    const middleName = (enrollee.middleName) ? enrollee.middleName : '';
     const lastName = (enrollee.lastName) ? enrollee.lastName : '';
-    return ` ${firstName} ${middleName} ${lastName} `;
+    return ` ${firstName} ${lastName} `;
   }
 
   private getPreferredName(enrollee: Enrollee) {

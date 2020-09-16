@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ReviewStatusContentComponent } from './review-status-content.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 describe('ReviewStatusContentComponent', () => {
@@ -11,8 +13,14 @@ describe('ReviewStatusContentComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         AdjudicationModule,
+        HttpClientTestingModule
       ],
-      declarations: []
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
+      ]
     })
       .compileComponents();
   }));

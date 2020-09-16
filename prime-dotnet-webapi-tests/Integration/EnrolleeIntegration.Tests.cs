@@ -40,13 +40,13 @@ namespace PrimeTests.Integration
                         .Include(e => e.MailingAddress)
                         .Include(e => e.Certifications)
                         .Include(e => e.Jobs)
-                        .Include(e => e.EnrolleeOrganizationTypes)
+                        .Include(e => e.EnrolleeCareSettings)
                         .Include(e => e.EnrolmentStatuses)
                         .AsNoTracking().Single(e => e.Id == enrolleeId);
         }
 
         [Fact]
-        public async void testGetEnrollees()
+        public async void TestGetEnrollees()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -60,7 +60,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void testGetEnrollees2()
+        public async void TestGetEnrollees2()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -78,7 +78,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void createEnrollee()
+        public async void TestCreateEnrollee()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -102,7 +102,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void getSingleEnrollee()
+        public async void TestGetSingleEnrollee()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -125,7 +125,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void getAllEnrollees()
+        public async void TestGetAllEnrollees()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -147,7 +147,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void updateSingleEnrollee()
+        public async void TestUpdateSingleEnrollee()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
@@ -156,13 +156,13 @@ namespace PrimeTests.Integration
 
                 Assert.NotEqual(expectedFirstName, enrollee.FirstName);
 
-                var enrolleeProfile = new EnrolleeProfileViewModel
+                var enrolleeProfile = new EnrolleeUpdateModel
                 {
                     PreferredFirstName = expectedFirstName
                 };
 
                 // create a request with an AUTH token
-                var request = TestUtils.CreateRequest<EnrolleeProfileViewModel>(HttpMethod.Put, $"/api/enrollees/{enrollee.Id}", enrollee.UserId, enrolleeProfile);
+                var request = TestUtils.CreateRequest<EnrolleeUpdateModel>(HttpMethod.Put, $"/api/enrollees/{enrollee.Id}", enrollee.UserId, enrolleeProfile);
 
                 // try to update the enrollee
                 var response = await _client.SendAsync(request);

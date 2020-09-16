@@ -4,6 +4,15 @@
 .alert-message {
   max-width: 695px;
   margin-bottom: 1.75rem;
+
+  strong {
+    display: block;
+    margin-top: 5px;
+  }
+}
+
+.emphasize {
+  display: block;
 }
 
 hr.divider {

@@ -4,23 +4,23 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable, of } from 'rxjs';
-import { debounceTime, switchMap, tap, exhaustMap } from 'rxjs/operators';
+import { Subscription, Observable, of, pipe } from 'rxjs';
+import { debounceTime, switchMap, tap, exhaustMap, take } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { UtilsService, SortWeight } from '@core/services/utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
+import { Site } from '@registration/shared/models/site.model';
+import { OrgBookAutocompleteResult } from '@registration/shared/models/orgbook.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
-import { OrgBookResource, OrgBookAutocompleteResult } from '@registration/shared/services/org-book-resource.service';
-import { Site } from '@registration/shared/models/site.model';
+import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 
 @Component({
   selector: 'app-organization-name',
@@ -47,10 +47,9 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
     private orgBookResource: OrgBookResource,
     private siteResource: SiteResource,
     private formUtilsService: FormUtilsService,
-    private utilsService: UtilsService,
     private dialog: MatDialog
   ) {
-    this.title = 'Organization Name';
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -67,7 +66,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
   }
 
   public getOrgBookLink(orgId: string) {
-    return `https://www.orgbook.gov.bc.ca/en/organization/${orgId}`;
+    return `https://www.orgbook.gov.bc.ca/en/organization/registration.registries.ca/${orgId}`;
   }
 
   public onSubmit() {
@@ -75,8 +74,11 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
       const organizationId = this.route.snapshot.params.oid;
       const payload = this.organizationFormStateService.json;
       this.organizationResource
-        .updateOrganization(payload, true)
+        .updateOrganization(payload)
         .pipe(
+          exhaustMap(() =>
+            this.organizationResource.updateCompleted(organizationId)
+          ),
           exhaustMap(
             // Check the organization wasn't completed before the update, and
             // if not then this is the initial registration wizard
@@ -99,11 +101,9 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
         this.orgBookResource.sourceIdMap(),
         tap((sourceId: string) => this.usedOrgBook = true),
         tap((sourceId: string) => this.form.get('registrationId').patchValue(sourceId)),
-        this.orgBookResource.doingBusinessAsMap()
+        this.getDoingBusinessAs()
       )
-      .subscribe((doingBusinessAsNames: string[]) =>
-        this.doingBusinessAsNames = doingBusinessAsNames
-      );
+      .subscribe();
   }
 
   public onInput() {
@@ -148,6 +148,15 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization, true);
+    this.form.markAsPristine();
+
+    this.usedOrgBook = !!organization?.registrationId;
+
+    if (organization.registrationId) {
+      this.busy = of(organization.registrationId)
+        .pipe(take(1), this.getDoingBusinessAs())
+        .subscribe();
+    }
 
     this.name.valueChanges
       .pipe(
@@ -160,12 +169,13 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
       });
   }
 
-  /**
-   * @description
-   * Sort by day of the week.
-   */
-  private sortDoingBusinessAsNames(): (a: string, b: string) => SortWeight {
-    return (a: string, b: string) =>
-      this.utilsService.sort<string>(a, b);
+  private getDoingBusinessAs() {
+    return pipe(
+      // Expects an organization registrationId
+      this.orgBookResource.doingBusinessAsMap(),
+      tap((doingBusinessAsNames: string[]) =>
+        this.doingBusinessAsNames = doingBusinessAsNames
+      )
+    );
   }
 }

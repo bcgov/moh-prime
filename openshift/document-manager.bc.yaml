@@ -1,8 +1,11 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 metadata:
   name: document-manager-bc
   creationTimestamp: null
+  description: >-
+    Build configuration template for PRIME's Document Manager component.
 parameters:
   - name: NAME
     displayName: Name
@@ -43,6 +46,8 @@ objects:
     lookupPolicy:
       local: false
     tags: []
+
+# Document Manager - Build Configuration
 - kind: BuildConfig
   apiVersion: v1
   metadata:

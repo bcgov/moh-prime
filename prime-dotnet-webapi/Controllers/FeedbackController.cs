@@ -35,29 +35,22 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResultResponse<Feedback>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Feedback>> CreateFeedback(Feedback feedback)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(feedback.EnrolleeId);
-
-            if (enrollee == null)
+            var record = await _enrolleeService.GetPermissionsRecordAsync(feedback.EnrolleeId);
+            if (record == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {feedback.EnrolleeId}"));
             }
-
-            if (!User.CanView(enrollee))
+            if (!record.ViewableBy(User))
             {
                 return Forbid();
             }
 
             var createFeedback = await _feedbackService.CreateFeedbackAsync(feedback);
 
-            return CreatedAtAction(
-                nameof(CreateFeedback),
-                new { enrolleeId = feedback.EnrolleeId },
-                ApiResponse.Result(createFeedback)
-            );
+            return Ok(ApiResponse.Result(createFeedback));
         }
     }
 }

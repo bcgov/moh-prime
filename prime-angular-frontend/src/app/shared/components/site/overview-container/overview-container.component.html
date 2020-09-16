@@ -30,19 +30,20 @@
   <app-overview-section title="Care Setting"
                         (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.CARE_SETTING"
-                        [showEditRedirect]="showEditRedirect">
+                        [showEditRedirect]="!site.submittedDate">
     <app-enrollee-property title="Care Setting">
-      {{ site.organizationTypeCode | configCode: 'organizationTypes' | default }}
+      {{ site.careSettingCode | configCode: 'careSettings' | default }}
     </app-enrollee-property>
-    <app-enrollee-property title="Vendor">
+
+    <app-enrollee-property title="PharmaNet Software Vendor">
       {{ site.siteVendors[0]?.vendorCode | configCode: 'vendors' | default }}
     </app-enrollee-property>
   </app-overview-section>
 
-  <app-overview-section title="Business Licence"
+  <app-overview-section title="Site Business Licence"
                         (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
-                        [showEditRedirect]="showEditRedirect">
+                        [showEditRedirect]="!site.submittedDate">
     <ng-container *ngIf="site.businessLicenceDocuments[0]">
 
       <app-enrollee-property title="Filename">
@@ -60,7 +61,7 @@
   <app-overview-section title="Site Address"
                         (route)="onRouteRelative($event)"
                         [editRoute]="SiteRoutes.SITE_ADDRESS"
-                        [showEditRedirect]="showEditRedirect">
+                        [showEditRedirect]="!site.submittedDate">
     <app-enrollee-property title="Address">
       {{ site?.physicalAddress?.street | default }}
     </app-enrollee-property>
@@ -88,13 +89,9 @@
                         [showEditRedirect]="showEditRedirect">
     <ng-container *ngFor="let businessDay of site?.businessHours">
       <app-enrollee-property [title]="businessDay.day | weekday">
-        <ng-container *ngIf="businessDay.startTime && businessDay.endTime; else open24Hours">
-          {{ businessDay.startTime | replace: ':00:00' : ':00' }} to
-          {{ businessDay.endTime | replace: ':00:00' : ':00' }}
+        <ng-container *ngIf="businessDay.startTime && businessDay.endTime">
+          {{ businessDay.startTime }} to {{ businessDay.endTime }}
         </ng-container>
-        <ng-template #open24Hours>
-          24 hours
-        </ng-template>
       </app-enrollee-property>
     </ng-container>
   </app-overview-section>
@@ -132,7 +129,27 @@
         </app-enrollee-property>
       </div>
 
-      <ng-container *ngFor="let location of user.remoteUserLocations">
+      <ng-container *ngFor="let remoteUserCertification of user.remoteUserCertifications">
+
+        <div class="mb-3">
+          <strong>Certification</strong>
+        </div>
+
+        <div class="ml-4 mb-3">
+
+          <app-enrollee-property title="College">
+            {{ remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Licence">
+            {{ remoteUserCertification.licenseNumber | default }}
+          </app-enrollee-property>
+
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngFor="let remoteUserLocation of user.remoteUserLocations">
         <div class="mb-3">
           <strong>Remote Address</strong>
         </div>
@@ -140,23 +157,23 @@
         <div class="ml-4 mb-3">
 
           <app-enrollee-property title="Internet Provider">
-            {{ location?.internetProvider | default }}
+            {{ remoteUserLocation?.internetProvider | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="Street Address">
-            {{ location?.physicalAddress?.street | default }}
+            {{ remoteUserLocation?.physicalAddress?.street | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="City">
-            {{ location?.physicalAddress?.city | default }}
+            {{ remoteUserLocation?.physicalAddress?.city | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="Province">
-            {{ location?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+            {{ remoteUserLocation?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="Postal Code">
-            {{ location?.physicalAddress?.postal | postal | default }}
+            {{ remoteUserLocation?.physicalAddress?.postal | postal | default }}
           </app-enrollee-property>
 
         </div>

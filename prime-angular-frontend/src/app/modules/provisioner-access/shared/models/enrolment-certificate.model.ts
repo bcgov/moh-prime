@@ -3,12 +3,11 @@ import { Config } from '@config/config.model';
 export interface EnrolmentCertificate {
   // TODO duplicate of EnrolleeProfile
   firstName: string;
-  middleName: string;
   lastName: string;
   preferredFirstName: string;
   preferredMiddleName: string;
   preferredLastName: string;
   gpid: string;
-  organizationTypes: Config<number>[];
+  careSettings: Config<number>[];
   expiryDate: string;
 }

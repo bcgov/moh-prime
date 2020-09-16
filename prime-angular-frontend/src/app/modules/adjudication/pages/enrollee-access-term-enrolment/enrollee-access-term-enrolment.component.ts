@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Address } from '@shared/models/address.model';
@@ -19,6 +19,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
   public enrolmentProfileHistory: EnrolmentProfileVersion;
+  public enrolment: Enrolment;
 
   constructor(
     protected route: ActivatedRoute,
@@ -31,13 +32,18 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
   public ngOnInit() {
     const enrolleeId = this.route.snapshot.params.id;
     const accessTermId = this.route.snapshot.params.aid;
-    this.busy = this.adjudicationResource.getEnrolmentForAccessTerm(enrolleeId, accessTermId)
-      .pipe(
-        map((enrolmentProfileVersion: HttpEnrolleeProfileVersion) => this.enrolleeVersionAdapterResponse(enrolmentProfileVersion))
+    this.busy = forkJoin([
+      this.adjudicationResource.getEnrolmentForAccessTerm(enrolleeId, accessTermId),
+      this.adjudicationResource.getEnrolleeById(enrolleeId)
+    ]).pipe(
+      map(([enrolmentProfileVersion, enrolment]: [HttpEnrolleeProfileVersion, HttpEnrollee]) =>
+        [this.enrolleeVersionAdapterResponse(enrolmentProfileVersion),
+        this.enrolleeAdapterResponse(enrolment)]
       )
-      .subscribe((enrolmentProfileVersion: EnrolmentProfileVersion) =>
-        this.enrolmentProfileHistory = enrolmentProfileVersion
-      );
+    ).subscribe(([enrolmentProfileHistory, enrolment]: [EnrolmentProfileVersion, Enrolment]) => {
+      this.enrolmentProfileHistory = enrolmentProfileHistory;
+      this.enrolment = enrolment;
+    });
   }
 
   private enrolleeVersionAdapterResponse(
@@ -64,8 +70,8 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       enrollee.jobs = [];
     }
 
-    if (!enrollee.enrolleeOrganizationTypes) {
-      enrollee.enrolleeOrganizationTypes = [];
+    if (!enrollee.enrolleeCareSettings) {
+      enrollee.enrolleeCareSettings = [];
     }
 
     return this.enrolmentAdapter(enrollee);
@@ -75,8 +81,8 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
     const {
       userId,
       firstName,
-      middleName,
       lastName,
+      givenNames,
       preferredFirstName,
       preferredMiddleName,
       preferredLastName,
@@ -89,7 +95,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       contactPhone,
       voicePhone,
       voiceExtension,
-      enrolleeOrganizationTypes,
+      enrolleeCareSettings,
       ...remainder
     } = enrollee;
 
@@ -97,8 +103,8 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       enrollee: {
         userId,
         firstName,
-        middleName,
         lastName,
+        givenNames,
         preferredFirstName,
         preferredMiddleName,
         preferredLastName,
@@ -114,7 +120,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
-      organizations: enrollee.enrolleeOrganizationTypes,
+      careSettings: enrollee.enrolleeCareSettings,
       ...remainder
     };
   }

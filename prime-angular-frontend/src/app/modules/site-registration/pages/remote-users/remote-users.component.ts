@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 
-import { Subscription } from 'rxjs';
+import { Subscription, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { AddressPipe } from '@shared/pipes/address.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
@@ -30,6 +31,8 @@ export class RemoteUsersComponent implements OnInit {
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
   public hasNoRemoteUserError: boolean;
+  public hasNoEmailError: boolean;
+  public submitButtonText: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,10 +41,12 @@ export class RemoteUsersComponent implements OnInit {
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
     private organizationResource: OrganizationResource,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private addressPipe: AddressPipe
   ) {
-    this.title = 'Practitioners Requiring Remote PharmaNet Access';
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.submitButtonText = 'Save and Continue';
   }
 
   public get remoteUsers(): FormArray {
@@ -52,20 +57,80 @@ export class RemoteUsersComponent implements OnInit {
     return this.form.get('hasRemoteUsers') as FormControl;
   }
 
+  public getRemoteUserProperties(remoteUser: FormGroup) {
+    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
+    const remoteUserLocations = remoteUser.controls?.remoteUserLocations as FormArray;
+
+    const firstLocation = remoteUserLocations.value[0].physicalAddress;
+    firstLocation.provinceCode = 'BC';
+
+    const collegeLicence = remoteUserCertifications.length > 1
+      ? 'More than one college licence'
+      : remoteUserCertifications.length === 0
+        ? 'No college licence'
+        : remoteUserCertifications.value[0].licenseNumber;
+
+    const remoteAddress = remoteUserLocations.controls?.length > 1
+      ? 'More than one remote address'
+      : this.addressPipe.transform(firstLocation);
+
+    return [
+      {
+        key: 'College Licence',
+        value: collegeLicence
+      },
+      {
+        key: 'Remote Address',
+        value: remoteAddress
+      },
+    ];
+  }
+
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       this.hasNoRemoteUserError = false;
       const payload = this.siteFormStateService.json;
       const organizationId = this.route.snapshot.params.oid;
+      const site = this.siteService.site;
 
-      this.organizationResource
+      const newRemoteUsers = this.siteFormStateService.remoteUsersForm.value.remoteUsers.reduce((
+        newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
+        if (!this.siteService.site.remoteUsers.find((current: RemoteUser) =>
+          current.firstName === updated.firstName &&
+          current.lastName === updated.lastName &&
+          current.email === updated.email
+        )) {
+          newRemoteUsersAcc.push(updated);
+        }
+        return newRemoteUsersAcc;
+      }, []);
+
+
+      this.busy = this.organizationResource
         .getOrganizationById(organizationId)
         .pipe(
           map((organization: Organization) => !!organization.acceptedAgreementDate),
-          // When the organization agreement has already been signed mark the site as completed
           exhaustMap((hasSignedOrgAgreement: boolean) =>
-            this.siteResource.updateSite(payload, hasSignedOrgAgreement)
+            this.siteResource.updateSite(payload)
               .pipe(map(() => hasSignedOrgAgreement))
+          ),
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            (hasSignedOrgAgreement)
+              ? this.siteResource.updateCompleted(site.id)
+                .pipe(map(() => hasSignedOrgAgreement))
+              : of(hasSignedOrgAgreement)
+          ),
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            (this.siteService.site.submittedDate)
+              ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
+                .pipe(map(() => hasSignedOrgAgreement))
+              : of(hasSignedOrgAgreement)
+          ),
+          exhaustMap((hasSignedOrgAgreement: boolean) =>
+            (this.siteService.site.submittedDate && newRemoteUsers)
+              ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
+                .pipe(map(() => hasSignedOrgAgreement))
+              : of(hasSignedOrgAgreement)
           )
         )
         .subscribe((hasSignedOrgAgreement: boolean) => {
@@ -79,6 +144,10 @@ export class RemoteUsersComponent implements OnInit {
 
   public onRemove(index: number) {
     this.remoteUsers.removeAt(index);
+  }
+
+  public onEdit(index: number) {
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.REMOTE_USERS, index]);
   }
 
   public onBack() {
@@ -100,6 +169,9 @@ export class RemoteUsersComponent implements OnInit {
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
+    if (this.siteService.site.submittedDate) {
+      this.submitButtonText = 'Save and Submit';
+    }
   }
 
   private createFormInstance() {
@@ -132,5 +204,6 @@ export class RemoteUsersComponent implements OnInit {
     // Remove query param from URL without refreshing
     this.router.navigate([], { queryParams: { fromRemoteUser: null } });
     this.siteFormStateService.setForm(site, !fromRemoteUser);
+    this.form.markAsPristine();
   }
 }

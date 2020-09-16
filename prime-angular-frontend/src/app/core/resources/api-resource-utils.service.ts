@@ -74,7 +74,6 @@ export class ApiResourceUtilsService {
    * @description
    * Helper for making the resource URI with HttpParams.
    */
-  // TODO refactor method for greater reuse
   public makeResourceUriWithHttpParams(
     action: string = null,
     params: { [key: string]: any } = null,
@@ -83,7 +82,7 @@ export class ApiResourceUtilsService {
     const uriParams = (action)
       ? (Array.isArray(resourceUriParams))
         ? [...resourceUriParams, action]
-        : [resourceUriParams as string, action]
+        : [resourceUriParams, action]
       : resourceUriParams;
 
     const { resourceUri, resourceParams } = this.makeResourceUri(uriParams, params);
@@ -95,7 +94,6 @@ export class ApiResourceUtilsService {
    * @description
    * Helper for making a resource URI from an action.
    */
-  // TODO refactor method for greater reuse
   public makeResourceUriFromAction(
     action: string,
     resourceUriParams: string | string[]

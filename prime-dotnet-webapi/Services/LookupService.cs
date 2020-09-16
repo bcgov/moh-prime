@@ -26,7 +26,7 @@ namespace Prime.Services
             lookupEntity.Licenses = await _context.Set<License>()
                 .Include(l => l.CollegeLicenses)
                 .ToListAsync();
-            lookupEntity.OrganizationTypes = await _context.Set<OrganizationType>().ToListAsync();
+            lookupEntity.CareSettings = await _context.Set<CareSetting>().ToListAsync();
             lookupEntity.Practices = await _context.Set<Practice>()
                 .Include(p => p.CollegePractices)
                 .ToListAsync();

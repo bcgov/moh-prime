@@ -1,30 +1,20 @@
 using System.Threading.Tasks;
-using Prime.Models;
 using System.Collections.Generic;
+using Prime.Models;
+using Prime.Models.Api;
 
 namespace Prime.Services
 {
     public interface IAccessTermService
     {
+        Task<AccessTerm> GetEnrolleeAccessTermAsync(int enrolleeId, int accessTermId, bool includeText = false);
 
-        Task<AccessTerm> GetMostRecentNotAcceptedEnrolleesAccessTermAsync(int enrolleeId);
+        Task<IEnumerable<AccessTerm>> GetAccessTermsAsync(int enrolleeId, AccessTermFilters filters);
 
-        Task<AccessTerm> GetMostRecentAcceptedEnrolleesAccessTermAsync(int enrolleeId);
+        Task CreateEnrolleeAccessTermAsync(int enrolleeId);
 
-        Task<AccessTerm> GetEnrolleesAccessTermAsync(int enrolleeId, int accessTermId);
+        Task AcceptCurrentAccessTermAsync(int enrolleeId);
 
-        Task<IEnumerable<AccessTerm>> GetAcceptedAccessTerms(int enrolleeId, int year);
-
-        Task CreateEnrolleeAccessTermAsync(Enrollee enrollee);
-
-        Task AcceptCurrentAccessTermAsync(Enrollee enrollee);
-
-        Task ExpireCurrentAccessTermAsync(Enrollee enrollee);
-
-        Task<bool> AccessTermExistsOnEnrolleeAsync(int accessTermId, int enrolleeId);
-
-        Task<bool> IsCurrentByEnrolleeAsync(Enrollee enrollee);
-
-        Task<string> GetCurrentTOAStatusAsync(Enrollee enrollee);
+        Task ExpireCurrentAccessTermAsync(int enrolleeId);
     }
 }

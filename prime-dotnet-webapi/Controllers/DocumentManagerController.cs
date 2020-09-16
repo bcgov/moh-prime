@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Models.Api;
-using Prime.Services.Clients;
-
+using Prime.HttpClients;
 
 namespace Prime.Controllers
 {
@@ -28,7 +27,7 @@ namespace Prime.Controllers
 
         // POST: api/Document
         /// <summary>
-        ///
+        /// Initialize uploading of a file with the Document Manager.
         /// </summary>
         [HttpPost(Name = nameof(InitializeFileUploadWithDocumentManager))]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]

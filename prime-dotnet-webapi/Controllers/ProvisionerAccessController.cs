@@ -121,7 +121,7 @@ namespace Prime.Controllers
                 this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in an editable state.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
-            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee);
+            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
 
             // Only a few provisioners want emails sent directly, otherwise sent only to managers
             if (provisionerName == "iClinic" || provisionerName == "MediNet" || provisionerName == "Other")
@@ -172,6 +172,34 @@ namespace Prime.Controllers
             var result = await _enrolleeService.HpdidLookupAsync(hpdid);
 
             return Ok(ApiResponse.Result(result));
+        }
+
+        // POST: api/provisioner-access/gpids/123456789/validate
+        /// <summary>
+        /// Validates the supplied information against the enrollee record with the given GPID. Requires a valid direct access grant token.
+        /// </summary>
+        [HttpPost("gpids/{gpid}/validate", Name = nameof(ValidateGpid))]
+        [Authorize(Policy = AuthConstants.EXTERNAL_GPID_VALIDATION_POLICY)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<GpidValidationResponse>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<GpidValidationResponse>> ValidateGpid(string gpid, GpidValidationParameters parameters)
+        {
+            if (parameters == null)
+            {
+                return BadRequest(ApiResponse.Message($"Must supply validation parameters"));
+            }
+
+            var response = await _enrolleeService.ValidateProvisionerDataAsync(gpid, parameters);
+
+            if (response == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with GPID {gpid}"));
+            }
+
+            return Ok(ApiResponse.Result(response));
         }
     }
 }
