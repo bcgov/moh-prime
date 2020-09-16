@@ -9,6 +9,9 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { Site } from '@registration/shared/models/site.model';
+import { exhaustMap, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-remote-access',
@@ -17,12 +20,15 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 })
 export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements OnInit {
 
+  public sites: Site[];
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
+    protected siteResource: SiteResource,
     protected enrolmentStateService: EnrolmentStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
@@ -32,7 +38,19 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public onClick() {
-
+    const enrolment = this.enrolmentService.enrolment;
+    this.busy = this.siteResource.getSitesByRemoteUserInfo(
+      enrolment.certifications,
+      enrolment.enrollee.firstName,
+      enrolment.enrollee.lastName)
+      .pipe(
+        exhaustMap((sites: Site[]) => this.sites = sites)
+      )
+      .subscribe(() => {
+        delay(3000);
+        this.busy = null;
+      }
+      );
   }
 
   ngOnInit() {

@@ -27,12 +27,16 @@
 
       <div class="col pt-2">
 
-        <button mat-stroked-button
+        <button *ngIf="!sites && !busy"
+                mat-stroked-button
                 type="button"
                 color="primary"
                 (click)="onClick()">
           Request remote access
         </button>
+
+        <mat-progress-bar *ngIf="busy"
+                          mode="indeterminate"></mat-progress-bar>
 
       </div>
 

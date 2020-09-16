@@ -472,6 +472,22 @@ namespace Prime.Services
             return SiteRegistrationNote;
         }
 
+        public async Task<IEnumerable<Site>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> certifications, string firstName, string lastName)
+        {
+            var sites = await this.GetBaseSiteQuery()
+                .Where(s => s.RemoteUsers.Any(
+                    r => r.FirstName == firstName
+                    && r.LastName == lastName))
+                .ToListAsync();
+
+
+            sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => certifications.Any(c => c.LicenseNumber == ruc.LicenseNumber))));
+
+            // (c => c.LicenseNumber == ruc.LicenseNumber)
+
+            return sites;
+        }
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
