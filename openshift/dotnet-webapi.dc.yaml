@@ -186,6 +186,18 @@ objects:
                     key: MAIL_SERVER_URL
                     name: "mailserver"
               
+              # Metabase embedded dashboard environment variables
+              - name: METABASE_SECRET_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: METABASE_SECRET_KEY
+                    name: "metabase-embedded-secrets"
+              - name: METABASE_SITE_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: METABASE_SITE_URL
+                    name: "metabase-embedded-secrets"
+
               # Pharmanet API environment variables
               - name: PHARMANET_API_PASSWORD
                 valueFrom:
