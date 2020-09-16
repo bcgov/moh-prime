@@ -20,10 +20,12 @@ namespace Prime.Controllers
     public class AdminsController : ControllerBase
     {
         private readonly IAdminService _adminService;
+        private readonly IMetabaseService _metabaseService;
 
-        public AdminsController(IAdminService adminService)
+        public AdminsController(IAdminService adminService, IMetabaseService metabaseService)
         {
             _adminService = adminService;
+            _metabaseService = metabaseService;
         }
 
         // POST: api/Admins
@@ -97,6 +99,22 @@ namespace Prime.Controllers
             }
 
             return Ok(ApiResponse.Result(admin));
+        }
+
+        // GET: api/Admins/embedded-metabase-url
+        /// <summary>
+        /// Returns a time sensitive metabase embedded url string
+        /// </summary>
+        [HttpGet("embedded-metabase-url", Name = nameof(GetMetabaseEmbeddedString))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetMetabaseEmbeddedString()
+        {
+            var token = await Task.Run(() => _metabaseService.BuildMetabaseEmbeddedString());
+
+            return Ok(ApiResponse.Result(token));
         }
     }
 }

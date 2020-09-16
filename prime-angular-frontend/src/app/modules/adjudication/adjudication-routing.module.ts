@@ -23,6 +23,7 @@ import { SiteRegistrationComponent } from './pages/site-registration/site-regist
 import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-users.component';
+import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
 
 const routes: Routes = [
   {
@@ -136,6 +137,11 @@ const routes: Routes = [
             ]
           }
         ]
+      },
+      {
+        path: AdjudicationRoutes.METABASE_REPORTS,
+        component: MetabaseReportsComponent,
+        data: { title: 'Metabase Reports' }
       },
       {
         path: '', // Equivalent to `/` and alias for `enrollees`
