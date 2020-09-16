@@ -7,42 +7,48 @@
 
       <ng-container matColumnDef="displayId">
         <th mat-header-cell
-            *matHeaderCellDef> Reference ID </th>
+            *matHeaderCellDef
+            scope="col"> Reference ID </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.displayId }} </td>
       </ng-container>
 
       <ng-container matColumnDef="name">
         <th mat-header-cell
-            *matHeaderCellDef> Enrollee Name </th>
+            *matHeaderCellDef
+            scope="col"> Enrollee Name </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row | fullname }} </td>
       </ng-container>
 
       <ng-container matColumnDef="givenNames">
         <th mat-header-cell
-            *matHeaderCellDef> Given Names </th>
+            *matHeaderCellDef
+            scope="col"> Given Names </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.givenNames | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="appliedDate">
         <th mat-header-cell
-            *matHeaderCellDef> Submission Date </th>
+            *matHeaderCellDef
+            scope="col"> Submission Date </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.appliedDate | formatDate | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="renewalDate">
         <th mat-header-cell
-            *matHeaderCellDef> Renewal Date </th>
+            *matHeaderCellDef
+            scope="col"> Renewal Date </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.expiryDate | formatDate | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="currentTOAStatus">
         <th mat-header-cell
-            *matHeaderCellDef> Current ToA </th>
+            *matHeaderCellDef
+            scope="col"> Current ToA </th>
         <td mat-cell
             *matCellDef="let row;">
           <mat-chip-list [selectable]="false">
@@ -53,7 +59,8 @@
 
       <ng-container matColumnDef="status">
         <th mat-header-cell
-            *matHeaderCellDef> State </th>
+            *matHeaderCellDef
+            scope="col"> State </th>
         <td mat-cell
             *matCellDef="let row;"
             class="status"
@@ -67,14 +74,16 @@
 
       <ng-container matColumnDef="adjudicator">
         <th mat-header-cell
-            *matHeaderCellDef> Adjudicator </th>
+            *matHeaderCellDef
+            scope="col"> Adjudicator </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell
-            *matHeaderCellDef>&nbsp;</th>
+            *matHeaderCellDef
+            scope="col">&nbsp;</th>
         <td mat-cell
             *matCellDef="let row;"
             class="text-right">

@@ -27,7 +27,7 @@
       <table class="table">
         <tbody>
           <tr *ngFor="let status of previousStatuses">
-            <th class="">
+            <th scope="row">
               <div class="text-nowrap">
                 {{ status.date | formatDate }}
               </div>
@@ -46,8 +46,7 @@
                 </p>
               </div>
               <div *ngIf="status.reasons?.length > 0">
-                <p class="mb-4 font-weight-bold">This Enrollee was manually adjudicated for the following reasons:
-                </p>
+                <p class="mb-4 font-weight-bold">This Enrollee was manually adjudicated for the following reasons:</p>
                 <div class="pl-2 mb-4"
                      *ngFor="let reason of status.reasons">
                   <span class="mb-4 font-weight-bolder">{{ reason.name }}</span>

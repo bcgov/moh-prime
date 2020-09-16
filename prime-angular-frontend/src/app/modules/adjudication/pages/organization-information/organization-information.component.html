@@ -1,10 +1,32 @@
 <app-site-registration-container [content]="content"
                                  [hasActions]="hasActions"
+                                 [actions]="actions"
                                  [refresh]="refresh">
 
   <app-page-header>Organization Information</app-page-header>
 
 </app-site-registration-container>
+
+<ng-template #actions
+             let-siteRegistration="siteRegistration">
+
+  <button mat-flat-button
+          color="primary"
+          [disabled]="!siteRegistration"
+          [matMenuTriggerFor]="menu">
+    Organization Information <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
+
+  <mat-menu #menu>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="getOrganizationAgreement(siteRegistration)">
+      <mat-icon>get_app</mat-icon>
+      <span>Organization Agreement</span>
+    </button>
+  </mat-menu>
+
+</ng-template>
 
 <ng-template #content>
 

@@ -516,18 +516,17 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/Sites/5/approval
+        // PUT: api/Sites/5/approve
         /// <summary>
-        /// Approved a site, setting it's approval date
+        /// Approve a site.
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/approval", Name = nameof(ApproveSite))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [HttpPut("{siteId}/approve", Name = nameof(ApproveSite))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         public async Task<ActionResult<Site>> ApproveSite(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
@@ -536,8 +535,31 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            var result = await _siteService.ApproveSite(siteId);
-            return Ok(ApiResponse.Result(result));
+            var updatedSite = await _siteService.ApproveSite(siteId);
+            return Ok(ApiResponse.Result(updatedSite));
+        }
+
+        // PUT: api/Sites/5/decline
+        /// <summary>
+        /// Decline a site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPut("{siteId}/decline", Name = nameof(DeclineSite))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<Site>> DeclineSite(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var updatedSite = await _siteService.DeclineSite(siteId);
+            return Ok(ApiResponse.Result(updatedSite));
         }
 
         // POST: api/Sites/5/site-registration-notes

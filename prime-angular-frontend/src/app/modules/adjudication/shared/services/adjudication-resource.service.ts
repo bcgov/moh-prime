@@ -16,7 +16,6 @@ import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-hist
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { Admin } from '@auth/shared/models/admin.model';
-import { Site } from '@registration/shared/models/site.model';
 
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
@@ -78,8 +77,9 @@ export class AdjudicationResource {
       );
   }
 
-  public setEnrolleeAdjudicator(enrolleeId: number): Observable<HttpEnrollee> {
-    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`)
+  public setEnrolleeAdjudicator(enrolleeId: number, adjudicatorId?: number): Observable<HttpEnrollee> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
+    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`, null, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         map((enrollee: HttpEnrollee) => enrollee),

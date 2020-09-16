@@ -16,6 +16,7 @@ import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ClaimSiteComponent, ClaimSiteAction } from '@shared/components/dialogs/content/claim-site/claim-site.component';
 import { ClaimActionEnum } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -23,7 +24,6 @@ import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';
-import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -32,6 +32,7 @@ import { NoteComponent } from '@shared/components/dialogs/content/note/note.comp
 })
 export class SiteRegistrationContainerComponent implements OnInit {
   @Input() public hasActions: boolean;
+  @Input() public actions: TemplateRef<any>;
   @Input() public content: TemplateRef<any>;
   @Input() public refresh: Observable<boolean>;
   @Output() public action: EventEmitter<void>;
@@ -125,13 +126,23 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
-        exhaustMap((note: string) => this.siteResource.approveSite(siteId).pipe(map(() => note))),
+        exhaustMap((result: { output: string }) =>
+          (result)
+            ? of(result.output ?? null)
+            : EMPTY
+        ),
+        exhaustMap((note: string) =>
+          this.siteResource.approveSite(siteId)
+            .pipe(
+              map((updatedSite: Site) => this.updateSite(updatedSite)),
+              map(() => note)
+            )
+        ),
         exhaustMap((note: string) =>
           (note)
             ? this.siteResource.createSiteRegistrationNote(siteId, note)
             : of(noop)
-        ),
+        )
       )
       .subscribe();
   }
@@ -141,20 +152,30 @@ export class SiteRegistrationContainerComponent implements OnInit {
       title: 'Decline Site Registration',
       message: 'Are you sure you want to Decline this Site Registration?',
       actionText: 'Decline Site Registration',
+      actionType: 'warn',
       component: NoteComponent
     };
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
-        // TODO: Implement Decline pathway
-        // exhaustMap((note: string) => this.siteResource.declineSite(siteId).pipe(map(() => note))),,
+        exhaustMap((result: { output: string }) =>
+          (result)
+            ? of(result.output ?? null)
+            : EMPTY
+        ),
+        exhaustMap((note: string) =>
+          this.siteResource.declineSite(siteId)
+            .pipe(
+              map((updatedSite: Site) => this.updateSite(updatedSite)),
+              map(() => note)
+            )
+        ),
         exhaustMap((note: string) =>
           (note)
             ? this.siteResource.createSiteRegistrationNote(siteId, note)
             : of(noop)
-        ),
+        )
       )
       .subscribe();
   }
@@ -319,8 +340,10 @@ export class SiteRegistrationContainerComponent implements OnInit {
       submittedDate,
       careSettingCode,
       siteVendors,
+      remoteUsers,
       adjudicator,
-      pec
+      pec,
+      status
     } = site;
 
     return {
@@ -330,8 +353,10 @@ export class SiteRegistrationContainerComponent implements OnInit {
       submittedDate,
       careSettingCode,
       siteVendors,
+      remoteUserCount: remoteUsers.length,
       adjudicatorIdir: adjudicator?.idir,
-      pec
+      pec,
+      status
     };
   }
 }

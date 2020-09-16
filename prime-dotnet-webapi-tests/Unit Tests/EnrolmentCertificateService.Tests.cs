@@ -27,7 +27,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testHappyPathCertificateAccess()
+        public async void TestHappyPathCertificateAccess()
         {
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
             var service = CreateService();
@@ -41,7 +41,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact(Skip = "Max views are temporarily disabled in the app")]
-        public async void testMaxViews()
+        public async void TestMaxViews()
         {
             int tokenMaxViews = 3;
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
@@ -61,7 +61,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact]
-        public async void testExpiryDate()
+        public async void TestExpiryDate()
         {
             TimeSpan tokenLifespan = TimeSpan.FromDays(7);
             TimeSpan tolerance = TimeSpan.FromSeconds(1);

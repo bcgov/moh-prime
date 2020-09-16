@@ -187,14 +187,14 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       this.hoursOperationForm.get('businessDays').patchValue(businessDays);
     }
 
-    if (site.remoteUsers?.length) {
-      const form = this.remoteUsersForm;
-      const remoteUsersFormArray = form.get('remoteUsers') as FormArray;
-      remoteUsersFormArray.clear(); // Clear out existing indices
 
+    const remoteUsersForm = this.remoteUsersForm;
+    const remoteUsersFormArray = remoteUsersForm.get('remoteUsers') as FormArray;
+    remoteUsersFormArray.clear(); // Clear out existing indices
+    if (site.remoteUsers?.length) {
       // Omitted from payload, but provided in the form to allow for
       // validation to occur when "Have Remote Users" is toggled
-      form.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
+      remoteUsersForm.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
 
       site.remoteUsers.forEach((remoteUser: RemoteUser) => {
         const group = this.createEmptyRemoteUserFormAndPatch(remoteUser);

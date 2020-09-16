@@ -6,12 +6,12 @@ import { StringUtils } from '@lib/utils/string-utils.class';
 })
 export class CapitalizePipe implements PipeTransform {
   transform(value: string, all: boolean = false): string {
-    if (value) {
-      return (all)
-        ? value.split(' ').map((word: string) => StringUtils.capitalize(word)).join(' ')
-        : StringUtils.capitalize(value);
+    if (!value) {
+      return value;
     }
 
-    return value;
+    return (all)
+      ? value.split(' ').map((word: string) => StringUtils.capitalize(word)).join(' ')
+      : StringUtils.capitalize(value);
   }
 }

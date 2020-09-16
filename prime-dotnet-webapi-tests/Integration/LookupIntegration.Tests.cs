@@ -16,7 +16,7 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void testGetLookups()
+        public async void TestGetLookups()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {

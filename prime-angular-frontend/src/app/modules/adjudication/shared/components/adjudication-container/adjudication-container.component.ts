@@ -112,7 +112,7 @@ export class AdjudicationContainerComponent implements OnInit {
           } else if (result.output.action === ClaimActionEnum.Claim) {
             return concat(
               this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId),
-              this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId)
+              this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, result.output.adjudicatorId)
             );
           }
         })

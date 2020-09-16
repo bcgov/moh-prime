@@ -19,7 +19,6 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
 
   constructor(
-    private organizationResource: OrganizationResource,
     private authService: AuthService,
     private utilsService: UtilsService
   ) {
@@ -31,40 +30,24 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public get canEdit(): boolean {
     return this.authService.isAdmin();
   }
+
   public get canDelete(): boolean {
     return this.authService.isSuperAdmin();
   }
 
-  public onDelete(record: { [key: string]: number }) {
-    this.delete.emit(record);
-  }
-
-  public getOrganizationAgreement() {
-    const request$ = (this.siteRegistration.signedAgreementDocumentCount)
-      ? this.organizationResource.getDownloadTokenForLatestSignedAgreement(this.siteRegistration.organizationId)
-        .pipe(
-          map((token: string) => this.utilsService.downloadToken(token))
-        )
-      : this.organizationResource.getSignedOrganizationAgreement(this.siteRegistration.organizationId)
-        .pipe(
-          map((base64: string) => this.utilsService.base64ToBlob(base64)),
-          map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
-        );
-  }
-
-  public approveSite(): void {
+  public onApprove(): void {
     if (this.canEdit) {
       this.approve.emit(this.siteRegistration.siteId);
     }
   }
 
-  public declineSite(): void {
+  public onDecline(): void {
     if (this.canEdit) {
       this.decline.emit(this.siteRegistration.siteId);
     }
   }
 
-  public contactSigningAuthorityForSite() {
+  public onContactSigningAuthority() {
     const signingAuthority = this.siteRegistration?.signingAuthority;
     if (signingAuthority) {
       this.utilsService.mailTo(
@@ -73,6 +56,10 @@ export class SiteRegistrationActionsComponent implements OnInit {
         `Dear ${signingAuthority.firstName} ${signingAuthority.lastName},`
       );
     }
+  }
+
+  public onDelete(record: { [key: string]: number }) {
+    this.delete.emit(record);
   }
 
   public ngOnInit(): void { }

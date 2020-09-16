@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.HttpClients;
 
-namespace PrimeTests.Mocks
+namespace PrimeTests.HttpClientMocks
 {
     public class CollegeLicenceClientMock : ICollegeLicenceClient
     {

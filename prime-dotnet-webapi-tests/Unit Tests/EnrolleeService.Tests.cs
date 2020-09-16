@@ -34,7 +34,10 @@ namespace PrimeTests.UnitTests
                 businessEventService ?? A.Fake<IBusinessEventService>()
             );
         }
+    }
 
+    public class TheValidateProvisionerDataMethod : EnrolleeServiceTests
+    {
         [Fact]
         public async void TestGpidValidation_NoParams()
         {
@@ -161,9 +164,9 @@ namespace PrimeTests.UnitTests
             //Assert
             Assert.NotNull(response);
             Assert.True(response.AllPropertiesNullExcept(
-                    nameof(response.LastName),
-                    nameof(response.Phone),
-                    nameof(response.PhoneExtension)));
+                nameof(response.LastName),
+                nameof(response.Phone),
+                nameof(response.PhoneExtension)));
             Assert.Equal(GpidValidationResponse.MatchText, response.LastName);
             Assert.Equal(GpidValidationResponse.MatchText, response.Phone);
             Assert.Equal(GpidValidationResponse.NoMatchText, response.PhoneExtension);
@@ -175,7 +178,8 @@ namespace PrimeTests.UnitTests
             // Arrange
             var service = CreateService();
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
-            enrollee.Certifications = new Certification[]{
+            enrollee.Certifications = new Certification[]
+            {
                 new Certification
                 {
                     College = new College
