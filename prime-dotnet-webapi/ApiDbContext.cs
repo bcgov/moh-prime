@@ -235,6 +235,10 @@ namespace Prime
                 .WithMany(ru => ru.RemoteUserLocations)
                 .HasForeignKey(rul => rul.RemoteUserId);
 
+            modelBuilder.Entity<EnrolleeRemoteUser>()
+                .HasOne(eru => eru.Enrollee)
+                .WithMany(e => e.EnrolleeRemoteUsers)
+
             #endregion
         }
 

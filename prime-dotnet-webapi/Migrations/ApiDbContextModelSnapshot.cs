@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
-using Prime.Models;
 
 namespace Prime.Migrations
 {
@@ -1455,18 +1454,6 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Credential");
-                });
-
-            modelBuilder.Entity("Prime.Models.DbViews.NewestAgreement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NewestAgreements");
                 });
 
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
@@ -7771,47 +7758,6 @@ namespace Prime.Migrations
                     b.ToTable("Site");
                 });
 
-            modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("AdjudicatorId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("NoteDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("SiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdjudicatorId");
-
-                    b.HasIndex("SiteId");
-
-                    b.ToTable("SiteRegistrationNote");
-                });
-
             modelBuilder.Entity("Prime.Models.SiteRegistrationReviewDocument", b =>
                 {
                     b.Property<int>("Id")
@@ -8274,8 +8220,6 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
-
-                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
@@ -14246,21 +14190,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Contact", "TechnicalSupport")
                         .WithMany()
                         .HasForeignKey("TechnicalSupportId");
-                });
-
-            modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>
-                {
-                    b.HasOne("Prime.Models.Admin", "Adjudicator")
-                        .WithMany()
-                        .HasForeignKey("AdjudicatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Site", "Site")
-                        .WithMany("SiteRegistrationNotes")
-                        .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationReviewDocument", b =>

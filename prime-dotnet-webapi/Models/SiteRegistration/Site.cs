@@ -16,7 +16,7 @@ namespace Prime.Models
 
         public int OrganizationId { get; set; }
 
-        [JsonIgnore]
+        // [JsonIgnore]
         public Organization Organization { get; set; }
 
         public PhysicalAddress PhysicalAddress { get; set; }

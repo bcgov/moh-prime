@@ -47,8 +47,9 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
         exhaustMap((sites: Site[]) => this.sites = sites)
       )
       .subscribe(() => {
-        delay(3000);
+        delay(10000);
         this.busy = null;
+        console.log('SITES', this.sites);
       }
       );
   }

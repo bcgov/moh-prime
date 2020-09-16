@@ -480,10 +480,7 @@ namespace Prime.Services
                     && r.LastName == lastName))
                 .ToListAsync();
 
-
             sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => certifications.Any(c => c.LicenseNumber == ruc.LicenseNumber))));
-
-            // (c => c.LicenseNumber == ruc.LicenseNumber)
 
             return sites;
         }

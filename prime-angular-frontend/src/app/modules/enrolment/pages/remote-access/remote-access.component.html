@@ -35,10 +35,33 @@
           Request remote access
         </button>
 
-        <mat-progress-bar *ngIf="busy"
-                          mode="indeterminate"></mat-progress-bar>
-
       </div>
+
+      <div *ngIf="busy">
+        <span>We are locating your site's remote application</span>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+
+      <ng-container *ngIf="sites">
+        <ng-container appPageSubheaderSummary>
+          The sites below have registered you for remote access. Check to confirm that you want remote access for these
+          sites. If you need remote access for a site not listed here, talk to that site's PharmaNet Administrator.
+        </ng-container>
+        <div class="col pt-2 mb-3"
+             *ngFor="let site of sites">
+          <mat-checkbox>
+            <div>{{ site.organization.name }}</div>
+            <div>
+              {{ site.physicalAddress.street }},
+              {{ site.physicalAddress.city }}
+              {{ site.physicalAddress.provinceCode }}
+              {{ site.physicalAddress.postal }}
+            </div>
+            <div>Vendor: {{ site.siteVendors[0].vendorCode | configCode: 'vendors' | default }}</div>
+          </mat-checkbox>
+        </div>
+      </ng-container>
+
 
     </section>
 
