@@ -15,20 +15,16 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System.Security.Claims;
 
-
 using Prime.Auth.Requirements;
+
 namespace Prime.Auth
 {
     public static class AuthenticationSetup
     {
-        public static void Initialize(
-            IServiceCollection services,
-            IConfiguration configuration,
-            IHostEnvironment environment)
+        public static void Initialize(IServiceCollection services, IConfiguration configuration)
         {
             services.ThrowIfNull(nameof(services));
             configuration.ThrowIfNull(nameof(configuration));
-            environment.ThrowIfNull(nameof(environment));
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -39,7 +35,7 @@ namespace Prime.Auth
             })
             .AddJwtBearer(options =>
             {
-                if (environment.IsDevelopment())
+                if (PrimeEnvironment.IsDeveloperFacing)
                 {
                     IdentityModelEventSource.ShowPII = true;
                     options.RequireHttpsMetadata = false;
@@ -55,7 +51,7 @@ namespace Prime.Auth
 
                         c.Response.StatusCode = 500;
                         c.Response.ContentType = "text/plain";
-                        if (environment.IsDevelopment())
+                        if (PrimeEnvironment.IsDeveloperFacing)
                         {
                             return c.Response.WriteAsync(c.Exception.ToString());
                         }
@@ -82,7 +78,7 @@ namespace Prime.Auth
 
                 options.AddPolicy(Policies.CanEdit, policy => policy.AddRequirements(new CanEditRequirement()));
 
-                // External Clientss
+                // External Clients
                 options.AddPolicy(Policies.CareConnectAccess, policy => policy.AddRequirements(new AuthorizedPartyRequirement(AuthorizedParties.CareConnect)));
                 options.AddPolicy(Policies.PosGpidAccess, policy => policy.AddRequirements(new AuthorizedPartyRequirement(AuthorizedParties.PosGpid)));
             });
@@ -96,31 +92,30 @@ namespace Prime.Auth
             {
                 identity.AddClaim(new Claim(ClaimTypes.Name, accessToken.Subject));
 
-                AddRolesForRealmAccessClaims(identity);
+                FlattenRealmAccessRoles(identity);
             }
 
             return Task.CompletedTask;
         }
 
-        private static void AddRolesForRealmAccessClaims(ClaimsIdentity identity)
+        /// <summary>
+        /// Flattens the Realm Access claim, as Microsoft Identity Model doesn't support nested claims
+        /// </summary>
+        private static void FlattenRealmAccessRoles(ClaimsIdentity identity)
         {
-            // flatten realm_access because Microsoft identity model doesn't support nested claims
             var realmAccessClaim = identity.Claims.SingleOrDefault(claim => claim.Type == Claims.RealmAccess);
 
             if (realmAccessClaim != null)
             {
                 var realmAccess = JsonConvert.DeserializeObject<RealmAccess>(realmAccessClaim.Value);
 
-                foreach (var role in realmAccess.roles)
-                {
-                    identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                }
+                identity.AddClaims(realmAccess.Roles.Select(roles => new Claim(ClaimTypes.Role, roles)));
             }
         }
 
         private class RealmAccess
         {
-            public string[] roles { get; set; }
+            public string[] Roles { get; set; }
         }
     }
 }

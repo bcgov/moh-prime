@@ -12,6 +12,7 @@ namespace Prime
         public static bool IsProduction { get => Name == "prod"; }
         public static bool IsDevelopment { get => Name == "dev"; }
         public static bool IsLocal { get => Name == "local"; }
+        public static bool IsDeveloperFacing { get => IsLocal || IsDevelopment; }
 
         public static class DocumentManager
         {

@@ -46,16 +46,16 @@ namespace Prime
         {
             string path = PrimeEnvironment.LogFile;
 
-            try
+            if (PrimeEnvironment.IsDeveloperFacing)
             {
-                if (PrimeEnvironment.IsLocal || PrimeEnvironment.IsDevelopment)
+                try
                 {
                     Directory.CreateDirectory(path);
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Creating the logging directory failed: {0}", e.ToString());
+                catch (Exception e)
+                {
+                    Console.WriteLine("Creating the logging directory failed: {0}", e.ToString());
+                }
             }
 
             var name = Assembly.GetExecutingAssembly().GetName();

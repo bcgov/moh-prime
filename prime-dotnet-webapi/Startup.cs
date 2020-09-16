@@ -113,7 +113,7 @@ namespace Prime
 
             this.ConfigureDatabase(services);
 
-            AuthenticationSetup.Initialize(services, Configuration, Environment);
+            AuthenticationSetup.Initialize(services, Configuration);
         }
 
         protected void ConfigureClients(IServiceCollection services)
