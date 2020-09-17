@@ -3,7 +3,6 @@ import { AbstractControl, FormBuilder, Validators, FormGroup } from '@angular/fo
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
 
-import { Party } from '../models/party.model';
 import { Person } from '../models/person.model';
 
 export abstract class AbstractFormState<T> {

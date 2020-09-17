@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { VendorEnum } from '@shared/enums/vendor.enum';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
@@ -28,6 +29,7 @@ export class SiteManagementComponent implements OnInit {
   public organizations: OrganizationListViewModel[];
   public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
+  public VendorEnum = VendorEnum;
   public SiteRoutes = SiteRoutes;
 
   constructor(

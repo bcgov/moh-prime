@@ -1,15 +1,15 @@
 <ng-container *ngIf="organization">
   <app-overview-section title="Signing Authority"
-                        (route)="onRoute($event)"
+                        [showEditRedirect]="showEditRedirect"
                         [editRoute]="[SiteRoutes.MODULE_PATH,SiteRoutes.SITE_MANAGEMENT,organization.id,SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
-                        [showEditRedirect]="showEditRedirect">
+                        (route)="onRoute($event)">
     <app-enrollee-profile [enrollee]="organization?.signingAuthority"></app-enrollee-profile>
   </app-overview-section>
 
   <app-overview-section title="Organization Information"
-                        (route)="onRoute($event)"
+                        [showEditRedirect]="showEditRedirect"
                         [editRoute]="[SiteRoutes.MODULE_PATH,SiteRoutes.SITE_MANAGEMENT,organization.id,SiteRoutes.ORGANIZATION_NAME]"
-                        [showEditRedirect]="showEditRedirect">
+                        (route)="onRoute($event)">
     <app-enrollee-property title="Organization Name (Legal Entity Operating Site)">
       {{ organization?.name | default }}
     </app-enrollee-property>
@@ -28,9 +28,9 @@
 <ng-container *ngIf="site">
 
   <app-overview-section title="Care Setting"
-                        (route)="onRouteRelative($event)"
+                        [showEditRedirect]="!site.submittedDate"
                         [editRoute]="SiteRoutes.CARE_SETTING"
-                        [showEditRedirect]="!site.submittedDate">
+                        (route)="onRouteRelative($event)">
     <app-enrollee-property title="Care Setting">
       {{ site.careSettingCode | configCode: 'careSettings' | default }}
     </app-enrollee-property>
@@ -41,9 +41,9 @@
   </app-overview-section>
 
   <app-overview-section title="Site Business Licence"
-                        (route)="onRouteRelative($event)"
+                        [showEditRedirect]="!site.submittedDate"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
-                        [showEditRedirect]="!site.submittedDate">
+                        (route)="onRouteRelative($event)">
     <ng-container *ngIf="site.businessLicenceDocuments[0]">
 
       <app-enrollee-property title="Filename">
@@ -59,9 +59,9 @@
   </app-overview-section>
 
   <app-overview-section title="Site Address"
-                        (route)="onRouteRelative($event)"
+                        [showEditRedirect]="!site.submittedDate"
                         [editRoute]="SiteRoutes.SITE_ADDRESS"
-                        [showEditRedirect]="!site.submittedDate">
+                        (route)="onRouteRelative($event)">
     <app-enrollee-property title="Address">
       {{ site?.physicalAddress?.street | default }}
     </app-enrollee-property>
@@ -84,9 +84,9 @@
   </app-overview-section>
 
   <app-overview-section title="Hours of Operation"
-                        (route)="onRouteRelative($event)"
+                        [showEditRedirect]="showEditRedirect"
                         [editRoute]="SiteRoutes.HOURS_OPERATION"
-                        [showEditRedirect]="showEditRedirect">
+                        (route)="onRouteRelative($event)">
     <ng-container *ngFor="let businessDay of site?.businessHours">
       <app-enrollee-property [title]="businessDay.day | weekday">
         <ng-container *ngIf="businessDay.startTime && businessDay.endTime">
@@ -97,89 +97,29 @@
   </app-overview-section>
 
   <app-overview-section title="PharmaNet Administrator"
-                        (route)="onRouteRelative($event)"
+                        [showEditRedirect]="showEditRedirect"
                         [editRoute]="SiteRoutes.ADMINISTRATOR"
-                        [showEditRedirect]="showEditRedirect">
+                        (route)="onRouteRelative($event)">
     <app-party-review [party]="site?.administratorPharmaNet"></app-party-review>
   </app-overview-section>
 
   <app-overview-section title="Privacy Officer"
-                        (route)="onRouteRelative($event)"
+                        [showEditRedirect]="showEditRedirect"
                         [editRoute]="SiteRoutes.PRIVACY_OFFICER"
-                        [showEditRedirect]="showEditRedirect">
+                        (route)="onRouteRelative($event)">
     <app-party-review [party]="site?.privacyOfficer"></app-party-review>
   </app-overview-section>
 
   <app-overview-section title="Technical Support Contact"
-                        (route)="onRouteRelative($event)"
+                        [showEditRedirect]="showEditRedirect"
                         [editRoute]="SiteRoutes.TECHNICAL_SUPPORT"
-                        [showEditRedirect]="showEditRedirect">
+                        (route)="onRouteRelative($event)">
     <app-party-review [party]="site?.technicalSupport"></app-party-review>
   </app-overview-section>
 
-  <ng-container *ngFor="let user of site.remoteUsers">
-    <app-overview-section title="Remote User"
-                          (route)="onRouteRelative($event)"
+  <app-remote-user-review [remoteUsers]="site.remoteUsers"
+                          [showEditRedirect]="showEditRedirect"
                           [editRoute]="SiteRoutes.REMOTE_USERS"
-                          [showEditRedirect]="showEditRedirect">
-
-      <div class="mb-3">
-        <app-enrollee-property title="Name">
-          {{ user | fullname | default }}
-        </app-enrollee-property>
-      </div>
-
-      <ng-container *ngFor="let remoteUserCertification of user.remoteUserCertifications">
-
-        <div class="mb-3">
-          <strong>Certification</strong>
-        </div>
-
-        <div class="ml-4 mb-3">
-
-          <app-enrollee-property title="College">
-            {{ remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
-          </app-enrollee-property>
-
-          <app-enrollee-property title="Licence">
-            {{ remoteUserCertification.licenseNumber | default }}
-          </app-enrollee-property>
-
-        </div>
-
-      </ng-container>
-
-      <ng-container *ngFor="let remoteUserLocation of user.remoteUserLocations">
-        <div class="mb-3">
-          <strong>Remote Address</strong>
-        </div>
-
-        <div class="ml-4 mb-3">
-
-          <app-enrollee-property title="Internet Provider">
-            {{ remoteUserLocation?.internetProvider | default }}
-          </app-enrollee-property>
-
-          <app-enrollee-property title="Street Address">
-            {{ remoteUserLocation?.physicalAddress?.street | default }}
-          </app-enrollee-property>
-
-          <app-enrollee-property title="City">
-            {{ remoteUserLocation?.physicalAddress?.city | default }}
-          </app-enrollee-property>
-
-          <app-enrollee-property title="Province">
-            {{ remoteUserLocation?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
-          </app-enrollee-property>
-
-          <app-enrollee-property title="Postal Code">
-            {{ remoteUserLocation?.physicalAddress?.postal | postal | default }}
-          </app-enrollee-property>
-
-        </div>
-
-      </ng-container>
-    </app-overview-section>
-  </ng-container>
+                          (route)="onRouteRelative($event)"></app-remote-user-review>
 
 </ng-container>

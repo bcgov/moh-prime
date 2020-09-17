@@ -6,23 +6,17 @@
     <div class="row">
       <div class="col-sm-12">
 
-        <app-form-icon-group>
-          <mat-form-field class="w-100">
-            <mat-label>College Licences</mat-label>
-            <mat-select formControlName="collegeCode">
-              <mat-option value="">None</mat-option>
-              <mat-option *ngFor="let college of getDisplayedColleges()"
-                          [value]="college.code">
-                {{ college.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="collegeCode.hasError('required')">Required</mat-error>
-          </mat-form-field>
-
-          <ng-container appContextualContent>
-            This is the licence that indicates your authority to deliver health care directly to patients in BC.
-          </ng-container>
-        </app-form-icon-group>
+        <mat-form-field class="w-100">
+          <mat-label>College Licences</mat-label>
+          <mat-select formControlName="collegeCode">
+            <mat-option value="">None</mat-option>
+            <mat-option *ngFor="let college of getDisplayedColleges()"
+                        [value]="college.code">
+              {{ college.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="collegeCode.hasError('required')">Required</mat-error>
+        </mat-form-field>
 
       </div>
 
@@ -42,15 +36,50 @@
             </div>
             <div class="col">
 
-              <mat-form-field class="w-100">
-                <input matInput
-                       placeholder="Licence Number"
-                       formControlName="licenseNumber">
-                <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
-                <mat-error *ngIf="form.get('licenseNumber').hasError('alphanumeric')">
-                  Must contain only alphanumeric characters
-                </mat-error>
-              </mat-form-field>
+              <app-form-icon-group>
+                <mat-form-field class="w-100">
+                  <input matInput
+                         placeholder="Licence Number"
+                         formControlName="licenseNumber">
+                  <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
+                  <mat-error *ngIf="form.get('licenseNumber').hasError('alphanumeric')">
+                    Must contain only alphanumeric characters
+                  </mat-error>
+                </mat-form-field>
+
+                <ng-container appContextualContent>
+
+                  <ng-container [ngSwitch]="collegeCode.value">
+                    <p *ngSwitchCase="CollegeLicenceClass.BCCNP">
+                      If you are a nurse practitioner, your Prescriber ID number was issued and communicated to you when
+                      you were initially granted practising NP registration. Your Prescriber ID number is created with
+                      the digits 96 and the last five digits of your College ID/Registration number. Please provide only
+                      the last 5 digits, without the leading “96”.
+                    </p>
+                    <p *ngSwitchCase="CollegeLicenceClass.CPSBC">
+                      Your college ID number is called the “CPSID number” in your license letter. Provide only the last
+                      5 digits, without the leading zero.
+                    </p>
+                    <div *ngSwitchCase="CollegeLicenceClass.CPBC">
+                      <p>
+                        You may view your registration number on eServices by clicking “My Profile” and navigating to
+                        either:
+                      </p>
+                      <ol>
+                        <li>
+                          <strong>Update profile (view only)</strong> OR
+                        </li>
+                        <li>
+                          <strong>My Registration Card</strong> (downloads registration card containing your
+                          registration
+                          number)
+                        </li>
+                      </ol>
+                    </div>
+                  </ng-container>
+
+                </ng-container>
+              </app-form-icon-group>
 
             </div>
           </div>
@@ -61,22 +90,16 @@
 
           <div class="col-sm-12 pl-5">
 
-            <app-form-icon-group>
-              <mat-form-field class="w-100">
-                <mat-label>Licence Class</mat-label>
-                <mat-select formControlName="licenseCode">
-                  <mat-option *ngFor="let license of filteredLicenses"
-                              [value]="license.code">
-                    {{ license.name }}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="form.get('licenseCode').hasError('required')">Required</mat-error>
-              </mat-form-field>
-
-              <ng-container appContextualContent>
-                Licence class associated with your certification.
-              </ng-container>
-            </app-form-icon-group>
+            <mat-form-field class="w-100">
+              <mat-label>Licence Class associated with your certification</mat-label>
+              <mat-select formControlName="licenseCode">
+                <mat-option *ngFor="let license of filteredLicenses"
+                            [value]="license.code">
+                  {{ license.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.get('licenseCode').hasError('required')">Required</mat-error>
+            </mat-form-field>
 
           </div>
           <div class="col-sm-12 pl-5">

@@ -38,6 +38,7 @@ namespace Prime.Services
                 .Include(o => o.Sites).ThenInclude(s => s.SiteVendors)
                 .Include(o => o.Sites).ThenInclude(s => s.PhysicalAddress)
                 .Include(o => o.Sites).ThenInclude(s => s.Adjudicator)
+                .Include(o => o.Sites).ThenInclude(s => s.RemoteUsers)
                 .ToListAsync();
         }
 

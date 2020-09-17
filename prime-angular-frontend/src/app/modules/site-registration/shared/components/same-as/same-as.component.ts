@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { SiteService } from '@registration/shared/services/site.service';
-import { Party } from '@registration/shared/models/party.model';
 import { Contact } from '@registration/shared/models/contact.model';
 import { Person } from '@registration/shared/models/person.model';
 
