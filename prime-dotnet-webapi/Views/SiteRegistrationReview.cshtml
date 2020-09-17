@@ -287,6 +287,65 @@
 
   @* End? *@
 
+  <h2 class="mb-2">Signing Authority</h2>
+
+  <div class="ml-2 mb-2">
+    <h5>Name</h5>
+    <span class="ml-2">@Model.Organization.SigningAuthority.FirstName @Model.Organization.SigningAuthority.LastName</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Date of Birth</h5>
+    <span class="ml-2">@Model.Organization.SigningAuthority.DateOfBirth</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Country</h5>
+    <span class="ml-2">@Model.Organization.SigningAuthority.PhysicalAddress.Country</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Province</h5>
+    <span class="ml-2">@Model.Organization.SigningAuthority.PhysicalAddress.Province</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Street Address</h5>
+    <span class="ml-2">@Model.Organization.SigningAuthority.PhysicalAddress.Street</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Street Address 2</h5>
+    <span class="ml-2">@Model.Organization.SigningAuthority.PhysicalAddress.Street2</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>City</h5>
+    <span class="ml-2">@Model.Organization.SigningAuthority.PhysicalAddress.City</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Postal Code</h5>
+    <span class="ml-2">@Model.Organization.SigningAuthority.PhysicalAddress.Postal</span>
+  </div>
+
+  <h2 class="mb-2">Organization Information</h2>
+
+  <div class="ml-2 mb-2">
+    <h5>Organization Name (Legal Entity Operating Site)</h5>
+    <span class="ml-2">@Model.Organization.Name</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Organization Registration ID</h5>
+    <span class="ml-2">@Model.Organization.RegistrationId</span>
+  </div>
+
+  <div class="ml-2 mb-2">
+    <h5>Doing Business As</h5>
+    <span class="ml-2">@Model.Organization.DoingBusinessAs</span>
+  </div>
+
 </div>
 
 
