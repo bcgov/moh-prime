@@ -22,6 +22,7 @@ import { SiteRegistrationsComponent } from './pages/site-registrations/site-regi
 import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
 import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
+import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-users.component';
 
 const routes: Routes = [
   {
@@ -126,6 +127,11 @@ const routes: Routes = [
                 path: AdjudicationRoutes.ORGANIZATION_INFORMATION,
                 component: OrganizationInformationComponent,
                 data: { title: 'Organization Information' }
+              },
+              {
+                path: AdjudicationRoutes.SITE_REMOTE_USERS,
+                component: SiteRemoteUsersComponent,
+                data: { title: 'Remote Practitioners' }
               }
             ]
           }

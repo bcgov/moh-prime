@@ -13,7 +13,6 @@ import { SiteStatusType } from '../enum/site-status.enum';
 export interface Site {
   id?: number;
   organizationId: number;
-  organization: Organization;
   // Provision is aka the Signing Authority
   provisionerId: number;
   provisioner: Party;
@@ -46,4 +45,5 @@ export interface Site {
 export interface SiteListViewModel extends
   Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'status'> {
   adjudicatorIdir: string;
+  remoteUserCount: number;
 }

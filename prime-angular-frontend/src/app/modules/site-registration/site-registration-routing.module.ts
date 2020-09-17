@@ -127,6 +127,25 @@ const routes: Routes = [
                     data: { title: 'Hours of Operation' }
                   },
                   {
+                    path: SiteRoutes.REMOTE_USERS,
+                    children: [
+                      {
+                        path: '',
+                        component: RemoteUsersComponent,
+                        canActivate: [SiteGuard],
+                        canDeactivate: [CanDeactivateFormGuard],
+                        data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
+                      },
+                      {
+                        path: ':index',
+                        component: RemoteUserComponent,
+                        canActivate: [SiteGuard],
+                        canDeactivate: [CanDeactivateFormGuard],
+                        data: { title: 'Remote User' }
+                      }
+                    ]
+                  },
+                  {
                     path: SiteRoutes.ADMINISTRATOR,
                     component: AdministratorComponent,
                     canActivate: [SiteGuard],
@@ -146,25 +165,6 @@ const routes: Routes = [
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Technical Support Contact' }
-                  },
-                  {
-                    path: SiteRoutes.REMOTE_USERS,
-                    children: [
-                      {
-                        path: '',
-                        component: RemoteUsersComponent,
-                        canActivate: [SiteGuard],
-                        canDeactivate: [CanDeactivateFormGuard],
-                        data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
-                      },
-                      {
-                        path: ':index',
-                        component: RemoteUserComponent,
-                        canActivate: [SiteGuard],
-                        canDeactivate: [CanDeactivateFormGuard],
-                        data: { title: 'Remote User' }
-                      }
-                    ]
                   },
                   {
                     path: SiteRoutes.SITE_REVIEW,

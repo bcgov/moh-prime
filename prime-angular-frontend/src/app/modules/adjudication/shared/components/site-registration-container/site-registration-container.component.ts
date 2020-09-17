@@ -340,6 +340,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       submittedDate,
       careSettingCode,
       siteVendors,
+      remoteUsers,
       adjudicator,
       pec,
       status
@@ -352,6 +353,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       submittedDate,
       careSettingCode,
       siteVendors,
+      remoteUserCount: remoteUsers.length,
       adjudicatorIdir: adjudicator?.idir,
       pec,
       status
