@@ -579,16 +579,14 @@ namespace Prime.Controllers
         /// Gets all of the Sites which have remote users who match search name and college id
         /// </summary>
         /// <param name="certificationsJson"></param>
-        /// <param name="firstName"></param>
-        /// <param name="lastName"></param>
         [HttpGet("/api/Sites/remote-users", Name = nameof(GetSitesByRemoteUserInfo))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSitesByRemoteUserInfo([FromQuery] string certificationsJson, [FromQuery] string firstName, [FromQuery] string lastName)
+        public async Task<ActionResult<IEnumerable<Site>>> GetSitesByRemoteUserInfo([FromQuery] string certificationsJson)
         {
             var certifications = JsonConvert.DeserializeObject<List<Certification>>(certificationsJson);
-            var sites = await _siteService.GetSitesByRemoteUserInfoAsync(certifications, firstName, lastName);
+            var sites = await _siteService.GetSitesByRemoteUserInfoAsync(certifications);
 
             return Ok(ApiResponse.Result(sites));
         }

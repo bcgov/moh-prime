@@ -21,6 +21,7 @@ import { exhaustMap, delay } from 'rxjs/operators';
 export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements OnInit {
 
   public sites: Site[];
+  public hasNoSitesError: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -38,18 +39,20 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public onClick() {
+    this.hasNoSitesError = false;
     const enrolment = this.enrolmentService.enrolment;
     this.busy = this.siteResource.getSitesByRemoteUserInfo(
-      enrolment.certifications,
-      enrolment.enrollee.firstName,
-      enrolment.enrollee.lastName)
+      enrolment.certifications)
       .pipe(
         exhaustMap((sites: Site[]) => this.sites = sites)
       )
       .subscribe(() => {
         delay(10000);
-        this.busy = null;
+        // this.busy = null;
         console.log('SITES', this.sites);
+        if (this.sites.length === 0) {
+          this.hasNoSitesError = true;
+        }
       }
       );
   }

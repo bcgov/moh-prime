@@ -80,6 +80,7 @@ namespace Prime
 
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
+        public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
@@ -235,9 +236,9 @@ namespace Prime
                 .WithMany(ru => ru.RemoteUserLocations)
                 .HasForeignKey(rul => rul.RemoteUserId);
 
-            modelBuilder.Entity<EnrolleeRemoteUser>()
-                .HasOne(eru => eru.Enrollee)
-                .WithMany(e => e.EnrolleeRemoteUsers)
+            // modelBuilder.Entity<EnrolleeRemoteUser>()
+            //     .HasOne(eru => eru.Enrollee)
+            //     .WithMany(e => e.EnrolleeRemoteUsers)
 
             #endregion
         }

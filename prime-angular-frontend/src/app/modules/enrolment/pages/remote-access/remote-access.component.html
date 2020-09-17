@@ -37,7 +37,8 @@
 
       </div>
 
-      <div *ngIf="busy">
+      <div *ngIf="busy"
+           class="col pt-2">
         <span>We are locating your site's remote application</span>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>
@@ -62,6 +63,15 @@
         </div>
       </ng-container>
 
+      <app-alert *ngIf="hasNoSitesError"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          Sorry, no site has registered you for remote access. Talk to your site's PharmaNet Administrator. You can
+          return to PRIME later to add remote access once they have registered you.
+        </ng-container>
+      </app-alert>
 
     </section>
 

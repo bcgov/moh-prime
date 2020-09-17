@@ -8,6 +8,8 @@ namespace Prime.Models
     [Table("EnrolleeRemoteUser")]
     public class EnrolleeRemoteUser : BaseAuditable
     {
+        [Key]
+        public int Id { get; set; }
         public int EnrolleeId { get; set; }
 
         [JsonIgnore]

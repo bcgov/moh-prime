@@ -474,5 +474,36 @@ namespace Prime.Services
             return selfDeclarationDocument;
         }
 
+        public async Task<int> AddEnrolleeRemoteUsersAsync(Enrollee enrollee, List<Site> sites)
+        {
+            var enrolleeRemoteUsers = new List<EnrolleeRemoteUser>();
+
+            foreach (var site in sites)
+            {
+                List<RemoteUser> remoteUsers = (List<RemoteUser>)site.RemoteUsers;
+                remoteUsers = remoteUsers.FindAll(ru => ru.RemoteUserCertifications.Any(ruc => enrollee.Certifications.Any(c => c.LicenseNumber == ruc.LicenseNumber)));
+                remoteUsers = remoteUsers.FindAll(ru => ru.FirstName == enrollee.FirstName && ru.LastName == enrollee.LastName);
+
+                foreach (var remoteUser in remoteUsers)
+                {
+                    var enrolleeRemoteUser = new EnrolleeRemoteUser
+                    {
+                        Enrollee = enrollee,
+                        RemoteUser = remoteUser
+                    };
+
+                    _context.EnrolleeRemoteUsers.Add(enrolleeRemoteUser);
+                }
+            }
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not add EnrolleeRemoteUsers.");
+            }
+
+            return updated;
+        }
+
     }
 }

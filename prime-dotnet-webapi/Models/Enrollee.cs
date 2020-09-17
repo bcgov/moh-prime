@@ -110,8 +110,8 @@ namespace Prime.Models
         [JsonIgnore]
         public string IdentityProvider { get; set; }
 
-        // [JsonIgnore]
-        // public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
+        [JsonIgnore]
+        public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
         public int? CredentialId { get; set; }
 
