@@ -54,6 +54,7 @@ namespace Prime.Services
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
             var enrollee = await _context.Enrollees
+                .Include(e => e.PhysicalAddress)
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
