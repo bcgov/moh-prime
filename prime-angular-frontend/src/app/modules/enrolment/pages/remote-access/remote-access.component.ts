@@ -12,6 +12,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { Site } from '@registration/shared/models/site.model';
 import { exhaustMap, delay } from 'rxjs/operators';
+import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-remote-access',
@@ -19,9 +20,10 @@ import { exhaustMap, delay } from 'rxjs/operators';
   styleUrls: ['./remote-access.component.scss']
 })
 export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements OnInit {
-
-  public sites: Site[];
+  public form: FormGroup;
+  public sites: Site[] = [];
   public hasNoSitesError: boolean;
+  public showProgress: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -33,42 +35,54 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     protected enrolmentStateService: EnrolmentStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
-    protected utilService: UtilsService
+    protected utilService: UtilsService,
+    private formBuilder: FormBuilder
   ) {
     super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
   }
 
   public onClick() {
     this.hasNoSitesError = false;
+    this.showProgress = true;
     const enrolment = this.enrolmentService.enrolment;
-    this.busy = this.siteResource.getSitesByRemoteUserInfo(
-      enrolment.certifications)
+    this.siteResource.getSitesByRemoteUserInfo(enrolment.certifications)
       .pipe(
-        exhaustMap((sites: Site[]) => this.sites = sites)
-      )
-      .subscribe(() => {
-        delay(10000);
-        // this.busy = null;
-        console.log('SITES', this.sites);
-        if (this.sites.length === 0) {
-          this.hasNoSitesError = true;
-        }
-      }
-      );
+        exhaustMap((sites: Site[]) => {
+          this.showProgress = false;
+          if (sites.length === 0) {
+            this.hasNoSitesError = true;
+          }
+          this.sites = sites;
+          this.initForm();
+          return this.sites;
+        })
+      ).subscribe();
   }
 
-  ngOnInit() {
+  public showButton() {
+    return this.sites.length === 0 && !this.showProgress && !this.hasNoSitesError;
+  }
+
+  public get sitesFormArray() {
+    return this.form.controls.remoteAccessSites as FormArray;
+  }
+
+  public onSubmit() {
+    alert('here');
+  }
+
+  public ngOnInit() {
     this.createFormInstance();
-    this.patchForm();
-    this.initForm();
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentStateService.careSettingsForm;
+    this.form = this.formBuilder.group({
+      sites: new FormArray([])
+    });
   }
 
   protected initForm() {
-
+    this.form.controls.sites = this.formBuilder.array(this.sites.map(x => !1));
   }
 
   protected nextRouteAfterSubmit() {
@@ -79,14 +93,5 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
     super.nextRouteAfterSubmit(nextRoutePath);
   }
-
-  public routeBackTo() {
-    const routePath = (this.enrolmentStateService.enrolment.certifications.length)
-      ? EnrolmentRoutes.REGULATORY
-      : EnrolmentRoutes.JOB;
-
-    this.routeTo(routePath);
-  }
-
 
 }

@@ -616,5 +616,36 @@ namespace Prime.Controllers
 
             return Ok(ApiResponse.Result(token));
         }
+
+
+        // POST: api/Enrollees/5/enrollee-remote-users
+        /// <summary>
+        /// Creates new EnrolleeRemoteUsers from site list
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="sites"></param>
+        [HttpPost("{enrolleeId}/enrollee-remote-users", Name = nameof(CreateEnrolleeRemoteUsers))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<int>> CreateEnrolleeRemoteUsers(int enrolleeId, [FromBody] List<Site> sites)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            var result = await _enrolleeService.AddEnrolleeRemoteUsersAsync(enrollee, sites);
+
+            return CreatedAtAction(
+                nameof(CreateEnrolleeRemoteUsers),
+                new { enrolleeId = enrolleeId },
+                ApiResponse.Result(result)
+            );
+        }
     }
 }

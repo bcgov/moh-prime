@@ -51,6 +51,7 @@ export class EnrolmentRoutes {
     return [
       EnrolmentRoutes.DEMOGRAPHIC,
       EnrolmentRoutes.REGULATORY,
+      EnrolmentRoutes.REMOTE_ACCESS,
       // EnrolmentRoutes.DEVICE_PROVIDER,
       EnrolmentRoutes.JOB,
       EnrolmentRoutes.CARE_SETTING,

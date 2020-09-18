@@ -27,9 +27,10 @@
 
       <div class="col pt-2">
 
-        <button *ngIf="!sites && !busy"
+        <button *ngIf="showButton()"
                 mat-stroked-button
-                type="button"
+                type="
+                button"
                 color="primary"
                 (click)="onClick()">
           Request remote access
@@ -37,20 +38,21 @@
 
       </div>
 
-      <div *ngIf="busy"
+      <div *ngIf="showProgress"
            class="col pt-2">
         <span>We are locating your site's remote application</span>
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>
 
-      <ng-container *ngIf="sites">
+      <ng-container *ngIf="sites.length > 0">
         <ng-container appPageSubheaderSummary>
           The sites below have registered you for remote access. Check to confirm that you want remote access for these
           sites. If you need remote access for a site not listed here, talk to that site's PharmaNet Administrator.
         </ng-container>
-        <div class="col pt-2 mb-3"
-             *ngFor="let site of sites">
-          <mat-checkbox>
+        <div formArrayName="sites"
+             class="col pt-2 mb-3"
+             *ngFor="let site of sites; let i = index">
+          <mat-checkbox [formControlName]="i">
             <div>{{ site.organization.name }}</div>
             <div>
               {{ site.physicalAddress.street }},
@@ -63,18 +65,19 @@
         </div>
       </ng-container>
 
-      <app-alert *ngIf="hasNoSitesError"
-                 type="danger"
-                 icon="warning">
-        <ng-container #alertContent
-                      class="alert-content">
+      <ng-container *ngIf="hasNoSitesError">
+        <p class="red">
           Sorry, no site has registered you for remote access. Talk to your site's PharmaNet Administrator. You can
           return to PRIME later to add remote access once they have registered you.
-        </ng-container>
-      </app-alert>
+        </p>
+      </ng-container>
 
     </section>
 
   </form>
+
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+                   (save)="onSubmit()"
+                   (back)="routeTo(EnrolmentRoutes.REGULATORY)"></app-page-footer>
 
 </app-enrollee-page>
