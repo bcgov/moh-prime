@@ -67,6 +67,10 @@
                 Required
               </mat-error>
             </mat-form-field>
+
+            <mat-checkbox class="pl-3"
+                          [class.hide]="!hasDay(businessDay)"
+                          (change)="on24Hours(businessDay)">24 hours</mat-checkbox>
           </ng-container>
         </div>
       </ng-container>

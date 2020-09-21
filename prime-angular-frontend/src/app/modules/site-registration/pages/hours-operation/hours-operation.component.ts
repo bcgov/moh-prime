@@ -49,9 +49,9 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public hasNoBusinessHoursError: boolean;
 
   public busyHoursTimePattern = {
-    A: { pattern: new RegExp('\[0-2\]') },
-    B: { pattern: new RegExp('\[0-9\]') },
-    C: { pattern: new RegExp('\[0-5\]') },
+    A: { pattern: /[0-2]/ },
+    B: { pattern: /[0-9]/ },
+    C: { pattern: /[0-5]/ }
   };
 
   constructor(
@@ -88,6 +88,10 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
 
   public hasDay(group: FormGroup): boolean {
     return group.get('startTime').value !== null;
+  }
+
+  public on24Hours(group: FormGroup): void {
+    group.patchValue({ startTime: '0000', endTime: '2400' });
   }
 
   public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
