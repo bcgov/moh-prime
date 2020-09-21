@@ -17,6 +17,7 @@ namespace Prime.Services
         Task<Site> UpdatePecCode(int siteId, string pecCode);
         Task DeleteSiteAsync(int siteId);
         Task<Site> ApproveSite(int siteId);
+        Task<Site> DeclineSite(int siteId);
         Task<Site> SubmitRegistrationAsync(int siteId);
         Task<Site> GetSiteNoTrackingAsync(int siteId);
         Task<IEnumerable<BusinessEvent>> GetSiteBusinessEvents(int siteId);

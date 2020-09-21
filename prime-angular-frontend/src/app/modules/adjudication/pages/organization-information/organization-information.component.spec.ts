@@ -3,6 +3,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { OrganizationInformationComponent } from './organization-information.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
@@ -22,7 +24,8 @@ describe('OrganizationInformationComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        KeycloakService
       ]
     })
       .compileComponents();

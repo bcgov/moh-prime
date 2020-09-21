@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200911205052_AddedSiteStatus")]
+    partial class AddedSiteStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4998,40 +5000,6 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.ToTable("EnrolleeProfileVersion");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolleeRemoteUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RemoteUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.HasIndex("RemoteUserId");
-
-                    b.ToTable("EnrolleeRemoteUser");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolmentCertificateAccessToken", b =>
@@ -14054,21 +14022,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("EnrolleeProfileVersions")
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolleeRemoteUser", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany("EnrolleeRemoteUsers")
-                        .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.RemoteUser", "RemoteUser")
-                        .WithMany()
-                        .HasForeignKey("RemoteUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
