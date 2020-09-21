@@ -84,6 +84,7 @@ namespace Prime.Services
             }
 
             var entity = await query
+                .Include(e => e.EnrolleeRemoteUsers)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (entity != null)
@@ -478,6 +479,11 @@ namespace Prime.Services
         public async Task<int> AddEnrolleeRemoteUsersAsync(Enrollee enrollee, List<Site> sites)
         {
             var enrolleeRemoteUsers = new List<EnrolleeRemoteUser>();
+
+            foreach (var eru in enrollee.EnrolleeRemoteUsers)
+            {
+                _context.EnrolleeRemoteUsers.Remove(eru);
+            }
 
             foreach (var site in sites)
             {

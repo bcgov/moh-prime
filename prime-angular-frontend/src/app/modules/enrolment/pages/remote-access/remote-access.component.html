@@ -52,8 +52,7 @@
         <div formArrayName="sites"
              class="col pt-2 mb-3"
              *ngFor="let site of sites; let i = index">
-          <mat-checkbox [formControlName]="i"
-                        value="true">
+          <mat-checkbox [formControlName]="i">
             <div>{{ site.organization.name }}</div>
             <div>
               {{ site.physicalAddress.street }},
