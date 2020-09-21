@@ -502,13 +502,7 @@ namespace Prime.Services
                 }
             }
 
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not add EnrolleeRemoteUsers.");
-            }
-
-            return updated;
+            return await _context.SaveChangesAsync();
         }
 
     }
