@@ -52,7 +52,8 @@
         <div formArrayName="sites"
              class="col pt-2 mb-3"
              *ngFor="let site of sites; let i = index">
-          <mat-checkbox [formControlName]="i">
+          <mat-checkbox [formControlName]="i"
+                        value="true">
             <div>{{ site.organization.name }}</div>
             <div>
               {{ site.physicalAddress.street }},
@@ -76,7 +77,8 @@
 
   </form>
 
-  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+  <app-page-footer *ngIf="sites.length > 0 || hasNoSitesError"
+                   [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
                    (back)="routeTo(EnrolmentRoutes.REGULATORY)"></app-page-footer>
 

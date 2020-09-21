@@ -166,7 +166,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public routeBackTo() {
     const routePath = (this.enrolmentStateService.enrolment.certifications.length)
-      ? EnrolmentRoutes.REGULATORY
+      ? EnrolmentRoutes.REMOTE_ACCESS
       : EnrolmentRoutes.JOB;
 
     this.routeTo(routePath);

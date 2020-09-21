@@ -20,6 +20,7 @@ import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/mod
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
+import { Site } from '@registration/shared/models/site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +76,14 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+      );
+  }
+
+  public addEnrolleeRemoteUsers(enrolleeId: number, sites: Site[]): Observable<number> {
+    return this.apiResource
+      .post<number>(`enrollees/${enrolleeId}/enrollee-remote-users`, sites)
+      .pipe(
+        map((response: ApiHttpResponse<number>) => response.result)
       );
   }
 
@@ -226,6 +235,10 @@ export class EnrolmentResource {
       enrollee.enrolleeCareSettings = [];
     }
 
+    // if (!enrollee.enrolleeRemoteUsers) {
+    //   enrollee.enrolleeRemoteUsers = [];
+    // }
+
     // Reorganize the shape of the enrollee into an enrolment
     return this.enrolmentAdapter(enrollee);
   }
@@ -273,6 +286,7 @@ export class EnrolmentResource {
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,
       careSettings: enrollee.enrolleeCareSettings,
+      enrolleeRemoteUsers: enrollee.enrolleeRemoteUsers,
       ...remainder
     };
   }
@@ -300,6 +314,7 @@ export class EnrolmentResource {
     return {
       ...enrollee,
       enrolleeCareSettings: enrolment.careSettings,
+      enrolleeRemoteUsers: enrolment.enrolleeRemoteUsers,
       ...remainder
     };
   }

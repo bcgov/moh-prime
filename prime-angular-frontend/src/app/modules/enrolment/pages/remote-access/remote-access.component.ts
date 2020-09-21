@@ -1,18 +1,27 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { exhaustMap } from 'rxjs/operators';
+
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { SiteResource } from '@core/resources/site-resource.service';
+
+import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+
 import { Site } from '@registration/shared/models/site.model';
-import { exhaustMap, delay } from 'rxjs/operators';
-import { FormGroup, FormBuilder, FormArray, FormControl } from '@angular/forms';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
+
+
 
 @Component({
   selector: 'app-remote-access',
@@ -24,6 +33,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   public sites: Site[] = [];
   public hasNoSitesError: boolean;
   public showProgress: boolean;
+  public enrolment: Enrolment;
 
   constructor(
     protected route: ActivatedRoute,
@@ -36,16 +46,17 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private formUtilsService: FormUtilsService
   ) {
     super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    this.enrolment = this.enrolmentService.enrolment;
   }
 
   public onClick() {
     this.hasNoSitesError = false;
     this.showProgress = true;
-    const enrolment = this.enrolmentService.enrolment;
-    this.siteResource.getSitesByRemoteUserInfo(enrolment.certifications)
+    this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
       .pipe(
         exhaustMap((sites: Site[]) => {
           this.showProgress = false;
@@ -56,23 +67,49 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
           this.initForm();
           return this.sites;
         })
-      ).subscribe();
+      ).subscribe(
+        () => { },
+        (error: any) => {
+          this.showProgress = false;
+          this.hasNoSitesError = true;
+        }
+      );
+  }
+
+  public checked(site: Site): boolean {
+    let checked = false;
+    site.remoteUsers.forEach((remoteUser) => {
+      if (this.enrolment.enrolleeRemoteUsers?.find(eru => eru.remoteUserId === remoteUser.id)) {
+        checked = true;
+      }
+    });
+    return checked;
   }
 
   public showButton() {
     return this.sites.length === 0 && !this.showProgress && !this.hasNoSitesError;
   }
 
-  public get sitesFormArray() {
-    return this.form.controls.remoteAccessSites as FormArray;
-  }
-
   public onSubmit() {
-    alert('here');
+    const selectedSites = this.sites.map((site, i) => {
+      if (this.form.controls.sites.value[i]) {
+        return site;
+      }
+    });
+    if (selectedSites.length > 0) {
+      this.enrolmentResource
+        .addEnrolleeRemoteUsers(this.enrolment.id, selectedSites)
+        .subscribe(() => {
+          this.nextRouteAfterSubmit();
+        });
+    } else {
+      this.nextRouteAfterSubmit();
+    }
   }
 
   public ngOnInit() {
     this.createFormInstance();
+    this.patchForm();
   }
 
   protected createFormInstance() {
@@ -83,6 +120,15 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
   protected initForm() {
     this.form.controls.sites = this.formBuilder.array(this.sites.map(x => !1));
+    console.log('before', this.form.controls.sites);
+    this.sites.forEach((site, i) => {
+      site.remoteUsers.forEach((remoteUser) => {
+        if (this.enrolment.enrolleeRemoteUsers?.find(eru => eru.remoteUserId === remoteUser.id)) {
+          this.form.controls.sites.value[i] = true;
+        }
+      });
+    });
+    console.log('after', this.form.controls.sites);
   }
 
   protected nextRouteAfterSubmit() {

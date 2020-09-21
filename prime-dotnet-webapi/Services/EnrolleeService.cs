@@ -270,6 +270,7 @@ namespace Prime.Services
                         .ThenInclude(l => l.DefaultPrivileges)
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeCareSettings)
+                .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.Status)
                 .Include(e => e.EnrolmentStatuses)
@@ -481,15 +482,14 @@ namespace Prime.Services
             foreach (var site in sites)
             {
                 List<RemoteUser> remoteUsers = (List<RemoteUser>)site.RemoteUsers;
-                remoteUsers = remoteUsers.FindAll(ru => ru.RemoteUserCertifications.Any(ruc => enrollee.Certifications.Any(c => c.LicenseNumber == ruc.LicenseNumber)));
-                remoteUsers = remoteUsers.FindAll(ru => ru.FirstName == enrollee.FirstName && ru.LastName == enrollee.LastName);
+                remoteUsers = remoteUsers.FindAll(ru => ru.RemoteUserCertifications.Any(ruc => enrollee.Certifications.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber)));
 
                 foreach (var remoteUser in remoteUsers)
                 {
                     var enrolleeRemoteUser = new EnrolleeRemoteUser
                     {
-                        Enrollee = enrollee,
-                        RemoteUser = remoteUser
+                        EnrolleeId = enrollee.Id,
+                        RemoteUserId = remoteUser.Id
                     };
 
                     _context.EnrolleeRemoteUsers.Add(enrolleeRemoteUser);

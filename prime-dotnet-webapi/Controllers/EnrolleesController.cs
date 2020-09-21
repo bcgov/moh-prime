@@ -625,7 +625,6 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="sites"></param>
         [HttpPost("{enrolleeId}/enrollee-remote-users", Name = nameof(CreateEnrolleeRemoteUsers))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

@@ -10,6 +10,7 @@ import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.
 import { Admin } from '@auth/shared/models/admin.model';
 import { SelfDeclaration } from './self-declarations.model';
 import { SelfDeclarationDocument } from './self-declaration-document.model';
+import { EnrolleeRemoteUser } from './enrollee-remote-user.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -26,6 +27,7 @@ export interface HttpEnrollee extends Enrollee {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
+  enrolleeRemoteUsers: EnrolleeRemoteUser[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
   enrolleeCareSettings: CareSetting[];
@@ -61,6 +63,7 @@ export interface Enrolment {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
+  enrolleeRemoteUsers: EnrolleeRemoteUser[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
   careSettings: CareSetting[];
