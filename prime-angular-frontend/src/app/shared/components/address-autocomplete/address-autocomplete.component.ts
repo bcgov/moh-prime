@@ -19,7 +19,6 @@ export class AddressAutocompleteComponent implements OnInit {
   @Output() autocompleteAddress: EventEmitter<Address>;
 
   public form: FormGroup;
-  public addressRetrieved: AddressAutocompleteRetrieveResponse;
   public addressAutocompleteFields: AddressAutocompleteFindResponse[];
 
   constructor(
@@ -38,16 +37,16 @@ export class AddressAutocompleteComponent implements OnInit {
   public onAutocomplete(id: string) {
     this.addressAutocompleteResource.retrieve(id)
       .subscribe((results: AddressAutocompleteRetrieveResponse[]) => {
-        this.addressRetrieved = results.find(result => result.language === 'ENG') ?? null;
+        const addressRetrieved = results.find(result => result.language === 'ENG') ?? null;
 
-        if (this.addressRetrieved) {
+        if (addressRetrieved) {
           const address = new Address(
-            this.addressRetrieved.countryIso2,
-            this.addressRetrieved.provinceCode,
-            this.addressRetrieved.line1,
-            this.addressRetrieved.line2,
-            this.addressRetrieved.city,
-            this.addressRetrieved.postalCode
+            addressRetrieved.countryIso2,
+            addressRetrieved.provinceCode,
+            addressRetrieved.line1,
+            addressRetrieved.line2,
+            addressRetrieved.city,
+            addressRetrieved.postalCode
           );
 
           (!this.bcOnly || address.provinceCode === 'BC')
