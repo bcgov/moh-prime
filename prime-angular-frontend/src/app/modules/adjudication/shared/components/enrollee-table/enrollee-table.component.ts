@@ -84,9 +84,9 @@ export class EnrolleeTableComponent implements OnInit {
     this.dataSource.data = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'displayId': return this.utilsService.sortBy(a.id, b.id, isAsc);
-        case 'appliedDate': return this.utilsService.sortByWithNullsAtEnd(a.appliedDate, b.appliedDate, isAsc);
-        case 'renewalDate': return this.utilsService.sortByWithNullsAtEnd(a.expiryDate, b.expiryDate, isAsc);
+        case 'displayId': return this.utilsService.sort(a.id, b.id, isAsc);
+        case 'appliedDate': return this.utilsService.sort(a.appliedDate, b.appliedDate, isAsc);
+        case 'renewalDate': return this.utilsService.sort(a.expiryDate, b.expiryDate, isAsc);
         default: return 0;
       }
     });

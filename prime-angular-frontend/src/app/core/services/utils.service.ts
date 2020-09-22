@@ -79,43 +79,18 @@ export class UtilsService {
    * @description
    * Generic sorting of a JSON object by key.
    */
-  public sort<T>(a: T, b: T): SortWeight {
-    return (a > b)
-      ? 1 : (a < b)
-        ? -1 : 0;
-  }
-
-  /**
-   * @description
-   * Generic sorting of a JSON object by key with asc flag
-   */
-  public sortBy<T>(a: T, b: T, isAsc: boolean): number {
-    return this.sort(a, b) * (isAsc ? 1 : -1);
-  }
-
-  /**
-   * @description
-   * Generic sorting of a JSON object by key with nulls at end
-   */
-  public sortWithNullsAtEnd<T>(a: T, b: T): SortWeight {
-    if (a === b) {
-      return 0;
-    } else if (a === null) {
-      return -1;
-    } else if (b === null) {
-      return 1;
+  public sort<T>(a: T, b: T, isAsc = true, trailingNull = true): SortWeight {
+    if (trailingNull) {
+      if (a === b) {
+        return 0;
+      } else if (a === null) {
+        return 1;
+      } else if (b === null) {
+        return -1;
+      }
     }
-    return (a > b)
-      ? 1 : (a < b)
-        ? -1 : 0;
-  }
 
-  /**
-   * @description
-   * Generic sorting of a JSON object by key with nulls at end and asc flag
-   */
-  public sortByWithNullsAtEnd<T>(a: T, b: T, isAsc: boolean): number {
-    return this.sortWithNullsAtEnd(a, b) * (isAsc ? 1 : -1);
+    return (a > b) ? ((isAsc) ? 1 : -1) : (a < b) ? ((isAsc) ? -1 : 1) : 0;
   }
 
   /**
