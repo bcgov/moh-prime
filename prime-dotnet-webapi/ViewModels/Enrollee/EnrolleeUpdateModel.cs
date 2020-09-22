@@ -36,6 +36,8 @@ namespace Prime.ViewModels
 
         public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 
+        public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
+
         [JsonIgnore]
         // This property is set by the backend from the JWT token; we cannot trust this property from the frontend
         public int IdentityAssuranceLevel { get; set; }

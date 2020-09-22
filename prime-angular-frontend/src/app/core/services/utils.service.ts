@@ -87,6 +87,39 @@ export class UtilsService {
 
   /**
    * @description
+   * Generic sorting of a JSON object by key with asc flag
+   */
+  public sortBy<T>(a: T, b: T, isAsc: boolean): number {
+    return this.sort(a, b) * (isAsc ? 1 : -1);
+  }
+
+  /**
+   * @description
+   * Generic sorting of a JSON object by key with nulls at end
+   */
+  public sortWithNullsAtEnd<T>(a: T, b: T): SortWeight {
+    if (a === b) {
+      return 0;
+    } else if (a === null) {
+      return -1;
+    } else if (b === null) {
+      return 1;
+    }
+    return (a > b)
+      ? 1 : (a < b)
+        ? -1 : 0;
+  }
+
+  /**
+   * @description
+   * Generic sorting of a JSON object by key with nulls at end and asc flag
+   */
+  public sortByWithNullsAtEnd<T>(a: T, b: T, isAsc: boolean): number {
+    return this.sortWithNullsAtEnd(a, b) * (isAsc ? 1 : -1);
+  }
+
+  /**
+   * @description
    * Conversion of Base64 encoded document to a Blob.
    */
   public base64ToBlob(base64: string, type: string = 'application/pdf'): Blob {

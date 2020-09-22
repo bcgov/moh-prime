@@ -1,11 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { Sort } from '@angular/material/sort';
 
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-enrollee-table',
@@ -24,7 +26,8 @@ export class EnrolleeTableComponent implements OnInit {
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private utilsService: UtilsService
   ) {
     this.notify = new EventEmitter<number>();
     this.claim = new EventEmitter<number>();
@@ -70,5 +73,25 @@ export class EnrolleeTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
+  public sortData(sort: Sort) {
+    console.log(sort);
+    const data = this.dataSource.data.slice();
+    if (!sort.active || sort.direction === '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'displayId': return this.utilsService.sortBy(a.id, b.id, isAsc);
+        case 'appliedDate': return this.utilsService.sortByWithNullsAtEnd(a.appliedDate, b.appliedDate, isAsc);
+        case 'renewalDate': return this.utilsService.sortByWithNullsAtEnd(a.expiryDate, b.expiryDate, isAsc);
+        default: return 0;
+      }
+    });
+  }
+
   public ngOnInit(): void { }
+
 }

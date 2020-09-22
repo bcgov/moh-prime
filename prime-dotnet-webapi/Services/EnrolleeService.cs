@@ -118,6 +118,7 @@ namespace Prime.Services
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreements = _context.NewestAgreements })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
+                .OrderBy(e => e.Id)
                 .ToListAsync();
         }
 
