@@ -262,7 +262,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "remote_access" },
-                    { "value", enrollee.RequestingRemoteAccess ? "true" : "false"}
+                    { "value", enrollee.EnrolleeRemoteUsers.Count > 0 ? "true" : "false"}
                 }
             };
 

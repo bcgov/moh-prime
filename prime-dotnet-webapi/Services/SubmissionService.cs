@@ -247,6 +247,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
                         .ThenInclude(l => l.DefaultPrivileges)
+                .Include(e => e.EnrolleeRemoteUsers)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
