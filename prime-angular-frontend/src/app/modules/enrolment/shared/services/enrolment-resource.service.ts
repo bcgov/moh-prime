@@ -235,9 +235,9 @@ export class EnrolmentResource {
       enrollee.enrolleeCareSettings = [];
     }
 
-    // if (!enrollee.enrolleeRemoteUsers) {
-    //   enrollee.enrolleeRemoteUsers = [];
-    // }
+    if (!enrollee.enrolleeRemoteUsers) {
+      enrollee.enrolleeRemoteUsers = [];
+    }
 
     // Reorganize the shape of the enrollee into an enrolment
     return this.enrolmentAdapter(enrollee);
