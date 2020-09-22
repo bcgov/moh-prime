@@ -74,12 +74,11 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   public sortData(sort: Sort) {
-    console.log(sort);
-    const data = this.dataSource.data.slice();
     if (!sort.active || sort.direction === '') {
-      this.dataSource.data = data;
       return;
     }
+
+    const data = this.dataSource.data.slice();
 
     this.dataSource.data = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
