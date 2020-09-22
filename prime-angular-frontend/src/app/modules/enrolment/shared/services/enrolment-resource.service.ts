@@ -21,6 +21,7 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { Site } from '@registration/shared/models/site.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -79,11 +80,11 @@ export class EnrolmentResource {
       );
   }
 
-  public createEnrolleeRemoteUsers(enrolleeId: number, sites: Site[]): Observable<number> {
+  public createEnrolleeRemoteUsers(enrolleeId: number, sites: Site[]): Observable<EnrolleeRemoteUser[]> {
     return this.apiResource
-      .post<number>(`enrollees/${enrolleeId}/enrollee-remote-users`, sites)
+      .post<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/enrollee-remote-users`, sites)
       .pipe(
-        map((response: ApiHttpResponse<number>) => response.result)
+        map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)
       );
   }
 

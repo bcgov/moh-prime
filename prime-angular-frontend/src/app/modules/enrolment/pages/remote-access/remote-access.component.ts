@@ -94,7 +94,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       }
     }, selectedSites);
 
-    this.enrolmentResource
+    this.busy = this.enrolmentResource
       .createEnrolleeRemoteUsers(this.enrolment.id, selectedSites)
       .subscribe(() => {
         this.nextRouteAfterSubmit();

@@ -476,7 +476,7 @@ namespace Prime.Services
             return selfDeclarationDocument;
         }
 
-        public async Task<int> AddEnrolleeRemoteUsersAsync(Enrollee enrollee, List<Site> sites)
+        public async Task<IEnumerable<EnrolleeRemoteUser>> AddEnrolleeRemoteUsersAsync(Enrollee enrollee, List<Site> sites)
         {
             var enrolleeRemoteUsers = new List<EnrolleeRemoteUser>();
 
@@ -499,10 +499,13 @@ namespace Prime.Services
                     };
 
                     _context.EnrolleeRemoteUsers.Add(enrolleeRemoteUser);
+                    enrolleeRemoteUsers.Add(enrolleeRemoteUser);
                 }
             }
 
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+            return enrolleeRemoteUsers;
         }
     }
 }

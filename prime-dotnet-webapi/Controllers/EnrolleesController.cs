@@ -629,7 +629,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeRemoteUser>>), StatusCodes.Status201Created)]
         public async Task<ActionResult<int>> CreateEnrolleeRemoteUsers(int enrolleeId, [FromBody] List<Site> sites)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))

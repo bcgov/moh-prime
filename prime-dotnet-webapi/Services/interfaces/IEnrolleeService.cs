@@ -58,6 +58,6 @@ namespace Prime.Services
 
         Task<SelfDeclarationDocument> AddSelfDeclarationDocumentAsync(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument);
 
-        Task<int> AddEnrolleeRemoteUsersAsync(Enrollee enrollee, List<Site> sites);
+        Task<IEnumerable<EnrolleeRemoteUser>> AddEnrolleeRemoteUsersAsync(Enrollee enrollee, List<Site> sites);
     }
 }
