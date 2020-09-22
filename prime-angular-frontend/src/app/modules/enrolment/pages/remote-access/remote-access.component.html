@@ -27,12 +27,12 @@
 
       <div class="col pt-2">
 
-        <button *ngIf="showButton()"
+        <button *ngIf="showRequestAccess()"
                 mat-stroked-button
                 type="
                 button"
                 color="primary"
-                (click)="onClick()">
+                (click)="onRequestAccess()">
           Request remote access
         </button>
 
@@ -44,7 +44,7 @@
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>
 
-      <ng-container *ngIf="sites.length > 0">
+      <ng-container *ngIf="sites?.length > 0">
         <ng-container appPageSubheaderSummary>
           The sites below have registered you for remote access. Check to confirm that you want remote access for these
           sites. If you need remote access for a site not listed here, talk to that site's PharmaNet Administrator.
@@ -76,7 +76,7 @@
 
   </form>
 
-  <app-page-footer *ngIf="sites.length > 0 || hasNoSitesError"
+  <app-page-footer *ngIf="sites?.length || hasNoSitesError"
                    [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
                    (back)="routeTo(EnrolmentRoutes.REGULATORY)"></app-page-footer>

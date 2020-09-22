@@ -54,6 +54,7 @@ export class MockSiteService implements ISiteService {
       provisioner: user,
       careSettingCode: faker.random.number(),
       pec: null,
+      status: null,
       completed: null,
       adjudicatorId: null,
       adjudicator: null,
