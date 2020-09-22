@@ -1,34 +1,28 @@
+@import 'bootstrap/bootstrap-imports';
+
 section {
-  .weekdays-container {
-    display: flex;
-    flex-flow: row wrap;
+  .weekdays {
+    .day {
+      padding-top: .9rem;
+      padding-bottom: .9rem;
 
-    span {
-      flex-basis: 125px;
-      margin-right: .5rem;
-      margin-bottom: 1rem;
-    }
-
-    .form-container {
-      $form-flex-basis: 320px;
-      flex-basis: $form-flex-basis;
-      margin-bottom: 1rem;
-
-      mat-form-field {
-        // Half the width minus 1rem for spacing
-        width: ($form-flex-basis / 16px / 2 * 1rem) - 1rem;
+      .weekday {
+        display: inline-block;
+        width: 90px;
+        margin-right: .5rem;
       }
 
-      mat-form-field:first-child {
-        margin-right: 1rem; // spacing
+      mat-slide-toggle {
+        margin-right: .5rem;
       }
     }
+  }
 
-    mat-checkbox {
-      flex-basis: 125px;
+  mat-form-field{
+    width: 6rem;
+
+    &:not(:last-child) {
       margin-right: 1rem;
-      margin-top: .5rem;
-      margin-bottom: 1rem;
     }
   }
 }
@@ -37,7 +31,7 @@ section {
   display: none;
 }
 
-@media (min-width: 767px) {
+@include media-breakpoint-up(sm) {
   .hide {
     visibility: hidden;
   }

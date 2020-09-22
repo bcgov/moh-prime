@@ -26,17 +26,21 @@
 
       <ng-container formArrayName="businessDays"
                     *ngFor="let businessDay of businessDays.controls; let i = index;">
-        <div class="weekdays-container">
-          <span>{{ WeekDay[i] }}</span>
+        <div class="row weekdays">
+          <div class="col-sm-12 col-lg-auto day">
 
-          <mat-slide-toggle color="primary"
-                            (change)="onDayToggle(businessDay, $event)"
-                            [checked]="hasDay(businessDay)">
-            {{ (hasDay(businessDay)) ? 'Open' : 'Closed' }}
-          </mat-slide-toggle>
+            <div class="weekday">{{ WeekDay[i] }}</div>
 
-          <ng-container [formGroup]="businessDay">
-            <div class="form-container">
+            <mat-slide-toggle color="primary"
+                              (change)="onDayToggle(businessDay, $event)"
+                              [checked]="hasDay(businessDay)">
+              {{ (hasDay(businessDay)) ? 'Open' : 'Closed' }}
+            </mat-slide-toggle>
+
+          </div>
+          <div class="col-sm-12 col-lg-auto">
+
+            <ng-container [formGroup]="businessDay">
               <mat-form-field [class.hide]="!hasDay(businessDay)">
                 <mat-label>Opens at</mat-label>
                 <input matInput
@@ -68,12 +72,13 @@
                   Required
                 </mat-error>
               </mat-form-field>
-            </div>
 
-            <mat-checkbox [class.hide]="!hasDay(businessDay)"
-                          [checked]="is24Hours(businessDay)"
-                          (change)="on24Hours($event, businessDay)">24 hours</mat-checkbox>
-          </ng-container>
+              <mat-checkbox [class.hide]="!hasDay(businessDay)"
+                            [checked]="is24Hours(businessDay)"
+                            (change)="on24Hours($event, businessDay)">24 hours</mat-checkbox>
+            </ng-container>
+
+          </div>
         </div>
       </ng-container>
 

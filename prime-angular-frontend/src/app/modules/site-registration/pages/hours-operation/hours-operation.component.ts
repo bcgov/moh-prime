@@ -113,7 +113,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
       ? group.patchValue(this.business24Hours)
       : group.patchValue(this.businessRegularHours);
 
-    this.allowEditingHours(group, change.checked);
+    this.allowEditingHours(group, !change.checked);
   }
 
   public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
@@ -180,6 +180,8 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   private allowEditingHours(group: FormGroup, isEditable: boolean = true) {
     const startTime = group.get('startTime') as FormControl;
     const endTime = group.get('endTime') as FormControl;
+
+
 
     if (isEditable) {
       startTime.enable();
