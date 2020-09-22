@@ -10,6 +10,7 @@ namespace Prime.Models
     {
         [Key]
         public int Id { get; set; }
+        
         public int EnrolleeId { get; set; }
 
         [JsonIgnore]
@@ -19,6 +20,5 @@ namespace Prime.Models
 
         [JsonIgnore]
         public RemoteUser RemoteUser { get; set; }
-
     }
 }
