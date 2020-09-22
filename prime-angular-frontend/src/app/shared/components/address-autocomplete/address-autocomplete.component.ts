@@ -1,10 +1,13 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+
+import { EMPTY } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
+import { Address } from '@shared/models/address.model';
 import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } from '@shared/models/address-autocomplete.model';
 import { AddressAutocompleteResource } from '@shared/services/address-autocomplete-resource.service';
-import { Address } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-address-autocomplete',
@@ -12,14 +15,15 @@ import { Address } from '@shared/models/address.model';
   styleUrls: ['./address-autocomplete.component.scss']
 })
 export class AddressAutocompleteComponent implements OnInit {
-  @Output() autocompleteAddress: EventEmitter<Address>;
   @Input() bcOnly: boolean;
+  @Output() autocompleteAddress: EventEmitter<Address>;
 
-  public addressAutocompleteFields: AddressAutocompleteFindResponse[];
-  public addressRetrieved: AddressAutocompleteRetrieveResponse;
   public form: FormGroup;
+  public addressRetrieved: AddressAutocompleteRetrieveResponse;
+  public addressAutocompleteFields: AddressAutocompleteFindResponse[];
 
   constructor(
+    private fb: FormBuilder,
     private addressAutocompleteResource: AddressAutocompleteResource,
     private toastService: ToastService
   ) {
@@ -32,40 +36,44 @@ export class AddressAutocompleteComponent implements OnInit {
   }
 
   public onAutocomplete(id: string) {
-    this.addressRetrieved = null;
     this.addressAutocompleteResource.retrieve(id)
-      .subscribe((response: AddressAutocompleteRetrieveResponse[]) => {
-        response.forEach((field) => {
-          if (field.language === 'ENG') {
-            this.addressRetrieved = field;
-          }
-        });
-        const address = new Address();
-        address.countryCode = this.addressRetrieved.countryIso2;
-        address.provinceCode = this.addressRetrieved.provinceCode;
-        address.city = this.addressRetrieved.city;
-        address.street = this.addressRetrieved.line1;
-        address.street2 = this.addressRetrieved.line2;
-        address.postal = this.addressRetrieved.postalCode;
+      .subscribe((results: AddressAutocompleteRetrieveResponse[]) => {
+        this.addressRetrieved = results.find(result => result.language === 'ENG') ?? null;
 
-        (!this.bcOnly || address.provinceCode === 'BC')
-          ? this.autocompleteAddress.emit(address)
-          : this.toastService.openErrorToast('Address must be in BC');
+        if (this.addressRetrieved) {
+          const address = new Address(
+            this.addressRetrieved.countryIso2,
+            this.addressRetrieved.provinceCode,
+            this.addressRetrieved.line1,
+            this.addressRetrieved.line2,
+            this.addressRetrieved.city,
+            this.addressRetrieved.postalCode
+          );
+
+          (!this.bcOnly || address.provinceCode === 'BC')
+            ? this.autocompleteAddress.emit(address)
+            : this.toastService.openErrorToast('Address must be located in BC');
+
+        } else {
+          this.toastService.openErrorToast('Address could not be retrieved');
+        }
       });
   }
 
   public ngOnInit(): void {
-    this.form = new FormGroup({ autocomplete: new FormControl() });
+    this.form = this.fb.group({ autocomplete: [''] });
 
     this.autocomplete.valueChanges
-      .subscribe(() => {
-        this.addressAutocompleteFields = [];
-        if (this.autocomplete.value) {
-          this.addressAutocompleteResource.find(this.autocomplete.value)
-            .subscribe((response: AddressAutocompleteFindResponse[]) => {
-              this.addressAutocompleteFields = response;
-            });
-        }
-      });
+      .pipe(
+        exhaustMap((value: string) => {
+          this.addressAutocompleteFields = [];
+          return (value)
+            ? this.addressAutocompleteResource.find(value)
+            : EMPTY;
+        })
+      )
+      .subscribe((response: AddressAutocompleteFindResponse[]) =>
+        this.addressAutocompleteFields = response
+      );
   }
 }
