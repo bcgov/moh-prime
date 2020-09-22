@@ -504,6 +504,5 @@ namespace Prime.Services
 
             return await _context.SaveChangesAsync();
         }
-
     }
 }

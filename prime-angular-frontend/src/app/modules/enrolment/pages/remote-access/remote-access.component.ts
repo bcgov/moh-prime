@@ -134,5 +134,4 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
     super.nextRouteAfterSubmit(nextRoutePath);
   }
-
 }
