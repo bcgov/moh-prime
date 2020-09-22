@@ -93,5 +93,4 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   public ngOnInit(): void { }
-
 }
