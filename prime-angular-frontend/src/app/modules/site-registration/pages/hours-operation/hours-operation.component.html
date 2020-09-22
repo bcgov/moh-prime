@@ -26,51 +26,53 @@
 
       <ng-container formArrayName="businessDays"
                     *ngFor="let businessDay of businessDays.controls; let i = index;">
-        <div class="row">
-          <span class="col-md-2 col-4 mt-3">{{ WeekDay[i] }}</span>
-          <mat-slide-toggle class="col-md-2 col-4 mt-3"
-                            color="primary"
+        <div class="weekdays-container">
+          <span>{{ WeekDay[i] }}</span>
+
+          <mat-slide-toggle color="primary"
                             (change)="onDayToggle(businessDay, $event)"
                             [checked]="hasDay(businessDay)">
-            {{ (hasDay(businessDay)) ? "Open" : "Closed" }}
+            {{ (hasDay(businessDay)) ? 'Open' : 'Closed' }}
           </mat-slide-toggle>
-          <ng-container [formGroup]="businessDay">
-            <mat-form-field class="col-md-3 col-12"
-                            [class.hide]="!hasDay(businessDay)">
-              <mat-label>Opens at</mat-label>
-              <input matInput
-                     mask="AB:CB"
-                     [patterns]="busyHoursTimePattern"
-                     formControlName="startTime"
-                     placeholder="00:00"
-                     [errorStateMatcher]="busDayHoursErrStateMatcher">
-              <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('startTime').hasError('length')">
-                Invalid
-              </mat-error>
-              <mat-error *ngIf="businessDay.get('startTime').hasError('required')">
-                Required
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field class="col-md-3 col-12"
-                            [class.hide]="!hasDay(businessDay)">
-              <mat-label>Closes at</mat-label>
-              <input matInput
-                     mask="AB:CB"
-                     [patterns]="busyHoursTimePattern"
-                     formControlName="endTime"
-                     placeholder="00:00"
-                     [errorStateMatcher]="busDayHoursErrStateMatcher">
-              <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('endTime').hasError('length')">
-                Invalid
-              </mat-error>
-              <mat-error *ngIf="businessDay.get('endTime').hasError('required')">
-                Required
-              </mat-error>
-            </mat-form-field>
 
-            <mat-checkbox class="pl-3"
-                          [class.hide]="!hasDay(businessDay)"
-                          (change)="on24Hours(businessDay)">24 hours</mat-checkbox>
+          <ng-container [formGroup]="businessDay">
+            <div class="form-container">
+              <mat-form-field [class.hide]="!hasDay(businessDay)">
+                <mat-label>Opens at</mat-label>
+                <input matInput
+                       mask="AB:CB"
+                       [patterns]="businessHoursTimePattern"
+                       formControlName="startTime"
+                       placeholder="00:00"
+                       [errorStateMatcher]="busDayHoursErrStateMatcher">
+                <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('startTime').hasError('length')">
+                  Invalid
+                </mat-error>
+                <mat-error *ngIf="businessDay.get('startTime').hasError('required')">
+                  Required
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field [class.hide]="!hasDay(businessDay)">
+                <mat-label>Closes at</mat-label>
+                <input matInput
+                       mask="AB:CB"
+                       [patterns]="businessHoursTimePattern"
+                       formControlName="endTime"
+                       placeholder="00:00"
+                       [errorStateMatcher]="busDayHoursErrStateMatcher">
+                <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('endTime').hasError('length')">
+                  Invalid
+                </mat-error>
+                <mat-error *ngIf="businessDay.get('endTime').hasError('required')">
+                  Required
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-checkbox [class.hide]="!hasDay(businessDay)"
+                          [checked]="is24Hours(businessDay)"
+                          (change)="on24Hours($event, businessDay)">24 hours</mat-checkbox>
           </ng-container>
         </div>
       </ng-container>

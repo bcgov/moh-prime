@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+import { WeekDay } from '@angular/common';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { WeekDay } from '@angular/common';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import { Subscription, Observable } from 'rxjs';
 
@@ -48,10 +49,20 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   public busDayHoursErrStateMatcher: BusinessDayHoursErrorStateMatcher;
   public hasNoBusinessHoursError: boolean;
 
-  public busyHoursTimePattern = {
+  public readonly businessHoursTimePattern = {
     A: { pattern: /[0-2]/ },
     B: { pattern: /[0-9]/ },
     C: { pattern: /[0-5]/ }
+  };
+
+  public readonly business24Hours = {
+    startTime: '0000',
+    endTime: '2400'
+  };
+
+  public readonly businessRegularHours = {
+    startTime: '0900',
+    endTime: '1700'
   };
 
   constructor(
@@ -90,8 +101,19 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     return group.get('startTime').value !== null;
   }
 
-  public on24Hours(group: FormGroup): void {
-    group.patchValue({ startTime: '0000', endTime: '2400' });
+  public is24Hours(group: FormGroup): boolean {
+    return (
+      group.get('startTime').value === this.business24Hours.startTime &&
+      group.get('endTime').value === this.business24Hours.endTime
+    ) ? true : false;
+  }
+
+  public on24Hours(change: MatCheckboxChange, group: FormGroup): void {
+    (change.checked)
+      ? group.patchValue(this.business24Hours)
+      : group.patchValue(this.businessRegularHours);
+
+    this.allowEditingHours(group, change.checked);
   }
 
   public onDayToggle(group: FormGroup, change: MatSlideToggleChange): void {
@@ -102,7 +124,7 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     if (this.hasDay(group)) {
       this.formUtilsService.resetAndClearValidators(group);
     } else {
-      group.patchValue({ startTime: '0900', endTime: '1700' });
+      group.patchValue(this.businessRegularHours);
       this.formUtilsService.setValidators(group, [
         Validators.required,
         FormControlValidators.requiredLength(4)
@@ -145,6 +167,26 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
+
+    this.businessDays.controls.forEach((group: FormGroup) => {
+      if (this.is24Hours(group)) {
+        this.allowEditingHours(group, false);
+      }
+    });
+
     this.form.markAsPristine();
+  }
+
+  private allowEditingHours(group: FormGroup, isEditable: boolean = true) {
+    const startTime = group.get('startTime') as FormControl;
+    const endTime = group.get('endTime') as FormControl;
+
+    if (isEditable) {
+      startTime.enable();
+      endTime.enable();
+    } else {
+      startTime.disable();
+      endTime.disable();
+    }
   }
 }
