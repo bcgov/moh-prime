@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { exhaustMap } from 'rxjs/operators';
@@ -50,6 +50,20 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     this.enrolment = this.enrolmentService.enrolment;
   }
 
+  public get sitesFormArray(): FormArray {
+    return this.form.get('sites') as FormArray;
+  }
+
+  public onSubmit() {
+    const selectedSites = this.sites.filter((site, i) => this.sitesFormArray.value[i]);
+
+    this.busy = this.enrolmentResource
+      .createEnrolleeRemoteUsers(this.enrolment.id, selectedSites)
+      .subscribe(() =>
+        this.nextRouteAfterSubmit()
+      );
+  }
+
   public onRequestAccess() {
     this.hasNoSitesError = false;
     this.showProgress = true;
@@ -74,16 +88,6 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     return !this.sites?.length && !this.showProgress && !this.hasNoSitesError;
   }
 
-  public onSubmit() {
-    const selectedSites = this.sites.filter((site, i) => this.form.controls.sites.value[i]);
-
-    this.busy = this.enrolmentResource
-      .createEnrolleeRemoteUsers(this.enrolment.id, selectedSites)
-      .subscribe(() =>
-        this.nextRouteAfterSubmit()
-      );
-  }
-
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm();
@@ -100,13 +104,11 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     // Set already linked sites as checked
     const checked = [];
     this.sites.forEach((site) => {
-      site.remoteUsers.forEach((remoteUser) => {
-        (this.enrolment.enrolleeRemoteUsers?.find(eru => eru.remoteUserId === remoteUser.id))
-          ? checked.push(true)
-          : checked.push(false);
-      });
+      site.remoteUsers.forEach((remoteUser) =>
+        checked.push((this.enrolment.enrolleeRemoteUsers?.some(eru => eru.remoteUserId === remoteUser.id)))
+      );
     });
-    this.form.get('sites').patchValue(checked);
+    this.sitesFormArray.patchValue(checked);
   }
 
   protected nextRouteAfterSubmit() {
