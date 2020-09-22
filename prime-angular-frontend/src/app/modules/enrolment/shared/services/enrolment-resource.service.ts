@@ -79,7 +79,7 @@ export class EnrolmentResource {
       );
   }
 
-  public addEnrolleeRemoteUsers(enrolleeId: number, sites: Site[]): Observable<number> {
+  public createEnrolleeRemoteUsers(enrolleeId: number, sites: Site[]): Observable<number> {
     return this.apiResource
       .post<number>(`enrollees/${enrolleeId}/enrollee-remote-users`, sites)
       .pipe(
