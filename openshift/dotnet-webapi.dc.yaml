@@ -187,6 +187,11 @@ objects:
                     name: "mailserver"
               
               # Metabase embedded dashboard environment variables
+              - name: METABASE_DASHBOARD_ID
+                valueFrom:
+                  secretKeyRef:
+                    key: METABASE_DASHBOARD_ID
+                    name: "metabase-embedded-secrets"
               - name: METABASE_SECRET_KEY
                 valueFrom:
                   secretKeyRef:
