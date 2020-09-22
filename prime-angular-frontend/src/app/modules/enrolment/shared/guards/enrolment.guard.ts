@@ -29,7 +29,8 @@ export class EnrolmentGuard extends BaseGuard {
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
-    private enrolmentService: EnrolmentService
+    private enrolmentService: EnrolmentService,
+    private router: Router
   ) {
     super(authService, logger);
   }
@@ -142,8 +143,8 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     if (!enrolment.certifications.length
-      || enrolment.certifications.find((cert) => cert.collegeCode === CollegeLicenceClass.CPBC)
-      || enrolment.careSettings.find((cs) => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)) {
+      || enrolment.certifications.some((cert) => cert.collegeCode === CollegeLicenceClass.CPBC)
+      || enrolment.careSettings.some((cs) => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)) {
       // No access to remote access if OBO or pharmacist
       blacklistedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }
