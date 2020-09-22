@@ -483,9 +483,7 @@ namespace Prime.Services
             var sites = await this.GetBaseSiteQuery()
                 .ToListAsync();
 
-            sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => certifications.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
-
-            return sites;
+            return sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => certifications.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
         }
 
         private IQueryable<Site> GetBaseSiteQuery()
