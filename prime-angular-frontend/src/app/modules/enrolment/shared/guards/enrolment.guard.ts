@@ -29,9 +29,7 @@ export class EnrolmentGuard extends BaseGuard {
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
-    private enrolmentService: EnrolmentService,
-    private router: Router,
-    private configService: ConfigService
+    private enrolmentService: EnrolmentService
   ) {
     super(authService, logger);
   }
