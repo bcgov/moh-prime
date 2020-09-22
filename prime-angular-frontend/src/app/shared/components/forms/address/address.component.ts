@@ -21,7 +21,7 @@ export class AddressComponent implements OnInit {
   @Input() public form: FormGroup;
   // List of controls that should be displayed
   @Input() public formControlNames: string[];
-  // Only BC addresses can be selected from autocomplete
+  // Whether BC addresses can only be selected using autocomplete
   @Input() bcOnly: boolean;
 
   public countries: Config<string>[];
@@ -75,8 +75,11 @@ export class AddressComponent implements OnInit {
     return this.formUtilsService.isRequired(this.form, path);
   }
 
-  public onAutocomplete({ id, ...remainder }: Address) {
-    this.form.patchValue(remainder);
+  public onAutocomplete({ id, countryCode, ...address }: Address) {
+    // Populate the associated list of associated provinces/states
+    this.countryCode.patchValue(countryCode);
+    // Patch the remaining address, which includes the province/state
+    this.form.patchValue(address);
   }
 
   public ngOnInit() {
