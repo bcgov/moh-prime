@@ -598,7 +598,7 @@ namespace Prime.Controllers
 
         // GET: api/Sites/remote-users
         /// <summary>
-        /// Gets all of the Sites which have remote users who match search name and college id
+        /// Gets all of the Sites which have remote users who match search name and college ID.
         /// </summary>
         /// <param name="certificationsJson"></param>
         [HttpGet("/api/Sites/remote-users", Name = nameof(GetSitesByRemoteUserInfo))]
