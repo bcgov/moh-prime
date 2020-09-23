@@ -316,7 +316,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthority,
         name,
         signedAgreementDocuments,
-        acceptedAgreementDate
+        acceptedAgreementDate,
+        doingBusinessAs
       } = organization;
 
       return [{
@@ -325,6 +326,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthorityId,
         signingAuthority,
         name,
+        organizationDoingBusinessAs: doingBusinessAs,
         signedAgreementDocumentCount: signedAgreementDocuments.length,
         acceptedAgreementDate,
         ...this.toSiteViewModelPartial(site)
@@ -349,7 +351,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     return {
       siteId,
       physicalAddress,
-      doingBusinessAs,
+      siteDoingBusinessAs: doingBusinessAs,
       submittedDate,
       careSettingCode,
       siteVendors,

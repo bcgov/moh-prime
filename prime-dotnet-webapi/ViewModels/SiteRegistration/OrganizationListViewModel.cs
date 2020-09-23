@@ -16,6 +16,8 @@ namespace Prime.ViewModels
 
         public Party SigningAuthority { get; set; }
 
+        public string DoingBusinessAs { get; set; }
+
         public IEnumerable<SiteListViewModel> Sites { get; set; }
 
         public int SignedAgreementDocumentCount { get; set; }
