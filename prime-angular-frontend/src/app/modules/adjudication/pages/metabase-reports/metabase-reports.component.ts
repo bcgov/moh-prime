@@ -13,7 +13,7 @@ export class MetabaseReportsComponent implements OnInit {
     private adjudicationResource: AdjudicationResource,
   ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getMetabaseToken();
     console.log(this.metabaseUrl);
   }
@@ -21,5 +21,4 @@ export class MetabaseReportsComponent implements OnInit {
   private getMetabaseToken(): void {
     this.adjudicationResource.getMetabaseToken().subscribe((token: string) => this.metabaseUrl = token);
   }
-
 }
