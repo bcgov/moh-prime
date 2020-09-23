@@ -165,7 +165,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
       )
       .subscribe((organizations: OrgBookAutocompleteResult[]) => {
         // Assumed only a single name per organization is relavent
-        this.organizations = organizations.map(o => o.names[0].text);
+        this.organizations = organizations.map(o => o.names[0]?.text);
       });
   }
 
