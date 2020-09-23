@@ -310,6 +310,18 @@ export class AdjudicationResource {
       );
   }
 
+  public getMetabaseToken(): Observable<string> {
+    return this.apiResource.get<string>('admins/embedded-metabase-url')
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap((token: string) => this.logger.info('METABASE_TOKEN', token)),
+        catchError((error: any) => {
+          this.logger.error('[Adjudication] AdjudicationResource::getMetabaseToken error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public createEnrolmentReference(enrolleeId: number): Observable<EnrolmentStatusReference> {
     return this.apiResource.post(`enrollees/${enrolleeId}/status-reference`)
       .pipe(
