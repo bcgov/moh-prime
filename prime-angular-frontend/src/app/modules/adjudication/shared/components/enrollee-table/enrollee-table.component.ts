@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { Sort } from '@angular/material/sort';
+
+import { UtilsService } from '@core/services/utils.service';
 
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
@@ -24,7 +27,8 @@ export class EnrolleeTableComponent implements OnInit {
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private utilsService: UtilsService
   ) {
     this.notify = new EventEmitter<number>();
     this.claim = new EventEmitter<number>();
@@ -68,6 +72,21 @@ export class EnrolleeTableComponent implements OnInit {
 
   public onRoute(routePath: string | (string | number)[]): void {
     this.route.emit(routePath);
+  }
+
+  public sortData(sort: Sort) {
+    if (!sort.active || !sort.direction) {
+      return;
+    }
+
+    this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
+      switch (sort.active) {
+        case 'displayId': return this.utilsService.sortByDirection(a.id, b.id, sort.direction);
+        case 'appliedDate': return this.utilsService.sortByDirection(a.appliedDate, b.appliedDate, sort.direction);
+        case 'renewalDate': return this.utilsService.sortByDirection(a.expiryDate, b.expiryDate, sort.direction);
+        default: return 0;
+      }
+    });
   }
 
   public ngOnInit(): void { }
