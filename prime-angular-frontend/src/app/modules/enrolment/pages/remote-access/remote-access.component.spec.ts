@@ -11,7 +11,6 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { RemoteAccessComponent } from './remote-access.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
-
 describe('RemoteAccessComponent', () => {
   let component: RemoteAccessComponent;
   let fixture: ComponentFixture<RemoteAccessComponent>;
