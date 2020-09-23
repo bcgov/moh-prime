@@ -34,7 +34,7 @@ namespace Prime.Services
 
             var tokenString = handler.WriteToken(secToken);
 
-            return Path.Join(PrimeEnvironment.MetabaseApi.Url, "embed/dashboard", tokenString, "#bordered=true&titled=false");
+            return Path.Join(PrimeEnvironment.MetabaseApi.Url, "embed/dashboard", tokenString, "#bordered=false&titled=false");
         }
     }
 }
