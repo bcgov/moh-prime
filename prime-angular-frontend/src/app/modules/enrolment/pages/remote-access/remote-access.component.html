@@ -52,14 +52,12 @@
              class="col pt-2 mb-3"
              *ngFor="let site of sites; let i = index">
           <mat-checkbox [formControlName]="i">
-            <div>{{ site.organization.name }}</div>
-            <div>
-              {{ site.physicalAddress.street }},
-              {{ site.physicalAddress.city }}
-              {{ site.physicalAddress.provinceCode }}
-              {{ site.physicalAddress.postal }}
-            </div>
-            <div>Vendor: {{ site.siteVendors[0].vendorCode | configCode: 'vendors' | default }}</div>
+            {{ site.organization.name }}<br>
+            {{ site.physicalAddress.street }},
+            {{ site.physicalAddress.city }}
+            {{ site.physicalAddress.provinceCode }}
+            {{ site.physicalAddress.postal }} <br>
+            Vendor: {{ site.siteVendors[0].vendorCode | configCode: 'vendors' | default }}
           </mat-checkbox>
         </div>
       </ng-container>
