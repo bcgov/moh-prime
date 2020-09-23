@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { WindowRefService } from './window-ref.service';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { SortDirection } from '@angular/material/sort';
 
 export type SortWeight = -1 | 0 | 1;
 
@@ -77,20 +78,34 @@ export class UtilsService {
 
   /**
    * @description
-   * Generic sorting of a JSON object by key.
+   * Generic sorting of a JSON object by direction.
    */
-  public sort<T>(a: T, b: T, isAsc = true, trailingNull = true): SortWeight {
-    if (trailingNull) {
-      if (a === b) {
-        return 0;
-      } else if (a === null) {
-        return 1;
-      } else if (b === null) {
-        return -1;
-      }
+  public sortByDirection<T>(a: T, b: T, direction: SortDirection = 'asc', withTrailingNull: boolean = true): SortWeight {
+    let result: SortWeight;
+
+    if (a === null && withTrailingNull) {
+      result = 1;
+    } else if (b === null && withTrailingNull) {
+      result = -1;
+    } else {
+      result = this.sort(a, b);
     }
 
-    return (a > b) ? ((isAsc) ? 1 : -1) : (a < b) ? ((isAsc) ? -1 : 1) : 0;
+    if (direction === 'desc') {
+      result *= -1;
+    }
+
+    return result;
+  }
+
+  /**
+   * @description
+   * Generic sorting of a JSON object by key.
+   */
+  public sort<T>(a: T, b: T): SortWeight {
+    return (a > b)
+      ? 1 : (a < b)
+        ? -1 : 0;
   }
 
   /**
