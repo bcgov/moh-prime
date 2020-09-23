@@ -5,7 +5,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable, of, pipe } from 'rxjs';
-import { debounceTime, switchMap, tap, exhaustMap, take } from 'rxjs/operators';
+import { debounceTime, switchMap, tap, exhaustMap, take, defaultIfEmpty } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
@@ -161,11 +161,12 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
     this.name.valueChanges
       .pipe(
         debounceTime(400),
-        switchMap((value: string) => this.orgBookResource.autocomplete(value))
+        switchMap((value: string) => this.orgBookResource.autocomplete(value)),
+        defaultIfEmpty([])
       )
       .subscribe((organizations: OrgBookAutocompleteResult[]) => {
         // Assumed only a single name per organization is relavent
-        this.organizations = organizations.map(o => o.names[0]?.text);
+        this.organizations = organizations.map(o => o.names[0].text).filter(o => o);
       });
   }
 
