@@ -15,7 +15,6 @@ export class MetabaseReportsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.getMetabaseToken();
-    console.log(this.metabaseUrl);
   }
 
   private getMetabaseToken(): void {
