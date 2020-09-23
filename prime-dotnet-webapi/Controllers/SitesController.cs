@@ -596,20 +596,18 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(createdSiteRegistrationNote));
         }
 
-        // GET: api/Sites/remote-users
+        // POST: api/Sites/remote-users
         /// <summary>
-        /// Gets all of the Sites which have remote users who match search name and college ID.
+        /// Gets all of the Sites which have remote users who match college ID + licence num
         /// </summary>
-        /// <param name="certificationsJson"></param>
-        [HttpGet("/api/Sites/remote-users", Name = nameof(GetSitesByRemoteUserInfo))]
+        /// <param name="certifications"></param>
+        [HttpPost("/api/Sites/remote-users", Name = nameof(GetSitesByRemoteUserInfo))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSitesByRemoteUserInfo([FromQuery] string certificationsJson)
+        public async Task<ActionResult<IEnumerable<Site>>> GetSitesByRemoteUserInfo(List<Certification> certifications)
         {
-            var certifications = JsonConvert.DeserializeObject<List<Certification>>(certificationsJson);
             var sites = await _siteService.GetSitesByRemoteUserInfoAsync(certifications);
-
             return Ok(ApiResponse.Result(sites));
         }
     }

@@ -304,8 +304,7 @@ export class SiteResource {
   }
 
   public getSitesByRemoteUserInfo(certifications: CollegeCertification[]): Observable<Site[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ certificationsJson: JSON.stringify(certifications) });
-    return this.apiResource.get<Site[]>(`sites/remote-users`, params)
+    return this.apiResource.post(`sites/remote-users`, certifications)
       .pipe(
         map((response: ApiHttpResponse<Site[]>) => response.result),
         tap((sites: Site[]) => this.logger.info('SITES', sites)),
