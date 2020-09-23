@@ -84,9 +84,9 @@ export class UtilsService {
     let result: SortWeight;
 
     if (a === null && withTrailingNull) {
-      result = 1;
-    } else if (b === null && withTrailingNull) {
       result = -1;
+    } else if (b === null && withTrailingNull) {
+      result = 1;
     } else {
       result = this.sort(a, b);
     }
