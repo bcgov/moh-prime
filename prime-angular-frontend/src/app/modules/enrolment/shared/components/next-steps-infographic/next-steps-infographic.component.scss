@@ -27,13 +27,13 @@
     }
   }
 
-  h5, p, a {
+  h5, p, a, div {
     padding-left: 3rem;
   }
 
   @include media-breakpoint-up(md) {
     background-size: auto;
-    height: 11rem;
+    min-height: 11rem;
     padding-left: 9rem;
     // Padding for content from the background image
     padding-top: 2.5rem;
