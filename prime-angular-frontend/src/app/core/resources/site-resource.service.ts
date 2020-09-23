@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
-import * as moment from 'moment';
-
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -17,6 +15,7 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
+import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 // TODO use ApiResourceUtils to build URLs
@@ -56,12 +55,8 @@ export class SiteResource {
         map((site: Site) => {
           site.businessHours = site.businessHours
             .map((businessDay: BusinessDay) => {
-              // Convert timespan to hours and minutes
-              businessDay.startTime = businessDay.startTime.slice(0, -3);
-              businessDay.endTime = (moment.duration(businessDay.endTime).asHours() === 24)
-                ? '24:00' // Convert timespan of 1.00:00:00 to hours and minutes
-                : businessDay.endTime.slice(0, -3);
-
+              businessDay.startTime = BusinessDayHours.fromTimeSpan(businessDay.startTime);
+              businessDay.endTime = BusinessDayHours.fromTimeSpan(businessDay.endTime);
               return businessDay;
             });
           return site;
@@ -95,11 +90,8 @@ export class SiteResource {
     if (site.businessHours?.length) {
       site.businessHours = site.businessHours
         .map((businessDay: BusinessDay) => {
-          // Convert hours and minutes to timespan
-          businessDay.startTime = `${businessDay.startTime}:00`;
-          businessDay.endTime = (businessDay.endTime === '24:00')
-            ? businessDay.endTime = '1.00:00' // Convert to 24 hours to 1 day
-            : `${businessDay.endTime}:00`;
+          businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
+          businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
           return businessDay;
         });
     } else {
