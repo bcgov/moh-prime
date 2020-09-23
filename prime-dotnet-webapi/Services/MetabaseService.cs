@@ -23,11 +23,11 @@ namespace Prime.Services
             var expired = DateTimeOffset.Now.AddMinutes(10).ToUnixTimeSeconds();
 
             var payload = new JwtPayload
-           {
+            {
                { "resource", new {dashboard = PrimeEnvironment.MetabaseApi.DashboardId} },
                { "exp",  expired},
                { "params", new object()}
-           };
+            };
 
             var secToken = new JwtSecurityToken(header, payload);
             var handler = new JwtSecurityTokenHandler();
