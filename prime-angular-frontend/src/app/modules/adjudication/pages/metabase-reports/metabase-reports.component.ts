@@ -19,6 +19,7 @@ export class MetabaseReportsComponent implements OnInit {
   }
 
   private getMetabaseToken(): void {
-    this.adjudicationResource.getMetabaseToken().subscribe((token: string) => this.metabaseUrl = token);
+    this.adjudicationResource.getMetabaseToken()
+      .subscribe((token: string) => this.metabaseUrl = token);
   }
 }
