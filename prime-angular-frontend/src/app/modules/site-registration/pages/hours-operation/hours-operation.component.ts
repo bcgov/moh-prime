@@ -181,8 +181,6 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
     const startTime = group.get('startTime') as FormControl;
     const endTime = group.get('endTime') as FormControl;
 
-
-
     if (isEditable) {
       startTime.enable();
       endTime.enable();
