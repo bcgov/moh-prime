@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { SortDirection } from '@angular/material/sort';
 
 import { WindowRefService } from './window-ref.service';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { SortDirection } from '@angular/material/sort';
 
 export type SortWeight = -1 | 0 | 1;
 
