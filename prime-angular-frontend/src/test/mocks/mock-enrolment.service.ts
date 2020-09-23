@@ -106,7 +106,6 @@ export class MockEnrolmentService implements IEnrolmentService {
       profileCompleted: true,
       collectionNoticeAccepted: false,
       alwaysManual: false,
-      requestingRemoteAccess: false,
       adjudicatorId: null,
       adjudicator: null,
       base64QRCode: null

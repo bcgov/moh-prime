@@ -44,8 +44,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected logger: LoggerService,
     protected utilService: UtilsService,
     private configService: ConfigService,
-    private authService: AuthService,
-    private enrolleeUtilsService: EnrolleeUtilsService
+    private authService: AuthService
   ) {
     super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
 
@@ -69,12 +68,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     }
     // Omit care settings that are not "Private Community Health Practices" for ComPap
     return (careSettingCode !== CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
-  }
-
-  public showRemoteAccess(): boolean {
-    const enrolment = this.enrolmentStateService.enrolment;
-    const isPharmacist = enrolment.certifications.some(c => c.collegeCode === CollegeLicenceClass.CPBC);
-    return this.enrolleeUtilsService.isRegulatedUser(enrolment) && !isPharmacist;
   }
 
   public removeCareSetting(index: number) {
