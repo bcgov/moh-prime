@@ -108,11 +108,10 @@ namespace Prime.Controllers
         [HttpGet("embedded-metabase-url", Name = nameof(GetMetabaseEmbeddedString))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetMetabaseEmbeddedString()
+        public ActionResult<string> GetMetabaseEmbeddedString()
         {
-            var token = await Task.Run(() => _metabaseService.BuildMetabaseEmbeddedString());
+            var token = _metabaseService.BuildMetabaseEmbeddedString();
 
             return Ok(ApiResponse.Result(token));
         }

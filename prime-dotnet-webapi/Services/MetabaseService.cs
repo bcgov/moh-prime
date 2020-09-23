@@ -3,7 +3,6 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.IO;
-using System.Collections.Generic;
 
 namespace Prime.Services
 {
@@ -21,12 +20,12 @@ namespace Prime.Services
             var header = new JwtHeader(credentials);
 
             // 10 minutes in the future represented by milliseconds from epoch
-            var expired = DateTime.Now.AddMinutes(10).Subtract(DateTime.MinValue.AddYears(1969)).TotalMilliseconds;
+            var expired = DateTimeOffset.Now.AddMinutes(10).ToUnixTimeSeconds();
 
             var payload = new JwtPayload
            {
-               { "resource", new DashboardResource(PrimeEnvironment.MetabaseApi.DashboardId)},
-               { "exp",  Math.Round(expired)},
+               { "resource", new {dashboard = PrimeEnvironment.MetabaseApi.DashboardId} },
+               { "exp",  expired},
                { "params", new object()}
            };
 
@@ -36,14 +35,6 @@ namespace Prime.Services
             var tokenString = handler.WriteToken(secToken);
 
             return Path.Join(PrimeEnvironment.MetabaseApi.Url, "embed/dashboard", tokenString, "#bordered=true&titled=true");
-        }
-    }
-    public class DashboardResource
-    {
-        public int dashboard { get; set; }
-        public DashboardResource(int _dashboard)
-        {
-            dashboard = _dashboard;
         }
     }
 }
