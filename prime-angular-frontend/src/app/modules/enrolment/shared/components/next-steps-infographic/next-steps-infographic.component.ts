@@ -43,7 +43,6 @@ export class NextStepsInfographicComponent implements OnInit {
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .pipe()
       .subscribe();
   }
 
