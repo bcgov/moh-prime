@@ -1,16 +1,38 @@
-section {
-  margin-bottom: 1.5rem;
-}
+@import 'bootstrap/bootstrap-imports';
 
-@media (max-width: 767px) {
-  .col-12 {
-      margin-top: 8px;
+section {
+  .weekdays {
+    .day {
+      padding-top: .9rem;
+      padding-bottom: .9rem;
+
+      .weekday {
+        display: inline-block;
+        width: 90px;
+        margin-right: .5rem;
+      }
+
+      mat-slide-toggle {
+        margin-right: .5rem;
+      }
+    }
   }
-  .hide {
-    display: none;
+
+  mat-form-field{
+    width: 6rem;
+
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
   }
 }
 
 .hide {
-  visibility: hidden;
+  display: none;
+}
+
+@include media-breakpoint-up(sm) {
+  .hide {
+    visibility: hidden;
+  }
 }
