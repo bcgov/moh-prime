@@ -25,7 +25,7 @@ namespace Prime.Services
 
             var payload = new JwtPayload
            {
-               { "resource", new DashboardResource(Int32.Parse(PrimeEnvironment.MetabaseApi.DashboardId))},
+               { "resource", new DashboardResource(PrimeEnvironment.MetabaseApi.DashboardId)},
                { "exp",  Math.Round(expired)},
                { "params", new object()}
            };
