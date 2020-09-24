@@ -8,68 +8,63 @@
                                       [currentRoute]="EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY">
     </app-enrolment-progress-indicator>
 
-    <app-next-steps-infographic [enrolment]="enrolment"></app-next-steps-infographic>
+    <app-next-steps-infographic [enrolment]="enrolment">
 
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Next Steps</ng-container>
-    </app-page-subheader>
-
-    <p>
-      Get your access to PharmaNet set up.
-    </p>
-    <p class="mb-4">
-      Use the email option below to notify your PharmaNet administrator of your completed enrolment. Enter in the email
-      address of your PharmaNet administrator who may be your Pharmacy Manager, Office Manager or Medical Office
-      Assistant
-    </p>
-
-    <form [formGroup]="form">
       <p class="mb-4">
-        If you work at more than one site, enter the email
-        addresses of all PharmaNet administrators separated by a comma.
+        Get your access to PharmaNet set up. Use the email option below to notify your PharmaNet administrator of your
+        completed enrolment. Enter in the email address of your PharmaNet administrator who may be your Pharmacy
+        Manager, Office Manager or Medical Office Assistant
       </p>
 
-      <div class="row">
-        <div class="col-sm-8 col-xl-7">
+      <form [formGroup]="form">
+        <p class="mb-4">
+          If you work at more than one site, enter the email addresses of all PharmaNet administrators separated by a
+          comma.
+        </p>
 
-          <mat-form-field class="w-100 mb-3">
-            <input matInput
-                   placeholder="Email"
-                   formControlName="administratorRecipients">
-            <mat-error *ngIf="administratorRecipients.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="administratorRecipients.hasError('email')">Must be a valid email address</mat-error>
-          </mat-form-field>
+        <div class="row">
+          <div class="col-sm-8 col-xl-7">
 
+            <mat-form-field class="w-100 mb-3">
+              <input matInput
+                     placeholder="Email"
+                     formControlName="administratorRecipients">
+              <mat-error *ngIf="administratorRecipients.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="administratorRecipients.hasError('email')">Must be a valid email address</mat-error>
+            </mat-form-field>
+
+          </div>
+          <div class="col-sm-4 col-xl-3">
+
+            <button mat-flat-button
+                    type="button"
+                    color="primary"
+                    class="w-100 mb-4"
+                    (click)="sendProvisionerAccessLinkTo('Administrator')">
+              Send
+            </button>
+
+          </div>
         </div>
-        <div class="col-sm-4 col-xl-3">
+      </form>
 
-          <button mat-flat-button
-                  type="button"
-                  color="primary"
-                  class="w-100 mb-4"
-                  (click)="sendProvisionerAccessLinkTo('Administrator')">
-            Send
-          </button>
+      <ng-template #concise
+                   let-provisioner="provisioner">
+        <p class="mb-4">
+          Your PharmaNet approval notification will be sent to {{ provisioner }}.
+        </p>
+      </ng-template>
 
-        </div>
-      </div>
-    </form>
+      <ng-template #verbose
+                   let-provisioner="provisioner">
+        <p class="mb-4">
+          Provide the email address of the person in your organization who is responsible for contacting
+          {{ provisioner }} to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple
+          emails addresses. Do not enter your own email as you will be copied on the communication.
+        </p>
+      </ng-template>
 
-    <ng-template #concise
-                 let-provisioner="provisioner">
-      <p class="mb-4">
-        Your PharmaNet approval notification will be sent to {{ provisioner }}.
-      </p>
-    </ng-template>
-
-    <ng-template #verbose
-                 let-provisioner="provisioner">
-      <p class="mb-4">
-        Provide the email address of the person in your organization who is responsible for contacting {{ provisioner }}
-        to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple emails addresses. Do not
-        enter your own email as you will be copied on the communication.
-      </p>
-    </ng-template>
+    </app-next-steps-infographic>
 
   </app-enrollee-page>
 

@@ -33,7 +33,7 @@ export class SiteRegistrationTableComponent implements OnInit {
       'displayId',
       'organizationName',
       'signingAuthority',
-      'doingBusinessAs',
+      'siteDoingBusinessAs',
       'submissionDate',
       'adjudicator',
       'siteAdjudication',
