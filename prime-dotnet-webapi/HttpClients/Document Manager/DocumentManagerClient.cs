@@ -16,13 +16,20 @@ namespace Prime.HttpClients
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-        public async Task<HttpResponseMessage> InitializeFileUploadAsync(string filename, string fileSize, string destinationFolder)
+        public async Task<HttpResponseMessage> InitializeFileUploadAsync(string filename, string fileSize)
         {
             _client.DefaultRequestHeaders.Add("Tus-Resumable", "1.0.0");
             _client.DefaultRequestHeaders.Add("Upload-Length", fileSize);
 
-            var content = UploadMetadata.AsHttpContent(filename, destinationFolder);
+            var content = FileMetadata.AsHttpContent(filename: filename);
             return await _client.PostAsync("documents/uploads", content);
+        }
+
+        public async Task FinalizeFileUploadAsync(Guid documentGuid, string destinationFolder)
+        {
+            var content = FileMetadata.AsHttpContent(destinationFolder: destinationFolder);
+            var response = await _client.PostAsync($"documents/uploads{documentGuid}/submit", content);
+            response.EnsureSuccessStatusCode();
         }
 
         public async Task<string> CreateDownloadTokenAsync(Guid documentGuid)
@@ -40,7 +47,7 @@ namespace Prime.HttpClients
 
         public async Task<Guid> SendFileAsync(Stream document, string filename, string destinationFolder)
         {
-            var url = UploadMetadata.AsQueryStringUrl("documents", filename, destinationFolder);
+            var url = FileMetadata.AsQueryStringUrl("documents", filename, destinationFolder);
             var content = new StreamContent(document);
 
             var response = await _client.PostAsync(url, content);
@@ -60,9 +67,9 @@ namespace Prime.HttpClients
             return await response.Content.ReadAsStreamAsync();
         }
 
-        private static class UploadMetadata
+        private static class FileMetadata
         {
-            public static HttpContent AsHttpContent(string filename, string destinationFolder)
+            public static HttpContent AsHttpContent(string filename = null, string destinationFolder = null)
             {
                 return new FormUrlEncodedContent(ToDictionary(filename, destinationFolder));
             }
@@ -74,11 +81,18 @@ namespace Prime.HttpClients
 
             private static Dictionary<string, string> ToDictionary(string filename, string destinationFolder)
             {
-                return new Dictionary<string, string>()
+                var dict = new Dictionary<string, string>();
+
+                if (!string.IsNullOrWhiteSpace(filename))
                 {
-                    { "filename", filename },
-                    { "folder", destinationFolder },
-                };
+                    dict.Add("filename", filename);
+                }
+                if (!string.IsNullOrWhiteSpace(destinationFolder))
+                {
+                    dict.Add("folder", destinationFolder);
+                }
+
+                return dict;
             }
         }
 
