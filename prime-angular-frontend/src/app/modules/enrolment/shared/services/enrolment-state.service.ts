@@ -363,7 +363,7 @@ export class EnrolmentStateService {
       hasConvictionDocumentGuids: this.fb.array([]),
       hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasRegistrationSuspendedDetails: [null, []],
-      hasRegistrationDocumentGuids: this.fb.array([]),
+      hasRegistrationSuspendedDocumentGuids: this.fb.array([]),
       hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
       hasDisciplinaryActionDetails: [null, []],
       hasDisciplinaryActionDocumentGuids: this.fb.array([]),
