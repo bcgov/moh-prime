@@ -80,6 +80,7 @@ namespace Prime
 
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
+        public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
@@ -89,7 +90,7 @@ namespace Prime
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<RemoteUser> RemoteUsers { get; set; }
         public DbSet<RemoteUserLocation> RemoteUserLocations { get; set; }
-
+        public DbSet<RemoteUserCertification> RemoteUserCertifications { get; set; }
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
         public DbSet<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }

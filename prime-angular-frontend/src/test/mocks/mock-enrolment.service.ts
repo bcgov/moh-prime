@@ -40,6 +40,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       approvedDate: null,
       expiryDate: null,
       certifications: [],
+      enrolleeRemoteUsers: [],
       deviceProviderNumber: null,
       isInsulinPumpProvider: null,
       jobs: [],
@@ -105,7 +106,6 @@ export class MockEnrolmentService implements IEnrolmentService {
       profileCompleted: true,
       collectionNoticeAccepted: false,
       alwaysManual: false,
-      requestingRemoteAccess: false,
       adjudicatorId: null,
       adjudicator: null,
       base64QRCode: null

@@ -44,6 +44,5 @@ namespace Prime.ViewModels
         // This property is set by the backend from the JWT token; we cannot trust this property from the frontend
         public string IdentityProvider { get; set; }
 
-        public bool RequestingRemoteAccess { get; set; }
     }
 }

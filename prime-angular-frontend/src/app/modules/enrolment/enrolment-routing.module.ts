@@ -33,6 +33,7 @@ import {
 import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
 import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
 import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
+import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
 
 const routes: Routes = [
   {
@@ -76,6 +77,12 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.REGULATORY,
         component: RegulatoryComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.REMOTE_ACCESS,
+        component: RemoteAccessComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },

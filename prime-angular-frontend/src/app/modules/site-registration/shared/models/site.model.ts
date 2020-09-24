@@ -3,7 +3,6 @@ import { Admin } from '@auth/shared/models/admin.model';
 
 import { BusinessLicenceDocument } from './business-licence-document.model';
 import { BusinessDay } from './business-day.model';
-import { Organization } from './organization.model';
 import { Party } from './party.model';
 import { RemoteUser } from './remote-user.model';
 import { Vendor } from './vendor.model';

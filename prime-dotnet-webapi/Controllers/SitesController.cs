@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 using AutoMapper;
 
@@ -599,6 +600,21 @@ namespace Prime.Controllers
             var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
 
             return Ok(ApiResponse.Result(createdSiteRegistrationNote));
+        }
+
+        // POST: api/Sites/remote-users
+        /// <summary>
+        /// Gets all of the Sites which have remote users who match college ID + licence num
+        /// </summary>
+        /// <param name="certifications"></param>
+        [HttpPost("remote-users", Name = nameof(GetSitesByRemoteUserInfo))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeRemoteAccessSiteViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolleeRemoteAccessSiteViewModel>>> GetSitesByRemoteUserInfo(List<Certification> certifications)
+        {
+            var sites = await _siteService.GetSitesByRemoteUserInfoAsync(certifications);
+            return Ok(ApiResponse.Result(sites));
         }
     }
 }
