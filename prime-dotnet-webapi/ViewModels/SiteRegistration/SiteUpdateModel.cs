@@ -32,5 +32,9 @@ namespace Prime.ViewModels
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }
 
         public ICollection<BusinessDay> BusinessHours { get; set; }
+
+        public string BusinessLicenceGuid { get; set; }
+
+        public string OrganizationAgreementGuid { get; set; }
     }
 }
