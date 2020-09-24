@@ -255,7 +255,7 @@ class DocumentUploadSubmissionResource(Resource):
         doc.submitted = True
         doc.save()
 
-        return make_response("", 200)
+        return make_response(doc.filename, 200)
 
 
 @api.route('/documents')
