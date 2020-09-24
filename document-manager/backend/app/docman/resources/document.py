@@ -234,8 +234,10 @@ class DocumentUploadSubmissionResource(Resource):
         folder = parser.parse_args().get('folder')
 
         doc = Document.find_by_document_guid(document_guid)
-        if not doc or doc.submitted:
+        if not doc:
             raise NotFound(f'Upload not found with GUID {document_guid}')
+        if doc.submitted:
+            raise Conflict('Upload is already submitted')
 
         destination_folder = to_absolute_folder(folder)
         destination_path = os.path.join(destination_folder, document_guid)
