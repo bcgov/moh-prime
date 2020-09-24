@@ -34,7 +34,5 @@ namespace Prime.ViewModels
         public ICollection<BusinessDay> BusinessHours { get; set; }
 
         public string BusinessLicenceGuid { get; set; }
-
-        public string OrganizationAgreementGuid { get; set; }
     }
 }

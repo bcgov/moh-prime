@@ -13,6 +13,7 @@ export interface Organization {
   name: string;
   registrationId: string;
   doingBusinessAs?: string;
+  organizationAgreementGuid: string;
   // States -----
   completed: boolean;
   acceptedAgreementDate: string;

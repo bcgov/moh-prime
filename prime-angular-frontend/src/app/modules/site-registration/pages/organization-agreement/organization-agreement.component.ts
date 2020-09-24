@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
+import { FormGroup } from '@angular/forms';
 
 import { Subscription, EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
@@ -26,6 +27,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 })
 export class OrganizationAgreementComponent implements OnInit, IPage {
   public busy: Subscription;
+  public form: FormGroup;
   public routeUtils: RouteUtils;
   public organizationAgreement: string;
   public hasAcceptedAgreement: boolean;
@@ -52,7 +54,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   public onSubmit() {
     if (this.accepted?.checked || this.hasUploadedFile) {
-      const organizationid = this.route.snapshot.params.oid;
+      const organizationId = this.route.snapshot.params.oid;
       const data: DialogOptions = {
         title: 'Organization Agreement',
         message: 'Are you sure you want to accept the Organization Agreement?',
@@ -63,8 +65,11 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
+              ? this.organizationResource.updateOrganization(this.organizationFormStateService.json)
               : EMPTY
+          ),
+          exhaustMap(() =>
+            this.organizationResource.acceptCurrentOrganizationAgreement(organizationId)
           ),
           exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.queryParams.siteId)))
         )
@@ -72,12 +77,8 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     }
   }
 
-  public onUpload(event: BaseDocument) {
-    const organizationId = this.organizationService.organization.id;
-    this.organizationResource
-      .addSignedAgreement(organizationId, event.documentGuid, event.filename)
-      .subscribe();
-
+  public onUpload(document: BaseDocument) {
+    this.form.get('organizationAgreementGuid').patchValue(document.documentGuid);
     this.hasUploadedFile = true;
     this.hasNoUploadError = false;
   }
@@ -123,6 +124,15 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public ngOnInit(): void {
+    this.createFormInstance();
+    this.initForm();
+  }
+
+  private createFormInstance() {
+    this.form = this.organizationFormStateService.organizationAgreementForm;
+  }
+
+  private initForm() {
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);
