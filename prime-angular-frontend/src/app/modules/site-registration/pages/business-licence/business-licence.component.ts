@@ -68,10 +68,16 @@ export class BusinessLicenceComponent implements OnInit {
         .updateSite(payload)
         .pipe(
           exhaustMap(() =>
-            this.siteResource.createBusinessLicence(siteId, payload.businessLicenceGuid, 'business-licence')
+            (payload.businessLicenceGuid)
+              ? this.siteResource.createBusinessLicence(siteId, payload.businessLicenceGuid, 'business-licence')
+              : of(noop)
           )
         )
         .subscribe(() => {
+          // TODO should make this cleaner, but for now good enough
+          // Remove the business licence GUID to prevent 404 already
+          // submitted if resubmited in same session
+          this.businessLicenceGuid.patchValue(null);
           this.form.markAsPristine();
           this.nextRoute();
         });
