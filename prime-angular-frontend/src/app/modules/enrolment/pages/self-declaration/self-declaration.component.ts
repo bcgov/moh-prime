@@ -12,7 +12,6 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 @Component({
