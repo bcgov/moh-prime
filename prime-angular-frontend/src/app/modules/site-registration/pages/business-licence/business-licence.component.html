@@ -18,7 +18,8 @@
                            additionalApiSuffix="business-licence"
                            labelMessage="Drag and drop your business licence or browse"
                            [multiple]="false"
-                           (completed)="onUpload($event)">
+                           (completed)="onUpload($event)"
+                           (remove)="onRemoveDocument($event)">
       </app-document-upload>
 
       <app-alert *ngIf="hasNoBusinessLicenceError"

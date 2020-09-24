@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { Subscription, EMPTY } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
@@ -52,6 +52,10 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
+  public get organizationAgreementGuid(): FormControl {
+    return this.form.get('businessLicenceGuid') as FormControl;
+  }
+
   public onSubmit() {
     if (this.accepted?.checked || this.hasUploadedFile) {
       const organizationId = this.route.snapshot.params.oid;
@@ -77,12 +81,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     }
   }
 
-  public onUpload(document: BaseDocument) {
-    this.form.get('organizationAgreementGuid').patchValue(document.documentGuid);
-    this.hasUploadedFile = true;
-    this.hasNoUploadError = false;
-  }
-
   public onDownload() {
     this.organizationResource
       .getUnsignedOrganizationAgreement()
@@ -91,6 +89,16 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         this.utilsService.downloadDocument(blob, 'Organization-Agreement');
         this.hasDownloadedFile = true;
       });
+  }
+
+  public onUpload(document: BaseDocument) {
+    this.organizationAgreementGuid.patchValue(document.documentGuid);
+    this.hasUploadedFile = true;
+    this.hasNoUploadError = false;
+  }
+
+  public onRemoveDocument(documentGuid: string) {
+    this.organizationAgreementGuid.patchValue(null);
   }
 
   public showDefaultAgreement() {

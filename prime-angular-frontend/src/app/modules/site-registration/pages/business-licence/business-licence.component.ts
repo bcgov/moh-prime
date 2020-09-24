@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -55,6 +55,10 @@ export class BusinessLicenceComponent implements OnInit {
     this.doingBusinessAsNames = [];
   }
 
+  public get businessLicenceGuid(): FormControl {
+    return this.form.get('businessLicenceGuid') as FormControl;
+  }
+
   public onSubmit() {
     const hasBusinessLicence = this.businessLicenceDocuments.length || this.uploadedFile;
     if (this.formUtilsService.checkValidity(this.form) && hasBusinessLicence) {
@@ -73,10 +77,13 @@ export class BusinessLicenceComponent implements OnInit {
   }
 
   public onUpload(document: BaseDocument) {
-    this.form.get('businessLicenceGuid')
-      .patchValue(document.documentGuid);
+    this.businessLicenceGuid.patchValue(document.documentGuid);
     this.uploadedFile = true;
     this.hasNoBusinessLicenceError = false;
+  }
+
+  public onRemoveDocument(documentGuid: string) {
+    this.businessLicenceGuid.patchValue(null);
   }
 
   public onBack() {
