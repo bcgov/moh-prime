@@ -1,6 +1,8 @@
 export class SelfDeclaration {
-  id?: number;
-  enrolleeId?: number;
-  selfDeclarationTypeCode: number;
-  selfDeclarationDetails: string;
+  constructor(
+    public selfDeclarationTypeCode: number,
+    public selfDeclarationDetails: string,
+    public enrolleeId?: number,
+    public id?: number
+  ) { }
 }
