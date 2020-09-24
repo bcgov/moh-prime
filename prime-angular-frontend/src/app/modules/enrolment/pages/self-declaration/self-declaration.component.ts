@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormControl } from '@angular/forms';
+import { Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -86,19 +86,19 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onHasConvictionUpload(sdd: SelfDeclarationDocument) {
-    this.form.get('hasConvictionDocumentGuids').patchValue(sdd.documentGuid);
+    this.addSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', sdd.documentGuid);
   }
 
   public onHasRegistrationSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.form.get('hasRegistrationDocumentGuids').patchValue(sdd.documentGuid);
+    this.addSelfDeclarationDocumentGuid('hasRegistrationDocumentGuids', sdd.documentGuid);
   }
 
   public onHasDisciplinaryActionUpload(sdd: SelfDeclarationDocument) {
-    this.form.get('hasDisciplinaryActionDocumentGuids').patchValue(sdd.documentGuid);
+    this.addSelfDeclarationDocumentGuid('hasDisciplinaryActionDocumentGuids', sdd.documentGuid);
   }
 
   public onHasPharmanetSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.form.get('hasPharmaNetSuspendedDocumentGuids').patchValue(sdd.documentGuid);
+    this.addSelfDeclarationDocumentGuid('hasPharmaNetSuspendedDocumentGuids', sdd.documentGuid);
   }
 
   public ngOnInit() {
@@ -160,5 +160,15 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     }
 
     return shouldShowUnansweredQuestions;
+  }
+
+  private addSelfDeclarationDocumentGuid(controlName: string, value: string) {
+    this.enrolmentStateService
+      .addSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, value);
+  }
+
+  private removeSelfDeclarationDocumentGuid(controlName: string, value: string) {
+    this.enrolmentStateService
+      .removeSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, value);
   }
 }

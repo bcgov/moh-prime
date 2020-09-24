@@ -369,4 +369,12 @@ export class EnrolmentStateService {
       hasPharmaNetSuspendedDocumentGuids: this.fb.array([])
     });
   }
+
+  public addSelfDeclarationDocumentGuid(control: FormArray, value: string) {
+    control.push(this.fb.control(value));
+  }
+
+  public removeSelfDeclarationDocumentGuid(control: FormArray, documentGuid: string) {
+    control.removeAt(control.value.findIndex((guid: string) => guid === documentGuid));
+  }
 }
