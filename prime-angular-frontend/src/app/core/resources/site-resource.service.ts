@@ -16,6 +16,8 @@ import { Site, SiteListViewModel } from '@registration/shared/models/site.model'
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
 
 // TODO use ApiResourceUtils to build URLs
 // TODO split out log messages for reuse into ErrorHandler
@@ -297,6 +299,19 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site Registration note could not be saved');
           this.logger.error('[SiteRegistration] SiteResource::createSiteRegistrationNote error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getSitesByRemoteUserInfo(certifications: CollegeCertification[]): Observable<EnrolleeRemoteAccessSite[]> {
+    return this.apiResource.post(`sites/remote-users`, certifications)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeRemoteAccessSite[]>) => response.result),
+        tap((sites: EnrolleeRemoteAccessSite[]) => this.logger.info('SITES', sites)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Sites could not be retrieved');
+          this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);
           throw error;
         })
       );

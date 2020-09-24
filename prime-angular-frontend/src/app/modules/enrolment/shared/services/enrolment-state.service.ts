@@ -358,8 +358,7 @@ export class EnrolmentStateService {
 
   private buildCareSettingsForm(): FormGroup {
     return this.fb.group({
-      careSettings: this.fb.array([]),
-      requestingRemoteAccess: [false, []]
+      careSettings: this.fb.array([])
     });
   }
 
