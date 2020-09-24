@@ -92,8 +92,7 @@ class DocumentUploadResource(Resource):
         response = make_response(jsonify(document_guid=document_guid), 201)
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
-        response.headers['Location'] = os.path.join(
-            current_app.config['DOCUMENT_MANAGER_URL'], 'documents', 'uploads', document_guid)
+        response.headers['Location'] = os.path.join(current_app.config['DOCUMENT_MANAGER_URL'], 'documents', 'uploads', document_guid)
         response.headers['Upload-Offset'] = 0
         response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Location,Upload-Offset"
         response.autocorrect_location_header = False
@@ -157,8 +156,7 @@ class DocumentUploadManagementResource(Resource):
         request_offset = int(request.headers.get('Upload-Offset', 0))
         file_offset = cache.get(FILE_UPLOAD_OFFSET(document_guid))
         if request_offset != file_offset:
-            raise Conflict(
-                "Offset in request does not match uploaded file's offset")
+            raise Conflict("Offset in request does not match uploaded file's offset")
 
         chunk_size = request.headers.get('Content-Length')
         if chunk_size is None:
@@ -170,8 +168,7 @@ class DocumentUploadManagementResource(Resource):
         new_offset = file_offset + chunk_size
         file_size = cache.get(FILE_UPLOAD_SIZE(document_guid))
         if new_offset > file_size:
-            raise RequestEntityTooLarge(
-                'The uploaded chunk would put the file above its declared file size.')
+            raise RequestEntityTooLarge('The uploaded chunk would put the file above its declared file size.')
 
         try:
             with open(file_path, "r+b") as f:
@@ -191,8 +188,7 @@ class DocumentUploadManagementResource(Resource):
             cache.delete(FILE_UPLOAD_PATH(document_guid))
         else:
             # File upload still in progress
-            cache.set(FILE_UPLOAD_OFFSET(document_guid),
-                      new_offset, TIMEOUT_24_HOURS)
+            cache.set(FILE_UPLOAD_OFFSET(document_guid), new_offset, TIMEOUT_24_HOURS)
 
         response = make_response('', 204)
         response.headers['Tus-Resumable'] = TUS_API_VERSION
@@ -212,10 +208,8 @@ class DocumentUploadManagementResource(Resource):
         response = make_response("", 200)
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
-        response.headers['Upload-Offset'] = cache.get(
-            FILE_UPLOAD_OFFSET(document_guid))
-        response.headers['Upload-Length'] = cache.get(
-            FILE_UPLOAD_SIZE(document_guid))
+        response.headers['Upload-Offset'] = cache.get(FILE_UPLOAD_OFFSET(document_guid))
+        response.headers['Upload-Length'] = cache.get(FILE_UPLOAD_SIZE(document_guid))
         response.headers['Cache-Control'] = 'no-store'
         response.headers['Access-Control-Expose-Headers'] = 'Tus-Resumable,Tus-Version,Upload-Offset,Upload-Length,Cache-Control'
         return response
