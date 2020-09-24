@@ -37,7 +37,7 @@ namespace Prime.Controllers
             var filename = ParseFilenameFromMetadata(metadata);
             var fileSize = Request.Headers["Upload-Length"].ToString();
 
-            var response = await _client.InitializeFileUploadAsync(filename, fileSize);
+            var response = await _client.InitializeUploadAsync(filename, fileSize);
 
             HttpContext.Response.Headers.Add("Location", response.Headers.GetValues("Location").FirstOrDefault());
             return Ok();
