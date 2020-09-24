@@ -3,7 +3,7 @@ import uuid
 import os
 from datetime import datetime
 
-from werkzeug.exceptions import BadRequest, Forbidden, NotFound, Conflict, RequestEntityTooLarge, InternalServerError
+from werkzeug.exceptions import BadRequest, NotFound, Conflict, RequestEntityTooLarge, InternalServerError
 from flask import request, current_app, send_file, make_response, jsonify
 from flask_restplus import Resource, reqparse
 
@@ -44,7 +44,8 @@ def validate_file_size(file_size):
 
     max_file_size = current_app.config['MAX_CONTENT_LENGTH']
     if size > max_file_size:
-        raise RequestEntityTooLarge(f'The maximum file upload size is {max_file_size/1024/1024}MB.')
+        raise RequestEntityTooLarge(
+            f'The maximum file upload size is {max_file_size/1024/1024}MB.')
 
     return size
 
@@ -54,10 +55,12 @@ class DocumentUploadResource(Resource):
     @jwt.requires_auth
     def post(self):
         if request.headers.get('Tus-Resumable') is None:
-            raise BadRequest('Received file upload for unsupported file transfer protocol')
+            raise BadRequest(
+                'Received file upload for unsupported file transfer protocol')
 
         parser = reqparse.RequestParser(trim=True)
-        parser.add_argument('filename', type=str, required=True, help='File name + extension of the document.')
+        parser.add_argument('filename', type=str, required=True,
+                            help='File name + extension of the document.')
 
         filename = validate_filename(parser.parse_args().get('filename'))
         file_size = validate_file_size(request.headers.get('Upload-Length'))
@@ -89,7 +92,8 @@ class DocumentUploadResource(Resource):
         response = make_response(jsonify(document_guid=document_guid), 201)
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
-        response.headers['Location'] = os.path.join(current_app.config['DOCUMENT_MANAGER_URL'], 'documents', 'uploads', document_guid)
+        response.headers['Location'] = os.path.join(
+            current_app.config['DOCUMENT_MANAGER_URL'], 'documents', 'uploads', document_guid)
         response.headers['Upload-Offset'] = 0
         response.headers['Access-Control-Expose-Headers'] = "Tus-Resumable,Tus-Version,Location,Upload-Offset"
         response.autocorrect_location_header = False
@@ -124,7 +128,8 @@ class DocumentUploadResource(Resource):
     # The 'restore' query string is marked as required because it is the only action we support currently.
     def get(self):
         parser = reqparse.RequestParser(trim=True)
-        parser.add_argument('restore', type=str, location='args', required=True)
+        parser.add_argument('restore', type=str,
+                            location='args', required=True)
 
         document_guid = parser.parse_args().get('restore')
         doc = Document.find_by_document_guid(document_guid)
@@ -134,8 +139,10 @@ class DocumentUploadResource(Resource):
         response = make_response("", 200)
         response.headers['Access-Control-Expose-Headers'] = 'Content-Disposition, Content-Length, X-Content-Transfer-Id'
         response.headers['Content-Disposition'] = f'inline; filename="{doc.filename}"'
-        response.headers['Content-Length'] = os.stat(doc.full_storage_path).st_size
-        response.headers['Content-Type'] = magic.from_file(doc.full_storage_path, mime=True)
+        response.headers['Content-Length'] = os.stat(
+            doc.full_storage_path).st_size
+        response.headers['Content-Type'] = magic.from_file(
+            doc.full_storage_path, mime=True)
         response.headers['X-Content-Transfer-Id'] = document_guid
         return response
 
@@ -150,7 +157,8 @@ class DocumentUploadManagementResource(Resource):
         request_offset = int(request.headers.get('Upload-Offset', 0))
         file_offset = cache.get(FILE_UPLOAD_OFFSET(document_guid))
         if request_offset != file_offset:
-            raise Conflict("Offset in request does not match uploaded file's offset")
+            raise Conflict(
+                "Offset in request does not match uploaded file's offset")
 
         chunk_size = request.headers.get('Content-Length')
         if chunk_size is None:
@@ -162,7 +170,8 @@ class DocumentUploadManagementResource(Resource):
         new_offset = file_offset + chunk_size
         file_size = cache.get(FILE_UPLOAD_SIZE(document_guid))
         if new_offset > file_size:
-            raise RequestEntityTooLarge('The uploaded chunk would put the file above its declared file size.')
+            raise RequestEntityTooLarge(
+                'The uploaded chunk would put the file above its declared file size.')
 
         try:
             with open(file_path, "r+b") as f:
@@ -182,7 +191,8 @@ class DocumentUploadManagementResource(Resource):
             cache.delete(FILE_UPLOAD_PATH(document_guid))
         else:
             # File upload still in progress
-            cache.set(FILE_UPLOAD_OFFSET(document_guid), new_offset, TIMEOUT_24_HOURS)
+            cache.set(FILE_UPLOAD_OFFSET(document_guid),
+                      new_offset, TIMEOUT_24_HOURS)
 
         response = make_response('', 204)
         response.headers['Tus-Resumable'] = TUS_API_VERSION
@@ -202,8 +212,10 @@ class DocumentUploadManagementResource(Resource):
         response = make_response("", 200)
         response.headers['Tus-Resumable'] = TUS_API_VERSION
         response.headers['Tus-Version'] = TUS_API_SUPPORTED_VERSIONS
-        response.headers['Upload-Offset'] = cache.get(FILE_UPLOAD_OFFSET(document_guid))
-        response.headers['Upload-Length'] = cache.get(FILE_UPLOAD_SIZE(document_guid))
+        response.headers['Upload-Offset'] = cache.get(
+            FILE_UPLOAD_OFFSET(document_guid))
+        response.headers['Upload-Length'] = cache.get(
+            FILE_UPLOAD_SIZE(document_guid))
         response.headers['Cache-Control'] = 'no-store'
         response.headers['Access-Control-Expose-Headers'] = 'Tus-Resumable,Tus-Version,Upload-Offset,Upload-Length,Cache-Control'
         return response
@@ -230,7 +242,8 @@ class DocumentUploadSubmissionResource(Resource):
     @jwt.requires_auth
     def post(self, document_guid):
         parser = reqparse.RequestParser(trim=True)
-        parser.add_argument('folder', type=str, required=True, help='The sub folder path to store the document in.')
+        parser.add_argument('folder', type=str, required=True,
+                            help='The sub folder path to store the document in.')
         folder = parser.parse_args().get('folder')
 
         doc = Document.find_by_document_guid(document_guid)
@@ -264,8 +277,10 @@ class DocumentListResource(Resource):
     @jwt.requires_auth
     def post(self):
         parser = reqparse.RequestParser(trim=True)
-        parser.add_argument('folder', type=str, location='args', required=True, help='The sub folder path to store the document in.')
-        parser.add_argument('filename', type=str, location='args', required=True, help='File name + extension of the document.')
+        parser.add_argument('folder', type=str, location='args', required=True,
+                            help='The sub folder path to store the document in.')
+        parser.add_argument('filename', type=str, location='args',
+                            required=True, help='File name + extension of the document.')
         data = parser.parse_args()
 
         filename = validate_filename(data.get('filename'))
