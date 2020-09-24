@@ -1,25 +1,29 @@
 <div class="container">
-
   <div class="row">
-    <div class="col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4 align-self-center">
+    <div class="col-sm-12 logo">
 
-      <div class="text-center">
+      <app-prime-logo label="right"
+                      [size]="(isMobile) ? 'small' : 'medium'"></app-prime-logo>
 
-        <img src="/assets/prime_logo.svg"
-             class="logo mb-4"
-             alt="PRIME Logo">
+    </div>
+    <div class="col-sm-12 header">
 
-        <br>
-        <br>
+      <h1>Request approval to access PharmaNet</h1>
+      <p>for health professionals of British Columbia</p>
 
-        <div class="button-container">
+    </div>
+    <div class="col-sm-12">
+
+      <div class="row actions">
+        <div class="col col-md-auto">
+
           <button mat-flat-button
                   color="primary"
-                  (click)="loginUsingBCeID()">BCeID Login</button>
+                  (click)="loginUsingBCeID()">Login using your BCeID</button>
+
         </div>
       </div>
 
     </div>
   </div>
-
 </div>
