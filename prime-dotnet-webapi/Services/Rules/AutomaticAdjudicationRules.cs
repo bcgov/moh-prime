@@ -158,9 +158,10 @@ namespace Prime.Services.Rules
             if (enrollee.EnrolleeRemoteUsers.Count > 0)
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.RequestingRemoteAccess);
+                return Task.FromResult(false);
             }
 
-            return Task.FromResult(!(enrollee.EnrolleeRemoteUsers.Count > 0));
+            return Task.FromResult(true);
         }
     }
 

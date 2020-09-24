@@ -601,7 +601,7 @@ namespace Prime.Controllers
         /// Gets all of the Sites which have remote users who match college ID + licence num
         /// </summary>
         /// <param name="certifications"></param>
-        [HttpPost("/api/Sites/remote-users", Name = nameof(GetSitesByRemoteUserInfo))]
+        [HttpPost("remote-users", Name = nameof(GetSitesByRemoteUserInfo))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeRemoteAccessSiteViewModel>>), StatusCodes.Status200OK)]
