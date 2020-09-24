@@ -16,7 +16,7 @@ namespace Prime.HttpClients
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-        public async Task<HttpResponseMessage> InitializeFileUploadAsync(string filename, string fileSize)
+        public async Task<HttpResponseMessage> InitializeUploadAsync(string filename, string fileSize)
         {
             _client.DefaultRequestHeaders.Add("Tus-Resumable", "1.0.0");
             _client.DefaultRequestHeaders.Add("Upload-Length", fileSize);
@@ -25,11 +25,15 @@ namespace Prime.HttpClients
             return await _client.PostAsync("documents/uploads", content);
         }
 
-        public async Task FinalizeFileUploadAsync(Guid documentGuid, string destinationFolder)
+        /// <summary>
+        /// Moves a temporary file upload to its final destination and marks it as "submitted".
+        /// Returns true if the operation was successful.
+        /// </summary>
+        public async Task<bool> FinalizeUploadAsync(Guid documentGuid, string destinationFolder)
         {
             var content = FileMetadata.AsHttpContent(destinationFolder: destinationFolder);
-            var response = await _client.PostAsync($"documents/uploads{documentGuid}/submit", content);
-            response.EnsureSuccessStatusCode();
+            var response = await _client.PostAsync($"documents/uploads/{documentGuid}/submit", content);
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<string> CreateDownloadTokenAsync(Guid documentGuid)
