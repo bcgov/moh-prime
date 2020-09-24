@@ -27,13 +27,19 @@ namespace Prime.HttpClients
 
         /// <summary>
         /// Moves a temporary file upload to its final destination and marks it as "submitted".
-        /// Returns true if the operation was successful.
+        /// Returns the file's name if the operation was successful.
         /// </summary>
-        public async Task<bool> FinalizeUploadAsync(Guid documentGuid, string destinationFolder)
+        public async Task<string> FinalizeUploadAsync(Guid documentGuid, string destinationFolder)
         {
             var content = FileMetadata.AsHttpContent(destinationFolder: destinationFolder);
             var response = await _client.PostAsync($"documents/uploads/{documentGuid}/submit", content);
-            return response.IsSuccessStatusCode;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadAsStringAsync();
         }
 
         public async Task<string> CreateDownloadTokenAsync(Guid documentGuid)

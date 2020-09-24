@@ -9,7 +9,7 @@ namespace Prime.HttpClients
     {
         Task<HttpResponseMessage> InitializeUploadAsync(string filename, string fileSize);
 
-        Task<bool> FinalizeUploadAsync(Guid documentGuid, string destinationFolder);
+        Task<string> FinalizeUploadAsync(Guid documentGuid, string destinationFolder);
 
         Task<string> CreateDownloadTokenAsync(Guid documentGuid);
 
