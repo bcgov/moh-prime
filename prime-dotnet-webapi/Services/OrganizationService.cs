@@ -188,10 +188,10 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
         }
 
-        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, Guid documentGuid, string filename)
+        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, Guid documentGuid)
         {
-            var success = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_org_agreements");
-            if (!success)
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_org_agreements");
+            if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;
             }

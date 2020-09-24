@@ -430,10 +430,10 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(v => v.Code == vendorCode);
         }
 
-        public async Task<BusinessLicenceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)
+        public async Task<BusinessLicenceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid)
         {
-            var success = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
-            if (!success)
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
+            if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;
             }
