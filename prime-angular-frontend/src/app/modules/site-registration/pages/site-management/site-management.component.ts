@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
+import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -84,12 +85,14 @@ export class SiteManagementComponent implements OnInit {
   public getOrganizationProperties(organization: OrganizationListViewModel): { key: string, value: string }[] {
     return [
       { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
-      { key: 'Organization Name', value: organization.name }
+      { key: 'Organization Name', value: organization.name },
+      ...ArrayUtils.insertIf(organization?.doingBusinessAs, { key: 'Doing Business As', value: organization.doingBusinessAs })
     ];
   }
 
   public getSiteProperties(site: SiteListViewModel): { key: string, value: string }[] {
     return [
+      ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
       { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }

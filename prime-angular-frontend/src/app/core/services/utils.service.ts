@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { SortDirection } from '@angular/material/sort';
 
 import { WindowRefService } from './window-ref.service';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
@@ -73,6 +74,28 @@ export class UtilsService {
    */
   public sortByKey<T>(a: { [key: string]: any }, b: { [key: string]: any }, key: string): SortWeight {
     return this.sort<T>(a[key], b[key]);
+  }
+
+  /**
+   * @description
+   * Generic sorting of a JSON object by direction.
+   */
+  public sortByDirection<T>(a: T, b: T, direction: SortDirection = 'asc', withTrailingNull: boolean = true): SortWeight {
+    let result: SortWeight;
+
+    if (a === null && withTrailingNull) {
+      result = -1;
+    } else if (b === null && withTrailingNull) {
+      result = 1;
+    } else {
+      result = this.sort(a, b);
+    }
+
+    if (direction === 'desc') {
+      result *= -1;
+    }
+
+    return result;
   }
 
   /**
