@@ -88,16 +88,32 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     this.addSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', sdd.documentGuid);
   }
 
+  public onRemoveConvictionUpload(documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', documentGuid);
+  }
+
   public onHasRegistrationSuspendedUpload(sdd: SelfDeclarationDocument) {
     this.addSelfDeclarationDocumentGuid('hasRegistrationDocumentGuids', sdd.documentGuid);
+  }
+
+  public onRemoveRegistrationSuspendedUpload(documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', documentGuid);
   }
 
   public onHasDisciplinaryActionUpload(sdd: SelfDeclarationDocument) {
     this.addSelfDeclarationDocumentGuid('hasDisciplinaryActionDocumentGuids', sdd.documentGuid);
   }
 
+  public onRemoveDisciplinaryActionUpload(documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', documentGuid);
+  }
+
   public onHasPharmanetSuspendedUpload(sdd: SelfDeclarationDocument) {
     this.addSelfDeclarationDocumentGuid('hasPharmaNetSuspendedDocumentGuids', sdd.documentGuid);
+  }
+
+  public onRemovePharmanetSuspendedUpload(documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', documentGuid);
   }
 
   public ngOnInit() {
@@ -161,13 +177,13 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     return shouldShowUnansweredQuestions;
   }
 
-  private addSelfDeclarationDocumentGuid(controlName: string, value: string) {
+  private addSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
     this.enrolmentStateService
-      .addSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, value);
+      .addSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
   }
 
-  private removeSelfDeclarationDocumentGuid(controlName: string, value: string) {
+  private removeSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
     this.enrolmentStateService
-      .removeSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, value);
+      .removeSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
   }
 }

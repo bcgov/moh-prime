@@ -127,7 +127,7 @@ export class EnrolmentStateService {
         sds.push(
           new SelfDeclaration(
             selfDeclarationsTypes[sd],
-            selfDeclarations[`${sd}ActionDetails`],
+            selfDeclarations[`${sd}Details`],
             selfDeclarations[`${sd}DocumentGuids`],
             this.enrolleeId
           )

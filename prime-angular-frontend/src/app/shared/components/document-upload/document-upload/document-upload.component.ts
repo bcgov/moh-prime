@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 
-import { FilePondOptions, ProcessServerConfigFunction } from 'filepond';
+import { FilePondErrorDescription, FilePondFile, FilePondOptions, ProcessServerConfigFunction } from 'filepond';
 import { FilePondPluginFileValidateTypeProps } from 'filepond-plugin-file-validate-type';
 import { FilePondPluginFileValidateSizeProps } from 'filepond-plugin-file-validate-size';
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
@@ -33,7 +33,8 @@ export class DocumentUploadComponent implements OnInit {
   @Input() public multiple: boolean;
   @Input() public additionalApiSuffix: string;
   @Input() public labelMessage: string;
-  @Output() public completed: EventEmitter<BaseDocument> = new EventEmitter();
+  @Output() public completed: EventEmitter<BaseDocument>;
+  @Output() public remove: EventEmitter<string>;
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
   public filePondOptions: FilePondOptions & FilePondPluginFileValidateSizeProps & FilePondPluginFileValidateTypeProps;
   public filePondFiles = [];
@@ -46,6 +47,8 @@ export class DocumentUploadComponent implements OnInit {
     private logger: LoggerService,
   ) {
     this.labelMessage = 'Click to Browse or Drop files here';
+    this.completed = new EventEmitter();
+    this.remove = new EventEmitter<string>();
   }
 
   public ngOnInit(): void {
@@ -80,6 +83,10 @@ export class DocumentUploadComponent implements OnInit {
   public async onFilePondAddFile() {
     // Can't get token synchronously inside server.process(), so refresh token on file add.
     this.jwt = await this.keycloakTokenService.token();
+  }
+
+  public onFilePondRemoveFile({ file }: { file: FilePondFile, error: FilePondErrorDescription }) {
+    this.remove.emit(file.serverId);
   }
 
   private getIdleText(allowedFileTypesMap: { [key: string]: string }): string {
