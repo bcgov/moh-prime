@@ -86,19 +86,19 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onHasConvictionUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_CONVICTION, sdd);
+    this.form.get('hasConvictionDocumentGuids').patchValue(sdd.documentGuid);
   }
 
   public onHasRegistrationSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED, sdd);
+    this.form.get('hasRegistrationDocumentGuids').patchValue(sdd.documentGuid);
   }
 
   public onHasDisciplinaryActionUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION, sdd);
+    this.form.get('hasDisciplinaryActionDocumentGuids').patchValue(sdd.documentGuid);
   }
 
   public onHasPharmanetSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED, sdd);
+    this.form.get('hasPharmaNetSuspendedDocumentGuids').patchValue(sdd.documentGuid);
   }
 
   public ngOnInit() {
@@ -139,13 +139,6 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   protected onSubmitFormIsInvalid() {
     this.showUnansweredQuestionsError = this.showUnansweredQuestions();
-  }
-
-  private createSelfDeclarationDocument(code: SelfDeclarationTypeEnum, sdd: SelfDeclarationDocument) {
-    const enrolleeId = this.enrolmentService.enrolment.id;
-    this.enrolmentResource
-      .createSelfDeclarationDocument(enrolleeId, code, sdd)
-      .subscribe();
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
