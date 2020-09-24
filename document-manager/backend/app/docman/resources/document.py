@@ -54,8 +54,7 @@ class DocumentUploadResource(Resource):
     @jwt.requires_auth
     def post(self):
         if request.headers.get('Tus-Resumable') is None:
-            raise BadRequest(
-                'Received file upload for unsupported file transfer protocol')
+            raise BadRequest('Received file upload for unsupported file transfer protocol')
 
         parser = reqparse.RequestParser(trim=True)
         parser.add_argument('filename', type=str, required=True,
