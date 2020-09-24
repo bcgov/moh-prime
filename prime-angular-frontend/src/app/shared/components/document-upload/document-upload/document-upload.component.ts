@@ -71,16 +71,6 @@ export class DocumentUploadComponent implements OnInit {
     if (this.additionalApiSuffix) {
       this.apiSuffix = `${this.apiSuffix}/${this.additionalApiSuffix}`;
     }
-
-    this.filePondFiles = [
-      {
-        source: '7831736e-43a0-4a5e-868a-4c94c13d5c78',
-
-        options: {
-          type: 'limbo'
-        }
-      },
-    ];
   }
 
   public onFilePondInit() {

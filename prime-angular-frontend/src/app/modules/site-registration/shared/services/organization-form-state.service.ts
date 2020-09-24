@@ -13,6 +13,7 @@ import { Party } from '@registration/shared/models/party.model';
 export class OrganizationFormStateService extends AbstractFormState<Organization> {
   public signingAuthorityForm: FormGroup;
   public organizationNameForm: FormGroup;
+  public organizationAgreementForm: FormGroup;
 
   constructor(
     protected fb: FormBuilder
@@ -27,12 +28,14 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
   public get json(): Organization {
     const organizationName = this.organizationNameForm.getRawValue();
     const signingAuthority = this.toPersonJson<Party>(this.signingAuthorityForm.getRawValue(), 'mailingAddress');
+    const { organizationAgreementGuid } = this.organizationAgreementForm.getRawValue();
 
     return {
       // OrganizationName is the only form that contains the organization ID
       ...organizationName,
       signingAuthorityId: signingAuthority?.id,
-      signingAuthority
+      signingAuthority,
+      organizationAgreementGuid
     };
   }
 
@@ -56,6 +59,7 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
   public init() {
     this.signingAuthorityForm = this.buildSigningAuthorityForm();
     this.organizationNameForm = this.buildOrganizationNameForm();
+    this.organizationAgreementForm = this.buildOrganizationAgreementForm();
   }
 
   /**
@@ -141,6 +145,15 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
       ],
       doingBusinessAs: [
         null,
+        []
+      ]
+    });
+  }
+
+  private buildOrganizationAgreementForm(): FormGroup {
+    return this.fb.group({
+      organizationAgreementGuid: [
+        '',
         []
       ]
     });

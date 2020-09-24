@@ -72,14 +72,11 @@ export class BusinessLicenceComponent implements OnInit {
     }
   }
 
-  public onUpload(event: BaseDocument) {
-    const siteId = this.siteService.site.id;
-    this.siteResource
-      .createBusinessLicence(siteId, event.documentGuid, event.filename)
-      .subscribe(() => {
-        this.uploadedFile = true;
-        this.hasNoBusinessLicenceError = false;
-      });
+  public onUpload(document: BaseDocument) {
+    this.form.get('businessLicenceGuid')
+      .patchValue(document.documentGuid);
+    this.uploadedFile = true;
+    this.hasNoBusinessLicenceError = false;
   }
 
   public onBack() {
@@ -123,7 +120,7 @@ export class BusinessLicenceComponent implements OnInit {
   public getBusinessLicence(event: Event) {
     event.preventDefault();
     this.siteResource.getBusinessLicenceDownloadToken(this.siteService.site.id)
-      .subscribe((token: string) => 
+      .subscribe((token: string) =>
         this.utilsService.downloadToken(token)
       );
   }

@@ -20,6 +20,7 @@ export interface Site {
   careSettingCode: number;
   siteVendors: Vendor[];
   businessLicenceDocuments: BusinessLicenceDocument[];
+  businessLicenceGuid: string;
   doingBusinessAs: string;
   physicalAddressId?: number;
   physicalAddress: Address;
