@@ -44,8 +44,7 @@ def validate_file_size(file_size):
 
     max_file_size = current_app.config['MAX_CONTENT_LENGTH']
     if size > max_file_size:
-        raise RequestEntityTooLarge(
-            f'The maximum file upload size is {max_file_size/1024/1024}MB.')
+        raise RequestEntityTooLarge(f'The maximum file upload size is {max_file_size/1024/1024}MB.')
 
     return size
 
