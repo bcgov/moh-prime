@@ -181,6 +181,9 @@ namespace Prime.Services
                 enrollee.ProfileCompleted = true;
             }
 
+            // This is the temporary way we are adding self declaration documents until this gets refactored.
+            CreateSelfDeclarationDocuments(enrolleeId, enrolleeProfile.SelfDeclarations);
+
             try
             {
                 return await _context.SaveChangesAsync();
@@ -218,6 +221,23 @@ namespace Prime.Services
                     item.EnrolleeId = enrolleeId;
                     _context.Entry(item).State = EntityState.Added;
                 }
+            }
+        }
+
+        private void CreateSelfDeclarationDocuments(int enrolleeId, ICollection<SelfDeclaration> newDeclarations)
+        {
+            foreach (var declaration in newDeclarations.Where(d => d.DocumentGuids.Any()))
+            {
+                var declarationDocuments = declaration.DocumentGuids.Select(dg => new SelfDeclarationDocument
+                {
+                    EnrolleeId = enrolleeId,
+                    SelfDeclarationTypeCode = declaration.SelfDeclarationTypeCode,
+                    DocumentGuid = dg,
+                    Filename = null, // TODO: this needs to be fixed asap
+                    UploadedDate = DateTimeOffset.Now
+                });
+
+                _context.SelfDeclarationDocuments.AddRange(declarationDocuments);
             }
         }
 
