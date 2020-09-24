@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
@@ -15,18 +16,21 @@ namespace Prime.Services
         private readonly IBusinessEventService _businessEventService;
         private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
+        private readonly IDocumentManagerClient _documentClient;
 
         public SiteService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IBusinessEventService businessEventService,
             IPartyService partyService,
-            IOrganizationService organizationService)
+            IOrganizationService organizationService,
+            IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _businessEventService = businessEventService;
             _partyService = partyService;
             _organizationService = organizationService;
+            _documentClient = documentClient;
         }
 
         public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
