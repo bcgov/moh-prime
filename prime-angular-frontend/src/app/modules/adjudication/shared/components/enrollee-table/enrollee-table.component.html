@@ -2,12 +2,15 @@
   <div class="col">
 
     <table mat-table
+           matSort
+           (matSortChange)="sortData($event)"
            [dataSource]="dataSource"
            class="w-100">
 
       <ng-container matColumnDef="displayId">
         <th mat-header-cell
             *matHeaderCellDef
+            mat-sort-header
             scope="col"> Reference ID </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.displayId }} </td>
@@ -32,6 +35,7 @@
       <ng-container matColumnDef="appliedDate">
         <th mat-header-cell
             *matHeaderCellDef
+            mat-sort-header
             scope="col"> Submission Date </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.appliedDate | formatDate | default }} </td>
@@ -40,6 +44,7 @@
       <ng-container matColumnDef="renewalDate">
         <th mat-header-cell
             *matHeaderCellDef
+            mat-sort-header
             scope="col"> Renewal Date </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.expiryDate | formatDate | default }} </td>
