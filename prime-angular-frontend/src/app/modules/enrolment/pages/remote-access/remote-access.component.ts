@@ -3,8 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { exhaustMap } from 'rxjs/operators';
-
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -19,6 +17,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
 
 
 @Component({
@@ -28,7 +27,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 })
 export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements OnInit {
   public form: FormGroup;
-  public sites: Site[];
+  public sites: EnrolleeRemoteAccessSite[];
   public hasNoSitesError: boolean;
   public showProgress: boolean;
   public enrolment: Enrolment;
@@ -55,7 +54,9 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public onSubmit() {
-    const selectedSites = this.sites.filter((site, i) => this.sitesFormArray.value[i]);
+    const selectedSites = this.sites
+      .filter((site, i) => this.sitesFormArray.value[i])
+      .map(site => site.id);
 
     this.busy = this.enrolmentResource
       .createEnrolleeRemoteUsers(this.enrolment.id, selectedSites)
@@ -69,7 +70,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     this.showProgress = true;
     this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
       .subscribe(
-        (sites: Site[]) => {
+        (sites: EnrolleeRemoteAccessSite[]) => {
           this.showProgress = false;
           if (!sites.length) {
             this.hasNoSitesError = true;

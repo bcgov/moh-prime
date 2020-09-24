@@ -604,8 +604,8 @@ namespace Prime.Controllers
         [HttpPost("/api/Sites/remote-users", Name = nameof(GetSitesByRemoteUserInfo))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSitesByRemoteUserInfo(List<Certification> certifications)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeRemoteAccessSiteViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolleeRemoteAccessSiteViewModel>>> GetSitesByRemoteUserInfo(List<Certification> certifications)
         {
             var sites = await _siteService.GetSitesByRemoteUserInfoAsync(certifications);
             return Ok(ApiResponse.Result(sites));

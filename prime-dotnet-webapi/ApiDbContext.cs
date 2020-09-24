@@ -90,7 +90,7 @@ namespace Prime
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<RemoteUser> RemoteUsers { get; set; }
         public DbSet<RemoteUserLocation> RemoteUserLocations { get; set; }
-
+        public DbSet<RemoteUserCertification> RemoteUserCertifications { get; set; }
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
         public DbSet<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
@@ -240,10 +240,10 @@ namespace Prime
         }
 
         // Uncomment for DB logging
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //     => optionsBuilder.UseLoggerFactory(DbLoggerFactory);
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.UseLoggerFactory(DbLoggerFactory);
 
-        // public static readonly Microsoft.Extensions.Logging.ILoggerFactory DbLoggerFactory
-        //     = new Microsoft.Extensions.Logging.LoggerFactory(new[] { new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider() });
+        public static readonly Microsoft.Extensions.Logging.ILoggerFactory DbLoggerFactory
+            = new Microsoft.Extensions.Logging.LoggerFactory(new[] { new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider() });
     }
 }

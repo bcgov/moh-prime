@@ -20,6 +20,7 @@ namespace Prime.Services
         private readonly IEmailService _emailService;
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly ISiteService _siteService;
 
         public EnrolleeService(
             ApiDbContext context,
@@ -28,7 +29,8 @@ namespace Prime.Services
             ISubmissionRulesService automaticAdjudicationService,
             IEmailService emailService,
             IEnrolleeProfileVersionService enroleeProfileVersionService,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            ISiteService siteService)
             : base(context, httpContext)
         {
             _mapper = mapper;
@@ -36,6 +38,7 @@ namespace Prime.Services
             _emailService = emailService;
             _enroleeProfileVersionService = enroleeProfileVersionService;
             _businessEventService = businessEventService;
+            _siteService = siteService;
         }
 
         public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
@@ -84,7 +87,6 @@ namespace Prime.Services
             }
 
             var entity = await query
-                .Include(e => e.EnrolleeRemoteUsers)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (entity != null)
@@ -476,7 +478,7 @@ namespace Prime.Services
             return selfDeclarationDocument;
         }
 
-        public async Task<IEnumerable<EnrolleeRemoteUser>> AddEnrolleeRemoteUsersAsync(Enrollee enrollee, List<Site> sites)
+        public async Task<IEnumerable<EnrolleeRemoteUser>> AddEnrolleeRemoteUsersAsync(Enrollee enrollee, List<int> sites)
         {
             var enrolleeRemoteUsers = new List<EnrolleeRemoteUser>();
 
@@ -485,9 +487,10 @@ namespace Prime.Services
                 _context.EnrolleeRemoteUsers.Remove(eru);
             }
 
-            foreach (var site in sites)
+            foreach (var siteId in sites)
             {
-                List<RemoteUser> remoteUsers = (List<RemoteUser>)site.RemoteUsers;
+                var site = await _siteService.GetSiteAsync(siteId);
+                List<RemoteUser> remoteUsers = site.RemoteUsers.ToList();
                 remoteUsers = remoteUsers.FindAll(ru => ru.RemoteUserCertifications.Any(ruc => enrollee.Certifications.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber)));
 
                 foreach (var remoteUser in remoteUsers)

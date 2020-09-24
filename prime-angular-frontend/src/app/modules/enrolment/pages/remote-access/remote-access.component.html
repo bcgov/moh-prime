@@ -52,7 +52,7 @@
              class="col pt-2 mb-3"
              *ngFor="let site of sites; let i = index">
           <mat-checkbox [formControlName]="i">
-            {{ site.organization.name }}<br>
+            {{ site.organizationName }}<br>
             {{ site.physicalAddress.street }},
             {{ site.physicalAddress.city }}
             {{ site.physicalAddress.provinceCode }}
