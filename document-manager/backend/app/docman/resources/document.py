@@ -21,7 +21,7 @@ def validate_filename(filename):
     return filename
 
 
-def validate_folder(folder):
+def to_absolute_folder(folder):
     if not folder:
         raise BadRequest('Folder is required')
 
@@ -57,15 +57,13 @@ class DocumentUploadResource(Resource):
             raise BadRequest('Received file upload for unsupported file transfer protocol')
 
         parser = reqparse.RequestParser(trim=True)
-        parser.add_argument('folder', type=str, required=True, help='The sub folder path to store the document in.')
         parser.add_argument('filename', type=str, required=True, help='File name + extension of the document.')
-        data = parser.parse_args()
 
-        filename = validate_filename(data.get('filename'))
-        destination_folder = validate_folder(data.get('folder'))
+        filename = validate_filename(parser.parse_args().get('filename'))
         file_size = validate_file_size(request.headers.get('Upload-Length'))
 
         document_guid = str(uuid.uuid4())
+        destination_folder = to_absolute_folder("temp")
         file_path = os.path.join(destination_folder, document_guid)
 
         try:
@@ -142,7 +140,7 @@ class DocumentUploadResource(Resource):
         return response
 
 
-@api.route(f'/documents/uploads/<string:document_guid>')
+@api.route('/documents/uploads/<string:document_guid>')
 class DocumentUploadManagementResource(Resource):
     def patch(self, document_guid):
         file_path = cache.get(FILE_UPLOAD_PATH(document_guid))
@@ -226,17 +224,48 @@ class DocumentUploadManagementResource(Resource):
         return response
 
 
-@api.route(f'/documents')
-class DocumentListResource(Resource):
-    parser = reqparse.RequestParser(trim=True)
-    parser.add_argument('folder', type=str, location='args', required=True, help='The sub folder path to store the document in.')
-    parser.add_argument('filename', type=str, location='args', required=True, help='File name + extension of the document.')
+@api.route('/documents/uploads/<string:document_guid>/submit')
+class DocumentUploadSubmissionResource(Resource):
+    # Finalizes a file upload, making it no longer directly accessable from the frontend
+    #@jwt.requires_auth
+    def post(self, document_guid):
+        parser = reqparse.RequestParser(trim=True)
+        parser.add_argument('folder', type=str, required=True, help='The sub folder path to store the document in.')
+        folder = parser.parse_args().get('folder')
 
+        doc = Document.find_by_document_guid(document_guid)
+        if not doc or doc.submitted:
+            raise NotFound(f'Upload not found with GUID {document_guid}')
+
+        destination_folder = to_absolute_folder(folder)
+        destination_path = os.path.join(destination_folder, document_guid)
+        if os.path.isfile(destination_path):
+            raise InternalServerError('File already exists at destination')
+
+        try:
+            if not os.path.exists(destination_folder):
+                os.makedirs(destination_folder)
+            os.rename(doc.full_storage_path, destination_path)
+        except IOError as e:
+            raise InternalServerError('Unable to write to file')
+
+        doc.full_storage_path = destination_path
+        doc.submitted = True
+        doc.save()
+
+
+@api.route('/documents')
+class DocumentListResource(Resource):
+    # Direct file upload from PRIME API
     @jwt.requires_auth
     def post(self):
-        data = self.parser.parse_args()
+        parser = reqparse.RequestParser(trim=True)
+        parser.add_argument('folder', type=str, location='args', required=True, help='The sub folder path to store the document in.')
+        parser.add_argument('filename', type=str, location='args', required=True, help='File name + extension of the document.')
+        data = parser.parse_args()
+
         filename = validate_filename(data.get('filename'))
-        destination_folder = validate_folder(data.get('folder'))
+        destination_folder = to_absolute_folder(data.get('folder'))
         validate_file_size(request.content_length)
 
         document_guid = str(uuid.uuid4())
@@ -263,7 +292,7 @@ class DocumentListResource(Resource):
         return make_response(jsonify(document_guid=document_guid), 201)
 
 
-@api.route(f'/documents/<string:document_guid>')
+@api.route('/documents/<string:document_guid>')
 class DocumentResource(Resource):
     @jwt.requires_auth
     def get(self, document_guid):
@@ -279,7 +308,7 @@ class DocumentResource(Resource):
                          as_attachment=True)
 
 
-@api.route(f'/documents/<string:document_guid>/download-token')
+@api.route('/documents/<string:document_guid>/download-token')
 class DownloadTokenCreationResource(Resource):
     @jwt.requires_auth
     def post(self, document_guid):
@@ -299,7 +328,7 @@ class DownloadTokenCreationResource(Resource):
         return {'token': token}
 
 
-@api.route(f'/documents/downloads/<string:token>')
+@api.route('/documents/downloads/<string:token>')
 class DocumentDownloadResource(Resource):
     def get(self, token):
         if not token:
