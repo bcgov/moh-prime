@@ -263,7 +263,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     return this.fb.group({
       businessLicenceGuid: [
         '',
-        [Validators.required]
+        []
       ],
       doingBusinessAs: [
         '',
