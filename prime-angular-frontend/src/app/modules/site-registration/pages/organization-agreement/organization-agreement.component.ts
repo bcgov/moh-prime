@@ -70,7 +70,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.organizationResource.addSignedAgreement(organizationId, payload.organizationAgreementGuid, 'organization-agreement')
+              ? this.organizationResource.addSignedAgreement(organizationId, payload.organizationAgreementGuid)
               : EMPTY
           ),
           exhaustMap(() =>

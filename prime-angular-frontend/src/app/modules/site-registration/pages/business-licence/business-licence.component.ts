@@ -69,7 +69,7 @@ export class BusinessLicenceComponent implements OnInit {
         .pipe(
           exhaustMap(() =>
             (payload.businessLicenceGuid)
-              ? this.siteResource.createBusinessLicence(siteId, payload.businessLicenceGuid, 'business-licence')
+              ? this.siteResource.createBusinessLicence(siteId, payload.businessLicenceGuid)
               : of(noop)
           )
         )
