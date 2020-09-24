@@ -320,7 +320,6 @@ namespace Prime.Controllers
         /// Creates a new Business Licence for a site.
         /// </summary>
         /// <param name="documentGuid"></param>
-        /// <param name="filename"></param>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/business-licence", Name = nameof(CreateBusinessLicence))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -328,7 +327,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<BusinessLicenceDocument>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<BusinessLicenceDocument>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
+        public async Task<ActionResult<BusinessLicenceDocument>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -340,7 +339,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var licence = await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid, filename);
+            var licence = await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid);
             if (licence == null)
             {
                 this.ModelState.AddModelError("documentGuid", "Business Licence could not be created; network error or upload is already submitted");

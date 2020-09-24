@@ -300,7 +300,6 @@ namespace Prime.Controllers
         /// Adds a new signed agreement to an organization.
         /// </summary>
         /// <param name="documentGuid"></param>
-        /// <param name="filename"></param>
         /// <param name="organizationId"></param>
         [HttpPost("{organizationId}/signed-agreement", Name = nameof(CreateSignedAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -308,7 +307,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<SignedAgreementDocument>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<SignedAgreementDocument>> CreateSignedAgreement(int organizationId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
+        public async Task<ActionResult<SignedAgreementDocument>> CreateSignedAgreement(int organizationId, [FromQuery] Guid documentGuid)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
@@ -320,7 +319,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var agreement = await _organizationService.AddSignedAgreementAsync(organization.Id, documentGuid, filename);
+            var agreement = await _organizationService.AddSignedAgreementAsync(organization.Id, documentGuid);
             if (agreement == null)
             {
                 this.ModelState.AddModelError("documentGuid", "Signed Organization Agreement could not be created; network error or upload is already submitted");
