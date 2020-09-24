@@ -233,7 +233,7 @@ namespace Prime.Services
                     EnrolleeId = enrolleeId,
                     SelfDeclarationTypeCode = declaration.SelfDeclarationTypeCode,
                     DocumentGuid = dg,
-                    Filename = null, // TODO: this needs to be fixed asap
+                    Filename = "Self-Declaration", // TODO: actual file name
                     UploadedDate = DateTimeOffset.Now
                 });
 
