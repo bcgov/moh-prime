@@ -98,6 +98,8 @@ export class EnrolmentStateService {
     const careSettings = this.careSettingsForm.getRawValue();
     const selfDeclarations = this.generateSelfDeclarations();
 
+    console.log(selfDeclarations);
+
     return {
       id,
       selfDeclarations,
@@ -126,6 +128,7 @@ export class EnrolmentStateService {
           new SelfDeclaration(
             selfDeclarationsTypes[sd],
             selfDeclarations[`${sd}ActionDetails`],
+            selfDeclarations[`${sd}DocumentGuids`],
             this.enrolleeId
           )
         );
