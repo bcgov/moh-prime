@@ -57,8 +57,7 @@ class DocumentUploadResource(Resource):
             raise BadRequest('Received file upload for unsupported file transfer protocol')
 
         parser = reqparse.RequestParser(trim=True)
-        parser.add_argument('filename', type=str, required=True,
-                            help='File name + extension of the document.')
+        parser.add_argument('filename', type=str, required=True, help='File name + extension of the document.')
 
         filename = validate_filename(parser.parse_args().get('filename'))
         file_size = validate_file_size(request.headers.get('Upload-Length'))
@@ -125,8 +124,7 @@ class DocumentUploadResource(Resource):
     # The 'restore' query string is marked as required because it is the only action we support currently.
     def get(self):
         parser = reqparse.RequestParser(trim=True)
-        parser.add_argument('restore', type=str,
-                            location='args', required=True)
+        parser.add_argument('restore', type=str, location='args', required=True)
 
         document_guid = parser.parse_args().get('restore')
         doc = Document.find_by_document_guid(document_guid)
@@ -136,10 +134,8 @@ class DocumentUploadResource(Resource):
         response = make_response("", 200)
         response.headers['Access-Control-Expose-Headers'] = 'Content-Disposition, Content-Length, X-Content-Transfer-Id'
         response.headers['Content-Disposition'] = f'inline; filename="{doc.filename}"'
-        response.headers['Content-Length'] = os.stat(
-            doc.full_storage_path).st_size
-        response.headers['Content-Type'] = magic.from_file(
-            doc.full_storage_path, mime=True)
+        response.headers['Content-Length'] = os.stat(doc.full_storage_path).st_size
+        response.headers['Content-Type'] = magic.from_file(doc.full_storage_path, mime=True)
         response.headers['X-Content-Transfer-Id'] = document_guid
         return response
 
@@ -234,8 +230,7 @@ class DocumentUploadSubmissionResource(Resource):
     @jwt.requires_auth
     def post(self, document_guid):
         parser = reqparse.RequestParser(trim=True)
-        parser.add_argument('folder', type=str, required=True,
-                            help='The sub folder path to store the document in.')
+        parser.add_argument('folder', type=str, required=True, help='The sub folder path to store the document in.')
         folder = parser.parse_args().get('folder')
 
         doc = Document.find_by_document_guid(document_guid)
@@ -269,10 +264,8 @@ class DocumentListResource(Resource):
     @jwt.requires_auth
     def post(self):
         parser = reqparse.RequestParser(trim=True)
-        parser.add_argument('folder', type=str, location='args', required=True,
-                            help='The sub folder path to store the document in.')
-        parser.add_argument('filename', type=str, location='args',
-                            required=True, help='File name + extension of the document.')
+        parser.add_argument('folder', type=str, location='args', required=True, help='The sub folder path to store the document in.')
+        parser.add_argument('filename', type=str, location='args', required=True, help='File name + extension of the document.')
         data = parser.parse_args()
 
         filename = validate_filename(data.get('filename'))
