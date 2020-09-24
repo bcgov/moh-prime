@@ -426,6 +426,12 @@ namespace Prime.Services
 
         public async Task<BusinessLicenceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)
         {
+            var success = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
+            if (!success)
+            {
+                return null;
+            }
+
             var businessLicence = new BusinessLicenceDocument
             {
                 DocumentGuid = documentGuid,
@@ -433,14 +439,9 @@ namespace Prime.Services
                 Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };
-
             _context.BusinessLicenceDocuments.Add(businessLicence);
 
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not add business licence.");
-            }
+            await _context.SaveChangesAsync();
 
             return businessLicence;
         }
