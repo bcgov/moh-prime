@@ -227,7 +227,7 @@ class DocumentUploadManagementResource(Resource):
 @api.route('/documents/uploads/<string:document_guid>/submit')
 class DocumentUploadSubmissionResource(Resource):
     # Finalizes a file upload, making it no longer directly accessable from the frontend
-    #@jwt.requires_auth
+    @jwt.requires_auth
     def post(self, document_guid):
         parser = reqparse.RequestParser(trim=True)
         parser.add_argument('folder', type=str, required=True, help='The sub folder path to store the document in.')
@@ -252,6 +252,8 @@ class DocumentUploadSubmissionResource(Resource):
         doc.full_storage_path = destination_path
         doc.submitted = True
         doc.save()
+
+        return make_response("", 200)
 
 
 @api.route('/documents')
