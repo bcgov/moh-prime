@@ -31,7 +31,6 @@ export class BaseDocument {
 export class DocumentUploadComponent implements OnInit {
   @Input() public componentName: string;
   @Input() public multiple: boolean;
-  @Input() public additionalApiSuffix: string;
   @Input() public labelMessage: string;
   @Output() public completed: EventEmitter<BaseDocument>;
   @Output() public remove: EventEmitter<string>;
@@ -39,7 +38,6 @@ export class DocumentUploadComponent implements OnInit {
   public filePondOptions: FilePondOptions & FilePondPluginFileValidateSizeProps & FilePondPluginFileValidateTypeProps;
   public filePondFiles = [];
 
-  private apiSuffix = 'document';
   private jwt: string;
 
   constructor(
@@ -70,10 +68,6 @@ export class DocumentUploadComponent implements OnInit {
       maxTotalFileSize: null,
       server: this.constructServer()
     };
-
-    if (this.additionalApiSuffix) {
-      this.apiSuffix = `${this.apiSuffix}/${this.additionalApiSuffix}`;
-    }
   }
 
   public onFilePondInit() {
@@ -109,7 +103,7 @@ export class DocumentUploadComponent implements OnInit {
       const { name: filename, type: filetype } = file;
 
       const upload = new tus.Upload(file, {
-        endpoint: `${environment.apiEndpoint}/${this.apiSuffix}`,
+        endpoint: `${environment.apiEndpoint}/document`,
         metadata: { filename, filetype },
         chunkSize: 1048576, // 1 MB
         removeFingerprintOnSuccess: true,
