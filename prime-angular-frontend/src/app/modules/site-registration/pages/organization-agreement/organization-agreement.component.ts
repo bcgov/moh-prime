@@ -4,7 +4,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { Subscription, EMPTY } from 'rxjs';
+import { Subscription, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
@@ -64,13 +64,19 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         message: 'Are you sure you want to accept the Organization Agreement?',
         actionText: 'Accept Organization Agreement'
       };
+      const payload = this.organizationFormStateService.json;
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.organizationResource.updateOrganization(this.organizationFormStateService.json)
+              ? this.organizationResource.updateOrganization(payload)
               : EMPTY
+          ),
+          exhaustMap(() =>
+            (payload.organizationAgreementGuid)
+              ? this.organizationResource.addSignedAgreement(organizationId, payload.organizationAgreementGuid, 'organization-agreement')
+              : of(noop)
           ),
           exhaustMap(() =>
             this.organizationResource.acceptCurrentOrganizationAgreement(organizationId)

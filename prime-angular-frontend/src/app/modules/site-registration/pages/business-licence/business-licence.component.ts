@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { noop, of, Subscription } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -60,11 +60,17 @@ export class BusinessLicenceComponent implements OnInit {
   }
 
   public onSubmit() {
+    const siteId = this.route.snapshot.params.sid;
     const hasBusinessLicence = this.businessLicenceDocuments.length || this.uploadedFile;
     if (this.formUtilsService.checkValidity(this.form) && hasBusinessLicence) {
       const payload = this.siteFormStateService.json;
       this.siteResource
         .updateSite(payload)
+        .pipe(
+          exhaustMap(() =>
+            this.siteResource.createBusinessLicence(siteId, payload.businessLicenceGuid, 'business-licence')
+          )
+        )
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
