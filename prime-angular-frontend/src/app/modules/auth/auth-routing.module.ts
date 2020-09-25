@@ -8,6 +8,7 @@ import { AuthorizationRedirectGuard } from './shared/guards/authorization-redire
 import { AuthRoutes } from './auth.routes';
 
 import { InfoComponent } from './pages/info/info.component';
+import { BceidComponent } from './pages/bceid/bceid.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { SiteComponent } from './pages/site/site.component';
 
@@ -26,6 +27,11 @@ const routes: Routes = [
         data: { title: 'Welcome to PRIME' }
       },
       {
+        path: AuthRoutes.BCEID,
+        component: BceidComponent,
+        data: { title: 'Welcome to PRIME' }
+      },
+      {
         path: AuthRoutes.ADMIN,
         component: AdminComponent,
         data: { title: 'Welcome to PRIME' }
@@ -33,7 +39,7 @@ const routes: Routes = [
       {
         path: AuthRoutes.SITE,
         component: SiteComponent,
-        data: { title: 'Welcome to PRIME - Site Registration' }
+        data: { title: 'Welcome to PRIME' }
       },
       {
         path: '', // Equivalent to `/` and alias for `info`
