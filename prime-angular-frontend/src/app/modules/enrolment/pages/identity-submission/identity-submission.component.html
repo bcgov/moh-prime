@@ -1,0 +1,34 @@
+<app-enrollee-page [busy]="busy">
+  <app-page-header>PRIME Enrolment</app-page-header>
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    [inProgress]="isInitialEnrolment"
+                                    [currentRoute]="EnrolmentRoutes.IDENTITY_SUBMISSION">
+  </app-enrolment-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>ID Submission</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Upload your identification.
+        </ng-container>
+      </app-page-subheader>
+
+      <app-document-upload componentName="has-conviction"
+                           additionalApiSuffix="self-declaration"
+                           (completed)="onUpload($event)">
+      </app-document-upload>
+
+    </section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+                   [hasSecondaryAction]="isProfileComplete"
+                   (save)="onSubmit()"></app-page-footer>
+
+</app-enrollee-page>

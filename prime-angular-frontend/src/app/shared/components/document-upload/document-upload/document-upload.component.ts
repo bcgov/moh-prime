@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 
-import { FilePondOptions, ProcessServerConfigFunction } from 'filepond';
+import { FilePondFile, FilePondOptions, ProcessServerConfigFunction } from 'filepond';
 import { FilePondPluginFileValidateTypeProps } from 'filepond-plugin-file-validate-type';
 import { FilePondPluginFileValidateSizeProps } from 'filepond-plugin-file-validate-size';
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
@@ -35,17 +35,19 @@ export class DocumentUploadComponent implements OnInit {
   @Input() public labelMessage: string;
   @Output() public completed: EventEmitter<BaseDocument> = new EventEmitter();
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
+  public filePondFiles: FilePondFile[];
   public filePondOptions: FilePondOptions & FilePondPluginFileValidateSizeProps & FilePondPluginFileValidateTypeProps;
-  public filePondFiles = [];
 
-  private apiSuffix = 'document';
   private jwt: string;
+  private apiSuffix: string;
 
   constructor(
     private keycloakTokenService: KeycloakTokenService,
     private logger: LoggerService,
   ) {
     this.labelMessage = 'Click to Browse or Drop files here';
+    this.filePondFiles = [];
+    this.apiSuffix = 'document';
   }
 
   public ngOnInit(): void {

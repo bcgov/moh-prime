@@ -54,14 +54,6 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     return this.form.get('mailingAddress') as FormGroup;
   }
 
-  public get voicePhone(): FormControl {
-    return this.form.get('voicePhone') as FormControl;
-  }
-
-  public get voiceExtension(): FormControl {
-    return this.form.get('voiceExtension') as FormControl;
-  }
-
   public get hasContactEmail(): FormControl {
     return this.form.get('hasContactEmail') as FormControl;
   }

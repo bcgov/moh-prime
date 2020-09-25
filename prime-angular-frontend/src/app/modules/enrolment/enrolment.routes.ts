@@ -3,8 +3,13 @@ export class EnrolmentRoutes {
   public static COLLECTION_NOTICE = 'collection-notice';
   // Enrollee overview:
   public static OVERVIEW = 'overview';
+  // Enrollee access:
+  public static IDENTITY_ACCESS_CODE = 'identity-access-code';
+  public static IDENTITY_SUBMISSION = 'identity-submission';
   // Enrollee profile:
+  public static IDENTITY_PROFILE = 'identity-profile';
   public static DEMOGRAPHIC = 'demographic';
+  // Enrollee enrolment:
   public static REGULATORY = 'regulatory';
   public static REMOTE_ACCESS = 'remote-access';
   public static DEVICE_PROVIDER = 'device-provider';

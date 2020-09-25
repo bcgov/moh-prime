@@ -66,14 +66,38 @@ const routes: Routes = [
         data: { title: 'PRIME Enrolment' }
       },
       //
-      // Enrollee profile:
+      // Enrollee access:
       //
+      {
+        path: EnrolmentRoutes.IDENTITY_ACCESS_CODE,
+        component: DemographicComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.IDENTITY_SUBMISSION,
+        component: DemographicComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      //
+      // Enrollee profile types:
+      //
+      {
+        path: EnrolmentRoutes.IDENTITY_PROFILE,
+        component: DemographicComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
       {
         path: EnrolmentRoutes.DEMOGRAPHIC,
         component: DemographicComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
+      //
+      // Enrollee enrolment:
+      //
       {
         path: EnrolmentRoutes.REGULATORY,
         component: RegulatoryComponent,
