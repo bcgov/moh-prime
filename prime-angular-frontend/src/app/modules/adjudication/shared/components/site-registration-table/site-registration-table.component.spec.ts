@@ -3,10 +3,18 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SiteRegistrationTableComponent } from './site-registration-table.component';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { KeycloakService } from 'keycloak-angular';
+import { ActivatedRoute } from '@angular/router';
 
 describe('SiteRegistrationTableComponent', () => {
   let component: SiteRegistrationTableComponent;
   let fixture: ComponentFixture<SiteRegistrationTableComponent>;
+  const mockActivatedRoute = {
+    snapshot: {
+      params: {
+        sid: 1
+      }
+    }
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -14,7 +22,11 @@ describe('SiteRegistrationTableComponent', () => {
         AdjudicationModule
       ],
       providers: [
-        KeycloakService
+        KeycloakService,
+        {
+          provide: ActivatedRoute,
+          useValue: mockActivatedRoute
+        }
       ]
     })
       .compileComponents();

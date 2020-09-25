@@ -2,12 +2,14 @@ import { SiteListViewModel } from '@registration/shared/models/site.model';
 import { OrganizationListViewModel } from '@registration/shared/models/organization.model';
 
 
-export interface SiteListViewModelPartial extends Omit<SiteListViewModel, 'id' | 'completed'> {
+export interface SiteListViewModelPartial extends Omit<SiteListViewModel, 'id' | 'completed' | 'doingBusinessAs'> {
   siteId: number;
+  siteDoingBusinessAs: string;
 }
 
-export interface OrganizationListViewModelPartial extends Omit<OrganizationListViewModel, 'id' | 'sites' | 'completed'> {
+export interface OrganizationListViewModelPartial extends Omit<OrganizationListViewModel, 'id' | 'sites' | 'completed' | 'doingBusinessAs'> {
   organizationId: number;
+  organizationDoingBusinessAs: string;
 }
 
 /**

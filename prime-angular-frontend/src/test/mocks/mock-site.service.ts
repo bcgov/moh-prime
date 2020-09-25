@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Address } from '@shared/models/address.model';
 import { Site } from '@registration/shared/models/site.model';
 import { ISiteService } from '@registration/shared/services/site.service';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 export class MockSiteService implements ISiteService {
   // tslint:disable-next-line: variable-name
@@ -58,7 +59,8 @@ export class MockSiteService implements ISiteService {
       adjudicatorId: null,
       adjudicator: null,
       approvedDate: faker.date.past(2).toDateString(),
-      submittedDate: faker.date.past(2).toDateString()
+      submittedDate: faker.date.past(2).toDateString(),
+      status: SiteStatusType.APPROVED,
     });
   }
 

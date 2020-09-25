@@ -5,12 +5,16 @@ import { Observable, of, from } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { ConfigService } from '@config/config.service';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { User } from '@auth/shared/models/user.model';
 import { Enrollee } from '@shared/models/enrollee.model';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+
+import { User } from '@auth/shared/models/user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -136,6 +140,13 @@ export class EnrolmentGuard extends BaseGuard {
     if (hasNotCompletedProfile) {
       // No access to overview if you've not completed the wizard
       blacklistedRoutes.push(EnrolmentRoutes.OVERVIEW);
+    }
+
+    if (!enrolment.certifications.length
+      || enrolment.certifications.some((cert) => cert.collegeCode === CollegeLicenceClass.CPBC)
+      || enrolment.careSettings.some((cs) => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)) {
+      // No access to remote access if OBO or pharmacist
+      blacklistedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }
 
     return (blacklistedRoutes.includes(route))

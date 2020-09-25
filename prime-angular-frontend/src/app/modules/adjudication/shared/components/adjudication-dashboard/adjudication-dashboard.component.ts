@@ -28,7 +28,8 @@ export class AdjudicationDashboardComponent implements OnInit, IDashboard {
   private getDashboardMenuItems(): Observable<DashboardMenuItem[]> {
     return of([
       new DashboardRouteMenuItem('PRIME Enrollees', AdjudicationRoutes.ENROLLEES, 'people'),
-      new DashboardRouteMenuItem('Site Registrations', AdjudicationRoutes.SITE_REGISTRATIONS, 'store')
+      new DashboardRouteMenuItem('Site Registrations', AdjudicationRoutes.SITE_REGISTRATIONS, 'store'),
+      new DashboardRouteMenuItem('Metabase Reports', AdjudicationRoutes.METABASE_REPORTS, 'show_chart')
     ]);
   }
 }

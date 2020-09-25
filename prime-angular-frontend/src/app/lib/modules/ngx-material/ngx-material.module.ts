@@ -24,6 +24,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
+import { MatSortModule } from '@angular/material/sort';
 
 export const APP_DATE_FORMAT = 'D MMM YYYY';
 export const APP_DATE_FORMATS = {
@@ -65,6 +66,7 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
     MatSlideToggleModule,
     MatSnackBarModule,
     MatTableModule,
+    MatSortModule,
     MatToolbarModule,
     MatTooltipModule,
     MatPaginatorModule,

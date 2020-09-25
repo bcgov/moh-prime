@@ -5,6 +5,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+
 using Prime.Models;
 using Prime.ViewModels;
 
@@ -12,6 +15,7 @@ namespace Prime.Services
 {
     public class SiteService : BaseService, ISiteService
     {
+        private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
         private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
@@ -19,11 +23,13 @@ namespace Prime.Services
         public SiteService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
+            IMapper mapper,
             IBusinessEventService businessEventService,
             IPartyService partyService,
             IOrganizationService organizationService)
             : base(context, httpContext)
         {
+            _mapper = mapper;
             _businessEventService = businessEventService;
             _partyService = partyService;
             _organizationService = organizationService;
@@ -476,6 +482,20 @@ namespace Prime.Services
             // TODO: Business events for sites?
 
             return SiteRegistrationNote;
+        }
+
+        public async Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
+        {
+            var sites = await this.GetBaseSiteQuery()
+                .ProjectTo<EnrolleeRemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
+            foreach (var site in sites)
+            {
+                site.RemoteUsers = site.RemoteUsers.Where(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber)));
+            }
+            return sites;
         }
 
         private IQueryable<Site> GetBaseSiteQuery()

@@ -95,7 +95,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     if (!this.isProfileComplete) {
       nextRoutePath = (!this.certifications.length)
         ? EnrolmentRoutes.JOB
-        : EnrolmentRoutes.CARE_SETTING;
+        : EnrolmentRoutes.REMOTE_ACCESS;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

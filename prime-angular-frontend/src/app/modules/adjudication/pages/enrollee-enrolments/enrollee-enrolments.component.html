@@ -24,7 +24,7 @@
                 [ngTemplateOutlet]="card"
                 [ngTemplateOutletContext]="{
                   isCurrent: true,
-                  submittedDate: enrollee?.appliedDate,
+                  submittedDate: enrollee?.createdDate,
                   enrolmentRoute: [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT]
                 }">
   </ng-container>
@@ -33,7 +33,7 @@
     <ng-container [ngTemplateOutlet]="card"
                   [ngTemplateOutletContext]="{
                     isCurrent: first && !isUnderAdjudication(enrollee),
-                    submittedDate: enrollee?.appliedDate,
+                    submittedDate: enrollee?.createdDate,
                     acceptedDate: accessTerm.acceptedDate,
                     enrolmentRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT],
                     toaRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM],

@@ -155,12 +155,13 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.RequestingRemoteAccess)
+            if (enrollee.EnrolleeRemoteUsers.Count > 0)
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.RequestingRemoteAccess);
+                return Task.FromResult(false);
             }
 
-            return Task.FromResult(!enrollee.RequestingRemoteAccess);
+            return Task.FromResult(true);
         }
     }
 
