@@ -122,14 +122,16 @@ export class EnrolmentStateService {
     };
     return Object.keys(selfDeclarationsTypes)
       .reduce((sds: SelfDeclaration[], sd: string) => {
-        sds.push(
-          new SelfDeclaration(
-            selfDeclarationsTypes[sd],
-            selfDeclarations[`${sd}Details`],
-            selfDeclarations[`${sd}DocumentGuids`],
-            this.enrolleeId
-          )
-        );
+        if (selfDeclarations[sd]) {
+          sds.push(
+            new SelfDeclaration(
+              selfDeclarationsTypes[sd],
+              selfDeclarations[`${sd}Details`],
+              selfDeclarations[`${sd}DocumentGuids`],
+              this.enrolleeId
+            )
+          );
+        }
         return sds;
       }, []);
   }
