@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Prime.Models;
-using Prime.ViewModels;
-using Prime.Models.Api;
 using DelegateDecompiler.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+
+using Prime.Models;
+using Prime.ViewModels;
+using Prime.Models.Api;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
@@ -21,6 +23,7 @@ namespace Prime.Services
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IBusinessEventService _businessEventService;
         private readonly ISiteService _siteService;
+        private readonly IDocumentManagerClient _documentClient;
 
         public EnrolleeService(
             ApiDbContext context,
@@ -30,7 +33,8 @@ namespace Prime.Services
             IEmailService emailService,
             IEnrolleeProfileVersionService enroleeProfileVersionService,
             IBusinessEventService businessEventService,
-            ISiteService siteService)
+            ISiteService siteService,
+            IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
@@ -39,6 +43,7 @@ namespace Prime.Services
             _enroleeProfileVersionService = enroleeProfileVersionService;
             _businessEventService = businessEventService;
             _siteService = siteService;
+            _documentClient = documentClient;
         }
 
         public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
@@ -185,7 +190,7 @@ namespace Prime.Services
             }
 
             // This is the temporary way we are adding self declaration documents until this gets refactored.
-            CreateSelfDeclarationDocuments(enrolleeId, enrolleeProfile.SelfDeclarations);
+            await CreateSelfDeclarationDocuments(enrolleeId, enrolleeProfile.SelfDeclarations);
 
             try
             {
@@ -227,20 +232,32 @@ namespace Prime.Services
             }
         }
 
-        private void CreateSelfDeclarationDocuments(int enrolleeId, ICollection<SelfDeclaration> newDeclarations)
+        private async Task CreateSelfDeclarationDocuments(int enrolleeId, ICollection<SelfDeclaration> newDeclarations)
         {
-            foreach (var declaration in newDeclarations.Where(d => d.DocumentGuids.Any()))
+            if (newDeclarations == null)
             {
-                var declarationDocuments = declaration.DocumentGuids.Select(dg => new SelfDeclarationDocument
-                {
-                    EnrolleeId = enrolleeId,
-                    SelfDeclarationTypeCode = declaration.SelfDeclarationTypeCode,
-                    DocumentGuid = dg,
-                    Filename = "Self-Declaration", // TODO: actual file name
-                    UploadedDate = DateTimeOffset.Now
-                });
+                return;
+            }
 
-                _context.SelfDeclarationDocuments.AddRange(declarationDocuments);
+            foreach (var declaration in newDeclarations.Where(d => d.DocumentGuids != null))
+            {
+                foreach (var documentGuid in declaration.DocumentGuids)
+                {
+                    var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "self_declarations");
+                    if (string.IsNullOrWhiteSpace(filename))
+                    {
+                        throw new InvalidOperationException($"Could not find a document upload with GUID {documentGuid}");
+                    }
+
+                    _context.SelfDeclarationDocuments.Add(new SelfDeclarationDocument
+                    {
+                        EnrolleeId = enrolleeId,
+                        SelfDeclarationTypeCode = declaration.SelfDeclarationTypeCode,
+                        DocumentGuid = documentGuid,
+                        Filename = filename,
+                        UploadedDate = DateTimeOffset.Now
+                    });
+                }
             }
         }
 
