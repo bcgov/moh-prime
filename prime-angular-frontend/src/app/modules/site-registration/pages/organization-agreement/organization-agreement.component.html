@@ -53,7 +53,7 @@
 
     <ng-template #electronic>
       <div class="organization-agreement"
-           [innerHTML]="organizationAgreement | safeHtml"></div>
+           [innerHTML]="organizationAgreement | safe: 'html'"></div>
 
       <div class="footer mb-4">
         <mat-checkbox #accept>
@@ -102,7 +102,7 @@
 
     <ng-container *ngIf="showDefaultAgreement(); else uploadedAgreement">
       <div class="organization-agreement mb-5"
-           [innerHTML]="organizationAgreement | safeHtml"></div>
+           [innerHTML]="organizationAgreement | safe: 'html'"></div>
     </ng-container>
 
     <ng-template #uploadedAgreement>

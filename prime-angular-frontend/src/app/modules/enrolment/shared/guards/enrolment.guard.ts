@@ -43,7 +43,6 @@ export class EnrolmentGuard extends BaseGuard {
    */
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
     const user$ = from(this.authService.getUser());
-    console.log(user$);
     const createEnrollee$ = user$
       .pipe(
         exhaustMap(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
