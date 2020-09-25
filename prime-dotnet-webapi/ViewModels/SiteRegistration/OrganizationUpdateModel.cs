@@ -16,7 +16,5 @@ namespace Prime.ViewModels
         public string DoingBusinessAs { get; set; }
 
         public Party SigningAuthority { get; set; }
-
-        public string OrganizationAgreementGuid { get; set; }
     }
 }
