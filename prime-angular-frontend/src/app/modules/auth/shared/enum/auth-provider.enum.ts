@@ -1,4 +1,5 @@
 export enum AuthProvider {
   BCSC = 'bcsc',
-  IDIR = 'idir'
+  IDIR = 'idir',
+  BCEID = 'bceid'
 }
