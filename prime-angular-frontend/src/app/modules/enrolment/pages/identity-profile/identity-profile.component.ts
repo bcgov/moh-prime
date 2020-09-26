@@ -50,4 +50,13 @@ export class IdentityProfileComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected initForm() { }
+
+  protected nextRouteAfterSubmit() {
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.REGULATORY;
+    }
+
+    super.nextRouteAfterSubmit(nextRoutePath);
+  }
 }

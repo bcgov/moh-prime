@@ -51,4 +51,13 @@ export class IdentitySubmissionComponent extends BaseEnrolmentProfilePage implem
   }
 
   protected initForm() { }
+
+  protected nextRouteAfterSubmit() {
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.IDENTITY_PROFILE;
+    }
+
+    super.nextRouteAfterSubmit(nextRoutePath);
+  }
 }

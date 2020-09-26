@@ -37,12 +37,10 @@ import { NextStepsInfographicComponent } from './shared/components/next-steps-in
 import { EnrolmentCollectionNoticeComponent } from './shared/components/enrolment-collection-notice/enrolment-collection-notice.component';
 import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.component';
 import { HeaderComponent } from './shared/components/header/header.component';
-import {
-  EnrolmentProgressIndicatorComponent
-} from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
+import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
+import { ContactInformationFormComponent } from './shared/components/contact-information-form/contact-information-form.component';
 import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
 import { ProgressIndicatorComponent } from './shared/components/progress-indicator/progress-indicator.component';
-import { ContactInformationComponent } from './shared/components/contact-information/contact-information.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +76,7 @@ import { ContactInformationComponent } from './shared/components/contact-informa
     // TODO drop this component and reimplement using ProgressIndicator2Component
     ProgressIndicatorComponent,
     NotificationConfirmationComponent,
-    ContactInformationComponent
+    ContactInformationFormComponent
   ],
   imports: [
     SharedModule,

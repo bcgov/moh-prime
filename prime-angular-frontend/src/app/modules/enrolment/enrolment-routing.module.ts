@@ -27,9 +27,7 @@ import { AccessAgreementHistoryComponent } from './pages/access-agreement-histor
 import { PharmanetEnrolmentSummaryComponent } from './pages/pharmanet-enrolment-summary/pharmanet-enrolment-summary.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
-import {
-  AccessAgreementHistoryEnrolmentComponent
-} from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
+import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
 import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
 import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';

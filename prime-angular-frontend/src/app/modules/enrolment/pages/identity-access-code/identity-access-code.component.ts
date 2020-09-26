@@ -46,4 +46,13 @@ export class IdentityAccessCodeComponent extends BaseEnrolmentProfilePage implem
   }
 
   protected initForm() { }
+
+  protected nextRouteAfterSubmit() {
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.IDENTITY_SUBMISSION;
+    }
+
+    super.nextRouteAfterSubmit(nextRoutePath);
+  }
 }

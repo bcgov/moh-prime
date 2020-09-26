@@ -54,22 +54,6 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     return this.form.get('mailingAddress') as FormGroup;
   }
 
-  public get hasContactEmail(): FormControl {
-    return this.form.get('hasContactEmail') as FormControl;
-  }
-
-  public get contactEmail(): FormControl {
-    return this.form.get('contactEmail') as FormControl;
-  }
-
-  public get hasContactPhone(): FormControl {
-    return this.form.get('hasContactPhone') as FormControl;
-  }
-
-  public get contactPhone(): FormControl {
-    return this.form.get('contactPhone') as FormControl;
-  }
-
   public onPreferredNameChange() {
     this.hasPreferredName = !this.hasPreferredName;
 
@@ -116,24 +100,6 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     );
 
     this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
-
-    this.hasContactEmail.valueChanges
-      .subscribe((value: boolean) =>
-        this.toggleContactValidators(value, this.contactEmail)
-      );
-
-    this.hasContactPhone.valueChanges
-      .subscribe((value: boolean) =>
-        this.toggleContactValidators(value, this.contactPhone)
-      );
-
-    if (this.contactEmail.value) {
-      this.form.get('hasContactEmail').patchValue(true);
-    }
-
-    if (this.contactPhone.value) {
-      this.form.get('hasContactPhone').patchValue(true);
-    }
   }
 
   protected nextRouteAfterSubmit() {
@@ -160,14 +126,6 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
       this.formUtilsService.resetAndClearValidators(mailingAddress);
     } else {
       this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
-    }
-  }
-
-  private toggleContactValidators(value: boolean, control: FormControl) {
-    if (!value) {
-      this.formUtilsService.resetAndClearValidators(control);
-    } else {
-      this.formUtilsService.setValidators(control, [Validators.required]);
     }
   }
 }
