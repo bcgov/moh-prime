@@ -10,6 +10,7 @@ export const environment = {
     email: 'prime@gov.bc.ca',
     supportEmail: 'primesupport@gov.bc.ca',
   },
+  phoneNumbers: { director: '236-478-0282' },
   keycloakConfig: {
     config: {
       url: 'https://sso-dev.pathfinder.gov.bc.ca/auth',
