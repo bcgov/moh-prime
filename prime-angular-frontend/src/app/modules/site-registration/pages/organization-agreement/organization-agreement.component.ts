@@ -70,11 +70,18 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.organizationResource.addSignedAgreement(organizationId, payload.organizationAgreementGuid)
+              ? of(noop)
               : EMPTY
           ),
           exhaustMap(() =>
-            this.organizationResource.acceptCurrentOrganizationAgreement(organizationId)
+            (payload.organizationAgreementGuid)
+              ? this.organizationResource.addSignedAgreement(organizationId, payload.organizationAgreementGuid)
+                .pipe(
+                  exhaustMap(() =>
+                    this.organizationResource.acceptCurrentOrganizationAgreement(organizationId)
+                  )
+                )
+              : of(noop)
           ),
           exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.queryParams.siteId)))
         )
