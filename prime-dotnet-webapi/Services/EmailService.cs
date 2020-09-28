@@ -239,7 +239,7 @@ namespace Prime.Services
             }
             else
             {
-                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
+                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/CommunityPracticeOrganizationAgreementPdf.cshtml", organization);
             }
 
             return new (string Filename, string HtmlContent)[]

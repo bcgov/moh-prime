@@ -48,7 +48,7 @@ export class OverviewComponent implements OnInit {
     const payload = this.siteService.site;
     const data: DialogOptions = {
       title: 'Save Site',
-      message: 'When your site is saved it will be submitted for review. Are you ready to save your site?',
+      message: 'When your site is saved, it will be submitted for review.',
       actionText: 'Save Site'
     };
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
