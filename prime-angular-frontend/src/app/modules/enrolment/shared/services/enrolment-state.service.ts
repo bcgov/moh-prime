@@ -227,9 +227,9 @@ export class EnrolmentStateService {
       const defaultValue = (enrolment.profileCompleted) ? false : null;
       const selfDeclarationsTypes = {
         hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
+        hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,
         hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
-        hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
-        hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
+        hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED
       };
       const selfDeclarations = Object.keys(selfDeclarationsTypes)
         .reduce((sds, sd) => {

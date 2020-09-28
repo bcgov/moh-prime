@@ -93,11 +93,11 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onHasRegistrationSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.addSelfDeclarationDocumentGuid('hasRegistrationDocumentGuids', sdd.documentGuid);
+    this.addSelfDeclarationDocumentGuid('hasRegistrationSuspendedDocumentGuids', sdd.documentGuid);
   }
 
   public onRemoveRegistrationSuspendedUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasRegistrationDocumentGuids', documentGuid);
+    this.removeSelfDeclarationDocumentGuid('hasRegistrationSuspendedDocumentGuids', documentGuid);
   }
 
   public onHasDisciplinaryActionUpload(sdd: SelfDeclarationDocument) {
