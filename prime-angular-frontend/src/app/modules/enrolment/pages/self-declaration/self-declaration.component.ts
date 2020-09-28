@@ -97,7 +97,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onRemoveRegistrationSuspendedUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', documentGuid);
+    this.removeSelfDeclarationDocumentGuid('hasRegistrationDocumentGuids', documentGuid);
   }
 
   public onHasDisciplinaryActionUpload(sdd: SelfDeclarationDocument) {
@@ -105,7 +105,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onRemoveDisciplinaryActionUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', documentGuid);
+    this.removeSelfDeclarationDocumentGuid('hasDisciplinaryActionDocumentGuids', documentGuid);
   }
 
   public onHasPharmanetSuspendedUpload(sdd: SelfDeclarationDocument) {
@@ -113,7 +113,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onRemovePharmanetSuspendedUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', documentGuid);
+    this.removeSelfDeclarationDocumentGuid('hasPharmaNetSuspendedDocumentGuids', documentGuid);
   }
 
   public ngOnInit() {
