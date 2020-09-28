@@ -236,7 +236,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            var agreement = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreement.cshtml", organization);
+            var agreement = await _razorConverterService.RenderViewToStringAsync("/Views/CommunityPracticeOrganizationAgreement.cshtml", organization);
 
             return Ok(ApiResponse.Result(agreement));
         }
@@ -420,7 +420,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public ActionResult<string> OrganizationAgreementDocument()
         {
-            var fileName = "Organization-Agreement.pdf";
+            var fileName = "CommunityPracticeOrganizationAgreement.pdf";
             var assembly = Assembly.GetExecutingAssembly();
             var resourcePath = assembly.GetManifestResourceNames()
                 .Single(str => str.EndsWith(fileName));
