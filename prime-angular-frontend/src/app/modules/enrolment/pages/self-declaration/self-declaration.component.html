@@ -12,12 +12,13 @@
         novalidate>
 
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
+      <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
       <ng-container appPageSubheaderSummary>
-        Self declaration information is collected under the authority of the Information Management Regulation of
-        the Pharmaceutical Services Act and confidentiality is protected under the Freedom of Information and
-        Protection of Privacy Act. Self declaration information is used to verify the applicant is in good standing
-        with their respective College and to determine eligibility for and access to PharmaNet.
+        Self-declaration information is collected under the authority of the Information Management
+        Regulation of the Pharmaceutical Services Act and confidentiality is protected under the
+        Freedom of Information and Protection of Privacy Act. Self-declaration information is used
+        to verify the applicant is in good standing with their respective College(s) and to determine
+        eligibility for and access to PharmaNet.
       </ng-container>
     </app-page-subheader>
 
@@ -26,7 +27,7 @@
                  icon="error_outline">
         <ng-container #alertContent
                       class="alert-content">
-          Each self declaration question must be answered before continuing with enrolment!
+          Each self-declaration question must be answered before continuing with enrolment!
         </ng-container>
       </app-alert>
     </ng-container>
@@ -80,7 +81,7 @@
             </mat-form-field>
 
             <li class="small mb-2">
-              Attach documents related to this self declaration.
+              Attach documents related to this self-declaration.
             </li>
 
             <app-document-upload (completed)="onHasConvictionUpload($event)"
@@ -144,7 +145,7 @@
             </mat-form-field>
 
             <li class="small mb-2">
-              Attach documents related to this self declaration.
+              Attach documents related to this self-declaration.
             </li>
 
             <app-document-upload (completed)="onHasRegistrationSuspendedUpload($event)"
@@ -202,7 +203,7 @@
             </mat-form-field>
 
             <li class="small mb-2">
-              Attach documents related to this self declaration.
+              Attach documents related to this self-declaration.
             </li>
 
             <app-document-upload (completed)="onHasDisciplinaryActionUpload($event)"
@@ -262,7 +263,7 @@
             </mat-form-field>
 
             <li class="small mb-2">
-              Attach documents related to this self declaration.
+              Attach documents related to this self-declaration.
             </li>
 
             <app-document-upload (completed)="onHasPharmanetSuspendedUpload($event)"
