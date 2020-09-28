@@ -29,10 +29,10 @@ export class PrimePhoneComponent {
   }
 
   private get primePhone() {
-    if(this.phoneNumber === 'prime') {
+    if (this.phoneNumber === 'prime') {
       return this.config.prime.phone;
     }
-    if(this.phoneNumber === 'director') {
+    if (this.phoneNumber === 'director') {
       return this.config.phoneNumbers.director;
     }
   }
