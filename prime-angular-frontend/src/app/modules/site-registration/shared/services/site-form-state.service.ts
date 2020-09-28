@@ -267,7 +267,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       ],
       doingBusinessAs: [
         '',
-        []
+        [Validators.required]
       ]
     });
   }
