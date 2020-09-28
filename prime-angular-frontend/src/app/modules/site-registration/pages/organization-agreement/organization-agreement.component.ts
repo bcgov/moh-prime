@@ -85,7 +85,13 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
           ),
           exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.queryParams.siteId)))
         )
-        .subscribe(() => this.nextRoute());
+        .subscribe(() => {
+          // TODO should make this cleaner, but for now good enough
+          // Remove the org agreement GUID to prevent 404 already
+          // submitted if resubmited in same session
+          this.organizationAgreementGuid.patchValue(null);
+          this.nextRoute();
+        });
     }
   }
 
