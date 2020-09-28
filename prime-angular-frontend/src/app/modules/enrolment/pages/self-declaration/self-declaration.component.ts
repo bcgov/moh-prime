@@ -156,6 +156,10 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     this.showUnansweredQuestionsError = this.showUnansweredQuestions();
   }
 
+  protected afterSubmitIsSuccessful(): void {
+    this.enrolmentStateService.clearSelfDeclarationDocumentGuids();
+  }
+
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
     if (!value) {
       this.formUtilsService.resetAndClearValidators(control);

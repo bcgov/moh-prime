@@ -379,4 +379,15 @@ export class EnrolmentStateService {
   public removeSelfDeclarationDocumentGuid(control: FormArray, documentGuid: string) {
     control.removeAt(control.value.findIndex((guid: string) => guid === documentGuid));
   }
+
+  public clearSelfDeclarationDocumentGuids() {
+    [
+      'hasConvictionDocumentGuids',
+      'hasRegistrationSuspendedDocumentGuids',
+      'hasDisciplinaryActionDocumentGuids',
+      'hasPharmaNetSuspendedDocumentGuids'
+    ]
+      .map((formArrayName: string) => this.selfDeclarationForm.get(formArrayName) as FormArray)
+      .forEach((formArray: FormArray) => formArray.clear());
+  }
 }
