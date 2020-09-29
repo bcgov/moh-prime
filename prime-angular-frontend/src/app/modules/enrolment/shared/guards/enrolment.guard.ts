@@ -1,20 +1,17 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable, of, from } from 'rxjs';
-import { map, exhaustMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { ConfigService } from '@config/config.service';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { Enrollee } from '@shared/models/enrollee.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
-import { User } from '@auth/shared/models/user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -39,45 +36,16 @@ export class EnrolmentGuard extends BaseGuard {
    * @description
    * Check an enrollee enrolment status, and attempt to redirect
    * to an appropriate destination based on its existence or
-   * status.
+   * status, as well as, their authentication provider.
    */
-  protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
-    const user$ = from(this.authService.getUser());
-    const createEnrollee$ = user$
-      .pipe(
-        exhaustMap(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
-          // Enforced the enrolment type instead of using Partial<Enrolment>
-          // to avoid creating constructors and partials for every model
-          const enrollee = {
-            // Providing only the minimum required fields for creating an enrollee
-            userId,
-            hpdid,
-            firstName,
-            lastName,
-            givenNames,
-            dateOfBirth,
-            physicalAddress,
-            voicePhone: null,
-            contactEmail: null
-          } as Enrollee;
-
-          return this.enrolmentResource.createEnrollee(enrollee);
-        }),
-        map((enrolment: Enrolment) => [enrolment, true])
-      );
-
+  protected checkAccess(routePath: string = null): Observable<boolean> {
     return this.enrolmentResource.enrollee()
       .pipe(
-        exhaustMap((enrolment: Enrolment) =>
-          (enrolment)
-            ? of([enrolment, false])
-            : createEnrollee$
-        ),
-        map(([enrolment, isNewEnrolment]: [Enrolment, boolean]) => {
+        map((enrolment: Enrolment) => {
           // Store the enrolment for access throughout enrolment, which
           // will allows be the most up-to-date enrolment
           this.enrolmentService.enrolment$.next(enrolment);
-          return this.routeDestination(routePath, enrolment, isNewEnrolment);
+          return this.routeDestination(routePath, enrolment);
         })
       );
   }
@@ -86,19 +54,16 @@ export class EnrolmentGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the enrolment status.
    */
-  private routeDestination(routePath: string, enrolment: Enrolment, isNewEnrolment: boolean = false) {
+  private routeDestination(routePath: string, enrolment: Enrolment) {
     // On login the enrollees will always be redirected to
     // the collection notice
     if (routePath.includes(EnrolmentRoutes.COLLECTION_NOTICE)) {
       return true;
-    } else if (isNewEnrolment) {
-      // TODO needs to be refactored, why would a new enrolment go to OVERVIEW?
-      this.navigate(routePath, EnrolmentRoutes.OVERVIEW);
     }
 
     // Otherwise, routes are directed based on enrolment status
-    //  TODO should never happen and should redirect to an error if it does
     if (!enrolment) {
+      // TODO check provider and route to demographic or identity profile
       return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
     } else if (enrolment) {
       switch (enrolment.currentStatus.statusCode) {

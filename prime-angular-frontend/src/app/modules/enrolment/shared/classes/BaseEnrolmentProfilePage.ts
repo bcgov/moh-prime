@@ -2,7 +2,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable } from 'rxjs';
+import { Observable, pipe } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -51,25 +52,8 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
 
       if (this.isInitialEnrolment) {
         // Update using the form which could contain changes
-        const payload = this.enrolmentStateService.enrolment;
-
-        // Indicate whether the enrolment process has reached the terminal view, or
-        // "Been Through The Wizard - Heidi G. 2019"
-        this.busy = this.enrolmentResource.updateEnrollee(payload, beenThroughTheWizard)
-          .subscribe(
-            () => {
-              this.afterSubmitIsSuccessful();
-
-              this.toastService.openSuccessToast('Enrolment information has been saved');
-              this.form.markAsPristine();
-
-              this.nextRouteAfterSubmit();
-            },
-            (error: any) => {
-              this.toastService.openErrorToast('Enrolment information could not be saved');
-              this.logger.error('[Enrolment] Submission error has occurred: ', error);
-            }
-          );
+        this.busy = this.performHttpRequest(this.enrolmentStateService.enrolment, beenThroughTheWizard)
+          .subscribe();
       } else {
         // Allow routing to occur without invoking the deactivation,
         // modal to persist form state being dirty between views
@@ -127,6 +111,10 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     this.routeTo(nextRoutePath);
   }
 
+  /**
+   * @description
+   * Patch the form with enrollee information.
+   */
   protected patchForm(): void {
     // Store a local copy of the enrolment for views
     this.enrolment = this.enrolmentService.enrolment;
@@ -135,5 +123,41 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
 
     // Attempt to patch the form if not already patched
     this.enrolmentStateService.setEnrolment(this.enrolment);
+  }
+
+  /**
+   * @description
+   * Perform an HTTP request to store the enrollee information. By default
+   * this is an update, but can be extended to perform any request.
+   */
+  protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
+    // Indicate whether the enrolment process has reached the terminal view, or
+    // "Been Through The Wizard - Heidi G. 2019"
+    return this.enrolmentResource.updateEnrollee(enrolment, beenThroughTheWizard)
+      .pipe(this.handleResponse());
+  }
+
+  /**
+   * @description
+   * Generic handler for the HTTP response. By default this covers update, and can
+   * also be used for create actions, or extended for any response.
+   */
+  protected handleResponse() {
+    return pipe(
+      map(() => {
+        this.afterSubmitIsSuccessful();
+
+        this.toastService.openSuccessToast('Enrolment information has been saved');
+        this.form.markAsPristine();
+
+        this.nextRouteAfterSubmit();
+      }),
+      catchError((error: any) => {
+        this.toastService.openErrorToast('Enrolment information could not be saved');
+        this.logger.error('[Enrolment] Submission error has occurred: ', error);
+
+        throw error;
+      })
+    );
   }
 }

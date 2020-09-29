@@ -69,6 +69,7 @@ export class KeycloakTokenService implements Token {
 
     return token.sub;
   }
+
   public async getUser(forceReload?: boolean): Promise<User> {
     const {
       firstName,
@@ -86,7 +87,7 @@ export class KeycloakTokenService implements Token {
     } = await this.keycloakService.loadUserProfile(forceReload) as Keycloak.KeycloakProfile & KeycloakAttributes;
 
     const userId = await this.getUserId();
-    const hpdid = await this._getPreferredUsername();
+    const hpdid = await this.getPreferredUsername();
 
     return {
       userId,
@@ -114,7 +115,7 @@ export class KeycloakTokenService implements Token {
     } = await this.keycloakService.loadUserProfile(forceReload);
 
     const userId = await this.getUserId();
-    const idir = await this._getPreferredUsername();
+    const idir = await this.getPreferredUsername();
 
     return {
       userId,
@@ -137,7 +138,7 @@ export class KeycloakTokenService implements Token {
     return this.keycloakService.isUserInRole(role);
   }
 
-  private async _getPreferredUsername(): Promise<string> {
+  private async getPreferredUsername(): Promise<string> {
     const token = await this.decodeToken() as any;
 
     return token.preferred_username;

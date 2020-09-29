@@ -76,8 +76,9 @@ export class EnrolmentStateService {
       // Indicate that the form is patched, and may contain unsaved information
       this.patched = true;
 
-      this.enrolleeId = enrolment.id;
-      this.userId = enrolment.enrollee.userId;
+      // Enrollee may not exist yet, and still need to be created
+      this.enrolleeId = enrolment?.id;
+      this.userId = enrolment?.enrollee.userId;
 
       this.patchEnrolment(enrolment);
     }
@@ -305,12 +306,7 @@ export class EnrolmentStateService {
         FormControlValidators.phone
       ]],
       voiceExtension: [null, [FormControlValidators.numeric]],
-      // TODO temporarily made visible until SMS available
-      hasContactEmail: [true, []],
-      // TODO temporarily made required until SMS available
       contactEmail: [null, [Validators.required, FormControlValidators.email]],
-      // TODO temporarily made optional until SMS available to collect phone numbers in advance
-      hasContactPhone: [true, []],
       contactPhone: [null, [FormControlValidators.phone]]
     });
   }

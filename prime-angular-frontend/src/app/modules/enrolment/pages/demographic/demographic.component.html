@@ -22,7 +22,7 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-enrollee-profile [enrollee]="enrolment.enrollee"
+      <app-enrollee-profile [enrollee]="enrollee"
                             [showAddress]="false"></app-enrollee-profile>
 
       <mat-slide-toggle class="mb-3"
@@ -99,14 +99,14 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-enrollee-profile [enrollee]="enrolment.enrollee"
+      <app-enrollee-profile [enrollee]="enrollee"
                             [showPersonal]="false"
                             [showAddressTitle]="false"></app-enrollee-profile>
 
       <mat-slide-toggle class="mb-3"
                         color="primary"
-                        (change)="onMailingAddressChange()"
-                        [checked]="hasMailingAddress">
+                        [checked]="hasMailingAddress"
+                        (change)="onMailingAddressChange()">
         I have a preferred address
       </mat-slide-toggle>
 

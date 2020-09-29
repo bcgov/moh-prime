@@ -3,10 +3,18 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Observable } from 'rxjs';
+import { exhaustMap, map, take, tap } from 'rxjs/operators';
+
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { Enrollee } from '@shared/models/enrollee.model';
+import { Enrolment } from '@shared/models/enrolment.model';
+
+import { User } from '@auth/shared/models/user.model';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
@@ -20,6 +28,11 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   styleUrls: ['./demographic.component.scss']
 })
 export class DemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
+  /**
+   * @description
+   * Enrollee profile information not contained within the form.
+   */
+  public enrollee: Enrollee;
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
 
@@ -33,6 +46,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
+    private authService: AuthService,
     private formUtilsService: FormUtilsService
   ) {
     super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
@@ -70,6 +84,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public ngOnInit() {
+    this.getUser();
     this.createFormInstance();
     this.patchForm();
     this.initForm();
@@ -102,6 +117,40 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
   }
 
+  protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
+    if (!enrolment.id && this.isInitialEnrolment) {
+      return this.authService.getUser$()
+        .pipe(
+          map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
+            // Enforced the enrolment type instead of using Partial<Enrolment>
+            // to avoid creating constructors and partials for every model
+            return {
+              // Providing only the minimum required fields for creating an enrollee
+              userId,
+              hpdid,
+              firstName,
+              lastName,
+              givenNames,
+              dateOfBirth,
+              physicalAddress,
+              voicePhone: null,
+              contactEmail: null
+            } as Enrollee;
+          }),
+          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee(enrollee)),
+          map((newEnrolment: Enrolment) => {
+            newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
+            return newEnrolment;
+          }),
+          // Populate generated keys within the form state (eg. id, userId, etc)
+          tap((newEnrolment: Enrolment) => this.enrolmentStateService.setEnrolment(newEnrolment, true)),
+          exhaustMap((newEnrolment: Enrolment) => super.performHttpRequest(newEnrolment))
+        );
+    } else {
+      return super.performHttpRequest(enrolment, beenThroughTheWizard);
+    }
+  }
+
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
@@ -127,5 +176,26 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     } else {
       this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
     }
+  }
+
+  private getUser(): void {
+    this.authService.getUser$()
+      .pipe(take(1))
+      .subscribe(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
+        // Enforced the enrollee type instead of using Partial<Enrollee>
+        // to avoid creating constructors and partials for every model
+        this.enrollee = {
+          // Providing only the minimum required fields for creating an enrollee
+          userId,
+          hpdid,
+          firstName,
+          lastName,
+          givenNames,
+          dateOfBirth,
+          physicalAddress,
+          voicePhone: null,
+          contactEmail: null
+        } as Enrollee;
+      });
   }
 }

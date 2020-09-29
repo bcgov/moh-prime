@@ -41,7 +41,7 @@ export class CollectionNoticeComponent implements OnInit {
 
     // Collection notice is the initial route after login, and used as a hub
     // for redirection to an appropriate view based on the enrolment
-    switch (this.enrolmentService.enrolment.currentStatus.statusCode) {
+    switch (this.enrolmentService.enrolment?.currentStatus.statusCode) {
       case EnrolmentStatus.UNDER_REVIEW:
         this.router.navigate([EnrolmentRoutes.SUBMISSION_CONFIRMATION], { relativeTo: this.route.parent });
         break;
