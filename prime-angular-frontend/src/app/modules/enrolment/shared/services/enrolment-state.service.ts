@@ -91,13 +91,12 @@ export class EnrolmentStateService {
     const id = this.enrolleeId;
     const userId = this.userId;
 
-    const selfDeclarations = this.generateSelfDeclarations();
-
     const profile = this.demographicForm.getRawValue();
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
+    const selfDeclarations = this.generateSelfDeclarations();
 
     return {
       id,
@@ -113,40 +112,28 @@ export class EnrolmentStateService {
     };
   }
 
-  // Generate the self decl array from form data
-  private generateSelfDeclarations() {
-    const results: SelfDeclaration[] = [];
-    const raw = this.selfDeclarationForm.getRawValue();
-
-    if (raw.hasConviction) {
-      const conv = new SelfDeclaration();
-      conv.selfDeclarationTypeCode = SelfDeclarationTypeEnum.HAS_CONVICTION;
-      conv.selfDeclarationDetails = raw.hasConvictionDetails;
-      conv.enrolleeId = this.enrolleeId;
-      results.push(conv);
-    }
-    if (raw.hasDisciplinaryAction) {
-      const disc = new SelfDeclaration();
-      disc.selfDeclarationTypeCode = SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION;
-      disc.selfDeclarationDetails = raw.hasDisciplinaryActionDetails;
-      disc.enrolleeId = this.enrolleeId;
-      results.push(disc);
-    }
-    if (raw.hasPharmaNetSuspended) {
-      const phar = new SelfDeclaration();
-      phar.selfDeclarationTypeCode = SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED;
-      phar.selfDeclarationDetails = raw.hasPharmaNetSuspendedDetails;
-      phar.enrolleeId = this.enrolleeId;
-      results.push(phar);
-    }
-    if (raw.hasRegistrationSuspended) {
-      const regi = new SelfDeclaration();
-      regi.selfDeclarationTypeCode = SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED;
-      regi.selfDeclarationDetails = raw.hasRegistrationSuspendedDetails;
-      regi.enrolleeId = this.enrolleeId;
-      results.push(regi);
-    }
-    return results;
+  private generateSelfDeclarations(): SelfDeclaration[] {
+    const selfDeclarations = this.selfDeclarationForm.getRawValue();
+    const selfDeclarationsTypes = {
+      hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
+      hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
+      hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
+      hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
+    };
+    return Object.keys(selfDeclarationsTypes)
+      .reduce((sds: SelfDeclaration[], sd: string) => {
+        if (selfDeclarations[sd]) {
+          sds.push(
+            new SelfDeclaration(
+              selfDeclarationsTypes[sd],
+              selfDeclarations[`${sd}Details`],
+              selfDeclarations[`${sd}DocumentGuids`],
+              this.enrolleeId
+            )
+          );
+        }
+        return sds;
+      }, []);
   }
 
   public get isDirty(): boolean {
@@ -240,9 +227,9 @@ export class EnrolmentStateService {
       const defaultValue = (enrolment.profileCompleted) ? false : null;
       const selfDeclarationsTypes = {
         hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
+        hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,
         hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
-        hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
-        hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
+        hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED
       };
       const selfDeclarations = Object.keys(selfDeclarationsTypes)
         .reduce((sds, sd) => {
@@ -372,12 +359,35 @@ export class EnrolmentStateService {
     return this.fb.group({
       hasConviction: [null, [FormControlValidators.requiredBoolean]],
       hasConvictionDetails: [null, []],
+      hasConvictionDocumentGuids: this.fb.array([]),
       hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasRegistrationSuspendedDetails: [null, []],
+      hasRegistrationSuspendedDocumentGuids: this.fb.array([]),
       hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
       hasDisciplinaryActionDetails: [null, []],
+      hasDisciplinaryActionDocumentGuids: this.fb.array([]),
       hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
-      hasPharmaNetSuspendedDetails: [null, []]
+      hasPharmaNetSuspendedDetails: [null, []],
+      hasPharmaNetSuspendedDocumentGuids: this.fb.array([])
     });
+  }
+
+  public addSelfDeclarationDocumentGuid(control: FormArray, value: string) {
+    control.push(this.fb.control(value));
+  }
+
+  public removeSelfDeclarationDocumentGuid(control: FormArray, documentGuid: string) {
+    control.removeAt(control.value.findIndex((guid: string) => guid === documentGuid));
+  }
+
+  public clearSelfDeclarationDocumentGuids() {
+    [
+      'hasConvictionDocumentGuids',
+      'hasRegistrationSuspendedDocumentGuids',
+      'hasDisciplinaryActionDocumentGuids',
+      'hasPharmaNetSuspendedDocumentGuids'
+    ]
+      .map((formArrayName: string) => this.selfDeclarationForm.get(formArrayName) as FormArray)
+      .forEach((formArray: FormArray) => formArray.clear());
   }
 }
