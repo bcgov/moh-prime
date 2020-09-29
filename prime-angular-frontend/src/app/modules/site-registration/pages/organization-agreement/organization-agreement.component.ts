@@ -53,7 +53,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public get organizationAgreementGuid(): FormControl {
-    return this.form.get('businessLicenceGuid') as FormControl;
+    return this.form.get('organizationAgreementGuid') as FormControl;
   }
 
   public onSubmit() {
