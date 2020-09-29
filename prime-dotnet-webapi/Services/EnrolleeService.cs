@@ -285,7 +285,7 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.AssignedPrivileges)
                     .ThenInclude(ap => ap.Privilege)
-                .Include(e => e.AccessTerms)
+                .Include(e => e.Agreements)
                 .Include(e => e.Credential);
         }
 
@@ -441,7 +441,7 @@ namespace Prime.Services
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
             return await _context.Enrollees
-                .Include(e => e.AccessTerms)
+                .Include(e => e.Agreements)
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => !e.CurrentStatus.IsType(StatusType.Declined))
                 .Select(e => HpdidLookup.FromEnrollee(e))
