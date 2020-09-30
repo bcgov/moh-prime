@@ -209,14 +209,6 @@ namespace Prime
                 .WithMany(e => e.Agreements)
                 .HasForeignKey(toa => toa.EnrolleeId);
 
-            // modelBuilder.Entity<Agreement>()
-            //     .HasCheckConstraint("CHK_OnlyOneForeignKey",
-            //         "( CASE WHEN FK_EnrolleeId IS NULL THEN 0 ELSE 1 END" +
-            //         "+ CASE WHEN FK_OrganizationId IS NULL THEN 0 ELSE 1 END" +
-            //         "+ CASE WHEN FK_PartyId IS NULL THEN 0 ELSE 1 END" +
-            //         ") = 1"
-            //     );
-
             modelBuilder.Entity<BusinessEvent>()
                 .HasOne(be => be.BusinessEventType)
                 .WithMany(t => t.BusinessEvents)
