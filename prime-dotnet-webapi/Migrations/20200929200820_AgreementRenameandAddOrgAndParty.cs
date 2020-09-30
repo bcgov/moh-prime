@@ -125,9 +125,9 @@ namespace Prime.Migrations
             migrationBuilder.CreateCheckConstraint(
                  name: "CHK_Agreement_OnlyOneForeignKey",
                  table: "Agreement",
-                 sql: "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END"
-                    + " + CASE WHEN \"OrganizationId\" IS NULL THEN 0 ELSE 1 END"
-                    + " + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
+                 sql: @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
+                     + CASE WHEN ""OrganizationId"" IS NULL THEN 0 ELSE 1 END
+                     + CASE WHEN ""PartyId"" IS NULL THEN 0 ELSE 1 END) = 1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
