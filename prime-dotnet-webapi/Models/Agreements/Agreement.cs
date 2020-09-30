@@ -12,20 +12,20 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
-        public int EnrolleeId { get; set; }
+        public int? EnrolleeId { get; set; }
 
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        public int OrganizationId { get; set; }
+        public int? OrganizationId { get; set; }
 
-        [JsonIgnore]
-        public Organization Organization { get; set; }
+        // [JsonIgnore]
+        // public Organization Organization { get; set; }
 
-        public int PartyId { get; set; }
+        public int? PartyId { get; set; }
 
-        [JsonIgnore]
-        public Party Party { get; set; }
+        // [JsonIgnore]
+        // public Party Party { get; set; }
 
         [JsonIgnore]
         public int AgreementVersionId { get; set; }

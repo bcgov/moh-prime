@@ -11,5 +11,10 @@ namespace Prime.Models
         [JsonIgnore]
         public Organization Organization { get; set; }
 
+        public int AgreementId { get; set; }
+
+        [JsonIgnore]
+        public Agreement Agreement { get; set; }
+
     }
 }

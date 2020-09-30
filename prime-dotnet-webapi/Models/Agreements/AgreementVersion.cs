@@ -15,6 +15,7 @@ namespace Prime.Models
 
         public string Text { get; set; }
 
+        public AgreementVersionType AgreementVersionType { get; set; }
         public DateTimeOffset EffectiveDate { get; set; }
 
         /// <summary>

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200929200820_AgreementRenameandAddOrgAndParty")]
+    partial class AgreementRenameandAddOrgAndParty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,7 +218,7 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("EnrolleeId")
+                    b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset?>("ExpiryDate")
@@ -225,10 +227,10 @@ namespace Prime.Migrations
                     b.Property<int?>("LimitsConditionsClauseId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("OrganizationId")
+                    b.Property<int>("OrganizationId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("PartyId")
+                    b.Property<int>("PartyId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
@@ -245,7 +247,13 @@ namespace Prime.Migrations
 
                     b.HasIndex("LimitsConditionsClauseId");
 
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("PartyId");
+
                     b.ToTable("Agreement");
+
+                    b.HasCheckConstraint("CHK_OnlyOneForeignKey", "( CASE WHEN FK_EnrolleeId IS NULL THEN 0 ELSE 1 END+ CASE WHEN FK_OrganizationId IS NULL THEN 0 ELSE 1 END+ CASE WHEN FK_PartyId IS NULL THEN 0 ELSE 1 END) = 1");
                 });
 
             modelBuilder.Entity("Prime.Models.AgreementVersion", b =>
@@ -254,9 +262,6 @@ namespace Prime.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("AgreementVersionType")
-                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -7701,9 +7706,6 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("AgreementId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -7729,8 +7731,6 @@ namespace Prime.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AgreementId");
 
                     b.HasIndex("OrganizationId");
 
@@ -8347,7 +8347,6 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 9,
-                            AgreementVersionType = 0,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9074,7 +9073,6 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 10,
-                            AgreementVersionType = 0,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 8, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -9795,7 +9793,6 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 1,
-                            AgreementVersionType = 0,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10047,7 +10044,6 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 3,
-                            AgreementVersionType = 0,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -8, 0, 0, 0)),
@@ -10332,7 +10328,6 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 5,
-                            AgreementVersionType = 0,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 3, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10617,7 +10612,6 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 7,
-                            AgreementVersionType = 0,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 5, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -10908,7 +10902,6 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 2,
-                            AgreementVersionType = 0,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -11595,7 +11588,6 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 4,
-                            AgreementVersionType = 0,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 3, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -8, 0, 0, 0)),
@@ -12440,7 +12432,6 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 6,
-                            AgreementVersionType = 0,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 5, 7, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13141,7 +13132,6 @@ namespace Prime.Migrations
                         new
                         {
                             Id = 8,
-                            AgreementVersionType = 0,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EffectiveDate = new DateTimeOffset(new DateTime(2020, 6, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -13886,11 +13876,25 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("Agreements")
-                        .HasForeignKey("EnrolleeId");
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.LimitsConditionsClause", "LimitsConditionsClause")
                         .WithMany()
                         .HasForeignKey("LimitsConditionsClauseId");
+
+                    b.HasOne("Prime.Models.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.AssignedPrivilege", b =>
@@ -14275,12 +14279,6 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.SignedAgreementDocument", b =>
                 {
-                    b.HasOne("Prime.Models.Agreement", "Agreement")
-                        .WithMany()
-                        .HasForeignKey("AgreementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Prime.Models.Organization", "Organization")
                         .WithMany("SignedAgreementDocuments")
                         .HasForeignKey("OrganizationId")
