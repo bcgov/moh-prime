@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
@@ -13,16 +14,19 @@ namespace Prime.Services
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly IPartyService _partyService;
+        private readonly IDocumentManagerClient _documentClient;
 
         public OrganizationService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IBusinessEventService businessEventService,
-            IPartyService partyService)
+            IPartyService partyService,
+            IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _businessEventService = businessEventService;
             _partyService = partyService;
+            _documentClient = documentClient;
         }
 
         public async Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId = null)
@@ -184,8 +188,14 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
         }
 
-        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, Guid documentGuid, string filename)
+        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, Guid documentGuid)
         {
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_org_agreements");
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
             var signedAgreement = new SignedAgreementDocument
             {
                 DocumentGuid = documentGuid,
@@ -193,14 +203,9 @@ namespace Prime.Services
                 Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };
-
             _context.SignedAgreementDocuments.Add(signedAgreement);
 
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException("Could not add business licence.");
-            }
+            await _context.SaveChangesAsync();
 
             return signedAgreement;
         }

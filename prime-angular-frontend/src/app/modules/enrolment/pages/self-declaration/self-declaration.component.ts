@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormControl } from '@angular/forms';
+import { Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -12,7 +12,6 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 @Component({
@@ -86,19 +85,35 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onHasConvictionUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_CONVICTION, sdd);
+    this.addSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', sdd.documentGuid);
+  }
+
+  public onRemoveConvictionUpload(documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', documentGuid);
   }
 
   public onHasRegistrationSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED, sdd);
+    this.addSelfDeclarationDocumentGuid('hasRegistrationSuspendedDocumentGuids', sdd.documentGuid);
+  }
+
+  public onRemoveRegistrationSuspendedUpload(documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid('hasRegistrationSuspendedDocumentGuids', documentGuid);
   }
 
   public onHasDisciplinaryActionUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION, sdd);
+    this.addSelfDeclarationDocumentGuid('hasDisciplinaryActionDocumentGuids', sdd.documentGuid);
+  }
+
+  public onRemoveDisciplinaryActionUpload(documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid('hasDisciplinaryActionDocumentGuids', documentGuid);
   }
 
   public onHasPharmanetSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED, sdd);
+    this.addSelfDeclarationDocumentGuid('hasPharmaNetSuspendedDocumentGuids', sdd.documentGuid);
+  }
+
+  public onRemovePharmanetSuspendedUpload(documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid('hasPharmaNetSuspendedDocumentGuids', documentGuid);
   }
 
   public ngOnInit() {
@@ -141,11 +156,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     this.showUnansweredQuestionsError = this.showUnansweredQuestions();
   }
 
-  private createSelfDeclarationDocument(code: SelfDeclarationTypeEnum, sdd: SelfDeclarationDocument) {
-    const enrolleeId = this.enrolmentService.enrolment.id;
-    this.enrolmentResource
-      .createSelfDeclarationDocument(enrolleeId, code, sdd)
-      .subscribe();
+  protected afterSubmitIsSuccessful(): void {
+    this.enrolmentStateService.clearSelfDeclarationDocumentGuids();
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
@@ -167,5 +179,15 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     }
 
     return shouldShowUnansweredQuestions;
+  }
+
+  private addSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
+    this.enrolmentStateService
+      .addSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
+  }
+
+  private removeSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
+    this.enrolmentStateService
+      .removeSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
   }
 }

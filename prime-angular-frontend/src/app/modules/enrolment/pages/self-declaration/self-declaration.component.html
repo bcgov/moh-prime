@@ -84,10 +84,10 @@
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload (completed)="onHasConvictionUpload($event)"
-                                 componentName="has-conviction"
+            <app-document-upload componentName="has-conviction"
                                  [multiple]="true"
-                                 additionalApiSuffix="self-declaration">
+                                 (completed)="onHasConvictionUpload($event)"
+                                 (remove)="onRemoveConvictionUpload($event)">
             </app-document-upload>
 
           </ol>
@@ -148,10 +148,10 @@
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload (completed)="onHasRegistrationSuspendedUpload($event)"
-                                 componentName="has-registration-suspended"
+            <app-document-upload componentName="has-registration-suspended"
                                  [multiple]="true"
-                                 additionalApiSuffix="self-declaration">
+                                 (completed)="onHasRegistrationSuspendedUpload($event)"
+                                 (remove)="onRemoveRegistrationSuspendedUpload($event)">
             </app-document-upload>
           </ol>
         </div>
@@ -206,10 +206,10 @@
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload (completed)="onHasDisciplinaryActionUpload($event)"
-                                 componentName="has-disciplinary-action"
+            <app-document-upload componentName="has-disciplinary-action"
                                  [multiple]="true"
-                                 additionalApiSuffix="self-declaration">
+                                 (completed)="onHasDisciplinaryActionUpload($event)"
+                                 (remove)="onRemoveDisciplinaryActionUpload($event)">
             </app-document-upload>
           </ol>
         </div>
@@ -266,10 +266,10 @@
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload (completed)="onHasPharmanetSuspendedUpload($event)"
-                                 componentName="has-pharmanet-suspended"
+            <app-document-upload componentName="has-pharmanet-suspended"
                                  [multiple]="true"
-                                 additionalApiSuffix="self-declaration">
+                                 (completed)="onHasPharmanetSuspendedUpload($event)"
+                                 (remove)="onRemovePharmanetSuspendedUpload($event)">
             </app-document-upload>
           </ol>
         </div>
