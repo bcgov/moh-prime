@@ -19,11 +19,11 @@ namespace Prime.Migrations
                 table: "Agreement");
 
             migrationBuilder.DropCheckConstraint(
-                name: "CHK_OnlyOneForeignKey",
+                name: "CHK_Agreement_OnlyOneForeignKey",
                 table: "Agreement");
 
             migrationBuilder.CreateCheckConstraint(
-                name: "CHK_OnlyOneForeignKey",
+                name: "CHK_Agreement_OnlyOneForeignKey",
                 table: "Agreement",
                 sql: "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END + CASE WHEN \"OrganizationId\" IS NULL THEN 0 ELSE 1 END + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
 
@@ -190,7 +190,7 @@ namespace Prime.Migrations
                 table: "SignedAgreementDocument");
 
             migrationBuilder.DropCheckConstraint(
-                name: "CHK_OnlyOneForeignKey",
+                name: "CHK_Agreement_OnlyOneForeignKey",
                 table: "Agreement");
 
             migrationBuilder.DropColumn(
@@ -202,7 +202,7 @@ namespace Prime.Migrations
                 table: "AgreementVersion");
 
             migrationBuilder.CreateCheckConstraint(
-                name: "CHK_OnlyOneForeignKey",
+                name: "CHK_Agreement_OnlyOneForeignKey",
                 table: "Agreement",
                 sql: "( CASE WHEN FK_EnrolleeId IS NULL THEN 0 ELSE 1 END+ CASE WHEN FK_OrganizationId IS NULL THEN 0 ELSE 1 END+ CASE WHEN FK_PartyId IS NULL THEN 0 ELSE 1 END) = 1");
 

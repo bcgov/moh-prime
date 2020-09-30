@@ -34,12 +34,10 @@ namespace Prime.Migrations
 
             migrationBuilder.RenameTable(
                 name: "Agreement",
-                schema: null,
                 newName: "AgreementVersion");
 
             migrationBuilder.RenameTable(
                 name: "AccessTerm",
-                schema: null,
                 newName: "Agreement");
 
             migrationBuilder.RenameColumn(
@@ -125,7 +123,7 @@ namespace Prime.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.CreateCheckConstraint(
-                 name: "CHK_OnlyOneForeignKey",
+                 name: "CHK_Agreement_OnlyOneForeignKey",
                  table: "Agreement",
                  sql: "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END"
                     + " + CASE WHEN \"OrganizationId\" IS NULL THEN 0 ELSE 1 END"
@@ -135,7 +133,7 @@ namespace Prime.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropCheckConstraint(
-                name: "CHK_OnlyOneForeignKey",
+                name: "CHK_Agreement_OnlyOneForeignKey",
                 table: "Agreement"
             );
 
