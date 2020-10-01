@@ -13,9 +13,7 @@ import { EnrolleeRemoteUser } from './enrollee-remote-user.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
-  id?: number;
   displayId?: number;
-  hpdid: string;
   firstName: string;
   lastName: string;
   givenNames: string;
