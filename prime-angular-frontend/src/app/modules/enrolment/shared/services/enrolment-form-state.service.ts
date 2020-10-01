@@ -6,19 +6,19 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { SelfDeclaration } from '@shared/models/self-declarations.model';
-import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 // TODO refactor into enrolment service and enrolment form service
 @Injectable({
   providedIn: 'root'
 })
-export class EnrolmentStateService {
+export class EnrolmentFormStateService {
   // TODO revisit access to form groups as service is refined, but
   // for now public, and then make into BehaviourSubject or use
   // asObservable, which would make them immutable

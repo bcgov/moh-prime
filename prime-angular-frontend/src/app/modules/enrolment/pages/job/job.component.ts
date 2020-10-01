@@ -15,7 +15,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { UtilsService } from '@core/services/utils.service';
 
 @Component({
@@ -35,13 +35,13 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
     private configService: ConfigService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
 
     this.jobNames = this.configService.jobNames;
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
@@ -57,7 +57,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     const defaultValue = (value)
       ? value : (this.allowDefaultOption)
         ? this.defaultOptionLabel : '';
-    const job = this.enrolmentStateService.buildJobForm(defaultValue);
+    const job = this.enrolmentFormStateService.buildJobForm(defaultValue);
     this.jobs.push(job);
   }
 
@@ -83,7 +83,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentStateService.jobsForm;
+    this.form = this.enrolmentFormStateService.jobsForm;
   }
 
   protected initForm() {
@@ -153,7 +153,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
    * job(s), as well as, college certification(s).
    */
   private removeCollegeCertifications() {
-    const form = this.enrolmentStateService.regulatoryForm;
+    const form = this.enrolmentFormStateService.regulatoryForm;
     const certifications = form.get('certifications') as FormArray;
     certifications.clear();
   }

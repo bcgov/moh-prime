@@ -15,7 +15,7 @@ import { ConfigService } from '@config/config.service';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 describe('CollegeCertificationFormComponent', () => {
   let component: CollegeCertificationFormComponent;
@@ -45,19 +45,19 @@ describe('CollegeCertificationFormComponent', () => {
           provide: ConfigService,
           useClass: MockConfigService
         },
-        EnrolmentStateService
+        EnrolmentFormStateService
       ]
     }).compileComponents();
   }));
 
   beforeEach(inject(
-    [EnrolmentStateService, ConfigService],
-    (enrolmentStateService: EnrolmentStateService, configService: ConfigService
+    [EnrolmentFormStateService, ConfigService],
+    (enrolmentFormStateService: EnrolmentFormStateService, configService: ConfigService
     ) => {
       fixture = TestBed.createComponent(CollegeCertificationFormComponent);
       component = fixture.componentInstance;
       // Add the bound FormGroup to the component
-      component.form = enrolmentStateService.buildCollegeCertificationForm();
+      component.form = enrolmentFormStateService.buildCollegeCertificationForm();
       component.selectedColleges = configService.colleges.map((college: CollegeConfig) => college.code);
       fixture.detectChanges();
     }));

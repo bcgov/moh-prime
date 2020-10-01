@@ -12,7 +12,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 
 import { Site } from '@registration/shared/models/site.model';
 
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -39,13 +39,13 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
     protected siteResource: SiteResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
     private fb: FormBuilder
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
     this.enrolment = this.enrolmentService.enrolment;
   }
 

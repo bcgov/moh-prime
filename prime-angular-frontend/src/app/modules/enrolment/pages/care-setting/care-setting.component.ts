@@ -19,7 +19,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -39,14 +39,14 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
     private configService: ConfigService,
     private authService: AuthService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
 
     this.careSettingTypes = this.configService.careSettings;
   }
@@ -56,7 +56,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public addCareSetting() {
-    const careSetting = this.enrolmentStateService.buildCareSettingForm();
+    const careSetting = this.enrolmentFormStateService.buildCareSettingForm();
     this.careSettings.push(careSetting);
   }
 
@@ -119,7 +119,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentStateService.careSettingsForm;
+    this.form = this.enrolmentFormStateService.careSettingsForm;
   }
 
   protected initForm() {
@@ -158,7 +158,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public routeBackTo() {
-    const routePath = (this.enrolmentStateService.enrolment.certifications.length)
+    const routePath = (this.enrolmentFormStateService.enrolment.certifications.length)
       ? EnrolmentRoutes.REMOTE_ACCESS
       : EnrolmentRoutes.JOB;
 

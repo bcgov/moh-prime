@@ -7,7 +7,7 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -26,12 +26,12 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
 
     this.decisions = [
       { code: false, name: 'No' },
@@ -54,7 +54,7 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentStateService.deviceProviderForm;
+    this.form = this.enrolmentFormStateService.deviceProviderForm;
   }
 
   protected initForm() {
@@ -69,7 +69,7 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = (!this.enrolmentStateService.enrolment.certifications.length)
+      nextRoutePath = (!this.enrolmentFormStateService.enrolment.certifications.length)
         ? EnrolmentRoutes.JOB
         : EnrolmentRoutes.SELF_DECLARATION;
     }

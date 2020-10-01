@@ -11,7 +11,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SharedModule } from '@shared/shared.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { JobFormComponent } from './job-form.component';
 
 describe('JobFormComponent', () => {
@@ -38,19 +38,19 @@ describe('JobFormComponent', () => {
             provide: ConfigService,
             useClass: MockConfigService
           },
-          EnrolmentStateService
+          EnrolmentFormStateService
         ]
       }
     ).compileComponents();
   }));
 
   beforeEach(inject(
-    [EnrolmentStateService, ConfigService],
-    (enrolmentStateService: EnrolmentStateService, configService: ConfigService) => {
+    [EnrolmentFormStateService, ConfigService],
+    (enrolmentFormStateService: EnrolmentFormStateService, configService: ConfigService) => {
       fixture = TestBed.createComponent(JobFormComponent);
       component = fixture.componentInstance;
       // Add the bound FormGroup to the component
-      component.form = enrolmentStateService.buildJobForm();
+      component.form = enrolmentFormStateService.buildJobForm();
       component.jobNames = new BehaviorSubject(configService.jobNames);
       fixture.detectChanges();
     }

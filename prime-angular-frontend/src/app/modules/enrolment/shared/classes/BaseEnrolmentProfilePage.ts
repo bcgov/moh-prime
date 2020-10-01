@@ -14,7 +14,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 
 export interface IBaseEnrolmentProfilePage {
@@ -36,7 +36,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService
@@ -52,7 +52,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
 
       if (this.isInitialEnrolment) {
         // Update using the form which could contain changes
-        this.busy = this.performHttpRequest(this.enrolmentStateService.enrolment, beenThroughTheWizard)
+        this.busy = this.performHttpRequest(this.enrolmentFormStateService.enrolment, beenThroughTheWizard)
           .subscribe();
       } else {
         // Allow routing to occur without invoking the deactivation,
@@ -122,7 +122,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     this.isProfileComplete = this.enrolmentService.isProfileComplete;
 
     // Attempt to patch the form if not already patched
-    this.enrolmentStateService.setEnrolment(this.enrolment);
+    this.enrolmentFormStateService.setEnrolment(this.enrolment);
   }
 
   /**

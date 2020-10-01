@@ -10,7 +10,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 @Component({
@@ -25,12 +25,12 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
   }
 
   public get certifications(): FormArray {
@@ -43,7 +43,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public addCertification() {
-    const certification = this.enrolmentStateService.buildCollegeCertificationForm();
+    const certification = this.enrolmentFormStateService.buildCollegeCertificationForm();
     this.certifications.push(certification);
   }
 
@@ -70,7 +70,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentStateService.regulatoryForm;
+    this.form = this.enrolmentFormStateService.regulatoryForm;
   }
 
   protected initForm() {
@@ -131,7 +131,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.removeIncompleteCertifications(true);
 
     if (this.certifications.length) {
-      const form = this.enrolmentStateService.jobsForm;
+      const form = this.enrolmentFormStateService.jobsForm;
       const jobs = form.get('jobs') as FormArray;
       jobs.clear();
     }

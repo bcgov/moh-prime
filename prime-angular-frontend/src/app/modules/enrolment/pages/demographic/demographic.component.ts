@@ -18,7 +18,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -42,14 +42,14 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
     private authService: AuthService,
     private formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
   }
 
   public get preferredFirstName(): FormControl {
@@ -91,7 +91,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentStateService.demographicForm;
+    this.form = this.enrolmentFormStateService.demographicForm;
   }
 
   protected initForm() {
@@ -143,7 +143,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
             return newEnrolment;
           }),
           // Populate generated keys within the form state (eg. id, userId, etc)
-          tap((newEnrolment: Enrolment) => this.enrolmentStateService.setEnrolment(newEnrolment, true)),
+          tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setEnrolment(newEnrolment, true)),
           exhaustMap((newEnrolment: Enrolment) => super.performHttpRequest(newEnrolment))
         );
     } else {

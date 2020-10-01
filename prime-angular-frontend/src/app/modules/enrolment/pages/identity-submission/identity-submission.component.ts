@@ -11,7 +11,7 @@ import { BaseDocument } from '@shared/components/document-upload/document-upload
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -27,13 +27,13 @@ export class IdentitySubmissionComponent extends BaseEnrolmentProfilePage implem
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
     private formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
   }
 
   public onUpload(document: BaseDocument) {
@@ -47,7 +47,7 @@ export class IdentitySubmissionComponent extends BaseEnrolmentProfilePage implem
   }
 
   protected createFormInstance() {
-    // this.form = this.enrolmentStateService.identityForm;
+    // this.form = this.enrolmentFormStateService.identityForm;
   }
 
   protected initForm() { }

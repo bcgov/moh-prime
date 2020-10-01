@@ -13,7 +13,7 @@ import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 
@@ -46,17 +46,17 @@ describe('JobComponent', () => {
           provide: EnrolmentService,
           useClass: MockEnrolmentService
         },
-        EnrolmentStateService
+        EnrolmentFormStateService
       ]
     })
       .compileComponents();
   }));
 
-  beforeEach(inject([EnrolmentStateService], (enrolmentStateService: EnrolmentStateService) => {
+  beforeEach(inject([EnrolmentFormStateService], (enrolmentFormStateService: EnrolmentFormStateService) => {
     fixture = TestBed.createComponent(JobComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
-    component.form = enrolmentStateService.buildJobsForm();
+    component.form = enrolmentFormStateService.buildJobsForm();
     fixture.detectChanges();
   }));
 

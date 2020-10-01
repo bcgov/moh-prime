@@ -10,7 +10,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
@@ -29,14 +29,14 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     protected router: Router,
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected enrolmentResource: EnrolmentResource,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
     private formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
 
     this.decisions = [
       { code: false, name: 'No' },
@@ -123,7 +123,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentStateService.selfDeclarationForm;
+    this.form = this.enrolmentFormStateService.selfDeclarationForm;
   }
 
   protected initForm() {
@@ -157,7 +157,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.enrolmentStateService.clearSelfDeclarationDocumentGuids();
+    this.enrolmentFormStateService.clearSelfDeclarationDocumentGuids();
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
@@ -182,12 +182,12 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   private addSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
-    this.enrolmentStateService
+    this.enrolmentFormStateService
       .addSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
   }
 
   private removeSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
-    this.enrolmentStateService
+    this.enrolmentFormStateService
       .removeSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
   }
 }

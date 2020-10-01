@@ -12,7 +12,7 @@ import { AddressComponent } from './address.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 describe('AddressComponent', () => {
   let component: AddressComponent;
@@ -41,17 +41,17 @@ describe('AddressComponent', () => {
             provide: ConfigService,
             useClass: MockConfigService
           },
-          EnrolmentStateService
+          EnrolmentFormStateService
         ]
       }
     ).compileComponents();
   }));
 
-  beforeEach(inject([EnrolmentStateService], (enrolmentStateService: EnrolmentStateService) => {
+  beforeEach(inject([EnrolmentFormStateService], (enrolmentFormStateService: EnrolmentFormStateService) => {
     fixture = TestBed.createComponent(AddressComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
-    component.form = enrolmentStateService.demographicForm.get('mailingAddress') as FormGroup;
+    component.form = enrolmentFormStateService.demographicForm.get('mailingAddress') as FormGroup;
     fixture.detectChanges();
   }));
 
