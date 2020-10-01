@@ -3,7 +3,7 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 export interface AccessTerm {
   id: number;
   enrolleeId: number;
-  termsOfAccess: string;
+  agreementMarkup: string;
   effectiveDate: string;
   createdDate: string;
   acceptedDate?: string;

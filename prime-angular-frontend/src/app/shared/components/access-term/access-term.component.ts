@@ -9,13 +9,13 @@ import { AccessTerm } from '@shared/models/access-term.model';
 export class AccessTermComponent implements OnInit, OnChanges {
   @Input() public accessTerms: AccessTerm;
 
-  public termsOfAccess: string;
+  public agreementMarkup: string;
 
   constructor() { }
 
   public ngOnChanges(change: SimpleChanges) {
     if (change.accessTerms.currentValue) {
-      this.termsOfAccess = this.accessTerms.termsOfAccess;
+      this.agreementMarkup = this.accessTerms.agreementMarkup;
     }
   }
 
