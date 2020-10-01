@@ -7,9 +7,9 @@ namespace Prime.Services
 {
     public interface IAccessTermService
     {
-        Task<AccessTerm> GetEnrolleeAccessTermAsync(int enrolleeId, int accessTermId, bool includeText = false);
+        Task<Agreement> GetEnrolleeAccessTermAsync(int enrolleeId, int accessTermId, bool includeText = false);
 
-        Task<IEnumerable<AccessTerm>> GetAccessTermsAsync(int enrolleeId, AccessTermFilters filters);
+        Task<IEnumerable<Agreement>> GetAccessTermsAsync(int enrolleeId, AccessTermFilters filters);
 
         Task CreateEnrolleeAccessTermAsync(int enrolleeId);
 

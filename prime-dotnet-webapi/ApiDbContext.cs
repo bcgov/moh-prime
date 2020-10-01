@@ -74,8 +74,8 @@ namespace Prime
         public DbSet<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
 
-        public DbSet<AccessTerm> AccessTerms { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
+        public DbSet<AgreementVersion> AgreementVersions { get; set; }
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
 
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
@@ -204,10 +204,26 @@ namespace Prime
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
 
-            modelBuilder.Entity<AccessTerm>()
+            modelBuilder.Entity<Agreement>()
                 .HasOne(toa => toa.Enrollee)
-                .WithMany(e => e.AccessTerms)
+                .WithMany(e => e.Agreements)
                 .HasForeignKey(toa => toa.EnrolleeId);
+
+            modelBuilder.Entity<Agreement>()
+                .HasOne(toa => toa.Organization)
+                .WithMany(e => e.Agreements)
+                .HasForeignKey(toa => toa.OrganizationId);
+
+            modelBuilder.Entity<Agreement>()
+                .HasOne(toa => toa.Party)
+                .WithMany(e => e.Agreements)
+                .HasForeignKey(toa => toa.PartyId);
+
+            modelBuilder.Entity<Agreement>()
+                .HasCheckConstraint("CHK_Agreement_OnlyOneForeignKey",
+                    @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
+                     + CASE WHEN ""OrganizationId"" IS NULL THEN 0 ELSE 1 END
+                     + CASE WHEN ""PartyId"" IS NULL THEN 0 ELSE 1 END) = 1");
 
             modelBuilder.Entity<BusinessEvent>()
                 .HasOne(be => be.BusinessEventType)

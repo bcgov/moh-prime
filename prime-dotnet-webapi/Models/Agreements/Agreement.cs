@@ -6,22 +6,32 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("AccessTerm")]
-    public class AccessTerm : BaseAuditable
+    [Table("Agreement")]
+    public class Agreement : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
 
-        public int EnrolleeId { get; set; }
+        public int? EnrolleeId { get; set; }
 
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        [JsonIgnore]
-        public int AgreementId { get; set; }
+        public int? OrganizationId { get; set; }
 
         [JsonIgnore]
-        public Agreement Agreement { get; set; }
+        public Organization Organization { get; set; }
+
+        public int? PartyId { get; set; }
+
+        [JsonIgnore]
+        public Party Party { get; set; }
+
+        [JsonIgnore]
+        public int AgreementVersionId { get; set; }
+
+        [JsonIgnore]
+        public AgreementVersion AgreementVersion { get; set; }
 
         [JsonIgnore]
         public int? LimitsConditionsClauseId { get; set; }
