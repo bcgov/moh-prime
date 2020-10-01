@@ -26,7 +26,7 @@ namespace Prime.Configuration.Agreements
                     new RegulatedUserAgreement       { Id = 8, Text =  "ru-access-terms-v4.html", AgreementVersionType = AgreementVersionType.RegulatedUserTOA, EffectiveDate = DateTimeOffset.Parse("2020-06-03 00:00:00"), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new CommunityPharmacistAgreement { Id = 9, Text =  "com-pharm-terms-v1.html", AgreementVersionType = AgreementVersionType.CommunityPharmacistTOA, EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new CommunityPharmacistAgreement { Id = 10, Text = "com-pharm-terms-v2.html", AgreementVersionType = AgreementVersionType.CommunityPharmacistTOA, EffectiveDate = DateTimeOffset.Parse("2020-08-28 00:00:00"), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new CommunityPracticeOrgAgreement { Id = 11, Text = "com-practice-org-v1.html", AgreementVersionType = AgreementVersionType.CommunityPracticeOrganizationAgreement, EffectiveDate = DateTimeOffset.Parse("2020-09-20 00:00:00"), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new CommunityPracticeOrgAgreement { Id = 11, Text = "com-practice-org-v1.html", AgreementVersionType = AgreementVersionType.CommunityPracticeOrganizationAgreement, EffectiveDate = SEEDING_DATE, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
                 };
             }
         }
