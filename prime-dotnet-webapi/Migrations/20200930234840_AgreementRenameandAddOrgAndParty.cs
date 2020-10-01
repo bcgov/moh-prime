@@ -224,6 +224,11 @@ namespace Prime.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropCheckConstraint(
+                name: "CHK_Agreement_OnlyOneForeignKey",
+                table: "Agreement"
+            );
+
             migrationBuilder.DropForeignKey(
                 name: "FK_Agreement_AgreementVersion_AgreementVersionId",
                 table: "Agreement");
@@ -248,12 +253,35 @@ namespace Prime.Migrations
                 name: "FK_SignedAgreementDocument_Agreement_AgreementId",
                 table: "SignedAgreementDocument");
 
-            migrationBuilder.DropTable(
-                name: "AgreementVersion");
-
             migrationBuilder.DropIndex(
                 name: "IX_SignedAgreementDocument_AgreementId",
                 table: "SignedAgreementDocument");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Agreement_PartyId",
+                table: "Agreement");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Agreement_OrganizationId",
+                table: "Agreement");
+
+            migrationBuilder.DropColumn(
+                name: "OrganizationId",
+                table: "Agreement");
+
+            migrationBuilder.DropColumn(
+                name: "PartyId",
+                table: "Agreement");
+
+            migrationBuilder.RenameColumn(
+                name: "AgreementVersionId",
+                table: "Agreement",
+                newName: "AgreementId");
+
+            migrationBuilder.RenameTable(
+                name: "Agreement",
+                schema: null,
+                newName: "AccessTerm");
 
             migrationBuilder.DropIndex(
                 name: "IX_Agreement_AgreementVersionId",
@@ -267,113 +295,10 @@ namespace Prime.Migrations
                 name: "IX_Agreement_LimitsConditionsClauseId",
                 table: "Agreement");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Agreement_OrganizationId",
-                table: "Agreement");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Agreement_PartyId",
-                table: "Agreement");
-
-            migrationBuilder.DropCheckConstraint(
-                name: "CHK_Agreement_OnlyOneForeignKey",
-                table: "Agreement");
-
-            migrationBuilder.DropColumn(
-                name: "AgreementId",
-                table: "SignedAgreementDocument");
-
-            migrationBuilder.DropColumn(
-                name: "AcceptedDate",
-                table: "Agreement");
-
-            migrationBuilder.DropColumn(
-                name: "AgreementVersionId",
-                table: "Agreement");
-
-            migrationBuilder.DropColumn(
-                name: "CreatedDate",
-                table: "Agreement");
-
-            migrationBuilder.DropColumn(
-                name: "EnrolleeId",
-                table: "Agreement");
-
-            migrationBuilder.DropColumn(
-                name: "ExpiryDate",
-                table: "Agreement");
-
-            migrationBuilder.DropColumn(
-                name: "LimitsConditionsClauseId",
-                table: "Agreement");
-
-            migrationBuilder.DropColumn(
-                name: "OrganizationId",
-                table: "Agreement");
-
-            migrationBuilder.DropColumn(
-                name: "PartyId",
-                table: "Agreement");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Discriminator",
-                table: "Agreement",
-                type: "text",
-                nullable: false,
-                defaultValue: "");
-
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "EffectiveDate",
-                table: "Agreement",
-                type: "timestamp with time zone",
-                nullable: false,
-                defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
-
-            migrationBuilder.AddColumn<string>(
-                name: "Text",
-                table: "Agreement",
-                type: "text",
-                nullable: true);
-
-            migrationBuilder.CreateTable(
-                name: "AccessTerm",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AcceptedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    AgreementId = table.Column<int>(type: "integer", nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    CreatedTimeStamp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    CreatedUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EnrolleeId = table.Column<int>(type: "integer", nullable: false),
-                    ExpiryDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LimitsConditionsClauseId = table.Column<int>(type: "integer", nullable: true),
-                    UpdatedTimeStamp = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    UpdatedUserId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AccessTerm", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AccessTerm_Agreement_AgreementId",
-                        column: x => x.AgreementId,
-                        principalTable: "Agreement",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AccessTerm_Enrollee_EnrolleeId",
-                        column: x => x.EnrolleeId,
-                        principalTable: "Enrollee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AccessTerm_LimitsConditionsClause_LimitsConditionsClauseId",
-                        column: x => x.LimitsConditionsClauseId,
-                        principalTable: "LimitsConditionsClause",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
+            migrationBuilder.RenameTable(
+                name: "AgreementVersion",
+                schema: null,
+                newName: "Agreement");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AccessTerm_AgreementId",
@@ -389,6 +314,30 @@ namespace Prime.Migrations
                 name: "IX_AccessTerm_LimitsConditionsClauseId",
                 table: "AccessTerm",
                 column: "LimitsConditionsClauseId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AccessTerm_Agreement_AgreementId",
+                table: "AccessTerm",
+                column: "AgreementId",
+                principalTable: "Agreement",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AccessTerm_Enrollee_EnrolleeId",
+                table: "AccessTerm",
+                column: "EnrolleeId",
+                principalTable: "Enrollee",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AccessTerm_LimitsConditionsClause_LimitsConditionsClauseId",
+                table: "AccessTerm",
+                column: "LimitsConditionsClauseId",
+                principalTable: "LimitsConditionsClause",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }
