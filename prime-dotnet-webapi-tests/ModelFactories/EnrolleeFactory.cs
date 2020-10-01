@@ -50,8 +50,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
             RuleFor(x => x.isAdminView, f => true);
-            RuleFor(x => x.RequestingRemoteAccess, f => false);
-            // TODO: fix these ignores
+            // TODO: create rule sets for these ignores?
             Ignore(x => x.AccessTerms);
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
@@ -59,6 +58,7 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.IdentityProvider);
             Ignore(x => x.Credential);
             Ignore(x => x.CredentialId);
+            Ignore(x => x.EnrolleeRemoteUsers);
 
             RuleSet("status.submitted", (set) =>
             {
