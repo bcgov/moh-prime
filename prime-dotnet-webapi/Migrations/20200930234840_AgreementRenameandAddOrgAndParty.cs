@@ -34,12 +34,10 @@ namespace Prime.Migrations
 
             migrationBuilder.RenameTable(
                 name: "Agreement",
-                schema: null,
                 newName: "AgreementVersion");
 
             migrationBuilder.RenameTable(
                 name: "AccessTerm",
-                schema: null,
                 newName: "Agreement");
 
             migrationBuilder.RenameColumn(
@@ -48,24 +46,107 @@ namespace Prime.Migrations
                 newName: "AgreementVersionId");
 
             migrationBuilder.AddColumn<int>(
-               name: "OrganizationId",
-               table: "Agreement",
-               nullable: true,
-               defaultValue: null);
+                name: "AgreementId",
+                table: "SignedAgreementDocument",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "OrganizationId",
+                table: "Agreement",
+                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "PartyId",
                 table: "Agreement",
-                nullable: true,
-                defaultValue: null);
+                nullable: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Agreement_Enrollee_EnrolleeId",
+            migrationBuilder.AddColumn<int>(
+                name: "AgreementVersionType",
+                table: "AgreementVersion",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.UpdateData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 9,
+                column: "AgreementVersionType",
+                value: 1);
+
+            migrationBuilder.UpdateData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 10,
+                column: "AgreementVersionType",
+                value: 1);
+
+            migrationBuilder.UpdateData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 1,
+                column: "AgreementVersionType",
+                value: 3);
+
+            migrationBuilder.UpdateData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 3,
+                column: "AgreementVersionType",
+                value: 3);
+
+            migrationBuilder.UpdateData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 5,
+                column: "AgreementVersionType",
+                value: 3);
+
+            migrationBuilder.UpdateData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 7,
+                column: "AgreementVersionType",
+                value: 3);
+
+            migrationBuilder.UpdateData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 2,
+                column: "AgreementVersionType",
+                value: 2);
+
+            migrationBuilder.UpdateData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 4,
+                column: "AgreementVersionType",
+                value: 2);
+
+            migrationBuilder.UpdateData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 6,
+                column: "AgreementVersionType",
+                value: 2);
+
+            migrationBuilder.UpdateData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 8,
+                column: "AgreementVersionType",
+                value: 2);
+
+            migrationBuilder.CreateCheckConstraint(
+                name: "CHK_Agreement_OnlyOneForeignKey",
                 table: "Agreement",
-                column: "EnrolleeId",
-                principalTable: "Enrollee",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                sql: @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
+                     + CASE WHEN ""OrganizationId"" IS NULL THEN 0 ELSE 1 END
+                     + CASE WHEN ""PartyId"" IS NULL THEN 0 ELSE 1 END) = 1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SignedAgreementDocument_AgreementId",
+                table: "SignedAgreementDocument",
+                column: "AgreementId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Agreement_AgreementVersionId",
@@ -101,6 +182,14 @@ namespace Prime.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_Agreement_Enrollee_EnrolleeId",
+                table: "Agreement",
+                column: "EnrolleeId",
+                principalTable: "Enrollee",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_Agreement_LimitsConditionsClause_LimitsConditionsClauseId",
                 table: "Agreement",
                 column: "LimitsConditionsClauseId",
@@ -114,7 +203,7 @@ namespace Prime.Migrations
                 column: "OrganizationId",
                 principalTable: "Organization",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Agreement_Party_PartyId",
@@ -122,20 +211,21 @@ namespace Prime.Migrations
                 column: "PartyId",
                 principalTable: "Party",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
-            migrationBuilder.CreateCheckConstraint(
-                 name: "CHK_OnlyOneForeignKey",
-                 table: "Agreement",
-                 sql: "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END"
-                    + " + CASE WHEN \"OrganizationId\" IS NULL THEN 0 ELSE 1 END"
-                    + " + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
+            migrationBuilder.AddForeignKey(
+                name: "FK_SignedAgreementDocument_Agreement_AgreementId",
+                table: "SignedAgreementDocument",
+                column: "AgreementId",
+                principalTable: "Agreement",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropCheckConstraint(
-                name: "CHK_OnlyOneForeignKey",
+                name: "CHK_Agreement_OnlyOneForeignKey",
                 table: "Agreement"
             );
 
@@ -158,6 +248,14 @@ namespace Prime.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Agreement_Party_PartyId",
                 table: "Agreement");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_SignedAgreementDocument_Agreement_AgreementId",
+                table: "SignedAgreementDocument");
+
+            migrationBuilder.DropIndex(
+                name: "IX_SignedAgreementDocument_AgreementId",
+                table: "SignedAgreementDocument");
 
             migrationBuilder.DropIndex(
                 name: "IX_Agreement_PartyId",

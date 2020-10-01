@@ -26,7 +26,7 @@ namespace PrimeTests.UnitTests
         }
 
         [Fact(Skip = "Awaiting test refactor")]
-        public void testCurrentToaRule()
+        public void TestCurrentToaRule()
         {
             // TODO: implement with better control over test DB and access term service.
         }
@@ -252,6 +252,11 @@ namespace PrimeTests.UnitTests
             // Remove declaration
             profile = enrollee.ToUpdateModel();
             profile.SelfDeclarations.Clear();
+            await AssertAllowableChanges(false, enrollee, profile);
+
+            // Any document GUID in a self declaration update should be considered a change (even if it somehow matches an existing document)
+            declaration.DocumentGuids = new[] { new Guid() };
+            profile = enrollee.ToUpdateModel();
             await AssertAllowableChanges(false, enrollee, profile);
         }
 
