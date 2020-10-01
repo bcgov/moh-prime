@@ -2,7 +2,7 @@
 
 namespace Prime.Migrations
 {
-    public partial class MigrateOldOrgAgreements : Migration
+    public partial class AgreementVersionCommunityPracticeOrgAgreement : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

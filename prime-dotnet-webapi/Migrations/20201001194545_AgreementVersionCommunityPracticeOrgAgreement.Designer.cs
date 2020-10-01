@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20200930222225_MigrateOldOrgAgreements")]
-    partial class MigrateOldOrgAgreements
+    [Migration("20201001194545_AgreementVersionCommunityPracticeOrgAgreement")]
+    partial class AgreementVersionCommunityPracticeOrgAgreement
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -253,7 +253,9 @@ namespace Prime.Migrations
 
                     b.ToTable("Agreement");
 
-                    b.HasCheckConstraint("CHK_OnlyOneForeignKey", "( CASE WHEN \"EnrolleeId\" IS NULL THEN 0 ELSE 1 END + CASE WHEN \"OrganizationId\" IS NULL THEN 0 ELSE 1 END + CASE WHEN \"PartyId\" IS NULL THEN 0 ELSE 1 END) = 1");
+                    b.HasCheckConstraint("CHK_Agreement_OnlyOneForeignKey", @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
+                     + CASE WHEN ""OrganizationId"" IS NULL THEN 0 ELSE 1 END
+                     + CASE WHEN ""PartyId"" IS NULL THEN 0 ELSE 1 END) = 1");
                 });
 
             modelBuilder.Entity("Prime.Models.AgreementVersion", b =>
