@@ -10,6 +10,5 @@ namespace Prime.Models
 
         [JsonIgnore]
         public Organization Organization { get; set; }
-
     }
 }

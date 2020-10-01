@@ -45,7 +45,8 @@
 
           <app-document-upload componentName="organization-agreement"
                                [multiple]="false"
-                               (completed)="onUpload($event)">
+                               (completed)="onUpload($event)"
+                               (remove)="onRemoveDocument($event)">
           </app-document-upload>
         </ng-template>
       </section>

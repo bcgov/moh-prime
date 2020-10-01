@@ -16,6 +16,8 @@ class Document(AuditMixin, Base):
     upload_started_date = db.Column(db.DateTime, nullable=False)
     upload_completed_date = db.Column(db.DateTime, nullable=True)
     filename = db.Column(db.String(255), nullable=False)
+    submitted = db.Column(db.Boolean, nullable=False)
+
 
     def __repr__(self):
         return '<Document %r>' % self.document_id
@@ -27,6 +29,7 @@ class Document(AuditMixin, Base):
             'upload_started_date': str(self.upload_started_date),
             'upload_completed_date': str(self.upload_completed_date) if self.upload_completed_date else None,
             'filename': self.filename,
+            'submitted': str(self.submitted)
         }
 
     @classmethod

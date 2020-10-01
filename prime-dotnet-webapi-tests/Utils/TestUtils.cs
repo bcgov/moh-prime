@@ -81,7 +81,8 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.EnrolleeCareSettings, f => EnrolleeCareSettingFaker.Generate(2))
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
             .RuleFor(e => e.IdentityAssuranceLevel, f => 3)
-            .RuleFor(e => e.AccessTerms, f => new List<AccessTerm>());
+            .RuleFor(e => e.AccessTerms, f => new List<AccessTerm>())
+            .RuleFor(e => e.SelfDeclarations, f => new List<SelfDeclaration>());
 
         public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()
             .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))

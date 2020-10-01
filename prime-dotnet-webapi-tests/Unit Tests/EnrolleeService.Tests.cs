@@ -8,6 +8,7 @@ using Prime;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
+using Prime.HttpClients;
 using PrimeTests.Utils;
 using PrimeTests.ModelFactories;
 using AutoMapper;
@@ -22,7 +23,9 @@ namespace PrimeTests.UnitTests
             ISubmissionRulesService automaticAdjudicationService = null,
             IEmailService emailService = null,
             IEnrolleeProfileVersionService enroleeProfileVersionService = null,
-            IBusinessEventService businessEventService = null)
+            IBusinessEventService businessEventService = null,
+            ISiteService siteService = null,
+            IDocumentManagerClient documentClient = null)
         {
             return new EnrolleeService(
                 TestDb,
@@ -31,7 +34,9 @@ namespace PrimeTests.UnitTests
                 automaticAdjudicationService ?? A.Fake<ISubmissionRulesService>(),
                 emailService ?? A.Fake<IEmailService>(),
                 enroleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>(),
-                businessEventService ?? A.Fake<IBusinessEventService>()
+                businessEventService ?? A.Fake<IBusinessEventService>(),
+                siteService ?? A.Fake<ISiteService>(),
+                documentClient ?? A.Fake<IDocumentManagerClient>()
             );
         }
     }
@@ -49,7 +54,7 @@ namespace PrimeTests.UnitTests
             // Act
             var response = await service.ValidateProvisionerDataAsync(enrollee.GPID, request);
 
-            //Assert
+            // Assert
             Assert.NotNull(response);
             foreach (var property in typeof(GpidValidationParameters).GetProperties())
             {
@@ -73,7 +78,7 @@ namespace PrimeTests.UnitTests
             // Act
             var response = await service.ValidateProvisionerDataAsync(enrollee.GPID, request);
 
-            //Assert
+            // Assert
             Assert.NotNull(response);
             Assert.True(response.AllPropertiesNullExcept(nameof(response.Email)));
             Assert.Equal(GpidValidationResponse.MatchText, response.Email);
@@ -94,7 +99,7 @@ namespace PrimeTests.UnitTests
             // Act
             var response = await service.ValidateProvisionerDataAsync(enrollee.GPID, request);
 
-            //Assert
+            // Assert
             Assert.NotNull(response);
             Assert.True(response.AllPropertiesNullExcept(nameof(response.FirstName)));
             Assert.Equal(GpidValidationResponse.MatchText, response.FirstName);
@@ -117,7 +122,7 @@ namespace PrimeTests.UnitTests
             // Act
             var response = await service.ValidateProvisionerDataAsync(enrollee.GPID, request);
 
-            //Assert
+            // Assert
             Assert.NotNull(response);
             Assert.True(response.AllPropertiesNullExcept(nameof(response.DateOfBirth)));
             Assert.Equal(expectedText, response.DateOfBirth);
@@ -138,7 +143,7 @@ namespace PrimeTests.UnitTests
             // Act
             var response = await service.ValidateProvisionerDataAsync(enrollee.GPID, request);
 
-            //Assert
+            // Assert
             Assert.NotNull(response);
             Assert.True(response.AllPropertiesNullExcept(nameof(response.MobilePhone)));
             Assert.Equal(GpidValidationResponse.MissingText, response.MobilePhone);
@@ -161,7 +166,7 @@ namespace PrimeTests.UnitTests
             // Act
             var response = await service.ValidateProvisionerDataAsync(enrollee.GPID, request);
 
-            //Assert
+            // Assert
             Assert.NotNull(response);
             Assert.True(response.AllPropertiesNullExcept(
                 nameof(response.LastName),
@@ -224,7 +229,7 @@ namespace PrimeTests.UnitTests
             // Act
             var response = await service.ValidateProvisionerDataAsync(enrollee.GPID, request);
 
-            //Assert
+            // Assert
             Assert.NotNull(response);
             Assert.True(response.AllPropertiesNullExcept(nameof(response.CollegeRecords)));
             Assert.Equal(request.CollegeRecords.Count(), response.CollegeRecords.Count());

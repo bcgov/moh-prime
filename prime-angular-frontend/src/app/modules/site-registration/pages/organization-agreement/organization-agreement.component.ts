@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { Subscription, EMPTY } from 'rxjs';
+import { Subscription, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
@@ -26,6 +27,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 })
 export class OrganizationAgreementComponent implements OnInit, IPage {
   public busy: Subscription;
+  public form: FormGroup;
   public routeUtils: RouteUtils;
   public organizationAgreement: string;
   public hasAcceptedAgreement: boolean;
@@ -50,36 +52,47 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
+  public get organizationAgreementGuid(): FormControl {
+    return this.form.get('organizationAgreementGuid') as FormControl;
+  }
+
   public onSubmit() {
     if (this.accepted?.checked || this.hasUploadedFile) {
-      const organizationid = this.route.snapshot.params.oid;
+      const organizationId = this.route.snapshot.params.oid;
       const data: DialogOptions = {
         title: 'Organization Agreement',
         message: 'Are you sure you want to accept the Organization Agreement?',
         actionText: 'Accept Organization Agreement'
       };
+      const payload = this.organizationFormStateService.json;
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.organizationResource.acceptCurrentOrganizationAgreement(organizationid)
+              ? of(noop)
               : EMPTY
+          ),
+          exhaustMap(() =>
+            (payload.organizationAgreementGuid)
+              ? this.organizationResource.addSignedAgreement(organizationId, payload.organizationAgreementGuid)
+                .pipe(
+                  exhaustMap(() =>
+                    this.organizationResource.acceptCurrentOrganizationAgreement(organizationId)
+                  )
+                )
+              : of(noop)
           ),
           exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.queryParams.siteId)))
         )
-        .subscribe(() => this.nextRoute());
+        .subscribe(() => {
+          // TODO should make this cleaner, but for now good enough
+          // Remove the org agreement GUID to prevent 404 already
+          // submitted if resubmited in same session
+          this.organizationAgreementGuid.patchValue(null);
+          this.nextRoute();
+        });
     }
-  }
-
-  public onUpload(event: BaseDocument) {
-    const organizationId = this.organizationService.organization.id;
-    this.organizationResource
-      .addSignedAgreement(organizationId, event.documentGuid, event.filename)
-      .subscribe();
-
-    this.hasUploadedFile = true;
-    this.hasNoUploadError = false;
   }
 
   public onDownload() {
@@ -90,6 +103,16 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         this.utilsService.downloadDocument(blob, 'Organization-Agreement');
         this.hasDownloadedFile = true;
       });
+  }
+
+  public onUpload(document: BaseDocument) {
+    this.organizationAgreementGuid.patchValue(document.documentGuid);
+    this.hasUploadedFile = true;
+    this.hasNoUploadError = false;
+  }
+
+  public onRemoveDocument(documentGuid: string) {
+    this.organizationAgreementGuid.patchValue(null);
   }
 
   public showDefaultAgreement() {
@@ -123,6 +146,15 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public ngOnInit(): void {
+    this.createFormInstance();
+    this.initForm();
+  }
+
+  private createFormInstance() {
+    this.form = this.organizationFormStateService.organizationAgreementForm;
+  }
+
+  private initForm() {
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);

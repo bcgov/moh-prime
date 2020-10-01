@@ -132,7 +132,7 @@ export class ReviewStatusContentComponent implements OnInit {
     return enrollee.selfDeclarations.reduce((acc, decl: SelfDeclaration) => {
       if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_CONVICTION) {
         const conviction = new Reason();
-        conviction.name = 'User Answered Yes to a Self Declaration Question:';
+        conviction.name = 'User answered yes to a self-declaration question:';
         conviction.isSelfDeclaration = true;
         conviction.note = decl.selfDeclarationDetails;
         conviction.question = this.convictionQ;
@@ -142,7 +142,7 @@ export class ReviewStatusContentComponent implements OnInit {
 
       if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED) {
         const registationSuspended = new Reason();
-        registationSuspended.name = 'User Answered Yes to a Self Declaration Question:';
+        registationSuspended.name = 'User answered yes to a self-declaration question:';
         registationSuspended.isSelfDeclaration = true;
         registationSuspended.note = decl.selfDeclarationDetails;
         registationSuspended.question = this.registrationQ;
@@ -152,7 +152,7 @@ export class ReviewStatusContentComponent implements OnInit {
 
       if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION) {
         const disciplinaryAction = new Reason();
-        disciplinaryAction.name = 'User Answered Yes to a Self Declaration Question:';
+        disciplinaryAction.name = 'User answered yes to a self-declaration question:';
         disciplinaryAction.isSelfDeclaration = true;
         disciplinaryAction.note = decl.selfDeclarationDetails;
         disciplinaryAction.question = this.disciplinaryQ;
@@ -162,7 +162,7 @@ export class ReviewStatusContentComponent implements OnInit {
 
       if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED) {
         const pharmaNetSuspended = new Reason();
-        pharmaNetSuspended.name = 'User Answered Yes to a Self Declaration Question:';
+        pharmaNetSuspended.name = 'User answered yes to a self-declaration question:';
         pharmaNetSuspended.isSelfDeclaration = true;
         pharmaNetSuspended.note = decl.selfDeclarationDetails;
         pharmaNetSuspended.question = this.pharmanetQ;
