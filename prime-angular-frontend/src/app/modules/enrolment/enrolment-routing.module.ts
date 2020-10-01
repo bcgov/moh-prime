@@ -12,6 +12,9 @@ import { EnrolmentGuard } from './shared/guards/enrolment.guard';
 import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.component';
 
 import { OverviewComponent } from './pages/overview/overview.component';
+import { IdentityAccessCodeComponent } from './pages/identity-access-code/identity-access-code.component';
+import { IdentitySubmissionComponent } from './pages/identity-submission/identity-submission.component';
+import { IdentityProfileComponent } from './pages/identity-profile/identity-profile.component';
 import { DemographicComponent } from './pages/demographic/demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 // TODO Temporary removal of device provider for Community Practice
@@ -68,13 +71,13 @@ const routes: Routes = [
       //
       {
         path: EnrolmentRoutes.IDENTITY_ACCESS_CODE,
-        component: DemographicComponent,
+        component: IdentityAccessCodeComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
       {
         path: EnrolmentRoutes.IDENTITY_SUBMISSION,
-        component: DemographicComponent,
+        component: IdentitySubmissionComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
@@ -83,7 +86,7 @@ const routes: Routes = [
       //
       {
         path: EnrolmentRoutes.IDENTITY_PROFILE,
-        component: DemographicComponent,
+        component: IdentityProfileComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },

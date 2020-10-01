@@ -61,7 +61,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public disableCareSetting(careSettingCode: number): boolean {
-    if (this.authService.isCommunityPharmacist()) {
+    if (this.authService.hasCommunityPharmacist()) {
       // If feature flagged enable "Private Community Health Practice" & "Community Pharmacist"
       return !(careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
         || careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
