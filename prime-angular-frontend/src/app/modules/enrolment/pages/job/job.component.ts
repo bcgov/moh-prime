@@ -10,13 +10,15 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { UtilsService } from '@core/services/utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+
 import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
-import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-job',
@@ -39,9 +41,21 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
+    protected formUtilsService: FormUtilsService,
     private configService: ConfigService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
 
     this.jobNames = this.configService.jobNames;
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);

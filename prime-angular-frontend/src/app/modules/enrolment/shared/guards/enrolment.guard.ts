@@ -68,28 +68,73 @@ export class EnrolmentGuard extends BaseGuard {
       return true;
     }
 
-    // Otherwise, routes are directed based on enrolment status
     if (!enrolment) {
-      return (identityProvider === IdentityProvider.BCEID)
-        ? this.navigate(routePath, EnrolmentRoutes.IDENTITY_ACCESS_CODE)
-        : this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
+      // Route based on identity provider to determine sequence of routing
+      // required to create a new enrolment
+      return this.identityProviderRouting(routePath, enrolment, identityProvider);
     } else if (enrolment) {
-      switch (enrolment.currentStatus.statusCode) {
-        case EnrolmentStatus.EDITABLE:
-          return this.manageEditableRouting(routePath, enrolment, identityProvider);
-        case EnrolmentStatus.UNDER_REVIEW:
-          return this.manageUnderReviewRouting(routePath, enrolment);
-        case EnrolmentStatus.REQUIRES_TOA:
-          return this.manageRequiresToaRouting(routePath, enrolment);
-        case EnrolmentStatus.LOCKED:
-          return this.navigate(routePath, EnrolmentRoutes.ACCESS_LOCKED);
-        case EnrolmentStatus.DECLINED:
-          return this.navigate(routePath, EnrolmentRoutes.ACCESS_DECLINED);
-      }
+      // Otherwise, routes are directed based on enrolment status
+      return this.enrolmentStatusRouting(routePath, enrolment, identityProvider);
     }
 
     // Otherwise, prevent the route from resolving
     return false;
+  }
+
+  /**
+   * @description
+   * Determine routing by identity provider for new enrolments that have not
+   * had their enrolment created.
+   */
+  private identityProviderRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+    switch (identityProvider) {
+      case IdentityProvider.BCEID:
+        return this.manageBceidRouting(routePath, enrolment, identityProvider);
+      case IdentityProvider.BCSC:
+        return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
+      default:
+        return false; // Identity provider is unknown and routing cannot be determined
+    }
+  }
+
+  private manageBceidRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+    // const tree: UrlTree =router.parseUrl('/team/33/(user/victor//support:help)?debug=true#fragment');
+    // const f = tree.fragment; // return 'fragment'
+    // const q = tree.queryParams; // returns {debug: 'true'}
+    // const g: UrlSegmentGroup = tree.root.children[PRIMARY_OUTLET];
+    // const s: UrlSegment[] = g.segments; // returns 2 segments 'team' and '33'
+    // g.children[PRIMARY_OUTLET].segments; // returns 2 segments 'user' and 'victor'
+    // g.children['support'].segments; // return 1 segment 'help'
+
+    console.log('ROUTER', this.router.url);
+    console.log('ROUTER', this.router.parseUrl(this.router.url));
+
+    // TODO a sequence of routing is required
+    // TODO check previous and current route and whether sequence is correct
+    // TODO Incorrect sequence goes back to access code
+
+    return this.navigate(routePath, EnrolmentRoutes.IDENTITY_ACCESS_CODE);
+  }
+
+  /**
+   * @description
+   * Determine routing based on enrolment status.
+   */
+  private enrolmentStatusRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+    switch (enrolment.currentStatus.statusCode) {
+      case EnrolmentStatus.EDITABLE:
+        return this.manageEditableRouting(routePath, enrolment, identityProvider);
+      case EnrolmentStatus.UNDER_REVIEW:
+        return this.manageUnderReviewRouting(routePath, enrolment);
+      case EnrolmentStatus.REQUIRES_TOA:
+        return this.manageRequiresToaRouting(routePath, enrolment);
+      case EnrolmentStatus.LOCKED:
+        return this.navigate(routePath, EnrolmentRoutes.ACCESS_LOCKED);
+      case EnrolmentStatus.DECLINED:
+        return this.navigate(routePath, EnrolmentRoutes.ACCESS_DECLINED);
+      default:
+        return false; // Status is unknown and routing cannot be determined
+    }
   }
 
   /**

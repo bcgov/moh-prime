@@ -10,12 +10,12 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { EnrolleeUtilsService } from '@core/services/enrollee-utils.service';
 import { UtilsService } from '@core/services/utils.service';
-import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
+
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
@@ -43,10 +43,22 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
+    protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
     private authService: AuthService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
 
     this.careSettingTypes = this.configService.careSettings;
   }
@@ -158,7 +170,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public routeBackTo() {
-    const routePath = (this.enrolmentFormStateService.enrolment.certifications.length)
+    const routePath = (this.enrolmentFormStateService.json.certifications.length)
       ? EnrolmentRoutes.REMOTE_ACCESS
       : EnrolmentRoutes.JOB;
 

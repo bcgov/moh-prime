@@ -31,9 +31,20 @@ export class IdentitySubmissionComponent extends BaseEnrolmentProfilePage implem
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    private formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
   }
 
   public onUpload(document: BaseDocument) {
@@ -42,15 +53,24 @@ export class IdentitySubmissionComponent extends BaseEnrolmentProfilePage implem
 
   public ngOnInit() {
     this.createFormInstance();
-    // this.patchForm();
+    this.patchForm();
     this.initForm();
   }
 
   protected createFormInstance() {
-    // this.form = this.enrolmentFormStateService.identityForm;
+    this.form = this.enrolmentFormStateService.identityForm;
   }
 
   protected initForm() { }
+
+  protected handleSubmission(beenThroughTheWizard: boolean = false) {
+    if (this.isInitialEnrolment) {
+      // Allow routing to occur without invoking the deactivation,
+      // modal to persist form state being dirty between views
+      this.allowRoutingWhenDirty = true;
+      this.nextRouteAfterSubmit();
+    }
+  }
 
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;

@@ -33,13 +33,13 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     protected route: ActivatedRoute,
     protected router: Router,
     @Inject(APP_CONFIG) private config: AppConfig,
+    private fb: FormBuilder,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private dialog: MatDialog,
     private toastService: ToastService,
     private logger: LoggerService,
-    private windowRef: WindowRefService,
-    private fb: FormBuilder
+    private windowRef: WindowRefService
   ) {
     super(route, router);
     this.showProgressBar = false;

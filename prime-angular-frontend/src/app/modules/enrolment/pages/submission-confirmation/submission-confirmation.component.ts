@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
+
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -23,7 +24,7 @@ export class SubmissionConfirmationComponent extends BaseEnrolmentPage implement
     super(route, router);
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.enrolmentService.enrolment$
       .subscribe((enrolment: Enrolment) => {
         // Only automatic if the enrolment reason is `Automatic`

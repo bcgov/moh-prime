@@ -30,9 +30,20 @@ export class IdentityProfileComponent extends BaseEnrolmentProfilePage implement
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    private formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
   }
 
   public get physicalAddress(): FormGroup {
@@ -41,12 +52,12 @@ export class IdentityProfileComponent extends BaseEnrolmentProfilePage implement
 
   public ngOnInit() {
     this.createFormInstance();
-    // this.patchForm();
+    this.patchForm();
     this.initForm();
   }
 
   protected createFormInstance() {
-    // this.form = this.enrolmentFormStateService.identityForm;
+    this.form = this.enrolmentFormStateService.identityForm;
   }
 
   protected initForm() { }

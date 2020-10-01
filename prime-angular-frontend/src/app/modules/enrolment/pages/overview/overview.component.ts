@@ -47,8 +47,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public onSubmit() {
-    if (this.enrolmentFormStateService.isEnrolmentValid()) {
-      const enrolment = this.enrolmentFormStateService.enrolment;
+    if (this.enrolmentFormStateService.isValid) {
+      const enrolment = this.enrolmentFormStateService.json;
       const data: DialogOptions = {
         title: 'Submit Enrolment',
         message: 'When your enrolment is submitted for adjudication, it can no longer be updated. Are you ready to submit your enrolment?',
@@ -74,18 +74,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           });
     } else {
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
-
-      this.logger.warn('DEMOGRAPHIC', this.enrolmentFormStateService.isProfileInfoValid());
-      this.logger.warn('REGULATORY', this.enrolmentFormStateService.isRegulatoryValid());
-      this.logger.warn('JOBS', this.enrolmentFormStateService.isJobsValid());
-      this.logger.warn('HAS_REG_OR_JOB', this.enrolmentFormStateService.hasRegOrJob());
-      this.logger.warn('SELF DECLARATION', this.enrolmentFormStateService.isSelfDeclarationValid());
-      this.logger.warn('CARE_SETTING', this.enrolmentFormStateService.isCareSettingValid());
     }
   }
 
   public hasRegOrJob(): boolean {
-    return this.enrolmentFormStateService.hasRegOrJob();
+    return this.enrolmentFormStateService.hasCertificateOrJob();
   }
 
   public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {
@@ -109,7 +102,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.currentStatus = enrolment.currentStatus.statusCode;
 
     if (this.enrolmentFormStateService.isPatched) {
-      enrolment = this.enrolmentFormStateService.enrolment;
+      enrolment = this.enrolmentFormStateService.json;
       // Merge BCSC information in for use within the view
       const {
         firstName,
@@ -125,6 +118,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
 
     // Attempt to patch the form if not already patched
-    this.enrolmentFormStateService.setEnrolment(enrolment);
+    this.enrolmentFormStateService.setForm(enrolment);
   }
 }

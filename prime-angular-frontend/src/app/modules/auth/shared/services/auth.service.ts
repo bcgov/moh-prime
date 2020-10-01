@@ -85,6 +85,8 @@ export class AuthService implements IAuthService {
    * NOTE: Careful using this in Angular lifecycle hooks. It is preferrable to
    * use the Observable based method getUser$().
    */
+  // TODO should be based this on provider now
+  // TODO use this as a base method for all other types of users
   public async getUser(forceReload?: boolean): Promise<User> {
     const {
       firstName,
@@ -133,6 +135,7 @@ export class AuthService implements IAuthService {
    * NOTE: Careful using this in Angular lifecycle hooks. It is preferrable to
    * use the Observable based method getAdmin$().
    */
+  // TODO drop after getUser providers object instance of auth user
   public async getAdmin(forceReload?: boolean): Promise<Admin> {
     const {
       firstName,

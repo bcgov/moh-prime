@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { EnrolmentFormStateService } from './enrolment-form-state.service';
 
-describe('enrolmentFormStateService', () => {
+describe('EnrolmentFormStateService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       ReactiveFormsModule,

@@ -36,6 +36,10 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url = this.getUrl(state);
+
+    console.log('GUARD_STATE', state);
+    console.log('GUARD_NEXT', next);
+
     return this.checkAccess(url, next.params);
   }
 
@@ -43,6 +47,10 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url = this.getUrl(state);
+
+    console.log('GUARD_STATE', state);
+    console.log('GUARD_NEXT', next);
+
     return this.checkAccess(url, next.params);
   }
 
@@ -79,9 +87,10 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    * Get the current route.
    *
    * NOTE: Only care about the second parameter to determine route
-   * access, and assumes that all child routes are allowed
+   * access, and assumes that all child routes are allowed.
    */
   protected route(routePath: string): string {
+    // TODO needs updating to account for query params
     return routePath.slice(1).split('/')[1];
   }
 
@@ -89,6 +98,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    * @description
    * Construct a common route URL.
    */
+  // TODO needs updating to account for query params
   private getUrl(routeParam: UrlSegment[] | RouterStateSnapshot): string {
     return (Array.isArray(routeParam))
       ? routeParam.reduce((path, segment) => `${path}/${segment.path}`, '')

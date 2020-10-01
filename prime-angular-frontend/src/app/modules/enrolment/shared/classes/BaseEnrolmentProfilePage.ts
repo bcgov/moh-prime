@@ -16,6 +16,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 export interface IBaseEnrolmentProfilePage {
   form: FormGroup;
@@ -39,7 +40,8 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
-    protected utilService: UtilsService
+    protected utilService: UtilsService,
+    protected formUtilsService: FormUtilsService
   ) {
     super(route, router);
 
@@ -47,22 +49,11 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
   }
 
   public onSubmit(beenThroughTheWizard: boolean = false): void {
-    if (this.form.valid) {
+    if (this.formUtilsService.checkValidity(this.form)) {
       this.onSubmitFormIsValid();
-
-      if (this.isInitialEnrolment) {
-        // Update using the form which could contain changes
-        this.busy = this.performHttpRequest(this.enrolmentFormStateService.enrolment, beenThroughTheWizard)
-          .subscribe();
-      } else {
-        // Allow routing to occur without invoking the deactivation,
-        // modal to persist form state being dirty between views
-        this.allowRoutingWhenDirty = true;
-        this.nextRouteAfterSubmit();
-      }
+      this.handleSubmission(beenThroughTheWizard);
     } else {
       this.onSubmitFormIsInvalid();
-      this.form.markAllAsTouched();
       this.utilService.scrollToErrorSection();
     }
   }
@@ -103,16 +94,6 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
 
   /**
    * @description
-   * Redirect to the next route after a valid submission.
-   *
-   * @params nextRoutePath Optional next route, or defaults to overview
-   */
-  protected nextRouteAfterSubmit(nextRoutePath: string = EnrolmentRoutes.OVERVIEW): void {
-    this.routeTo(nextRoutePath);
-  }
-
-  /**
-   * @description
    * Patch the form with enrollee information.
    */
   protected patchForm(): void {
@@ -122,7 +103,24 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     this.isProfileComplete = this.enrolmentService.isProfileComplete;
 
     // Attempt to patch the form if not already patched
-    this.enrolmentFormStateService.setEnrolment(this.enrolment);
+    this.enrolmentFormStateService.setForm(this.enrolment);
+  }
+
+  /**
+   * @description
+   * Handle a valid form submission.
+   */
+  protected handleSubmission(beenThroughTheWizard: boolean = false) {
+    if (this.isInitialEnrolment) {
+      // Update using the form which could contain changes
+      this.busy = this.performHttpRequest(this.enrolmentFormStateService.json, beenThroughTheWizard)
+        .subscribe();
+    } else {
+      // Allow routing to occur without invoking the deactivation,
+      // modal to persist form state being dirty between views
+      this.allowRoutingWhenDirty = true;
+      this.nextRouteAfterSubmit();
+    }
   }
 
   /**
@@ -159,5 +157,15 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
         throw error;
       })
     );
+  }
+
+  /**
+   * @description
+   * Redirect to the next route after a valid submission.
+   *
+   * @params nextRoutePath Optional next route, or defaults to overview
+   */
+  protected nextRouteAfterSubmit(nextRoutePath: string = EnrolmentRoutes.OVERVIEW): void {
+    this.routeTo(nextRoutePath);
   }
 }

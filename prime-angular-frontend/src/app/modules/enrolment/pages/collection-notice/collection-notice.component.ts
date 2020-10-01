@@ -36,7 +36,7 @@ export class CollectionNoticeComponent implements OnInit {
     }
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.authService.hasJustLoggedIn = true;
 
     // Collection notice is the initial route after login, and used as a hub

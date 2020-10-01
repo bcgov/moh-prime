@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -28,9 +30,21 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
-    protected utilService: UtilsService
+    protected utilService: UtilsService,
+    protected formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
   }
 
   public get certifications(): FormArray {

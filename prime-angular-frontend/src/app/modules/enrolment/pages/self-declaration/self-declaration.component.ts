@@ -34,9 +34,20 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    private formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
 
     this.decisions = [
       { code: false, name: 'No' },

@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { AccessTerm } from '@shared/models/access-term.model';
+
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
@@ -29,7 +30,7 @@ export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
     super(route, router);
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.getAccessTerms();
   }
 

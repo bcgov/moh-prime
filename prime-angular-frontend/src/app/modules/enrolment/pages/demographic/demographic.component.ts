@@ -46,10 +46,21 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    private authService: AuthService,
-    private formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    private authService: AuthService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
   }
 
   public get preferredFirstName(): FormControl {
@@ -143,7 +154,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
             return newEnrolment;
           }),
           // Populate generated keys within the form state (eg. id, userId, etc)
-          tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setEnrolment(newEnrolment, true)),
+          tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
           exhaustMap((newEnrolment: Enrolment) => super.performHttpRequest(newEnrolment))
         );
     } else {

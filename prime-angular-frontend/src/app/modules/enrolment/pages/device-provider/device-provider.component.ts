@@ -5,12 +5,14 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { UtilsService } from '@core/services/utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-device-provider',
@@ -30,8 +32,20 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
+    protected formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentFormStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
 
     this.decisions = [
       { code: false, name: 'No' },
@@ -69,7 +83,7 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = (!this.enrolmentFormStateService.enrolment.certifications.length)
+      nextRoutePath = (!this.enrolmentFormStateService.json.certifications.length)
         ? EnrolmentRoutes.JOB
         : EnrolmentRoutes.SELF_DECLARATION;
     }

@@ -1,10 +1,12 @@
 import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
+// TODO move into shared folder
 import { IProgressIndicator } from '@enrolment/shared/components/progress-indicator/progress-indicator.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 
 @Component({
   selector: 'app-site-progress-indicator',
@@ -27,7 +29,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
     private router: Router,
     private organizationService: OrganizationService
   ) {
-    this.currentRoute = this.getCurrentRoute();
+    this.currentRoute = RouteUtils.currentRoute(this.router.url);
 
     // Possible route pathways within site registration
     const routePaths = (!organizationService.organization.acceptedAgreementDate)
@@ -43,23 +45,4 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   }
 
   public ngOnInit() { }
-
-  /**
-   * @description
-   * Determine the current route by removing query and URI params
-   * that can't be mapped to existing module routes.
-   */
-  private getCurrentRoute(): string {
-    return this.router.url
-      // Truncate query parameters
-      .split('?')
-      .shift()
-      // List the remaining URI params
-      .split('/')
-      // Remove URI params that are numbers
-      .filter(p => !/^\d+$/.test(p))
-      // Remove blacklisted URI params
-      .filter(p => !['new'].includes(p))
-      .pop(); // Current route is the last index
-  }
 }

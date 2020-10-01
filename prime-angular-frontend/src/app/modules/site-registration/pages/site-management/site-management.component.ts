@@ -100,19 +100,11 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.resetFormStates();
     // this.checkQueryParams();
     // Temporary hack to show success message until guards can be refactored
     this.hasSubmittedSite = (this.organizationService.showSuccess) ? true : false;
     this.organizationService.showSuccess = false;
     this.getOrganizations();
-  }
-
-  private resetFormStates(): void {
-    // Clear the organization and site form states so new organizations, and
-    // sites aren't filled with previous information
-    this.siteFormStateService.init();
-    this.organizationFormStateService.init();
   }
 
   private checkQueryParams(): void {
