@@ -2,7 +2,7 @@
   <app-page-header>PRIME Enrolment</app-page-header>
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
                                     [inProgress]="isInitialEnrolment"
-                                    [currentRoute]="EnrolmentRoutes.IDENTITY_SUBMISSION">
+                                    [currentRoute]="EnrolmentRoutes.ID_SUBMISSION">
   </app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
