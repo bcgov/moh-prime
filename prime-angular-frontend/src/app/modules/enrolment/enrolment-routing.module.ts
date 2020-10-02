@@ -14,7 +14,7 @@ import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.
 import { OverviewComponent } from './pages/overview/overview.component';
 import { IdentityAccessCodeComponent } from './pages/identity-access-code/identity-access-code.component';
 import { IdentitySubmissionComponent } from './pages/identity-submission/identity-submission.component';
-import { IdentityProfileComponent } from './pages/identity-profile/identity-profile.component';
+import { BceidDemographicComponent } from './pages/bceid-demographic/bceid-demographic.component';
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 // TODO Temporary removal of device provider for Community Practice
@@ -86,7 +86,7 @@ const routes: Routes = [
       //
       {
         path: EnrolmentRoutes.BCEID_DEMOGRAPHIC,
-        component: IdentityProfileComponent,
+        component: BceidDemographicComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },

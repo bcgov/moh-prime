@@ -20,11 +20,11 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-identity-profile',
-  templateUrl: './identity-profile.component.html',
-  styleUrls: ['./identity-profile.component.scss']
+  selector: 'app-bceid-demographic',
+  templateUrl: './bceid-demographic.component.html',
+  styleUrls: ['./bceid-demographic.component.scss']
 })
-export class IdentityProfileComponent extends BaseEnrolmentProfilePage implements OnInit {
+export class BceidDemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
   public addressFormControlNames: string[];
 
   constructor(
