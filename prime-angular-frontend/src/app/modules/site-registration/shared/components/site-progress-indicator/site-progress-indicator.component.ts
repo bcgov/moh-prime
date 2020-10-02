@@ -2,19 +2,17 @@ import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-// TODO move into shared folder
-import { IProgressIndicator } from '@enrolment/shared/components/progress-indicator/progress-indicator.component';
+import { IProgressIndicator2 } from '@shared/components/progress-indicator2/progress-indicator2.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 
 @Component({
   selector: 'app-site-progress-indicator',
   templateUrl: './site-progress-indicator.component.html',
   styleUrls: ['./site-progress-indicator.component.scss']
 })
-export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicator {
+export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicator2 {
   @Input() public inProgress: boolean;
   @Input() public message: string;
   @Input() public template: TemplateRef<any>;

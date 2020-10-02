@@ -12,6 +12,7 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 
 import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
