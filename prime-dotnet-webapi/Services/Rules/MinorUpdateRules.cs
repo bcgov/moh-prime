@@ -25,7 +25,7 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.AccessTerms == null)
+            if (enrollee.Agreements == null)
             {
                 return Task.FromResult(false);
             }

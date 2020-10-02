@@ -12,7 +12,7 @@ namespace Prime.Configuration.Agreements
         {
             get
             {
-                return AgreementConfiguration.SeedData.OfType<OboAgreement>();
+                return AgreementVersionConfiguration.SeedData.OfType<OboAgreement>();
             }
         }
 
