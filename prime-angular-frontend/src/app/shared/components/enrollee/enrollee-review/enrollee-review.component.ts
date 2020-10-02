@@ -1,7 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
-import { Observable } from 'rxjs';
-
 import { Enrolment } from '@shared/models/enrolment.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
