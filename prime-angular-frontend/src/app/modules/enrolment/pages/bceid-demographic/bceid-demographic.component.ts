@@ -4,14 +4,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-
 import { AuthService } from '@auth/shared/services/auth.service';
+
+import { User } from '@auth/shared/models/user.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
@@ -25,6 +27,12 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   styleUrls: ['./bceid-demographic.component.scss']
 })
 export class BceidDemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
+  /**
+   * @description
+   * User information from the provider.
+   */
+  // TODO use an actual model... maybe BceidUser
+  public user: { firstName: string, lastName: string, email: string };
   public addressFormControlNames: string[];
 
   constructor(
@@ -69,6 +77,10 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     this.createFormInstance();
     this.patchForm();
     this.initForm();
+    this.getUser$()
+      .subscribe((user: { firstName: string, lastName: string, email: string }) =>
+        this.form.patchValue(user)
+      );
   }
 
   protected createFormInstance() {
@@ -89,5 +101,21 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
+  }
+
+  private getUser$(): Observable<{ firstName: string, lastName: string, email: string }> {
+    return this.authService.getUser$()
+      .pipe(
+        map(({ firstName, lastName }: User) => {
+          // Enforced the enrollee type instead of using Partial<Enrollee>
+          // to avoid creating constructors and partials for every model
+          return {
+            // Providing only the minimum required fields for creating an enrollee
+            firstName,
+            lastName,
+            email: null
+          };
+        })
+      );
   }
 }
