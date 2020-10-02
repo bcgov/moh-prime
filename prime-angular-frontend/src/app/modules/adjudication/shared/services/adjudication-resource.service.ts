@@ -237,12 +237,12 @@ export class AdjudicationResource {
   }
 
   // ---
-  // Access Terms
+  // Agreements
   // ---
 
   public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<AccessTerm[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
-    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
+    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/agreements`, params)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
         tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERMS', accessTerms)),
@@ -254,8 +254,8 @@ export class AdjudicationResource {
       );
   }
 
-  public getAccessTerm(enrolleeId: number, accessTermsId: number): Observable<AccessTerm> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermsId}`)
+  public getAccessTerm(enrolleeId: number, agreementId: number): Observable<AccessTerm> {
+    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}`)
       .pipe(
         map((response: ApiHttpResponse<AccessTerm>) => response.result),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm)),
@@ -266,9 +266,9 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number)
+  public getEnrolmentForAccessTerm(enrolleeId: number, agreementId: number)
     : Observable<HttpEnrolleeProfileVersion> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
+    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/enrolment`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
         tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>

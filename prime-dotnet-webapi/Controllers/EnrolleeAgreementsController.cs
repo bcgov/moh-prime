@@ -39,13 +39,13 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
         }
 
-        // GET: api/Enrollees/5/access-terms
+        // GET: api/Enrollees/5/agreements
         /// <summary>
-        /// Get a list of the enrollee's access terms.
+        /// Get a list of the enrollee's agreements.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="filters"></param>
-        [HttpGet("{enrolleeId}/access-terms", Name = nameof(GetAgreements))]
+        [HttpGet("{enrolleeId}/agreements", Name = nameof(GetAgreements))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -72,13 +72,13 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(agreements));
         }
 
-        // GET: api/Enrollees/5/access-terms/2
+        // GET: api/Enrollees/5/agreements/2
         /// <summary>
         /// Get a specific agreement for an enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="agreementId"></param>
-        [HttpGet("{enrolleeId}/access-terms/{agreementId}", Name = nameof(GetAgreement))]
+        [HttpGet("{enrolleeId}/agreements/{agreementId}", Name = nameof(GetAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -110,13 +110,13 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(agreement));
         }
 
-        // GET: api/Enrollees/5/access-terms/3/enrolment
+        // GET: api/Enrollees/5/agreements/3/enrolment
         /// <summary>
         /// Get the Profile Snapshot used for the given agreement.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="agreementId"></param>
-        [HttpGet("{enrolleeId}/access-terms/{agreementId}/enrolment", Name = nameof(GetEnrolmentForAgreement))]
+        [HttpGet("{enrolleeId}/agreements/{agreementId}/enrolment", Name = nameof(GetEnrolmentForAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
