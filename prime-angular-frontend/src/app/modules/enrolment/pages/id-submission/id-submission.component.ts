@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -7,6 +7,7 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
@@ -15,11 +16,14 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-identity-access-code',
-  templateUrl: './identity-access-code.component.html',
-  styleUrls: ['./identity-access-code.component.scss']
+  selector: 'app-id-submission',
+  templateUrl: './id-submission.component.html',
+  styleUrls: ['./id-submission.component.scss']
 })
-export class IdentityAccessCodeComponent extends BaseEnrolmentProfilePage implements OnInit {
+export class IdSubmissionComponent extends BaseEnrolmentProfilePage implements OnInit {
+  public uploadedFile: boolean;
+  public hasNoIdentificationDocumentError: boolean;
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -44,10 +48,18 @@ export class IdentityAccessCodeComponent extends BaseEnrolmentProfilePage implem
       utilService,
       formUtilsService
     );
+
+    this.uploadedFile = false;
   }
 
-  public get accessCode(): FormControl {
-    return this.form.get('accessCode') as FormControl;
+  public get identificationDocumentGuid(): FormControl {
+    return this.form.get('identificationDocumentGuid') as FormControl;
+  }
+
+  public onUpload(document: BaseDocument) {
+    this.identificationDocumentGuid.patchValue(document.documentGuid);
+    this.uploadedFile = true;
+    this.hasNoIdentificationDocumentError = false;
   }
 
   public ngOnInit() {
@@ -57,7 +69,7 @@ export class IdentityAccessCodeComponent extends BaseEnrolmentProfilePage implem
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.accessForm;
+    this.form = this.enrolmentFormStateService.identityDocumentForm;
   }
 
   protected initForm() { }
@@ -71,10 +83,18 @@ export class IdentityAccessCodeComponent extends BaseEnrolmentProfilePage implem
     }
   }
 
+  protected onSubmitFormIsValid(): void {
+    this.hasNoIdentificationDocumentError = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.hasNoIdentificationDocumentError = true;
+  }
+
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.ID_SUBMISSION;
+      nextRoutePath = EnrolmentRoutes.BCEID_DEMOGRAPHIC;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

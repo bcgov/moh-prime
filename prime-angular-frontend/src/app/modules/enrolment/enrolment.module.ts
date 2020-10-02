@@ -7,8 +7,8 @@ import { SharedModule } from '@shared/shared.module';
 import { EnrolmentRoutingModule } from './enrolment-routing.module';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { IdentityAccessCodeComponent } from './pages/identity-access-code/identity-access-code.component';
-import { IdentitySubmissionComponent } from './pages/identity-submission/identity-submission.component';
+import { AccessCodeComponent } from './pages/access-code/access-code.component';
+import { IdSubmissionComponent } from './pages/id-submission/id-submission.component';
 import { BceidDemographicComponent } from './pages/bceid-demographic/bceid-demographic.component';
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
@@ -47,8 +47,8 @@ import { ProgressIndicatorComponent } from './shared/components/progress-indicat
     DashboardV1Component,
     HeaderComponent,
     CollectionNoticeComponent,
-    IdentityAccessCodeComponent,
-    IdentitySubmissionComponent,
+    AccessCodeComponent,
+    IdSubmissionComponent,
     BceidDemographicComponent,
     BcscDemographicComponent,
     RegulatoryComponent,

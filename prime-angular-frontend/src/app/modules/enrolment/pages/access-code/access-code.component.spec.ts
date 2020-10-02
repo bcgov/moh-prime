@@ -8,14 +8,14 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
-import { IdentityAccessCodeComponent } from './identity-access-code.component';
+import { AccessCodeComponent } from './access-code.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-describe('IdentityAccessCodeComponent', () => {
-  let component: IdentityAccessCodeComponent;
-  let fixture: ComponentFixture<IdentityAccessCodeComponent>;
+describe('AccessCodeComponent', () => {
+  let component: AccessCodeComponent;
+  let fixture: ComponentFixture<AccessCodeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -27,7 +27,7 @@ describe('IdentityAccessCodeComponent', () => {
         NgxMaterialModule
       ],
       declarations: [
-        IdentityAccessCodeComponent
+        AccessCodeComponent
       ],
       providers: [
         {
@@ -45,7 +45,7 @@ describe('IdentityAccessCodeComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IdentityAccessCodeComponent);
+    fixture = TestBed.createComponent(AccessCodeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

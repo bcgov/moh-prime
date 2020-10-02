@@ -12,8 +12,8 @@ import { EnrolmentGuard } from './shared/guards/enrolment.guard';
 import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.component';
 
 import { OverviewComponent } from './pages/overview/overview.component';
-import { IdentityAccessCodeComponent } from './pages/identity-access-code/identity-access-code.component';
-import { IdentitySubmissionComponent } from './pages/identity-submission/identity-submission.component';
+import { AccessCodeComponent } from './pages/access-code/access-code.component';
+import { IdSubmissionComponent } from './pages/id-submission/id-submission.component';
 import { BceidDemographicComponent } from './pages/bceid-demographic/bceid-demographic.component';
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
@@ -71,13 +71,13 @@ const routes: Routes = [
       //
       {
         path: EnrolmentRoutes.ACCESS_CODE,
-        component: IdentityAccessCodeComponent,
+        component: AccessCodeComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
       {
         path: EnrolmentRoutes.ID_SUBMISSION,
-        component: IdentitySubmissionComponent,
+        component: IdSubmissionComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },

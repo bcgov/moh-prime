@@ -7,14 +7,14 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
-import { IdentitySubmissionComponent } from './identity-submission.component';
+import { IdSubmissionComponent } from './id-submission.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-describe('IdentitySubmissionComponent', () => {
-  let component: IdentitySubmissionComponent;
-  let fixture: ComponentFixture<IdentitySubmissionComponent>;
+describe('IdSubmissionComponent', () => {
+  let component: IdSubmissionComponent;
+  let fixture: ComponentFixture<IdSubmissionComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -25,7 +25,7 @@ describe('IdentitySubmissionComponent', () => {
         NgxMaterialModule
       ],
       declarations: [
-        IdentitySubmissionComponent
+        IdSubmissionComponent
       ],
       providers: [
         {
@@ -43,7 +43,7 @@ describe('IdentitySubmissionComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(IdentitySubmissionComponent);
+    fixture = TestBed.createComponent(IdSubmissionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

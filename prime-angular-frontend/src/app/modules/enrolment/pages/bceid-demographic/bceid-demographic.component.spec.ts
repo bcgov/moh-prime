@@ -13,7 +13,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-describe('IdentityProfileComponent', () => {
+describe('BceidDemographicComponent', () => {
   let component: BceidDemographicComponent;
   let fixture: ComponentFixture<BceidDemographicComponent>;
 
