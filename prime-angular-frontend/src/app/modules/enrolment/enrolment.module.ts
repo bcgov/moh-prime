@@ -10,7 +10,7 @@ import { CollectionNoticeComponent } from './pages/collection-notice/collection-
 import { IdentityAccessCodeComponent } from './pages/identity-access-code/identity-access-code.component';
 import { IdentitySubmissionComponent } from './pages/identity-submission/identity-submission.component';
 import { IdentityProfileComponent } from './pages/identity-profile/identity-profile.component';
-import { DemographicComponent } from './pages/demographic/demographic.component';
+import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 import { JobComponent } from './pages/job/job.component';
@@ -50,7 +50,7 @@ import { ProgressIndicatorComponent } from './shared/components/progress-indicat
     IdentityAccessCodeComponent,
     IdentitySubmissionComponent,
     IdentityProfileComponent,
-    DemographicComponent,
+    BcscDemographicComponent,
     RegulatoryComponent,
     DeviceProviderComponent,
     JobComponent,

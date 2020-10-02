@@ -4,11 +4,11 @@ export class EnrolmentRoutes {
   // Enrollee overview:
   public static OVERVIEW = 'overview';
   // Enrollee access:
-  public static IDENTITY_ACCESS_CODE = 'identity-access-code';
-  public static IDENTITY_SUBMISSION = 'identity-submission';
+  public static ACCESS_CODE = 'access-code';
+  public static ID_SUBMISSION = 'id-submission';
   // Enrollee profile:
-  public static IDENTITY_PROFILE = 'identity-profile';
-  public static DEMOGRAPHIC = 'demographic';
+  public static BCEID_DEMOGRAPHIC = 'bceid-demographic';
+  public static BCSC_DEMOGRAPHIC = 'bcsc-demographic';
   // Enrollee enrolment:
   public static REGULATORY = 'regulatory';
   public static REMOTE_ACCESS = 'remote-access';
@@ -55,10 +55,10 @@ export class EnrolmentRoutes {
   public static enrolmentProfileRoutes(): string[] {
     return [
       // TODO shouldn't include identity access code or submission
-      EnrolmentRoutes.IDENTITY_ACCESS_CODE,
-      EnrolmentRoutes.IDENTITY_SUBMISSION,
-      EnrolmentRoutes.IDENTITY_PROFILE,
-      EnrolmentRoutes.DEMOGRAPHIC,
+      EnrolmentRoutes.ACCESS_CODE,
+      EnrolmentRoutes.ID_SUBMISSION,
+      EnrolmentRoutes.BCEID_DEMOGRAPHIC,
+      EnrolmentRoutes.BCSC_DEMOGRAPHIC,
       EnrolmentRoutes.REGULATORY,
       EnrolmentRoutes.REMOTE_ACCESS,
       // EnrolmentRoutes.DEVICE_PROVIDER,

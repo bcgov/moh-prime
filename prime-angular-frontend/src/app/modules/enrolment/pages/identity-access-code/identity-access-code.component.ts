@@ -74,7 +74,7 @@ export class IdentityAccessCodeComponent extends BaseEnrolmentProfilePage implem
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.IDENTITY_SUBMISSION;
+      nextRoutePath = EnrolmentRoutes.ID_SUBMISSION;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

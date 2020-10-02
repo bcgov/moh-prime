@@ -28,7 +28,7 @@ export class CollectionNoticeComponent implements OnInit {
     this.authService.hasJustLoggedIn = false;
 
     const route = (!this.enrolmentService.isProfileComplete)
-      ? EnrolmentRoutes.DEMOGRAPHIC
+      ? EnrolmentRoutes.BCSC_DEMOGRAPHIC
       : EnrolmentRoutes.OVERVIEW;
 
     if (this.enrolmentService.isInitialEnrolment) {

@@ -94,7 +94,7 @@ export class IdentitySubmissionComponent extends BaseEnrolmentProfilePage implem
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.IDENTITY_PROFILE;
+      nextRoutePath = EnrolmentRoutes.BCEID_DEMOGRAPHIC;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

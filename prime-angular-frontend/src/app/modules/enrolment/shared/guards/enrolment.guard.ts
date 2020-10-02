@@ -89,7 +89,7 @@ export class EnrolmentGuard extends BaseGuard {
       case IdentityProvider.BCEID:
         return this.manageBceidRouting(routePath, enrolment, identityProvider);
       case IdentityProvider.BCSC:
-        return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
+        return this.navigate(routePath, EnrolmentRoutes.BCSC_DEMOGRAPHIC);
       default:
         return false; // Identity provider is unknown and routing cannot be determined
     }
@@ -100,18 +100,18 @@ export class EnrolmentGuard extends BaseGuard {
     const nextRoutePath = RouteUtils.currentRoutePath(routePath);
 
     if (
-      currentRoutePath === EnrolmentRoutes.IDENTITY_ACCESS_CODE &&
-      nextRoutePath === EnrolmentRoutes.IDENTITY_SUBMISSION
+      currentRoutePath === EnrolmentRoutes.ACCESS_CODE &&
+      nextRoutePath === EnrolmentRoutes.ID_SUBMISSION
     ) {
-      return this.navigate(routePath, EnrolmentRoutes.IDENTITY_SUBMISSION);
+      return this.navigate(routePath, EnrolmentRoutes.ID_SUBMISSION);
     } else if (
-      currentRoutePath === EnrolmentRoutes.IDENTITY_SUBMISSION &&
-      nextRoutePath === EnrolmentRoutes.IDENTITY_PROFILE
+      currentRoutePath === EnrolmentRoutes.ID_SUBMISSION &&
+      nextRoutePath === EnrolmentRoutes.BCEID_DEMOGRAPHIC
     ) {
-      return this.navigate(routePath, EnrolmentRoutes.IDENTITY_PROFILE);
+      return this.navigate(routePath, EnrolmentRoutes.BCEID_DEMOGRAPHIC);
     } else {
       // Otherwise, start at the beginning of the enrolment process
-      return this.navigate(routePath, EnrolmentRoutes.IDENTITY_ACCESS_CODE);
+      return this.navigate(routePath, EnrolmentRoutes.ACCESS_CODE);
     }
   }
 
@@ -148,8 +148,8 @@ export class EnrolmentGuard extends BaseGuard {
     const route = this.route(routePath);
     const redirectionRoute = (hasNotCompletedProfile)
       ? (identityProvider === IdentityProvider.BCEID)
-        ? EnrolmentRoutes.IDENTITY_PROFILE
-        : EnrolmentRoutes.DEMOGRAPHIC
+        ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
+        : EnrolmentRoutes.BCSC_DEMOGRAPHIC
       : EnrolmentRoutes.OVERVIEW;
 
     const blacklistedRoutes = [

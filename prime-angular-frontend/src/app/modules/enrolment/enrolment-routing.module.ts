@@ -15,7 +15,7 @@ import { OverviewComponent } from './pages/overview/overview.component';
 import { IdentityAccessCodeComponent } from './pages/identity-access-code/identity-access-code.component';
 import { IdentitySubmissionComponent } from './pages/identity-submission/identity-submission.component';
 import { IdentityProfileComponent } from './pages/identity-profile/identity-profile.component';
-import { DemographicComponent } from './pages/demographic/demographic.component';
+import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 // TODO Temporary removal of device provider for Community Practice
 // import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
@@ -70,13 +70,13 @@ const routes: Routes = [
       // Enrollee access:
       //
       {
-        path: EnrolmentRoutes.IDENTITY_ACCESS_CODE,
+        path: EnrolmentRoutes.ACCESS_CODE,
         component: IdentityAccessCodeComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
       {
-        path: EnrolmentRoutes.IDENTITY_SUBMISSION,
+        path: EnrolmentRoutes.ID_SUBMISSION,
         component: IdentitySubmissionComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
@@ -85,14 +85,14 @@ const routes: Routes = [
       // Enrollee profile types:
       //
       {
-        path: EnrolmentRoutes.IDENTITY_PROFILE,
+        path: EnrolmentRoutes.BCEID_DEMOGRAPHIC,
         component: IdentityProfileComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
       {
-        path: EnrolmentRoutes.DEMOGRAPHIC,
-        component: DemographicComponent,
+        path: EnrolmentRoutes.BCSC_DEMOGRAPHIC,
+        component: BcscDemographicComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },

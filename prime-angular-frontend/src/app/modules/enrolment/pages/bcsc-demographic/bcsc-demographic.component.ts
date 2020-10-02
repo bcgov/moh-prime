@@ -23,11 +23,11 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-demographic',
-  templateUrl: './demographic.component.html',
-  styleUrls: ['./demographic.component.scss']
+  selector: 'app-bcsc-demographic',
+  templateUrl: './bcsc-demographic.component.html',
+  styleUrls: ['./bcsc-demographic.component.scss']
 })
-export class DemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
+export class BcscDemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
   /**
    * @description
    * Enrollee profile information not contained within the form.
