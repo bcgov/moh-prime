@@ -3,10 +3,15 @@ import { FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Observable, of } from 'rxjs';
+
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { Enrolment } from '@shared/models/enrolment.model';
+
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
@@ -32,7 +37,8 @@ export class IdentityProfileComponent extends BaseEnrolmentProfilePage implement
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    private authService: AuthService
   ) {
     super(
       route,
@@ -70,6 +76,11 @@ export class IdentityProfileComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected initForm() { }
+
+  protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
+    // TODO handle create or update similar to demographic and make method generic
+    return of(void (0));
+  }
 
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
