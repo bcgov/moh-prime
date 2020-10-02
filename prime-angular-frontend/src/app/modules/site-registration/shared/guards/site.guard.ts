@@ -101,19 +101,4 @@ export class SiteGuard extends BaseGuard {
       return false;
     }
   }
-
-  // TODO use in a proper fix after pushing in a temporary fix
-  // private getChildRoute(routePath: string): string {
-  //   return this.router.url
-  //     // Truncate query parameters
-  //     .split('?')
-  //     .shift()
-  //     // List the remaining URI params
-  //     .split('/')
-  //     // Remove URI params that are numbers
-  //     .filter(p => !/^\d+$/.test(p))
-  //     // Remove blacklisted URI params
-  //     .filter(p => !['new'].includes(p))
-  //     .pop(); // Current route is the last index
-  // }
 }

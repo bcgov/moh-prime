@@ -79,7 +79,7 @@ export class IdentityProfileComponent extends BaseEnrolmentProfilePage implement
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     // TODO handle create or update similar to demographic and make method generic
-    return of(void (0));
+    return of(void 0);
   }
 
   protected nextRouteAfterSubmit() {

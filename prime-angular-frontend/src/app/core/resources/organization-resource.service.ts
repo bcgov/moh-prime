@@ -13,8 +13,6 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
 
-// TODO use ApiResourceUtils to build URLs
-// TODO split out log messages for reuse into ErrorHandler
 @Injectable({
   providedIn: 'root'
 })

@@ -11,16 +11,15 @@ import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
+
 import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
 
-// TODO use ApiResourceUtils to build URLs
-// TODO split out log messages for reuse into ErrorHandler
 @Injectable({
   providedIn: 'root'
 })
@@ -231,8 +230,6 @@ export class SiteResource {
         })
       );
   }
-
-  // TODO should have a single GET of getBusinessLicenceById?
 
   public getBusinessLicences(siteId: number): Observable<BusinessLicenceDocument[]> {
     return this.apiResource.get<BusinessLicenceDocument[]>(`sites/${siteId}/business-licence`)
