@@ -256,10 +256,10 @@ export class EnrolmentResource {
       hpdid,
       physicalAddress,
       mailingAddress,
-      contactEmail,
-      contactPhone,
-      voicePhone,
-      voiceExtension,
+      email,
+      smsPhone,
+      phone,
+      phoneExtension,
       ...remainder
     } = enrollee;
 
@@ -277,10 +277,10 @@ export class EnrolmentResource {
         hpdid,
         physicalAddress,
         mailingAddress,
-        contactEmail,
-        contactPhone,
-        voicePhone,
-        voiceExtension
+        email,
+        smsPhone,
+        phone,
+        phoneExtension
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

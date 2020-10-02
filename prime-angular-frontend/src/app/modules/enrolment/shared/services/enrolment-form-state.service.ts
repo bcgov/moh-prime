@@ -300,16 +300,16 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         useDefaults: true,
         exclude: ['countryCode', 'street2']
       }),
-      voicePhone: [null, [
+      phone: [null, [
         Validators.required,
         FormControlValidators.phone
       ]],
-      voiceExtension: [null, [FormControlValidators.numeric]],
-      contactEmail: [null, [
+      phoneExtension: [null, [FormControlValidators.numeric]],
+      email: [null, [
         Validators.required,
         FormControlValidators.email
       ]],
-      contactPhone: [null, [FormControlValidators.phone]]
+      smsPhone: [null, [FormControlValidators.phone]]
     });
   }
 
@@ -319,16 +319,16 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
       mailingAddress: this.buildAddressForm(),
-      voicePhone: [null, [
+      phone: [null, [
         Validators.required,
         FormControlValidators.phone
       ]],
-      voiceExtension: [null, [FormControlValidators.numeric]],
-      contactEmail: [null, [
+      phoneExtension: [null, [FormControlValidators.numeric]],
+      email: [null, [
         Validators.required,
         FormControlValidators.email
       ]],
-      contactPhone: [null, [FormControlValidators.phone]]
+      smsPhone: [null, [FormControlValidators.phone]]
     });
   }
 

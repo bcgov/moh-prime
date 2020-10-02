@@ -144,8 +144,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
               givenNames,
               dateOfBirth,
               physicalAddress,
-              voicePhone: null,
-              contactEmail: null
+              phone: null,
+              email: null
             } as Enrollee;
           }),
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee(enrollee)),
@@ -204,8 +204,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
           givenNames,
           dateOfBirth,
           physicalAddress,
-          voicePhone: null,
-          contactEmail: null
+          phone: null,
+          email: null
         } as Enrollee;
       });
   }
