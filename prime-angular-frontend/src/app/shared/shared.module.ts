@@ -27,7 +27,6 @@ import { CasePipe } from '@shared/pipes/case.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
-import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SafePipe } from '@shared/pipes/safe.pipe';
@@ -91,7 +90,6 @@ import { RemoteUserReviewComponent } from './components/site/remote-user-review/
     YesNoPipe,
     WeekdayPipe,
     FullnamePipe,
-    SafeHtmlPipe,
     SafePipe,
     CasePipe,
     AddressPipe,
@@ -173,7 +171,6 @@ import { RemoteUserReviewComponent } from './components/site/remote-user-review/
     YesNoPipe,
     WeekdayPipe,
     FullnamePipe,
-    SafeHtmlPipe,
     SafePipe,
     AddressPipe,
     AddressComponent,

@@ -8,19 +8,18 @@ import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.serv
 import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
-import { NoContent } from '@core/resources/abstract-resource';
-import { BusinessDay } from '@registration/shared/models/business-day.model';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
+
+import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
 
-// TODO use ApiResourceUtils to build URLs
-// TODO split out log messages for reuse into ErrorHandler
 @Injectable({
   providedIn: 'root'
 })
@@ -100,10 +99,8 @@ export class SiteResource {
     }
     return this.apiResource.put<NoContent>(`sites/${site.id}`, site)
       .pipe(
-        // TODO remove pipe when ApiResource handles NoContent
-        map(() => {
-          this.toastService.openSuccessToast('Site has been updated');
-        }),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Site has been updated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site could not be updated');
           this.logger.error('[SiteRegistration] SiteResource::updateSite error has occurred: ', error);
@@ -115,8 +112,7 @@ export class SiteResource {
   public updateCompleted(siteId: number): NoContent {
     return this.apiResource.put<NoContent>(`sites/${siteId}/completed`)
       .pipe(
-        // TODO remove pipe when ApiResource handles NoContent
-        map(() => { }),
+        NoContentResponse,
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] SiteResource::updateSiteCompleted error has occurred: ', error);
           throw error;
@@ -127,7 +123,7 @@ export class SiteResource {
   public sendRemoteUsersEmailAdmin(siteId: number): NoContent {
     return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-admin`)
       .pipe(
-        map(() => { }),
+        NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Remote users update email could not be sent');
           this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmailAdmin error has occurred: ', error);
@@ -139,7 +135,7 @@ export class SiteResource {
   public sendRemoteUsersEmailUser(siteId: number, newRemoteUsers: RemoteUser[]): NoContent {
     return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-user`, newRemoteUsers)
       .pipe(
-        map(() => { }),
+        NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Remote users email could not be sent');
           this.logger.error('[SiteRegistration] SiteResource::sendRemoteUsersEmailUser error has occurred: ', error);
@@ -234,8 +230,6 @@ export class SiteResource {
         })
       );
   }
-
-  // TODO should have a single GET of getBusinessLicenceById?
 
   public getBusinessLicences(siteId: number): Observable<BusinessLicenceDocument[]> {
     return this.apiResource.get<BusinessLicenceDocument[]>(`sites/${siteId}/business-licence`)

@@ -42,6 +42,14 @@ export class LoggerService {
 
   /**
    * @description
+   * Outputs a stack trace.
+   */
+  public trace(msg: string, ...data: any[]) {
+    this.print('error', { msg, data });
+  }
+
+  /**
+   * @description
    * Pretty print JSON.
    */
   public pretty(msg: string, ...data: any[]) {

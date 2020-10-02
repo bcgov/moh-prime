@@ -6,8 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable, EMPTY, of, noop, combineLatest, concat } from 'rxjs';
 import { exhaustMap, map, tap, take } from 'rxjs/operators';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
-
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
@@ -20,7 +20,6 @@ import { NoteComponent } from '@shared/components/dialogs/content/note/note.comp
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';

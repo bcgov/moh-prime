@@ -5,8 +5,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { NgxMaskModule } from 'ngx-mask';
+import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { CollegeCertificationFormComponent } from './college-certification-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -15,7 +17,8 @@ import { ConfigService } from '@config/config.service';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 describe('CollegeCertificationFormComponent', () => {
   let component: CollegeCertificationFormComponent;
@@ -45,19 +48,24 @@ describe('CollegeCertificationFormComponent', () => {
           provide: ConfigService,
           useClass: MockConfigService
         },
-        EnrolmentStateService
+        {
+          provide: AuthService,
+          useClass: MockAuthService
+        },
+        EnrolmentFormStateService,
+        KeycloakService
       ]
     }).compileComponents();
   }));
 
   beforeEach(inject(
-    [EnrolmentStateService, ConfigService],
-    (enrolmentStateService: EnrolmentStateService, configService: ConfigService
+    [EnrolmentFormStateService, ConfigService],
+    (enrolmentFormStateService: EnrolmentFormStateService, configService: ConfigService
     ) => {
       fixture = TestBed.createComponent(CollegeCertificationFormComponent);
       component = fixture.componentInstance;
       // Add the bound FormGroup to the component
-      component.form = enrolmentStateService.buildCollegeCertificationForm();
+      component.form = enrolmentFormStateService.buildCollegeCertificationForm();
       component.selectedColleges = configService.colleges.map((college: CollegeConfig) => college.code);
       fixture.detectChanges();
     }));

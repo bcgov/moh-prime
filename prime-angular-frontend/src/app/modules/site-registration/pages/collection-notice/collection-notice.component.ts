@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
+
 import { AuthService } from '@auth/shared/services/auth.service';
+
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({

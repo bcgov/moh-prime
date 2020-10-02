@@ -17,6 +17,24 @@ export class RouteUtils {
 
   /**
    * @description
+   * Determine the current route path of a URL by removing query and
+   * URI params that can't be mapped to existing module routes.
+   */
+  public static currentRoutePath(url: string) {
+    // Truncate query parameters
+    return url.split('?')
+      .shift()
+      // List the remaining URI params
+      .split('/')
+      // Remove URI params that are numbers
+      .filter(p => !/^\d+$/.test(p))
+      // Remove blacklisted URI params
+      .filter(p => !['new'].includes(p))
+      .pop(); // Current route is the last index
+  }
+
+  /**
+   * @description
    * Route from a base route.
    */
   public routeTo(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}): void {

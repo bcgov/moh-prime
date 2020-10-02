@@ -7,6 +7,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -15,7 +16,6 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';

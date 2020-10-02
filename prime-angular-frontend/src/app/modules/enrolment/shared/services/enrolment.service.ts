@@ -31,14 +31,10 @@ export class EnrolmentService implements IEnrolmentService {
   }
 
   public get isInitialEnrolment(): boolean {
-    return (this.enrolment)
-      ? !this.enrolment.expiryDate
-      : false;
+    return !this.enrolment || (this.enrolment && !this.enrolment.expiryDate);
   }
 
   public get isProfileComplete(): boolean {
-    return (this.enrolment)
-      ? this.enrolment.profileCompleted
-      : false;
+    return this.enrolment && this.enrolment.profileCompleted;
   }
 }

@@ -7,21 +7,20 @@ import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { Address } from '@shared/models/address.model';
 import { AccessTerm } from '@shared/models/access-term.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Site } from '@registration/shared/models/site.model';
-import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -59,8 +58,7 @@ export class EnrolmentResource {
     const { id } = enrolment;
     const params = this.apiResourceUtilsService.makeHttpParams({ beenThroughTheWizard });
     return this.apiResource.put<NoContent>(`enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), params)
-      // TODO remove pipe when ApiResource handles NoContent
-      .pipe(map(() => { }));
+      .pipe(NoContentResponse);
   }
 
   public submitApplication(enrolment: Enrolment): Observable<HttpEnrollee> {

@@ -12,7 +12,10 @@ import { EnrolmentGuard } from './shared/guards/enrolment.guard';
 import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.component';
 
 import { OverviewComponent } from './pages/overview/overview.component';
-import { DemographicComponent } from './pages/demographic/demographic.component';
+import { AccessCodeComponent } from './pages/access-code/access-code.component';
+import { IdSubmissionComponent } from './pages/id-submission/id-submission.component';
+import { BceidDemographicComponent } from './pages/bceid-demographic/bceid-demographic.component';
+import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 // TODO Temporary removal of device provider for Community Practice
 // import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
@@ -27,9 +30,7 @@ import { AccessAgreementHistoryComponent } from './pages/access-agreement-histor
 import { PharmanetEnrolmentSummaryComponent } from './pages/pharmanet-enrolment-summary/pharmanet-enrolment-summary.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
-import {
-  AccessAgreementHistoryEnrolmentComponent
-} from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
+import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
 import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
 import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
@@ -66,14 +67,38 @@ const routes: Routes = [
         data: { title: 'PRIME Enrolment' }
       },
       //
-      // Enrollee profile:
+      // Enrollee access:
       //
       {
-        path: EnrolmentRoutes.DEMOGRAPHIC,
-        component: DemographicComponent,
+        path: EnrolmentRoutes.ACCESS_CODE,
+        component: AccessCodeComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
+      {
+        path: EnrolmentRoutes.ID_SUBMISSION,
+        component: IdSubmissionComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      //
+      // Enrollee profile types:
+      //
+      {
+        path: EnrolmentRoutes.BCEID_DEMOGRAPHIC,
+        component: BceidDemographicComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.BCSC_DEMOGRAPHIC,
+        component: BcscDemographicComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      //
+      // Enrollee enrolment:
+      //
       {
         path: EnrolmentRoutes.REGULATORY,
         component: RegulatoryComponent,
