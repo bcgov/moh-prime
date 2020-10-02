@@ -33,7 +33,7 @@ export class RegistrantGuard extends BaseGuard {
       } else if (this.authService.isRegistrant()) {
         // Allow route to resolve
         return resolve(true);
-      } else if (this.authService.hasEnrollee()) {
+      } else if (this.authService.isEnrollee()) {
         destinationRoute = this.config.routes.enrolment;
       }
 

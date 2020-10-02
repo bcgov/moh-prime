@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Enrolment } from '@shared/models/enrolment.model';
+
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
-import { Enrolment } from '@shared/models/enrolment.model';
 
 @Component({
   selector: 'app-access-declined',
@@ -18,7 +20,7 @@ export class AccessDeclinedComponent extends BaseEnrolmentPage implements OnInit
     super(route, router);
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.enrolmentService.enrolment$
       .subscribe((enrolment: Enrolment) =>
         this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment

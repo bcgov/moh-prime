@@ -3,23 +3,36 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Observable } from 'rxjs';
+import { exhaustMap, map, take, tap } from 'rxjs/operators';
+
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { Enrollee } from '@shared/models/enrollee.model';
+import { Enrolment } from '@shared/models/enrolment.model';
+
+import { User } from '@auth/shared/models/user.model';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
-  selector: 'app-demographic',
-  templateUrl: './demographic.component.html',
-  styleUrls: ['./demographic.component.scss']
+  selector: 'app-bcsc-demographic',
+  templateUrl: './bcsc-demographic.component.html',
+  styleUrls: ['./bcsc-demographic.component.scss']
 })
-export class DemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
+export class BcscDemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
+  /**
+   * @description
+   * Enrollee profile information not contained within the form.
+   */
+  public enrollee: Enrollee;
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
 
@@ -29,13 +42,25 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    private formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    private authService: AuthService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
   }
 
   public get preferredFirstName(): FormControl {
@@ -54,30 +79,6 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     return this.form.get('mailingAddress') as FormGroup;
   }
 
-  public get voicePhone(): FormControl {
-    return this.form.get('voicePhone') as FormControl;
-  }
-
-  public get voiceExtension(): FormControl {
-    return this.form.get('voiceExtension') as FormControl;
-  }
-
-  public get hasContactEmail(): FormControl {
-    return this.form.get('hasContactEmail') as FormControl;
-  }
-
-  public get contactEmail(): FormControl {
-    return this.form.get('contactEmail') as FormControl;
-  }
-
-  public get hasContactPhone(): FormControl {
-    return this.form.get('hasContactPhone') as FormControl;
-  }
-
-  public get contactPhone(): FormControl {
-    return this.form.get('contactPhone') as FormControl;
-  }
-
   public onPreferredNameChange() {
     this.hasPreferredName = !this.hasPreferredName;
 
@@ -94,13 +95,14 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public ngOnInit() {
+    this.getUser();
     this.createFormInstance();
     this.patchForm();
     this.initForm();
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentStateService.demographicForm;
+    this.form = this.enrolmentFormStateService.bcscDemographicForm;
   }
 
   protected initForm() {
@@ -124,23 +126,39 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     );
 
     this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
+  }
 
-    this.hasContactEmail.valueChanges
-      .subscribe((value: boolean) =>
-        this.toggleContactValidators(value, this.contactEmail)
-      );
-
-    this.hasContactPhone.valueChanges
-      .subscribe((value: boolean) =>
-        this.toggleContactValidators(value, this.contactPhone)
-      );
-
-    if (this.contactEmail.value) {
-      this.form.get('hasContactEmail').patchValue(true);
-    }
-
-    if (this.contactPhone.value) {
-      this.form.get('hasContactPhone').patchValue(true);
+  protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
+    if (!enrolment.id && this.isInitialEnrolment) {
+      return this.authService.getUser$()
+        .pipe(
+          map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
+            // Enforced the enrolment type instead of using Partial<Enrolment>
+            // to avoid creating constructors and partials for every model
+            return {
+              // Providing only the minimum required fields for creating an enrollee
+              userId,
+              hpdid,
+              firstName,
+              lastName,
+              givenNames,
+              dateOfBirth,
+              physicalAddress,
+              voicePhone: null,
+              contactEmail: null
+            } as Enrollee;
+          }),
+          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee(enrollee)),
+          map((newEnrolment: Enrolment) => {
+            newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
+            return newEnrolment;
+          }),
+          // Populate generated keys within the form state (eg. id, userId, etc)
+          tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
+          exhaustMap((newEnrolment: Enrolment) => super.performHttpRequest(newEnrolment))
+        );
+    } else {
+      return super.performHttpRequest(enrolment, beenThroughTheWizard);
     }
   }
 
@@ -171,11 +189,24 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
     }
   }
 
-  private toggleContactValidators(value: boolean, control: FormControl) {
-    if (!value) {
-      this.formUtilsService.resetAndClearValidators(control);
-    } else {
-      this.formUtilsService.setValidators(control, [Validators.required]);
-    }
+  private getUser(): void {
+    this.authService.getUser$()
+      .pipe(take(1))
+      .subscribe(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
+        // Enforced the enrollee type instead of using Partial<Enrollee>
+        // to avoid creating constructors and partials for every model
+        this.enrollee = {
+          // Providing only the minimum required fields for creating an enrollee
+          userId,
+          hpdid,
+          firstName,
+          lastName,
+          givenNames,
+          dateOfBirth,
+          physicalAddress,
+          voicePhone: null,
+          contactEmail: null
+        } as Enrollee;
+      });
   }
 }

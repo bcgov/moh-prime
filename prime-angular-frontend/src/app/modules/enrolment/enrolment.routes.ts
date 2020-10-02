@@ -3,8 +3,13 @@ export class EnrolmentRoutes {
   public static COLLECTION_NOTICE = 'collection-notice';
   // Enrollee overview:
   public static OVERVIEW = 'overview';
+  // Enrollee access:
+  public static ACCESS_CODE = 'access-code';
+  public static ID_SUBMISSION = 'id-submission';
   // Enrollee profile:
-  public static DEMOGRAPHIC = 'demographic';
+  public static BCEID_DEMOGRAPHIC = 'bceid-demographic';
+  public static BCSC_DEMOGRAPHIC = 'bcsc-demographic';
+  // Enrollee enrolment:
   public static REGULATORY = 'regulatory';
   public static REMOTE_ACCESS = 'remote-access';
   public static DEVICE_PROVIDER = 'device-provider';
@@ -49,7 +54,11 @@ export class EnrolmentRoutes {
   // enrollee incrementally through creating their profile
   public static enrolmentProfileRoutes(): string[] {
     return [
-      EnrolmentRoutes.DEMOGRAPHIC,
+      // TODO shouldn't include identity access code or submission
+      EnrolmentRoutes.ACCESS_CODE,
+      EnrolmentRoutes.ID_SUBMISSION,
+      EnrolmentRoutes.BCEID_DEMOGRAPHIC,
+      EnrolmentRoutes.BCSC_DEMOGRAPHIC,
       EnrolmentRoutes.REGULATORY,
       EnrolmentRoutes.REMOTE_ACCESS,
       // EnrolmentRoutes.DEVICE_PROVIDER,
