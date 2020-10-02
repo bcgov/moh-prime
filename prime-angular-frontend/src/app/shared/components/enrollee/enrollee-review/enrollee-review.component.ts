@@ -22,7 +22,7 @@ export class EnrolleeReviewComponent {
   @Input() public enrolment: Enrolment;
   @Output() public route: EventEmitter<string>;
 
-  public demographicRoutePath: EnrolmentRoutes;
+  public demographicRoutePath: string;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
