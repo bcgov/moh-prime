@@ -8,7 +8,7 @@ import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.serv
 import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
-import { NoContent } from '@core/resources/abstract-resource';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
@@ -73,11 +73,9 @@ export class OrganizationResource {
 
   public updateOrganization(organization: Organization): NoContent {
     return this.apiResource.put<NoContent>(`organizations/${organization.id}`, organization)
-      // TODO remove pipe when ApiResource handles NoContent
       .pipe(
-        map(() => {
-          this.toastService.openSuccessToast('Organization has been updated');
-        }),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization has been updated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be updated');
           this.logger.error('[SiteRegistration] OrganizationResource::updateOrganization error has occurred: ', error);
@@ -89,8 +87,7 @@ export class OrganizationResource {
   public updateCompleted(organizationId: number): NoContent {
     return this.apiResource.put<NoContent>(`organizations/${organizationId}/completed`)
       .pipe(
-        // TODO remove pipe when ApiResource handles NoContent
-        map(() => { }),
+        NoContentResponse,
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] OrganizationResource::updateCompleted error has occurred: ', error);
           throw error;
@@ -142,9 +139,8 @@ export class OrganizationResource {
   public acceptCurrentOrganizationAgreement(organizationId: number): NoContent {
     return this.apiResource.put<NoContent>(`organizations/${organizationId}/organization-agreement`)
       .pipe(
-        map(() => {
-          this.toastService.openSuccessToast('Organization agreement has been accepted');
-        }),
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization agreement has been accepted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be accepted');
           this.logger.error('[SiteRegistration] OrganizationResource::acceptCurrentOrganizationAgreement error has occurred: ', error);

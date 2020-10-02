@@ -113,7 +113,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         this.bcscDemographicForm
       ),
       this.regulatoryForm,
-      // TODO commented out until required
+      // TODO commented out until required to avoid it being validated
       // this.deviceProviderForm,
       this.jobsForm,
       this.selfDeclarationForm,
@@ -276,8 +276,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   private buildAccessForm(): FormGroup {
     return this.fb.group({
-      // TODO remove after testing
-      accessCode: ['lobster', [
+      accessCode: ['', [
         Validators.required,
         Validators.pattern(/^lobster$/)
       ]]
