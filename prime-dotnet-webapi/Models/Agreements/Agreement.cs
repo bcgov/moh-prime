@@ -39,13 +39,13 @@ namespace Prime.Models
         [JsonIgnore]
         public LimitsConditionsClause LimitsConditionsClause { get; set; }
 
-        [NotMapped]
-        public string TermsOfAccess { get; set; }
-
         public DateTimeOffset CreatedDate { get; set; }
 
         public DateTimeOffset? AcceptedDate { get; set; }
 
         public DateTimeOffset? ExpiryDate { get; set; }
+
+        [NotMapped]
+        public string AgreementMarkup { get; set; }
     }
 }

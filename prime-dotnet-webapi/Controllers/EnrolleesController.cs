@@ -21,7 +21,7 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAccessTermService _accessTermService;
+        private readonly IAgreementService _agreementService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
@@ -31,7 +31,7 @@ namespace Prime.Controllers
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
-            IAccessTermService accessTermService,
+            IAgreementService agreementService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
@@ -40,7 +40,7 @@ namespace Prime.Controllers
             IRazorConverterService razorConverterService)
         {
             _enrolleeService = enrolleeService;
-            _accessTermService = accessTermService;
+            _agreementService = agreementService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
             _adminService = adminService;
             _businessEventService = businessEventService;

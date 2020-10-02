@@ -9,13 +9,13 @@ using Prime.Models.Api;
 
 namespace Prime.Services
 {
-    public class AccessTermService : BaseService, IAccessTermService
+    public class AgreementService : BaseService, IAgreementService
     {
-        private static readonly TimeSpan ACCESS_TERM_EXPIRY = TimeSpan.FromDays(365);
+        private static readonly TimeSpan AGREEMENT_EXPIRY = TimeSpan.FromDays(365);
 
         private readonly IRazorConverterService _razorConverterService;
 
-        public AccessTermService(
+        public AgreementService(
             ApiDbContext context, IHttpContextAccessor httpContext,
             IRazorConverterService razorConverterService)
             : base(context, httpContext)
@@ -24,33 +24,33 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Gets the access term for an enrollee by ID, if it exists (No Tracking).
+        /// Gets the agreement for an enrollee by ID, if it exists (No Tracking).
         /// </summary>
-        public async Task<Agreement> GetEnrolleeAccessTermAsync(int enrolleeId, int accessTermId, bool includeText = false)
+        public async Task<Agreement> GetEnrolleeAgreementAsync(int enrolleeId, int agreementId, bool includeText = false)
         {
-            var accessTerm = await _context.Agreements
+            var agreement = await _context.Agreements
                 .AsNoTracking()
-                .Where(at => at.Id == accessTermId)
+                .Where(at => at.Id == agreementId)
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .If(includeText, q => q.Include(at => at.AgreementVersion).Include(at => at.LimitsConditionsClause))
                 .SingleOrDefaultAsync();
 
             if (includeText)
             {
-                await RenderHtml(accessTerm);
+                await RenderHtml(agreement);
             }
 
-            return accessTerm;
+            return agreement;
         }
 
         /// <summary>
-        /// Get the list of access terms for an enrollee, using filters (No Tracking).
+        /// Get the list of agreements for an enrollee, using filters (No Tracking).
         /// </summary>
-        public async Task<IEnumerable<Agreement>> GetAccessTermsAsync(int enrolleeId, AccessTermFilters filters)
+        public async Task<IEnumerable<Agreement>> GetEnrolleeAgreementsAsync(int enrolleeId, AgreementFilters filters)
         {
-            filters = filters ?? new AccessTermFilters();
+            filters = filters ?? new AgreementFilters();
 
-            var accessTerms = await _context.Agreements
+            var agreements = await _context.Agreements
                 .AsNoTracking()
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .OrderByDescending(at => at.CreatedDate)
@@ -63,20 +63,20 @@ namespace Prime.Services
             if (filters.YearAccepted.HasValue)
             {
                 // NpgSQL does not support DateTimeOffset operations, this filtering must be done after fetching all the data :(
-                accessTerms = accessTerms
+                agreements = agreements
                     .Where(at => at.AcceptedDate.Value.Year == filters.YearAccepted)
                     .ToArray();
             }
 
             if (filters.IncludeText)
             {
-                await RenderHtml(accessTerms);
+                await RenderHtml(agreements);
             }
 
-            return accessTerms;
+            return agreements;
         }
 
-        public async Task CreateEnrolleeAccessTermAsync(int enrolleeId)
+        public async Task CreateEnrolleeAgreementAsync(int enrolleeId)
         {
             var enrollee = await _context.Enrollees
                 .AsNoTracking()
@@ -86,7 +86,7 @@ namespace Prime.Services
                 .Include(e => e.AccessAgreementNote)
                 .SingleAsync(e => e.Id == enrolleeId);
 
-            var accessTerm = new Agreement
+            var agreement = new Agreement
             {
                 EnrolleeId = enrolleeId,
                 AgreementVersionId = await GetCurrentAgreementVersionIdForUserAsync(enrollee),
@@ -94,55 +94,55 @@ namespace Prime.Services
                 CreatedDate = DateTimeOffset.Now
             };
 
-            _context.Add(accessTerm);
+            _context.Add(agreement);
             await _context.SaveChangesAsync();
         }
 
         /// <summary>
-        /// Accepts the Enrollee's newest Access Term, if it hasn't already been accepted.
+        /// Accepts the Enrollee's newest Agreement, if it hasn't already been accepted.
         /// </summary>
-        public async Task AcceptCurrentAccessTermAsync(int enrolleeId)
+        public async Task AcceptCurrentEnrolleeAgreementAsync(int enrolleeId)
         {
-            var accessTerm = await _context.Agreements
+            var agreement = await _context.Agreements
                 .OrderByDescending(at => at.CreatedDate)
                 .FirstAsync(at => at.EnrolleeId == enrolleeId);
 
-            if (accessTerm.AcceptedDate == null)
+            if (agreement.AcceptedDate == null)
             {
-                accessTerm.AcceptedDate = DateTimeOffset.Now;
-                accessTerm.ExpiryDate = DateTimeOffset.Now.Add(ACCESS_TERM_EXPIRY);
+                agreement.AcceptedDate = DateTimeOffset.Now;
+                agreement.ExpiryDate = DateTimeOffset.Now.Add(AGREEMENT_EXPIRY);
 
                 await _context.SaveChangesAsync();
             }
         }
 
         /// <summary>
-        /// Expires the Enrollee's most recently accepted Access Term.
+        /// Expires the Enrollee's most recently accepted Agreement.
         /// </summary>
-        public async Task ExpireCurrentAccessTermAsync(int enrolleeId)
+        public async Task ExpireCurrentEnrolleeAgreementAsync(int enrolleeId)
         {
-            var accessTerm = await _context.Agreements
+            var agreement = await _context.Agreements
                 .OrderByDescending(at => at.CreatedDate)
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .FirstOrDefaultAsync(at => at.AcceptedDate.HasValue);
 
-            if (accessTerm != null)
+            if (agreement != null)
             {
-                accessTerm.ExpiryDate = DateTimeOffset.Now;
+                agreement.ExpiryDate = DateTimeOffset.Now;
                 await _context.SaveChangesAsync();
             }
         }
 
         /// <summary>
-        /// Renders the HTML text of the Access Term for viewing on the frontend.
+        /// Renders the HTML text of the Agreement for viewing on the frontend.
         /// </summary>
-        private async Task RenderHtml(params Agreement[] accessTerms)
+        private async Task RenderHtml(params Agreement[] agreements)
         {
-            foreach (var term in accessTerms)
+            foreach (var agreement in agreements)
             {
-                if (term != null)
+                if (agreement != null)
                 {
-                    term.TermsOfAccess = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", term);
+                    agreement.AgreementMarkup = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", agreement);
                 }
             }
         }

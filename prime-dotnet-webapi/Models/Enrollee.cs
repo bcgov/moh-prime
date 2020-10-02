@@ -193,7 +193,7 @@ namespace Prime.Models
         }
 
         /// <summary>
-        /// The expiry date of the Enrollee's most recently accepted Access Term.
+        /// The expiry date of the Enrollee's most recently accepted Agreement.
         /// </summary>
         [NotMapped]
         [Computed]

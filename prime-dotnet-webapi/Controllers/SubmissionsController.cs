@@ -21,20 +21,20 @@ namespace Prime.Controllers
         private readonly ISubmissionService _submissionService;
         private readonly IAdminService _adminService;
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAccessTermService _accessTermService;
+        private readonly IAgreementService _agreementService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
 
         public SubmissionsController(
             ISubmissionService submissionService,
             IAdminService adminService,
             IEnrolleeService enrolleeService,
-            IAccessTermService accessTermService,
+            IAgreementService agreementService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService)
         {
             _submissionService = submissionService;
             _adminService = adminService;
             _enrolleeService = enrolleeService;
-            _accessTermService = accessTermService;
+            _agreementService = agreementService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
         }
 
