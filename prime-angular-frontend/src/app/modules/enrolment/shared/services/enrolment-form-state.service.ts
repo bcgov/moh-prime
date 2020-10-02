@@ -289,7 +289,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     });
   }
 
-  public buildBceidDemographicForm(): FormGroup {
+  private buildBceidDemographicForm(): FormGroup {
     return this.fb.group({
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],

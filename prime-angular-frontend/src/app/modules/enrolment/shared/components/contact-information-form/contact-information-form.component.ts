@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 
@@ -11,9 +11,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 export class ContactInformationFormComponent implements OnInit {
   @Input() public form: FormGroup;
 
-  constructor(
-    private formUtilsService: FormUtilsService
-  ) { }
+  constructor() { }
 
   public get voicePhone(): FormControl {
     return this.form.get('voicePhone') as FormControl;

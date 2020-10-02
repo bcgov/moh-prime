@@ -7,12 +7,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NgxMaskModule } from 'ngx-mask';
 import { KeycloakService } from 'keycloak-angular';
 
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { AddressComponent } from './address.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 describe('AddressComponent', () => {
@@ -41,6 +43,10 @@ describe('AddressComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
+          },
+          {
+            provide: AuthService,
+            useValue: MockAuthService
           },
           EnrolmentFormStateService,
           KeycloakService

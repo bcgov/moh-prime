@@ -7,14 +7,16 @@ import { BehaviorSubject } from 'rxjs';
 
 import { KeycloakService } from 'keycloak-angular';
 
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
+import { JobFormComponent } from './job-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SharedModule } from '@shared/shared.module';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
-import { JobFormComponent } from './job-form.component';
 
 describe('JobFormComponent', () => {
   let component: JobFormComponent;
@@ -39,6 +41,10 @@ describe('JobFormComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
           },
           EnrolmentFormStateService,
           KeycloakService
