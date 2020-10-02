@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -46,6 +46,10 @@ export class IdentityAccessCodeComponent extends BaseEnrolmentProfilePage implem
     );
   }
 
+  public get accessCode(): FormControl {
+    return this.form.get('accessCode') as FormControl;
+  }
+
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm();
@@ -53,7 +57,7 @@ export class IdentityAccessCodeComponent extends BaseEnrolmentProfilePage implem
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.identityForm;
+    this.form = this.enrolmentFormStateService.accessForm;
   }
 
   protected initForm() { }

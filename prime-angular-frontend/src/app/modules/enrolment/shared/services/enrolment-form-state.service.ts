@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
-import { RouterEvent } from '@angular/router';
 
+import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
@@ -9,6 +9,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
+import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
@@ -17,15 +18,15 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 
 // TODO move to lib or common folder
 import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
-import { ArrayUtils } from '@lib/utils/array-utils.class';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
-  public identityForm: FormGroup;
-  public demographicForm: FormGroup;
+  public accessForm: FormGroup;
+  public identityDocumentForm: FormGroup;
+  public bceidDemographicForm: FormGroup;
+  public bcscDemographicForm: FormGroup;
   public regulatoryForm: FormGroup;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
@@ -72,8 +73,9 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public get json(): Enrolment {
     const id = this.enrolleeId;
     const userId = this.userId;
-
-    const profile = this.demographicForm.getRawValue();
+    const profile = (this.identityProvider === IdentityProvider.BCEID)
+      ? this.bceidDemographicForm.getRawValue()
+      : this.bcscDemographicForm.getRawValue();
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
@@ -100,8 +102,16 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
    */
   public get forms(): AbstractControl[] {
     return [
-      ...ArrayUtils.insertIf(this.identityProvider === IdentityProvider.BCEID, this.identityForm),
-      ...ArrayUtils.insertIf(this.identityProvider === IdentityProvider.BCSC, this.demographicForm),
+      ...ArrayUtils.insertIf(
+        this.identityProvider === IdentityProvider.BCEID,
+        // Purposefully omitted accessForm and identityDocumentForm
+        // from the list of forms since they are used out of band
+        this.bceidDemographicForm
+      ),
+      ...ArrayUtils.insertIf(
+        this.identityProvider === IdentityProvider.BCSC,
+        this.bcscDemographicForm
+      ),
       this.regulatoryForm,
       // TODO commented out until required
       // this.deviceProviderForm,
@@ -136,9 +146,13 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
    * Initialize and configure the forms for patching, which is also used
    * clear previous form data from the service.
    */
-  protected init() {
-    this.identityForm = this.buildIdentityForm();
-    this.demographicForm = this.buildDemographicForm();
+  protected buildForms() {
+    // The accessForm and identityDocumentForm are used out of band
+    // compared to the other form groups
+    this.accessForm = this.buildAccessForm();
+    this.identityDocumentForm = this.buildIdentityDocumentForm();
+    this.bceidDemographicForm = this.buildBceidDemographicForm();
+    this.bcscDemographicForm = this.buildBcscDemographicForm();
     this.regulatoryForm = this.buildRegulatoryForm();
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
@@ -155,7 +169,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       return null;
     }
 
-    this.demographicForm.patchValue(enrolment.enrollee);
+    this.bcscDemographicForm.patchValue(enrolment.enrollee);
     this.deviceProviderForm.patchValue(enrolment);
 
     if (enrolment.certifications.length) {
@@ -260,33 +274,46 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
    * Form Builders and Helpers
    */
 
-  private buildIdentityForm(): FormGroup {
+  private buildAccessForm(): FormGroup {
     return this.fb.group({
-      accessCode: [null, [Validators.required]],
-      identificationGuid: [null, []], // Validators.required
-      firstName: [null, []], // Validators.required
-      lastName: [null, []], // Validators.required
+      accessCode: ['', [
+        Validators.required,
+        Validators.pattern(/^lobster$/)
+      ]]
+    });
+  }
+
+  private buildIdentityDocumentForm(): FormGroup {
+    return this.fb.group({
+      identificationDocumentGuid: [null, [Validators.required]]
+    });
+  }
+
+  private buildBceidDemographicForm(): FormGroup {
+    return this.fb.group({
+      firstName: [null, [Validators.required]],
+      lastName: [null, [Validators.required]],
       middleName: [null, []],
-      dateOfBirth: [null, []], // Validators.required
+      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       physicalAddress: this.buildAddressForm({
-        // areRequired: ['street', 'city', 'provinceCode', 'postal'],
+        areRequired: ['street', 'city', 'provinceCode', 'postal'],
         useDefaults: true,
-        exclude: ['country', 'street2']
+        exclude: ['countryCode', 'street2']
       }),
       voicePhone: [null, [
-        // Validators.required,
+        Validators.required,
         FormControlValidators.phone
       ]],
       voiceExtension: [null, [FormControlValidators.numeric]],
       contactEmail: [null, [
-        // Validators.required,
+        Validators.required,
         FormControlValidators.email
       ]],
       contactPhone: [null, [FormControlValidators.phone]]
     });
   }
 
-  private buildDemographicForm(): FormGroup {
+  private buildBcscDemographicForm(): FormGroup {
     return this.fb.group({
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],

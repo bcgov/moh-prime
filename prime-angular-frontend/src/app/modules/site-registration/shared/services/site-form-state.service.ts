@@ -144,7 +144,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * Initialize and configure the forms for patching, which is also used
    * clear previous form data from the service.
    */
-  protected init() {
+  protected buildForms() {
     this.careSettingTypeForm = this.buildCareSettingTypeForm();
     this.businessForm = this.buildBusinessForm();
     this.siteAddressForm = this.buildSiteAddressForm();

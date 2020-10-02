@@ -17,10 +17,10 @@ export class RouteUtils {
 
   /**
    * @description
-   * Determine the current route by removing query and URI params
-   * that can't be mapped to existing module routes.
+   * Determine the current route path of a URL by removing query and
+   * URI params that can't be mapped to existing module routes.
    */
-  public static currentRoute(url: string) {
+  public static currentRoutePath(url: string) {
     // Truncate query parameters
     return url.split('?')
       .shift()

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -20,6 +20,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   styleUrls: ['./identity-profile.component.scss']
 })
 export class IdentityProfileComponent extends BaseEnrolmentProfilePage implements OnInit {
+  public addressFormControlNames: string[];
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -44,6 +46,13 @@ export class IdentityProfileComponent extends BaseEnrolmentProfilePage implement
       utilService,
       formUtilsService
     );
+
+    this.addressFormControlNames = [
+      'street',
+      'city',
+      'provinceCode',
+      'postal'
+    ];
   }
 
   public get physicalAddress(): FormGroup {
@@ -57,7 +66,7 @@ export class IdentityProfileComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.identityForm;
+    this.form = this.enrolmentFormStateService.bceidDemographicForm;
   }
 
   protected initForm() { }

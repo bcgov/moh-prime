@@ -102,7 +102,7 @@ export class DemographicComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.demographicForm;
+    this.form = this.enrolmentFormStateService.bcscDemographicForm;
   }
 
   protected initForm() {

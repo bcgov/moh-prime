@@ -64,7 +64,7 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
    * Initialize and configure the forms for patching, which is also used
    * to clear previous form data from the service.
    */
-  protected init() {
+  protected buildForms() {
     this.signingAuthorityForm = this.buildSigningAuthorityForm();
     this.organizationNameForm = this.buildOrganizationNameForm();
     this.organizationAgreementForm = this.buildOrganizationAgreementForm();

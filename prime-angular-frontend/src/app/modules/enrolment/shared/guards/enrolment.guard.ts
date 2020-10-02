@@ -63,7 +63,7 @@ export class EnrolmentGuard extends BaseGuard {
    */
   private routeDestination(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
     // On login the enrollees will always be redirected to
-    // the collection notice
+    // the collection notice, which should always resolve
     if (routePath.includes(EnrolmentRoutes.COLLECTION_NOTICE)) {
       return true;
     }
@@ -72,13 +72,10 @@ export class EnrolmentGuard extends BaseGuard {
       // Route based on identity provider to determine sequence of routing
       // required to create a new enrolment
       return this.identityProviderRouting(routePath, enrolment, identityProvider);
-    } else if (enrolment) {
-      // Otherwise, routes are directed based on enrolment status
-      return this.enrolmentStatusRouting(routePath, enrolment, identityProvider);
     }
 
-    // Otherwise, prevent the route from resolving
-    return false;
+    // Otherwise, routes are dictated based on enrolment status
+    return this.enrolmentStatusRouting(routePath, enrolment, identityProvider);
   }
 
   /**
@@ -98,22 +95,23 @@ export class EnrolmentGuard extends BaseGuard {
   }
 
   private manageBceidRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
-    // const tree: UrlTree =router.parseUrl('/team/33/(user/victor//support:help)?debug=true#fragment');
-    // const f = tree.fragment; // return 'fragment'
-    // const q = tree.queryParams; // returns {debug: 'true'}
-    // const g: UrlSegmentGroup = tree.root.children[PRIMARY_OUTLET];
-    // const s: UrlSegment[] = g.segments; // returns 2 segments 'team' and '33'
-    // g.children[PRIMARY_OUTLET].segments; // returns 2 segments 'user' and 'victor'
-    // g.children['support'].segments; // return 1 segment 'help'
+    const currentRoutePath = RouteUtils.currentRoutePath(this.router.url);
+    const nextRoutePath = RouteUtils.currentRoutePath(routePath);
 
-    console.log('ROUTER', this.router.url);
-    console.log('ROUTER', this.router.parseUrl(this.router.url));
-
-    // TODO a sequence of routing is required
-    // TODO check previous and current route and whether sequence is correct
-    // TODO Incorrect sequence goes back to access code
-
-    return this.navigate(routePath, EnrolmentRoutes.IDENTITY_ACCESS_CODE);
+    if (
+      currentRoutePath === EnrolmentRoutes.IDENTITY_ACCESS_CODE &&
+      nextRoutePath === EnrolmentRoutes.IDENTITY_SUBMISSION
+    ) {
+      return this.navigate(routePath, EnrolmentRoutes.IDENTITY_SUBMISSION);
+    } else if (
+      currentRoutePath === EnrolmentRoutes.IDENTITY_SUBMISSION &&
+      nextRoutePath === EnrolmentRoutes.IDENTITY_PROFILE
+    ) {
+      return this.navigate(routePath, EnrolmentRoutes.IDENTITY_PROFILE);
+    } else {
+      // Otherwise, start at the beginning of the enrolment process
+      return this.navigate(routePath, EnrolmentRoutes.IDENTITY_ACCESS_CODE);
+    }
   }
 
   /**

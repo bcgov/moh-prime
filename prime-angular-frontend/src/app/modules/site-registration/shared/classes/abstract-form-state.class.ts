@@ -11,9 +11,6 @@ import { Country } from '@shared/enums/country.enum';
 import { Person } from '@registration/shared/models/person.model';
 import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 
-// TODO revisit access to form groups as services are refined, but
-// for now public, and then make into BehaviourSubject and use
-// asObservable, which would make them immutable
 export abstract class AbstractFormState<T> {
   protected patched: boolean;
   protected readonly resetRoutes: string[] = [];
@@ -23,13 +20,7 @@ export abstract class AbstractFormState<T> {
     protected routeStateService: RouteStateService,
     protected logger: LoggerService
   ) {
-    // Initial state of the form is unpatched and ready for
-    // enrolment information
-    this.patched = false;
-
-    this.init();
-
-    this.routeStateResetListener(this.resetRoutes);
+    this.initialize();
   }
 
   /**
@@ -108,10 +99,9 @@ export abstract class AbstractFormState<T> {
 
   /**
    * @description
-   * Initialize and configure the forms for patching, which is also used
-   * to clear previous form data from the service.
+   * Build and configure the forms for patching.
    */
-  protected abstract init(): void;
+  protected abstract buildForms(): void;
 
   /**
    * @description
@@ -140,7 +130,7 @@ export abstract class AbstractFormState<T> {
 
     this.routeStateService.onNavigationEnd()
       .pipe(
-        map((event: RouterEvent) => RouteUtils.currentRoute(event.url)),
+        map((event: RouterEvent) => RouteUtils.currentRoutePath(event.url)),
         tap((routePath: string) => this.logger.info('CURRENT_ROUTE', routePath)),
         map((currentRoutePath: string) => this.checkResetRoutes(currentRoutePath, resetRoutes))
       )
@@ -269,5 +259,20 @@ export abstract class AbstractFormState<T> {
     }
 
     return person;
+  }
+
+  /**
+   * @description
+   * Initialize the form state service for use by building the required
+   * forms and setting up the route state listener.
+   */
+  private initialize() {
+    // Initial state of the form is unpatched and ready for
+    // enrolment information to be populated
+    this.patched = false;
+
+    this.buildForms();
+
+    this.routeStateResetListener(this.resetRoutes);
   }
 }

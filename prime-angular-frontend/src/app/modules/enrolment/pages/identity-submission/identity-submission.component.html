@@ -23,6 +23,15 @@
                            (completed)="onUpload($event)">
       </app-document-upload>
 
+      <app-alert *ngIf="hasNoIdentificationDocumentError"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          No identification document has been uploaded.
+        </ng-container>
+      </app-alert>
+
     </section>
 
   </form>

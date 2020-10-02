@@ -31,8 +31,8 @@ export class BusinessLicenceComponent implements OnInit {
   public title: string;
   public routeUtils: RouteUtils;
   public businessLicenceDocuments: BusinessLicenceDocument[];
-  public hasNoBusinessLicenceError: boolean;
   public uploadedFile: boolean;
+  public hasNoBusinessLicenceError: boolean;
   public doingBusinessAsNames: string[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;

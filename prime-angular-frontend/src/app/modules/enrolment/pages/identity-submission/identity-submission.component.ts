@@ -21,6 +21,9 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   styleUrls: ['./identity-submission.component.scss']
 })
 export class IdentitySubmissionComponent extends BaseEnrolmentProfilePage implements OnInit {
+  public uploadedFile: boolean;
+  public hasNoIdentificationDocumentError: boolean;
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -45,10 +48,18 @@ export class IdentitySubmissionComponent extends BaseEnrolmentProfilePage implem
       utilService,
       formUtilsService
     );
+
+    this.uploadedFile = false;
+  }
+
+  public get identificationDocumentGuid(): FormControl {
+    return this.form.get('identificationDocumentGuid') as FormControl;
   }
 
   public onUpload(document: BaseDocument) {
-
+    this.identificationDocumentGuid.patchValue(document.documentGuid);
+    this.uploadedFile = true;
+    this.hasNoIdentificationDocumentError = false;
   }
 
   public ngOnInit() {
@@ -58,7 +69,7 @@ export class IdentitySubmissionComponent extends BaseEnrolmentProfilePage implem
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.identityForm;
+    this.form = this.enrolmentFormStateService.identityDocumentForm;
   }
 
   protected initForm() { }
@@ -70,6 +81,14 @@ export class IdentitySubmissionComponent extends BaseEnrolmentProfilePage implem
       this.allowRoutingWhenDirty = true;
       this.nextRouteAfterSubmit();
     }
+  }
+
+  protected onSubmitFormIsValid(): void {
+    this.hasNoIdentificationDocumentError = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.hasNoIdentificationDocumentError = true;
   }
 
   protected nextRouteAfterSubmit() {

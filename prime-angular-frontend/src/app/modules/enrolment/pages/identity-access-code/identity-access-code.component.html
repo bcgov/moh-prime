@@ -19,13 +19,14 @@
       </app-page-subheader>
 
       <div class="row">
-        <div class="col">
+        <div class="col-sm-8">
 
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Passcode"
                    formControlName="accessCode">
-            <mat-error>Required</mat-error>
+            <mat-error *ngIf="accessCode.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="accessCode.hasError('pattern')">Invalid Passcode</mat-error>
           </mat-form-field>
 
         </div>
