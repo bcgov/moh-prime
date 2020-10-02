@@ -1,6 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { IdentityProfileComponent } from './identity-profile.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
 describe('IdentityProfileComponent', () => {
   let component: IdentityProfileComponent;
@@ -8,7 +13,21 @@ describe('IdentityProfileComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [IdentityProfileComponent]
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        ReactiveFormsModule,
+        NgxMaterialModule
+      ],
+      declarations: [
+        IdentityProfileComponent
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
+      ]
     })
       .compileComponents();
   }));
