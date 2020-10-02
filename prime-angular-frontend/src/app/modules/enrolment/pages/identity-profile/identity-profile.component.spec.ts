@@ -2,6 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { KeycloakService } from 'keycloak-angular';
 
 import { IdentityProfileComponent } from './identity-profile.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -14,6 +17,7 @@ describe('IdentityProfileComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        BrowserAnimationsModule,
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
@@ -26,7 +30,8 @@ describe('IdentityProfileComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        KeycloakService
       ]
     })
       .compileComponents();
