@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { KeycloakService } from 'keycloak-angular';
 
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { SelfDeclarationComponent } from './self-declaration.component';
@@ -12,6 +13,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 
@@ -35,6 +37,10 @@ describe('SelfDeclarationComponent', () => {
           {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
           },
           {
             provide: EnrolmentService,

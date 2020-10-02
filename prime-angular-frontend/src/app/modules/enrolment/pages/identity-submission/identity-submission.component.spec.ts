@@ -5,9 +5,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { KeycloakService } from 'keycloak-angular';
 
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+
 import { IdentitySubmissionComponent } from './identity-submission.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 describe('IdentitySubmissionComponent', () => {
   let component: IdentitySubmissionComponent;
@@ -28,6 +31,10 @@ describe('IdentitySubmissionComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
         },
         KeycloakService
       ]
