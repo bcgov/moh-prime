@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 // TODO move into shared folder
 import { IProgressIndicator } from '@enrolment/shared/components/progress-indicator/progress-indicator.component';
 

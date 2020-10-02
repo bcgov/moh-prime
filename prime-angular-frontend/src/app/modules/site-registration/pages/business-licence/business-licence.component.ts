@@ -5,13 +5,13 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { noop, of, Subscription } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';

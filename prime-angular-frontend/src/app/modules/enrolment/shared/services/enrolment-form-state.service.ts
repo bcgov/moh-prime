@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { LoggerService } from '@core/services/logger.service';
@@ -15,9 +16,6 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-
-// TODO move to lib or common folder
-import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -73,6 +71,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public get json(): Enrolment {
     const id = this.enrolleeId;
     const userId = this.userId;
+    // TODO may need to merge partials into full model
     const profile = (this.identityProvider === IdentityProvider.BCEID)
       ? this.bceidDemographicForm.getRawValue()
       : this.bcscDemographicForm.getRawValue();
@@ -276,7 +275,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   private buildAccessForm(): FormGroup {
     return this.fb.group({
-      accessCode: ['', [
+      // TODO remove after testing
+      accessCode: ['lobster', [
         Validators.required,
         Validators.pattern(/^lobster$/)
       ]]

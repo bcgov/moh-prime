@@ -3,13 +3,13 @@ import { RouterEvent } from '@angular/router';
 
 import { map, tap } from 'rxjs/operators';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
 
 import { Person } from '@registration/shared/models/person.model';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 
 export abstract class AbstractFormState<T> {
   protected patched: boolean;

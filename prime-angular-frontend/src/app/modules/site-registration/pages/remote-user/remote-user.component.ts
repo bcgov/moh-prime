@@ -4,12 +4,12 @@ import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
 import { Province } from '@shared/enums/province.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';

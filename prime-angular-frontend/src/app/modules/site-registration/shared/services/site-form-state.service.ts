@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { StringUtils } from '@lib/utils/string-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
@@ -9,7 +10,6 @@ import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 import { Contact } from '@registration/shared/models/contact.model';

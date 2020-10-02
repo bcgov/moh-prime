@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -14,7 +15,6 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
