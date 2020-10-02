@@ -63,10 +63,10 @@ namespace Prime.Models.Api
                 FirstName = MatchAny(FirstName, enrollee.FirstName, enrollee.PreferredFirstName),
                 LastName = MatchAny(LastName, enrollee.LastName, enrollee.PreferredLastName),
                 DateOfBirth = MatchDate(DateOfBirth, enrollee.DateOfBirth),
-                Email = MatchAny(Email, enrollee.ContactEmail),
-                Phone = MatchAny(Phone, enrollee.VoicePhone),
-                PhoneExtension = MatchAny(PhoneExtension, enrollee.VoiceExtension),
-                MobilePhone = MatchAny(MobilePhone, enrollee.ContactPhone),
+                Email = MatchAny(Email, enrollee.Email),
+                Phone = MatchAny(Phone, enrollee.Phone),
+                PhoneExtension = MatchAny(PhoneExtension, enrollee.PhoneExtension),
+                MobilePhone = MatchAny(MobilePhone, enrollee.SmsPhone),
                 CollegeRecords = CollegeRecords?.Select(record => new GpidValidationResponse.CollegeRecordResponse
                 {
                     CollegeName = record.CollegeName,

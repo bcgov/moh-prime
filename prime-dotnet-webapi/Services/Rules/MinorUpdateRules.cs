@@ -111,10 +111,10 @@ namespace Prime.Services.Rules
             config.IgnoreCollectionOrder = true;
 
             // Fields considered "minor" changes
-            config.IgnoreProperty<Enrollee>(x => x.ContactEmail);
-            config.IgnoreProperty<Enrollee>(x => x.ContactPhone);
-            config.IgnoreProperty<Enrollee>(x => x.VoicePhone);
-            config.IgnoreProperty<Enrollee>(x => x.VoiceExtension);
+            config.IgnoreProperty<Enrollee>(x => x.Email);
+            config.IgnoreProperty<Enrollee>(x => x.SmsPhone);
+            config.IgnoreProperty<Enrollee>(x => x.Phone);
+            config.IgnoreProperty<Enrollee>(x => x.PhoneExtension);
             if (isObo)
             {
                 config.IgnoreProperty<Enrollee>(x => x.Jobs);
