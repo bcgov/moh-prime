@@ -3,6 +3,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { SelfDeclarationComponent } from './self-declaration.component';
@@ -37,7 +39,8 @@ describe('SelfDeclarationComponent', () => {
           {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          }
+          },
+          KeycloakService
         ]
       }
     ).compileComponents();

@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { NgxMaskModule } from 'ngx-mask';
+import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
@@ -41,7 +42,8 @@ describe('AddressComponent', () => {
             provide: ConfigService,
             useClass: MockConfigService
           },
-          EnrolmentFormStateService
+          EnrolmentFormStateService,
+          KeycloakService
         ]
       }
     ).compileComponents();

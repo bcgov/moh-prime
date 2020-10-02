@@ -5,7 +5,7 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { IAuthService } from '@auth/shared/services/auth.service';
 import { User } from '@auth/shared/models/user.model';
 import { Admin } from '@auth/shared/models/admin.model';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
 
 export class MockAuthService implements IAuthService {
@@ -46,7 +46,7 @@ export class MockAuthService implements IAuthService {
   }
 
   public identityProvider$(): Observable<IdentityProvider> {
-    throw new Error('Method not implemented.');
+    return of(IdentityProvider.BCEID);
   }
 
   public logout(redirectUri: string): Promise<void> {

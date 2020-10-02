@@ -57,6 +57,14 @@ export class MockAccessTokenService implements IAccessTokenService {
     throw new Error('Method not implemented.');
   }
 
+  public roles(allRoles?: boolean): string[] {
+    throw new Error('Method not implemented.');
+  }
+
+  public hasRole(role: string, resource?: string): boolean {
+    throw new Error('Method not implemented.');
+  }
+
   public logout(redirectUri: string): Promise<void> {
     throw new Error('Method not implemented.');
   }

@@ -3,9 +3,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { MockConfigService } from 'test/mocks/mock-config.service';
-
 import { BehaviorSubject } from 'rxjs';
+
+import { KeycloakService } from 'keycloak-angular';
+
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
@@ -38,7 +40,8 @@ describe('JobFormComponent', () => {
             provide: ConfigService,
             useClass: MockConfigService
           },
-          EnrolmentFormStateService
+          EnrolmentFormStateService,
+          KeycloakService
         ]
       }
     ).compileComponents();

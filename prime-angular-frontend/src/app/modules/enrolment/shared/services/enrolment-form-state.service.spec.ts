@@ -2,13 +2,18 @@ import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { EnrolmentFormStateService } from './enrolment-form-state.service';
 
 describe('EnrolmentFormStateService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       ReactiveFormsModule,
-      RouterTestingModule,
+      RouterTestingModule
+    ],
+    providers: [
+      KeycloakService
     ]
   }));
 

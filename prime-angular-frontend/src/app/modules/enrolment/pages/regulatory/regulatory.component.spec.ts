@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { NgxMaskModule } from 'ngx-mask';
+import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
@@ -49,7 +50,8 @@ describe('RegulatoryComponent', () => {
           {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          }
+          },
+          KeycloakService
         ]
       }
     ).compileComponents();

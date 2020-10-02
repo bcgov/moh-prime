@@ -5,9 +5,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { NgxMaskModule } from 'ngx-mask';
+import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { DemographicComponent } from './demographic.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -18,7 +20,6 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 describe('DemographicComponent', () => {
   let component: DemographicComponent;
@@ -54,7 +55,8 @@ describe('DemographicComponent', () => {
           {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
-          }
+          },
+          KeycloakService
         ]
       }
     ).compileComponents();
