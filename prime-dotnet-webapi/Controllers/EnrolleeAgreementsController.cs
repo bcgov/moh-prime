@@ -104,7 +104,7 @@ namespace Prime.Controllers
 
             if (User.IsAdmin())
             {
-                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Terms of Access");
+                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Agreement");
             }
 
             return Ok(ApiResponse.Result(agreement));
