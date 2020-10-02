@@ -36,7 +36,7 @@
 
           <div class="preview">
             <p class="bold underline">Additional Limits and Conditions</p>
-            <div [innerHTML]="preview | safeHtml | default: 'No Preview Found'"></div>
+            <div [innerHTML]="preview | safe: 'html' | default: 'No Preview Found'"></div>
           </div>
 
         </ng-container>

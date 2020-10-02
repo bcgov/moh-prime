@@ -1,0 +1,98 @@
+<app-enrollee-page [busy]="busy">
+  <app-page-header>PRIME Enrolment</app-page-header>
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    [inProgress]="isInitialEnrolment"
+                                    [currentRoute]="EnrolmentRoutes.BCEID_DEMOGRAPHIC">
+  </app-enrolment-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Personal Information</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Provide your personal information.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col-sm-6">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="First Name"
+                   formControlName="firstName">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-sm-6">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Middle Name (optional)"
+                   formControlName="givenNames">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Last Name"
+                   formControlName="lastName">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Date of Birth"
+                   [matDatepicker]="myDatepicker"
+                   formControlName="dateOfBirth">
+            <mat-datepicker-toggle matSuffix
+                                   [for]="myDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #myDatepicker
+                            startView="multi-year"
+                            disabled="false"></mat-datepicker>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+    </section>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Address</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Provide an address the Ministry of Health can use to contact you.
+        </ng-container>
+      </app-page-subheader>
+
+      <app-address [form]="physicalAddress"
+                   [formControlNames]="addressFormControlNames"></app-address>
+
+    </section>
+
+    <app-contact-information-form [form]="form"></app-contact-information-form>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+                   [hasSecondaryAction]="isProfileComplete"
+                   (save)="onSubmit()"></app-page-footer>
+
+</app-enrollee-page>

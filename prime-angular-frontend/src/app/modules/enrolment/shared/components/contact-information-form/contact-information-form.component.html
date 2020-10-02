@@ -1,0 +1,87 @@
+<ng-container [formGroup]="form">
+
+  <section class="mb-3">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Contact Information</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Provide a phone number that may be used to contact you.
+      </ng-container>
+    </app-page-subheader>
+
+    <div class="row">
+      <div class="col">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Phone Number"
+                 formControlName="voicePhone"
+                 mask="(000) 000-0000"
+                 [showMaskTyped]="false">
+          <mat-error *ngIf="voicePhone.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="voicePhone.hasError('phone')">Must be a valid phone number</mat-error>
+        </mat-form-field>
+
+      </div>
+      <div class="col">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Optional Extension Number"
+                 formControlName="voiceExtension"
+                 maxlength="10">
+          <mat-error *ngIf="voiceExtension.hasError('required')">Required</mat-error>
+          <mat-error *ngIf="voiceExtension.hasError('numeric')">Must contain only numbers</mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+  </section>
+
+  <section class="mb-3">
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Notification Information</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Provide an email address and phone number (optional) that may be used for sending notifications from the PRIME
+        system.
+      </ng-container>
+    </app-page-subheader>
+
+    <div class="row">
+      <div class="col-sm-12">
+
+        <div class="row">
+          <div class="col-6">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Email"
+                     formControlName="contactEmail">
+              <mat-error *ngIf="contactEmail.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="contactEmail.hasError('email')">Must be a valid email address</mat-error>
+            </mat-form-field>
+
+          </div>
+          <div class="col-6">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Optional SMS Phone Number"
+                     formControlName="contactPhone"
+                     mask="(000) 000-0000"
+                     [showMaskTyped]="false">
+              <mat-error *ngIf="contactPhone.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="contactPhone.hasError('phone')">Must be a valid phone number</mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+</ng-container>

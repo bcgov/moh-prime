@@ -1,21 +1,20 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable, of, from } from 'rxjs';
-import { map, exhaustMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { ConfigService } from '@config/config.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { Enrollee } from '@shared/models/enrollee.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
-import { User } from '@auth/shared/models/user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -39,47 +38,23 @@ export class EnrolmentGuard extends BaseGuard {
    * @description
    * Check an enrollee enrolment status, and attempt to redirect
    * to an appropriate destination based on its existence or
-   * status.
+   * status, as well as, their authentication provider.
    */
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
-    const user$ = from(this.authService.getUser());
-    console.log(user$);
-    const createEnrollee$ = user$
-      .pipe(
-        exhaustMap(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
-          // Enforced the enrolment type instead of using Partial<Enrolment>
-          // to avoid creating constructors and partials for every model
-          const enrollee = {
-            // Providing only the minimum required fields for creating an enrollee
-            userId,
-            hpdid,
-            firstName,
-            lastName,
-            givenNames,
-            dateOfBirth,
-            physicalAddress,
-            voicePhone: null,
-            contactEmail: null
-          } as Enrollee;
-
-          return this.enrolmentResource.createEnrollee(enrollee);
-        }),
-        map((enrolment: Enrolment) => [enrolment, true])
-      );
-
     return this.enrolmentResource.enrollee()
       .pipe(
-        exhaustMap((enrolment: Enrolment) =>
-          (enrolment)
-            ? of([enrolment, false])
-            : createEnrollee$
-        ),
-        map(([enrolment, isNewEnrolment]: [Enrolment, boolean]) => {
-          // Store the enrolment for access throughout enrolment, which
-          // will allows be the most up-to-date enrolment
+        tap((enrolment: Enrolment) => {
+          // Store the enrolment for access throughout enrolment, which will
+          // allows be the most up-to-date enrolment (source of truth)
           this.enrolmentService.enrolment$.next(enrolment);
-          return this.routeDestination(routePath, enrolment, isNewEnrolment);
-        })
+        }),
+        exhaustMap((enrolment: Enrolment) =>
+          this.authService.identityProvider$()
+            .pipe(map((identityProvider: IdentityProvider) => [routePath, enrolment, identityProvider]))
+        ),
+        map((params: [string, Enrolment, IdentityProvider]) =>
+          this.routeDestination(...params)
+        )
       );
   }
 
@@ -87,37 +62,78 @@ export class EnrolmentGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the enrolment status.
    */
-  private routeDestination(routePath: string, enrolment: Enrolment, isNewEnrolment: boolean = false) {
+  private routeDestination(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
     // On login the enrollees will always be redirected to
-    // the collection notice
+    // the collection notice, which should always resolve
     if (routePath.includes(EnrolmentRoutes.COLLECTION_NOTICE)) {
       return true;
-    } else if (isNewEnrolment) {
-      // TODO needs to be refactored, why would a new enrolment go to OVERVIEW?
-      this.navigate(routePath, EnrolmentRoutes.OVERVIEW);
     }
 
-    // Otherwise, routes are directed based on enrolment status
-    //  TODO should never happen and should redirect to an error if it does
     if (!enrolment) {
-      return this.navigate(routePath, EnrolmentRoutes.DEMOGRAPHIC);
-    } else if (enrolment) {
-      switch (enrolment.currentStatus.statusCode) {
-        case EnrolmentStatus.EDITABLE:
-          return this.manageEditableRouting(routePath, enrolment);
-        case EnrolmentStatus.UNDER_REVIEW:
-          return this.manageUnderReviewRouting(routePath, enrolment);
-        case EnrolmentStatus.REQUIRES_TOA:
-          return this.manageRequiresToaRouting(routePath, enrolment);
-        case EnrolmentStatus.LOCKED:
-          return this.navigate(routePath, EnrolmentRoutes.ACCESS_LOCKED);
-        case EnrolmentStatus.DECLINED:
-          return this.navigate(routePath, EnrolmentRoutes.ACCESS_DECLINED);
-      }
+      // Route based on identity provider to determine sequence of routing
+      // required to create a new enrolment
+      return this.identityProviderRouting(routePath, enrolment, identityProvider);
     }
 
-    // Otherwise, prevent the route from resolving
-    return false;
+    // Otherwise, routes are dictated based on enrolment status
+    return this.enrolmentStatusRouting(routePath, enrolment, identityProvider);
+  }
+
+  /**
+   * @description
+   * Determine routing by identity provider for new enrolments that have not
+   * had their enrolment created.
+   */
+  private identityProviderRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+    switch (identityProvider) {
+      case IdentityProvider.BCEID:
+        return this.manageBceidRouting(routePath, enrolment, identityProvider);
+      case IdentityProvider.BCSC:
+        return this.navigate(routePath, EnrolmentRoutes.BCSC_DEMOGRAPHIC);
+      default:
+        return false; // Identity provider is unknown and routing cannot be determined
+    }
+  }
+
+  private manageBceidRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+    const currentRoutePath = RouteUtils.currentRoutePath(this.router.url);
+    const nextRoutePath = RouteUtils.currentRoutePath(routePath);
+
+    if (
+      currentRoutePath === EnrolmentRoutes.ACCESS_CODE &&
+      nextRoutePath === EnrolmentRoutes.ID_SUBMISSION
+    ) {
+      return this.navigate(routePath, EnrolmentRoutes.ID_SUBMISSION);
+    } else if (
+      currentRoutePath === EnrolmentRoutes.ID_SUBMISSION &&
+      nextRoutePath === EnrolmentRoutes.BCEID_DEMOGRAPHIC
+    ) {
+      return this.navigate(routePath, EnrolmentRoutes.BCEID_DEMOGRAPHIC);
+    } else {
+      // Otherwise, start at the beginning of the enrolment process
+      return this.navigate(routePath, EnrolmentRoutes.ACCESS_CODE);
+    }
+  }
+
+  /**
+   * @description
+   * Determine routing based on enrolment status.
+   */
+  private enrolmentStatusRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+    switch (enrolment.currentStatus.statusCode) {
+      case EnrolmentStatus.EDITABLE:
+        return this.manageEditableRouting(routePath, enrolment, identityProvider);
+      case EnrolmentStatus.UNDER_REVIEW:
+        return this.manageUnderReviewRouting(routePath, enrolment);
+      case EnrolmentStatus.REQUIRES_TOA:
+        return this.manageRequiresToaRouting(routePath, enrolment);
+      case EnrolmentStatus.LOCKED:
+        return this.navigate(routePath, EnrolmentRoutes.ACCESS_LOCKED);
+      case EnrolmentStatus.DECLINED:
+        return this.navigate(routePath, EnrolmentRoutes.ACCESS_DECLINED);
+      default:
+        return false; // Status is unknown and routing cannot be determined
+    }
   }
 
   /**
@@ -126,13 +142,16 @@ export class EnrolmentGuard extends BaseGuard {
    * out their initial enrolment, which prevents access to
    * post-enrolment routes.
    */
-  private manageEditableRouting(routePath: string, enrolment: Enrolment): boolean {
+  private manageEditableRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
     const hasNotCompletedProfile = !enrolment.profileCompleted;
 
     const route = this.route(routePath);
     const redirectionRoute = (hasNotCompletedProfile)
-      ? EnrolmentRoutes.DEMOGRAPHIC // Only for new enrolments with incomplete profiles
+      ? (identityProvider === IdentityProvider.BCEID)
+        ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
+        : EnrolmentRoutes.BCSC_DEMOGRAPHIC
       : EnrolmentRoutes.OVERVIEW;
+
     const blacklistedRoutes = [
       ...EnrolmentRoutes.enrolmentSubmissionRoutes()
     ];
@@ -143,8 +162,8 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     if (!enrolment.certifications.length
-      || enrolment.certifications.some((cert) => cert.collegeCode === CollegeLicenceClass.CPBC)
-      || enrolment.careSettings.some((cs) => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)) {
+      || enrolment.certifications.some(cert => cert.collegeCode === CollegeLicenceClass.CPBC)
+      || enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)) {
       // No access to remote access if OBO or pharmacist
       blacklistedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }

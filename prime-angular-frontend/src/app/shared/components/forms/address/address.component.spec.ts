@@ -5,14 +5,17 @@ import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { NgxMaskModule } from 'ngx-mask';
+import { KeycloakService } from 'keycloak-angular';
 
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { AddressComponent } from './address.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 describe('AddressComponent', () => {
   let component: AddressComponent;
@@ -41,17 +44,22 @@ describe('AddressComponent', () => {
             provide: ConfigService,
             useClass: MockConfigService
           },
-          EnrolmentStateService
+          {
+            provide: AuthService,
+            useValue: MockAuthService
+          },
+          EnrolmentFormStateService,
+          KeycloakService
         ]
       }
     ).compileComponents();
   }));
 
-  beforeEach(inject([EnrolmentStateService], (enrolmentStateService: EnrolmentStateService) => {
+  beforeEach(inject([EnrolmentFormStateService], (enrolmentFormStateService: EnrolmentFormStateService) => {
     fixture = TestBed.createComponent(AddressComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
-    component.form = enrolmentStateService.demographicForm.get('mailingAddress') as FormGroup;
+    component.form = enrolmentFormStateService.bcscDemographicForm.get('mailingAddress') as FormGroup;
     fixture.detectChanges();
   }));
 

@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { RouteStateService } from '@core/services/route-state.service';
+import { LoggerService } from '@core/services/logger.service';
 
-import { Organization } from '@registration/shared/models/organization.model';
-import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
+import { SiteRoutes } from '@registration/site-registration.routes';
 import { Party } from '@registration/shared/models/party.model';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +18,14 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
   public organizationNameForm: FormGroup;
   public organizationAgreementForm: FormGroup;
 
+  protected readonly resetRoutes: string[] = [SiteRoutes.SITE_MANAGEMENT];
+
   constructor(
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected routeStateService: RouteStateService,
+    protected logger: LoggerService
   ) {
-    super(fb);
+    super(fb, routeStateService, logger);
   }
 
   /**
@@ -56,7 +63,7 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
    * Initialize and configure the forms for patching, which is also used
    * to clear previous form data from the service.
    */
-  public init() {
+  protected buildForms() {
     this.signingAuthorityForm = this.buildSigningAuthorityForm();
     this.organizationNameForm = this.buildOrganizationNameForm();
     this.organizationAgreementForm = this.buildOrganizationAgreementForm();
@@ -74,6 +81,11 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
     this.organizationNameForm.patchValue(organization);
     this.toPersonFormModel<Party>([this.signingAuthorityForm, organization.signingAuthority]);
   }
+
+
+  /**
+   * Form Builders and Helpers
+   */
 
   // TODO BCSC information is also in enrolments and can have shared form helpers
   private buildSigningAuthorityForm(): FormGroup {

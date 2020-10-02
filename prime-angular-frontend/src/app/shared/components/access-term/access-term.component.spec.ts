@@ -1,14 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessTermComponent } from './access-term.component';
-import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
+import { SafePipe } from '@shared/pipes/safe.pipe';
 
 describe('AccessTermComponent', () => {
   let component: AccessTermComponent;
   let fixture: ComponentFixture<AccessTermComponent>;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AccessTermComponent, SafeHtmlPipe],
+      declarations: [
+        AccessTermComponent,
+        SafePipe
+      ]
     })
       .compileComponents();
   }));
