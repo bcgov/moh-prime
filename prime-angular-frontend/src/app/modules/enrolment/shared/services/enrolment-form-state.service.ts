@@ -294,7 +294,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     return this.fb.group({
       firstName: [null, [Validators.required]],
       lastName: [null, [Validators.required]],
-      middleName: [null, []],
+      givenNames: [null, []],
       dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       physicalAddress: this.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'postal'],
