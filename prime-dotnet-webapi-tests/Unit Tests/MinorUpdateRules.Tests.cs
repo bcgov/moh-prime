@@ -36,9 +36,9 @@ namespace PrimeTests.UnitTests
         public async void TestDateRule(DateTimeOffset? expiryDate, bool expected)
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            enrollee.AccessTerms = new[]
+            enrollee.Agreements = new[]
             {
-                new AccessTerm
+                new Agreement
                 {
                     AcceptedDate = DateTimeOffset.Now,
                     ExpiryDate = expiryDate

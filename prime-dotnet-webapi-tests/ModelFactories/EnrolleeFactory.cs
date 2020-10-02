@@ -51,7 +51,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
             RuleFor(x => x.isAdminView, f => true);
             // TODO: create rule sets for these ignores?
-            Ignore(x => x.AccessTerms);
+            Ignore(x => x.Agreements);
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
             Ignore(x => x.AlwaysManual);
