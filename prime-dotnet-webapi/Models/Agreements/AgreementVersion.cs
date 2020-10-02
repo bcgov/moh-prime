@@ -8,32 +8,26 @@ using Prime.Configuration.Agreements;
 namespace Prime.Models
 {
     [Table("AgreementVersion")]
-    public abstract class AgreementVersion : BaseAuditable
+    public class AgreementVersion : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
 
         public string Text { get; set; }
 
-        public AgreementVersionType AgreementVersionType { get; set; }
+        public AgreementType AgreementType { get; set; }
+
         public DateTimeOffset EffectiveDate { get; set; }
 
         /// <summary>
-        /// Returns a list containing the IDs of the newest version of each type of AgreementVersion.
+        /// Returns a list containing the IDs of the newest version of each type of Agreement.
         /// TODO: Move to a service with cached newest agreementversion Ids? DI a singleton data object created at app startup?
         /// </summary>
         public static IEnumerable<int> NewestAgreementVersionIds()
         {
-            return AgreementVersionConfiguration.SeedData
-                .GroupBy(a => a.GetType())
+            return new AgreementVersionConfiguration().SeedData
+                .GroupBy(a => a.AgreementType)
                 .Select(group => group.OrderByDescending(a => a.EffectiveDate).First().Id);
         }
     }
-
-    public class CommunityPharmacistAgreement : AgreementVersion
-    { }
-    public class RegulatedUserAgreement : AgreementVersion
-    { }
-    public class OboAgreement : AgreementVersion
-    { }
 }

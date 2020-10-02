@@ -1,6 +1,6 @@
 namespace Prime.Models
 {
-    public enum AgreementVersionType
+    public enum AgreementType
     {
         CommunityPharmacistTOA = 1,
         RegulatedUserTOA = 2,
