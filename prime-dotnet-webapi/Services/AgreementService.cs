@@ -155,25 +155,25 @@ namespace Prime.Services
         {
             if (!enrollee.IsRegulatedUser())
             {
-                return await FetchNewestAgreementVersionIdOfType<OboAgreement>();
+                return await FetchNewestAgreementVersionIdOfType(AgreementType.OboTOA);
             }
 
             if (enrollee.HasCareSetting(CareSettingType.CommunityPharmacy))
             {
-                return await FetchNewestAgreementVersionIdOfType<CommunityPharmacistAgreement>();
+                return await FetchNewestAgreementVersionIdOfType(AgreementType.CommunityPharmacistTOA);
             }
             else
             {
-                return await FetchNewestAgreementVersionIdOfType<RegulatedUserAgreement>();
+                return await FetchNewestAgreementVersionIdOfType(AgreementType.RegulatedUserTOA);
             }
         }
 
-        private async Task<int> FetchNewestAgreementVersionIdOfType<T>() where T : AgreementVersion
+        private async Task<int> FetchNewestAgreementVersionIdOfType(AgreementType type)
         {
             return await _context.AgreementVersions
                 .AsNoTracking()
-                .OfType<T>()
                 .OrderByDescending(a => a.EffectiveDate)
+                .Where(a => a.AgreementType == type)
                 .Select(a => a.Id)
                 .FirstAsync();
         }
