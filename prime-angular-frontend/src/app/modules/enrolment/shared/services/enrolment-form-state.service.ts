@@ -291,25 +291,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   private buildBceidDemographicForm(): FormGroup {
     return this.fb.group({
-      firstName: [null, [Validators.required]],
-      lastName: [null, [Validators.required]],
-      givenNames: [null, []],
-      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
-      physicalAddress: this.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'postal'],
-        useDefaults: true,
-        exclude: ['countryCode', 'street2']
-      }),
-      phone: [null, [
-        Validators.required,
-        FormControlValidators.phone
-      ]],
-      phoneExtension: [null, [FormControlValidators.numeric]],
-      email: [null, [
-        Validators.required,
-        FormControlValidators.email
-      ]],
-      smsPhone: [null, [FormControlValidators.phone]]
+      ...this.buildBcscDemographicForm(),
+      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]]
     });
   }
 
