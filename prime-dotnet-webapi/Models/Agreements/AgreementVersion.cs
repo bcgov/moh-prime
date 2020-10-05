@@ -36,4 +36,6 @@ namespace Prime.Models
     { }
     public class OboAgreement : AgreementVersion
     { }
+    public class CommunityPracticeOrgAgreement : AgreementVersion
+    { }
 }
