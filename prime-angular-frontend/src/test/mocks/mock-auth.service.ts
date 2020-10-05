@@ -42,11 +42,11 @@ export class MockAuthService implements IAuthService {
   }
 
   public async identityProvider(): Promise<IdentityProvider> {
-    throw new Error('Method not implemented.');
+    return await Promise.resolve(IdentityProvider.BCSC);
   }
 
   public identityProvider$(): Observable<IdentityProvider> {
-    return of(IdentityProvider.BCEID);
+    return from(this.identityProvider());
   }
 
   public logout(redirectUri: string): Promise<void> {
