@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201001215349_MigrateOrganizationsToNewAgreement")]
+    partial class MigrateOrganizationsToNewAgreement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -4839,6 +4841,12 @@ namespace Prime.Migrations
                     b.Property<bool>("AlwaysManual")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("ContactEmail")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContactPhone")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -4852,9 +4860,6 @@ namespace Prime.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("DeviceProviderNumber")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
@@ -4889,12 +4894,6 @@ namespace Prime.Migrations
                     b.Property<int?>("MailingAddressId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneExtension")
-                        .HasColumnType("text");
-
                     b.Property<int>("PhysicalAddressId")
                         .HasColumnType("integer");
 
@@ -4910,9 +4909,6 @@ namespace Prime.Migrations
                     b.Property<bool>("ProfileCompleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("SmsPhone")
-                        .HasColumnType("text");
-
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -4921,6 +4917,12 @@ namespace Prime.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("VoiceExtension")
+                        .HasColumnType("text");
+
+                    b.Property<string>("VoicePhone")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
