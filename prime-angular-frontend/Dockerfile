@@ -1,7 +1,4 @@
-# base image
 FROM node:10.16 as buildDeps
-#SHELL [ "/bin/bash","-c"]
-# set working directory
 USER 0
 ENV NODE_ROOT /usr/src/app
 ENV REDIRECT_URL $REDIRECT_URL
@@ -36,25 +33,13 @@ RUN npm install @angular/cli -g && \
     ng build --prod && \
     echo "NPM packages installed..."
 
-# RUN npm audit fix && \
-# FROM nginx:1.15-alpine
-# COPY --from=buildDeps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
-# RUN rm -f /etc/nginx/conf.d/default.conf
-# COPY --from=buildDeps /usr/src/app/nginx.conf /etc/nginx/
-# COPY --from=buildDeps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
-# COPY --from=build-deps /usr/src/app/nginx${OC_APP}.conf /etc/nginx/nginx.template.conf
-# COPY --from=buildDeps /usr/src/app/entrypoint.sh /etc/nginx
-
 RUN chmod +x /entrypoint.sh && \
     chmod 777 /entrypoint.sh && \
     echo "Build completed."
-
-#WORKDIR /
 
 COPY ./entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 80 8080 4200:8080
 
-#CMD /etc/nginx/entrypoint.sh
 CMD /entrypoint.sh
