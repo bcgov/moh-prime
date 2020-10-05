@@ -134,7 +134,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     if (!enrolment.id && this.isInitialEnrolment) {
       return this.getUser$()
         .pipe(
-          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee(enrollee)),
+          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
           // Merge the enrolment with generated keys
           map((newEnrolment: Enrolment) => {
             newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };

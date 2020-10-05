@@ -92,8 +92,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     if (!enrolment.id && this.isInitialEnrolment) {
       const payload = {
-        ...this.form.getRawValue(),
-        identificationDocumentGuid: this.enrolmentFormStateService.identityDocumentForm.get('identificationDocumentGuid')
+        enrollee: this.form.getRawValue(),
+        identificationDocumentGuid: this.enrolmentFormStateService.identityDocumentForm.get('identificationDocumentGuid').value
       };
       return this.enrolmentResource.createEnrollee(payload)
         .pipe(

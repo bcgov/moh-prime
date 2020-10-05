@@ -45,7 +45,7 @@ export class EnrolmentResource {
       );
   }
 
-  public createEnrollee(payload: Enrollee): Observable<Enrolment> {
+  public createEnrollee(payload: { enrollee: Enrollee, identificationDocumentGuid?: string }): Observable<Enrolment> {
     return this.apiResource.post<HttpEnrollee>('enrollees', payload)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
