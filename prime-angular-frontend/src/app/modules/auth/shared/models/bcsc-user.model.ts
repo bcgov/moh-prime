@@ -1,4 +1,4 @@
-export interface User {
+export interface BcscUser {
   userId: string;
   hpdid: string;
   firstName: string;

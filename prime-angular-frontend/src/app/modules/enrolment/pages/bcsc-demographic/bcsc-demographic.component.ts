@@ -13,7 +13,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 
-import { User } from '@auth/shared/models/user.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -132,7 +132,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     if (!enrolment.id && this.isInitialEnrolment) {
-      return this.getUser$()
+      return this.getUser$()BcscUser
         .pipe(
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee(enrollee)),
           map((newEnrolment: Enrolment) => {
@@ -192,7 +192,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
             physicalAddress,
             phone: null,
             email: null
-          } as Enrollee;
+          } as Enrollee; BcscUser
         })
       );
   }

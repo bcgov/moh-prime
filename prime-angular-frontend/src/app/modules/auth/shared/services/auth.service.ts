@@ -7,7 +7,7 @@ import { KeycloakLoginOptions } from 'keycloak-js';
 
 import { LoggerService } from '@core/services/logger.service';
 
-import { User } from '@auth/shared/models/user.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { BrokerProfile } from '@auth/shared/models/broker-profile.model';
 import { AccessTokenParsed } from '@auth/shared/models/access-token-parsed.model';
@@ -22,8 +22,8 @@ export interface IAuthService {
   identityProvider$(): Observable<IdentityProvider>;
   logout(redirectUri: string): Promise<void>;
 
-  getUser(forceReload?: boolean): Promise<User>;
-  getUser$(forceReload?: boolean): Observable<User>;
+  getUser(forceReload?: boolean): Promise<BcscUser>;
+  getUser$(forceReload?: boolean): Observable<BcscUser>;
   getAdmin(forceReload?: boolean): Promise<Admin>;
   getAdmin$(forceReload?: boolean): Observable<Admin>;
 
@@ -87,7 +87,7 @@ export class AuthService implements IAuthService {
    */
   // TODO should be based this on provider now
   // TODO use this as a base method for all other types of users
-  public async getUser(forceReload?: boolean): Promise<User> {
+  public async getUser(forceReload?: boolean): Promise<BcscUser> {
     const {
       firstName,
       lastName,
@@ -121,10 +121,10 @@ export class AuthService implements IAuthService {
       },
       email,
       ...claims
-    } as User;
+    } as BcscUser;
   }
 
-  public getUser$(forceReload?: boolean): Observable<User> {
+  public getUser$(forceReload?: boolean): Observable<BcscUser> {
     return from(this.getUser(forceReload)).pipe(take(1));
   }
 

@@ -13,7 +13,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-import { User } from '@auth/shared/models/user.model';
+import { BceidUser } from '@auth/shared/models/bceid-user.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
@@ -31,8 +31,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
    * @description
    * User information from the provider.
    */
-  // TODO use an actual model... maybe BceidUser
-  public user: { firstName: string, lastName: string, email: string };
+  public user: BceidUser;
   public addressFormControlNames: string[];
 
   constructor(
@@ -78,7 +77,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     this.patchForm();
     this.initForm();
     this.getUser$()
-      .subscribe((user: { firstName: string, lastName: string, email: string }) =>
+      .subscribe((user: BceidUser) =>
         this.form.patchValue(user)
       );
   }
@@ -103,10 +102,10 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private getUser$(): Observable<{ firstName: string, lastName: string, email: string }> {
+  private getUser$(): Observable<BceidUser> {
     return this.authService.getUser$()
       .pipe(
-        map(({ firstName, lastName }: User) => {
+        map(({ firstName, lastName, email }: BceidUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
