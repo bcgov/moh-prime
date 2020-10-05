@@ -378,8 +378,7 @@ export class AdjudicationResource {
     };
     Object.keys(contactInfo).forEach(oldKey => {
       const newKey = contactInfo[oldKey];
-      const value = profileSnapshot[oldKey];
-      profileSnapshot[newKey] = value;
+      profileSnapshot[newKey] = profileSnapshot[oldKey];
       delete profileSnapshot[oldKey];
     });
 
