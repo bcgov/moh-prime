@@ -1,13 +1,14 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 import { Enrolment } from '@shared/models/enrolment.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 @Component({
   selector: 'app-enrollee-review',
