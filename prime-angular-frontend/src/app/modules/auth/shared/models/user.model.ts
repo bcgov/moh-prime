@@ -12,5 +12,5 @@ export interface User {
     city: string;
     postal: string;
   };
-  contactEmail: string;
+  email: string;
 }

@@ -83,11 +83,11 @@
   </app-page-subheader>
 
   <app-enrollee-property title="Voice Phone">
-    {{ enrollee?.voicePhone | phone | default }}
+    {{ enrollee?.phone | phone | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Extension">
-    {{ enrollee?.voiceExtension | default }}
+    {{ enrollee?.phoneExtension | default }}
   </app-enrollee-property>
 
 </section>
@@ -106,11 +106,11 @@
   </app-page-subheader>
 
   <app-enrollee-property title="Email Notification">
-    {{ enrollee?.contactEmail | default }}
+    {{ enrollee?.email | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Text Notification (SMS)">
-    {{ enrollee?.contactPhone | phone | default }}
+    {{ enrollee?.smsPhone | phone | default }}
   </app-enrollee-property>
 
 </section>

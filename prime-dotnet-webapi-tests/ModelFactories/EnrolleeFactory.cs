@@ -25,10 +25,10 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.PreferredMiddleName, (f, x) => x.PreferredFirstName == null ? null : f.Name.FirstName());
             RuleFor(x => x.PreferredLastName, (f, x) => x.PreferredFirstName == null ? null : f.Name.LastName());
             RuleFor(x => x.DateOfBirth, f => f.Date.Past(50, DateTime.Now.AddYears(-19)));
-            RuleFor(x => x.ContactEmail, f => f.Internet.Email());
-            RuleFor(x => x.VoicePhone, f => f.Phone.PhoneNumber());
-            RuleFor(x => x.VoiceExtension, f => f.Random.Replace("###").OrNull(f));
-            RuleFor(x => x.ContactPhone, f => f.Phone.PhoneNumber().OrNull(f));
+            RuleFor(x => x.Email, f => f.Internet.Email());
+            RuleFor(x => x.Phone, f => f.Phone.PhoneNumber());
+            RuleFor(x => x.PhoneExtension, f => f.Random.Replace("###").OrNull(f));
+            RuleFor(x => x.SmsPhone, f => f.Phone.PhoneNumber().OrNull(f));
             RuleFor(x => x.DeviceProviderNumber, f => null);
             RuleFor(x => x.IsInsulinPumpProvider, f => null);
             RuleFor(x => x.GPID, f => null);

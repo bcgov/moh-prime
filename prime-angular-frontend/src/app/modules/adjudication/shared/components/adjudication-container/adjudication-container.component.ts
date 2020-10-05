@@ -85,7 +85,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.adjudicationResource.getEnrolleeById(enrolleeId)
       .pipe(
         exhaustMap((enrollee: HttpEnrollee) => {
-          if (enrollee.contactEmail) {
+          if (enrollee.email) {
             return of(enrollee);
           }
           this.toastService.openErrorToast('Enrollee does not have a contact email.');
@@ -95,7 +95,7 @@ export class AdjudicationContainerComponent implements OnInit {
           .pipe(map(() => enrollee)))
       )
       .subscribe((enrollee: HttpEnrollee) => {
-        this.utilsService.mailTo(enrollee.contactEmail);
+        this.utilsService.mailTo(enrollee.email);
       });
   }
 

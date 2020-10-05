@@ -115,8 +115,8 @@ namespace Prime.Services
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(e => e.FirstName,
                         e => e.LastName,
-                        e => e.ContactEmail,
-                        e => e.VoicePhone,
+                        e => e.Email,
+                        e => e.Phone,
                         e => e.DisplayId.ToString())
                     .SearchCollections(e => e.Certifications.Select(c => c.LicenseNumber))
                     .Containing(searchOptions.TextSearch)
