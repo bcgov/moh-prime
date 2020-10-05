@@ -69,8 +69,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     ];
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
+  public get mailingAddress(): FormGroup {
+    return this.form.get('mailingAddress') as FormGroup;
   }
 
   public ngOnInit() {
