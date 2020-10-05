@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
+import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
@@ -370,17 +371,13 @@ export class AdjudicationResource {
   }
 
   private enrolleeVersionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
-    const contactInfo = {
+    const mapping = {
       voicePhone: 'phone',
       voiceExtension: 'phoneExtension',
       contactEmail: 'email',
       contactPhone: 'smsPhone'
     };
-    Object.keys(contactInfo).forEach(oldKey => {
-      const newKey = contactInfo[oldKey];
-      profileSnapshot[newKey] = profileSnapshot[oldKey];
-      delete profileSnapshot[oldKey];
-    });
+    ObjectUtils.keyMapping(profileSnapshot, mapping);
 
     // Key index aligns with SelfDeclarationTypeEnum
     const selfDeclarations = {
