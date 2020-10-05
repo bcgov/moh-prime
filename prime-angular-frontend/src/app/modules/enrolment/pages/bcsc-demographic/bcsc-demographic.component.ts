@@ -132,16 +132,17 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     if (!enrolment.id && this.isInitialEnrolment) {
-      return this.getUser$()BcscUser
+      return this.getUser$()
         .pipe(
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee(enrollee)),
+          // Merge the enrolment with generated keys
           map((newEnrolment: Enrolment) => {
             newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
             return newEnrolment;
           }),
-          // Populate generated keys within the form state (eg. id, userId, etc)
+          // Populate generated keys within the form state
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
-          exhaustMap((newEnrolment: Enrolment) => super.performHttpRequest(newEnrolment))
+          this.handleResponse()
         );
     } else {
       return super.performHttpRequest(enrolment, beenThroughTheWizard);
@@ -178,7 +179,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   private getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
-        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: BcscUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
@@ -192,7 +193,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
             physicalAddress,
             phone: null,
             email: null
-          } as Enrollee; BcscUser
+          } as Enrollee;
         })
       );
   }
