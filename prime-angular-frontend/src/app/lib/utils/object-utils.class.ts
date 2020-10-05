@@ -1,7 +1,7 @@
 export class ObjectUtils {
   /**
    * @description
-   * Mapping an object's keys by reference.
+   * Map an object's keys by reference.
    */
   public static keyMapping(object: { [key: string]: any }, mapping: { [key: string]: string }) {
     Object.keys(object).forEach(oldKey => {

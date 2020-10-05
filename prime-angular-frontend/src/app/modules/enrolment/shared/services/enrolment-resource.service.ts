@@ -27,7 +27,6 @@ import { Job } from '@enrolment/shared/models/job.model';
   providedIn: 'root'
 })
 export class EnrolmentResource {
-
   constructor(
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,

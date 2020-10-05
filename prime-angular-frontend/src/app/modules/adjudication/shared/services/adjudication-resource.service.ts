@@ -25,7 +25,6 @@ import { BusinessEvent } from '@adjudication/shared/models/business-event.model'
   providedIn: 'root'
 })
 export class AdjudicationResource {
-
   constructor(
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
