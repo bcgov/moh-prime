@@ -72,7 +72,7 @@ namespace PrimeTests.UnitTests
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
             var request = new GpidValidationParameters()
             {
-                Email = enrollee.ContactEmail
+                Email = enrollee.Email
             };
 
             // Act
@@ -134,7 +134,7 @@ namespace PrimeTests.UnitTests
             // Arrange
             var service = CreateService();
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
-            enrollee.ContactPhone = null;
+            enrollee.SmsPhone = null;
             var request = new GpidValidationParameters()
             {
                 MobilePhone = "1-800-COOL-ENROLLEE"
@@ -155,12 +155,12 @@ namespace PrimeTests.UnitTests
             // Arrange
             var service = CreateService();
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
-            enrollee.VoiceExtension = "123";
+            enrollee.PhoneExtension = "123";
             var request = new GpidValidationParameters()
             {
                 LastName = enrollee.LastName,
-                Phone = enrollee.VoicePhone,
-                PhoneExtension = enrollee.VoiceExtension + "6"
+                Phone = enrollee.Phone,
+                PhoneExtension = enrollee.PhoneExtension + "6"
             };
 
             // Act

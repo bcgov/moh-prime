@@ -76,10 +76,10 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
 
-            profile.ContactEmail += "change";
-            profile.ContactPhone += "change";
-            profile.VoicePhone += "change";
-            profile.VoiceExtension += "change";
+            profile.Email += "change";
+            profile.SmsPhone += "change";
+            profile.Phone += "change";
+            profile.PhoneExtension += "change";
 
             await AssertAllowableChanges(true, enrollee, profile);
         }

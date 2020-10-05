@@ -370,6 +370,18 @@ export class AdjudicationResource {
   }
 
   private enrolleeVersionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
+    const contactInfo = {
+      voicePhone: 'phone',
+      voiceExtension: 'phoneExtension',
+      contactEmail: 'email',
+      contactPhone: 'smsPhone'
+    };
+    Object.keys(contactInfo).forEach(oldKey => {
+      const newKey = contactInfo[oldKey];
+      profileSnapshot[newKey] = profileSnapshot[oldKey];
+      delete profileSnapshot[oldKey];
+    });
+
     // Key index aligns with SelfDeclarationTypeEnum
     const selfDeclarations = {
       hasConviction: 'Has Conviction',

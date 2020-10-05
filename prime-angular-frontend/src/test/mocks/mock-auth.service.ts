@@ -68,7 +68,7 @@ export class MockAuthService implements IAuthService {
         city: faker.address.city(),
         postal: faker.address.zipCode()
       },
-      contactEmail: faker.internet.email()
+      email: faker.internet.email()
     }));
   }
 

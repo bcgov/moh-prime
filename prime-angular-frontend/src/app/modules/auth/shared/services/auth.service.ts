@@ -91,7 +91,7 @@ export class AuthService implements IAuthService {
     const {
       firstName,
       lastName,
-      email: contactEmail = '',
+      email: email = '',
       attributes: {
         birthdate: [dateOfBirth] = '',
         country: [countryCode] = '',
@@ -119,7 +119,7 @@ export class AuthService implements IAuthService {
         city,
         postal
       },
-      contactEmail,
+      email,
       ...claims
     } as User;
   }

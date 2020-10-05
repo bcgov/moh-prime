@@ -191,6 +191,18 @@ export class EnrolmentResource {
   }
 
   private enrolleeVersionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
+    const contactInfo = {
+      voicePhone: 'phone',
+      voiceExtension: 'phoneExtension',
+      contactEmail: 'email',
+      contactPhone: 'smsPhone'
+    };
+    Object.keys(contactInfo).forEach(oldKey => {
+      const newKey = contactInfo[oldKey];
+      profileSnapshot[newKey] = profileSnapshot[oldKey];
+      delete profileSnapshot[oldKey];
+    });
+
     // Key index aligns with SelfDeclarationTypeEnum
     const selfDeclarations = {
       hasConviction: 'Has Conviction',
@@ -256,10 +268,10 @@ export class EnrolmentResource {
       hpdid,
       physicalAddress,
       mailingAddress,
-      contactEmail,
-      contactPhone,
-      voicePhone,
-      voiceExtension,
+      email,
+      smsPhone,
+      phone,
+      phoneExtension,
       ...remainder
     } = enrollee;
 
@@ -277,10 +289,10 @@ export class EnrolmentResource {
         hpdid,
         physicalAddress,
         mailingAddress,
-        contactEmail,
-        contactPhone,
-        voicePhone,
-        voiceExtension
+        email,
+        smsPhone,
+        phone,
+        phoneExtension
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

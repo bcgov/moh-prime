@@ -13,20 +13,20 @@ export class ContactInformationFormComponent implements OnInit {
 
   constructor() { }
 
-  public get voicePhone(): FormControl {
-    return this.form.get('voicePhone') as FormControl;
+  public get phone(): FormControl {
+    return this.form.get('phone') as FormControl;
   }
 
-  public get voiceExtension(): FormControl {
-    return this.form.get('voiceExtension') as FormControl;
+  public get phoneExtension(): FormControl {
+    return this.form.get('phoneExtension') as FormControl;
   }
 
-  public get contactEmail(): FormControl {
-    return this.form.get('contactEmail') as FormControl;
+  public get email(): FormControl {
+    return this.form.get('email') as FormControl;
   }
 
-  public get contactPhone(): FormControl {
-    return this.form.get('contactPhone') as FormControl;
+  public get smsPhone(): FormControl {
+    return this.form.get('smsPhone') as FormControl;
   }
 
   public ngOnInit(): void { }
