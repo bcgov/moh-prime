@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { UtilsService } from '@core/services/utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
+import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { EnrolmentStatus as EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
@@ -12,20 +13,24 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
 class Status {
-  public date: string;
-  public name: string;
-  public code: number;
-  public note: string;
-  public adjudicator: string;
-  public reasons: Reason[];
+  constructor(
+    public date: string,
+    public name: string,
+    public code: number,
+    public reasons: Reason[],
+    public note?: string,
+    public adjudicator?: string
+  ) { }
 }
 
 class Reason {
-  public name: string;
-  public note: string;
-  public isSelfDeclaration: boolean;
-  public question: string;
-  public documents: SelfDeclarationDocument[];
+  constructor(
+    public name: string,
+    public note: string,
+    public isSelfDeclaration?: boolean,
+    public question?: string,
+    public documents?: SelfDeclarationDocument[]
+  ) { }
 }
 
 @Component({
@@ -33,77 +38,75 @@ class Reason {
   templateUrl: './review-status-content.component.html',
   styleUrls: ['./review-status-content.component.scss']
 })
-export class ReviewStatusContentComponent implements OnInit {
-  private _enrollee: HttpEnrollee;
+export class ReviewStatusContentComponent implements OnInit, OnChanges {
+  @Input() public enrollee: HttpEnrollee;
   public previousStatuses: Status[];
   public reasons: Reason[];
 
   // TODO: Currenty we just store this in this place and in the self declaration form
   // and should be centralize for reuse so it doesn't have to changed in multiple places
-  private registrationQ = 'Are you, or have you ever been, the subject of an order or a conviction under'
-    + ' legislation in any jurisdiction for a matter that involved improper access to, collection,'
-    + ' use, or disclosure of personal information?';
-  private convictionQ = 'Are you, or have you ever been, subject to any limits, conditions'
-    + ' or prohibitions imposed as a result of disciplinary actions taken by a governing body'
-    + ' of a health profession in any jurisdiction, that involved improper access to, collection,'
-    + ' use, or disclosure of personal information?';
-  private pharmanetQ = 'Have you ever had your access to an electronic health record system,'
-    + ' electronic medical record system, pharmacy or laboratory record system,'
-    + ' or any similar health information system, in any jurisdiction, suspended or cancelled?';
-  private disciplinaryQ = 'Have you ever been disciplined or fired by an employer, or had a contract for your services terminated,'
-    + ' for a matter that involved improper access to, collection, use, or disclosure of personal information?';
+  private questions: { [key: number]: string } = {
+    [SelfDeclarationTypeEnum.HAS_CONVICTION]: `Are you, or have you ever been, the subject of an order or a
+    conviction under legislation in any jurisdiction for a matter that involved improper access to, collection,
+    use, or disclosure of personal information?`,
+    [SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED]: `Are you, or have you ever been, subject to any limits,
+    conditions or prohibitions imposed as a result of disciplinary actions taken by a governing body of a health
+    profession in any jurisdiction, that involved improper access to, collection, use, or disclosure of personal
+    information?`,
+    [SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION]: `Have you ever had your access to an electronic health record
+    system, electronic medical record system, pharmacy or laboratory record system, or any similar health information
+    system, in any jurisdiction, suspended or cancelled?`,
+    [SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED]: `Have you ever been disciplined or fired by an employer, or had
+    a contract for your services terminated, for a matter that involved improper access to, collection, use, or
+    disclosure of personal information?`,
+  };
 
   constructor(
     private utilsService: UtilsService,
     private enrolmentResource: EnrolmentResource,
   ) { }
 
-  @Input()
-  public set enrollee(value: HttpEnrollee) {
-    this._enrollee = value;
-    this.reasons = this.generateReasons();
-    this.previousStatuses = this.generatePreviousStatuses();
-  }
-
-  public get enrollee(): HttpEnrollee {
-    return this._enrollee;
-  }
-
-  public downloadDocument(document: SelfDeclarationDocument) {
+  public downloadDocument(document: SelfDeclarationDocument): void {
     this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, document.id)
-      .subscribe((token: string) => {
-        this.utilsService.downloadToken(token);
-      });
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.enrollee) {
+      this.enrollee = changes.enrollee.currentValue;
+      this.reasons = this.generateReasons(this.enrollee);
+      this.previousStatuses = this.generatePreviousStatuses(this.enrollee);
+    }
   }
 
   public ngOnInit(): void { }
 
-  private generatePreviousStatuses(): Status[] {
-    if (!this.enrollee) {
+  private generatePreviousStatuses(enrollee: HttpEnrollee): Status[] {
+    if (!enrollee) {
       return [];
     }
-    return this.enrollee.enrolmentStatuses.reduce((acc: Status[], es: EnrolmentStatus) => {
-      const status = new Status();
-      status.name = es.status.name;
-      status.code = es.statusCode;
-      status.date = es.statusDate;
-      status.reasons = this.parseReasons(es);
-      if (es.enrolmentStatusReference) {
-        const reference = es.enrolmentStatusReference;
-        status.adjudicator = (reference.adjudicator) ? reference.adjudicator.idir : '';
-        status.note = (reference.adjudicatorNote) ? reference.adjudicatorNote.note : '';
-      }
-      acc.push(status);
-      return acc;
-    }, []).reverse();
+    return enrollee.enrolmentStatuses
+      .reduce((statuses: Status[], enrolmentStatus: EnrolmentStatus) => {
+        const status = new Status(
+          enrolmentStatus.statusDate,
+          enrolmentStatus.status.name,
+          enrolmentStatus.statusCode,
+          this.parseReasons(enrolmentStatus)
+        );
+        const reference = enrolmentStatus?.enrolmentStatusReference;
+        if (reference) {
+          status.adjudicator = (reference.adjudicator) ? reference.adjudicator.idir : '';
+          status.note = (reference.adjudicatorNote) ? reference.adjudicatorNote.note : '';
+        }
+        statuses.push(status);
+        return statuses;
+      }, []).reverse();
   }
 
-  private generateReasons(): Reason[] {
-    if (!this.enrollee || this.enrollee.currentStatus.statusCode !== EnrolmentStatusEnum.UNDER_REVIEW) {
-      return [];
-    }
-
-    return this.parseReasons(this.enrollee.currentStatus);
+  private generateReasons(enrollee: HttpEnrollee): Reason[] {
+    return (enrollee?.currentStatus.statusCode === EnrolmentStatusEnum.UNDER_REVIEW)
+      ? this.parseReasons(enrollee.currentStatus)
+      : [];
   }
 
   private parseReasons(enrolmentStatus: EnrolmentStatus): Reason[] {
@@ -111,66 +114,32 @@ export class ReviewStatusContentComponent implements OnInit {
       return [];
     }
 
-    return enrolmentStatus.enrolmentStatusReasons.reduce((acc: Reason[], esr: EnrolmentStatusReason) => {
-      if (esr.statusReasonCode === 10) {
-        return acc.concat(this.parseSelfDeclarations(this.enrollee));
-      }
-      const reason = new Reason();
-      reason.name = esr.statusReason.name;
-      reason.note = esr.reasonNote;
-      acc.push(reason);
+    return enrolmentStatus.enrolmentStatusReasons
+      .reduce((reasons: Reason[], esr: EnrolmentStatusReason) => {
+        if (esr.statusReasonCode === EnrolmentStatusReasonEnum.SELF_DECLARATION) {
+          return reasons.concat(this.parseSelfDeclarations(this.enrollee));
+        }
 
-      return acc;
-    }, []);
-  }
-
-  private getDocumentsForSelfDeclaration(enrollee: HttpEnrollee, code: SelfDeclarationTypeEnum) {
-    return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
+        reasons.push(new Reason(esr.statusReason.name, esr.reasonNote));
+        return reasons;
+      }, []);
   }
 
   private parseSelfDeclarations(enrollee: HttpEnrollee): Reason[] {
-    return enrollee.selfDeclarations.reduce((acc, decl: SelfDeclaration) => {
-      if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_CONVICTION) {
-        const conviction = new Reason();
-        conviction.name = 'User answered yes to a self-declaration question:';
-        conviction.isSelfDeclaration = true;
-        conviction.note = decl.selfDeclarationDetails;
-        conviction.question = this.convictionQ;
-        conviction.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_CONVICTION);
-        acc.push(conviction);
-      }
+    return enrollee.selfDeclarations
+      .reduce((selfDeclarations, selfDeclaration: SelfDeclaration) => {
+        selfDeclarations.push(new Reason(
+          'User answered yes to a self-declaration question:',
+          selfDeclaration.selfDeclarationDetails,
+          true,
+          this.questions[selfDeclaration.selfDeclarationTypeCode],
+          this.getDocumentsForSelfDeclaration(enrollee, selfDeclaration.selfDeclarationTypeCode)
+        ));
+        return selfDeclarations;
+      }, []);
+  }
 
-      if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED) {
-        const registationSuspended = new Reason();
-        registationSuspended.name = 'User answered yes to a self-declaration question:';
-        registationSuspended.isSelfDeclaration = true;
-        registationSuspended.note = decl.selfDeclarationDetails;
-        registationSuspended.question = this.registrationQ;
-        registationSuspended.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED);
-        acc.push(registationSuspended);
-      }
-
-      if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION) {
-        const disciplinaryAction = new Reason();
-        disciplinaryAction.name = 'User answered yes to a self-declaration question:';
-        disciplinaryAction.isSelfDeclaration = true;
-        disciplinaryAction.note = decl.selfDeclarationDetails;
-        disciplinaryAction.question = this.disciplinaryQ;
-        disciplinaryAction.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION);
-        acc.push(disciplinaryAction);
-      }
-
-      if (decl.selfDeclarationTypeCode === SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED) {
-        const pharmaNetSuspended = new Reason();
-        pharmaNetSuspended.name = 'User answered yes to a self-declaration question:';
-        pharmaNetSuspended.isSelfDeclaration = true;
-        pharmaNetSuspended.note = decl.selfDeclarationDetails;
-        pharmaNetSuspended.question = this.pharmanetQ;
-        pharmaNetSuspended.documents = this.getDocumentsForSelfDeclaration(enrollee, SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED);
-        acc.push(pharmaNetSuspended);
-      }
-
-      return acc;
-    }, []);
+  private getDocumentsForSelfDeclaration(enrollee: HttpEnrollee, code: SelfDeclarationTypeEnum): SelfDeclarationDocument[] {
+    return enrollee.selfDeclarationDocuments.filter(d => d.selfDeclarationTypeCode === code);
   }
 }
