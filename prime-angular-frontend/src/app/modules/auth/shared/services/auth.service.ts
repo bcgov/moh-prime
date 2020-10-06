@@ -7,6 +7,8 @@ import { KeycloakLoginOptions } from 'keycloak-js';
 
 import { LoggerService } from '@core/services/logger.service';
 
+import { ObjectUtils } from '@lib/utils/object-utils.class';
+import { User } from '@auth/shared/models/user.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { BrokerProfile } from '@auth/shared/models/broker-profile.model';
@@ -105,6 +107,7 @@ export class AuthService implements IAuthService {
 
     const userId = await this.getUserId();
     const claims = await this.getTokenAttribsByKey('hpdid');
+    this.tokenAttribMapping(claims);
 
     return {
       userId,
@@ -144,7 +147,8 @@ export class AuthService implements IAuthService {
     } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
 
     const userId = await this.getUserId();
-    const claims = await this.getTokenAttribsByKey('idir');
+    const claims = await this.getTokenAttribsByKey('preferred_username'); // aka IDIR
+    this.tokenAttribMapping(claims);
 
     return {
       userId,
@@ -208,5 +212,13 @@ export class AuthService implements IAuthService {
         return { ...attribs, [key]: token[key] };
       }, {})
       : { [keys]: token[keys] };
+  }
+
+  private async tokenAttribMapping(attribs: { [key: string]: any }) {
+    const mapping = {
+      preferred_username: 'idir'
+    };
+
+    ObjectUtils.keyMapping(attribs, mapping);
   }
 }
