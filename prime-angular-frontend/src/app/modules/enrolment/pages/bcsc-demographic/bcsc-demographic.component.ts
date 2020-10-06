@@ -100,7 +100,9 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     this.patchForm();
     this.initForm();
     this.getUser$()
-      .subscribe((enrollee: Enrollee) => this.enrollee = enrollee);
+      .subscribe((enrollee: Enrollee) =>
+        this.enrollee = enrollee
+      );
   }
 
   protected createFormInstance() {

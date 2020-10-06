@@ -77,10 +77,12 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     this.createFormInstance();
     this.patchForm();
     this.initForm();
-    this.getUser$()
-      .subscribe((user: BceidUser) =>
-        this.form.patchValue(user)
-      );
+    if (this.isInitialEnrolment) {
+      this.getUser$()
+        .subscribe((user: BceidUser) =>
+          this.form.patchValue(user)
+        );
+    }
   }
 
   protected createFormInstance() {

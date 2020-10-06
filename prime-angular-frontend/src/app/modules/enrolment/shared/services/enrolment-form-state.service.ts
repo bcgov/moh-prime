@@ -45,11 +45,6 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     private authService: AuthService
   ) {
     super(fb, routeStateService, logger);
-
-    this.authService.identityProvider$()
-      .subscribe((identityProvider: IdentityProvider) =>
-        this.identityProvider = identityProvider
-      );
   }
 
   /**
@@ -57,7 +52,12 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
    * Convert JSON into reactive form abstract controls, which can
    * only be set more than once when explicitly forced.
    */
-  public setForm(enrolment: Enrolment, forcePatch: boolean = false) {
+  public async setForm(enrolment: Enrolment, forcePatch: boolean = false): Promise<void> {
+    // Executed by views to populate their form models, which allows for
+    // it to be used for setting required values that can't be loaded
+    // during instantiation
+    this.identityProvider = await this.authService.identityProvider();
+
     // Store required enrolment identifiers not captured in forms
     this.enrolleeId = enrolment?.id;
     this.userId = enrolment?.enrollee.userId;
@@ -72,7 +72,6 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public get json(): Enrolment {
     const id = this.enrolleeId;
     const userId = this.userId;
-    // TODO may need to merge partials into full model
     const profile = (this.identityProvider === IdentityProvider.BCEID)
       ? this.bceidDemographicForm.getRawValue()
       : this.bcscDemographicForm.getRawValue();
@@ -166,10 +165,12 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
    */
   protected patchForm(enrolment: Enrolment) {
     if (!enrolment) {
-      return null;
+      return;
     }
 
-    this.bcscDemographicForm.patchValue(enrolment.enrollee);
+    (this.identityProvider === IdentityProvider.BCEID)
+      ? this.bceidDemographicForm.patchValue(enrolment.enrollee)
+      : this.bcscDemographicForm.patchValue(enrolment.enrollee);
     this.deviceProviderForm.patchValue(enrolment);
 
     if (enrolment.certifications.length) {
@@ -291,7 +292,20 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   private buildBceidDemographicForm(): FormGroup {
     return this.fb.group({
-      ...this.buildBcscDemographicForm(),
+      preferredFirstName: [null, []],
+      preferredMiddleName: [null, []],
+      preferredLastName: [null, []],
+      mailingAddress: this.buildAddressForm(),
+      phone: [null, [
+        Validators.required,
+        FormControlValidators.phone
+      ]],
+      phoneExtension: [null, [FormControlValidators.numeric]],
+      email: [null, [
+        Validators.required,
+        FormControlValidators.email
+      ]],
+      smsPhone: [null, [FormControlValidators.phone]],
       dateOfBirth: [{ value: null, disabled: true }, [Validators.required]]
     });
   }
