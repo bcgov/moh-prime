@@ -77,7 +77,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     this.createFormInstance();
     this.patchForm();
     this.initForm();
-    if (this.isInitialEnrolment) {
+    if (!this.enrolmentService.enrolment) {
       this.getUser$()
         .subscribe((user: BceidUser) =>
           this.form.patchValue(user)
@@ -125,14 +125,14 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
   private getUser$(): Observable<BceidUser> {
     return this.authService.getUser$()
       .pipe(
-        map(({ firstName, lastName }: BceidUser) => {
+        map(({ firstName, lastName, email = null }: BceidUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
             // Providing only the minimum required fields for creating an enrollee
             firstName,
             lastName,
-            email: null
+            email
           } as Enrollee;
         })
       );
