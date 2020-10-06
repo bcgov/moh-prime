@@ -1,4 +1,6 @@
-export interface BcscUser {
+import { User } from './user.model';
+
+export interface BcscUser extends User {
   userId: string;
   hpdid: string;
   firstName: string;

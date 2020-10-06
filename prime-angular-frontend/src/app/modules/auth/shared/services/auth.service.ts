@@ -8,7 +8,6 @@ import { KeycloakLoginOptions } from 'keycloak-js';
 import { LoggerService } from '@core/services/logger.service';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
-import { User } from '@auth/shared/models/user.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { BrokerProfile } from '@auth/shared/models/broker-profile.model';
@@ -89,6 +88,7 @@ export class AuthService implements IAuthService {
    */
   // TODO should be based this on provider now
   // TODO use this as a base method for all other types of users
+  // TODO multiple return types through switch-case, and new up objects for narrowing
   public async getUser(forceReload?: boolean): Promise<BcscUser> {
     const {
       firstName,
@@ -106,8 +106,12 @@ export class AuthService implements IAuthService {
     } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
 
     const userId = await this.getUserId();
-    const claims = await this.getTokenAttribsByKey('hpdid');
-    this.tokenAttribMapping(claims);
+    const claims = await this.getTokenAttribsByKey(['hpdid', 'preferred_username']);
+
+    const mapping = {
+      preferred_username: 'username'
+    };
+    ObjectUtils.keyMapping(claims, mapping);
 
     return {
       userId,
@@ -147,8 +151,13 @@ export class AuthService implements IAuthService {
     } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
 
     const userId = await this.getUserId();
-    const claims = await this.getTokenAttribsByKey('preferred_username'); // aka IDIR
-    this.tokenAttribMapping(claims);
+    const claims = await this.getTokenAttribsByKey('preferred_username');
+
+    const mapping = {
+      // TODO consolidate `idir` into `username` on User
+      preferred_username: 'idir'
+    };
+    ObjectUtils.keyMapping(claims, mapping);
 
     return {
       userId,
@@ -208,17 +217,7 @@ export class AuthService implements IAuthService {
     const token = await this.accessTokenService.decodeToken();
 
     return (Array.isArray(keys))
-      ? keys.reduce((attribs: { [key: string]: any }, key: string) => {
-        return { ...attribs, [key]: token[key] };
-      }, {})
-      : { [keys]: token[keys] };
-  }
-
-  private async tokenAttribMapping(attribs: { [key: string]: any }) {
-    const mapping = {
-      preferred_username: 'idir'
-    };
-
-    ObjectUtils.keyMapping(attribs, mapping);
+      ? keys.reduce((attribs: { [key: string]: any }, key: string) => ObjectUtils.mergeInto(key, token, attribs), {})
+      : ObjectUtils.mergeInto(keys, token);
   }
 }

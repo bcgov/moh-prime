@@ -55,6 +55,7 @@ export class MockAuthService implements IAuthService {
 
   public getUser(forceReload?: boolean): Promise<BcscUser> {
     return new Promise((resolve, reject) => resolve({
+      username: `${faker.internet.userName()}`,
       userId: `${faker.random.uuid()}`,
       hpdid: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
@@ -78,11 +79,12 @@ export class MockAuthService implements IAuthService {
 
   public getAdmin(forceReload?: boolean): Promise<Admin> {
     return new Promise((resolve, reject) => resolve({
+      username: `${faker.internet.userName()}`,
       userId: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      idir: `${faker.random.uuid()}`,
+      idir: `${faker.random.uuid()}`
     }));
   }
 
