@@ -35,17 +35,18 @@ export class MockOrganizationService implements IOrganizationService {
     };
     this._organization = new BehaviorSubject<Organization>({
       id: faker.random.number(),
+      sites: [],
+      siteCount: faker.random.number(),
       signingAuthorityId: faker.random.number(),
       signingAuthority: user,
       name: faker.company.companyName(),
       registrationId: faker.random.alphaNumeric(),
       doingBusinessAs: null,
+      organizationAgreementGuid: faker.random.uuid(),
       completed: false,
       acceptedAgreementDate: faker.date.past(2).toDateString(),
       signedAgreementDocuments: [],
-      submittedDate: null,
-      siteCount: faker.random.number(),
-      sites: []
+      submittedDate: null
     });
   }
 

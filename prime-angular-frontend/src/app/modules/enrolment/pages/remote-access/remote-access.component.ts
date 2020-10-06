@@ -7,18 +7,15 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
-
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 
-import { Site } from '@registration/shared/models/site.model';
-
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
-
 
 @Component({
   selector: 'app-remote-access',
@@ -39,13 +36,26 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
     protected siteResource: SiteResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
+    protected formUtilsService: FormUtilsService,
     private fb: FormBuilder
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
+
     this.enrolment = this.enrolmentService.enrolment;
   }
 

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-minor-update-confirmation',
@@ -12,13 +11,10 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 export class MinorUpdateConfirmationComponent extends BaseEnrolmentPage implements OnInit {
   constructor(
     protected route: ActivatedRoute,
-    protected router: Router,
-    private enrolmentService: EnrolmentService
+    protected router: Router
   ) {
     super(route, router);
   }
 
-  public ngOnInit() {
-
-  }
+  public ngOnInit(): void { }
 }

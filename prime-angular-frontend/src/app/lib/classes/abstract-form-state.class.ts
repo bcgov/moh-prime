@@ -1,21 +1,34 @@
 import { AbstractControl, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { RouterEvent } from '@angular/router';
 
+import { map, tap } from 'rxjs/operators';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { RouteStateService } from '@core/services/route-state.service';
+import { LoggerService } from '@core/services/logger.service';
 import { Province } from '@shared/enums/province.enum';
 import { Country } from '@shared/enums/country.enum';
 
-import { Person } from '../models/person.model';
+import { Person } from '@registration/shared/models/person.model';
 
 export abstract class AbstractFormState<T> {
   protected patched: boolean;
+  protected readonly resetRoutes: string[] = [];
 
   constructor(
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected routeStateService: RouteStateService,
+    protected logger: LoggerService
   ) {
-    // Initial state of the form is unpatched and ready for
-    // enrolment information
-    this.patched = false;
+    this.initialize();
+  }
 
-    this.init();
+  /**
+   * @description
+   * Check whether the form has been patched.
+   */
+  public get isPatched() {
+    return this.patched;
   }
 
   /**
@@ -76,16 +89,58 @@ export abstract class AbstractFormState<T> {
 
   /**
    * @description
-   * Initialize and configure the forms for patching, which is also used
-   * to clear previous form data from the service.
+   * Reset all the forms.
    */
-  public abstract init(): void;
+  public reset(): void {
+    this.patched = false;
+    this.forms
+      .forEach((form: FormGroup) => form.reset());
+  }
+
+  /**
+   * @description
+   * Build and configure the forms for patching.
+   */
+  protected abstract buildForms(): void;
 
   /**
    * @description
    * Manage the conversion of JSON to reactive forms.
    */
   protected abstract patchForm(model: T): T;
+
+  /**
+   * @description
+   * Determine whether the form should be reset based
+   * on the current route path.
+   */
+  protected checkResetRoutes(currentRoutePath: string, resetRoutes: string[]): boolean {
+    return resetRoutes?.includes(currentRoutePath);
+  }
+
+  /**
+   * @description
+   * Listen for a route that is outside of a registration route path
+   * to trigger a form reset.
+   */
+  protected routeStateResetListener(resetRoutes: string[]): void {
+    if (!resetRoutes?.length) {
+      return;
+    }
+
+    this.routeStateService.onNavigationEnd()
+      .pipe(
+        map((event: RouterEvent) => RouteUtils.currentRoutePath(event.url)),
+        tap((routePath: string) => this.logger.info('CURRENT_ROUTE', routePath)),
+        map((currentRoutePath: string) => this.checkResetRoutes(currentRoutePath, resetRoutes))
+      )
+      .subscribe((shouldReset: boolean) => {
+        if (shouldReset) {
+          this.logger.info('RESET_FORM_STATE');
+          this.reset();
+        }
+      });
+  }
 
   /**
    * @description
@@ -97,7 +152,6 @@ export abstract class AbstractFormState<T> {
    *  useDefaults for province and country, otherwise empty
    *  exclude control names that are not needed
    */
-  // TODO start sliding this into form builders
   protected buildAddressForm(options: {
     areRequired?: string[],
     areDisabled?: string[],
@@ -113,8 +167,6 @@ export abstract class AbstractFormState<T> {
         { value: null, disabled: false },
         []
       ],
-      // TODO not always used so should be able to omit the key
-      // from the form controls
       street2: [
         { value: null, disabled: false },
         []
@@ -207,5 +259,20 @@ export abstract class AbstractFormState<T> {
     }
 
     return person;
+  }
+
+  /**
+   * @description
+   * Initialize the form state service for use by building the required
+   * forms and setting up the route state listener.
+   */
+  private initialize() {
+    // Initial state of the form is unpatched and ready for
+    // enrolment information to be populated
+    this.patched = false;
+
+    this.buildForms();
+
+    this.routeStateResetListener(this.resetRoutes);
   }
 }

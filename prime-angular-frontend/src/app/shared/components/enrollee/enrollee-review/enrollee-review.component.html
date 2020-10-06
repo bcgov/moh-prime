@@ -9,7 +9,7 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Preferred Name"
-            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+            (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
@@ -37,7 +37,7 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Mailing Address"
-            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+            (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
@@ -77,17 +77,17 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Contact Information"
-            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+            (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Voice Phone">
-    {{ enrollee?.voicePhone | phone | default }}
+    {{ enrollee?.phone | phone | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Extension">
-    {{ enrollee?.voiceExtension | default }}
+    {{ enrollee?.phoneExtension | default }}
   </app-enrollee-property>
 
 </section>
@@ -100,17 +100,17 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Notification Information"
-            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+            (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Email Notification">
-    {{ enrollee?.contactEmail | default }}
+    {{ enrollee?.email | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Text Notification (SMS)">
-    {{ enrollee?.contactPhone | phone | default }}
+    {{ enrollee?.smsPhone | phone | default }}
   </app-enrollee-property>
 
 </section>

@@ -10,7 +10,7 @@ import tus from 'tus-js-client';
 import { environment } from '@env/environment';
 
 import { LoggerService } from '@core/services/logger.service';
-import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
+import { AccessTokenService } from '@auth/shared/services/access-token.service';
 
 export class BaseDocument {
   id: number;
@@ -35,16 +35,19 @@ export class DocumentUploadComponent implements OnInit {
   @Output() public completed: EventEmitter<BaseDocument>;
   @Output() public remove: EventEmitter<string>;
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
+  public filePondFiles: FilePondFile[];
   public filePondOptions: FilePondOptions & FilePondPluginFileValidateSizeProps & FilePondPluginFileValidateTypeProps;
-  public filePondFiles = [];
 
   private jwt: string;
+  private apiSuffix: string;
 
   constructor(
-    private keycloakTokenService: KeycloakTokenService,
+    private accessTokenService: AccessTokenService,
     private logger: LoggerService,
   ) {
     this.labelMessage = 'Click to Browse or Drop files here';
+    this.filePondFiles = [];
+    this.apiSuffix = 'document';
     this.completed = new EventEmitter();
     this.remove = new EventEmitter<string>();
   }
@@ -75,8 +78,8 @@ export class DocumentUploadComponent implements OnInit {
   }
 
   public async onFilePondAddFile() {
-    // Can't get token synchronously inside server.process(), so refresh token on file add.
-    this.jwt = await this.keycloakTokenService.token();
+    // Can't get token synchronously inside server.process(), so refresh token on file add
+    this.jwt = await this.accessTokenService.token();
   }
 
   public onFilePondRemoveFile({ file }: { file: FilePondFile, error: FilePondErrorDescription }) {

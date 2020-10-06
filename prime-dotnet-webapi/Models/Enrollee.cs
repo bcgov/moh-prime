@@ -53,13 +53,13 @@ namespace Prime.Models
 
         public MailingAddress MailingAddress { get; set; }
 
-        public string ContactEmail { get; set; }
+        public string Email { get; set; }
 
-        public string ContactPhone { get; set; }
+        public string SmsPhone { get; set; }
 
-        public string VoicePhone { get; set; }
+        public string Phone { get; set; }
 
-        public string VoiceExtension { get; set; }
+        public string PhoneExtension { get; set; }
 
         public ICollection<Certification> Certifications { get; set; }
 

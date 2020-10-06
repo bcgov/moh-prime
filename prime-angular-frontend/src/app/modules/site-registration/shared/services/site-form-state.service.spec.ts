@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { SiteFormStateService } from './site-form-state.service';
 
@@ -9,7 +10,8 @@ describe('SiteFormStateService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        RouterTestingModule
       ]
     });
     service = TestBed.inject(SiteFormStateService);

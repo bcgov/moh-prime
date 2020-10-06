@@ -5,17 +5,16 @@ import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Subscription, of, noop } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-remote-users',

@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { EnrolmentProfileVersion } from '@shared/models/enrollee-profile-history.model';
+
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -36,7 +37,7 @@ export class AccessAgreementHistoryEnrolmentComponent extends BaseEnrolmentPage 
     super.routeTo(EnrolmentRoutes.routePath(EnrolmentRoutes.ACCESS_TERMS));
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     const enrolleeId = this.enrolmentService.enrolment.id;
     const accessTermId = this.route.snapshot.params.id;
     this.expiryDate = this.enrolmentService.enrolment.expiryDate;
