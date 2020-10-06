@@ -84,8 +84,8 @@
 
             <app-document-upload componentName="has-conviction"
                                  [multiple]="true"
-                                 (completed)="onHasConvictionUpload($event)"
-                                 (remove)="onRemoveConvictionUpload($event)">
+                                 (completed)="onUpload('hasConvictionDocumentGuids', $event)"
+                                 (remove)="onRemove('hasConvictionDocumentGuids', $event)">
             </app-document-upload>
 
           </ol>
@@ -148,8 +148,8 @@
 
             <app-document-upload componentName="has-registration-suspended"
                                  [multiple]="true"
-                                 (completed)="onHasRegistrationSuspendedUpload($event)"
-                                 (remove)="onRemoveRegistrationSuspendedUpload($event)">
+                                 (completed)="onUpload('hasRegistrationSuspendedDocumentGuids', $event)"
+                                 (remove)="onRemove('hasRegistrationSuspendedDocumentGuids', $event)">
             </app-document-upload>
           </ol>
         </div>
@@ -205,8 +205,8 @@
 
             <app-document-upload componentName="has-disciplinary-action"
                                  [multiple]="true"
-                                 (completed)="onHasDisciplinaryActionUpload($event)"
-                                 (remove)="onRemoveDisciplinaryActionUpload($event)">
+                                 (completed)="onUpload('hasDisciplinaryActionDocumentGuids', $event)"
+                                 (remove)="onRemove('hasDisciplinaryActionDocumentGuids', $event)">
             </app-document-upload>
           </ol>
         </div>
@@ -263,8 +263,8 @@
 
             <app-document-upload componentName="has-pharmanet-suspended"
                                  [multiple]="true"
-                                 (completed)="onHasPharmanetSuspendedUpload($event)"
-                                 (remove)="onRemovePharmanetSuspendedUpload($event)">
+                                 (completed)="onUpload('hasPharmaNetSuspendedDocumentGuids', $event)"
+                                 (remove)="onRemove('hasPharmaNetSuspendedDocumentGuids', $event)">
             </app-document-upload>
           </ol>
         </div>

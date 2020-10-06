@@ -99,36 +99,12 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     super.onSubmit(hasBeenThroughTheWizard);
   }
 
-  public onHasConvictionUpload(sdd: SelfDeclarationDocument) {
-    this.addSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', sdd.documentGuid);
+  public onUpload(controlName: string, sdd: SelfDeclarationDocument) {
+    this.addSelfDeclarationDocumentGuid(controlName, sdd.documentGuid);
   }
 
-  public onRemoveConvictionUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', documentGuid);
-  }
-
-  public onHasRegistrationSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.addSelfDeclarationDocumentGuid('hasRegistrationSuspendedDocumentGuids', sdd.documentGuid);
-  }
-
-  public onRemoveRegistrationSuspendedUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasRegistrationSuspendedDocumentGuids', documentGuid);
-  }
-
-  public onHasDisciplinaryActionUpload(sdd: SelfDeclarationDocument) {
-    this.addSelfDeclarationDocumentGuid('hasDisciplinaryActionDocumentGuids', sdd.documentGuid);
-  }
-
-  public onRemoveDisciplinaryActionUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasDisciplinaryActionDocumentGuids', documentGuid);
-  }
-
-  public onHasPharmanetSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.addSelfDeclarationDocumentGuid('hasPharmaNetSuspendedDocumentGuids', sdd.documentGuid);
-  }
-
-  public onRemovePharmanetSuspendedUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasPharmaNetSuspendedDocumentGuids', documentGuid);
+  public onRemove(constrolName: string, documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid(constrolName, documentGuid);
   }
 
   public ngOnInit() {
