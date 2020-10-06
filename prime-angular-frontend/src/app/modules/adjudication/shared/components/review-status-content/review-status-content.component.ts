@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
+import { selfDeclarationQuestions } from '@lib/data/self-declaration-paragraphs';
 import { UtilsService } from '@core/services/utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
@@ -42,24 +43,7 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   @Input() public enrollee: HttpEnrollee;
   public previousStatuses: Status[];
   public reasons: Reason[];
-
-  // TODO: Currenty we just store this in this place and in the self declaration form
-  // and should be centralize for reuse so it doesn't have to changed in multiple places
-  private questions: { [key: number]: string } = {
-    [SelfDeclarationTypeEnum.HAS_CONVICTION]: `Are you, or have you ever been, the subject of an order or a
-    conviction under legislation in any jurisdiction for a matter that involved improper access to, collection,
-    use, or disclosure of personal information?`,
-    [SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED]: `Are you, or have you ever been, subject to any limits,
-    conditions or prohibitions imposed as a result of disciplinary actions taken by a governing body of a health
-    profession in any jurisdiction, that involved improper access to, collection, use, or disclosure of personal
-    information?`,
-    [SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION]: `Have you ever had your access to an electronic health record
-    system, electronic medical record system, pharmacy or laboratory record system, or any similar health information
-    system, in any jurisdiction, suspended or cancelled?`,
-    [SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED]: `Have you ever been disciplined or fired by an employer, or had
-    a contract for your services terminated, for a matter that involved improper access to, collection, use, or
-    disclosure of personal information?`,
-  };
+  private questions: { [key: number]: string } = selfDeclarationQuestions;
 
   constructor(
     private utilsService: UtilsService,

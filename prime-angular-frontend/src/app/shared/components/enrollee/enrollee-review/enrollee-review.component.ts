@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
+import { selfDeclarationQuestions } from '@lib/data/self-declaration-paragraphs';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
@@ -20,7 +21,8 @@ export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;
   @Input() public enrolment: Enrolment;
   @Output() public route: EventEmitter<string>;
-
+  public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
+  public selfDeclarationQuestions = selfDeclarationQuestions;
   public demographicRoutePath: string;
   public EnrolmentRoutes = EnrolmentRoutes;
 
