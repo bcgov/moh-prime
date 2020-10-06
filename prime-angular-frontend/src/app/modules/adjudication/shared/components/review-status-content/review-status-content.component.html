@@ -1,12 +1,16 @@
 <ng-container *ngIf="enrollee">
-  <h3 class="mb-4">
-    Status: {{ enrollee?.currentStatus.status.name }}
-  </h3>
+  <h2 class="h3 mb-4">
+    Status:
+    <span class="status"
+          [class]="enrollee?.currentStatus.statusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
+      {{ enrollee?.currentStatus.status.name }}
+    </span>
+  </h2>
 
   <section *ngIf="reasons?.length">
-    <h3 class="mb-4">
+    <h2 class="h3 mb-4">
       This Enrollee was manually adjudicated for the following reasons:
-    </h3>
+    </h2>
 
     <div *ngFor="let reason of reasons"
          class="pl-2 mb-4">
