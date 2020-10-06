@@ -8,7 +8,6 @@ import { KeycloakLoginOptions } from 'keycloak-js';
 import { LoggerService } from '@core/services/logger.service';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
-import { User } from '@auth/shared/models/user.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { BrokerProfile } from '@auth/shared/models/broker-profile.model';

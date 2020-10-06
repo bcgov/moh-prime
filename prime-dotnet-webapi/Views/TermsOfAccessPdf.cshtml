@@ -1,0 +1,24 @@
+@using Prime.Models
+@model Agreement
+
+@{
+  var primaryText = Model.AgreementVersion.Text;
+  var limitsAndConditions = Model.LimitsConditionsClause?.Text;
+}
+
+@Html.Raw(primaryText)
+
+@if(!string.IsNullOrWhiteSpace(limitsAndConditions))
+{
+  <p class="bold underline">Additional Clauses that Apply to You</p>
+  <p>@Html.Raw(limitsAndConditions)</p>
+}
+
+SIGNED AND DELIVERED by
+
+_______________________
+
+In the presence of:
+
+_________________________      ____________________________
+Witness                        Practitioner

@@ -29,7 +29,6 @@ namespace Prime.Controllers
         private readonly IPartyService _partyService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
-
         private readonly IPdfService _pdfService;
 
         public OrganizationsController(

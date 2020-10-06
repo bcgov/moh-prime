@@ -24,6 +24,7 @@ namespace Prime.Controllers
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IPdfService _pdfService;
 
         public EnrolleesAccessTermsController(
             IEnrolleeService enrolleeService,
@@ -109,6 +110,43 @@ namespace Prime.Controllers
             }
 
             return Ok(ApiResponse.Result(accessTerm));
+        }
+
+        // GET: api/Enrollees/5/access-terms/2/download-unsigned
+        /// <summary>
+        /// Downloads a specific unsigned access term for an enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="accessTermId"></param>
+        [HttpGet("{enrolleeId}/access-terms/{accessTermId}/download-unsigned", Name = nameof(GetAccessTermDownloadUnsigned))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Agreement>> GetAccessTermDownloadUnsigned(int enrolleeId, int accessTermId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            if (!record.ViewableBy(User))
+            {
+                return Forbid();
+            }
+
+            Agreement agreement = await _accessTermService.GetEnrolleeAccessTermAsync(enrolleeId, accessTermId, true);
+
+            if (agreement == null)
+            {
+                return NotFound(ApiResponse.Message($"Access term not found with id {accessTermId} on enrollee with id {enrolleeId}"));
+            }
+
+            var html = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccessPdf.cshtml", agreement);
+            var download = _pdfService.Generate(html);
+
+            return Ok(ApiResponse.Result(download));
         }
 
         // GET: api/Enrollees/5/access-terms/3/enrolment
