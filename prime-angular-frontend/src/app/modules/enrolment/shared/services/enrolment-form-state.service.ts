@@ -51,11 +51,15 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
    * @description
    * Convert JSON into reactive form abstract controls, which can
    * only be set more than once when explicitly forced.
+   *
+   * NOTE: Executed by views to populate their form models, which
+   * allows for it to be used for setting required values that
+   * can't be loaded during instantiation.
    */
   public async setForm(enrolment: Enrolment, forcePatch: boolean = false): Promise<void> {
-    // Executed by views to populate their form models, which allows for
-    // it to be used for setting required values that can't be loaded
-    // during instantiation
+    // Must delay loading of the identity provider otherwise race
+    // conditions occur when views initialize and the form instances
+    // are not necessarily available
     this.identityProvider = await this.authService.identityProvider();
 
     // Store required enrolment identifiers not captured in forms
