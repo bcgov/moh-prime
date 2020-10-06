@@ -77,7 +77,7 @@ namespace Prime.ViewModels
                     CountryCode = MailingAddress.CountryCode,
                     ProvinceCode = MailingAddress.ProvinceCode,
                     Street = MailingAddress.Street,
-                    Stree2 = MailingAddress.Stree2,
+                    Street2 = MailingAddress.Street2,
                     City = MailingAddress.City,
                     Postal = MailingAddress.Postal,
                 };
