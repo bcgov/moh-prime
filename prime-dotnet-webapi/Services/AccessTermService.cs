@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
@@ -14,13 +15,16 @@ namespace Prime.Services
         private static readonly TimeSpan ACCESS_TERM_EXPIRY = TimeSpan.FromDays(365);
 
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IDocumentManagerClient _documentClient;
 
         public AccessTermService(
             ApiDbContext context, IHttpContextAccessor httpContext,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
+            IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
+            _documentClient = documentClient;
         }
 
         /// <summary>
@@ -99,6 +103,16 @@ namespace Prime.Services
         }
 
         /// <summary>
+        /// Gets the Enrollee's newest Access Term
+        /// </summary>
+        public async Task<Agreement> GetCurrentAccessTermAsync(int enrolleeId)
+        {
+            return await _context.Agreements
+                .OrderByDescending(at => at.CreatedDate)
+                .FirstAsync(at => at.EnrolleeId == enrolleeId);
+        }
+
+        /// <summary>
         /// Accepts the Enrollee's newest Access Term, if it hasn't already been accepted.
         /// </summary>
         public async Task AcceptCurrentAccessTermAsync(int enrolleeId)
@@ -114,6 +128,28 @@ namespace Prime.Services
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int agreementId, Guid documentGuid)
+        {
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_agreements");
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
+            var signedAgreement = new SignedAgreementDocument
+            {
+                DocumentGuid = documentGuid,
+                AgreementId = agreementId,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now
+            };
+            _context.SignedAgreementDocuments.Add(signedAgreement);
+
+            await _context.SaveChangesAsync();
+
+            return signedAgreement;
         }
 
         /// <summary>

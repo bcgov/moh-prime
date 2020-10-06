@@ -89,7 +89,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction)
+        public async Task<ActionResult<Enrollee>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction, [FromQuery] Guid? documentGuid)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -103,7 +103,7 @@ namespace Prime.Controllers
 
             try
             {
-                await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin());
+                await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin(), documentGuid);
                 var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
                 return Ok(ApiResponse.Result(enrollee));
             }

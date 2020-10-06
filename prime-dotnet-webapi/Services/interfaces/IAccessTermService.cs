@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
@@ -13,7 +14,10 @@ namespace Prime.Services
 
         Task CreateEnrolleeAccessTermAsync(int enrolleeId);
 
+        Task<Agreement> GetCurrentAccessTermAsync(int enrolleeId);
         Task AcceptCurrentAccessTermAsync(int enrolleeId);
+
+        Task<SignedAgreementDocument> AddSignedAgreementAsync(int agreementId, Guid documentGuid);
 
         Task ExpireCurrentAccessTermAsync(int enrolleeId);
     }

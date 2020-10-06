@@ -101,7 +101,7 @@ namespace Prime.Services
         /// Performs a submission action on an Enrollee.
         /// </summary>
         /// <exception cref="Prime.Services.SubmissionService.InvalidActionException"> Thrown when the action is invalid on the given Enrollee due to current state or admin access </exception>
-        public async Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin)
+        public async Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin, Guid? documentGuid = null)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.PhysicalAddress)
@@ -117,7 +117,7 @@ namespace Prime.Services
                     .ThenInclude(l => l.License)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            var stateMachine = new SubmissionStateMachine(enrollee, this);
+            var stateMachine = new SubmissionStateMachine(enrollee, this, (Guid)documentGuid);
 
             await stateMachine.PerformAction(action, isAdmin);
         }
@@ -144,14 +144,26 @@ namespace Prime.Services
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
-        private async Task ProcessToaAsync(Enrollee enrollee, bool accept)
+        private async Task ProcessToaAsync(Enrollee enrollee, bool accept, Guid? documentGuid = null)
         {
             enrollee.AddEnrolmentStatus(StatusType.Editable);
 
             if (accept)
             {
+                if (enrollee.IdentityProvider == "bceid")
+                {
+                    var agreement = _accessTermService.GetCurrentAccessTermAsync(enrollee.Id);
+                    var agreementDocument = await _accessTermService.AddSignedAgreementAsync(agreement.Id, (Guid)documentGuid);
+                    if (agreementDocument == null)
+                    {
+                        return;
+                    }
+                }
+
                 await SetGpid(enrollee);
+
                 await _accessTermService.AcceptCurrentAccessTermAsync(enrollee.Id);
+
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
 
@@ -271,11 +283,12 @@ namespace Prime.Services
         private class SubmissionStateMachine
         {
             private readonly Enrollee _enrollee;
+            private readonly Guid _documentGuid;
             private readonly AsyncPassiveStateMachine<EnrolleeState, SubmissionAction> _machine;
             private readonly SubmissionService _submissionService;
 
             private async Task HandleApprove() { await _submissionService.ApproveApplicationAsync(_enrollee); }
-            private async Task HandleAcceptToa() { await _submissionService.ProcessToaAsync(_enrollee, true); }
+            private async Task HandleAcceptToa() { await _submissionService.ProcessToaAsync(_enrollee, true, _documentGuid); }
             private async Task HandleDeclineToa() { await _submissionService.ProcessToaAsync(_enrollee, false); }
             private async Task HandleEnableEditing() { await _submissionService.EnableEditingAsync(_enrollee); }
             private async Task HandleLockProfile() { await _submissionService.LockProfileAsync(_enrollee); }
@@ -283,10 +296,11 @@ namespace Prime.Services
             private async Task HandleEnableProfile() { await _submissionService.EnableProfileAsync(_enrollee); }
             private async Task HandleRerunRules() { await _submissionService.RerunRulesAsync(_enrollee); }
 
-            public SubmissionStateMachine(Enrollee enrollee, SubmissionService submissionService)
+            public SubmissionStateMachine(Enrollee enrollee, SubmissionService submissionService, Guid documentGuid)
             {
                 _enrollee = enrollee;
                 _submissionService = submissionService;
+                _documentGuid = documentGuid;
 
                 var stateMachineBuilder = InitBuilder();
                 stateMachineBuilder.WithInitialState(FromEnrollee(enrollee));

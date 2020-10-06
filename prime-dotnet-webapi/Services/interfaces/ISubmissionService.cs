@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Prime.ViewModels;
 using Prime.Models.Api;
@@ -8,7 +9,7 @@ namespace Prime.Services
     {
         Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile);
 
-        Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin);
+        Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin, Guid? documentGuid);
 
         Task UpdateAlwaysManualAsync(int enrolleeId, bool alwaysManual);
     }
