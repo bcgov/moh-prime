@@ -9,7 +9,7 @@ using DelegateDecompiler;
 namespace Prime.Models
 {
     [Table("Enrollee")]
-    public class Enrollee : BaseAuditable, IValidatableObject, IUserBoundModel
+    public class Enrollee : BaseAuditable, IValidatableObject, IUserBoundModel, IAgreeable
     {
         public Enrollee()
         {

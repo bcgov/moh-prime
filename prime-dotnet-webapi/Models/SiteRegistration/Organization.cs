@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("Organization")]
-    public class Organization : BaseAuditable
+    public class Organization : BaseAuditable, IAgreeable
     {
         public const int DISPLAY_OFFSET = 1000;
 
@@ -44,6 +44,12 @@ namespace Prime.Models
         public int DisplayId
         {
             get => Id + DISPLAY_OFFSET;
+        }
+
+        [NotMapped]
+        public DateTimeOffset? AcceptedAgreementDate
+        {
+
         }
     }
 }
