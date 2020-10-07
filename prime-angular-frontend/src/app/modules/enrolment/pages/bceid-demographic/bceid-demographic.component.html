@@ -1,9 +1,7 @@
 <app-enrollee-page [busy]="busy">
   <app-page-header>PRIME Enrolment</app-page-header>
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
-                                    [inProgress]="isInitialEnrolment"
-                                    [currentRoute]="EnrolmentRoutes.BCEID_DEMOGRAPHIC">
-  </app-enrolment-progress-indicator>
+                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -60,6 +58,7 @@
                    placeholder="Date of Birth"
                    [matDatepicker]="myDatepicker"
                    formControlName="dateOfBirth"
+                   (click)="myDatepicker.open()"
                    readonly>
             <mat-datepicker-toggle matSuffix
                                    [for]="myDatepicker"></mat-datepicker-toggle>
