@@ -59,7 +59,7 @@ namespace Prime.Models
             var foreignKeyCount = new[] { EnrolleeId, OrganizationId, PartyId }.Count(k => k.HasValue);
             if (foreignKeyCount > 1)
             {
-                yield return new ValidationResult("Cannot specify more than one foriegn key on an Agreement");
+                yield return new ValidationResult("Cannot specify more than one foreign key on an Agreement");
             }
 
             var navPropertiesCount = new object[] { Enrollee, Organization, Party }.Count(n => n != null);
