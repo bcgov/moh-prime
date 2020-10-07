@@ -1,21 +1,15 @@
 using System.ServiceModel;
-using Prime.Models;
+using System.Runtime.Serialization;
 
 namespace Prime.Services
 {
-    [ServiceContract]
+    [ServiceContract(Namespace = "urn:hl7-org:v3")]
     public interface ISoapService
     {
-        [OperationContract]
-        string Test(string s);
+        [OperationContract(Name = "PRPM_IN301030CA")]
+        void Request(System.Xml.Linq.XElement controlActProcess);
 
-        [OperationContract]
-        SoapObject GetModel();
-
-        [OperationContract]
-        SoapObject SetModel(int id, string email);
-
-        [OperationContract]
-        void XmlMethod(System.Xml.Linq.XElement xml);
     }
+
+
 }
