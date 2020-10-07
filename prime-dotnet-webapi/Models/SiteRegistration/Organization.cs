@@ -20,8 +20,6 @@ namespace Prime.Models
 
         public string DoingBusinessAs { get; set; }
 
-        public DateTimeOffset? AcceptedAgreementDate { get; set; }
-
         public bool Completed { get; set; }
 
         public DateTimeOffset? SubmittedDate { get; set; }
@@ -41,8 +39,6 @@ namespace Prime.Models
         {
             get => (this.Sites == null) ? 0 : this.Sites.Count;
         }
-
-        public ICollection<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
 
         [NotMapped]
         public int DisplayId

@@ -46,6 +46,8 @@ namespace Prime.Models
 
         public DateTimeOffset? ExpiryDate { get; set; }
 
+        public SignedAgreementDocument SignedAgreement { get; set; }
+
         [NotMapped]
         public string AgreementMarkup { get; set; }
 
