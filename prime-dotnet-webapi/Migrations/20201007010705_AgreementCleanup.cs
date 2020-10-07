@@ -8,6 +8,10 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(@"
+                DROP VIEW IF EXISTS public.""NewestAgreements"";
+            ");
+
             migrationBuilder.DropColumn(
                 name: "Discriminator",
                 table: "AgreementVersion");
@@ -64,10 +68,6 @@ namespace Prime.Migrations
                 principalTable: "Agreement",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.Sql(@"
-                DROP VIEW IF EXISTS public.""NewestAgreements"";
-            ");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
