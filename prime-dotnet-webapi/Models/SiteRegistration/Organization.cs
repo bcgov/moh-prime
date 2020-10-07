@@ -45,11 +45,5 @@ namespace Prime.Models
         {
             get => Id + DISPLAY_OFFSET;
         }
-
-        [NotMapped]
-        public DateTimeOffset? AcceptedAgreementDate
-        {
-
-        }
     }
 }
