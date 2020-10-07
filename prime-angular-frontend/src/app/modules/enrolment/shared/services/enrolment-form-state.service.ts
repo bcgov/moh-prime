@@ -31,6 +31,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public jobsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
+  public accessAgreementForm: FormGroup;
 
   protected readonly resetRoutes: string[] = [...EnrolmentRoutes.enrolmentProfileRoutes()];
 
@@ -84,6 +85,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     const jobs = this.jobsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
     const selfDeclarations = this.convertSelfDeclarationsToJson();
+    const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
 
     return {
       id,
@@ -95,13 +97,14 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ...deviceProvider,
       ...jobs,
       ...careSettings,
-      selfDeclarations
+      selfDeclarations,
+      accessAgreementGuid
     };
   }
 
   /**
    * @description
-   * Helper for getting a list of organization forms.
+   * Helper for getting a list of enrolment forms.
    */
   public get forms(): AbstractControl[] {
     return [
@@ -161,6 +164,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     this.jobsForm = this.buildJobsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
+    this.accessAgreementForm = this.buildAccessAgreementForm();
   }
 
   /**
@@ -400,6 +404,15 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasPharmaNetSuspendedDetails: [null, []],
       hasPharmaNetSuspendedDocumentGuids: this.fb.array([])
+    });
+  }
+
+  private buildAccessAgreementForm(): FormGroup {
+    return this.fb.group({
+      accessAgreementGuid: [
+        '',
+        []
+      ]
     });
   }
 

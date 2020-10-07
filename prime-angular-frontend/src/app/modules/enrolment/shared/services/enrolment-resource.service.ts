@@ -70,8 +70,9 @@ export class EnrolmentResource {
       );
   }
 
-  public submissionAction(id: number, action: SubmissionAction): Observable<HttpEnrollee> {
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission/${action}`)
+  public submissionAction(id: number, action: SubmissionAction, documentGuid: string = '00000000-0000-0000-0000-000000000000'): Observable<HttpEnrollee> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission/${action}`, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
@@ -134,6 +135,13 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<AccessTerm>) => response.result),
         tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
+      );
+  }
+
+  public getAccessTermDownloadUnsigned(enrolleeId: number, accessTermsId: number): Observable<string> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/access-terms/${accessTermsId}/download-unsigned`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result)
       );
   }
 

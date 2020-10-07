@@ -31,13 +31,15 @@ namespace Prime.Controllers
             IAccessTermService accessTermService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IRazorConverterService razorConverterService,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IPdfService pdfService)
         {
             _enrolleeService = enrolleeService;
             _accessTermService = accessTermService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
             _razorConverterService = razorConverterService;
             _businessEventService = businessEventService;
+            _pdfService = pdfService;
         }
 
         // GET: api/Enrollees/5/access-terms
