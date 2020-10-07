@@ -36,7 +36,8 @@
 
   </form>
 
-  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+  <app-page-footer primaryActionLabel="Continue"
+                   [isInitialEnrolment]="isInitialEnrolment"
                    [hasSecondaryAction]="isProfileComplete"
                    (save)="onSubmit()"></app-page-footer>
 
