@@ -228,7 +228,8 @@ namespace Prime.Services
         private IQueryable<Organization> GetBaseOrganizationQuery()
         {
             return _context.Organizations
-                .Include(o => o.SignedAgreementDocuments)
+                .Include(o => o.Agreements)
+                    .ThenInclude(a => a.SignedAgreement)
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(o => o.SigningAuthority)
