@@ -73,9 +73,9 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
    * @description
    * Manage the conversion of JSON to reactive forms.
    */
-  protected patchForm(organization: Organization): Organization {
+  protected patchForm(organization: Organization): void {
     if (!organization) {
-      return null;
+      return;
     }
 
     this.organizationNameForm.patchValue(organization);

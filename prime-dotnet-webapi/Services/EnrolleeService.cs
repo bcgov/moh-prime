@@ -145,10 +145,11 @@ namespace Prime.Services
             return enrollee;
         }
 
-        public async Task<int> CreateEnrolleeAsync(Enrollee enrollee)
+        public async Task<int> CreateEnrolleeAsync(EnrolleeCreateModel createModel)
         {
-            enrollee.ThrowIfNull(nameof(enrollee));
+            createModel.ThrowIfNull(nameof(createModel));
 
+            var enrollee = _mapper.Map<Enrollee>(createModel);
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             _context.Enrollees.Add(enrollee);
 

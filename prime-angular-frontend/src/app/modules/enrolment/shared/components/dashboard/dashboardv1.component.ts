@@ -124,7 +124,8 @@ export class DashboardV1Component implements OnInit {
       .subscribe((device: string) => this.setSideNavProps(device));
 
     const user = await this.authService.getUser();
-    this.username = `${user.firstName} ${user.lastName}`;
+    // Identity providers don't all provide last name
+    this.username = `${user?.firstName} ${user.lastName ?? ''}`;
   }
 
   private getSideNavSections(): DashboardNavSectionV1[] {

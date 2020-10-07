@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -111,29 +112,25 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Enrollee>> CreateEnrollee(Enrollee enrollee)
+        public async Task<ActionResult<Enrollee>> CreateEnrollee(EnrolleeCreatePayload payload)
         {
-            if (enrollee == null)
+            if (payload == null || payload.Enrollee == null)
             {
                 this.ModelState.AddModelError("Enrollee", "Could not create an enrollee, the passed in Enrollee cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
-            if (!enrollee.PermissionsRecord().EditableBy(User))
-            {
-                return Forbid();
-            }
 
-            if (await _enrolleeService.UserIdExistsAsync(enrollee.UserId))
+            if (await _enrolleeService.UserIdExistsAsync(User.GetPrimeUserId()))
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            enrollee.IdentityAssuranceLevel = User.GetIdentityAssuranceLevel();
-            enrollee.IdentityProvider = User.GetIdentityProvider();
+            var createModel = payload.Enrollee;
+            createModel.MapConditionalProperties(User);
+            var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(createModel);
 
-            var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(enrollee);
-            enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
 
             return CreatedAtAction(
                 nameof(GetEnrolleeById),

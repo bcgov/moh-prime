@@ -11,7 +11,7 @@ import { DashboardMenuProps } from '@lib/modules/dashboard/models/dashboard-menu
 import { DashboardMenuItem, DashboardRouteMenuItem } from '@lib/modules/dashboard/models/dashboard-menu-item.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { User } from '@auth/shared/models/user.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit {
 
     // Set the authenticated username for the application header
     this.authService.getUser$()
-      .subscribe(({ firstName, lastName }: User) =>
+      .subscribe(({ firstName, lastName }: BcscUser) =>
         this.username = `${firstName} ${lastName}`
       );
 

@@ -8,7 +8,7 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
-import { User } from '@auth/shared/models/user.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -37,7 +37,7 @@ export class RegistrationGuard extends BaseGuard {
     const user$ = this.authService.getUser$();
     const createOrganization$ = user$
       .pipe(
-        map((user: User) => new Party(user)),
+        map((user: BcscUser) => new Party(user)),
         exhaustMap((party: Party) => this.organizationResource.createOrganization(party)),
         map((organization: Organization) => [organization, true])
       );

@@ -35,8 +35,12 @@ export abstract class AbstractFormState<T> {
    * @description
    * Convert JSON into reactive form abstract controls, which can
    * only be set more than once when explicitly forced.
+   *
+   * NOTE: Executed by views to populate their form models, which
+   * allows for it to be used for setting required values that
+   * can't be loaded during instantiation.
    */
-  public setForm(model: T, forcePatch: boolean = false) {
+  public setForm(model: T, forcePatch: boolean = false): void {
     if (this.patched && !forcePatch) {
       return;
     }
@@ -107,7 +111,7 @@ export abstract class AbstractFormState<T> {
    * @description
    * Manage the conversion of JSON to reactive forms.
    */
-  protected abstract patchForm(model: T): T;
+  protected abstract patchForm(model: T): void;
 
   /**
    * @description
@@ -266,7 +270,7 @@ export abstract class AbstractFormState<T> {
    * Initialize the form state service for use by building the required
    * forms and setting up the route state listener.
    */
-  private initialize() {
+  protected initialize() {
     // Initial state of the form is unpatched and ready for
     // enrolment information to be populated
     this.patched = false;

@@ -3,14 +3,17 @@ import { FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { Enrollee } from '@shared/models/enrollee.model';
 
+import { BceidUser } from '@auth/shared/models/bceid-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -25,6 +28,11 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   styleUrls: ['./bceid-demographic.component.scss']
 })
 export class BceidDemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
+  /**
+   * @description
+   * User information from the provider.
+   */
+  public user: BceidUser;
   public addressFormControlNames: string[];
 
   constructor(
@@ -61,14 +69,22 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     ];
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
+  public get mailingAddress(): FormGroup {
+    return this.form.get('mailingAddress') as FormGroup;
   }
 
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm();
     this.initForm();
+    if (!this.enrolmentService.enrolment) {
+      console.log('TEST');
+
+      this.getUser$()
+        .subscribe((enrollee: Enrollee) =>
+          this.form.patchValue(enrollee)
+        );
+    }
   }
 
   protected createFormInstance() {
@@ -78,8 +94,25 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
   protected initForm() { }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
-    // TODO handle create or update similar to demographic and make method generic
-    return of(void 0);
+    if (!enrolment.id && this.isInitialEnrolment) {
+      const payload = {
+        enrollee: this.form.getRawValue(),
+        identificationDocumentGuid: this.enrolmentFormStateService.identityDocumentForm.get('identificationDocumentGuid').value
+      };
+      return this.enrolmentResource.createEnrollee(payload)
+        .pipe(
+          // Merge the enrolment with generated keys
+          map((newEnrolment: Enrolment) => {
+            newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
+            return newEnrolment;
+          }),
+          // Populate generated keys within the form state
+          tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
+          this.handleResponse()
+        );
+    } else {
+      return super.performHttpRequest(enrolment, beenThroughTheWizard);
+    }
   }
 
   protected nextRouteAfterSubmit() {
@@ -89,5 +122,21 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
+  }
+
+  private getUser$(): Observable<Enrollee> {
+    return this.authService.getUser$()
+      .pipe(
+        map(({ firstName, lastName, email = null }: BceidUser) => {
+          // Enforced the enrollee type instead of using Partial<Enrollee>
+          // to avoid creating constructors and partials for every model
+          return {
+            // Providing only the minimum required fields for creating an enrollee
+            preferredFirstName: firstName,
+            preferredLastName: lastName,
+            email
+          } as Enrollee;
+        })
+      );
   }
 }

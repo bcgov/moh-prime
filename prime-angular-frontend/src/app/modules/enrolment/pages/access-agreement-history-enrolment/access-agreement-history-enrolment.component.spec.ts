@@ -1,15 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { KeycloakService } from 'keycloak-angular';
+
+import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 import { AccessAgreementHistoryEnrolmentComponent } from './access-agreement-history-enrolment.component';
-import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
-import { EnrolmentModule } from '@enrolment/enrolment.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterModule } from '@angular/router';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
-import { MockConfigService } from 'test/mocks/mock-config.service';
+import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
+import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
 describe('AccessAgreementHistoryEnrolmentComponent', () => {
   let component: AccessAgreementHistoryEnrolmentComponent;
@@ -21,7 +24,7 @@ describe('AccessAgreementHistoryEnrolmentComponent', () => {
         NgxBusyModule,
         EnrolmentModule,
         HttpClientTestingModule,
-        RouterModule.forRoot([])
+        RouterTestingModule
       ],
       providers: [
         {
@@ -36,6 +39,7 @@ describe('AccessAgreementHistoryEnrolmentComponent', () => {
           provide: EnrolmentService,
           useClass: MockEnrolmentService
         },
+        KeycloakService
       ]
     })
       .compileComponents();

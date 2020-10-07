@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable } from 'rxjs';
-import { exhaustMap, map, take, tap } from 'rxjs/operators';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -13,7 +13,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 
-import { User } from '@auth/shared/models/user.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -30,7 +30,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 export class BcscDemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
   /**
    * @description
-   * Enrollee profile information not contained within the form.
+   * Enrollee information from the provider not
+   * contained within the form.
    */
   public enrollee: Enrollee;
   public hasPreferredName: boolean;
@@ -95,10 +96,13 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   }
 
   public ngOnInit() {
-    this.getUser();
     this.createFormInstance();
     this.patchForm();
     this.initForm();
+    this.getUser$()
+      .subscribe((enrollee: Enrollee) =>
+        this.enrollee = enrollee
+      );
   }
 
   protected createFormInstance() {
@@ -130,32 +134,17 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     if (!enrolment.id && this.isInitialEnrolment) {
-      return this.authService.getUser$()
+      return this.getUser$()
         .pipe(
-          map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
-            // Enforced the enrolment type instead of using Partial<Enrolment>
-            // to avoid creating constructors and partials for every model
-            return {
-              // Providing only the minimum required fields for creating an enrollee
-              userId,
-              hpdid,
-              firstName,
-              lastName,
-              givenNames,
-              dateOfBirth,
-              physicalAddress,
-              phone: null,
-              email: null
-            } as Enrollee;
-          }),
-          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee(enrollee)),
+          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
+          // Merge the enrolment with generated keys
           map((newEnrolment: Enrolment) => {
             newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
             return newEnrolment;
           }),
-          // Populate generated keys within the form state (eg. id, userId, etc)
+          // Populate generated keys within the form state
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
-          exhaustMap((newEnrolment: Enrolment) => super.performHttpRequest(newEnrolment))
+          this.handleResponse()
         );
     } else {
       return super.performHttpRequest(enrolment, beenThroughTheWizard);
@@ -189,24 +178,25 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     }
   }
 
-  private getUser(): void {
-    this.authService.getUser$()
-      .pipe(take(1))
-      .subscribe(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: User) => {
-        // Enforced the enrollee type instead of using Partial<Enrollee>
-        // to avoid creating constructors and partials for every model
-        this.enrollee = {
-          // Providing only the minimum required fields for creating an enrollee
-          userId,
-          hpdid,
-          firstName,
-          lastName,
-          givenNames,
-          dateOfBirth,
-          physicalAddress,
-          phone: null,
-          email: null
-        } as Enrollee;
-      });
+  private getUser$(): Observable<Enrollee> {
+    return this.authService.getUser$()
+      .pipe(
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: BcscUser) => {
+          // Enforced the enrollee type instead of using Partial<Enrollee>
+          // to avoid creating constructors and partials for every model
+          return {
+            // Providing only the minimum required fields for creating an enrollee
+            userId,
+            hpdid,
+            firstName,
+            lastName,
+            givenNames,
+            dateOfBirth,
+            physicalAddress,
+            phone: null,
+            email: null
+          } as Enrollee;
+        })
+      );
   }
 }
