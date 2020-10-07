@@ -79,7 +79,7 @@ namespace Prime.ViewModels
                     Street = MailingAddress.Street,
                     Street2 = MailingAddress.Street2,
                     City = MailingAddress.City,
-                    Postal = MailingAddress.Postal,
+                    Postal = MailingAddress.Postal
                 };
             }
         }

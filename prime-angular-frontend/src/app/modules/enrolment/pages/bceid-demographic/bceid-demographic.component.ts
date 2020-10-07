@@ -78,9 +78,11 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     this.patchForm();
     this.initForm();
     if (!this.enrolmentService.enrolment) {
+      console.log('TEST');
+
       this.getUser$()
-        .subscribe((user: BceidUser) =>
-          this.form.patchValue(user)
+        .subscribe((enrollee: Enrollee) =>
+          this.form.patchValue(enrollee)
         );
     }
   }
@@ -122,7 +124,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private getUser$(): Observable<BceidUser> {
+  private getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
         map(({ firstName, lastName, email = null }: BceidUser) => {
@@ -130,8 +132,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
           // to avoid creating constructors and partials for every model
           return {
             // Providing only the minimum required fields for creating an enrollee
-            firstName,
-            lastName,
+            preferredFirstName: firstName,
+            preferredLastName: lastName,
             email
           } as Enrollee;
         })
