@@ -8,6 +8,7 @@ using DelegateDecompiler.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
+using Prime.Auth;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
@@ -164,7 +165,7 @@ namespace Prime.Services
             return enrollee.Id;
         }
 
-        public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false)
+        public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel updateModel, bool profileCompleted = false)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.MailingAddress)
@@ -174,13 +175,17 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .SingleAsync(e => e.Id == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile);
+            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
-            UpdateMailingAddress(enrollee, enrolleeProfile.MailingAddress);
-            ReplaceExistingItems(enrollee.Certifications, enrolleeProfile.Certifications, enrolleeId);
-            ReplaceExistingItems(enrollee.Jobs, enrolleeProfile.Jobs, enrolleeId);
-            ReplaceExistingItems(enrollee.EnrolleeCareSettings, enrolleeProfile.EnrolleeCareSettings, enrolleeId);
-            ReplaceExistingItems(enrollee.SelfDeclarations, enrolleeProfile.SelfDeclarations, enrolleeId);
+            if (enrollee.IdentityProvider != AuthConstants.BC_SERVICES_CARD)
+            {
+                UpdatePhysicalAddress(enrollee, updateModel.PhysicalAddress);
+            }
+            UpdateMailingAddress(enrollee, updateModel.MailingAddress);
+            ReplaceExistingItems(enrollee.Certifications, updateModel.Certifications, enrolleeId);
+            ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
+            ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -191,7 +196,7 @@ namespace Prime.Services
             }
 
             // This is the temporary way we are adding self declaration documents until this gets refactored.
-            await CreateSelfDeclarationDocuments(enrolleeId, enrolleeProfile.SelfDeclarations);
+            await CreateSelfDeclarationDocuments(enrolleeId, updateModel.SelfDeclarations);
 
             try
             {
@@ -201,6 +206,16 @@ namespace Prime.Services
             {
                 return 0;
             }
+        }
+
+        private void UpdatePhysicalAddress(Enrollee dbEnrollee, PhysicalAddress newAddress)
+        {
+            if (dbEnrollee.PhysicalAddress != null)
+            {
+                _context.Addresses.Remove(dbEnrollee.PhysicalAddress);
+            }
+
+            dbEnrollee.PhysicalAddress = newAddress;
         }
 
         private void UpdateMailingAddress(Enrollee dbEnrollee, MailingAddress newAddress)
