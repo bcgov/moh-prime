@@ -59,7 +59,8 @@
             <input matInput
                    placeholder="Date of Birth"
                    [matDatepicker]="myDatepicker"
-                   formControlName="dateOfBirth">
+                   formControlName="dateOfBirth"
+                   readonly>
             <mat-datepicker-toggle matSuffix
                                    [for]="myDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #myDatepicker

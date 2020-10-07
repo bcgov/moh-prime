@@ -142,7 +142,7 @@ export class AuthService implements IAuthService {
    * NOTE: Careful using this in Angular lifecycle hooks. It is preferrable to
    * use the Observable based method getAdmin$().
    */
-  // TODO drop after getUser providers object instance of auth user
+  // TODO drop after getUser provides object instance of auth user
   public async getAdmin(forceReload?: boolean): Promise<Admin> {
     const {
       firstName,
