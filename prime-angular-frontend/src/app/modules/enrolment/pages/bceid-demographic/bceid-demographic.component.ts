@@ -78,6 +78,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     this.patchForm();
     this.initForm();
     if (!this.enrolmentService.enrolment) {
+      console.log('TEST');
+
       this.getUser$()
         .subscribe((enrollee: Enrollee) =>
           this.form.patchValue(enrollee)
@@ -130,8 +132,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
           // to avoid creating constructors and partials for every model
           return {
             // Providing only the minimum required fields for creating an enrollee
-            firstName,
-            lastName,
+            preferredFirstName: firstName,
+            preferredLastName: lastName,
             email
           } as Enrollee;
         })
