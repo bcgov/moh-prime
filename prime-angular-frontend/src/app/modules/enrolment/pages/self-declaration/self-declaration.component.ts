@@ -3,7 +3,7 @@ import { Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { selfDeclarationQuestions } from '@lib/data/self-declaration-paragraphs';
+import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 
-import { selfDeclarationQuestions } from '@lib/data/self-declaration-paragraphs';
+import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { UtilsService } from '@core/services/utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';

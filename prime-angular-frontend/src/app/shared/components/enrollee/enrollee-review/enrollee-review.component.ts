@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
-import { selfDeclarationQuestions } from '@lib/data/self-declaration-paragraphs';
+import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
