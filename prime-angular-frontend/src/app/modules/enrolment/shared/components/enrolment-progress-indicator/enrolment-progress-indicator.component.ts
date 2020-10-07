@@ -2,7 +2,7 @@ import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { IProgressIndicator2 } from '@shared/components/progress-indicator2/progress-indicator2.component';
+import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -12,7 +12,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
   templateUrl: './enrolment-progress-indicator.component.html',
   styleUrls: ['./enrolment-progress-indicator.component.scss']
 })
-export class EnrolmentProgressIndicatorComponent implements OnInit, IProgressIndicator2 {
+export class EnrolmentProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public inProgress: boolean;
   @Input() public message: string;
   @Input() public template: TemplateRef<any>;

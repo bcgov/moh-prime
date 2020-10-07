@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProgressIndicator2Component } from './progress-indicator2.component';
+import { ProgressIndicatorComponent } from './progress-indicator.component';
 
-describe('ProgressIndicator2Component', () => {
-  let component: ProgressIndicator2Component;
-  let fixture: ComponentFixture<ProgressIndicator2Component>;
+describe('ProgressIndicatorComponent', () => {
+  let component: ProgressIndicatorComponent;
+  let fixture: ComponentFixture<ProgressIndicatorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProgressIndicator2Component]
+      declarations: [ProgressIndicatorComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProgressIndicator2Component);
+    fixture = TestBed.createComponent(ProgressIndicatorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
