@@ -9,6 +9,7 @@ import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { EnrolleeRemoteUser } from './enrollee-remote-user.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -25,6 +26,7 @@ export interface HttpEnrollee extends Enrollee {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
+  enrolleeRemoteUsers: EnrolleeRemoteUser[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
   enrolleeCareSettings: CareSetting[];
@@ -40,7 +42,6 @@ export interface HttpEnrollee extends Enrollee {
   collectionNoticeAccepted: boolean;
   // Always send an enrollee to manual adjudication
   alwaysManual: boolean;
-  requestingRemoteAccess: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
   base64QRCode: string;
@@ -60,6 +61,7 @@ export interface Enrolment {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
+  enrolleeRemoteUsers: EnrolleeRemoteUser[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
   careSettings: CareSetting[];
@@ -75,7 +77,6 @@ export interface Enrolment {
   collectionNoticeAccepted: boolean;
   // Always send an enrollee to manual adjudication
   alwaysManual: boolean;
-  requestingRemoteAccess: boolean;
   adjudicatorId: number;
   adjudicator: Admin;
   base64QRCode: string;

@@ -1,6 +1,7 @@
 export class AuthRoutes {
   public static AUTH = '';
   public static INFO = 'info';
+  public static BCEID = 'bceid';
   public static ADMIN = 'admin';
   public static SITE = 'site';
 

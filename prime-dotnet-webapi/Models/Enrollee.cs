@@ -102,13 +102,13 @@ namespace Prime.Models
 
         public bool AlwaysManual { get; set; }
 
-        public bool RequestingRemoteAccess { get; set; }
-
         [JsonIgnore]
         public int IdentityAssuranceLevel { get; set; }
 
         [JsonIgnore]
         public string IdentityProvider { get; set; }
+
+        public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
         public int? CredentialId { get; set; }
 

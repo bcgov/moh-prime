@@ -25,5 +25,6 @@ namespace Prime.Services
         Task<IEnumerable<BusinessLicenceDocument>> GetBusinessLicencesAsync(int siteId);
         Task<BusinessLicenceDocument> GetLatestBusinessLicenceAsync(int siteId);
         Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId);
+        Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> certifications);
     }
 }

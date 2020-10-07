@@ -4,6 +4,8 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { EnrolleeTableComponent } from './enrollee-table.component';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('EnrolleeTableComponent', () => {
   let component: EnrolleeTableComponent;
@@ -12,11 +14,16 @@ describe('EnrolleeTableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        AdjudicationModule
+        AdjudicationModule,
+        BrowserAnimationsModule
       ],
       declarations: [],
       providers: [
-        KeycloakService
+        KeycloakService,
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
       ]
     }).compileComponents();
   }));

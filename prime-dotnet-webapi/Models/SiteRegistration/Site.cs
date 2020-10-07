@@ -54,7 +54,7 @@ namespace Prime.Models
 
         public DateTimeOffset? ApprovedDate { get; set; }
 
-        public IEnumerable<SiteVendor> SiteVendors { get; set; }
+        public ICollection<SiteVendor> SiteVendors { get; set; }
 
         public ICollection<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
 

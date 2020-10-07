@@ -1,5 +1,6 @@
 export class AdjudicationRoutes {
   public static ADJUDICATION = 'adjudication';
+  public static METABASE_REPORTS = 'metabase-reports';
 
   public static ENROLLEES = 'enrollees';
   public static ENROLLEE_ENROLMENTS = 'enrolments';

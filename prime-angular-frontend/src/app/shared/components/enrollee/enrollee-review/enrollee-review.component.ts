@@ -69,7 +69,7 @@ export class EnrolleeReviewComponent {
   }
 
   public get isRequestingRemoteAccess(): boolean {
-    return (this.enrolment && !!this.enrolment.requestingRemoteAccess);
+    return (this.enrolment && !!this.enrolment.enrolleeRemoteUsers?.length);
   }
 
   public get careSettings(): CareSetting[] {
