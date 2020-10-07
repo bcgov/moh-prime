@@ -168,6 +168,7 @@ namespace Prime.Services
         public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel updateModel, bool profileCompleted = false)
         {
             var enrollee = await _context.Enrollees
+                .Include(e => e.PhysicalAddress)
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
