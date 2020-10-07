@@ -142,6 +142,7 @@ namespace Prime.Services
             {
                 DocumentGuid = documentGuid,
                 AgreementId = agreementId,
+                OrganizationId = 1, // REMOVE AS SOON AS ORG AGREEMENT CHANGES ARE IN
                 Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };

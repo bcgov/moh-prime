@@ -70,9 +70,9 @@ export class EnrolmentResource {
       );
   }
 
-  public submissionAction(id: number, action: SubmissionAction, documentGuid: string = '00000000-0000-0000-0000-000000000000'): Observable<HttpEnrollee> {
+  public submissionAction(id: number, action: SubmissionAction, documentGuid: string = null): Observable<HttpEnrollee> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission/${action}`, params)
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission/${action}`, {}, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
