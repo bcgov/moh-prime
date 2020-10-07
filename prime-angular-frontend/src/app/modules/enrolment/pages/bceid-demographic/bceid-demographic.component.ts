@@ -79,8 +79,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     this.initForm();
     if (!this.enrolmentService.enrolment) {
       this.getUser$()
-        .subscribe((user: BceidUser) =>
-          this.form.patchValue(user)
+        .subscribe((enrollee: Enrollee) =>
+          this.form.patchValue(enrollee)
         );
     }
   }
@@ -122,7 +122,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private getUser$(): Observable<BceidUser> {
+  private getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
         map(({ firstName, lastName, email = null }: BceidUser) => {
