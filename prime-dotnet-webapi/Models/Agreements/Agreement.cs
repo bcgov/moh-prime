@@ -56,8 +56,8 @@ namespace Prime.Models
             // Validate that no more than one Foreign key / Navigation property have been set. Zero could be fine, since it is valid to specify only the keys or only the navigation properties when creating an Agreement.
             // This is a simple validation, more accurate validation is performed by the check constraints in the database.
 
-            var foriegnKeyCount = new[] { EnrolleeId, OrganizationId, PartyId }.Count(k => k.HasValue);
-            if (foriegnKeyCount > 1)
+            var foreignKeyCount = new[] { EnrolleeId, OrganizationId, PartyId }.Count(k => k.HasValue);
+            if (foreignKeyCount > 1)
             {
                 yield return new ValidationResult("Cannot specify more than one foriegn key on an Agreement");
             }
