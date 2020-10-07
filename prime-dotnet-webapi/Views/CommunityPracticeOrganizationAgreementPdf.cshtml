@@ -14,15 +14,10 @@
    * located in /documents.
    */
   var organizationName = Model.Name;
-  var day = @DateTime.Now.ToString("dd");
-  var month = @DateTime.Now.ToString("MMMM");
-  var year = @DateTime.Now.ToString("yyyy");
-
-  if(Model.AcceptedAgreementDate.HasValue) {
-    day = Model.AcceptedAgreementDate.Value.ToString("dd");
-    month = Model.AcceptedAgreementDate.Value.ToString("MMMM");
-    year = Model.AcceptedAgreementDate.Value.ToString("yyyy");
-  }
+  var date = Model.NewestAcceptedAgreementDate() ?? @DateTime.Now;
+  var day = date.ToString("dd");
+  var month = date.ToString("MMMM");
+  var year = date.ToString("yyyy");
 }
 
 <link rel="stylesheet"
