@@ -321,6 +321,7 @@ namespace Prime.Services
                 .Include(e => e.AccessAgreementNote)
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.SelfDeclarationDocuments)
+                .Include(e => e.IdentificationDocuments)
                 .Include(e => e.AssignedPrivileges)
                     .ThenInclude(ap => ap.Privilege)
                 .Include(e => e.Agreements)
@@ -548,6 +549,22 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return enrolleeRemoteUsers;
+        }
+
+        public async Task<IdentificationDocument> CreateIdentificationDocument(int enrolleeId, Guid documentGuid, string filename)
+        {
+            var identificationDocument = new IdentificationDocument
+            {
+                DocumentGuid = documentGuid,
+                EnrolleeId = enrolleeId,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now
+            };
+            _context.IdentificationDocuments.Add(identificationDocument);
+
+            await _context.SaveChangesAsync();
+
+            return identificationDocument;
         }
     }
 }

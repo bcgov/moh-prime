@@ -35,7 +35,7 @@
                   mat-stroked-button
                   color="primary"
                   class="pl-2 mb-2"
-                  (click)="downloadDocument(document)">
+                  (click)="downloadDocument(document, reason.isSelfDeclaration)">
             <mat-icon class="mr-1">attachment</mat-icon> {{ document.filename }}
           </button>
         </div>

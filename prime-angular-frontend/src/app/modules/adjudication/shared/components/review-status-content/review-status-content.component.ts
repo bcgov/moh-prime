@@ -12,6 +12,8 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { IdentificationDocument } from '@shared/models/identification-document.model';
 
 class Status {
   constructor(
@@ -28,9 +30,9 @@ class Reason {
   constructor(
     public name: string,
     public note: string,
+    public documents?: BaseDocument[],
     public isSelfDeclaration?: boolean,
     public question?: string,
-    public documents?: SelfDeclarationDocument[]
   ) { }
 }
 
@@ -50,8 +52,20 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     private enrolmentResource: EnrolmentResource,
   ) { }
 
-  public downloadDocument(document: SelfDeclarationDocument): void {
-    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, document.id)
+  public downloadDocument(document: BaseDocument, isSelfDeclaration: boolean): void {
+    if (isSelfDeclaration) {
+      return this.downloadSelfDeclarationDocument(document.id);
+    }
+    this.downloadIdentificationDocument(document.id);
+  }
+
+  private downloadSelfDeclarationDocument(id: number): void {
+    this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrollee.id, id)
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
+  }
+
+  private downloadIdentificationDocument(id: number): void {
+    this.enrolmentResource.getDownloadTokenIdentificationDocument(this.enrollee.id, id)
       .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
@@ -104,6 +118,10 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
           return reasons.concat(this.parseSelfDeclarations(this.enrollee));
         }
 
+        if (esr.statusReasonCode === EnrolmentStatusReasonEnum.IDENTITY_PROVIDER) {
+          return reasons.concat(new Reason(esr.statusReason.name, esr.reasonNote, this.enrollee.identificationDocuments));
+        }
+
         reasons.push(new Reason(esr.statusReason.name, esr.reasonNote));
         return reasons;
       }, []);
@@ -115,9 +133,9 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
         selfDeclarations.push(new Reason(
           'User answered yes to a self-declaration question:',
           selfDeclaration.selfDeclarationDetails,
+          this.getDocumentsForSelfDeclaration(enrollee, selfDeclaration.selfDeclarationTypeCode),
           true,
-          this.questions[selfDeclaration.selfDeclarationTypeCode],
-          this.getDocumentsForSelfDeclaration(enrollee, selfDeclaration.selfDeclarationTypeCode)
+          this.questions[selfDeclaration.selfDeclarationTypeCode]
         ));
         return selfDeclarations;
       }, []);
