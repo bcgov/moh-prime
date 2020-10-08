@@ -26,5 +26,4 @@ ENV DB_HOST postgresql${SUFFIX}
 ENV PGPASSWORD postgres
 # Run the server
 EXPOSE 5001 9191
-#ENTRYPOINT /opt/app-root/src/app.sh dev
-# Entry remarked out, using command in compose instead
+ENTRYPOINT /opt/app-root/src/app.sh dev

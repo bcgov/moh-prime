@@ -29,8 +29,11 @@ case "$1" in
         migrate
         ;;
     dev)
+        echo "Running database migrations..."
         migrate
         backend
+        echo "Keeping Document Manager alive..."
+        tail /dev/null
         ;;
     *)
     echo "You\'re doing it wrong..."
