@@ -11,6 +11,7 @@ import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
+import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 
 @Injectable({
@@ -122,6 +123,42 @@ export class OrganizationResource {
       );
   }
 
+  /**
+   * @description
+   * Check whether an organization agreement is needed, and create
+   * the organization agreement.
+   *
+   * NOTE:
+   * Presence of location header indicates new organization agreement
+   * is required and has been created. The location header contains
+   * the resource URL for requesting the organization agreement.
+   * @see getOrganizationAgreementByUrl
+   */
+  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<string | null> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ siteId });
+    return this.apiResource.post<string | null>(`organizations/${organizationId}/agreements/update`, null, params, { observe: 'response' })
+      .pipe(
+        map((response: ApiHttpResponse<string | null>) => response.headers.get('Location') ?? null)
+      );
+  }
+
+  /**
+   * @description
+   * Get the created organization agreement.
+   * @see updateOrganizationAgreement
+   */
+  public getOrganizationAgreementByUrl(url: string) {
+    return this.apiResource.get<string>(url)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement could not be retrieved');
+          this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getOrganizationAgreement(organizationId: number): Observable<string> {
     return this.apiResource.get<string>(`organizations/${organizationId}/agreements`)
       .pipe(
@@ -184,6 +221,10 @@ export class OrganizationResource {
       );
   }
 
+  /**
+   * @description
+   * Download a PDF version of the organization agreement.
+   */
   public getUnsignedOrganizationAgreement(): Observable<string> {
     return this.apiResource.get<string>(`organizations/organization-agreement-document`)
       .pipe(
