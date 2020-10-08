@@ -10,4 +10,14 @@ export class ObjectUtils {
       delete object[oldKey];
     });
   }
+
+  /**
+   * @description
+   * Merge a key/value pair into an object if it exists.
+   */
+  public static mergeInto(key: string, refObject: { [key: string]: any }, mergeObject: { [key: string]: any } = {}) {
+    return (refObject[key])
+      ? { ...mergeObject, [key]: refObject[key] }
+      : mergeObject;
+  }
 }

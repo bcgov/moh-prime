@@ -159,9 +159,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * @description
    * Manage the conversion of JSON to reactive forms.
    */
-  protected patchForm(site: Site): Site {
+  protected patchForm(site: Site): void {
     if (!site) {
-      return null;
+      return;
     }
 
     this.careSettingTypeForm.patchValue(site);

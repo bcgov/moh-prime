@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, TemplateRef, OnChanges, SimpleChanges } from '@angular/core';
 
-export interface IProgressIndicator2 {
+export interface IProgressIndicator {
   inProgress: boolean;
   currentRoute: string;
   routes: string[];
@@ -12,11 +12,11 @@ export interface IProgressIndicator2 {
  * within a list of routes.
  */
 @Component({
-  selector: 'app-progress-indicator2',
-  templateUrl: './progress-indicator2.component.html',
-  styleUrls: ['./progress-indicator2.component.scss']
+  selector: 'app-progress-indicator',
+  templateUrl: './progress-indicator.component.html',
+  styleUrls: ['./progress-indicator.component.scss']
 })
-export class ProgressIndicator2Component implements OnInit, OnChanges, IProgressIndicator2 {
+export class ProgressIndicatorComponent implements OnInit, OnChanges, IProgressIndicator {
   /**
    * @description
    * Indicate whether progress has already been completed, and

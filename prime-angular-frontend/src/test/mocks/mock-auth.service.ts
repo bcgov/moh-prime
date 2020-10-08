@@ -3,7 +3,7 @@ import { KeycloakTokenParsed, KeycloakLoginOptions } from 'keycloak-js';
 
 import { Role } from '@auth/shared/enum/role.enum';
 import { IAuthService } from '@auth/shared/services/auth.service';
-import { User } from '@auth/shared/models/user.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { Observable, from, of } from 'rxjs';
 import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
@@ -42,19 +42,20 @@ export class MockAuthService implements IAuthService {
   }
 
   public async identityProvider(): Promise<IdentityProvider> {
-    throw new Error('Method not implemented.');
+    return await Promise.resolve(IdentityProvider.BCSC);
   }
 
   public identityProvider$(): Observable<IdentityProvider> {
-    return of(IdentityProvider.BCEID);
+    return from(this.identityProvider());
   }
 
   public logout(redirectUri: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
-  public getUser(forceReload?: boolean): Promise<User> {
+  public getUser(forceReload?: boolean): Promise<BcscUser> {
     return new Promise((resolve, reject) => resolve({
+      username: `${faker.internet.userName()}`,
       userId: `${faker.random.uuid()}`,
       hpdid: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
@@ -72,17 +73,18 @@ export class MockAuthService implements IAuthService {
     }));
   }
 
-  public getUser$(forceReload?: boolean): Observable<User> {
+  public getUser$(forceReload?: boolean): Observable<BcscUser> {
     return from(this.getUser());
   }
 
   public getAdmin(forceReload?: boolean): Promise<Admin> {
     return new Promise((resolve, reject) => resolve({
+      username: `${faker.internet.userName()}`,
       userId: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      idir: `${faker.random.uuid()}`,
+      idir: `${faker.random.uuid()}`
     }));
   }
 

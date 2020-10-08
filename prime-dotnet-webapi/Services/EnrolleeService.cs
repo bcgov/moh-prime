@@ -8,6 +8,7 @@ using DelegateDecompiler.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
+using Prime.Auth;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
@@ -145,10 +146,11 @@ namespace Prime.Services
             return enrollee;
         }
 
-        public async Task<int> CreateEnrolleeAsync(Enrollee enrollee)
+        public async Task<int> CreateEnrolleeAsync(EnrolleeCreateModel createModel)
         {
-            enrollee.ThrowIfNull(nameof(enrollee));
+            createModel.ThrowIfNull(nameof(createModel));
 
+            var enrollee = _mapper.Map<Enrollee>(createModel);
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             _context.Enrollees.Add(enrollee);
 
@@ -163,9 +165,10 @@ namespace Prime.Services
             return enrollee.Id;
         }
 
-        public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false)
+        public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel updateModel, bool profileCompleted = false)
         {
             var enrollee = await _context.Enrollees
+                .Include(e => e.PhysicalAddress)
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
@@ -173,13 +176,30 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .SingleAsync(e => e.Id == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile);
+            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
-            UpdateMailingAddress(enrollee, enrolleeProfile.MailingAddress);
-            ReplaceExistingItems(enrollee.Certifications, enrolleeProfile.Certifications, enrolleeId);
-            ReplaceExistingItems(enrollee.Jobs, enrolleeProfile.Jobs, enrolleeId);
-            ReplaceExistingItems(enrollee.EnrolleeCareSettings, enrolleeProfile.EnrolleeCareSettings, enrolleeId);
-            ReplaceExistingItems(enrollee.SelfDeclarations, enrolleeProfile.SelfDeclarations, enrolleeId);
+            // TODO currently doesn't update the date of birth
+            if (enrollee.IdentityProvider != AuthConstants.BC_SERVICES_CARD)
+            {
+                enrollee.FirstName = updateModel.PreferredFirstName;
+                enrollee.LastName = updateModel.PreferredLastName;
+                enrollee.GivenNames = $"{updateModel.PreferredFirstName} {updateModel.PreferredMiddleName}";
+                UpdatePhysicalAddress(enrollee, new PhysicalAddress
+                {
+                    CountryCode = updateModel.MailingAddress.CountryCode,
+                    ProvinceCode = updateModel.MailingAddress.ProvinceCode,
+                    Street = updateModel.MailingAddress.Street,
+                    Street2 = updateModel.MailingAddress.Street2,
+                    City = updateModel.MailingAddress.City,
+                    Postal = updateModel.MailingAddress.Postal
+                });
+            }
+
+            UpdateMailingAddress(enrollee, updateModel.MailingAddress);
+            ReplaceExistingItems(enrollee.Certifications, updateModel.Certifications, enrolleeId);
+            ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
+            ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -190,7 +210,7 @@ namespace Prime.Services
             }
 
             // This is the temporary way we are adding self declaration documents until this gets refactored.
-            await CreateSelfDeclarationDocuments(enrolleeId, enrolleeProfile.SelfDeclarations);
+            await CreateSelfDeclarationDocuments(enrolleeId, updateModel.SelfDeclarations);
 
             try
             {
@@ -202,6 +222,19 @@ namespace Prime.Services
             }
         }
 
+        private void UpdatePhysicalAddress(Enrollee dbEnrollee, PhysicalAddress newAddress)
+        {
+            if (dbEnrollee.PhysicalAddress != null && newAddress != null)
+            {
+                newAddress.Id = dbEnrollee.PhysicalAddress.Id;
+                _context.Entry(dbEnrollee.PhysicalAddress).CurrentValues.SetValues(newAddress);
+            }
+            else if (newAddress != null)
+            {
+                dbEnrollee.PhysicalAddress = newAddress;
+            }
+        }
+
         private void UpdateMailingAddress(Enrollee dbEnrollee, MailingAddress newAddress)
         {
             if (dbEnrollee.MailingAddress != null)
@@ -209,7 +242,20 @@ namespace Prime.Services
                 _context.Addresses.Remove(dbEnrollee.MailingAddress);
             }
 
-            dbEnrollee.MailingAddress = newAddress;
+            if (newAddress != null)
+            {
+                var address = new MailingAddress
+                {
+                    CountryCode = newAddress.CountryCode,
+                    ProvinceCode = newAddress.ProvinceCode,
+                    Street = newAddress.Street,
+                    Street2 = newAddress.Street2,
+                    City = newAddress.City,
+                    Postal = newAddress.Postal
+                };
+
+                dbEnrollee.MailingAddress = address;
+            }
         }
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
