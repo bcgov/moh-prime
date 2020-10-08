@@ -178,6 +178,7 @@ namespace Prime.Services
 
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
+            // TODO currently doesn't update the date of birth
             if (enrollee.IdentityProvider != AuthConstants.BC_SERVICES_CARD)
             {
                 enrollee.FirstName = updateModel.PreferredFirstName;
@@ -223,12 +224,15 @@ namespace Prime.Services
 
         private void UpdatePhysicalAddress(Enrollee dbEnrollee, PhysicalAddress newAddress)
         {
-            if (dbEnrollee.PhysicalAddress != null)
+            if (dbEnrollee.PhysicalAddress != null && newAddress != null)
             {
-                _context.Addresses.Remove(dbEnrollee.PhysicalAddress);
+                newAddress.Id = dbEnrollee.PhysicalAddress.Id;
+                _context.Entry(dbEnrollee.PhysicalAddress).CurrentValues.SetValues(newAddress);
             }
-
-            dbEnrollee.PhysicalAddress = newAddress;
+            else if (newAddress != null)
+            {
+                dbEnrollee.PhysicalAddress = newAddress;
+            }
         }
 
         private void UpdateMailingAddress(Enrollee dbEnrollee, MailingAddress newAddress)
@@ -238,7 +242,20 @@ namespace Prime.Services
                 _context.Addresses.Remove(dbEnrollee.MailingAddress);
             }
 
-            dbEnrollee.MailingAddress = newAddress;
+            if (newAddress != null)
+            {
+                var address = new MailingAddress
+                {
+                    CountryCode = newAddress.CountryCode,
+                    ProvinceCode = newAddress.ProvinceCode,
+                    Street = newAddress.Street,
+                    Street2 = newAddress.Street2,
+                    City = newAddress.City,
+                    Postal = newAddress.Postal
+                };
+
+                dbEnrollee.MailingAddress = address;
+            }
         }
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
