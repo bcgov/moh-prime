@@ -1,5 +1,8 @@
+import { HttpHeaders } from '@angular/common/http';
+
 export class ApiHttpResponse<T> {
   readonly status: number;
+  readonly headers: HttpHeaders;
   readonly result: T;
   readonly message?: string;
 
