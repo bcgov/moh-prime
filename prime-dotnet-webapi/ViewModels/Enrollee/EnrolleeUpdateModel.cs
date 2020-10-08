@@ -52,22 +52,6 @@ namespace Prime.ViewModels
         {
             IdentityProvider = user.GetIdentityProvider();
             IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
-
-            if (IdentityProvider != AuthConstants.BC_SERVICES_CARD)
-            {
-                FirstName = PreferredFirstName;
-                LastName = PreferredLastName;
-                GivenNames = $"{PreferredFirstName} {PreferredMiddleName}";
-                PhysicalAddress = new PhysicalAddress
-                {
-                    CountryCode = MailingAddress.CountryCode,
-                    ProvinceCode = MailingAddress.ProvinceCode,
-                    Street = MailingAddress.Street,
-                    Street2 = MailingAddress.Street2,
-                    City = MailingAddress.City,
-                    Postal = MailingAddress.Postal
-                };
-            }
         }
     }
 }
