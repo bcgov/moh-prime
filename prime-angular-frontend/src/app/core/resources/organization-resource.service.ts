@@ -131,13 +131,31 @@ export class OrganizationResource {
    * NOTE:
    * Presence of location header indicates new organization agreement
    * is required and has been created. The location header contains
-   * the API endpoint for requesting the organization agreement.
+   * the resource URL for requesting the organization agreement.
+   * @see getOrganizationAgreementByUrl
    */
   public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<string | null> {
     const params = this.apiResourceUtilsService.makeHttpParams({ siteId });
     return this.apiResource.post<string | null>(`organizations/${organizationId}/agreements/update`, null, params, { observe: 'response' })
       .pipe(
         map((response: ApiHttpResponse<string | null>) => response.headers.get('Location') ?? null)
+      );
+  }
+
+  /**
+   * @description
+   * Get the created organization agreement.
+   * @see updateOrganizationAgreement
+   */
+  public getOrganizationAgreementByUrl(url: string) {
+    return this.apiResource.get<string>(url)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement could not be retrieved');
+          this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
       );
   }
 

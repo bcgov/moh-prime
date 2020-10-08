@@ -156,13 +156,19 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   private initForm() {
     const organization = this.organizationService.organization;
+    const siteId = this.route.snapshot.queryParams.siteId;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);
 
     this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
 
-    this.organizationResource
-      .getOrganizationAgreement(organization.id)
+    this.busy = this.organizationResource
+      .updateOrganizationAgreement(organization.id, siteId)
+      .pipe(
+        exhaustMap((url: string) =>
+          this.organizationResource.getOrganizationAgreementByUrl(url)
+        )
+      )
       .subscribe((organizationAgreement: string) =>
         this.organizationAgreement = organizationAgreement
       );
