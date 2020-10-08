@@ -58,23 +58,25 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
       const site = this.siteService.site;
 
       this.busy = this.organizationResource
-        .getOrganizationById(organizationId)
+        .updateOrganizationAgreement(organizationId, site.id)
         .pipe(
-          map((organization: Organization) => !!organization.acceptedAgreementDate),
-          exhaustMap((hasSignedOrgAgreement: boolean) =>
+          map((url: string | null) => !!url),
+          exhaustMap((needsOrgAgreement: boolean) =>
             this.siteResource.updateSite(payload)
-              .pipe(map(() => hasSignedOrgAgreement))
+              .pipe(map(() => needsOrgAgreement))
           ),
-          exhaustMap((hasSignedOrgAgreement: boolean) =>
-            (hasSignedOrgAgreement)
+          exhaustMap((needsOrgAgreement: boolean) =>
+            // Mark the site as completed if an organization
+            // agreement does not need to be signed
+            (!needsOrgAgreement)
               ? this.siteResource.updateCompleted(site.id)
-                .pipe(map(() => hasSignedOrgAgreement))
-              : of(hasSignedOrgAgreement)
+                .pipe(map(() => needsOrgAgreement))
+              : of(needsOrgAgreement)
           )
         )
-        .subscribe((hasSignedOrgAgreement: boolean) => {
+        .subscribe((needsOrgAgreement: boolean) => {
           this.form.markAsPristine();
-          this.nextRoute(organizationId, hasSignedOrgAgreement);
+          this.nextRoute(organizationId, needsOrgAgreement);
         });
     }
   }
@@ -90,8 +92,8 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     this.routeUtils.routeRelativeTo(SiteRoutes.PRIVACY_OFFICER);
   }
 
-  public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
-    if (!hasSignedOrgAgreement) {
+  public nextRoute(organizationId: number, needsOrgAgreement: boolean) {
+    if (needsOrgAgreement) {
       const siteId = this.route.snapshot.params.sid;
       // Provide site for redirection after accepting the organization agreement
       this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.SITE_MANAGEMENT), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT], {
