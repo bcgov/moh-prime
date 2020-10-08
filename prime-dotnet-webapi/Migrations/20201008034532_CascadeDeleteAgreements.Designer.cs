@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201008034532_CascadeDeleteAgreements")]
+    partial class CascadeDeleteAgreements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5267,8 +5269,7 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnrolleeId")
-                        .IsUnique();
+                    b.HasIndex("EnrolleeId");
 
                     b.ToTable("IdentificationDocument");
                 });
@@ -14954,8 +14955,8 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.IdentificationDocument", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithOne("IdentificationDocument")
-                        .HasForeignKey("Prime.Models.IdentificationDocument", "EnrolleeId")
+                        .WithMany("IdentificationDocuments")
+                        .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
