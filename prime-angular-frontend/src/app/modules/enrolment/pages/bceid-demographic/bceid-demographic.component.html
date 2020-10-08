@@ -1,9 +1,7 @@
 <app-enrollee-page [busy]="busy">
   <app-page-header>PRIME Enrolment</app-page-header>
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
-                                    [inProgress]="isInitialEnrolment"
-                                    [currentRoute]="EnrolmentRoutes.BCEID_DEMOGRAPHIC">
-  </app-enrolment-progress-indicator>
+                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -24,7 +22,7 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="First Name"
-                   formControlName="firstName">
+                   formControlName="preferredFirstName">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -34,7 +32,7 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Middle Name (optional)"
-                   formControlName="givenNames">
+                   formControlName="preferredMiddleName">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -46,7 +44,7 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Last Name"
-                   formControlName="lastName">
+                   formControlName="preferredLastName">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -59,7 +57,9 @@
             <input matInput
                    placeholder="Date of Birth"
                    [matDatepicker]="myDatepicker"
-                   formControlName="dateOfBirth">
+                   formControlName="dateOfBirth"
+                   (click)="myDatepicker.open()"
+                   readonly>
             <mat-datepicker-toggle matSuffix
                                    [for]="myDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #myDatepicker
@@ -82,7 +82,7 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-address [form]="physicalAddress"
+      <app-address [form]="mailingAddress"
                    [formControlNames]="addressFormControlNames"></app-address>
 
     </section>

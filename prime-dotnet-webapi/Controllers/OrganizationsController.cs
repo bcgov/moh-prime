@@ -217,42 +217,99 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(organization));
         }
 
-        // GET: api/Organizations/organization-agreement
+        // POST: api/Organizations/5/agreements/update
         /// <summary>
-        /// Get the organization agreement.
+        /// Creates a new un-accepted Oganization Agreement based on the type of Site supplied, if a newer version exits.
+        /// Will return a reference to any existing un-accepted agreement instead of creating a new one, if able.
         /// </summary>
         /// <param name="organizationId"></param>
-        [HttpGet("{organizationId}/organization-agreement", Name = nameof(GetOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        /// <param name="siteId"></param>
+        [HttpGet("{organizationId}/agreements/update", Name = nameof(UpdateOrganizationAgreement))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetOrganizationAgreement(int organizationId)
+        [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateOrganizationAgreement(int organizationId, [FromQuery] int siteId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
+            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            {
+                return Forbid();
+            }
 
-            var agreement = await _razorConverterService.RenderViewToStringAsync("/Views/CommunityPracticeOrganizationAgreement.cshtml", organization);
+            var agreement = await _organizationService.EnsureUpdatedOrgAgreementAsync(organizationId, siteId);
+            if (agreement == null)
+            {
+                return NotFound(ApiResponse.Message($"Site with ID {siteId} not found on Organization {organizationId}"));
+            }
 
-            return Ok(ApiResponse.Result(agreement));
+            if (agreement.AcceptedDate.HasValue)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return CreatedAtAction(
+                    nameof(GetOrganizationAgreement),
+                    new { organizationId = organizationId, agreementId = agreement.Id },
+                    ApiResponse.Result(agreement)
+                );
+            }
         }
 
-        // PUT: api/Organizations/5/organization-agreement
+        // GET: api/Organizations/5/agreements/7
+        // TODO: load text from DB, security
+        /// <summary>
+        /// Get the organization agreement text.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        /// <param name="agreementId"></param>
+        [HttpGet("{organizationId}/agreements/{agreementId}", Name = nameof(GetOrganizationAgreement))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetOrganizationAgreement(int organizationId, int agreementId)
+        {
+            var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            var agreementType = await _organizationService.GetOrgAgreementTypeAsync(organizationId, agreementId);
+            if (agreementType == null)
+            {
+                return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
+            }
+
+            string viewToRender = agreementType == AgreementType.CommunityPracticeOrgAgreement
+                ? "/Views/CommunityPracticeOrganizationAgreement.cshtml"
+                : "/Views/CommunityPharmacyOrganizationAgreement.cshtml";
+
+            var text = await _razorConverterService.RenderViewToStringAsync(viewToRender, organization);
+
+            return Ok(ApiResponse.Result(text));
+        }
+
+        // PUT: api/Organizations/5/agreements/7
         /// <summary>
         /// Accept an organization agreement
         /// </summary>
         /// <param name="organizationId"></param>
-        [HttpPut("{organizationId}/organization-agreement", Name = nameof(AcceptCurrentOrganizationAgreement))]
+        [HttpPut("{organizationId}/agreements/{agreementId}", Name = nameof(AcceptOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> AcceptCurrentOrganizationAgreement(int organizationId)
+        public async Task<IActionResult> AcceptOrganizationAgreement(int organizationId, int agreementId, [FromQuery] Guid? documentGuid)
         {
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
@@ -264,7 +321,17 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _organizationService.AcceptCurrentOrganizationAgreementAsync(organization.Id);
+            if (documentGuid.HasValue)
+            {
+                var signedAgreement = await _organizationService.AddSignedAgreementAsync(organizationId, agreementId, documentGuid.Value);
+                if (signedAgreement == null)
+                {
+                    this.ModelState.AddModelError("documentGuid", "Signed Organization Agreement could not be created; network error or upload is already submitted");
+                    return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                }
+            }
+
+            await _organizationService.AcceptOrgAgreementAsync(organizationId, agreementId);
 
             return NoContent();
         }
@@ -293,71 +360,6 @@ namespace Prime.Controllers
 
             organization = await _organizationService.SubmitRegistrationAsync(organizationId);
             return Ok(ApiResponse.Result(organization));
-        }
-
-        // POST: api/organizations/5/signed-agreement
-        /// <summary>
-        /// Adds a new signed agreement to an organization.
-        /// </summary>
-        /// <param name="documentGuid"></param>
-        /// <param name="organizationId"></param>
-        [HttpPost("{organizationId}/signed-agreement", Name = nameof(CreateSignedAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<SignedAgreementDocument>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<SignedAgreementDocument>> CreateSignedAgreement(int organizationId, [FromQuery] Guid documentGuid)
-        {
-            var organization = await _organizationService.GetOrganizationAsync(organizationId);
-            if (organization == null)
-            {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
-            }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
-            {
-                return Forbid();
-            }
-
-            var agreement = await _organizationService.AddSignedAgreementAsync(organization.Id, documentGuid);
-            if (agreement == null)
-            {
-                this.ModelState.AddModelError("documentGuid", "Signed Organization Agreement could not be created; network error or upload is already submitted");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
-            }
-
-            return CreatedAtAction(
-                nameof(GetSignedAgreement),
-                new { organizationId = organization.Id },
-                ApiResponse.Result(agreement)
-            );
-        }
-
-        // Get: api/organizations/5/signed-agreement
-        /// <summary>
-        /// Gets the signed agreement for a organization.
-        /// </summary>
-        /// <param name="organizationId"></param>
-        [HttpGet("{organizationId}/signed-agreement", Name = nameof(GetSignedAgreement))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<SignedAgreementDocument>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<SignedAgreementDocument>>> GetSignedAgreement(int organizationId)
-        {
-            var organization = await _organizationService.GetOrganizationAsync(organizationId);
-            if (organization == null)
-            {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
-            }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
-            {
-                return Forbid();
-            }
-
-            var agreements = await _organizationService.GetSignedAgreementsAsync(organization.Id);
-
-            return Ok(ApiResponse.Result(agreements));
         }
 
         // Get: api/organizations/5/latest-signed-agreement
