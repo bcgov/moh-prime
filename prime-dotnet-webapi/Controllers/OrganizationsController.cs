@@ -303,6 +303,8 @@ namespace Prime.Controllers
         /// Accept an organization agreement
         /// </summary>
         /// <param name="organizationId"></param>
+        /// <param name="agreementId"></param>
+        /// <param name="documentGuid"></param>
         [HttpPut("{organizationId}/agreements/{agreementId}", Name = nameof(AcceptOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
