@@ -48,18 +48,6 @@ namespace Prime.ViewModels
         // This property is set by the backend from the JWT token; we cannot trust this property from the frontend
         public string IdentityProvider { get; set; }
 
-        [JsonIgnore]
-        public string FirstName { get; set; }
-
-        [JsonIgnore]
-        public string LastName { get; set; }
-
-        [JsonIgnore]
-        public string GivenNames { get; set; }
-
-        [JsonIgnore]
-        public PhysicalAddress PhysicalAddress { get; set; }
-
         public void MapConditionalProperties(ClaimsPrincipal user)
         {
             IdentityProvider = user.GetIdentityProvider();
