@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201008034532_CascadeDeleteAgreements")]
+    partial class CascadeDeleteAgreements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -5234,6 +5236,44 @@ namespace Prime.Migrations
                     b.ToTable("Feedback");
                 });
 
+            modelBuilder.Entity("Prime.Models.IdentificationDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DocumentGuid")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Filename")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("UploadedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("IdentificationDocument");
+                });
+
             modelBuilder.Entity("Prime.Models.Job", b =>
                 {
                     b.Property<int>("Id")
@@ -9806,7 +9846,7 @@ namespace Prime.Migrations
                             AgreementVersionType = 4,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            EffectiveDate = new DateTimeOffset(new DateTime(2020, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            EffectiveDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             Text = @"<p class=""text-center"">
   This Agreement is made the {{day}} day of {{month}}, {{year}}
 </p>
@@ -14908,6 +14948,15 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.EnrolmentStatus", "EnrolmentStatus")
                         .WithOne("EnrolmentStatusReference")
                         .HasForeignKey("Prime.Models.EnrolmentStatusReference", "EnrolmentStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.IdentificationDocument", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany("IdentificationDocuments")
+                        .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
