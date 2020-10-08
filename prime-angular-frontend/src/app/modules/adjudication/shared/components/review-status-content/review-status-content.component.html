@@ -31,13 +31,16 @@
             {{ reason.note }}
           </p>
 
-          <button *ngFor="let document of reason.documents"
-                  mat-stroked-button
-                  color="primary"
-                  class="pl-2 mb-2"
-                  (click)="downloadDocument(document, reason.isSelfDeclaration)">
-            <mat-icon class="mr-1">attachment</mat-icon> {{ document.filename }}
-          </button>
+          <span *ngIf="reason.documents" class="mb-4 font-weight-bolder">Documents provided by Enrollee:</span>
+          <div>
+            <button *ngFor="let document of reason.documents"
+                    mat-stroked-button
+                    color="primary"
+                    class="pl-2 mb-2 mt-2"
+                    (click)="downloadDocument(document, reason.isSelfDeclaration)">
+              <mat-icon class="mr-1">attachment</mat-icon> {{ document.filename }}
+            </button>
+          </div>
         </div>
 
       </div>
