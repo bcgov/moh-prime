@@ -1,6 +1,7 @@
 <file-pond #filePond
-           [options]="filePondOptions"
            [files]="filePondFiles"
+           [options]="filePondOptions"
            (oninit)="onFilePondInit()"
-           (onaddfile)="onFilePondAddFile()">
+           (onaddfile)="onFilePondAddFile()"
+           (onremovefile)="onFilePondRemoveFile($event)">
 </file-pond>

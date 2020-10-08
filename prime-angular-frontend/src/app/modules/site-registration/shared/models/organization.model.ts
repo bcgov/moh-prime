@@ -13,6 +13,7 @@ export interface Organization {
   name: string;
   registrationId: string;
   doingBusinessAs?: string;
+  organizationAgreementGuid: string;
   // States -----
   completed: boolean;
   acceptedAgreementDate: string;
@@ -21,7 +22,7 @@ export interface Organization {
 }
 
 export interface OrganizationListViewModel extends
-  Omit<Organization, 'sites' | 'siteCount' | 'registrationId' | 'signedAgreementDocuments'> {
+  Omit<Organization, 'sites' | 'siteCount' | 'registrationId' | 'signedAgreementDocuments' | 'organizationAgreementGuid'> {
   sites: SiteListViewModel[];
   signedAgreementDocumentCount: number;
 }

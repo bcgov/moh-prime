@@ -15,7 +15,7 @@ namespace Prime.Models
         {
             // Initialize collections to prevent null exception on computed properties like CurrrentStatus and ExpiryDate
             EnrolmentStatuses = new List<EnrolmentStatus>();
-            AccessTerms = new List<AccessTerm>();
+            Agreements = new List<Agreement>();
         }
 
         public const int DISPLAY_OFFSET = 1000;
@@ -53,13 +53,13 @@ namespace Prime.Models
 
         public MailingAddress MailingAddress { get; set; }
 
-        public string ContactEmail { get; set; }
+        public string Email { get; set; }
 
-        public string ContactPhone { get; set; }
+        public string SmsPhone { get; set; }
 
-        public string VoicePhone { get; set; }
+        public string Phone { get; set; }
 
-        public string VoiceExtension { get; set; }
+        public string PhoneExtension { get; set; }
 
         public ICollection<Certification> Certifications { get; set; }
 
@@ -95,7 +95,7 @@ namespace Prime.Models
         public AccessAgreementNote AccessAgreementNote { get; set; }
 
         [JsonIgnore]
-        public ICollection<AccessTerm> AccessTerms { get; set; }
+        public ICollection<Agreement> Agreements { get; set; }
 
         [JsonIgnore]
         public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
@@ -185,10 +185,10 @@ namespace Prime.Models
         [Computed]
         public int? CurrentAgreementId
         {
-            get => AccessTerms
+            get => Agreements
                 .OrderByDescending(a => a.CreatedDate)
                 .Where(a => a.AcceptedDate != null)
-                .Select(a => (int?)a.AgreementId)
+                .Select(a => (int?)a.AgreementVersionId)
                 .FirstOrDefault();
         }
 
@@ -199,7 +199,7 @@ namespace Prime.Models
         [Computed]
         public DateTimeOffset? ExpiryDate
         {
-            get => AccessTerms
+            get => Agreements
                 .OrderByDescending(at => at.CreatedDate)
                 .Where(at => at.AcceptedDate.HasValue)
                 .Select(at => (DateTimeOffset?)at.ExpiryDate)
@@ -252,12 +252,12 @@ namespace Prime.Models
         /// </summary>
         public bool HasLatestAgreement()
         {
-            if (AccessTerms == null)
+            if (Agreements == null)
             {
-                throw new InvalidOperationException($"Cannot determine latest agreement, {nameof(AccessTerms)} is null");
+                throw new InvalidOperationException($"Cannot determine latest agreement, {nameof(Agreements)} is null");
             }
 
-            var currentAgreement = AccessTerms
+            var currentAgreement = Agreements
                 .OrderByDescending(a => a.CreatedDate)
                 .FirstOrDefault(a => a.AcceptedDate != null);
 
@@ -266,7 +266,7 @@ namespace Prime.Models
                 return false;
             }
 
-            return Agreement.NewestAgreementIds().Contains(currentAgreement.AgreementId);
+            return AgreementVersion.NewestAgreementVersionIds().Contains(currentAgreement.AgreementVersionId);
         }
 
         /// <summary>

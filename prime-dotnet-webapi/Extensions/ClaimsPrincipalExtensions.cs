@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Security.Claims;
+using Newtonsoft.Json;
 
 using Prime.Models;
 using Prime.Auth;
@@ -40,14 +41,49 @@ namespace Prime
 
         public static string GetIdentityProvider(this ClaimsPrincipal User)
         {
-            Claim identityProviderClaim = User?.Claims?.SingleOrDefault(c => c.Type == AuthConstants.IDENTITY_PROVIDER_CLAIM_TYPE);
-
-            return identityProviderClaim?.Value;
+            return User.GetStringClaim(AuthConstants.IDENTITY_PROVIDER_CLAIM_TYPE);
         }
 
         public static bool hasVCIssuance(this ClaimsPrincipal User)
         {
             return User.IsInRole(AuthConstants.FEATURE_VC_ISSUANCE);
+        }
+
+        public static string GetStringClaim(this ClaimsPrincipal User, string claimType)
+        {
+            Claim claim = User?.Claims?.SingleOrDefault(c => c.Type == claimType);
+
+            return claim?.Value;
+        }
+
+        public static PhysicalAddress GetPhysicalAddress(this ClaimsPrincipal User)
+        {
+            Claim addressClaim = User?.Claims?.SingleOrDefault(c => c.Type == "address");
+
+            var address = JsonConvert.DeserializeObject<TokenAddress>(addressClaim?.Value);
+
+            return address?.ToModel();
+        }
+
+        private class TokenAddress
+        {
+            public string street_address { get; set; }
+            public string locality { get; set; }
+            public string region { get; set; }
+            public string postal_code { get; set; }
+            public string country { get; set; }
+
+            public PhysicalAddress ToModel()
+            {
+                return new PhysicalAddress
+                {
+                    CountryCode = country,
+                    ProvinceCode = region,
+                    Street = street_address,
+                    City = locality,
+                    Postal = postal_code,
+                };
+            }
         }
     }
 }

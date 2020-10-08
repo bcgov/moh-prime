@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { AccessTerm } from '@shared/models/access-term.model';
+
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
@@ -24,7 +25,7 @@ export class AccessAgreementCurrentComponent implements OnInit {
     private logger: LoggerService
   ) { }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.getAccessTermLatestSigned();
   }
 

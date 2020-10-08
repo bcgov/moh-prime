@@ -79,8 +79,9 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    * Get the current route.
    *
    * NOTE: Only care about the second parameter to determine route
-   * access, and assumes that all child routes are allowed
+   * access, and assumes that all child routes are allowed.
    */
+  // TODO needs updating to account for query params using router.parseUrl(...)
   protected route(routePath: string): string {
     return routePath.slice(1).split('/')[1];
   }
@@ -89,6 +90,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    * @description
    * Construct a common route URL.
    */
+  // TODO needs updating to account for query params using router.parseUrl(...)
   private getUrl(routeParam: UrlSegment[] | RouterStateSnapshot): string {
     return (Array.isArray(routeParam))
       ? routeParam.reduce((path, segment) => `${path}/${segment.path}`, '')

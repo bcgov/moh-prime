@@ -48,7 +48,6 @@ namespace Prime.ViewModels
                         {
                             return HasNewestAgreement ? "Yes" : "No";
                         }
-
                     default:
                         return null;
                 }

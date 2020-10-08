@@ -5,7 +5,6 @@ export type CaseType = 'snake' | 'kebab' | 'camel' | 'pascal' | 'space';
 @Pipe({
   name: 'case'
 })
-// TODO small use case so simple conversions only as needed
 export class CasePipe implements PipeTransform {
   public transform(value: string, fromCase: CaseType, toCase: CaseType): string {
     if (!value) {

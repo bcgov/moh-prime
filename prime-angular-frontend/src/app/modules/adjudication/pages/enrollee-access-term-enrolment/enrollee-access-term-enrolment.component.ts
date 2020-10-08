@@ -91,10 +91,10 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       hpdid,
       physicalAddress,
       mailingAddress,
-      contactEmail,
-      contactPhone,
-      voicePhone,
-      voiceExtension,
+      email,
+      smsPhone,
+      phone,
+      phoneExtension,
       enrolleeCareSettings,
       ...remainder
     } = enrollee;
@@ -113,10 +113,10 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
         hpdid,
         physicalAddress,
         mailingAddress,
-        contactEmail,
-        contactPhone,
-        voicePhone,
-        voiceExtension
+        email,
+        smsPhone,
+        phone,
+        phoneExtension
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

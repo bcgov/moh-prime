@@ -25,7 +25,7 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.AccessTerms == null)
+            if (enrollee.Agreements == null)
             {
                 return Task.FromResult(false);
             }
@@ -92,7 +92,9 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-            if (!CompareCollections(comparitor, enrollee.SelfDeclarations, _updatedProfile.SelfDeclarations))
+            // If the new profile has self declaration document GUIDs in it, the user has uploaded new documents
+            if (_updatedProfile.SelfDeclarations.Any(sd => sd.DocumentGuids.Any())
+                || !CompareCollections(comparitor, enrollee.SelfDeclarations, _updatedProfile.SelfDeclarations))
             {
                 return Task.FromResult(false);
             }
@@ -109,10 +111,10 @@ namespace Prime.Services.Rules
             config.IgnoreCollectionOrder = true;
 
             // Fields considered "minor" changes
-            config.IgnoreProperty<Enrollee>(x => x.ContactEmail);
-            config.IgnoreProperty<Enrollee>(x => x.ContactPhone);
-            config.IgnoreProperty<Enrollee>(x => x.VoicePhone);
-            config.IgnoreProperty<Enrollee>(x => x.VoiceExtension);
+            config.IgnoreProperty<Enrollee>(x => x.Email);
+            config.IgnoreProperty<Enrollee>(x => x.SmsPhone);
+            config.IgnoreProperty<Enrollee>(x => x.Phone);
+            config.IgnoreProperty<Enrollee>(x => x.PhoneExtension);
             if (isObo)
             {
                 config.IgnoreProperty<Enrollee>(x => x.Jobs);
@@ -145,9 +147,10 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<EnrolleeCareSetting>(x => x.CareSetting);
 
             config.IgnoreProperty<SelfDeclaration>(x => x.Id);
-            config.IgnoreProperty<SelfDeclaration>(x => x.SelfDeclarationType);
             config.IgnoreProperty<SelfDeclaration>(x => x.EnrolleeId);
             config.IgnoreProperty<SelfDeclaration>(x => x.Enrollee);
+            config.IgnoreProperty<SelfDeclaration>(x => x.SelfDeclarationType);
+            config.IgnoreProperty<SelfDeclaration>(x => x.DocumentGuids);
 
             return new CompareLogic(config);
         }

@@ -18,7 +18,7 @@ namespace Prime.Services
         Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);
         Task<int> AcceptCurrentOrganizationAgreementAsync(int organizationId);
         Task<Organization> GetOrganizationByPartyIdAsync(int partyId);
-        Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, Guid documentGuid, string filename);
+        Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, Guid documentGuid);
         Task<IEnumerable<SignedAgreementDocument>> GetSignedAgreementsAsync(int organizationId);
         Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId);
     }

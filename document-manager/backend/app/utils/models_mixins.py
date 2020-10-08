@@ -17,6 +17,14 @@ class Base(db.Model):
                 db.session.rollback()
                 raise e
 
+    def delete(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except SQLAlchemyError as e:
+            db.session.rollback()
+            raise e
+
 
 class AuditMixin(object):
     create_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

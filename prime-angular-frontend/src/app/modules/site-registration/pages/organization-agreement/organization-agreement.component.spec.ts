@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { OrganizationAgreementComponent } from './organization-agreement.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
+import { SafePipe } from '@shared/pipes/safe.pipe';
 
 describe('OrganizationAgreementComponent', () => {
   let component: OrganizationAgreementComponent;
@@ -18,7 +18,7 @@ describe('OrganizationAgreementComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         OrganizationAgreementComponent,
-        SafeHtmlPipe
+        SafePipe
       ],
       imports: [
         BrowserAnimationsModule,

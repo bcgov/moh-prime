@@ -61,8 +61,9 @@ namespace Prime.Controllers
         /// <param name="organizationId"></param>
         /// <param name="verbose"></param>
         [HttpGet("/api/organizations/{organizationId:int}/sites", Name = nameof(GetSites))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Site>>> GetSites(int organizationId, [FromQuery] bool verbose)
         {
@@ -90,7 +91,6 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}", Name = nameof(GetSiteById))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -98,7 +98,10 @@ namespace Prime.Controllers
         public async Task<ActionResult<Site>> GetSiteById(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
-
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
             if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
             {
                 return Forbid();
@@ -113,9 +116,9 @@ namespace Prime.Controllers
         /// <param name="organizationId"></param>
         /// </summary>
         [HttpPost("/api/organizations/{organizationId:int}/sites", Name = nameof(CreateSite))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Site>> CreateSite(int organizationId)
         {
@@ -143,7 +146,6 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="updatedSite"></param>
         [HttpPut("{siteId}", Name = nameof(UpdateSite))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -172,7 +174,6 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/completed", Name = nameof(UpdateSiteCompleted))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -291,7 +292,6 @@ namespace Prime.Controllers
         /// Submits the given site for adjudication.
         /// </summary>
         [HttpPost("{siteId}/submission", Name = nameof(SubmitSiteRegistration))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -320,14 +320,14 @@ namespace Prime.Controllers
         /// Creates a new Business Licence for a site.
         /// </summary>
         /// <param name="documentGuid"></param>
-        /// <param name="filename"></param>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/business-licence", Name = nameof(CreateBusinessLicence))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<BusinessLicenceDocument>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid, [FromQuery] string filename)
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<BusinessLicenceDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<BusinessLicenceDocument>> CreateBusinessLicence(int siteId, [FromQuery] Guid documentGuid)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -339,7 +339,12 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var licence = await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid, filename);
+            var licence = await _siteService.AddBusinessLicenceAsync(site.Id, documentGuid);
+            if (licence == null)
+            {
+                this.ModelState.AddModelError("documentGuid", "Business Licence could not be created; network error or upload is already submitted");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
 
             return Ok(ApiResponse.Result(licence));
         }
@@ -350,10 +355,10 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/business-licence", Name = nameof(CreateBusinessLicence))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessLicenceDocument>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<BusinessLicenceDocument>>> GetBusinessLicence(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
@@ -409,14 +414,14 @@ namespace Prime.Controllers
 
         // Get: api/site/5/latest-business-licence
         /// <summary>
-        /// Gets the latest business licence by site download token.
+        /// Gets a download token for the latest business licence on a site.
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/latest-business-licence", Name = nameof(GetLatestBusinessLicenceDownloadToken))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<SignedAgreementDocument>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> GetLatestBusinessLicenceDownloadToken(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);

@@ -72,10 +72,10 @@ export class SiteRoutes {
       this.BUSINESS_LICENCE,
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
+      this.REMOTE_USERS,
       this.ADMINISTRATOR,
       this.PRIVACY_OFFICER,
-      this.TECHNICAL_SUPPORT,
-      this.REMOTE_USERS
+      this.TECHNICAL_SUPPORT
     ];
   }
 
@@ -83,11 +83,11 @@ export class SiteRoutes {
   public static editSiteRegistrationRouteOrder(): string[] {
     return [
       this.HOURS_OPERATION,
+      this.REMOTE_USERS,
+      this.REMOTE_USER, // included because it is the child of remote_users,
       this.ADMINISTRATOR,
       this.PRIVACY_OFFICER,
       this.TECHNICAL_SUPPORT,
-      this.REMOTE_USERS,
-      this.REMOTE_USER, // included because it is the child of remote_users
       this.SITE_REVIEW
     ];
   }

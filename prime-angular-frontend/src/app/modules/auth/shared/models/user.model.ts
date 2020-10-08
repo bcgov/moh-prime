@@ -1,16 +1,4 @@
 export interface User {
-  userId: string;
-  hpdid: string;
-  firstName: string;
-  lastName: string;
-  givenNames: string;
-  dateOfBirth: string;
-  physicalAddress: {
-    countryCode: string;
-    provinceCode: string;
-    street: string;
-    city: string;
-    postal: string;
-  };
-  contactEmail: string;
+  // TODO consolidate idir into username
+  username: string; // Identity provider username
 }

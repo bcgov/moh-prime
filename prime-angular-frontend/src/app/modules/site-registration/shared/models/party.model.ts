@@ -1,5 +1,5 @@
 import { Address } from '@shared/models/address.model';
-import { User } from '@auth/shared/models/user.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Person } from '@registration/shared/models/person.model';
 
 export class Party implements Person {
@@ -23,8 +23,8 @@ export class Party implements Person {
   public mailingAddressId?: number;
   public mailingAddress?: Address;
 
-  // TODO should be a public static factory
-  constructor(user: User) {
+  // TODO should be a public static factory for instantiation
+  constructor(user: BcscUser) {
     this.userId = user.userId;
     this.physicalAddress = user.physicalAddress;
     this.hpdid = user.hpdid;

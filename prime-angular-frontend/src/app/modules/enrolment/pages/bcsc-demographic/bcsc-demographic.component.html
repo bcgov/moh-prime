@@ -1,0 +1,136 @@
+<app-enrollee-page [busy]="busy">
+  <app-page-header>PRIME Enrolment</app-page-header>
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Enrollee Information</ng-container>
+        <ng-container appPageSubheaderSummary>
+          This information comes from your BC Services Card. If you use a different name professionally, please
+          select "I have a preferred name."
+          <small class="font-italic d-block">
+            Entering a preferred name in PRIME will not change your BC Services Card name.<br>
+            NOTE: The name you provide must match your College registration information, if applicable.
+          </small>
+        </ng-container>
+      </app-page-subheader>
+
+      <app-enrollee-profile [enrollee]="enrollee"
+                            [showAddress]="false"></app-enrollee-profile>
+
+      <mat-slide-toggle class="mb-3"
+                        color="primary"
+                        (change)="onPreferredNameChange()"
+                        [checked]="hasPreferredName">
+        I have a preferred name
+      </mat-slide-toggle>
+
+    </section>
+
+    <ng-container *ngIf="hasPreferredName">
+
+      <section class="mb-3">
+
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
+          <ng-container appPageSubheaderSummary>
+            If you have a name that is different than your legal name that people know you by, enter your full
+            preferred name.
+          </ng-container>
+        </app-page-subheader>
+
+        <div class="row">
+          <div class="col">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Preferred First Name"
+                     formControlName="preferredFirstName">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Preferred Middle Name (Optional)"
+                     formControlName="preferredMiddleName">
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Preferred Last Name"
+                     formControlName="preferredLastName">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+      </section>
+
+    </ng-container>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Address</ng-container>
+        <ng-container appPageSubheaderSummary>
+          This information comes from the your BC Services Card. If you would prefer to receive mail at a
+          professional or other address, select "I have a preferred address."
+          <small class="font-italic d-block">
+                Entering a preferred address in PRIME will not change your BC Services Card address.
+              </small>
+        </ng-container>
+      </app-page-subheader>
+
+      <app-enrollee-profile [enrollee]="enrollee"
+                            [showPersonal]="false"
+                            [showAddressTitle]="false"></app-enrollee-profile>
+
+      <mat-slide-toggle class="mb-3"
+                        color="primary"
+                        [checked]="hasMailingAddress"
+                        (change)="onMailingAddressChange()">
+        I have a preferred address
+      </mat-slide-toggle>
+
+    </section>
+
+    <ng-container *ngIf="hasMailingAddress">
+
+      <section class="mb-3">
+
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
+        </app-page-subheader>
+
+        <app-address [form]="mailingAddress"></app-address>
+
+      </section>
+
+    </ng-container>
+
+    <app-contact-information-form [form]="form"></app-contact-information-form>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+                   [hasSecondaryAction]="isProfileComplete"
+                   (save)="onSubmit()"></app-page-footer>
+
+</app-enrollee-page>
