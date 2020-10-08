@@ -296,10 +296,12 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   private buildBceidDemographicForm(): FormGroup {
     return this.fb.group({
-      preferredFirstName: [null, []],
+      preferredFirstName: [null, [Validators.required]],
       preferredMiddleName: [null, []],
-      preferredLastName: [null, []],
-      mailingAddress: this.buildAddressForm(),
+      preferredLastName: [null, [Validators.required]],
+      mailingAddress: this.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal']
+      }),
       phone: [null, [
         Validators.required,
         FormControlValidators.phone
@@ -310,7 +312,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         FormControlValidators.email
       ]],
       smsPhone: [null, [FormControlValidators.phone]],
-      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]]
+      dateOfBirth: [{ value: null, disabled: false }, [Validators.required]]
     });
   }
 
