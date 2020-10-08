@@ -273,6 +273,16 @@
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
+  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED]"
+                         [makeBold]="false">
+    {{ hasRegistrationSuspended() | yesNo: true }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="hasRegistrationSuspended()"
+                         title="Description"
+                         [makeBold]="false">
+    {{ getRegistrationSuspendedDetails() }}
+  </app-enrollee-property>
 
   <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION]"
                          [makeBold]="false">
@@ -285,15 +295,15 @@
     {{ getConvictionDetails() }}
   </app-enrollee-property>
 
-  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED]"
+  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED]"
                          [makeBold]="false">
-    {{ hasRegistrationSuspended() | yesNo: true }}
+    {{ hasPharmaNetSuspended() | yesNo: true }}
   </app-enrollee-property>
 
-  <app-enrollee-property *ngIf="hasRegistrationSuspended()"
+  <app-enrollee-property *ngIf="hasPharmaNetSuspended()"
                          title="Description"
                          [makeBold]="false">
-    {{ getRegistrationSuspendedDetails() }}
+    {{ getPharmaNetSuspendedDetails() }}
   </app-enrollee-property>
 
   <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION]"
@@ -305,17 +315,6 @@
                          title="Description"
                          [makeBold]="false">
     {{ getDisciplinaryActionDetails() }}
-  </app-enrollee-property>
-
-  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED]"
-                         [makeBold]="false">
-    {{ hasPharmaNetSuspended() | yesNo: true }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="hasPharmaNetSuspended()"
-                         title="Description"
-                         [makeBold]="false">
-    {{ getPharmaNetSuspendedDetails() }}
   </app-enrollee-property>
 
 </section>
