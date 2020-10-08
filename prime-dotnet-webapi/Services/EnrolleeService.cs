@@ -223,12 +223,12 @@ namespace Prime.Services
 
         private void UpdatePhysicalAddress(Enrollee dbEnrollee, PhysicalAddress newAddress)
         {
-            if (dbEnrollee.PhysicalAddress != null)
+            if (dbEnrollee.PhysicalAddress != null && newAddress != null)
             {
                 newAddress.Id = dbEnrollee.PhysicalAddress.Id;
                 _context.Entry(dbEnrollee.PhysicalAddress).CurrentValues.SetValues(newAddress);
             }
-            else
+            else if (newAddress != null)
             {
                 dbEnrollee.PhysicalAddress = newAddress;
             }
