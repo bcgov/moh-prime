@@ -180,9 +180,9 @@ namespace Prime.Services
 
             if (enrollee.IdentityProvider != AuthConstants.BC_SERVICES_CARD)
             {
-                enrollee.FirstName = updateModel.PrefferredFirstName;
-                enrollee.LastName = updateModel.PrefferredLastName;
-                enrollee.GivenNames = $"{updateModel.PrefferredFirstName} {updateModel.PreferredMiddleName}";
+                enrollee.FirstName = updateModel.PreferredFirstName;
+                enrollee.LastName = updateModel.PreferredLastName;
+                enrollee.GivenNames = $"{updateModel.PreferredFirstName} {updateModel.PreferredMiddleName}";
                 UpdatePhysicalAddress(enrollee, new PhysicalAddress
                 {
                     CountryCode = updateModel.MailingAddress.CountryCode,
