@@ -21,9 +21,11 @@ export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;
   @Input() public enrolment: Enrolment;
   @Output() public route: EventEmitter<string>;
+  public identityProvider: IdentityProvider;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = selfDeclarationQuestions;
   public demographicRoutePath: string;
+  public IdentityProvider = IdentityProvider;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -33,11 +35,12 @@ export class EnrolleeReviewComponent {
     this.route = new EventEmitter<string>();
 
     this.authService.identityProvider$()
-      .subscribe((identityProvider: IdentityProvider) =>
+      .subscribe((identityProvider: IdentityProvider) => {
+        this.identityProvider = identityProvider;
         this.demographicRoutePath = (identityProvider === IdentityProvider.BCEID)
           ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
           : EnrolmentRoutes.BCSC_DEMOGRAPHIC
-      );
+      });
   }
 
   public get enrollee() {

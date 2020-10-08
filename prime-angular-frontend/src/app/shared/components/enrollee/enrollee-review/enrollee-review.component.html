@@ -1,6 +1,6 @@
 <app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
 
-<section *ngIf="hasPreferredName"
+<section *ngIf="hasPreferredName && identityProvider === IdentityProvider.BCSC"
          class="mb-4">
 
   <app-page-subheader>
