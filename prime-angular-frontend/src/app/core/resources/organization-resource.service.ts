@@ -134,11 +134,16 @@ export class OrganizationResource {
    * the resource URL for requesting the organization agreement.
    * @see getOrganizationAgreementByUrl
    */
-  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<string | null> {
+  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<{ agreementId: number }> {
     const params = this.apiResourceUtilsService.makeHttpParams({ siteId });
-    return this.apiResource.post<string | null>(`organizations/${organizationId}/agreements/update`, null, params, { observe: 'response' })
+    return this.apiResource.get<{ agreementId: number }>(`organizations/${organizationId}/agreements/update`, params)
       .pipe(
-        map((response: ApiHttpResponse<string | null>) => response.headers.get('Location') ?? null)
+        map(({ headers, result }: ApiHttpResponse<{ agreementId: number }>) => {
+          return {
+            url: headers.get('Location'),
+            agreementId: result.agreementId
+          };
+        })
       );
   }
 
@@ -171,8 +176,8 @@ export class OrganizationResource {
       );
   }
 
-  public acceptCurrentOrganizationAgreement(organizationId: number): NoContent {
-    return this.apiResource.put<NoContent>(`organizations/${organizationId}/agreements`)
+  public acceptCurrentOrganizationAgreement(organizationId: number, agreementId: number, organizationAgreementGuid): NoContent {
+    return this.apiResource.put<NoContent>(`organizations/${organizationId}/agreements/${agreementId}`)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Organization agreement has been accepted')),
@@ -203,19 +208,6 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Latest signed organization agreement could not be retrieved');
           this.logger.error('[SiteRegistration] OrganizationResource::downloadLatestSignedAgreement error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  // This should be done as part of acceptCurrentOrganizationAgreement
-  public addSignedAgreement(organizationId: number, documentGuid: string): Observable<string> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<string>(`organizations/${organizationId}/signed-agreement`, { organizationId }, params)
-      .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        catchError((error: any) => {
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::addSignedAgreement error has occurred: ', error);
           throw error;
         })
       );

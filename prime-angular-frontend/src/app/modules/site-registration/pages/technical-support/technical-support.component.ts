@@ -60,7 +60,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
       this.busy = this.organizationResource
         .updateOrganizationAgreement(organizationId, site.id)
         .pipe(
-          map((url: string | null) => !!url),
+          map(({ url }: { url: string, agreementId: number }) => !!url),
           exhaustMap((needsOrgAgreement: boolean) =>
             this.siteResource.updateSite(payload)
               .pipe(map(() => needsOrgAgreement))

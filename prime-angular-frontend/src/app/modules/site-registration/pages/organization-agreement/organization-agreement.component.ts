@@ -75,10 +75,11 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
           ),
           exhaustMap(() =>
             (payload.organizationAgreementGuid)
-              ? this.organizationResource.addSignedAgreement(organizationId, payload.organizationAgreementGuid)
+              ? this.organizationResource.updateOrganizationAgreement(organizationId, this.route.snapshot.queryParams.siteId)
                 .pipe(
-                  exhaustMap(() =>
-                    this.organizationResource.acceptCurrentOrganizationAgreement(organizationId)
+                  exhaustMap(({ agreementId }: { url: string, agreementId: number }) =>
+                    this.organizationResource
+                      .acceptCurrentOrganizationAgreement(organizationId, agreementId, payload.organizationAgreementGuid)
                   )
                 )
               : of(noop)
@@ -166,7 +167,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.busy = this.organizationResource
       .updateOrganizationAgreement(organization.id, siteId)
       .pipe(
-        exhaustMap((url: string) =>
+        exhaustMap(({ url }: { url: string, agreementId: number }) =>
           this.organizationResource.getOrganizationAgreementByUrl(url)
         )
       )
