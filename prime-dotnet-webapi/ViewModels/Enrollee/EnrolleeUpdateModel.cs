@@ -1,6 +1,10 @@
+using System;
+using System.Security.Claims;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+
 using Prime.Infrastructure;
+using Prime.Auth;
 using Prime.Models;
 
 namespace Prime.ViewModels
@@ -44,5 +48,10 @@ namespace Prime.ViewModels
         // This property is set by the backend from the JWT token; we cannot trust this property from the frontend
         public string IdentityProvider { get; set; }
 
+        public void MapConditionalProperties(ClaimsPrincipal user)
+        {
+            IdentityProvider = user.GetIdentityProvider();
+            IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
+        }
     }
 }

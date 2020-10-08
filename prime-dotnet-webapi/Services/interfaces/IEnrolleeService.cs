@@ -26,7 +26,7 @@ namespace Prime.Services
 
         Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
 
-        Task<int> CreateEnrolleeAsync(Enrollee enrollee);
+        Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
 
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
 
