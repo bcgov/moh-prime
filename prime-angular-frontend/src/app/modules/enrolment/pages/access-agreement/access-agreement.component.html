@@ -5,9 +5,7 @@
   <app-page-header>Terms of Access</app-page-header>
 
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
-                                    [inProgress]="isInitialEnrolment"
-                                    [currentRoute]="EnrolmentRoutes.PENDING_ACCESS_TERM">
-  </app-enrolment-progress-indicator>
+                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <ng-container *ngIf="currentPage > 0; else preamble">
     <app-access-term [accessTerms]="accessTerm"></app-access-term>

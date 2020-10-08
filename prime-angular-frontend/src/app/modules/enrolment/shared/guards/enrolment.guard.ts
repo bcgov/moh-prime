@@ -75,6 +75,8 @@ export class EnrolmentGuard extends BaseGuard {
       return this.identityProviderRouting(routePath, enrolment, identityProvider);
     }
 
+    routePath = this.checkBlacklistedRoutes(routePath, identityProvider);
+
     // Otherwise, routes are dictated based on enrolment status
     return this.enrolmentStatusRouting(routePath, enrolment, identityProvider);
   }
@@ -87,7 +89,7 @@ export class EnrolmentGuard extends BaseGuard {
   private identityProviderRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
     switch (identityProvider) {
       case IdentityProvider.BCEID:
-        return this.manageBceidRouting(routePath, enrolment, identityProvider);
+        return this.manageBceidRouting(routePath);
       case IdentityProvider.BCSC:
         return this.navigate(routePath, EnrolmentRoutes.BCSC_DEMOGRAPHIC);
       default:
@@ -95,7 +97,11 @@ export class EnrolmentGuard extends BaseGuard {
     }
   }
 
-  private manageBceidRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+  /**
+   * @description
+   * Step by step routing sequence for initial enrolment with BCeID.
+   */
+  private manageBceidRouting(routePath: string): boolean {
     const currentRoutePath = RouteUtils.currentRoutePath(this.router.url);
     const nextRoutePath = RouteUtils.currentRoutePath(routePath);
 
@@ -216,5 +222,39 @@ export class EnrolmentGuard extends BaseGuard {
       this.router.navigate([enrolmentRoutePath, destinationPath]);
       return false;
     }
+  }
+
+  /**
+   * @description
+   * General blacklisted routes based on enrolment existence and provider.
+   */
+  private checkBlacklistedRoutes(routePath: string, identityProvider: IdentityProvider): string {
+    // Blacklisted routes if an enrolment exists regardless of provider
+    if (
+      [
+        EnrolmentRoutes.ACCESS_CODE,
+        EnrolmentRoutes.ID_SUBMISSION
+      ].includes(RouteUtils.currentRoutePath(routePath))
+    ) {
+      return routePath.replace(
+        new RegExp(`${EnrolmentRoutes.ACCESS_CODE}|${EnrolmentRoutes.ID_SUBMISSION}`),
+        EnrolmentRoutes.OVERVIEW
+      );
+    }
+
+    // Blacklisted routes based on provider
+    if (routePath.includes(EnrolmentRoutes.BCSC_DEMOGRAPHIC) && identityProvider === IdentityProvider.BCEID) {
+      return routePath.replace(
+        EnrolmentRoutes.BCSC_DEMOGRAPHIC,
+        EnrolmentRoutes.OVERVIEW
+      );
+    } else if (routePath.includes(EnrolmentRoutes.BCEID_DEMOGRAPHIC) && identityProvider === IdentityProvider.BCSC) {
+      return routePath.replace(
+        EnrolmentRoutes.BCEID_DEMOGRAPHIC,
+        EnrolmentRoutes.OVERVIEW
+      );
+    }
+
+    return routePath;
   }
 }

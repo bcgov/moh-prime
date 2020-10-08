@@ -18,6 +18,8 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
             .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count));
 
+        CreateMap<EnrolleeCreateModel, Enrollee>();
+
         IQueryable<int> newestAgreementIds = null;
         CreateMap<Enrollee, EnrolleeListViewModel>()
             .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))

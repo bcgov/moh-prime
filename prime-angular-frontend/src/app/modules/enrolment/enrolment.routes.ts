@@ -54,9 +54,6 @@ export class EnrolmentRoutes {
   // enrollee incrementally through creating their profile
   public static enrolmentProfileRoutes(): string[] {
     return [
-      // TODO shouldn't include identity access code or submission
-      EnrolmentRoutes.ACCESS_CODE,
-      EnrolmentRoutes.ID_SUBMISSION,
       EnrolmentRoutes.BCEID_DEMOGRAPHIC,
       EnrolmentRoutes.BCSC_DEMOGRAPHIC,
       EnrolmentRoutes.REGULATORY,
