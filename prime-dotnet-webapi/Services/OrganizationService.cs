@@ -210,13 +210,6 @@ namespace Prime.Services
             return signedAgreement;
         }
 
-        public async Task<IEnumerable<SignedAgreementDocument>> GetSignedAgreementsAsync(int organizationId)
-        {
-            return await _context.SignedAgreementDocuments
-                .Where(a => a.OrganizationId == organizationId)
-                .ToListAsync();
-        }
-
         public async Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId)
         {
             return await _context.SignedAgreementDocuments

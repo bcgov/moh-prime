@@ -333,33 +333,6 @@ namespace Prime.Controllers
             );
         }
 
-        // Get: api/organizations/5/signed-agreement
-        /// <summary>
-        /// Gets the signed agreement for a organization.
-        /// </summary>
-        /// <param name="organizationId"></param>
-        [HttpGet("{organizationId}/signed-agreement", Name = nameof(GetSignedAgreement))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<SignedAgreementDocument>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<SignedAgreementDocument>>> GetSignedAgreement(int organizationId)
-        {
-            var organization = await _organizationService.GetOrganizationAsync(organizationId);
-            if (organization == null)
-            {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
-            }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
-            {
-                return Forbid();
-            }
-
-            var agreements = await _organizationService.GetSignedAgreementsAsync(organization.Id);
-
-            return Ok(ApiResponse.Result(agreements));
-        }
-
         // Get: api/organizations/5/latest-signed-agreement
         /// <summary>
         /// Gets a download token for the latest signed agreement on an organization.
