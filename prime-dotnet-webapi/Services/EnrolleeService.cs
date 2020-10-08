@@ -214,10 +214,13 @@ namespace Prime.Services
         {
             if (dbEnrollee.PhysicalAddress != null)
             {
-                _context.Addresses.Remove(dbEnrollee.PhysicalAddress);
+                newAddress.Id = dbEnrollee.PhysicalAddress.Id;
+                _context.Entry(dbEnrollee.PhysicalAddress).CurrentValues.SetValues(newAddress);
             }
-
-            dbEnrollee.PhysicalAddress = newAddress;
+            else
+            {
+                dbEnrollee.PhysicalAddress = newAddress;
+            }
         }
 
         private void UpdateMailingAddress(Enrollee dbEnrollee, MailingAddress newAddress)
@@ -227,17 +230,20 @@ namespace Prime.Services
                 _context.Addresses.Remove(dbEnrollee.MailingAddress);
             }
 
-            var address = new MailingAddress
+            if (newAddress != null)
             {
-                CountryCode = newAddress.CountryCode,
-                ProvinceCode = newAddress.ProvinceCode,
-                Street = newAddress.Street,
-                Street2 = newAddress.Street2,
-                City = newAddress.City,
-                Postal = newAddress.Postal
-            };
+                var address = new MailingAddress
+                {
+                    CountryCode = newAddress.CountryCode,
+                    ProvinceCode = newAddress.ProvinceCode,
+                    Street = newAddress.Street,
+                    Street2 = newAddress.Street2,
+                    City = newAddress.City,
+                    Postal = newAddress.Postal
+                };
 
-            dbEnrollee.MailingAddress = address;
+                dbEnrollee.MailingAddress = address;
+            }
         }
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
