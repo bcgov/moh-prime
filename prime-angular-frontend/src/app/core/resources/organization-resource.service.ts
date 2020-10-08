@@ -123,7 +123,7 @@ export class OrganizationResource {
   }
 
   public getOrganizationAgreement(organizationId: number): Observable<string> {
-    return this.apiResource.get<string>(`organizations/${organizationId}/organization-agreement`)
+    return this.apiResource.get<string>(`organizations/${organizationId}/agreements`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
@@ -135,7 +135,7 @@ export class OrganizationResource {
   }
 
   public acceptCurrentOrganizationAgreement(organizationId: number): NoContent {
-    return this.apiResource.put<NoContent>(`organizations/${organizationId}/organization-agreement`)
+    return this.apiResource.put<NoContent>(`organizations/${organizationId}/agreements`)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Organization agreement has been accepted')),
@@ -171,6 +171,7 @@ export class OrganizationResource {
       );
   }
 
+  // This should be done as part of acceptCurrentOrganizationAgreement
   public addSignedAgreement(organizationId: number, documentGuid: string): Observable<string> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
     return this.apiResource.post<string>(`organizations/${organizationId}/signed-agreement`, { organizationId }, params)
