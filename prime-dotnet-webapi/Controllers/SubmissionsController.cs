@@ -106,6 +106,10 @@ namespace Prime.Controllers
 
             try
             {
+                if (documentGuid == null)
+                {
+                    documentGuid = Guid.Empty;
+                }
                 await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin(), documentGuid);
                 var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
                 return Ok(ApiResponse.Result(enrollee));
