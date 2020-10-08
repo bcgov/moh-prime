@@ -19,7 +19,7 @@ namespace Prime.Migrations
             migrationBuilder.RenameColumn(
                 name: "AgreementVersionType",
                 table: "AgreementVersion",
-                newName: "AgreementVersion");
+                newName: "AgreementType");
 
 
             migrationBuilder.DropColumn(
