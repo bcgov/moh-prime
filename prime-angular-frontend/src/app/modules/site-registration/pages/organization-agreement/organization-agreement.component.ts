@@ -96,6 +96,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public onDownload() {
+    // TODO update to download wet agreement based on type
     this.organizationResource
       .getUnsignedOrganizationAgreement()
       .subscribe((base64: string) => {
