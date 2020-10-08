@@ -134,11 +134,11 @@ export class OrganizationResource {
    * the resource URL for requesting the organization agreement.
    * @see getOrganizationAgreementByUrl
    */
-  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<{ agreementId: number }> {
+  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<{ url: string, agreementId: number }> {
     const params = this.apiResourceUtilsService.makeHttpParams({ siteId });
-    return this.apiResource.get<{ agreementId: number }>(`organizations/${organizationId}/agreements/update`, params)
+    return this.apiResource.get<{ url: string, agreementId: number }>(`organizations/${organizationId}/agreements/update`, params)
       .pipe(
-        map(({ headers, result }: ApiHttpResponse<{ agreementId: number }>) => {
+        map(({ headers, result }: ApiHttpResponse<{ url: string, agreementId: number }>) => {
           return {
             url: headers.get('Location'),
             agreementId: result.agreementId
@@ -176,8 +176,9 @@ export class OrganizationResource {
       );
   }
 
-  public acceptCurrentOrganizationAgreement(organizationId: number, agreementId: number, organizationAgreementGuid): NoContent {
-    return this.apiResource.put<NoContent>(`organizations/${organizationId}/agreements/${agreementId}`)
+  public acceptOrganizationAgreement(organizationId: number, agreementId: number, organizationAgreementGuid: string): NoContent {
+    const params = this.apiResourceUtilsService.makeHttpParams({ organizationAgreementGuid });
+    return this.apiResource.put<NoContent>(`organizations/${organizationId}/agreements/${agreementId}`, null, params)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Organization agreement has been accepted')),

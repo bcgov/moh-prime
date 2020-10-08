@@ -29,6 +29,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public busy: Subscription;
   public form: FormGroup;
   public routeUtils: RouteUtils;
+  public agreementId: number;
   public organizationAgreement: string;
   public hasAcceptedAgreement: boolean;
   public hasDownloadedFile: boolean;
@@ -75,13 +76,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
           ),
           exhaustMap(() =>
             (payload.organizationAgreementGuid)
-              ? this.organizationResource.updateOrganizationAgreement(organizationId, this.route.snapshot.queryParams.siteId)
-                .pipe(
-                  exhaustMap(({ agreementId }: { url: string, agreementId: number }) =>
-                    this.organizationResource
-                      .acceptCurrentOrganizationAgreement(organizationId, agreementId, payload.organizationAgreementGuid)
-                  )
-                )
+              ? this.organizationResource.acceptOrganizationAgreement(organizationId, this.agreementId, payload.organizationAgreementGuid)
               : of(noop)
           ),
           exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.queryParams.siteId)))
@@ -167,9 +162,10 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.busy = this.organizationResource
       .updateOrganizationAgreement(organization.id, siteId)
       .pipe(
-        exhaustMap(({ url }: { url: string, agreementId: number }) =>
-          this.organizationResource.getOrganizationAgreementByUrl(url)
-        )
+        exhaustMap(({ url, agreementId }: { url: string, agreementId: number }) => {
+          this.agreementId = agreementId;
+          return this.organizationResource.getOrganizationAgreementByUrl(url);
+        })
       )
       .subscribe((organizationAgreement: string) =>
         this.organizationAgreement = organizationAgreement
