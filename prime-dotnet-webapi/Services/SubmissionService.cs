@@ -101,7 +101,7 @@ namespace Prime.Services
         /// Performs a submission action on an Enrollee.
         /// </summary>
         /// <exception cref="Prime.Services.SubmissionService.InvalidActionException"> Thrown when the action is invalid on the given Enrollee due to current state or admin access </exception>
-        public async Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin, Guid? documentGuid)
+        public async Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin, Guid? documentGuid = null)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.PhysicalAddress)
@@ -283,7 +283,7 @@ namespace Prime.Services
         private class SubmissionStateMachine
         {
             private readonly Enrollee _enrollee;
-            private readonly Guid _documentGuid;
+            private readonly Guid? _documentGuid = null;
             private readonly AsyncPassiveStateMachine<EnrolleeState, SubmissionAction> _machine;
             private readonly SubmissionService _submissionService;
 
