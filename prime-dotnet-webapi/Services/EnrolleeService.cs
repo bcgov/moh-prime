@@ -178,6 +178,7 @@ namespace Prime.Services
 
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
+            // TODO currently doesn't update the date of birth
             if (enrollee.IdentityProvider != AuthConstants.BC_SERVICES_CARD)
             {
                 enrollee.FirstName = updateModel.PreferredFirstName;
