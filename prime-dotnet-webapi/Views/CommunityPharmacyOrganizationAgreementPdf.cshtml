@@ -14,7 +14,7 @@
    * located in /documents.
    */
   var organizationName = Model.Name;
-  var date = Model.NewestAcceptedAgreementDate() ?? @DateTime.Now;
+  var date = ((IAgreeable)Model).NewestAcceptedAgreementDate() ?? @DateTime.Now;
   var day = date.ToString("dd");
   var month = date.ToString("MMMM");
   var year = date.ToString("yyyy");
