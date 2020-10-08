@@ -65,6 +65,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
       'street',
       'city',
       'provinceCode',
+      'countryCode',
       'postal'
     ];
   }
@@ -96,8 +97,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     if (!enrolment.id && this.isInitialEnrolment) {
       const payload = {
-        enrollee: this.form.getRawValue(),
-        identificationDocumentGuid: this.enrolmentFormStateService.identityDocumentForm.get('identificationDocumentGuid').value
+        enrollee: this.form.getRawValue() as Enrollee,
+        identificationDocumentGuid: this.enrolmentFormStateService.identityDocumentForm.get('identificationDocumentGuid').value as string
       };
       return this.enrolmentResource.createEnrollee(payload)
         .pipe(
