@@ -62,6 +62,9 @@ namespace Prime.ViewModels
 
         public void MapConditionalProperties(ClaimsPrincipal user)
         {
+            IdentityProvider = user.GetIdentityProvider();
+            IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
+
             if (IdentityProvider != AuthConstants.BC_SERVICES_CARD)
             {
                 FirstName = PreferredFirstName;
