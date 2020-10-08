@@ -11,6 +11,7 @@ import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
+import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 
 @Injectable({
@@ -122,6 +123,24 @@ export class OrganizationResource {
       );
   }
 
+  /**
+   * @description
+   * Check whether an organization agreement is needed, and create
+   * the organization agreement.
+   *
+   * NOTE:
+   * Presence of location header indicates new organization agreement
+   * is required and has been created. The location header contains
+   * the API endpoint for requesting the organization agreement.
+   */
+  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<string | null> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ siteId });
+    return this.apiResource.post<string | null>(`organizations/${organizationId}/agreements/update`, null, params, { observe: 'response' })
+      .pipe(
+        map((response: ApiHttpResponse<string | null>) => response.headers.get('Location') ?? null)
+      );
+  }
+
   public getOrganizationAgreement(organizationId: number): Observable<string> {
     return this.apiResource.get<string>(`organizations/${organizationId}/organization-agreement`)
       .pipe(
@@ -183,6 +202,10 @@ export class OrganizationResource {
       );
   }
 
+  /**
+   * @description
+   * Download a PDF version of the organization agreement.
+   */
   public getUnsignedOrganizationAgreement(): Observable<string> {
     return this.apiResource.get<string>(`organizations/organization-agreement-document`)
       .pipe(
