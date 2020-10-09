@@ -127,18 +127,12 @@ export class OrganizationResource {
    * @description
    * Check whether an organization agreement is needed, and create
    * the organization agreement.
-   *
-   * NOTE:
-   * Presence of location header indicates new organization agreement
-   * is required and has been created. The location header contains
-   * the resource URL for requesting the organization agreement.
-   * @see getOrganizationAgreementByUrl
    */
-  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<Agreement | NoContent> {
+  public updateOrganizationAgreement<T = Agreement>(organizationId: number, siteId: number): Observable<T | NoContent> {
     const params = this.apiResourceUtilsService.makeHttpParams({ siteId });
-    return this.apiResource.get<Agreement | NoContent>(`organizations/${organizationId}/agreements/update`, params)
+    return this.apiResource.get<T | NoContent>(`organizations/${organizationId}/agreements/update`, params)
       .pipe(
-        map((response: ApiHttpResponse<Agreement | NoContent>) => response?.result)
+        map((response: ApiHttpResponse<T | NoContent>) => response?.result)
       );
   }
 

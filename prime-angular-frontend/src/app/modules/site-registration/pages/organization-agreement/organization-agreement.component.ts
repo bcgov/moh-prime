@@ -160,7 +160,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
 
     this.busy = this.organizationResource
-      .updateOrganizationAgreement(organization.id, siteId)
+      .updateOrganizationAgreement<OrganizationAgreement>(organization.id, siteId)
       .pipe(
         map(({ id }: OrganizationAgreement) =>
           this.agreementId = id
