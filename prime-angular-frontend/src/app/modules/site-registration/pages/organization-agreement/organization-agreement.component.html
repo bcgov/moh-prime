@@ -22,33 +22,24 @@
 
     <ng-container *ngIf="!canSignOnline.checked; else electronic">
       <section class="mb-5">
+        <p class="mb-4">
+          Download and print off the Organization Agreement for PharmaNet Use. Sign, and upload. You cannot make
+          changes to the agreement.
+        </p>
 
-        <ng-container *ngIf="!hasDownloadedFile; else upload">
-          <p class="mb-4">
-            Download and print off the Organization Agreement for PharmaNet Use. Sign, and upload. You cannot make
-            changes to the agreement.
-          </p>
+        <button mat-flat-button
+                class="mb-2"
+                color="primary"
+                (click)="onDownload()">Download Agreement</button>
 
-          <div class="mb-2 row">
-            <div class="col">
-              <button mat-flat-button
-                      color="primary"
-                      (click)="onDownload()">Download Agreement</button>
-            </div>
-          </div>
-        </ng-container>
+        <p class="mb-3">
+          <strong>Upload the signed Organization Agreement here.</strong>
+        </p>
 
-        <ng-template #upload>
-          <p class="mb-3">
-            <strong>Upload the signed Organization Agreement here.</strong>
-          </p>
-
-          <app-document-upload componentName="organization-agreement"
-                               [multiple]="false"
-                               (completed)="onUpload($event)"
-                               (remove)="onRemoveDocument($event)">
-          </app-document-upload>
-        </ng-template>
+        <app-document-upload componentName="organization-agreement"
+                             [multiple]="false"
+                             (completed)="onUpload($event)"
+                             (remove)="onRemoveDocument($event)"></app-document-upload>
       </section>
     </ng-container>
 

@@ -143,8 +143,13 @@ export class OrganizationResource {
       );
   }
 
-  public getOrganizationAgreement(organizationId: number, agreementId: number): Observable<string> {
-    return this.apiResource.get<string>(`organizations/${organizationId}/agreements/${agreementId}`)
+  /**
+   * @description
+   * Get an organization agreement as markup or PDF (Base64).
+   */
+  public getOrganizationAgreement(organizationId: number, agreementId: number, asPdf: boolean = false): Observable<string> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ asPdf });
+    return this.apiResource.get<string>(`organizations/${organizationId}/agreements/${agreementId}`, params)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
@@ -188,22 +193,6 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Latest signed organization agreement could not be retrieved');
           this.logger.error('[SiteRegistration] OrganizationResource::downloadLatestSignedAgreement error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  /**
-   * @description
-   * Download a PDF version of the organization agreement.
-   */
-  public getUnsignedOrganizationAgreement(): Observable<string> {
-    return this.apiResource.get<string>(`organizations/organization-agreement-document`)
-      .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organization agreement document could not be downloaded');
-          this.logger.error('[SiteRegistration] OrganizationResource::downloadOrganizationAgreement error has occurred: ', error);
           throw error;
         })
       );
