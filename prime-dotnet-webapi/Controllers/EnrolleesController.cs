@@ -126,19 +126,28 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
+            var createModel = payload.Enrollee;
+            createModel.MapConditionalProperties(User);
+
             string filename = null;
-            if (payload.IdentificationDocumentGuid != null)
+            if (!createModel.IsBcServicesCard())
             {
-                filename = await _documentService.FinalizeDocumentUpload((Guid)payload.IdentificationDocumentGuid, "identification_document");
-                if (string.IsNullOrWhiteSpace(filename))
+                if (payload.IdentificationDocumentGuid != null)
                 {
-                    this.ModelState.AddModelError("documentGuid", "Identification document could not be created; network error or upload is already submitted");
+                    filename = await _documentService.FinalizeDocumentUpload((Guid)payload.IdentificationDocumentGuid, "identification_document");
+                    if (string.IsNullOrWhiteSpace(filename))
+                    {
+                        this.ModelState.AddModelError("documentGuid", "Identification document could not be created; network error or upload is already submitted");
+                        return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                    }
+                }
+                else
+                {
+                    this.ModelState.AddModelError("documentGuid", "Identification Document Guid was not supplied with request; Cannot create enrollee without identification.");
                     return BadRequest(ApiResponse.BadRequest(this.ModelState));
                 }
             }
 
-            var createModel = payload.Enrollee;
-            createModel.MapConditionalProperties(User);
             var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(createModel);
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
@@ -639,6 +648,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="identificationDocumentId"></param>
         [HttpGet("{enrolleeId}/identification-document/{identificationDocumentId}", Name = nameof(GetIdentificationDocument))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
