@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
@@ -19,7 +19,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 })
 export class AccessAgreementHistoryComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
-  public accessTerm: AccessTerm;
+  public accessTerm: EnrolleeAgreement;
 
   constructor(
     protected router: Router,
@@ -45,7 +45,7 @@ export class AccessAgreementHistoryComponent extends BaseEnrolmentPage implement
     const accessTermId = this.route.snapshot.params.id;
     this.busy = this.enrolmentResource.getAccessTerm(enrolleeId, accessTermId)
       .subscribe(
-        (accessTerm: AccessTerm) => {
+        (accessTerm: EnrolleeAgreement) => {
           this.logger.info('ACCESS TERM', accessTerm);
           this.accessTerm = accessTerm;
         },

@@ -9,11 +9,10 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
+import { Agreement } from '@shared/models/agreement.model';
 
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
-import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
-import { Agreement } from '@registration/shared/models/agreement.model';
 
 @Injectable({
   providedIn: 'root'

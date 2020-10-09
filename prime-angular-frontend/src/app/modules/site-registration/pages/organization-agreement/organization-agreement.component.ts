@@ -14,12 +14,12 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { OrganizationAgreement } from '@shared/models/agreement.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { OrganizationAgreement } from '@registration/shared/models/agreement.model';
 
 @Component({
   selector: 'app-organization-agreement',

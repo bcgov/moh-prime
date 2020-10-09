@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 
 import moment from 'moment';
 
-import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
@@ -20,7 +20,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class EnrolleeEnrolmentsComponent implements OnInit {
   public busy: Subscription;
-  public accessTerms: AccessTerm[];
+  public accessTerms: EnrolleeAgreement[];
   public years: number[];
   public selectedYear: number;
   public hasActions: boolean;
@@ -58,7 +58,7 @@ export class EnrolleeEnrolmentsComponent implements OnInit {
   private getAccessTerms(year: number = null) {
     const enrolleeId = this.route.snapshot.params.id;
     this.busy = this.adjudicationResource.getAcceptedAccessTermsByYear(enrolleeId, year)
-      .subscribe((accessTerms: AccessTerm[]) => this.accessTerms = accessTerms);
+      .subscribe((accessTerms: EnrolleeAgreement[]) => this.accessTerms = accessTerms);
   }
 
   private getYears() {

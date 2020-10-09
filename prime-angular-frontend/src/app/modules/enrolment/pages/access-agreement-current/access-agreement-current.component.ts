@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
-import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -16,7 +16,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 })
 export class AccessAgreementCurrentComponent implements OnInit {
   public busy: Subscription;
-  public accessTerm: AccessTerm;
+  public accessTerm: EnrolleeAgreement;
 
   constructor(
     private enrolmentResource: EnrolmentResource,
@@ -33,7 +33,7 @@ export class AccessAgreementCurrentComponent implements OnInit {
     const enrolleeId = this.enrolmentService.enrolment.id;
     this.busy = this.enrolmentResource.getLatestAccessTerm(enrolleeId, true)
       .subscribe(
-        (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
+        (accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm,
         (error: any) => {
           this.toastService.openErrorToast('Access Term could not be retrieved');
           this.logger.error('[Enrolments] AccessAgreementHistory::getAccessTerm error has occurred: ', error);

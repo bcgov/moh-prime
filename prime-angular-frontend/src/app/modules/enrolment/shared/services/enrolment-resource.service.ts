@@ -12,7 +12,7 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { Address } from '@shared/models/address.model';
-import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
@@ -111,29 +111,29 @@ export class EnrolmentResource {
   // Agreements
   // ---
 
-  public getAcceptedAccessTerms(enrolleeId: number): Observable<AccessTerm[]> {
+  public getAcceptedAccessTerms(enrolleeId: number): Observable<EnrolleeAgreement[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ accepted: true });
-    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/agreements`, params)
+    return this.apiResource.get<EnrolleeAgreement[]>(`enrollees/${enrolleeId}/agreements`, params)
       .pipe(
-        map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
-        tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERMS', accessTerms))
+        map((response: ApiHttpResponse<EnrolleeAgreement[]>) => response.result),
+        tap((accessTerms: EnrolleeAgreement[]) => this.logger.info('ACCESS_TERMS', accessTerms))
       );
   }
 
-  public getLatestAccessTerm(enrolleeId: number, accepted: boolean): Observable<AccessTerm> {
+  public getLatestAccessTerm(enrolleeId: number, accepted: boolean): Observable<EnrolleeAgreement> {
     const params = this.apiResourceUtilsService.makeHttpParams({ onlyLatest: true, accepted, includeText: true });
-    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/agreements`, params)
+    return this.apiResource.get<EnrolleeAgreement[]>(`enrollees/${enrolleeId}/agreements`, params)
       .pipe(
-        map((response: ApiHttpResponse<AccessTerm[]>) => response.result.pop()),
-        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM_LATEST', accessTerm))
+        map((response: ApiHttpResponse<EnrolleeAgreement[]>) => response.result.pop()),
+        tap((accessTerm: EnrolleeAgreement) => this.logger.info('ACCESS_TERM_LATEST', accessTerm))
       );
   }
 
-  public getAccessTerm(enrolleeId: number, agreementId: number): Observable<AccessTerm> {
-    return this.apiResource.get<AccessTerm>(`enrollees/${enrolleeId}/agreements/${agreementId}`)
+  public getAccessTerm(enrolleeId: number, agreementId: number): Observable<EnrolleeAgreement> {
+    return this.apiResource.get<EnrolleeAgreement>(`enrollees/${enrolleeId}/agreements/${agreementId}`)
       .pipe(
-        map((response: ApiHttpResponse<AccessTerm>) => response.result),
-        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm))
+        map((response: ApiHttpResponse<EnrolleeAgreement>) => response.result),
+        tap((accessTerm: EnrolleeAgreement) => this.logger.info('ACCESS_TERM', accessTerm))
       );
   }
 
