@@ -27,6 +27,15 @@ namespace Prime.Migrations
                 table: "Organization");
 
 
+            migrationBuilder.AlterColumn<int>(
+                name: "EnrolleeId",
+                table: "Agreement",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "integer",
+                oldNullable: false);
+
+
             migrationBuilder.DropForeignKey(
                 name: "FK_SignedAgreementDocument_Agreement_AgreementId",
                 table: "SignedAgreementDocument");
@@ -68,6 +77,16 @@ namespace Prime.Migrations
                 principalTable: "Agreement",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.InsertData(
+                table: "AgreementVersion",
+                columns: new[] { "Id", "AgreementType", "CreatedTimeStamp", "CreatedUserId", "EffectiveDate", "Text", "UpdatedTimeStamp", "UpdatedUserId" },
+                values: new object[] { 12, 5, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), @"<p class=""text-center"">
+    This Agreement is made the {{day}} day of {{month}}, {{year}}
+    </p>
+
+    <h1>---- PLACEHOLDER TEXT ----</h1>
+    ", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000") });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -229,6 +248,19 @@ namespace Prime.Migrations
                 principalTable: "Organization",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.DeleteData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 12);
+
+            migrationBuilder.AlterColumn<int>(
+                name: "EnrolleeId",
+                table: "Agreement",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "integer",
+                oldNullable: true);
         }
     }
 }
