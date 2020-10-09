@@ -135,11 +135,11 @@ export class OrganizationResource {
    * the resource URL for requesting the organization agreement.
    * @see getOrganizationAgreementByUrl
    */
-  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<Agreement> {
+  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<Agreement | NoContent> {
     const params = this.apiResourceUtilsService.makeHttpParams({ siteId });
-    return this.apiResource.get<Agreement>(`organizations/${organizationId}/agreements/update`, params)
+    return this.apiResource.get<Agreement | NoContent>(`organizations/${organizationId}/agreements/update`, params)
       .pipe(
-        map((response: ApiHttpResponse<Agreement>) => response.result)
+        map((response: ApiHttpResponse<Agreement | NoContent>) => response?.result)
       );
   }
 
