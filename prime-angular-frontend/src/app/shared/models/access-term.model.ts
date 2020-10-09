@@ -1,5 +1,3 @@
-import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
-
 /**
  * @deprecated
  * @see EnrolleeAgreement
@@ -15,14 +13,4 @@ export interface AccessTerm {
   createdDate: string;
   acceptedDate?: string;
   expiryDate?: string;
-}
-
-export interface Clause {
-  id: number;
-  clause: string;
-  effectiveDate: string;
-}
-
-export interface UserClause extends Clause {
-  enrolleeClassification: EnrolleeClassification;
 }
