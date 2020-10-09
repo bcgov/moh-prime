@@ -20,7 +20,7 @@ import { Contact } from '@registration/shared/models/contact.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { Agreement } from '@registration/shared/models/agreement.model';
+import { OrganizationAgreement } from '@registration/shared/models/agreement.model';
 
 @Component({
   selector: 'app-technical-support',
@@ -60,7 +60,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
       this.busy = this.organizationResource
         .updateOrganizationAgreement(organizationId, site.id)
         .pipe(
-          map((agreement: Agreement) => !!agreement),
+          map((agreement: OrganizationAgreement) => !!agreement),
           exhaustMap((needsOrgAgreement: boolean) =>
             this.siteResource.updateSite(payload)
               .pipe(map(() => needsOrgAgreement))

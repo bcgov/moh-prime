@@ -19,7 +19,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { Agreement } from '@registration/shared/models/agreement.model';
+import { OrganizationAgreement } from '@registration/shared/models/agreement.model';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -162,7 +162,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.busy = this.organizationResource
       .updateOrganizationAgreement(organization.id, siteId)
       .pipe(
-        map(({ id }: Agreement) =>
+        map(({ id }: OrganizationAgreement) =>
           this.agreementId = id
         ),
         exhaustMap((agreementId: number) =>
