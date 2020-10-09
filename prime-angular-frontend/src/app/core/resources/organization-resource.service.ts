@@ -13,6 +13,7 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
+import { Agreement } from '@registration/shared/models/agreement.model';
 
 @Injectable({
   providedIn: 'root'
@@ -134,38 +135,16 @@ export class OrganizationResource {
    * the resource URL for requesting the organization agreement.
    * @see getOrganizationAgreementByUrl
    */
-  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<{ url: string, agreementId: number }> {
+  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<Agreement> {
     const params = this.apiResourceUtilsService.makeHttpParams({ siteId });
-    return this.apiResource.get<{ url: string, agreementId: number }>(`organizations/${organizationId}/agreements/update`, params)
+    return this.apiResource.get<Agreement>(`organizations/${organizationId}/agreements/update`, params)
       .pipe(
-        map(({ headers, result }: ApiHttpResponse<{ url: string, agreementId: number }>) => {
-          return {
-            url: headers.get('Location'),
-            agreementId: result.agreementId
-          };
-        })
+        map((response: ApiHttpResponse<Agreement>) => response.result)
       );
   }
 
-  /**
-   * @description
-   * Get the created organization agreement.
-   * @see updateOrganizationAgreement
-   */
-  public getOrganizationAgreementByUrl(url: string) {
-    return this.apiResource.get<string>(url)
-      .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organization agreement could not be retrieved');
-          this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationAgreement error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getOrganizationAgreement(organizationId: number): Observable<string> {
-    return this.apiResource.get<string>(`organizations/${organizationId}/agreements`)
+  public getOrganizationAgreement(organizationId: number, agreementId: number): Observable<string> {
+    return this.apiResource.get<string>(`organizations/${organizationId}/agreements/${agreementId}`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {

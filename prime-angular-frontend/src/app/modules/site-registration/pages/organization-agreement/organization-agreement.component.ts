@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { Subscription, EMPTY, of, noop } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
@@ -19,6 +19,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { Agreement } from '@registration/shared/models/agreement.model';
 
 @Component({
   selector: 'app-organization-agreement',
@@ -162,10 +163,12 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.busy = this.organizationResource
       .updateOrganizationAgreement(organization.id, siteId)
       .pipe(
-        exhaustMap(({ url, agreementId }: { url: string, agreementId: number }) => {
-          this.agreementId = agreementId;
-          return this.organizationResource.getOrganizationAgreementByUrl(url);
-        })
+        map(({ id }: Agreement) =>
+          this.agreementId = id
+        ),
+        exhaustMap((agreementId: number) =>
+          this.organizationResource.getOrganizationAgreement(organization.id, agreementId)
+        )
       )
       .subscribe((organizationAgreement: string) =>
         this.organizationAgreement = organizationAgreement
