@@ -33,9 +33,6 @@ export class AuthorizationRedirectGuard extends BaseGuard {
         return resolve(true);
       }
 
-      console.log(routePath);
-
-
       let destinationRoute = this.config.routes.denied;
 
       if (this.authService.isEnrollee()) {
