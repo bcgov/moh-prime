@@ -14,12 +14,20 @@
   var month = @DateTime.Now.ToString("MMMM");
   var year = @DateTime.Now.ToString("yyyy");
 
+  var time = @DateTime.Now;
+  var timeUtc = @DateTime.UtcNow;
+  var timeLocal = @DateTime.UtcNow.ToLocalTime();
+
   if(Model.AcceptedAgreementDate.HasValue) {
     day = Model.AcceptedAgreementDate.Value.ToString("dd");
     month = Model.AcceptedAgreementDate.Value.ToString("MMMM");
     year = Model.AcceptedAgreementDate.Value.ToString("yyyy");
   }
 }
+
+@time<br>
+@timeUtc<br>
+@timeLocal<br>
 
 <p class="text-center">
   This Agreement is made the @day day of @month, @year
