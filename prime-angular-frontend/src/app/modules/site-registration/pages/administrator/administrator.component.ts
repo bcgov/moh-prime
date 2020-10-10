@@ -68,7 +68,17 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    if (this.siteService.site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT) {
+    const chosenVendorCode = this.siteService.site.siteVendors[0].vendorCode;
+    if (
+      chosenVendorCode === VendorEnum.CARECONNECT ||
+      [ // Community pharmacy vendors
+        VendorEnum.TELUS_HEALTH,
+        VendorEnum.SHOPPERS_DRUG_MART,
+        VendorEnum.APPLIED_ROBOTICS,
+        VendorEnum.MCKESSON,
+        VendorEnum.COMMANDER_GROUP
+      ].includes(chosenVendorCode)
+    ) {
       this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
     } else {
       this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);
