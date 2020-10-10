@@ -9,8 +9,9 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { VendorEnum } from '@shared/enums/vendor.enum';
 import { Address } from '@shared/models/address.model';
+import { VendorEnum } from '@shared/enums/vendor.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
@@ -68,16 +69,10 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    const chosenVendorCode = this.siteService.site.siteVendors[0].vendorCode;
+    const site = this.siteService.site;
     if (
-      chosenVendorCode === VendorEnum.CARECONNECT ||
-      [ // Community pharmacy vendors
-        VendorEnum.TELUS_HEALTH,
-        VendorEnum.SHOPPERS_DRUG_MART,
-        VendorEnum.APPLIED_ROBOTICS,
-        VendorEnum.MCKESSON,
-        VendorEnum.COMMANDER_GROUP
-      ].includes(chosenVendorCode)
+      site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT ||
+      site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST
     ) {
       this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
     } else {

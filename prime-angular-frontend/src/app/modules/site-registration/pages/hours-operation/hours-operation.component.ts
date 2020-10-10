@@ -21,6 +21,7 @@ import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -137,16 +138,10 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public nextRoute() {
-    const chosenVendorCode = this.siteService.site.siteVendors[0].vendorCode;
+    const site = this.siteService.site;
     if (
-      chosenVendorCode === VendorEnum.CARECONNECT ||
-      [ // Community pharmacy vendors
-        VendorEnum.TELUS_HEALTH,
-        VendorEnum.SHOPPERS_DRUG_MART,
-        VendorEnum.APPLIED_ROBOTICS,
-        VendorEnum.MCKESSON,
-        VendorEnum.COMMANDER_GROUP
-      ].includes(chosenVendorCode)
+      site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT ||
+      site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST
     ) {
       this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
     } else if (this.isCompleted) {
