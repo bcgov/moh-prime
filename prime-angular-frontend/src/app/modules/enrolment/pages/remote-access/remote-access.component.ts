@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { delay } from 'rxjs/operators';
 
@@ -25,10 +25,13 @@ import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remo
   styleUrls: ['./remote-access.component.scss']
 })
 export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements OnInit {
+  @ViewChild('requestAccess') public requestAccess: MatSlideToggle;
+
   public form: FormGroup;
   public enrolment: Enrolment;
-  public remoteSites: EnrolleeRemoteAccessSite[];
   public showProgress: boolean;
+  public remoteSites: EnrolleeRemoteAccessSite[];
+  public noRemoteSites: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -72,8 +75,14 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
         .pipe(delay(2000))
         .subscribe(
           (sites: EnrolleeRemoteAccessSite[]) => {
-            this.remoteSites = sites;
-            this.initForm();
+            if (sites) {
+              this.noRemoteSites = false;
+              this.remoteSites = sites;
+              this.initForm();
+            } else {
+              this.noRemoteSites = true;
+              this.requestAccess.checked = false;
+            }
           },
           (error: any) => { },
           () => this.showProgress = false

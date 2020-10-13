@@ -39,7 +39,7 @@
         </div>
 
         <ng-template #results>
-          <ng-container *ngIf="remoteSites?.length; else noRemoteSites">
+          <ng-container *ngIf="remoteSites?.length">
             <app-page-subheader>
               <ng-container appPageSubheaderSummary>
                 The sites below have registered you for remote access. Check to confirm that you want remote access for
@@ -66,17 +66,17 @@
               </mat-checkbox>
             </div>
           </ng-container>
-
-          <ng-template #noRemoteSites>
-            <p class="red">
-              No site has registered you for remote access. Please continue in PRIME; your enrolment will be processed
-              for onsite PharmaNet access. Ask your PharmaNet administrator to register your site in PRIME and add you
-              to their list of remote-access users. When that is complete, you will receive an email notification, and
-              you can return to PRIME and add your remote access information for approval.
-            </p>
-          </ng-template>
         </ng-template>
 
+      </ng-container>
+
+      <ng-container *ngIf="noRemoteSites">
+        <p class="red">
+          No site has registered you for remote access. Please continue in PRIME; your enrolment will be processed
+          for onsite PharmaNet access. Ask your PharmaNet administrator to register your site in PRIME and add you
+          to their list of remote-access users. When that is complete, you will receive an email notification, and
+          you can return to PRIME and add your remote access information for approval.
+        </p>
       </ng-container>
     </section>
 
