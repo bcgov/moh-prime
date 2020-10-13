@@ -410,20 +410,5 @@ namespace Prime.Controllers
 
             return Ok(ApiResponse.Result(agreement));
         }
-
-        // GET: api/Organizations/organization-agreement-document
-        /// <summary>
-        /// Get the organization agreement document.
-        /// </summary>
-        [HttpGet("organization-agreement-document", Name = nameof(OrganizationAgreementDocument))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public ActionResult<string> OrganizationAgreementDocument()
-        {
-
-        }
     }
 }
