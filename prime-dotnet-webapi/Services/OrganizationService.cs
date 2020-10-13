@@ -174,20 +174,6 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Since we currently load the text from the cshtml view rather than the database, this currently returns the agreement's type instead (or null if it doesn't exist)
-        /// </summary>
-        /// <param name="organizationId"></param>
-        /// <param name="agreementId"></param>
-        /// <returns></returns>
-        public async Task<AgreementType?> GetOrgAgreementTypeAsync(int organizationId, int agreementId)
-        {
-            return await _context.Agreements
-                .Where(a => a.Id == agreementId && a.OrganizationId == organizationId)
-                .Select(a => (AgreementType?)a.AgreementVersion.AgreementType)
-                .SingleOrDefaultAsync();
-        }
-
-        /// <summary>
         /// Creates a new Org Agreement of type appropriate for the indicated site if none exist or a newer version is availible.
         /// Otherwise, returns the newest existing Agreement of that type.
         /// Returns null if the Site doesn't exist on the Organization.
@@ -197,19 +183,18 @@ namespace Prime.Services
         /// <returns></returns>
         public async Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int siteId)
         {
-            var siteType = await _context.Sites
+            var siteSetting = await _context.Sites
+                .AsNoTracking()
                 .Where(s => s.Id == siteId && s.OrganizationId == organizationId)
                 .Select(s => s.CareSettingCode)
                 .SingleOrDefaultAsync();
 
-            if (!siteType.HasValue)
+            if (!siteSetting.HasValue)
             {
                 return null;
             }
 
-            var agreementType = siteType == (int)CareSettingType.CommunityPractice
-                ? AgreementType.CommunityPracticeOrgAgreement
-                : AgreementType.CommunityPharmacyOrgAgreement;
+            var agreementType = AgreementTypeForSiteSetting(siteSetting.Value);
 
             var newestVersionId = await _context.AgreementVersions
                 .AsNoTracking()
@@ -219,7 +204,8 @@ namespace Prime.Services
                 .FirstAsync();
 
             var newestAgreement = await _context.Agreements
-                .SingleOrDefaultAsync(a => a.OrganizationId == organizationId && a.AgreementVersionId == newestVersionId);
+                .OrderByDescending(a => a.CreatedDate)
+                .FirstOrDefaultAsync(a => a.OrganizationId == organizationId && a.AgreementVersionId == newestVersionId);
 
             if (newestAgreement != null)
             {
@@ -300,6 +286,21 @@ namespace Prime.Services
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(p => p.MailingAddress);
+        }
+
+        private AgreementType AgreementTypeForSiteSetting(int careSettingCode)
+        {
+            switch ((CareSettingType)careSettingCode)
+            {
+                case CareSettingType.CommunityPractice:
+                    return AgreementType.CommunityPracticeOrgAgreement;
+
+                case CareSettingType.CommunityPharmacy:
+                    return AgreementType.CommunityPharmacyOrgAgreement;
+
+                default:
+                    throw new InvalidOperationException($"Did not recognize case setting code {careSettingCode} in {nameof(AgreementTypeForSiteSetting)}");
+            }
         }
     }
 }

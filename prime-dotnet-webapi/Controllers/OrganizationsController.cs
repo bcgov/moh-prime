@@ -269,13 +269,14 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="agreementId"></param>
+        /// <param name="asPdf"></param>
         [HttpGet("{organizationId}/agreements/{agreementId}", Name = nameof(GetOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetOrganizationAgreement(int organizationId, int agreementId)
+        public async Task<ActionResult<string>> GetOrganizationAgreement(int organizationId, int agreementId, [FromQuery] bool asPdf)
         {
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
@@ -283,17 +284,11 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            var agreementType = await _organizationService.GetOrgAgreementTypeAsync(organizationId, agreementId);
-            if (agreementType == null)
+            var text = await _organizationService.GetOrgAgreementTextAsync(organizationId, agreementId, asPdf);
+            if (text == null)
             {
                 return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
             }
-
-            string viewToRender = agreementType == AgreementType.CommunityPracticeOrgAgreement
-                ? "/Views/CommunityPracticeOrganizationAgreement.cshtml"
-                : "/Views/CommunityPharmacyOrganizationAgreement.cshtml";
-
-            var text = await _razorConverterService.RenderViewToStringAsync(viewToRender, organization);
 
             return Ok(ApiResponse.Result(text));
         }
@@ -428,20 +423,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public ActionResult<string> OrganizationAgreementDocument()
         {
-            var fileName = "CommunityPracticeOrganizationAgreement.pdf";
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourcePath = assembly.GetManifestResourceNames()
-                .Single(str => str.EndsWith(fileName));
 
-            string base64;
-            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
-            using (var reader = new MemoryStream())
-            {
-                stream.CopyTo(reader);
-                base64 = Convert.ToBase64String(reader.ToArray());
-            }
-
-            return Ok(ApiResponse.Result(base64));
         }
     }
 }

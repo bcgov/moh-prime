@@ -104,8 +104,8 @@ namespace Prime.Services
         public async Task AcceptCurrentEnrolleeAgreementAsync(int enrolleeId)
         {
             var agreement = await _context.Agreements
-                .OrderByDescending(at => at.CreatedDate)
-                .FirstAsync(at => at.EnrolleeId == enrolleeId);
+                .OrderByDescending(a => a.CreatedDate)
+                .FirstAsync(a => a.EnrolleeId == enrolleeId);
 
             if (agreement.AcceptedDate == null)
             {
@@ -122,15 +122,53 @@ namespace Prime.Services
         public async Task ExpireCurrentEnrolleeAgreementAsync(int enrolleeId)
         {
             var agreement = await _context.Agreements
-                .OrderByDescending(at => at.CreatedDate)
-                .Where(at => at.EnrolleeId == enrolleeId)
-                .FirstOrDefaultAsync(at => at.AcceptedDate.HasValue);
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.EnrolleeId == enrolleeId)
+                .FirstOrDefaultAsync(a => a.AcceptedDate.HasValue);
 
             if (agreement != null)
             {
                 agreement.ExpiryDate = DateTimeOffset.Now;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        /// <summary>
+        /// Gets the text of a given Org Agreement, optionally in the form of a Base 64 encoded PDF.
+        /// Returns null if the Agreement does not exist on the given organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        /// <param name="agreementId"></param>
+        /// <param name="asEncodedPdf"></param>
+        /// <returns></returns>
+        public async Task<string> GetOrgAgreementTextAsync(int organizationId, int agreementId, bool asEncodedPdf = false)
+        {
+            var orgDto = await _context.Organizations
+                .Include(o => )
+                .AsNoTracking()
+                .Where(a => a.Id == agreementId)
+                .Where(a => a.OrganizationId == organizationId)
+                .Select(a => (AgreementType?)a.AgreementVersion.AgreementType)
+                .SingleOrDefaultAsync();
+
+            return null;
+
+
+
+            // var fileName = "CommunityPracticeOrganizationAgreement.pdf";
+            // var assembly = Assembly.GetExecutingAssembly();
+            // var resourcePath = assembly.GetManifestResourceNames()
+            //     .Single(str => str.EndsWith(fileName));
+
+            // string base64;
+            // using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+            // using (var reader = new MemoryStream())
+            // {
+            //     stream.CopyTo(reader);
+            //     base64 = Convert.ToBase64String(reader.ToArray());
+            // }
+
+            // return Ok(ApiResponse.Result(base64));
         }
 
         /// <summary>

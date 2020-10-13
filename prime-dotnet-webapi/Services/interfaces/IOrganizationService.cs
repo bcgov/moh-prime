@@ -16,7 +16,6 @@ namespace Prime.Services
         Task DeleteOrganizationAsync(int organizationId);
         Task<Organization> SubmitRegistrationAsync(int organizationId);
         Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);
-        Task<AgreementType?> GetOrgAgreementTypeAsync(int organizationId, int agreementId);
         Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int siteId);
         Task AcceptOrgAgreementAsync(int organizationId, int agreementId);
         Task<Organization> GetOrganizationByPartyIdAsync(int partyId);
