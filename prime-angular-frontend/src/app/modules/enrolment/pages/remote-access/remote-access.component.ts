@@ -71,11 +71,12 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   public onRequestAccess(event: MatSlideToggleChange) {
     if (event.checked) {
       this.showProgress = true;
+      this.noRemoteSites = false;
       this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
         .pipe(delay(2000))
         .subscribe(
           (sites: EnrolleeRemoteAccessSite[]) => {
-            if (sites) {
+            if (sites.length) {
               this.noRemoteSites = false;
               this.remoteSites = sites;
               this.initForm();
