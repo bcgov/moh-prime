@@ -7,6 +7,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import * as moment from 'moment';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -95,8 +97,8 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public onDownload() {
     this.organizationResource
       .getOrganizationAgreement(this.route.snapshot.params.oid, this.agreementId, true)
-      .subscribe((base64: string) => {
-        const blob = this.utilsService.base64ToBlob(base64);
+      .subscribe(({ agreementMarkup }: OrganizationAgreement) => {
+        const blob = this.utilsService.base64ToBlob(agreementMarkup);
         this.utilsService.downloadDocument(blob, 'Organization-Agreement');
         this.hasDownloadedFile = true;
       });
@@ -167,6 +169,19 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         ),
         exhaustMap((agreementId: number) =>
           this.organizationResource.getOrganizationAgreement(organization.id, agreementId)
+        ),
+        map(({ acceptedDate, agreementMarkup }: OrganizationAgreement) => {
+          const date = (acceptedDate)
+            ? moment(acceptedDate).local()
+            : moment();
+
+          return [agreementMarkup, date];
+        }),
+        map(([organizationAgreement, date]: [string, moment.Moment]) =>
+          organizationAgreement
+            .replace('$day', `${date.format('dddd')}`)
+            .replace('$month', date.format('MMMM'))
+            .replace('$year', `${date.format('YYYY')}`)
         )
       )
       .subscribe((organizationAgreement: string) =>

@@ -9,7 +9,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
-import { Agreement } from '@shared/models/agreement.model';
+import { Agreement, OrganizationAgreement } from '@shared/models/agreement.model';
 
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
@@ -140,11 +140,11 @@ export class OrganizationResource {
    * @description
    * Get an organization agreement as markup or PDF (Base64).
    */
-  public getOrganizationAgreement(organizationId: number, agreementId: number, asPdf: boolean = false): Observable<string> {
+  public getOrganizationAgreement(organizationId: number, agreementId: number, asPdf: boolean = false): Observable<OrganizationAgreement> {
     const params = this.apiResourceUtilsService.makeHttpParams({ asPdf });
-    return this.apiResource.get<string>(`organizations/${organizationId}/agreements/${agreementId}`, params)
+    return this.apiResource.get<OrganizationAgreement>(`organizations/${organizationId}/agreements/${agreementId}`, params)
       .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
+        map((response: ApiHttpResponse<OrganizationAgreement>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be retrieved');
           this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationAgreement error has occurred: ', error);
