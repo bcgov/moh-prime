@@ -171,6 +171,16 @@ export class EnrolmentResource {
       );
   }
 
+
+  public getDownloadTokenIdentificationDocument(enrolleeId: number, identificationDocumentId: number): Observable<string> {
+    return this.apiResource
+      .get<string>(`enrollees/${enrolleeId}/identification-document/${identificationDocumentId}`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap((document: string) => this.logger.info('DOCUMENT', document)),
+      );
+  }
+
   // ---
   // Enrollee and Enrolment Adapters
   // ---

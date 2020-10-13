@@ -10,6 +10,7 @@ import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.mode
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { IdentificationDocument } from './identification-document.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -27,6 +28,7 @@ export interface HttpEnrollee extends Enrollee {
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
+  identificationDocuments: IdentificationDocument[];
   enrolleeCareSettings: CareSetting[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
@@ -62,6 +64,7 @@ export interface Enrolment {
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
+  identificationDocuments: IdentificationDocument[];
   careSettings: CareSetting[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201007221147_AddIdentificationDocument")]
+    partial class AddIdentificationDocument
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,9 +29,6 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("AdjudicatorId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -40,7 +39,6 @@ namespace Prime.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("NoteDate")
@@ -53,8 +51,6 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AdjudicatorId");
 
                     b.HasIndex("EnrolleeId")
                         .IsUnique();
@@ -111,6 +107,47 @@ namespace Prime.Migrations
                     b.ToTable("Address");
 
                     b.HasDiscriminator<int>("AddressType");
+                });
+
+            modelBuilder.Entity("Prime.Models.AdjudicatorNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("AdjudicatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("NoteDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdjudicatorId");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("AdjudicatorNote");
                 });
 
             modelBuilder.Entity("Prime.Models.Admin", b =>
@@ -4941,47 +4978,6 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.ToTable("EnrolleeCareSetting");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("AdjudicatorId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("NoteDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdjudicatorId");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.ToTable("EnrolleeNote");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
@@ -14641,12 +14637,6 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
-                    b.HasOne("Prime.Models.Admin", "Adjudicator")
-                        .WithMany()
-                        .HasForeignKey("AdjudicatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithOne("AccessAgreementNote")
                         .HasForeignKey("Prime.Models.AccessAgreementNote", "EnrolleeId")
@@ -14663,6 +14653,21 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Province", "Province")
                         .WithMany()
                         .HasForeignKey("ProvinceCode");
+                });
+
+            modelBuilder.Entity("Prime.Models.AdjudicatorNote", b =>
+                {
+                    b.HasOne("Prime.Models.Admin", "Adjudicator")
+                        .WithMany("AdjudicatorNotes")
+                        .HasForeignKey("AdjudicatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany("AdjudicatorNotes")
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Agreement", b =>
@@ -14865,21 +14870,6 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
-                {
-                    b.HasOne("Prime.Models.Admin", "Adjudicator")
-                        .WithMany("AdjudicatorNotes")
-                        .HasForeignKey("AdjudicatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany("AdjudicatorNotes")
-                        .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
@@ -14945,7 +14935,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.EnrolmentStatusReference", b =>
                 {
-                    b.HasOne("Prime.Models.EnrolleeNote", "AdjudicatorNote")
+                    b.HasOne("Prime.Models.AdjudicatorNote", "AdjudicatorNote")
                         .WithOne("EnrolmentStatusReference")
                         .HasForeignKey("Prime.Models.EnrolmentStatusReference", "AdjudicatorNoteId");
 
