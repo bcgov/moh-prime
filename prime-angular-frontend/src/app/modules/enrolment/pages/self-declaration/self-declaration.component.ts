@@ -3,16 +3,18 @@ import { Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
-import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 @Component({
   selector: 'app-self-declaration',
@@ -23,6 +25,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   public decisions: { code: boolean, name: string }[];
   public hasAttemptedFormSubmission: boolean;
   public showUnansweredQuestionsError: boolean;
+  public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
+  public selfDeclarationQuestions = selfDeclarationQuestions;
 
   constructor(
     protected route: ActivatedRoute,
@@ -95,36 +99,12 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     super.onSubmit(hasBeenThroughTheWizard);
   }
 
-  public onHasConvictionUpload(sdd: SelfDeclarationDocument) {
-    this.addSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', sdd.documentGuid);
+  public onUpload(controlName: string, sdd: SelfDeclarationDocument) {
+    this.addSelfDeclarationDocumentGuid(controlName, sdd.documentGuid);
   }
 
-  public onRemoveConvictionUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasConvictionDocumentGuids', documentGuid);
-  }
-
-  public onHasRegistrationSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.addSelfDeclarationDocumentGuid('hasRegistrationSuspendedDocumentGuids', sdd.documentGuid);
-  }
-
-  public onRemoveRegistrationSuspendedUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasRegistrationSuspendedDocumentGuids', documentGuid);
-  }
-
-  public onHasDisciplinaryActionUpload(sdd: SelfDeclarationDocument) {
-    this.addSelfDeclarationDocumentGuid('hasDisciplinaryActionDocumentGuids', sdd.documentGuid);
-  }
-
-  public onRemoveDisciplinaryActionUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasDisciplinaryActionDocumentGuids', documentGuid);
-  }
-
-  public onHasPharmanetSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.addSelfDeclarationDocumentGuid('hasPharmaNetSuspendedDocumentGuids', sdd.documentGuid);
-  }
-
-  public onRemovePharmanetSuspendedUpload(documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid('hasPharmaNetSuspendedDocumentGuids', documentGuid);
+  public onRemove(constrolName: string, documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid(constrolName, documentGuid);
   }
 
   public ngOnInit() {
