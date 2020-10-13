@@ -6,8 +6,9 @@ export class ApiHttpResponse<T> {
   readonly result: T;
   readonly message?: string;
 
-  constructor(status: number, result: T, message?: string) {
+  constructor(status: number, headers: HttpHeaders, result: T, message?: string) {
     this.status = status;
+    this.headers = headers;
     this.result = result;
     this.message = message;
   }

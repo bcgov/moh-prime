@@ -46,7 +46,7 @@ export abstract class AbstractResource {
    * @description
    * Handle the HTTP response.
    */
-  protected handleResponse<T>(observe: 'body' | 'response' = 'body') {
+  protected handleResponse<T>() {
     return pipe(
       map(this.handleSuccess<T>()),
       catchError(this.handleError)
