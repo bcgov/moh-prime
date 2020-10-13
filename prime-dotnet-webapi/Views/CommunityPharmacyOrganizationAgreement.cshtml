@@ -1,23 +1,15 @@
-@using Prime.Models
-@model Organization
+@model string
 
 @{
   /**
    * Organization Agreement that is downloaded and rendered in the
    * web client by the signing authority.
-   *
-   * NOTE: The downloadable and signable copy of the Organization Agreement is
-   * located in /documents.
    */
-  var organizationName = Model.Name;
-  var date = ((IAgreeable)Model).NewestAcceptedAgreementDate() ?? @DateTime.Now;
-  var day = date.ToString("dd");
-  var month = date.ToString("MMMM");
-  var year = date.ToString("yyyy");
+  var organizationName = Model;
 }
 
 <p class="text-center">
-  This Agreement is made the @day day of @month, @year
+  This Agreement is made the $day day of $month, $year
 </p>
 
 <h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>
@@ -67,8 +59,8 @@
 </p>
 
 <ol type="1"
-    start="1"
-    class="decimal">
+start="1"
+class="decimal">
   <li>
     <ol type="1">
       <li>
@@ -106,7 +98,8 @@
             </ol>
           </li>
           <li>
-            <strong>&quot;Information Management Regulation&quot;</strong> means the <em>Information Management Regulation</em>,
+            <strong>&quot;Information Management Regulation&quot;</strong> means the
+            <em>Information Management Regulation</em>,
             B.C. Reg. 74/2015;
           </li>
           <li>
@@ -115,10 +108,12 @@
             PharmaNet;
           </li>
           <li>
-            &quot;PharmaNet&quot; means PharmaNet as continued under section 2 of the <em>Information Management Regulation</em>;
+            &quot;PharmaNet&quot; means PharmaNet as continued under section 2 of the
+            <em>Information Management Regulation</em>;
           </li>
           <li>
-            <strong>&quot;PharmaNet Data&quot;</strong> includes any records or information contained in PharmaNet and any records
+            <strong>&quot;PharmaNet Data&quot;</strong> includes any records or information contained in PharmaNet and
+            any records
             or information in the custody, control or possession of Organization or any Authorized User as the result of
             any Site Access;
           </li>
@@ -129,16 +124,19 @@
             <strong>&quot;Provider Regulation&quot;</strong> means the Provider Regulation, B.C. Reg. 222/2014;
           </li>
           <li>
-            <strong>&quot;Regulated User&quot;</strong> means an Authorized User described in subsections 4 (2) to (4) of the
+            <strong>&quot;Regulated User&quot;</strong> means an Authorized User described in subsections 4 (2) to (4)
+            of the
             <em>Information Management Regulation</em>;
           </li>
           <li>
-            <strong>&quot;Signing Authority&quot;</strong> means the individual identified by Organization as the &quot;Signing Authority&quot;
+            <strong>&quot;Signing Authority&quot;</strong> means the individual identified by Organization as the
+            &quot;Signing Authority&quot;
             for a Site, with the associated contact information, as set out in section 2 of the Site Request;
           </li>
           <li>
             <p>
-              &quot;Site&quot; means a licensed community pharmacy premises operated by Organization and located in British Columbia that:
+              &quot;Site&quot; means a licensed community pharmacy premises operated by Organization and located in
+              British Columbia that:
             </p>
 
             <ol type="i">
@@ -151,22 +149,27 @@
             </ol>
           </li>
           <li>
-            <strong>&quot;Site Access&quot;</strong> means any access to or use of PharmaNet at a Site as permitted by the Province;
+            <strong>&quot;Site Access&quot;</strong> means any access to or use of PharmaNet at a Site as permitted by
+            the Province;
           </li>
           <li>
-            <strong>&quot;Site Request&quot;</strong> means, in relation to a Site, the information contained in the PharmaNet access
+            <strong>&quot;Site Request&quot;</strong> means, in relation to a Site, the information contained in the
+            PharmaNet access
             request form submitted to the Province by the Organization, requesting PharmaNet access at the Site, as such
             information is updated by the Organization from time to time in accordance with section 2.2;
           </li>
           <li>
-            <strong>&quot;SSO-Provided Technology&quot;</strong> means any information technology hardware, software or services
+            <strong>&quot;SSO-Provided Technology&quot;</strong> means any information technology hardware, software or
+            services
             provided to Organization by an Approved SSO for the purpose of Site Access;
           </li>
         </ol>
       </li>
       <li>
-        Unless otherwise specified, a reference to a statute or regulation by name means a statute or regulation of British
-        Columbia of that name, as amended or replaced from time to time, and includes any enactments made under the authority
+        Unless otherwise specified, a reference to a statute or regulation by name means a statute or regulation of
+        British
+        Columbia of that name, as amended or replaced from time to time, and includes any enactments made under the
+        authority
         of that statute or regulation.
       </li>
       <li>
@@ -181,9 +184,12 @@
         </ul>
       </li>
       <li>
-        The main body of this Agreement, the Schedules, and any documents incorporated by reference into this Agreement are to
-        be interpreted so that all of the provisions are given as full effect as possible. In the event of a conflict, unless
-        expressly stated to the contrary the main body of the Agreement will prevail over the Schedules, which will prevail
+        The main body of this Agreement, the Schedules, and any documents incorporated by reference into this Agreement
+        are to
+        be interpreted so that all of the provisions are given as full effect as possible. In the event of a conflict,
+        unless
+        expressly stated to the contrary the main body of the Agreement will prevail over the Schedules, which will
+        prevail
         over any document incorporated by reference.
       </li>
     </ol>
@@ -195,8 +201,8 @@
 </p>
 
 <ol type="1"
-    start="2"
-    class="decimal">
+start="2"
+class="decimal">
   <li>
     <ol type="1">
       <li>
@@ -233,7 +239,8 @@
       <li>
         Organization must immediately notify the Province of any change to the information contained in a Site Request,
         including any change to a Site’s status, location, normal operating hours, Approved SSO, or the name and contact
-        information of the Signing Authority or any of the other specific roles set out in the Site Request. Such notices
+        information of the Signing Authority or any of the other specific roles set out in the Site Request. Such
+        notices
         must be submitted to the Province in the form and manner directed by the Province in its published instructions
         regarding the submission of updated Site Request information, as such instructions may be updated from time to
         time by the Province.
@@ -247,8 +254,8 @@
 </p>
 
 <ol type="1"
-    start="3"
-    class="decimal">
+start="3"
+class="decimal">
   <li>
     <ol type="1">
       <li>
@@ -266,7 +273,8 @@
         Unless otherwise authorized by the Province in writing, Organization must at all times use the secure network
         or security technology that the Province certifies or makes available to Organization for the purpose of Site
         Access. The use of any such network or technology by Organization may be subject to terms and conditions of use,
-        including acceptable use policies, established by the Province and communicated to Organization from time to time
+        including acceptable use policies, established by the Province and communicated to Organization from time to
+        time
         in writing (including through this Agreement), and Organization must comply with all such terms and conditions
         of use.
       </li>
@@ -296,7 +304,8 @@
             individual whose personal information is being accessed;
           </li>
           <li>
-            first complete any mandatory training program(s) that the Site’s Approved SSO or the Province makes available
+            first complete any mandatory training program(s) that the Site’s Approved SSO or the Province makes
+            available
             in relation to PharmaNet;
           </li>
           <li>
@@ -309,9 +318,12 @@
         </ol>
       </li>
       <li>
-        If notified by the Province that an Authorized User’s access to PharmaNet has been suspended or revoked, Organization
-        will immediately take any local measures necessary to remove the Authorized User’s Site Access. Organization will
-        only restore Site Access to a previously suspended or revoked Authorized User upon the Province’s specific written
+        If notified by the Province that an Authorized User’s access to PharmaNet has been suspended or revoked,
+        Organization
+        will immediately take any local measures necessary to remove the Authorized User’s Site Access. Organization
+        will
+        only restore Site Access to a previously suspended or revoked Authorized User upon the Province’s specific
+        written
         direction.
       </li>
       <li>
@@ -321,7 +333,8 @@
 
         <ol type="a">
           <li>
-            <strong>&quot;Responsible Authorized User&quot;</strong> means, in relation to any PharmaNet Data, the Regulated User by whom,
+            <strong>&quot;Responsible Authorized User&quot;</strong> means, in relation to any PharmaNet Data, the
+            Regulated User by whom,
             or on whose behalf, that data was obtained from PharmaNet; and
           </li>
           <li>
@@ -330,13 +343,16 @@
         </ol>
 
         <p>
-          The PharmaNet Data disclosed under this Agreement is disclosed by the Province solely for the Use of the Responsible
+          The PharmaNet Data disclosed under this Agreement is disclosed by the Province solely for the Use of the
+          Responsible
           Authorized User to whom it is disclosed.
         </p>
 
         <p>
-          Organization must not Use any PharmaNet Data, or permit any third party to Use PharmaNet Data, unless the Responsible
-          Authorized User has authorized such Use and it is otherwise permitted under the Act, applicable law, and the limits
+          Organization must not Use any PharmaNet Data, or permit any third party to Use PharmaNet Data, unless the
+          Responsible
+          Authorized User has authorized such Use and it is otherwise permitted under the Act, applicable law, and the
+          limits
           and conditions imposed by the Province on the Responsible Authorized User.
         </p>
 
@@ -345,18 +361,21 @@
         </p>
 
         <p>
-          This Agreement documents limits and conditions, set by the minister in writing, that the Act requires you to comply with.
+          This Agreement documents limits and conditions, set by the minister in writing, that the Act requires you to
+          comply with.
         </p>
       </li>
       <li>
         <p>
-          Organization must make all reasonable arrangements to protect PharmaNet Data against such risks as unauthorized access,
+          Organization must make all reasonable arrangements to protect PharmaNet Data against such risks as
+          unauthorized access,
           collection, use, modification, retention, disclosure or disposal, including by:
         </p>
 
         <ol type="a">
           <li>
-            taking all reasonable physical, technical and operational measures necessary to ensure Site Access operates in
+            taking all reasonable physical, technical and operational measures necessary to ensure Site Access operates
+            in
             accordance with sections 3.1 to 3.9 above, and
           </li>
           <li>
@@ -365,7 +384,8 @@
         </ol>
       </li>
       <li>
-        Organization must ensure that no Authorized User submits Claims on PharmaNet other than from a Site in respect of which
+        Organization must ensure that no Authorized User submits Claims on PharmaNet other than from a Site in respect
+        of which
         a person is enrolled as a Provider.
       </li>
     </ol>
@@ -377,25 +397,33 @@
 </p>
 
 <ol type="1"
-    start="4"
-    class="decimal">
+start="4"
+class="decimal">
   <li>
     <ol type="1">
       <li>
-        Organization must promptly notify the Province, and provide particulars, if Organization does not comply, or anticipates
-        that it will be unable to comply, with the terms of this Agreement, or if Organization has knowledge of any circumstances,
-        incidents or events which have or may jeopardize the security, confidentiality or integrity of PharmaNet, including any
-        attempt by any person to gain unauthorized access to PharmaNet or the networks or equipment used to connect to PharmaNet
+        Organization must promptly notify the Province, and provide particulars, if Organization does not comply, or
+        anticipates
+        that it will be unable to comply, with the terms of this Agreement, or if Organization has knowledge of any
+        circumstances,
+        incidents or events which have or may jeopardize the security, confidentiality or integrity of PharmaNet,
+        including any
+        attempt by any person to gain unauthorized access to PharmaNet or the networks or equipment used to connect to
+        PharmaNet
         or convey PharmaNet Data.
       </li>
       <li>
-        Organization must immediately investigate any suspected breaches of this Agreement and take all reasonable steps to prevent
+        Organization must immediately investigate any suspected breaches of this Agreement and take all reasonable steps
+        to prevent
         recurrences of any such breaches.
       </li>
       <li>
-        Organization must cooperate with any audits or investigations conducted by the Province (including any independent auditor
-        appointed by the Province) regarding compliance with this Agreement, including by providing access upon request to a Site
-        and any associated facilities, networks, equipment, systems, books, records and personnel for the purposes of such audit
+        Organization must cooperate with any audits or investigations conducted by the Province (including any
+        independent auditor
+        appointed by the Province) regarding compliance with this Agreement, including by providing access upon request
+        to a Site
+        and any associated facilities, networks, equipment, systems, books, records and personnel for the purposes of
+        such audit
         or investigation.
       </li>
     </ol>
@@ -407,43 +435,53 @@
 </p>
 
 <ol type="1"
-    start="5"
-    class="decimal">
+start="5"
+class="decimal">
   <li>
     <ol type="1">
       <li>
         <p>
-          The Province may terminate all Site Access at a Site immediately, upon notice to the Signing Authority for the Site, if:
+          The Province may terminate all Site Access at a Site immediately, upon notice to the Signing Authority for the
+          Site, if:
         </p>
 
         <ol type="a">
           <li>
-            the Approved SSO for the Site is no longer approved by the Province to provide information technology hardware, software,
+            the Approved SSO for the Site is no longer approved by the Province to provide information technology
+            hardware, software,
             or service in connection with PharmaNet, or
           </li>
           <li>
-            the Province determines that the SSO-Provided Technology or Associated Technology in use at the Site, or any component
+            the Province determines that the SSO-Provided Technology or Associated Technology in use at the Site, or any
+            component
             thereof, is obsolete, unsupported, or otherwise poses an unacceptable security risk to PharmaNet,
           </li>
         </ol>
 
         <p>
-          and the Organization is unable or unwilling to remedy the problem within a timeframe acceptable to the Province.
+          and the Organization is unable or unwilling to remedy the problem within a timeframe acceptable to the
+          Province.
         </p>
       </li>
       <li>
-        The Province may terminate all Site Access at a Site upon notice to the Signing Authority for the Site if Organization
-        transfers ownership of the Site to another entity, if there are changes to the officers, directors, or shareholders of
-        Organization, or if there is a change to the PharmaCare enrollment status (including with regard to limits or conditions
+        The Province may terminate all Site Access at a Site upon notice to the Signing Authority for the Site if
+        Organization
+        transfers ownership of the Site to another entity, if there are changes to the officers, directors, or
+        shareholders of
+        Organization, or if there is a change to the PharmaCare enrollment status (including with regard to limits or
+        conditions
         on enrolment) of the Site or Organization.
       </li>
       <li>
-        As a security precaution, the Province may suspend Site Access at a Site after a period of inactivity. If Site Access at
-        a Site remains inactive for a period of 90 days or more, the Province may, immediately upon notice to the Signing Authority
+        As a security precaution, the Province may suspend Site Access at a Site after a period of inactivity. If Site
+        Access at
+        a Site remains inactive for a period of 90 days or more, the Province may, immediately upon notice to the
+        Signing Authority
         for the Site, terminate all further Site Access at the Site.
       </li>
       <li>
-        Organization must prevent all further Site Access at a Site immediately upon the Province’s termination, in accordance with
+        Organization must prevent all further Site Access at a Site immediately upon the Province’s termination, in
+        accordance with
         this Article 5, of Site Access at the Site.
       </li>
     </ol>
@@ -455,8 +493,8 @@
 </p>
 
 <ol type="1"
-    start="6"
-    class="decimal">
+start="6"
+class="decimal">
   <li>
     <ol type="1">
       <li>
@@ -467,11 +505,13 @@
         Organization may terminate this Agreement at any time on notice to the Province.
       </li>
       <li>
-        The Province may terminate this Agreement immediately upon notice to Organization if Organization fails to comply with any
+        The Province may terminate this Agreement immediately upon notice to Organization if Organization fails to
+        comply with any
         provision of this Agreement.
       </li>
       <li>
-        The Province may terminate this Agreement immediately upon notice to Organization in the event Organization no longer operates
+        The Province may terminate this Agreement immediately upon notice to Organization in the event Organization no
+        longer operates
         any Sites where Site Access is permitted.
       </li>
       <li>
@@ -489,20 +529,26 @@
 </p>
 
 <ol type="1"
-    start="7"
-    class="decimal">
+start="7"
+class="decimal">
   <li>
     <ol type="1">
       <li>
-        The PharmaNet access and PharmaNet Data provided under this Agreement are provided &quot;as is&quot; without warranty of any kind,
-        whether express or implied. All implied warranties, including, without limitation, implied warranties of merchantability,
-        fitness for a particular purpose, and non-infringement, are hereby expressly disclaimed. The Province does not warrant
-        the accuracy, completeness or reliability of the PharmaNet Data or the availability of PharmaNet, or that access to or
+        The PharmaNet access and PharmaNet Data provided under this Agreement are provided &quot;as is&quot; without
+        warranty of any kind,
+        whether express or implied. All implied warranties, including, without limitation, implied warranties of
+        merchantability,
+        fitness for a particular purpose, and non-infringement, are hereby expressly disclaimed. The Province does not
+        warrant
+        the accuracy, completeness or reliability of the PharmaNet Data or the availability of PharmaNet, or that access
+        to or
         the operation of PharmaNet will function without error, failure or interruption.
       </li>
       <li>
-        Under no circumstances will the Province be liable to any person or business entity for any direct, indirect, special,
-        incidental, consequential, or other damages based on any use of PharmaNet or the PharmaNet Data, including without
+        Under no circumstances will the Province be liable to any person or business entity for any direct, indirect,
+        special,
+        incidental, consequential, or other damages based on any use of PharmaNet or the PharmaNet Data, including
+        without
         limitation any lost profits, business interruption, or loss of programs or information, even if the Province has
         been specifically advised of the possibility of such damages.
       </li>
@@ -523,8 +569,8 @@
 </p>
 
 <ol type="1"
-    start="8"
-    class="decimal">
+start="8"
+class="decimal">
   <li>
     <ol type="1">
       <li>
@@ -545,35 +591,44 @@
         </address>
 
         <p>
-          Any notice to be given to a Signing Authority or the Organization will be in writing and emailed, mailed, faxed
+          Any notice to be given to a Signing Authority or the Organization will be in writing and emailed, mailed,
+          faxed
           or text messaged to the Signing Authority (in the case of notice to a Signing Authority) or all Signing
           Authorities (in the case of notice to the Organization). A Signing Authority may be required to click a
           URL link or to log in to the Province’s &quot;PRIME&quot; system to receive the content of any such notice.
         </p>
 
         <p>
-          Any written notice from a party, if sent electronically, will be deemed to have been received 24 hours after the
-          time the notice was sent, or, if sent by mail, will be deemed to have been received 3 days (excluding Saturdays,
+          Any written notice from a party, if sent electronically, will be deemed to have been received 24 hours after
+          the
+          time the notice was sent, or, if sent by mail, will be deemed to have been received 3 days (excluding
+          Saturdays,
           Sundays and statutory holidays) after the date the notice was sent.
         </p>
       </li>
       <li>
-        <strong class="underline">Waiver.</strong> The failure of the Province at any time to insist on performance of any
-        provision of this Agreement by Organization is not a waiver of its right subsequently to insist on performance of
-        that or any other provision of this Agreement. A waiver of any provision or breach of this Agreement is effective
+        <strong class="underline">Waiver.</strong> The failure of the Province at any time to insist on performance of
+        any
+        provision of this Agreement by Organization is not a waiver of its right subsequently to insist on performance
+        of
+        that or any other provision of this Agreement. A waiver of any provision or breach of this Agreement is
+        effective
         only if it is writing and signed by, or on behalf of, the waiving party.
       </li>
       <li>
         <p>
-          <strong class="underline">Modification.</strong> No modification to this Agreement is effective unless it is in writing and signed
+          <strong class="underline">Modification.</strong> No modification to this Agreement is effective unless it is
+          in writing and signed
           by, or on behalf of, the parties.
         </p>
 
         <p>
-          Notwithstanding the foregoing, the Province may amend this Agreement, including the Schedules and this section,
+          Notwithstanding the foregoing, the Province may amend this Agreement, including the Schedules and this
+          section,
           at any time in its sole discretion, by written notice to Organization, in which case the amendment will become
           effective upon the later of: (i) the date notice of the amendment is delivered to Organization; and (ii) the
-          effective date of the amendment specified by the Province. The Province will make reasonable efforts to provide
+          effective date of the amendment specified by the Province. The Province will make reasonable efforts to
+          provide
           at least thirty (30) days advance notice of any such amendment, subject to any determination by the Province
           that a shorter notice period is necessary due to changes in the Act, applicable law or applicable policies of
           the Province, or is necessary to maintain privacy and security in relation to PharmaNet or PharmaNet Data.
@@ -629,8 +684,8 @@
         </p>
 
         <a href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards"
-           target="_blank"
-           rel="noopener noreferrer">
+        target="_blank"
+        rel="noopener noreferrer">
           https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards
         </a>
       </li>
@@ -641,8 +696,8 @@
         </p>
 
         <a href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet"
-           target="_blank"
-           rel="noopener noreferrer">
+        target="_blank"
+        rel="noopener noreferrer">
           https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/requirements-for-wireless-access-to-pharmanet
         </a>
       </li>
@@ -650,7 +705,8 @@
   </li>
   <li>
     ensure that a qualified technical support person is engaged to provide security support for the Site. This person
-    should be familiar with the Site’s network configurations, hardware and software, including all SSO-Provided Technology
+    should be familiar with the Site’s network configurations, hardware and software, including all SSO-Provided
+    Technology
     and Associated Technology, and should be capable of understanding and adhering to the standards set forth in this
     Agreement and Schedule. Note that any such qualified technical support person must not be permitted by Organization
     to access or use PharmaNet in any manner, unless otherwise permitted under this Agreement;
@@ -669,7 +725,8 @@
     regularly review the administrative, physical and technological safeguards at the Site;
   </li>
   <li>
-    establish and maintain a program for monitoring PharmaNet use at the Site, including by making appropriate monitoring
+    establish and maintain a program for monitoring PharmaNet use at the Site, including by making appropriate
+    monitoring
     and reporting mechanisms available to Authorized Users for this purpose.
   </li>
 </ol>

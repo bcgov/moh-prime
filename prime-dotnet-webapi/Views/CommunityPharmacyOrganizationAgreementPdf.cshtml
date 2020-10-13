@@ -1,5 +1,4 @@
-@using Prime.Models
-@model Organization
+@model string
 
 @{
   /**
@@ -8,16 +7,9 @@
    * @see CommunityPharmacyOrganizationAgreement.cshtml
    *
    * The BEGIN/END of the Organization Agreement copy is marked with
-   * comment delimiters
-   *
-   * NOTE: The downloadable and signable copy of the Organization Agreement is
-   * located in /documents.
+   * comment delimiters.
    */
-  var organizationName = Model.Name;
-  var date = ((IAgreeable)Model).NewestAcceptedAgreementDate() ?? @DateTime.Now;
-  var day = date.ToString("dd");
-  var month = date.ToString("MMMM");
-  var year = date.ToString("yyyy");
+  var organizationName = Model;
 }
 
 <link rel="stylesheet"
@@ -101,7 +93,7 @@ ol[type="1"].decimal ol[type="1"] > li::before {
   @* BEGIN of Organization Agreement copied from CommunityPharmacyOrganizationAgreement.cshtml *@
 
   <p class="text-center">
-    This Agreement is made the @day day of @month, @year
+    This Agreement is made the $day day of $month, $year
   </p>
 
   <h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>
