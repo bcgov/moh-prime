@@ -46,6 +46,13 @@ namespace Prime.Services
             return await _documentManagerClient.CreateDownloadTokenAsync(selfDeclarationDocument.DocumentGuid);
         }
 
+        public async Task<string> GetDownloadTokenForIdentificationDocument(int identificationDocumentId)
+        {
+            var identificationDocument = await _context.IdentificationDocuments
+                .Where(sa => sa.Id == identificationDocumentId).SingleAsync();
+            return await _documentManagerClient.CreateDownloadTokenAsync(identificationDocument.DocumentGuid);
+        }
+
         public async Task<Stream> GetStreamForLatestBusinessLicenceDocument(int siteId)
         {
             var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
@@ -56,6 +63,11 @@ namespace Prime.Services
         {
             var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
             return await _documentManagerClient.GetFileStreamAsync(agreement.DocumentGuid);
+        }
+
+        public async Task<string> FinalizeDocumentUpload(Guid documentGuid, string filePath)
+        {
+            return await _documentManagerClient.FinalizeUploadAsync(documentGuid, filePath);
         }
     }
 }
