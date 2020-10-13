@@ -18,7 +18,7 @@ import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
-import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 
 @Injectable({
@@ -182,11 +182,11 @@ export class AdjudicationResource {
 
   }
 
-  public getAdjudicatorNotes(enrolleeId: number): Observable<AdjudicationNote[]> {
+  public getAdjudicatorNotes(enrolleeId: number): Observable<EnrolleeNote[]> {
     return this.apiResource.get(`enrollees/${enrolleeId}/adjudicator-notes`)
       .pipe(
-        map((response: ApiHttpResponse<AdjudicationNote[]>) => response.result),
-        tap((adjudicatorNotes: AdjudicationNote[]) => this.logger.info('ADJUDICATOR_NOTES', adjudicatorNotes)),
+        map((response: ApiHttpResponse<EnrolleeNote[]>) => response.result),
+        tap((adjudicatorNotes: EnrolleeNote[]) => this.logger.info('ADJUDICATOR_NOTES', adjudicatorNotes)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator notes could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getAdjudicatorNotes error has occurred: ', error);
@@ -195,13 +195,13 @@ export class AdjudicationResource {
       );
   }
 
-  public createAdjudicatorNote(enrolleeId: number, note: string, link: boolean = false): Observable<AdjudicationNote> {
+  public createAdjudicatorNote(enrolleeId: number, note: string, link: boolean = false): Observable<EnrolleeNote> {
     const payload = { data: note };
     const params = this.apiResourceUtilsService.makeHttpParams({ link });
     return this.apiResource.post(`enrollees/${enrolleeId}/adjudicator-notes`, payload, params)
       .pipe(
-        map((response: ApiHttpResponse<AdjudicationNote>) => response.result),
-        tap((adjudicatorNote: AdjudicationNote) => {
+        map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
+        tap((adjudicatorNote: EnrolleeNote) => {
           this.toastService.openErrorToast('Adjudication note has been saved');
           this.logger.info('NEW_ADJUDICATOR_NOTE', adjudicatorNote);
         }),
@@ -216,12 +216,12 @@ export class AdjudicationResource {
   public updateAccessAgreementNote(
     enrolleeId: number,
     note: string
-  ): Observable<AdjudicationNote> {
+  ): Observable<EnrolleeNote> {
     const payload = { enrolleeId, note };
     return this.apiResource.put(`enrollees/${enrolleeId}/access-agreement-notes`, payload)
       .pipe(
-        map((response: ApiHttpResponse<AdjudicationNote>) => response.result),
-        tap((adjudicatorNote: AdjudicationNote) => {
+        map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
+        tap((adjudicatorNote: EnrolleeNote) => {
           this.toastService.openSuccessToast(`Limits and conditions clause has been saved.`);
           this.logger.info('LIMITS_AND_CONDITIONS_CLAUSE', adjudicatorNote);
         }),

@@ -503,6 +503,15 @@ namespace Prime.Services
             return sites;
         }
 
+        public async Task<IEnumerable<SiteRegistrationNote>> GetSiteRegistrationNotesAsync(Site site)
+        {
+            return await _context.SiteRegistrationNotes
+                .Where(srn => srn.SiteId == site.Id)
+                .Include(srn => srn.Adjudicator)
+                .OrderByDescending(srn => srn.NoteDate)
+                .ToListAsync();
+        }
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
