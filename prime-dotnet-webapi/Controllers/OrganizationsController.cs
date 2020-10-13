@@ -275,8 +275,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetOrganizationAgreement(int organizationId, int agreementId, [FromQuery] bool asPdf)
+        [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Agreement>> GetOrganizationAgreement(int organizationId, int agreementId, [FromQuery] bool asPdf)
         {
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
@@ -284,13 +284,13 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            var text = await _organizationService.GetOrgAgreementTextAsync(organizationId, agreementId, asPdf);
-            if (text == null)
+            var agreement = await _organizationService.GetOrgAgreementAsync(organizationId, agreementId, asPdf);
+            if (agreement == null)
             {
                 return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
             }
 
-            return Ok(ApiResponse.Result(text));
+            return Ok(ApiResponse.Result(agreement));
         }
 
         // PUT: api/Organizations/5/agreements/7

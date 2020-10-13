@@ -1,7 +1,9 @@
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
@@ -134,41 +136,42 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Gets the text of a given Org Agreement, optionally in the form of a Base 64 encoded PDF.
+        /// Gets the Agreement + text of a given Org Agreement, optionally with the text in the form of a Base 64 encoded PDF.
         /// Returns null if the Agreement does not exist on the given organization.
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="agreementId"></param>
         /// <param name="asEncodedPdf"></param>
         /// <returns></returns>
-        public async Task<string> GetOrgAgreementTextAsync(int organizationId, int agreementId, bool asEncodedPdf = false)
+        public async Task<Agreement> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false)
         {
-            var orgDto = await _context.Organizations
-                .Include(o => )
+            // Currently, org agreement text does not come from the database.
+            var orgDto = await _context.Agreements
                 .AsNoTracking()
-                .Where(a => a.Id == agreementId)
-                .Where(a => a.OrganizationId == organizationId)
-                .Select(a => (AgreementType?)a.AgreementVersion.AgreementType)
+                .Where(a => a.Id == agreementId && a.OrganizationId == organizationId)
+                .Select(a => new
+                {
+                    Agreement = a,
+                    Type = a.AgreementVersion.AgreementType,
+                    OrgName = a.Organization.Name
+                })
                 .SingleOrDefaultAsync();
 
-            return null;
+            if (orgDto == null || orgDto.Agreement == null)
+            {
+                return null;
+            }
 
+            if (asEncodedPdf)
+            {
+                orgDto.Agreement.AgreementMarkup = GetEncodedPdf(orgDto.Type);
+            }
+            else
+            {
+                orgDto.Agreement.AgreementMarkup = await RenderOrgAgreementHtmlAsync(orgDto.Type, orgDto.OrgName);
+            }
 
-
-            // var fileName = "CommunityPracticeOrganizationAgreement.pdf";
-            // var assembly = Assembly.GetExecutingAssembly();
-            // var resourcePath = assembly.GetManifestResourceNames()
-            //     .Single(str => str.EndsWith(fileName));
-
-            // string base64;
-            // using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
-            // using (var reader = new MemoryStream())
-            // {
-            //     stream.CopyTo(reader);
-            //     base64 = Convert.ToBase64String(reader.ToArray());
-            // }
-
-            // return Ok(ApiResponse.Result(base64));
+            return orgDto.Agreement;
         }
 
         /// <summary>
@@ -214,6 +217,55 @@ namespace Prime.Services
                 .Where(a => a.AgreementType == type)
                 .Select(a => a.Id)
                 .FirstAsync();
+        }
+
+        private string GetEncodedPdf(AgreementType type)
+        {
+            string filename;
+            switch (type)
+            {
+                case AgreementType.CommunityPracticeOrgAgreement:
+                    filename = "CommunityPracticeOrganizationAgreement.pdf";
+                    break;
+
+                case AgreementType.CommunityPharmacyOrgAgreement:
+                    filename = "CommunityPharmacyOrganizationAgreement.pdf";
+                    break;
+
+                default:
+                    throw new ArgumentException($"Invalid AgreementType {type} in {nameof(GetEncodedPdf)}");
+            }
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourcePath = assembly.GetManifestResourceNames()
+                .Single(str => str.EndsWith(filename));
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+            using (var reader = new MemoryStream())
+            {
+                stream.CopyTo(reader);
+                return Convert.ToBase64String(reader.ToArray());
+            }
+        }
+
+        private async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName)
+        {
+            string viewName;
+            switch (type)
+            {
+                case AgreementType.CommunityPracticeOrgAgreement:
+                    viewName = "/Views/CommunityPracticeOrganizationAgreement.cshtml";
+                    break;
+
+                case AgreementType.CommunityPharmacyOrgAgreement:
+                    viewName = "/Views/CommunityPharmacyOrganizationAgreement.cshtml";
+                    break;
+
+                default:
+                    throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}");
+            }
+
+            return await _razorConverterService.RenderViewToStringAsync(viewName, orgName);
         }
     }
 }

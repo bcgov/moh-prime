@@ -17,6 +17,6 @@ namespace Prime.Services
 
         Task ExpireCurrentEnrolleeAgreementAsync(int enrolleeId);
 
-        Task<string> GetOrgAgreementTextAsync(int organizationId, int agreementId, bool asEncodedPdf = false);
+        Task<Agreement> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false);
     }
 }
