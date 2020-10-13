@@ -580,8 +580,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<AdjudicatorNote>> CreateSiteRegistrationNote(int siteId, FromBodyText note)
+        [ProducesResponseType(typeof(ApiResultResponse<SiteRegistrationNote>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<SiteRegistrationNote>> CreateSiteRegistrationNote(int siteId, FromBodyText note)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -599,6 +599,30 @@ namespace Prime.Controllers
             var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
 
             return Ok(ApiResponse.Result(createdSiteRegistrationNote));
+        }
+
+        // GET: api/Sites/5/site-registration-notes
+        /// <summary>
+        /// Gets all of the site registration notes for a specific site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/site-registration-notes", Name = nameof(GetSiteRegistrationNotes))]
+        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SiteRegistrationNote>>> GetSiteRegistrationNotes(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var siteRegistrationNotes = await _siteService.GetSiteRegistrationNotesAsync(site);
+
+            return Ok(ApiResponse.Result(siteRegistrationNotes));
         }
 
         // POST: api/Sites/remote-users

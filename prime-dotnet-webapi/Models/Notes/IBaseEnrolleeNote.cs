@@ -1,11 +1,12 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public interface IEnrolleeNote
+    public interface IBaseEnrolleeNote
     {
-        int Id { get; set; }
-
         int EnrolleeId { get; set; }
 
         Enrollee Enrollee { get; set; }

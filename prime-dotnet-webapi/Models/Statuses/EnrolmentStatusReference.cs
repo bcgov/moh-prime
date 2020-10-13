@@ -17,7 +17,7 @@ namespace Prime.Models
 
         public int? AdjudicatorNoteId { get; set; }
 
-        public AdjudicatorNote AdjudicatorNote { get; set; }
+        public EnrolleeNote AdjudicatorNote { get; set; }
 
         public bool ShouldSerializeAdjudicatorNote()
         {
