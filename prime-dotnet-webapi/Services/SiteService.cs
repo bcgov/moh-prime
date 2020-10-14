@@ -210,6 +210,7 @@ namespace Prime.Services
             {
                 foreach (var remoteUser in updated.RemoteUsers)
                 {
+                    remoteUser.SiteId = current.Id;
                     var remoteUserCertifications = new List<RemoteUserCertification>();
 
                     foreach (var certification in remoteUser.RemoteUserCertifications)
