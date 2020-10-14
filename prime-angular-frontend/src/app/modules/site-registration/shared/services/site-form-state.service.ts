@@ -236,9 +236,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         formGroup.patchValue(cert);
         return formGroup;
       })
-      // .forEach((remoteUserLocationFormGroup: FormGroup) =>
-      //   certs.push(remoteUserLocationFormGroup)
-      // );
+        .forEach((remoteUserLocationFormGroup: FormGroup) =>
+          certs.push(remoteUserLocationFormGroup)
+        );
     }
 
     return group;
