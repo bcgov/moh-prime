@@ -221,6 +221,23 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(organization));
         }
 
+        // GET: api/Organizations/5/agreements
+        // TODO: security?
+        /// <summary>
+        /// Gets all agreements for a specific Organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpGet("{organizationId}/agreements", Name = nameof(GetAgreements))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Agreement>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Agreement>>> GetAgreements(int organizationId)
+        {
+            var agreements = await _agreementService.GetOrgAgreementsAsync(organizationId);
+
+            return Ok(ApiResponse.Result(agreements));
+        }
+
         // POST: api/Organizations/5/agreements/update
         /// <summary>
         /// Creates a new un-accepted Oganization Agreement based on the type of Site supplied, if a newer version exits.

@@ -135,6 +135,15 @@ namespace Prime.Services
             }
         }
 
+        public async Task<IEnumerable<Agreement>> GetOrgAgreementsAsync(int organizationId)
+        {
+            return await _context.Agreements
+                .AsNoTracking()
+                .OrderByDescending(a => a.CreatedDate)
+                .Where(a => a.OrganizationId == organizationId)
+                .ToListAsync();
+        }
+
         /// <summary>
         /// Gets the Agreement + text of a given Org Agreement, optionally with the text in the form of a Base 64 encoded PDF.
         /// Returns null if the Agreement does not exist on the given organization.
