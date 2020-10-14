@@ -227,11 +227,11 @@ namespace Prime.Controllers
         /// Gets all agreements for a specific Organization.
         /// </summary>
         /// <param name="organizationId"></param>
-        [HttpGet("{organizationId}/agreements", Name = nameof(GetAgreements))]
+        [HttpGet("{organizationId}/agreements", Name = nameof(GetOrganizationAgreements))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Agreement>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Agreement>>> GetAgreements(int organizationId)
+        public async Task<ActionResult<IEnumerable<Agreement>>> GetOrganizationAgreements(int organizationId)
         {
             var agreements = await _agreementService.GetOrgAgreementsAsync(organizationId);
 

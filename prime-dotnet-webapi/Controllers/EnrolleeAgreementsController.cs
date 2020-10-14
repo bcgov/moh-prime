@@ -45,12 +45,12 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="filters"></param>
-        [HttpGet("{enrolleeId}/agreements", Name = nameof(GetAgreements))]
+        [HttpGet("{enrolleeId}/agreements", Name = nameof(GetEnrolleeAgreements))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Agreement>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Agreement>>> GetAgreements(int enrolleeId, [FromQuery] AgreementFilters filters)
+        public async Task<ActionResult<IEnumerable<Agreement>>> GetEnrolleeAgreements(int enrolleeId, [FromQuery] AgreementFilters filters)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
