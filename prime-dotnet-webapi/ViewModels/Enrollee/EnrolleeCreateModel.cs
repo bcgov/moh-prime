@@ -53,6 +53,11 @@ namespace Prime.ViewModels
         [JsonIgnore]
         public string IdentityProvider { get; set; }
 
+        public bool IsBcServicesCard()
+        {
+            return IdentityProvider == AuthConstants.BC_SERVICES_CARD;
+        }
+
         public void MapConditionalProperties(ClaimsPrincipal user)
         {
             UserId = user.GetPrimeUserId();

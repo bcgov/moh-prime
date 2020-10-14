@@ -8,33 +8,22 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Drops
             migrationBuilder.Sql(@"
                 DROP VIEW IF EXISTS public.""NewestAgreements"";
             ");
 
             migrationBuilder.DropColumn(
-                name: "Discriminator",
-                table: "AgreementVersion");
-
-            migrationBuilder.RenameColumn(
-                name: "AgreementVersionType",
-                table: "AgreementVersion",
-                newName: "AgreementType");
-
+                name: "OrganizationId",
+                table: "SignedAgreementDocument");
 
             migrationBuilder.DropColumn(
                 name: "AcceptedAgreementDate",
                 table: "Organization");
 
-
-            migrationBuilder.AlterColumn<int>(
-                name: "EnrolleeId",
-                table: "Agreement",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "integer",
-                oldNullable: false);
-
+            migrationBuilder.DropColumn(
+                name: "Discriminator",
+                table: "AgreementVersion");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_SignedAgreementDocument_Agreement_AgreementId",
@@ -52,9 +41,16 @@ namespace Prime.Migrations
                 name: "IX_SignedAgreementDocument_OrganizationId",
                 table: "SignedAgreementDocument");
 
-            migrationBuilder.DropColumn(
-                name: "OrganizationId",
-                table: "SignedAgreementDocument");
+            migrationBuilder.DropIndex(
+                name: "IX_IdentificationDocument_EnrolleeId",
+                table: "IdentificationDocument");
+
+
+            // Changes
+            migrationBuilder.RenameColumn(
+                name: "AgreementVersionType",
+                table: "AgreementVersion",
+                newName: "AgreementType");
 
             migrationBuilder.AlterColumn<int>(
                 name: "AgreementId",
@@ -64,11 +60,34 @@ namespace Prime.Migrations
                 oldType: "integer",
                 oldNullable: true);
 
+            migrationBuilder.AlterColumn<int>(
+                name: "EnrolleeId",
+                table: "Agreement",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "integer",
+                oldNullable: false);
+
+            migrationBuilder.InsertData(
+                table: "AgreementVersion",
+                columns: new[] { "Id", "AgreementType", "CreatedTimeStamp", "CreatedUserId", "EffectiveDate", "Text", "UpdatedTimeStamp", "UpdatedUserId" },
+                values: new object[] { 12, 5, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), @"<p class=""text-center"">
+  This Agreement is made the {{day}} day of {{month}}, {{year}}
+</p>
+
+<h1>---- PLACEHOLDER TEXT ----</h1>
+", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000") });
+
             migrationBuilder.CreateIndex(
                 name: "IX_SignedAgreementDocument_AgreementId",
                 table: "SignedAgreementDocument",
                 column: "AgreementId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentificationDocument_EnrolleeId",
+                table: "IdentificationDocument",
+                column: "EnrolleeId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_SignedAgreementDocument_Agreement_AgreementId",
@@ -77,16 +96,6 @@ namespace Prime.Migrations
                 principalTable: "Agreement",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.InsertData(
-                table: "AgreementVersion",
-                columns: new[] { "Id", "AgreementType", "CreatedTimeStamp", "CreatedUserId", "EffectiveDate", "Text", "UpdatedTimeStamp", "UpdatedUserId" },
-                values: new object[] { 12, 5, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), @"<p class=""text-center"">
-    This Agreement is made the {{day}} day of {{month}}, {{year}}
-    </p>
-
-    <h1>---- PLACEHOLDER TEXT ----</h1>
-    ", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000") });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -98,6 +107,15 @@ namespace Prime.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_SignedAgreementDocument_AgreementId",
                 table: "SignedAgreementDocument");
+
+            migrationBuilder.DropIndex(
+                name: "IX_IdentificationDocument_EnrolleeId",
+                table: "IdentificationDocument");
+
+            migrationBuilder.DeleteData(
+                table: "AgreementVersion",
+                keyColumn: "Id",
+                keyValue: 12);
 
             migrationBuilder.DropColumn(
                 name: "AgreementType",
@@ -137,14 +155,17 @@ namespace Prime.Migrations
                 nullable: false,
                 defaultValue: "");
 
-            migrationBuilder.Sql(@"
-                CREATE OR REPLACE VIEW public.""NewestAgreements""
-                AS
-                SELECT DISTINCT ON(""Discriminator"")
-	                ""Id""
-                FROM public.""Agreement""
-                ORDER BY ""Discriminator"", ""EffectiveDate"" DESC;
-            ");
+            migrationBuilder.CreateTable(
+                name: "NewestAgreements",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewestAgreements", x => x.Id);
+                });
 
             migrationBuilder.UpdateData(
                 table: "AgreementVersion",
@@ -164,8 +185,8 @@ namespace Prime.Migrations
                 table: "AgreementVersion",
                 keyColumn: "Id",
                 keyValue: 11,
-                columns: new[] { "AgreementVersionType", "Discriminator", "EffectiveDate" },
-                values: new object[] { 4, "CommunityPracticeOrgAgreement", new DateTimeOffset(new DateTime(2020, 9, 20, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)) });
+                columns: new[] { "AgreementVersionType", "Discriminator" },
+                values: new object[] { 4, "CommunityPracticeOrgAgreement" });
 
             migrationBuilder.UpdateData(
                 table: "AgreementVersion",
@@ -233,6 +254,12 @@ namespace Prime.Migrations
                 table: "SignedAgreementDocument",
                 column: "OrganizationId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentificationDocument_EnrolleeId",
+                table: "IdentificationDocument",
+                column: "EnrolleeId",
+                unique: true);
+
             migrationBuilder.AddForeignKey(
                 name: "FK_SignedAgreementDocument_Agreement_AgreementId",
                 table: "SignedAgreementDocument",
@@ -249,18 +276,14 @@ namespace Prime.Migrations
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
-            migrationBuilder.DeleteData(
-                table: "AgreementVersion",
-                keyColumn: "Id",
-                keyValue: 12);
-
-            migrationBuilder.AlterColumn<int>(
-                name: "EnrolleeId",
-                table: "Agreement",
-                nullable: false,
-                oldClrType: typeof(int),
-                oldType: "integer",
-                oldNullable: true);
+            migrationBuilder.Sql(@"
+                CREATE OR REPLACE VIEW public.""NewestAgreements""
+                AS
+                SELECT DISTINCT ON(""Discriminator"")
+	                ""Id""
+                FROM public.""AgreementVersion""
+                ORDER BY ""Discriminator"", ""EffectiveDate"" DESC;
+            ");
         }
     }
 }
