@@ -25,56 +25,65 @@
         </ng-container>
       </app-page-subheader>
 
-      <div class="col pt-2">
+      <mat-slide-toggle #requestAccess
+                        color="primary"
+                        class="mb-4"
+                        (change)="onRequestAccess($event)">Request remote access</mat-slide-toggle>
 
-        <button *ngIf="showRequestAccess()"
-                mat-stroked-button
-                type="button"
-                color="primary"
-                (click)="onRequestAccess()">
-          Request remote access
-        </button>
+      <ng-container *ngIf="requestAccess.checked">
 
-      </div>
-
-      <div *ngIf="showProgress"
-           class="col pt-2">
-        <span>We are locating your site's remote application</span>
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-      </div>
-
-      <ng-container *ngIf="sites?.length > 0">
-        <ng-container appPageSubheaderSummary>
-          The sites below have registered you for remote access. Check to confirm that you want remote access for these
-          sites. If you need remote access for a site not listed here, talk to that site's PharmaNet Administrator.
-        </ng-container>
-        <div formArrayName="sites"
-             class="col pt-2 mb-3"
-             *ngFor="let site of sites; let i = index">
-          <mat-checkbox [formControlName]="i">
-            {{ site.organizationName }}<br>
-            {{ site.physicalAddress.street }},
-            {{ site.physicalAddress.city }}
-            {{ site.physicalAddress.provinceCode }}
-            {{ site.physicalAddress.postal }} <br>
-            Vendor: {{ site.siteVendors[0].vendorCode | configCode: 'vendors' | default }}
-          </mat-checkbox>
+        <div *ngIf="showProgress; else results"
+             class="mb-5">
+          We are locating your site's remote application
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
+
+        <ng-template #results>
+          <ng-container *ngIf="remoteSites?.length">
+            <app-page-subheader>
+              <ng-container appPageSubheaderSummary>
+                The sites below have registered you for remote access. Check to confirm that you want remote access for
+                these sites. If you need remote access for a site not listed here, talk to that site's PharmaNet
+                Administrator.
+              </ng-container>
+            </app-page-subheader>
+
+            <div formArrayName="sites"
+                 class="mb-3"
+                 *ngFor="let remoteSite of remoteSites; let i = index">
+              <mat-checkbox [formControlName]="i">
+                <div class="pl-2">
+                  <address class="mb-0">
+                    {{ remoteSite.organizationName }}<br>
+                    {{ remoteSite.physicalAddress.street }},
+                    {{ remoteSite.physicalAddress.city }}
+                    {{ remoteSite.physicalAddress.provinceCode }}
+                    {{ remoteSite.physicalAddress.postal }}
+                  </address>
+
+                  Vendor: {{ remoteSite.siteVendors[0].vendorCode | configCode: 'vendors' | default }}
+                </div>
+              </mat-checkbox>
+            </div>
+          </ng-container>
+        </ng-template>
+
       </ng-container>
 
-      <ng-container *ngIf="hasNoSitesError">
+      <ng-container *ngIf="noRemoteSites">
         <p class="red">
-          Sorry, no site has registered you for remote access. Talk to your site's PharmaNet Administrator. You can
-          return to PRIME later to add remote access once they have registered you.
+          No site has registered you for remote access. Please continue in PRIME; your enrolment will be processed
+          for onsite PharmaNet access. Ask your PharmaNet administrator to register your site in PRIME and add you
+          to their list of remote-access users. When that is complete, you will receive an email notification, and
+          you can return to PRIME and add your remote access information for approval.
         </p>
       </ng-container>
-
     </section>
 
   </form>
 
-  <app-page-footer *ngIf="sites?.length || hasNoSitesError"
-                   [isInitialEnrolment]="isInitialEnrolment"
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+                   [disableSave]="showProgress"
                    (save)="onSubmit()"
                    (back)="routeTo(EnrolmentRoutes.REGULATORY)"></app-page-footer>
 
