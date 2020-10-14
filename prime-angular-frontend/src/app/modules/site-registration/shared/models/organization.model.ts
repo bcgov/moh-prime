@@ -1,6 +1,5 @@
-import { Site, SiteListViewModel } from './site.model';
+import { SiteListViewModel } from './site.model';
 import { Party } from './party.model';
-import { SignedAgreementDocument } from './signed-agreement-document.model';
 
 export interface Organization {
   id?: number;
@@ -20,5 +19,6 @@ export interface Organization {
 export interface OrganizationListViewModel extends
   Omit<Organization, 'siteCount' | 'registrationId'> {
   sites: SiteListViewModel[];
+  // TODO PRIME-1085 (is this still needed?)
   signedAgreementDocumentCount: number;
 }

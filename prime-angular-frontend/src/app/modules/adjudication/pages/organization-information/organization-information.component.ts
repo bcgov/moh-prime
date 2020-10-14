@@ -36,18 +36,19 @@ export class OrganizationInformationComponent implements OnInit {
     return this.authService.isAdmin();
   }
 
+  // TODO PRIME-1085
   public getOrganizationAgreement(siteRegistration: SiteRegistrationListViewModel) {
-    const request$ = (siteRegistration.signedAgreementDocumentCount)
-      ? this.organizationResource.getDownloadTokenForLatestSignedAgreement(siteRegistration.organizationId)
-        .pipe(
-          map((token: string) => this.utilsService.downloadToken(token))
-        )
-      : this.organizationResource.getSignedOrganizationAgreement(siteRegistration.organizationId)
-        .pipe(
-          map((base64: string) => this.utilsService.base64ToBlob(base64)),
-          map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
-        );
-    request$.subscribe();
+    // const request$ = (siteRegistration.signedAgreementDocumentCount)
+    //   ? this.organizationResource.getDownloadTokenForLatestSignedAgreement(siteRegistration.organizationId)
+    //     .pipe(
+    //       map((token: string) => this.utilsService.downloadToken(token))
+    //     )
+    //   : this.organizationResource.getSignedOrganizationAgreement(siteRegistration.organizationId)
+    //     .pipe(
+    //       map((base64: string) => this.utilsService.base64ToBlob(base64)),
+    //       map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
+    //     );
+    // request$.subscribe();
   }
 
   public ngOnInit(): void {
