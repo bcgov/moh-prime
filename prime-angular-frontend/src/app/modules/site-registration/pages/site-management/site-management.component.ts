@@ -56,10 +56,11 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public viewAgreement(organization: OrganizationListViewModel) {
-    const routePath = (organization.acceptedAgreementDate)
-      ? [SiteRoutes.ORGANIZATION_AGREEMENT]
-      : []; // Defaults to overview
-    this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
+    // TODO requires refactor of organization agreement
+    // const routePath = (organization.acceptedAgreementDate)
+    //   ? [SiteRoutes.ORGANIZATION_AGREEMENT]
+    //   : []; // Defaults to overview
+    // this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
   }
 
   public viewSite(organizationId: number, site: SiteListViewModel) {

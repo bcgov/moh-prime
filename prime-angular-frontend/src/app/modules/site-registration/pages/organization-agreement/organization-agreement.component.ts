@@ -115,7 +115,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public showDefaultAgreement() {
-    return this.organizationService.organization.signedAgreementDocuments?.length < 1 ?? true;
+    return !this.organizationService.hasSignedAgreement() ?? true;
   }
 
   public downloadSignedAgreement() {
@@ -159,7 +159,8 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);
 
-    this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
+    // TODO requires refactor of organization agreement
+    // this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
 
     this.busy = this.organizationResource
       .updateOrganizationAgreement(organization.id, siteId)
