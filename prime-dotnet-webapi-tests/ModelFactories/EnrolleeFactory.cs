@@ -38,6 +38,7 @@ namespace PrimeTests.ModelFactories
 
             RuleFor(x => x.SelfDeclarations, (f, x) => new SelfDeclarationFactory(x).GenerateBetween(0, 1));
             RuleFor(x => x.SelfDeclarationDocuments, f => null);
+            RuleFor(x => x.IdentificationDocuments, f => null);
 
             RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x).Generate(1, "default,inProgress"));
             RuleFor(x => x.PhysicalAddress, f => new PhysicalAddressFactory().Generate());
