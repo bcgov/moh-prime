@@ -78,6 +78,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
               : EMPTY
           ),
           exhaustMap(() =>
+            // TODO PRIME-1127
             (payload.organizationAgreementGuid)
               ? this.organizationResource.acceptOrganizationAgreement(organizationId, this.agreementId, payload.organizationAgreementGuid)
               : of(noop)
@@ -159,7 +160,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);
 
-    // TODO requires refactor of organization agreement
+    // TODO PRIME-1127
     // this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
 
     this.busy = this.organizationResource

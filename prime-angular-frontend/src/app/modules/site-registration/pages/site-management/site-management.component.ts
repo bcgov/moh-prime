@@ -56,7 +56,7 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public viewAgreement(organization: OrganizationListViewModel) {
-    // TODO requires refactor of organization agreement
+    // TODO PRIME-1127
     // const routePath = (organization.acceptedAgreementDate)
     //   ? [SiteRoutes.ORGANIZATION_AGREEMENT]
     //   : []; // Defaults to overview

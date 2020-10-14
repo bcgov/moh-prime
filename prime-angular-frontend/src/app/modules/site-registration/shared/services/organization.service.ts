@@ -48,7 +48,7 @@ export class OrganizationService {
     // Allow subscriptions, but make immutable
     return this._organization.asObservable();
   }
-
+  // TODO PRIME-1127
   public set agreements(organizationAgreements: OrganizationAgreement[]) {
     // Store a copy to prevent updates by reference
     this._agreements.next([...organizationAgreements]);
