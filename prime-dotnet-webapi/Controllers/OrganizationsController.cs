@@ -26,6 +26,8 @@ namespace Prime.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
+
+        private readonly IAgreementService _agreementService;
         private readonly IPartyService _partyService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
@@ -35,6 +37,7 @@ namespace Prime.Controllers
         public OrganizationsController(
             IMapper mapper,
             IOrganizationService organizationService,
+            IAgreementService agreementService,
             IPartyService partyService,
             IDocumentService documentService,
             IRazorConverterService razorConverterService,
@@ -42,6 +45,7 @@ namespace Prime.Controllers
         {
             _mapper = mapper;
             _organizationService = organizationService;
+            _agreementService = agreementService;
             _partyService = partyService;
             _razorConverterService = razorConverterService;
             _documentService = documentService;
@@ -284,7 +288,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
 
-            var agreement = await _organizationService.GetOrgAgreementAsync(organizationId, agreementId, asPdf);
+            var agreement = await _agreementService.GetOrgAgreementAsync(organizationId, agreementId, asPdf);
             if (agreement == null)
             {
                 return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
