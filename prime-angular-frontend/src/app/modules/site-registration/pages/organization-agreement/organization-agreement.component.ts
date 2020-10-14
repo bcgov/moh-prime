@@ -179,7 +179,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         }),
         map(([organizationAgreement, date]: [string, moment.Moment]) =>
           organizationAgreement
-            .replace('$day', `${date.format('dddd')}`)
+            .replace('$day', `${date.format('DD')}`)
             .replace('$month', date.format('MMMM'))
             .replace('$year', `${date.format('YYYY')}`)
         )

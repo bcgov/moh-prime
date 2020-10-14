@@ -16,8 +16,6 @@ export interface Organization {
   organizationAgreementGuid: string;
   // States -----
   completed: boolean;
-  acceptedAgreementDate: string;
-  signedAgreementDocuments: SignedAgreementDocument[];
   submittedDate: string;
 }
 
