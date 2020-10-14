@@ -58,7 +58,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
       const site = this.siteService.site;
 
       this.busy = this.organizationResource
-        .updateOrganizationAgreement<OrganizationAgreement>(organizationId, site.id)
+        .updateOrganizationAgreement(organizationId, site.id)
         .pipe(
           map((agreement: OrganizationAgreement) => !!agreement),
           exhaustMap((needsOrgAgreement: boolean) =>

@@ -15,8 +15,6 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
-import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
-import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
@@ -37,9 +35,7 @@ export class SiteManagementComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private organizationResource: OrganizationResource,
-    private organizationFormStateService: OrganizationFormStateService,
     private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService,
     private fullnamePipe: FullnamePipe,
     private addressPipe: AddressPipe,
     private configCodePipe: ConfigCodePipe,

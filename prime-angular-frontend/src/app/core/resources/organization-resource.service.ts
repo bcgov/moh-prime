@@ -126,25 +126,46 @@ export class OrganizationResource {
   /**
    * @description
    * Check whether an organization agreement is needed, and create
-   * the organization agreement.
+   * the organization agreement
    */
-  public updateOrganizationAgreement<T = Agreement>(organizationId: number, siteId: number): Observable<T | NoContent> {
+  public updateOrganizationAgreement(organizationId: number, siteId: number): Observable<OrganizationAgreement | NoContent> {
     const params = this.apiResourceUtilsService.makeHttpParams({ siteId });
-    return this.apiResource.get<T | NoContent>(`organizations/${organizationId}/agreements/update`, params)
+    return this.apiResource.get<OrganizationAgreement | NoContent>(`organizations/${organizationId}/agreements/update`, params)
       .pipe(
-        map((response: ApiHttpResponse<T | NoContent>) => response?.result)
+        map((response: ApiHttpResponse<OrganizationAgreement | NoContent>) => response?.result),
+        tap((organizationAgreement: OrganizationAgreement) => this.logger.info('ORGANIZATION_AGREEMENT', organizationAgreement)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement could not be updated');
+          this.logger.error('[SiteRegistration] OrganizationResource::updateOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getOrganizationAgreements(organizationId: number): Observable<OrganizationAgreement[]> {
+    return this.apiResource.get<OrganizationAgreement[] | NoContent>(`organizations/${organizationId}/agreements`)
+      .pipe(
+        map((response: ApiHttpResponse<OrganizationAgreement[]>) => response.result),
+        tap((organizationAgreements: OrganizationAgreement[]) => this.logger.info('ORGANIZATION_AGREEMENTS', organizationAgreements)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement(s) could not be retrieved');
+          this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationAgreements error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
   /**
    * @description
-   * Get an organization agreement as markup or PDF (Base64).
+   * Get an organization agreement as HTML markup for display, or
+   * as a PDF (Base64) for downloading.
    */
   public getOrganizationAgreement(organizationId: number, agreementId: number, asPdf: boolean = false): Observable<OrganizationAgreement> {
     const params = this.apiResourceUtilsService.makeHttpParams({ asPdf });
     return this.apiResource.get<OrganizationAgreement>(`organizations/${organizationId}/agreements/${agreementId}`, params)
       .pipe(
         map((response: ApiHttpResponse<OrganizationAgreement>) => response.result),
+        tap((organizationAgreement: OrganizationAgreement) => this.logger.info('ORGANIZATION_AGREEMENT', organizationAgreement)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be retrieved');
           this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationAgreement error has occurred: ', error);
