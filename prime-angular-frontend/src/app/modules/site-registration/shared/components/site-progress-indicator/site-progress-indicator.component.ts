@@ -31,7 +31,7 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
     this.currentRoute = RouteUtils.currentRoutePath(this.router.url);
 
     // Possible route pathways within site registration
-    const routePaths = (!organizationService.organization.acceptedAgreementDate)
+    const routePaths = (!organizationService.hasSignedAgreement())
       // Combine organization and site routes, which includes
       // the organization agreement
       ? [SiteRoutes.initialRegistrationRouteOrder()]
