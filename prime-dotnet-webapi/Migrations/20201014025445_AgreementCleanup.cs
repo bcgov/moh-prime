@@ -13,18 +13,6 @@ namespace Prime.Migrations
                 DROP VIEW IF EXISTS public.""NewestAgreements"";
             ");
 
-            migrationBuilder.DropColumn(
-                name: "OrganizationId",
-                table: "SignedAgreementDocument");
-
-            migrationBuilder.DropColumn(
-                name: "AcceptedAgreementDate",
-                table: "Organization");
-
-            migrationBuilder.DropColumn(
-                name: "Discriminator",
-                table: "AgreementVersion");
-
             migrationBuilder.DropForeignKey(
                 name: "FK_SignedAgreementDocument_Agreement_AgreementId",
                 table: "SignedAgreementDocument");
@@ -44,6 +32,18 @@ namespace Prime.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_IdentificationDocument_EnrolleeId",
                 table: "IdentificationDocument");
+
+            migrationBuilder.DropColumn(
+                name: "OrganizationId",
+                table: "SignedAgreementDocument");
+
+            migrationBuilder.DropColumn(
+                name: "AcceptedAgreementDate",
+                table: "Organization");
+
+            migrationBuilder.DropColumn(
+                name: "Discriminator",
+                table: "AgreementVersion");
 
 
             // Changes
