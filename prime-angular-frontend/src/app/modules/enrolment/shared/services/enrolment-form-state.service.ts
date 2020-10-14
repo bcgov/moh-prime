@@ -17,6 +17,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public regulatoryForm: FormGroup;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
+  public remoteAccessAddressesForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
 
@@ -101,7 +103,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   /**
    * @description
-   * Helper for getting a list of organization forms.
+   * Helper for getting a list of enrolment forms.
    */
   public get forms(): AbstractControl[] {
     return [
@@ -119,6 +121,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       // TODO commented out until required to avoid it being validated
       // this.deviceProviderForm,
       this.jobsForm,
+      this.remoteAccessAddressesForm,
       this.selfDeclarationForm,
       this.careSettingsForm
     ];
@@ -159,6 +162,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     this.regulatoryForm = this.buildRegulatoryForm();
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
+    this.remoteAccessAddressesForm = this.buildRemoteAccessAddressesForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
   }
@@ -199,6 +203,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
     this.regulatoryForm.patchValue(enrolment);
     this.jobsForm.patchValue(enrolment);
+    this.remoteAccessAddressesForm.patchValue(enrolment);
 
     const defaultValue = (enrolment.profileCompleted) ? false : null;
     const selfDeclarationsTypes = {
@@ -373,6 +378,27 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         FormControlValidators.requiredLength(5)
       ]],
       isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
+    });
+  }
+
+  public buildRemoteAccessAddressesForm(): FormGroup {
+    return this.fb.group({
+      remoteUserLocations: this.fb.array(
+        [],
+        [FormArrayValidators.atLeast(1)])
+    });
+  }
+
+  public remoteUserLocationFormGroup(): FormGroup {
+    return this.fb.group({
+      internetProvider: [
+        null,
+        [Validators.required]
+      ],
+      physicalAddress: this.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        exclude: ['street2']
+      })
     });
   }
 

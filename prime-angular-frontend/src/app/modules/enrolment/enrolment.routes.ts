@@ -12,6 +12,7 @@ export class EnrolmentRoutes {
   // Enrollee enrolment:
   public static REGULATORY = 'regulatory';
   public static REMOTE_ACCESS = 'remote-access';
+  public static REMOTE_ACCESS_ADDRESSES = 'remote-access-addresses';
   public static DEVICE_PROVIDER = 'device-provider';
   public static JOB = 'job';
   public static CARE_SETTING = 'care-setting';

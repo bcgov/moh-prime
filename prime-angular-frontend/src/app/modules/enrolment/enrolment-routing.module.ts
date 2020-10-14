@@ -35,6 +35,7 @@ import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmat
 import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
 import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
 import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
+import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 
 const routes: Routes = [
   {
@@ -108,6 +109,12 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.REMOTE_ACCESS,
         component: RemoteAccessComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES,
+        component: RemoteAccessAddressesComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },

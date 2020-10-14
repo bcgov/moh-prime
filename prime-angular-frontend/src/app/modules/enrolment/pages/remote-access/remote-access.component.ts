@@ -28,6 +28,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   public hasNoSitesError: boolean;
   public showProgress: boolean;
   public enrolment: Enrolment;
+  public selectedSites: number[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -64,12 +65,12 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public onSubmit() {
-    const selectedSites = this.sites
+    this.selectedSites = this.sites
       .filter((site, i) => this.sitesFormArray.value[i])
       .map(site => site.id);
 
     this.busy = this.enrolmentResource
-      .createEnrolleeRemoteUsers(this.enrolment.id, selectedSites)
+      .createEnrolleeRemoteUsers(this.enrolment.id, this.selectedSites)
       .subscribe(() =>
         this.nextRouteAfterSubmit()
       );
@@ -125,7 +126,9 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.CARE_SETTING;
+      nextRoutePath = this.selectedSites.length
+        ? EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES
+        : EnrolmentRoutes.CARE_SETTING;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

@@ -10,6 +10,7 @@ import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -25,6 +26,7 @@ export interface HttpEnrollee extends Enrollee {
   isInsulinPumpProvider: boolean;
   jobs: Job[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
+  remoteUserLocations: RemoteUserLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
   enrolleeCareSettings: CareSetting[];
@@ -60,6 +62,7 @@ export interface Enrolment {
   isInsulinPumpProvider: boolean;
   jobs: Job[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
+  remoteUserLocations: RemoteUserLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
   careSettings: CareSetting[];
