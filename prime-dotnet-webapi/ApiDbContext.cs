@@ -247,10 +247,11 @@ namespace Prime
                 .WithMany(s => s.RemoteUsers)
                 .HasForeignKey(ru => ru.SiteId);
 
-            modelBuilder.Entity<RemoteUserLocation>()
-                .HasOne(rul => rul.RemoteUser)
-                .WithMany(ru => ru.RemoteUserLocations)
-                .HasForeignKey(rul => rul.RemoteUserId);
+            modelBuilder.Entity<RemoteAccessLocation>()
+                .HasOne(ral => ral.Enrollee)
+                .WithMany(e => e.RemoteAccessLocations)
+                .HasForeignKey(ral => ral.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
         }

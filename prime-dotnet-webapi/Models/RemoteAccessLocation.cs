@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("RemoteAccessLocation")]
-    public class RemoteAccessLocation : BaseAuditable
+    public class RemoteAccessLocation : BaseAuditable, IEnrolleeNavigationProperty
     {
         [Key]
         public int Id { get; set; }

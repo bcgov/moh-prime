@@ -31,6 +31,8 @@ namespace Prime.ViewModels
 
         public ICollection<Job> Jobs { get; set; }
 
+        public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
+
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]

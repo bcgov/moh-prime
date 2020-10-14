@@ -172,6 +172,7 @@ namespace Prime.Services
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
+                .Include(e => e.RemoteAccessLocations)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.SelfDeclarations)
                 .SingleAsync(e => e.Id == enrolleeId);
@@ -200,6 +201,7 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
+            ReplaceExistingItems(enrollee.RemoteAccessLocations, updateModel.RemoteAccessLocations, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -358,6 +360,8 @@ namespace Prime.Services
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeRemoteUsers)
+                .Include(r => r.RemoteAccessLocations)
+                    .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.Status)
                 .Include(e => e.EnrolmentStatuses)
