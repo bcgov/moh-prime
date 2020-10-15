@@ -27,6 +27,14 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(n => n == src.CurrentAgreementId)));
 
         CreateMap<Site, EnrolleeRemoteAccessSiteViewModel>()
-           .ForMember(dest => dest.OrganizationName, opt => opt.MapFrom(src => src.Organization.Name));
+            .ForMember(dest => dest.OrganizationName, opt => opt.MapFrom(src => src.Organization.Name));
+
+        CreateMap<Agreement, AgreementViewModel>()
+            .ForMember(dest => dest.SignedAgreementDocumentGuid, opt =>
+            {
+                opt.PreCondition(src => src.SignedAgreement != null);
+                opt.MapFrom(src => src.SignedAgreement.DocumentGuid);
+            })
+            .ForMember(dest => dest.AgreementType, opt => opt.MapFrom(src => src.AgreementVersion.AgreementType));
     }
 }
