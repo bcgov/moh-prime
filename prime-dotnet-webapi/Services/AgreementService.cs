@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -15,13 +18,16 @@ namespace Prime.Services
     {
         private static readonly TimeSpan AGREEMENT_EXPIRY = TimeSpan.FromDays(365);
 
+        private readonly IMapper _mapper;
         private readonly IRazorConverterService _razorConverterService;
 
         public AgreementService(
             ApiDbContext context, IHttpContextAccessor httpContext,
+            IMapper mapper,
             IRazorConverterService razorConverterService)
             : base(context, httpContext)
         {
+            _mapper = mapper;
             _razorConverterService = razorConverterService;
         }
 
@@ -135,12 +141,13 @@ namespace Prime.Services
             }
         }
 
-        public async Task<IEnumerable<Agreement>> GetOrgAgreementsAsync(int organizationId)
+        public async Task<IEnumerable<AgreementViewModel>> GetOrgAgreementsAsync(int organizationId)
         {
             return await _context.Agreements
                 .AsNoTracking()
                 .OrderByDescending(a => a.CreatedDate)
                 .Where(a => a.OrganizationId == organizationId)
+                .ProjectTo<AgreementViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 

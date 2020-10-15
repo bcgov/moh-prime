@@ -230,8 +230,8 @@ namespace Prime.Controllers
         [HttpGet("{organizationId}/agreements", Name = nameof(GetOrganizationAgreements))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Agreement>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Agreement>>> GetOrganizationAgreements(int organizationId)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<AgreementViewModel>>> GetOrganizationAgreements(int organizationId)
         {
             var agreements = await _agreementService.GetOrgAgreementsAsync(organizationId);
 

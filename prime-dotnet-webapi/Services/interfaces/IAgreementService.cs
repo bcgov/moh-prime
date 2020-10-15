@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -17,7 +18,7 @@ namespace Prime.Services
 
         Task ExpireCurrentEnrolleeAgreementAsync(int enrolleeId);
 
-        Task<IEnumerable<Agreement>> GetOrgAgreementsAsync(int organizationId);
+        Task<IEnumerable<AgreementViewModel>> GetOrgAgreementsAsync(int organizationId);
 
         Task<Agreement> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false);
     }
