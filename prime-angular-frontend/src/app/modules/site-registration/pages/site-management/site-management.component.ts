@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { OrganizationAgreement } from '@shared/models/agreement.model';
 import { VendorEnum } from '@shared/enums/vendor.enum';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
@@ -26,6 +28,7 @@ export class SiteManagementComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: OrganizationListViewModel[];
+  public organizationAgreements: OrganizationAgreement[];
   public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
@@ -56,7 +59,10 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public viewAgreement(organization: OrganizationListViewModel) {
-    // TODO requires refactor of organization agreement
+    // TODO PRIME-1085
+    // TODO No UI for showing vs downloading agreement(s) so MVP download each as a PDF
+    // TODO Create buttons for downloading each agreement as a PDF with proper labels
+    // How do you determine what agreement the button will download?
     // const routePath = (organization.acceptedAgreementDate)
     //   ? [SiteRoutes.ORGANIZATION_AGREEMENT]
     //   : []; // Defaults to overview
@@ -98,7 +104,7 @@ export class SiteManagementComponent implements OnInit {
 
   public ngOnInit(): void {
     // this.checkQueryParams();
-    // Temporary hack to show success message until guards can be refactored
+    // TODO temporary hack to show success message until guards can be refactored
     this.hasSubmittedSite = (this.organizationService.showSuccess) ? true : false;
     this.organizationService.showSuccess = false;
     this.getOrganizations();
@@ -111,7 +117,17 @@ export class SiteManagementComponent implements OnInit {
 
   private getOrganizations(): void {
     this.busy = this.organizationResource.getOrganizations()
-      .subscribe((organizations: OrganizationListViewModel[]) => this.organizations = organizations);
+      .pipe(
+        map((organizations: OrganizationListViewModel[]) =>
+          this.organizations = organizations
+        ),
+        exhaustMap((organization: OrganizationListViewModel[]) =>
+          this.organizationResource.getOrganizationAgreements(organization[0].id)
+        )
+      )
+      .subscribe((agreements: OrganizationAgreement[]) =>
+        this.organizationAgreements = agreements
+      );
   }
 
   private createSite(organizationId: number): void {

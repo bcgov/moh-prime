@@ -76,7 +76,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
         )
         .subscribe((needsOrgAgreement: boolean) => {
           this.form.markAsPristine();
-          this.nextRoute(organizationId, needsOrgAgreement);
+          this.nextRoute(needsOrgAgreement);
         });
     }
   }
@@ -92,13 +92,9 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     this.routeUtils.routeRelativeTo(SiteRoutes.PRIVACY_OFFICER);
   }
 
-  public nextRoute(organizationId: number, needsOrgAgreement: boolean) {
+  public nextRoute(needsOrgAgreement: boolean) {
     if (needsOrgAgreement) {
-      const siteId = this.route.snapshot.params.sid;
-      // Provide site for redirection after accepting the organization agreement
-      this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.SITE_MANAGEMENT), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT], {
-        queryParams: { redirect: `${SiteRoutes.SITES}/${siteId}`, siteId }
-      });
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
     } else {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     }

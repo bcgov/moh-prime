@@ -32,8 +32,6 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
 
-  protected readonly resetRoutes: string[] = [...EnrolmentRoutes.enrolmentProfileRoutes()];
-
   private identityProvider: IdentityProvider;
   private enrolleeId: number;
   private userId: string;
@@ -44,7 +42,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     protected logger: LoggerService,
     private authService: AuthService
   ) {
-    super(fb, routeStateService, logger);
+    super(fb, routeStateService, logger, [...EnrolmentRoutes.enrolmentProfileRoutes()]);
   }
 
   /**

@@ -1,11 +1,9 @@
-import { Site, SiteListViewModel } from './site.model';
+import { SiteListViewModel } from './site.model';
 import { Party } from './party.model';
-import { SignedAgreementDocument } from './signed-agreement-document.model';
 
 export interface Organization {
   id?: number;
   displayId?: number;
-  sites: Site[];
   siteCount: number;
   // Forms -----
   signingAuthorityId?: number;
@@ -13,14 +11,14 @@ export interface Organization {
   name: string;
   registrationId: string;
   doingBusinessAs?: string;
-  organizationAgreementGuid: string;
   // States -----
   completed: boolean;
   submittedDate: string;
 }
 
 export interface OrganizationListViewModel extends
-  Omit<Organization, 'sites' | 'siteCount' | 'registrationId' | 'signedAgreementDocuments' | 'organizationAgreementGuid'> {
+  Omit<Organization, 'siteCount' | 'registrationId'> {
   sites: SiteListViewModel[];
+  // TODO PRIME-1085 (is this still needed?)
   signedAgreementDocumentCount: number;
 }

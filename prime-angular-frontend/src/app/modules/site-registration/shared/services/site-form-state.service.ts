@@ -32,8 +32,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   public privacyOfficerForm: FormGroup;
   public technicalSupportForm: FormGroup;
 
-  protected readonly resetRoutes: string[] = [SiteRoutes.SITE_MANAGEMENT];
-
   private siteId: number;
   private organizationId: number;
   private provisionerId: number;
@@ -43,7 +41,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     protected routeStateService: RouteStateService,
     protected logger: LoggerService
   ) {
-    super(fb, routeStateService, logger);
+    super(fb, routeStateService, logger, [SiteRoutes.SITE_MANAGEMENT]);
   }
 
   /**

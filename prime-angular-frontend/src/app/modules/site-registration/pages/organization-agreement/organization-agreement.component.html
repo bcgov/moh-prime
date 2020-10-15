@@ -2,126 +2,75 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <ng-container *ngIf="!hasAcceptedAgreement; else continue">
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Organization Agreement</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Does your organization have signing requirements that prevent you from signing an online agreement?
+      </ng-container>
+    </app-page-subheader2>
 
-    <section class="mb-3">
-      <app-page-subheader2>
-        <ng-container appPageSubheader2Title>Organization Agreement</ng-container>
-        <ng-container appPageSubheader2Summary>
-          Does your organization have signing requirements that prevent you from signing an online agreement?
-        </ng-container>
-      </app-page-subheader2>
+    <mat-slide-toggle #canSignOnline
+                      color="primary"
+                      class="mt-3 mb-3"
+                      [checked]="true">
+      I can sign online agreements
+    </mat-slide-toggle>
+  </section>
 
-      <mat-slide-toggle #canSignOnline
-                        color="primary"
-                        class="mt-3 mb-3"
-                        [checked]="true">
-        I can sign online agreements
-      </mat-slide-toggle>
+  <ng-container *ngIf="!canSignOnline.checked; else electronic">
+    <section class="mb-5">
+      <p class="mb-4">
+        Download and print off the Organization Agreement for PharmaNet Use. Sign, and upload. You cannot make
+        changes to the agreement.
+      </p>
+
+      <button mat-flat-button
+              class="mb-4"
+              color="primary"
+              (click)="onDownload()">Download Agreement</button>
+
+      <p class="mb-3">
+        <strong>Upload the signed Organization Agreement here.</strong>
+      </p>
+
+      <app-document-upload componentName="organization-agreement"
+                           [multiple]="false"
+                           (completed)="onUpload($event)"
+                           (remove)="onRemoveDocument($event)"></app-document-upload>
     </section>
-
-    <ng-container *ngIf="!canSignOnline.checked; else electronic">
-      <section class="mb-5">
-        <p class="mb-4">
-          Download and print off the Organization Agreement for PharmaNet Use. Sign, and upload. You cannot make
-          changes to the agreement.
-        </p>
-
-        <button mat-flat-button
-                class="mb-2"
-                color="primary"
-                (click)="onDownload()">Download Agreement</button>
-
-        <p class="mb-3">
-          <strong>Upload the signed Organization Agreement here.</strong>
-        </p>
-
-        <app-document-upload componentName="organization-agreement"
-                             [multiple]="false"
-                             (completed)="onUpload($event)"
-                             (remove)="onRemoveDocument($event)"></app-document-upload>
-      </section>
-    </ng-container>
-
-    <ng-template #electronic>
-      <div class="organization-agreement"
-           [innerHTML]="organizationAgreement | safe: 'html'"></div>
-
-      <div class="footer mb-4">
-        <mat-checkbox #accept>
-          <div class="pl-3">
-            By checking here I agree to the terms of this Agreement as the duly authorized representative of the
-            Organization.
-          </div>
-        </mat-checkbox>
-      </div>
-    </ng-template>
-
-    <div class="row justify-content-end">
-      <div class="col">
-
-        <button mat-stroked-button
-                color="primary"
-                (click)="onBack()">Back</button>
-
-      </div>
-      <div class="col text-right">
-
-        <button mat-flat-button
-                color="primary"
-                [disabled]="!accepted?.checked && !hasUploadedFile"
-                (click)="onSubmit()">Accept Organization Agreement</button>
-
-      </div>
-    </div>
   </ng-container>
 
-  <ng-template #continue>
-    <div class="mb-4">
-      <app-alert type="success"
-                 icon="check_circle_outline">
-        <ng-container #alertTitle
-                      class="alert-title">
-          Organization Agreement Accepted
-        </ng-container>
-        <ng-container #alertContent
-                      class="alert-content">
-          The organization agreement has been accepted. If you have questions please contact us at
-          <app-prime-phone></app-prime-phone> or <app-prime-support-email></app-prime-support-email>.
-        </ng-container>
-      </app-alert>
-    </div>
+  <ng-template #electronic>
+    <div class="organization-agreement"
+         [innerHTML]="organizationAgreement | safe: 'html'"></div>
 
-    <ng-container *ngIf="showDefaultAgreement(); else uploadedAgreement">
-      <div class="organization-agreement mb-5"
-           [innerHTML]="organizationAgreement | safe: 'html'"></div>
-    </ng-container>
-
-    <ng-template #uploadedAgreement>
-      <button mat-stroked-button
-              color="primary"
-              class="mb-4 ml-2"
-              (click)="downloadSignedAgreement()">
-        <mat-icon class="mr-1">attachment</mat-icon>Signed Agreement
-      </button>
-    </ng-template>
-
-    <div class="row justify-content-end">
-      <div class="col">
-
-        <button mat-stroked-button
-                color="primary"
-                (click)="onBack()">Back</button>
-
-      </div>
-      <div class="col text-right">
-
-        <button mat-flat-button
-                color="primary"
-                (click)="nextRoute()">Continue</button>
-
-      </div>
+    <div class="footer mb-4">
+      <mat-checkbox #accept>
+        <div class="pl-3">
+          By checking here I agree to the terms of this Agreement as the duly authorized representative of the
+          Organization.
+        </div>
+      </mat-checkbox>
     </div>
   </ng-template>
+
+  <div class="row justify-content-end">
+    <div class="col">
+
+      <button mat-stroked-button
+              color="primary"
+              (click)="onBack()">Back</button>
+
+    </div>
+    <div class="col text-right">
+
+      <button mat-flat-button
+              color="primary"
+              [disabled]="!accepted?.checked && !hasUploadedFile"
+              (click)="onSubmit()">Accept Organization Agreement</button>
+
+    </div>
+  </div>
 
 </app-page>

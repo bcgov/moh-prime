@@ -17,6 +17,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { ClaimSiteComponent, ClaimSiteAction } from '@shared/components/dialogs/content/claim-site/claim-site.component';
 import { ClaimActionEnum } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { OrganizationAgreement } from '@shared/models/agreement.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -204,6 +205,12 @@ export class SiteRegistrationContainerComponent implements OnInit {
       ])
         .pipe(
           take(1),
+          exhaustMap(([organization, site]: [Organization, Site]) =>
+            this.organizationResource.getOrganizationAgreements(organization.id)
+              .pipe(
+                map((agreements: OrganizationAgreement[]) => [organization, agreements, site])
+              )
+          ),
           map(this.toSiteRegistration())
         )
       : this.getOrganizations(queryParams)
@@ -306,16 +313,14 @@ export class SiteRegistrationContainerComponent implements OnInit {
     return [].concat(...siteRegistrations);
   }
 
-  private toSiteRegistration(): ([organization, site]: [Organization, Site]) => SiteRegistrationListViewModel[] {
-    return ([organization, site]: [Organization, Site]) => {
+  private toSiteRegistration(): (models: [Organization, OrganizationAgreement[], Site]) => SiteRegistrationListViewModel[] {
+    return ([organization, agreements, site]: [Organization, OrganizationAgreement[], Site]) => {
       const {
         id: organizationId,
         displayId,
         signingAuthorityId,
         signingAuthority,
         name,
-        signedAgreementDocuments,
-        acceptedAgreementDate,
         doingBusinessAs
       } = organization;
 
@@ -326,8 +331,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthority,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
-        signedAgreementDocumentCount: signedAgreementDocuments.length,
-        acceptedAgreementDate,
+        // TODO PRIME-1085 (is this still needed?)
+        signedAgreementDocumentCount: null,
         ...this.toSiteViewModelPartial(site)
       }];
     };

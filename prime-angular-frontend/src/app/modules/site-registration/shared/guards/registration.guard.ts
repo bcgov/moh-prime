@@ -4,18 +4,18 @@ import { Router, Params } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
 
-import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Party } from '@registration/shared/models/party.model';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { Organization } from '../models/organization.model';
-import { OrganizationService } from '../services/organization.service';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Injectable({
   providedIn: 'root'
@@ -143,6 +143,10 @@ export class RegistrationGuard extends BaseGuard {
     const comparePath = (destinationPath && oid)
       ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
       : `/${modulePath}/${loopPath}`;
+
+    console.log('TEST', comparePath);
+    console.log('DESTINATION_PATH', destinationPath);
+    console.log('OID', oid);
 
     if (routePath === comparePath) {
       return true;

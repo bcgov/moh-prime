@@ -55,8 +55,9 @@ export class OrganizationService {
   }
 
   public get agreements(): OrganizationAgreement[] {
+    const agreements = this._agreements.value ?? [];
     // Allow access to current value, but prevent updates by reference
-    return [...this._agreements.value];
+    return [...agreements];
   }
 
   public get agreements$(): Observable<OrganizationAgreement[]> {

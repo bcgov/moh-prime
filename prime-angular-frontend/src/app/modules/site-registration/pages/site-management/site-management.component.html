@@ -77,12 +77,11 @@
               (click)="viewOrganization(organization)">
         <span>View/Update Organization</span>
       </button>
-      <!-- TODO requires refactor of organization agreement -->
-      <!-- <button mat-menu-item
-              [disabled]="!organization.acceptedAgreementDate"
+      <button mat-menu-item
+              [disabled]="!organizationAgreements?.length"
               (click)="viewAgreement(organization)">
         <span>View/Print Agreement</span>
-      </button> -->
+      </button>
     </mat-menu>
   </ng-template>
 
