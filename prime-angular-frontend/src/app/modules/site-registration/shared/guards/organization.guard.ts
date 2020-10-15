@@ -35,9 +35,10 @@ export class OrganizationGuard extends BaseGuard {
     return this.organizationResource.getOrganizationById(organizationId)
       .pipe(
         exhaustMap((organization: Organization) =>
-          // TODO PRIME-1127
-          // TODO MVP, but should lock this down based by only invoking on default of
-          // null, and only update when an organization agreement has been accepted
+          // TODO revisit when guards are re-evaluated
+          // TODO use a resolver since only data is updated
+          // TODO only invoke when when null (default), and only update
+          // when an organization agreement has been accepted
           this.organizationResource.getOrganizationAgreements(organization.id)
             .pipe(
               map((organizationAgreements: OrganizationAgreement[]) =>

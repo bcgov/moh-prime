@@ -55,8 +55,8 @@ export class OrganizationService {
   }
 
   public get agreements(): OrganizationAgreement[] {
-    // Allow access to current value, but prevent updates by reference
     const agreements = this._agreements.value ?? [];
+    // Allow access to current value, but prevent updates by reference
     return [...agreements];
   }
 
