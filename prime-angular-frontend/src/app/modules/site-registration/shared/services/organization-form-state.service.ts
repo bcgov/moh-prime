@@ -18,14 +18,12 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
   public organizationNameForm: FormGroup;
   public organizationAgreementForm: FormGroup;
 
-  protected readonly resetRoutes: string[] = [SiteRoutes.SITE_MANAGEMENT];
-
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: LoggerService
   ) {
-    super(fb, routeStateService, logger);
+    super(fb, routeStateService, logger, [SiteRoutes.SITE_MANAGEMENT]);
   }
 
   /**

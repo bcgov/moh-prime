@@ -144,6 +144,10 @@ export class RegistrationGuard extends BaseGuard {
       ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
       : `/${modulePath}/${loopPath}`;
 
+    console.log('TEST', comparePath);
+    console.log('DESTINATION_PATH', destinationPath);
+    console.log('OID', oid);
+
     if (routePath === comparePath) {
       return true;
     } else {

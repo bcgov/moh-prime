@@ -13,14 +13,14 @@ import { Person } from '@registration/shared/models/person.model';
 
 export abstract class AbstractFormState<T> {
   protected patched: boolean;
-  protected readonly resetRoutes: string[] = [];
 
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService
+    protected logger: LoggerService,
+    protected resetRoutes: string[]
   ) {
-    this.initialize();
+    this.initialize(resetRoutes);
   }
 
   /**
@@ -269,8 +269,10 @@ export abstract class AbstractFormState<T> {
    * @description
    * Initialize the form state service for use by building the required
    * forms and setting up the route state listener.
+   *
+   * NOTE: Must be invoked by the inheriting class!
    */
-  protected initialize() {
+  protected initialize(resetRoutes: string[] = []) {
     // Initial state of the form is unpatched and ready for
     // enrolment information to be populated
     this.patched = false;
