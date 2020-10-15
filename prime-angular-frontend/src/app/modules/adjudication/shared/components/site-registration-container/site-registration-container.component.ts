@@ -205,12 +205,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
       ])
         .pipe(
           take(1),
-          exhaustMap(([organization, site]: [Organization, Site]) =>
-            this.organizationResource.getOrganizationAgreements(organization.id)
-              .pipe(
-                map((agreements: OrganizationAgreement[]) => [organization, agreements, site])
-              )
-          ),
           map(this.toSiteRegistration())
         )
       : this.getOrganizations(queryParams)
@@ -313,14 +307,15 @@ export class SiteRegistrationContainerComponent implements OnInit {
     return [].concat(...siteRegistrations);
   }
 
-  private toSiteRegistration(): (models: [Organization, OrganizationAgreement[], Site]) => SiteRegistrationListViewModel[] {
-    return ([organization, agreements, site]: [Organization, OrganizationAgreement[], Site]) => {
+  private toSiteRegistration(): (models: [Organization, Site]) => SiteRegistrationListViewModel[] {
+    return ([organization, site]: [Organization, Site]) => {
       const {
         id: organizationId,
         displayId,
         signingAuthorityId,
         signingAuthority,
         name,
+        agreements,
         doingBusinessAs
       } = organization;
 
@@ -331,6 +326,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthority,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
+        agreements,
         // TODO PRIME-1085 (is this still needed?)
         signedAgreementDocumentCount: null,
         ...this.toSiteViewModelPartial(site)

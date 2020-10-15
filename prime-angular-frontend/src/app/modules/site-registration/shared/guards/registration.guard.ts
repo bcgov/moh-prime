@@ -8,6 +8,7 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { OrganizationAgreement } from '@shared/models/agreement.model';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -39,7 +40,7 @@ export class RegistrationGuard extends BaseGuard {
       .pipe(
         map((user: BcscUser) => new Party(user)),
         exhaustMap((party: Party) => this.organizationResource.createOrganization(party)),
-        map((organization: Organization) => [organization, true])
+        map((organization: Organization) => [organization, []])
       );
 
     return this.organizationResource.getOrganizations({ verbose: true })
@@ -51,14 +52,16 @@ export class RegistrationGuard extends BaseGuard {
         ),
         exhaustMap((organization: Organization) =>
           (organization)
-            ? of([organization, false])
+            ? of(organization)
             : createOrganization$
         ),
-        map(([organization, isNewOrganization]: [Organization, boolean]) => {
+        map((organization: Organization) => {
+          // TODO PRIME-1131
           // Store the organization for access throughout registration, which
           // will allows be the most up-to-date organization
+          // TODO drop this and see if the organization guard is enough
           this.organizationService.organization = organization;
-          return this.routeDestination(routePath, organization, isNewOrganization);
+          return this.routeDestination(routePath, organization);
         })
       );
   }
@@ -67,7 +70,7 @@ export class RegistrationGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the organization status.
    */
-  private routeDestination(routePath: string, organization: Organization, isNewOrganization: boolean = false) {
+  private routeDestination(routePath: string, organization: Organization) {
     // On login the user will always be redirected to the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
@@ -112,7 +115,7 @@ export class RegistrationGuard extends BaseGuard {
       whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
       whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
 
-      if (this.organizationService.hasSignedAgreement()) {
+      if (organization.agreements.some((agreement: OrganizationAgreement) => agreement.acceptedDate)) {
         whiteListedRoutes.push(SiteRoutes.SITE_REVIEW);
       }
     }
@@ -143,10 +146,6 @@ export class RegistrationGuard extends BaseGuard {
     const comparePath = (destinationPath && oid)
       ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
       : `/${modulePath}/${loopPath}`;
-
-    console.log('TEST', comparePath);
-    console.log('DESTINATION_PATH', destinationPath);
-    console.log('OID', oid);
 
     if (routePath === comparePath) {
       return true;

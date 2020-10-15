@@ -1,10 +1,12 @@
 import { SiteListViewModel } from './site.model';
 import { Party } from './party.model';
+import { OrganizationAgreement } from '@shared/models/agreement.model';
 
 export interface Organization {
   id?: number;
   displayId?: number;
   siteCount: number;
+  agreements: OrganizationAgreement[];
   // Forms -----
   signingAuthorityId?: number;
   signingAuthority: Party;

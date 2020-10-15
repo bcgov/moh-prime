@@ -142,6 +142,12 @@ export class OrganizationResource {
       );
   }
 
+  /**
+   * @description
+   * Get a list of organization agreements.
+   * 
+   * NOTE: Inclues agreement type and document GUID for downloading.
+   */
   public getOrganizationAgreements(organizationId: number): Observable<OrganizationAgreement[]> {
     return this.apiResource.get<OrganizationAgreement[] | NoContent>(`organizations/${organizationId}/agreements`)
       .pipe(

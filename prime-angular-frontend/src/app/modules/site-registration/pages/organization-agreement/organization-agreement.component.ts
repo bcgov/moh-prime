@@ -116,7 +116,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public showDefaultAgreement() {
-    return !this.organizationService.hasSignedAgreement() ?? true;
+    return !this.organizationService.organization.agreements.some((agreement: OrganizationAgreement) => agreement.acceptedDate) ?? true;
   }
 
   public downloadSignedAgreement() {

@@ -20,17 +20,15 @@ export interface IOrganizationService {
   providedIn: 'root'
 })
 export class OrganizationService {
+  // TODO PRIME-1131
   // Temporary hack to show success message until guards can be refactored
   public showSuccess: boolean;
 
   // tslint:disable-next-line: variable-name
   private _organization: BehaviorSubject<Organization>;
-  // tslint:disable-next-line: variable-name
-  private _agreements: BehaviorSubject<OrganizationAgreement[]>;
 
   constructor() {
     this._organization = new BehaviorSubject<Organization>(null);
-    this._agreements = new BehaviorSubject<OrganizationAgreement[]>(null);
     this.showSuccess = false;
   }
 
@@ -47,29 +45,5 @@ export class OrganizationService {
   public get organization$(): Observable<Organization> {
     // Allow subscriptions, but make immutable
     return this._organization.asObservable();
-  }
-
-  public set agreements(organizationAgreements: OrganizationAgreement[]) {
-    // Store a copy to prevent updates by reference
-    this._agreements.next([...organizationAgreements]);
-  }
-
-  public get agreements(): OrganizationAgreement[] {
-    const agreements = this._agreements.value ?? [];
-    // Allow access to current value, but prevent updates by reference
-    return [...agreements];
-  }
-
-  public get agreements$(): Observable<OrganizationAgreement[]> {
-    // Allow subscriptions, but make immutable
-    return this._agreements.asObservable();
-  }
-
-  /**
-   * @description
-   * Has signed at least one agreement.
-   */
-  public hasSignedAgreement(): boolean {
-    return this.agreements.some((agreement: OrganizationAgreement) => agreement.acceptedDate);
   }
 }

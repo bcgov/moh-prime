@@ -15,6 +15,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
+// TODO PRIME-1131
+// Should this guard be dropped and only use the registration guard
 @Injectable({
   providedIn: 'root'
 })
@@ -35,6 +37,7 @@ export class OrganizationGuard extends BaseGuard {
     return this.organizationResource.getOrganizationById(organizationId)
       .pipe(
         exhaustMap((organization: Organization) =>
+          // TODO PRIME-1131
           // TODO revisit when guards are re-evaluated
           // TODO use a resolver since only data is updated
           // TODO only invoke when when null (default), and only update
@@ -50,7 +53,7 @@ export class OrganizationGuard extends BaseGuard {
           // Store the organization for access throughout creation and updating of a
           // organization, which will allows provide the most up-to-date organization
           this.organizationService.organization = organization;
-          this.organizationService.agreements = organizationAgreements;
+          // TODO PRIME-1131
           // TODO always resolve until routes are lock down
           return true;
         })
