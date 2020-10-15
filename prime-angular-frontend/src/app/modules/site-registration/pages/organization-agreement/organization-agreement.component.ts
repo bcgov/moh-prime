@@ -53,6 +53,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     private dialog: MatDialog,
     private utilsService: UtilsService
   ) {
+    this.organizationAgreement = null;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -68,7 +69,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         message: 'Are you sure you want to accept the Organization Agreement?',
         actionText: 'Accept Organization Agreement'
       };
-      const payload = this.organizationFormStateService.json;
+
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
@@ -78,17 +79,16 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
               : EMPTY
           ),
           exhaustMap(() =>
-            // TODO PRIME-1127
-            (payload.organizationAgreementGuid)
-              ? this.organizationResource.acceptOrganizationAgreement(organizationId, this.agreementId, payload.organizationAgreementGuid)
+            (this.organizationAgreementGuid.value)
+              ? this.organizationResource
+                .acceptOrganizationAgreement(organizationId, this.agreementId, this.organizationAgreementGuid.value)
               : of(noop)
           ),
-          exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.queryParams.siteId)))
+          exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.params.sid)))
         )
         .subscribe(() => {
-          // TODO should make this cleaner, but for now good enough
           // Remove the org agreement GUID to prevent 404 already
-          // submitted if resubmited in same session
+          // submitted if resubmited in the same session
           this.organizationAgreementGuid.patchValue(null);
           this.nextRoute();
         });
@@ -128,21 +128,11 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public onBack() {
-    const siteId = this.route.snapshot.queryParams.siteId;
-    if (siteId) {
-      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.TECHNICAL_SUPPORT]);
-    } else {
-      this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
-    }
+    this.routeUtils.routeWithin(SiteRoutes.TECHNICAL_SUPPORT);
   }
 
   public nextRoute() {
-    const redirectPath = this.route.snapshot.queryParams.redirect;
-    if (redirectPath) {
-      this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
-    } else {
-      this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
-    }
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }
 
   public ngOnInit(): void {
@@ -156,12 +146,9 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   private initForm() {
     const organization = this.organizationService.organization;
-    const siteId = this.route.snapshot.queryParams.siteId;
+    const siteId = this.route.snapshot.params.sid;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);
-
-    // TODO PRIME-1127
-    // this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
 
     this.busy = this.organizationResource
       .updateOrganizationAgreement(organization.id, siteId)

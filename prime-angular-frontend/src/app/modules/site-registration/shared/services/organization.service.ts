@@ -48,7 +48,7 @@ export class OrganizationService {
     // Allow subscriptions, but make immutable
     return this._organization.asObservable();
   }
-  // TODO PRIME-1127
+
   public set agreements(organizationAgreements: OrganizationAgreement[]) {
     // Store a copy to prevent updates by reference
     this._agreements.next([...organizationAgreements]);
@@ -56,7 +56,8 @@ export class OrganizationService {
 
   public get agreements(): OrganizationAgreement[] {
     // Allow access to current value, but prevent updates by reference
-    return [...this._agreements.value];
+    const agreements = this._agreements.value ?? [];
+    return [...agreements];
   }
 
   public get agreements$(): Observable<OrganizationAgreement[]> {

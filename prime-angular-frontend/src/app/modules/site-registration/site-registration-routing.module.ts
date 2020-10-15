@@ -84,13 +84,6 @@ const routes: Routes = [
                 data: { title: 'Organization Review' }
               },
               {
-                path: SiteRoutes.ORGANIZATION_AGREEMENT,
-                component: OrganizationAgreementComponent,
-                canActivate: [OrganizationGuard],
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Organization Agreement' }
-              },
-              {
                 path: '', // Equivalent to `/` and alias for `organization-review`
                 redirectTo: SiteRoutes.ORGANIZATION_REVIEW,
                 pathMatch: 'full'
@@ -165,6 +158,13 @@ const routes: Routes = [
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Technical Support Contact' }
+                  },
+                  {
+                    path: SiteRoutes.ORGANIZATION_AGREEMENT,
+                    component: OrganizationAgreementComponent,
+                    canActivate: [SiteGuard, OrganizationGuard],
+                    canDeactivate: [CanDeactivateFormGuard],
+                    data: { title: 'Organization Agreement' }
                   },
                   {
                     path: SiteRoutes.SITE_REVIEW,
