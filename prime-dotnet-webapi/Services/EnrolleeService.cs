@@ -173,6 +173,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.RemoteAccessLocations)
+                    .ThenInclude(ral => ral.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.SelfDeclarations)
                 .SingleAsync(e => e.Id == enrolleeId);
@@ -201,7 +202,7 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
-            ReplaceExistingItems(enrollee.RemoteAccessLocations, updateModel.RemoteAccessLocations, enrolleeId);
+            UpdateRemoteAccessLocations(enrollee, updateModel);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -257,6 +258,44 @@ namespace Prime.Services
                 };
 
                 dbEnrollee.MailingAddress = address;
+            }
+        }
+
+        private void UpdateRemoteAccessLocations(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
+        {
+            // Wholesale replace the remote access locations
+            foreach (var location in dbEnrollee.RemoteAccessLocations)
+            {
+                _context.Remove(location.PhysicalAddress);
+                _context.Remove(location);
+            }
+
+            if (updateEnrollee?.RemoteAccessLocations != null && updateEnrollee?.RemoteAccessLocations.Count() != 0)
+            {
+                var remoteAccessLocations = new List<RemoteAccessLocation>();
+
+                foreach (var location in updateEnrollee.RemoteAccessLocations)
+                {
+                    var newAddress = new PhysicalAddress
+                    {
+                        CountryCode = location.PhysicalAddress.CountryCode,
+                        ProvinceCode = location.PhysicalAddress.ProvinceCode,
+                        Street = location.PhysicalAddress.Street,
+                        Street2 = location.PhysicalAddress.Street2,
+                        City = location.PhysicalAddress.City,
+                        Postal = location.PhysicalAddress.Postal
+                    };
+                    var newLocation = new RemoteAccessLocation
+                    {
+                        Enrollee = dbEnrollee,
+                        InternetProvider = location.InternetProvider,
+                        PhysicalAddress = newAddress
+                    };
+                    _context.Entry(newAddress).State = EntityState.Added;
+                    _context.Entry(newLocation).State = EntityState.Added;
+                    remoteAccessLocations.Add(newLocation);
+                }
+                updateEnrollee.RemoteAccessLocations = remoteAccessLocations;
             }
         }
 

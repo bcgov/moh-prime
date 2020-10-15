@@ -13,7 +13,6 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Country } from '@shared/enums/country.enum';
 import { Province } from '@shared/enums/province.enum';
-import { Enrolment } from '@shared/models/enrolment.model';
 
 @Component({
   selector: 'app-remote-access-addresses',
@@ -21,7 +20,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
   styleUrls: ['./remote-access-addresses.component.scss']
 })
 export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage implements OnInit {
-  public enrolment: Enrolment;
+  // public enrolment: Enrolment;
   public formControlNames: string[];
 
   constructor(
@@ -51,7 +50,7 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
       formUtilsService
     );
 
-    this.enrolment = this.enrolmentService.enrolment;
+    // this.enrolment = this.enrolmentService.enrolment;
     this.formControlNames = [
       'street',
       'city',
@@ -60,56 +59,60 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
     ];
   }
 
-
-  public get remoteUserLocations(): FormArray {
-    return this.form.get('remoteUserLocations') as FormArray;
+  public get remoteAccessLocations(): FormArray {
+    return this.form.get('remoteAccessLocations') as FormArray;
   }
 
   public addLocation() {
-    this.addRemoteUserLocation();
+    this.addRemoteAccessLocation();
   }
 
   public removeLocation(index: number) {
-    this.remoteUserLocations.removeAt(index);
+    this.remoteAccessLocations.removeAt(index);
 
-    if (!this.remoteUserLocations.controls.length) {
-      this.addRemoteUserLocation();
+    if (!this.remoteAccessLocations.controls.length) {
+      this.addRemoteAccessLocation();
     }
   }
 
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
+    this.patchForm();
   }
 
-  private addRemoteUserLocation(): void {
-    const remoteUserLocation = this.enrolmentFormStateService
-      .remoteUserLocationFormGroup();
-    remoteUserLocation.get('physicalAddress')
+  private addRemoteAccessLocation(): void {
+    const remoteAccessLocation = this.enrolmentFormStateService
+      .remoteAccessLocationFormGroup();
+    remoteAccessLocation.get('physicalAddress')
       .patchValue({
         countryCode: Country.CANADA,
         provinceCode: Province.BRITISH_COLUMBIA
       });
-    this.disableProvince(remoteUserLocation);
+    this.disableProvince(remoteAccessLocation);
 
-    this.remoteUserLocations.push(remoteUserLocation);
+    this.remoteAccessLocations.push(remoteAccessLocation);
   }
 
-  private disableProvince(remoteUserLocationFormGroups: FormGroup | FormGroup[]): void {
-    (Array.isArray(remoteUserLocationFormGroups))
-      ? remoteUserLocationFormGroups.forEach(group => this.disableProvince(group))
-      : remoteUserLocationFormGroups.get('physicalAddress.provinceCode').disable();
+  private disableProvince(remoteAccessLocationFormGroups: FormGroup | FormGroup[]): void {
+    (Array.isArray(remoteAccessLocationFormGroups))
+      ? remoteAccessLocationFormGroups.forEach(group => this.disableProvince(group))
+      : remoteAccessLocationFormGroups.get('physicalAddress.provinceCode').disable();
   }
 
   protected createFormInstance(): void {
-    this.form = this.enrolmentFormStateService.remoteAccessAddressesForm;
+    this.form = this.enrolmentFormStateService.remoteAccessLocationsForm;
   }
 
   protected initForm(): void {
     // Always have at least one certification ready for
     // the enrollee to fill out
-    if (!this.remoteUserLocations.length) {
-      this.addRemoteUserLocation();
+    if (!this.remoteAccessLocations.length) {
+      this.addRemoteAccessLocation();
     }
+  }
+
+  protected nextRouteAfterSubmit() {
+    super.nextRouteAfterSubmit(this.EnrolmentRoutes.CARE_SETTING);
   }
 }

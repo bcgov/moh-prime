@@ -22,9 +22,9 @@
         </ng-container>
       </app-page-subheader>
 
-      <ng-container *ngFor="let remoteUserLocation of remoteUserLocations.controls; let i = index; let last = last"
-                    formArrayName="remoteUserLocations">
-        <ng-container [formGroup]="remoteUserLocation">
+      <ng-container *ngFor="let remoteAccessLocation of remoteAccessLocations.controls; let i = index; let last = last"
+                    formArrayName="remoteAccessLocations">
+        <ng-container [formGroup]="remoteAccessLocation">
 
           <app-form-icon-group [show]="true"
                                (event)="removeLocation(i)">
@@ -43,7 +43,7 @@
                 </div>
               </div>
 
-              <app-address [form]="remoteUserLocation.get('physicalAddress')"
+              <app-address [form]="remoteAccessLocation.get('physicalAddress')"
                            [formControlNames]="formControlNames"
                            [bcOnly]="true"></app-address>
 
