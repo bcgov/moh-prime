@@ -36,7 +36,7 @@ namespace Prime.Services
 
         Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck);
 
-        Task<IEnumerable<EnrolleeNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee);
+        Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee);
 
         Task<EnrolleeNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId);
 
