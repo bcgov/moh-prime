@@ -16,7 +16,6 @@ import { Contact } from '@registration/shared/models/contact.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
-import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 
 @Injectable({
@@ -235,10 +234,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         const formGroup = this.remoteUserCertificationFormGroup();
         formGroup.patchValue(cert);
         return formGroup;
-      })
-        .forEach((remoteUserLocationFormGroup: FormGroup) =>
-          certs.push(remoteUserLocationFormGroup)
-        );
+      }).forEach((remoteUserCertificationFormGroup: FormGroup) =>
+        certs.push(remoteUserCertificationFormGroup)
+      );
     }
 
     return group;

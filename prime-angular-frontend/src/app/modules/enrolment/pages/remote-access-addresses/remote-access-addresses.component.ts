@@ -20,7 +20,6 @@ import { Province } from '@shared/enums/province.enum';
   styleUrls: ['./remote-access-addresses.component.scss']
 })
 export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage implements OnInit {
-  // public enrolment: Enrolment;
   public formControlNames: string[];
 
   constructor(
@@ -50,7 +49,6 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
       formUtilsService
     );
 
-    // this.enrolment = this.enrolmentService.enrolment;
     this.formControlNames = [
       'street',
       'city',
