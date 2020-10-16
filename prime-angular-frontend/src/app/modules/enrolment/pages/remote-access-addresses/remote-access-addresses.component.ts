@@ -111,6 +111,6 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
   }
 
   protected nextRouteAfterSubmit() {
-    super.nextRouteAfterSubmit(this.EnrolmentRoutes.CARE_SETTING);
+    super.nextRouteAfterSubmit(this.EnrolmentRoutes.SELF_DECLARATION);
   }
 }
