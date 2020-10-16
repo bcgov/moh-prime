@@ -35,33 +35,37 @@
       </div>
     </section>
 
-    <app-page-subheader2>
-      <ng-container appPageSubheader2Title>Vendor</ng-container>
-      <ng-container appPageSubheader2Summary>
-        What PharmaNet software vendor does this site use?
-      </ng-container>
-    </app-page-subheader2>
+    <ng-container *ngIf="filteredVendorConfig.length">
 
-    <section class="mb-4">
-      <mat-radio-group class="radio-group"
-                       formControlName="vendorCode"
-                       (change)="onVendorChange($event)">
-        <mat-radio-button *ngFor="let vendor of filteredVendorConfig"
-                          class="radio-button"
-                          [value]="vendor.code">
-          {{ vendor.name }}
-        </mat-radio-button>
-      </mat-radio-group>
-
-      <app-alert *ngIf="hasNoVendorError"
-                 type="danger"
-                 icon="warning">
-        <ng-container #alertContent
-                      class="alert-content">
-          No vendor has been chosen.
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Vendor</ng-container>
+        <ng-container appPageSubheader2Summary>
+          What PharmaNet software vendor does this site use?
         </ng-container>
-      </app-alert>
-    </section>
+      </app-page-subheader2>
+
+      <section class="mb-4">
+        <mat-radio-group class="radio-group"
+                         formControlName="vendorCode"
+                         (change)="onVendorChange($event)">
+          <mat-radio-button *ngFor="let vendor of filteredVendorConfig"
+                            class="radio-button"
+                            [value]="vendor.code">
+            {{ vendor.name }}
+          </mat-radio-button>
+        </mat-radio-group>
+
+        <app-alert *ngIf="hasNoVendorError"
+                   type="danger"
+                   icon="warning">
+          <ng-container #alertContent
+                        class="alert-content">
+            No vendor has been chosen.
+          </ng-container>
+        </app-alert>
+      </section>
+
+    </ng-container>
 
   </form>
 

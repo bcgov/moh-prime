@@ -97,8 +97,11 @@ export abstract class AbstractFormState<T> {
    */
   public reset(): void {
     this.patched = false;
-    this.forms
-      .forEach((form: FormGroup) => form.reset());
+
+    // Recreate the forms to enforce that the expected
+    // defaults are maintained, which doesn't occur
+    // if AbstractControl::reset() is used
+    this.buildForms();
   }
 
   /**
