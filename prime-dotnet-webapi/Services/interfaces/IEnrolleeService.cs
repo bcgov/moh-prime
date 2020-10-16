@@ -57,5 +57,7 @@ namespace Prime.Services
         Task<EnrolmentStatusReference> AddAdjudicatorNoteToReferenceIdAsync(int statusId, int noteId);
 
         Task<SelfDeclarationDocument> AddSelfDeclarationDocumentAsync(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument);
+
+        Task<IdentificationDocument> CreateIdentificationDocument(int enrolleeId, Guid documentGuid, string filename);
     }
 }

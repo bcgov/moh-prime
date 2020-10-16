@@ -75,6 +75,8 @@ namespace Prime.Models
 
         public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
 
+        public ICollection<IdentificationDocument> IdentificationDocuments { get; set; }
+
         [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
