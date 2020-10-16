@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -37,13 +38,19 @@ namespace Prime.Models
         [NotMapped]
         public int SiteCount
         {
-            get => (this.Sites == null) ? 0 : this.Sites.Count;
+            get => Sites?.Count ?? 0;
         }
 
         [NotMapped]
         public int DisplayId
         {
             get => Id + DISPLAY_OFFSET;
+        }
+
+        [NotMapped]
+        public bool HasAcceptedAgreement
+        {
+            get => Agreements?.Any(a => a.AcceptedDate.HasValue) ?? false;
         }
     }
 }
