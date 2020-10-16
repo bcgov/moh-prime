@@ -64,16 +64,34 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     return this.form.get('sites') as FormArray;
   }
 
+  public get enrolleeRemoteUsers(): FormArray {
+    return this.form.get('enrolleeRemoteUsers') as FormArray;
+  }
+
   public onSubmit() {
+    const enrolleeRemoteUserControls = [];
+
     this.selectedSites = this.sites
       .filter((site, i) => this.sitesFormArray.value[i])
-      .map(site => site.id);
+      .map(site => {
+        site.remoteUsers.forEach(remoteUser => {
+          const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
+          enrolleeRemoteUser.get('enrolleeId').setValue(this.enrolment.id);
+          enrolleeRemoteUser.get('remoteUserId').setValue(remoteUser.id);
+          this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
+        });
 
-    this.busy = this.enrolmentResource
-      .createEnrolleeRemoteUsers(this.enrolment.id, this.selectedSites)
-      .subscribe(() =>
-        this.nextRouteAfterSubmit()
-      );
+        return site.id;
+      });
+
+    console.log(this.form.getRawValue());
+    this.handleSubmission();
+
+    // this.busy = this.enrolmentResource
+    //   .createEnrolleeRemoteUsers(this.enrolment.id, this.selectedSites)
+    //   .subscribe(() =>
+    //     this.nextRouteAfterSubmit()
+    //   );
   }
 
   public onRequestAccess() {
@@ -106,9 +124,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   }
 
   protected createFormInstance() {
-    this.form = this.fb.group({
-      sites: this.fb.array([])
-    });
+    this.form = this.enrolmentFormStateService.remoteAccessForm;
   }
 
   protected initForm() {

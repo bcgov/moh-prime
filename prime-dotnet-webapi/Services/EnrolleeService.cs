@@ -202,6 +202,8 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
+
+            UpdateEnrolleeRemoteUsers(enrollee, updateModel);
             UpdateRemoteAccessLocations(enrollee, updateModel);
 
             // If profileCompleted is true, this is the first time the enrollee
@@ -261,6 +263,26 @@ namespace Prime.Services
             }
         }
 
+        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
+        {
+            // Remove existing items
+            foreach (var item in dbCollection)
+            {
+                _context.Remove(item);
+            }
+
+            // Create new items
+            if (newCollection != null)
+            {
+                foreach (var item in newCollection)
+                {
+                    // Prevent the ID from being changed by the incoming changes
+                    item.EnrolleeId = enrolleeId;
+                    _context.Entry(item).State = EntityState.Added;
+                }
+            }
+        }
+
         private void UpdateRemoteAccessLocations(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
         {
             // Wholesale replace the remote access locations
@@ -299,24 +321,21 @@ namespace Prime.Services
             }
         }
 
-        private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
+        private void UpdateEnrolleeRemoteUsers(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
         {
-            // Remove existing items
-            foreach (var item in dbCollection)
+            var enrolleeRemoteUsers = new List<EnrolleeRemoteUser>();
+
+            foreach (var eru in dbEnrollee.EnrolleeRemoteUsers)
             {
-                _context.Remove(item);
+                _context.EnrolleeRemoteUsers.Remove(eru);
             }
 
-            // Create new items
-            if (newCollection != null)
+            foreach (var eru in updateEnrollee.EnrolleeRemoteUsers)
             {
-                foreach (var item in newCollection)
-                {
-                    // Prevent the ID from being changed by the incoming changes
-                    item.EnrolleeId = enrolleeId;
-                    _context.Entry(item).State = EntityState.Added;
-                }
+                eru.EnrolleeId = dbEnrollee.Id;
+                _context.Entry(eru).State = EntityState.Added;
             }
+
         }
 
         private async Task CreateSelfDeclarationDocuments(int enrolleeId, ICollection<SelfDeclaration> newDeclarations)

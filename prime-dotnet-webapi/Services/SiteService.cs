@@ -461,6 +461,7 @@ namespace Prime.Services
         public async Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
         {
             var sites = await this.GetBaseSiteQuery()
+                .Where(s => s.ApprovedDate != null)
                 .ProjectTo<EnrolleeRemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 

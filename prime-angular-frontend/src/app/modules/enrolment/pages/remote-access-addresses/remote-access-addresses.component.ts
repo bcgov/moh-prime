@@ -105,7 +105,7 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
   }
 
   protected initForm(): void {
-    // Always have at least one certification ready for
+    // Always have at least one location ready for
     // the enrollee to fill out
     if (!this.remoteAccessLocations.length) {
       this.addRemoteAccessLocation();
