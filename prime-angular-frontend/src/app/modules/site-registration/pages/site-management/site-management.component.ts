@@ -10,7 +10,7 @@ import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
-import { OrganizationAgreement } from '@shared/models/agreement.model';
+import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 import { VendorEnum } from '@shared/enums/vendor.enum';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { AddressPipe } from '@shared/pipes/address.pipe';
@@ -62,7 +62,7 @@ export class SiteManagementComponent implements OnInit {
     this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
   }
 
-  public viewAgreement(organization: Organization, organizationAgreement: OrganizationAgreement) {
+  public viewAgreement(organization: Organization, organizationAgreement: OrganizationAgreementViewModel) {
     if (organizationAgreement?.signedAgreementDocumentGuid) {
       // TODO download wet signed agreement via GUID
     } else {
@@ -133,7 +133,7 @@ export class SiteManagementComponent implements OnInit {
           this.organizationResource.getOrganizationAgreements(organization[0].id)
         )
       )
-      .subscribe((agreements: OrganizationAgreement[]) =>
+      .subscribe((agreements: OrganizationAgreementViewModel[]) =>
         this.organizationAgreements = agreements
       );
   }
