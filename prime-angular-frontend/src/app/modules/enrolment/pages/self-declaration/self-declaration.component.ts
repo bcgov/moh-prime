@@ -8,9 +8,15 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
+
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -105,6 +111,26 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   public onRemove(constrolName: string, documentGuid: string) {
     this.removeSelfDeclarationDocumentGuid(constrolName, documentGuid);
+  }
+
+  public onBack() {
+    const certifications = this.enrolmentFormStateService.regulatoryForm
+      .get('certifications').value as CollegeCertification[];
+    const careSettings = this.enrolmentFormStateService.careSettingsForm
+      .get('careSettings').value as CareSetting[];
+
+    let backRoutePath: string;
+    if (!this.isProfileComplete) {
+      backRoutePath = (
+        !certifications.length
+        || certifications.some(cert => cert.collegeCode === CollegeLicenceClass.CPBC)
+        || careSettings.some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+      )
+        ? EnrolmentRoutes.CARE_SETTING
+        : EnrolmentRoutes.REMOTE_ACCESS;
+    }
+
+    this.routeTo(backRoutePath);
   }
 
   public ngOnInit() {
