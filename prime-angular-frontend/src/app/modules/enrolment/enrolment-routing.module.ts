@@ -106,12 +106,6 @@ const routes: Routes = [
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
-      {
-        path: EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES,
-        component: RemoteAccessAddressesComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PRIME Enrolment' }
-      },
       // TODO Temporary removal of device provider for Community Practice
       // {
       //   path: EnrolmentRoutes.DEVICE_PROVIDER,
@@ -134,6 +128,12 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.REMOTE_ACCESS,
         component: RemoteAccessComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES,
+        component: RemoteAccessAddressesComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },

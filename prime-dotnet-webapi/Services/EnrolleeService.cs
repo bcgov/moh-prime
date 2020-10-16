@@ -172,6 +172,7 @@ namespace Prime.Services
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
+                .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessLocations)
                     .ThenInclude(ral => ral.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
@@ -325,17 +326,22 @@ namespace Prime.Services
         {
             var enrolleeRemoteUsers = new List<EnrolleeRemoteUser>();
 
-            foreach (var eru in dbEnrollee.EnrolleeRemoteUsers)
+            if (dbEnrollee.EnrolleeRemoteUsers != null)
             {
-                _context.EnrolleeRemoteUsers.Remove(eru);
+                foreach (var eru in dbEnrollee.EnrolleeRemoteUsers)
+                {
+                    _context.EnrolleeRemoteUsers.Remove(eru);
+                }
             }
 
-            foreach (var eru in updateEnrollee.EnrolleeRemoteUsers)
+            if (updateEnrollee.EnrolleeRemoteUsers != null)
             {
-                eru.EnrolleeId = dbEnrollee.Id;
-                _context.Entry(eru).State = EntityState.Added;
+                foreach (var eru in updateEnrollee.EnrolleeRemoteUsers)
+                {
+                    eru.EnrolleeId = dbEnrollee.Id;
+                    _context.Entry(eru).State = EntityState.Added;
+                }
             }
-
         }
 
         private async Task CreateSelfDeclarationDocuments(int enrolleeId, ICollection<SelfDeclaration> newDeclarations)
