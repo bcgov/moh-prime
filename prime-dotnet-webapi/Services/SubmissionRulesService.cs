@@ -38,7 +38,6 @@ namespace Prime.Services
                 new AlwaysManualRule(),
                 new IdentityAssuranceLevelRule(),
                 new IdentityProviderRule(),
-                new RequestingRemoteAccessRule()
             };
 
             return await ProcessRules(rules, enrollee);
