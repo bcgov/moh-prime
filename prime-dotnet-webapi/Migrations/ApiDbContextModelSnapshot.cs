@@ -5267,8 +5267,7 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnrolleeId")
-                        .IsUnique();
+                    b.HasIndex("EnrolleeId");
 
                     b.ToTable("IdentificationDocument");
                 });
@@ -7593,44 +7592,6 @@ namespace Prime.Migrations
                     b.HasIndex("RemoteUserId");
 
                     b.ToTable("RemoteUserCertification");
-                });
-
-            modelBuilder.Entity("Prime.Models.RemoteUserLocation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("InternetProvider")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("PhysicalAddressId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RemoteUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PhysicalAddressId");
-
-                    b.HasIndex("RemoteUserId");
-
-                    b.ToTable("RemoteUserLocation");
                 });
 
             modelBuilder.Entity("Prime.Models.SelfDeclaration", b =>
@@ -14989,8 +14950,8 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.IdentificationDocument", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithOne("IdentificationDocument")
-                        .HasForeignKey("Prime.Models.IdentificationDocument", "EnrolleeId")
+                        .WithMany("IdentificationDocuments")
+                        .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -15085,21 +15046,6 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.RemoteUser", "RemoteUser")
                         .WithMany("RemoteUserCertifications")
-                        .HasForeignKey("RemoteUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.RemoteUserLocation", b =>
-                {
-                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
-                        .WithMany()
-                        .HasForeignKey("PhysicalAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.RemoteUser", "RemoteUser")
-                        .WithMany()
                         .HasForeignKey("RemoteUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
