@@ -16,10 +16,11 @@ export interface Organization {
   // States -----
   completed: boolean;
   submittedDate: string;
+  hasAcceptedAgreement: boolean;
 }
 
 export interface OrganizationListViewModel extends
-  Omit<Organization, 'siteCount' | 'registrationId'> {
+  Omit<Organization, 'siteCount' | 'registrationId' | 'hasAcceptedAgreement'> {
   sites: SiteListViewModel[];
   // TODO PRIME-1085 (is this still needed?)
   signedAgreementDocumentCount: number;

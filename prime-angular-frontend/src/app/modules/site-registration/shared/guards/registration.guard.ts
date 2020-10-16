@@ -115,7 +115,7 @@ export class RegistrationGuard extends BaseGuard {
       whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
       whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
 
-      if (organization.agreements.some((agreement: OrganizationAgreement) => agreement.acceptedDate)) {
+      if (organization.hasAcceptedAgreement) {
         whiteListedRoutes.push(SiteRoutes.SITE_REVIEW);
       }
     }

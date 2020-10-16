@@ -39,11 +39,11 @@ export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
     this.busy = this.enrolmentResource.getAcceptedAccessTerms(enrolleeId)
       .subscribe(
         (accessTerms: EnrolleeAgreement[]) => {
-          this.logger.info('ACCESS TERMS', accessTerms);
+          this.logger.info('ENROLLEE_AGREEMENT', accessTerms);
           this.dataSource = new MatTableDataSource<EnrolleeAgreement>(accessTerms);
         },
         (error: any) => {
-          this.toastService.openErrorToast('Access Terms could not be retrieved');
+          this.toastService.openErrorToast('Enrollee agreement could not be retrieved');
           this.logger.error('[Enrolments] AccessTerms::getAccessTerms error has occurred: ', error);
         }
       );

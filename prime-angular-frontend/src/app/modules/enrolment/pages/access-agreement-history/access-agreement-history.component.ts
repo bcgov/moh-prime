@@ -46,11 +46,11 @@ export class AccessAgreementHistoryComponent extends BaseEnrolmentPage implement
     this.busy = this.enrolmentResource.getAccessTerm(enrolleeId, accessTermId)
       .subscribe(
         (accessTerm: EnrolleeAgreement) => {
-          this.logger.info('ACCESS TERM', accessTerm);
+          this.logger.info('ENROLLEE_AGREEMENT', accessTerm);
           this.accessTerm = accessTerm;
         },
         (error: any) => {
-          this.toastService.openErrorToast('Access Term could not be retrieved');
+          this.toastService.openErrorToast('Enrollee agreement could not be retrieved');
           this.logger.error('[Enrolments] AccessAgreementHistory::getAccessTerm error has occurred: ', error);
         }
       );

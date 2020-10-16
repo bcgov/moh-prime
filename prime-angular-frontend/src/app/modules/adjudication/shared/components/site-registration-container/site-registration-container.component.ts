@@ -307,7 +307,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     return [].concat(...siteRegistrations);
   }
 
-  private toSiteRegistration(): (models: [Organization, Site]) => SiteRegistrationListViewModel[] {
+  private toSiteRegistration(): ([organization, site]: [Organization, Site]) => SiteRegistrationListViewModel[] {
     return ([organization, site]: [Organization, Site]) => {
       const {
         id: organizationId,

@@ -9,7 +9,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
-import { Agreement, OrganizationAgreement } from '@shared/models/agreement.model';
+import { OrganizationAgreement } from '@shared/models/agreement.model';
 
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
@@ -35,7 +35,7 @@ export class OrganizationResource {
         tap((organizations: OrganizationListViewModel[] | Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
-          this.logger.error('[SiteRegistration] OrganizationResource::getOrganizations error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getOrganizations error has occurred: ', error);
           throw error;
         })
       );
@@ -48,7 +48,7 @@ export class OrganizationResource {
         tap((organization: Organization) => this.logger.info('ORGANIZATION', organization)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be retrieved');
-          this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationById error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getOrganizationById error has occurred: ', error);
           throw error;
         })
       );
@@ -64,7 +64,7 @@ export class OrganizationResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be created');
-          this.logger.error('[SiteRegistration] OrganizationResource::createOrganization error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::createOrganization error has occurred: ', error);
           throw error;
         })
       );
@@ -77,7 +77,7 @@ export class OrganizationResource {
         tap(() => this.toastService.openSuccessToast('Organization has been updated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be updated');
-          this.logger.error('[SiteRegistration] OrganizationResource::updateOrganization error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::updateOrganization error has occurred: ', error);
           throw error;
         })
       );
@@ -88,7 +88,7 @@ export class OrganizationResource {
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
-          this.logger.error('[SiteRegistration] OrganizationResource::updateCompleted error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::updateCompleted error has occurred: ', error);
           throw error;
         })
       );
@@ -104,7 +104,7 @@ export class OrganizationResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be deleted');
-          this.logger.error('[SiteRegistration] OrganizationResource::deleteOrganization error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::deleteOrganization error has occurred: ', error);
           throw error;
         })
       );
@@ -117,7 +117,7 @@ export class OrganizationResource {
         tap(() => this.toastService.openSuccessToast('Organization has been submitted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be submitted');
-          this.logger.error('[SiteRegistration] OrganizationResource::submitOrganization error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::submitOrganization error has occurred: ', error);
           throw error;
         })
       );
@@ -136,7 +136,7 @@ export class OrganizationResource {
         tap((organizationAgreement: OrganizationAgreement) => this.logger.info('ORGANIZATION_AGREEMENT', organizationAgreement)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be updated');
-          this.logger.error('[SiteRegistration] OrganizationResource::updateOrganizationAgreement error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::updateOrganizationAgreement error has occurred: ', error);
           throw error;
         })
       );
@@ -145,7 +145,7 @@ export class OrganizationResource {
   /**
    * @description
    * Get a list of organization agreements.
-   * 
+   *
    * NOTE: Inclues agreement type and document GUID for downloading.
    */
   public getOrganizationAgreements(organizationId: number): Observable<OrganizationAgreement[]> {
@@ -155,7 +155,7 @@ export class OrganizationResource {
         tap((organizationAgreements: OrganizationAgreement[]) => this.logger.info('ORGANIZATION_AGREEMENTS', organizationAgreements)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement(s) could not be retrieved');
-          this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationAgreements error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getOrganizationAgreements error has occurred: ', error);
           throw error;
         })
       );
@@ -174,7 +174,7 @@ export class OrganizationResource {
         tap((organizationAgreement: OrganizationAgreement) => this.logger.info('ORGANIZATION_AGREEMENT', organizationAgreement)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be retrieved');
-          this.logger.error('[SiteRegistration] OrganizationResource::getOrganizationAgreement error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getOrganizationAgreement error has occurred: ', error);
           throw error;
         })
       );
@@ -188,7 +188,7 @@ export class OrganizationResource {
         tap(() => this.toastService.openSuccessToast('Organization agreement has been accepted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be accepted');
-          this.logger.error('[SiteRegistration] OrganizationResource::acceptCurrentOrganizationAgreement error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::acceptOrganizationAgreement error has occurred: ', error);
           throw error;
         })
       );
@@ -200,7 +200,7 @@ export class OrganizationResource {
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be retrieved');
-          this.logger.error('[SiteRegistration] OrganizationResource::getSignedOrganizationAgreement error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getSignedOrganizationAgreement error has occurred: ', error);
           throw error;
         })
       );
@@ -212,7 +212,7 @@ export class OrganizationResource {
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Latest signed organization agreement could not be retrieved');
-          this.logger.error('[SiteRegistration] OrganizationResource::downloadLatestSignedAgreement error has occurred: ', error);
+          this.logger.error('[Core] OrganizationResource::getDownloadTokenForLatestSignedAgreement error has occurred: ', error);
           throw error;
         })
       );

@@ -242,9 +242,9 @@ export class AdjudicationResource {
     return this.apiResource.get<EnrolleeAgreement[]>(`enrollees/${enrolleeId}/agreements`, params)
       .pipe(
         map((response: ApiHttpResponse<EnrolleeAgreement[]>) => response.result),
-        tap((accessTerms: EnrolleeAgreement[]) => this.logger.info('ACCESS_TERMS', accessTerms)),
+        tap((accessTerms: EnrolleeAgreement[]) => this.logger.info('ENROLLEE_AGREEMENT', accessTerms)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Access terms could not be retrieved');
+          this.toastService.openErrorToast('Enrollee agreements could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getAccessTerms error has occurred: ', error);
           throw error;
         })
