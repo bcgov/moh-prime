@@ -15,10 +15,10 @@
       </app-page-subheader2>
 
       <app-document-upload componentName="business-licence"
-                           additionalApiSuffix="business-licence"
                            labelMessage="Drag and drop your business licence or browse"
                            [multiple]="false"
-                           (completed)="onUpload($event)">
+                           (completed)="onUpload($event)"
+                           (remove)="onRemoveDocument($event)">
       </app-document-upload>
 
       <app-alert *ngIf="hasNoBusinessLicenceError"
@@ -58,7 +58,7 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="Doing Business As (Optional)"
+                   placeholder="Doing Business As"
                    formControlName="doingBusinessAs"
                    [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete">

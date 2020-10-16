@@ -13,5 +13,13 @@
   "html.format.wrapAttributes": "force-aligned",
   "html.format.unformatted": "wbr,small,span,a,strong,em,br",
   "git.ignoreLimitWarning": true,
-  "editor.formatOnPaste": true
+  "editor.formatOnPaste": true,
+  "search.exclude": {
+    "./bin": true,
+    "./logs": true,
+    "./obj": true,
+  },
+  "emmet.includeLanguages": {
+    "aspnetcorerazor": "html"
+  }
 }

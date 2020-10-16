@@ -17,6 +17,7 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -129,7 +130,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     }
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.busy = this.enrolmentResource.getLatestAccessTerm(this.enrolment.id, false)

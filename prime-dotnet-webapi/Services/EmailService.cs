@@ -106,7 +106,7 @@ namespace Prime.Services
 
         public async Task SendReminderEmailAsync(Enrollee enrollee)
         {
-            if (!IsValidEmail(enrollee.ContactEmail))
+            if (!IsValidEmail(enrollee.Email))
             {
                 // TODO Log invalid email, cannot send?
                 return;
@@ -114,7 +114,7 @@ namespace Prime.Services
 
             string subject = "PRIME Requires your Attention";
             string body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/ReminderEmail.cshtml", new EmailParams());
-            await Send(PRIME_EMAIL, enrollee.ContactEmail, subject, body);
+            await Send(PRIME_EMAIL, enrollee.Email, subject, body);
         }
 
         public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null)
@@ -131,7 +131,7 @@ namespace Prime.Services
             }
 
             // Always send a copy to the enrollee
-            var ccEmails = new List<string>() { token.Enrollee.ContactEmail };
+            var ccEmails = new List<string>() { token.Enrollee.Email };
 
             string subject = "New Access Request";
             string viewName = string.IsNullOrEmpty(provisionerName)
@@ -239,7 +239,7 @@ namespace Prime.Services
             }
             else
             {
-                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
+                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/CommunityPracticeOrganizationAgreementPdf.cshtml", organization);
             }
 
             return new (string Filename, string HtmlContent)[]

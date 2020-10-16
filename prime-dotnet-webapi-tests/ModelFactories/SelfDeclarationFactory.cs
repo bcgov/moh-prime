@@ -18,6 +18,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.SelfDeclarationTypeCode, f => f.PickRandom(SelfDeclarationTypeLookup.All).Code);
 
             Ignore(x => x.SelfDeclarationType);
+            Ignore(x => x.DocumentGuids);
         }
     }
 }

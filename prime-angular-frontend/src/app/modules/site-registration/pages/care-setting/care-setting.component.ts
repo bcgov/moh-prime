@@ -9,6 +9,7 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
@@ -19,7 +20,6 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 
@@ -68,6 +68,10 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
 
   public get careSettingCode(): FormControl {
     return this.form.get('careSettingCode') as FormControl;
+  }
+
+  public get vendorCode(): FormControl {
+    return this.form.get('vendorCode') as FormControl;
   }
 
   public onSubmit() {
@@ -163,7 +167,10 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
               vendorConfig.careSettingCode === careSettingCode
           )
         )
-      ).subscribe((vendors: VendorConfig[]) => this.filteredVendorConfig = vendors);
+      ).subscribe((vendors: VendorConfig[]) => {
+        this.filteredVendorConfig = vendors;
+        this.vendorCode.patchValue(null);
+      });
 
     const site = this.siteService.site;
     this.isCompleted = site?.completed;

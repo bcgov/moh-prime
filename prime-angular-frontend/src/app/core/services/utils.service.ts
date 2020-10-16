@@ -42,8 +42,8 @@ export class UtilsService {
 
   /**
    * @description
-   * Scroll to a material form field that is invalid.
-   * If it is in a section scroll to the section instead.
+   * Scroll to a material form field that is invalid, and if contained
+   * within a <section> scroll to the section instead.
    */
   public scrollToErrorSection(): void {
     const firstElementWithError = document.querySelector('mat-form-field.ng-invalid');
@@ -154,7 +154,8 @@ export class UtilsService {
    * Download a document using a document manager download token.
    */
   public downloadToken(token: string): void {
-    window.location.assign(`${this.config.documentManagerUrl}/documents/downloads/${token}`);
+    this.window.location
+      .assign(`${this.config.documentManagerUrl}/documents/downloads/${token}`);
   }
 
   /**
@@ -162,7 +163,6 @@ export class UtilsService {
    * Open an email using the user's default mail client.
    */
   public mailTo(recipient: string, subject: string = null, body: string = null) {
-
     if (recipient) {
       let href = `mailto:${recipient}`;
 

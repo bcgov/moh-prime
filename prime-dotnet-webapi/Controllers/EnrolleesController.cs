@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -111,29 +112,50 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Enrollee>> CreateEnrollee(Enrollee enrollee)
+        public async Task<ActionResult<Enrollee>> CreateEnrollee(EnrolleeCreatePayload payload)
         {
-            if (enrollee == null)
+            if (payload == null || payload.Enrollee == null)
             {
                 this.ModelState.AddModelError("Enrollee", "Could not create an enrollee, the passed in Enrollee cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
-            if (!enrollee.PermissionsRecord().EditableBy(User))
-            {
-                return Forbid();
-            }
 
-            if (await _enrolleeService.UserIdExistsAsync(enrollee.UserId))
+            if (await _enrolleeService.UserIdExistsAsync(User.GetPrimeUserId()))
             {
                 this.ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            enrollee.IdentityAssuranceLevel = User.GetIdentityAssuranceLevel();
-            enrollee.IdentityProvider = User.GetIdentityProvider();
+            var createModel = payload.Enrollee;
+            createModel.MapConditionalProperties(User);
 
-            var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(enrollee);
-            enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
+            string filename = null;
+            if (!createModel.IsBcServicesCard())
+            {
+                if (payload.IdentificationDocumentGuid != null)
+                {
+                    filename = await _documentService.FinalizeDocumentUpload((Guid)payload.IdentificationDocumentGuid, "identification_document");
+                    if (string.IsNullOrWhiteSpace(filename))
+                    {
+                        this.ModelState.AddModelError("documentGuid", "Identification document could not be created; network error or upload is already submitted");
+                        return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                    }
+                }
+                else
+                {
+                    this.ModelState.AddModelError("documentGuid", "Identification Document Guid was not supplied with request; Cannot create enrollee without identification.");
+                    return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                }
+            }
+
+            var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(createModel);
+
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
+
+            if (filename != null)
+            {
+                await _enrolleeService.CreateIdentificationDocument(enrollee.Id, (Guid)payload.IdentificationDocumentGuid, filename);
+            }
 
             return CreatedAtAction(
                 nameof(GetEnrolleeById),
@@ -147,7 +169,7 @@ namespace Prime.Controllers
         /// Updates a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="enrolleeProfile"></param>
+        /// <param name="enrollee"></param>
         /// <param name="beenThroughTheWizard"></param>
         [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -155,7 +177,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, [FromQuery] bool beenThroughTheWizard)
+        public async Task<IActionResult> UpdateEnrollee(int enrolleeId, EnrolleeUpdateModel enrollee, [FromQuery] bool beenThroughTheWizard)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -174,7 +196,9 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, enrolleeProfile, beenThroughTheWizard);
+            enrollee.MapConditionalProperties(User);
+
+            await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, enrollee, beenThroughTheWizard);
 
             return NoContent();
         }
@@ -594,13 +618,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="selfDeclarationDocumentId"></param>
-        [HttpGet("{enrolleeId}/self-declaration-document/{selfDeclarationDocumentId}", Name = nameof(getSelfDeclarationDocument))]
+        [HttpGet("{enrolleeId}/self-declaration-document/{selfDeclarationDocumentId}", Name = nameof(GetSelfDeclarationDocument))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> getSelfDeclarationDocument(int enrolleeId, int selfDeclarationDocumentId)
+        public async Task<ActionResult<string>> GetSelfDeclarationDocument(int enrolleeId, int selfDeclarationDocumentId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -613,6 +637,36 @@ namespace Prime.Controllers
             }
 
             var token = await _documentService.GetDownloadTokenForSelfDeclarationDocument(selfDeclarationDocumentId);
+
+            return Ok(ApiResponse.Result(token));
+        }
+
+        // GET: api/Enrollees/{enrolleeId}/identification-document/{identificationDocumentId}
+        /// <summary>
+        /// Get the Identification Document download token.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="identificationDocumentId"></param>
+        [HttpGet("{enrolleeId}/identification-document/{identificationDocumentId}", Name = nameof(GetIdentificationDocument))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetIdentificationDocument(int enrolleeId, int identificationDocumentId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            if (!record.ViewableBy(User))
+            {
+                return Forbid();
+            }
+
+            var token = await _documentService.GetDownloadTokenForIdentificationDocument(identificationDocumentId);
 
             return Ok(ApiResponse.Result(token));
         }

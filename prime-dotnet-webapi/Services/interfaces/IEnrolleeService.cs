@@ -26,7 +26,7 @@ namespace Prime.Services
 
         Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
 
-        Task<int> CreateEnrolleeAsync(Enrollee enrollee);
+        Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
 
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
 
@@ -59,5 +59,7 @@ namespace Prime.Services
         Task<SelfDeclarationDocument> AddSelfDeclarationDocumentAsync(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument);
 
         Task<IEnumerable<EnrolleeRemoteUser>> AddEnrolleeRemoteUsersAsync(Enrollee enrollee, List<int> sites);
+
+        Task<IdentificationDocument> CreateIdentificationDocument(int enrolleeId, Guid documentGuid, string filename);
     }
 }

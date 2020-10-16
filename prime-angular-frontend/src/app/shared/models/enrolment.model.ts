@@ -1,5 +1,6 @@
 import { Enrollee } from '@shared/models/enrollee.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
@@ -9,13 +10,11 @@ import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { EnrolleeRemoteUser } from './enrollee-remote-user.model';
+import { IdentificationDocument } from './identification-document.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
-  id?: number;
   displayId?: number;
-  hpdid: string;
   firstName: string;
   lastName: string;
   givenNames: string;
@@ -29,6 +28,7 @@ export interface HttpEnrollee extends Enrollee {
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
+  identificationDocuments: IdentificationDocument[];
   enrolleeCareSettings: CareSetting[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
@@ -64,6 +64,7 @@ export interface Enrolment {
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
+  identificationDocuments: IdentificationDocument[];
   careSettings: CareSetting[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;

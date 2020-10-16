@@ -25,10 +25,10 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.PreferredMiddleName, (f, x) => x.PreferredFirstName == null ? null : f.Name.FirstName());
             RuleFor(x => x.PreferredLastName, (f, x) => x.PreferredFirstName == null ? null : f.Name.LastName());
             RuleFor(x => x.DateOfBirth, f => f.Date.Past(50, DateTime.Now.AddYears(-19)));
-            RuleFor(x => x.ContactEmail, f => f.Internet.Email());
-            RuleFor(x => x.VoicePhone, f => f.Phone.PhoneNumber());
-            RuleFor(x => x.VoiceExtension, f => f.Random.Replace("###").OrNull(f));
-            RuleFor(x => x.ContactPhone, f => f.Phone.PhoneNumber().OrNull(f));
+            RuleFor(x => x.Email, f => f.Internet.Email());
+            RuleFor(x => x.Phone, f => f.Phone.PhoneNumber());
+            RuleFor(x => x.PhoneExtension, f => f.Random.Replace("###").OrNull(f));
+            RuleFor(x => x.SmsPhone, f => f.Phone.PhoneNumber().OrNull(f));
             RuleFor(x => x.DeviceProviderNumber, f => null);
             RuleFor(x => x.IsInsulinPumpProvider, f => null);
             RuleFor(x => x.GPID, f => null);
@@ -38,6 +38,7 @@ namespace PrimeTests.ModelFactories
 
             RuleFor(x => x.SelfDeclarations, (f, x) => new SelfDeclarationFactory(x).GenerateBetween(0, 1));
             RuleFor(x => x.SelfDeclarationDocuments, f => null);
+            RuleFor(x => x.IdentificationDocuments, f => null);
 
             RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x).Generate(1, "default,inProgress"));
             RuleFor(x => x.PhysicalAddress, f => new PhysicalAddressFactory().Generate());
@@ -50,8 +51,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
             RuleFor(x => x.isAdminView, f => true);
-            RuleFor(x => x.RequestingRemoteAccess, f => false);
-            // TODO: fix these ignores
+            // TODO: create rule sets for these ignores?
             Ignore(x => x.AccessTerms);
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
@@ -59,6 +59,7 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.IdentityProvider);
             Ignore(x => x.Credential);
             Ignore(x => x.CredentialId);
+            Ignore(x => x.EnrolleeRemoteUsers);
 
             RuleSet("status.submitted", (set) =>
             {

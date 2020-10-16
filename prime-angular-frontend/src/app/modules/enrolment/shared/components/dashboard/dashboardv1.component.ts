@@ -98,7 +98,7 @@ export class DashboardV1Component implements OnInit {
     // Initialize the side navigation based on the type of user
     this.dashboardNavSections = this.getSideNavSections();
 
-    if (await this.authService.isEnrollee()) {
+    if (this.authService.isEnrollee()) {
       // Listen for changes to the current enrolment status to update
       // the side navigation based on enrollee progression
       merge(
@@ -124,7 +124,8 @@ export class DashboardV1Component implements OnInit {
       .subscribe((device: string) => this.setSideNavProps(device));
 
     const user = await this.authService.getUser();
-    this.username = `${user.firstName} ${user.lastName}`;
+    // Identity providers don't all provide last name
+    this.username = `${user?.firstName} ${user.lastName ?? ''}`;
   }
 
   private getSideNavSections(): DashboardNavSectionV1[] {

@@ -1,11 +1,15 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
+import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+
+import { AuthService } from '@auth/shared/services/auth.service';
+import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -17,12 +21,26 @@ export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;
   @Input() public enrolment: Enrolment;
   @Output() public route: EventEmitter<string>;
-
+  public identityProvider: IdentityProvider;
+  public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
+  public selfDeclarationQuestions = selfDeclarationQuestions;
+  public demographicRoutePath: string;
+  public IdentityProvider = IdentityProvider;
   public EnrolmentRoutes = EnrolmentRoutes;
 
-  constructor() {
+  constructor(
+    private authService: AuthService
+  ) {
     this.showEditRedirect = false;
     this.route = new EventEmitter<string>();
+
+    this.authService.identityProvider$()
+      .subscribe((identityProvider: IdentityProvider) => {
+        this.identityProvider = identityProvider;
+        this.demographicRoutePath = (identityProvider === IdentityProvider.BCEID)
+          ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
+          : EnrolmentRoutes.BCSC_DEMOGRAPHIC
+      });
   }
 
   public get enrollee() {

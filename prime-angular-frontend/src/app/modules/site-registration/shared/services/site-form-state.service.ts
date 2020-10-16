@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { StringUtils } from '@lib/utils/string-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { FormUtilsService } from '@core/services/form-utils.service';
+import { RouteStateService } from '@core/services/route-state.service';
+import { LoggerService } from '@core/services/logger.service';
 
+import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 import { Contact } from '@registration/shared/models/contact.model';
@@ -15,7 +18,6 @@ import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
-import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -30,15 +32,18 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   public privacyOfficerForm: FormGroup;
   public technicalSupportForm: FormGroup;
 
+  protected readonly resetRoutes: string[] = [SiteRoutes.SITE_MANAGEMENT];
+
   private siteId: number;
   private organizationId: number;
   private provisionerId: number;
 
   constructor(
     protected fb: FormBuilder,
-    private formUtilsService: FormUtilsService
+    protected routeStateService: RouteStateService,
+    protected logger: LoggerService
   ) {
-    super(fb);
+    super(fb, routeStateService, logger);
   }
 
   /**
@@ -61,7 +66,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    */
   public get json(): Site {
     const { careSettingCode, vendorCode } = this.careSettingTypeForm.getRawValue();
-    const { doingBusinessAs } = this.businessForm.getRawValue();
+    const { businessLicenceGuid, doingBusinessAs } = this.businessForm.getRawValue();
     const { physicalAddress } = this.siteAddressForm.getRawValue();
     const businessHours = this.hoursOperationForm.getRawValue().businessDays
       .map((hours: BusinessDayHours, dayOfWeek: number) => {
@@ -98,7 +103,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         siteId: this.siteId,
         vendorCode
       }],
-      // businessLicenceDocuments (N/A)
+      businessLicenceGuid,
       doingBusinessAs,
       physicalAddressId: physicalAddress?.id,
       physicalAddress,
@@ -139,7 +144,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * Initialize and configure the forms for patching, which is also used
    * clear previous form data from the service.
    */
-  public init() {
+  protected buildForms() {
     this.careSettingTypeForm = this.buildCareSettingTypeForm();
     this.businessForm = this.buildBusinessForm();
     this.siteAddressForm = this.buildSiteAddressForm();
@@ -154,9 +159,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * @description
    * Manage the conversion of JSON to reactive forms.
    */
-  protected patchForm(site: Site): Site {
+  protected patchForm(site: Site): void {
     if (!site) {
-      return null;
+      return;
     }
 
     this.careSettingTypeForm.patchValue(site);
@@ -187,7 +192,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       this.hoursOperationForm.get('businessDays').patchValue(businessDays);
     }
 
-
     const remoteUsersForm = this.remoteUsersForm;
     const remoteUsersFormArray = remoteUsersForm.get('remoteUsers') as FormArray;
     remoteUsersFormArray.clear(); // Clear out existing indices
@@ -210,6 +214,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       .filter(([form, data]: [FormGroup, Party]) => data)
       .forEach((formParty: [FormGroup, Party]) => this.toPersonFormModel<Contact>(formParty));
   }
+
+  /**
+   * Form Builders and Helpers
+   */
 
   /**
    * @description
@@ -261,9 +269,13 @@ export class SiteFormStateService extends AbstractFormState<Site> {
 
   private buildBusinessForm(): FormGroup {
     return this.fb.group({
-      doingBusinessAs: [
+      businessLicenceGuid: [
         '',
         []
+      ],
+      doingBusinessAs: [
+        '',
+        [Validators.required]
       ]
     });
   }

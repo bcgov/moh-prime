@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Prime.Models;
-using Prime.ViewModels;
-using Prime.Models.Api;
 using DelegateDecompiler.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+
+using Prime.Auth;
+using Prime.Models;
+using Prime.ViewModels;
+using Prime.Models.Api;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
@@ -21,6 +24,7 @@ namespace Prime.Services
         private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
         private readonly IBusinessEventService _businessEventService;
         private readonly ISiteService _siteService;
+        private readonly IDocumentManagerClient _documentClient;
 
         public EnrolleeService(
             ApiDbContext context,
@@ -30,7 +34,8 @@ namespace Prime.Services
             IEmailService emailService,
             IEnrolleeProfileVersionService enroleeProfileVersionService,
             IBusinessEventService businessEventService,
-            ISiteService siteService)
+            ISiteService siteService,
+            IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
@@ -39,6 +44,7 @@ namespace Prime.Services
             _enroleeProfileVersionService = enroleeProfileVersionService;
             _businessEventService = businessEventService;
             _siteService = siteService;
+            _documentClient = documentClient;
         }
 
         public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
@@ -110,8 +116,8 @@ namespace Prime.Services
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(e => e.FirstName,
                         e => e.LastName,
-                        e => e.ContactEmail,
-                        e => e.VoicePhone,
+                        e => e.Email,
+                        e => e.Phone,
                         e => e.DisplayId.ToString())
                     .SearchCollections(e => e.Certifications.Select(c => c.LicenseNumber))
                     .Containing(searchOptions.TextSearch)
@@ -140,10 +146,11 @@ namespace Prime.Services
             return enrollee;
         }
 
-        public async Task<int> CreateEnrolleeAsync(Enrollee enrollee)
+        public async Task<int> CreateEnrolleeAsync(EnrolleeCreateModel createModel)
         {
-            enrollee.ThrowIfNull(nameof(enrollee));
+            createModel.ThrowIfNull(nameof(createModel));
 
+            var enrollee = _mapper.Map<Enrollee>(createModel);
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             _context.Enrollees.Add(enrollee);
 
@@ -158,9 +165,10 @@ namespace Prime.Services
             return enrollee.Id;
         }
 
-        public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false)
+        public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel updateModel, bool profileCompleted = false)
         {
             var enrollee = await _context.Enrollees
+                .Include(e => e.PhysicalAddress)
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
@@ -168,13 +176,30 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .SingleAsync(e => e.Id == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(enrolleeProfile);
+            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
-            UpdateMailingAddress(enrollee, enrolleeProfile.MailingAddress);
-            ReplaceExistingItems(enrollee.Certifications, enrolleeProfile.Certifications, enrolleeId);
-            ReplaceExistingItems(enrollee.Jobs, enrolleeProfile.Jobs, enrolleeId);
-            ReplaceExistingItems(enrollee.EnrolleeCareSettings, enrolleeProfile.EnrolleeCareSettings, enrolleeId);
-            ReplaceExistingItems(enrollee.SelfDeclarations, enrolleeProfile.SelfDeclarations, enrolleeId);
+            // TODO currently doesn't update the date of birth
+            if (enrollee.IdentityProvider != AuthConstants.BC_SERVICES_CARD)
+            {
+                enrollee.FirstName = updateModel.PreferredFirstName;
+                enrollee.LastName = updateModel.PreferredLastName;
+                enrollee.GivenNames = $"{updateModel.PreferredFirstName} {updateModel.PreferredMiddleName}";
+                UpdatePhysicalAddress(enrollee, new PhysicalAddress
+                {
+                    CountryCode = updateModel.MailingAddress.CountryCode,
+                    ProvinceCode = updateModel.MailingAddress.ProvinceCode,
+                    Street = updateModel.MailingAddress.Street,
+                    Street2 = updateModel.MailingAddress.Street2,
+                    City = updateModel.MailingAddress.City,
+                    Postal = updateModel.MailingAddress.Postal
+                });
+            }
+
+            UpdateMailingAddress(enrollee, updateModel.MailingAddress);
+            ReplaceExistingItems(enrollee.Certifications, updateModel.Certifications, enrolleeId);
+            ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
+            ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -183,6 +208,9 @@ namespace Prime.Services
             {
                 enrollee.ProfileCompleted = true;
             }
+
+            // This is the temporary way we are adding self declaration documents until this gets refactored.
+            await CreateSelfDeclarationDocuments(enrolleeId, updateModel.SelfDeclarations);
 
             try
             {
@@ -194,6 +222,19 @@ namespace Prime.Services
             }
         }
 
+        private void UpdatePhysicalAddress(Enrollee dbEnrollee, PhysicalAddress newAddress)
+        {
+            if (dbEnrollee.PhysicalAddress != null && newAddress != null)
+            {
+                newAddress.Id = dbEnrollee.PhysicalAddress.Id;
+                _context.Entry(dbEnrollee.PhysicalAddress).CurrentValues.SetValues(newAddress);
+            }
+            else if (newAddress != null)
+            {
+                dbEnrollee.PhysicalAddress = newAddress;
+            }
+        }
+
         private void UpdateMailingAddress(Enrollee dbEnrollee, MailingAddress newAddress)
         {
             if (dbEnrollee.MailingAddress != null)
@@ -201,7 +242,20 @@ namespace Prime.Services
                 _context.Addresses.Remove(dbEnrollee.MailingAddress);
             }
 
-            dbEnrollee.MailingAddress = newAddress;
+            if (newAddress != null)
+            {
+                var address = new MailingAddress
+                {
+                    CountryCode = newAddress.CountryCode,
+                    ProvinceCode = newAddress.ProvinceCode,
+                    Street = newAddress.Street,
+                    Street2 = newAddress.Street2,
+                    City = newAddress.City,
+                    Postal = newAddress.Postal
+                };
+
+                dbEnrollee.MailingAddress = address;
+            }
         }
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
@@ -220,6 +274,35 @@ namespace Prime.Services
                     // Prevent the ID from being changed by the incoming changes
                     item.EnrolleeId = enrolleeId;
                     _context.Entry(item).State = EntityState.Added;
+                }
+            }
+        }
+
+        private async Task CreateSelfDeclarationDocuments(int enrolleeId, ICollection<SelfDeclaration> newDeclarations)
+        {
+            if (newDeclarations == null)
+            {
+                return;
+            }
+
+            foreach (var declaration in newDeclarations.Where(d => d.DocumentGuids != null))
+            {
+                foreach (var documentGuid in declaration.DocumentGuids)
+                {
+                    var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "self_declarations");
+                    if (string.IsNullOrWhiteSpace(filename))
+                    {
+                        throw new InvalidOperationException($"Could not find a document upload with GUID {documentGuid}");
+                    }
+
+                    _context.SelfDeclarationDocuments.Add(new SelfDeclarationDocument
+                    {
+                        EnrolleeId = enrolleeId,
+                        SelfDeclarationTypeCode = declaration.SelfDeclarationTypeCode,
+                        DocumentGuid = documentGuid,
+                        Filename = filename,
+                        UploadedDate = DateTimeOffset.Now
+                    });
                 }
             }
         }
@@ -283,9 +366,10 @@ namespace Prime.Services
                 .Include(e => e.AccessAgreementNote)
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.SelfDeclarationDocuments)
+                .Include(e => e.IdentificationDocuments)
                 .Include(e => e.AssignedPrivileges)
                     .ThenInclude(ap => ap.Privilege)
-                .Include(e => e.AccessTerms)
+                .Include(e => e.Agreements)
                 .Include(e => e.Credential);
         }
 
@@ -441,7 +525,7 @@ namespace Prime.Services
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
             return await _context.Enrollees
-                .Include(e => e.AccessTerms)
+                .Include(e => e.Agreements)
                 .Where(e => hpdids.Contains(e.HPDID))
                 .Where(e => !e.CurrentStatus.IsType(StatusType.Declined))
                 .Select(e => HpdidLookup.FromEnrollee(e))
@@ -510,6 +594,22 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return enrolleeRemoteUsers;
+        }
+
+        public async Task<IdentificationDocument> CreateIdentificationDocument(int enrolleeId, Guid documentGuid, string filename)
+        {
+            var identificationDocument = new IdentificationDocument
+            {
+                DocumentGuid = documentGuid,
+                EnrolleeId = enrolleeId,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now
+            };
+            _context.IdentificationDocuments.Add(identificationDocument);
+
+            await _context.SaveChangesAsync();
+
+            return identificationDocument;
         }
     }
 }

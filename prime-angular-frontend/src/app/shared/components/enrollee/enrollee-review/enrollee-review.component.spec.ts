@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { EnrolleeReviewComponent } from './enrollee-review.component';
 import { SharedModule } from '@shared/shared.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -19,7 +21,8 @@ describe('EnrolleeReviewComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        KeycloakService
       ]
     }).compileComponents();
   }));

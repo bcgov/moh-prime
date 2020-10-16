@@ -3,31 +3,30 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
+import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { Address } from '@shared/models/address.model';
 import { AccessTerm } from '@shared/models/access-term.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { Site } from '@registration/shared/models/site.model';
-import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnrolmentResource {
-
   constructor(
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
@@ -46,7 +45,7 @@ export class EnrolmentResource {
       );
   }
 
-  public createEnrollee(payload: Enrollee): Observable<Enrolment> {
+  public createEnrollee(payload: { enrollee: Enrollee, identificationDocumentGuid?: string }): Observable<Enrolment> {
     return this.apiResource.post<HttpEnrollee>('enrollees', payload)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
@@ -59,8 +58,7 @@ export class EnrolmentResource {
     const { id } = enrolment;
     const params = this.apiResourceUtilsService.makeHttpParams({ beenThroughTheWizard });
     return this.apiResource.put<NoContent>(`enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), params)
-      // TODO remove pipe when ApiResource handles NoContent
-      .pipe(map(() => { }));
+      .pipe(NoContentResponse);
   }
 
   public submitApplication(enrolment: Enrolment): Observable<HttpEnrollee> {
@@ -173,6 +171,16 @@ export class EnrolmentResource {
       );
   }
 
+
+  public getDownloadTokenIdentificationDocument(enrolleeId: number, identificationDocumentId: number): Observable<string> {
+    return this.apiResource
+      .get<string>(`enrollees/${enrolleeId}/identification-document/${identificationDocumentId}`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap((document: string) => this.logger.info('DOCUMENT', document)),
+      );
+  }
+
   // ---
   // Enrollee and Enrolment Adapters
   // ---
@@ -193,6 +201,14 @@ export class EnrolmentResource {
   }
 
   private enrolleeVersionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
+    const mapping = {
+      voicePhone: 'phone',
+      voiceExtension: 'phoneExtension',
+      contactEmail: 'email',
+      contactPhone: 'smsPhone'
+    };
+    ObjectUtils.keyMapping(profileSnapshot, mapping);
+
     // Key index aligns with SelfDeclarationTypeEnum
     const selfDeclarations = {
       hasConviction: 'Has Conviction',
@@ -258,10 +274,10 @@ export class EnrolmentResource {
       hpdid,
       physicalAddress,
       mailingAddress,
-      contactEmail,
-      contactPhone,
-      voicePhone,
-      voiceExtension,
+      email,
+      smsPhone,
+      phone,
+      phoneExtension,
       ...remainder
     } = enrollee;
 
@@ -279,10 +295,10 @@ export class EnrolmentResource {
         hpdid,
         physicalAddress,
         mailingAddress,
-        contactEmail,
-        contactPhone,
-        voicePhone,
-        voiceExtension
+        email,
+        smsPhone,
+        phone,
+        phoneExtension
       },
       // Provide the default and allow it to be overridden
       collectionNoticeAccepted: false,

@@ -3,8 +3,7 @@
   <app-page-header>PRIME Enrolment</app-page-header>
 
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
-                                    [inProgress]="isInitialEnrolment"
-                                    [currentRoute]="EnrolmentRoutes.REGULATORY"></app-enrolment-progress-indicator>
+                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -16,7 +15,7 @@
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
         <ng-container appPageSubheaderSummary>
           Provide details for all your active College licenses. This is the licence that indicates your authority to
-          deliver health care directly to patients in BC. If you do not have a licence from one of the colleges listed
+          deliver health care directly to patients in B.C. If you do not have a licence from one of the colleges listed
           here, select <strong>None</strong>.
         </ng-container>
       </app-page-subheader>
@@ -54,6 +53,6 @@
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
-                   (back)="routeTo(EnrolmentRoutes.DEMOGRAPHIC)"></app-page-footer>
+                   (back)="routeTo(EnrolmentRoutes.BCSC_DEMOGRAPHIC)"></app-page-footer>
 
 </app-enrollee-page>

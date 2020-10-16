@@ -60,7 +60,7 @@ namespace Prime.Services
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.EnrolleeCareSettings)
-                .Include(e => e.AccessTerms)
+                .Include(e => e.Agreements)
                 .Include(e => e.SelfDeclarations)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 

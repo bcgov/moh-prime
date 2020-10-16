@@ -6,8 +6,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Observable, Subscription, EMPTY, of, noop, concat, pipe } from 'rxjs';
 import { map, exhaustMap, tap } from 'rxjs/operators';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 
+import { UtilsService } from '@core/services/utils.service';
+import { ToastService } from '@core/services/toast.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
@@ -24,11 +27,9 @@ import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-proper
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
+
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { UtilsService } from '@core/services/utils.service';
-import { ToastService } from '@core/services/toast.service';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -84,7 +85,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.adjudicationResource.getEnrolleeById(enrolleeId)
       .pipe(
         exhaustMap((enrollee: HttpEnrollee) => {
-          if (enrollee.contactEmail) {
+          if (enrollee.email) {
             return of(enrollee);
           }
           this.toastService.openErrorToast('Enrollee does not have a contact email.');
@@ -94,7 +95,7 @@ export class AdjudicationContainerComponent implements OnInit {
           .pipe(map(() => enrollee)))
       )
       .subscribe((enrollee: HttpEnrollee) => {
-        this.utilsService.mailTo(enrollee.contactEmail);
+        this.utilsService.mailTo(enrollee.email);
       });
   }
 

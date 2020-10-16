@@ -10,6 +10,7 @@ using AutoMapper.QueryableExtensions;
 
 using Prime.Models;
 using Prime.ViewModels;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
@@ -19,6 +20,7 @@ namespace Prime.Services
         private readonly IBusinessEventService _businessEventService;
         private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
+        private readonly IDocumentManagerClient _documentClient;
 
         public SiteService(
             ApiDbContext context,
@@ -26,13 +28,15 @@ namespace Prime.Services
             IMapper mapper,
             IBusinessEventService businessEventService,
             IPartyService partyService,
-            IOrganizationService organizationService)
+            IOrganizationService organizationService,
+            IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
             _businessEventService = businessEventService;
             _partyService = partyService;
             _organizationService = organizationService;
+            _documentClient = documentClient;
         }
 
         public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
@@ -426,8 +430,14 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(v => v.Code == vendorCode);
         }
 
-        public async Task<BusinessLicenceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid, string filename)
+        public async Task<BusinessLicenceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid)
         {
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
             var businessLicence = new BusinessLicenceDocument
             {
                 DocumentGuid = documentGuid,
@@ -435,14 +445,9 @@ namespace Prime.Services
                 Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };
-
             _context.BusinessLicenceDocuments.Add(businessLicence);
 
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not add business licence.");
-            }
+            await _context.SaveChangesAsync();
 
             return businessLicence;
         }
