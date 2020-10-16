@@ -131,7 +131,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.CARE_SETTING;
+      nextRoutePath = EnrolmentRoutes.SELF_DECLARATION;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
