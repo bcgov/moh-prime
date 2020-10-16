@@ -1,9 +1,10 @@
-import { AbstractControl, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators, FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { RouterEvent } from '@angular/router';
 
 import { map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AddressLine } from '@lib/types/address-line.type';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Province } from '@shared/enums/province.enum';
@@ -160,10 +161,10 @@ export abstract class AbstractFormState<T> {
    *  exclude control names that are not needed
    */
   protected buildAddressForm(options: {
-    areRequired?: string[],
-    areDisabled?: string[],
-    useDefaults?: boolean,
-    exclude?: string[]
+    areRequired?: AddressLine[],
+    areDisabled?: AddressLine[],
+    useDefaults?: Extract<AddressLine, 'provinceCode' | 'countryCode'>[],
+    exclude?: AddressLine[]
   } = null): FormGroup {
     const controlsConfig = {
       id: [
@@ -197,21 +198,27 @@ export abstract class AbstractFormState<T> {
     };
 
     Object.keys(controlsConfig)
-      .filter((key: string) => !options?.exclude?.includes(key))
-      .forEach((key: string, index: number) => {
+      .filter((key: AddressLine) => !options?.exclude?.includes(key))
+      .forEach((key: AddressLine, index: number) => {
         const control = controlsConfig[key];
+        const controlProps = control[0] as { value: any, disabled: boolean };
+        const controlValidators = control[1] as Array<ValidatorFn>;
+
         if (options?.areDisabled?.includes(key)) {
-          control[0].disabled = true;
+          controlProps.disabled = true;
         }
-        if (options?.useDefaults) {
+
+        const useDefaults = options?.useDefaults;
+        if (useDefaults) {
           if (key === 'provinceCode') {
-            control[0].value = Province.BRITISH_COLUMBIA;
+            controlProps.value = Province.BRITISH_COLUMBIA;
           } else if (key === 'countryCode') {
-            control[0].value = Country.CANADA;
+            controlProps.value = Country.CANADA;
           }
         }
+
         if (options?.areRequired?.includes(key)) {
-          control[1].push(Validators.required);
+          controlValidators.push(Validators.required);
         }
       });
 
