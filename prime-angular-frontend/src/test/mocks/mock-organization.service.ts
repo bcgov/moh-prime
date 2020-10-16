@@ -42,7 +42,9 @@ export class MockOrganizationService implements IOrganizationService {
       registrationId: faker.random.alphaNumeric(),
       doingBusinessAs: null,
       completed: false,
-      submittedDate: null
+      submittedDate: null,
+      agreements: [],
+      hasAcceptedAgreement: false,
     });
   }
 

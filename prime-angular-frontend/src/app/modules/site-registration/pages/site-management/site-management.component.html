@@ -32,8 +32,7 @@
                       title="Organization Information"
                       [menu]="organizationMenu"
                       [menuOutletContext]="{ organization: organization }"
-                      [properties]="getOrganizationProperties(organization)"
-                      (action)="viewAgreement(organization)"></app-summary-card>
+                      [properties]="getOrganizationProperties(organization)"></app-summary-card>
 
     <hr *ngIf="first"
         class="divider">
