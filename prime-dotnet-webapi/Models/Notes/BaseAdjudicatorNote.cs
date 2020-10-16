@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Prime.Models
 {
-    public class BaseAdjudicatorNote : BaseAuditable
+    public abstract class BaseAdjudicatorNote : BaseAuditable
     {
         [Key]
         public int Id { get; set; }

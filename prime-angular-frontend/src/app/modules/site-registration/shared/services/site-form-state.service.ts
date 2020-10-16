@@ -285,7 +285,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       physicalAddress: this.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         areDisabled: ['provinceCode', 'countryCode'],
-        useDefaults: true,
+        useDefaults: ['provinceCode', 'countryCode'],
         exclude: ['street2']
       })
     });
