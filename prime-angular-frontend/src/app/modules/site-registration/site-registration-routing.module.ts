@@ -11,7 +11,6 @@ import { RegistrantGuard } from './shared/guards/registrant.guard';
 import { RegistrationGuard } from './shared/guards/registration.guard';
 import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
-
 import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
