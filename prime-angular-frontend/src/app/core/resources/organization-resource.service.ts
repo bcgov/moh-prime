@@ -9,7 +9,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
-import { OrganizationAgreement } from '@shared/models/agreement.model';
+import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
@@ -145,14 +145,14 @@ export class OrganizationResource {
   /**
    * @description
    * Get a list of organization agreements.
-   *
-   * NOTE: Includes agreement type and document GUID for downloading.
    */
-  public getOrganizationAgreements(organizationId: number): Observable<OrganizationAgreement[]> {
-    return this.apiResource.get<OrganizationAgreement[] | NoContent>(`organizations/${organizationId}/agreements`)
+  public getOrganizationAgreements(organizationId: number): Observable<OrganizationAgreementViewModel[]> {
+    return this.apiResource.get<OrganizationAgreementViewModel[] | NoContent>(`organizations/${organizationId}/agreements`)
       .pipe(
-        map((response: ApiHttpResponse<OrganizationAgreement[]>) => response.result),
-        tap((organizationAgreements: OrganizationAgreement[]) => this.logger.info('ORGANIZATION_AGREEMENTS', organizationAgreements)),
+        map((response: ApiHttpResponse<OrganizationAgreementViewModel[]>) => response.result),
+        tap((organizationAgreements: OrganizationAgreementViewModel[]) =>
+          this.logger.info('ORGANIZATION_AGREEMENTS', organizationAgreements)
+        ),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement(s) could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizationAgreements error has occurred: ', error);
