@@ -13,7 +13,6 @@
     </app-alert>
   </div>
 
-
   <section class="mb-3">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>{{ title }}</ng-container>
@@ -77,11 +76,19 @@
               (click)="viewOrganization(organization)">
         <span>View/Update Organization</span>
       </button>
-      <button mat-menu-item
-              [disabled]="!organizationAgreements?.length"
-              (click)="viewAgreement(organization)">
-        <span>View/Print Agreement</span>
-      </button>
+
+      <ng-container *ngIf="organizationAgreements?.length">
+
+        <button *ngFor="let agreement of organizationAgreements"
+                mat-menu-item
+                (click)="viewAgreement(organization, agreement)">
+          <span>View/Print {{ AgreementType[agreement.agreementType] | case: 'snake' : 'space' | capitalize: true }}</span>
+        </button>
+
+      </ng-container>
+
+      <!-- TODO should there be a default disabled button when no agreements signed -->
+
     </mat-menu>
   </ng-template>
 

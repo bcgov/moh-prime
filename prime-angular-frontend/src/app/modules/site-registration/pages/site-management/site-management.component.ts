@@ -9,13 +9,15 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { UtilsService } from '@core/services/utils.service';
 import { OrganizationAgreement } from '@shared/models/agreement.model';
 import { VendorEnum } from '@shared/enums/vendor.enum';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { OrganizationListViewModel } from '@registration/shared/models/organization.model';
+import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
@@ -32,6 +34,7 @@ export class SiteManagementComponent implements OnInit {
   public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
+  public AgreementType = AgreementType;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -42,6 +45,7 @@ export class SiteManagementComponent implements OnInit {
     private fullnamePipe: FullnamePipe,
     private addressPipe: AddressPipe,
     private configCodePipe: ConfigCodePipe,
+    private utilsService: UtilsService,
     // Temporary hack to show success message until guards can be refactored
     private organizationService: OrganizationService
   ) {
@@ -58,15 +62,19 @@ export class SiteManagementComponent implements OnInit {
     this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
   }
 
-  public viewAgreement(organization: OrganizationListViewModel) {
-    // TODO PRIME-1085
-    // TODO No UI for showing vs downloading agreement(s) so MVP download each as a PDF
-    // TODO Create buttons for downloading each agreement as a PDF with proper labels
-    // How do you determine what agreement the button will download?
-    // const routePath = (organization.acceptedAgreementDate)
-    //   ? [SiteRoutes.ORGANIZATION_AGREEMENT]
-    //   : []; // Defaults to overview
-    // this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
+  public viewAgreement(organization: Organization, organizationAgreement: OrganizationAgreement) {
+    if (organizationAgreement?.signedAgreementDocumentGuid) {
+      // TODO download wet signed agreement via GUID
+    } else {
+      this.organizationResource.getOrganizationAgreement(organization.id, organizationAgreement.id, true)
+        .pipe(
+          // TODO create reuseable pipe for agreements
+          map((agreement: OrganizationAgreement) => agreement.agreementMarkup),
+          map((base64: string) => this.utilsService.base64ToBlob(base64)),
+          map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
+        )
+        .subscribe();
+    }
   }
 
   public viewSite(organizationId: number, site: SiteListViewModel) {

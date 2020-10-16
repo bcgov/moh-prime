@@ -1,7 +1,12 @@
+import { AgreementType } from '@shared/enums/agreement-type.enum';
+
+// TODO split out into view model
 export interface Agreement {
   id: number;
-  signedAgreement: string;
+  agreementType: AgreementType;
+  // TODO rename to agreementContent to represent multiple formats
   agreementMarkup: string;
+  signedAgreementDocumentGuid: string;
   createdDate: string;
   acceptedDate: string;
   expiryDate: string;
