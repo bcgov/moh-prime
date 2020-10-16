@@ -316,18 +316,18 @@ namespace Prime.Controllers
 
         // PUT: api/Organizations/5/agreements/7
         /// <summary>
-        /// Accept an organization agreement
+        /// Accept an organization agreement, optionally with a Document GUID of the wet-signed agreement upload
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="agreementId"></param>
-        /// <param name="documentGuid"></param>
+        /// <param name="organizationAgreementGuid"></param>
         [HttpPut("{organizationId}/agreements/{agreementId}", Name = nameof(AcceptOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> AcceptOrganizationAgreement(int organizationId, int agreementId, [FromQuery] Guid? documentGuid)
+        public async Task<IActionResult> AcceptOrganizationAgreement(int organizationId, int agreementId, [FromQuery] Guid? organizationAgreementGuid)
         {
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
@@ -339,12 +339,12 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (documentGuid.HasValue)
+            if (organizationAgreementGuid.HasValue)
             {
-                var signedAgreement = await _organizationService.AddSignedAgreementAsync(organizationId, agreementId, documentGuid.Value);
+                var signedAgreement = await _organizationService.AddSignedAgreementAsync(organizationId, agreementId, organizationAgreementGuid.Value);
                 if (signedAgreement == null)
                 {
-                    this.ModelState.AddModelError("documentGuid", "Signed Organization Agreement could not be created; network error or upload is already submitted");
+                    this.ModelState.AddModelError(nameof(organizationAgreementGuid), "Signed Organization Agreement could not be created; network error or upload is already submitted");
                     return BadRequest(ApiResponse.BadRequest(this.ModelState));
                 }
             }
