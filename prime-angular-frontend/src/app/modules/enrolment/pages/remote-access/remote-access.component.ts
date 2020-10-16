@@ -84,30 +84,17 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
   public onRequestAccess(event: MatSlideToggleChange) {
     if (event.checked) {
-      this.showProgress = true;
-      this.noRemoteSites = false;
-      this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
-        .pipe(delay(2000))
-        .subscribe(
-          (sites: EnrolleeRemoteAccessSite[]) => {
-            if (sites.length) {
-              this.noRemoteSites = false;
-              this.remoteSites = sites;
-              this.initForm();
-            } else {
-              this.noRemoteSites = true;
-              this.requestAccess.checked = false;
-            }
-          },
-          (error: any) => { },
-          () => this.showProgress = false
-        );
+      this.getRemoteAccess();
     }
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
+
+    if (this.enrolment.enrolleeRemoteUsers.length) {
+      this.getRemoteAccess();
+    }
   }
 
   protected createFormInstance() {
@@ -135,5 +122,30 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
+  }
+
+  /**
+   * @description
+   * Request remote access information.
+   */
+  private getRemoteAccess(): void {
+    this.showProgress = true;
+    this.noRemoteSites = false;
+    this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
+      .pipe(delay(2000))
+      .subscribe(
+        (sites: EnrolleeRemoteAccessSite[]) => {
+          if (sites.length) {
+            this.noRemoteSites = false;
+            this.remoteSites = sites;
+            this.initForm();
+          } else {
+            this.noRemoteSites = true;
+            this.requestAccess.checked = false;
+          }
+        },
+        (error: any) => { },
+        () => this.showProgress = false
+      );
   }
 }
