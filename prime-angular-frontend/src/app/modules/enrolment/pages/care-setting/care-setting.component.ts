@@ -13,6 +13,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -22,6 +23,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 @Component({
   selector: 'app-care-setting',
@@ -143,9 +145,20 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected nextRouteAfterSubmit() {
+    const certifications = this.enrolmentFormStateService.regulatoryForm
+      .get('certifications').value as CollegeCertification[];
+    const careSettings = this.enrolmentFormStateService.careSettingsForm
+      .get('careSettings').value as CareSetting[];
+
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.SELF_DECLARATION;
+      nextRoutePath = (
+        !certifications.length
+        || certifications.some(cert => cert.collegeCode === CollegeLicenceClass.CPBC)
+        || careSettings.some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+      )
+        ? EnrolmentRoutes.SELF_DECLARATION
+        : EnrolmentRoutes.REMOTE_ACCESS;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
@@ -171,7 +184,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public routeBackTo() {
     const routePath = (this.enrolmentFormStateService.json.certifications.length)
-      ? EnrolmentRoutes.REMOTE_ACCESS
+      ? EnrolmentRoutes.REGULATORY
       : EnrolmentRoutes.JOB;
 
     this.routeTo(routePath);

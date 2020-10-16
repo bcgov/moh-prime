@@ -11,6 +11,10 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+
+import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
+
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -26,6 +30,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
   public currentStatus: EnrolmentStatus;
+  public demographicRoutePath: string;
+  public identityProvider: IdentityProvider;
+  public IdentityProvider = IdentityProvider;
   public EnrolmentStatus = EnrolmentStatus;
 
   protected allowRoutingWhenDirty: boolean;
@@ -34,6 +41,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     protected route: ActivatedRoute,
     protected router: Router,
     private dialog: MatDialog,
+    private authService: AuthService,
     private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
     private enrolmentFormStateService: EnrolmentFormStateService,
@@ -44,6 +52,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
     this.currentStatus = null;
     this.allowRoutingWhenDirty = true;
+
+    this.authService.identityProvider$()
+      .subscribe((identityProvider: IdentityProvider) => {
+        this.identityProvider = identityProvider;
+        this.demographicRoutePath = (identityProvider === IdentityProvider.BCEID)
+          ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
+          : EnrolmentRoutes.BCSC_DEMOGRAPHIC;
+      });
   }
 
   public onSubmit() {

@@ -30,6 +30,13 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>
+
+    <button *ngIf="identityProvider === IdentityProvider.BCEID"
+            mat-icon-button
+            matTooltip="Edit Demographic"
+            (click)="routeTo(demographicRoutePath)">
+      <mat-icon>edit</mat-icon>
+    </button>
   </app-page-subheader>
 
   <app-enrollee-review *ngIf="enrolment"
