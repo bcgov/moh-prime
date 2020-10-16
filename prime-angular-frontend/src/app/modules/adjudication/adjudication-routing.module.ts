@@ -25,6 +25,7 @@ import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-
 import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
 import { EnrolleeAdjudicatorNotesComponent } from './pages/enrollee-adjudicator-notes/enrollee-adjudicator-notes.component';
 import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/site-adjudicator-notes.component';
+import { SiteAdjudicatorDocumentsComponent } from './pages/site-adjudicator-documents/site-adjudicator-documents.component';
 
 const routes: Routes = [
   {
@@ -96,6 +97,11 @@ const routes: Routes = [
                 data: { title: 'Adjudicator Notes' }
               },
               {
+                path: AdjudicationRoutes.DOCUMENT_UPLOAD,
+                component: SiteAdjudicatorDocumentsComponent,
+                data: { title: 'Document Upload' }
+              },
+              {
                 path: AdjudicationRoutes.ENROLLEE_EVENT_LOG,
                 component: EnrolleeEventsComponent,
                 data: { title: 'Event Log' }
@@ -139,6 +145,11 @@ const routes: Routes = [
                 path: AdjudicationRoutes.ADJUDICATOR_NOTES,
                 component: SiteAdjudicatorNotesComponent,
                 data: { title: 'Adjudicator Notes' }
+              },
+              {
+                path: AdjudicationRoutes.DOCUMENT_UPLOAD,
+                component: SiteAdjudicatorDocumentsComponent,
+                data: { title: 'Document Upload' }
               },
             ]
           }

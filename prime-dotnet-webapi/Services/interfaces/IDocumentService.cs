@@ -10,6 +10,8 @@ namespace Prime.Services
         Task<string> GetDownloadTokenForLatestSignedAgreementDocument(int organizationId);
         Task<string> GetDownloadTokenForSelfDeclarationDocument(int selfDeclarationDocumentId);
         Task<string> GetDownloadTokenForIdentificationDocument(int identificationDocumentId);
+        Task<string> GetDownloadTokenForEnrolleeAdjudicationDocument(int enrolleeAdjudicationDocumentId);
+        Task<string> GetDownloadTokenForSiteAdjudicationDocument(int siteAdjudicationDocumentId);
         Task<Stream> GetStreamForLatestBusinessLicenceDocument(int siteId);
         Task<Stream> GetStreamForLatestSignedAgreementDocument(int organizationId);
         Task<string> FinalizeDocumentUpload(Guid documentGuid, string filePath);

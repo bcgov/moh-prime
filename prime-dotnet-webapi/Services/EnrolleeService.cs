@@ -611,5 +611,37 @@ namespace Prime.Services
 
             return identificationDocument;
         }
+
+        public async Task<EnrolleeAdjudicationDocument> AddEnrolleeAdjudicationDocumentAsync(int enrolleeId, Guid documentGuid, int adminId)
+        {
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "enrollee_adjudication_document");
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
+            var document = new EnrolleeAdjudicationDocument
+            {
+                DocumentGuid = documentGuid,
+                EnrolleeId = enrolleeId,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now,
+                AdjudicatorId = adminId
+            };
+            _context.EnrolleeAdjudicationDocuments.Add(document);
+
+            await _context.SaveChangesAsync();
+
+            return document;
+        }
+
+        public async Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId)
+        {
+            return await _context.EnrolleeAdjudicationDocuments
+               .Where(bl => bl.EnrolleeId == enrolleeId)
+               .Include(bl => bl.Adjudicator)
+                .OrderByDescending(bl => bl.UploadedDate)
+               .ToListAsync();
+        }
     }
 }

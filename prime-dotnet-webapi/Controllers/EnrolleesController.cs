@@ -700,5 +700,83 @@ namespace Prime.Controllers
                 ApiResponse.Result(result)
             );
         }
+
+        // POST: api/enrollees/5/adjudication-documents
+        /// <summary>
+        /// Creates a new enrollee adjudication document for an enrollee.
+        /// </summary>
+        /// <param name="documentGuid"></param>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/adjudication-documents", Name = nameof(CreateEnrolleeAdjudicationDocument))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeAdjudicationDocument>> CreateEnrolleeAdjudicationDocument(int enrolleeId, [FromQuery] Guid documentGuid)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            var document = await _enrolleeService.AddEnrolleeAdjudicationDocumentAsync(enrolleeId, documentGuid, admin.Id);
+            if (document == null)
+            {
+                this.ModelState.AddModelError("documentGuid", "Enrollee Adjudication Document could not be created; network error or upload is already submitted");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            return Ok(ApiResponse.Result(document));
+        }
+
+        // GET: api/enrollees/5/adjudication-documents
+        /// <summary>
+        /// Gets all enrollee adjudication documents for an enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/adjudication-documents", Name = nameof(GetEnrolleeAdjudicationDocuments))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolleeAdjudicationDocument>>> GetEnrolleeAdjudicationDocuments(int enrolleeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var documents = await _enrolleeService.GetEnrolleeAdjudicationDocumentsAsync(enrolleeId);
+
+            return Ok(ApiResponse.Result(documents));
+        }
+
+        // GET: api/Enrollees/{enrolleeId}/adjudication-documents/{documentId}
+        /// <summary>
+        /// Get the enrollee adjudication documents download token.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="documentId"></param>
+        [HttpGet("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(GetEnrolleeAdjudicationDocument))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetEnrolleeAdjudicationDocument(int enrolleeId, int documentId)
+        {
+            var enrollee = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var token = await _documentService.GetDownloadTokenForEnrolleeAdjudicationDocument(documentId);
+
+            return Ok(ApiResponse.Result(token));
+        }
     }
 }

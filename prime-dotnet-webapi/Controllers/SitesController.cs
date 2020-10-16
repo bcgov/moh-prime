@@ -376,6 +376,86 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(licences));
         }
 
+        // POST: api/sites/5/adjudication-documents
+        /// <summary>
+        /// Creates a new site adjudication document for a site.
+        /// </summary>
+        /// <param name="documentGuid"></param>
+        /// <param name="siteId"></param>
+        [HttpPost("{siteId}/adjudication-documents", Name = nameof(CreateSiteAdjudicationDocument))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<SiteAdjudicationDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<SiteAdjudicationDocument>> CreateSiteAdjudicationDocument(int siteId, [FromQuery] Guid documentGuid)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            var document = await _siteService.AddSiteAdjudicationDocumentAsync(site.Id, documentGuid, admin.Id);
+            if (document == null)
+            {
+                this.ModelState.AddModelError("documentGuid", "Site Adjudication Document could not be created; network error or upload is already submitted");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            return Ok(ApiResponse.Result(document));
+        }
+
+        // GET: api/sites/5/adjudication-documents
+        /// <summary>
+        /// Gets all site adjudication documents for a site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPost("{siteId}/adjudication-documents", Name = nameof(GetSiteAdjudicationDocuments))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<SiteAdjudicationDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SiteAdjudicationDocument>>> GetSiteAdjudicationDocuments(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var documents = await _siteService.GetSiteAdjudicationDocumentsAsync(site.Id);
+
+            return Ok(ApiResponse.Result(documents));
+        }
+
+        // GET: api/Sites/{siteId}/adjudication-documents/{documentId}
+        /// <summary>
+        /// Get the site adjudication documents download token.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="documentId"></param>
+        [HttpGet("{siteId}/adjudication-documents/{documentId}", Name = nameof(GetSiteAdjudicationDocument))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetSiteAdjudicationDocument(int siteId, int documentId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var token = await _documentService.GetDownloadTokenForSiteAdjudicationDocument(documentId);
+
+            return Ok(ApiResponse.Result(token));
+        }
+
         // PUT: api/Sites/5/pec
         /// <summary>
         /// Update the PEC code.
@@ -570,7 +650,7 @@ namespace Prime.Controllers
 
         // POST: api/Sites/5/site-registration-notes
         /// <summary>
-        /// Creates a new site registration note on an enrollee.
+        /// Creates a new site registration note on a site.
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="note"></param>

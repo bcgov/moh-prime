@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription, BehaviorSubject, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -11,6 +11,8 @@ import { DateContent } from '@adjudication/shared/components/dated-content-table
 import { BaseAdjudicatorNote } from '@shared/models/adjudicator-note.model';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-adjudicator-notes',
@@ -25,15 +27,20 @@ export class AdjudicatorNotesComponent implements OnInit {
   public hasActions: boolean;
   @Input() public noteType: NoteType;
 
+  private routeUtils: RouteUtils;
+  public AdjudicationRoutes = AdjudicationRoutes;
+
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
     private siteResource: SiteResource,
-    private authService: AuthService
+    private authService: AuthService,
+    protected router: Router,
   ) {
     this.hasActions = false;
     this.adjudicatorNotes$ = new BehaviorSubject<DateContent[]>(null);
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
   }
 
   public get canEdit(): boolean {
@@ -57,6 +64,10 @@ export class AdjudicatorNotesComponent implements OnInit {
           break;
       }
     }
+  }
+
+  public onRoute(routePath: string | (string | number)[]) {
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public ngOnInit() {

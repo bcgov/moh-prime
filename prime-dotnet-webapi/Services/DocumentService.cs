@@ -53,6 +53,20 @@ namespace Prime.Services
             return await _documentManagerClient.CreateDownloadTokenAsync(identificationDocument.DocumentGuid);
         }
 
+        public async Task<string> GetDownloadTokenForEnrolleeAdjudicationDocument(int enrolleeAdjudicationDocumentId)
+        {
+            var document = await _context.EnrolleeAdjudicationDocuments
+                .Where(sa => sa.Id == enrolleeAdjudicationDocumentId).SingleAsync();
+            return await _documentManagerClient.CreateDownloadTokenAsync(document.DocumentGuid);
+        }
+
+        public async Task<string> GetDownloadTokenForSiteAdjudicationDocument(int siteAdjudicationDocumentId)
+        {
+            var document = await _context.SiteAdjudicationDocuments
+                .Where(sa => sa.Id == siteAdjudicationDocumentId).SingleAsync();
+            return await _documentManagerClient.CreateDownloadTokenAsync(document.DocumentGuid);
+        }
+
         public async Task<Stream> GetStreamForLatestBusinessLicenceDocument(int siteId)
         {
             var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);

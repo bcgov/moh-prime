@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { ApiResource } from '@core/resources/api-resource.service';
@@ -22,6 +22,7 @@ import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/mod
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
+import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 @Injectable({
   providedIn: 'root'
@@ -178,6 +179,42 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap((document: string) => this.logger.info('DOCUMENT', document)),
+      );
+  }
+
+  public createEnrolleeAdjudicationDocument(enrolleeId: number, documentGuid: string): Observable<EnrolleeAdjudicationDocument> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this
+      .apiResource.post<EnrolleeAdjudicationDocument>(`enrollees/${enrolleeId}/adjudication-documents`, { enrolleeId }, params)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAdjudicationDocument>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::createEnrolleeAdjudicationDocument error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolleeAdjudicationDocuments(enrolleeId: number): Observable<EnrolleeAdjudicationDocument[]> {
+    return this.apiResource.get<EnrolleeAdjudicationDocument[]>(`enrollees/${enrolleeId}/adjudication-documents`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAdjudicationDocument[]>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAdjudicationDocuments error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId: number, documentId: number): Observable<string> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/adjudication-documents/${documentId}`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAdjudicationDocumentDownloadToken error has occurred: ',
+            error);
+          throw error;
+        })
       );
   }
 

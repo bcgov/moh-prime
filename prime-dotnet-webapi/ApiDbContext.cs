@@ -99,6 +99,8 @@ namespace Prime
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
         public DbSet<IdentificationDocument> IdentificationDocuments { get; set; }
+        public DbSet<EnrolleeAdjudicationDocument> EnrolleeAdjudicationDocuments { get; set; }
+        public DbSet<SiteAdjudicationDocument> SiteAdjudicationDocuments { get; set; }
         public DbSet<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
         public DbSet<DocumentAccessToken> DocumentAccessToken { get; set; }
 
