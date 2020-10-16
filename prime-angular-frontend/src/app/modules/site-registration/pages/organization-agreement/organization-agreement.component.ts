@@ -122,13 +122,11 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public downloadSignedAgreement() {
     this.organizationResource
       .getDownloadTokenForLatestSignedAgreement(this.organizationService.organization.id)
-      .subscribe((token: string) => {
-        this.utilsService.downloadToken(token);
-      });
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
   public onBack() {
-    this.routeUtils.routeWithin(SiteRoutes.TECHNICAL_SUPPORT);
+    this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
   }
 
   public nextRoute() {
