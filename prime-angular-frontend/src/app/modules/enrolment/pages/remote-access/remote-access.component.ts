@@ -27,8 +27,6 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   public sites: EnrolleeRemoteAccessSite[];
   public hasNoSitesError: boolean;
   public showProgress: boolean;
-  public enrolment: Enrolment;
-  public selectedSites: number[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -56,8 +54,6 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       utilService,
       formUtilsService
     );
-
-    this.enrolment = this.enrolmentService.enrolment;
   }
 
   public get sitesFormArray(): FormArray {
@@ -69,29 +65,16 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public onSubmit() {
-    const enrolleeRemoteUserControls = [];
-
-    this.selectedSites = this.sites
-      .filter((site, i) => this.sitesFormArray.value[i])
-      .map(site => {
-        site.remoteUsers.forEach(remoteUser => {
-          const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
-          enrolleeRemoteUser.get('enrolleeId').setValue(this.enrolment.id);
-          enrolleeRemoteUser.get('remoteUserId').setValue(remoteUser.id);
-          this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
-        });
-
-        return site.id;
+    this.sites.forEach(site => {
+      site.remoteUsers.forEach(remoteUser => {
+        const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
+        enrolleeRemoteUser.get('enrolleeId').setValue(this.enrolment.id);
+        enrolleeRemoteUser.get('remoteUserId').setValue(remoteUser.id);
+        this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
       });
+    });
 
-    console.log(this.form.getRawValue());
-    this.handleSubmission();
-
-    // this.busy = this.enrolmentResource
-    //   .createEnrolleeRemoteUsers(this.enrolment.id, this.selectedSites)
-    //   .subscribe(() =>
-    //     this.nextRouteAfterSubmit()
-    //   );
+    super.onSubmit();
   }
 
   public onRequestAccess() {
@@ -142,7 +125,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = this.selectedSites.length
+      nextRoutePath = this.enrolleeRemoteUsers.length
         ? EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES
         : EnrolmentRoutes.CARE_SETTING;
     }

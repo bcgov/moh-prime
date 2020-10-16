@@ -623,38 +623,5 @@ namespace Prime.Services
 
             return selfDeclarationDocument;
         }
-
-        public async Task<IEnumerable<EnrolleeRemoteUser>> AddEnrolleeRemoteUsersAsync(Enrollee enrollee, List<int> sites)
-        {
-            var enrolleeRemoteUsers = new List<EnrolleeRemoteUser>();
-
-            foreach (var eru in enrollee.EnrolleeRemoteUsers)
-            {
-                _context.EnrolleeRemoteUsers.Remove(eru);
-            }
-
-            foreach (var siteId in sites)
-            {
-                var site = await _siteService.GetSiteAsync(siteId);
-                List<RemoteUser> remoteUsers = site.RemoteUsers.ToList();
-                remoteUsers = remoteUsers.FindAll(ru => ru.RemoteUserCertifications.Any(ruc => enrollee.Certifications.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber)));
-
-                foreach (var remoteUser in remoteUsers)
-                {
-                    var enrolleeRemoteUser = new EnrolleeRemoteUser
-                    {
-                        EnrolleeId = enrollee.Id,
-                        RemoteUserId = remoteUser.Id
-                    };
-
-                    _context.EnrolleeRemoteUsers.Add(enrolleeRemoteUser);
-                    enrolleeRemoteUsers.Add(enrolleeRemoteUser);
-                }
-            }
-
-            await _context.SaveChangesAsync();
-
-            return enrolleeRemoteUsers;
-        }
     }
 }

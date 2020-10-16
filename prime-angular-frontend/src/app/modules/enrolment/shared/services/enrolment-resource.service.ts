@@ -78,14 +78,6 @@ export class EnrolmentResource {
       );
   }
 
-  public createEnrolleeRemoteUsers(enrolleeId: number, sites: number[]): Observable<EnrolleeRemoteUser[]> {
-    return this.apiResource
-      .post<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/enrollee-remote-users`, sites)
-      .pipe(
-        map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)
-      );
-  }
-
   // ---
   // Provisioner Access
   // ---
