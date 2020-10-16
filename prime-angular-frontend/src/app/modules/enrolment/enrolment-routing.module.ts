@@ -107,12 +107,6 @@ const routes: Routes = [
         data: { title: 'PRIME Enrolment' }
       },
       {
-        path: EnrolmentRoutes.REMOTE_ACCESS,
-        component: RemoteAccessComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PRIME Enrolment' }
-      },
-      {
         path: EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES,
         component: RemoteAccessAddressesComponent,
         canDeactivate: [CanDeactivateFormGuard],
@@ -134,6 +128,12 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.CARE_SETTING,
         component: CareSettingComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.REMOTE_ACCESS,
+        component: RemoteAccessComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
