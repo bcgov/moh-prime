@@ -60,18 +60,7 @@ export class RemoteUserComponent implements OnInit {
 
       if (remoteUserIndex !== 'new') {
         const remoteUserFormGroup = remoteUsersFormArray.at(remoteUserIndex);
-        // const remoteUserLocationsFormArray = remoteUserFormGroup.get('remoteUserLocations') as FormArray;
         const certificationFormArray = remoteUserFormGroup.get('remoteUserCertifications') as FormArray;
-
-        // // Changes in the amount of locations requires adjusting the number of
-        // // locations in the parent, which is not handled automatically
-        // if (this.remoteUserLocations.length !== remoteUserLocationsFormArray.length) {
-        //   remoteUserLocationsFormArray.clear();
-
-        //   Object.keys(this.remoteUserLocations.controls)
-        //     .map(() => this.siteFormStateService.remoteUserLocationFormGroup())
-        //     .forEach((group: FormGroup) => remoteUserLocationsFormArray.push(group));
-        // }
 
         // Changes in the amount of certificates requires adjusting the number of
         // certificates in the parent, which is not handled automatically
@@ -93,18 +82,6 @@ export class RemoteUserComponent implements OnInit {
       this.nextRoute();
     }
   }
-
-  // public addLocation() {
-  //   this.addRemoteUserLocation();
-  // }
-
-  // public removeLocation(index: number) {
-  //   this.remoteUserLocations.removeAt(index);
-
-  //   if (!this.remoteUserLocations.controls.length) {
-  //     this.addRemoteUserLocation();
-  //   }
-  // }
 
   public addCertification() {
     const remoteUserCertification = this.siteFormStateService.remoteUserCertificationFormGroup();
@@ -165,38 +142,10 @@ export class RemoteUserComponent implements OnInit {
     this.form = this.siteFormStateService
       .createEmptyRemoteUserFormAndPatch(remoteUser);
 
-    // Remote user index and "new" were used instead of ID and 0 since the
-    // remote users can't be persisted immediately, and need to be stored
-    // locally for submission by the sibling view. Therefore, there could
-    // be multiple "new" entries without an unique identifier that might
-    // be edited prior to submission so it was necessary to use an index
-    // (remoteUserIndex !== 'new' && remoteUser)
-    //   ? this.disableProvince(this.remoteUserLocations.controls as FormGroup[])
-    //   : this.addRemoteUserLocation();
-
     if (!this.remoteUserCertifications.length) {
       this.addCertification();
     }
   }
-
-  // private addRemoteUserLocation(): void {
-  //   const remoteUserLocation = this.siteFormStateService
-  //     .remoteUserLocationFormGroup();
-  //   remoteUserLocation.get('physicalAddress')
-  //     .patchValue({
-  //       countryCode: Country.CANADA,
-  //       provinceCode: Province.BRITISH_COLUMBIA
-  //     });
-  //   this.disableProvince(remoteUserLocation);
-
-  //   this.remoteUserLocations.push(remoteUserLocation);
-  // }
-
-  // private disableProvince(remoteUserLocationFormGroups: FormGroup | FormGroup[]): void {
-  //   (Array.isArray(remoteUserLocationFormGroups))
-  //     ? remoteUserLocationFormGroups.forEach(group => this.disableProvince(group))
-  //     : remoteUserLocationFormGroups.get('physicalAddress.provinceCode').disable();
-  // }
 
   /**
    * @description

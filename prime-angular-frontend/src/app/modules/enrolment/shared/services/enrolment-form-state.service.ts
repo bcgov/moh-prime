@@ -123,7 +123,6 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       // TODO commented out until required to avoid it being validated
       // this.deviceProviderForm,
       this.jobsForm,
-      this.remoteAccessLocationsForm,
       this.selfDeclarationForm,
       this.careSettingsForm
     ];
