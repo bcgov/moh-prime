@@ -119,12 +119,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     return !this.organizationService.organization.hasAcceptedAgreement;
   }
 
-  public downloadSignedAgreement() {
-    this.organizationResource
-      .getDownloadTokenForLatestSignedAgreement(this.organizationService.organization.id)
-      .subscribe((token: string) => this.utilsService.downloadToken(token));
-  }
-
   public onBack() {
     this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
   }

@@ -64,16 +64,9 @@ export class SiteManagementComponent implements OnInit {
 
   public viewAgreement(organization: Organization, organizationAgreement: OrganizationAgreementViewModel) {
     if (organizationAgreement?.signedAgreementDocumentGuid) {
-      // TODO download wet signed agreement via GUID
+      // TODO PRIME-1085
     } else {
-      this.organizationResource.getOrganizationAgreement(organization.id, organizationAgreement.id, true)
-        .pipe(
-          // TODO create reuseable pipe for agreements
-          map((agreement: OrganizationAgreement) => agreement.agreementMarkup),
-          map((base64: string) => this.utilsService.base64ToBlob(base64)),
-          map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
-        )
-        .subscribe();
+      // TODO PRIME-1085
     }
   }
 

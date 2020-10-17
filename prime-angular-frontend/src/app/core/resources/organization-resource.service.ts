@@ -165,9 +165,21 @@ export class OrganizationResource {
    * @description
    * Get an organization agreement as HTML markup for display, or
    * as a PDF (Base64) for downloading.
+   *
+   * TODO WIP PRIME-1085
+   * Unsigned
+   * - HTML for rendering for electronic signature for each type
+   * - Download PDF for signing (wet) for upload for each type
+   * Signed
+   * - Get signed electronically signed agreement (HTML or PDF)
+   * - Get document GUID for signed agreement for download via token (always PDF)
    */
-  public getOrganizationAgreement(organizationId: number, agreementId: number, asPdf: boolean = false): Observable<OrganizationAgreement> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ asPdf });
+  public getOrganizationAgreement(
+    organizationId: number,
+    agreementId: number,
+    options: { asPdf: boolean, signed: boolean }
+  ): Observable<OrganizationAgreement> {
+    const params = this.apiResourceUtilsService.makeHttpParams(options);
     return this.apiResource.get<OrganizationAgreement>(`organizations/${organizationId}/agreements/${agreementId}`, params)
       .pipe(
         map((response: ApiHttpResponse<OrganizationAgreement>) => response.result),
@@ -189,30 +201,6 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be accepted');
           this.logger.error('[Core] OrganizationResource::acceptOrganizationAgreement error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getSignedOrganizationAgreement(organizationId: number): Observable<string> {
-    return this.apiResource.get<string>(`organizations/${organizationId}/organization-agreement-digital-signed`)
-      .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organization agreement could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getSignedOrganizationAgreement error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getDownloadTokenForLatestSignedAgreement(organizationId: number): Observable<string> {
-    return this.apiResource.get<string>(`organizations/${organizationId}/latest-signed-agreement`)
-      .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Latest signed organization agreement could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getDownloadTokenForLatestSignedAgreement error has occurred: ', error);
           throw error;
         })
       );
