@@ -39,8 +39,7 @@ export class RegistrationGuard extends BaseGuard {
     const createOrganization$ = user$
       .pipe(
         map((user: BcscUser) => new Party(user)),
-        exhaustMap((party: Party) => this.organizationResource.createOrganization(party)),
-        map((organization: Organization) => [organization, []])
+        exhaustMap((party: Party) => this.organizationResource.createOrganization(party))
       );
 
     return this.organizationResource.getOrganizations({ verbose: true })
