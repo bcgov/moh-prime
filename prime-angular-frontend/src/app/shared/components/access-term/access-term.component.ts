@@ -10,13 +10,13 @@ import { EnrolleeAgreement } from '@shared/models/agreement.model';
 export class AccessTermComponent implements OnInit, OnChanges {
   @Input() public accessTerms: EnrolleeAgreement;
 
-  public agreementMarkup: string;
+  public agreementContent: string;
 
   constructor() { }
 
   public ngOnChanges(change: SimpleChanges) {
     if (change.accessTerms.currentValue) {
-      this.agreementMarkup = this.accessTerms.agreementMarkup;
+      this.agreementContent = this.accessTerms.agreementContent;
     }
   }
 

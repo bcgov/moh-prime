@@ -6,7 +6,6 @@ export interface Organization {
   id?: number;
   displayId?: number;
   siteCount: number;
-  agreements: OrganizationAgreement[];
   // Forms -----
   signingAuthorityId?: number;
   signingAuthority: Party;

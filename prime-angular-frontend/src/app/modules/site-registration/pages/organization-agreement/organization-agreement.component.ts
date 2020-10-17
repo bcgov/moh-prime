@@ -16,7 +16,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { OrganizationAgreement } from '@shared/models/agreement.model';
+import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
@@ -98,8 +98,8 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public onDownload() {
     this.organizationResource
       .getOrganizationAgreement(this.route.snapshot.params.oid, this.agreementId, true)
-      .subscribe(({ agreementMarkup }: OrganizationAgreement) => {
-        const blob = this.utilsService.base64ToBlob(agreementMarkup);
+      .subscribe(({ agreementContent }: OrganizationAgreementViewModel) => {
+        const blob = this.utilsService.base64ToBlob(agreementContent);
         this.utilsService.downloadDocument(blob, 'Organization-Agreement');
         this.hasDownloadedFile = true;
       });
@@ -151,12 +151,12 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         exhaustMap((agreementId: number) =>
           this.organizationResource.getOrganizationAgreement(organization.id, agreementId)
         ),
-        map(({ acceptedDate, agreementMarkup }: OrganizationAgreement) => {
+        map(({ acceptedDate, agreementContent }: OrganizationAgreementViewModel) => {
           const date = (acceptedDate)
             ? moment(acceptedDate).local()
             : moment();
 
-          return [agreementMarkup, date];
+          return [agreementContent, date];
         }),
         map(([organizationAgreement, date]: [string, moment.Moment]) =>
           organizationAgreement

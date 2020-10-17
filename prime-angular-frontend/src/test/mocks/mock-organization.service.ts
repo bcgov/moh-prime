@@ -43,7 +43,6 @@ export class MockOrganizationService implements IOrganizationService {
       doingBusinessAs: null,
       completed: false,
       submittedDate: null,
-      agreements: [],
       hasAcceptedAgreement: false,
     });
   }

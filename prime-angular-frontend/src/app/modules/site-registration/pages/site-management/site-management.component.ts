@@ -30,7 +30,7 @@ export class SiteManagementComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: OrganizationListViewModel[];
-  public organizationAgreements: OrganizationAgreement[];
+  public organizationAgreements: OrganizationAgreementViewModel[];
   public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;

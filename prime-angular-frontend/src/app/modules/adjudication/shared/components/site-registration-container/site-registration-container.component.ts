@@ -315,7 +315,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthorityId,
         signingAuthority,
         name,
-        agreements,
         doingBusinessAs
       } = organization;
 
@@ -326,7 +325,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthority,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
-        agreements,
         // TODO PRIME-1085 (is this still needed?)
         signedAgreementDocumentCount: null,
         ...this.toSiteViewModelPartial(site)
