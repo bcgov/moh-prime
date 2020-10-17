@@ -163,30 +163,68 @@ export class OrganizationResource {
 
   /**
    * @description
-   * Get an organization agreement as HTML markup for display, or
-   * as a PDF (Base64) for downloading.
+   * Get an organization agreement.
    *
    * TODO WIP PRIME-1085
-   * Unsigned
+   * Unsigned (Both us markup or Base64 same key go nuts)
    * - HTML for rendering for electronic signature for each type
-   * - Download PDF for signing (wet) for upload for each type
+   * - Download PDF for signing (wet) for upload for each type (Base64 from csHtmlPDF)
    * Signed
-   * - Get signed electronically signed agreement (HTML or PDF)
+   * - Get signed electronically signed agreement (HTML or PDF = csHtmlPDF)
+   *   - Markup or Base64 in same key (same as unsigned)
    * - Get document GUID for signed agreement for download via token (always PDF)
+   *   - GUID used to get Token to download
    */
   public getOrganizationAgreement(
     organizationId: number,
     agreementId: number,
-    options: { asPdf: boolean, signed: boolean }
-  ): Observable<OrganizationAgreement> {
-    const params = this.apiResourceUtilsService.makeHttpParams(options);
-    return this.apiResource.get<OrganizationAgreement>(`organizations/${organizationId}/agreements/${agreementId}`, params)
+    asPdf?: boolean // TODO should we include format?
+  ): Observable<OrganizationAgreementViewModel> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ asPdf });
+    return this.apiResource.get<OrganizationAgreementViewModel>(`organizations/${organizationId}/agreements/${agreementId}`, params)
       .pipe(
-        map((response: ApiHttpResponse<OrganizationAgreement>) => response.result),
-        tap((organizationAgreement: OrganizationAgreement) => this.logger.info('ORGANIZATION_AGREEMENT', organizationAgreement)),
+        map((response: ApiHttpResponse<OrganizationAgreementViewModel>) => response.result),
+        tap((organizationAgreement: OrganizationAgreementViewModel) => this.logger.info('ORGANIZATION_AGREEMENT', organizationAgreement)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizationAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * @description
+   * Get a organization agreement for signing as HTML markup for inline
+   * display, or Base64 (PDF) for downloading.
+   */
+  // TODO is this accurate?
+  public getOrganizationAgreementForSigning(organizationId: number, agreementId: number) {
+    return this.apiResource.get<OrganizationAgreement>(`organizations/${organizationId}/agreements/${agreementId}/signable`)
+      .pipe(
+        map((response: ApiHttpResponse<OrganizationAgreement>) => response.result),
+        tap((organizationAgreement: OrganizationAgreement) => this.logger.info('ORGANIZATION_AGREEMENT_SIGNABLE', organizationAgreement)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getOrganizationAgreementForSigning error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * @description
+   * Get a download token for a signed organization agreement.
+   */
+  // TODO create helper pipe to download the PDF using utils service
+  public getSignedOrganizationAgreementToken(organizationId: number, agreementId: number): Observable<string> {
+    return this.apiResource.get<string>(`organizations/${organizationId}/agreements/${agreementId}/signed`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        tap((token: string) => this.logger.info('ORGANIZATION_AGREEMENT_SIGNED', token)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization agreement token could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getSignedOrganizationAgreement error has occurred: ', error);
           throw error;
         })
       );
