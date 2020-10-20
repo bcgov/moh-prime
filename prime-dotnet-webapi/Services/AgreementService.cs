@@ -180,7 +180,7 @@ namespace Prime.Services
                 .Select(o => o.Name)
                 .SingleAsync();
 
-            var html = await RenderOrgAgreementHtmlAsync(agreementVm.AgreementType, asEncodedPdf, orgName);
+            var html = await RenderOrgAgreementHtmlAsync(agreementVm.AgreementType, orgName, agreementVm.AcceptedDate, asEncodedPdf);
 
             if (asEncodedPdf)
             {
@@ -299,7 +299,7 @@ namespace Prime.Services
                 .FirstAsync();
         }
 
-        private async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, bool forPdf, string orgName)
+        private async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf)
         {
             string viewName;
             switch (type)
@@ -320,7 +320,11 @@ namespace Prime.Services
                     throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}");
             }
 
-            return await _razorConverterService.RenderViewToStringAsync(viewName, new Tuple<string, DateTimeOffset>(orgName, DateTimeOffset.Now));
+            DateTimeOffset displayDate = acceptedDate ?? DateTimeOffset.Now;
+            // Converting to BC time here since we arn't localizing this time in the Front End.
+            displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
+
+            return await _razorConverterService.RenderViewToStringAsync(viewName, new Tuple<string, DateTimeOffset>(orgName, displayDate));
         }
     }
 }
