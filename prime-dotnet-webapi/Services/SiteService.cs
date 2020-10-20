@@ -466,6 +466,19 @@ namespace Prime.Services
                 .OrderByDescending(bl => bl.UploadedDate)
                 .FirstOrDefaultAsync();
         }
+        public async Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
+        {
+            var sites = await this.GetBaseSiteQuery()
+                .ProjectTo<EnrolleeRemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
+            foreach (var site in sites)
+            {
+                site.RemoteUsers = site.RemoteUsers.Where(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber)));
+            }
+            return sites;
+        }
 
         public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
         {
@@ -489,26 +502,13 @@ namespace Prime.Services
             return SiteRegistrationNote;
         }
 
-        public async Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
-        {
-            var sites = await this.GetBaseSiteQuery()
-                .ProjectTo<EnrolleeRemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-
-            sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
-            foreach (var site in sites)
-            {
-                site.RemoteUsers = site.RemoteUsers.Where(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber)));
-            }
-            return sites;
-        }
-
-        public async Task<IEnumerable<SiteRegistrationNote>> GetSiteRegistrationNotesAsync(Site site)
+        public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(Site site)
         {
             return await _context.SiteRegistrationNotes
                 .Where(srn => srn.SiteId == site.Id)
                 .Include(srn => srn.Adjudicator)
                 .OrderByDescending(srn => srn.NoteDate)
+                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 

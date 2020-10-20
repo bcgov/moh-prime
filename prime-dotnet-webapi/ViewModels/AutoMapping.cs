@@ -29,5 +29,8 @@ public class AutoMapping : Profile
 
         CreateMap<Site, EnrolleeRemoteAccessSiteViewModel>()
            .ForMember(dest => dest.OrganizationName, opt => opt.MapFrom(src => src.Organization.Name));
+
+        CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
+        CreateMap<SiteRegistrationNote, SiteRegistrationNoteViewModel>();
     }
 }

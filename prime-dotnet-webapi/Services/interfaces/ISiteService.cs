@@ -31,6 +31,6 @@ namespace Prime.Services
         Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId);
         Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> certifications);
 
-        Task<IEnumerable<SiteRegistrationNote>> GetSiteRegistrationNotesAsync(Site site);
+        Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(Site site);
     }
 }
