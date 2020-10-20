@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -428,7 +427,9 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ],
       physicalAddress: this.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        exclude: ['street2']
+        exclude: ['street2'],
+        useDefaults: ['provinceCode', 'countryCode'],
+        areDisabled: ['provinceCode', 'countryCode']
       })
     });
   }

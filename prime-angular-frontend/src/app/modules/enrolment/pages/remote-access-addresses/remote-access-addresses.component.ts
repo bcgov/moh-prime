@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -8,8 +8,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { Country } from '@shared/enums/country.enum';
-import { Province } from '@shared/enums/province.enum';
 
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -35,8 +33,7 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService,
-    private fb: FormBuilder
+    protected formUtilsService: FormUtilsService
   ) {
     super(
       route,
@@ -84,13 +81,6 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
   private addRemoteAccessLocation(): void {
     const remoteAccessLocation = this.enrolmentFormStateService
       .remoteAccessLocationFormGroup();
-    remoteAccessLocation.get('physicalAddress')
-      .patchValue({
-        countryCode: Country.CANADA,
-        provinceCode: Province.BRITISH_COLUMBIA
-      });
-    this.disableProvince(remoteAccessLocation);
-
     this.remoteAccessLocations.push(remoteAccessLocation);
   }
 
@@ -113,6 +103,10 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
   }
 
   protected nextRouteAfterSubmit() {
-    super.nextRouteAfterSubmit(this.EnrolmentRoutes.SELF_DECLARATION);
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = this.EnrolmentRoutes.SELF_DECLARATION;
+    }
+    super.nextRouteAfterSubmit(nextRoutePath);
   }
 }
