@@ -1,5 +1,6 @@
-import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { Component, OnInit } from '@angular/core';
+
+import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 
 @Component({
   selector: 'app-enrollee-adjudicator-notes',
@@ -13,7 +14,5 @@ export class EnrolleeAdjudicatorNotesComponent implements OnInit {
     this.noteType = NoteType.EnrolleeAdjudicationNote;
   }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
