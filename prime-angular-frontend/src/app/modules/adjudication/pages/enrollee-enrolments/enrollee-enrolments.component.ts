@@ -38,7 +38,7 @@ export class EnrolleeEnrolmentsComponent implements OnInit {
 
   public isUnderAdjudication(enrollee: EnrolleeListViewModel): boolean {
     const currentStatusCode = enrollee?.currentStatusCode;
-    const previousStatusCode = enrollee?.previousStatus.statusCode;
+    const previousStatusCode = enrollee?.previousStatus?.statusCode;
     return [EnrolmentStatus.UNDER_REVIEW, EnrolmentStatus.REQUIRES_TOA].includes(currentStatusCode) ||
       (currentStatusCode === EnrolmentStatus.EDITABLE && previousStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
