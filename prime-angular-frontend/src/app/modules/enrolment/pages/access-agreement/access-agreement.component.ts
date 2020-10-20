@@ -17,14 +17,15 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+
+import { AuthService } from '@auth/shared/services/auth.service';
+import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 @Component({
