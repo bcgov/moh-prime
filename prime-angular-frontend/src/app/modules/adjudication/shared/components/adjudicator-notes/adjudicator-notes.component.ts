@@ -5,12 +5,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription, BehaviorSubject, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { SiteResource } from '@core/resources/site-resource.service';
+import { BaseAdjudicatorNote } from '@shared/models/adjudicator-note.model';
+
 import { AuthService } from '@auth/shared/services/auth.service';
+
+import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
-import { BaseAdjudicatorNote } from '@shared/models/adjudicator-note.model';
-import { SiteResource } from '@core/resources/site-resource.service';
-import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 
 @Component({
   selector: 'app-adjudicator-notes',
