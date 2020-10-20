@@ -32,6 +32,7 @@ namespace Prime.Models
         [JsonIgnore]
         public ICollection<Site> Sites { get; set; }
 
+        [JsonIgnore]
         public ICollection<Agreement> Agreements { get; set; }
 
         [NotMapped]

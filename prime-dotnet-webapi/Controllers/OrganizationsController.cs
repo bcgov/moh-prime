@@ -314,6 +314,30 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(agreement));
         }
 
+        // GET: api/Organizations/5/agreements/7/signable
+        // TODO: security
+        /// <summary>
+        /// Get the organization agreement as a signable PDF, Base 64 encoded.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        /// <param name="agreementId"></param>
+        [HttpGet("{organizationId}/agreements/{agreementId}/signable", Name = nameof(GetSignableOrganizationAgreement))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetSignableOrganizationAgreement(int organizationId, int agreementId)
+        {
+            var pdf = await _agreementService.GetSignableOrgAgreementAsync(organizationId, agreementId);
+            if (pdf == null)
+            {
+                return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
+            }
+
+            return Ok(ApiResponse.Result(pdf));
+        }
+
         // PUT: api/Organizations/5/agreements/7
         /// <summary>
         /// Accept an organization agreement, optionally with a Document GUID of the wet-signed agreement upload
@@ -380,17 +404,18 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(organization));
         }
 
-        // Get: api/organizations/5/latest-signed-agreement
+        // Get: api/organizations/5/agreements/7/signed
         /// <summary>
-        /// Gets a download token for the latest signed agreement on an organization.
+        /// Gets a download token for the uploaded wet-signed Agreement Document (if exists).
         /// </summary>
         /// <param name="organizationId"></param>
-        [HttpGet("{organizationId}/latest-signed-agreement", Name = nameof(GetLatestSignedAgreement))]
+        /// <param name="agreementId"></param>
+        [HttpGet("{organizationId}/agreements/{agreementId}/signed", Name = nameof(GetSignedAgreementToken))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetLatestSignedAgreement(int organizationId)
+        public async Task<ActionResult<string>> GetSignedAgreementToken(int organizationId, int agreementId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
@@ -401,35 +426,14 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-
-            var token = await _documentService.GetDownloadTokenForLatestSignedAgreementDocument(organizationId);
-
-            return Ok(ApiResponse.Result(token));
-        }
-
-        // GET: api/Organizations/organization-agreement-digital-signed
-        /// <summary>
-        /// Get the digitally signed organization agreement.
-        /// </summary>
-        /// <param name="organizationId"></param>
-        [HttpGet("{organizationId}/organization-agreement-digital-signed", Name = nameof(GetSignedDigitalOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetSignedDigitalOrganizationAgreement(int organizationId)
-        {
-            var organization = await _organizationService.GetOrganizationAsync(organizationId);
-            if (organization == null)
+            if (!organization.Agreements.Any(a => a.Id == agreementId))
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
             }
 
-            var html = await _razorConverterService.RenderViewToStringAsync("/Views/OrganizationAgreementPdf.cshtml", organization);
-            var agreement = _pdfService.Generate(html);
+            var token = await _documentService.GetDownloadTokenForSignedAgreementDocument(agreementId);
 
-            return Ok(ApiResponse.Result(agreement));
+            return Ok(ApiResponse.Result(token));
         }
     }
 }

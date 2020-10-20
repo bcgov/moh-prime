@@ -49,7 +49,7 @@ namespace Prime.Models
         public SignedAgreementDocument SignedAgreement { get; set; }
 
         [NotMapped]
-        public string AgreementMarkup { get; set; }
+        public string AgreementContent { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
