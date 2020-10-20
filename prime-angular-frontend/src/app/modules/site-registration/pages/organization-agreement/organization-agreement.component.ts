@@ -33,7 +33,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public form: FormGroup;
   public routeUtils: RouteUtils;
   public agreementId: number;
-  public organizationAgreement: string;
+  public organizationAgreementContent: string;
   public hasAcceptedAgreement: boolean;
   public hasDownloadedFile: boolean;
   public hasUploadedFile: boolean;
@@ -53,7 +53,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     private dialog: MatDialog,
     private utilsService: UtilsService
   ) {
-    this.organizationAgreement = null;
+    this.organizationAgreementContent = null;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -150,23 +150,10 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         ),
         exhaustMap((agreementId: number) =>
           this.organizationResource.getOrganizationAgreement(organization.id, agreementId)
-        ),
-        map(({ acceptedDate, agreementContent }: OrganizationAgreementViewModel) => {
-          const date = (acceptedDate)
-            ? moment(acceptedDate).local()
-            : moment();
-
-          return [agreementContent, date];
-        }),
-        map(([organizationAgreement, date]: [string, moment.Moment]) =>
-          organizationAgreement
-            .replace('$day', `${date.format('DD')}`)
-            .replace('$month', date.format('MMMM'))
-            .replace('$year', `${date.format('YYYY')}`)
         )
       )
-      .subscribe((organizationAgreement: string) =>
-        this.organizationAgreement = organizationAgreement
+      .subscribe(({ agreementContent }: OrganizationAgreementViewModel) =>
+        this.organizationAgreementContent = agreementContent
       );
   }
 }
