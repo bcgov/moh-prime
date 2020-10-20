@@ -1,4 +1,4 @@
-@model string
+@model Tuple<string, DateTimeOffset>;
 
 @{
   /**
@@ -9,7 +9,10 @@
    * The BEGIN/END of the Organization Agreement copy is marked with
    * comment delimiters.
    */
-  var organizationName = Model;
+  var organizationName = Model.Item1;
+  var day = Model.Item2.ToString("dd");
+  var month = Model.Item2.ToString("MMMM");
+  var year = Model.Item2.ToString("yyyy");
 }
 
 <link rel="stylesheet"
@@ -93,7 +96,7 @@ ol[type="1"].decimal ol[type="1"] > li::before {
   @* BEGIN of Organization Agreement copied from CommunityPracticeOrganizationAgreement.cshtml *@
 
   <p class="text-center">
-    This Agreement is made the $day day of $month, $year
+    This Agreement is made the @day day of @month, @year
   </p>
 
   <h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>
