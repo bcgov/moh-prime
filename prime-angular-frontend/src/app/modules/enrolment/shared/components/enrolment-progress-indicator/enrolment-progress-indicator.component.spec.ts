@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { EnrolmentProgressIndicatorComponent } from './enrolment-progress-indicator.component';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
@@ -10,6 +11,7 @@ describe('EnrolmentProgressIndicatorComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        RouterTestingModule,
         EnrolmentModule
       ]
     })
