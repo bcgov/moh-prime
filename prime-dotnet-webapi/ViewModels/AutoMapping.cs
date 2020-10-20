@@ -12,8 +12,7 @@ public class AutoMapping : Profile
 {
     public AutoMapping()
     {
-        CreateMap<Organization, OrganizationListViewModel>()
-            .ForMember(dest => dest.SignedAgreementDocumentCount, opt => opt.MapFrom(src => src.Agreements.Count(a => a.SignedAgreement != null)));
+        CreateMap<Organization, OrganizationListViewModel>();
         CreateMap<Site, SiteListViewModel>()
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
             .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count));

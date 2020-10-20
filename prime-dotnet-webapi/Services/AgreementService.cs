@@ -321,7 +321,7 @@ namespace Prime.Services
             }
 
             DateTimeOffset displayDate = acceptedDate ?? DateTimeOffset.Now;
-            // Converting to BC time here since we arn't localizing this time in the Front End.
+            // Converting to BC time here since we aren't localizing this time in the web client
             displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
 
             return await _razorConverterService.RenderViewToStringAsync(viewName, new Tuple<string, DateTimeOffset>(orgName, displayDate));

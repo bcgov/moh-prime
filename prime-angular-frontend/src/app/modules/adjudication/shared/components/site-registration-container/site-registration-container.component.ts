@@ -325,8 +325,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthority,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
-        // TODO PRIME-1085 (is this still needed?)
-        signedAgreementDocumentCount: null,
         ...this.toSiteViewModelPartial(site)
       }];
     };

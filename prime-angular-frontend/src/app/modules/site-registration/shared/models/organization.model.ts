@@ -21,6 +21,4 @@ export interface Organization {
 export interface OrganizationListViewModel extends
   Omit<Organization, 'siteCount' | 'registrationId' | 'hasAcceptedAgreement'> {
   sites: SiteListViewModel[];
-  // TODO PRIME-1085 (is this still needed?)
-  signedAgreementDocumentCount: number;
 }
