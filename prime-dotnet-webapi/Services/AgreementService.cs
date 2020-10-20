@@ -320,7 +320,7 @@ namespace Prime.Services
                     throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}");
             }
 
-            return await _razorConverterService.RenderViewToStringAsync(viewName, orgName);
+            return await _razorConverterService.RenderViewToStringAsync(viewName, new Tuple<string, DateTimeOffset>(orgName, DateTimeOffset.Now));
         }
     }
 }
