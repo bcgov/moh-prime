@@ -84,12 +84,6 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
     this.remoteAccessLocations.push(remoteAccessLocation);
   }
 
-  private disableProvince(remoteAccessLocationFormGroups: FormGroup | FormGroup[]): void {
-    (Array.isArray(remoteAccessLocationFormGroups))
-      ? remoteAccessLocationFormGroups.forEach(group => this.disableProvince(group))
-      : remoteAccessLocationFormGroups.get('physicalAddress.provinceCode').disable();
-  }
-
   protected createFormInstance(): void {
     this.form = this.enrolmentFormStateService.remoteAccessLocationsForm;
   }
