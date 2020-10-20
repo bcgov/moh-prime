@@ -19,15 +19,18 @@ namespace Prime.Services
         private static readonly TimeSpan AGREEMENT_EXPIRY = TimeSpan.FromDays(365);
 
         private readonly IMapper _mapper;
+        private readonly IPdfService _pdfService;
         private readonly IRazorConverterService _razorConverterService;
 
         public AgreementService(
             ApiDbContext context, IHttpContextAccessor httpContext,
             IMapper mapper,
+            IPdfService pdfService,
             IRazorConverterService razorConverterService)
             : base(context, httpContext)
         {
             _mapper = mapper;
+            _pdfService = pdfService;
             _razorConverterService = razorConverterService;
         }
 
@@ -159,35 +162,67 @@ namespace Prime.Services
         /// <param name="agreementId"></param>
         /// <param name="asEncodedPdf"></param>
         /// <returns></returns>
-        public async Task<Agreement> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false)
+        public async Task<AgreementViewModel> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false)
         {
-            // Currently, org agreement text does not come from the database.
-            var orgDto = await _context.Agreements
+            var agreementVm = await _context.Agreements
                 .AsNoTracking()
                 .Where(a => a.Id == agreementId && a.OrganizationId == organizationId)
-                .Select(a => new
-                {
-                    Agreement = a,
-                    Type = a.AgreementVersion.AgreementType,
-                    OrgName = a.Organization.Name
-                })
+                .ProjectTo<AgreementViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
 
-            if (orgDto == null || orgDto.Agreement == null)
+            if (agreementVm == null)
             {
                 return null;
             }
 
+            var orgName = await _context.Organizations
+                .Where(o => o.Id == organizationId)
+                .Select(o => o.Name)
+                .SingleAsync();
+
+            var html = await RenderOrgAgreementHtmlAsync(agreementVm.AgreementType, asEncodedPdf, orgName);
+
             if (asEncodedPdf)
             {
-                orgDto.Agreement.AgreementMarkup = GetEncodedPdf(orgDto.Type);
+                var pdf = _pdfService.Generate(html);
+                agreementVm.AgreementContent = Convert.ToBase64String(pdf);
             }
             else
             {
-                orgDto.Agreement.AgreementMarkup = await RenderOrgAgreementHtmlAsync(orgDto.Type, orgDto.OrgName);
+                agreementVm.AgreementContent = html;
             }
 
-            return orgDto.Agreement;
+            return agreementVm;
+        }
+
+        /// <summary>
+        /// Returns a Base64 encoded PDF of a given org agreement, for signing.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        /// <param name="agreementId"></param>
+        /// <returns></returns>
+        public async Task<string> GetSignableOrgAgreementAsync(int organizationId, int agreementId)
+        {
+            var type = await _context.Agreements
+                .AsNoTracking()
+                .Where(a => a.Id == agreementId && a.OrganizationId == organizationId)
+                .Select(a => (AgreementType?)a.AgreementVersion.AgreementType)
+                .SingleOrDefaultAsync();
+
+            if (!type.HasValue)
+            {
+                return null;
+            }
+
+            return GetEncodedPdf(type.Value);
+        }
+
+        public async Task<SignedAgreementDocument> GetSignedAgreementDocumentAsync(int agreementId)
+        {
+            return await _context.Agreements
+                .Where(a => a.Id == agreementId)
+                .Select(a => a.SignedAgreement)
+                .SingleOrDefaultAsync();
         }
 
         /// <summary>
@@ -199,7 +234,7 @@ namespace Prime.Services
             {
                 if (agreement != null)
                 {
-                    agreement.AgreementMarkup = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", agreement);
+                    agreement.AgreementContent = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", agreement);
                 }
             }
         }
@@ -223,16 +258,6 @@ namespace Prime.Services
             {
                 return await FetchNewestAgreementVersionIdOfType(AgreementType.RegulatedUserTOA);
             }
-        }
-
-        private async Task<int> FetchNewestAgreementVersionIdOfType(AgreementType type)
-        {
-            return await _context.AgreementVersions
-                .AsNoTracking()
-                .OrderByDescending(a => a.EffectiveDate)
-                .Where(a => a.AgreementType == type)
-                .Select(a => a.Id)
-                .FirstAsync();
         }
 
         private string GetEncodedPdf(AgreementType type)
@@ -264,17 +289,31 @@ namespace Prime.Services
             }
         }
 
-        private async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName)
+        private async Task<int> FetchNewestAgreementVersionIdOfType(AgreementType type)
+        {
+            return await _context.AgreementVersions
+                .AsNoTracking()
+                .OrderByDescending(a => a.EffectiveDate)
+                .Where(a => a.AgreementType == type)
+                .Select(a => a.Id)
+                .FirstAsync();
+        }
+
+        private async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, bool forPdf, string orgName)
         {
             string viewName;
             switch (type)
             {
                 case AgreementType.CommunityPracticeOrgAgreement:
-                    viewName = "/Views/CommunityPracticeOrganizationAgreement.cshtml";
+                    viewName = forPdf
+                        ? "/Views/CommunityPracticeOrganizationAgreementPdf.cshtml"
+                        : "/Views/CommunityPracticeOrganizationAgreement.cshtml";
                     break;
 
                 case AgreementType.CommunityPharmacyOrgAgreement:
-                    viewName = "/Views/CommunityPharmacyOrganizationAgreement.cshtml";
+                    viewName = forPdf
+                        ? "/Views/CommunityPharmacyOrganizationAgreementPdf.cshtml"
+                        : "/Views/CommunityPharmacyOrganizationAgreement.cshtml";
                     break;
 
                 default:

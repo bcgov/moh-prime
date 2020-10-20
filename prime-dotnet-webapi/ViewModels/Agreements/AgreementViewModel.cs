@@ -23,6 +23,6 @@ namespace Prime.ViewModels
 
         public AgreementType AgreementType { get; set; }
 
-        public string AgreementMarkup { get; set; }
+        public string AgreementContent { get; set; }
     }
 }

@@ -20,6 +20,10 @@ namespace Prime.Services
 
         Task<IEnumerable<AgreementViewModel>> GetOrgAgreementsAsync(int organizationId);
 
-        Task<Agreement> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false);
+        Task<AgreementViewModel> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false);
+
+        Task<string> GetSignableOrgAgreementAsync(int organizationId, int agreementId);
+
+        Task<SignedAgreementDocument> GetSignedAgreementDocumentAsync(int agreementId);
     }
 }
