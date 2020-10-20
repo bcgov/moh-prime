@@ -76,17 +76,23 @@
         <span>View/Update Organization</span>
       </button>
 
-      <ng-container *ngIf="organizationAgreements?.length">
+      <ng-container *ngIf="organizationAgreements?.length; else noAgreement">
 
         <button *ngFor="let agreement of organizationAgreements"
                 mat-menu-item
                 (click)="viewAgreement(organization, agreement)">
-          <span>View/Print {{ AgreementType[agreement.agreementType] | case: 'snake' : 'space' | capitalize: true }}</span>
+          <span>Download {{ AgreementType[agreement.agreementType] | case: 'snake' : 'space' | capitalize: true }}</span>
         </button>
 
       </ng-container>
 
-      <!-- TODO should there be a default disabled button when no agreements signed -->
+      <ng-template #noAgreement>
+        <button mat-menu-item
+                [disabled]="true">
+          <mat-icon>get_app</mat-icon>
+          <span>Download Organization Agreement</span>
+        </button>
+      </ng-template>
 
     </mat-menu>
   </ng-template>
