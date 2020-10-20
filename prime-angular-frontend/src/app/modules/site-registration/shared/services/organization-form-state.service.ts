@@ -133,7 +133,11 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
       physicalAddress: this.buildAddressForm({
         areDisabled: ['street', 'street2', 'city', 'provinceCode', 'countryCode', 'postal'],
       }),
-      mailingAddress: this.buildAddressForm()
+      mailingAddress: this.buildAddressForm(),
+      dateOfBirth: [
+        null,
+        [Validators.required]
+      ]
     });
   }
 
