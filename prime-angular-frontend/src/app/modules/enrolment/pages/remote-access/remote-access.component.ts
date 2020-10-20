@@ -62,7 +62,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     );
   }
 
-  public get sitesFormArray(): FormArray {
+  public get sites(): FormArray {
     return this.form.get('sites') as FormArray;
   }
 
@@ -71,11 +71,11 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public onSubmit() {
+    this.enrolleeRemoteUsers.clear();
     this.remoteSites.forEach(site => {
       site.remoteUsers.forEach(remoteUser => {
         const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
-        enrolleeRemoteUser.get('enrolleeId').setValue(this.enrolment.id);
-        enrolleeRemoteUser.get('remoteUserId').setValue(remoteUser.id);
+        enrolleeRemoteUser.patchValue({ enrolleeId: this.enrolment.id, remoteUserId: remoteUser.id })
         this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
       });
     });
@@ -106,12 +106,16 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     this.form.controls.sites = this.fb.array(this.remoteSites.map(() => this.fb.control(false)));
     // Set already linked sites as checked
     const checked = [];
-    this.remoteSites.forEach(remoteSite =>
-      remoteSite.remoteUsers.forEach(remoteUser =>
-        checked.push(this.enrolment.enrolleeRemoteUsers?.some(eru => eru.remoteUserId === remoteUser.id))
-      )
-    );
-    this.sitesFormArray.patchValue(checked);
+    this.remoteSites.forEach(remoteSite => {
+      remoteSite.remoteUsers.forEach(remoteUser => {
+        this.enrolleeRemoteUsers.controls.forEach(control => {
+          if (control.get('remoteUserId').value === remoteUser.id) {
+            checked.push(true);
+          }
+        });
+      });
+    });
+    this.sites.patchValue(checked);
   }
 
   protected nextRouteAfterSubmit() {
