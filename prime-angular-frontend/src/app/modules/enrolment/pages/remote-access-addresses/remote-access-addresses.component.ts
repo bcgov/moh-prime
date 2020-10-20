@@ -2,17 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
+import { Country } from '@shared/enums/country.enum';
+import { Province } from '@shared/enums/province.enum';
+
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { Country } from '@shared/enums/country.enum';
-import { Province } from '@shared/enums/province.enum';
 
 @Component({
   selector: 'app-remote-access-addresses',
