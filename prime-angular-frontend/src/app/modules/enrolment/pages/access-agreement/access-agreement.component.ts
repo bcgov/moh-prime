@@ -171,8 +171,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   }
 
   public ngOnInit(): void {
-
-
     this.createFormInstance();
     this.initForm();
   }
