@@ -20,12 +20,13 @@ import { DateContent } from '@adjudication/shared/components/dated-content-table
   styleUrls: ['./adjudicator-notes.component.scss']
 })
 export class AdjudicatorNotesComponent implements OnInit {
+  @Input() public noteType: NoteType;
+  
   public busy: Subscription;
   public form: FormGroup;
   public columns: string[];
   public adjudicatorNotes$: BehaviorSubject<DateContent[]>;
   public hasActions: boolean;
-  @Input() public noteType: NoteType;
 
   constructor(
     private route: ActivatedRoute,
