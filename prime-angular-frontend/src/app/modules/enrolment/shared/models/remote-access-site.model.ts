@@ -3,7 +3,7 @@ import { Address } from '@shared/models/address.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { Vendor } from '@registration/shared/models/vendor.model';
 
-export interface EnrolleeRemoteAccessSite {
+export interface RemoteAccessSite {
   id: number;
   organizationName: string;
   physicalAddress: Address;

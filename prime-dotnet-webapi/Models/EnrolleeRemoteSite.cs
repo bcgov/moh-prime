@@ -4,8 +4,8 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("EnrolleeRemoteUser")]
-    public class EnrolleeRemoteUser : BaseAuditable
+    [Table("RemoteAccessSite")]
+    public class RemoteAccessSite : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
@@ -15,9 +15,9 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        public int RemoteUserId { get; set; }
+        public int SiteId { get; set; }
 
         [JsonIgnore]
-        public RemoteUser RemoteUser { get; set; }
+        public Site Site { get; set; }
     }
 }

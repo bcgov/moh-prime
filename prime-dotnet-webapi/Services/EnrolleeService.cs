@@ -131,10 +131,13 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
+        public async Task<EnrolleeViewModel> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
-            Enrollee enrollee = await this.GetBaseEnrolleeQuery()
+            EnrolleeViewModel enrollee = await this.GetBaseEnrolleeQuery()
+                .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
                 .AsNoTracking()
+                .ProjectTo<EnrolleeViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(e => e.UserId == userId);
 
             if (enrollee == null
@@ -142,6 +145,16 @@ namespace Prime.Services
             {
                 return null;
             }
+
+            // if (enrollee.RemoteAccessSites != null)
+            // {
+            //     var mappedRemoteAccessSites = new List<RemoteAccessSiteViewModel>();
+            //     foreach (var remoteAccessSite in enrollee.RemoteAccessSites)
+            //     {
+            //         mappedRemoteAccessSites.Add(_mapper.Map<Site, RemoteAccessSiteViewModel>(remoteAccessSite.Site));
+            //     }
+            //     enrollee.RemoteAccessSites = mappedRemoteAccessSites;
+            // }
 
             return enrollee;
         }

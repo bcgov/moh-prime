@@ -12,6 +12,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { IdentificationDocument } from './identification-document.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -27,6 +28,7 @@ export interface HttpEnrollee extends Enrollee {
   isInsulinPumpProvider: boolean;
   jobs: Job[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
+  remoteAccessSites: RemoteAccessSite[];
   remoteAccessLocations: RemoteAccessLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
@@ -64,6 +66,7 @@ export interface Enrolment {
   isInsulinPumpProvider: boolean;
   jobs: Job[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
+  remoteAccessSites: RemoteAccessSite[];
   remoteAccessLocations: RemoteAccessLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];

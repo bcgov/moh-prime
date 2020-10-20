@@ -6,12 +6,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 using DelegateDecompiler;
 
-namespace Prime.Models
+using Prime.Models;
+
+namespace Prime.ViewModels
 {
-    [Table("Enrollee")]
-    public class Enrollee : BaseAuditable, IValidatableObject, IUserBoundModel
+    public class EnrolleeViewModel
     {
-        public Enrollee()
+        public EnrolleeViewModel()
         {
             // Initialize collections to prevent null exception on computed properties like CurrrentStatus and ExpiryDate
             EnrolmentStatuses = new List<EnrolmentStatus>();
@@ -112,7 +113,7 @@ namespace Prime.Models
 
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
-        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
+        public ICollection<RemoteAccessSiteViewModel> RemoteAccessSites { get; set; }
 
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 

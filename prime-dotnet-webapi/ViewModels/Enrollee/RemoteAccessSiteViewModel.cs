@@ -5,7 +5,7 @@ using Prime.Models;
 
 namespace Prime.ViewModels
 {
-    public class EnrolleeRemoteAccessSiteViewModel
+    public class RemoteAccessSiteViewModel
     {
         public int Id { get; set; }
         public string OrganizationName { get; set; }

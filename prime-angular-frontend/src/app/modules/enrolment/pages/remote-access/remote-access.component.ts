@@ -14,7 +14,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -31,7 +31,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   public form: FormGroup;
   public enrolment: Enrolment;
   public showProgress: boolean;
-  public remoteSites: EnrolleeRemoteAccessSite[];
+  public remoteSites: RemoteAccessSite[];
   public noRemoteSites: boolean;
 
   constructor(
@@ -135,7 +135,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
       .pipe(delay(2000))
       .subscribe(
-        (sites: EnrolleeRemoteAccessSite[]) => {
+        (sites: RemoteAccessSite[]) => {
           if (sites.length) {
             this.noRemoteSites = false;
             this.remoteSites = sites;

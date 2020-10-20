@@ -86,7 +86,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
-    const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
+    const remoteAccess = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
     const selfDeclarations = this.convertSelfDeclarationsToJson();
@@ -101,7 +101,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ...deviceProvider,
       ...jobs,
       ...careSettings,
-      enrolleeRemoteUsers,
+      ...remoteAccess,
       ...remoteAccessLocations,
       selfDeclarations
     };
@@ -402,7 +402,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   public buildRemoteAccessForm(): FormGroup {
     return this.fb.group({
-      sites: this.fb.array([]),
+      remoteAccessSites: this.fb.array([]),
       enrolleeRemoteUsers: this.fb.array([])
     });
   }

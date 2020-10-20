@@ -252,6 +252,12 @@ namespace Prime
                 .HasForeignKey(ral => ral.EnrolleeId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<RemoteAccessSite>()
+                .HasOne(ras => ras.Enrollee)
+                .WithMany(e => e.RemoteAccessSites)
+                .HasForeignKey(ras => ras.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             #endregion
         }
 

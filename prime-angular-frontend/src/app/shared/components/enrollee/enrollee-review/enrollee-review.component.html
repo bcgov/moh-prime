@@ -264,6 +264,23 @@
 <section class="mb-4">
 
   <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Remote Access</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Remote Access"
+            (click)="onRoute(EnrolmentRoutes.REMOTE_ACCESS)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
     <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
 
     <button *ngIf="showEditRedirect"

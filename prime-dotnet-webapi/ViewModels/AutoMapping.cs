@@ -27,7 +27,7 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
             .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreements.Any(n => n.Id == src.CurrentAgreementId)));
 
-        CreateMap<Site, EnrolleeRemoteAccessSiteViewModel>()
+        CreateMap<Site, RemoteAccessSiteViewModel>()
            .ForMember(dest => dest.OrganizationName, opt => opt.MapFrom(src => src.Organization.Name));
     }
 }
