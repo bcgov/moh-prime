@@ -12,6 +12,7 @@ import { BceidDemographicComponent } from './bceid-demographic.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 describe('BceidDemographicComponent', () => {
   let component: BceidDemographicComponent;
@@ -36,9 +37,10 @@ describe('BceidDemographicComponent', () => {
         },
         {
           provide: AuthService,
-          useValue: MockAuthService
+          useClass: MockAuthService
         },
-        KeycloakService
+        KeycloakService,
+        EnrolmentFormStateService
       ]
     })
       .compileComponents();
