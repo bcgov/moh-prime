@@ -413,6 +413,13 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     });
   }
 
+  public remoteAccessSiteFormGroup(): FormGroup {
+    return this.fb.group({
+      enrolleeId: [null, []],
+      siteId: [null, []]
+    });
+  }
+
   public buildRemoteAccessLocationsForm(): FormGroup {
     return this.fb.group({
       remoteAccessLocations: this.fb.array([])

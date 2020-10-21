@@ -62,8 +62,14 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     );
   }
 
+  // All site checkboxes returned from search
   public get sites(): FormArray {
     return this.form.get('sites') as FormArray;
+  }
+
+  // Sites selected by the enrollee
+  public get remoteAccessSites(): FormArray {
+    return this.form.get('remoteAccessSites') as FormArray;
   }
 
   public get enrolleeRemoteUsers(): FormArray {
@@ -72,13 +78,19 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
   public onSubmit() {
     this.enrolleeRemoteUsers.clear();
+    this.remoteAccessSites.clear();
 
+    // for each checked site, add a enrolleeRemoteUser and a remoteAccessSite
     this.sites.controls.forEach((checked, i) => {
       if (checked.value) {
         this.remoteSites[i].remoteUsers.forEach(remoteUser => {
           const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
           enrolleeRemoteUser.patchValue({ enrolleeId: this.enrolment.id, remoteUserId: remoteUser.id });
           this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
+
+          const remoteAccessSite = this.enrolmentFormStateService.remoteAccessSiteFormGroup();
+          remoteAccessSite.patchValue({ enrolleeId: this.enrolment.id, siteId: this.remoteSites[i].siteId });
+          this.remoteAccessSites.push(remoteAccessSite);
         });
       }
     });
