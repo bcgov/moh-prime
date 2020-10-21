@@ -18,12 +18,26 @@
   </button>
 
   <mat-menu #menu>
-    <button mat-menu-item
-            [disabled]="!canEdit"
-            (click)="getOrganizationAgreement(siteRegistration)">
-      <mat-icon>get_app</mat-icon>
-      <span>Organization Agreement</span>
-    </button>
+
+    <ng-container *ngIf="organizationAgreements?.length; else noAgreement">
+
+      <button *ngFor="let agreement of organizationAgreements"
+              mat-menu-item
+              [disabled]="!canEdit"
+              (click)="viewAgreement(organization, agreement)">
+        <span>Download {{ AgreementType[agreement.agreementType] | case: 'snake' : 'space' | capitalize: true }}</span>
+      </button>
+
+    </ng-container>
+
+    <ng-template #noAgreement>
+      <button mat-menu-item
+              [disabled]="true">
+        <mat-icon>get_app</mat-icon>
+        <span>Download Organization Agreement</span>
+      </button>
+    </ng-template>
+
   </mat-menu>
 
 </ng-template>

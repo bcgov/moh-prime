@@ -55,22 +55,30 @@ export class SiteManagementComponent implements OnInit {
     this.organizations = [];
   }
 
-  public viewOrganization(organization: OrganizationListViewModel) {
+  public viewOrganization(organization: OrganizationListViewModel): void {
     const routePath = (!organization.completed)
       ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
       : []; // Defaults to overview
     this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
   }
 
-  public viewAgreement(organization: Organization, organizationAgreement: OrganizationAgreementViewModel) {
-    if (organizationAgreement?.signedAgreementDocumentGuid) {
-      // TODO PRIME-1085
-    } else {
-      // TODO PRIME-1085
-    }
+  public viewAgreement(organization: Organization, organizationAgreement: OrganizationAgreementViewModel): void {
+    const request$ = (organizationAgreement?.signedAgreementDocumentGuid)
+      ? this.organizationResource.getSignedOrganizationAgreementToken(organization.id, organizationAgreement.id)
+        .pipe(
+          map((token: string) => this.utilsService.downloadToken(token))
+        )
+      : this.organizationResource.getOrganizationAgreement(organization.id, organizationAgreement.id, true)
+        .pipe(
+          map((agreement: OrganizationAgreement) => agreement.agreementContent),
+          map((base64: string) => this.utilsService.base64ToBlob(base64)),
+          map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
+        );
+
+    this.busy = request$.subscribe();
   }
 
-  public viewSite(organizationId: number, site: SiteListViewModel) {
+  public viewSite(organizationId: number, site: SiteListViewModel): void {
     const routePath = (site.completed)
       ? [organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
       : [organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING];
