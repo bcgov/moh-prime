@@ -8,6 +8,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
@@ -17,8 +18,6 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -428,7 +427,9 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ],
       physicalAddress: this.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        exclude: ['street2']
+        exclude: ['street2'],
+        useDefaults: ['provinceCode', 'countryCode'],
+        areDisabled: ['provinceCode', 'countryCode']
       })
     });
   }

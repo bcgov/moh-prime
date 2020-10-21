@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
+
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { Country } from '@shared/enums/country.enum';
-import { Province } from '@shared/enums/province.enum';
 
 @Component({
   selector: 'app-remote-access-addresses',
@@ -33,8 +33,7 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService,
-    private fb: FormBuilder
+    protected formUtilsService: FormUtilsService
   ) {
     super(
       route,
@@ -73,6 +72,25 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
     }
   }
 
+  public onBack() {
+    this.removeIncompleteLocations();
+    this.routeTo(this.EnrolmentRoutes.REMOTE_ACCESS);
+  }
+
+  /**
+   * @description
+   * Removes incomplete locations from the list in preparation
+   * for submission
+   */
+  private removeIncompleteLocations() {
+    this.remoteAccessLocations.controls
+      .forEach((control: FormGroup, index: number) => {
+        if (!control.get('internetProvider').value || control.invalid) {
+          this.remoteAccessLocations.removeAt(index);
+        }
+      });
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
@@ -82,20 +100,7 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
   private addRemoteAccessLocation(): void {
     const remoteAccessLocation = this.enrolmentFormStateService
       .remoteAccessLocationFormGroup();
-    remoteAccessLocation.get('physicalAddress')
-      .patchValue({
-        countryCode: Country.CANADA,
-        provinceCode: Province.BRITISH_COLUMBIA
-      });
-    this.disableProvince(remoteAccessLocation);
-
     this.remoteAccessLocations.push(remoteAccessLocation);
-  }
-
-  private disableProvince(remoteAccessLocationFormGroups: FormGroup | FormGroup[]): void {
-    (Array.isArray(remoteAccessLocationFormGroups))
-      ? remoteAccessLocationFormGroups.forEach(group => this.disableProvince(group))
-      : remoteAccessLocationFormGroups.get('physicalAddress.provinceCode').disable();
   }
 
   protected createFormInstance(): void {
@@ -111,6 +116,10 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
   }
 
   protected nextRouteAfterSubmit() {
-    super.nextRouteAfterSubmit(this.EnrolmentRoutes.SELF_DECLARATION);
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = this.EnrolmentRoutes.SELF_DECLARATION;
+    }
+    super.nextRouteAfterSubmit(nextRoutePath);
   }
 }
