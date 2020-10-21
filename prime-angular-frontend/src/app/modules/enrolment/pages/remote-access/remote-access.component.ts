@@ -71,7 +71,6 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   }
 
   public onSubmit() {
-    console.log(this.sites);
     this.enrolleeRemoteUsers.clear();
 
     this.sites.controls.forEach((checked, i) => {
