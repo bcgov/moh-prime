@@ -194,7 +194,7 @@ namespace Prime.Services
                 return null;
             }
 
-            var agreementType = AgreementTypeForSiteSetting(siteSetting.Value);
+            var agreementType = OrgAgreementTypeForSiteSetting(siteSetting.Value);
 
             var newestVersionId = await _context.AgreementVersions
                 .AsNoTracking()
@@ -277,18 +277,7 @@ namespace Prime.Services
                 .FirstOrDefaultAsync();
         }
 
-        private IQueryable<Organization> GetBaseOrganizationQuery()
-        {
-            return _context.Organizations
-                .Include(o => o.Agreements)
-                    .ThenInclude(a => a.SignedAgreement)
-                .Include(o => o.SigningAuthority)
-                    .ThenInclude(p => p.PhysicalAddress)
-                .Include(o => o.SigningAuthority)
-                    .ThenInclude(p => p.MailingAddress);
-        }
-
-        private AgreementType AgreementTypeForSiteSetting(int careSettingCode)
+        public AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode)
         {
             switch ((CareSettingType)careSettingCode)
             {
@@ -299,8 +288,19 @@ namespace Prime.Services
                     return AgreementType.CommunityPharmacyOrgAgreement;
 
                 default:
-                    throw new InvalidOperationException($"Did not recognize case setting code {careSettingCode} in {nameof(AgreementTypeForSiteSetting)}");
+                    throw new InvalidOperationException($"Did not recognize care setting code {careSettingCode} in {nameof(OrgAgreementTypeForSiteSetting)}");
             }
+        }
+
+        private IQueryable<Organization> GetBaseOrganizationQuery()
+        {
+            return _context.Organizations
+                .Include(o => o.Agreements)
+                    .ThenInclude(a => a.SignedAgreement)
+                .Include(o => o.SigningAuthority)
+                    .ThenInclude(p => p.PhysicalAddress)
+                .Include(o => o.SigningAuthority)
+                    .ThenInclude(p => p.MailingAddress);
         }
     }
 }

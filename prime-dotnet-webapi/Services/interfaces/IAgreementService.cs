@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
@@ -21,6 +22,8 @@ namespace Prime.Services
         Task<IEnumerable<AgreementViewModel>> GetOrgAgreementsAsync(int organizationId);
 
         Task<AgreementViewModel> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false);
+
+        Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf);
 
         Task<string> GetSignableOrgAgreementAsync(int organizationId, int agreementId);
 

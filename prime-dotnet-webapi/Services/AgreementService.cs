@@ -195,6 +195,34 @@ namespace Prime.Services
             return agreementVm;
         }
 
+        public async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf)
+        {
+            string viewName;
+            switch (type)
+            {
+                case AgreementType.CommunityPracticeOrgAgreement:
+                    viewName = forPdf
+                        ? "/Views/CommunityPracticeOrganizationAgreementPdf.cshtml"
+                        : "/Views/CommunityPracticeOrganizationAgreement.cshtml";
+                    break;
+
+                case AgreementType.CommunityPharmacyOrgAgreement:
+                    viewName = forPdf
+                        ? "/Views/CommunityPharmacyOrganizationAgreementPdf.cshtml"
+                        : "/Views/CommunityPharmacyOrganizationAgreement.cshtml";
+                    break;
+
+                default:
+                    throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}");
+            }
+
+            DateTimeOffset displayDate = acceptedDate ?? DateTimeOffset.Now;
+            // Converting to BC time here since we aren't localizing this time in the web client
+            displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
+
+            return await _razorConverterService.RenderViewToStringAsync(viewName, new Tuple<string, DateTimeOffset>(orgName, displayDate));
+        }
+
         /// <summary>
         /// Returns a Base64 encoded PDF of a given org agreement, for signing.
         /// </summary>
@@ -297,34 +325,6 @@ namespace Prime.Services
                 .Where(a => a.AgreementType == type)
                 .Select(a => a.Id)
                 .FirstAsync();
-        }
-
-        private async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf)
-        {
-            string viewName;
-            switch (type)
-            {
-                case AgreementType.CommunityPracticeOrgAgreement:
-                    viewName = forPdf
-                        ? "/Views/CommunityPracticeOrganizationAgreementPdf.cshtml"
-                        : "/Views/CommunityPracticeOrganizationAgreement.cshtml";
-                    break;
-
-                case AgreementType.CommunityPharmacyOrgAgreement:
-                    viewName = forPdf
-                        ? "/Views/CommunityPharmacyOrganizationAgreementPdf.cshtml"
-                        : "/Views/CommunityPharmacyOrganizationAgreement.cshtml";
-                    break;
-
-                default:
-                    throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}");
-            }
-
-            DateTimeOffset displayDate = acceptedDate ?? DateTimeOffset.Now;
-            // Converting to BC time here since we aren't localizing this time in the web client
-            displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
-
-            return await _razorConverterService.RenderViewToStringAsync(viewName, new Tuple<string, DateTimeOffset>(orgName, displayDate));
         }
     }
 }
