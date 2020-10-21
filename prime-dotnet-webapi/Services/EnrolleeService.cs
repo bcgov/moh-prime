@@ -115,7 +115,7 @@ namespace Prime.Services
                 .Select(a => a.AgreementType)
                 .Distinct()
                 .Select(type => _context.AgreementVersions
-                    .OrderByDescending(x => x.EffectiveDate)
+                    .OrderByDescending(a => a.EffectiveDate)
                     .First(a => a.AgreementType == type)
                     .Id
                 );
