@@ -300,7 +300,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       preferredMiddleName: [null, []],
       preferredLastName: [null, [Validators.required]],
       mailingAddress: this.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal']
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        useDefaults: ['countryCode']
       }),
       phone: [null, [
         Validators.required,

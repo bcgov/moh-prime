@@ -6,6 +6,7 @@ import { pairwise, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { Config, ProvinceConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 
+import { AddressLine } from '@lib/types/address-line.type';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
 import { Address } from '@shared/models/address.model';
@@ -20,7 +21,7 @@ export class AddressComponent implements OnInit {
   // does not have to be displayed
   @Input() public form: FormGroup;
   // List of controls that should be displayed
-  @Input() public formControlNames: string[];
+  @Input() public formControlNames: AddressLine[];
   // Whether BC addresses can only be selected using autocomplete
   @Input() bcOnly: boolean;
 
@@ -62,17 +63,17 @@ export class AddressComponent implements OnInit {
     return this.form.get('postal') as FormControl;
   }
 
-  public showFormControl(formControlName: string): boolean {
+  public showFormControl(formControlName: AddressLine): boolean {
     return this.formControlNames.includes(formControlName);
   }
 
-  public getFormControlOrder(formControlName: string): string {
+  public getFormControlOrder(formControlName: AddressLine): string {
     const index = this.formControlNames.indexOf(formControlName) + 1;
     return `order-${index}`;
   }
 
-  public isRequired(path: string): boolean {
-    return this.formUtilsService.isRequired(this.form, path);
+  public isRequired(addressLine: AddressLine): boolean {
+    return this.formUtilsService.isRequired(this.form, addressLine);
   }
 
   public onAutocomplete({ id, countryCode, ...address }: Address) {
