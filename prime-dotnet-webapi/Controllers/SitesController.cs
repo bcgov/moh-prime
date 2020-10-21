@@ -444,13 +444,13 @@ namespace Prime.Controllers
         /// Send HIBC an email when remote users are updated for a submitted site
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/remote-users-email", Name = nameof(sendRemoteUsersEmail))]
+        [HttpPost("{siteId}/remote-users-email", Name = nameof(SendRemoteUsersEmail))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> sendRemoteUsersEmail(int siteId)
+        public async Task<ActionResult> SendRemoteUsersEmail(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
