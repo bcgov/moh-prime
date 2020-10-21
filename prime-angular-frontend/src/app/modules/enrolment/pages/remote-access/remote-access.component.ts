@@ -74,17 +74,15 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     console.log(this.sites);
     this.enrolleeRemoteUsers.clear();
 
-    if (this.sites.length) {
-      this.sites.controls.forEach((checked, i) => {
-        if (checked.value) {
-          this.remoteSites[i].remoteUsers.forEach(remoteUser => {
-            const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
-            enrolleeRemoteUser.patchValue({ enrolleeId: this.enrolment.id, remoteUserId: remoteUser.id });
-            this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
-          });
-        }
-      });
-    }
+    this.sites.controls.forEach((checked, i) => {
+      if (checked.value) {
+        this.remoteSites[i].remoteUsers.forEach(remoteUser => {
+          const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
+          enrolleeRemoteUser.patchValue({ enrolleeId: this.enrolment.id, remoteUserId: remoteUser.id });
+          this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
+        });
+      }
+    });
 
     super.onSubmit();
   }
