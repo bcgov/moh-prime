@@ -65,36 +65,32 @@
   <ng-template #organizationMenu
                let-organization="organization">
     <button mat-icon-button
-            [matMenuTriggerFor]="menu">
+            [matMenuTriggerFor]="rootMenu">
       <mat-icon>more_vert</mat-icon>
     </button>
 
-    <mat-menu #menu="matMenu"
+    <mat-menu #rootMenu="matMenu"
               aria-label="Organization actions menu">
       <button mat-menu-item
               (click)="viewOrganization(organization)">
         <span>View/Update Organization</span>
       </button>
 
-      <ng-container *ngIf="organizationAgreements?.length; else noAgreement">
-
-        <button *ngFor="let agreement of organizationAgreements"
-                mat-menu-item
-                (click)="viewAgreement(organization, agreement)">
-          <span>Download {{ AgreementType[agreement.agreementType] | case: 'snake' : 'space' | capitalize: true }}</span>
-        </button>
-
-      </ng-container>
-
-      <ng-template #noAgreement>
-        <button mat-menu-item
-                [disabled]="true">
-          <mat-icon>get_app</mat-icon>
-          <span>Download Organization Agreement</span>
-        </button>
-      </ng-template>
-
+      <button mat-menu-item
+              [matMenuTriggerFor]="subMenu"
+              [disabled]="!organizationAgreements?.length">
+        <span>Download Organization Agreement</span>
+      </button>
     </mat-menu>
+
+    <mat-menu #subMenu="matMenu">
+      <button *ngFor="let agreement of organizationAgreements"
+              mat-menu-item
+              (click)="viewAgreement(organization, agreement)">
+        <span>{{ AgreementType[agreement.agreementType] | case: 'snake' : 'space' | capitalize: true }}</span>
+      </button>
+    </mat-menu>
+
   </ng-template>
 
   <ng-template #siteMenu
