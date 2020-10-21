@@ -7,8 +7,8 @@ namespace Prime.ViewModels
 {
     public class RemoteAccessSiteViewModel
     {
-        public int Id { get; set; }
-        public string OrganizationName { get; set; }
+        public int SiteId { get; set; }
+        public string DoingBusinessAs { get; set; }
         public PhysicalAddress PhysicalAddress { get; set; }
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }
         public IEnumerable<SiteVendor> SiteVendors { get; set; }

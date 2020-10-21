@@ -5,7 +5,7 @@ import { Vendor } from '@registration/shared/models/vendor.model';
 
 export interface RemoteAccessSite {
   id: number;
-  organizationName: string;
+  doingBusinessAs: string;
   physicalAddress: Address;
   remoteUsers: RemoteUser[];
   siteVendors: Vendor[];
