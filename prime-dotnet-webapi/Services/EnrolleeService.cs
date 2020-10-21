@@ -111,9 +111,14 @@ namespace Prime.Services
         {
             searchOptions = searchOptions ?? new EnrolleeSearchOptions();
 
-            IQueryable<int> newestAgreements = _context.AgreementVersions
-                .GroupBy(a => a.AgreementType)
-                .Select(group => group.OrderByDescending(a => a.EffectiveDate).First().Id);
+            IQueryable<int> newestAgreementIds = _context.AgreementVersions
+                .Select(a => a.AgreementType)
+                .Distinct()
+                .Select(type => _context.AgreementVersions
+                    .OrderByDescending(x => x.EffectiveDate)
+                    .First(a => a.AgreementType == type)
+                    .Id
+                );
 
             return await _context.Enrollees
                 .AsNoTracking()
@@ -129,7 +134,7 @@ namespace Prime.Services
                 .If(searchOptions.StatusCode.HasValue, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreements = newestAgreements })
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds = newestAgreementIds })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();
