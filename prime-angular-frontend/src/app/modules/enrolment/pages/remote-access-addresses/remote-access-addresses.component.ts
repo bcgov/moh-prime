@@ -79,13 +79,12 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
 
   /**
    * @description
-   * Removes incomplete certifications from the list in preparation
-   * for submission, and allows for an empty list of certifications.
+   * Removes incomplete locations from the list in preparation
+   * for submission
    */
   private removeIncompleteLocations() {
     this.remoteAccessLocations.controls
       .forEach((control: FormGroup, index: number) => {
-        // Remove if college code is "None" or the group is invalid
         if (!control.get('internetProvider').value || control.invalid) {
           this.remoteAccessLocations.removeAt(index);
         }
