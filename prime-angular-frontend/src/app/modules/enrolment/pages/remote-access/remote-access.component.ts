@@ -83,6 +83,10 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       }
     });
 
+    if (!this.enrolleeRemoteUsers.length) {
+      this.removeRemoteAccessLocations();
+    }
+
     super.onSubmit();
   }
 
@@ -127,6 +131,8 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       nextRoutePath = this.enrolleeRemoteUsers.length
         ? EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES
         : EnrolmentRoutes.SELF_DECLARATION;
+    } else if (this.enrolleeRemoteUsers.length) {
+      nextRoutePath = EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
@@ -155,5 +161,15 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
         (error: any) => { },
         () => this.showProgress = false
       );
+  }
+
+  /**
+   * @description
+   * Remove remoteAccessLocations from the enrolment if no remote sites have been chosen
+   */
+  private removeRemoteAccessLocations() {
+    const form = this.enrolmentFormStateService.remoteAccessLocationsForm;
+    const locations = form.get('remoteAccessLocations') as FormArray;
+    locations.clear();
   }
 }
