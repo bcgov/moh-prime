@@ -11,10 +11,6 @@ namespace Prime.Migrations
             migrationBuilder.DropTable(
                 name: "RemoteUserLocation");
 
-            migrationBuilder.DropIndex(
-                name: "IX_IdentificationDocument_EnrolleeId",
-                table: "IdentificationDocument");
-
             migrationBuilder.CreateTable(
                 name: "RemoteAccessLocation",
                 columns: table => new
@@ -47,11 +43,6 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_IdentificationDocument_EnrolleeId",
-                table: "IdentificationDocument",
-                column: "EnrolleeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RemoteAccessLocation_EnrolleeId",
                 table: "RemoteAccessLocation",
                 column: "EnrolleeId");
@@ -66,10 +57,6 @@ namespace Prime.Migrations
         {
             migrationBuilder.DropTable(
                 name: "RemoteAccessLocation");
-
-            migrationBuilder.DropIndex(
-                name: "IX_IdentificationDocument_EnrolleeId",
-                table: "IdentificationDocument");
 
             migrationBuilder.CreateTable(
                 name: "RemoteUserLocation",
@@ -101,12 +88,6 @@ namespace Prime.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IdentificationDocument_EnrolleeId",
-                table: "IdentificationDocument",
-                column: "EnrolleeId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_RemoteUserLocation_PhysicalAddressId",

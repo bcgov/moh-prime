@@ -299,6 +299,19 @@ export class SiteResource {
       );
   }
 
+  public getSiteRegistrationNotes(siteId: number): Observable<SiteRegistrationNote[]> {
+    return this.apiResource.get(`sites/${siteId}/site-registration-notes`)
+      .pipe(
+        map((response: ApiHttpResponse<SiteRegistrationNote[]>) => response.result),
+        tap((siteRegistrationNotes: SiteRegistrationNote[]) => this.logger.info('SITE_REGISTRATION_NOTES', siteRegistrationNotes)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site Registration notes could not be retrieved');
+          this.logger.error('[SiteRegistration] SiteResource::getSiteRegistrationNotes error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getSitesByRemoteUserInfo(certifications: CollegeCertification[]): Observable<RemoteAccessSite[]> {
     return this.apiResource.post(`sites/remote-users`, certifications)
       .pipe(

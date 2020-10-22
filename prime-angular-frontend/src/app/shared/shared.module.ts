@@ -66,7 +66,6 @@ import { CollectionNoticeContainerComponent } from '@shared/components/collectio
 import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.component';
 import { PartyReviewComponent } from '@shared/components/site/party-review/party-review.component';
 import { DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
-import { OrganizationReviewComponent } from '@shared/components/organization-review/organization-review.component';
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
 import { OverviewSectionComponent } from '@shared/components/overview-section/overview-section.component';
 import { OverviewContainerComponent } from '@shared/components/site/overview-container/overview-container.component';
@@ -129,7 +128,6 @@ import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-r
     FormErrorsComponent,
     PartyReviewComponent,
     DocumentUploadComponent,
-    OrganizationReviewComponent,
     ImageComponent,
     OverviewSectionComponent,
     OverviewContainerComponent,
@@ -201,7 +199,6 @@ import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-r
     FormErrorsComponent,
     PartyReviewComponent,
     DocumentUploadComponent,
-    OrganizationReviewComponent,
     OverviewSectionComponent,
     OverviewContainerComponent,
     CollegeCertificationFormComponent,

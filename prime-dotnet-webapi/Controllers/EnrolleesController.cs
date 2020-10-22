@@ -22,7 +22,7 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAccessTermService _accessTermService;
+        private readonly IAgreementService _agreementService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
@@ -32,7 +32,7 @@ namespace Prime.Controllers
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
-            IAccessTermService accessTermService,
+            IAgreementService agreementService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
@@ -41,7 +41,7 @@ namespace Prime.Controllers
             IRazorConverterService razorConverterService)
         {
             _enrolleeService = enrolleeService;
-            _accessTermService = accessTermService;
+            _agreementService = agreementService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
             _adminService = adminService;
             _businessEventService = businessEventService;
@@ -267,7 +267,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AdjudicatorNote>>> GetAdjudicatorNotes(int enrolleeId)
+        public async Task<ActionResult<IEnumerable<EnrolleeNote>>> GetAdjudicatorNotes(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             if (enrollee == null)
@@ -292,8 +292,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<AdjudicatorNote>> CreateAdjudicatorNote(int enrolleeId, FromBodyText note, [FromQuery] bool link)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNote>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<EnrolleeNote>> CreateAdjudicatorNote(int enrolleeId, FromBodyText note, [FromQuery] bool link)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
@@ -333,8 +333,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<AdjudicatorNote>> CreateEnrolmentReference(int enrolleeId)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNote>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<EnrolleeNote>> CreateEnrolmentReference(int enrolleeId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {

@@ -11,6 +11,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { OrganizationAgreement } from '@shared/models/agreement.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
@@ -20,7 +21,6 @@ import { Contact } from '@registration/shared/models/contact.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
   selector: 'app-technical-support',
@@ -58,23 +58,25 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
       const site = this.siteService.site;
 
       this.busy = this.organizationResource
-        .getOrganizationById(organizationId)
+        .updateOrganizationAgreement(organizationId, site.id)
         .pipe(
-          map((organization: Organization) => !!organization.acceptedAgreementDate),
-          exhaustMap((hasSignedOrgAgreement: boolean) =>
+          map((agreement: OrganizationAgreement) => !!agreement),
+          exhaustMap((needsOrgAgreement: boolean) =>
             this.siteResource.updateSite(payload)
-              .pipe(map(() => hasSignedOrgAgreement))
+              .pipe(map(() => needsOrgAgreement))
           ),
-          exhaustMap((hasSignedOrgAgreement: boolean) =>
-            (hasSignedOrgAgreement)
+          exhaustMap((needsOrgAgreement: boolean) =>
+            // Mark the site as completed if an organization
+            // agreement does not need to be signed
+            (!needsOrgAgreement)
               ? this.siteResource.updateCompleted(site.id)
-                .pipe(map(() => hasSignedOrgAgreement))
-              : of(hasSignedOrgAgreement)
+                .pipe(map(() => needsOrgAgreement))
+              : of(needsOrgAgreement)
           )
         )
-        .subscribe((hasSignedOrgAgreement: boolean) => {
+        .subscribe((needsOrgAgreement: boolean) => {
           this.form.markAsPristine();
-          this.nextRoute(organizationId, hasSignedOrgAgreement);
+          this.nextRoute(needsOrgAgreement);
         });
     }
   }
@@ -90,13 +92,9 @@ export class TechnicalSupportComponent implements OnInit, IPage, IForm {
     this.routeUtils.routeRelativeTo(SiteRoutes.PRIVACY_OFFICER);
   }
 
-  public nextRoute(organizationId: number, hasSignedOrgAgreement: boolean) {
-    if (!hasSignedOrgAgreement) {
-      const siteId = this.route.snapshot.params.sid;
-      // Provide site for redirection after accepting the organization agreement
-      this.routeUtils.routeTo([SiteRoutes.routePath(SiteRoutes.SITE_MANAGEMENT), organizationId, SiteRoutes.ORGANIZATION_AGREEMENT], {
-        queryParams: { redirect: `${SiteRoutes.SITES}/${siteId}`, siteId }
-      });
+  public nextRoute(needsOrgAgreement: boolean) {
+    if (needsOrgAgreement) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
     } else {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
     }

@@ -47,12 +47,12 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Jobs, (f, x) => x.Certifications.Any() ? new List<Job>() : new JobFactory(x).Generate(1));
             RuleFor(x => x.EnrolleeCareSettings, (f, x) => new EnrolleeCareSettingFactory(x).Generate(1));
             RuleFor(x => x.AccessAgreementNote, f => null);
-            RuleFor(x => x.AdjudicatorNotes, (f, x) => new AdjudicatorNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
+            RuleFor(x => x.AdjudicatorNotes, (f, x) => new EnrolleeNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.EnrolleeProfileVersions, f => null);
             RuleFor(x => x.isAdminView, f => true);
             // TODO: create rule sets for these ignores?
-            Ignore(x => x.AccessTerms);
+            Ignore(x => x.Agreements);
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
             Ignore(x => x.AlwaysManual);

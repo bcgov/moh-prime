@@ -58,11 +58,8 @@ export abstract class AbstractResource {
    * Handle NoContent HTTP response.
    */
   // TODO handle NoContent and possibly drop NoContentResponse
-  protected handleNoContent<T>() {
-    return (response: HttpResponse<ApiHttpResponse<T>>): Observable<HttpResponse<ApiHttpResponse<T>> | NoContent> =>
-      (response.status === 204)
-        ? of(void 0)
-        : of(response);
+  protected handleNoContent() {
+    return (_: HttpResponse<ApiHttpResponse<NoContent>>): Observable<NoContent> => of(void 0);
   }
 
   /**
@@ -70,11 +67,10 @@ export abstract class AbstractResource {
    * Handle a successful HTTP response.
    */
   protected handleSuccess<T>(): (response: HttpResponse<ApiHttpResponse<T>>) => ApiHttpResponse<T> {
-    return ({ status, body }: HttpResponse<ApiHttpResponse<T>>): ApiHttpResponse<T> => {
+    return ({ headers, status, body }: HttpResponse<ApiHttpResponse<T>>): ApiHttpResponse<T> => {
       this.logger.info(`RESPONSE: ${status}`, body);
 
-      // TODO handle status of 204 NoContent using void 0
-      return body;
+      return { headers, status, ...body };
     };
   }
 
