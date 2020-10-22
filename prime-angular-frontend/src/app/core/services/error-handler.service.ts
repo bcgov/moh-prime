@@ -37,11 +37,8 @@ export class ErrorHandlerService implements ErrorHandler {
       : error.toString();
     const url = router.url;
 
-    // TODO implement stack trace js and push to server for logging, but
-    // for now log the error to console
     logger.error(message, { url });
 
-    // TODO should this rethrow?
     // IMPORTANT: Rethrow the error, otherwise it gets swallowed
     throw error;
   }

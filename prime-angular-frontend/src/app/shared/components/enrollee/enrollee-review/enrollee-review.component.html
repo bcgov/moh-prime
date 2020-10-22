@@ -1,6 +1,6 @@
 <app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
 
-<section *ngIf="hasPreferredName"
+<section *ngIf="hasPreferredName && identityProvider === IdentityProvider.BCSC"
          class="mb-4">
 
   <app-page-subheader>
@@ -9,7 +9,7 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Preferred Name"
-            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+            (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
@@ -37,7 +37,7 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Mailing Address"
-            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+            (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
@@ -77,17 +77,17 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Contact Information"
-            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+            (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Voice Phone">
-    {{ enrollee?.voicePhone | phone | default }}
+    {{ enrollee?.phone | phone | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Extension">
-    {{ enrollee?.voiceExtension | default }}
+    {{ enrollee?.phoneExtension | default }}
   </app-enrollee-property>
 
 </section>
@@ -100,17 +100,17 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Notification Information"
-            (click)="onRoute(EnrolmentRoutes.DEMOGRAPHIC)">
+            (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
 
   <app-enrollee-property title="Email Notification">
-    {{ enrollee?.contactEmail | default }}
+    {{ enrollee?.email | default }}
   </app-enrollee-property>
 
   <app-enrollee-property title="Text Notification (SMS)">
-    {{ enrollee?.contactPhone | phone | default }}
+    {{ enrollee?.smsPhone | phone | default }}
   </app-enrollee-property>
 
 </section>
@@ -228,7 +228,7 @@
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Care Type Setting</ng-container>
+    <ng-container appPageSubheaderTitle>Care Setting</ng-container>
 
     <button *ngIf="showEditRedirect"
             mat-icon-button
@@ -264,28 +264,16 @@
 <section class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Self Declaration</ng-container>
+    <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
 
     <button *ngIf="showEditRedirect"
             mat-icon-button
-            matTooltip="Edit Self Declaration"
+            matTooltip="Edit Self-declaration"
             (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
-
-  <app-enrollee-property title="Are you, or have you ever been, subject to any limits, conditions or prohibitions imposed as a result of disciplinary actions taken by a governing body of a health profession in any jurisdiction, that involved improper access to, collection, use, or disclosure of personal information?"
-                         [makeBold]="false">
-    {{ hasConviction() | yesNo: true }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="hasConviction()"
-                         title="Description"
-                         [makeBold]="false">
-    {{ getConvictionDetails() }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Are you or have you ever been the subject of an order or a conviction under legislation in any jurisdiction for a matter that involved improper access to, collection, use, or disclosure of personal information?"
+  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED]"
                          [makeBold]="false">
     {{ hasRegistrationSuspended() | yesNo: true }}
   </app-enrollee-property>
@@ -296,18 +284,18 @@
     {{ getRegistrationSuspendedDetails() }}
   </app-enrollee-property>
 
-  <app-enrollee-property title="Have you ever been disciplined or fired by an employer, or had a contract for your services terminated, for a matter that involved improper access to, collection, use, or disclosure of personal information?"
+  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION]"
                          [makeBold]="false">
-    {{ hasDisciplinaryAction() | yesNo: true }}
+    {{ hasConviction() | yesNo: true }}
   </app-enrollee-property>
 
-  <app-enrollee-property *ngIf="hasDisciplinaryAction()"
+  <app-enrollee-property *ngIf="hasConviction()"
                          title="Description"
                          [makeBold]="false">
-    {{ getDisciplinaryActionDetails() }}
+    {{ getConvictionDetails() }}
   </app-enrollee-property>
 
-  <app-enrollee-property title="Have you ever had your access to an electronic health record system, electronic medical record system, pharmacy or laboratory record system, or any similar health information system, in any jurisdiction, suspended or cancelled?"
+  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED]"
                          [makeBold]="false">
     {{ hasPharmaNetSuspended() | yesNo: true }}
   </app-enrollee-property>
@@ -316,6 +304,17 @@
                          title="Description"
                          [makeBold]="false">
     {{ getPharmaNetSuspendedDetails() }}
+  </app-enrollee-property>
+
+  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION]"
+                         [makeBold]="false">
+    {{ hasDisciplinaryAction() | yesNo: true }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="hasDisciplinaryAction()"
+                         title="Description"
+                         [makeBold]="false">
+    {{ getDisciplinaryActionDetails() }}
   </app-enrollee-property>
 
 </section>

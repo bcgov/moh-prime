@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
-import { NoContent } from '@core/resources/abstract-resource';
+import { ObjectUtils } from '@lib/utils/object-utils.class';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
@@ -24,7 +25,6 @@ import { BusinessEvent } from '@adjudication/shared/models/business-event.model'
   providedIn: 'root'
 })
 export class AdjudicationResource {
-
   constructor(
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
@@ -114,8 +114,7 @@ export class AdjudicationResource {
 
     return request$
       .pipe(
-        // TODO remove pipe when ApiResource handles NoContent
-        map(() => { }),
+        NoContentResponse,
         tap(() => this.logger.info('UPDATED_ENROLLEE', alwaysManual)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be marked as always manual');
@@ -159,9 +158,8 @@ export class AdjudicationResource {
   public sendEnrolleeReminderEmail(enrolleeId: number): NoContent {
     return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/reminder`)
       .pipe(
-        map(() => {
-          this.toastService.openErrorToast('Enrollee reminder has been sent');
-        }),
+        NoContentResponse,
+        tap(() => this.toastService.openErrorToast('Enrollee reminder has been sent')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee reminder could not be sent');
           this.logger.error('[Enrolment] EnrolmentResource::sendReminderEmail error has occurred: ', error);
@@ -173,9 +171,8 @@ export class AdjudicationResource {
   public createInitiatedEnrolleeEmailEvent(enrolleeId: number): NoContent {
     return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/events/email-initiated`)
       .pipe(
-        map(() => {
-          this.toastService.openErrorToast('Enrollee initiated email event has been created');
-        }),
+        NoContentResponse,
+        tap(() => this.toastService.openErrorToast('Enrollee initiated email event has been created')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee initiated email event could not be created');
           this.logger.error('[Enrolment] EnrolmentResource::createInitiatedEnrolleeEmailEvent error has occurred: ', error);
@@ -373,6 +370,14 @@ export class AdjudicationResource {
   }
 
   private enrolleeVersionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
+    const mapping = {
+      voicePhone: 'phone',
+      voiceExtension: 'phoneExtension',
+      contactEmail: 'email',
+      contactPhone: 'smsPhone'
+    };
+    ObjectUtils.keyMapping(profileSnapshot, mapping);
+
     // Key index aligns with SelfDeclarationTypeEnum
     const selfDeclarations = {
       hasConviction: 'Has Conviction',

@@ -5,6 +5,7 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AuthRoutes } from '@auth/auth.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -34,10 +35,10 @@ export class AuthorizationRedirectGuard extends BaseGuard {
 
       let destinationRoute = this.config.routes.denied;
 
-      if (this.authService.hasEnrollee()) {
-
-        destinationRoute = this.config.routes.enrolment;
-
+      if (this.authService.isEnrollee()) {
+        destinationRoute = (routePath.slice(1) === AuthRoutes.INFO)
+          ? this.config.routes.enrolment
+          : this.config.routes.site;
       } else if (this.authService.hasAdminView()) {
         destinationRoute = this.config.routes.adjudication;
       }

@@ -26,13 +26,13 @@ namespace Prime.Services
         /// <summary>
         /// Gets the access term for an enrollee by ID, if it exists (No Tracking).
         /// </summary>
-        public async Task<AccessTerm> GetEnrolleeAccessTermAsync(int enrolleeId, int accessTermId, bool includeText = false)
+        public async Task<Agreement> GetEnrolleeAccessTermAsync(int enrolleeId, int accessTermId, bool includeText = false)
         {
-            var accessTerm = await _context.AccessTerms
+            var accessTerm = await _context.Agreements
                 .AsNoTracking()
                 .Where(at => at.Id == accessTermId)
                 .Where(at => at.EnrolleeId == enrolleeId)
-                .If(includeText, q => q.Include(at => at.Agreement).Include(at => at.LimitsConditionsClause))
+                .If(includeText, q => q.Include(at => at.AgreementVersion).Include(at => at.LimitsConditionsClause))
                 .SingleOrDefaultAsync();
 
             if (includeText)
@@ -46,18 +46,18 @@ namespace Prime.Services
         /// <summary>
         /// Get the list of access terms for an enrollee, using filters (No Tracking).
         /// </summary>
-        public async Task<IEnumerable<AccessTerm>> GetAccessTermsAsync(int enrolleeId, AccessTermFilters filters)
+        public async Task<IEnumerable<Agreement>> GetAccessTermsAsync(int enrolleeId, AccessTermFilters filters)
         {
             filters = filters ?? new AccessTermFilters();
 
-            var accessTerms = await _context.AccessTerms
+            var accessTerms = await _context.Agreements
                 .AsNoTracking()
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .OrderByDescending(at => at.CreatedDate)
                 .If(filters.OnlyLatest, q => q.Take(1))
                 .If(filters.Accepted == true || filters.YearAccepted.HasValue, q => q.Where(at => at.AcceptedDate.HasValue))
                 .If(filters.Accepted == false, q => q.Where(at => !at.AcceptedDate.HasValue))
-                .If(filters.IncludeText, q => q.Include(at => at.Agreement).Include(at => at.LimitsConditionsClause))
+                .If(filters.IncludeText, q => q.Include(at => at.AgreementVersion).Include(at => at.LimitsConditionsClause))
                 .ToArrayAsync();
 
             if (filters.YearAccepted.HasValue)
@@ -86,10 +86,10 @@ namespace Prime.Services
                 .Include(e => e.AccessAgreementNote)
                 .SingleAsync(e => e.Id == enrolleeId);
 
-            var accessTerm = new AccessTerm
+            var accessTerm = new Agreement
             {
                 EnrolleeId = enrolleeId,
-                AgreementId = await GetCurrentAgreementIdForUserAsync(enrollee),
+                AgreementVersionId = await GetCurrentAgreementVersionIdForUserAsync(enrollee),
                 LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(enrollee.AccessAgreementNote),
                 CreatedDate = DateTimeOffset.Now
             };
@@ -103,7 +103,7 @@ namespace Prime.Services
         /// </summary>
         public async Task AcceptCurrentAccessTermAsync(int enrolleeId)
         {
-            var accessTerm = await _context.AccessTerms
+            var accessTerm = await _context.Agreements
                 .OrderByDescending(at => at.CreatedDate)
                 .FirstAsync(at => at.EnrolleeId == enrolleeId);
 
@@ -121,7 +121,7 @@ namespace Prime.Services
         /// </summary>
         public async Task ExpireCurrentAccessTermAsync(int enrolleeId)
         {
-            var accessTerm = await _context.AccessTerms
+            var accessTerm = await _context.Agreements
                 .OrderByDescending(at => at.CreatedDate)
                 .Where(at => at.EnrolleeId == enrolleeId)
                 .FirstOrDefaultAsync(at => at.AcceptedDate.HasValue);
@@ -136,7 +136,7 @@ namespace Prime.Services
         /// <summary>
         /// Renders the HTML text of the Access Term for viewing on the frontend.
         /// </summary>
-        private async Task RenderHtml(params AccessTerm[] accessTerms)
+        private async Task RenderHtml(params Agreement[] accessTerms)
         {
             foreach (var term in accessTerms)
             {
@@ -148,29 +148,29 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Gets the ID of the most current Agreement based on the scope of practice of the Enrollee.
+        /// Gets the ID of the most current AgreementVersion based on the scope of practice of the Enrollee.
         /// See JIRA PRIME-880
         /// </summary>
-        private async Task<int> GetCurrentAgreementIdForUserAsync(Enrollee enrollee)
+        private async Task<int> GetCurrentAgreementVersionIdForUserAsync(Enrollee enrollee)
         {
             if (!enrollee.IsRegulatedUser())
             {
-                return await FetchNewestAgreementIdOfType<OboAgreement>();
+                return await FetchNewestAgreementVersionIdOfType<OboAgreement>();
             }
 
             if (enrollee.HasCareSetting(CareSettingType.CommunityPharmacy))
             {
-                return await FetchNewestAgreementIdOfType<CommunityPharmacistAgreement>();
+                return await FetchNewestAgreementVersionIdOfType<CommunityPharmacistAgreement>();
             }
             else
             {
-                return await FetchNewestAgreementIdOfType<RegulatedUserAgreement>();
+                return await FetchNewestAgreementVersionIdOfType<RegulatedUserAgreement>();
             }
         }
 
-        private async Task<int> FetchNewestAgreementIdOfType<T>() where T : Agreement
+        private async Task<int> FetchNewestAgreementVersionIdOfType<T>() where T : AgreementVersion
         {
-            return await _context.Agreements
+            return await _context.AgreementVersions
                 .AsNoTracking()
                 .OfType<T>()
                 .OrderByDescending(a => a.EffectiveDate)

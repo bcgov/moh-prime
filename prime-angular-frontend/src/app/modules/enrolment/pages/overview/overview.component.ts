@@ -11,11 +11,15 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+
+import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
+
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 @Component({
   selector: 'app-overview',
@@ -26,6 +30,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
   public currentStatus: EnrolmentStatus;
+  public demographicRoutePath: string;
+  public identityProvider: IdentityProvider;
+  public IdentityProvider = IdentityProvider;
   public EnrolmentStatus = EnrolmentStatus;
 
   protected allowRoutingWhenDirty: boolean;
@@ -34,9 +41,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     protected route: ActivatedRoute,
     protected router: Router,
     private dialog: MatDialog,
+    private authService: AuthService,
     private enrolmentService: EnrolmentService,
     private enrolmentResource: EnrolmentResource,
-    private enrolmentStateService: EnrolmentStateService,
+    private enrolmentFormStateService: EnrolmentFormStateService,
     private toastService: ToastService,
     private logger: LoggerService
   ) {
@@ -44,14 +52,22 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
     this.currentStatus = null;
     this.allowRoutingWhenDirty = true;
+
+    this.authService.identityProvider$()
+      .subscribe((identityProvider: IdentityProvider) => {
+        this.identityProvider = identityProvider;
+        this.demographicRoutePath = (identityProvider === IdentityProvider.BCEID)
+          ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
+          : EnrolmentRoutes.BCSC_DEMOGRAPHIC;
+      });
   }
 
   public onSubmit() {
-    if (this.enrolmentStateService.isEnrolmentValid()) {
-      const enrolment = this.enrolmentStateService.enrolment;
+    if (this.enrolmentFormStateService.isValid) {
+      const enrolment = this.enrolmentFormStateService.json;
       const data: DialogOptions = {
         title: 'Submit Enrolment',
-        message: 'When your enrolment is submitted for adjudication it can no longer be updated. Are you ready to submit your enrolment?',
+        message: 'When your enrolment is submitted for adjudication, it can no longer be updated. Are you ready to submit your enrolment?',
         actionText: 'Submit Enrolment'
       };
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
@@ -74,18 +90,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           });
     } else {
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
-
-      this.logger.warn('DEMOGRAPHIC', this.enrolmentStateService.isProfileInfoValid());
-      this.logger.warn('REGULATORY', this.enrolmentStateService.isRegulatoryValid());
-      this.logger.warn('JOBS', this.enrolmentStateService.isJobsValid());
-      this.logger.warn('HAS_REG_OR_JOB', this.enrolmentStateService.hasRegOrJob());
-      this.logger.warn('SELF DECLARATION', this.enrolmentStateService.isSelfDeclarationValid());
-      this.logger.warn('CARE_SETTING', this.enrolmentStateService.isCareSettingValid());
     }
   }
 
   public hasRegOrJob(): boolean {
-    return this.enrolmentStateService.hasRegOrJob();
+    return this.enrolmentFormStateService.hasCertificateOrJob();
   }
 
   public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {
@@ -97,7 +106,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   // since it has common use @see BaseEnrolmentProfilePage
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
-    return (this.enrolmentStateService.isDirty && !this.allowRoutingWhenDirty)
+    return (this.enrolmentFormStateService.isDirty && !this.allowRoutingWhenDirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
   }
@@ -108,8 +117,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     // Store current status as it will be truncated for initial enrolment
     this.currentStatus = enrolment.currentStatus.statusCode;
 
-    if (this.enrolmentStateService.isPatched) {
-      enrolment = this.enrolmentStateService.enrolment;
+    if (this.enrolmentFormStateService.isPatched) {
+      enrolment = this.enrolmentFormStateService.json;
       // Merge BCSC information in for use within the view
       const {
         firstName,
@@ -125,6 +134,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
 
     // Attempt to patch the form if not already patched
-    this.enrolmentStateService.setEnrolment(enrolment);
+    this.enrolmentFormStateService.setForm(enrolment);
   }
 }

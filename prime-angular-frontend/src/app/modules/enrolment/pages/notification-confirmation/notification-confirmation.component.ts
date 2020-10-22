@@ -6,7 +6,6 @@ import { EMPTY, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
-
 import { Feedback } from '@shared/models/feedback.model';
 import { FeedbackResourceService } from '@core/resources/feedback-resource.service';
 import { FeedbackComponent } from '@shared/components/dialogs/content/feedback/feedback.component';

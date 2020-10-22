@@ -9,6 +9,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import { Subscription, Observable } from 'rxjs';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -16,11 +17,11 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { VendorEnum } from '@shared/enums/vendor.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -137,7 +138,11 @@ export class HoursOperationComponent implements OnInit, IPage, IForm {
   }
 
   public nextRoute() {
-    if (this.siteService.site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT) {
+    const site = this.siteService.site;
+    if (
+      site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT ||
+      site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST
+    ) {
       this.routeUtils.routeRelativeTo(SiteRoutes.ADMINISTRATOR);
     } else if (this.isCompleted) {
       this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);

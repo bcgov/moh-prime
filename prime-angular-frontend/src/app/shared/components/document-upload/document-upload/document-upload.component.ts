@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, Output } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 
-import { FilePondOptions, ProcessServerConfigFunction } from 'filepond';
+import { FilePondErrorDescription, FilePondFile, FilePondOptions, ProcessServerConfigFunction } from 'filepond';
 import { FilePondPluginFileValidateTypeProps } from 'filepond-plugin-file-validate-type';
 import { FilePondPluginFileValidateSizeProps } from 'filepond-plugin-file-validate-size';
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
@@ -10,7 +10,7 @@ import tus from 'tus-js-client';
 import { environment } from '@env/environment';
 
 import { LoggerService } from '@core/services/logger.service';
-import { KeycloakTokenService } from '@auth/shared/services/keycloak-token.service';
+import { AccessTokenService } from '@auth/shared/services/access-token.service';
 
 export class BaseDocument {
   id: number;
@@ -31,21 +31,25 @@ export class BaseDocument {
 export class DocumentUploadComponent implements OnInit {
   @Input() public componentName: string;
   @Input() public multiple: boolean;
-  @Input() public additionalApiSuffix: string;
   @Input() public labelMessage: string;
-  @Output() public completed: EventEmitter<BaseDocument> = new EventEmitter();
+  @Output() public completed: EventEmitter<BaseDocument>;
+  @Output() public remove: EventEmitter<string>;
   @ViewChild('filePond') public filePondComponent: FilePondComponent;
+  public filePondFiles: FilePondFile[];
   public filePondOptions: FilePondOptions & FilePondPluginFileValidateSizeProps & FilePondPluginFileValidateTypeProps;
-  public filePondFiles = [];
 
-  private apiSuffix = 'document';
   private jwt: string;
+  private apiSuffix: string;
 
   constructor(
-    private keycloakTokenService: KeycloakTokenService,
+    private accessTokenService: AccessTokenService,
     private logger: LoggerService,
   ) {
     this.labelMessage = 'Click to Browse or Drop files here';
+    this.filePondFiles = [];
+    this.apiSuffix = 'document';
+    this.completed = new EventEmitter();
+    this.remove = new EventEmitter<string>();
   }
 
   public ngOnInit(): void {
@@ -67,10 +71,6 @@ export class DocumentUploadComponent implements OnInit {
       maxTotalFileSize: null,
       server: this.constructServer()
     };
-
-    if (this.additionalApiSuffix) {
-      this.apiSuffix = `${this.apiSuffix}/${this.additionalApiSuffix}`;
-    }
   }
 
   public onFilePondInit() {
@@ -78,8 +78,12 @@ export class DocumentUploadComponent implements OnInit {
   }
 
   public async onFilePondAddFile() {
-    // Can't get token synchronously inside server.process(), so refresh token on file add.
-    this.jwt = await this.keycloakTokenService.token();
+    // Can't get token synchronously inside server.process(), so refresh token on file add
+    this.jwt = await this.accessTokenService.token();
+  }
+
+  public onFilePondRemoveFile({ file }: { file: FilePondFile, error: FilePondErrorDescription }) {
+    this.remove.emit(file.serverId);
   }
 
   private getIdleText(allowedFileTypesMap: { [key: string]: string }): string {
@@ -102,7 +106,7 @@ export class DocumentUploadComponent implements OnInit {
       const { name: filename, type: filetype } = file;
 
       const upload = new tus.Upload(file, {
-        endpoint: `${environment.apiEndpoint}/${this.apiSuffix}`,
+        endpoint: `${environment.apiEndpoint}/document`,
         metadata: { filename, filetype },
         chunkSize: 1048576, // 1 MB
         removeFingerprintOnSuccess: true,
@@ -130,9 +134,8 @@ export class DocumentUploadComponent implements OnInit {
     };
 
     return {
+      url: `${environment.documentManagerUrl}/documents/uploads`,
       process,
-      // No-Op for revert to prevent the default DELETE request that FilePond does when removing a file.
-      revert: (source: any, load: () => void, error: (errorText: string) => void) => load(),
     };
   }
 }

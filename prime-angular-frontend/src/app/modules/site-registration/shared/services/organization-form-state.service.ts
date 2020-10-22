@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { RouteStateService } from '@core/services/route-state.service';
+import { LoggerService } from '@core/services/logger.service';
 
-import { Organization } from '@registration/shared/models/organization.model';
-import { AbstractFormState } from '@registration/shared/classes/abstract-form-state.class';
+import { SiteRoutes } from '@registration/site-registration.routes';
 import { Party } from '@registration/shared/models/party.model';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +16,16 @@ import { Party } from '@registration/shared/models/party.model';
 export class OrganizationFormStateService extends AbstractFormState<Organization> {
   public signingAuthorityForm: FormGroup;
   public organizationNameForm: FormGroup;
+  public organizationAgreementForm: FormGroup;
+
+  protected readonly resetRoutes: string[] = [SiteRoutes.SITE_MANAGEMENT];
 
   constructor(
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected routeStateService: RouteStateService,
+    protected logger: LoggerService
   ) {
-    super(fb);
+    super(fb, routeStateService, logger);
   }
 
   /**
@@ -27,12 +35,14 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
   public get json(): Organization {
     const organizationName = this.organizationNameForm.getRawValue();
     const signingAuthority = this.toPersonJson<Party>(this.signingAuthorityForm.getRawValue(), 'mailingAddress');
+    const { organizationAgreementGuid } = this.organizationAgreementForm.getRawValue();
 
     return {
       // OrganizationName is the only form that contains the organization ID
       ...organizationName,
       signingAuthorityId: signingAuthority?.id,
-      signingAuthority
+      signingAuthority,
+      organizationAgreementGuid
     };
   }
 
@@ -53,23 +63,29 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
    * Initialize and configure the forms for patching, which is also used
    * to clear previous form data from the service.
    */
-  public init() {
+  protected buildForms() {
     this.signingAuthorityForm = this.buildSigningAuthorityForm();
     this.organizationNameForm = this.buildOrganizationNameForm();
+    this.organizationAgreementForm = this.buildOrganizationAgreementForm();
   }
 
   /**
    * @description
    * Manage the conversion of JSON to reactive forms.
    */
-  protected patchForm(organization: Organization): Organization {
+  protected patchForm(organization: Organization): void {
     if (!organization) {
-      return null;
+      return;
     }
 
     this.organizationNameForm.patchValue(organization);
     this.toPersonFormModel<Party>([this.signingAuthorityForm, organization.signingAuthority]);
   }
+
+
+  /**
+   * Form Builders and Helpers
+   */
 
   // TODO BCSC information is also in enrolments and can have shared form helpers
   private buildSigningAuthorityForm(): FormGroup {
@@ -119,7 +135,11 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
       physicalAddress: this.buildAddressForm({
         areDisabled: ['street', 'street2', 'city', 'provinceCode', 'countryCode', 'postal'],
       }),
-      mailingAddress: this.buildAddressForm()
+      mailingAddress: this.buildAddressForm(),
+      dateOfBirth: [
+        null,
+        [Validators.required]
+      ]
     });
   }
 
@@ -141,6 +161,15 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
       ],
       doingBusinessAs: [
         null,
+        []
+      ]
+    });
+  }
+
+  private buildOrganizationAgreementForm(): FormGroup {
+    return this.fb.group({
+      organizationAgreementGuid: [
+        '',
         []
       ]
     });

@@ -9,6 +9,6 @@ export class ArrayUtils {
    * const example = [1, 2, 3, ...ArrayUtils.insertIf(false, 4)] // [1, 2, 3]
    */
   public static insertIf(condition: any, ...elements: any[]) {
-    return (condition) ? elements : [];
+    return (condition) ? [].concat(...elements) : [];
   }
 }

@@ -3,8 +3,7 @@
   <app-page-header>PRIME Enrolment</app-page-header>
 
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
-                                    [inProgress]="isInitialEnrolment"
-                                    [currentRoute]="EnrolmentRoutes.CARE_SETTING"></app-enrolment-progress-indicator>
+                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -28,6 +27,7 @@
       <mat-slide-toggle #requestAccess
                         color="primary"
                         class="mb-4"
+                        [checked]="!!enrolment.enrolleeRemoteUsers.length"
                         (change)="onRequestAccess($event)">Request remote access</mat-slide-toggle>
 
       <ng-container *ngIf="requestAccess.checked">
@@ -85,6 +85,6 @@
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    [disableSave]="showProgress"
                    (save)="onSubmit()"
-                   (back)="routeTo(EnrolmentRoutes.REGULATORY)"></app-page-footer>
+                   (back)="routeTo(EnrolmentRoutes.CARE_SETTING)"></app-page-footer>
 
 </app-enrollee-page>

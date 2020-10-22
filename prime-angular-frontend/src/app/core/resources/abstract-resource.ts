@@ -9,6 +9,7 @@ import { LoggerService } from '@core/services/logger.service';
 
 // Type for NoContent responses from the API
 export type NoContent = Observable<void>;
+export const NoContentResponse = pipe(map(() => void 0));
 
 export abstract class AbstractResource {
   constructor(
@@ -56,7 +57,7 @@ export abstract class AbstractResource {
    * @description
    * Handle NoContent HTTP response.
    */
-  // TODO handle NoContent
+  // TODO handle NoContent and possibly drop NoContentResponse
   protected handleNoContent<T>() {
     return (response: HttpResponse<ApiHttpResponse<T>>): Observable<HttpResponse<ApiHttpResponse<T>> | NoContent> =>
       (response.status === 204)

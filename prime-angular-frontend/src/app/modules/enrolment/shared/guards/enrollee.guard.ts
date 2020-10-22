@@ -30,7 +30,7 @@ export class EnrolleeGuard extends BaseGuard {
 
       if (!authenticated) {
         destinationRoute = this.config.routes.auth;
-      } else if (this.authService.hasEnrollee()) {
+      } else if (this.authService.isEnrollee()) {
         // Allow route to resolve
         return resolve(true);
       } else if (this.authService.isAdmin()) {

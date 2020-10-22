@@ -10,14 +10,15 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 @Component({
   selector: 'app-remote-access',
@@ -40,13 +41,26 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     protected enrolmentService: EnrolmentService,
     protected enrolmentResource: EnrolmentResource,
     protected siteResource: SiteResource,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
+    protected formUtilsService: FormUtilsService,
     private fb: FormBuilder
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
+
     this.enrolment = this.enrolmentService.enrolment;
   }
 
@@ -70,30 +84,17 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
   public onRequestAccess(event: MatSlideToggleChange) {
     if (event.checked) {
-      this.showProgress = true;
-      this.noRemoteSites = false;
-      this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
-        .pipe(delay(2000))
-        .subscribe(
-          (sites: EnrolleeRemoteAccessSite[]) => {
-            if (sites.length) {
-              this.noRemoteSites = false;
-              this.remoteSites = sites;
-              this.initForm();
-            } else {
-              this.noRemoteSites = true;
-              this.requestAccess.checked = false;
-            }
-          },
-          (error: any) => { },
-          () => this.showProgress = false
-        );
+      this.getRemoteAccess();
     }
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
+
+    if (this.enrolment.enrolleeRemoteUsers.length) {
+      this.getRemoteAccess();
+    }
   }
 
   protected createFormInstance() {
@@ -117,9 +118,34 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.CARE_SETTING;
+      nextRoutePath = EnrolmentRoutes.SELF_DECLARATION;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
+  }
+
+  /**
+   * @description
+   * Request remote access information.
+   */
+  private getRemoteAccess(): void {
+    this.showProgress = true;
+    this.noRemoteSites = false;
+    this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
+      .pipe(delay(2000))
+      .subscribe(
+        (sites: EnrolleeRemoteAccessSite[]) => {
+          if (sites.length) {
+            this.noRemoteSites = false;
+            this.remoteSites = sites;
+            this.initForm();
+          } else {
+            this.noRemoteSites = true;
+            this.requestAccess.checked = false;
+          }
+        },
+        (error: any) => { },
+        () => this.showProgress = false
+      );
   }
 }

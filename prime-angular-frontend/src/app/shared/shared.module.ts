@@ -27,7 +27,6 @@ import { CasePipe } from '@shared/pipes/case.pipe';
 import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
-import { SafeHtmlPipe } from '@shared/pipes/safe-html.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SafePipe } from '@shared/pipes/safe.pipe';
@@ -36,15 +35,15 @@ import { AddressComponent } from '@shared/components/forms/address/address.compo
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
-import { ProgressIndicator2Component } from './components/progress-indicator2/progress-indicator2.component';
-import { PageSubheaderComponent } from './components/page-subheader/page-subheader.component';
+import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
+import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
 import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
 import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
-import { PageSubheader2Component } from './components/page-subheader2/page-subheader2.component';
-import { PageSubheader2TitleDirective } from './components/page-subheader2/page-subheader2-title.directive';
-import { PageSubheader2MoreInfoDirective } from './components/page-subheader2/page-subheader2-more-info.directive';
-import { PageSubheader2SummaryDirective } from './components/page-subheader2/page-subheader2-summary.directive';
-import { PageFooterComponent } from './components/page-footer/page-footer.component';
+import { PageSubheader2Component } from '@shared/components/page-subheader2/page-subheader2.component';
+import { PageSubheader2TitleDirective } from '@shared/components/page-subheader2/page-subheader2-title.directive';
+import { PageSubheader2MoreInfoDirective } from '@shared/components/page-subheader2/page-subheader2-more-info.directive';
+import { PageSubheader2SummaryDirective } from '@shared/components/page-subheader2/page-subheader2-summary.directive';
+import { PageFooterComponent } from '@shared/components/page-footer/page-footer.component';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
@@ -57,24 +56,24 @@ import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
 import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/approve-enrolment/approve-enrolment.component';
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
-import { AccessTermsTableComponent } from './components/access-terms-table/access-terms-table.component';
-import { AccessTermComponent } from './components/access-term/access-term.component';
-import { ClaimEnrolleeComponent } from './components/dialogs/content/claim-enrollee/claim-enrollee.component';
-import { ManualFlagNoteComponent } from './components/dialogs/content/manual-flag-note/manual-flag-note.component';
-import { NoteComponent } from './components/dialogs/content/note/note.component';
-import { FeedbackComponent } from './components/dialogs/content/feedback/feedback.component';
-import { CollectionNoticeContainerComponent } from './components/collection-notice-container/collection-notice-container.component';
-import { FormErrorsComponent } from './components/form-errors/form-errors.component';
-import { PartyReviewComponent } from './components/site/party-review/party-review.component';
-import { DocumentUploadComponent } from './components/document-upload/document-upload/document-upload.component';
-import { OrganizationReviewComponent } from './components/organization-review/organization-review.component';
-import { ImageComponent } from './components/dialogs/content/image/image.component';
-import { OverviewSectionComponent } from './components/overview-section/overview-section.component';
-import { OverviewContainerComponent } from './components/site/overview-container/overview-container.component';
-import { CollegeCertificationFormComponent } from './components/college-certification-form/college-certification-form.component';
-import { AddressAutocompleteComponent } from './components/address-autocomplete/address-autocomplete.component';
-import { ClaimSiteComponent } from './components/dialogs/content/claim-site/claim-site.component';
-import { RemoteUserReviewComponent } from './components/site/remote-user-review/remote-user-review.component';
+import { AccessTermsTableComponent } from '@shared/components/access-terms-table/access-terms-table.component';
+import { AccessTermComponent } from '@shared/components/access-term/access-term.component';
+import { ClaimEnrolleeComponent } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { FeedbackComponent } from '@shared/components/dialogs/content/feedback/feedback.component';
+import { CollectionNoticeContainerComponent } from '@shared/components/collection-notice-container/collection-notice-container.component';
+import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.component';
+import { PartyReviewComponent } from '@shared/components/site/party-review/party-review.component';
+import { DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { OrganizationReviewComponent } from '@shared/components/organization-review/organization-review.component';
+import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
+import { OverviewSectionComponent } from '@shared/components/overview-section/overview-section.component';
+import { OverviewContainerComponent } from '@shared/components/site/overview-container/overview-container.component';
+import { CollegeCertificationFormComponent } from '@shared/components/college-certification-form/college-certification-form.component';
+import { AddressAutocompleteComponent } from '@shared/components/address-autocomplete/address-autocomplete.component';
+import { ClaimSiteComponent } from '@shared/components/dialogs/content/claim-site/claim-site.component';
+import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
 
 @NgModule({
   declarations: [
@@ -91,14 +90,13 @@ import { RemoteUserReviewComponent } from './components/site/remote-user-review/
     YesNoPipe,
     WeekdayPipe,
     FullnamePipe,
-    SafeHtmlPipe,
     SafePipe,
     CasePipe,
     AddressPipe,
     AddressComponent,
     ConfirmDialogComponent,
     PageComponent,
-    ProgressIndicator2Component,
+    ProgressIndicatorComponent,
     PageHeaderComponent,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
@@ -173,13 +171,12 @@ import { RemoteUserReviewComponent } from './components/site/remote-user-review/
     YesNoPipe,
     WeekdayPipe,
     FullnamePipe,
-    SafeHtmlPipe,
     SafePipe,
     AddressPipe,
     AddressComponent,
     PageComponent,
     PageHeaderComponent,
-    ProgressIndicator2Component,
+    ProgressIndicatorComponent,
     PageSubheaderComponent,
     PageSubheaderTitleDirective,
     PageSubheaderSummaryDirective,

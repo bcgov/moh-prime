@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { Subscription } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { noop, of, Subscription } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
@@ -31,8 +31,8 @@ export class BusinessLicenceComponent implements OnInit {
   public title: string;
   public routeUtils: RouteUtils;
   public businessLicenceDocuments: BusinessLicenceDocument[];
-  public hasNoBusinessLicenceError: boolean;
   public uploadedFile: boolean;
+  public hasNoBusinessLicenceError: boolean;
   public doingBusinessAsNames: string[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
@@ -55,13 +55,29 @@ export class BusinessLicenceComponent implements OnInit {
     this.doingBusinessAsNames = [];
   }
 
+  public get businessLicenceGuid(): FormControl {
+    return this.form.get('businessLicenceGuid') as FormControl;
+  }
+
   public onSubmit() {
+    const siteId = this.route.snapshot.params.sid;
     const hasBusinessLicence = this.businessLicenceDocuments.length || this.uploadedFile;
     if (this.formUtilsService.checkValidity(this.form) && hasBusinessLicence) {
       const payload = this.siteFormStateService.json;
       this.siteResource
         .updateSite(payload)
+        .pipe(
+          exhaustMap(() =>
+            (payload.businessLicenceGuid)
+              ? this.siteResource.createBusinessLicence(siteId, payload.businessLicenceGuid)
+              : of(noop)
+          )
+        )
         .subscribe(() => {
+          // TODO should make this cleaner, but for now good enough
+          // Remove the business licence GUID to prevent 404 already
+          // submitted if resubmited in same session
+          this.businessLicenceGuid.patchValue(null);
           this.form.markAsPristine();
           this.nextRoute();
         });
@@ -72,14 +88,14 @@ export class BusinessLicenceComponent implements OnInit {
     }
   }
 
-  public onUpload(event: BaseDocument) {
-    const siteId = this.siteService.site.id;
-    this.siteResource
-      .createBusinessLicence(siteId, event.documentGuid, event.filename)
-      .subscribe(() => {
-        this.uploadedFile = true;
-        this.hasNoBusinessLicenceError = false;
-      });
+  public onUpload(document: BaseDocument) {
+    this.businessLicenceGuid.patchValue(document.documentGuid);
+    this.uploadedFile = true;
+    this.hasNoBusinessLicenceError = false;
+  }
+
+  public onRemoveDocument(documentGuid: string) {
+    this.businessLicenceGuid.patchValue(null);
   }
 
   public onBack() {
@@ -123,7 +139,7 @@ export class BusinessLicenceComponent implements OnInit {
   public getBusinessLicence(event: Event) {
     event.preventDefault();
     this.siteResource.getBusinessLicenceDownloadToken(this.siteService.site.id)
-      .subscribe((token: string) => 
+      .subscribe((token: string) =>
         this.utilsService.downloadToken(token)
       );
   }

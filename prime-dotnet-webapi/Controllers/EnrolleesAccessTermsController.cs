@@ -49,8 +49,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AccessTerm>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AccessTerm>>> GetAccessTerms(int enrolleeId, [FromQuery] AccessTermFilters filters)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Agreement>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Agreement>>> GetAccessTerms(int enrolleeId, [FromQuery] AccessTermFilters filters)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -83,8 +83,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<AccessTerm>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<AccessTerm>> GetAccessTerm(int enrolleeId, int accessTermId)
+        [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Agreement>> GetAccessTerm(int enrolleeId, int accessTermId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -96,7 +96,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            AccessTerm accessTerm = await _accessTermService.GetEnrolleeAccessTermAsync(enrolleeId, accessTermId, true);
+            Agreement accessTerm = await _accessTermService.GetEnrolleeAccessTermAsync(enrolleeId, accessTermId, true);
 
             if (accessTerm == null)
             {
@@ -135,7 +135,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            AccessTerm accessTerm = await _accessTermService.GetEnrolleeAccessTermAsync(enrolleeId, accessTermId);
+            Agreement accessTerm = await _accessTermService.GetEnrolleeAccessTermAsync(enrolleeId, accessTermId);
             if (accessTerm == null || accessTerm.AcceptedDate == null)
             {
                 return NotFound(ApiResponse.Message($"Accepted Access Term not found with id {accessTermId} for enrollee with id {enrolleeId}"));

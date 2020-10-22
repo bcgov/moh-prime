@@ -5,14 +5,15 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { VendorEnum } from '@shared/enums/vendor.enum';
 import { Address } from '@shared/models/address.model';
+import { VendorEnum } from '@shared/enums/vendor.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { RouteUtils } from '@registration/shared/classes/route-utils.class';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { Site } from '@registration/shared/models/site.model';
@@ -68,7 +69,11 @@ export class AdministratorComponent implements OnInit, IPage, IForm {
   }
 
   public onBack() {
-    if (this.siteService.site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT) {
+    const site = this.siteService.site;
+    if (
+      site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT ||
+      site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST
+    ) {
       this.routeUtils.routeRelativeTo(SiteRoutes.HOURS_OPERATION);
     } else {
       this.routeUtils.routeRelativeTo(SiteRoutes.REMOTE_USERS);

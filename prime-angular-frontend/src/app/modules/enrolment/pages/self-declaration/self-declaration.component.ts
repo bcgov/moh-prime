@@ -1,19 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormControl } from '@angular/forms';
+import { Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentStateService } from '@enrolment/shared/services/enrolment-state.service';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+
+
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 
 @Component({
   selector: 'app-self-declaration',
@@ -24,20 +31,33 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   public decisions: { code: boolean, name: string }[];
   public hasAttemptedFormSubmission: boolean;
   public showUnansweredQuestionsError: boolean;
+  public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
+  public selfDeclarationQuestions = selfDeclarationQuestions;
 
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
     protected enrolmentService: EnrolmentService,
-    protected enrolmentStateService: EnrolmentStateService,
+    protected enrolmentFormStateService: EnrolmentFormStateService,
     protected enrolmentResource: EnrolmentResource,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    private formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService
   ) {
-    super(route, router, dialog, enrolmentService, enrolmentResource, enrolmentStateService, toastService, logger, utilService);
+    super(
+      route,
+      router,
+      dialog,
+      enrolmentService,
+      enrolmentResource,
+      enrolmentFormStateService,
+      toastService,
+      logger,
+      utilService,
+      formUtilsService
+    );
 
     this.decisions = [
       { code: false, name: 'No' },
@@ -85,20 +105,32 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     super.onSubmit(hasBeenThroughTheWizard);
   }
 
-  public onHasConvictionUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_CONVICTION, sdd);
+  public onUpload(controlName: string, sdd: SelfDeclarationDocument) {
+    this.addSelfDeclarationDocumentGuid(controlName, sdd.documentGuid);
   }
 
-  public onHasRegistrationSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED, sdd);
+  public onRemove(constrolName: string, documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid(constrolName, documentGuid);
   }
 
-  public onHasDisciplinaryActionUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION, sdd);
-  }
+  public onBack() {
+    const certifications = this.enrolmentFormStateService.regulatoryForm
+      .get('certifications').value as CollegeCertification[];
+    const careSettings = this.enrolmentFormStateService.careSettingsForm
+      .get('careSettings').value as CareSetting[];
 
-  public onHasPharmanetSuspendedUpload(sdd: SelfDeclarationDocument) {
-    this.createSelfDeclarationDocument(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED, sdd);
+    let backRoutePath: string;
+    if (!this.isProfileComplete) {
+      backRoutePath = (
+        !certifications.length
+        || certifications.some(cert => cert.collegeCode === CollegeLicenceClass.CPBC)
+        || careSettings.some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+      )
+        ? EnrolmentRoutes.CARE_SETTING
+        : EnrolmentRoutes.REMOTE_ACCESS;
+    }
+
+    this.routeTo(backRoutePath);
   }
 
   public ngOnInit() {
@@ -108,7 +140,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentStateService.selfDeclarationForm;
+    this.form = this.enrolmentFormStateService.selfDeclarationForm;
   }
 
   protected initForm() {
@@ -141,11 +173,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     this.showUnansweredQuestionsError = this.showUnansweredQuestions();
   }
 
-  private createSelfDeclarationDocument(code: SelfDeclarationTypeEnum, sdd: SelfDeclarationDocument) {
-    const enrolleeId = this.enrolmentService.enrolment.id;
-    this.enrolmentResource
-      .createSelfDeclarationDocument(enrolleeId, code, sdd)
-      .subscribe();
+  protected afterSubmitIsSuccessful(): void {
+    this.enrolmentFormStateService.clearSelfDeclarationDocumentGuids();
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
@@ -167,5 +196,15 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     }
 
     return shouldShowUnansweredQuestions;
+  }
+
+  private addSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
+    this.enrolmentFormStateService
+      .addSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
+  }
+
+  private removeSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
+    this.enrolmentFormStateService
+      .removeSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
   }
 }

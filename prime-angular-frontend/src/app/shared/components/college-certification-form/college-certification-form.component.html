@@ -3,20 +3,35 @@
   <app-form-icon-group [show]="total > 1"
                        (event)="removeCertification()">
 
+    <ng-template #collegeLicences>
+      <mat-form-field class="w-100">
+        <mat-label>College Licences</mat-label>
+        <mat-select formControlName="collegeCode">
+          <mat-option value="">None</mat-option>
+          <mat-option *ngFor="let college of getDisplayedColleges()"
+                      [value]="college.code">
+            {{ college.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="collegeCode.hasError('required')">Required</mat-error>
+      </mat-form-field>
+    </ng-template>
+
     <div class="row">
       <div class="col-sm-12">
+        <app-form-icon-group *ngIf="condensed">
+          <ng-container [ngTemplateOutlet]="collegeLicences"></ng-container>
+          <ng-container *ngIf="condensed"
+                        appContextualContent>
+            <p>
+              This is the licence that indicates the practitioner's authority to deliver health care directly to
+              patients in B.C.
+            </p>
+          </ng-container>
+        </app-form-icon-group>
 
-        <mat-form-field class="w-100">
-          <mat-label>College Licences</mat-label>
-          <mat-select formControlName="collegeCode">
-            <mat-option value="">None</mat-option>
-            <mat-option *ngFor="let college of getDisplayedColleges()"
-                        [value]="college.code">
-              {{ college.name }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="collegeCode.hasError('required')">Required</mat-error>
-        </mat-form-field>
+        <ng-container *ngIf="!condensed"
+                      [ngTemplateOutlet]="collegeLicences"></ng-container>
 
       </div>
 
@@ -91,7 +106,7 @@
           <div class="col-sm-12 pl-5">
 
             <mat-form-field class="w-100">
-              <mat-label>Licence Class associated with your certification</mat-label>
+              <mat-label>Licence class issued to you by your college</mat-label>
               <mat-select formControlName="licenseCode">
                 <mat-option *ngFor="let license of filteredLicenses"
                             [value]="license.code">
