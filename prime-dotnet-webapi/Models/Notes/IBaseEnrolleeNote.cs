@@ -2,10 +2,8 @@ using System;
 
 namespace Prime.Models
 {
-    public interface IEnrolleeNote
+    public interface IBaseEnrolleeNote
     {
-        int Id { get; set; }
-
         int EnrolleeId { get; set; }
 
         Enrollee Enrollee { get; set; }

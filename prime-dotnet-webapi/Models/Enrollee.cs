@@ -92,7 +92,7 @@ namespace Prime.Models
 
         public bool ProfileCompleted { get; set; }
 
-        public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
+        public ICollection<EnrolleeNote> AdjudicatorNotes { get; set; }
 
         public AccessAgreementNote AccessAgreementNote { get; set; }
 

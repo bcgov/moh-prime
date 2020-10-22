@@ -35,5 +35,7 @@ public class AutoMapping : Profile
                 opt.MapFrom(src => src.SignedAgreement.DocumentGuid);
             })
             .ForMember(dest => dest.AgreementType, opt => opt.MapFrom(src => src.AgreementVersion.AgreementType));
+        CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
+        CreateMap<SiteRegistrationNote, SiteRegistrationNoteViewModel>();
     }
 }
