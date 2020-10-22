@@ -82,7 +82,8 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
             (this.organizationAgreementGuid.value)
               ? this.organizationResource
                 .acceptOrganizationAgreement(organizationId, this.agreementId, this.organizationAgreementGuid.value)
-              : of(noop)
+              : this.organizationResource
+                .acceptOrganizationAgreement(organizationId, this.agreementId)
           ),
           exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.params.sid)))
         )

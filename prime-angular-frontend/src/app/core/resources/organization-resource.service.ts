@@ -230,7 +230,7 @@ export class OrganizationResource {
       );
   }
 
-  public acceptOrganizationAgreement(organizationId: number, agreementId: number, organizationAgreementGuid: string): NoContent {
+  public acceptOrganizationAgreement(organizationId: number, agreementId: number, organizationAgreementGuid?: string): NoContent {
     const params = this.apiResourceUtilsService.makeHttpParams({ organizationAgreementGuid });
     return this.apiResource.put<NoContent>(`organizations/${organizationId}/agreements/${agreementId}`, null, params)
       .pipe(
