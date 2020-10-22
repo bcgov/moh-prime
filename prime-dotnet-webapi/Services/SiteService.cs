@@ -435,11 +435,11 @@ namespace Prime.Services
                 .OrderByDescending(bl => bl.UploadedDate)
                 .FirstOrDefaultAsync();
         }
-        public async Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
+        public async Task<IEnumerable<RemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
         {
             var sites = await this.GetBaseSiteQuery()
                 .Where(s => s.ApprovedDate != null)
-                .ProjectTo<EnrolleeRemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<RemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
@@ -470,15 +470,6 @@ namespace Prime.Services
             // TODO: Business events for sites?
 
             return SiteRegistrationNote;
-        }
-
-        public async Task<IEnumerable<RemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
-        {
-            var sites = await this.GetBaseSiteQuery()
-                .Where(s => s.ApprovedDate != null)
-                .ProjectTo<RemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-                
         }
 
         public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(Site site)
