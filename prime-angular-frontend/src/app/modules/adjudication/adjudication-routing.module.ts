@@ -11,7 +11,6 @@ import { AdjudicationDashboardComponent } from './shared/components/adjudication
 
 import { EnrolleesComponent } from './pages/enrollees/enrollees.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
-import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
 import { EnrolleeEnrolmentsComponent } from './pages/enrollee-enrolments/enrollee-enrolments.component';
 import { EnrolleeAccessTermComponent } from './pages/enrollee-access-term/enrollee-access-term.component';
@@ -24,6 +23,8 @@ import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudi
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-users.component';
 import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
+import { EnrolleeAdjudicatorNotesComponent } from './pages/enrollee-adjudicator-notes/enrollee-adjudicator-notes.component';
+import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/site-adjudicator-notes.component';
 
 const routes: Routes = [
   {
@@ -90,8 +91,8 @@ const routes: Routes = [
                 data: { title: 'Limits and Conditions Clauses' }
               },
               {
-                path: AdjudicationRoutes.ENROLLEE_ADJUDICATOR_NOTES,
-                component: AdjudicatorNotesComponent,
+                path: AdjudicationRoutes.ADJUDICATOR_NOTES,
+                component: EnrolleeAdjudicatorNotesComponent,
                 data: { title: 'Adjudicator Notes' }
               },
               {
@@ -133,7 +134,12 @@ const routes: Routes = [
                 path: AdjudicationRoutes.SITE_REMOTE_USERS,
                 component: SiteRemoteUsersComponent,
                 data: { title: 'Remote Practitioners' }
-              }
+              },
+              {
+                path: AdjudicationRoutes.ADJUDICATOR_NOTES,
+                component: SiteAdjudicatorNotesComponent,
+                data: { title: 'Adjudicator Notes' }
+              },
             ]
           }
         ]

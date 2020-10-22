@@ -1,5 +1,5 @@
 import { EnrolmentStatus } from './enrolment-status.model';
-import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { Adjudicator } from './adjudicator.model';
 
 export interface EnrolmentStatusReference {
@@ -7,7 +7,7 @@ export interface EnrolmentStatusReference {
   enrolmentStatusId: number;
   enrolmentStatus: EnrolmentStatus;
   adjudicatorNoteId: number;
-  adjudicatorNote: AdjudicationNote;
+  adjudicatorNote: EnrolleeNote;
   adminId: number;
   adjudicator: Adjudicator;
 }
