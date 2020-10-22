@@ -11,7 +11,6 @@ import { RegistrantGuard } from './shared/guards/registrant.guard';
 import { RegistrationGuard } from './shared/guards/registration.guard';
 import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
-
 import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -82,13 +81,6 @@ const routes: Routes = [
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Review' }
-              },
-              {
-                path: SiteRoutes.ORGANIZATION_AGREEMENT,
-                component: OrganizationAgreementComponent,
-                canActivate: [OrganizationGuard],
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Organization Agreement' }
               },
               {
                 path: '', // Equivalent to `/` and alias for `organization-review`
@@ -165,6 +157,13 @@ const routes: Routes = [
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Technical Support Contact' }
+                  },
+                  {
+                    path: SiteRoutes.ORGANIZATION_AGREEMENT,
+                    component: OrganizationAgreementComponent,
+                    canActivate: [SiteGuard, OrganizationGuard],
+                    canDeactivate: [CanDeactivateFormGuard],
+                    data: { title: 'Organization Agreement' }
                   },
                   {
                     path: SiteRoutes.SITE_REVIEW,

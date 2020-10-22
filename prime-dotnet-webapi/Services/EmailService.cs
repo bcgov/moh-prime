@@ -61,6 +61,7 @@ namespace Prime.Services
         private readonly IDocumentManagerClient _documentManagerClient;
         private readonly IDocumentAccessTokenService _documentAccessTokenService;
         private readonly ISiteService _siteService;
+        private readonly IAgreementService _agreementService;
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
@@ -72,7 +73,8 @@ namespace Prime.Services
             ISmtpEmailClient smtpEmailClient,
             IDocumentManagerClient documentManagerClient,
             IDocumentAccessTokenService documentAccessTokenService,
-            ISiteService siteService)
+            ISiteService siteService,
+            IAgreementService agreementService)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
@@ -84,6 +86,7 @@ namespace Prime.Services
             _documentAccessTokenService = documentAccessTokenService;
             _smtpEmailClient = smtpEmailClient;
             _siteService = siteService;
+            _agreementService = agreementService;
         }
 
         public static bool IsValidEmail(string email)
@@ -194,8 +197,8 @@ namespace Prime.Services
         private async Task<IEnumerable<(string Filename, byte[] Content)>> getSiteRegistrationAttachments(Site site)
         {
             var organization = site.Organization;
-            var organizationAgreementHtml = "";
 
+            var organizationAgreementHtml = "";
             string organizationAgreementFilename = "OrganizationAgreement.pdf";
             string registrationReviewFilename = "SiteRegistrationReview.pdf";
 
@@ -239,7 +242,18 @@ namespace Prime.Services
             }
             else
             {
-                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync("/Views/CommunityPracticeOrganizationAgreementPdf.cshtml", organization);
+                var agreementType = _organizationService.OrgAgreementTypeForSiteSetting(site.CareSettingCode.Value);
+                var agreementDate = await _context.Agreements
+                    .AsNoTracking()
+                    .Include(a => a.AgreementVersion)
+                    .Where(a => a.OrganizationId == organization.Id
+                        && a.AgreementVersion.AgreementType == agreementType
+                        && a.AcceptedDate.HasValue)
+                    .OrderByDescending(a => a.AcceptedDate)
+                    .Select(a => a.AcceptedDate)
+                    .FirstAsync();
+
+                organizationAgreementHtml = await _agreementService.RenderOrgAgreementHtmlAsync(agreementType, organization.Name, agreementDate, true);
             }
 
             return new (string Filename, string HtmlContent)[]

@@ -4,16 +4,18 @@ import { Router, Params } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 
-import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
+// TODO PRIME-1131
+// Should this guard be dropped and only use the registration guard
 @Injectable({
   providedIn: 'root'
 })
@@ -37,6 +39,7 @@ export class OrganizationGuard extends BaseGuard {
           // Store the organization for access throughout creation and updating of a
           // organization, which will allows provide the most up-to-date organization
           this.organizationService.organization = organization;
+          // TODO PRIME-1131
           // TODO always resolve until routes are lock down
           return true;
         })

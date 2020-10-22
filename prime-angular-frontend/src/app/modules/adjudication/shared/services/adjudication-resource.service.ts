@@ -11,7 +11,7 @@ import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.serv
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { Address } from '@shared/models/address.model';
-import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
@@ -234,28 +234,28 @@ export class AdjudicationResource {
   }
 
   // ---
-  // Access Terms
+  // Agreements
   // ---
 
-  public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<AccessTerm[]> {
+  public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolleeAgreement[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
-    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
+    return this.apiResource.get<EnrolleeAgreement[]>(`enrollees/${enrolleeId}/agreements`, params)
       .pipe(
-        map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
-        tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERMS', accessTerms)),
+        map((response: ApiHttpResponse<EnrolleeAgreement[]>) => response.result),
+        tap((accessTerms: EnrolleeAgreement[]) => this.logger.info('ENROLLEE_AGREEMENT', accessTerms)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Access terms could not be retrieved');
+          this.toastService.openErrorToast('Enrollee agreements could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getAccessTerms error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  public getAccessTerm(enrolleeId: number, accessTermsId: number): Observable<AccessTerm> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermsId}`)
+  public getAccessTerm(enrolleeId: number, agreementId: number): Observable<EnrolleeAgreement> {
+    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}`)
       .pipe(
-        map((response: ApiHttpResponse<AccessTerm>) => response.result),
-        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm)),
+        map((response: ApiHttpResponse<EnrolleeAgreement>) => response.result),
+        tap((accessTerm: EnrolleeAgreement) => this.logger.info('ACCESS_TERM', accessTerm)),
         catchError((error: any) => {
           this.logger.error('[Adjudication] AdjudicationResource::getAccessTerm error has occurred: ', error);
           throw error;
@@ -263,9 +263,9 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number)
+  public getEnrolmentForAccessTerm(enrolleeId: number, agreementId: number)
     : Observable<HttpEnrolleeProfileVersion> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
+    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/enrolment`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
         tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
