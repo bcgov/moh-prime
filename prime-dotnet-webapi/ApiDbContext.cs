@@ -205,17 +205,20 @@ namespace Prime
             modelBuilder.Entity<Agreement>()
                 .HasOne(toa => toa.Enrollee)
                 .WithMany(e => e.Agreements)
-                .HasForeignKey(toa => toa.EnrolleeId);
+                .HasForeignKey(toa => toa.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Agreement>()
                 .HasOne(toa => toa.Organization)
                 .WithMany(e => e.Agreements)
-                .HasForeignKey(toa => toa.OrganizationId);
+                .HasForeignKey(toa => toa.OrganizationId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Agreement>()
                 .HasOne(toa => toa.Party)
                 .WithMany(e => e.Agreements)
-                .HasForeignKey(toa => toa.PartyId);
+                .HasForeignKey(toa => toa.PartyId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Agreement>()
                 .HasCheckConstraint("CHK_Agreement_OnlyOneForeignKey",
