@@ -524,13 +524,13 @@ namespace Prime.Controllers
         /// Send HIBC an email when remote users are updated for a submitted site
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/remote-users-email", Name = nameof(sendRemoteUsersEmail))]
+        [HttpPost("{siteId}/remote-users-email", Name = nameof(SendRemoteUsersEmail))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> sendRemoteUsersEmail(int siteId)
+        public async Task<ActionResult> SendRemoteUsersEmail(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -547,13 +547,13 @@ namespace Prime.Controllers
         /// Send HIBC an email when remote users are updated for a submitted site
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/remote-users-email-admin", Name = nameof(sendRemoteUsersEmailAdmin))]
+        [HttpPost("{siteId}/remote-users-email-admin", Name = nameof(SendRemoteUsersEmailAdmin))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> sendRemoteUsersEmailAdmin(int siteId)
+        public async Task<ActionResult> SendRemoteUsersEmailAdmin(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
@@ -578,13 +578,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="remoteUsers"></param>
-        [HttpPost("{siteId}/remote-users-email-user", Name = nameof(sendRemoteUsersEmailUser))]
+        [HttpPost("{siteId}/remote-users-email-user", Name = nameof(SendRemoteUsersEmailUser))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> sendRemoteUsersEmailUser(int siteId, IEnumerable<RemoteUser> remoteUsers)
+        public async Task<ActionResult> SendRemoteUsersEmailUser(int siteId, IEnumerable<RemoteUser> remoteUsers)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 

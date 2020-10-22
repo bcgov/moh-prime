@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
 using Prime.Configuration;
-using Prime.Models.DbViews;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
@@ -103,8 +102,6 @@ namespace Prime
         public DbSet<SiteAdjudicationDocument> SiteAdjudicationDocuments { get; set; }
         public DbSet<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
         public DbSet<DocumentAccessToken> DocumentAccessToken { get; set; }
-
-        public DbSet<NewestAgreement> NewestAgreements { get; set; }
 
         public override int SaveChanges()
         {
@@ -210,17 +207,20 @@ namespace Prime
             modelBuilder.Entity<Agreement>()
                 .HasOne(toa => toa.Enrollee)
                 .WithMany(e => e.Agreements)
-                .HasForeignKey(toa => toa.EnrolleeId);
+                .HasForeignKey(toa => toa.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Agreement>()
                 .HasOne(toa => toa.Organization)
                 .WithMany(e => e.Agreements)
-                .HasForeignKey(toa => toa.OrganizationId);
+                .HasForeignKey(toa => toa.OrganizationId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Agreement>()
                 .HasOne(toa => toa.Party)
                 .WithMany(e => e.Agreements)
-                .HasForeignKey(toa => toa.PartyId);
+                .HasForeignKey(toa => toa.PartyId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Agreement>()
                 .HasCheckConstraint("CHK_Agreement_OnlyOneForeignKey",

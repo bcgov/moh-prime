@@ -4,18 +4,19 @@ import { Router, Params } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, exhaustMap } from 'rxjs/operators';
 
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { OrganizationAgreement } from '@shared/models/agreement.model';
 
-import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Party } from '@registration/shared/models/party.model';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { Organization } from '../models/organization.model';
-import { OrganizationService } from '../services/organization.service';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +39,7 @@ export class RegistrationGuard extends BaseGuard {
     const createOrganization$ = user$
       .pipe(
         map((user: BcscUser) => new Party(user)),
-        exhaustMap((party: Party) => this.organizationResource.createOrganization(party)),
-        map((organization: Organization) => [organization, true])
+        exhaustMap((party: Party) => this.organizationResource.createOrganization(party))
       );
 
     return this.organizationResource.getOrganizations({ verbose: true })
@@ -51,14 +51,16 @@ export class RegistrationGuard extends BaseGuard {
         ),
         exhaustMap((organization: Organization) =>
           (organization)
-            ? of([organization, false])
+            ? of(organization)
             : createOrganization$
         ),
-        map(([organization, isNewOrganization]: [Organization, boolean]) => {
+        map((organization: Organization) => {
+          // TODO PRIME-1131
           // Store the organization for access throughout registration, which
           // will allows be the most up-to-date organization
+          // TODO drop this and see if the organization guard is enough
           this.organizationService.organization = organization;
-          return this.routeDestination(routePath, organization, isNewOrganization);
+          return this.routeDestination(routePath, organization);
         })
       );
   }
@@ -67,7 +69,7 @@ export class RegistrationGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the organization status.
    */
-  private routeDestination(routePath: string, organization: Organization, isNewOrganization: boolean = false) {
+  private routeDestination(routePath: string, organization: Organization) {
     // On login the user will always be redirected to the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
@@ -112,7 +114,7 @@ export class RegistrationGuard extends BaseGuard {
       whiteListedRoutes.push(SiteRoutes.ORGANIZATION_AGREEMENT);
       whiteListedRoutes.push(SiteRoutes.ORGANIZATION_REVIEW);
 
-      if (organization.acceptedAgreementDate) {
+      if (organization.hasAcceptedAgreement) {
         whiteListedRoutes.push(SiteRoutes.SITE_REVIEW);
       }
     }
