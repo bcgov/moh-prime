@@ -1,14 +1,15 @@
 <ng-container *ngIf="organization">
+
   <app-overview-section title="Signing Authority"
                         [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[SiteRoutes.MODULE_PATH,SiteRoutes.SITE_MANAGEMENT,organization.id,SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
+                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
                         (route)="onRoute($event)">
     <app-enrollee-profile [enrollee]="organization?.signingAuthority"></app-enrollee-profile>
   </app-overview-section>
 
   <app-overview-section title="Organization Information"
                         [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[SiteRoutes.MODULE_PATH,SiteRoutes.SITE_MANAGEMENT,organization.id,SiteRoutes.ORGANIZATION_NAME]"
+                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_NAME]"
                         (route)="onRoute($event)">
     <app-enrollee-property title="Organization Name (Legal Entity Operating Site)">
       {{ organization?.name | default }}

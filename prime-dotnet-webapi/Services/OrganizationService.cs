@@ -173,13 +173,70 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
-        public async Task<int> AcceptCurrentOrganizationAgreementAsync(int organizationId)
+        /// <summary>
+        /// Creates a new Org Agreement of type appropriate for the indicated site if none exist or a newer version is availible.
+        /// Otherwise, returns the newest existing Agreement of that type.
+        /// Returns null if the Site doesn't exist on the Organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        /// <param name="siteId"></param>
+        /// <returns></returns>
+        public async Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int siteId)
         {
-            var organization = await GetOrganizationAsync(organizationId);
+            var siteSetting = await _context.Sites
+                .AsNoTracking()
+                .Where(s => s.Id == siteId && s.OrganizationId == organizationId)
+                .Select(s => s.CareSettingCode)
+                .SingleOrDefaultAsync();
 
-            organization.AcceptedAgreementDate = DateTimeOffset.Now;
+            if (!siteSetting.HasValue)
+            {
+                return null;
+            }
 
-            return await _context.SaveChangesAsync();
+            var agreementType = OrgAgreementTypeForSiteSetting(siteSetting.Value);
+
+            var newestVersionId = await _context.AgreementVersions
+                .AsNoTracking()
+                .OrderByDescending(v => v.EffectiveDate)
+                .Where(v => v.AgreementType == agreementType)
+                .Select(v => v.Id)
+                .FirstAsync();
+
+            var newestAgreement = await _context.Agreements
+                .OrderByDescending(a => a.CreatedDate)
+                .FirstOrDefaultAsync(a => a.OrganizationId == organizationId && a.AgreementVersionId == newestVersionId);
+
+            if (newestAgreement != null)
+            {
+                return newestAgreement;
+            }
+            else
+            {
+                // Either no Agreement, or only outdated versions. Create a new one
+                var newAgreement = new Agreement
+                {
+                    OrganizationId = organizationId,
+                    AgreementVersionId = newestVersionId,
+                    CreatedDate = DateTimeOffset.Now
+                };
+
+                _context.Agreements.Add(newAgreement);
+                await _context.SaveChangesAsync();
+                return newAgreement;
+            }
+        }
+
+        public async Task AcceptOrgAgreementAsync(int organizationId, int agreementId)
+        {
+            var agreement = await _context.Agreements
+                .SingleOrDefaultAsync(a => a.Id == agreementId && a.OrganizationId == organizationId);
+
+            if (agreement != null)
+            {
+                agreement.AcceptedDate = DateTimeOffset.Now;
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<Organization> GetOrganizationByPartyIdAsync(int partyId)
@@ -188,7 +245,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
         }
 
-        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, Guid documentGuid)
+        public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid)
         {
             var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_org_agreements");
             if (string.IsNullOrWhiteSpace(filename))
@@ -199,7 +256,7 @@ namespace Prime.Services
             var signedAgreement = new SignedAgreementDocument
             {
                 DocumentGuid = documentGuid,
-                OrganizationId = organizationId,
+                AgreementId = agreementId,
                 Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };
@@ -210,25 +267,36 @@ namespace Prime.Services
             return signedAgreement;
         }
 
-        public async Task<IEnumerable<SignedAgreementDocument>> GetSignedAgreementsAsync(int organizationId)
-        {
-            return await _context.SignedAgreementDocuments
-                .Where(a => a.OrganizationId == organizationId)
-                .ToListAsync();
-        }
-
         public async Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId)
         {
-            return await _context.SignedAgreementDocuments
-                .Where(sa => sa.OrganizationId == organizationId)
+            return await _context.Organizations
+                .Where(o => o.Id == organizationId)
+                .SelectMany(o => o.Agreements)
+                .Select(a => a.SignedAgreement)
                 .OrderByDescending(sa => sa.UploadedDate)
                 .FirstOrDefaultAsync();
+        }
+
+        public AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode)
+        {
+            switch ((CareSettingType)careSettingCode)
+            {
+                case CareSettingType.CommunityPractice:
+                    return AgreementType.CommunityPracticeOrgAgreement;
+
+                case CareSettingType.CommunityPharmacy:
+                    return AgreementType.CommunityPharmacyOrgAgreement;
+
+                default:
+                    throw new InvalidOperationException($"Did not recognize care setting code {careSettingCode} in {nameof(OrgAgreementTypeForSiteSetting)}");
+            }
         }
 
         private IQueryable<Organization> GetBaseOrganizationQuery()
         {
             return _context.Organizations
-                .Include(o => o.SignedAgreementDocuments)
+                .Include(o => o.Agreements)
+                    .ThenInclude(a => a.SignedAgreement)
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(o => o.SigningAuthority)

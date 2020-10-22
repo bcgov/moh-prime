@@ -23,7 +23,7 @@ export class AppConfig {
   };
   phoneNumbers: {
     director: string;
-  }
+  };
   routes: {
     denied: string;
     maintenance: string;

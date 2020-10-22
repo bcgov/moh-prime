@@ -4,13 +4,13 @@ import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { IdentificationDocument } from '@shared/models/identification-document.model';
 
 import { Admin } from '@auth/shared/models/admin.model';
 import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { IdentificationDocument } from './identification-document.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
