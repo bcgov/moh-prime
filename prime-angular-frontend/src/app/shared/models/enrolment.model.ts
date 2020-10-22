@@ -7,7 +7,7 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 import { IdentificationDocument } from '@shared/models/identification-document.model';
 
 import { Admin } from '@auth/shared/models/admin.model';
-import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
@@ -36,8 +36,8 @@ export interface HttpEnrollee extends Enrollee {
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
   enrolleeClassification: EnrolleeClassification;
-  enrolmentCertificateNote: AdjudicationNote;
-  accessAgreementNote: AdjudicationNote;
+  enrolmentCertificateNote: EnrolleeNote;
+  accessAgreementNote: EnrolleeNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice
@@ -73,8 +73,8 @@ export interface Enrolment {
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
   enrolleeClassification: EnrolleeClassification;
-  enrolmentCertificateNote: AdjudicationNote;
-  accessAgreementNote: AdjudicationNote;
+  enrolmentCertificateNote: EnrolleeNote;
+  accessAgreementNote: EnrolleeNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice

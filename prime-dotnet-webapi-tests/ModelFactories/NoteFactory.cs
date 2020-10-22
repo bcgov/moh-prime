@@ -8,9 +8,9 @@ namespace PrimeTests.ModelFactories
         public AccessAgreementNoteFactory(Enrollee owner) : base(owner) { }
     }
 
-    public class AdjudicatorNoteFactory : NoteFactory<AdjudicatorNote>
+    public class EnrolleeNoteFactory : NoteFactory<EnrolleeNote>
     {
-        public AdjudicatorNoteFactory(Enrollee owner) : base(owner)
+        public EnrolleeNoteFactory(Enrollee owner) : base(owner)
         {
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
@@ -18,7 +18,7 @@ namespace PrimeTests.ModelFactories
         }
     }
 
-    public abstract class NoteFactory<T> : Faker<T> where T : BaseAuditable, IEnrolleeNote
+    public abstract class NoteFactory<T> : Faker<T> where T : BaseAdjudicatorNote, IBaseEnrolleeNote
     {
         private static int IdCounter = 1;
 

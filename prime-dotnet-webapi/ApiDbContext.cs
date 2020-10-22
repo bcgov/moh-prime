@@ -68,7 +68,7 @@ namespace Prime
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
         public DbSet<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
-        public DbSet<AdjudicatorNote> AdjudicatorNotes { get; set; }
+        public DbSet<EnrolleeNote> EnrolleeNotes { get; set; }
         public DbSet<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
 
@@ -196,7 +196,7 @@ namespace Prime
                 .WithMany(sr => sr.EnrolmentStatusReasons)
                 .HasForeignKey(esr => esr.StatusReasonCode);
 
-            modelBuilder.Entity<AdjudicatorNote>()
+            modelBuilder.Entity<EnrolleeNote>()
                 .HasOne(an => an.Enrollee)
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
