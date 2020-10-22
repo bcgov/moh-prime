@@ -59,6 +59,7 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.BCSC_DEMOGRAPHIC,
       EnrolmentRoutes.REGULATORY,
       EnrolmentRoutes.REMOTE_ACCESS,
+      EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES,
       // EnrolmentRoutes.DEVICE_PROVIDER,
       EnrolmentRoutes.JOB,
       EnrolmentRoutes.CARE_SETTING,
