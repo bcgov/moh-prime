@@ -30,16 +30,6 @@ export class EnrolmentProgressIndicatorComponent implements OnInit, IProgressInd
     private enrolmentService: EnrolmentService
   ) {
     this.currentRoute = RouteUtils.currentRoutePath(this.router.url);
-
-    // // Possible route pathways within site registration
-    // const routePaths = (!organizationService.organization.acceptedAgreementDate)
-    //   // Combine organization and site routes, which includes
-    //   // the organization agreement
-    //   ? [SiteRoutes.initialRegistrationRouteOrder()]
-    //   // Otherwise, split organization and site routes for
-    //   // multiple registrations
-    //   : [SiteRoutes.organizationRegistrationRouteOrder(), SiteRoutes.siteRegistrationRouteOrder()];
-
     this.routes = EnrolmentRoutes.initialEnrolmentRouteOrder();
     this.prefix = 'Enrolment';
   }

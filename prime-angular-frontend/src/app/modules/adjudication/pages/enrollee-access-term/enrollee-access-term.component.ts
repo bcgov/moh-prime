@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { AbstractComponent } from '@shared/classes/abstract-component';
-import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
@@ -15,7 +15,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class EnrolleeAccessTermComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
-  public accessTerm: AccessTerm;
+  public accessTerm: EnrolleeAgreement;
 
   constructor(
     protected router: Router,
@@ -33,6 +33,6 @@ export class EnrolleeAccessTermComponent extends AbstractComponent implements On
     const enrolleeId = this.route.snapshot.params.id;
     const accessTermId = this.route.snapshot.params.aid;
     this.busy = this.adjudicationResource.getAccessTerm(enrolleeId, accessTermId)
-      .subscribe((accessTerm: AccessTerm) => this.accessTerm = accessTerm);
+      .subscribe((accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm);
   }
 }

@@ -79,8 +79,6 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     this.patchForm();
     this.initForm();
     if (!this.enrolmentService.enrolment) {
-      console.log('TEST');
-
       this.getUser$()
         .subscribe((enrollee: Enrollee) =>
           this.form.patchValue(enrollee)

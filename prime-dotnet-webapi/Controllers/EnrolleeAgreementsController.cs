@@ -17,40 +17,40 @@ namespace Prime.Controllers
     [ApiController]
     // User needs at least the RO_ADMIN or ENROLLEE role to use this controller
     [Authorize(Policy = AuthConstants.USER_POLICY)]
-    public class EnrolleesAccessTermsController : ControllerBase
+    public class EnrolleeAgreementsController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAccessTermService _accessTermService;
+        private readonly IAgreementService _agreementService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IBusinessEventService _businessEventService;
 
-        public EnrolleesAccessTermsController(
+        public EnrolleeAgreementsController(
             IEnrolleeService enrolleeService,
-            IAccessTermService accessTermService,
+            IAgreementService agreementService,
             IEnrolleeProfileVersionService enrolleeProfileVersionService,
             IRazorConverterService razorConverterService,
             IBusinessEventService businessEventService)
         {
             _enrolleeService = enrolleeService;
-            _accessTermService = accessTermService;
+            _agreementService = agreementService;
             _enrolleeProfileVersionService = enrolleeProfileVersionService;
             _razorConverterService = razorConverterService;
             _businessEventService = businessEventService;
         }
 
-        // GET: api/Enrollees/5/access-terms
+        // GET: api/Enrollees/5/agreements
         /// <summary>
-        /// Get a list of the enrollee's access terms.
+        /// Get a list of the enrollee's agreements.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="filters"></param>
-        [HttpGet("{enrolleeId}/access-terms", Name = nameof(GetAccessTerms))]
+        [HttpGet("{enrolleeId}/agreements", Name = nameof(GetEnrolleeAgreements))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Agreement>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Agreement>>> GetAccessTerms(int enrolleeId, [FromQuery] AccessTermFilters filters)
+        public async Task<ActionResult<IEnumerable<Agreement>>> GetEnrolleeAgreements(int enrolleeId, [FromQuery] AgreementFilters filters)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -62,29 +62,29 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var accessTerms = await _accessTermService.GetAccessTermsAsync(enrolleeId, filters);
+            var agreements = await _agreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
 
             if (User.IsAdmin())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
             }
 
-            return Ok(ApiResponse.Result(accessTerms));
+            return Ok(ApiResponse.Result(agreements));
         }
 
-        // GET: api/Enrollees/5/access-terms/2
+        // GET: api/Enrollees/5/agreements/2
         /// <summary>
-        /// Get a specific access term for an enrollee.
+        /// Get a specific agreement for an enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="accessTermId"></param>
-        [HttpGet("{enrolleeId}/access-terms/{accessTermId}", Name = nameof(GetAccessTerm))]
+        /// <param name="agreementId"></param>
+        [HttpGet("{enrolleeId}/agreements/{agreementId}", Name = nameof(GetAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Agreement>> GetAccessTerm(int enrolleeId, int accessTermId)
+        public async Task<ActionResult<Agreement>> GetAgreement(int enrolleeId, int agreementId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -96,34 +96,33 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            Agreement accessTerm = await _accessTermService.GetEnrolleeAccessTermAsync(enrolleeId, accessTermId, true);
-
-            if (accessTerm == null)
+            Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
+            if (agreement == null)
             {
-                return NotFound(ApiResponse.Message($"Access term not found with id {accessTermId} on enrollee with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}"));
             }
 
             if (User.IsAdmin())
             {
-                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Terms of Access");
+                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Agreement");
             }
 
-            return Ok(ApiResponse.Result(accessTerm));
+            return Ok(ApiResponse.Result(agreement));
         }
 
-        // GET: api/Enrollees/5/access-terms/3/enrolment
+        // GET: api/Enrollees/5/agreements/3/enrolment
         /// <summary>
-        /// Get the Profile Snapshot used for the given access term.
+        /// Get the Profile Snapshot used for the given agreement.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="accessTermId"></param>
-        [HttpGet("{enrolleeId}/access-terms/{accessTermId}/enrolment", Name = nameof(GetEnrolmentForAccessTerm))]
+        /// <param name="agreementId"></param>
+        [HttpGet("{enrolleeId}/agreements/{agreementId}/enrolment", Name = nameof(GetEnrolmentForAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAccessTerm(int enrolleeId, int accessTermId)
+        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAgreement(int enrolleeId, int agreementId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -135,16 +134,16 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            Agreement accessTerm = await _accessTermService.GetEnrolleeAccessTermAsync(enrolleeId, accessTermId);
-            if (accessTerm == null || accessTerm.AcceptedDate == null)
+            Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId);
+            if (agreement == null || agreement.AcceptedDate == null)
             {
-                return NotFound(ApiResponse.Message($"Accepted Access Term not found with id {accessTermId} for enrollee with id {enrolleeId}"));
+                return NotFound(ApiResponse.Message($"Accepted Agreement not found with id {agreementId} for enrollee with id {enrolleeId}"));
             }
 
-            var enrolleeProfileHistory = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, accessTerm.AcceptedDate.Value);
+            var enrolleeProfileHistory = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
             if (enrolleeProfileHistory == null)
             {
-                return NotFound(ApiResponse.Message($"No enrolment profile history found for Access Term with id {accessTermId} for enrollee with id {enrolleeId}."));
+                return NotFound(ApiResponse.Message($"No enrolment profile history found for Agreement with id {agreementId} for enrollee with id {enrolleeId}."));
             }
 
             if (User.IsAdmin())

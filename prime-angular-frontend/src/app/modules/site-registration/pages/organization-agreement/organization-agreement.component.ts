@@ -5,7 +5,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { Subscription, EMPTY, of, noop } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
+
+import * as moment from 'moment';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
@@ -14,6 +16,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
@@ -29,7 +32,8 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   public busy: Subscription;
   public form: FormGroup;
   public routeUtils: RouteUtils;
-  public organizationAgreement: string;
+  public agreementId: number;
+  public organizationAgreementContent: string;
   public hasAcceptedAgreement: boolean;
   public hasDownloadedFile: boolean;
   public hasUploadedFile: boolean;
@@ -49,6 +53,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     private dialog: MatDialog,
     private utilsService: UtilsService
   ) {
+    this.organizationAgreementContent = null;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
@@ -64,7 +69,7 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
         message: 'Are you sure you want to accept the Organization Agreement?',
         actionText: 'Accept Organization Agreement'
       };
-      const payload = this.organizationFormStateService.json;
+
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
@@ -74,21 +79,17 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
               : EMPTY
           ),
           exhaustMap(() =>
-            (payload.organizationAgreementGuid)
-              ? this.organizationResource.addSignedAgreement(organizationId, payload.organizationAgreementGuid)
-                .pipe(
-                  exhaustMap(() =>
-                    this.organizationResource.acceptCurrentOrganizationAgreement(organizationId)
-                  )
-                )
-              : of(noop)
+            (this.organizationAgreementGuid.value)
+              ? this.organizationResource
+                .acceptOrganizationAgreement(organizationId, this.agreementId, this.organizationAgreementGuid.value)
+              : this.organizationResource
+                .acceptOrganizationAgreement(organizationId, this.agreementId)
           ),
-          exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.queryParams.siteId)))
+          exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.params.sid)))
         )
         .subscribe(() => {
-          // TODO should make this cleaner, but for now good enough
           // Remove the org agreement GUID to prevent 404 already
-          // submitted if resubmited in same session
+          // submitted if resubmited in the same session
           this.organizationAgreementGuid.patchValue(null);
           this.nextRoute();
         });
@@ -97,9 +98,9 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   public onDownload() {
     this.organizationResource
-      .getUnsignedOrganizationAgreement()
-      .subscribe((base64: string) => {
-        const blob = this.utilsService.base64ToBlob(base64);
+      .getOrganizationAgreement(this.route.snapshot.params.oid, this.agreementId, true)
+      .subscribe(({ agreementContent }: OrganizationAgreementViewModel) => {
+        const blob = this.utilsService.base64ToBlob(agreementContent);
         this.utilsService.downloadDocument(blob, 'Organization-Agreement');
         this.hasDownloadedFile = true;
       });
@@ -116,33 +117,15 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
   }
 
   public showDefaultAgreement() {
-    return this.organizationService.organization.signedAgreementDocuments?.length < 1 ?? true;
-  }
-
-  public downloadSignedAgreement() {
-    this.organizationResource
-      .getDownloadTokenForLatestSignedAgreement(this.organizationService.organization.id)
-      .subscribe((token: string) => {
-        this.utilsService.downloadToken(token);
-      });
+    return !this.organizationService.organization.hasAcceptedAgreement;
   }
 
   public onBack() {
-    const siteId = this.route.snapshot.queryParams.siteId;
-    if (siteId) {
-      this.routeUtils.routeRelativeTo([SiteRoutes.SITES, siteId, SiteRoutes.TECHNICAL_SUPPORT]);
-    } else {
-      this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
-    }
+    this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
   }
 
   public nextRoute() {
-    const redirectPath = this.route.snapshot.queryParams.redirect;
-    if (redirectPath) {
-      this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
-    } else {
-      this.routeUtils.routeWithin(SiteRoutes.SITE_MANAGEMENT);
-    }
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }
 
   public ngOnInit(): void {
@@ -156,15 +139,22 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
 
   private initForm() {
     const organization = this.organizationService.organization;
+    const siteId = this.route.snapshot.params.sid;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);
 
-    this.hasAcceptedAgreement = !!organization.acceptedAgreementDate;
-
-    this.organizationResource
-      .getOrganizationAgreement(organization.id)
-      .subscribe((organizationAgreement: string) =>
-        this.organizationAgreement = organizationAgreement
+    this.busy = this.organizationResource
+      .updateOrganizationAgreement(organization.id, siteId)
+      .pipe(
+        map(({ id }: OrganizationAgreement) =>
+          this.agreementId = id
+        ),
+        exhaustMap((agreementId: number) =>
+          this.organizationResource.getOrganizationAgreement(organization.id, agreementId)
+        )
+      )
+      .subscribe(({ agreementContent }: OrganizationAgreementViewModel) =>
+        this.organizationAgreementContent = agreementContent
       );
   }
 }
