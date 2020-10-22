@@ -62,7 +62,8 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     );
   }
 
-  // All site checkboxes returned from search
+  // All sites returned from search that have remote users
+  // with the same college licence as the enrollee used as checkboxes
   public get sites(): FormArray {
     return this.form.get('sites') as FormArray;
   }

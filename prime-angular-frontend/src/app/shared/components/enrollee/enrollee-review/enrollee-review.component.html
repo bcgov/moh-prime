@@ -253,12 +253,6 @@
     None
   </app-enrollee-property>
 
-  <app-enrollee-property *ngIf="isRequestingRemoteAccess"
-                         title="Requesting Remote Access"
-                         [makeBold]="true">
-    Yes
-  </app-enrollee-property>
-
 </section>
 
 <section class="mb-4">
@@ -274,7 +268,24 @@
     </button>
   </app-page-subheader>
 
+  <app-enrollee-property title="Requested"
+                         [makeBold]="true">
+    <ng-container *ngIf="isRequestingRemoteAccess">
+      User Requested Remote Access
+    </ng-container>
+    <ng-container *ngIf="!isRequestingRemoteAccess">
+      User Did Not Request Remote Access
+    </ng-container>
+  </app-enrollee-property>
 
+  <ng-container *ngFor="let careSetting of careSettings">
+
+    <app-enrollee-property title="Care Setting"
+                           [makeBold]="true">
+      {{ careSetting.careSettingCode | configCode: 'careSettings' }}
+    </app-enrollee-property>
+
+  </ng-container>
 
 </section>
 
