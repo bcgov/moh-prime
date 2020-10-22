@@ -2,21 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { UtilsService } from '@core/services/utils.service';
+import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 import { VendorEnum } from '@shared/enums/vendor.enum';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { OrganizationListViewModel } from '@registration/shared/models/organization.model';
+import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
-import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
-import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
@@ -28,21 +30,22 @@ export class SiteManagementComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: OrganizationListViewModel[];
+  public organizationAgreements: OrganizationAgreementViewModel[];
   public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
+  public AgreementType = AgreementType;
   public SiteRoutes = SiteRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private organizationResource: OrganizationResource,
-    private organizationFormStateService: OrganizationFormStateService,
     private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService,
     private fullnamePipe: FullnamePipe,
     private addressPipe: AddressPipe,
     private configCodePipe: ConfigCodePipe,
+    private utilsService: UtilsService,
     // Temporary hack to show success message until guards can be refactored
     private organizationService: OrganizationService
   ) {
@@ -52,21 +55,30 @@ export class SiteManagementComponent implements OnInit {
     this.organizations = [];
   }
 
-  public viewOrganization(organization: OrganizationListViewModel) {
+  public viewOrganization(organization: OrganizationListViewModel): void {
     const routePath = (!organization.completed)
       ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
       : []; // Defaults to overview
     this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
   }
 
-  public viewAgreement(organization: OrganizationListViewModel) {
-    const routePath = (organization.acceptedAgreementDate)
-      ? [SiteRoutes.ORGANIZATION_AGREEMENT]
-      : []; // Defaults to overview
-    this.routeUtils.routeRelativeTo([organization.id, ...routePath]);
+  public viewAgreement(organization: Organization, organizationAgreement: OrganizationAgreementViewModel): void {
+    const request$ = (organizationAgreement?.signedAgreementDocumentGuid)
+      ? this.organizationResource.getSignedOrganizationAgreementToken(organization.id, organizationAgreement.id)
+        .pipe(
+          map((token: string) => this.utilsService.downloadToken(token))
+        )
+      : this.organizationResource.getOrganizationAgreement(organization.id, organizationAgreement.id, true)
+        .pipe(
+          map((agreement: OrganizationAgreement) => agreement.agreementContent),
+          map((base64: string) => this.utilsService.base64ToBlob(base64)),
+          map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
+        );
+
+    this.busy = request$.subscribe();
   }
 
-  public viewSite(organizationId: number, site: SiteListViewModel) {
+  public viewSite(organizationId: number, site: SiteListViewModel): void {
     const routePath = (site.completed)
       ? [organizationId, SiteRoutes.SITES, site.id] // Defaults to overview
       : [organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING];
@@ -101,7 +113,7 @@ export class SiteManagementComponent implements OnInit {
 
   public ngOnInit(): void {
     // this.checkQueryParams();
-    // Temporary hack to show success message until guards can be refactored
+    // TODO temporary hack to show success message until guards can be refactored
     this.hasSubmittedSite = (this.organizationService.showSuccess) ? true : false;
     this.organizationService.showSuccess = false;
     this.getOrganizations();
@@ -114,7 +126,17 @@ export class SiteManagementComponent implements OnInit {
 
   private getOrganizations(): void {
     this.busy = this.organizationResource.getOrganizations()
-      .subscribe((organizations: OrganizationListViewModel[]) => this.organizations = organizations);
+      .pipe(
+        map((organizations: OrganizationListViewModel[]) =>
+          this.organizations = organizations
+        ),
+        exhaustMap((organization: OrganizationListViewModel[]) =>
+          this.organizationResource.getOrganizationAgreements(organization[0].id)
+        )
+      )
+      .subscribe((agreements: OrganizationAgreementViewModel[]) =>
+        this.organizationAgreements = agreements
+      );
   }
 
   private createSite(organizationId: number): void {

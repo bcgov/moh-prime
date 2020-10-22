@@ -20,6 +20,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 describe('BcscDemographicComponent', () => {
   let component: BcscDemographicComponent;
@@ -56,7 +57,8 @@ describe('BcscDemographicComponent', () => {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
           },
-          KeycloakService
+          KeycloakService,
+          EnrolmentFormStateService
         ]
       }
     ).compileComponents();

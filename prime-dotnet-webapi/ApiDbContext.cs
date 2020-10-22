@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
 using Prime.Configuration;
-using Prime.Models.DbViews;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
@@ -101,8 +100,6 @@ namespace Prime
         public DbSet<IdentificationDocument> IdentificationDocuments { get; set; }
         public DbSet<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
         public DbSet<DocumentAccessToken> DocumentAccessToken { get; set; }
-
-        public DbSet<NewestAgreement> NewestAgreements { get; set; }
 
         public override int SaveChanges()
         {

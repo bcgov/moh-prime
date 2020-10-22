@@ -1,6 +1,6 @@
 namespace Prime.Models.Api
 {
-    public class AccessTermFilters
+    public class AgreementFilters
     {
         public int? YearAccepted { get; set; }
         public bool OnlyLatest { get; set; }
