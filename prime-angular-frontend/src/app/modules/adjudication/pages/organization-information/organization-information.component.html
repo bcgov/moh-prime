@@ -13,16 +13,23 @@
   <button mat-flat-button
           color="primary"
           [disabled]="!siteRegistration"
-          [matMenuTriggerFor]="menu">
+          [matMenuTriggerFor]="rootMenu">
     Organization Information <mat-icon>keyboard_arrow_down</mat-icon>
   </button>
 
-  <mat-menu #menu>
+  <mat-menu #rootMenu>
     <button mat-menu-item
-            [disabled]="!canEdit"
-            (click)="getOrganizationAgreement(siteRegistration)">
-      <mat-icon>get_app</mat-icon>
-      <span>Organization Agreement</span>
+            [matMenuTriggerFor]="subMenu"
+            [disabled]="!organizationAgreements?.length">
+      <span>Download Organization Agreement</span>
+    </button>
+  </mat-menu>
+
+  <mat-menu #subMenu="matMenu">
+    <button *ngFor="let agreement of organizationAgreements"
+            mat-menu-item
+            (click)="viewAgreement(organization, agreement)">
+      <span>{{ AgreementType[agreement.agreementType] | case: 'snake' : 'space' | capitalize: true }}</span>
     </button>
   </mat-menu>
 

@@ -12,47 +12,47 @@ using PrimeTests.ModelFactories;
 
 namespace PrimeTests.UnitTests
 {
-    public class AccessTermServiceTests : InMemoryDbTest
+    public class AgreementServiceTests : InMemoryDbTest
     {
-        public AccessTermService CreateService(
+        public AgreementService CreateService(
             IHttpContextAccessor httpContext = null,
             IRazorConverterService razorConverterService = null)
         {
-            return new AccessTermService(
+            return new AgreementService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 razorConverterService ?? A.Fake<IRazorConverterService>()
             );
         }
 
-        private void AssertAgreementGeneration(Enrollee enrollee, int? expectedAgreementId = null, string expectedLimitsClauseText = null)
+        private void AssertAgreementGeneration(Enrollee enrollee, int? expectedAgreementVersionId = null, string expectedLimitsClauseText = null)
         {
-            Assert.Single(enrollee.AccessTerms);
+            Assert.Single(enrollee.Agreements);
 
-            var accessTerm = enrollee.AccessTerms.Single();
+            var agreement = enrollee.Agreements.Single();
 
-            Assert.True(accessTerm.CreatedDate > DateTimeOffset.MinValue);
-            Assert.Null(accessTerm.AcceptedDate);
+            Assert.True(agreement.CreatedDate > DateTimeOffset.MinValue);
+            Assert.Null(agreement.AcceptedDate);
 
-            if (expectedAgreementId.HasValue)
+            if (expectedAgreementVersionId.HasValue)
             {
-                Assert.Equal(accessTerm.AgreementId, expectedAgreementId.Value);
+                Assert.Equal(agreement.AgreementVersionId, expectedAgreementVersionId.Value);
             }
 
             if (expectedLimitsClauseText == null)
             {
-                Assert.Null(accessTerm.LimitsConditionsClauseId);
+                Assert.Null(agreement.LimitsConditionsClauseId);
             }
             else
             {
-                Assert.Equal(accessTerm.LimitsConditionsClause.Text, expectedLimitsClauseText);
+                Assert.Equal(agreement.LimitsConditionsClause.Text, expectedLimitsClauseText);
             }
         }
 
         [Theory]
         [InlineData(CareSettingType.CommunityPractice)]
         [InlineData(CareSettingType.CommunityPharmacy)]
-        public async void TestCreateAccessTerm_Obo(CareSettingType careSetting)
+        public async void TestCreateAgreement_Obo(CareSettingType careSetting)
         {
             // Arrange
             var service = CreateService();
@@ -62,10 +62,10 @@ namespace PrimeTests.UnitTests
             enrollee.AccessAgreementNote = null;
             TestDb.Has(enrollee);
 
-            var expectedAgreementId = TestDb.Agreements.GetNewestIdOfType<OboAgreement>();
+            var expectedAgreementId = TestDb.AgreementVersions.GetNewestIdOfType<OboAgreement>();
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
+            await service.CreateEnrolleeAgreementAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
@@ -74,7 +74,7 @@ namespace PrimeTests.UnitTests
         [Theory]
         [InlineData(CareSettingType.CommunityPractice)]
         [InlineData(CareSettingType.CommunityPharmacy)]
-        public async void TestCreateAccessTerm_LicencedObo(CareSettingType careSetting)
+        public async void TestCreateAgreement_LicencedObo(CareSettingType careSetting)
         {
             // Arrange
             var service = CreateService();
@@ -85,10 +85,10 @@ namespace PrimeTests.UnitTests
             TestDb.Has(enrollee);
             TestDb.Entry(enrollee.Certifications.Single()).Reference(c => c.License).Load();
 
-            var expectedAgreementId = TestDb.Agreements.GetNewestIdOfType<OboAgreement>();
+            var expectedAgreementId = TestDb.AgreementVersions.GetNewestIdOfType<OboAgreement>();
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
+            await service.CreateEnrolleeAgreementAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
@@ -97,7 +97,7 @@ namespace PrimeTests.UnitTests
         [Theory]
         [InlineData(CareSettingType.CommunityPractice)]
         [InlineData(CareSettingType.CommunityPharmacy)]
-        public async void TestCreateAccessTerm_RegulatedUser(CareSettingType careSetting)
+        public async void TestCreateAgreement_RegulatedUser(CareSettingType careSetting)
         {
             // Arrange
             var service = CreateService();
@@ -112,22 +112,22 @@ namespace PrimeTests.UnitTests
             switch (careSetting)
             {
                 case CareSettingType.CommunityPractice:
-                    expectedAgreementId = TestDb.Agreements.GetNewestIdOfType<RegulatedUserAgreement>();
+                    expectedAgreementId = TestDb.AgreementVersions.GetNewestIdOfType<RegulatedUserAgreement>();
                     break;
                 case CareSettingType.CommunityPharmacy:
-                    expectedAgreementId = TestDb.Agreements.GetNewestIdOfType<CommunityPharmacistAgreement>();
+                    expectedAgreementId = TestDb.AgreementVersions.GetNewestIdOfType<CommunityPharmacistAgreement>();
                     break;
             }
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
+            await service.CreateEnrolleeAgreementAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
         }
 
         [Fact]
-        public async void TestCreateAccessTerm_WithLimitsClause()
+        public async void TestCreateAgreement_WithLimitsClause()
         {
             // Arrange
             var service = CreateService();
@@ -137,16 +137,16 @@ namespace PrimeTests.UnitTests
             TestDb.Has(enrollee);
 
             // Act
-            await service.CreateEnrolleeAccessTermAsync(enrollee.Id);
+            await service.CreateEnrolleeAgreementAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedLimitsClauseText: noteText);
         }
     }
 
-    internal static class AgreementExtensions
+    internal static class AgreementVersionExtensions
     {
-        public static int GetNewestIdOfType<T>(this IEnumerable<Agreement> agreements) where T : Agreement
+        public static int GetNewestIdOfType<T>(this IEnumerable<AgreementVersion> agreements) where T : AgreementVersion
         {
             return agreements
                 .OfType<T>()

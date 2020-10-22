@@ -10,6 +10,7 @@ namespace Prime.Services
 {
     public class DocumentService : BaseService, IDocumentService
     {
+        private readonly IAgreementService _agreementService;
         private readonly ISiteService _siteService;
         private readonly IOrganizationService _organizationService;
         private readonly IDocumentManagerClient _documentManagerClient;
@@ -17,11 +18,13 @@ namespace Prime.Services
         public DocumentService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
+            IAgreementService agreementService,
             ISiteService siteService,
             IOrganizationService organizationService,
             IDocumentManagerClient documentManagerClient)
             : base(context, httpContext)
         {
+            _agreementService = agreementService;
             _siteService = siteService;
             _organizationService = organizationService;
             _documentManagerClient = documentManagerClient;
@@ -33,10 +36,15 @@ namespace Prime.Services
             return await _documentManagerClient.CreateDownloadTokenAsync(licence.DocumentGuid);
         }
 
-        public async Task<string> GetDownloadTokenForLatestSignedAgreementDocument(int organizationId)
+        public async Task<string> GetDownloadTokenForSignedAgreementDocument(int agreementId)
         {
-            var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
-            return await _documentManagerClient.CreateDownloadTokenAsync(agreement.DocumentGuid);
+            var signedAgreement = await _agreementService.GetSignedAgreementDocumentAsync(agreementId);
+            if (signedAgreement == null)
+            {
+                return null;
+            }
+
+            return await _documentManagerClient.CreateDownloadTokenAsync(signedAgreement.DocumentGuid);
         }
 
         public async Task<string> GetDownloadTokenForSelfDeclarationDocument(int selfDeclarationDocumentId)

@@ -4,12 +4,12 @@ using Prime.Models;
 
 namespace PrimeTests.ModelFactories
 {
-    public class AccessTermFactory : Faker<AccessTerm>
+    public class AgreementFactory : Faker<Agreement>
     {
         // private static int IdCounter = 1;
 
         // TODO awaiting finalization of dynamic access agreement
-        public AccessTermFactory(Enrollee owner)
+        public AgreementFactory(Enrollee owner)
         {
             throw new NotImplementedException("");
 
