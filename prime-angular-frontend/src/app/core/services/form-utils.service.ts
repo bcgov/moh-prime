@@ -1,22 +1,27 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, ValidatorFn, FormArray, FormBuilder } from '@angular/forms';
 
+import { LoggerService } from './logger.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class FormUtilsService {
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private logger: LoggerService
   ) { }
 
   /**
    * @description
    * Checks the validity of a form, and triggers validation messages when invalid.
    */
-  public checkValidity(form: AbstractControl): boolean {
+  public checkValidity(form: FormGroup | FormArray): boolean {
     if (form.valid) {
       return true;
     } else {
+      this.logger.info('FORM_INVALID', this.getFormErrors(form));
+
       form.markAllAsTouched();
       return false;
     }
