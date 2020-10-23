@@ -97,11 +97,15 @@ export class EnrolleeReviewComponent {
   }
 
   public get remoteAccessSites(): RemoteAccessSite[] {
-    return (this.isRequestingRemoteAccess) ? this.enrolment.remoteAccessSites : [];
+    return (this.isRequestingRemoteAccess)
+      ? this.enrolment.remoteAccessSites
+      : [];
   }
 
   public get remoteAccessLocations(): RemoteAccessLocation[] {
-    return (this.isRequestingRemoteAccess) ? this.enrolment.remoteAccessLocations : [];
+    return (this.isRequestingRemoteAccess)
+      ? this.enrolment.remoteAccessLocations
+      : [];
   }
 
   public onRoute(routePath: string): void {
