@@ -1,10 +1,12 @@
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
 
 import { ContactInformationFormComponent } from './contact-information-form.component';
+import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 describe('ContactInformationComponent', () => {
@@ -15,7 +17,9 @@ describe('ContactInformationComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        EnrolmentModule
       ],
       declarations: [
         ContactInformationFormComponent
@@ -27,12 +31,6 @@ describe('ContactInformationComponent', () => {
     })
       .compileComponents();
   }));
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ContactInformationFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
   beforeEach(inject(
     [EnrolmentFormStateService],

@@ -9,7 +9,6 @@ import { AdjudicationRoutingModule } from './adjudication-routing.module';
 
 import { AdjudicationContainerComponent } from './shared/components/adjudication-container/adjudication-container.component';
 import { AdjudicatorActionsComponent } from './shared/components/adjudicator-actions/adjudicator-actions.component';
-import { AdjudicatorNotesComponent } from './pages/adjudicator-notes/adjudicator-notes.component';
 import { EnrolleesComponent } from './pages/enrollees/enrollees.component';
 import { EnrolmentComponent } from './pages/enrolment/enrolment.component';
 import { LimitsConditionsClausesComponent } from './pages/limits-conditions-clauses/limits-conditions-clauses.component';
@@ -34,6 +33,9 @@ import { SiteRegistrationTableComponent } from './shared/components/site-registr
 import { SiteRegistrationActionsComponent } from './shared/components/site-registration-actions/site-registration-actions.component';
 import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-users.component';
 import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
+import { EnrolleeAdjudicatorNotesComponent } from './pages/enrollee-adjudicator-notes/enrollee-adjudicator-notes.component';
+import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/site-adjudicator-notes.component';
+import { AdjudicatorNotesComponent } from './shared/components/adjudicator-notes/adjudicator-notes.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +63,9 @@ import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-repo
     OrganizationInformationComponent,
     SiteRemoteUsersComponent,
     AdjudicationDashboardComponent,
-    MetabaseReportsComponent
+    MetabaseReportsComponent,
+    EnrolleeAdjudicatorNotesComponent,
+    SiteAdjudicatorNotesComponent
   ],
   imports: [
     AdjudicationRoutingModule,

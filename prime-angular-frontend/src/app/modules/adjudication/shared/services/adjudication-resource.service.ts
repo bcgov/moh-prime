@@ -11,14 +11,14 @@ import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.serv
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { Address } from '@shared/models/address.model';
-import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
-import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 
 @Injectable({
@@ -182,11 +182,11 @@ export class AdjudicationResource {
 
   }
 
-  public getAdjudicatorNotes(enrolleeId: number): Observable<AdjudicationNote[]> {
+  public getAdjudicatorNotes(enrolleeId: number): Observable<EnrolleeNote[]> {
     return this.apiResource.get(`enrollees/${enrolleeId}/adjudicator-notes`)
       .pipe(
-        map((response: ApiHttpResponse<AdjudicationNote[]>) => response.result),
-        tap((adjudicatorNotes: AdjudicationNote[]) => this.logger.info('ADJUDICATOR_NOTES', adjudicatorNotes)),
+        map((response: ApiHttpResponse<EnrolleeNote[]>) => response.result),
+        tap((adjudicatorNotes: EnrolleeNote[]) => this.logger.info('ADJUDICATOR_NOTES', adjudicatorNotes)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator notes could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getAdjudicatorNotes error has occurred: ', error);
@@ -195,13 +195,13 @@ export class AdjudicationResource {
       );
   }
 
-  public createAdjudicatorNote(enrolleeId: number, note: string, link: boolean = false): Observable<AdjudicationNote> {
+  public createAdjudicatorNote(enrolleeId: number, note: string, link: boolean = false): Observable<EnrolleeNote> {
     const payload = { data: note };
     const params = this.apiResourceUtilsService.makeHttpParams({ link });
     return this.apiResource.post(`enrollees/${enrolleeId}/adjudicator-notes`, payload, params)
       .pipe(
-        map((response: ApiHttpResponse<AdjudicationNote>) => response.result),
-        tap((adjudicatorNote: AdjudicationNote) => {
+        map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
+        tap((adjudicatorNote: EnrolleeNote) => {
           this.toastService.openErrorToast('Adjudication note has been saved');
           this.logger.info('NEW_ADJUDICATOR_NOTE', adjudicatorNote);
         }),
@@ -216,12 +216,12 @@ export class AdjudicationResource {
   public updateAccessAgreementNote(
     enrolleeId: number,
     note: string
-  ): Observable<AdjudicationNote> {
+  ): Observable<EnrolleeNote> {
     const payload = { enrolleeId, note };
     return this.apiResource.put(`enrollees/${enrolleeId}/access-agreement-notes`, payload)
       .pipe(
-        map((response: ApiHttpResponse<AdjudicationNote>) => response.result),
-        tap((adjudicatorNote: AdjudicationNote) => {
+        map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
+        tap((adjudicatorNote: EnrolleeNote) => {
           this.toastService.openSuccessToast(`Limits and conditions clause has been saved.`);
           this.logger.info('LIMITS_AND_CONDITIONS_CLAUSE', adjudicatorNote);
         }),
@@ -234,28 +234,28 @@ export class AdjudicationResource {
   }
 
   // ---
-  // Access Terms
+  // Agreements
   // ---
 
-  public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<AccessTerm[]> {
+  public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolleeAgreement[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
-    return this.apiResource.get<AccessTerm[]>(`enrollees/${enrolleeId}/access-terms`, params)
+    return this.apiResource.get<EnrolleeAgreement[]>(`enrollees/${enrolleeId}/agreements`, params)
       .pipe(
-        map((response: ApiHttpResponse<AccessTerm[]>) => response.result),
-        tap((accessTerms: AccessTerm[]) => this.logger.info('ACCESS_TERMS', accessTerms)),
+        map((response: ApiHttpResponse<EnrolleeAgreement[]>) => response.result),
+        tap((accessTerms: EnrolleeAgreement[]) => this.logger.info('ENROLLEE_AGREEMENT', accessTerms)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Access terms could not be retrieved');
+          this.toastService.openErrorToast('Enrollee agreements could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getAccessTerms error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  public getAccessTerm(enrolleeId: number, accessTermsId: number): Observable<AccessTerm> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermsId}`)
+  public getAccessTerm(enrolleeId: number, agreementId: number): Observable<EnrolleeAgreement> {
+    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}`)
       .pipe(
-        map((response: ApiHttpResponse<AccessTerm>) => response.result),
-        tap((accessTerm: AccessTerm) => this.logger.info('ACCESS_TERM', accessTerm)),
+        map((response: ApiHttpResponse<EnrolleeAgreement>) => response.result),
+        tap((accessTerm: EnrolleeAgreement) => this.logger.info('ACCESS_TERM', accessTerm)),
         catchError((error: any) => {
           this.logger.error('[Adjudication] AdjudicationResource::getAccessTerm error has occurred: ', error);
           throw error;
@@ -263,9 +263,9 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolmentForAccessTerm(enrolleeId: number, accessTermId: number)
+  public getEnrolmentForAccessTerm(enrolleeId: number, agreementId: number)
     : Observable<HttpEnrolleeProfileVersion> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/access-terms/${accessTermId}/enrolment`)
+    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/enrolment`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
         tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>

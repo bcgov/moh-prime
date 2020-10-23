@@ -3,9 +3,7 @@
   <app-page-header>PRIME Enrolment</app-page-header>
 
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
-                                    [inProgress]="isInitialEnrolment"
-                                    [currentRoute]="EnrolmentRoutes.SELF_DECLARATION">
-  </app-enrolment-progress-indicator>
+                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -35,12 +33,11 @@
     <section class="mb-3">
 
       <p class="question">
-        Are you, or have you ever been, subject to any limits, conditions or prohibitions imposed as a result of
-        disciplinary actions taken by a governing body of a health profession in any jurisdiction, that involved
-        improper access to, collection, use, or disclosure of personal information?
+        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED] }}
       </p>
 
-      <mat-radio-group formControlName="hasConviction">
+
+      <mat-radio-group formControlName="hasRegistrationSuspended">
         <mat-radio-button class="mr-4"
                           *ngFor="let decision of decisions"
                           [value]="decision.code">
@@ -48,7 +45,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="hasConviction.value"
+      <div *ngIf="hasRegistrationSuspended.value"
            class="row">
         <div class="col pt-3">
 
@@ -75,23 +72,21 @@
               <textarea matInput
                         placeholder="Type Here"
                         rows="5"
-                        #hasConvictionInput
-                        formControlName="hasConvictionDetails"></textarea>
-              <mat-error *ngIf="hasConvictionDetails.hasError('required')">Required</mat-error>
+                        #hasRegistrationSuspended
+                        formControlName="hasRegistrationSuspendedDetails"></textarea>
+              <mat-error *ngIf="hasRegistrationSuspendedDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
             <li class="small mb-2">
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload componentName="has-conviction"
+            <app-document-upload componentName="has-registration-suspended"
                                  [multiple]="true"
-                                 (completed)="onHasConvictionUpload($event)"
-                                 (remove)="onRemoveConvictionUpload($event)">
+                                 (completed)="onUpload('hasRegistrationSuspendedDocumentGuids', $event)"
+                                 (remove)="onRemove('hasRegistrationSuspendedDocumentGuids', $event)">
             </app-document-upload>
-
           </ol>
-
         </div>
       </div>
 
@@ -100,11 +95,10 @@
     <section class="mb-3">
 
       <p class="question">
-        Are you, or have you ever been, the subject of an order or a conviction under legislation in any jurisdiction
-        for a matter that involved improper access to, collection, use, or disclosure of personal information?
+        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION] }}
       </p>
 
-      <mat-radio-group formControlName="hasRegistrationSuspended">
+      <mat-radio-group formControlName="hasConviction">
         <mat-radio-button class="mr-4"
                           *ngFor="let decision of decisions"
                           [value]="decision.code">
@@ -112,7 +106,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="hasRegistrationSuspended.value"
+      <div *ngIf="hasConviction.value"
            class="row">
         <div class="col pt-3">
 
@@ -139,21 +133,23 @@
               <textarea matInput
                         placeholder="Type Here"
                         rows="5"
-                        #hasRegistrationSuspended
-                        formControlName="hasRegistrationSuspendedDetails"></textarea>
-              <mat-error *ngIf="hasRegistrationSuspendedDetails.hasError('required')">Required</mat-error>
+                        #hasConvictionInput
+                        formControlName="hasConvictionDetails"></textarea>
+              <mat-error *ngIf="hasConvictionDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
             <li class="small mb-2">
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload componentName="has-registration-suspended"
+            <app-document-upload componentName="has-conviction"
                                  [multiple]="true"
-                                 (completed)="onHasRegistrationSuspendedUpload($event)"
-                                 (remove)="onRemoveRegistrationSuspendedUpload($event)">
+                                 (completed)="onUpload('hasConvictionDocumentGuids', $event)"
+                                 (remove)="onRemove('hasConvictionDocumentGuids', $event)">
             </app-document-upload>
+
           </ol>
+
         </div>
       </div>
 
@@ -162,11 +158,10 @@
     <section class="mb-3">
 
       <p class="question">
-        Have you ever been disciplined or fired by an employer, or had a contract for your services terminated, for a
-        matter that involved improper access to, collection, use, or disclosure of personal information?
+        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED] }}
       </p>
 
-      <mat-radio-group formControlName="hasDisciplinaryAction">
+      <mat-radio-group formControlName="hasPharmaNetSuspended">
         <mat-radio-button class="mr-4"
                           *ngFor="let decision of decisions"
                           [value]="decision.code">
@@ -174,7 +169,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="hasDisciplinaryAction.value"
+      <div *ngIf="hasPharmaNetSuspended.value"
            class="row">
         <div class="col pt-3">
 
@@ -197,19 +192,19 @@
               <textarea matInput
                         placeholder="Type Here"
                         rows="5"
-                        #hasDisciplinaryAction
-                        formControlName="hasDisciplinaryActionDetails"></textarea>
-              <mat-error *ngIf="hasDisciplinaryActionDetails.hasError('required')">Required</mat-error>
+                        #hasPharmaNetSuspended
+                        formControlName="hasPharmaNetSuspendedDetails"></textarea>
+              <mat-error *ngIf="hasPharmaNetSuspendedDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
             <li class="small mb-2">
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload componentName="has-disciplinary-action"
+            <app-document-upload componentName="has-pharmanet-suspended"
                                  [multiple]="true"
-                                 (completed)="onHasDisciplinaryActionUpload($event)"
-                                 (remove)="onRemoveDisciplinaryActionUpload($event)">
+                                 (completed)="onUpload('hasPharmaNetSuspendedDocumentGuids', $event)"
+                                 (remove)="onRemove('hasPharmaNetSuspendedDocumentGuids', $event)">
             </app-document-upload>
           </ol>
         </div>
@@ -220,12 +215,10 @@
     <section class="mb-3">
 
       <p class="question">
-        Have you ever had your access to an electronic health record system, electronic medical record system, pharmacy
-        or laboratory record system, or any similar health information system, in any jurisdiction, suspended or
-        cancelled?
+        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION] }}
       </p>
 
-      <mat-radio-group formControlName="hasPharmaNetSuspended">
+      <mat-radio-group formControlName="hasDisciplinaryAction">
         <mat-radio-button class="mr-4"
                           *ngFor="let decision of decisions"
                           [value]="decision.code">
@@ -233,7 +226,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="hasPharmaNetSuspended.value"
+      <div *ngIf="hasDisciplinaryAction.value"
            class="row">
         <div class="col pt-3">
 
@@ -257,19 +250,19 @@
               <textarea matInput
                         placeholder="Type Here"
                         rows="5"
-                        #hasPharmaNetSuspended
-                        formControlName="hasPharmaNetSuspendedDetails"></textarea>
-              <mat-error *ngIf="hasPharmaNetSuspendedDetails.hasError('required')">Required</mat-error>
+                        #hasDisciplinaryAction
+                        formControlName="hasDisciplinaryActionDetails"></textarea>
+              <mat-error *ngIf="hasDisciplinaryActionDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
             <li class="small mb-2">
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload componentName="has-pharmanet-suspended"
+            <app-document-upload componentName="has-disciplinary-action"
                                  [multiple]="true"
-                                 (completed)="onHasPharmanetSuspendedUpload($event)"
-                                 (remove)="onRemovePharmanetSuspendedUpload($event)">
+                                 (completed)="onUpload('hasDisciplinaryActionDocumentGuids', $event)"
+                                 (remove)="onRemove('hasDisciplinaryActionDocumentGuids', $event)">
             </app-document-upload>
           </ol>
         </div>
@@ -279,7 +272,7 @@
 
     <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                      (save)="onSubmit()"
-                     (back)="routeTo(EnrolmentRoutes.CARE_SETTING)"></app-page-footer>
+                     (back)="onBack()"></app-page-footer>
 
   </form>
 

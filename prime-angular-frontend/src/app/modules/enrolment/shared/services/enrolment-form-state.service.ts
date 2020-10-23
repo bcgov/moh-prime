@@ -32,8 +32,6 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
 
-  protected readonly resetRoutes: string[] = [...EnrolmentRoutes.enrolmentProfileRoutes()];
-
   private identityProvider: IdentityProvider;
   private enrolleeId: number;
   private userId: string;
@@ -44,20 +42,24 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     protected logger: LoggerService,
     private authService: AuthService
   ) {
-    super(fb, routeStateService, logger);
-
-    this.authService.identityProvider$()
-      .subscribe((identityProvider: IdentityProvider) =>
-        this.identityProvider = identityProvider
-      );
+    super(fb, routeStateService, logger, [...EnrolmentRoutes.enrolmentProfileRoutes()]);
   }
 
   /**
    * @description
    * Convert JSON into reactive form abstract controls, which can
    * only be set more than once when explicitly forced.
+   *
+   * NOTE: Executed by views to populate their form models, which
+   * allows for it to be used for setting required values that
+   * can't be loaded during instantiation.
    */
-  public setForm(enrolment: Enrolment, forcePatch: boolean = false) {
+  public async setForm(enrolment: Enrolment, forcePatch: boolean = false): Promise<void> {
+    // Must delay loading of the identity provider otherwise race
+    // conditions occur when views initialize and the form instances
+    // are not necessarily available
+    this.identityProvider = await this.authService.identityProvider();
+
     // Store required enrolment identifiers not captured in forms
     this.enrolleeId = enrolment?.id;
     this.userId = enrolment?.enrollee.userId;
@@ -72,7 +74,6 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public get json(): Enrolment {
     const id = this.enrolleeId;
     const userId = this.userId;
-    // TODO may need to merge partials into full model
     const profile = (this.identityProvider === IdentityProvider.BCEID)
       ? this.bceidDemographicForm.getRawValue()
       : this.bcscDemographicForm.getRawValue();
@@ -166,10 +167,12 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
    */
   protected patchForm(enrolment: Enrolment) {
     if (!enrolment) {
-      return null;
+      return;
     }
 
-    this.bcscDemographicForm.patchValue(enrolment.enrollee);
+    (this.identityProvider === IdentityProvider.BCEID)
+      ? this.bceidDemographicForm.patchValue(enrolment.enrollee)
+      : this.bcscDemographicForm.patchValue(enrolment.enrollee);
     this.deviceProviderForm.patchValue(enrolment);
 
     if (enrolment.certifications.length) {
@@ -291,14 +294,12 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   private buildBceidDemographicForm(): FormGroup {
     return this.fb.group({
-      firstName: [null, [Validators.required]],
-      lastName: [null, [Validators.required]],
-      givenNames: [null, []],
-      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
-      physicalAddress: this.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'postal'],
-        useDefaults: true,
-        exclude: ['countryCode', 'street2']
+      preferredFirstName: [null, [Validators.required]],
+      preferredMiddleName: [null, []],
+      preferredLastName: [null, [Validators.required]],
+      mailingAddress: this.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        useDefaults: ['countryCode']
       }),
       phone: [null, [
         Validators.required,
@@ -309,7 +310,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         Validators.required,
         FormControlValidators.email
       ]],
-      smsPhone: [null, [FormControlValidators.phone]]
+      smsPhone: [null, [FormControlValidators.phone]],
+      dateOfBirth: [{ value: null, disabled: false }, [Validators.required]]
     });
   }
 

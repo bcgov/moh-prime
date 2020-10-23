@@ -2,7 +2,8 @@ import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { IProgressIndicator2 } from '@shared/components/progress-indicator2/progress-indicator2.component';
+import { OrganizationAgreement } from '@shared/models/agreement.model';
+import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationService } from '@registration/shared/services/organization.service';
@@ -12,7 +13,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
   templateUrl: './site-progress-indicator.component.html',
   styleUrls: ['./site-progress-indicator.component.scss']
 })
-export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicator2 {
+export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicator {
   @Input() public inProgress: boolean;
   @Input() public message: string;
   @Input() public template: TemplateRef<any>;
@@ -30,8 +31,9 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   ) {
     this.currentRoute = RouteUtils.currentRoutePath(this.router.url);
 
+    // TODO PRIME-1131 (trap)
     // Possible route pathways within site registration
-    const routePaths = (!organizationService.organization.acceptedAgreementDate)
+    const routePaths = (!organizationService.organization.hasAcceptedAgreement)
       // Combine organization and site routes, which includes
       // the organization agreement
       ? [SiteRoutes.initialRegistrationRouteOrder()]

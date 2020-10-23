@@ -1,8 +1,7 @@
 <app-enrollee-page [busy]="busy">
   <app-page-header>PRIME Enrolment</app-page-header>
-  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
-                                    [inProgress]="isInitialEnrolment"
-                                    [currentRoute]="EnrolmentRoutes.ID_SUBMISSION">
+  <app-enrolment-progress-indicator [inProgress]="isInitialEnrolment"
+                                    message="Pre-enrolment Step">
   </app-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
@@ -36,7 +35,8 @@
 
   </form>
 
-  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+  <app-page-footer primaryActionLabel="Continue"
+                   [isInitialEnrolment]="isInitialEnrolment"
                    [hasSecondaryAction]="isProfileComplete"
                    (save)="onSubmit()"></app-page-footer>
 

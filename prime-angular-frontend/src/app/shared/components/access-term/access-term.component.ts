@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { AccessTerm } from '@shared/models/access-term.model';
+
+import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
 @Component({
   selector: 'app-access-term',
@@ -7,15 +8,15 @@ import { AccessTerm } from '@shared/models/access-term.model';
   styleUrls: ['./access-term.component.scss']
 })
 export class AccessTermComponent implements OnInit, OnChanges {
-  @Input() public accessTerms: AccessTerm;
+  @Input() public accessTerms: EnrolleeAgreement;
 
-  public termsOfAccess: string;
+  public agreementContent: string;
 
   constructor() { }
 
   public ngOnChanges(change: SimpleChanges) {
     if (change.accessTerms.currentValue) {
-      this.termsOfAccess = this.accessTerms.termsOfAccess;
+      this.agreementContent = this.accessTerms.agreementContent;
     }
   }
 

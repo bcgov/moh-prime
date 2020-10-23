@@ -10,7 +10,7 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { ViewportService } from '@core/services/viewport.service';
-import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
@@ -38,7 +38,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public EnrolmentStatus = EnrolmentStatus;
   public EnrolleeClassification = EnrolleeClassification;
 
-  public accessTerm: AccessTerm;
+  public accessTerm: EnrolleeAgreement;
 
   constructor(
     protected route: ActivatedRoute,
@@ -135,7 +135,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.busy = this.enrolmentResource.getLatestAccessTerm(this.enrolment.id, false)
       .subscribe(
-        (accessTerm: AccessTerm) => this.accessTerm = accessTerm,
+        (accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm,
         (error: any) => {
           this.toastService.openErrorToast(`Terms of access could not be found`);
           this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 
 import { DashboardMenuItem, DashboardRouteMenuItem } from '@lib/modules/dashboard/models/dashboard-menu-item.model';
 import { IDashboard } from '@lib/modules/dashboard/interfaces/dashboard.interface';
 
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { AuthRoutes } from '@auth/auth.routes';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
@@ -17,8 +18,10 @@ export class SiteRegistrationDashboardComponent implements OnInit, IDashboard {
   public dashboardMenuItems: Observable<DashboardMenuItem[]>;
   public logoutRedirectUrl: string;
 
-  constructor() {
-    this.logoutRedirectUrl = AuthRoutes.routePath(AuthRoutes.SITE);
+  constructor(
+    @Inject(APP_CONFIG) protected config: AppConfig
+  ) {
+    this.logoutRedirectUrl = `${this.config.loginRedirectUrl}/${AuthRoutes.routePath(AuthRoutes.SITE)}`;
   }
 
   public ngOnInit(): void {

@@ -134,6 +134,11 @@
           <span>Site Information</span>
         </button>
         <button mat-menu-item
+                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.ADJUDICATOR_NOTES])">
+          <mat-icon>message</mat-icon>
+          <span>Add and View Notes</span>
+        </button>
+        <button mat-menu-item
                 [disabled]="!row.remoteUserCount || row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST"
                 (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.SITE_REMOTE_USERS])">
           <mat-icon>account_circle</mat-icon>

@@ -32,8 +32,6 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   public privacyOfficerForm: FormGroup;
   public technicalSupportForm: FormGroup;
 
-  protected readonly resetRoutes: string[] = [SiteRoutes.SITE_MANAGEMENT];
-
   private siteId: number;
   private organizationId: number;
   private provisionerId: number;
@@ -43,7 +41,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     protected routeStateService: RouteStateService,
     protected logger: LoggerService
   ) {
-    super(fb, routeStateService, logger);
+    super(fb, routeStateService, logger, [SiteRoutes.SITE_MANAGEMENT]);
   }
 
   /**
@@ -159,9 +157,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
    * @description
    * Manage the conversion of JSON to reactive forms.
    */
-  protected patchForm(site: Site): Site {
+  protected patchForm(site: Site): void {
     if (!site) {
-      return null;
+      return;
     }
 
     this.careSettingTypeForm.patchValue(site);
@@ -285,7 +283,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       physicalAddress: this.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         areDisabled: ['provinceCode', 'countryCode'],
-        useDefaults: true,
+        useDefaults: ['provinceCode', 'countryCode'],
         exclude: ['street2']
       })
     });

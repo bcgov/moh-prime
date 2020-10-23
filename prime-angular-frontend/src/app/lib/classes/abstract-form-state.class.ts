@@ -1,9 +1,10 @@
-import { AbstractControl, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators, FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { RouterEvent } from '@angular/router';
 
 import { map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AddressLine } from '@lib/types/address-line.type';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
 import { Province } from '@shared/enums/province.enum';
@@ -13,14 +14,14 @@ import { Person } from '@registration/shared/models/person.model';
 
 export abstract class AbstractFormState<T> {
   protected patched: boolean;
-  protected readonly resetRoutes: string[] = [];
 
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService
+    protected logger: LoggerService,
+    protected resetRoutes: string[]
   ) {
-    this.initialize();
+    this.initialize(resetRoutes);
   }
 
   /**
@@ -35,8 +36,12 @@ export abstract class AbstractFormState<T> {
    * @description
    * Convert JSON into reactive form abstract controls, which can
    * only be set more than once when explicitly forced.
+   *
+   * NOTE: Executed by views to populate their form models, which
+   * allows for it to be used for setting required values that
+   * can't be loaded during instantiation.
    */
-  public setForm(model: T, forcePatch: boolean = false) {
+  public setForm(model: T, forcePatch: boolean = false): void {
     if (this.patched && !forcePatch) {
       return;
     }
@@ -93,8 +98,11 @@ export abstract class AbstractFormState<T> {
    */
   public reset(): void {
     this.patched = false;
-    this.forms
-      .forEach((form: FormGroup) => form.reset());
+
+    // Recreate the forms to enforce that the expected
+    // defaults are maintained, which doesn't occur
+    // if AbstractControl::reset() is used
+    this.buildForms();
   }
 
   /**
@@ -107,7 +115,7 @@ export abstract class AbstractFormState<T> {
    * @description
    * Manage the conversion of JSON to reactive forms.
    */
-  protected abstract patchForm(model: T): T;
+  protected abstract patchForm(model: T): void;
 
   /**
    * @description
@@ -153,10 +161,10 @@ export abstract class AbstractFormState<T> {
    *  exclude control names that are not needed
    */
   protected buildAddressForm(options: {
-    areRequired?: string[],
-    areDisabled?: string[],
-    useDefaults?: boolean,
-    exclude?: string[]
+    areRequired?: AddressLine[],
+    areDisabled?: AddressLine[],
+    useDefaults?: Extract<AddressLine, 'provinceCode' | 'countryCode'>[],
+    exclude?: AddressLine[]
   } = null): FormGroup {
     const controlsConfig = {
       id: [
@@ -190,21 +198,27 @@ export abstract class AbstractFormState<T> {
     };
 
     Object.keys(controlsConfig)
-      .filter((key: string) => !options?.exclude?.includes(key))
-      .forEach((key: string, index: number) => {
+      .filter((key: AddressLine) => !options?.exclude?.includes(key))
+      .forEach((key: AddressLine, index: number) => {
         const control = controlsConfig[key];
+        const controlProps = control[0] as { value: any, disabled: boolean };
+        const controlValidators = control[1] as Array<ValidatorFn>;
+
         if (options?.areDisabled?.includes(key)) {
-          control[0].disabled = true;
+          controlProps.disabled = true;
         }
-        if (options?.useDefaults) {
+
+        const useDefaults = options?.useDefaults;
+        if (useDefaults) {
           if (key === 'provinceCode') {
-            control[0].value = Province.BRITISH_COLUMBIA;
+            controlProps.value = Province.BRITISH_COLUMBIA;
           } else if (key === 'countryCode') {
-            control[0].value = Country.CANADA;
+            controlProps.value = Country.CANADA;
           }
         }
+
         if (options?.areRequired?.includes(key)) {
-          control[1].push(Validators.required);
+          controlValidators.push(Validators.required);
         }
       });
 
@@ -265,8 +279,10 @@ export abstract class AbstractFormState<T> {
    * @description
    * Initialize the form state service for use by building the required
    * forms and setting up the route state listener.
+   *
+   * NOTE: Must be invoked by the inheriting class!
    */
-  private initialize() {
+  protected initialize(resetRoutes: string[] = []) {
     // Initial state of the form is unpatched and ready for
     // enrolment information to be populated
     this.patched = false;
