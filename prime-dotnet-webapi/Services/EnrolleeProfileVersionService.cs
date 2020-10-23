@@ -7,12 +7,16 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using AutoMapper;
+
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
     public class EnrolleeProfileVersionService : BaseService, IEnrolleeProfileVersionService
     {
+        private readonly IMapper _mapper;
         private JsonSerializer _camelCaseSerializer = JsonSerializer.Create(
             new JsonSerializerSettings
             {
@@ -22,9 +26,12 @@ namespace Prime.Services
 
         public EnrolleeProfileVersionService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext
+            IHttpContextAccessor httpContext,
+            IMapper mapper
             ) : base(context, httpContext)
-        { }
+        {
+            _mapper = mapper;
+        }
 
         public async Task<IEnumerable<EnrolleeProfileVersion>> GetEnrolleeProfileVersionsAsync(int enrolleeId)
         {
@@ -53,10 +60,13 @@ namespace Prime.Services
 
         public async Task CreateEnrolleeProfileVersionAsync(Enrollee enrollee)
         {
+            // Save enrollee as view model so it can be displayed on front end
+            var enrolleeViewModel = _mapper.Map<Enrollee, EnrolleeViewModel>(enrollee);
+
             var enrolleeProfileVersion = new EnrolleeProfileVersion
             {
                 EnrolleeId = enrollee.Id,
-                ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
+                ProfileSnapshot = JObject.FromObject(enrolleeViewModel, _camelCaseSerializer),
                 CreatedDate = DateTimeOffset.Now
             };
 

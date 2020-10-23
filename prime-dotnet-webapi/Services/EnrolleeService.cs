@@ -471,6 +471,7 @@ namespace Prime.Services
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeRemoteUsers)
+                .Include(e => e.RemoteAccessSites)
                 .Include(r => r.RemoteAccessLocations)
                     .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(e => e.EnrolmentStatuses)
