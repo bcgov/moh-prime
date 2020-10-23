@@ -15,6 +15,8 @@ namespace Prime.Services
 
         Task CreateEnrolleeAgreementAsync(int enrolleeId);
 
+        Task<Agreement> GetCurrentAgreementAsync(int enrolleeId);
+
         Task AcceptCurrentEnrolleeAgreementAsync(int enrolleeId);
 
         Task ExpireCurrentEnrolleeAgreementAsync(int enrolleeId);

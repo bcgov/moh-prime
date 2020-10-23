@@ -139,7 +139,7 @@ export class EnrolmentResource {
   }
 
   public getAccessTermDownloadUnsigned(enrolleeId: number, accessTermsId: number): Observable<string> {
-    return this.apiResource.get<string>(`enrollees/${enrolleeId}/access-terms/${accessTermsId}/download-unsigned`)
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/agreements/${accessTermsId}/download-unsigned`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result)
       );

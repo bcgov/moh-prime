@@ -152,8 +152,8 @@ namespace Prime.Services
             {
                 if (enrollee.IdentityProvider == "bceid")
                 {
-                    var agreement = await _accessTermService.GetCurrentAccessTermAsync(enrollee.Id);
-                    var agreementDocument = await _accessTermService.AddSignedAgreementAsync(agreement.Id, (Guid)documentGuid);
+                    var agreement = await _agreementService.GetCurrentAgreementAsync(enrollee.Id);
+                    var agreementDocument = await _agreementService.AddSignedAgreementAsync(agreement.Id, (Guid)documentGuid);
                     if (agreementDocument == null)
                     {
                         throw new InvalidOperationException("Could not upload access term document.");

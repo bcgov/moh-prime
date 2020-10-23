@@ -113,13 +113,21 @@ namespace Prime.Services
         }
 
         /// <summary>
+        /// Gets the Enrollee's newest Agreement
+        /// </summary>
+        public async Task<Agreement> GetCurrentAgreementAsync(int enrolleeId)
+        {
+            return await _context.Agreements
+                .OrderByDescending(at => at.CreatedDate)
+                .FirstAsync(at => at.EnrolleeId == enrolleeId);
+        }
+
+        /// <summary>
         /// Accepts the Enrollee's newest Agreement, if it hasn't already been accepted.
         /// </summary>
         public async Task AcceptCurrentEnrolleeAgreementAsync(int enrolleeId)
         {
-            var agreement = await _context.Agreements
-                .OrderByDescending(a => a.CreatedDate)
-                .FirstAsync(a => a.EnrolleeId == enrolleeId);
+            var agreement = this.GetCurrentAgreementAsync(enrolleeId);
 
             if (agreement.AcceptedDate == null)
             {
