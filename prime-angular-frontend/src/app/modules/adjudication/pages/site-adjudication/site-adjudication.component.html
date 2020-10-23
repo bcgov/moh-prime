@@ -16,9 +16,9 @@
     <section class="mb-3">
 
       <app-page-subheader2>
-        <ng-container appPageSubheader2Title>Enter PEC Code to approve this site</ng-container>
+        <ng-container appPageSubheader2Title>Enter Site ID to approve this site</ng-container>
         <ng-container appPageSubheader2Summary>
-          The PEC Code will be sent to the Signing Authority, Administrator of PharmaNet onboarding and the vendor
+          The Site ID will be sent to the Signing Authority, Administrator of PharmaNet onboarding and the vendor
           associated to this submission.
         </ng-container>
       </app-page-subheader2>
@@ -28,7 +28,7 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="PEC Code"
+                   placeholder="Site ID"
                    formControlName="pec">
             <mat-error>Required</mat-error>
           </mat-form-field>
@@ -37,7 +37,7 @@
       </div>
 
       <button mat-flat-button
-              color="primary">Save PEC</button>
+              color="primary">Save Site ID</button>
 
     </section>
 

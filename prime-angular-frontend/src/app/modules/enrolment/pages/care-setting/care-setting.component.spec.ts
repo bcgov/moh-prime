@@ -61,11 +61,11 @@ describe('CareSettingComponent', () => {
   }));
 
 
-  beforeEach(inject([EnrolmentService], (enrolmentService: EnrolmentService) => {
+  beforeEach(() => {
     fixture = TestBed.createComponent(CareSettingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  }));
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();

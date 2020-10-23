@@ -16,7 +16,7 @@ namespace Prime.Services
 {
     public class SubmissionService : BaseService, ISubmissionService
     {
-        private readonly IAccessTermService _accessTermService;
+        private readonly IAgreementService _agreementService;
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
@@ -29,7 +29,7 @@ namespace Prime.Services
         public SubmissionService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IAccessTermService accessTermService,
+            IAgreementService agreementService,
             ISubmissionRulesService submissionRulesService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
@@ -40,7 +40,7 @@ namespace Prime.Services
             ILogger<SubmissionService> logger)
             : base(context, httpContext)
         {
-            _accessTermService = accessTermService;
+            _agreementService = agreementService;
             _submissionRulesService = submissionRulesService;
             _businessEventService = businessEventService;
             _emailService = emailService;
@@ -136,7 +136,7 @@ namespace Prime.Services
             var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
             newStatus.AddStatusReason(StatusReasonType.Manual);
 
-            await _accessTermService.CreateEnrolleeAccessTermAsync(enrollee.Id);
+            await _agreementService.CreateEnrolleeAgreementAsync(enrollee.Id);
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
             await _context.SaveChangesAsync();
@@ -161,9 +161,7 @@ namespace Prime.Services
                 }
 
                 await SetGpid(enrollee);
-
-                await _accessTermService.AcceptCurrentAccessTermAsync(enrollee.Id);
-
+                await _agreementService.AcceptCurrentEnrolleeAgreementAsync(enrollee.Id);
                 await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
                 await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
 
@@ -203,7 +201,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Declined);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
-            await _accessTermService.ExpireCurrentAccessTermAsync(enrollee.Id);
+            await _agreementService.ExpireCurrentEnrolleeAgreementAsync(enrollee.Id);
         }
 
         private async Task EnableProfileAsync(Enrollee enrollee)
@@ -268,7 +266,7 @@ namespace Prime.Services
                 var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
                 newStatus.AddStatusReason(StatusReasonType.Automatic);
 
-                await _accessTermService.CreateEnrolleeAccessTermAsync(enrolleeId);
+                await _agreementService.CreateEnrolleeAgreementAsync(enrolleeId);
                 await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Automatically Approved");
             }
         }

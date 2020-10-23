@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
+import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
+
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { Organization } from '@registration/shared/models/organization.model';
-import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 
 @Component({
   selector: 'app-organization-information',
@@ -20,8 +22,9 @@ export class OrganizationInformationComponent implements OnInit {
   public busy: Subscription;
   public hasActions: boolean;
   public refresh: BehaviorSubject<boolean>;
-
   public organization: Organization;
+  public organizationAgreements: OrganizationAgreementViewModel[];
+  public AgreementType = AgreementType;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,23 +39,33 @@ export class OrganizationInformationComponent implements OnInit {
     return this.authService.isAdmin();
   }
 
-  public getOrganizationAgreement(siteRegistration: SiteRegistrationListViewModel) {
-    const request$ = (siteRegistration.signedAgreementDocumentCount)
-      ? this.organizationResource.getDownloadTokenForLatestSignedAgreement(siteRegistration.organizationId)
+  public viewAgreement(organization: Organization, organizationAgreement: OrganizationAgreementViewModel): void {
+    const request$ = (organizationAgreement?.signedAgreementDocumentGuid)
+      ? this.organizationResource.getSignedOrganizationAgreementToken(organization.id, organizationAgreement.id)
         .pipe(
           map((token: string) => this.utilsService.downloadToken(token))
         )
-      : this.organizationResource.getSignedOrganizationAgreement(siteRegistration.organizationId)
+      : this.organizationResource.getOrganizationAgreement(organization.id, organizationAgreement.id, true)
         .pipe(
+          map((agreement: OrganizationAgreement) => agreement.agreementContent),
           map((base64: string) => this.utilsService.base64ToBlob(base64)),
           map((blob: Blob) => this.utilsService.downloadDocument(blob, 'Organization-Agreement'))
         );
-    request$.subscribe();
+
+    this.busy = request$.subscribe();
   }
 
   public ngOnInit(): void {
     this.busy = this.getOrganization()
-      .subscribe((organization: Organization) => this.organization = organization);
+      .pipe(
+        map((organization: Organization) => this.organization = organization),
+        exhaustMap((organization: Organization) =>
+          this.organizationResource.getOrganizationAgreements(organization.id)
+        )
+      )
+      .subscribe((agreements: OrganizationAgreementViewModel[]) =>
+        this.organizationAgreements = agreements
+      );
   }
 
   private getOrganization(): Observable<Organization> {

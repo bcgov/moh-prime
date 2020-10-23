@@ -33,8 +33,6 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public careSettingsForm: FormGroup;
   public accessAgreementForm: FormGroup;
 
-  protected readonly resetRoutes: string[] = [...EnrolmentRoutes.enrolmentProfileRoutes()];
-
   private identityProvider: IdentityProvider;
   private enrolleeId: number;
   private userId: string;
@@ -45,7 +43,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     protected logger: LoggerService,
     private authService: AuthService
   ) {
-    super(fb, routeStateService, logger);
+    super(fb, routeStateService, logger, [...EnrolmentRoutes.enrolmentProfileRoutes()]);
   }
 
   /**
@@ -304,7 +302,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       preferredMiddleName: [null, []],
       preferredLastName: [null, [Validators.required]],
       mailingAddress: this.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal']
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        useDefaults: ['countryCode']
       }),
       phone: [null, [
         Validators.required,

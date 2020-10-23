@@ -111,6 +111,15 @@ namespace Prime.Services
         {
             searchOptions = searchOptions ?? new EnrolleeSearchOptions();
 
+            IQueryable<int> newestAgreementIds = _context.AgreementVersions
+                .Select(a => a.AgreementType)
+                .Distinct()
+                .Select(type => _context.AgreementVersions
+                    .OrderByDescending(a => a.EffectiveDate)
+                    .First(a => a.AgreementType == type)
+                    .Id
+                );
+
             return await _context.Enrollees
                 .AsNoTracking()
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
@@ -125,7 +134,7 @@ namespace Prime.Services
                 .If(searchOptions.StatusCode.HasValue, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreements = _context.NewestAgreements })
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds = newestAgreementIds })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();
@@ -366,6 +375,7 @@ namespace Prime.Services
                 .Include(e => e.AccessAgreementNote)
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.SelfDeclarationDocuments)
+                .Include(e => e.IdentificationDocuments)
                 .Include(e => e.AssignedPrivileges)
                     .ThenInclude(ap => ap.Privilege)
                 .Include(e => e.Agreements)
@@ -381,18 +391,19 @@ namespace Prime.Services
             return entity;
         }
 
-        public async Task<IEnumerable<AdjudicatorNote>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
+        public async Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
         {
-            return await _context.AdjudicatorNotes
+            return await _context.EnrolleeNotes
                 .Where(an => an.EnrolleeId == enrollee.Id)
                 .Include(an => an.Adjudicator)
                 .OrderByDescending(an => an.NoteDate)
+                .ProjectTo<EnrolleeNoteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
-        public async Task<AdjudicatorNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId)
+        public async Task<EnrolleeNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId)
         {
-            var adjudicatorNote = new AdjudicatorNote
+            var adjudicatorNote = new EnrolleeNote
             {
                 EnrolleeId = enrolleeId,
                 AdjudicatorId = adminId,
@@ -400,7 +411,7 @@ namespace Prime.Services
                 NoteDate = DateTimeOffset.Now
             };
 
-            _context.AdjudicatorNotes.Add(adjudicatorNote);
+            _context.EnrolleeNotes.Add(adjudicatorNote);
 
             var created = await _context.SaveChangesAsync();
             if (created < 1)
@@ -443,14 +454,14 @@ namespace Prime.Services
             return reference;
         }
 
-        public async Task<IEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IEnrolleeNote newNote)
+        public async Task<IBaseEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IBaseEnrolleeNote newNote)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.AccessAgreementNote)
                 .Where(e => e.Id == enrolleeId)
                 .SingleOrDefaultAsync();
 
-            IEnrolleeNote dbNote = null;
+            IBaseEnrolleeNote dbNote = null;
 
             if (newNote.GetType() == typeof(AccessAgreementNote))
             {
@@ -593,6 +604,22 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return enrolleeRemoteUsers;
+        }
+
+        public async Task<IdentificationDocument> CreateIdentificationDocument(int enrolleeId, Guid documentGuid, string filename)
+        {
+            var identificationDocument = new IdentificationDocument
+            {
+                DocumentGuid = documentGuid,
+                EnrolleeId = enrolleeId,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now
+            };
+            _context.IdentificationDocuments.Add(identificationDocument);
+
+            await _context.SaveChangesAsync();
+
+            return identificationDocument;
         }
     }
 }

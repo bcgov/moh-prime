@@ -9,7 +9,7 @@ export class AdjudicationRoutes {
   public static ENROLLEE_ACCESS_TERM = 'terms-of-access';
   public static ENROLLEE_REVIEW = 'review';
   public static ENROLLEE_LIMITS_CONDITIONS = 'limits-and-conditions';
-  public static ENROLLEE_ADJUDICATOR_NOTES = 'notes';
+  public static ADJUDICATOR_NOTES = 'notes';
   public static ENROLLEE_EVENT_LOG = 'event-log';
 
   // SITE_REGISTRATIONS is an alias for ORGANIZATIONS in the routing hierarchy

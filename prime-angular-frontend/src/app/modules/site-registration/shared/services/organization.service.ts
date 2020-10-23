@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
+import { OrganizationAgreement } from '@shared/models/agreement.model';
+
 import { Organization } from '@registration/shared/models/organization.model';
 
 /**
@@ -18,6 +20,7 @@ export interface IOrganizationService {
   providedIn: 'root'
 })
 export class OrganizationService {
+  // TODO PRIME-1131
   // Temporary hack to show success message until guards can be refactored
   public showSuccess: boolean;
 

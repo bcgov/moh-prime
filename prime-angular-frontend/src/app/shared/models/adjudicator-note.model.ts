@@ -1,9 +1,14 @@
+import { Admin } from '@auth/shared/models/admin.model';
+
 export interface EnrolmentStatusAdjudicatorNote {
-  adjudicatorNote: AdjudicatorNote;
+  adjudicatorNote: BaseAdjudicatorNote;
   id: number;
 }
 
-export interface AdjudicatorNote {
+export interface BaseAdjudicatorNote {
   note: string;
   id: number;
+  adudicatorId: number;
+  adjudicator: Admin;
+  noteDate?: string;
 }

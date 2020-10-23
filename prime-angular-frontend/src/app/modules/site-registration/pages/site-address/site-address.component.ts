@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AddressLine } from '@lib/types/address-line.type';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -26,7 +27,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   public form: FormGroup;
   public title: string;
   public routeUtils: RouteUtils;
-  public formControlNames: string[];
+  public formControlNames: AddressLine[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 

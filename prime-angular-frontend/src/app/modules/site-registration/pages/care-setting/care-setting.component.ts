@@ -70,6 +70,10 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     return this.form.get('careSettingCode') as FormControl;
   }
 
+  public get vendorCode(): FormControl {
+    return this.form.get('vendorCode') as FormControl;
+  }
+
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.siteFormStateService.json;
@@ -163,7 +167,10 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
               vendorConfig.careSettingCode === careSettingCode
           )
         )
-      ).subscribe((vendors: VendorConfig[]) => this.filteredVendorConfig = vendors);
+      ).subscribe((vendors: VendorConfig[]) => {
+        this.filteredVendorConfig = vendors;
+        this.vendorCode.patchValue(null);
+      });
 
     const site = this.siteService.site;
     this.isCompleted = site?.completed;

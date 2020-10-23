@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
+import { AddressLine } from '@lib/types/address-line.type';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -33,7 +34,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
    * User information from the provider.
    */
   public user: BceidUser;
-  public addressFormControlNames: string[];
+  public addressFormControlNames: AddressLine[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -79,8 +80,6 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     this.patchForm();
     this.initForm();
     if (!this.enrolmentService.enrolment) {
-      console.log('TEST');
-
       this.getUser$()
         .subscribe((enrollee: Enrollee) =>
           this.form.patchValue(enrollee)
