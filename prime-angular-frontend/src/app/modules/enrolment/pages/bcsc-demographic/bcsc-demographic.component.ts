@@ -92,7 +92,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   public onMailingAddressChange() {
     this.hasMailingAddress = !this.hasMailingAddress;
-    this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
+    this.toggleMailingAddressValidators(this.mailingAddress, ['id', 'street2']);
   }
 
   public ngOnInit() {
