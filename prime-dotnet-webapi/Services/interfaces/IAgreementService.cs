@@ -30,5 +30,7 @@ namespace Prime.Services
         Task<string> GetSignableOrgAgreementAsync(int organizationId, int agreementId);
 
         Task<SignedAgreementDocument> GetSignedAgreementDocumentAsync(int agreementId);
+
+        Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid);
     }
 }
