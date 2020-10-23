@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Prime.Models;
+using Prime.Engines;
 using Prime.Models.Api;
 using Prime.ViewModels;
 
@@ -97,10 +98,12 @@ namespace Prime.Services
                 .Include(e => e.AccessAgreementNote)
                 .SingleAsync(e => e.Id == enrolleeId);
 
+            AgreementType type = new AgreementEngine().DetermineAgreementType(enrollee).Value;
+
             var agreement = new Agreement
             {
                 EnrolleeId = enrolleeId,
-                AgreementVersionId = await GetCurrentAgreementVersionIdForUserAsync(enrollee),
+                AgreementVersionId = await FetchNewestAgreementVersionIdOfType(type),
                 LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(enrollee.AccessAgreementNote),
                 CreatedDate = DateTimeOffset.Now
             };
@@ -264,27 +267,6 @@ namespace Prime.Services
                 {
                     agreement.AgreementContent = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", agreement);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets the ID of the most current AgreementVersion based on the scope of practice of the Enrollee.
-        /// See JIRA PRIME-880
-        /// </summary>
-        private async Task<int> GetCurrentAgreementVersionIdForUserAsync(Enrollee enrollee)
-        {
-            if (!enrollee.IsRegulatedUser())
-            {
-                return await FetchNewestAgreementVersionIdOfType(AgreementType.OboTOA);
-            }
-
-            if (enrollee.HasCareSetting(CareSettingType.CommunityPharmacy))
-            {
-                return await FetchNewestAgreementVersionIdOfType(AgreementType.CommunityPharmacistTOA);
-            }
-            else
-            {
-                return await FetchNewestAgreementVersionIdOfType(AgreementType.RegulatedUserTOA);
             }
         }
 
