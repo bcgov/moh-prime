@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { AccessTerm } from '@shared/models/access-term.model';
+import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -16,7 +16,7 @@ import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
   styleUrls: ['./access-terms.component.scss']
 })
 export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
-  public dataSource: MatTableDataSource<AccessTerm>;
+  public dataSource: MatTableDataSource<EnrolleeAgreement>;
   public columns: string[];
 
   constructor(
@@ -38,12 +38,12 @@ export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
     const enrolleeId = this.enrolmentService.enrolment.id;
     this.busy = this.enrolmentResource.getAcceptedAccessTerms(enrolleeId)
       .subscribe(
-        (accessTerms: AccessTerm[]) => {
-          this.logger.info('ACCESS TERMS', accessTerms);
-          this.dataSource = new MatTableDataSource<AccessTerm>(accessTerms);
+        (accessTerms: EnrolleeAgreement[]) => {
+          this.logger.info('ENROLLEE_AGREEMENT', accessTerms);
+          this.dataSource = new MatTableDataSource<EnrolleeAgreement>(accessTerms);
         },
         (error: any) => {
-          this.toastService.openErrorToast('Access Terms could not be retrieved');
+          this.toastService.openErrorToast('Enrollee agreement could not be retrieved');
           this.logger.error('[Enrolments] AccessTerms::getAccessTerms error has occurred: ', error);
         }
       );

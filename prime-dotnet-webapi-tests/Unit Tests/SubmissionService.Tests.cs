@@ -16,7 +16,7 @@ namespace PrimeTests.UnitTests
     {
         public SubmissionService CreateService(
             IHttpContextAccessor httpContext = null,
-            IAccessTermService accessTermService = null,
+            IAgreementService agreementService = null,
             ISubmissionRulesService submissionRulesService = null,
             IBusinessEventService businessEventService = null,
             IEmailService emailService = null,
@@ -29,7 +29,7 @@ namespace PrimeTests.UnitTests
             return new SubmissionService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
-                accessTermService ?? A.Fake<IAccessTermService>(),
+                agreementService ?? A.Fake<IAgreementService>(),
                 submissionRulesService ?? A.Fake<ISubmissionRulesService>(),
                 businessEventService ?? A.Fake<IBusinessEventService>(),
                 emailService ?? A.Fake<IEmailService>(),

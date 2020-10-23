@@ -4,13 +4,13 @@ import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+import { IdentificationDocument } from '@shared/models/identification-document.model';
 
 import { Admin } from '@auth/shared/models/admin.model';
-import { AdjudicationNote } from '@adjudication/shared/models/adjudication-note.model';
+import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { IdentificationDocument } from './identification-document.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -34,8 +34,8 @@ export interface HttpEnrollee extends Enrollee {
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
   enrolleeClassification: EnrolleeClassification;
-  enrolmentCertificateNote: AdjudicationNote;
-  accessAgreementNote: AdjudicationNote;
+  enrolmentCertificateNote: EnrolleeNote;
+  accessAgreementNote: EnrolleeNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice
@@ -70,8 +70,8 @@ export interface Enrolment {
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
   enrolleeClassification: EnrolleeClassification;
-  enrolmentCertificateNote: AdjudicationNote;
-  accessAgreementNote: AdjudicationNote;
+  enrolmentCertificateNote: EnrolleeNote;
+  accessAgreementNote: EnrolleeNote;
   // Indicates enrollee has not completed all profile information
   profileCompleted: boolean;
   // Indicates enrollee has seen the collection notice

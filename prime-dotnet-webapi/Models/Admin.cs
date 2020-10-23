@@ -30,7 +30,7 @@ namespace Prime.Models
         public IEnumerable<Enrollee> Enrollees { get; set; }
 
         [JsonIgnore]
-        public IEnumerable<AdjudicatorNote> AdjudicatorNotes { get; set; }
+        public IEnumerable<EnrolleeNote> AdjudicatorNotes { get; set; }
 
         [JsonIgnore]
         public IEnumerable<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }

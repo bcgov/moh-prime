@@ -9,7 +9,7 @@ using DelegateDecompiler;
 namespace Prime.Models
 {
     [Table("Enrollee")]
-    public class Enrollee : BaseAuditable, IValidatableObject, IUserBoundModel
+    public class Enrollee : BaseAuditable, IValidatableObject, IUserBoundModel, IAgreeable
     {
         public Enrollee()
         {
@@ -92,7 +92,7 @@ namespace Prime.Models
 
         public bool ProfileCompleted { get; set; }
 
-        public ICollection<AdjudicatorNote> AdjudicatorNotes { get; set; }
+        public ICollection<EnrolleeNote> AdjudicatorNotes { get; set; }
 
         public AccessAgreementNote AccessAgreementNote { get; set; }
 
@@ -195,7 +195,7 @@ namespace Prime.Models
         }
 
         /// <summary>
-        /// The expiry date of the Enrollee's most recently accepted Access Term.
+        /// The expiry date of the Enrollee's most recently accepted Agreement.
         /// </summary>
         [NotMapped]
         [Computed]

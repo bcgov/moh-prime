@@ -81,12 +81,12 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.EnrolleeCareSettings, f => EnrolleeCareSettingFaker.Generate(2))
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
             .RuleFor(e => e.IdentityAssuranceLevel, f => 3)
-            .RuleFor(e => e.AccessTerms, f => new List<AccessTerm>())
+            .RuleFor(e => e.Agreements, f => new List<Agreement>())
             .RuleFor(e => e.SelfDeclarations, f => new List<SelfDeclaration>());
 
-        public static Faker<AccessTerm> AccessTermFaker = new Faker<AccessTerm>()
+        public static Faker<Agreement> AgreementFaker = new Faker<Agreement>()
             .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
-            .RuleFor(x => x.AgreementId, f => f.Random.Int(1, 5))
+            .RuleFor(x => x.AgreementVersionId, f => f.Random.Int(1, 5))
             .RuleFor(x => x.LimitsConditionsClauseId, f => f.Random.Int(1, 5))
             .RuleFor(es => es.CreatedDate, f => DateTime.Now.AddDays(-5))
             .RuleFor(es => es.AcceptedDate, f => DateTime.Now)
