@@ -155,16 +155,6 @@ namespace Prime.Services
                 return null;
             }
 
-            // if (enrollee.RemoteAccessSites != null)
-            // {
-            //     var mappedRemoteAccessSites = new List<RemoteAccessSiteViewModel>();
-            //     foreach (var remoteAccessSite in enrollee.RemoteAccessSites)
-            //     {
-            //         mappedRemoteAccessSites.Add(_mapper.Map<Site, RemoteAccessSiteViewModel>(remoteAccessSite.Site));
-            //     }
-            //     enrollee.RemoteAccessSites = mappedRemoteAccessSites;
-            // }
-
             return enrollee;
         }
 
