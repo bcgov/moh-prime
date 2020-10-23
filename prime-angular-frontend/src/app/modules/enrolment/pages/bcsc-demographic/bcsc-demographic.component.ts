@@ -129,7 +129,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       this.mailingAddress.get('postal').value
     );
 
-    this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
+    this.toggleMailingAddressValidators(this.mailingAddress, ['id', 'street2']);
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
