@@ -35,6 +35,7 @@ namespace Prime.Configuration
                     new License { Code = 18, Weight = 22, Manual = false, Validate = true,  RegulatedUser = true,  Name = "Emergency - Family", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 19, Weight = 23, Manual = false, Validate = true,  RegulatedUser = true,  Name = "Emergency - Specialty", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 21, Weight = 24, Manual = true,  Validate = true,  RegulatedUser = false, Name = "Temporarily Inactive", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 59, Weight = 25, Manual = true,  Validate = false, RegulatedUser = false, Name = "Podiatrists", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Pharmacy
                     new License { Code = 25, Weight = 1,  Manual = false, Validate = true,  RegulatedUser = true,  Name = "Full Pharmacist", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -72,7 +73,14 @@ namespace Prime.Configuration
                     new License { Code = 56, Weight = 24, Manual = true,  Validate = false, RegulatedUser = false, Name = "Temporary Licensed Practical Nurse (Special Event)", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 54, Weight = 25, Manual = true,  Validate = false, RegulatedUser = false, Name = "Non-Practicing Licensed Practical Nurse", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 57, Weight = 26, Manual = true,  Validate = true,  RegulatedUser = false, Name = "Non-Practicing Licensed Nurse Practitioner", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new License { Code = 58, Weight = 27, Manual = true,  Validate = true,  RegulatedUser = false, Name = "Temporary Nurse Practitioner (time-limited)", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new License { Code = 58, Weight = 27, Manual = true,  Validate = true,  RegulatedUser = false, Name = "Temporary Nurse Practitioner (time-limited)", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 60, Weight = 28, Manual = true,  Validate = false, RegulatedUser = false, Name = "Practising Midwife", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 61, Weight = 29, Manual = true,  Validate = false, RegulatedUser = false, Name = "Provisional Midwife", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 62, Weight = 30, Manual = true,  Validate = false, RegulatedUser = false, Name = "Temporary Midwife (Emergency)", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 63, Weight = 31, Manual = true,  Validate = false, RegulatedUser = false, Name = "Non-Practising Midwife", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+
+                    // Other
+                    new License { Code = 64, Weight = 1 , Manual = true,  Validate = false, RegulatedUser = false, Name = "Not Displayed", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }
