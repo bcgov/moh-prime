@@ -45,10 +45,14 @@ export class FormUtilsService {
    * @description
    * Resets FormControl value(s) and clears associated validators.
    */
-  public resetAndClearValidators(control: FormControl | FormGroup): void {
+  public resetAndClearValidators(control: FormControl | FormGroup, blacklist: string[] = []): void {
     if (control instanceof FormGroup) {
       // Assumes that FormGroups will not be deeply nested
-      Object.keys(control.controls).forEach((key: string) => this.resetAndClearValidators(control.controls[key] as FormControl));
+      Object.keys(control.controls).forEach((key: string) => {
+        if (!blacklist.includes(key)) {
+          this.resetAndClearValidators(control.controls[key] as FormControl);
+        }
+      });
     } else {
       control.reset();
       control.clearValidators();
