@@ -391,55 +391,6 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(updatedNote));
         }
 
-        // GET: api/Enrollees/5/submissions
-        /// <summary>
-        /// Get a list of enrollee submissions.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/submissions", Name = nameof(GetEnrolleeSubmissions))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Submission>>> GetEnrolleeSubmissions(int enrolleeId)
-        {
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
-            }
-
-            var enrolleeSubmissions = await _enrolleeSubmissionService.GetEnrolleeSubmissionsAsync(enrolleeId);
-
-            return Ok(ApiResponse.Result(enrolleeSubmissions));
-        }
-
-        // GET: api/Enrollees/5/submissions/1
-        /// <summary>
-        /// Get an enrollee submission.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        /// <param name="enrolleeSubmissionId"></param>
-        [HttpGet("{enrolleeId}/submissions/{enrolleeSubmissionId}", Name = nameof(GetEnrolleeSubmission))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Submission>> GetEnrolleeSubmission(int enrolleeId, int enrolleeSubmissionId)
-        {
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
-            }
-
-            var enrolleeSubmission = await _enrolleeSubmissionService.GetEnrolleeSubmissionAsync(enrolleeSubmissionId);
-
-            return Ok(ApiResponse.Result(enrolleeSubmission));
-        }
-
         // PUT: api/Enrollees/5/adjudicator
         /// <summary>
         /// Add an enrollee's assigned adjudicator.
