@@ -16,7 +16,6 @@ import { Contact } from '@registration/shared/models/contact.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
-import { RemoteUserLocation } from '@registration/shared/models/remote-user-location.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 
 @Injectable({
@@ -225,28 +224,17 @@ export class SiteFormStateService extends AbstractFormState<Site> {
   public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
     const group = this.remoteUserFormGroup();
     if (remoteUser) {
-      const { id, firstName, lastName, email, remoteUserLocations, remoteUserCertifications } = remoteUser;
+      const { id, firstName, lastName, email, remoteUserCertifications } = remoteUser;
       group.patchValue({ id, firstName, lastName, email });
-      const array = group.get('remoteUserLocations') as FormArray;
-      remoteUserLocations
-        .map((rul: RemoteUserLocation) => {
-          const formGroup = this.remoteUserLocationFormGroup();
-          formGroup.patchValue(rul);
-          return formGroup;
-        })
-        .forEach((remoteUserLocationFormGroup: FormGroup) =>
-          array.push(remoteUserLocationFormGroup)
-        );
 
       const certs = group.get('remoteUserCertifications') as FormArray;
       remoteUserCertifications.map((cert: RemoteUserCertification) => {
         const formGroup = this.remoteUserCertificationFormGroup();
         formGroup.patchValue(cert);
         return formGroup;
-      })
-        .forEach((remoteUserLocationFormGroup: FormGroup) =>
-          certs.push(remoteUserLocationFormGroup)
-        );
+      }).forEach((remoteUserCertificationFormGroup: FormGroup) =>
+        certs.push(remoteUserCertificationFormGroup)
+      );
     }
 
     return group;
@@ -339,24 +327,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         null,
         [Validators.required]
       ],
-      remoteUserCertifications: this.fb.array([]),
-      remoteUserLocations: this.fb.array(
+      remoteUserCertifications: this.fb.array(
         [],
-        [FormArrayValidators.atLeast(1)]
-      )
-    });
-  }
-
-  public remoteUserLocationFormGroup(): FormGroup {
-    return this.fb.group({
-      internetProvider: [
-        null,
-        [Validators.required]
-      ],
-      physicalAddress: this.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        exclude: ['street2']
-      })
+        [FormArrayValidators.atLeast(1)])
     });
   }
 
