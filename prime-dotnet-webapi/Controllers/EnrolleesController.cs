@@ -23,7 +23,7 @@ namespace Prime.Controllers
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
@@ -33,7 +33,7 @@ namespace Prime.Controllers
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IAgreementService agreementService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IEnrolleeSubmissionService enrolleeSubmissionService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
@@ -42,7 +42,7 @@ namespace Prime.Controllers
         {
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
-            _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
             _adminService = adminService;
             _businessEventService = businessEventService;
             _emailService = emailService;
@@ -393,51 +393,51 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/5/versions
         /// <summary>
-        /// Get a list of enrollee profile versions.
+        /// Get a list of enrollee submissions.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/versions", Name = nameof(GetEnrolleeProfileVersions))]
+        [HttpGet("{enrolleeId}/submissions", Name = nameof(GetEnrolleeSubmissions))]
         [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EnrolleeProfileVersion>>> GetEnrolleeProfileVersions(int enrolleeId)
+        [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Submission>>> GetEnrolleeSubmissions(int enrolleeId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            var enrolleeProfileHistories = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionsAsync(enrolleeId);
+            var enrolleeSubmissions = await _enrolleeSubmissionService.GetEnrolleeSubmissionsAsync(enrolleeId);
 
-            return Ok(ApiResponse.Result(enrolleeProfileHistories));
+            return Ok(ApiResponse.Result(enrolleeSubmissions));
         }
 
         // GET: api/Enrollees/5/versions/1
         /// <summary>
-        /// Get an enrollee profile version.
+        /// Get an enrollee submission.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="enrolleeProfileVersionId"></param>
-        [HttpGet("{enrolleeId}/versions/{enrolleeProfileVersionId}", Name = nameof(GetEnrolleeProfileVersion))]
+        /// <param name="enrolleeSubmissionId"></param>
+        [HttpGet("{enrolleeId}/submissions/{enrolleeSubmissionId}", Name = nameof(GetEnrolleeSubmission))]
         [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolleeProfileVersion(int enrolleeId, int enrolleeProfileVersionId)
+        [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Submission>> GetEnrolleeSubmission(int enrolleeId, int enrolleeSubmissionId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            var enrolleeProfileVersion = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionAsync(enrolleeProfileVersionId);
+            var enrolleeSubmission = await _enrolleeSubmissionService.GetEnrolleeSubmissionAsync(enrolleeSubmissionId);
 
-            return Ok(ApiResponse.Result(enrolleeProfileVersion));
+            return Ok(ApiResponse.Result(enrolleeSubmission));
         }
 
         // PUT: api/Enrollees/5/adjudicator

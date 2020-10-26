@@ -21,7 +21,7 @@ namespace Prime.Services
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IVerifiableCredentialService _verifiableCredentialService;
         private readonly IPrivilegeService _privilegeService;
         private readonly ILogger _logger;
@@ -34,7 +34,7 @@ namespace Prime.Services
             IBusinessEventService businessEventService,
             IEmailService emailService,
             IEnrolleeService enrolleeService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IEnrolleeSubmissionService enrolleeSubmissionService,
             IVerifiableCredentialService verifiableCredentialService,
             IPrivilegeService privilegeService,
             ILogger<SubmissionService> logger)
@@ -45,7 +45,7 @@ namespace Prime.Services
             _businessEventService = businessEventService;
             _emailService = emailService;
             _enrolleeService = enrolleeService;
-            _enroleeProfileVersionService = enrolleeProfileVersionService;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
             _verifiableCredentialService = verifiableCredentialService;
             _privilegeService = privilegeService;
             _logger = logger;
@@ -73,7 +73,7 @@ namespace Prime.Services
             }
 
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
-            await _enroleeProfileVersionService.CreateEnrolleeProfileVersionAsync(enrollee);
+            await _enrolleeSubmissionService.CreateEnrolleeSubmissionAsync(enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
 
             // TODO need robust issuance rules to be added since each submission shouldn't create
