@@ -21,6 +21,7 @@ namespace Prime.Models
         public JObject ProfileSnapshot { get; set; }
 
         public AgreementType? agreementType { get; set; }
+
         public DateTimeOffset CreatedDate { get; set; }
     }
 }

@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
+import { ToastService } from '@core/services/toast.service';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { Address } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
-import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
-import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
+import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
@@ -30,6 +30,7 @@ export class EnrolmentResource {
   constructor(
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
+    private toastService: ToastService,
     private logger: LoggerService
   ) { }
 
@@ -37,11 +38,16 @@ export class EnrolmentResource {
     return this.apiResource.get<HttpEnrollee[]>('enrollees')
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee[]>) => response.result),
-        tap((enrollees) => this.logger.info('ENROLLEES', enrollees[0])),
+        tap((enrollees) => this.logger.info('ENROLLEE', enrollees[0])),
         map((enrollees) =>
           // Only a single enrollee will be provided
           (enrollees.length) ? this.enrolleeAdapterResponse(enrollees.pop()) : null
-        )
+        ),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::enrollee error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -50,7 +56,12 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
-        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
+        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee could not be created.');
+          this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -58,7 +69,14 @@ export class EnrolmentResource {
     const { id } = enrolment;
     const params = this.apiResourceUtilsService.makeHttpParams({ beenThroughTheWizard });
     return this.apiResource.put<NoContent>(`enrollees/${id}`, this.enrolmentAdapterRequest(enrolment), params)
-      .pipe(NoContentResponse);
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee could not be updated.');
+          this.logger.error('[Enrolment] EnrolmentResource::updateEnrollee error has occurred: ', error);
+          throw error;
+        })
+      );
   }
 
   public submitApplication(enrolment: Enrolment): Observable<HttpEnrollee> {
@@ -67,6 +85,11 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Application submission could not be completed.');
+          this.logger.error('[Enrolment] EnrolmentResource::submitApplication error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -75,6 +98,11 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Submission could not be completed.');
+          this.logger.error('[Enrolment] EnrolmentResource::submissionAction error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -86,7 +114,12 @@ export class EnrolmentResource {
     return this.apiResource.get<EnrolmentCertificateAccessToken[]>('provisioner-access/token')
       .pipe(
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken[]>) => response.result),
-        tap((tokens: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKENS', tokens))
+        tap((tokens: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKENS', tokens)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment certificate access tokens could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::enrolmentCertificateAccessTokens error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -95,7 +128,12 @@ export class EnrolmentResource {
     return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${provisionerName}`, payload)
       .pipe(
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
-        tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token))
+        tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Provisioner access could not be sent.');
+          this.logger.error('[Enrolment] EnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -108,7 +146,12 @@ export class EnrolmentResource {
     return this.apiResource.get<EnrolleeAgreement[]>(`enrollees/${enrolleeId}/agreements`, params)
       .pipe(
         map((response: ApiHttpResponse<EnrolleeAgreement[]>) => response.result),
-        tap((accessTerms: EnrolleeAgreement[]) => this.logger.info('ACCESS_TERMS', accessTerms))
+        tap((accessTerms: EnrolleeAgreement[]) => this.logger.info('ENROLLEE_AGREEMENTS', accessTerms)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee agreements could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getAcceptedAccessTerms error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -117,7 +160,12 @@ export class EnrolmentResource {
     return this.apiResource.get<EnrolleeAgreement[]>(`enrollees/${enrolleeId}/agreements`, params)
       .pipe(
         map((response: ApiHttpResponse<EnrolleeAgreement[]>) => response.result.pop()),
-        tap((accessTerm: EnrolleeAgreement) => this.logger.info('ACCESS_TERM_LATEST', accessTerm))
+        tap((accessTerm: EnrolleeAgreement) => this.logger.info('LATEST_ENROLLEE_AGREEMENT', accessTerm)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee agreement could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getLatestAccessTerm error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -125,16 +173,26 @@ export class EnrolmentResource {
     return this.apiResource.get<EnrolleeAgreement>(`enrollees/${enrolleeId}/agreements/${agreementId}`)
       .pipe(
         map((response: ApiHttpResponse<EnrolleeAgreement>) => response.result),
-        tap((accessTerm: EnrolleeAgreement) => this.logger.info('ACCESS_TERM', accessTerm))
+        tap((accessTerm: EnrolleeAgreement) => this.logger.info('ENROLLEE_AGREEMENT', accessTerm)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee agreement could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getAccessTerm error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
-  public getEnrolmentProfileForAccessTerm(enrolleeId: number, agreementId: number): Observable<EnrolmentProfileVersion> {
-    return this.apiResource.get<EnrolmentProfileVersion>(`enrollees/${enrolleeId}/agreements/${agreementId}/enrolment`)
+  public getEnrolmentProfileForAccessTerm(enrolleeId: number, agreementId: number): Observable<EnrolmentSubmission> {
+    return this.apiResource.get<HttpEnrolleeSubmission>(`enrollees/${enrolleeId}/agreements/${agreementId}/enrolment`)
       .pipe(
-        map((response: ApiHttpResponse<EnrolmentProfileVersion>) => response.result),
-        tap((enrolmentProfileVersion: EnrolmentProfileVersion) => this.logger.info('ENROLMENT_PROFILE_VERSION', enrolmentProfileVersion)),
-        map(this.enrolleeVersionAdapterResponse.bind(this))
+        map((response: ApiHttpResponse<HttpEnrolleeSubmission>) => response.result),
+        tap((enrolleeSubmission: HttpEnrolleeSubmission) => this.logger.info('ENROLMENT_SUBMISSION', enrolleeSubmission)),
+        map(this.enrolleeSubmissionAdapterResponse()),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment profile could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrolmentProfileForAccessTerm error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -142,15 +200,22 @@ export class EnrolmentResource {
   // Self Declaration Documents
   // ---
 
-  public createSelfDeclarationDocument(enrolleeId: number, selfDeclarationStatusCode: number, sdd: SelfDeclarationDocument):
-    Observable<SelfDeclarationDocument> {
+  public createSelfDeclarationDocument(
+    enrolleeId: number,
+    selfDeclarationStatusCode: number,
+    sdd: SelfDeclarationDocument
+  ): Observable<SelfDeclarationDocument> {
     sdd.selfDeclarationTypeCode = selfDeclarationStatusCode;
     return this.apiResource
-      .post<SelfDeclarationDocument>(`enrollees/${enrolleeId}/self-declaration-document`
-        , sdd)
+      .post<SelfDeclarationDocument>(`enrollees/${enrolleeId}/self-declaration-document`, sdd)
       .pipe(
         map((response: ApiHttpResponse<SelfDeclarationDocument>) => response.result),
         tap((selfDeclarationDocument: SelfDeclarationDocument) => this.logger.info('SELF_DECLARATION_DOCUMENT', selfDeclarationDocument)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Document could not be created.');
+          this.logger.error('[Enrolment] EnrolmentResource::createSelfDeclarationDocument error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -160,6 +225,11 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap((document: string) => this.logger.info('DOCUMENT', document)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Document could not be downloaded.');
+          this.logger.error('[Enrolment] EnrolmentResource::getDownloadTokenSelfDeclarationDocument error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -170,6 +240,11 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap((document: string) => this.logger.info('DOCUMENT', document)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Document could not be downloaded.');
+          this.logger.error('[Enrolment] EnrolmentResource::getDownloadTokenIdentificationDocument error has occurred: ', error);
+          throw error;
+        })
       );
   }
 
@@ -177,22 +252,23 @@ export class EnrolmentResource {
   // Enrollee and Enrolment Adapters
   // ---
 
-  private enrolleeVersionAdapterResponse(
-    { id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion
-  ): EnrolmentProfileVersion {
+  private enrolleeSubmissionAdapterResponse(): (enrolleeSubmission: HttpEnrolleeSubmission) => EnrolmentSubmission {
     // Compensate for updates to the current enrolment model
     // that don't match enrolment versioning
-    this.enrolleeVersionSnapshotAdapter(profileSnapshot);
+    return ({ id, enrolleeId, profileSnapshot, agreementType, createdDate }: HttpEnrolleeSubmission) => {
+      this.enrolleeSubmissionSnapshotAdapter(profileSnapshot);
 
-    return {
-      id,
-      enrolleeId,
-      profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
-      createdDate
-    };
+      return {
+        id,
+        enrolleeId,
+        profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+        agreementType,
+        createdDate
+      };
+    }
   }
 
-  private enrolleeVersionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
+  private enrolleeSubmissionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
     const mapping = {
       voicePhone: 'phone',
       voiceExtension: 'phoneExtension',
