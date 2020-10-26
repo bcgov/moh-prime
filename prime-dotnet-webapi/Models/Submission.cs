@@ -20,7 +20,7 @@ namespace Prime.Models
         [Required]
         public JObject ProfileSnapshot { get; set; }
 
-        public AgreementType? agreementType { get; set; }
+        public AgreementType? AgreementType { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }
     }
