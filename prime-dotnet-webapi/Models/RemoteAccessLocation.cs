@@ -4,16 +4,16 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    [Table("RemoteUserLocation")]
-    public class RemoteUserLocation : BaseAuditable
+    [Table("RemoteAccessLocation")]
+    public class RemoteAccessLocation : BaseAuditable, IEnrolleeNavigationProperty
     {
         [Key]
         public int Id { get; set; }
 
-        public int RemoteUserId { get; set; }
+        public int EnrolleeId { get; set; }
 
         [JsonIgnore]
-        public RemoteUser RemoteUser { get; set; }
+        public Enrollee Enrollee { get; set; }
 
         [Required]
         public string InternetProvider { get; set; }
