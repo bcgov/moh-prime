@@ -88,6 +88,10 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   public ngOnInit() {
+    if (this.condensed) {
+      this.formUtilsService.setValidators(this.collegeCode, [Validators.required]);
+    }
+
     this.setCollegeCertification(this.collegeCode.value);
 
     this.collegeCode.valueChanges
