@@ -96,10 +96,6 @@ export class RemoteUsersComponent implements OnInit {
 
   public getRemoteUserProperties(remoteUser: FormGroup) {
     const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
-    const remoteUserLocations = remoteUser.controls?.remoteUserLocations as FormArray;
-
-    const firstLocation = remoteUserLocations.value[0].physicalAddress;
-    firstLocation.provinceCode = 'BC';
 
     const collegeLicence = remoteUserCertifications.length > 1
       ? 'More than one college licence'
@@ -107,19 +103,11 @@ export class RemoteUsersComponent implements OnInit {
         ? 'No college licence'
         : remoteUserCertifications.value[0].licenseNumber;
 
-    const remoteAddress = remoteUserLocations.controls?.length > 1
-      ? 'More than one remote address'
-      : this.addressPipe.transform(firstLocation);
-
     return [
       {
         key: 'College Licence',
         value: collegeLicence
-      },
-      {
-        key: 'Remote Address',
-        value: remoteAddress
-      },
+      }
     ];
   }
 

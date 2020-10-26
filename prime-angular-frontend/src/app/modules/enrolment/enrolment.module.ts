@@ -40,6 +40,7 @@ import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.
 import { HeaderComponent } from './shared/components/header/header.component';
 import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
 import { ContactInformationFormComponent } from './shared/components/contact-information-form/contact-information-form.component';
+import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { ContactInformationFormComponent } from './shared/components/contact-inf
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
     NotificationConfirmationComponent,
-    ContactInformationFormComponent
+    ContactInformationFormComponent,
+    RemoteAccessAddressesComponent
   ],
   imports: [
     SharedModule,

@@ -30,35 +30,5 @@
 
     </ng-container>
 
-    <ng-container *ngFor="let remoteUserLocation of remoteUser.remoteUserLocations">
-      <div class="mb-3">
-        <strong>Remote Address</strong>
-      </div>
-
-      <div class="ml-4 mb-3">
-
-        <app-enrollee-property title="Internet Provider">
-          {{ remoteUserLocation?.internetProvider | default }}
-        </app-enrollee-property>
-
-        <app-enrollee-property title="Street Address">
-          {{ remoteUserLocation?.physicalAddress?.street | default }}
-        </app-enrollee-property>
-
-        <app-enrollee-property title="City">
-          {{ remoteUserLocation?.physicalAddress?.city | default }}
-        </app-enrollee-property>
-
-        <app-enrollee-property title="Province">
-          {{ remoteUserLocation?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
-        </app-enrollee-property>
-
-        <app-enrollee-property title="Postal Code">
-          {{ remoteUserLocation?.physicalAddress?.postal | postal | default }}
-        </app-enrollee-property>
-
-      </div>
-
-    </ng-container>
   </app-overview-section>
 </ng-container>
