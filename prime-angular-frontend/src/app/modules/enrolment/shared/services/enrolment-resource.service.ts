@@ -110,19 +110,6 @@ export class EnrolmentResource {
   // Provisioner Access
   // ---
 
-  public enrolmentCertificateAccessTokens(): Observable<EnrolmentCertificateAccessToken[]> {
-    return this.apiResource.get<EnrolmentCertificateAccessToken[]>('provisioner-access/token')
-      .pipe(
-        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken[]>) => response.result),
-        tap((tokens: EnrolmentCertificateAccessToken[]) => this.logger.info('ACCESS_TOKENS', tokens)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrolment certificate access tokens could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::enrolmentCertificateAccessTokens error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
   public sendProvisionerAccessLink(provisionerName: string, emails: string = null): Observable<EnrolmentCertificateAccessToken> {
     const payload = { data: emails };
     return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${provisionerName}`, payload)
@@ -130,7 +117,7 @@ export class EnrolmentResource {
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Provisioner access could not be sent.');
+          this.toastService.openErrorToast('Email could not be sent');
           this.logger.error('[Enrolment] EnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);
           throw error;
         })
@@ -199,25 +186,6 @@ export class EnrolmentResource {
   // ---
   // Self Declaration Documents
   // ---
-
-  public createSelfDeclarationDocument(
-    enrolleeId: number,
-    selfDeclarationStatusCode: number,
-    sdd: SelfDeclarationDocument
-  ): Observable<SelfDeclarationDocument> {
-    sdd.selfDeclarationTypeCode = selfDeclarationStatusCode;
-    return this.apiResource
-      .post<SelfDeclarationDocument>(`enrollees/${enrolleeId}/self-declaration-document`, sdd)
-      .pipe(
-        map((response: ApiHttpResponse<SelfDeclarationDocument>) => response.result),
-        tap((selfDeclarationDocument: SelfDeclarationDocument) => this.logger.info('SELF_DECLARATION_DOCUMENT', selfDeclarationDocument)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Document could not be created.');
-          this.logger.error('[Enrolment] EnrolmentResource::createSelfDeclarationDocument error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
 
   public getDownloadTokenSelfDeclarationDocument(enrolleeId: number, selfDeclarationDocumentId: number): Observable<string> {
     return this.apiResource

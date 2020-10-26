@@ -391,7 +391,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(updatedNote));
         }
 
-        // GET: api/Enrollees/5/versions
+        // GET: api/Enrollees/5/submissions
         /// <summary>
         /// Get a list of enrollee submissions.
         /// </summary>
@@ -415,7 +415,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(enrolleeSubmissions));
         }
 
-        // GET: api/Enrollees/5/versions/1
+        // GET: api/Enrollees/5/submissions/1
         /// <summary>
         /// Get an enrollee submission.
         /// </summary>

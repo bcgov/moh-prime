@@ -47,12 +47,13 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
   }
 
   private enrolleeSubmissionAdapterResponse(
-    { id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeSubmission
+    { id, enrolleeId, profileSnapshot, agreementType, createdDate }: HttpEnrolleeSubmission
   ): EnrolmentSubmission {
     return {
       id,
       enrolleeId,
       profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+      agreementType,
       createdDate
     };
   }

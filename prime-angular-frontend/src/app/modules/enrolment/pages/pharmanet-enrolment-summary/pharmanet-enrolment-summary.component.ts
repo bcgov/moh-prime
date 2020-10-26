@@ -98,19 +98,13 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             : EMPTY
         )
       )
-      .subscribe(
-        () => {
-          this.toastService.openSuccessToast('Email was successfully sent');
-          if (formControl) {
-            formControl.reset();
-          }
-          this.router.navigate([EnrolmentRoutes.NOTIFICATION_CONFIRMATION], { relativeTo: this.route.parent });
-        },
-        (error: any) => {
-          this.logger.error('[Enrolment] Error occurred sending email', error);
-          this.toastService.openErrorToast('Email could not be sent');
+      .subscribe(() => {
+        this.toastService.openSuccessToast('Email was successfully sent');
+        if (formControl) {
+          formControl.reset();
         }
-      );
+        this.router.navigate([EnrolmentRoutes.NOTIFICATION_CONFIRMATION], { relativeTo: this.route.parent });
+      });
   }
 
   public ngOnInit() {

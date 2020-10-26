@@ -355,7 +355,7 @@ export class AdjudicationResource {
   }
 
   private enrolleeSubmissionAdapterResponse(): (enrolleeSubmission: HttpEnrolleeSubmission) => HttpEnrolleeSubmission {
-    return ({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeSubmission) => {
+    return ({ id, enrolleeId, profileSnapshot, agreementType, createdDate }: HttpEnrolleeSubmission) => {
       // Compensate for updates to the current enrolment model
       // that don't match enrolment versioning
       this.enrolleeSubmissionSnapshotAdapter(profileSnapshot);
@@ -364,6 +364,7 @@ export class AdjudicationResource {
         id,
         enrolleeId,
         profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+        agreementType,
         createdDate
       };
     };
