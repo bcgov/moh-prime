@@ -97,9 +97,9 @@ export class RemoteUsersComponent implements OnInit {
   public getRemoteUserProperties(remoteUser: FormGroup) {
     const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
 
-    const collegeLicence = remoteUserCertifications.length > 1
+    const collegeLicence = (remoteUserCertifications.length > 1)
       ? 'More than one college licence'
-      : remoteUserCertifications.length === 0
+      : (remoteUserCertifications.length === 0)
         ? 'No college licence'
         : remoteUserCertifications.value[0].licenseNumber;
 
