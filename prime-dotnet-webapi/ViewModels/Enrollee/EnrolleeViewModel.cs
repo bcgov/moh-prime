@@ -10,7 +10,7 @@ using Prime.Models;
 
 namespace Prime.ViewModels
 {
-    public class EnrolleeViewModel
+    public class EnrolleeViewModel : IUserBoundModel
     {
         public EnrolleeViewModel()
         {

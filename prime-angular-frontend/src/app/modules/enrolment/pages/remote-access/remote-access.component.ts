@@ -90,7 +90,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
           this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
 
           const remoteAccessSite = this.enrolmentFormStateService.remoteAccessSiteFormGroup();
-          remoteAccessSite.patchValue({ enrolleeId: this.enrolment.id, siteId: this.remoteSites[i].siteId });
+          remoteAccessSite.patchValue({ ...this.remoteSites[i] });
           this.remoteAccessSites.push(remoteAccessSite);
         });
       }

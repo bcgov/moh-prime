@@ -11,6 +11,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using AutoMapper;
 
 namespace Prime.Controllers
 {
@@ -21,6 +22,7 @@ namespace Prime.Controllers
     [Authorize(Policy = AuthConstants.USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
         private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
@@ -38,7 +40,8 @@ namespace Prime.Controllers
             IBusinessEventService businessEventService,
             IEmailService emailService,
             IDocumentService documentService,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
+            IMapper mapper)
         {
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
@@ -48,6 +51,7 @@ namespace Prime.Controllers
             _emailService = emailService;
             _documentService = documentService;
             _razorConverterService = razorConverterService;
+            _mapper = mapper;
         }
 
         // GET: api/Enrollees
@@ -74,7 +78,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/5
         /// <summary>
-        /// Gets a specific Enrollee.
+        /// Gets a specific Enrollee View Model.
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}", Name = nameof(GetEnrolleeById))]
@@ -82,10 +86,10 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> GetEnrolleeById(int enrolleeId)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> GetEnrolleeById(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.HasAdminView());
+            var enrollee = await _enrolleeService.GetEnrolleeViewAsync(enrolleeId, User.HasAdminView());
             if (enrollee == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));

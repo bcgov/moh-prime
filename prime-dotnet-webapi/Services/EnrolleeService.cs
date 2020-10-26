@@ -77,7 +77,13 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
+        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
+        {
+            return await this.GetBaseEnrolleeQuery()
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+        }
+
+        public async Task<EnrolleeViewModel> GetEnrolleeViewAsync(int enrolleeId, bool isAdmin = false)
         {
             IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
 
@@ -93,6 +99,7 @@ namespace Prime.Services
             }
 
             var entity = await query
+                .ProjectTo<EnrolleeViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (entity != null)
