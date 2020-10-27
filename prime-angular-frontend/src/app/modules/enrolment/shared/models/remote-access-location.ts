@@ -1,6 +1,6 @@
 import { Address } from '@shared/models/address.model';
 
-export interface RemoteUserLocation {
+export interface RemoteAccessLocation {
   id?: number;
   internetProvider: string;
   physicalAddress: Address;

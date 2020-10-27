@@ -10,7 +10,6 @@ using Prime.Configuration;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using System.Reflection;
 
 namespace Prime
 {
@@ -80,6 +79,7 @@ namespace Prime
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
+        public DbSet<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
@@ -88,7 +88,6 @@ namespace Prime
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<RemoteUser> RemoteUsers { get; set; }
-        public DbSet<RemoteUserLocation> RemoteUserLocations { get; set; }
         public DbSet<RemoteUserCertification> RemoteUserCertifications { get; set; }
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
         public DbSet<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
@@ -250,10 +249,11 @@ namespace Prime
                 .WithMany(s => s.RemoteUsers)
                 .HasForeignKey(ru => ru.SiteId);
 
-            modelBuilder.Entity<RemoteUserLocation>()
-                .HasOne(rul => rul.RemoteUser)
-                .WithMany(ru => ru.RemoteUserLocations)
-                .HasForeignKey(rul => rul.RemoteUserId);
+            modelBuilder.Entity<RemoteAccessLocation>()
+                .HasOne(ral => ral.Enrollee)
+                .WithMany(e => e.RemoteAccessLocations)
+                .HasForeignKey(ral => ral.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
         }

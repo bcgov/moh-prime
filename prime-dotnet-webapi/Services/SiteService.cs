@@ -199,12 +199,6 @@ namespace Prime.Services
             // Wholesale replace the remote users
             foreach (var remoteUser in current.RemoteUsers)
             {
-                foreach (var location in remoteUser.RemoteUserLocations)
-                {
-                    _context.Remove(location.PhysicalAddress);
-                    _context.Remove(location);
-                }
-
                 foreach (var certification in remoteUser.RemoteUserCertifications)
                 {
                     _context.Remove(certification);
@@ -217,31 +211,6 @@ namespace Prime.Services
                 foreach (var remoteUser in updated.RemoteUsers)
                 {
                     remoteUser.SiteId = current.Id;
-                    var remoteUserLocations = new List<RemoteUserLocation>();
-
-                    foreach (var location in remoteUser.RemoteUserLocations)
-                    {
-                        var newAddress = new PhysicalAddress
-                        {
-                            CountryCode = location.PhysicalAddress.CountryCode,
-                            ProvinceCode = location.PhysicalAddress.ProvinceCode,
-                            Street = location.PhysicalAddress.Street,
-                            Street2 = location.PhysicalAddress.Street2,
-                            City = location.PhysicalAddress.City,
-                            Postal = location.PhysicalAddress.Postal
-                        };
-                        var newLocation = new RemoteUserLocation
-                        {
-                            RemoteUser = remoteUser,
-                            InternetProvider = location.InternetProvider,
-                            PhysicalAddress = newAddress
-                        };
-                        _context.Entry(newAddress).State = EntityState.Added;
-                        _context.Entry(newLocation).State = EntityState.Added;
-                        remoteUserLocations.Add(newLocation);
-                    }
-                    remoteUser.RemoteUserLocations = remoteUserLocations;
-
                     var remoteUserCertifications = new List<RemoteUserCertification>();
 
                     foreach (var certification in remoteUser.RemoteUserCertifications)
@@ -469,6 +438,7 @@ namespace Prime.Services
         public async Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
         {
             var sites = await this.GetBaseSiteQuery()
+                .Where(s => s.ApprovedDate != null)
                 .ProjectTo<EnrolleeRemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
@@ -565,9 +535,6 @@ namespace Prime.Services
                 .Include(s => s.TechnicalSupport)
                     .ThenInclude(p => p.PhysicalAddress)
                 .Include(s => s.BusinessHours)
-                .Include(s => s.RemoteUsers)
-                    .ThenInclude(r => r.RemoteUserLocations)
-                        .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserCertifications)
                 .Include(s => s.BusinessLicenceDocuments)

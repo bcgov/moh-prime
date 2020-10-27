@@ -1,0 +1,74 @@
+<app-enrollee-page [busy]="busy">
+
+  <app-page-header>PRIME Enrolment</app-page-header>
+
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Remote Access Addresses</ng-container>
+        <ng-container appPageSubheaderSummary>
+          List every location where you may access PharmaNet remotely. Remote access is not permitted from public
+          locations, or locations with shared Wi-Fi connections. Talk to your vendor about your home network
+          requirements for remote access.
+          <a href="https://www2.gov.bc.ca/assets/gov/health/practitioner-pro/software-development-guidelines/remote-access-policy-pnet-v10.pdf">Remote Access Policy</a>
+
+        </ng-container>
+      </app-page-subheader>
+
+      <ng-container *ngFor="let remoteAccessLocation of remoteAccessLocations.controls; let i = index; let last = last"
+                    formArrayName="remoteAccessLocations">
+        <ng-container [formGroup]="remoteAccessLocation">
+
+          <app-form-icon-group [show]="true"
+                               (event)="removeLocation(i)">
+
+            <section [class.mb-4]="!last">
+              <div class="row">
+                <div class="col-12">
+
+                  <mat-form-field class="w-100">
+                    <input matInput
+                           placeholder="Internet Provider at this location (e.g., Shaw, Telus)"
+                           formControlName="internetProvider">
+                    <mat-error>Required</mat-error>
+                  </mat-form-field>
+
+                </div>
+              </div>
+
+              <app-address [form]="remoteAccessLocation.get('physicalAddress')"
+                           [formControlNames]="formControlNames"
+                           [bcOnly]="true"></app-address>
+
+            </section>
+
+          </app-form-icon-group>
+
+        </ng-container>
+      </ng-container>
+
+      <button mat-button
+              type="button"
+              color="primary"
+              class="mb-3"
+              (click)="addLocation()">
+        <mat-icon class="add-icon">add</mat-icon>
+        Add Remote Address
+      </button>
+
+    </section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-enrollee-page>
