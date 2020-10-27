@@ -6,6 +6,7 @@ namespace Prime.Models
         RegulatedUserTOA = 2,
         OboTOA = 3,
         CommunityPracticeOrgAgreement = 4,
-        CommunityPharmacyOrgAgreement = 5
+        CommunityPharmacyOrgAgreement = 5,
+        PharmacyOboTOA = 6
     }
 }
