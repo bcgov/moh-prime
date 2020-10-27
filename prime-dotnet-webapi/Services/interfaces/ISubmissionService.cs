@@ -9,7 +9,7 @@ namespace Prime.Services
     {
         Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile);
 
-        Task PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin, Guid? documentGuid);
+        Task<bool> PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin, object additionalParameters = null);
 
         Task UpdateAlwaysManualAsync(int enrolleeId, bool alwaysManual);
     }
