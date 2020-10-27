@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AdjudicationDashboardComponent } from './adjudication-dashboard.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 describe('AdjudicationDashboardComponent', () => {
   let component: AdjudicationDashboardComponent;
@@ -8,9 +9,15 @@ describe('AdjudicationDashboardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdjudicationDashboardComponent ]
+      declarations: [AdjudicationDashboardComponent],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

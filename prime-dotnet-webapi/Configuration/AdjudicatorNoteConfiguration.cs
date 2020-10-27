@@ -4,9 +4,9 @@ using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class AdjudicatorNoteConfiguration : IEntityTypeConfiguration<AdjudicatorNote>
+    public class AdjudicatorNoteConfiguration : IEntityTypeConfiguration<EnrolleeNote>
     {
-        public void Configure(EntityTypeBuilder<AdjudicatorNote> builder)
+        public void Configure(EntityTypeBuilder<EnrolleeNote> builder)
         {
             builder.HasKey(an => new { an.Id });
 

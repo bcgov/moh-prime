@@ -1,5 +1,4 @@
-@using Prime.Models
-@model Organization
+@model Tuple<string, DateTimeOffset>;
 
 @{
   /**
@@ -8,21 +7,12 @@
    * @see CommunityPharmacyOrganizationAgreement.cshtml
    *
    * The BEGIN/END of the Organization Agreement copy is marked with
-   * comment delimiters
-   *
-   * NOTE: The downloadable and signable copy of the Organization Agreement is
-   * located in /documents.
+   * comment delimiters.
    */
-  var organizationName = Model.Name;
-  var day = @DateTime.Now.ToString("dd");
-  var month = @DateTime.Now.ToString("MMMM");
-  var year = @DateTime.Now.ToString("yyyy");
-
-  if(Model.AcceptedAgreementDate.HasValue) {
-    day = Model.AcceptedAgreementDate.Value.ToString("dd");
-    month = Model.AcceptedAgreementDate.Value.ToString("MMMM");
-    year = Model.AcceptedAgreementDate.Value.ToString("yyyy");
-  }
+  var organizationName = Model.Item1;
+  var day = Model.Item2.ToString("dd");
+  var month = Model.Item2.ToString("MMMM");
+  var year = Model.Item2.ToString("yyyy");
 }
 
 <link rel="stylesheet"
