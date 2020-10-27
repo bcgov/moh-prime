@@ -44,9 +44,6 @@ export class AccessAgreementHistoryComponent extends BaseEnrolmentPage implement
     const enrolleeId = this.enrolmentService.enrolment.id;
     const accessTermId = this.route.snapshot.params.id;
     this.busy = this.enrolmentResource.getAccessTerm(enrolleeId, accessTermId)
-      .subscribe((accessTerm: EnrolleeAgreement) => {
-        this.logger.info('ENROLLEE_AGREEMENT', accessTerm);
-        this.accessTerm = accessTerm;
-      });
+      .subscribe((accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm);
   }
 }
