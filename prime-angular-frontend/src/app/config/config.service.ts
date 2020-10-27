@@ -32,7 +32,13 @@ export class ConfigService implements IConfigService {
 
   public get colleges(): CollegeConfig[] {
     return [...this.configuration.colleges]
-      .sort(this.sortConfigByName());
+      .reduce((colleges: [CollegeConfig[], CollegeConfig[]], college: CollegeConfig) => {
+        const group = (college.prefix) ? colleges[0] : colleges[1];
+        group.push(college);
+        return colleges;
+      }, [[], []]) // Group by existence of prefix
+      .map((group: CollegeConfig[]) => group.sort(this.sortConfigByName()))
+      .reduce((acc, arr) => acc.concat(arr), []);
   }
 
   public get countries(): Config<string>[] {
@@ -137,5 +143,10 @@ export class ConfigService implements IConfigService {
   private sortConfigByWeight(): (a: LicenseWeightedConfig, b: LicenseWeightedConfig) => SortWeight {
     return (a: LicenseWeightedConfig, b: LicenseWeightedConfig) =>
       this.utilsService.sortByKey<LicenseWeightedConfig>(a, b, 'weight');
+  }
+
+  private sortConfigByKeyPriority() {
+    return () =>
+      this.utilsService.sort()
   }
 }
