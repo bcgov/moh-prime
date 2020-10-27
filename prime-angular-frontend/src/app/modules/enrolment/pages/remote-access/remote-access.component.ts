@@ -60,26 +60,34 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       utilService,
       formUtilsService
     );
-
-    this.enrolment = this.enrolmentService.enrolment;
   }
 
-  public get sitesFormArray(): FormArray {
+  public get sites(): FormArray {
     return this.form.get('sites') as FormArray;
   }
 
-  public onSubmit() {
-    if (this.remoteSites?.length) {
-      const selectedSites = this.remoteSites
-        .filter((site, i) => this.sitesFormArray.value[i])
-        .map(site => site.id);
+  public get enrolleeRemoteUsers(): FormArray {
+    return this.form.get('enrolleeRemoteUsers') as FormArray;
+  }
 
-      this.busy = this.enrolmentResource
-        .createEnrolleeRemoteUsers(this.enrolment.id, selectedSites)
-        .subscribe(() => this.nextRouteAfterSubmit());
-    } else {
-      this.nextRouteAfterSubmit();
+  public onSubmit() {
+    this.enrolleeRemoteUsers.clear();
+
+    this.sites.controls.forEach((checked, i) => {
+      if (checked.value) {
+        this.remoteSites[i].remoteUsers.forEach(remoteUser => {
+          const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
+          enrolleeRemoteUser.patchValue({ enrolleeId: this.enrolment.id, remoteUserId: remoteUser.id });
+          this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
+        });
+      }
+    });
+
+    if (!this.enrolleeRemoteUsers.length) {
+      this.removeRemoteAccessLocations();
     }
+
+    super.onSubmit();
   }
 
   public onRequestAccess(event: MatSlideToggleChange) {
@@ -98,27 +106,33 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   }
 
   protected createFormInstance() {
-    this.form = this.fb.group({
-      sites: this.fb.array([])
-    });
+    this.form = this.enrolmentFormStateService.remoteAccessForm;
   }
 
   protected initForm() {
     this.form.controls.sites = this.fb.array(this.remoteSites.map(() => this.fb.control(false)));
     // Set already linked sites as checked
     const checked = [];
-    this.remoteSites.forEach(remoteSite =>
-      remoteSite.remoteUsers.forEach(remoteUser =>
-        checked.push(this.enrolment.enrolleeRemoteUsers?.some(eru => eru.remoteUserId === remoteUser.id))
-      )
-    );
-    this.sitesFormArray.patchValue(checked);
+    this.remoteSites.forEach(remoteSite => {
+      remoteSite.remoteUsers.forEach(remoteUser => {
+        this.enrolleeRemoteUsers.controls.forEach(control => {
+          if (control.get('remoteUserId').value === remoteUser.id) {
+            checked.push(true);
+          }
+        });
+      });
+    });
+    this.sites.patchValue(checked);
   }
 
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.SELF_DECLARATION;
+      nextRoutePath = this.enrolleeRemoteUsers.length
+        ? EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES
+        : EnrolmentRoutes.SELF_DECLARATION;
+    } else if (this.enrolleeRemoteUsers.length) {
+      nextRoutePath = EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
@@ -147,5 +161,15 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
         (error: any) => { },
         () => this.showProgress = false
       );
+  }
+
+  /**
+   * @description
+   * Remove remoteAccessLocations from the enrolment if no remote sites have been chosen
+   */
+  private removeRemoteAccessLocations() {
+    const form = this.enrolmentFormStateService.remoteAccessLocationsForm;
+    const locations = form.get('remoteAccessLocations') as FormArray;
+    locations.clear();
   }
 }

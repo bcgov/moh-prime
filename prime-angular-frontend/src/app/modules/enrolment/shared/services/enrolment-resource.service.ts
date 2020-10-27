@@ -78,14 +78,6 @@ export class EnrolmentResource {
       );
   }
 
-  public createEnrolleeRemoteUsers(enrolleeId: number, sites: number[]): Observable<EnrolleeRemoteUser[]> {
-    return this.apiResource
-      .post<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/enrollee-remote-users`, sites)
-      .pipe(
-        map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)
-      );
-  }
-
   // ---
   // Provisioner Access
   // ---
@@ -310,6 +302,7 @@ export class EnrolmentResource {
 
   private enrolmentAdapterRequest(enrolment: Enrolment): HttpEnrollee {
     if (enrolment.enrollee.mailingAddress.postal) {
+      enrolment.enrollee.mailingAddress.id = enrolment.enrollee.mailingAddress.id ?? 0;
       enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
     } else {
       enrolment.enrollee.mailingAddress = null;

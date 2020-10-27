@@ -1,4 +1,3 @@
-import { RemoteUserLocation } from './remote-user-location.model';
 import { RemoteUserCertification } from './remote-user-certification.model';
 
 export interface RemoteUser {
@@ -6,6 +5,5 @@ export interface RemoteUser {
   firstName: string;
   lastName: string;
   email: string;
-  remoteUserLocations: RemoteUserLocation[];
   remoteUserCertifications: RemoteUserCertification[];
 }
