@@ -54,23 +54,6 @@ export class RemoteUsersComponent implements OnInit {
     return this.form.get('hasRemoteUsers') as FormControl;
   }
 
-  public getRemoteUserProperties(remoteUser: FormGroup) {
-    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
-
-    const collegeLicence = remoteUserCertifications.length > 1
-      ? 'More than one college licence'
-      : remoteUserCertifications.length === 0
-        ? 'No college licence'
-        : remoteUserCertifications.value[0].licenseNumber;
-
-    return [
-      {
-        key: 'College Licence',
-        value: collegeLicence
-      }
-    ];
-  }
-
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       this.hasNoRemoteUserError = false;
@@ -109,6 +92,23 @@ export class RemoteUsersComponent implements OnInit {
     } else {
       this.hasNoRemoteUserError = true;
     }
+  }
+
+  public getRemoteUserProperties(remoteUser: FormGroup) {
+    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
+
+    const collegeLicence = (remoteUserCertifications.length > 1)
+      ? 'More than one college licence'
+      : (remoteUserCertifications.length === 0)
+        ? 'No college licence'
+        : remoteUserCertifications.value[0].licenseNumber;
+
+    return [
+      {
+        key: 'College Licence',
+        value: collegeLicence
+      }
+    ];
   }
 
   public onRemove(index: number) {
