@@ -24,7 +24,8 @@ namespace Prime.Services
         private readonly IRazorConverterService _razorConverterService;
 
         public AgreementService(
-            ApiDbContext context, IHttpContextAccessor httpContext,
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
             IMapper mapper,
             IPdfService pdfService,
             IRazorConverterService razorConverterService)
