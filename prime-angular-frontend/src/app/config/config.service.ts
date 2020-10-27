@@ -144,9 +144,4 @@ export class ConfigService implements IConfigService {
     return (a: LicenseWeightedConfig, b: LicenseWeightedConfig) =>
       this.utilsService.sortByKey<LicenseWeightedConfig>(a, b, 'weight');
   }
-
-  private sortConfigByKeyPriority() {
-    return () =>
-      this.utilsService.sort()
-  }
 }
