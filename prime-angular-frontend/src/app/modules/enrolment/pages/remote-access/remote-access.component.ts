@@ -14,11 +14,11 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-remote-access',
@@ -31,7 +31,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   public form: FormGroup;
   public enrolment: Enrolment;
   public showProgress: boolean;
-  public remoteSites: RemoteAccessSite[];
+  public remoteSites: Site[];
   public noRemoteSites: boolean;
 
   constructor(
@@ -90,7 +90,11 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
           this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
 
           const remoteAccessSite = this.enrolmentFormStateService.remoteAccessSiteFormGroup();
-          remoteAccessSite.patchValue({ ...this.remoteSites[i] });
+          remoteAccessSite.patchValue({
+            enrolleeId: this.enrolment.id,
+            siteId: this.remoteSites[i].id,
+            doingBusinessAs: this.remoteSites[i].doingBusinessAs
+          });
           this.remoteAccessSites.push(remoteAccessSite);
         });
       }
@@ -161,7 +165,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
       .pipe(delay(2000))
       .subscribe(
-        (sites: RemoteAccessSite[]) => {
+        (sites: Site[]) => {
           if (sites.length) {
             this.noRemoteSites = false;
             this.remoteSites = sites;

@@ -77,13 +77,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId)
-        {
-            return await this.GetBaseEnrolleeQuery()
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-        }
-
-        public async Task<EnrolleeViewModel> GetEnrolleeViewAsync(int enrolleeId, bool isAdmin = false)
+        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
         {
             IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
 
@@ -99,7 +93,6 @@ namespace Prime.Services
             }
 
             var entity = await query
-                .ProjectTo<EnrolleeViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (entity != null)
@@ -147,13 +140,10 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<EnrolleeViewModel> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
+        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
-            EnrolleeViewModel enrollee = await this.GetBaseEnrolleeQuery()
-                .Include(e => e.RemoteAccessSites)
-                    .ThenInclude(ras => ras.Site)
+            Enrollee enrollee = await this.GetBaseEnrolleeQuery()
                 .AsNoTracking()
-                .ProjectTo<EnrolleeViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(e => e.UserId == userId);
 
             if (enrollee == null
@@ -469,6 +459,7 @@ namespace Prime.Services
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
                 .Include(r => r.RemoteAccessLocations)
                     .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(e => e.EnrolmentStatuses)

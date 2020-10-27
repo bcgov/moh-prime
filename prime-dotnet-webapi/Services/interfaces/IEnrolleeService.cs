@@ -10,7 +10,7 @@ namespace Prime.Services
 {
     public interface IEnrolleeService
     {
-        Task<EnrolleeViewModel> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false);
+        Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false);
 
         Task<bool> EnrolleeExistsAsync(int enrolleeId);
 
@@ -20,9 +20,7 @@ namespace Prime.Services
 
         Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
 
-        Task<Enrollee> GetEnrolleeAsync(int enrolleeId);
-
-        Task<EnrolleeViewModel> GetEnrolleeViewAsync(int enrolleeId, bool isAdmin = false);
+        Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false);
 
         Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
 

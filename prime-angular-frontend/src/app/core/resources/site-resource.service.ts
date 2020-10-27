@@ -312,11 +312,11 @@ export class SiteResource {
       );
   }
 
-  public getSitesByRemoteUserInfo(certifications: CollegeCertification[]): Observable<RemoteAccessSite[]> {
+  public getSitesByRemoteUserInfo(certifications: CollegeCertification[]): Observable<Site[]> {
     return this.apiResource.post(`sites/remote-users`, certifications)
       .pipe(
-        map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result),
-        tap((sites: RemoteAccessSite[]) => this.logger.info('SITES', sites)),
+        map((response: ApiHttpResponse<Site[]>) => response.result),
+        tap((sites: Site[]) => this.logger.info('SITES', sites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);

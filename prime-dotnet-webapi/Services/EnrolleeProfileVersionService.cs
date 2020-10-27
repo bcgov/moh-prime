@@ -60,13 +60,10 @@ namespace Prime.Services
 
         public async Task CreateEnrolleeProfileVersionAsync(Enrollee enrollee)
         {
-            // Save enrollee as view model so it can be displayed on front end
-            var enrolleeViewModel = _mapper.Map<Enrollee, EnrolleeViewModel>(enrollee);
-
             var enrolleeProfileVersion = new EnrolleeProfileVersion
             {
                 EnrolleeId = enrollee.Id,
-                ProfileSnapshot = JObject.FromObject(enrolleeViewModel, _camelCaseSerializer),
+                ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
                 CreatedDate = DateTimeOffset.Now
             };
 

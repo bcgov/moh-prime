@@ -17,7 +17,6 @@ namespace Prime.Models
 
         public int SiteId { get; set; }
 
-        [JsonIgnore]
         public Site Site { get; set; }
     }
 }

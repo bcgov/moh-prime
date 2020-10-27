@@ -22,6 +22,7 @@ import { EnrolmentProfileVersion, HttpEnrolleeProfileVersion } from '@shared/mod
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
+import { EnrolleeEnrolmentsComponent } from '@adjudication/pages/enrollee-enrolments/enrollee-enrolments.component';
 
 @Injectable({
   providedIn: 'root'
@@ -248,6 +249,10 @@ export class EnrolmentResource {
       enrollee.enrolleeRemoteUsers = [];
     }
 
+    if (!enrollee.remoteAccessSites) {
+      enrollee.remoteAccessSites = [];
+    }
+
     // Reorganize the shape of the enrollee into an enrolment
     return this.enrolmentAdapter(enrollee);
   }
@@ -296,6 +301,7 @@ export class EnrolmentResource {
       collectionNoticeAccepted: false,
       careSettings: enrollee.enrolleeCareSettings,
       enrolleeRemoteUsers: enrollee.enrolleeRemoteUsers,
+      remoteAccessSites: enrollee.remoteAccessSites,
       ...remainder
     };
   }

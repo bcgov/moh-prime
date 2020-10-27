@@ -72,13 +72,13 @@ namespace Prime.Controllers
             else
             {
                 var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
-                return Ok(ApiResponse.Result(enrollee == null ? Enumerable.Empty<EnrolleeViewModel>() : new[] { enrollee }));
+                return Ok(ApiResponse.Result(enrollee == null ? Enumerable.Empty<Enrollee>() : new[] { enrollee }));
             }
         }
 
         // GET: api/Enrollees/5
         /// <summary>
-        /// Gets a specific Enrollee View Model.
+        /// Gets a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}", Name = nameof(GetEnrolleeById))]
@@ -86,10 +86,10 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> GetEnrolleeById(int enrolleeId)
+        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Enrollee>> GetEnrolleeById(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeViewAsync(enrolleeId, User.HasAdminView());
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.HasAdminView());
             if (enrollee == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));

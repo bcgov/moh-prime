@@ -1,12 +1,8 @@
-import { Address } from '@shared/models/address.model';
-
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { Vendor } from '@registration/shared/models/vendor.model';
+import { Site } from '@registration/shared/models/site.model';
 
 export interface RemoteAccessSite {
+  id: number;
+  enrolleeId: number;
   siteId: number;
-  doingBusinessAs: string;
-  physicalAddress: Address;
-  remoteUsers: RemoteUser[];
-  siteVendors: Vendor[];
+  site: Site;
 }
