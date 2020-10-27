@@ -59,6 +59,8 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeRemoteUsers)
+                .Include(e => e.RemoteAccessLocations)
+                    .ThenInclude(ral => ral.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.Agreements)
                 .Include(e => e.SelfDeclarations)

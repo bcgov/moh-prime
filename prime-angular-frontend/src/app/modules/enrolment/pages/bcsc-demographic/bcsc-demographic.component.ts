@@ -92,7 +92,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   public onMailingAddressChange() {
     this.hasMailingAddress = !this.hasMailingAddress;
-    this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
+    this.toggleMailingAddressValidators(this.mailingAddress, ['id', 'street2']);
   }
 
   public ngOnInit() {
@@ -129,19 +129,18 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       this.mailingAddress.get('postal').value
     );
 
-    this.toggleMailingAddressValidators(this.mailingAddress, ['street2']);
+    this.toggleMailingAddressValidators(this.mailingAddress, ['id', 'street2']);
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     if (!enrolment.id && this.isInitialEnrolment) {
       return this.getUser$()
         .pipe(
-          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
-          // Merge the enrolment with generated keys
-          map((newEnrolment: Enrolment) => {
-            newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
-            return newEnrolment;
+          map((enrollee: Enrollee) => {
+            const { userId, ...demographic } = enrolment.enrollee;
+            return { ...enrollee, ...demographic };
           }),
+          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
           // Populate generated keys within the form state
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
           this.handleResponse()
@@ -172,7 +171,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   private toggleMailingAddressValidators(mailingAddress: FormGroup, blacklist: string[] = []) {
     if (!this.hasMailingAddress) {
-      this.formUtilsService.resetAndClearValidators(mailingAddress);
+      this.formUtilsService.resetAndClearValidators(mailingAddress, blacklist);
     } else {
       this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
     }
