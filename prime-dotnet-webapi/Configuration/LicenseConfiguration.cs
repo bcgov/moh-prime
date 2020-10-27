@@ -79,8 +79,8 @@ namespace Prime.Configuration
                     new License { Code = 62, Weight = 30, Manual = true,  Validate = false, RegulatedUser = false, Name = "Temporary Midwife (Emergency)", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 63, Weight = 31, Manual = true,  Validate = false, RegulatedUser = false, Name = "Non-Practising Midwife", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
-                    // Other
-                    new License { Code = 64, Weight = 1 , Manual = true,  Validate = false, RegulatedUser = false, Name = "Not Displayed", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    // All other colleges are assigned the "Not Displayed" Licence
+                    new License { Code = 64, Weight = 1,  Manual = true,  Validate = false, RegulatedUser = false, Name = "Not Displayed", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }

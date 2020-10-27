@@ -54,35 +54,6 @@ export class RemoteUsersComponent implements OnInit {
     return this.form.get('hasRemoteUsers') as FormControl;
   }
 
-  public getRemoteUserProperties(remoteUser: FormGroup) {
-    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
-    const remoteUserLocations = remoteUser.controls?.remoteUserLocations as FormArray;
-
-    const firstLocation = remoteUserLocations.value[0].physicalAddress;
-    firstLocation.provinceCode = 'BC';
-
-    const collegeLicence = remoteUserCertifications.length > 1
-      ? 'More than one college licence'
-      : remoteUserCertifications.length === 0
-        ? 'No college licence'
-        : remoteUserCertifications.value[0].licenseNumber;
-
-    const remoteAddress = remoteUserLocations.controls?.length > 1
-      ? 'More than one remote address'
-      : this.addressPipe.transform(firstLocation);
-
-    return [
-      {
-        key: 'College Licence',
-        value: collegeLicence
-      },
-      {
-        key: 'Remote Address',
-        value: remoteAddress
-      },
-    ];
-  }
-
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       this.hasNoRemoteUserError = false;
@@ -121,6 +92,23 @@ export class RemoteUsersComponent implements OnInit {
     } else {
       this.hasNoRemoteUserError = true;
     }
+  }
+
+  public getRemoteUserProperties(remoteUser: FormGroup) {
+    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
+
+    const collegeLicence = (remoteUserCertifications.length > 1)
+      ? 'More than one college licence'
+      : (remoteUserCertifications.length === 0)
+        ? 'No college licence'
+        : remoteUserCertifications.value[0].licenseNumber;
+
+    return [
+      {
+        key: 'College Licence',
+        value: collegeLicence
+      }
+    ];
   }
 
   public onRemove(index: number) {
