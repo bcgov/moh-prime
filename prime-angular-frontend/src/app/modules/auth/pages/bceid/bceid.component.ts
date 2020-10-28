@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
@@ -31,7 +31,7 @@ export class BceidComponent implements OnInit, OnDestroy {
 
   public loginUsingBCeID() {
     this.authService.login({
-      idpHint: IdentityProvider.BCEID,
+      idpHint: IdentityProviderEnum.BCEID,
       redirectUri: this.config.loginRedirectUrl
     });
   }
