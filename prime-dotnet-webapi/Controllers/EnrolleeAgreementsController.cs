@@ -169,8 +169,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Agreement>> GetAccessTermSignable(int enrolleeId, int agreementId)
+        [ProducesResponseType(typeof(ApiResultResponse<byte[]>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<byte[]>> GetAccessTermSignable(int enrolleeId, int agreementId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
