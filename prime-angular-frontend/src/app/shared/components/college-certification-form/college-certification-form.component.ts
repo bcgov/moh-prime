@@ -95,34 +95,29 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.setCollegeCertification(this.collegeCode.value);
 
     this.collegeCode.valueChanges
-      .subscribe((collegeCode: number) => this.setCollegeCertification(collegeCode));
+      .subscribe((collegeCode: number) => {
+        this.resetCollegeCertification();
+        this.setCollegeCertification(collegeCode);
+      });
   }
 
-  private setCollegeCertification(collegeCode: number) {
-    if (collegeCode) {
-      // Initialize the validations when the college code is not
-      // "None" to allow for submission when no college is selected
-      this.setValidations();
-      this.setPrefix(collegeCode);
-
-      if (!this.condensed) {
-        this.loadLicenses(collegeCode);
-        this.loadPractices(collegeCode);
-
-        if (this.filteredLicenses?.length === 1) {
-          this.licenseCode.patchValue(this.filteredLicenses[0].code);
-        }
-      }
-    } else {
+  private setCollegeCertification(collegeCode: number): void {
+    if (!collegeCode) {
       this.removeValidations();
+      return;
+    }
 
-      // Reset individually and not emitted to be handled by parent
-      // to prevent ExpressionChangedAfterItHasBeenCheckedError
-      this.licenseNumber.reset(null);
-      if (!this.condensed) {
-        this.licenseCode.reset(null);
-        this.renewalDate.reset(null);
-        this.practiceCode.reset(null);
+    // Initialize the validations when the college code is not
+    // "None" to allow for submission when no college is selected
+    this.setValidations();
+    this.setPrefix(collegeCode);
+
+    if (!this.condensed) {
+      this.loadLicenses(collegeCode);
+      this.loadPractices(collegeCode);
+
+      if (this.filteredLicenses?.length === 1) {
+        this.licenseCode.patchValue(this.filteredLicenses[0].code);
       }
     }
   }
@@ -132,6 +127,16 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
       this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
+    }
+  }
+
+  private resetCollegeCertification() {
+    this.licenseNumber.reset(null);
+
+    if (!this.condensed) {
+      this.licenseCode.reset(null);
+      this.renewalDate.reset(null);
+      this.practiceCode.reset(null);
     }
   }
 
