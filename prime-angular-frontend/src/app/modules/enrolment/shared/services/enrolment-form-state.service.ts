@@ -4,6 +4,8 @@ import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { ConfigService } from '@config/config.service';
+import { CollegeConfig } from '@config/config.model';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -35,6 +37,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
 
+  public colleges: CollegeConfig[];
+
   private identityProvider: IdentityProvider;
   private enrolleeId: number;
   private userId: string;
@@ -43,9 +47,12 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: LoggerService,
-    private authService: AuthService
+    private authService: AuthService,
+    private configService: ConfigService
   ) {
     super(fb, routeStateService, logger, [...EnrolmentRoutes.enrolmentProfileRoutes()]);
+
+    this.colleges = this.configService.colleges;
   }
 
   /**
@@ -80,7 +87,13 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     const profile = (this.identityProvider === IdentityProvider.BCEID)
       ? this.bceidDemographicForm.getRawValue()
       : this.bcscDemographicForm.getRawValue();
-    const regulatory = this.regulatoryForm.getRawValue();
+    const regulatory = this.regulatoryForm.getRawValue()
+      .map((collegeCertfication: CollegeCertification) =>
+        collegeCertfication.prefix = this.colleges
+          .filter(c => c.code === collegeCertfication.collegeCode)
+          .shift()
+          .prefix
+      );
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
