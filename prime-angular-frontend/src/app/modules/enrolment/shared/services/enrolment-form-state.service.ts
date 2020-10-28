@@ -102,7 +102,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ...careSettings,
       enrolleeRemoteUsers,
       ...remoteAccessLocations,
-      selfDeclarations
+      selfDeclarations,
       accessAgreementGuid
     };
   }

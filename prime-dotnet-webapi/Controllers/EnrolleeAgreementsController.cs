@@ -158,19 +158,19 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(enrolleeProfileHistory));
         }
 
-        // GET: api/Enrollees/5/agreements/2/download-unsigned
+        // GET: api/Enrollees/5/agreements/2/signable
         /// <summary>
         /// Downloads a specific unsigned access term for an enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="agreementId"></param>
-        [HttpGet("{enrolleeId}/agreements/{agreementId}/download-unsigned", Name = nameof(GetAccessTermDownloadUnsigned))]
+        [HttpGet("{enrolleeId}/agreements/{agreementId}/signable", Name = nameof(GetAccessTermSignable))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Agreement>> GetAccessTermDownloadUnsigned(int enrolleeId, int agreementId)
+        public async Task<ActionResult<Agreement>> GetAccessTermSignable(int enrolleeId, int agreementId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)

@@ -48,7 +48,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   // Allow the use of enum in the component template
   public EnrolmentStatus = EnrolmentStatus;
   public EnrolleeClassification = EnrolleeClassification;
-  public IdentityProvider = IdentityProvider;
+  public IdentityProviderEnum = IdentityProvider;
 
   public accessTerm: EnrolleeAgreement;
 
@@ -106,7 +106,9 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
             (result)
               ? this.enrolmentResource.submissionAction(
                 this.enrolment.id,
-                isAcceptingToa ? SubmissionAction.ACCEPT_TOA : SubmissionAction.DECLINE_TOA, this.accessAgreementGuid.value)
+                isAcceptingToa ? SubmissionAction.ACCEPT_TOA : SubmissionAction.DECLINE_TOA,
+                this.accessAgreementGuid.value
+              )
               : EMPTY
           )
         )
@@ -152,7 +154,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
   public onDownload() {
     this.enrolmentResource
-      .getAccessTermDownloadUnsigned(this.enrolment.id, this.accessTerm.id)
+      .getAccessTermSignable(this.enrolment.id, this.accessTerm.id)
       .subscribe((base64: string) => {
         const blob = this.utilsService.base64ToBlob(base64);
         this.utilsService.downloadDocument(blob, 'Terms-Of-Access');
