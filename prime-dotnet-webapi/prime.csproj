@@ -51,6 +51,7 @@
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v4.html" />
     <EmbeddedResource Include="Configuration\Resources\com-practice-org-v1.html" />
     <EmbeddedResource Include="Configuration\Resources\com-pharmacy-org-v1.html" />
+    <EmbeddedResource Include="Configuration\Resources\pharmacy-obo-toa-v1.html" />
     <EmbeddedResource Include="Resources\documents\CommunityPracticeOrganizationAgreement.pdf" />
     <EmbeddedResource Include="Resources\documents\CommunityPharmacyOrganizationAgreement.pdf" />
   </ItemGroup>
