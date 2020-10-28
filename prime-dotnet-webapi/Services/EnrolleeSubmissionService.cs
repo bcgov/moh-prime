@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using Prime.Engines;
 using Prime.Models;
 
 namespace Prime.Services
@@ -53,10 +54,13 @@ namespace Prime.Services
 
         public async Task CreateEnrolleeSubmissionAsync(Enrollee enrollee)
         {
+            AgreementType type = new AgreementEngine().DetermineAgreementType(enrollee).Value;
+
             var enrolleeSubmission = new Submission
             {
                 EnrolleeId = enrollee.Id,
                 ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
+                AgreementType = type,
                 CreatedDate = DateTimeOffset.Now
             };
 
