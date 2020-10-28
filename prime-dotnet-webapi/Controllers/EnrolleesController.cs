@@ -671,36 +671,6 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(token));
         }
 
-
-        // POST: api/Enrollees/5/enrollee-remote-users
-        /// <summary>
-        /// Creates new EnrolleeRemoteUsers from site list
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        /// <param name="sites"></param>
-        [HttpPost("{enrolleeId}/enrollee-remote-users", Name = nameof(CreateEnrolleeRemoteUsers))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeRemoteUser>>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<IEnumerable<EnrolleeRemoteUser>>> CreateEnrolleeRemoteUsers(int enrolleeId, [FromBody] List<int> sites)
-        {
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
-            }
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            var result = await _enrolleeService.AddEnrolleeRemoteUsersAsync(enrollee, sites);
-
-            return CreatedAtAction(
-                nameof(CreateEnrolleeRemoteUsers),
-                new { enrolleeId = enrolleeId },
-                ApiResponse.Result(result)
-            );
-        }
-
         // POST: api/enrollees/5/adjudication-documents
         /// <summary>
         /// Creates a new enrollee adjudication document for an enrollee.
@@ -736,7 +706,7 @@ namespace Prime.Controllers
         /// Gets all enrollee adjudication documents for an enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/adjudication-documents", Name = nameof(GetEnrolleeAdjudicationDocuments))]
+        [HttpGet("{enrolleeId}/adjudication-documents", Name = nameof(GetEnrolleeAdjudicationDocuments))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

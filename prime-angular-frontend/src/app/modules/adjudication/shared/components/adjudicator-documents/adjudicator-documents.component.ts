@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { AdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-import { Observable } from 'rxjs';
+import { DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { DateContent } from '../dated-content-table/dated-content-table.component';
 
 @Component({
   selector: 'app-adjudicator-documents',
@@ -8,57 +11,42 @@ import { Observable } from 'rxjs';
   styleUrls: ['./adjudicator-documents.component.scss']
 })
 export class AdjudicatorDocumentsComponent implements OnInit {
-  public documents$: Observable<AdjudicationDocument[]>;
+  @Input() public documents$: Observable<AdjudicationDocument[]>;
+  @Output() public saveDocuments: EventEmitter<string[]>;
+  @Output() public getDocumentByGuid: EventEmitter<number>;
+  @ViewChild('documentUpload') public documentUploadComponent: DocumentUploadComponent;
 
-  constructor() {
+  public documentGuids: string[];
 
+  public uploadedFile: boolean;
+
+  constructor(
+  ) {
+    this.saveDocuments = new EventEmitter<string[]>();
+    this.getDocumentByGuid = new EventEmitter<number>();
+    this.documentGuids = [];
   }
 
   public onSubmit() {
-    // const siteId = this.route.snapshot.params.sid;
-    // const hasBusinessLicence = this.businessLicenceDocuments.length || this.uploadedFile;
-    // if (this.formUtilsService.checkValidity(this.form) && hasBusinessLicence) {
-    //   const payload = this.siteFormStateService.json;
-    //   this.siteResource
-    //     .updateSite(payload)
-    //     .pipe(
-    //       exhaustMap(() =>
-    //         (payload.businessLicenceGuid)
-    //           ? this.siteResource.createBusinessLicence(siteId, payload.businessLicenceGuid)
-    //           : of(noop)
-    //       )
-    //     )
-    //     .subscribe(() => {
-    //       // TODO should make this cleaner, but for now good enough
-    //       // Remove the business licence GUID to prevent 404 already
-    //       // submitted if resubmited in same session
-    //       this.businessLicenceGuid.patchValue(null);
-    //       this.form.markAsPristine();
-    //       this.nextRoute();
-    //     });
-    // } else {
-    //   if (!hasBusinessLicence) {
-    //     this.hasNoBusinessLicenceError = true;
-    //   }
-    // }
+    if (this.documentGuids?.length) {
+      this.saveDocuments.emit(this.documentGuids);
+    }
+  }
+
+  public removeFiles() {
+    this.documentUploadComponent.removeFiles();
   }
 
   public onUpload(document: AdjudicationDocument) {
-    // this.businessLicenceGuid.patchValue(document.documentGuid);
-    // this.uploadedFile = true;
-    // this.hasNoBusinessLicenceError = false;
+    this.documentGuids.push(document.documentGuid);
   }
 
   public onRemoveDocument(documentGuid: string) {
-    // this.businessLicenceGuid.patchValue(null);
+    delete this.documentGuids[documentGuid];
   }
 
-  public getDocument(event: Event) {
-    // event.preventDefault();
-    // this.siteResource.getBusinessLicenceDownloadToken(this.siteService.site.id)
-    //   .subscribe((token: string) =>
-    //     this.utilsService.downloadToken(token)
-    //   );
+  public getDocument(documentId: number) {
+    this.getDocumentByGuid.emit(documentId);
   }
 
   ngOnInit(): void {

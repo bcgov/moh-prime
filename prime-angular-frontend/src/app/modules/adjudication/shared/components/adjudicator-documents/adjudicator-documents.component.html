@@ -10,7 +10,8 @@
 
     <section class="mb-4">
 
-      <app-document-upload componentName="adjudicator-documents"
+      <app-document-upload #documentUpload
+                           componentName="adjudicator-documents"
                            labelMessage="Drag and drop your documents or browse"
                            [multiple]="true"
                            (completed)="onUpload($event)"
@@ -20,7 +21,8 @@
       <div class="col pt-2 text-right">
         <button mat-flat-button
                 type="button"
-                color="primary">
+                color="primary"
+                (click)="onSubmit()">
           Save
         </button>
       </div>
@@ -35,15 +37,14 @@
           <table class="table">
             <tbody>
               <tr *ngFor="let document of documents$ | async">
-                <th class="text-right"
-                    scope="row">
+                <th scope="row">
                   <div class="text-nowrap">
                     {{ document.uploadedDate | formatDate }}
                   </div>
                   <small *ngIf="true"
                          class="d-block text-mute font-weight-normal mb-2">
-                    {{ document.uploadedDate | formatDate: 'h:mm a' }}
-                  </small>
+                      {{ document.uploadedDate | formatDate: 'h:mm a' }}
+                    </small>
                   <mat-chip-list [selectable]="false">
                     <mat-chip selected
                               color="primary"
@@ -53,7 +54,7 @@
                 <td>
                   <button mat-stroked-button
                           color="primary"
-                          (click)="getDocument($event)">
+                          (click)="getDocument(document.id)">
                     <mat-icon class="mr-1">attachment</mat-icon>
                     {{ document.filename | default }}
                   </button>

@@ -1,1 +1,4 @@
-<app-adjudicator-documents></app-adjudicator-documents>
+<app-adjudicator-documents #adjudicationDocuments
+                           (getDocumentByGuid)="onGetDocumentByGuid($event)"
+                           (saveDocuments)="onSaveDocuments($event)"
+                           [documents$]="documents$"></app-adjudicator-documents>

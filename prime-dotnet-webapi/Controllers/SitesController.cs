@@ -412,7 +412,7 @@ namespace Prime.Controllers
         /// Gets all site adjudication documents for a site.
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/adjudication-documents", Name = nameof(GetSiteAdjudicationDocuments))]
+        [HttpGet("{siteId}/adjudication-documents", Name = nameof(GetSiteAdjudicationDocuments))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
