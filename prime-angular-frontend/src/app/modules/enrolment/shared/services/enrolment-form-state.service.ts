@@ -88,12 +88,13 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ? this.bceidDemographicForm.getRawValue()
       : this.bcscDemographicForm.getRawValue();
     const regulatory = this.regulatoryForm.getRawValue()
-      .map((collegeCertfication: CollegeCertification) =>
+      .map((collegeCertfication: CollegeCertification) => {
         collegeCertfication.prefix = this.colleges
           .filter(c => c.code === collegeCertfication.collegeCode)
           .shift()
-          .prefix
-      );
+          .prefix;
+        return collegeCertfication;
+      });
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
