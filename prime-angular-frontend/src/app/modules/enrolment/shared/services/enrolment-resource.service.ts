@@ -93,8 +93,9 @@ export class EnrolmentResource {
       );
   }
 
-  public submissionAction(id: number, action: SubmissionAction): Observable<HttpEnrollee> {
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission/${action}`)
+  public submissionAction(id: number, action: SubmissionAction, documentGuid: string = null): Observable<HttpEnrollee> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission/${action}`, {}, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
@@ -166,6 +167,13 @@ export class EnrolmentResource {
           this.logger.error('[Enrolment] EnrolmentResource::getAccessTerm error has occurred: ', error);
           throw error;
         })
+      );
+  }
+
+  public getAccessTermSignable(enrolleeId: number, accessTermsId: number): Observable<string> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/agreements/${accessTermsId}/signable`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result)
       );
   }
 

@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
@@ -39,7 +39,7 @@ export class InfoComponent implements OnInit, OnDestroy {
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
-      idpHint: IdentityProvider.BCSC,
+      idpHint: IdentityProviderEnum.BCSC,
       redirectUri
     });
   }

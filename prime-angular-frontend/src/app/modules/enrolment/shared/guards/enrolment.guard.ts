@@ -14,7 +14,7 @@ import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -50,9 +50,9 @@ export class EnrolmentGuard extends BaseGuard {
         }),
         exhaustMap((enrolment: Enrolment) =>
           this.authService.identityProvider$()
-            .pipe(map((identityProvider: IdentityProvider) => [routePath, enrolment, identityProvider]))
+            .pipe(map((identityProvider: IdentityProviderEnum) => [routePath, enrolment, identityProvider]))
         ),
-        map((params: [string, Enrolment, IdentityProvider]) =>
+        map((params: [string, Enrolment, IdentityProviderEnum]) =>
           this.routeDestination(...params)
         )
       );
@@ -62,7 +62,7 @@ export class EnrolmentGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the enrolment status.
    */
-  private routeDestination(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+  private routeDestination(routePath: string, enrolment: Enrolment, identityProvider: IdentityProviderEnum): boolean {
     // On login the enrollees will always be redirected to
     // the collection notice, which should always resolve
     if (routePath.includes(EnrolmentRoutes.COLLECTION_NOTICE)) {
@@ -86,11 +86,11 @@ export class EnrolmentGuard extends BaseGuard {
    * Determine routing by identity provider for new enrolments that have not
    * had their enrolment created.
    */
-  private identityProviderRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+  private identityProviderRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProviderEnum): boolean {
     switch (identityProvider) {
-      case IdentityProvider.BCEID:
+      case IdentityProviderEnum.BCEID:
         return this.manageBceidRouting(routePath);
-      case IdentityProvider.BCSC:
+      case IdentityProviderEnum.BCSC:
         return this.navigate(routePath, EnrolmentRoutes.BCSC_DEMOGRAPHIC);
       default:
         return false; // Identity provider is unknown and routing cannot be determined
@@ -125,7 +125,7 @@ export class EnrolmentGuard extends BaseGuard {
    * @description
    * Determine routing based on enrolment status.
    */
-  private enrolmentStatusRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+  private enrolmentStatusRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProviderEnum): boolean {
     switch (enrolment.currentStatus.statusCode) {
       case EnrolmentStatus.EDITABLE:
         return this.manageEditableRouting(routePath, enrolment, identityProvider);
@@ -148,12 +148,12 @@ export class EnrolmentGuard extends BaseGuard {
    * out their initial enrolment, which prevents access to
    * post-enrolment routes.
    */
-  private manageEditableRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProvider): boolean {
+  private manageEditableRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProviderEnum): boolean {
     const hasNotCompletedProfile = !enrolment.profileCompleted;
 
     const route = this.route(routePath);
     const redirectionRoute = (hasNotCompletedProfile)
-      ? (identityProvider === IdentityProvider.BCEID)
+      ? (identityProvider === IdentityProviderEnum.BCEID)
         ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
         : EnrolmentRoutes.BCSC_DEMOGRAPHIC
       : EnrolmentRoutes.OVERVIEW;
@@ -228,7 +228,7 @@ export class EnrolmentGuard extends BaseGuard {
    * @description
    * General blacklisted routes based on enrolment existence and provider.
    */
-  private checkBlacklistedRoutes(routePath: string, identityProvider: IdentityProvider): string {
+  private checkBlacklistedRoutes(routePath: string, identityProvider: IdentityProviderEnum): string {
     // Blacklisted routes if an enrolment exists regardless of provider
     if (
       [
@@ -243,12 +243,12 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     // Blacklisted routes based on provider
-    if (routePath.includes(EnrolmentRoutes.BCSC_DEMOGRAPHIC) && identityProvider === IdentityProvider.BCEID) {
+    if (routePath.includes(EnrolmentRoutes.BCSC_DEMOGRAPHIC) && identityProvider === IdentityProviderEnum.BCEID) {
       return routePath.replace(
         EnrolmentRoutes.BCSC_DEMOGRAPHIC,
         EnrolmentRoutes.OVERVIEW
       );
-    } else if (routePath.includes(EnrolmentRoutes.BCEID_DEMOGRAPHIC) && identityProvider === IdentityProvider.BCSC) {
+    } else if (routePath.includes(EnrolmentRoutes.BCEID_DEMOGRAPHIC) && identityProvider === IdentityProviderEnum.BCSC) {
       return routePath.replace(
         EnrolmentRoutes.BCEID_DEMOGRAPHIC,
         EnrolmentRoutes.OVERVIEW
