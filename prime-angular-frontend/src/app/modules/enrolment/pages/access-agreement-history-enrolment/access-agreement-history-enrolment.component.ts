@@ -39,7 +39,8 @@ export class AccessAgreementHistoryEnrolmentComponent extends BaseEnrolmentPage 
     this.expiryDate = this.enrolmentService.enrolment.expiryDate;
 
     this.busy = this.enrolmentResource
-      .getEnrolmentProfileForAccessTerm(enrolleeId, accessTermId)
+      .getEnrolmentSubmissionForAccessTerm(enrolleeId, accessTermId)
       .subscribe((enrolmentSubmission: EnrolmentSubmission) => this.enrolmentSubmission = enrolmentSubmission);
   }
 }
+

@@ -177,7 +177,7 @@ export class EnrolmentResource {
       );
   }
 
-  public getEnrolmentProfileForAccessTerm(enrolleeId: number, agreementId: number): Observable<EnrolmentSubmission> {
+  public getEnrolmentSubmissionForAccessTerm(enrolleeId: number, agreementId: number): Observable<EnrolmentSubmission> {
     return this.apiResource.get<HttpEnrolleeSubmission>(`enrollees/${enrolleeId}/agreements/${agreementId}/enrolment`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeSubmission>) => response.result),
@@ -185,7 +185,7 @@ export class EnrolmentResource {
         map(this.enrolleeSubmissionAdapterResponse()),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment profile could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getEnrolmentProfileForAccessTerm error has occurred: ', error);
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrolmentSubmissionForAccessTerm error has occurred: ', error);
           throw error;
         })
       );
