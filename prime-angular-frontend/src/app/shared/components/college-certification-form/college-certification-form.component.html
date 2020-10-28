@@ -92,6 +92,9 @@
                         </li>
                       </ol>
                     </div>
+                    <p *ngSwitchDefault>
+                      Enter your College license number
+                    </p>
                   </ng-container>
 
                 </ng-container>
@@ -104,20 +107,22 @@
 
         <ng-container *ngIf="!condensed">
 
-          <div class="col-sm-12 pl-5">
+          <ng-container *ngIf="filteredLicenses.length > 1">
+            <div class="col-sm-12 pl-5">
 
-            <mat-form-field class="w-100">
-              <mat-label>Licence class issued to you by your college</mat-label>
-              <mat-select formControlName="licenseCode">
-                <mat-option *ngFor="let license of filteredLicenses"
-                            [value]="license.code">
-                  {{ license.name }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="form.get('licenseCode').hasError('required')">Required</mat-error>
-            </mat-form-field>
+              <mat-form-field class="w-100">
+                <mat-label>Licence class issued to you by your college</mat-label>
+                <mat-select formControlName="licenseCode">
+                  <mat-option *ngFor="let license of filteredLicenses"
+                              [value]="license.code">
+                    {{ license.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="form.get('licenseCode').hasError('required')">Required</mat-error>
+              </mat-form-field>
 
-          </div>
+            </div>
+          </ng-container>
           <div class="col-sm-12 pl-5">
 
             <mat-form-field class="w-100">

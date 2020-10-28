@@ -140,7 +140,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setPrefix(collegeCode: number) {
-    this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
+    this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix || 'N/A';
   }
 
   private loadLicenses(collegeCode: number) {
