@@ -20,7 +20,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
@@ -48,11 +48,10 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   // Allow the use of enum in the component template
   public EnrolmentStatus = EnrolmentStatus;
   public EnrolleeClassification = EnrolleeClassification;
-  public IdentityProviderEnum = IdentityProvider;
+  public IdentityProviderEnum = IdentityProviderEnum;
 
   public accessTerm: EnrolleeAgreement;
-
-  public identityProvider: IdentityProvider;
+  public identityProvider: IdentityProviderEnum;
 
   constructor(
     protected route: ActivatedRoute,
@@ -185,7 +184,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.authService.identityProvider$()
-      .subscribe((identityProvider: IdentityProvider) => this.identityProvider = identityProvider);
+      .subscribe((identityProvider: IdentityProviderEnum) => this.identityProvider = identityProvider);
     this.busy = this.enrolmentResource.getLatestAccessTerm(this.enrolment.id, false)
       .subscribe(
         (accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm,
