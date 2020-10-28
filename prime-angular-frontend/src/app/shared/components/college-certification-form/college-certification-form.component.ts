@@ -108,6 +108,10 @@ export class CollegeCertificationFormComponent implements OnInit {
       if (!this.condensed) {
         this.loadLicenses(collegeCode);
         this.loadPractices(collegeCode);
+
+        if (this.filteredLicenses?.length === 1) {
+          this.licenseCode.patchValue(this.filteredLicenses[0].code);
+        }
       }
     } else {
       this.removeValidations();
