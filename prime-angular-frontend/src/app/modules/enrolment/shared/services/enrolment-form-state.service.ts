@@ -20,6 +20,7 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { RemoteAccessSite } from '../models/remote-access-site.model';
 import { RemoteAccessLocation } from '../models/remote-access-location';
+import { Site } from '@registration/shared/models/site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -85,10 +86,11 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
-    const remoteAccess = this.remoteAccessForm.getRawValue();
+    const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
     const selfDeclarations = this.convertSelfDeclarationsToJson();
+    const remoteAccessSites = this.convertRemoteAccessSitesToJson();
 
     return {
       id,
@@ -100,7 +102,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ...deviceProvider,
       ...jobs,
       ...careSettings,
-      ...remoteAccess,
+      enrolleeRemoteUsers,
+      remoteAccessSites,
       ...remoteAccessLocations,
       selfDeclarations
     };
@@ -319,6 +322,18 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         }
         return sds;
       }, []);
+  }
+
+  private convertRemoteAccessSitesToJson(): RemoteAccessSite[] {
+    const { remoteAccessSites } = this.remoteAccessForm.getRawValue();
+
+    return remoteAccessSites.map((ras) => {
+      return {
+        enrolleeId: ras.enrolleeId,
+        siteId: ras.siteId,
+        site: { doingBusinessAs: ras.doingBusinessAs } as Site,
+      } as RemoteAccessSite;
+    });
   }
 
   /**
