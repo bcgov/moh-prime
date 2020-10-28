@@ -72,7 +72,7 @@ export class DocumentUploadComponent implements OnInit {
   }
 
   public removeFiles() {
-    this.filePondComponent.removeFiles();
+    this.filePondComponent.removeFiles({ revert: false });
   }
 
   public onFilePondInit() {
