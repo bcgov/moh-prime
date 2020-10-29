@@ -25,6 +25,11 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
             .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(n => n == src.CurrentAgreementId)));
 
+        CreateMap<Enrollee, EnrolleeViewModel>()
+            .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
+            .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
+            .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(n => n == src.CurrentAgreementId)));
+
         CreateMap<Site, EnrolleeRemoteAccessSiteViewModel>()
             .ForMember(dest => dest.OrganizationName, opt => opt.MapFrom(src => src.Organization.Name));
 

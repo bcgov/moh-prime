@@ -91,8 +91,10 @@ export class AdjudicationContainerComponent implements OnInit {
           this.toastService.openErrorToast('Enrollee does not have a contact email.');
           return EMPTY;
         }),
-        exhaustMap((enrollee: HttpEnrollee) => this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
-          .pipe(map(() => enrollee)))
+        exhaustMap((enrollee: HttpEnrollee) =>
+          this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
+            .pipe(map(() => enrollee))
+        )
       )
       .subscribe((enrollee: HttpEnrollee) => {
         this.utilsService.mailTo(enrollee.email);
@@ -344,8 +346,7 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   private getEnrolleeById(enrolleeId: number): Observable<EnrolleeListViewModel[]> {
-    return this.adjudicationResource
-      .getEnrolleeById(enrolleeId)
+    return this.adjudicationResource.getEnrolleeById(enrolleeId)
       .pipe(
         map(this.toEnrolleeListViewModel),
         map((enrollee: EnrolleeListViewModel) => [enrollee]),
