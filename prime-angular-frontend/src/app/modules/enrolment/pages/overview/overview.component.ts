@@ -12,7 +12,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -31,8 +31,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
   public currentStatus: EnrolmentStatus;
   public demographicRoutePath: string;
-  public identityProvider: IdentityProvider;
-  public IdentityProvider = IdentityProvider;
+  public identityProvider: IdentityProviderEnum;
+  public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatus;
 
   protected allowRoutingWhenDirty: boolean;
@@ -54,9 +54,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.allowRoutingWhenDirty = true;
 
     this.authService.identityProvider$()
-      .subscribe((identityProvider: IdentityProvider) => {
+      .subscribe((identityProvider: IdentityProviderEnum) => {
         this.identityProvider = identityProvider;
-        this.demographicRoutePath = (identityProvider === IdentityProvider.BCEID)
+        this.demographicRoutePath = (identityProvider === IdentityProviderEnum.BCEID)
           ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
           : EnrolmentRoutes.BCSC_DEMOGRAPHIC;
       });
