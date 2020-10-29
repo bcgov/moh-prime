@@ -8,7 +8,6 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { OrganizationAgreement } from '@shared/models/agreement.model';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';

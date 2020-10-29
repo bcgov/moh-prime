@@ -6,13 +6,13 @@ using Prime.Models;
 
 namespace Prime.Configuration
 {
-    public class EnrolleeProfileVersionConfiguration : IEntityTypeConfiguration<EnrolleeProfileVersion>
+    public class SubmissionConfiguration : IEntityTypeConfiguration<Submission>
     {
-        public void Configure(EntityTypeBuilder<EnrolleeProfileVersion> builder)
+        public void Configure(EntityTypeBuilder<Submission> builder)
         {
             builder
                 .HasOne(epf => epf.Enrollee)
-                .WithMany(e => e.EnrolleeProfileVersions)
+                .WithMany(e => e.Submissions)
                 .HasForeignKey(epf => epf.EnrolleeId);
 
             builder

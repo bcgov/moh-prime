@@ -22,20 +22,20 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
 
         public SubmissionsController(
             ISubmissionService submissionService,
             IAdminService adminService,
             IEnrolleeService enrolleeService,
             IAgreementService agreementService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService)
+            IEnrolleeSubmissionService enrolleeSubmissionService)
         {
             _submissionService = submissionService;
             _adminService = adminService;
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
-            _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
         }
 
         // POST: api/enrollees/5/submission

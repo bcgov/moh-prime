@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Prime.Models;
-using Prime.Engines;
 using Prime.Models.Api;
 using Prime.ViewModels;
 using Prime.HttpClients;
@@ -26,7 +25,8 @@ namespace Prime.Services
         private readonly IDocumentManagerClient _documentClient;
 
         public AgreementService(
-            ApiDbContext context, IHttpContextAccessor httpContext,
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
             IMapper mapper,
             IPdfService pdfService,
             IRazorConverterService razorConverterService,
@@ -100,14 +100,23 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
                 .Include(e => e.AccessAgreementNote)
+                .Include(e => e.Submissions)
                 .SingleAsync(e => e.Id == enrolleeId);
 
-            AgreementType type = new AgreementEngine().DetermineAgreementType(enrollee).Value;
+            var type = enrollee.Submissions
+                .OrderByDescending(s => s.CreatedDate)
+                .Select(s => s.AgreementType)
+                .FirstOrDefault();
+
+            if (!type.HasValue)
+            {
+                throw new InvalidOperationException("Agreement type is required to approve an enrollee");
+            }
 
             var agreement = new Agreement
             {
                 EnrolleeId = enrolleeId,
-                AgreementVersionId = await FetchNewestAgreementVersionIdOfType(type),
+                AgreementVersionId = await FetchNewestAgreementVersionIdOfType(type.Value),
                 LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(enrollee.AccessAgreementNote),
                 CreatedDate = DateTimeOffset.Now
             };
