@@ -25,6 +25,7 @@ namespace Prime.Configuration
                     new StatusReason { Code = 13, Name = "User does not have high enough identity assurance level", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 14, Name = "User authenticated with a method other than BC Services Card", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 15, Name = "User has Requested Remote Access", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 16, Name = "--Placeholder--", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }
