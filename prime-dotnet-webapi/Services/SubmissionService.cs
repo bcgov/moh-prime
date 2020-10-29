@@ -63,6 +63,7 @@ namespace Prime.Services
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.Agreements)
                 .Include(e => e.SelfDeclarations)
+                .Include(e => e.Submissions)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             bool minorUpdate = await _submissionRulesService.QualifiesAsMinorUpdateAsync(enrollee, updatedProfile);
@@ -89,7 +90,7 @@ namespace Prime.Services
                 }
             }
 
-            await this.ProcessEnrolleeApplicationRules(enrolleeId);
+            await ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();
         }
 
