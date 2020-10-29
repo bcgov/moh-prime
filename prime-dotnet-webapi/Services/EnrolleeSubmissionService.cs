@@ -54,13 +54,11 @@ namespace Prime.Services
 
         public async Task CreateEnrolleeSubmissionAsync(Enrollee enrollee)
         {
-            AgreementType type = new AgreementEngine().DetermineAgreementType(enrollee).Value;
-
             var enrolleeSubmission = new Submission
             {
                 EnrolleeId = enrollee.Id,
                 ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
-                AgreementType = type,
+                AgreementType = new AgreementEngine().DetermineAgreementType(enrollee),
                 CreatedDate = DateTimeOffset.Now
             };
 
