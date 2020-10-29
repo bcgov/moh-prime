@@ -12,6 +12,7 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 
 @Component({
   selector: 'app-enrollee-enrolments',
@@ -20,7 +21,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class EnrolleeEnrolmentsComponent implements OnInit {
   public busy: Subscription;
-  public accessTerms: EnrolleeAgreement[];
+  public enrolmentCards: EnrolmentCard[];
   public years: number[];
   public selectedYear: number;
   public hasActions: boolean;
@@ -59,8 +60,8 @@ export class EnrolleeEnrolmentsComponent implements OnInit {
 
   private getAccessTerms(year: number = null) {
     const enrolleeId = this.route.snapshot.params.id;
-    this.busy = this.adjudicationResource.getAcceptedAccessTermsByYear(enrolleeId, year)
-      .subscribe((accessTerms: EnrolleeAgreement[]) => this.accessTerms = accessTerms);
+    this.busy = this.adjudicationResource.getEnrolmentCardsByYear(enrolleeId, year)
+      .subscribe((enrolmentCards: EnrolmentCard[]) => this.enrolmentCards = enrolmentCards);
   }
 
   private getYears() {

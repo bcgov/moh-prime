@@ -20,6 +20,7 @@ import { Admin } from '@auth/shared/models/admin.model';
 
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
+import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 
 @Injectable({
   providedIn: 'root'
@@ -246,6 +247,20 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee agreements could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getAccessTerms error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolmentCardsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolmentCard[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
+    return this.apiResource.get<EnrolmentCard[]>(`enrollees/${enrolleeId}/cards`, params)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolmentCard[]>) => response.result),
+        tap((accessTerms: EnrolmentCard[]) => this.logger.info('ENROLMENT_CARDS', accessTerms)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment cards could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getEnrolmentCardsByYear error has occurred: ', error);
           throw error;
         })
       );

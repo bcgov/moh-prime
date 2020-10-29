@@ -9,6 +9,7 @@ using Prime.Auth;
 using Prime.Models;
 using Prime.Services;
 using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
@@ -74,6 +75,55 @@ namespace Prime.Controllers
             }
 
             return Ok(ApiResponse.Result(agreements));
+        }
+
+        // GET: api/Enrollees/5/cards
+        /// <summary>
+        /// Get a list of the enrollee's enrolment card view models.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="filters"></param>
+        [HttpGet("{enrolleeId}/cards", Name = nameof(GetEnrolleeEnrolmentCards))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentCardViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolmentCardViewModel>>> GetEnrolleeEnrolmentCards(int enrolleeId, [FromQuery] AgreementFilters filters)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            if (!record.ViewableBy(User))
+            {
+                return Forbid();
+            }
+
+            var enrolmentCards = new List<EnrolmentCardViewModel>();
+
+            var agreements = await _agreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
+
+            foreach (var agreement in agreements)
+            {
+                var enrolleeProfileHistory = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
+
+                var card = new EnrolmentCardViewModel
+                {
+                    AgreementId = agreement.Id,
+                    AgreementAcceptedDate = agreement.AcceptedDate,
+                    EnrolleeProfileVersion = enrolleeProfileHistory
+                };
+
+                enrolmentCards.Add(card);
+            }
+
+            if (User.IsAdmin())
+            {
+                await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
+            }
+
+            return Ok(ApiResponse.Result(enrolmentCards));
         }
 
         // GET: api/Enrollees/5/agreements/2
