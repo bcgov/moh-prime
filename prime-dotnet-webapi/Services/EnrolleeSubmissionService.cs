@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+
+using Prime.Engines;
 using Prime.Models;
 
 namespace Prime.Services
@@ -57,6 +59,7 @@ namespace Prime.Services
             {
                 EnrolleeId = enrollee.Id,
                 ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
+                AgreementType = new AgreementEngine().DetermineAgreementType(enrollee),
                 CreatedDate = DateTimeOffset.Now
             };
 

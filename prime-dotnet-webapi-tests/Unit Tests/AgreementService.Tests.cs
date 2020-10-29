@@ -24,8 +24,8 @@ namespace PrimeTests.UnitTests
             return new AgreementService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
-                mapper,
-                pdfService,
+                mapper ?? A.Fake<IMapper>(),
+                pdfService ?? A.Fake<IPdfService>(),
                 razorConverterService ?? A.Fake<IRazorConverterService>()
             );
         }
