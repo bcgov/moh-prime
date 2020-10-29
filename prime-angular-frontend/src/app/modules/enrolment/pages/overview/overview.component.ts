@@ -79,15 +79,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
               : EMPTY
           )
         )
-        .subscribe(
-          () => {
-            this.toastService.openSuccessToast('Enrolment has been submitted');
-            this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
-          },
-          (error: any) => {
-            this.toastService.openErrorToast('Enrolment could not be submitted');
-            this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
-          });
+        .subscribe(() => {
+          this.toastService.openSuccessToast('Enrolment has been submitted');
+          this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
+        });
     } else {
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
     }
