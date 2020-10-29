@@ -12,7 +12,7 @@ namespace Prime.Engines
         /// </summary>
         public AgreementType? DetermineAgreementType(Enrollee enrollee)
         {
-            if (enrollee.certifications.Count() > 1)
+            if (enrollee.Certifications.Count() > 1)
             {
                 return null;
             }
