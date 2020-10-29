@@ -77,7 +77,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
+        public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
         {
             IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
 
@@ -92,17 +92,19 @@ namespace Prime.Services
                             .ThenInclude(esr => esr.Adjudicator);
             }
 
-            var entity = await query
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            IQueryable<int> newestAgreementIds = _context.AgreementVersions
+                .Select(a => a.AgreementType)
+                .Distinct()
+                .Select(type => _context.AgreementVersions
+                    .OrderByDescending(a => a.EffectiveDate)
+                    .First(a => a.AgreementType == type)
+                    .Id
+                );
 
-            if (entity != null)
-            {
-                // TODO: This is an interm fix for making a different view model for enrollee based on isAdmin
-                if (isAdmin)
-                {
-                    entity.isAdminView = true;
-                }
-            }
+            var entity = await query
+                .ProjectTo<EnrolleeViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds = newestAgreementIds })
+                .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             return entity;
         }
