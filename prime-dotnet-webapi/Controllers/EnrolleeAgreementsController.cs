@@ -114,19 +114,19 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(agreement));
         }
 
-        // GET: api/Enrollees/5/agreements/3/enrolment
+        // GET: api/Enrollees/5/agreements/3/submission
         /// <summary>
         /// Get the submission for a given agreement.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="agreementId"></param>
-        [HttpGet("{enrolleeId}/agreements/{agreementId}/enrolment", Name = nameof(GetEnrolmentForAgreement))]
+        [HttpGet("{enrolleeId}/agreements/{agreementId}/submission", Name = nameof(GetSubmissionForAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Submission>> GetEnrolmentForAgreement(int enrolleeId, int agreementId)
+        public async Task<ActionResult<Submission>> GetSubmissionForAgreement(int enrolleeId, int agreementId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
