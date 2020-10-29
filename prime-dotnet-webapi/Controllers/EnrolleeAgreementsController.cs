@@ -106,13 +106,13 @@ namespace Prime.Controllers
 
             foreach (var agreement in agreements)
             {
-                var enrolleeProfileHistory = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
+                var submission = await _enrolleeSubmissionService.GetEnrolleeSubmissionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
 
                 var card = new EnrolmentCardViewModel
                 {
                     AgreementId = agreement.Id,
                     AgreementAcceptedDate = agreement.AcceptedDate,
-                    EnrolleeProfileVersion = enrolleeProfileHistory
+                    Submission = submission
                 };
 
                 enrolmentCards.Add(card);

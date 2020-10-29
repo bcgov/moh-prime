@@ -13,13 +13,13 @@ namespace Prime.ViewModels
         public DateTimeOffset? AgreementAcceptedDate { get; set; }
 
         [JsonIgnore]
-        public EnrolleeProfileVersion EnrolleeProfileVersion { get; set; }
+        public Submission Submission { get; set; }
 
         public string RemoteAccess
         {
             get
             {
-                var enrolleeRemoteUsers = EnrolleeProfileVersion.ProfileSnapshot.Value<JArray>("enrolleeRemoteUsers");
+                var enrolleeRemoteUsers = Submission.ProfileSnapshot.Value<JArray>("enrolleeRemoteUsers");
 
                 if (enrolleeRemoteUsers != null)
                 {
