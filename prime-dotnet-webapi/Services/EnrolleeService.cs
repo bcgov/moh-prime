@@ -21,7 +21,7 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly ISubmissionRulesService _automaticAdjudicationService;
         private readonly IEmailService _emailService;
-        private readonly IEnrolleeProfileVersionService _enroleeProfileVersionService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmisService;
         private readonly IBusinessEventService _businessEventService;
         private readonly ISiteService _siteService;
         private readonly IDocumentManagerClient _documentClient;
@@ -32,7 +32,7 @@ namespace Prime.Services
             IMapper mapper,
             ISubmissionRulesService automaticAdjudicationService,
             IEmailService emailService,
-            IEnrolleeProfileVersionService enroleeProfileVersionService,
+            IEnrolleeSubmissionService enroleeSubmissionService,
             IBusinessEventService businessEventService,
             ISiteService siteService,
             IDocumentManagerClient documentClient)
@@ -41,7 +41,7 @@ namespace Prime.Services
             _mapper = mapper;
             _automaticAdjudicationService = automaticAdjudicationService;
             _emailService = emailService;
-            _enroleeProfileVersionService = enroleeProfileVersionService;
+            _enrolleeSubmisService = enroleeSubmissionService;
             _businessEventService = businessEventService;
             _siteService = siteService;
             _documentClient = documentClient;

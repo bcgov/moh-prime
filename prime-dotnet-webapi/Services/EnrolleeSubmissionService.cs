@@ -11,7 +11,7 @@ using Prime.Models;
 
 namespace Prime.Services
 {
-    public class EnrolleeProfileVersionService : BaseService, IEnrolleeProfileVersionService
+    public class EnrolleeSubmissionService : BaseService, IEnrolleeSubmissionService
     {
         private JsonSerializer _camelCaseSerializer = JsonSerializer.Create(
             new JsonSerializerSettings
@@ -20,47 +20,47 @@ namespace Prime.Services
             }
         );
 
-        public EnrolleeProfileVersionService(
+        public EnrolleeSubmissionService(
             ApiDbContext context,
             IHttpContextAccessor httpContext
             ) : base(context, httpContext)
         { }
 
-        public async Task<IEnumerable<EnrolleeProfileVersion>> GetEnrolleeProfileVersionsAsync(int enrolleeId)
+        public async Task<IEnumerable<Submission>> GetEnrolleeSubmissionsAsync(int enrolleeId)
         {
-            return await _context.EnrolleeProfileVersions
+            return await _context.Submissions
                 .Where(epv => epv.EnrolleeId == enrolleeId)
                 .ToListAsync();
         }
 
-        public async Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionAsync(int enrolleeProfileVersionId)
+        public async Task<Submission> GetEnrolleeSubmissionAsync(int enrolleeSubmissionId)
         {
-            return await _context.EnrolleeProfileVersions
-                .SingleOrDefaultAsync(epv => epv.Id == enrolleeProfileVersionId);
+            return await _context.Submissions
+                .SingleOrDefaultAsync(epv => epv.Id == enrolleeSubmissionId);
         }
 
         /**
-          * Get the most recent Profile version before a given time.
+          * Get the most recent submission before a given date.
           */
-        public async Task<EnrolleeProfileVersion> GetEnrolleeProfileVersionBeforeDateAsync(int enrolleeId, DateTimeOffset dateTime)
+        public async Task<Submission> GetEnrolleeSubmissionBeforeDateAsync(int enrolleeId, DateTimeOffset dateTime)
         {
-            return await _context.EnrolleeProfileVersions
+            return await _context.Submissions
             .Where(epv => epv.EnrolleeId == enrolleeId)
             .Where(epv => epv.CreatedDate < dateTime)
             .OrderByDescending(epv => epv.CreatedDate)
             .FirstOrDefaultAsync();
         }
 
-        public async Task CreateEnrolleeProfileVersionAsync(Enrollee enrollee)
+        public async Task CreateEnrolleeSubmissionAsync(Enrollee enrollee)
         {
-            var enrolleeProfileVersion = new EnrolleeProfileVersion
+            var enrolleeSubmission = new Submission
             {
                 EnrolleeId = enrollee.Id,
                 ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
                 CreatedDate = DateTimeOffset.Now
             };
 
-            _context.EnrolleeProfileVersions.Add(enrolleeProfileVersion);
+            _context.Submissions.Add(enrolleeSubmission);
 
             await _context.SaveChangesAsync();
         }

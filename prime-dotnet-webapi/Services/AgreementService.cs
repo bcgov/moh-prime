@@ -26,7 +26,8 @@ namespace Prime.Services
         private readonly IDocumentManagerClient _documentClient;
 
         public AgreementService(
-            ApiDbContext context, IHttpContextAccessor httpContext,
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
             IMapper mapper,
             IPdfService pdfService,
             IRazorConverterService razorConverterService,
