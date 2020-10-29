@@ -13,7 +13,7 @@ import { ToastService } from '@core/services/toast.service';
 import { Address } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
-import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
+import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { Admin } from '@auth/shared/models/admin.model';
@@ -278,17 +278,17 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolmentForAccessTerm(enrolleeId: number, agreementId: number)
-    : Observable<HttpEnrolleeProfileVersion> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/enrolment`)
+  public getSubmissionForAgreement(enrolleeId: number, agreementId: number)
+    : Observable<HttpEnrolleeSubmission> {
+    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/submission`)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
-        tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
-          this.logger.info('ENROLLEE_PROFILE_VERSION', enrolleeProfileVersion)
+        map((response: ApiHttpResponse<HttpEnrolleeSubmission>) => response.result),
+        tap((enrolleeSubmission: HttpEnrolleeSubmission) =>
+          this.logger.info('ENROLLEE_SUBMISSION', enrolleeSubmission)
         ),
-        map(this.enrolleeVersionAdapterResponse()),
+        map(this.enrolleeSubmissionAdapterResponse()),
         catchError((error: any) => {
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolmentForAccessTerm error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getSubmissionForAgreement error has occurred: ', error);
           throw error;
         })
       );
@@ -369,22 +369,23 @@ export class AdjudicationResource {
     return enrollee;
   }
 
-  private enrolleeVersionAdapterResponse(): (enrolleeProfileVersion: HttpEnrolleeProfileVersion) => HttpEnrolleeProfileVersion {
-    return ({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion) => {
+  private enrolleeSubmissionAdapterResponse(): (enrolleeSubmission: HttpEnrolleeSubmission) => HttpEnrolleeSubmission {
+    return ({ id, enrolleeId, profileSnapshot, agreementType, createdDate }: HttpEnrolleeSubmission) => {
       // Compensate for updates to the current enrolment model
       // that don't match enrolment versioning
-      this.enrolleeVersionSnapshotAdapter(profileSnapshot);
+      this.enrolleeSubmissionSnapshotAdapter(profileSnapshot);
 
       return {
         id,
         enrolleeId,
         profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+        agreementType,
         createdDate
       };
     };
   }
 
-  private enrolleeVersionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
+  private enrolleeSubmissionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
     const mapping = {
       voicePhone: 'phone',
       voiceExtension: 'phoneExtension',

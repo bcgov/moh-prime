@@ -4,12 +4,12 @@
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>
-      Enrolment From {{ enrolmentProfileHistory?.createdDate | formatDate }}
+      Enrolment From {{ enrolmentSubmission?.createdDate | formatDate }}
       <small *ngIf="expiryDate" class="text-green ml-4"> Renew by {{ expiryDate | formatDate }}</small>
     </ng-container>
   </app-page-subheader>
 
-  <app-enrollee-review [enrolment]="enrolmentProfileHistory?.profileSnapshot"></app-enrollee-review>
+  <app-enrollee-review [enrolment]="enrolmentSubmission?.profileSnapshot"></app-enrollee-review>
 
   <div class="row justify-content-between">
     <div class="col pt-4">

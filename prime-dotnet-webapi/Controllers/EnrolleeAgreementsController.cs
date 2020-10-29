@@ -22,7 +22,7 @@ namespace Prime.Controllers
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IBusinessEventService _businessEventService;
 
@@ -31,14 +31,14 @@ namespace Prime.Controllers
         public EnrolleeAgreementsController(
             IEnrolleeService enrolleeService,
             IAgreementService agreementService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IEnrolleeSubmissionService enrolleeSubmissionService,
             IRazorConverterService razorConverterService,
             IBusinessEventService businessEventService,
             IPdfService pdfService)
         {
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
-            _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
             _razorConverterService = razorConverterService;
             _businessEventService = businessEventService;
             _pdfService = pdfService;
@@ -164,19 +164,19 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(agreement));
         }
 
-        // GET: api/Enrollees/5/agreements/3/enrolment
+        // GET: api/Enrollees/5/agreements/3/submission
         /// <summary>
-        /// Get the Profile Snapshot used for the given agreement.
+        /// Get the submission for a given agreement.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="agreementId"></param>
-        [HttpGet("{enrolleeId}/agreements/{agreementId}/enrolment", Name = nameof(GetEnrolmentForAgreement))]
+        [HttpGet("{enrolleeId}/agreements/{agreementId}/submission", Name = nameof(GetSubmissionForAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolmentForAgreement(int enrolleeId, int agreementId)
+        [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<Submission>> GetSubmissionForAgreement(int enrolleeId, int agreementId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -194,10 +194,10 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Accepted Agreement not found with id {agreementId} for enrollee with id {enrolleeId}"));
             }
 
-            var enrolleeProfileHistory = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
-            if (enrolleeProfileHistory == null)
+            var enrolleeSubmission = await _enrolleeSubmissionService.GetEnrolleeSubmissionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
+            if (enrolleeSubmission == null)
             {
-                return NotFound(ApiResponse.Message($"No enrolment profile history found for Agreement with id {agreementId} for enrollee with id {enrolleeId}."));
+                return NotFound(ApiResponse.Message($"No enrolment submissions were found for Agreement with id {agreementId} for enrollee with id {enrolleeId}."));
             }
 
             if (User.IsAdmin())
@@ -205,7 +205,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Enrolment in PRIME History");
             }
 
-            return Ok(ApiResponse.Result(enrolleeProfileHistory));
+            return Ok(ApiResponse.Result(enrolleeSubmission));
         }
 
         // GET: api/Enrollees/5/agreements/2/signable
