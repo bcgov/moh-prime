@@ -439,7 +439,6 @@ namespace Prime.Services
         {
             var sites = await this.GetBaseSiteQuery()
                 .Where(s => s.ApprovedDate != null)
-                // .ProjectTo<RemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
