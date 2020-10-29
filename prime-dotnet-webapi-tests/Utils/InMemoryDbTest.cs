@@ -59,7 +59,7 @@ namespace PrimeTests.Utils
             TestDb.AddRange(new StatusReasonConfiguration().SeedData);
             TestDb.AddRange(new VendorConfiguration().SeedData);
 
-            TestDb.AddRange(AgreementVersionConfiguration.SeedData);
+            TestDb.AddRange(new AgreementVersionConfiguration().SeedData);
 
             TestDb.SaveChanges();
         }

@@ -100,7 +100,7 @@ namespace Prime.Models
         public ICollection<Agreement> Agreements { get; set; }
 
         [JsonIgnore]
-        public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
+        public ICollection<Submission> Submissions { get; set; }
 
         public bool AlwaysManual { get; set; }
 

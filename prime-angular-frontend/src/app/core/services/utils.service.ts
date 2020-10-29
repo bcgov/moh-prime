@@ -151,6 +151,18 @@ export class UtilsService {
 
   /**
    * @description
+   * Download a PDF.
+   */
+  public downloadPdf(file: string | Blob, filename: string): void {
+    if (typeof file === 'string') {
+      file = this.base64ToBlob(file);
+    }
+
+    this.downloadDocument(file, filename);
+  }
+
+  /**
+   * @description
    * Download a document using a document manager download token.
    */
   public downloadToken(token: string): void {

@@ -12,6 +12,11 @@ namespace Prime.Engines
         /// </summary>
         public AgreementType? DetermineAgreementType(Enrollee enrollee)
         {
+            if (enrollee.Certifications.Count() > 1)
+            {
+                return null;
+            }
+
             if (!enrollee.IsRegulatedUser())
             {
                 return AgreementType.OboTOA;

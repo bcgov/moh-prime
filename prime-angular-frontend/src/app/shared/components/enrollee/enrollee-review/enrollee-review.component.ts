@@ -5,7 +5,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
@@ -26,8 +26,8 @@ export class EnrolleeReviewComponent {
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = selfDeclarationQuestions;
   public demographicRoutePath: string;
-  public identityProvider: IdentityProvider;
-  public IdentityProvider = IdentityProvider;
+  public identityProvider: IdentityProviderEnum;
+  public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentRoutes = EnrolmentRoutes;
 
   constructor(
@@ -37,9 +37,9 @@ export class EnrolleeReviewComponent {
     this.route = new EventEmitter<string>();
 
     this.authService.identityProvider$()
-      .subscribe((identityProvider: IdentityProvider) => {
+      .subscribe((identityProvider: IdentityProviderEnum) => {
         this.identityProvider = identityProvider;
-        this.demographicRoutePath = (identityProvider === IdentityProvider.BCEID)
+        this.demographicRoutePath = (identityProvider === IdentityProviderEnum.BCEID)
           ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
           : EnrolmentRoutes.BCSC_DEMOGRAPHIC;
       });
