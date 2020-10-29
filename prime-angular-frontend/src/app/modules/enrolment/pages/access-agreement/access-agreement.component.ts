@@ -111,18 +111,12 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
               : EMPTY
           )
         )
-        .subscribe(
-          () => {
-            this.toastService.openSuccessToast(`Terms of Access has been ${status.adjective}`);
-            this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY, {
-              state: { showProgressBar: this.isInitialEnrolment }
-            });
-          },
-          (error: any) => {
-            this.toastService.openErrorToast(`Terms of Access could not be ${status.adjective}`);
-            this.logger.error('[Enrolment] AccessAgreement::onSubmit error has occurred: ', error);
-          }
-        );
+        .subscribe(() => {
+          this.toastService.openSuccessToast(`Terms of Access has been ${status.adjective}`);
+          this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY, {
+            state: { showProgressBar: this.isInitialEnrolment }
+          });
+        });
     }
   }
 
@@ -186,12 +180,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     this.authService.identityProvider$()
       .subscribe((identityProvider: IdentityProviderEnum) => this.identityProvider = identityProvider);
     this.busy = this.enrolmentResource.getLatestAccessTerm(this.enrolment.id, false)
-      .subscribe(
-        (accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm,
-        (error: any) => {
-          this.toastService.openErrorToast(`Terms of access could not be found`);
-          this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);
-        }
-      );
+      .subscribe((accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm);
   }
 }
