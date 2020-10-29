@@ -263,9 +263,9 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolmentForAccessTerm(enrolleeId: number, agreementId: number)
+  public getSubmissionForAgreement(enrolleeId: number, agreementId: number)
     : Observable<HttpEnrolleeSubmission> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/enrolment`)
+    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/submission`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrolleeSubmission>) => response.result),
         tap((enrolleeSubmission: HttpEnrolleeSubmission) =>
@@ -273,7 +273,7 @@ export class AdjudicationResource {
         ),
         map(this.enrolleeSubmissionAdapterResponse()),
         catchError((error: any) => {
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolmentForAccessTerm error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getSubmissionForAgreement error has occurred: ', error);
           throw error;
         })
       );

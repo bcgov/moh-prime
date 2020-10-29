@@ -33,7 +33,7 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
     const enrolleeId = this.route.snapshot.params.id;
     const accessTermId = this.route.snapshot.params.aid;
     this.busy = forkJoin([
-      this.adjudicationResource.getEnrolmentForAccessTerm(enrolleeId, accessTermId),
+      this.adjudicationResource.getSubmissionForAgreement(enrolleeId, accessTermId),
       this.adjudicationResource.getEnrolleeById(enrolleeId)
     ]).pipe(
       map(([enrolleeSubmission, enrolment]: [HttpEnrolleeSubmission, HttpEnrollee]) =>
