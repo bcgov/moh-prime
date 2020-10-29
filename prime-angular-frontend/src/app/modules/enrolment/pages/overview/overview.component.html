@@ -19,6 +19,14 @@
     </app-page-subheader>
   </div>
 
+  <button *ngIf="!this.enrolment.enrolleeRemoteUsers?.length"
+          mat-stroked-button
+          color="primary"
+          (click)="routeTo(EnrolmentRoutes.REMOTE_ACCESS)">
+    <mat-icon class="mr-1">notification_important</mat-icon>
+    Request Remote Access
+  </button>
+
   <app-alert *ngIf="!hasRegOrJob()"
              type="danger"
              icon="warning">
