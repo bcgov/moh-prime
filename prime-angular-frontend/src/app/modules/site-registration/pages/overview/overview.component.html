@@ -10,7 +10,7 @@
     </app-page-subheader2>
   </div>
 
-  <app-overview-container [showEditRedirect]="!isOrganizationReview"
+  <app-overview-container [showEditRedirect]="isSiteReview || (isOrganizationReview && !organization.submittedDate)"
                           [organization]="organization"
                           [site]="site"></app-overview-container>
 
