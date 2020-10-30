@@ -5,7 +5,6 @@ import { OrganizationAgreement } from '@shared/models/agreement.model';
 export interface Organization {
   id?: number;
   displayId?: number;
-  siteCount: number;
   // Forms -----
   signingAuthorityId?: number;
   signingAuthority: Party;
@@ -14,8 +13,8 @@ export interface Organization {
   doingBusinessAs?: string;
   // States -----
   completed: boolean;
-  submittedDate: string;
   hasAcceptedAgreement: boolean;
+  hasSubmittedSite: boolean;
 }
 
 export interface OrganizationListViewModel extends
