@@ -31,7 +31,7 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId = null)
         {
-            IQueryable<Organization> query = this.GetBaseOrganizationQuery();
+            IQueryable<Organization> query = GetBaseOrganizationQuery();
 
             if (partyId != null)
             {
@@ -48,7 +48,7 @@ namespace Prime.Services
 
         public async Task<Organization> GetOrganizationAsync(int organizationId)
         {
-            return await this.GetBaseOrganizationQuery()
+            return await GetBaseOrganizationQuery()
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
@@ -91,13 +91,13 @@ namespace Prime.Services
 
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
-            var currentOrganization = await this.GetOrganizationAsync(organizationId);
+            var currentOrganization = await GetOrganizationAsync(organizationId);
 
             // BCSC Fields
             var userId = currentOrganization.SigningAuthority.UserId;
 
-            this._context.Entry(currentOrganization).CurrentValues.SetValues(updatedOrganization);
-            this._context.Entry(currentOrganization.SigningAuthority).CurrentValues.SetValues(updatedOrganization.SigningAuthority);
+            _context.Entry(currentOrganization).CurrentValues.SetValues(updatedOrganization);
+            _context.Entry(currentOrganization.SigningAuthority).CurrentValues.SetValues(updatedOrganization.SigningAuthority);
 
             _partyService.UpdatePartyPhysicalAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority);
 
@@ -120,12 +120,12 @@ namespace Prime.Services
 
         public async Task<int> UpdateCompletedAsync(int organizationId)
         {
-            var organization = await this.GetBaseOrganizationQuery()
+            var organization = await GetBaseOrganizationQuery()
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
 
             organization.Completed = true;
 
-            this._context.Update(organization);
+            _context.Update(organization);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
@@ -138,7 +138,7 @@ namespace Prime.Services
 
         public async Task DeleteOrganizationAsync(int organizationId)
         {
-            var organization = await this.GetBaseOrganizationQuery()
+            var organization = await GetBaseOrganizationQuery()
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
 
             if (organization == null)
@@ -153,7 +153,7 @@ namespace Prime.Services
 
         public async Task<Organization> GetOrganizationNoTrackingAsync(int organizationId)
         {
-            return await this.GetBaseOrganizationQuery()
+            return await GetBaseOrganizationQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
