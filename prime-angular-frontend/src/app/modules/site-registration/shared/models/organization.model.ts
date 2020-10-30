@@ -1,6 +1,5 @@
 import { SiteListViewModel } from './site.model';
 import { Party } from './party.model';
-import { OrganizationAgreement } from '@shared/models/agreement.model';
 
 export interface Organization {
   id?: number;
@@ -18,6 +17,6 @@ export interface Organization {
 }
 
 export interface OrganizationListViewModel extends
-  Omit<Organization, 'siteCount' | 'registrationId' | 'hasAcceptedAgreement'> {
+  Omit<Organization, 'siteCount' | 'registrationId' | 'hasAcceptedAgreement' | 'hasSubmittedSite'> {
   sites: SiteListViewModel[];
 }
