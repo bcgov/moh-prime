@@ -1,9 +1,5 @@
 {
   "compileOnSave": false,
-  "exclude": [
-    "node_modules",
-    "typings"
-  ],
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
@@ -17,8 +13,7 @@
     "importHelpers": true,
     "target": "es2015",
     "typeRoots": [
-      "./types",
-      "./node_modules/@types"
+      "node_modules/@types"
     ],
     "lib": [
       "es2018",
