@@ -30,6 +30,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -46,6 +47,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public termsOfAccessAgreements: { type: AgreementType, name: string }[];
 
   private routeUtils: RouteUtils;
 
@@ -67,6 +69,13 @@ export class AdjudicationContainerComponent implements OnInit {
     this.dataSource = new MatTableDataSource<EnrolleeListViewModel>([]);
 
     this.showSearchFilter = false;
+
+    this.termsOfAccessAgreements = [
+      { type: AgreementType.REGULATED_USER_TOA, name: 'RU' },
+      { type: AgreementType.OBO_TOA, name: 'OBO' },
+      { type: AgreementType.COMMUNITY_PHARMACIST_TOA, name: 'PharmRU' },
+      { type: AgreementType.PHARMACY_OBO_TOA, name: 'PharmOBO' }
+    ];
   }
 
   public onSearch(search: string | null): void {

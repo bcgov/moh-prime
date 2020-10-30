@@ -41,6 +41,18 @@
                                  (rerunRules)="onRerunRules($event)"
                                  (toggleManualAdj)="onToggleManualAdj($event)"></app-adjudicator-actions>
 
+        <mat-form-field>
+          <mat-label>TOA Selection</mat-label>
+          <mat-select>
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let agreement of termsOfAccessAgreements"
+                        [value]="agreement.type">
+              {{ agreement.name }}
+            </mat-option>
+          </mat-select>
+          <!-- <mat-error *ngIf="animalControl.hasError('required')">Required</mat-error> -->
+        </mat-form-field>
+
       </div>
     </div>
 
