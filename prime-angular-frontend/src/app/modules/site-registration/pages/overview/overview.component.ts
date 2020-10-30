@@ -89,13 +89,9 @@ export class OverviewComponent implements OnInit {
 
   public ngOnInit(): void {
     if (this.isOrganizationReview) {
-      console.log('TEST 1');
-
       this.organization = this.organizationService.organization;
       this.showSubmission = false;
     } else {
-      console.log('TEST 2');
-
       this.site = this.siteService.site;
       this.showSubmission = !this.site.submittedDate;
     }
