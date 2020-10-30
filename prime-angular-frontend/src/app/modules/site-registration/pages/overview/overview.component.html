@@ -14,7 +14,7 @@
                           [organization]="organization"
                           [site]="site"></app-overview-container>
 
-  <ng-container *ngIf="!showSubmission">
+  <ng-container *ngIf="showSubmission; else goBack">
     <div class="footer mb-4">
       <mat-checkbox #accept>
         <div class="pl-3">
@@ -34,7 +34,7 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="showSubmission">
+  <ng-template #goBack>
     <div class="row justify-content-end">
       <div class="col">
         <button mat-stroked-button
@@ -42,5 +42,5 @@
                 (click)="onBack()">Back</button>
       </div>
     </div>
-  </ng-container>
+  </ng-template>
 </app-page>
