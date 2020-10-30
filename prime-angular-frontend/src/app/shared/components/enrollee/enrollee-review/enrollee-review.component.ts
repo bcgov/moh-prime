@@ -12,6 +12,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -22,13 +23,14 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;
   @Input() public enrolment: Enrolment;
-  @Output() public route: EventEmitter<string>;
+  @Output() public route: EventEmitter<string | (string | number)[]>;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = selfDeclarationQuestions;
   public demographicRoutePath: string;
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentRoutes = EnrolmentRoutes;
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     private authService: AuthService
@@ -108,7 +110,7 @@ export class EnrolleeReviewComponent {
       : [];
   }
 
-  public onRoute(routePath: string): void {
+  public onRoute(routePath: string | (string | number)[]): void {
     this.route.emit(routePath);
   }
 

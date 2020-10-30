@@ -283,7 +283,15 @@
 
     <app-enrollee-property title="Site Information"
                            [makeBold]="true">
-      <a routerLink=""> {{ remoteAccessSite?.site?.doingBusinessAs | default }} </a>
+      <a (click)="onRoute([
+          remoteAccessSite?.site?.organizationId,
+          AdjudicationRoutes.SITE_REGISTRATION,
+          remoteAccessSite.id,
+          AdjudicationRoutes.ORGANIZATION_INFORMATION
+        ])"
+      >
+        {{ remoteAccessSite?.site?.doingBusinessAs | default }}
+      </a>
     </app-enrollee-property>
 
   </ng-container>
