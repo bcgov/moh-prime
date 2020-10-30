@@ -2,14 +2,13 @@
 @model EmailParams
 
 @{
-  var provisionerName = Model.ProvisionerName;
   var enrolleeName = $"{Model.FirstName} {Model.LastName}";
   var tokenUrl = Model.TokenUrl;
   var maxViews = Model.MaxViews;
   var expiryDays = Model.ExpiryDays;
 }
 
-To: @provisionerName
+To: Whom it may concern,
 
 <br>
 <br>
@@ -20,7 +19,6 @@ They can now be set up with their PharmaNet Access account in your local softwar
 You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile.
 
 You can access their GPID via this link below.
-
 
 <br>
 <br>
