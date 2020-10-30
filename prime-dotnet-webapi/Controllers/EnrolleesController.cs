@@ -23,7 +23,7 @@ namespace Prime.Controllers
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
@@ -33,7 +33,7 @@ namespace Prime.Controllers
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IAgreementService agreementService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IEnrolleeSubmissionService enrolleeSubmissionService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
@@ -42,7 +42,7 @@ namespace Prime.Controllers
         {
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
-            _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
             _adminService = adminService;
             _businessEventService = businessEventService;
             _emailService = emailService;
@@ -391,55 +391,6 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(updatedNote));
         }
 
-        // GET: api/Enrollees/5/versions
-        /// <summary>
-        /// Get a list of enrollee profile versions.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/versions", Name = nameof(GetEnrolleeProfileVersions))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EnrolleeProfileVersion>>> GetEnrolleeProfileVersions(int enrolleeId)
-        {
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
-            }
-
-            var enrolleeProfileHistories = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionsAsync(enrolleeId);
-
-            return Ok(ApiResponse.Result(enrolleeProfileHistories));
-        }
-
-        // GET: api/Enrollees/5/versions/1
-        /// <summary>
-        /// Get an enrollee profile version.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        /// <param name="enrolleeProfileVersionId"></param>
-        [HttpGet("{enrolleeId}/versions/{enrolleeProfileVersionId}", Name = nameof(GetEnrolleeProfileVersion))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolleeProfileVersion(int enrolleeId, int enrolleeProfileVersionId)
-        {
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
-            }
-
-            var enrolleeProfileVersion = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionAsync(enrolleeProfileVersionId);
-
-            return Ok(ApiResponse.Result(enrolleeProfileVersion));
-        }
-
         // PUT: api/Enrollees/5/adjudicator
         /// <summary>
         /// Add an enrollee's assigned adjudicator.
@@ -671,34 +622,5 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(token));
         }
 
-
-        // POST: api/Enrollees/5/enrollee-remote-users
-        /// <summary>
-        /// Creates new EnrolleeRemoteUsers from site list
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        /// <param name="sites"></param>
-        [HttpPost("{enrolleeId}/enrollee-remote-users", Name = nameof(CreateEnrolleeRemoteUsers))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeRemoteUser>>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<IEnumerable<EnrolleeRemoteUser>>> CreateEnrolleeRemoteUsers(int enrolleeId, [FromBody] List<int> sites)
-        {
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
-            }
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            var result = await _enrolleeService.AddEnrolleeRemoteUsersAsync(enrollee, sites);
-
-            return CreatedAtAction(
-                nameof(CreateEnrolleeRemoteUsers),
-                new { enrolleeId = enrolleeId },
-                ApiResponse.Result(result)
-            );
-        }
     }
 }

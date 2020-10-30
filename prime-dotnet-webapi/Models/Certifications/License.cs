@@ -19,7 +19,9 @@ namespace Prime.Models
         [JsonIgnore]
         public bool Validate { get; set; }
 
-        public bool RegulatedUser { get; set; }
+        public bool NamedInImReg  { get; set; }
+
+        public bool LicensedToProvideCare { get; set; }
 
         [Required]
         public string Name { get; set; }

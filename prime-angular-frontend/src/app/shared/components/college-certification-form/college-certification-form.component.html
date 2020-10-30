@@ -7,7 +7,8 @@
       <mat-form-field class="w-100">
         <mat-label>College Licences</mat-label>
         <mat-select formControlName="collegeCode">
-          <mat-option value="">None</mat-option>
+          <mat-option *ngIf="!condensed"
+                      value="">None</mat-option>
           <mat-option *ngFor="let college of getDisplayedColleges()"
                       [value]="college.code">
             {{ college.name }}
@@ -65,7 +66,7 @@
                 <ng-container appContextualContent>
 
                   <ng-container [ngSwitch]="collegeCode.value">
-                    <p *ngSwitchCase="CollegeLicenceClass.BCCNP">
+                    <p *ngSwitchCase="CollegeLicenceClass.BCCNM">
                       If you are a nurse practitioner, your Prescriber ID number was issued and communicated to you when
                       you were initially granted practising NP registration. Your Prescriber ID number is created with
                       the digits 96 and the last five digits of your College ID/Registration number. Please provide only
@@ -91,6 +92,9 @@
                         </li>
                       </ol>
                     </div>
+                    <p *ngSwitchDefault>
+                      Enter your College license number
+                    </p>
                   </ng-container>
 
                 </ng-container>
@@ -103,7 +107,8 @@
 
         <ng-container *ngIf="!condensed">
 
-          <div class="col-sm-12 pl-5">
+          <div *ngIf="filteredLicenses.length > 1"
+               class="col-sm-12 pl-5">
 
             <mat-form-field class="w-100">
               <mat-label>Licence class issued to you by your college</mat-label>

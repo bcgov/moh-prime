@@ -66,6 +66,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
       'street',
       'city',
       'provinceCode',
+      'countryCode',
       'postal'
     ];
   }
