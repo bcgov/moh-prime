@@ -11,7 +11,7 @@ import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -34,8 +34,9 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public remoteAccessLocationsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
+  public accessAgreementForm: FormGroup;
 
-  private identityProvider: IdentityProvider;
+  private identityProvider: IdentityProviderEnum;
   private enrolleeId: number;
   private userId: string;
 
@@ -77,7 +78,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public get json(): Enrolment {
     const id = this.enrolleeId;
     const userId = this.userId;
-    const profile = (this.identityProvider === IdentityProvider.BCEID)
+    const profile = (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicForm.getRawValue()
       : this.bcscDemographicForm.getRawValue();
     const regulatory = this.regulatoryForm.getRawValue();
@@ -87,6 +88,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
     const selfDeclarations = this.convertSelfDeclarationsToJson();
+    const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
 
     return {
       id,
@@ -100,7 +102,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ...careSettings,
       enrolleeRemoteUsers,
       ...remoteAccessLocations,
-      selfDeclarations
+      selfDeclarations,
+      accessAgreementGuid
     };
   }
 
@@ -111,13 +114,13 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public get forms(): AbstractControl[] {
     return [
       ...ArrayUtils.insertIf(
-        this.identityProvider === IdentityProvider.BCEID,
+        this.identityProvider === IdentityProviderEnum.BCEID,
         // Purposefully omitted accessForm and identityDocumentForm
         // from the list of forms since they are used out of band
         this.bceidDemographicForm
       ),
       ...ArrayUtils.insertIf(
-        this.identityProvider === IdentityProvider.BCSC,
+        this.identityProvider === IdentityProviderEnum.BCSC,
         this.bcscDemographicForm
       ),
       this.regulatoryForm,
@@ -169,6 +172,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
+    this.accessAgreementForm = this.buildAccessAgreementForm();
   }
 
   /**
@@ -180,7 +184,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       return;
     }
 
-    (this.identityProvider === IdentityProvider.BCEID)
+    (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicForm.patchValue(enrolment.enrollee)
       : this.bcscDemographicForm.patchValue(enrolment.enrollee);
     this.deviceProviderForm.patchValue(enrolment);
@@ -458,6 +462,15 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasPharmaNetSuspendedDetails: [null, []],
       hasPharmaNetSuspendedDocumentGuids: this.fb.array([])
+    });
+  }
+
+  private buildAccessAgreementForm(): FormGroup {
+    return this.fb.group({
+      accessAgreementGuid: [
+        '',
+        []
+      ]
     });
   }
 

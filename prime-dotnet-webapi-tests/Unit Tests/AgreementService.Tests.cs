@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Xunit;
 using FakeItEasy;
+using AutoMapper;
 
 using Prime.Models;
 using Prime.Services;
@@ -16,11 +17,15 @@ namespace PrimeTests.UnitTests
     {
         public AgreementService CreateService(
             IHttpContextAccessor httpContext = null,
+            IMapper mapper = null,
+            IPdfService pdfService = null,
             IRazorConverterService razorConverterService = null)
         {
             return new AgreementService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
+                mapper ?? A.Fake<IMapper>(),
+                pdfService ?? A.Fake<IPdfService>(),
                 razorConverterService ?? A.Fake<IRazorConverterService>()
             );
         }

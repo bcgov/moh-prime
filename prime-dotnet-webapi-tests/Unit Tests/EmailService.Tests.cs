@@ -24,7 +24,8 @@ namespace PrimeTests.UnitTests
             ISmtpEmailClient smtpEmailClient = null,
             IDocumentManagerClient documentManagerClient = null,
             IDocumentAccessTokenService documentAccessTokenService = null,
-            ISiteService siteService = null
+            ISiteService siteService = null,
+            IAgreementService agreementService = null
             )
         {
             return new EmailService(
@@ -38,7 +39,8 @@ namespace PrimeTests.UnitTests
                 smtpEmailClient,
                 documentManagerClient,
                 documentAccessTokenService,
-                siteService
+                siteService,
+                agreementService
             );
         }
     }

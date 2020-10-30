@@ -8,8 +8,36 @@
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <ng-container *ngIf="currentPage > 0; else preamble">
-    <app-access-term [accessTerms]="accessTerm"></app-access-term>
+    <ng-container *ngIf="identityProvider === IdentityProviderEnum.BCSC; else uploadTOA">
+      <app-access-term [accessTerms]="accessTerm"></app-access-term>
+    </ng-container>
   </ng-container>
+
+  <ng-template #uploadTOA>
+    <ng-container>
+      <p class="mb-4">
+        Download and print the terms of access. Carefully read and sign the terms of access, then upload the signed
+        version using the upload tool.
+      </p>
+
+      <div class="mb-2 row">
+        <div class="col">
+          <button mat-flat-button
+                  color="primary"
+                  (click)="onDownload()">Download Terms of Access</button>
+        </div>
+      </div>
+
+      <app-document-upload componentName="terms-of-access"
+                           labelMessage="Drag or drop your terms of access or browse"
+                           [multiple]="false"
+                           (completed)="onUpload($event)"
+                           (remove)="onRemoveDocument($event)">
+      </app-document-upload>
+    </ng-container>
+
+
+  </ng-template>
 
   <ng-template #preamble>
 
@@ -44,7 +72,7 @@
 
   </ng-template>
 
-  <div *ngIf="hasReadAgreement"
+  <div *ngIf="hasReadAgreement && identityProvider === IdentityProviderEnum.BCSC"
        class="footer my-3 pb-2">
     <mat-checkbox class="mr-4"
                   [formControl]="agreed">
@@ -65,19 +93,41 @@
     </div>
   </div>
 
-  <div *ngIf="hasReadAgreement"
-       class="row">
-    <div class="col-12 text-md-right">
+  <ng-container *ngIf="identityProvider === IdentityProviderEnum.BCSC; else saveUpload">
+    <div *ngIf="hasReadAgreement"
+         class="row">
+      <div class="col-12 text-md-right">
 
-      <button mat-flat-button
-              color="primary"
-              class="mb-2 w-100"
-              [disabled]="!hasAgreed"
-              (click)="onSubmit(true)">
-        Accept Terms of Access
-      </button>
+        <button mat-flat-button
+                color="primary"
+                class="mb-2 w-100"
+                [disabled]="!hasAgreed"
+                (click)="onSubmit(true)">
+          Accept Terms of Access
+        </button>
 
+      </div>
     </div>
-  </div>
+  </ng-container>
+
+  <ng-template #saveUpload>
+
+    <div *ngIf="hasReadAgreement"
+         class="row">
+      <div class="col pt-2 text-right">
+
+        <button mat-flat-button
+                type="button"
+                color="primary"
+                [disabled]="!hasUploadedFile"
+                (click)="onSubmit(true)">
+          Save and Continue
+        </button>
+
+      </div>
+    </div>
+
+  </ng-template>
+
 
 </app-enrollee-page>
