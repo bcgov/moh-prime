@@ -31,24 +31,23 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId = null)
         {
-            IQueryable<Organization> query = GetBaseOrganizationQuery();
-
-            if (partyId != null)
-            {
-                query = query.Where(o => o.SigningAuthorityId == partyId);
-            }
-
-            return await query
-                .Include(o => o.Sites).ThenInclude(s => s.SiteVendors)
-                .Include(o => o.Sites).ThenInclude(s => s.PhysicalAddress)
-                .Include(o => o.Sites).ThenInclude(s => s.Adjudicator)
-                .Include(o => o.Sites).ThenInclude(s => s.RemoteUsers)
+            return await GetBaseOrganizationQuery()
+                .Include(o => o.Sites)
+                    .ThenInclude(s => s.SiteVendors)
+                .Include(o => o.Sites)
+                    .ThenInclude(s => s.PhysicalAddress)
+                .Include(o => o.Sites)
+                    .ThenInclude(s => s.Adjudicator)
+                .Include(o => o.Sites)
+                    .ThenInclude(s => s.RemoteUsers)
+                .If(partyId != null, q => q.Where(o => o.SigningAuthorityId == partyId))
                 .ToListAsync();
         }
 
         public async Task<Organization> GetOrganizationAsync(int organizationId)
         {
             return await GetBaseOrganizationQuery()
+                .Include(o => o.Sites)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
