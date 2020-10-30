@@ -6,8 +6,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Prime.Models
 {
-    [Table("EnrolleeProfileVersion")]
-    public class EnrolleeProfileVersion : BaseAuditable
+    [Table("Submission")]
+    public class Submission : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
@@ -19,6 +19,8 @@ namespace Prime.Models
 
         [Required]
         public JObject ProfileSnapshot { get; set; }
+
+        public AgreementType? AgreementType { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }
     }
