@@ -182,6 +182,7 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeRemoteUsers)
+                .Include(e => e.RemoteAccessSites)
                 .Include(e => e.RemoteAccessLocations)
                     .ThenInclude(ral => ral.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
@@ -214,6 +215,7 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
 
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
+            UpdateRemoteAccessSites(enrollee, updateModel);
             UpdateRemoteAccessLocations(enrollee, updateModel);
 
             // If profileCompleted is true, this is the first time the enrollee
@@ -333,8 +335,6 @@ namespace Prime.Services
 
         private void UpdateEnrolleeRemoteUsers(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
         {
-            var enrolleeRemoteUsers = new List<EnrolleeRemoteUser>();
-
             if (dbEnrollee.EnrolleeRemoteUsers != null)
             {
                 foreach (var eru in dbEnrollee.EnrolleeRemoteUsers)
@@ -349,6 +349,31 @@ namespace Prime.Services
                 {
                     eru.EnrolleeId = dbEnrollee.Id;
                     _context.Entry(eru).State = EntityState.Added;
+                }
+            }
+        }
+
+        private void UpdateRemoteAccessSites(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
+        {
+            if (dbEnrollee.RemoteAccessSites != null)
+            {
+                foreach (var ras in dbEnrollee.RemoteAccessSites)
+                {
+                    _context.RemoteAccessSites.Remove(ras);
+                }
+            }
+
+            if (updateEnrollee.RemoteAccessSites != null)
+            {
+                foreach (var ras in updateEnrollee.RemoteAccessSites)
+                {
+                    var remoteAccessSite = new RemoteAccessSite
+                    {
+                        EnrolleeId = dbEnrollee.Id,
+                        SiteId = ras.SiteId
+                    };
+
+                    _context.Entry(remoteAccessSite).State = EntityState.Added;
                 }
             }
         }
@@ -433,6 +458,8 @@ namespace Prime.Services
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeRemoteUsers)
+                .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
                 .Include(r => r.RemoteAccessLocations)
                     .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(e => e.EnrolmentStatuses)

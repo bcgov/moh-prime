@@ -435,17 +435,16 @@ namespace Prime.Services
                 .OrderByDescending(bl => bl.UploadedDate)
                 .FirstOrDefaultAsync();
         }
-        public async Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
+        public async Task<IEnumerable<Site>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
         {
             var sites = await this.GetBaseSiteQuery()
                 .Where(s => s.ApprovedDate != null)
-                .ProjectTo<EnrolleeRemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
             foreach (var site in sites)
             {
-                site.RemoteUsers = site.RemoteUsers.Where(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber)));
+                site.RemoteUsers = site.RemoteUsers.Where(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))).ToList();
             }
             return sites;
         }

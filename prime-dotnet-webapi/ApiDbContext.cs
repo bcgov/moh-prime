@@ -78,6 +78,7 @@ namespace Prime
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
+        public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
         public DbSet<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
         // Site Registration
@@ -252,6 +253,12 @@ namespace Prime
                 .HasOne(ral => ral.Enrollee)
                 .WithMany(e => e.RemoteAccessLocations)
                 .HasForeignKey(ral => ral.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RemoteAccessSite>()
+                .HasOne(ras => ras.Enrollee)
+                .WithMany(e => e.RemoteAccessSites)
+                .HasForeignKey(ras => ras.EnrolleeId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion

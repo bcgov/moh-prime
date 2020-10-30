@@ -18,6 +18,9 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { RemoteAccessSite } from '../models/remote-access-site.model';
+import { RemoteAccessLocation } from '../models/remote-access-location';
+import { Site } from '@registration/shared/models/site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -88,6 +91,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
     const selfDeclarations = this.convertSelfDeclarationsToJson();
+    const remoteAccessSites = this.convertRemoteAccessSitesToJson();
     const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
 
     return {
@@ -101,6 +105,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ...jobs,
       ...careSettings,
       enrolleeRemoteUsers,
+      remoteAccessSites,
       ...remoteAccessLocations,
       selfDeclarations,
       accessAgreementGuid
@@ -219,6 +224,30 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       });
     }
 
+    if (enrolment.remoteAccessSites.length) {
+      const remoteAccessSites = this.remoteAccessForm.get('remoteAccessSites') as FormArray;
+      remoteAccessSites.clear();
+      enrolment.remoteAccessSites.forEach((ras: RemoteAccessSite) => {
+        const remoteAccessSite = this.remoteAccessSiteFormGroup();
+        remoteAccessSite.patchValue({
+          enrolleeId: ras.enrolleeId,
+          siteId: ras.siteId,
+          doingBusinessAs: ras.site.doingBusinessAs
+        });
+        remoteAccessSites.push(remoteAccessSite);
+      });
+    }
+
+    if (enrolment.remoteAccessLocations.length) {
+      const remoteAccessLocations = this.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
+      remoteAccessLocations.clear();
+      enrolment.remoteAccessLocations.forEach((ral: RemoteAccessLocation) => {
+        const remoteAccessLocation = this.remoteAccessLocationFormGroup();
+        remoteAccessLocation.patchValue(ral);
+        remoteAccessLocations.push(remoteAccessLocation);
+      });
+    }
+
     this.regulatoryForm.patchValue(enrolment);
     this.jobsForm.patchValue(enrolment);
     this.remoteAccessForm.patchValue(enrolment);
@@ -297,6 +326,18 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         }
         return sds;
       }, []);
+  }
+
+  private convertRemoteAccessSitesToJson(): RemoteAccessSite[] {
+    const { remoteAccessSites } = this.remoteAccessForm.getRawValue();
+
+    return remoteAccessSites.map((ras) => {
+      return {
+        enrolleeId: ras.enrolleeId,
+        siteId: ras.siteId,
+        site: { doingBusinessAs: ras.doingBusinessAs } as Site,
+      } as RemoteAccessSite;
+    });
   }
 
   /**
@@ -403,7 +444,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   public buildRemoteAccessForm(): FormGroup {
     return this.fb.group({
-      sites: this.fb.array([]),
+      remoteAccessSites: this.fb.array([]),
       enrolleeRemoteUsers: this.fb.array([])
     });
   }
@@ -412,6 +453,14 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     return this.fb.group({
       enrolleeId: [null, []],
       remoteUserId: [null, []]
+    });
+  }
+
+  public remoteAccessSiteFormGroup(): FormGroup {
+    return this.fb.group({
+      enrolleeId: [null, []],
+      siteId: [null, []],
+      doingBusinessAs: [null, []]
     });
   }
 

@@ -29,7 +29,7 @@ namespace Prime.Services
 
         Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId);
         Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId);
-        Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> certifications);
+        Task<IEnumerable<Site>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> certifications);
 
         Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(Site site);
     }
