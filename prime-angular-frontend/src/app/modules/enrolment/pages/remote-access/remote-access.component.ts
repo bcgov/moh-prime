@@ -82,7 +82,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     this.remoteAccessSites.clear();
 
     // for each checked site, add a enrolleeRemoteUser and a remoteAccessSite
-    this.sites.controls.forEach((checked, i) => {
+    this.sites?.controls.forEach((checked, i) => {
       if (checked.value) {
         this.remoteSites[i].remoteUsers.forEach(remoteUser => {
           const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
