@@ -36,12 +36,6 @@ namespace Prime.Models
         public ICollection<Agreement> Agreements { get; set; }
 
         [NotMapped]
-        public int SiteCount
-        {
-            get => Sites?.Count ?? 0;
-        }
-
-        [NotMapped]
         public int DisplayId
         {
             get => Id + DISPLAY_OFFSET;
