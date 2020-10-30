@@ -285,7 +285,7 @@ namespace Prime.Models
                 throw new InvalidOperationException($"{nameof(Certifications)} cannnot be null");
             }
 
-            return Certifications.Any(cert => cert.License?.RegulatedUser == true);
+            return Certifications.Any(cert => cert.License?.NamedInImReg  == true);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
