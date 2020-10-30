@@ -46,5 +46,11 @@ namespace Prime.Models
         {
             get => Agreements?.Any(a => a.AcceptedDate.HasValue) ?? false;
         }
+
+        [NotMapped]
+        public bool HasSubmittedSite
+        {
+            get => Sites?.Any(s => s.SubmittedDate.HasValue) ?? false;
+        }
     }
 }
