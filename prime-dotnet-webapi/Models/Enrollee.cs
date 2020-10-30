@@ -108,6 +108,8 @@ namespace Prime.Models
 
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
+        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
+
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
         public int? CredentialId { get; set; }
