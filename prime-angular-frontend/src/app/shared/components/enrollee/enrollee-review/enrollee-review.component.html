@@ -283,7 +283,7 @@
 
     <app-enrollee-property title="Site Information"
                            [makeBold]="true">
-      {{ remoteAccessSite.site.doingBusinessAs | default }}
+      <a routerLink=""> {{ remoteAccessSite?.site?.doingBusinessAs | default }} </a>
     </app-enrollee-property>
 
   </ng-container>

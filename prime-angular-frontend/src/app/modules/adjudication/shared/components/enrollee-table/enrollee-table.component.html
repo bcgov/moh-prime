@@ -77,14 +77,6 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="adjudicator">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Adjudicator </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
-      </ng-container>
-
       <ng-container matColumnDef="remoteAccess">
         <th mat-header-cell
             *matHeaderCellDef
@@ -92,9 +84,17 @@
         <td mat-cell
             *matCellDef="let row;">
           <mat-chip-list [selectable]="false">
-            <mat-chip [disableRipple]="true">{{ row.remoteAccess | default }}</mat-chip>
+            <mat-chip [disableRipple]="true">{{ row.remoteAccess ? "Yes" : "No" | default }}</mat-chip>
           </mat-chip-list>
         </td>
+      </ng-container>
+
+      <ng-container matColumnDef="adjudicator">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Adjudicator </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">

@@ -397,7 +397,8 @@ export class AdjudicationContainerComponent implements OnInit {
       currentStatus,
       previousStatus,
       adjudicator,
-      alwaysManual
+      alwaysManual,
+      enrolleeRemoteUsers
     } = enrollee;
     return {
       id,
@@ -411,7 +412,8 @@ export class AdjudicationContainerComponent implements OnInit {
       currentStatusCode: currentStatus?.statusCode,
       previousStatus,
       adjudicatorIdir: adjudicator?.idir,
-      alwaysManual
+      alwaysManual,
+      remoteAccess: (enrolleeRemoteUsers?.length) ? true : false
     };
   }
 }

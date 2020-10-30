@@ -25,6 +25,7 @@
                 [ngTemplateOutletContext]="{
                   isCurrent: true,
                   submittedDate: enrollee?.appliedDate,
+                  remoteAccess: enrollee?.remoteAccess,
                   enrolmentRoute: [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT]
                 }">
   </ng-container>
@@ -75,7 +76,12 @@
 
       <div *ngIf="remoteAccess"
            class="card-title">
-        <small>{{ remoteAccess }}</small>
+        <ng-container *ngIf="isCurrent; else currentRemoteAccess">
+          User Requested Remote Access
+        </ng-container>
+        <ng-template #currentRemoteAccess>
+          <small>{{ remoteAccess }}</small>
+        </ng-template>
       </div>
     </mat-card-content>
     <mat-card-actions>

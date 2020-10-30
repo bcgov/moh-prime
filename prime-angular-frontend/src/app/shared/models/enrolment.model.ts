@@ -102,4 +102,5 @@ export interface EnrolleeListViewModel {
   previousStatus: EnrolmentStatus;
   adjudicatorIdir: string;
   alwaysManual: boolean;
+  remoteAccess: boolean;
 }

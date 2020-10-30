@@ -454,7 +454,6 @@ namespace Prime.Services
                 .Include(e => e.MailingAddress)
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
-                        .ThenInclude(l => l.DefaultPrivileges)
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeRemoteUsers)
@@ -471,8 +470,6 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.IdentificationDocuments)
-                .Include(e => e.AssignedPrivileges)
-                    .ThenInclude(ap => ap.Privilege)
                 .Include(e => e.Agreements)
                 .Include(e => e.Credential);
         }

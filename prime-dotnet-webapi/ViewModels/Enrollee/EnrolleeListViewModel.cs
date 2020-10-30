@@ -62,15 +62,11 @@ namespace Prime.ViewModels
         [JsonIgnore]
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
-        public string RemoteAccess
+        public bool RemoteAccess
         {
             get
             {
-                if (EnrolleeRemoteUsers.Count > 0)
-                {
-                    return (ApprovedDate == null) ? "Requested" : "Yes";
-                }
-                return null;
+                return (EnrolleeRemoteUsers.Count > 0) ? true : false;
             }
         }
     }

@@ -23,7 +23,7 @@ namespace Prime.ViewModels
 
                 if (enrolleeRemoteUsers != null)
                 {
-                    if (enrolleeRemoteUsers.Count > 0 && AgreementAcceptedDate != null)
+                    if (enrolleeRemoteUsers.Count > 0)
                     {
                         return (AgreementAcceptedDate == null)
                             ? "User Requested Remote Access"
