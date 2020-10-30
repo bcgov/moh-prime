@@ -10,6 +10,8 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -86,12 +88,24 @@ export class EnrolleeReviewComponent {
     return (this.enrolment && !!this.enrolment.careSettings.length);
   }
 
+  public get careSettings(): CareSetting[] {
+    return (this.hasCareSetting) ? this.enrolment.careSettings : [];
+  }
+
   public get isRequestingRemoteAccess(): boolean {
     return (this.enrolment && !!this.enrolment.enrolleeRemoteUsers?.length);
   }
 
-  public get careSettings(): CareSetting[] {
-    return (this.hasCareSetting) ? this.enrolment.careSettings : [];
+  public get remoteAccessSites(): RemoteAccessSite[] {
+    return (this.isRequestingRemoteAccess)
+      ? this.enrolment.remoteAccessSites
+      : [];
+  }
+
+  public get remoteAccessLocations(): RemoteAccessLocation[] {
+    return (this.isRequestingRemoteAccess)
+      ? this.enrolment.remoteAccessLocations
+      : [];
   }
 
   public onRoute(routePath: string): void {

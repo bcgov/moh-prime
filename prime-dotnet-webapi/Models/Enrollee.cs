@@ -112,6 +112,8 @@ namespace Prime.Models
 
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
+        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
+
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
         public int? CredentialId { get; set; }
@@ -283,7 +285,7 @@ namespace Prime.Models
                 throw new InvalidOperationException($"{nameof(Certifications)} cannnot be null");
             }
 
-            return Certifications.Any(cert => cert.License?.RegulatedUser == true);
+            return Certifications.Any(cert => cert.License?.NamedInImReg  == true);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

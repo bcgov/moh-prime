@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201029012017_NewColleges")]
+    partial class NewColleges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -12518,6 +12520,42 @@ namespace Prime.Migrations
                     b.ToTable("EnrolleeNote");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ProfileSnapshot")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("EnrolleeProfileVersion");
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolleeRemoteUser", b =>
                 {
                     b.Property<int>("Id")
@@ -15161,40 +15199,6 @@ namespace Prime.Migrations
                     b.ToTable("RemoteAccessLocation");
                 });
 
-            modelBuilder.Entity("Prime.Models.RemoteAccessSite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.HasIndex("SiteId");
-
-                    b.ToTable("RemoteAccessSite");
-                });
-
             modelBuilder.Entity("Prime.Models.RemoteUser", b =>
                 {
                     b.Property<int>("Id")
@@ -15889,55 +15893,7 @@ namespace Prime.Migrations
                             Name = "User has Requested Remote Access",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = 16,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Terms of Agreement to be determined by an Adjudicator",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
-                });
-
-            modelBuilder.Entity("Prime.Models.Submission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int?>("AgreementType")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ProfileSnapshot")
-                        .IsRequired()
-                        .HasColumnType("json");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.ToTable("Submission");
                 });
 
             modelBuilder.Entity("Prime.Models.Vendor", b =>
@@ -16349,6 +16305,15 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeProfileVersion", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany("EnrolleeProfileVersions")
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolleeRemoteUser", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
@@ -16500,21 +16465,6 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.RemoteAccessSite", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany("RemoteAccessSites")
-                        .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Site", "Site")
-                        .WithMany()
-                        .HasForeignKey("SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Prime.Models.RemoteUser", b =>
                 {
                     b.HasOne("Prime.Models.Site", "Site")
@@ -16650,15 +16600,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Vendor", "Vendor")
                         .WithMany("SiteVendors")
                         .HasForeignKey("VendorCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.Submission", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany("Submissions")
-                        .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
