@@ -151,21 +151,6 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Organization> SubmitRegistrationAsync(int organizationId)
-        {
-            var organization = await GetOrganizationAsync(organizationId);
-            organization.SubmittedDate = DateTimeOffset.Now;
-            _context.Update(organization);
-
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not submit the organization.");
-            }
-
-            return organization;
-        }
-
         public async Task<Organization> GetOrganizationNoTrackingAsync(int organizationId)
         {
             return await this.GetBaseOrganizationQuery()
