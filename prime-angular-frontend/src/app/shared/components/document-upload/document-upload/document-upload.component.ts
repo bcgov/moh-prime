@@ -72,7 +72,9 @@ export class DocumentUploadComponent implements OnInit {
   }
 
   public removeFiles() {
-    this.filePondComponent.removeFiles({ revert: false });
+    // TODO temporary fix to get around type definitions not be up to date for filepond
+    const method = 'removeFiles';
+    this.filePondComponent[method]({ revert: false });
   }
 
   public onFilePondInit() {
