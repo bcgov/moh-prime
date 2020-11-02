@@ -52,13 +52,6 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
-        public async Task<Organization> GetOrganizationBySiteIdAsync(int siteId)
-        {
-            return await _context.Organizations
-                .Where(o => o.Sites.Any(s => s.Id == siteId))
-                .SingleOrDefaultAsync();
-        }
-
         public async Task<int> CreateOrganizationAsync(Party signingAuthority)
         {
             signingAuthority.ThrowIfNull(nameof(signingAuthority));
