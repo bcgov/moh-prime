@@ -32,12 +32,6 @@ export class AccessAgreementCurrentComponent implements OnInit {
   private getAccessTermLatestSigned() {
     const enrolleeId = this.enrolmentService.enrolment.id;
     this.busy = this.enrolmentResource.getLatestAccessTerm(enrolleeId, true)
-      .subscribe(
-        (accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm,
-        (error: any) => {
-          this.toastService.openErrorToast('Enrollee agreement could not be retrieved');
-          this.logger.error('[Enrolments] AccessAgreementHistory::getAccessTerm error has occurred: ', error);
-        }
-      );
+      .subscribe((accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm);
   }
 }

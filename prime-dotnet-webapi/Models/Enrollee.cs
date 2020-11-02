@@ -100,7 +100,7 @@ namespace Prime.Models
         public ICollection<Agreement> Agreements { get; set; }
 
         [JsonIgnore]
-        public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
+        public ICollection<Submission> Submissions { get; set; }
 
         public bool AlwaysManual { get; set; }
 
@@ -111,6 +111,8 @@ namespace Prime.Models
         public string IdentityProvider { get; set; }
 
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
+
+        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
 
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
@@ -283,7 +285,7 @@ namespace Prime.Models
                 throw new InvalidOperationException($"{nameof(Certifications)} cannnot be null");
             }
 
-            return Certifications.Any(cert => cert.License?.RegulatedUser == true);
+            return Certifications.Any(cert => cert.License?.NamedInImReg  == true);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

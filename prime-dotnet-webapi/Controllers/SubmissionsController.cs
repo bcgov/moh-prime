@@ -22,20 +22,20 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
 
         public SubmissionsController(
             ISubmissionService submissionService,
             IAdminService adminService,
             IEnrolleeService enrolleeService,
             IAgreementService agreementService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService)
+            IEnrolleeSubmissionService enrolleeSubmissionService)
         {
             _submissionService = submissionService;
             _adminService = adminService;
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
-            _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
         }
 
         // POST: api/enrollees/5/submission
@@ -83,13 +83,16 @@ namespace Prime.Controllers
         /// <summary>
         /// Performs a submission-related action on an Enrolle, such as an adjudicator approving an application.
         /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="submissionAction"></param>
+        /// <param name="documentGuid"></param>
         [HttpPost("{enrolleeId}/submission/{submissionAction:submissionAction}", Name = nameof(SubmissionAction))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction)
+        public async Task<ActionResult<Enrollee>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction, [FromQuery] Guid? documentGuid = null)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -101,17 +104,15 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            try
-            {
-                await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin());
-                var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-                return Ok(ApiResponse.Result(enrollee));
-            }
-            catch (SubmissionService.InvalidActionException)
+            var success = await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin(), documentGuid);
+            if (!success)
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Action could not be performed.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
+
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            return Ok(ApiResponse.Result(enrollee));
         }
 
         // PUT: api/enrollees/5/always-manual

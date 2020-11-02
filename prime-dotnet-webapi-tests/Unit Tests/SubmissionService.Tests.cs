@@ -21,7 +21,7 @@ namespace PrimeTests.UnitTests
             IBusinessEventService businessEventService = null,
             IEmailService emailService = null,
             IEnrolleeService enrolleeService = null,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService = null,
+            IEnrolleeSubmissionService enrolleeSubmissionService = null,
             IVerifiableCredentialService verifiableCredentialService = null,
             IPrivilegeService privilegeService = null,
             ILogger<SubmissionService> logger = null)
@@ -34,7 +34,7 @@ namespace PrimeTests.UnitTests
                 businessEventService ?? A.Fake<IBusinessEventService>(),
                 emailService ?? A.Fake<IEmailService>(),
                 enrolleeService ?? A.Fake<IEnrolleeService>(),
-                enrolleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>(),
+                enrolleeSubmissionService ?? A.Fake<IEnrolleeSubmissionService>(),
                 verifiableCredentialService ?? A.Fake<IVerifiableCredentialService>(),
                 privilegeService ?? A.Fake<IPrivilegeService>(),
                 logger ?? A.Fake<ILogger<SubmissionService>>()

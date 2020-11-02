@@ -1,4 +1,4 @@
-import { AbstractControl, FormBuilder, Validators, FormGroup, FormControl, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, Validators, FormGroup, ValidatorFn } from '@angular/forms';
 import { RouterEvent } from '@angular/router';
 
 import { map, tap } from 'rxjs/operators';

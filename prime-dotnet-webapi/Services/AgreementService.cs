@@ -9,9 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Prime.Models;
-using Prime.Engines;
 using Prime.Models.Api;
 using Prime.ViewModels;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
@@ -22,17 +22,21 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly IPdfService _pdfService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IDocumentManagerClient _documentClient;
 
         public AgreementService(
-            ApiDbContext context, IHttpContextAccessor httpContext,
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
             IMapper mapper,
             IPdfService pdfService,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
+            IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
             _pdfService = pdfService;
             _razorConverterService = razorConverterService;
+            _documentClient = documentClient;
         }
 
         /// <summary>
@@ -96,14 +100,23 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
                 .Include(e => e.AccessAgreementNote)
+                .Include(e => e.Submissions)
                 .SingleAsync(e => e.Id == enrolleeId);
 
-            AgreementType type = new AgreementEngine().DetermineAgreementType(enrollee).Value;
+            var type = enrollee.Submissions
+                .OrderByDescending(s => s.CreatedDate)
+                .Select(s => s.AgreementType)
+                .FirstOrDefault();
+
+            if (!type.HasValue)
+            {
+                throw new InvalidOperationException("Agreement type is required to approve an enrollee");
+            }
 
             var agreement = new Agreement
             {
                 EnrolleeId = enrolleeId,
-                AgreementVersionId = await FetchNewestAgreementVersionIdOfType(type),
+                AgreementVersionId = await FetchNewestAgreementVersionIdOfType(type.Value),
                 LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(enrollee.AccessAgreementNote),
                 CreatedDate = DateTimeOffset.Now
             };
@@ -113,13 +126,21 @@ namespace Prime.Services
         }
 
         /// <summary>
+        /// Gets the Enrollee's newest Agreement
+        /// </summary>
+        public async Task<Agreement> GetCurrentAgreementAsync(int enrolleeId)
+        {
+            return await _context.Agreements
+                .OrderByDescending(at => at.CreatedDate)
+                .FirstAsync(at => at.EnrolleeId == enrolleeId);
+        }
+
+        /// <summary>
         /// Accepts the Enrollee's newest Agreement, if it hasn't already been accepted.
         /// </summary>
         public async Task AcceptCurrentEnrolleeAgreementAsync(int enrolleeId)
         {
-            var agreement = await _context.Agreements
-                .OrderByDescending(a => a.CreatedDate)
-                .FirstAsync(a => a.EnrolleeId == enrolleeId);
+            var agreement = await this.GetCurrentAgreementAsync(enrolleeId);
 
             if (agreement.AcceptedDate == null)
             {
@@ -254,6 +275,28 @@ namespace Prime.Services
                 .Where(a => a.Id == agreementId)
                 .Select(a => a.SignedAgreement)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid)
+        {
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_agreements");
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
+            var signedAgreement = new SignedAgreementDocument
+            {
+                DocumentGuid = documentGuid,
+                AgreementId = agreementId,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now
+            };
+            _context.SignedAgreementDocuments.Add(signedAgreement);
+
+            await _context.SaveChangesAsync();
+
+            return signedAgreement;
         }
 
         /// <summary>

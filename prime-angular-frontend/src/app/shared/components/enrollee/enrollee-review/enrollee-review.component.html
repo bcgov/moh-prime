@@ -1,6 +1,6 @@
 <app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
 
-<section *ngIf="hasPreferredName && identityProvider === IdentityProvider.BCSC"
+<section *ngIf="hasPreferredName && identityProvider === IdentityProviderEnum.BCSC"
          class="mb-4">
 
   <app-page-subheader>
@@ -253,11 +253,65 @@
     None
   </app-enrollee-property>
 
-  <app-enrollee-property *ngIf="isRequestingRemoteAccess"
-                         title="Requesting Remote Access"
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Remote Access</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Remote Access"
+            (click)="onRoute(EnrolmentRoutes.REMOTE_ACCESS)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Requested"
                          [makeBold]="true">
-    Yes
+    <ng-container *ngIf="isRequestingRemoteAccess; else noAccessRequested">
+      User Requested Remote Access
+    </ng-container>
+
+    <ng-template #noAccessRequested>
+      User Did Not Request Remote Access
+    </ng-template>
   </app-enrollee-property>
+
+  <ng-container *ngFor="let remoteAccessSite of remoteAccessSites">
+
+    <app-enrollee-property title="Site Information"
+                           [makeBold]="true">
+      {{ remoteAccessSite.site.doingBusinessAs | default }}
+    </app-enrollee-property>
+
+  </ng-container>
+
+  <ng-container *ngFor="let remoteAccessLocation of remoteAccessLocations">
+
+    <app-enrollee-property title="Internet Provider"
+                           [makeBold]="true">
+      {{ remoteAccessLocation.internetProvider | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Remote Address">
+      <div class="mb-3">{{ remoteAccessLocation.physicalAddress?.street | default }}</div>
+
+      <app-enrollee-property title="City">
+        {{ remoteAccessLocation.physicalAddress?.city | default }}
+      </app-enrollee-property>
+
+      <app-enrollee-property title="Province">
+        {{ remoteAccessLocation.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+      </app-enrollee-property>
+
+      <app-enrollee-property title="Postal Code">
+        {{ remoteAccessLocation.physicalAddress?.postal | postal | default }}
+      </app-enrollee-property>
+    </app-enrollee-property>
+
+  </ng-container>
 
 </section>
 
