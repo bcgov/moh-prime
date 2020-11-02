@@ -34,6 +34,7 @@ export interface IAuthService {
   isSuperAdmin(): boolean;
   hasAdminView(): boolean;
   hasCommunityPharmacist(): boolean;
+  hasHealthAuthority(): boolean;
   hasVCIssuance(): boolean;
 }
 
