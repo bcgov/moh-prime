@@ -15,9 +15,7 @@ export class AdjudicatorDocumentsComponent implements OnInit {
   @Output() public saveDocuments: EventEmitter<string[]>;
   @Output() public getDocumentByGuid: EventEmitter<number>;
   @ViewChild('documentUpload') public documentUploadComponent: DocumentUploadComponent;
-
   public documentGuids: string[];
-
   public uploadedFile: boolean;
 
   constructor(
@@ -49,7 +47,5 @@ export class AdjudicatorDocumentsComponent implements OnInit {
     this.getDocumentByGuid.emit(documentId);
   }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }

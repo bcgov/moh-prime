@@ -1,10 +1,12 @@
 import { AdjudicatorDocumentsComponent } from '@adjudication/shared/components/adjudicator-documents/adjudicator-documents.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { forkJoin, Observable, of } from 'rxjs';
+
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-import { forkJoin, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-site-adjudicator-documents',
@@ -13,9 +15,10 @@ import { forkJoin, Observable, of } from 'rxjs';
 })
 export class SiteAdjudicatorDocumentsComponent implements OnInit {
   public documents$: Observable<SiteAdjudicationDocument[]>;
-  private siteId: number;
   @ViewChild('adjudicationDocuments') public adjudicatorDocumentsComponent: AdjudicatorDocumentsComponent;
-
+  
+  private siteId: number;
+  
   constructor(
     private siteResource: SiteResource,
     private route: ActivatedRoute,
@@ -42,12 +45,11 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
       );
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getDocuments();
   }
 
   private getDocuments() {
     this.documents$ = this.siteResource.getSiteAdjudicationDocuments(this.siteId);
   }
-
 }

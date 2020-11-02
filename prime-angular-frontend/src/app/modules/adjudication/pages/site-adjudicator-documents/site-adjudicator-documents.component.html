@@ -1,4 +1,4 @@
 <app-adjudicator-documents #adjudicationDocuments
-                           (getDocumentByGuid)="onGetDocumentByGuid($event)"
+                           [documents$]="documents$"
                            (saveDocuments)="onSaveDocuments($event)"
-                           [documents$]="documents$"></app-adjudicator-documents>
+                           (getDocumentByGuid)="onGetDocumentByGuid($event)"></app-adjudicator-documents>
