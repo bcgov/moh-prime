@@ -177,13 +177,13 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     // Always have a single care setting available, and it prevents
     // the page from jumping too much when routing
-    if (!this.careSettings.controls.length) {
+    if (!this.careSettings?.controls.length) {
       this.addCareSetting();
     }
   }
 
   public routeBackTo() {
-    const routePath = (this.enrolmentFormStateService.json.certifications.length)
+    const routePath = (this.enrolmentFormStateService.json?.certifications.length)
       ? EnrolmentRoutes.REGULATORY
       : EnrolmentRoutes.JOB;
 
