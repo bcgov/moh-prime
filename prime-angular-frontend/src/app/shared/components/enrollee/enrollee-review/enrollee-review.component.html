@@ -283,15 +283,26 @@
 
     <app-enrollee-property title="Site Information"
                            [makeBold]="true">
-      <a (click)="onRoute([
-          remoteAccessSite?.site?.organizationId,
-          AdjudicationRoutes.SITE_REGISTRATION,
-          remoteAccessSite.id,
-          AdjudicationRoutes.ORGANIZATION_INFORMATION
-        ])"
-      >
-        {{ remoteAccessSite?.site?.doingBusinessAs | default }}
-      </a>
+      <ng-container *ngIf="admin; else enrolleeView">
+        <a (click)="onRoute(
+            [
+              remoteAccessSite.site?.organizationId,
+              AdjudicationRoutes.SITE_REGISTRATION,
+              remoteAccessSite.site?.id
+            ],
+            $event
+          )"
+          href="#"
+        >
+          {{ remoteAccessSite.site?.doingBusinessAs | default }}
+        </a>
+      </ng-container>
+
+      <ng-template #enrolleeView>
+        {{ remoteAccessSite.site?.doingBusinessAs | default }}
+
+      </ng-template>
+
     </app-enrollee-property>
 
   </ng-container>

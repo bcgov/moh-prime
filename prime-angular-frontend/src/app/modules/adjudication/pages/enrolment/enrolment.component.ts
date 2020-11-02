@@ -9,6 +9,8 @@ import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 
 @Component({
   selector: 'app-enrolment',
@@ -18,6 +20,9 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 export class EnrolmentComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
   public enrollee: Enrolment;
+  public AdjudicationRoutes = AdjudicationRoutes;
+
+  private routeUtils: RouteUtils;
 
   constructor(
     protected route: ActivatedRoute,
@@ -25,6 +30,11 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
     private adjudicationResource: AdjudicationResource
   ) {
     super(route, router);
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
+  }
+
+  public onRoute(routePath: string | (string | number)[]) {
+    this.routeUtils.routeWithin(routePath);
   }
 
   public ngOnInit() {

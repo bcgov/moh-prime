@@ -23,6 +23,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;
   @Input() public enrolment: Enrolment;
+  @Input() public admin: boolean;
   @Output() public route: EventEmitter<string | (string | number)[]>;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = selfDeclarationQuestions;
@@ -36,7 +37,8 @@ export class EnrolleeReviewComponent {
     private authService: AuthService
   ) {
     this.showEditRedirect = false;
-    this.route = new EventEmitter<string>();
+    this.admin = false;
+    this.route = new EventEmitter<string | (string | number)[]>();
 
     this.authService.identityProvider$()
       .subscribe((identityProvider: IdentityProviderEnum) => {
@@ -110,7 +112,8 @@ export class EnrolleeReviewComponent {
       : [];
   }
 
-  public onRoute(routePath: string | (string | number)[]): void {
+  public onRoute(routePath: string | (string | number)[], event: Event = null): void {
+    event?.preventDefault();
     this.route.emit(routePath);
   }
 

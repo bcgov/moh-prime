@@ -9,6 +9,8 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-access-agreement-history-enrolment',

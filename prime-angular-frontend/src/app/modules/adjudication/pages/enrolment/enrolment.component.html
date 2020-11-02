@@ -3,7 +3,9 @@
   <app-page-header>Enrolment</app-page-header>
 
   <app-enrollee-review *ngIf="enrollee"
-                       [enrolment]="enrollee"></app-enrollee-review>
+                       [enrolment]="enrollee"
+                       [admin]="true"
+                       (route)="onRoute($event)"></app-enrollee-review>
 
   <div class="row justify-content-between">
     <div class="col pt-4">
