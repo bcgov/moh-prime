@@ -4,10 +4,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { KeycloakService } from 'keycloak-angular';
+
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { KeycloakService } from 'keycloak-angular';
 
 import { RemoteAccessAddressesComponent } from './remote-access-addresses.component';
 
