@@ -377,32 +377,6 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/organizations/5/submission
-        /// <summary>
-        /// Submits the given organization for adjudication.
-        /// </summary>
-        [HttpPost("{organizationId}/submission", Name = nameof(SubmitOrganizationRegistration))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Organization>> SubmitOrganizationRegistration(int organizationId)
-        {
-            var organization = await _organizationService.GetOrganizationAsync(organizationId);
-            if (organization == null)
-            {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
-            }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
-            {
-                return Forbid();
-            }
-
-            organization = await _organizationService.SubmitRegistrationAsync(organizationId);
-            return Ok(ApiResponse.Result(organization));
-        }
-
         // Get: api/organizations/5/agreements/7/signed
         /// <summary>
         /// Gets a download token for the uploaded wet-signed Agreement Document (if exists).
