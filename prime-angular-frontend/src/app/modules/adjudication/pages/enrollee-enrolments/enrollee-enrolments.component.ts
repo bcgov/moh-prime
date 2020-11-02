@@ -6,13 +6,13 @@ import { Subscription } from 'rxjs';
 
 import moment from 'moment';
 
-import { EnrolleeAgreement } from '@shared/models/agreement.model';
+import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { EnrolmentCard } from '@shared/models/enrolment-card.model';
+
 
 @Component({
   selector: 'app-enrollee-enrolments',
