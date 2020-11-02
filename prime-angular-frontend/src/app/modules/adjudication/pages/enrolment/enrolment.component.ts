@@ -4,13 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
+
 import { Address } from '@shared/models/address.model';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { RouteUtils } from '@lib/utils/route-utils.class';
 
 @Component({
   selector: 'app-enrolment',
