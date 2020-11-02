@@ -60,6 +60,8 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.Credential);
             Ignore(x => x.CredentialId);
             Ignore(x => x.EnrolleeRemoteUsers);
+            Ignore(x => x.RemoteAccessSites);
+            Ignore(x => x.RemoteAccessLocations);
 
             RuleSet("status.submitted", (set) =>
             {
