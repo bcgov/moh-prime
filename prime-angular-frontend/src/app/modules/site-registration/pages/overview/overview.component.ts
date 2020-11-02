@@ -29,7 +29,7 @@ export class OverviewComponent implements OnInit {
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
 
-  public submitted: boolean;
+  public showSubmission: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -90,14 +90,10 @@ export class OverviewComponent implements OnInit {
   public ngOnInit(): void {
     if (this.isOrganizationReview) {
       this.organization = this.organizationService.organization;
-      // Never show the submission section for an organization
-      this.submitted = true;
+      this.showSubmission = false;
     } else {
       this.site = this.siteService.site;
-      this.submitted = !!this.site.submittedDate;
-      if (!this.submitted && this.organizationService.organization.siteCount === 1) {
-        this.organization = this.organizationService.organization;
-      }
+      this.showSubmission = !this.site.submittedDate;
     }
   }
 }

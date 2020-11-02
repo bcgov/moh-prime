@@ -110,19 +110,6 @@ export class OrganizationResource {
       );
   }
 
-  public submitOrganization(organization: Organization): Observable<string> {
-    return this.apiResource.post<string>(`organizations/${organization.id}/submission`)
-      .pipe(
-        map((response: ApiHttpResponse<string>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Organization has been submitted')),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organization could not be submitted');
-          this.logger.error('[Core] OrganizationResource::submitOrganization error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
   /**
    * @description
    * Check whether an organization agreement is needed, and create
