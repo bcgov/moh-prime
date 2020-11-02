@@ -112,7 +112,7 @@ export class EnrolleeReviewComponent {
       : [];
   }
 
-  public onRoute(routePath: string | (string | number)[], event: Event = null): void {
+  public onRoute(routePath: string | (string | number)[], event?: Event): void {
     event?.preventDefault();
     this.route.emit(routePath);
   }
