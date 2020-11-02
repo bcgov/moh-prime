@@ -138,7 +138,8 @@ namespace Prime.Services
 
             string subject = "New Access Request";
             string viewName = hasCommunityPharmacyCareSetting
-                ? "/Views/Emails/CommunityPharmacyManagerEmail.cshtml" : "/Views/Emails/OfficeManagerEmail.cshtml";
+                ? "/Views/Emails/CommunityPharmacyManagerEmail.cshtml"
+                : "/Views/Emails/OfficeManagerEmail.cshtml";
             string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
