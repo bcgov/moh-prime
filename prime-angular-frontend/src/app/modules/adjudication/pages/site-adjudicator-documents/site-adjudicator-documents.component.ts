@@ -49,5 +49,4 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
   private getDocuments() {
     this.documents$ = this.siteResource.getSiteAdjudicationDocuments(this.siteId);
   }
-
 }
