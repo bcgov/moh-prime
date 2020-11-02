@@ -1,5 +1,7 @@
 export enum NoteType {
   AdjudicatorNote,
   AccessAgreementNote,
-  EnrolmentCertificateNote
+  EnrolmentCertificateNote,
+  SiteRegistrationNote,
+  EnrolleeAdjudicationNote
 }

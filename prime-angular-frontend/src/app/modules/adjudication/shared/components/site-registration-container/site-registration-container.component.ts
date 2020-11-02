@@ -17,6 +17,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { ClaimSiteComponent, ClaimSiteAction } from '@shared/components/dialogs/content/claim-site/claim-site.component';
 import { ClaimActionEnum } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { OrganizationAgreement } from '@shared/models/agreement.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -314,8 +315,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthorityId,
         signingAuthority,
         name,
-        signedAgreementDocuments,
-        acceptedAgreementDate,
         doingBusinessAs
       } = organization;
 
@@ -326,8 +325,6 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthority,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
-        signedAgreementDocumentCount: signedAgreementDocuments.length,
-        acceptedAgreementDate,
         ...this.toSiteViewModelPartial(site)
       }];
     };

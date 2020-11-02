@@ -444,13 +444,13 @@ namespace Prime.Controllers
         /// Send HIBC an email when remote users are updated for a submitted site
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/remote-users-email", Name = nameof(sendRemoteUsersEmail))]
+        [HttpPost("{siteId}/remote-users-email", Name = nameof(SendRemoteUsersEmail))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> sendRemoteUsersEmail(int siteId)
+        public async Task<ActionResult> SendRemoteUsersEmail(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -467,13 +467,13 @@ namespace Prime.Controllers
         /// Send HIBC an email when remote users are updated for a submitted site
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/remote-users-email-admin", Name = nameof(sendRemoteUsersEmailAdmin))]
+        [HttpPost("{siteId}/remote-users-email-admin", Name = nameof(SendRemoteUsersEmailAdmin))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> sendRemoteUsersEmailAdmin(int siteId)
+        public async Task<ActionResult> SendRemoteUsersEmailAdmin(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
@@ -498,13 +498,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="remoteUsers"></param>
-        [HttpPost("{siteId}/remote-users-email-user", Name = nameof(sendRemoteUsersEmailUser))]
+        [HttpPost("{siteId}/remote-users-email-user", Name = nameof(SendRemoteUsersEmailUser))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> sendRemoteUsersEmailUser(int siteId, IEnumerable<RemoteUser> remoteUsers)
+        public async Task<ActionResult> SendRemoteUsersEmailUser(int siteId, IEnumerable<RemoteUser> remoteUsers)
         {
             var site = await _siteService.GetSiteAsync(siteId);
 
@@ -580,8 +580,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<AdjudicatorNote>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<AdjudicatorNote>> CreateSiteRegistrationNote(int siteId, FromBodyText note)
+        [ProducesResponseType(typeof(ApiResultResponse<SiteRegistrationNote>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<SiteRegistrationNote>> CreateSiteRegistrationNote(int siteId, FromBodyText note)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -599,6 +599,30 @@ namespace Prime.Controllers
             var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
 
             return Ok(ApiResponse.Result(createdSiteRegistrationNote));
+        }
+
+        // GET: api/Sites/5/site-registration-notes
+        /// <summary>
+        /// Gets all of the site registration notes for a specific site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/site-registration-notes", Name = nameof(GetSiteRegistrationNotes))]
+        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SiteRegistrationNote>>> GetSiteRegistrationNotes(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var siteRegistrationNotes = await _siteService.GetSiteRegistrationNotesAsync(site);
+
+            return Ok(ApiResponse.Result(siteRegistrationNotes));
         }
 
         // POST: api/Sites/remote-users

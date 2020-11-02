@@ -171,7 +171,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   private toggleMailingAddressValidators(mailingAddress: FormGroup, blacklist: string[] = []) {
     if (!this.hasMailingAddress) {
-      this.formUtilsService.resetAndClearValidators(mailingAddress, ['id']);
+      this.formUtilsService.resetAndClearValidators(mailingAddress, blacklist);
     } else {
       this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
     }

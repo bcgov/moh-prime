@@ -14,7 +14,6 @@ describe('AdjudicatorActionsComponent', () => {
       imports: [
         AdjudicationModule
       ],
-      declarations: [],
       providers: [
         KeycloakService
       ]

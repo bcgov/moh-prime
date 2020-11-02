@@ -13,7 +13,6 @@
     </app-alert>
   </div>
 
-
   <section class="mb-3">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>{{ title }}</ng-container>
@@ -33,8 +32,7 @@
                       title="Organization Information"
                       [menu]="organizationMenu"
                       [menuOutletContext]="{ organization: organization }"
-                      [properties]="getOrganizationProperties(organization)"
-                      (action)="viewAgreement(organization)"></app-summary-card>
+                      [properties]="getOrganizationProperties(organization)"></app-summary-card>
 
     <hr *ngIf="first"
         class="divider">
@@ -67,22 +65,32 @@
   <ng-template #organizationMenu
                let-organization="organization">
     <button mat-icon-button
-            [matMenuTriggerFor]="menu">
+            [matMenuTriggerFor]="rootMenu">
       <mat-icon>more_vert</mat-icon>
     </button>
 
-    <mat-menu #menu="matMenu"
+    <mat-menu #rootMenu="matMenu"
               aria-label="Organization actions menu">
       <button mat-menu-item
               (click)="viewOrganization(organization)">
         <span>View/Update Organization</span>
       </button>
+
       <button mat-menu-item
-              [disabled]="!organization.acceptedAgreementDate"
-              (click)="viewAgreement(organization)">
-        <span>View/Print Agreement</span>
+              [matMenuTriggerFor]="subMenu"
+              [disabled]="!organizationAgreements?.length">
+        <span>Download Organization Agreement</span>
       </button>
     </mat-menu>
+
+    <mat-menu #subMenu="matMenu">
+      <button *ngFor="let agreement of organizationAgreements"
+              mat-menu-item
+              (click)="viewAgreement(organization, agreement)">
+        <span>{{ AgreementType[agreement.agreementType] | case: 'snake' : 'space' | capitalize: true }}</span>
+      </button>
+    </mat-menu>
+
   </ng-template>
 
   <ng-template #siteMenu

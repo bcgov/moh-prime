@@ -8,6 +8,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
@@ -29,10 +30,10 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public regulatoryForm: FormGroup;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
+  public remoteAccessForm: FormGroup;
+  public remoteAccessLocationsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
-
-  protected readonly resetRoutes: string[] = [...EnrolmentRoutes.enrolmentProfileRoutes()];
 
   private identityProvider: IdentityProvider;
   private enrolleeId: number;
@@ -44,7 +45,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     protected logger: LoggerService,
     private authService: AuthService
   ) {
-    super(fb, routeStateService, logger);
+    super(fb, routeStateService, logger, [...EnrolmentRoutes.enrolmentProfileRoutes()]);
   }
 
   /**
@@ -82,6 +83,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
+    const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
+    const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
     const selfDeclarations = this.convertSelfDeclarationsToJson();
 
@@ -95,13 +98,15 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ...deviceProvider,
       ...jobs,
       ...careSettings,
+      enrolleeRemoteUsers,
+      ...remoteAccessLocations,
       selfDeclarations
     };
   }
 
   /**
    * @description
-   * Helper for getting a list of organization forms.
+   * Helper for getting a list of enrolment forms.
    */
   public get forms(): AbstractControl[] {
     return [
@@ -119,6 +124,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       // TODO commented out until required to avoid it being validated
       // this.deviceProviderForm,
       this.jobsForm,
+      this.remoteAccessLocationsForm,
       this.selfDeclarationForm,
       this.careSettingsForm
     ];
@@ -159,6 +165,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     this.regulatoryForm = this.buildRegulatoryForm();
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
+    this.remoteAccessForm = this.buildRemoteAccessForm();
+    this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
   }
@@ -197,8 +205,20 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       });
     }
 
+    if (enrolment.enrolleeRemoteUsers.length) {
+      const enrolleeRemoteUsers = this.remoteAccessForm.get('enrolleeRemoteUsers') as FormArray;
+      enrolleeRemoteUsers.clear();
+      enrolment.enrolleeRemoteUsers.forEach((eru: EnrolleeRemoteUser) => {
+        const enrolleeRemoteUser = this.enrolleeRemoteUserFormGroup();
+        enrolleeRemoteUser.patchValue(eru);
+        enrolleeRemoteUsers.push(enrolleeRemoteUser);
+      });
+    }
+
     this.regulatoryForm.patchValue(enrolment);
     this.jobsForm.patchValue(enrolment);
+    this.remoteAccessForm.patchValue(enrolment);
+    this.remoteAccessLocationsForm.patchValue(enrolment);
 
     const defaultValue = (enrolment.profileCompleted) ? false : null;
     const selfDeclarationsTypes = {
@@ -374,6 +394,41 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         FormControlValidators.requiredLength(5)
       ]],
       isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
+    });
+  }
+
+  public buildRemoteAccessForm(): FormGroup {
+    return this.fb.group({
+      sites: this.fb.array([]),
+      enrolleeRemoteUsers: this.fb.array([])
+    });
+  }
+
+  public enrolleeRemoteUserFormGroup(): FormGroup {
+    return this.fb.group({
+      enrolleeId: [null, []],
+      remoteUserId: [null, []]
+    });
+  }
+
+  public buildRemoteAccessLocationsForm(): FormGroup {
+    return this.fb.group({
+      remoteAccessLocations: this.fb.array([])
+    });
+  }
+
+  public remoteAccessLocationFormGroup(): FormGroup {
+    return this.fb.group({
+      internetProvider: [
+        null,
+        [Validators.required]
+      ],
+      physicalAddress: this.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        exclude: ['street2'],
+        useDefaults: ['provinceCode', 'countryCode'],
+        areDisabled: ['provinceCode', 'countryCode']
+      })
     });
   }
 
