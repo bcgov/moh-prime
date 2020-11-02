@@ -105,8 +105,6 @@ namespace Prime.ViewModels
 
         public bool IsRegulatedUser { get; set; }
 
-        public string CurrentTOAType { get; set; }
-
         public string CurrentTOAStatus
         {
             get
