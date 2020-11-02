@@ -44,7 +44,7 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
       );
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getDocuments();
   }
 
