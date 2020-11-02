@@ -125,6 +125,7 @@ namespace Prime.Services
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(e => e.FirstName,
                         e => e.LastName,
+                        e => e.FullName,
                         e => e.Email,
                         e => e.Phone,
                         e => e.DisplayId.ToString())
