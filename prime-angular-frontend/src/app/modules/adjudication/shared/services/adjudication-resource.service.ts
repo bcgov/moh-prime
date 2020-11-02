@@ -16,11 +16,11 @@ import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.mo
 import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
+import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
-import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 
 @Injectable({
   providedIn: 'root'
