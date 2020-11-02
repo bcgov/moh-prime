@@ -9,7 +9,7 @@ using Prime.Models;
 
 namespace Prime.ViewModels
 {
-    public class EnrolleeViewModel
+    public class EnrolleeViewModel : IUserBoundModel
     {
         public int Id { get; set; }
 
@@ -102,6 +102,10 @@ namespace Prime.ViewModels
         public int CurrentStatusCode { get; set; }
 
         public bool HasNewestAgreement { get; set; }
+
+        public bool IsRegulatedUser { get; set; }
+
+        public string CurrentTOAType { get; set; }
 
         public string CurrentTOAStatus
         {

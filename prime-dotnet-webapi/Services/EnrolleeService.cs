@@ -488,10 +488,10 @@ namespace Prime.Services
             return entity;
         }
 
-        public async Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
+        public async Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId)
         {
             return await _context.EnrolleeNotes
-                .Where(an => an.EnrolleeId == enrollee.Id)
+                .Where(an => an.EnrolleeId == enrolleeId)
                 .Include(an => an.Adjudicator)
                 .OrderByDescending(an => an.NoteDate)
                 .ProjectTo<EnrolleeNoteViewModel>(_mapper.ConfigurationProvider)

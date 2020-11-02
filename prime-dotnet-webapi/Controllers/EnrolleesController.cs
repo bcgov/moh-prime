@@ -279,7 +279,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee);
+            var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee.Id);
 
             return Ok(ApiResponse.Result(adjudicationNotes));
         }
@@ -506,7 +506,7 @@ namespace Prime.Controllers
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var username = admin.IDIR.Replace("@idir", "");
-            await _emailService.SendReminderEmailAsync(enrollee);
+            await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Email reminder sent to Enrollee by {username}");
 
             return NoContent();
