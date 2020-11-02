@@ -1,10 +1,12 @@
 import { AdjudicatorDocumentsComponent } from '@adjudication/shared/components/adjudicator-documents/adjudicator-documents.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { forkJoin, Observable, of } from 'rxjs';
+
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-import { forkJoin, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-site-adjudicator-documents',
