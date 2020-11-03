@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
@@ -282,11 +282,11 @@ export class AdjudicationResource {
 
   /**
    * @description
-   * Assign a TOA agreement to a enrollee.
+   * Assign a TOA agreement to a enrollee that is under review.
    */
   public assignToaAgreementType(enrolleeId: number, agreementType: AgreementType): Observable<HttpEnrollee> {
     const params = this.apiResourceUtilsService.makeHttpParams({ agreementType });
-    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/assign`, { params })
+    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/submission/assignment`, { params })
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
