@@ -75,13 +75,20 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public disableCareSetting(careSettingCode: number): boolean {
-    if (this.authService.hasCommunityPharmacist()) {
-      // If feature flagged enable "Private Community Health Practice" & "Community Pharmacist"
-      return !(careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
-        || careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
+    let disabled = true;
+    // If feature flagged enabled "Community Pharmacist"
+    if (this.authService.hasCommunityPharmacist() && careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+      disabled = false;
     }
-    // Omit care settings that are not "Private Community Health Practices" for ComPap
-    return (careSettingCode !== CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
+    // If feature flagged enabled "Health Authority"
+    if (this.authService.hasHealthAuthority() && careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
+      disabled = false;
+    }
+    if (careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
+      disabled = false;
+    }
+
+    return disabled;
   }
 
   public removeCareSetting(index: number) {

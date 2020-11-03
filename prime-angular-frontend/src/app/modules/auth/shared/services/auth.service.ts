@@ -197,6 +197,10 @@ export class AuthService implements IAuthService {
     return this.accessTokenService.hasRole(Role.FEATURE_COMMUNITY_PHARMACIST);
   }
 
+  public hasHealthAuthority(): boolean {
+    return this.accessTokenService.hasRole(Role.FEATURE_COMMUNITY_PHARMACIST);
+  }
+
   public hasVCIssuance(): boolean {
     return this.accessTokenService.hasRole(Role.FEATURE_VC_ISSUANCE);
   }
