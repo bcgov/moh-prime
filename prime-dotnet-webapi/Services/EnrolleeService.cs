@@ -423,6 +423,17 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task AssignAgreementType(int enrolleeId, AgreementType? agreementType)
+        {
+            var submission = await _context.Submissions
+                .OrderByDescending(s => s.CreatedDate)
+                .Where(e => e.EnrolleeId == enrolleeId)
+                .SingleOrDefaultAsync();
+
+            submission.AgreementType = agreementType;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId)
         {
             IQueryable<EnrolmentStatus> query = _context.EnrolmentStatuses

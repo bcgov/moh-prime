@@ -32,6 +32,8 @@ namespace Prime.Services
 
         Task DeleteEnrolleeAsync(int enrolleeId);
 
+        Task AssignAgreementType(int enrolleeId, AgreementType? agreementType);
+
         Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId);
 
         Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck);
