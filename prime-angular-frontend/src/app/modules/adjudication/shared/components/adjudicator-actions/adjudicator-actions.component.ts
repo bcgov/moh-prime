@@ -1,29 +1,33 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { AuthService } from '@auth/shared/services/auth.service';
+
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 @Component({
   selector: 'app-adjudicator-actions',
   templateUrl: './adjudicator-actions.component.html',
   styleUrls: ['./adjudicator-actions.component.scss']
 })
-export class AdjudicatorActionsComponent implements OnInit {
+export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Input() public enrollee: EnrolleeListViewModel;
-  @Output() public approve: EventEmitter<EnrolleeListViewModel>;
+  @Output() public approve: EventEmitter<number>;
   @Output() public decline: EventEmitter<number>;
   @Output() public lock: EventEmitter<number>;
   @Output() public unlock: EventEmitter<number>;
   @Output() public enableEnrollee: EventEmitter<number>;
-  @Output() public toggleManualAdj: EventEmitter<EnrolleeListViewModel>;
+  @Output() public toggleManualAdj: EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>;
   @Output() public enableEditing: EventEmitter<number>;
   @Output() public rerunRules: EventEmitter<number>;
   @Output() public delete: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
+  @Output() public assign: EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>;
   public form: FormGroup;
   public termsOfAccessAgreements: { type: AgreementType, name: string }[];
 
@@ -32,9 +36,10 @@ export class AdjudicatorActionsComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private formUtilsService: FormUtilsService
   ) {
-    this.approve = new EventEmitter<EnrolleeListViewModel>();
+    this.approve = new EventEmitter<number>();
     this.decline = new EventEmitter<number>();
     this.lock = new EventEmitter<number>();
     this.unlock = new EventEmitter<number>();
@@ -42,10 +47,12 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.enableEditing = new EventEmitter<number>();
     this.rerunRules = new EventEmitter<number>();
     this.delete = new EventEmitter<number>();
-    this.toggleManualAdj = new EventEmitter<EnrolleeListViewModel>();
+    this.assign = new EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>();
+    this.toggleManualAdj = new EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>();
     this.route = new EventEmitter<string | (string | number)[]>();
 
     this.termsOfAccessAgreements = [
+      { type: null, name: 'None' },
       { type: AgreementType.REGULATED_USER_TOA, name: 'RU' },
       { type: AgreementType.OBO_TOA, name: 'OBO' },
       { type: AgreementType.COMMUNITY_PHARMACIST_TOA, name: 'PharmRU' },
@@ -53,8 +60,8 @@ export class AdjudicatorActionsComponent implements OnInit {
     ];
   }
 
-  public get assignedToaType(): FormControl {
-    return this.form.get('assignedToaType') as FormControl;
+  public get assignedTOAType(): FormControl {
+    return this.form.get('assignedTOAType') as FormControl;
   }
 
   public get canEdit(): boolean {
@@ -70,9 +77,8 @@ export class AdjudicatorActionsComponent implements OnInit {
   }
 
   public onApprove() {
-    // TODO more consistent to pass enrollee ID and find them on the other side
-    if (this.canEdit && this.isUnderReview) {
-      this.approve.emit(this.enrollee);
+    if (this.formUtilsService.checkValidity(this.form) && this.canEdit && this.isUnderReview) {
+      this.approve.emit(this.enrollee.id);
     }
   }
 
@@ -120,12 +126,19 @@ export class AdjudicatorActionsComponent implements OnInit {
 
   public onToggleManualAdj() {
     if (this.canEdit) {
-      this.toggleManualAdj.emit(this.enrollee);
+      this.toggleManualAdj.emit({
+        enrolleeId: this.enrollee.id,
+        alwaysManual: !this.enrollee.alwaysManual
+      });
     }
   }
 
   public onRoute(routePath: string | (string | number)[]) {
     this.route.emit(routePath);
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    console.log('ENROLLEE_CHANGE', changes);
   }
 
   public ngOnInit() {
@@ -135,14 +148,18 @@ export class AdjudicatorActionsComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      assignedTOAType: [null, [Validators.required]]
+      assignedTOAType: [null, [FormControlValidators.requiredTruthful]]
     });
   }
 
   private initForm() {
-    this.form.patchValue(this.enrollee);
+    this.assignedTOAType.valueChanges
+      .subscribe((agreementType: AgreementType) =>
+        this.assign.emit({ enrolleeId: this.enrollee.id, agreementType })
+      );
+  }
 
-    this.assignedToaType.valueChanges
-      .pipe();
+  private patchForm(isFirstChange: boolean = false) {
+    this.assignedTOAType.patchValue(this.enrollee?.assignedTOAType, { emitEvent: !isFirstChange });
   }
 }

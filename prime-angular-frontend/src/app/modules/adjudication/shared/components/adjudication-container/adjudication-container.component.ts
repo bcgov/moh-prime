@@ -133,7 +133,7 @@ export class AdjudicationContainerComponent implements OnInit {
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
-  public onApprove(enrollee: EnrolleeListViewModel) {
+  public onApprove(enrolleeId: number) {
     const data: DialogOptions = {
       title: 'Approve Enrolment',
       message: 'Are you sure you want to approve this enrolment?',
@@ -144,7 +144,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrollee.id, SubmissionAction.APPROVE)
+        this.adjudicationActionPipe(enrolleeId, SubmissionAction.APPROVE)
       )
       .subscribe((approvedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(approvedEnrollee);
@@ -297,13 +297,12 @@ export class AdjudicationContainerComponent implements OnInit {
     }
   }
 
-  public onToggleManualAdj(enrollee: EnrolleeListViewModel) {
-    const flagText = enrollee.alwaysManual ? 'Unflag' : 'Flag';
+  public onToggleManualAdj({ enrolleeId, alwaysManual }: { enrolleeId: number, alwaysManual: boolean }) {
+    const flagText = (alwaysManual) ? 'Flag' : 'Unflag';
     const data: DialogOptions = {
       title: `${flagText} Enrollee`,
       message: `Are you sure you want to ${flagText} this enrollee for manual adjudication?`,
-      actionText: `${flagText} Enrollee`,
-      data: { enrollee }
+      actionText: `${flagText} Enrollee`
     };
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
@@ -315,9 +314,9 @@ export class AdjudicationContainerComponent implements OnInit {
             : EMPTY
         ),
         exhaustMap(() =>
-          this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, !enrollee.alwaysManual)
+          this.adjudicationResource.updateEnrolleeAlwaysManual(enrolleeId, alwaysManual)
         ),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrollee.id))
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
       .subscribe((flaggedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(flaggedEnrollee);

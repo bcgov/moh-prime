@@ -10,14 +10,15 @@
 
   <mat-form-field>
     <mat-label>TOA Selection</mat-label>
-    <mat-select [value]="enrollee.assignedTOAType">
-      <mat-option [value]="null">None</mat-option>
+    <mat-select [formControl]="assignedTOAType">
       <mat-option *ngFor="let agreement of termsOfAccessAgreements"
                   [value]="agreement.type">
         {{ agreement.name }}
       </mat-option>
     </mat-select>
-    <!-- <mat-error *ngIf="agreementControl.hasError('required')">Required</mat-error> -->
+    <mat-error *ngIf="assignedTOAType.hasError('required')">
+      A TOA must be assigned in order to approve an enrollee.
+    </mat-error>
   </mat-form-field>
 
   <mat-menu #menu>
