@@ -11,6 +11,7 @@ import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-dat
 
 import { UtilsService } from '@core/services/utils.service';
 import { ToastService } from '@core/services/toast.service';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
@@ -30,7 +31,6 @@ import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -47,7 +47,6 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
-  public termsOfAccessAgreements: { type: AgreementType, name: string }[];
 
   private routeUtils: RouteUtils;
 
@@ -69,13 +68,6 @@ export class AdjudicationContainerComponent implements OnInit {
     this.dataSource = new MatTableDataSource<EnrolleeListViewModel>([]);
 
     this.showSearchFilter = false;
-
-    this.termsOfAccessAgreements = [
-      { type: AgreementType.REGULATED_USER_TOA, name: 'RU' },
-      { type: AgreementType.OBO_TOA, name: 'OBO' },
-      { type: AgreementType.COMMUNITY_PHARMACIST_TOA, name: 'PharmRU' },
-      { type: AgreementType.PHARMACY_OBO_TOA, name: 'PharmOBO' }
-    ];
   }
 
   public onSearch(search: string | null): void {
@@ -335,6 +327,11 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onRoute(routePath: string | (string | number)[]) {
     this.routeUtils.routeWithin(routePath);
+  }
+
+  public onAssign({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
+    this.adjudicationResource.assignToaAgreementType(enrolleeId, agreementType)
+      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
   public ngOnInit() {

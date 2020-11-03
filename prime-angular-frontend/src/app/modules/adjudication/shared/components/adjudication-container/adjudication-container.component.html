@@ -36,27 +36,11 @@
                                  (unlock)="onUnlock($event)"
                                  (delete)="onDelete($event)"
                                  (route)="onRoute($event)"
+                                 (assign)="onAssign($event)"
                                  (enableEnrollee)="onEnableEnrollee($event)"
                                  (enableEditing)="onEnableEditing($event)"
                                  (rerunRules)="onRerunRules($event)"
                                  (toggleManualAdj)="onToggleManualAdj($event)"></app-adjudicator-actions>
-
-        <div *ngIf="dataSource?.data[0]"
-             class="mt-5">
-
-          <mat-form-field>
-            <mat-label>TOA Selection</mat-label>
-            <mat-select [value]="null">
-              <mat-option [value]="null">None</mat-option>
-              <mat-option *ngFor="let agreement of termsOfAccessAgreements"
-                          [value]="agreement.type">
-                {{ agreement.name }}
-              </mat-option>
-            </mat-select>
-            <!-- <mat-error *ngIf="agreementControl.hasError('required')">Required</mat-error> -->
-          </mat-form-field>
-
-        </div>
 
       </div>
     </div>

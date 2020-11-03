@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
@@ -22,12 +24,15 @@ export class AdjudicatorActionsComponent implements OnInit {
   @Output() public rerunRules: EventEmitter<number>;
   @Output() public delete: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
+  public form: FormGroup;
+  public termsOfAccessAgreements: { type: AgreementType, name: string }[];
 
   public EnrolmentStatus = EnrolmentStatus;
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private fb: FormBuilder
   ) {
     this.approve = new EventEmitter<EnrolleeListViewModel>();
     this.decline = new EventEmitter<number>();
@@ -39,6 +44,17 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.delete = new EventEmitter<number>();
     this.toggleManualAdj = new EventEmitter<EnrolleeListViewModel>();
     this.route = new EventEmitter<string | (string | number)[]>();
+
+    this.termsOfAccessAgreements = [
+      { type: AgreementType.REGULATED_USER_TOA, name: 'RU' },
+      { type: AgreementType.OBO_TOA, name: 'OBO' },
+      { type: AgreementType.COMMUNITY_PHARMACIST_TOA, name: 'PharmRU' },
+      { type: AgreementType.PHARMACY_OBO_TOA, name: 'PharmOBO' }
+    ];
+  }
+
+  public get assignedToaType(): FormControl {
+    return this.form.get('assignedToaType') as FormControl;
   }
 
   public get canEdit(): boolean {
@@ -112,5 +128,21 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  public ngOnInit() { }
+  public ngOnInit() {
+    this.createFormInstance();
+    this.initForm();
+  }
+
+  private createFormInstance() {
+    this.form = this.fb.group({
+      assignedTOAType: [null, [Validators.required]]
+    });
+  }
+
+  private initForm() {
+    this.form.patchValue(this.enrollee);
+
+    this.assignedToaType.valueChanges
+      .pipe();
+  }
 }
