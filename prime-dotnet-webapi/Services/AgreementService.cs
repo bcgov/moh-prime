@@ -94,18 +94,20 @@ namespace Prime.Services
 
         public async Task CreateEnrolleeAgreementAsync(int enrolleeId)
         {
-            var enrollee = await _context.Enrollees
+            var dto = await _context.Enrollees
                 .AsNoTracking()
-                .Include(e => e.EnrolleeCareSettings)
-                .Include(e => e.Certifications)
-                    .ThenInclude(c => c.License)
-                .Include(e => e.AccessAgreementNote)
-                .Include(e => e.Submissions)
-                .SingleAsync(e => e.Id == enrolleeId);
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => new
+                {
+                    NewestAssignedAgreement = e.Submissions
+                        .OrderByDescending(s => s.CreatedDate)
+                        .Select(s => s.AgreementType)
+                        .FirstOrDefault(),
+                    AccessAgreementNote = e.AccessAgreementNote
+                })
+                .SingleAsync();
 
-            var type = enrollee.AssignedTOAType;
-
-            if (!type.HasValue)
+            if (dto.NewestAssignedAgreement == null)
             {
                 throw new InvalidOperationException("Agreement type is required to approve an enrollee");
             }
@@ -113,8 +115,8 @@ namespace Prime.Services
             var agreement = new Agreement
             {
                 EnrolleeId = enrolleeId,
-                AgreementVersionId = await FetchNewestAgreementVersionIdOfType(type.Value),
-                LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(enrollee.AccessAgreementNote),
+                AgreementVersionId = await FetchNewestAgreementVersionIdOfType(dto.NewestAssignedAgreement.Value),
+                LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(dto.AccessAgreementNote),
                 CreatedDate = DateTimeOffset.Now
             };
 
