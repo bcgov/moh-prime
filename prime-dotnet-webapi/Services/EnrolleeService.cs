@@ -93,7 +93,8 @@ namespace Prime.Services
                             .ThenInclude(esr => esr.Adjudicator);
             }
 
-            var enrollee = await query.SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var enrollee = await query
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
             var newestAgreementIds = await _context.AgreementVersions
                 .Select(a => a.AgreementType)
                 .Distinct()

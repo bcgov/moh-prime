@@ -103,10 +103,7 @@ namespace Prime.Services
                 .Include(e => e.Submissions)
                 .SingleAsync(e => e.Id == enrolleeId);
 
-            var type = enrollee.Submissions
-                .OrderByDescending(s => s.CreatedDate)
-                .Select(s => s.AgreementType)
-                .FirstOrDefault();
+            var type = enrollee.AssignedTOAType;
 
             if (!type.HasValue)
             {
