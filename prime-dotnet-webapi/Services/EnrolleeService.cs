@@ -105,8 +105,8 @@ namespace Prime.Services
                 )
                 .ToListAsync();
 
-            return _mapper.Map<EnrolleeViewModel>(enrollee,
-                opt => opt.Items["HasNewestAgreement"] = newestAgreementIds.Any(n => n == enrollee?.CurrentAgreementId));
+            return _mapper.Map<Enrollee, EnrolleeViewModel>(enrollee,
+                opt => opt.AfterMap((src, dest) => dest.HasNewestAgreement = newestAgreementIds.Any(n => n == src.CurrentAgreementId)));
         }
 
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
