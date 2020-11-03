@@ -29,7 +29,8 @@
       <div *ngIf="hasActions"
            class="col-auto py-5">
 
-        <app-adjudicator-actions [enrollee]="dataSource?.data[0]"
+        <app-adjudicator-actions *ngIf="dataSource?.data[0]"
+                                 [enrollee]="dataSource?.data[0]"
                                  (approve)="onApprove($event)"
                                  (decline)="onDecline($event)"
                                  (lock)="onLock($event)"

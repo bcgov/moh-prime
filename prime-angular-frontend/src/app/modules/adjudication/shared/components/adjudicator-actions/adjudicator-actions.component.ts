@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
@@ -15,7 +15,7 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
   templateUrl: './adjudicator-actions.component.html',
   styleUrls: ['./adjudicator-actions.component.scss']
 })
-export class AdjudicatorActionsComponent implements OnInit, OnChanges {
+export class AdjudicatorActionsComponent implements OnInit {
   @Input() public enrollee: EnrolleeListViewModel;
   @Output() public approve: EventEmitter<number>;
   @Output() public decline: EventEmitter<number>;
@@ -137,10 +137,6 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
     this.route.emit(routePath);
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
-    console.log('ENROLLEE_CHANGE', changes);
-  }
-
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
@@ -148,18 +144,19 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      assignedTOAType: [null, [FormControlValidators.requiredTruthful]]
+      assignedTOAType: [
+        { value: null, disabled: !this.isUnderReview },
+        [FormControlValidators.requiredTruthful]
+      ]
     });
   }
 
   private initForm() {
+    this.assignedTOAType.patchValue(this.enrollee.assignedTOAType);
+
     this.assignedTOAType.valueChanges
       .subscribe((agreementType: AgreementType) =>
         this.assign.emit({ enrolleeId: this.enrollee.id, agreementType })
       );
-  }
-
-  private patchForm(isFirstChange: boolean = false) {
-    this.assignedTOAType.patchValue(this.enrollee?.assignedTOAType, { emitEvent: !isFirstChange });
   }
 }

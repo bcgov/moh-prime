@@ -286,7 +286,7 @@ export class AdjudicationResource {
    */
   public assignToaAgreementType(enrolleeId: number, agreementType: AgreementType): Observable<HttpEnrollee> {
     const params = this.apiResourceUtilsService.makeHttpParams({ agreementType });
-    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/submission/assignment`, { params })
+    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/submission/assignment`, null, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap(() => this.toastService.openSuccessToast('TOA agreement has been assigned')),
