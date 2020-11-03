@@ -237,13 +237,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="agreementType"></param>
-        [HttpPut("{enrolleeId}/assign", Name = nameof(AssignAgreementType))]
+        [HttpPut("{enrolleeId}/assign", Name = nameof(AssignToaAgreementType))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> AssignAgreementType(int enrolleeId, [FromQuery] AgreementType? agreementType)
+        public async Task<ActionResult<EnrolleeViewModel>> AssignToaAgreementType(int enrolleeId, [FromQuery] AgreementType? agreementType)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -257,7 +257,17 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Agreement type not found with id {agreementType}."));
             }
 
-            // TODO check organization agreement types are not provided
+            if (agreementType.HasValue && !Enum.GetValues(typeof(AgreementType))
+                .Cast<AgreementType>()
+                .Where(v =>
+                    v != AgreementType.CommunityPracticeOrgAgreement &&
+                    v != AgreementType.CommunityPharmacyOrgAgreement)
+                .ToList()
+                .Contains(agreementType.Value))
+            {
+                this.ModelState.AddModelError("AgreementType", "Agreement type is invalid.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
             {
@@ -265,7 +275,7 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            await _enrolleeService.AssignAgreementType(enrollee.Id, agreementType.Value);
+            await _enrolleeService.AssignToaAgreementType(enrollee.Id, agreementType.Value);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin assigned agreement");
 
             var updatedEnrollee = await _enrolleeService.GetEnrolleeAsync(enrollee.Id);

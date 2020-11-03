@@ -423,7 +423,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task AssignAgreementType(int enrolleeId, AgreementType? agreementType)
+        public async Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType)
         {
             var submission = await _context.Submissions
                 .OrderByDescending(s => s.CreatedDate)
