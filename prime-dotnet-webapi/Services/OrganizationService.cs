@@ -31,24 +31,23 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId = null)
         {
-            IQueryable<Organization> query = this.GetBaseOrganizationQuery();
-
-            if (partyId != null)
-            {
-                query = query.Where(o => o.SigningAuthorityId == partyId);
-            }
-
-            return await query
-                .Include(o => o.Sites).ThenInclude(s => s.SiteVendors)
-                .Include(o => o.Sites).ThenInclude(s => s.PhysicalAddress)
-                .Include(o => o.Sites).ThenInclude(s => s.Adjudicator)
-                .Include(o => o.Sites).ThenInclude(s => s.RemoteUsers)
+            return await GetBaseOrganizationQuery()
+                .Include(o => o.Sites)
+                    .ThenInclude(s => s.SiteVendors)
+                .Include(o => o.Sites)
+                    .ThenInclude(s => s.PhysicalAddress)
+                .Include(o => o.Sites)
+                    .ThenInclude(s => s.Adjudicator)
+                .Include(o => o.Sites)
+                    .ThenInclude(s => s.RemoteUsers)
+                .If(partyId != null, q => q.Where(o => o.SigningAuthorityId == partyId))
                 .ToListAsync();
         }
 
         public async Task<Organization> GetOrganizationAsync(int organizationId)
         {
-            return await this.GetBaseOrganizationQuery()
+            return await GetBaseOrganizationQuery()
+                .Include(o => o.Sites)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
@@ -91,13 +90,13 @@ namespace Prime.Services
 
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
-            var currentOrganization = await this.GetOrganizationAsync(organizationId);
+            var currentOrganization = await GetOrganizationAsync(organizationId);
 
             // BCSC Fields
             var userId = currentOrganization.SigningAuthority.UserId;
 
-            this._context.Entry(currentOrganization).CurrentValues.SetValues(updatedOrganization);
-            this._context.Entry(currentOrganization.SigningAuthority).CurrentValues.SetValues(updatedOrganization.SigningAuthority);
+            _context.Entry(currentOrganization).CurrentValues.SetValues(updatedOrganization);
+            _context.Entry(currentOrganization.SigningAuthority).CurrentValues.SetValues(updatedOrganization.SigningAuthority);
 
             _partyService.UpdatePartyPhysicalAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority);
 
@@ -120,12 +119,12 @@ namespace Prime.Services
 
         public async Task<int> UpdateCompletedAsync(int organizationId)
         {
-            var organization = await this.GetBaseOrganizationQuery()
+            var organization = await GetBaseOrganizationQuery()
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
 
             organization.Completed = true;
 
-            this._context.Update(organization);
+            _context.Update(organization);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
@@ -138,7 +137,7 @@ namespace Prime.Services
 
         public async Task DeleteOrganizationAsync(int organizationId)
         {
-            var organization = await this.GetBaseOrganizationQuery()
+            var organization = await GetBaseOrganizationQuery()
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
 
             if (organization == null)
@@ -151,24 +150,9 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Organization> SubmitRegistrationAsync(int organizationId)
-        {
-            var organization = await GetOrganizationAsync(organizationId);
-            organization.SubmittedDate = DateTimeOffset.Now;
-            _context.Update(organization);
-
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not submit the organization.");
-            }
-
-            return organization;
-        }
-
         public async Task<Organization> GetOrganizationNoTrackingAsync(int organizationId)
         {
-            return await this.GetBaseOrganizationQuery()
+            return await GetBaseOrganizationQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
