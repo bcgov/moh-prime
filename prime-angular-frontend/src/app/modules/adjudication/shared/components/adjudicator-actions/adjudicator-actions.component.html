@@ -10,7 +10,8 @@
 
   <mat-form-field>
     <mat-label>TOA Selection</mat-label>
-    <mat-select [formControl]="assignedTOAType">
+    <mat-select [disabled]="!isUnderReview"
+                [formControl]="assignedTOAType">
       <mat-option *ngFor="let agreement of termsOfAccessAgreements"
                   [value]="agreement.type">
         {{ agreement.name }}
