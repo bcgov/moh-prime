@@ -79,7 +79,7 @@ namespace Prime.Services
 
         public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
         {
-            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
+            IQueryable<Enrollee> query = GetBaseEnrolleeQuery();
 
             if (isAdmin)
             {
@@ -143,7 +143,7 @@ namespace Prime.Services
 
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
-            Enrollee enrollee = await this.GetBaseEnrolleeQuery()
+            Enrollee enrollee = await GetBaseEnrolleeQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
 
@@ -170,7 +170,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create enrollee.");
             }
 
-            await this._businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Created");
+            await _businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Created");
 
             return enrollee.Id;
         }
@@ -480,7 +480,7 @@ namespace Prime.Services
 
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
         {
-            var entity = await this.GetBaseEnrolleeQuery()
+            var entity = await GetBaseEnrolleeQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
