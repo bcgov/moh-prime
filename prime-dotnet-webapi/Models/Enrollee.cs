@@ -224,7 +224,7 @@ namespace Prime.Models
         [JsonIgnore]
         public string FullName
         {
-            get => FirstName + " " + LastName;
+            get => $"{FirstName} {LastName}";
         }
 
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
