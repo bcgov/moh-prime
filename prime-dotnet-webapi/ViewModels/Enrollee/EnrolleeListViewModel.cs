@@ -59,15 +59,6 @@ namespace Prime.ViewModels
 
         public bool AlwaysManual { get; set; }
 
-        [JsonIgnore]
-        public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
-
-        public bool RemoteAccess
-        {
-            get
-            {
-                return (EnrolleeRemoteUsers.Count > 0) ? true : false;
-            }
-        }
+        public bool RemoteAccess { get; set; }
     }
 }
