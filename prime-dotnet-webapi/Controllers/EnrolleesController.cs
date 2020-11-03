@@ -22,7 +22,6 @@ namespace Prime.Controllers
     [Authorize(Policy = AuthConstants.USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
         private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
@@ -40,8 +39,7 @@ namespace Prime.Controllers
             IBusinessEventService businessEventService,
             IEmailService emailService,
             IDocumentService documentService,
-            IRazorConverterService razorConverterService,
-            IMapper mapper)
+            IRazorConverterService razorConverterService)
         {
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
@@ -229,58 +227,6 @@ namespace Prime.Controllers
             await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
 
             return Ok(ApiResponse.Result(enrollee));
-        }
-
-        // PUT: api/Enrollees/5/assign
-        /// <summary>
-        /// .
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        /// <param name="agreementType"></param>
-        [HttpPut("{enrolleeId}/assign", Name = nameof(AssignToaAgreementType))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> AssignToaAgreementType(int enrolleeId, [FromQuery] AgreementType? agreementType)
-        {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
-            {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
-            }
-
-            if (!agreementType.Equals(null) && !Enum.IsDefined(typeof(AgreementType), agreementType))
-            {
-                return NotFound(ApiResponse.Message($"Agreement type not found with id {agreementType}."));
-            }
-
-            if (agreementType.HasValue && !Enum.GetValues(typeof(AgreementType))
-                .Cast<AgreementType>()
-                .Where(v =>
-                    v != AgreementType.CommunityPracticeOrgAgreement &&
-                    v != AgreementType.CommunityPharmacyOrgAgreement)
-                .ToList()
-                .Contains(agreementType.Value))
-            {
-                this.ModelState.AddModelError("AgreementType", "Agreement type is invalid.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
-            }
-
-            if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
-            {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Assigned agreement type can not be updated when the current status is 'Editable'.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
-            }
-
-            await _enrolleeService.AssignToaAgreementType(enrollee.Id, agreementType.Value);
-            await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin assigned agreement");
-
-            var updatedEnrollee = await _enrolleeService.GetEnrolleeAsync(enrollee.Id);
-
-            return Ok(ApiResponse.Result(updatedEnrollee));
         }
 
         // GET: api/Enrollees/5/statuses

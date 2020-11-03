@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,19 +24,22 @@ namespace Prime.Controllers
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
         private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
+        private readonly IBusinessEventService _businessEventService;
 
         public SubmissionsController(
             ISubmissionService submissionService,
             IAdminService adminService,
             IEnrolleeService enrolleeService,
             IAgreementService agreementService,
-            IEnrolleeSubmissionService enrolleeSubmissionService)
+            IEnrolleeSubmissionService enrolleeSubmissionService,
+            IBusinessEventService businessEventService)
         {
             _submissionService = submissionService;
             _adminService = adminService;
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
             _enrolleeSubmissionService = enrolleeSubmissionService;
+            _businessEventService = businessEventService;
         }
 
         // POST: api/enrollees/5/submission
@@ -113,6 +117,58 @@ namespace Prime.Controllers
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             return Ok(ApiResponse.Result(enrollee));
+        }
+
+        // PUT: api/Enrollees/5/submission/assignment
+        /// <summary>
+        /// Assign a TOA agreement type to an enrollee that is under review.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="agreementType"></param>
+        [HttpPut("{enrolleeId}/submission/assignment", Name = nameof(AssignToaAgreementType))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> AssignToaAgreementType(int enrolleeId, [FromQuery] AgreementType? agreementType)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+            }
+
+            if (!agreementType.Equals(null) && !Enum.IsDefined(typeof(AgreementType), agreementType))
+            {
+                return NotFound(ApiResponse.Message($"Agreement type not found with id {agreementType}."));
+            }
+
+            if (agreementType.HasValue && !Enum.GetValues(typeof(AgreementType))
+                .Cast<AgreementType>()
+                .Where(v =>
+                    v != AgreementType.CommunityPracticeOrgAgreement &&
+                    v != AgreementType.CommunityPharmacyOrgAgreement)
+                .ToList()
+                .Contains(agreementType.Value))
+            {
+                this.ModelState.AddModelError("AgreementType", "Agreement type is invalid.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Assigned agreement type can not be updated when the current status is 'Editable'.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            await _enrolleeService.AssignToaAgreementType(enrollee.Id, agreementType.Value);
+            await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin assigned agreement");
+
+            var updatedEnrollee = await _enrolleeService.GetEnrolleeAsync(enrollee.Id);
+
+            return Ok(ApiResponse.Result(updatedEnrollee));
         }
 
         // PUT: api/enrollees/5/always-manual
