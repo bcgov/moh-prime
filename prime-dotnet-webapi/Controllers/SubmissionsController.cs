@@ -140,7 +140,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            if (!Enum.IsDefined(typeof(AgreementType), agreementType) && !agreementType.Equals(null))
+            if (!agreementType.Equals(null) && !Enum.IsDefined(typeof(AgreementType), agreementType))
             {
                 return NotFound(ApiResponse.Message($"Agreement type not found with id {agreementType}."));
             }
