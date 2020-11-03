@@ -6,7 +6,7 @@ namespace Prime.Services
 {
     public interface IEmailService
     {
-        Task SendReminderEmailAsync(Enrollee enrollee);
+        Task SendReminderEmailAsync(int enrolleeId);
 
         Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null);
 

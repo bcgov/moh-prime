@@ -77,12 +77,13 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<Enrollee> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
+        public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
         {
-            IQueryable<Enrollee> query = this.GetBaseEnrolleeQuery();
+            IQueryable<Enrollee> query = GetBaseEnrolleeQuery();
 
             if (isAdmin)
             {
+                // TODO create a enrollee admin view model
                 query = query.Include(e => e.Adjudicator)
                     .Include(e => e.EnrolmentStatuses)
                         .ThenInclude(es => es.EnrolmentStatusReference)
@@ -92,19 +93,19 @@ namespace Prime.Services
                             .ThenInclude(esr => esr.Adjudicator);
             }
 
-            var entity = await query
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var enrollee = await query.SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var newestAgreementIds = await _context.AgreementVersions
+                .Select(a => a.AgreementType)
+                .Distinct()
+                .Select(type => _context.AgreementVersions
+                    .OrderByDescending(a => a.EffectiveDate)
+                    .First(a => a.AgreementType == type)
+                    .Id
+                )
+                .ToListAsync();
 
-            if (entity != null)
-            {
-                // TODO: This is an interm fix for making a different view model for enrollee based on isAdmin
-                if (isAdmin)
-                {
-                    entity.isAdminView = true;
-                }
-            }
-
-            return entity;
+            return _mapper.Map<EnrolleeViewModel>(enrollee,
+                opt => opt.Items["HasNewestAgreement"] = newestAgreementIds.Any(n => n == enrollee?.CurrentAgreementId));
         }
 
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
@@ -142,7 +143,7 @@ namespace Prime.Services
 
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
-            Enrollee enrollee = await this.GetBaseEnrolleeQuery()
+            Enrollee enrollee = await GetBaseEnrolleeQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.UserId == userId);
 
@@ -169,7 +170,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create enrollee.");
             }
 
-            await this._businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Created");
+            await _businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Created");
 
             return enrollee.Id;
         }
@@ -479,17 +480,17 @@ namespace Prime.Services
 
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
         {
-            var entity = await this.GetBaseEnrolleeQuery()
+            var entity = await GetBaseEnrolleeQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             return entity;
         }
 
-        public async Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(Enrollee enrollee)
+        public async Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId)
         {
             return await _context.EnrolleeNotes
-                .Where(an => an.EnrolleeId == enrollee.Id)
+                .Where(an => an.EnrolleeId == enrolleeId)
                 .Include(an => an.Adjudicator)
                 .OrderByDescending(an => an.NoteDate)
                 .ProjectTo<EnrolleeNoteViewModel>(_mapper.ConfigurationProvider)
@@ -605,13 +606,16 @@ namespace Prime.Services
                 .CountAsync();
         }
 
-        public async Task<Enrollee> UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null)
+        public async Task<EnrolleeViewModel> UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null)
         {
-            var enrollee = await _context.Enrollees.Where(e => e.Id == enrolleeId).SingleOrDefaultAsync();
+            var enrollee = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .SingleOrDefaultAsync();
+
             enrollee.AdjudicatorId = adminId;
             await _context.SaveChangesAsync();
 
-            return enrollee;
+            return _mapper.Map<EnrolleeViewModel>(enrollee);
         }
 
         public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId)

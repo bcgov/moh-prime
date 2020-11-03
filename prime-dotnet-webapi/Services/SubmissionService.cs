@@ -180,7 +180,7 @@ namespace Prime.Services
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
             await _context.SaveChangesAsync();
-            await _emailService.SendReminderEmailAsync(enrollee);
+            await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
@@ -233,7 +233,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Enabled Editing");
             await _context.SaveChangesAsync();
-            await _emailService.SendReminderEmailAsync(enrollee);
+            await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
@@ -242,7 +242,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Locked);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Locked");
             await _context.SaveChangesAsync();
-            await _emailService.SendReminderEmailAsync(enrollee);
+            await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
         }
 
