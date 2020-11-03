@@ -65,6 +65,7 @@ namespace Prime.ViewModels
 
         public int? AdjudicatorId { get; set; }
 
+        // TODO currently easily derived on web client, but currently used on backend
         public string AdjudicatorIdir { get; set; }
 
         public Admin Adjudicator { get; set; }
@@ -99,10 +100,12 @@ namespace Prime.ViewModels
 
         public int DisplayId { get; set; }
 
+        // TODO currently easily derived on web client, but needed on backend for now
         public int CurrentStatusCode { get; set; }
 
         public bool HasNewestAgreement { get; set; }
 
+        // TODO not currently used in web client, but needed on backend for now
         public bool IsRegulatedUser { get; set; }
 
         public string CurrentTOAStatus

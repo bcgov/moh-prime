@@ -83,6 +83,7 @@ namespace Prime.Services
 
             if (isAdmin)
             {
+                // TODO create a enrollee admin view model
                 query = query.Include(e => e.Adjudicator)
                     .Include(e => e.EnrolmentStatuses)
                         .ThenInclude(es => es.EnrolmentStatusReference)
@@ -92,6 +93,7 @@ namespace Prime.Services
                             .ThenInclude(esr => esr.Adjudicator);
             }
 
+            var enrollee = await query.SingleOrDefaultAsync(e => e.Id == enrolleeId);
             var newestAgreementIds = await _context.AgreementVersions
                 .Select(a => a.AgreementType)
                 .Distinct()
@@ -101,8 +103,6 @@ namespace Prime.Services
                     .Id
                 )
                 .ToListAsync();
-
-            var enrollee = await query.SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             return _mapper.Map<EnrolleeViewModel>(enrollee,
                 opt => opt.Items["HasNewestAgreement"] = newestAgreementIds.Any(n => n == enrollee?.CurrentAgreementId));

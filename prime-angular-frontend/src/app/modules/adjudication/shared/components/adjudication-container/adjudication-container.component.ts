@@ -397,6 +397,8 @@ export class AdjudicationContainerComponent implements OnInit {
       expiryDate,
       currentStatus,
       previousStatus,
+      currentTOAStatus,
+      hasNewestAgreement,
       adjudicator,
       alwaysManual
     } = enrollee;
@@ -411,6 +413,8 @@ export class AdjudicationContainerComponent implements OnInit {
       expiryDate,
       currentStatusCode: currentStatus?.statusCode,
       previousStatus,
+      currentTOAStatus,
+      hasNewestAgreement,
       adjudicatorIdir: adjudicator?.idir,
       alwaysManual
     };
