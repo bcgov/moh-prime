@@ -289,8 +289,8 @@ export class AdjudicationResource {
     return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/submission/assignment`, { params })
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap(() => this.toastService.openSuccessToast('TOA agreement has been assigned')),
         tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
-        tap((enrollee: HttpEnrollee) => this.toastService.openSuccessToast('TOA agreement has been assigned')),
         catchError((error: any) => {
           this.toastService.openErrorToast('TOA agreement could not be assigned.');
           this.logger.error('[Enrolment] EnrolmentResource::assignAgreementType error has occurred: ', error);
