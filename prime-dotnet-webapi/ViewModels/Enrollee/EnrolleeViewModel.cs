@@ -108,7 +108,7 @@ namespace Prime.ViewModels
         // TODO not currently used in web client, but needed on backend for now
         public bool IsRegulatedUser { get; set; }
 
-        public AgreementType AssignedTOAType { get; set; }
+        public AgreementType? AssignedTOAType { get; set; }
 
         public string CurrentTOAStatus
         {
