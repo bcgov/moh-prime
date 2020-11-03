@@ -92,21 +92,20 @@ namespace Prime.Services
                             .ThenInclude(esr => esr.Adjudicator);
             }
 
-            IQueryable<int> newestAgreementIds = _context.AgreementVersions
+            var newestAgreementIds = await _context.AgreementVersions
                 .Select(a => a.AgreementType)
                 .Distinct()
                 .Select(type => _context.AgreementVersions
                     .OrderByDescending(a => a.EffectiveDate)
                     .First(a => a.AgreementType == type)
                     .Id
-                );
+                )
+                .ToListAsync();
 
-            var entity = await query
-                .ProjectTo<EnrolleeViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds = newestAgreementIds })
-                .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var enrollee = await query.SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            return entity;
+            return _mapper.Map<EnrolleeViewModel>(enrollee,
+                opt => opt.Items["HasNewestAgreement"] = newestAgreementIds.Any(n => n == enrollee?.CurrentAgreementId));
         }
 
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
