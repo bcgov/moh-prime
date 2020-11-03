@@ -46,8 +46,8 @@
 
           <mat-form-field>
             <mat-label>TOA Selection</mat-label>
-            <mat-select [value]="0">
-              <mat-option value="0">None</mat-option>
+            <mat-select [value]="null">
+              <mat-option [value]="null">None</mat-option>
               <mat-option *ngFor="let agreement of termsOfAccessAgreements"
                           [value]="agreement.type">
                 {{ agreement.name }}

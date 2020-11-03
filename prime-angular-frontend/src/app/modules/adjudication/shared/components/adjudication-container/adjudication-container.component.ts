@@ -407,6 +407,7 @@ export class AdjudicationContainerComponent implements OnInit {
       currentStatus,
       previousStatus,
       currentTOAStatus,
+      assignedTOAType,
       hasNewestAgreement,
       adjudicator,
       alwaysManual
@@ -423,6 +424,7 @@ export class AdjudicationContainerComponent implements OnInit {
       currentStatusCode: currentStatus?.statusCode,
       previousStatus,
       currentTOAStatus,
+      assignedTOAType,
       hasNewestAgreement,
       adjudicatorIdir: adjudicator?.idir,
       alwaysManual
