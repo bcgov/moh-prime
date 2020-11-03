@@ -49,7 +49,6 @@ namespace Prime.Controllers
             _emailService = emailService;
             _documentService = documentService;
             _razorConverterService = razorConverterService;
-            _mapper = mapper;
         }
 
         // GET: api/Enrollees
