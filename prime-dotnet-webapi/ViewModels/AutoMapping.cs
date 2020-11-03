@@ -28,7 +28,6 @@ public class AutoMapping : Profile
         CreateMap<Enrollee, EnrolleeViewModel>()
             .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
-            .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(n => n == src.CurrentAgreementId)))
             .ForMember(dest => dest.IsRegulatedUser, opt => opt.MapFrom(src => src.IsRegulatedUser()));
 
         CreateMap<Agreement, AgreementViewModel>()
