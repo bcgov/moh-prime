@@ -38,6 +38,7 @@ namespace Prime.Services
                 new AlwaysManualRule(),
                 new IdentityAssuranceLevelRule(),
                 new IdentityProviderRule(),
+                new NoAssignedAgreementRule(),
             };
 
             return await ProcessRules(rules, enrollee);
