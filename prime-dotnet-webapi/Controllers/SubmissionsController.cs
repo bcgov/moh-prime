@@ -119,7 +119,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(enrollee));
         }
 
-        // PUT: api/Enrollees/5/submission/assignment
+        // PUT: api/Enrollees/5/submissions/latest/type
         /// <summary>
         /// Assign a TOA agreement type to the latest submission.
         /// </summary>

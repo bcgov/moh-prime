@@ -153,7 +153,7 @@ namespace Prime.Models
         }
 
         /// <summary>
-        /// Gets the TOA that was assigned during submission of the enrolment.
+        /// Gets the most recent TOA that was assigned during submission of the enrolment.
         /// </summary>
         [NotMapped]
         [Computed]
