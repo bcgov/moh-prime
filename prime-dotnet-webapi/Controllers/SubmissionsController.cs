@@ -165,8 +165,6 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            // TODO submission is current not approved already (eg. approved flag)
-
             await _enrolleeService.AssignToaAgreementType(enrolleeId, assignedToaType);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin assigned agreement");
 
