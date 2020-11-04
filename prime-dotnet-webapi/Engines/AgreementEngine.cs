@@ -18,52 +18,49 @@ namespace Prime.Engines
                 return null;
             }
 
-            var context = CertificationContext.FromEnrolleeCertifiaction(enrollee.Certifications.SingleOrDefault());
+            var context = CertificationContext.FromCertification(enrollee.Certifications.SingleOrDefault());
 
 
         }
 
         private class CertificationContext
         {
-            public enum User
+            public enum CollegeContext
             {
-                CannotProvideCare,
-                HasNoLicence,
-                HasOtherLicence,
-                IsPharmacist
+                None,
+                Other,
+                Pharmacist
             }
 
             public bool Regulated { get; set; }
-            public User UserContext { get; set; }
 
-            public static CertificationContext FromEnrolleeCertification(Certification cert)
+            public bool CanProvideCare { get; set; }
+            public CollegeContext College { get; set; }
+
+            public static CertificationContext FromCertification(Certification cert)
             {
                 return new CertificationContext
                 {
                     Regulated = cert?.License.NamedInImReg ?? false,
-                    UserContext = DetermineUserContext(cert)
+                    CanProvideCare = cert?.License.LicensedToProvideCare ?? false,
+                    College = DetermineCollegeContext(cert)
                 };
             }
 
-            private static User DetermineUserContext(Certification cert)
+            private static CollegeContext DetermineCollegeContext(Certification cert)
             {
                 if (cert == null)
                 {
-                    return User.HasNoLicence;
-                }
-
-                if (!cert.License.LicensedToProvideCare)
-                {
-                    return User.CannotProvideCare;
+                    return CollegeContext.None;
                 }
 
                 if (cert.CollegeCode == 2) // Is College of Pharmacists
                 {
-                    return User.IsPharmacist;
+                    return CollegeContext.Pharmacist;
                 }
                 else
                 {
-                    return User.HasOtherLicence;
+                    return CollegeContext.Other;
                 }
             }
         }
