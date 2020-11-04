@@ -2,20 +2,15 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { EMPTY } from 'rxjs';
-import { map } from 'rxjs/operators';
-
+import { EnumUtils } from '@lib/utils/enum-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { EnumUtils } from '@lib/utils/enum-utils.class';
 
 @Component({
   selector: 'app-adjudicator-actions',
@@ -24,7 +19,7 @@ import { EnumUtils } from '@lib/utils/enum-utils.class';
 })
 export class AdjudicatorActionsComponent implements OnInit {
   @Input() public enrollee: EnrolleeListViewModel;
-  @Output() public approve: EventEmitter<number>;
+  @Output() public approve: EventEmitter<{ enrolleeId: number, agreementName: string }>;
   @Output() public decline: EventEmitter<number>;
   @Output() public lock: EventEmitter<number>;
   @Output() public unlock: EventEmitter<number>;
@@ -47,7 +42,7 @@ export class AdjudicatorActionsComponent implements OnInit {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
   ) {
-    this.approve = new EventEmitter<number>();
+    this.approve = new EventEmitter<{ enrolleeId: number, agreementName: string }>();
     this.decline = new EventEmitter<number>();
     this.lock = new EventEmitter<number>();
     this.unlock = new EventEmitter<number>();
@@ -89,21 +84,7 @@ export class AdjudicatorActionsComponent implements OnInit {
       const agreementName = this.termsOfAccessAgreements
         .filter(t => t.type === this.assignedTOAType.value)[0]
         .name;
-      const data: DialogOptions = {
-        title: 'Assign Agreement',
-        message: `Are you sure you want to assign this ${agreementName} TOA agreement?`,
-        actionText: 'Assign'
-      };
-
-      this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          map((result: boolean) =>
-            (result)
-              ? this.approve.emit(this.enrollee.id)
-              : EMPTY
-          )
-        );
+      this.approve.emit({ enrolleeId: this.enrollee.id, agreementName });
     }
   }
 

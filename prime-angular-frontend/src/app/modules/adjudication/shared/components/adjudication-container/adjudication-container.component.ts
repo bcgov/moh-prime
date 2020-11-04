@@ -133,10 +133,10 @@ export class AdjudicationContainerComponent implements OnInit {
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
-  public onApprove(enrolleeId: number) {
+  public onApprove({ enrolleeId, agreementName }: { enrolleeId: number, agreementName: string }) {
     const data: DialogOptions = {
       title: 'Approve Enrolment',
-      message: 'Are you sure you want to approve this enrolment?',
+      message: `Are you sure you want to approve this enrolment with a ${agreementName} TOA agreement?`,
       actionText: 'Approve Enrolment',
       component: NoteComponent
     };
