@@ -14,21 +14,57 @@ namespace Prime.Engines
         {
             if (enrollee.Certifications.Count() > 1)
             {
+                // Multiple College licences result in too many edge cases for automatic determination to be possible.
                 return null;
             }
 
-            if (!enrollee.IsRegulatedUser())
+            var context = CertificationContext.FromEnrolleeCertifiaction(enrollee.Certifications.SingleOrDefault());
+
+
+        }
+
+        private class CertificationContext
+        {
+            public enum User
             {
-                return AgreementType.OboTOA;
+                CannotProvideCare,
+                HasNoLicence,
+                HasOtherLicence,
+                IsPharmacist
             }
 
-            if (enrollee.HasCareSetting(CareSettingType.CommunityPharmacy))
+            public bool Regulated { get; set; }
+            public User UserContext { get; set; }
+
+            public static CertificationContext FromEnrolleeCertification(Certification cert)
             {
-                return AgreementType.CommunityPharmacistTOA;
+                return new CertificationContext
+                {
+                    Regulated = cert?.License.NamedInImReg ?? false,
+                    UserContext = DetermineUserContext(cert)
+                };
             }
-            else
+
+            private static User DetermineUserContext(Certification cert)
             {
-                return AgreementType.RegulatedUserTOA;
+                if (cert == null)
+                {
+                    return User.HasNoLicence;
+                }
+
+                if (!cert.License.LicensedToProvideCare)
+                {
+                    return User.CannotProvideCare;
+                }
+
+                if (cert.CollegeCode == 2) // Is College of Pharmacists
+                {
+                    return User.IsPharmacist;
+                }
+                else
+                {
+                    return User.HasOtherLicence;
+                }
             }
         }
     }
