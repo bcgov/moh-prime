@@ -169,7 +169,6 @@ export class FormControlValidators {
   public static requiredIn<T>(allowedValues: T[]): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const valid = allowedValues.includes(control.value);
-      console.log('VALID?', allowedValues, control.value, valid);
       return valid ? null : { requiredIn: true };
     };
   }
