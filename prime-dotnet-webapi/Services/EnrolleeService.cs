@@ -84,7 +84,7 @@ namespace Prime.Services
 
             if (isAdmin)
             {
-                // TODO create a enrollee admin view model
+                // TODO create an enrollee admin view model
                 query = query.Include(e => e.Adjudicator)
                     .Include(e => e.EnrolmentStatuses)
                         .ThenInclude(es => es.EnrolmentStatusReference)
@@ -424,7 +424,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task AssignToaAgreementType(int enrolleeId, AgreementType agreementType)
+        public async Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType)
         {
             var submission = await _context.Submissions
                 .OrderByDescending(s => s.CreatedDate)

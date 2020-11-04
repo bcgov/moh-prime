@@ -121,17 +121,17 @@ namespace Prime.Controllers
 
         // PUT: api/Enrollees/5/submission/assignment
         /// <summary>
-        /// Assign a TOA agreement type to an enrollee that is under review.
+        /// Assign a TOA agreement type to the latest submission.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="agreementType"></param>
-        [HttpPut("{enrolleeId}/submission/assignment", Name = nameof(AssignToaAgreementType))]
+        [HttpPut("{enrolleeId}/submissions/latest/type", Name = nameof(AssignToaAgreementType))]
         [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> AssignToaAgreementType(int enrolleeId, [FromQuery] AgreementType agreementType)
+        public async Task<ActionResult<EnrolleeViewModel>> AssignToaAgreementType(int enrolleeId, AgreementType? agreementType)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -140,20 +140,20 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            if (!Enum.IsDefined(typeof(AgreementType), agreementType))
+            if (agreementType.HasValue && !Enum.IsDefined(typeof(AgreementType), agreementType))
             {
                 return NotFound(ApiResponse.Message($"Agreement type not found with id {agreementType}."));
             }
 
-            if (!Enum.GetValues(typeof(AgreementType))
+            if (agreementType.HasValue && !Enum.GetValues(typeof(AgreementType))
                 .Cast<AgreementType>()
                 .Where(v =>
                     v != AgreementType.CommunityPracticeOrgAgreement &&
                     v != AgreementType.CommunityPharmacyOrgAgreement)
                 .ToList()
-                .Contains(agreementType))
+                .Contains(agreementType.Value))
             {
-                this.ModelState.AddModelError("AgreementType", "Agreement type is invalid.");
+                this.ModelState.AddModelError("AgreementType", "Agreement type must be a TOA.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
@@ -162,6 +162,8 @@ namespace Prime.Controllers
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Assigned agreement type can not be updated when the current status is 'Editable'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
+
+            // TODO submission is current not approved already (eg. approved flag)
 
             await _enrolleeService.AssignToaAgreementType(enrollee.Id, agreementType);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin assigned agreement");
