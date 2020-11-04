@@ -52,7 +52,6 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.route = new EventEmitter<string | (string | number)[]>();
 
     this.termsOfAccessAgreements = [
-      { type: null, name: 'None' },
       { type: AgreementType.REGULATED_USER_TOA, name: 'RU' },
       { type: AgreementType.OBO_TOA, name: 'OBO' },
       { type: AgreementType.COMMUNITY_PHARMACIST_TOA, name: 'PharmRU' },
