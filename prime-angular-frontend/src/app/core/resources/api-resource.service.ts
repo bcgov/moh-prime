@@ -34,7 +34,7 @@ export class ApiResource extends AbstractResource {
 
   public post<T>(
     path: string,
-    body: any = null,
+    body: any = {},
     params: HttpParams = new HttpParams(),
     options: { [key: string]: any } = {}
   ): Observable<ApiHttpResponse<T> | ApiHttpErrorResponse> {
@@ -45,7 +45,7 @@ export class ApiResource extends AbstractResource {
 
   public put<T>(
     path: string,
-    body: any = null,
+    body: any = {},
     params: HttpParams = new HttpParams(),
     options: { [key: string]: any } = {}
   ): Observable<ApiHttpResponse<T> | ApiHttpErrorResponse> {
@@ -56,7 +56,7 @@ export class ApiResource extends AbstractResource {
 
   public patch<T>(
     path: string,
-    body: any = null,
+    body: any = {},
     params: HttpParams = new HttpParams(),
     options: { [key: string]: any } = {}
   ): Observable<ApiHttpResponse<T> | ApiHttpErrorResponse> {
