@@ -230,6 +230,14 @@ namespace Prime.Models
             get => Id + DISPLAY_OFFSET;
         }
 
+        [NotMapped]
+        [Computed]
+        [JsonIgnore]
+        public string FullName
+        {
+            get => $"{FirstName} {LastName}";
+        }
+
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
             var newStatus = EnrolmentStatus.FromType(statusType, this.Id);
