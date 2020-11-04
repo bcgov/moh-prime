@@ -32,7 +32,7 @@ namespace Prime.Services
 
         Task DeleteEnrolleeAsync(int enrolleeId);
 
-        Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType);
+        Task AssignToaAgreementType(int enrolleeId, AgreementType agreementType);
 
         Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId);
 
