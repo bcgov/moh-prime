@@ -46,7 +46,6 @@ export class EnrolmentResource {
           (enrollees.length) ? this.enrolleeAdapterResponse(enrollees.pop()) : null
         ),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee could not be found.');
           this.logger.error('[Enrolment] EnrolmentResource::enrollee error has occurred: ', error);
           throw error;
         })
