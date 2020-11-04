@@ -215,6 +215,14 @@ namespace Prime.Models
             get => Id + DISPLAY_OFFSET;
         }
 
+        [NotMapped]
+        [Computed]
+        [JsonIgnore]
+        public string FullName
+        {
+            get => $"{FirstName} {LastName}";
+        }
+
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
             var newStatus = EnrolmentStatus.FromType(statusType, this.Id);
@@ -281,7 +289,7 @@ namespace Prime.Models
                 throw new InvalidOperationException($"{nameof(Certifications)} cannnot be null");
             }
 
-            return Certifications.Any(cert => cert.License?.NamedInImReg  == true);
+            return Certifications.Any(cert => cert.License?.NamedInImReg == true);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
