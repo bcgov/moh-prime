@@ -79,7 +79,8 @@ namespace Prime.Services
 
         public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
         {
-            IQueryable<Enrollee> query = GetBaseEnrolleeQuery();
+            IQueryable<Enrollee> query = GetBaseEnrolleeQuery()
+                .Include(e => e.Submissions);
 
             if (isAdmin)
             {
