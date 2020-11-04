@@ -109,7 +109,7 @@ namespace Prime.ViewModels
         public bool IsRegulatedUser { get; set; }
 
         public AgreementType? AssignedTOAType { get; set; }
-
+        
         public string CurrentTOAStatus
         {
             get
