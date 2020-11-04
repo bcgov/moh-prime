@@ -17,5 +17,6 @@ namespace Prime.Models
         AssuranceLevel = 13,
         IdentityProvider = 14,
         RequestingRemoteAccess = 15,
+        NoAssignedAgreement = 16,
     }
 }
