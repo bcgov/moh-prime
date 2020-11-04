@@ -20,10 +20,11 @@
   </div>
 
   <button *ngIf="!this.enrolment.enrolleeRemoteUsers?.length"
+          class="mb-4"
           mat-stroked-button
           color="primary"
           (click)="routeTo(EnrolmentRoutes.REMOTE_ACCESS)">
-    <mat-icon class="mr-1">notification_important</mat-icon>
+    <mat-icon class="mt-1 mr-1">notification_important</mat-icon>
     Request Remote Access
   </button>
 

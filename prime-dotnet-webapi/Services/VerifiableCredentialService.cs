@@ -257,7 +257,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "user_class" },
-                    { "value", enrollee.IsRegulatedUser() ? "RU" : "OBO" }
+                    { "value", enrollee.IsRegulatedUser ? "RU" : "OBO" }
                 },
                 new JObject
                 {

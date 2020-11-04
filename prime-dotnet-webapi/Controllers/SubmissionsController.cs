@@ -47,8 +47,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> Submit(int enrolleeId, EnrolleeUpdateModel updatedProfile)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> Submit(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -91,8 +91,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction, [FromQuery] Guid? documentGuid = null)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction, [FromQuery] Guid? documentGuid = null)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)

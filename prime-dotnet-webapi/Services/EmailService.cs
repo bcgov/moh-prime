@@ -107,9 +107,14 @@ namespace Prime.Services
             return emails.All(e => IsValidEmail(e));
         }
 
-        public async Task SendReminderEmailAsync(Enrollee enrollee)
+        public async Task SendReminderEmailAsync(int enrolleeId)
         {
-            if (!IsValidEmail(enrollee.Email))
+            var enrolleeEmail = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => e.Email)
+                .SingleOrDefaultAsync();
+
+            if (!IsValidEmail(enrolleeEmail))
             {
                 // TODO Log invalid email, cannot send?
                 return;
@@ -117,7 +122,7 @@ namespace Prime.Services
 
             string subject = "PRIME Requires your Attention";
             string body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/ReminderEmail.cshtml", new EmailParams());
-            await Send(PRIME_EMAIL, enrollee.Email, subject, body);
+            await Send(PRIME_EMAIL, enrolleeEmail, subject, body);
         }
 
         public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, bool hasCommunityPharmacyCareSetting)
