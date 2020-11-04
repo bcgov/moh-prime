@@ -22,8 +22,8 @@ namespace Prime
         // TODO: Environment variables and service client. Client needs manage-users and view-realm roles to get and assign roles.
         public static class Keycloak
         {
-            public readonly static string TokenUrl = Environment.GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
-            public readonly static string AdministrationUrl = Environment.GetEnvironmentVariable("") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/admin/realms/v4mbqqas/";
+            public readonly static string TokenUrl = Environment.GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
+            public readonly static string AdministrationUrl = Environment.GetEnvironmentVariable("") ?? "https://dev.oidc.gov.bc.ca/auth/admin/realms/v4mbqqas/";
             public readonly static string AdministrationClientId = Environment.GetEnvironmentVariable("") ?? "";
             public readonly static string AdministrationClientSecret = Environment.GetEnvironmentVariable("") ?? "";
         }
@@ -49,7 +49,7 @@ namespace Prime
             public readonly static string Url = Environment.GetEnvironmentVariable("CHES_API_URL") ?? "https://ches-master-9f0fbe-dev.pathfinder.gov.bc.ca/api/v1";
             public readonly static string ClientId = "PRIME_SERVICE_CLIENT";
             public readonly static string ClientSecret = Environment.GetEnvironmentVariable("CHES_CLIENT_SECRET") ?? "88e123a6-80cb-46a0-96d3-e2edae076ae7";
-            public readonly static string TokenUrl = Environment.GetEnvironmentVariable("CHES_TOKEN_URL") ?? "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect";
+            public readonly static string TokenUrl = Environment.GetEnvironmentVariable("CHES_TOKEN_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect";
         }
 
         /// <summary>
