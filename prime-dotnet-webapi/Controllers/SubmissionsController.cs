@@ -131,7 +131,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> AssignToaAgreementType(int enrolleeId, [FromQuery] AgreementType? agreementType)
+        public async Task<ActionResult<EnrolleeViewModel>> AssignToaAgreementType(int enrolleeId, [FromQuery] AgreementType agreementType)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -140,18 +140,18 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            if (!agreementType.Equals(null) && !Enum.IsDefined(typeof(AgreementType), agreementType))
+            if (!Enum.IsDefined(typeof(AgreementType), agreementType))
             {
                 return NotFound(ApiResponse.Message($"Agreement type not found with id {agreementType}."));
             }
 
-            if (agreementType.HasValue && !Enum.GetValues(typeof(AgreementType))
+            if (!Enum.GetValues(typeof(AgreementType))
                 .Cast<AgreementType>()
                 .Where(v =>
                     v != AgreementType.CommunityPracticeOrgAgreement &&
                     v != AgreementType.CommunityPharmacyOrgAgreement)
                 .ToList()
-                .Contains(agreementType.Value))
+                .Contains(agreementType))
             {
                 this.ModelState.AddModelError("AgreementType", "Agreement type is invalid.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
@@ -163,7 +163,7 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            await _enrolleeService.AssignToaAgreementType(enrollee.Id, agreementType.Value);
+            await _enrolleeService.AssignToaAgreementType(enrollee.Id, agreementType);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin assigned agreement");
 
             var updatedEnrollee = await _enrolleeService.GetEnrolleeAsync(enrollee.Id);
