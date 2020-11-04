@@ -16,7 +16,7 @@
         {{ agreement.name }}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="assignedTOAType.hasError('required')">
+    <mat-error *ngIf="assignedTOAType.hasError('requiredIn')">
       A TOA must be assigned in order to approve an enrollee.
     </mat-error>
   </mat-form-field>

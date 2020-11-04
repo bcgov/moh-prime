@@ -1,14 +1,21 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
+import { EMPTY } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { EnumUtils } from '@lib/utils/enum-utils.class';
 
 @Component({
   selector: 'app-adjudicator-actions',
@@ -37,7 +44,8 @@ export class AdjudicatorActionsComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private dialog: MatDialog
   ) {
     this.approve = new EventEmitter<number>();
     this.decline = new EventEmitter<number>();
@@ -52,6 +60,7 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.route = new EventEmitter<string | (string | number)[]>();
 
     this.termsOfAccessAgreements = [
+      { type: 0, name: 'None' },
       { type: AgreementType.REGULATED_USER_TOA, name: 'RU' },
       { type: AgreementType.OBO_TOA, name: 'OBO' },
       { type: AgreementType.COMMUNITY_PHARMACIST_TOA, name: 'PharmRU' },
@@ -77,7 +86,24 @@ export class AdjudicatorActionsComponent implements OnInit {
 
   public onApprove() {
     if (this.formUtilsService.checkValidity(this.form) && this.canEdit && this.isUnderReview) {
-      this.approve.emit(this.enrollee.id);
+      const agreementName = this.termsOfAccessAgreements
+        .filter(t => t.type === this.assignedTOAType.value)[0]
+        .name;
+      const data: DialogOptions = {
+        title: 'Assign Agreement',
+        message: `Are you sure you want to assign this ${agreementName} TOA agreement?`,
+        actionText: 'Assign'
+      };
+
+      this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          map((result: boolean) =>
+            (result)
+              ? this.approve.emit(this.enrollee.id)
+              : EMPTY
+          )
+        );
     }
   }
 
@@ -144,14 +170,14 @@ export class AdjudicatorActionsComponent implements OnInit {
   private createFormInstance() {
     this.form = this.fb.group({
       assignedTOAType: [
-        { value: null, disabled: !this.isUnderReview },
-        [FormControlValidators.requiredTruthful]
+        { value: 0, disabled: !this.isUnderReview },
+        [FormControlValidators.requiredIn(EnumUtils.values(AgreementType))]
       ]
     });
   }
 
   private initForm() {
-    this.assignedTOAType.patchValue(this.enrollee.assignedTOAType);
+    this.assignedTOAType.patchValue(this.enrollee.assignedTOAType ?? 0);
 
     this.assignedTOAType.valueChanges
       .subscribe((agreementType: AgreementType) =>

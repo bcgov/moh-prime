@@ -143,8 +143,8 @@ export class FormControlValidators {
 
   /**
    * @description
-   * Checks a form control is within a valid length,
-   * if there is no maxLength, it will be assumed to be the same as minLength.
+   * Checks a form control is within a valid length, and
+   * if no maxlength assumed to be minlength.
    */
   public static requiredLength(minLength: number, maxLength?: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -155,6 +155,22 @@ export class FormControlValidators {
         && currentLength >= minLength
         && currentLength <= maxLength);
       return valid ? null : { length: true };
+    };
+  }
+
+  /**
+   * @description
+   * Checks a form control is set to one of a set of
+   * values.
+   *
+   * @example
+   * FormControlValidators.requiredIn(Object.values(enum))
+   */
+  public static requiredIn<T>(allowedValues: T[]): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const valid = allowedValues.includes(control.value);
+      console.log('VALID?', allowedValues, control.value, valid);
+      return valid ? null : { requiredIn: true };
     };
   }
 }
