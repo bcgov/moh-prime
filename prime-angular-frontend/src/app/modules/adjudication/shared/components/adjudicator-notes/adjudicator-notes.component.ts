@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription, BehaviorSubject, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -13,6 +13,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-adjudicator-notes',
@@ -21,20 +23,27 @@ import { DateContent } from '@adjudication/shared/components/dated-content-table
 })
 export class AdjudicatorNotesComponent implements OnInit {
   @Input() public noteType: NoteType;
-  
+
   public busy: Subscription;
   public form: FormGroup;
   public columns: string[];
   public adjudicatorNotes$: BehaviorSubject<DateContent[]>;
   public hasActions: boolean;
 
+  public AdjudicationRoutes = AdjudicationRoutes;
+
+  private routeUtils: RouteUtils;
+
   constructor(
     private route: ActivatedRoute,
+    protected router: Router,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
     private siteResource: SiteResource,
     private authService: AuthService
   ) {
+    // Arbitrary base route path, since all routing is relative in this page.
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
     this.hasActions = false;
     this.adjudicatorNotes$ = new BehaviorSubject<DateContent[]>(null);
   }
@@ -60,6 +69,10 @@ export class AdjudicatorNotesComponent implements OnInit {
           break;
       }
     }
+  }
+
+  public onRoute(routePath: string | (string | number)[]) {
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public ngOnInit() {

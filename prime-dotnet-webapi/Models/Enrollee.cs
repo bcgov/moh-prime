@@ -78,6 +78,9 @@ namespace Prime.Models
         public ICollection<IdentificationDocument> IdentificationDocuments { get; set; }
 
         [JsonIgnore]
+        public ICollection<EnrolleeAdjudicationDocument> EnrolleeAdjudicationDocuments { get; set; }
+
+        [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
