@@ -82,10 +82,6 @@ namespace Prime.Models
 
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
-        [NotMapped]
-        [JsonIgnore]
-        public bool? isAdminView { get; set; }
-
         public int? AdjudicatorId { get; set; }
 
         public Admin Adjudicator { get; set; }
