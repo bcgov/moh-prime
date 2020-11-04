@@ -111,9 +111,9 @@ export class EnrolmentResource {
   // Provisioner Access
   // ---
 
-  public sendProvisionerAccessLink(provisionerName: string, emails: string = null): Observable<EnrolmentCertificateAccessToken> {
+  public sendProvisionerAccessLink(emails: string = null): Observable<EnrolmentCertificateAccessToken> {
     const payload = { data: emails };
-    return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${provisionerName}`, payload)
+    return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link`, payload)
       .pipe(
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
