@@ -42,7 +42,7 @@ export class EnrolleeTableComponent implements OnInit {
       'status',
       'remoteAccess',
       'renewalDate',
-      'currentTOAStatus',
+      'currentTOA',
       'adjudicator',
       'actions'
     ];

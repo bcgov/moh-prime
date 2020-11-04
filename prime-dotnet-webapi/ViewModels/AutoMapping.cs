@@ -26,6 +26,11 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(n => n == src.CurrentAgreementId)))
             .ForMember(dest => dest.RemoteAccess, opt => opt.MapFrom(src => src.EnrolleeRemoteUsers.Any()));
 
+        CreateMap<Enrollee, EnrolleeViewModel>()
+            .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
+            .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
+            .AfterMap((src, dest) => dest.IsRegulatedUser = src.IsRegulatedUser());
+
         CreateMap<Agreement, AgreementViewModel>()
             .ForMember(dest => dest.SignedAgreementDocumentGuid, opt =>
             {
@@ -33,6 +38,7 @@ public class AutoMapping : Profile
                 opt.MapFrom(src => src.SignedAgreement.DocumentGuid);
             })
             .ForMember(dest => dest.AgreementType, opt => opt.MapFrom(src => src.AgreementVersion.AgreementType));
+
         CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
         CreateMap<SiteRegistrationNote, SiteRegistrationNoteViewModel>();
     }

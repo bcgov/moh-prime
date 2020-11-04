@@ -37,6 +37,8 @@ export interface HttpEnrollee extends Enrollee {
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
+  currentTOAStatus: string;
+  hasNewestAgreement: boolean;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
   accessAgreementNote: EnrolleeNote;
@@ -75,6 +77,8 @@ export interface Enrolment {
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
+  currentTOAStatus: string;
+  hasNewestAgreement: boolean;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
   accessAgreementNote: EnrolleeNote;
@@ -99,7 +103,9 @@ export interface EnrolleeListViewModel {
   approvedDate: string;
   expiryDate: string;
   currentStatusCode: number;
+  currentTOAStatus: string;
   previousStatus: EnrolmentStatus;
+  hasNewestAgreement: boolean;
   adjudicatorIdir: string;
   alwaysManual: boolean;
   remoteAccess: boolean;
