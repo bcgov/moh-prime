@@ -146,7 +146,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Agreement type not found with id {agreementType}."));
             }
 
-            if (assignedToaType.HasValue && !agreementType.IsToa())
+            if (assignedToaType.HasValue && !agreementType.IsEnrolleeAgreement())
             {
                 this.ModelState.AddModelError("AgreementType", "Agreement type must be a TOA.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));

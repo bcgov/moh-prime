@@ -17,9 +17,9 @@ namespace Prime.Models
     public static class AgreementTypeExtensions
     {
         /// <summary>
-        /// Checks an agreement type is a TOA.
+        /// Checks for an enrollee agreement type.
         /// </summary>
-        public static bool IsToa(this AgreementType agreementType)
+        public static bool IsEnrolleeAgreement(this AgreementType agreementType)
         {
             return Enum.GetValues(typeof(AgreementType))
                 .Cast<AgreementType>()
