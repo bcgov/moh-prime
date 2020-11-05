@@ -63,12 +63,11 @@
                         [menuOutletContext]="{ site: site, organizationId: organization.id }"
                         [properties]="getSiteProperties(site)"
                         (action)="viewSiteRemoteUsers(organization.id, site)">
-        <ng-container [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props: getSiteNotificationProperties(organization.id, site.id) }">
+        <ng-container *ngIf="site.completed && !site.submittedDate"
+                      [ngTemplateOutlet]="notification"
+                      [ngTemplateOutletContext]="{ props: getSiteNotificationProperties(organization.id, site) }">
         </ng-container>
       </app-summary-card>
-
-      <!-- *ngIf="site.completed && !site.submittedDate" -->
 
     </ng-container>
 
@@ -78,12 +77,12 @@
                let-props="props">
     <div class="d-flex align-items-center mt-2">
       <mat-icon class="mr-2"
-                color="warn">props.icon</mat-icon>
-      <span class="text-red">props.text</span>
+                color="warn">{{ props.icon }}</mat-icon>
+      <span class="text-red">{{ props.text }}</span>
       <button mat-flat-button
               color="primary"
               class="ml-auto"
-              (click)="props.route()">props.label</button>
+              (click)="props.route()">{{ props.label }}</button>
     </div>
   </ng-template>
 

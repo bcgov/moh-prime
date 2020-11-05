@@ -119,12 +119,12 @@ export class SiteManagementComponent implements OnInit {
     ];
   }
 
-  public getSiteNotificationProperties(organizationId: number, siteId: number) {
+  public getSiteNotificationProperties(organizationId: number, site: SiteListViewModel) {
     return {
       icon: 'notification_important',
       text: 'Submission not completed',
       label: 'Continue Site Submission',
-      route: () => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, siteId, SiteRoutes.SITE_REVIEW])
+      route: () => this.viewSite(organizationId, site)
     };
   }
 
