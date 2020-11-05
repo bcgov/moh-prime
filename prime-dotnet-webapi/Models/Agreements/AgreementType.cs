@@ -17,7 +17,7 @@ namespace Prime.Models
     public static class AgreementTypeExtensions
     {
         /// <summary>
-        /// Returns a list of TOA agreement types.
+        /// Checks an agreement type is a TOA.
         /// </summary>
         public static bool IsToa(this AgreementType agreementType)
         {
