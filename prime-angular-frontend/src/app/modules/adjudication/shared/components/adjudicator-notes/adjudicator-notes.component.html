@@ -30,7 +30,16 @@
       </div>
       <div class="col-sm-12 col-lg-9 col-xl-7">
 
-        <h2 class="mb-2">Notes List</h2>
+        <div class="mb-4">
+          <button mat-stroked-button
+                  color="primary"
+                  type="button"
+                  (click)="onRoute([AdjudicationRoutes.DOCUMENT_UPLOAD])">
+            Document Upload
+          </button>
+        </div>
+
+        <h2 class="mb-2">Notes</h2>
 
         <ng-container *ngIf="adjudicatorNotes$.value?.length; else noNotes">
           <app-dated-content-table [items$]="adjudicatorNotes$"></app-dated-content-table>
