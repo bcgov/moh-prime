@@ -430,7 +430,7 @@ namespace Prime.Services
             var submission = await _context.Submissions
                 .OrderByDescending(s => s.CreatedDate)
                 .Where(e => e.EnrolleeId == enrolleeId)
-                .SingleOrDefaultAsync();
+                .FirstOrDefaultAsync();
 
             submission.AgreementType = agreementType;
             await _context.SaveChangesAsync();
