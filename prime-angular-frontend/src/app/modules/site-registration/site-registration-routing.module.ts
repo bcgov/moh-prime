@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ConfigResolver } from '@config/config-resolver';
 import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
+import { UnderagedGuard } from '@core/guards/underaged.guard';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
@@ -35,7 +36,10 @@ const routes: Routes = [
   {
     path: SiteRoutes.MODULE_PATH,
     component: SiteRegistrationDashboardComponent,
-    canActivate: [UnsupportedGuard],
+    canActivate: [
+      UnsupportedGuard,
+      UnderagedGuard
+    ],
     canActivateChild: [
       AuthenticationGuard,
       RegistrantGuard,

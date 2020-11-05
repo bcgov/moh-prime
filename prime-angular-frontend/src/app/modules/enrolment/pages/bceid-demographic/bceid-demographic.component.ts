@@ -4,7 +4,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable } from 'rxjs';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+
+import moment from 'moment';
 
 import { AddressLine } from '@lib/types/address-line.type';
 import { ToastService } from '@core/services/toast.service';
@@ -35,6 +37,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
    */
   public user: BceidUser;
   public addressFormControlNames: AddressLine[];
+  public maxDateOfBirth: moment.Moment;
 
   constructor(
     protected route: ActivatedRoute,
@@ -69,6 +72,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
       'countryCode',
       'postal'
     ];
+    // Must be 18 years of age or older
+    this.maxDateOfBirth = moment().subtract(18, 'years');
   }
 
   public get mailingAddress(): FormGroup {
