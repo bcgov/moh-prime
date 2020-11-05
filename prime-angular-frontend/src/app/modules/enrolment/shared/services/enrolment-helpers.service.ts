@@ -31,9 +31,6 @@ export class EnrolmentHelpersService {
     const isCommunityPharmacist = careSettings
       .some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
 
-    console.log('isCollegeOfPharmacists', isCollegeOfPharmacists);
-    console.log('isCommunityPharmacist', isCommunityPharmacist);
-
     if (isCollegeOfPharmacists || isCommunityPharmacist) {
       return false;
     }
@@ -41,15 +38,11 @@ export class EnrolmentHelpersService {
     const enrolleeLicenceCodes = certifications
       .map((certification: CollegeCertification) => certification.licenseCode);
 
-    console.log('enrolleeLicenceCodes', enrolleeLicenceCodes);
-
     const hasRemoteAccessLicence = this.configService.licenses
       .filter((licence: LicenseWeightedConfig) => enrolleeLicenceCodes.includes(licence.code))
       .reduce((canAccess: boolean, licence: LicenseWeightedConfig) => {
         return canAccess || licence.licensedToProvideCare || licence.namedInImReg;
       }, false);
-
-    console.log('hasRemoteAccessLicence', hasRemoteAccessLicence);
 
     return hasRemoteAccessLicence;
   }

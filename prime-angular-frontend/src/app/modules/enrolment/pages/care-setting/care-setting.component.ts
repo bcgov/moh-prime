@@ -13,7 +13,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -24,6 +23,7 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { EnrolmentHelpersService } from '@enrolment/shared/services/enrolment-helpers.service';
 
 @Component({
   selector: 'app-care-setting',
@@ -47,7 +47,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private authService: AuthService
+    private authService: AuthService,
+    private enrolmentHelpersService: EnrolmentHelpersService
   ) {
     super(
       route,
@@ -160,12 +161,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = (
-        !certifications.length
-        || certifications.some(cert => cert.collegeCode === CollegeLicenceClass.CPBC)
-        || careSettings.some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+        this.enrolmentHelpersService
+          .canRequestRemoteAccess(certifications, careSettings)
       )
-        ? EnrolmentRoutes.SELF_DECLARATION
-        : EnrolmentRoutes.REMOTE_ACCESS;
+        ? EnrolmentRoutes.REMOTE_ACCESS
+        : EnrolmentRoutes.SELF_DECLARATION;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

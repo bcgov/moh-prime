@@ -10,14 +10,13 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentHelpersService } from '@enrolment/shared/services/enrolment-helpers.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +28,8 @@ export class EnrolmentGuard extends BaseGuard {
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
-    private router: Router
+    private router: Router,
+    private enrolmentHelpersService: EnrolmentHelpersService
   ) {
     super(authService, logger);
   }
@@ -167,9 +167,10 @@ export class EnrolmentGuard extends BaseGuard {
       blacklistedRoutes.push(EnrolmentRoutes.OVERVIEW);
     }
 
-    if (!enrolment.certifications.length
-      || enrolment.certifications.some(cert => cert.collegeCode === CollegeLicenceClass.CPBC)
-      || enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)) {
+    if (
+      !this.enrolmentHelpersService
+        .canRequestRemoteAccess(enrolment.certifications, enrolment.careSettings)
+    ) {
       // No access to remote access if OBO or pharmacist
       blacklistedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }
