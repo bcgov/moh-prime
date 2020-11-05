@@ -18,11 +18,11 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 
+import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
+
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-import { EnrolleeEnrolmentsComponent } from '@adjudication/pages/enrollee-enrolments/enrollee-enrolments.component';
 
 @Injectable({
   providedIn: 'root'
