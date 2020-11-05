@@ -67,6 +67,9 @@ namespace Prime.Models
         [JsonIgnore]
         public ICollection<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
 
+        [JsonIgnore]
+        public ICollection<SiteAdjudicationDocument> SiteAdjudicationDocuments { get; set; }
+
         public ICollection<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
 
         public ICollection<BusinessDay> BusinessHours { get; set; }
