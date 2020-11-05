@@ -36,12 +36,6 @@ namespace Prime.Models
         public ICollection<Agreement> Agreements { get; set; }
 
         [NotMapped]
-        public int SiteCount
-        {
-            get => Sites?.Count ?? 0;
-        }
-
-        [NotMapped]
         public int DisplayId
         {
             get => Id + DISPLAY_OFFSET;
@@ -51,6 +45,12 @@ namespace Prime.Models
         public bool HasAcceptedAgreement
         {
             get => Agreements?.Any(a => a.AcceptedDate.HasValue) ?? false;
+        }
+
+        [NotMapped]
+        public bool HasSubmittedSite
+        {
+            get => Sites?.Any(s => s.SubmittedDate.HasValue) ?? false;
         }
     }
 }
