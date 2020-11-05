@@ -8,25 +8,29 @@ import { MaintenanceComponent } from './components/maintenance/maintenance.compo
 import { PageSimpleComponent } from './components/page-simple/page-simple.component';
 import { UnsupportedComponent } from './components/unsupported/unsupported.component';
 import { HelpComponent } from './components/help/help.component';
+import { UnderagedComponent } from './components/underaged/underaged.component';
 
 @NgModule({
   imports: [
     SharedModule
   ],
   declarations: [
+    PageSimpleComponent,
     AccessDeniedComponent,
     PageNotFoundComponent,
     MaintenanceComponent,
-    PageSimpleComponent,
     UnsupportedComponent,
-    HelpComponent
+    HelpComponent,
+    UnderagedComponent
   ],
   exports: [
-    PageNotFoundComponent,
+    PageSimpleComponent,
     AccessDeniedComponent,
+    PageNotFoundComponent,
     MaintenanceComponent,
+    UnsupportedComponent,
     HelpComponent,
-    PageSimpleComponent
+    UnderagedComponent
   ]
 })
 export class RootRoutesModule { }
