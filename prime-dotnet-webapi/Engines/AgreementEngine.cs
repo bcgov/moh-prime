@@ -1,6 +1,7 @@
 using System.Linq;
 
 using Prime.Models;
+using Prime.Engines.AgreementEngineInternal;
 
 namespace Prime.Engines
 {
@@ -18,51 +19,10 @@ namespace Prime.Engines
                 return null;
             }
 
-            var context = CertificationContext.FromCertification(enrollee.Certifications.SingleOrDefault());
+            var certDigest = CertificationDigest.FromCertification(enrollee.Certifications.SingleOrDefault());
+            var settingsDigest = new SettingsDigest(enrollee.EnrolleeCareSettings);
 
-
-        }
-
-        private class CertificationContext
-        {
-            public enum CollegeContext
-            {
-                None,
-                Other,
-                Pharmacist
-            }
-
-            public bool Regulated { get; set; }
-
-            public bool CanProvideCare { get; set; }
-            public CollegeContext College { get; set; }
-
-            public static CertificationContext FromCertification(Certification cert)
-            {
-                return new CertificationContext
-                {
-                    Regulated = cert?.License.NamedInImReg ?? false,
-                    CanProvideCare = cert?.License.LicensedToProvideCare ?? false,
-                    College = DetermineCollegeContext(cert)
-                };
-            }
-
-            private static CollegeContext DetermineCollegeContext(Certification cert)
-            {
-                if (cert == null)
-                {
-                    return CollegeContext.None;
-                }
-
-                if (cert.CollegeCode == 2) // Is College of Pharmacists
-                {
-                    return CollegeContext.Pharmacist;
-                }
-                else
-                {
-                    return CollegeContext.Other;
-                }
-            }
+            return certDigest.Resolve(settingsDigest);
         }
     }
 }
