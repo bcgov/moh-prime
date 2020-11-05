@@ -11,7 +11,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { Address } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { Enrollee } from '@shared/models/enrollee.model';
@@ -19,11 +18,11 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 
+import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
+
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-import { EnrolleeEnrolmentsComponent } from '@adjudication/pages/enrollee-enrolments/enrollee-enrolments.component';
 
 @Injectable({
   providedIn: 'root'
