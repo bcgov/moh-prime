@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Prime.Models
 {
     public enum AgreementType
@@ -21,7 +17,7 @@ namespace Prime.Models
         /// </summary>
         public static bool IsEnrolleeAgreement(this AgreementType agreementType)
         {
-            return agreementType != AgreementType.CommunityPracticeOrgAgreement && agreementType != AgreementType.CommunityPharmacyOrgAgreement);
+            return agreementType != AgreementType.CommunityPracticeOrgAgreement && agreementType != AgreementType.CommunityPharmacyOrgAgreement;
         }
     }
 }
