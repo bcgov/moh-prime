@@ -5,7 +5,7 @@
 
       <mat-form-field class="w-100"
                       appearance="fill">
-        <mat-label>Address (include suite # )</mat-label>
+        <mat-label>Address autocompleted by Canada Post</mat-label>
         <input matInput
                formControlName="autocomplete"
                [matAutocomplete]="auto">
@@ -17,8 +17,8 @@
           </mat-option>
         </mat-autocomplete>
         <mat-hint>
-          Type in your full address to have it autocompleted by
-          <a href="https://www.canadapost.ca/pca" target="_blank">Canada Post</a>
+          Start with unit number and street number. Address autocompleted by
+          <a href="https://www.canadapost.ca/pca" target="_blank">Canada Post</a>.
         </mat-hint>
       </mat-form-field>
 
