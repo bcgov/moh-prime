@@ -21,13 +21,7 @@ namespace Prime.Models
         /// </summary>
         public static bool IsEnrolleeAgreement(this AgreementType agreementType)
         {
-            return Enum.GetValues(typeof(AgreementType))
-                .Cast<AgreementType>()
-                .Where(v =>
-                    v != AgreementType.CommunityPracticeOrgAgreement &&
-                    v != AgreementType.CommunityPharmacyOrgAgreement)
-                .ToList()
-                .Contains(agreementType);
+            return agreementType != AgreementType.CommunityPracticeOrgAgreement && agreementType != AgreementType.CommunityPharmacyOrgAgreement);
         }
     }
 }
