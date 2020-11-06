@@ -8,6 +8,8 @@ import { map } from 'rxjs/operators';
 
 import * as moment from 'moment';
 
+import { MINIMUM_AGE } from '@lib/constants';
+
 import { AppRoutes } from 'app/app.routes';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -44,7 +46,7 @@ export class UnderagedGuard implements CanActivate, CanActivateChild, CanLoad {
       .pipe(
         map((user: BcscUser) => moment(user.dateOfBirth, 'YYYY-MM-DD')),
         map((dateOfBirth: moment.Moment) => moment().diff(dateOfBirth, 'years')),
-        map((age: number) => age < 18),
+        map((age: number) => age < MINIMUM_AGE),
         map((isUnderAged: boolean) => {
           if (isUnderAged) {
             this.router.navigate([AppRoutes.UNDERAGED]);

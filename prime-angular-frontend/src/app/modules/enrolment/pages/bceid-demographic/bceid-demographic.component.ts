@@ -8,6 +8,7 @@ import { map, tap } from 'rxjs/operators';
 
 import moment from 'moment';
 
+import { MINIMUM_AGE } from '@lib/constants';
 import { AddressLine } from '@lib/types/address-line.type';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -73,7 +74,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
       'postal'
     ];
     // Must be 18 years of age or older
-    this.maxDateOfBirth = moment().subtract(18, 'years');
+    this.maxDateOfBirth = moment().subtract(MINIMUM_AGE, 'years');
   }
 
   public get mailingAddress(): FormGroup {
