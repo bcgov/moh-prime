@@ -18,7 +18,6 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
-import { EnrolmentHelpersService } from '@enrolment/shared/services/enrolment-helpers.service';
 
 @Component({
   selector: 'app-self-declaration',
@@ -42,8 +41,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService,
-    private enrolmentHelpersService: EnrolmentHelpersService
+    protected formUtilsService: FormUtilsService
   ) {
     super(
       route,
@@ -121,7 +119,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     let backRoutePath: string;
     if (!this.isProfileComplete) {
       backRoutePath = (
-        this.enrolmentHelpersService
+        this.enrolmentService
           .canRequestRemoteAccess(certifications, careSettings)
       )
         ? EnrolmentRoutes.REMOTE_ACCESS

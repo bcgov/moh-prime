@@ -23,7 +23,6 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { EnrolmentHelpersService } from '@enrolment/shared/services/enrolment-helpers.service';
 
 @Component({
   selector: 'app-care-setting',
@@ -47,8 +46,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private authService: AuthService,
-    private enrolmentHelpersService: EnrolmentHelpersService
+    private authService: AuthService
   ) {
     super(
       route,
@@ -161,7 +159,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = (
-        this.enrolmentHelpersService
+        this.enrolmentService
           .canRequestRemoteAccess(certifications, careSettings)
       )
         ? EnrolmentRoutes.REMOTE_ACCESS

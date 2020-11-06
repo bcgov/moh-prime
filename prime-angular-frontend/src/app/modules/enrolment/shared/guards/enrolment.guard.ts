@@ -16,7 +16,6 @@ import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentHelpersService } from '@enrolment/shared/services/enrolment-helpers.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +27,7 @@ export class EnrolmentGuard extends BaseGuard {
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
-    private router: Router,
-    private enrolmentHelpersService: EnrolmentHelpersService
+    private router: Router
   ) {
     super(authService, logger);
   }
@@ -168,7 +166,7 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     if (
-      !this.enrolmentHelpersService
+      !this.enrolmentService
         .canRequestRemoteAccess(enrolment.certifications, enrolment.careSettings)
     ) {
       // No access to remote access if OBO or pharmacist
