@@ -132,11 +132,9 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolleeViewModel>> AssignToaAgreementType(int enrolleeId, [FromBody] AgreementType agreementType)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
             var assignedToaType = (agreementType == 0) ? null : (AgreementType?)agreementType;
