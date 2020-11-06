@@ -46,7 +46,7 @@ namespace WinformsGpidPoc
             // It is not reccommended to write this code yourself.
             var options = new OidcClientOptions
             {
-                Authority = "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/v4mbqqas",
+                Authority = "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas",
                 ClientId = "prime-pos-gpid",
                 Scope = "openid",
                 RedirectUri = redirectUri,
