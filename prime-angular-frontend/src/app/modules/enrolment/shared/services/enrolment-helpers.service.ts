@@ -40,9 +40,7 @@ export class EnrolmentHelpersService {
 
     const hasRemoteAccessLicence = this.configService.licenses
       .filter((licence: LicenseWeightedConfig) => enrolleeLicenceCodes.includes(licence.code))
-      .reduce((canAccess: boolean, licence: LicenseWeightedConfig) => {
-        return canAccess || (licence.licensedToProvideCare && licence.namedInImReg);
-      }, false);
+      .some((licence: LicenseWeightedConfig) => (licence.licensedToProvideCare && licence.namedInImReg));
 
     return hasRemoteAccessLicence;
   }
