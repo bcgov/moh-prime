@@ -39,7 +39,39 @@ namespace Prime.Engines.AgreementEngineInternal
     {
         public AgreementType? Resolve(SettingsDigest settingsDigest)
         {
-            throw new System.NotImplementedException();
+            if (settingsDigest.Multiple)
+            {
+                return HandleMultipleSettings(settingsDigest);
+            }
+            else
+            {
+                return HandleSingleSetting(settingsDigest);
+            }
+        }
+
+        private AgreementType? HandleSingleSetting(SettingsDigest settingsDigest)
+        {
+            if (settingsDigest.HasCommunityPharmacy)
+            {
+                return AgreementType.PharmacyOboTOA;
+            }
+            else
+            {
+                return AgreementType.OboTOA;
+            }
+        }
+
+        private AgreementType? HandleMultipleSettings(SettingsDigest settingsDigest)
+        {
+            if (settingsDigest.HasCommunityPharmacy)
+            {
+                // Normally, An OBO should not be working in both a Pharmacy setting and somewhere else
+                return null;
+            }
+            else
+            {
+                return AgreementType.OboTOA;
+            }
         }
     }
 
@@ -62,7 +94,7 @@ namespace Prime.Engines.AgreementEngineInternal
 
         public AgreementType? Resolve(SettingsDigest settingsDigest)
         {
-            // A pharmacist always recieves a Pharmacy Agreement, regardless of setting
+            // A Pharmacist always recieves a Pharmacy Agreement, regardless of setting
             if (Regulated)
             {
                 return AgreementType.CommunityPharmacistTOA;
@@ -85,7 +117,20 @@ namespace Prime.Engines.AgreementEngineInternal
 
         public AgreementType? Resolve(SettingsDigest settingsDigest)
         {
-            throw new System.NotImplementedException();
+            if (settingsDigest.HasCommunityPharmacy)
+            {
+                // Normally, only Pharmacists should have Community Pharmacy
+                return null;
+            }
+
+            if (Regulated)
+            {
+                return AgreementType.RegulatedUserTOA;
+            }
+            else
+            {
+                return AgreementType.OboTOA;
+            }
         }
     }
 }
