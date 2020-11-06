@@ -4,7 +4,7 @@ namespace Prime.Engines.AgreementEngineInternal
 {
     public interface ICertificationDigest
     {
-        AgreementType? Resolve(SettingsDigest settingsDigest);
+        AgreementType? ResolveWith(SettingsDigest settings);
     }
 
     public static class CertificationDigest
@@ -37,47 +37,28 @@ namespace Prime.Engines.AgreementEngineInternal
 
     public class NoCollege : ICertificationDigest
     {
-        public AgreementType? Resolve(SettingsDigest settingsDigest)
+        public AgreementType? ResolveWith(SettingsDigest settings)
         {
-            if (settingsDigest.Multiple)
-            {
-                return HandleMultipleSettings(settingsDigest);
-            }
-            else
-            {
-                return HandleSingleSetting(settingsDigest);
-            }
-        }
-
-        private AgreementType? HandleSingleSetting(SettingsDigest settingsDigest)
-        {
-            if (settingsDigest.HasCommunityPharmacy)
-            {
-                return AgreementType.PharmacyOboTOA;
-            }
-            else
+            if (!settings.HasCommunityPharmacy)
             {
                 return AgreementType.OboTOA;
             }
-        }
 
-        private AgreementType? HandleMultipleSettings(SettingsDigest settingsDigest)
-        {
-            if (settingsDigest.HasCommunityPharmacy)
+            if (settings.Multiple)
             {
                 // Normally, An OBO should not be working in both a Pharmacy setting and somewhere else
                 return null;
             }
             else
             {
-                return AgreementType.OboTOA;
+                return AgreementType.PharmacyOboTOA;
             }
         }
     }
 
     public class CannotProvideCare : ICertificationDigest
     {
-        public AgreementType? Resolve(SettingsDigest settingsDigest)
+        public AgreementType? ResolveWith(SettingsDigest settings)
         {
             return null;
         }
@@ -92,7 +73,7 @@ namespace Prime.Engines.AgreementEngineInternal
             Regulated = regulated;
         }
 
-        public AgreementType? Resolve(SettingsDigest settingsDigest)
+        public AgreementType? ResolveWith(SettingsDigest settings)
         {
             // A Pharmacist always recieves a Pharmacy Agreement, regardless of setting
             if (Regulated)
@@ -115,11 +96,11 @@ namespace Prime.Engines.AgreementEngineInternal
             Regulated = regulated;
         }
 
-        public AgreementType? Resolve(SettingsDigest settingsDigest)
+        public AgreementType? ResolveWith(SettingsDigest settings)
         {
-            if (settingsDigest.HasCommunityPharmacy)
+            if (settings.HasCommunityPharmacy)
             {
-                // Normally, only Pharmacists should have Community Pharmacy
+                // Normally, only Pharmacists or Pharmacy OBOs should have Community Pharmacy
                 return null;
             }
 

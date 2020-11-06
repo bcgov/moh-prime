@@ -20,9 +20,9 @@ namespace Prime.Engines
             }
 
             var certDigest = CertificationDigest.FromCertification(enrollee.Certifications.SingleOrDefault());
-            var settingsDigest = new SettingsDigest(enrollee.EnrolleeCareSettings);
+            var settings = new SettingsDigest(enrollee.EnrolleeCareSettings);
 
-            return certDigest.Resolve(settingsDigest);
+            return certDigest.ResolveWith(settings);
         }
     }
 }
