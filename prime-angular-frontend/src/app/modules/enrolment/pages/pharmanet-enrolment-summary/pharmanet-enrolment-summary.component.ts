@@ -18,6 +18,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
@@ -28,6 +29,12 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public form: FormGroup;
   public enrolment: Enrolment;
   public showProgressBar: boolean;
+
+  public CareSettingEnum = CareSettingEnum;
+
+  public communityHealthSent: boolean;
+  public pharmacistSent: boolean;
+  public healthAuthoritySent: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -58,6 +65,48 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return (this.enrolment) ? this.enrolment.careSettings : null;
   }
 
+  public isEmailHidden(careSettingCode: number) {
+    switch (careSettingCode) {
+      case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+        return !!this.communityHealthSent;
+        break;
+      }
+      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
+        return !!this.pharmacistSent;
+        break;
+      }
+      case this.CareSettingEnum.HEALTH_AUTHORITY: {
+        return !!this.healthAuthoritySent;
+        break;
+      }
+      default: {
+        return false;
+        break;
+      }
+    }
+  }
+
+  public setEmailHidden(careSettingCode: number) {
+    switch (careSettingCode) {
+      case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+        this.communityHealthSent = true;
+        break;
+      }
+      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
+        this.pharmacistSent = true;
+        break;
+      }
+      case this.CareSettingEnum.HEALTH_AUTHORITY: {
+        this.healthAuthoritySent = true;
+        break;
+      }
+      default: {
+        return false;
+        break;
+      }
+    }
+  }
+
   public get enrolmentCertificateNote() {
     return (this.enrolment.enrolmentCertificateNote)
       ? this.enrolment.enrolmentCertificateNote.note
@@ -72,18 +121,18 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public sendProvisionerAccessLinkTo() {
+  public sendProvisionerAccessLinkTo(careSettingCode: number) {
     const formControl = this.form.get(`recipients`) as FormControl;
     if (!formControl) { return; }
 
     const emails = formControl.value.split(',').map((email: string) => email.trim()).join(',') || null;
 
     (formControl.valid)
-      ? this.sendProvisionerAccessLink(emails, formControl)
+      ? this.sendProvisionerAccessLink(emails, formControl, careSettingCode)
       : formControl.markAllAsTouched();
   }
 
-  public sendProvisionerAccessLink(emails: string = null, formControl: FormControl = null) {
+  public sendProvisionerAccessLink(emails: string = null, formControl: FormControl = null, careSettingCode) {
     const data: DialogOptions = {
       title: 'Confirm Email',
       message: `Are you sure you want to send your Approval Notification?`,
@@ -94,7 +143,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) =>
           result
-            ? this.enrolmentResource.sendProvisionerAccessLink(emails)
+            ? this.enrolmentResource.sendProvisionerAccessLink(emails, careSettingCode)
             : EMPTY
         )
       )
@@ -103,7 +152,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         if (formControl) {
           formControl.reset();
         }
-        this.router.navigate([EnrolmentRoutes.NOTIFICATION_CONFIRMATION], { relativeTo: this.route.parent });
+        this.setEmailHidden(careSettingCode);
       });
   }
 
