@@ -13,7 +13,7 @@ export const environment = {
   phoneNumbers: { director: '236-478-0282' },
   keycloakConfig: {
     config: {
-      url: 'https://sso-dev.pathfinder.gov.bc.ca/auth',
+      url: 'https://dev.oidc.gov.bc.ca/auth',
       realm: 'v4mbqqas',
       clientId: 'prime-application-local'
     },
