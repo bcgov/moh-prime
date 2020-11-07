@@ -79,11 +79,12 @@ namespace Prime.Services
 
         public async Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false)
         {
-            IQueryable<Enrollee> query = GetBaseEnrolleeQuery();
+            IQueryable<Enrollee> query = GetBaseEnrolleeQuery()
+                .Include(e => e.Submissions);
 
             if (isAdmin)
             {
-                // TODO create a enrollee admin view model
+                // TODO create an enrollee admin view model
                 query = query.Include(e => e.Adjudicator)
                     .Include(e => e.EnrolmentStatuses)
                         .ThenInclude(es => es.EnrolmentStatusReference)
@@ -93,7 +94,8 @@ namespace Prime.Services
                             .ThenInclude(esr => esr.Adjudicator);
             }
 
-            var enrollee = await query.SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var enrollee = await query
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
             var newestAgreementIds = await _context.AgreementVersions
                 .Select(a => a.AgreementType)
                 .Distinct()
@@ -420,6 +422,16 @@ namespace Prime.Services
             }
 
             _context.Enrollees.Remove(enrollee);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType)
+        {
+            var submission = await _context.Submissions
+                .OrderByDescending(s => s.CreatedDate)
+                .FirstOrDefaultAsync(e => e.EnrolleeId == enrolleeId);
+
+            submission.AgreementType = agreementType;
             await _context.SaveChangesAsync();
         }
 

@@ -277,7 +277,7 @@ export class EnrolmentResource {
         agreementType,
         createdDate
       };
-    }
+    };
   }
 
   private enrolleeSubmissionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
