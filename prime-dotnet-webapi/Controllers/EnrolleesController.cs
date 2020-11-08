@@ -22,7 +22,6 @@ namespace Prime.Controllers
     [Authorize(Policy = AuthConstants.USER_POLICY)]
     public class EnrolleesController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
         private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
@@ -40,8 +39,7 @@ namespace Prime.Controllers
             IBusinessEventService businessEventService,
             IEmailService emailService,
             IDocumentService documentService,
-            IRazorConverterService razorConverterService,
-            IMapper mapper)
+            IRazorConverterService razorConverterService)
         {
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
@@ -51,7 +49,6 @@ namespace Prime.Controllers
             _emailService = emailService;
             _documentService = documentService;
             _razorConverterService = razorConverterService;
-            _mapper = mapper;
         }
 
         // GET: api/Enrollees
@@ -158,7 +155,6 @@ namespace Prime.Controllers
             }
 
             var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(createModel);
-
             var enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
 
             if (filename != null)

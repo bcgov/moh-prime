@@ -13,9 +13,11 @@ namespace Prime.Models
     {
         public Enrollee()
         {
-            // Initialize collections to prevent null exception on computed properties like CurrrentStatus and ExpiryDate
+            // Initialize collections to prevent null exception on computed properties
+            // like CurrentStatus and ExpiryDate
             EnrolmentStatuses = new List<EnrolmentStatus>();
             Agreements = new List<Agreement>();
+            Submissions = new List<Submission>();
         }
 
         public const int DISPLAY_OFFSET = 1000;
@@ -150,6 +152,19 @@ namespace Prime.Models
                 .OrderByDescending(s => s.StatusDate)
                 .ThenByDescending(s => s.Id)
                 .Skip(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the most recent TOA that was assigned during submission of the enrolment.
+        /// </summary>
+        [NotMapped]
+        [Computed]
+        public AgreementType? AssignedTOAType
+        {
+            get => Submissions
+                .OrderByDescending(s => s.CreatedDate)
+                .Select(s => s.AgreementType)
                 .FirstOrDefault();
         }
 

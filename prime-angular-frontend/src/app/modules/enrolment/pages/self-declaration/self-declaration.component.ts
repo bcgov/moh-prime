@@ -8,19 +8,16 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
-
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 
 @Component({
   selector: 'app-self-declaration',
@@ -122,12 +119,11 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     let backRoutePath: string;
     if (!this.isProfileComplete) {
       backRoutePath = (
-        !certifications.length
-        || certifications.some(cert => cert.collegeCode === CollegeLicenceClass.CPBC)
-        || careSettings.some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+        this.enrolmentService
+          .canRequestRemoteAccess(certifications, careSettings)
       )
-        ? EnrolmentRoutes.CARE_SETTING
-        : EnrolmentRoutes.REMOTE_ACCESS;
+        ? EnrolmentRoutes.REMOTE_ACCESS
+        : EnrolmentRoutes.CARE_SETTING;
     }
 
     this.routeTo(backRoutePath);
