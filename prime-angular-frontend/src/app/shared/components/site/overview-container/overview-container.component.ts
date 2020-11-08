@@ -18,7 +18,6 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 export class OverviewContainerComponent extends AbstractComponent implements OnInit {
   @Input() public site: Site;
   @Input() public organization: Organization;
-
   @Input() public showEditRedirect: boolean;
 
   public routeUtils: RouteUtils;
