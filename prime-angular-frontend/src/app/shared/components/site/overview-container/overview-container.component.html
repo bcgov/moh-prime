@@ -45,6 +45,10 @@
                         [showEditRedirect]="!site.submittedDate"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
+    <app-enrollee-property title="Doing Business As">
+      {{ site?.doingBusinessAs | default }}
+    </app-enrollee-property>
+
     <ng-container *ngIf="site.businessLicenceDocuments[0]">
 
       <app-enrollee-property title="Filename">

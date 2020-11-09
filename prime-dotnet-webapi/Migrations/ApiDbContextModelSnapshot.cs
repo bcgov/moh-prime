@@ -15295,6 +15295,9 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("LicenseCode")
+                        .HasColumnType("integer");
+
                     b.Property<string>("LicenseNumber")
                         .IsRequired()
                         .HasColumnType("text");

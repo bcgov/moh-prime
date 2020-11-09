@@ -6,8 +6,8 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
-import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
+import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 

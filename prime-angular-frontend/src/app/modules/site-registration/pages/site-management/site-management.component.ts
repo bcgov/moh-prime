@@ -51,7 +51,6 @@ export class SiteManagementComponent implements OnInit {
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-
     this.organizations = [];
   }
 
@@ -102,6 +101,15 @@ export class SiteManagementComponent implements OnInit {
     ];
   }
 
+  public getOrganizationNotificationProperties(organizationId: number, siteId: number) {
+    return {
+      icon: 'assignment_late',
+      text: 'Signed agreement has not been updated',
+      label: 'Upload Agreement',
+      route: () => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, siteId, SiteRoutes.ORGANIZATION_AGREEMENT])
+    };
+  }
+
   public getSiteProperties(site: SiteListViewModel): { key: string, value: string }[] {
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
@@ -109,6 +117,15 @@ export class SiteManagementComponent implements OnInit {
       { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
+  }
+
+  public getSiteNotificationProperties(organizationId: number, site: SiteListViewModel) {
+    return {
+      icon: 'notification_important',
+      text: 'Submission not completed',
+      label: 'Continue Site Submission',
+      route: () => this.viewSite(organizationId, site)
+    };
   }
 
   public ngOnInit(): void {

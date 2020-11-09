@@ -29,13 +29,15 @@
       <div *ngIf="hasActions"
            class="col-auto py-5">
 
-        <app-adjudicator-actions [enrollee]="dataSource?.data[0]"
+        <app-adjudicator-actions *ngIf="dataSource?.data[0]"
+                                 [enrollee]="dataSource?.data[0]"
                                  (approve)="onApprove($event)"
                                  (decline)="onDecline($event)"
                                  (lock)="onLock($event)"
                                  (unlock)="onUnlock($event)"
                                  (delete)="onDelete($event)"
                                  (route)="onRoute($event)"
+                                 (assign)="onAssign($event)"
                                  (enableEnrollee)="onEnableEnrollee($event)"
                                  (enableEditing)="onEnableEditing($event)"
                                  (rerunRules)="onRerunRules($event)"

@@ -48,8 +48,7 @@
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Doing Business As</ng-container>
         <ng-container appPageSubheader2Summary>
-          Enter the site name if it is different from the organization name. It must match the name on the site business
-          licence.
+          The site name must match the name on the site's business licence.
         </ng-container>
       </app-page-subheader2>
 
@@ -58,7 +57,7 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="Doing Business As"
+                   placeholder="Site Name (Doing Business As)"
                    formControlName="doingBusinessAs"
                    [matAutocomplete]="auto">
             <mat-autocomplete #auto="matAutocomplete">

@@ -329,7 +329,8 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       ],
       remoteUserCertifications: this.fb.array(
         [],
-        [FormArrayValidators.atLeast(1)])
+        [FormArrayValidators.atLeast(1)]
+      )
     });
   }
 
@@ -340,6 +341,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       // Validators are applied at the component-level when
       // fields are made visible to allow empty submissions
       licenseNumber: [null, []],
+      licenseCode: [null, []]
     });
   }
 
