@@ -13,7 +13,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -160,12 +159,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = (
-        !certifications.length
-        || certifications.some(cert => cert.collegeCode === CollegeLicenceClass.CPBC)
-        || careSettings.some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+        this.enrolmentService
+          .canRequestRemoteAccess(certifications, careSettings)
       )
-        ? EnrolmentRoutes.SELF_DECLARATION
-        : EnrolmentRoutes.REMOTE_ACCESS;
+        ? EnrolmentRoutes.REMOTE_ACCESS
+        : EnrolmentRoutes.SELF_DECLARATION;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
