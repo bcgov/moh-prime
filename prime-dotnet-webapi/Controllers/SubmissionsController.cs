@@ -22,20 +22,23 @@ namespace Prime.Controllers
         private readonly IAdminService _adminService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
+        private readonly IBusinessEventService _businessEventService;
 
         public SubmissionsController(
             ISubmissionService submissionService,
             IAdminService adminService,
             IEnrolleeService enrolleeService,
             IAgreementService agreementService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService)
+            IEnrolleeSubmissionService enrolleeSubmissionService,
+            IBusinessEventService businessEventService)
         {
             _submissionService = submissionService;
             _adminService = adminService;
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
-            _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
+            _businessEventService = businessEventService;
         }
 
         // POST: api/enrollees/5/submission
@@ -47,8 +50,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> Submit(int enrolleeId, EnrolleeUpdateModel updatedProfile)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> Submit(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -83,13 +86,16 @@ namespace Prime.Controllers
         /// <summary>
         /// Performs a submission-related action on an Enrolle, such as an adjudicator approving an application.
         /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="submissionAction"></param>
+        /// <param name="documentGuid"></param>
         [HttpPost("{enrolleeId}/submission/{submissionAction:submissionAction}", Name = nameof(SubmissionAction))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction, [FromQuery] Guid? documentGuid = null)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -101,17 +107,61 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            try
-            {
-                await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin());
-                var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-                return Ok(ApiResponse.Result(enrollee));
-            }
-            catch (SubmissionService.InvalidActionException)
+            var success = await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin(), documentGuid);
+            if (!success)
             {
                 this.ModelState.AddModelError("Enrollee.CurrentStatus", "Action could not be performed.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
+
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+            return Ok(ApiResponse.Result(enrollee));
+        }
+
+        // PUT: api/Enrollees/5/submissions/latest/type
+        /// <summary>
+        /// Assign a TOA agreement type to the latest submission.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="agreementType"></param>
+        [HttpPut("{enrolleeId}/submissions/latest/type", Name = nameof(AssignToaAgreementType))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> AssignToaAgreementType(int enrolleeId, [FromBody] AgreementType agreementType)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var assignedToaType = (agreementType == 0) ? null : (AgreementType?)agreementType;
+
+            if (assignedToaType.HasValue && !Enum.IsDefined(typeof(AgreementType), agreementType))
+            {
+                return NotFound(ApiResponse.Message($"Agreement type not found with id {agreementType}."));
+            }
+
+            if (assignedToaType.HasValue && !agreementType.IsEnrolleeAgreement())
+            {
+                this.ModelState.AddModelError("AgreementType", "Agreement type must be a TOA.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
+            {
+                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Assigned agreement type can not be updated when the current status is not 'Under Review'.");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            await _enrolleeService.AssignToaAgreementType(enrolleeId, assignedToaType);
+            await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin assigned agreement");
+
+            var updatedEnrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
+
+            return Ok(ApiResponse.Result(updatedEnrollee));
         }
 
         // PUT: api/enrollees/5/always-manual

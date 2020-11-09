@@ -13,7 +13,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -75,13 +74,20 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public disableCareSetting(careSettingCode: number): boolean {
-    if (this.authService.hasCommunityPharmacist()) {
-      // If feature flagged enable "Private Community Health Practice" & "Community Pharmacist"
-      return !(careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
-        || careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
+    let disabled = true;
+    // If feature flagged enabled "Community Pharmacist"
+    if (this.authService.hasCommunityPharmacist() && careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+      disabled = false;
     }
-    // Omit care settings that are not "Private Community Health Practices" for ComPap
-    return (careSettingCode !== CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
+    // If feature flagged enabled "Health Authority"
+    if (this.authService.hasHealthAuthority() && careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
+      disabled = false;
+    }
+    if (careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
+      disabled = false;
+    }
+
+    return disabled;
   }
 
   public removeCareSetting(index: number) {
@@ -153,12 +159,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = (
-        !certifications.length
-        || certifications.some(cert => cert.collegeCode === CollegeLicenceClass.CPBC)
-        || careSettings.some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+        this.enrolmentService
+          .canRequestRemoteAccess(certifications, careSettings)
       )
-        ? EnrolmentRoutes.SELF_DECLARATION
-        : EnrolmentRoutes.REMOTE_ACCESS;
+        ? EnrolmentRoutes.REMOTE_ACCESS
+        : EnrolmentRoutes.SELF_DECLARATION;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
@@ -177,13 +182,13 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     // Always have a single care setting available, and it prevents
     // the page from jumping too much when routing
-    if (!this.careSettings.controls.length) {
+    if (!this.careSettings?.controls.length) {
       this.addCareSetting();
     }
   }
 
   public routeBackTo() {
-    const routePath = (this.enrolmentFormStateService.json.certifications.length)
+    const routePath = (this.enrolmentFormStateService.json?.certifications.length)
       ? EnrolmentRoutes.REGULATORY
       : EnrolmentRoutes.JOB;
 

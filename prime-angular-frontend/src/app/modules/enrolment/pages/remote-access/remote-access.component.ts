@@ -14,11 +14,11 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-remote-access',
@@ -31,7 +31,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   public form: FormGroup;
   public enrolment: Enrolment;
   public showProgress: boolean;
-  public remoteSites: EnrolleeRemoteAccessSite[];
+  public remoteSites: Site[];
   public noRemoteSites: boolean;
 
   constructor(
@@ -62,8 +62,15 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     );
   }
 
+  // All sites returned from search that have remote users
+  // with the same college licence as the enrollee used as checkboxes
   public get sites(): FormArray {
     return this.form.get('sites') as FormArray;
+  }
+
+  // Sites selected by the enrollee
+  public get remoteAccessSites(): FormArray {
+    return this.form.get('remoteAccessSites') as FormArray;
   }
 
   public get enrolleeRemoteUsers(): FormArray {
@@ -72,13 +79,23 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
   public onSubmit() {
     this.enrolleeRemoteUsers.clear();
+    this.remoteAccessSites.clear();
 
-    this.sites.controls.forEach((checked, i) => {
+    // for each checked site, add a enrolleeRemoteUser and a remoteAccessSite
+    this.sites?.controls.forEach((checked, i) => {
       if (checked.value) {
         this.remoteSites[i].remoteUsers.forEach(remoteUser => {
           const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
           enrolleeRemoteUser.patchValue({ enrolleeId: this.enrolment.id, remoteUserId: remoteUser.id });
           this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
+
+          const remoteAccessSite = this.enrolmentFormStateService.remoteAccessSiteFormGroup();
+          remoteAccessSite.patchValue({
+            enrolleeId: this.enrolment.id,
+            siteId: this.remoteSites[i].id,
+            doingBusinessAs: this.remoteSites[i].doingBusinessAs
+          });
+          this.remoteAccessSites.push(remoteAccessSite);
         });
       }
     });
@@ -148,7 +165,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
       .pipe(delay(2000))
       .subscribe(
-        (sites: EnrolleeRemoteAccessSite[]) => {
+        (sites: Site[]) => {
           if (sites.length) {
             this.noRemoteSites = false;
             this.remoteSites = sites;

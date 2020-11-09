@@ -219,7 +219,8 @@ namespace Prime.Services
                         {
                             RemoteUser = remoteUser,
                             CollegeCode = certification.CollegeCode,
-                            LicenseNumber = certification.LicenseNumber
+                            LicenseNumber = certification.LicenseNumber,
+                            LicenseCode = certification.LicenseCode
                         };
                         _context.Entry(newCertification).State = EntityState.Added;
                         remoteUserCertifications.Add(newCertification);
@@ -435,17 +436,16 @@ namespace Prime.Services
                 .OrderByDescending(bl => bl.UploadedDate)
                 .FirstOrDefaultAsync();
         }
-        public async Task<IEnumerable<EnrolleeRemoteAccessSiteViewModel>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
+        public async Task<IEnumerable<Site>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
         {
             var sites = await this.GetBaseSiteQuery()
                 .Where(s => s.ApprovedDate != null)
-                .ProjectTo<EnrolleeRemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
             foreach (var site in sites)
             {
-                site.RemoteUsers = site.RemoteUsers.Where(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber)));
+                site.RemoteUsers = site.RemoteUsers.Where(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))).ToList();
             }
             return sites;
         }
@@ -480,6 +480,38 @@ namespace Prime.Services
                 .OrderByDescending(srn => srn.NoteDate)
                 .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId)
+        {
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "site_adjudication_document");
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
+            var document = new SiteAdjudicationDocument
+            {
+                DocumentGuid = documentGuid,
+                SiteId = siteId,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now,
+                AdjudicatorId = adminId
+            };
+            _context.SiteAdjudicationDocuments.Add(document);
+
+            await _context.SaveChangesAsync();
+
+            return document;
+        }
+
+        public async Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId)
+        {
+            return await _context.SiteAdjudicationDocuments
+               .Where(bl => bl.SiteId == siteId)
+               .Include(bl => bl.Adjudicator)
+                .OrderByDescending(bl => bl.UploadedDate)
+               .ToListAsync();
         }
 
         private IQueryable<Site> GetBaseSiteQuery()

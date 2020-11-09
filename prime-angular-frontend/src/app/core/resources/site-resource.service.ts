@@ -12,13 +12,15 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 
 import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
+import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -255,6 +257,43 @@ export class SiteResource {
       );
   }
 
+  public createSiteAdjudicationDocument(siteId: number, documentGuid: string): Observable<SiteAdjudicationDocument> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this.apiResource.post<SiteAdjudicationDocument>(`sites/${siteId}/adjudication-documents`, { siteId }, params)
+      .pipe(
+        map((response: ApiHttpResponse<SiteAdjudicationDocument>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::createSiteAdjudicationDocument error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getSiteAdjudicationDocuments(siteId: number): Observable<SiteAdjudicationDocument[]> {
+    return this.apiResource.get<SiteAdjudicationDocument[]>(`sites/${siteId}/adjudication-documents`)
+      .pipe(
+        map((response: ApiHttpResponse<SiteAdjudicationDocument[]>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site Adjudication Documents could not be Retrieved');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getSiteAdjudicationDocuments error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getSiteAdjudicationDocumentDownloadToken(siteId: number, documentId: number): Observable<string> {
+    return this.apiResource.get<string>(`sites/${siteId}/adjudication-documents/${documentId}`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site Adjudication Document token could not be Retrieved');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getSiteAdjudicationDocumentDownloadToken error has occurred: ',
+            error);
+          throw error;
+        })
+      );
+  }
+
   public approveSite(siteId: number): Observable<Site> {
     return this.apiResource.put<Site>(`sites/${siteId}/approve`)
       .pipe(
@@ -311,11 +350,11 @@ export class SiteResource {
       );
   }
 
-  public getSitesByRemoteUserInfo(certifications: CollegeCertification[]): Observable<EnrolleeRemoteAccessSite[]> {
+  public getSitesByRemoteUserInfo(certifications: CollegeCertification[]): Observable<Site[]> {
     return this.apiResource.post(`sites/remote-users`, certifications)
       .pipe(
-        map((response: ApiHttpResponse<EnrolleeRemoteAccessSite[]>) => response.result),
-        tap((sites: EnrolleeRemoteAccessSite[]) => this.logger.info('SITES', sites)),
+        map((response: ApiHttpResponse<Site[]>) => response.result),
+        tap((sites: Site[]) => this.logger.info('SITES', sites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);

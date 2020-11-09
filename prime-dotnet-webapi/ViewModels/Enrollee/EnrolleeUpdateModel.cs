@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 using Prime.Infrastructure;
-using Prime.Auth;
 using Prime.Models;
 
 namespace Prime.ViewModels
@@ -32,6 +31,8 @@ namespace Prime.ViewModels
         public ICollection<Job> Jobs { get; set; }
 
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
+
+        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
 
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 

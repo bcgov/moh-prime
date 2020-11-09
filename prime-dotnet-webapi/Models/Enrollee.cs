@@ -13,9 +13,11 @@ namespace Prime.Models
     {
         public Enrollee()
         {
-            // Initialize collections to prevent null exception on computed properties like CurrrentStatus and ExpiryDate
+            // Initialize collections to prevent null exception on computed properties
+            // like CurrentStatus and ExpiryDate
             EnrolmentStatuses = new List<EnrolmentStatus>();
             Agreements = new List<Agreement>();
+            Submissions = new List<Submission>();
         }
 
         public const int DISPLAY_OFFSET = 1000;
@@ -78,13 +80,12 @@ namespace Prime.Models
         public ICollection<IdentificationDocument> IdentificationDocuments { get; set; }
 
         [JsonIgnore]
+        public ICollection<EnrolleeAdjudicationDocument> EnrolleeAdjudicationDocuments { get; set; }
+
+        [JsonIgnore]
         public ICollection<AssignedPrivilege> AssignedPrivileges { get; set; }
 
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
-
-        [NotMapped]
-        [JsonIgnore]
-        public bool? isAdminView { get; set; }
 
         public int? AdjudicatorId { get; set; }
 
@@ -100,7 +101,7 @@ namespace Prime.Models
         public ICollection<Agreement> Agreements { get; set; }
 
         [JsonIgnore]
-        public ICollection<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
+        public ICollection<Submission> Submissions { get; set; }
 
         public bool AlwaysManual { get; set; }
 
@@ -111,6 +112,8 @@ namespace Prime.Models
         public string IdentityProvider { get; set; }
 
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
+
+        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
 
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
@@ -149,6 +152,19 @@ namespace Prime.Models
                 .OrderByDescending(s => s.StatusDate)
                 .ThenByDescending(s => s.Id)
                 .Skip(1)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the most recent TOA that was assigned during submission of the enrolment.
+        /// </summary>
+        [NotMapped]
+        [Computed]
+        public AgreementType? AssignedTOAType
+        {
+            get => Submissions
+                .OrderByDescending(s => s.CreatedDate)
+                .Select(s => s.AgreementType)
                 .FirstOrDefault();
         }
 
@@ -217,6 +233,14 @@ namespace Prime.Models
             get => Id + DISPLAY_OFFSET;
         }
 
+        [NotMapped]
+        [Computed]
+        [JsonIgnore]
+        public string FullName
+        {
+            get => $"{FirstName} {LastName}";
+        }
+
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
             var newStatus = EnrolmentStatus.FromType(statusType, this.Id);
@@ -283,7 +307,7 @@ namespace Prime.Models
                 throw new InvalidOperationException($"{nameof(Certifications)} cannnot be null");
             }
 
-            return Certifications.Any(cert => cert.License?.RegulatedUser == true);
+            return Certifications.Any(cert => cert.License?.NamedInImReg == true);
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

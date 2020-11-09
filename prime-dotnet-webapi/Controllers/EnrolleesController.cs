@@ -11,6 +11,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using AutoMapper;
 
 namespace Prime.Controllers
 {
@@ -23,7 +24,7 @@ namespace Prime.Controllers
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeProfileVersionService _enrolleeProfileVersionService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
@@ -33,7 +34,7 @@ namespace Prime.Controllers
         public EnrolleesController(
             IEnrolleeService enrolleeService,
             IAgreementService agreementService,
-            IEnrolleeProfileVersionService enrolleeProfileVersionService,
+            IEnrolleeSubmissionService enrolleeSubmissionService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
@@ -42,7 +43,7 @@ namespace Prime.Controllers
         {
             _enrolleeService = enrolleeService;
             _agreementService = agreementService;
-            _enrolleeProfileVersionService = enrolleeProfileVersionService;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
             _adminService = adminService;
             _businessEventService = businessEventService;
             _emailService = emailService;
@@ -82,8 +83,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> GetEnrolleeById(int enrolleeId)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> GetEnrolleeById(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.HasAdminView());
             if (enrollee == null)
@@ -111,8 +112,8 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Enrollee>> CreateEnrollee(EnrolleeCreatePayload payload)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<EnrolleeViewModel>> CreateEnrollee(EnrolleeCreatePayload payload)
         {
             if (payload == null || payload.Enrollee == null)
             {
@@ -128,6 +129,11 @@ namespace Prime.Controllers
 
             var createModel = payload.Enrollee;
             createModel.MapConditionalProperties(User);
+
+            if (createModel.IsUnderage())
+            {
+                return Forbid();
+            }
 
             string filename = null;
             if (!createModel.IsBcServicesCard())
@@ -149,7 +155,6 @@ namespace Prime.Controllers
             }
 
             var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(createModel);
-
             var enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
 
             if (filename != null)
@@ -213,8 +218,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> DeleteEnrollee(int enrolleeId)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> DeleteEnrollee(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -275,7 +280,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee);
+            var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee.Id);
 
             return Ok(ApiResponse.Result(adjudicationNotes));
         }
@@ -391,55 +396,6 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(updatedNote));
         }
 
-        // GET: api/Enrollees/5/versions
-        /// <summary>
-        /// Get a list of enrollee profile versions.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/versions", Name = nameof(GetEnrolleeProfileVersions))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EnrolleeProfileVersion>>> GetEnrolleeProfileVersions(int enrolleeId)
-        {
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
-            }
-
-            var enrolleeProfileHistories = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionsAsync(enrolleeId);
-
-            return Ok(ApiResponse.Result(enrolleeProfileHistories));
-        }
-
-        // GET: api/Enrollees/5/versions/1
-        /// <summary>
-        /// Get an enrollee profile version.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        /// <param name="enrolleeProfileVersionId"></param>
-        [HttpGet("{enrolleeId}/versions/{enrolleeProfileVersionId}", Name = nameof(GetEnrolleeProfileVersion))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeProfileVersion>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeProfileVersion>> GetEnrolleeProfileVersion(int enrolleeId, int enrolleeProfileVersionId)
-        {
-            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
-            {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
-            }
-
-            var enrolleeProfileVersion = await _enrolleeProfileVersionService.GetEnrolleeProfileVersionAsync(enrolleeProfileVersionId);
-
-            return Ok(ApiResponse.Result(enrolleeProfileVersion));
-        }
-
         // PUT: api/Enrollees/5/adjudicator
         /// <summary>
         /// Add an enrollee's assigned adjudicator.
@@ -451,8 +407,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> SetEnrolleeAdjudicator(int enrolleeId, [FromQuery] int? adjudicatorId)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> SetEnrolleeAdjudicator(int enrolleeId, [FromQuery] int? adjudicatorId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -486,8 +442,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Enrollee>> RemoveEnrolleeAdjudicator(int enrolleeId)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeViewModel>> RemoveEnrolleeAdjudicator(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -551,7 +507,7 @@ namespace Prime.Controllers
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var username = admin.IDIR.Replace("@idir", "");
-            await _emailService.SendReminderEmailAsync(enrollee);
+            await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Email reminder sent to Enrollee by {username}");
 
             return NoContent();
@@ -671,5 +627,82 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(token));
         }
 
+        // POST: api/enrollees/5/adjudication-documents
+        /// <summary>
+        /// Creates a new enrollee adjudication document for an enrollee.
+        /// </summary>
+        /// <param name="documentGuid"></param>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/adjudication-documents", Name = nameof(CreateEnrolleeAdjudicationDocument))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeAdjudicationDocument>> CreateEnrolleeAdjudicationDocument(int enrolleeId, [FromQuery] Guid documentGuid)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            var document = await _enrolleeService.AddEnrolleeAdjudicationDocumentAsync(enrolleeId, documentGuid, admin.Id);
+            if (document == null)
+            {
+                this.ModelState.AddModelError("documentGuid", "Enrollee Adjudication Document could not be created; network error or upload is already submitted");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            return Ok(ApiResponse.Result(document));
+        }
+
+        // GET: api/enrollees/5/adjudication-documents
+        /// <summary>
+        /// Gets all enrollee adjudication documents for an enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/adjudication-documents", Name = nameof(GetEnrolleeAdjudicationDocuments))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolleeAdjudicationDocument>>> GetEnrolleeAdjudicationDocuments(int enrolleeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var documents = await _enrolleeService.GetEnrolleeAdjudicationDocumentsAsync(enrolleeId);
+
+            return Ok(ApiResponse.Result(documents));
+        }
+
+        // GET: api/Enrollees/{enrolleeId}/adjudication-documents/{documentId}
+        /// <summary>
+        /// Get the enrollee adjudication documents download token.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="documentId"></param>
+        [HttpGet("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(GetEnrolleeAdjudicationDocument))]
+        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetEnrolleeAdjudicationDocument(int enrolleeId, int documentId)
+        {
+            var enrollee = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var token = await _documentService.GetDownloadTokenForEnrolleeAdjudicationDocument(documentId);
+
+            return Ok(ApiResponse.Result(token));
+        }
     }
 }

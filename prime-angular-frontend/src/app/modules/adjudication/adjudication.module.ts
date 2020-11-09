@@ -36,6 +36,9 @@ import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-repo
 import { EnrolleeAdjudicatorNotesComponent } from './pages/enrollee-adjudicator-notes/enrollee-adjudicator-notes.component';
 import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/site-adjudicator-notes.component';
 import { AdjudicatorNotesComponent } from './shared/components/adjudicator-notes/adjudicator-notes.component';
+import { SiteAdjudicatorDocumentsComponent } from './pages/site-adjudicator-documents/site-adjudicator-documents.component';
+import { EnrolleeAdjudicatorDocumentsComponent } from './pages/enrollee-adjudicator-documents/enrollee-adjudicator-documents.component';
+import { AdjudicatorDocumentsComponent } from './shared/components/adjudicator-documents/adjudicator-documents.component';
 
 @NgModule({
   declarations: [
@@ -65,7 +68,10 @@ import { AdjudicatorNotesComponent } from './shared/components/adjudicator-notes
     AdjudicationDashboardComponent,
     MetabaseReportsComponent,
     EnrolleeAdjudicatorNotesComponent,
-    SiteAdjudicatorNotesComponent
+    SiteAdjudicatorNotesComponent,
+    SiteAdjudicatorDocumentsComponent,
+    EnrolleeAdjudicatorDocumentsComponent,
+    AdjudicatorDocumentsComponent
   ],
   imports: [
     AdjudicationRoutingModule,

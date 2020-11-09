@@ -1,6 +1,7 @@
 using System.Linq;
 
 using Prime.Models;
+using Prime.Engines.AgreementEngineInternal;
 
 namespace Prime.Engines
 {
@@ -12,19 +13,16 @@ namespace Prime.Engines
         /// </summary>
         public AgreementType? DetermineAgreementType(Enrollee enrollee)
         {
-            if (!enrollee.IsRegulatedUser())
+            if (enrollee.Certifications.Count() > 1)
             {
-                return AgreementType.OboTOA;
+                // Multiple College licences result in too many edge cases for automatic determination to be possible.
+                return null;
             }
 
-            if (enrollee.HasCareSetting(CareSettingType.CommunityPharmacy))
-            {
-                return AgreementType.CommunityPharmacistTOA;
-            }
-            else
-            {
-                return AgreementType.RegulatedUserTOA;
-            }
+            var certDigest = CertificationDigest.FromCertification(enrollee.Certifications.SingleOrDefault());
+            var settings = new SettingsDigest(enrollee.EnrolleeCareSettings);
+
+            return certDigest.ResolveWith(settings);
         }
     }
 }

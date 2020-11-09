@@ -19,6 +19,15 @@
     </app-page-subheader>
   </div>
 
+  <button *ngIf="!this.enrolment.enrolleeRemoteUsers?.length"
+          class="mb-4"
+          mat-stroked-button
+          color="primary"
+          (click)="routeTo(EnrolmentRoutes.REMOTE_ACCESS)">
+    <mat-icon class="mt-1 mr-1">notification_important</mat-icon>
+    Request Remote Access
+  </button>
+
   <app-alert *ngIf="!hasRegOrJob()"
              type="danger"
              icon="warning">
@@ -31,7 +40,7 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>
 
-    <button *ngIf="identityProvider === IdentityProvider.BCEID"
+    <button *ngIf="identityProvider === IdentityProviderEnum.BCEID"
             mat-icon-button
             matTooltip="Edit Demographic"
             (click)="routeTo(demographicRoutePath)">

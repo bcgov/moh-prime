@@ -44,7 +44,7 @@ export class CertificateComponent implements OnInit {
   public get fullName(): string {
     return !this.hasPreferredName
       ? `${this.certificate.firstName} ${this.certificate.lastName}`
-      : `${this.certificate.preferredFirstName} ${this.middleName} ${this.certificate.preferredLastName}`;
+      : `${this.certificate.preferredFirstName} ${this.middleName || ''} ${this.certificate.preferredLastName}`;
   }
 
   public ngOnInit() {

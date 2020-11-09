@@ -1,10 +1,10 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { exhaustMap } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -17,11 +17,16 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+
+import { AuthService } from '@auth/shared/services/auth.service';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 @Component({
   selector: 'app-access-agreement',
@@ -30,15 +35,23 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 })
 export class AccessAgreementComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
+  public form: FormGroup;
   public currentPage: number;
   public hasReadAgreement: boolean;
   public agreed: FormControl;
 
+  public hasAcceptedAgreement: boolean;
+  public hasDownloadedFile: boolean;
+  public hasUploadedFile: boolean;
+  public hasNoUploadError: boolean;
+
   // Allow the use of enum in the component template
   public EnrolmentStatus = EnrolmentStatus;
   public EnrolleeClassification = EnrolleeClassification;
+  public IdentityProviderEnum = IdentityProviderEnum;
 
   public accessTerm: EnrolleeAgreement;
+  public identityProvider: IdentityProviderEnum;
 
   constructor(
     protected route: ActivatedRoute,
@@ -47,16 +60,22 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     private changeDetectorRef: ChangeDetectorRef,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
+    private enrolmentFormStateService: EnrolmentFormStateService,
     private toastService: ToastService,
     private utilsService: UtilsService,
     private viewportService: ViewportService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private authService: AuthService
   ) {
     super(route, router);
 
     this.currentPage = 0;
     this.hasReadAgreement = false;
     this.agreed = new FormControl(false);
+  }
+
+  public get accessAgreementGuid(): FormControl {
+    return this.form.get('accessAgreementGuid') as FormControl;
   }
 
   public get isMobile(): boolean {
@@ -86,22 +105,18 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
             (result)
               ? this.enrolmentResource.submissionAction(
                 this.enrolment.id,
-                isAcceptingToa ? SubmissionAction.ACCEPT_TOA : SubmissionAction.DECLINE_TOA)
+                isAcceptingToa ? SubmissionAction.ACCEPT_TOA : SubmissionAction.DECLINE_TOA,
+                this.accessAgreementGuid.value
+              )
               : EMPTY
           )
         )
-        .subscribe(
-          () => {
-            this.toastService.openSuccessToast(`Terms of Access has been ${status.adjective}`);
-            this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY, {
-              state: { showProgressBar: this.isInitialEnrolment }
-            });
-          },
-          (error: any) => {
-            this.toastService.openErrorToast(`Terms of Access could not be ${status.adjective}`);
-            this.logger.error('[Enrolment] AccessAgreement::onSubmit error has occurred: ', error);
-          }
-        );
+        .subscribe(() => {
+          this.toastService.openSuccessToast(`Terms of Access has been ${status.adjective}`);
+          this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY, {
+            state: { showProgressBar: this.isInitialEnrolment }
+          });
+        });
     }
   }
 
@@ -130,16 +145,41 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     }
   }
 
+  public onDownload() {
+    this.enrolmentResource
+      .getAccessTermSignable(this.enrolment.id, this.accessTerm.id)
+      .subscribe((base64: string) => {
+        const blob = this.utilsService.base64ToBlob(base64);
+        this.utilsService.downloadDocument(blob, 'Terms-Of-Access');
+        this.hasDownloadedFile = true;
+      });
+  }
+
+  public onUpload(document: BaseDocument) {
+    this.accessAgreementGuid.patchValue(document.documentGuid);
+    this.hasUploadedFile = true;
+    this.hasNoUploadError = false;
+  }
+
+  public onRemoveDocument(documentGuid: string) {
+    this.accessAgreementGuid.patchValue(null);
+  }
+
   public ngOnInit(): void {
+    this.createFormInstance();
+    this.initForm();
+  }
+
+  private createFormInstance() {
+    this.form = this.enrolmentFormStateService.accessAgreementForm;
+  }
+
+  private initForm() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+    this.authService.identityProvider$()
+      .subscribe((identityProvider: IdentityProviderEnum) => this.identityProvider = identityProvider);
     this.busy = this.enrolmentResource.getLatestAccessTerm(this.enrolment.id, false)
-      .subscribe(
-        (accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm,
-        (error: any) => {
-          this.toastService.openErrorToast(`Terms of access could not be found`);
-          this.logger.error('[Enrolment] AccessAgreement::ngOnInit error has occurred: ', error);
-        }
-      );
+      .subscribe((accessTerm: EnrolleeAgreement) => this.accessTerm = accessTerm);
   }
 }
