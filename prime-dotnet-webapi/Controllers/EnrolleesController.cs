@@ -130,6 +130,11 @@ namespace Prime.Controllers
             var createModel = payload.Enrollee;
             createModel.MapConditionalProperties(User);
 
+            if (createModel.IsUnderage())
+            {
+                return Forbid();
+            }
+
             string filename = null;
             if (!createModel.IsBcServicesCard())
             {
