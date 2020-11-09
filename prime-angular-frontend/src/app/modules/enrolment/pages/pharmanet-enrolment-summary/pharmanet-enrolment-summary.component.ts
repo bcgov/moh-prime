@@ -32,9 +32,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   public CareSettingEnum = CareSettingEnum;
 
-  public communityHealthSent: boolean;
-  public pharmacistSent: boolean;
-  public healthAuthoritySent: boolean;
+  public showCommunityHealth: boolean;
+  public showPharmacist: boolean;
+  public showHealthAuthority: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -50,6 +50,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   ) {
     super(route, router);
     this.showProgressBar = false;
+    this.showCommunityHealth = true;
+    this.showPharmacist = true;
+    this.showHealthAuthority = true;
     this.form = this.buildVendorEmailGroup();
   }
 
@@ -68,44 +71,40 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public isEmailHidden(careSettingCode: number) {
     switch (careSettingCode) {
       case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        return !!this.communityHealthSent;
-        break;
+        return !this.showCommunityHealth;
       }
       case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
-        return !!this.pharmacistSent;
-        break;
+        return !this.showPharmacist;
       }
       case this.CareSettingEnum.HEALTH_AUTHORITY: {
-        return !!this.healthAuthoritySent;
-        break;
+        return !this.showHealthAuthority;
       }
       default: {
         return false;
-        break;
       }
     }
   }
 
-  public setEmailHidden(careSettingCode: number) {
+  public setShowEmail(careSettingCode: number, show: boolean) {
     switch (careSettingCode) {
       case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        this.communityHealthSent = true;
+        this.showCommunityHealth = show;
         break;
       }
       case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
-        this.pharmacistSent = true;
+        this.showPharmacist = show;
         break;
       }
       case this.CareSettingEnum.HEALTH_AUTHORITY: {
-        this.healthAuthoritySent = true;
+        this.showHealthAuthority = show;
         break;
       }
       default: {
-        return false;
-        break;
+        return show;
       }
     }
   }
+
 
   public get enrolmentCertificateNote() {
     return (this.enrolment.enrolmentCertificateNote)
@@ -152,7 +151,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         if (formControl) {
           formControl.reset();
         }
-        this.setEmailHidden(careSettingCode);
+        this.setShowEmail(careSettingCode, false);
       });
   }
 

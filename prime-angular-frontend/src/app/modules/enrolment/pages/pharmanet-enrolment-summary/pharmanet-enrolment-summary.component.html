@@ -83,6 +83,25 @@
         </ng-container>
       </form>
 
+      <ng-template #emailSent
+                   let-email="email"
+                   let-setting="setting"
+                   let-settingCode="settingCode">
+        <p class="mb-4">
+          Email sent to: {{ email }}
+        </p>
+        <p class="mb-4">
+          If your work in multiple {{ setting }}'s you will need to notify them all.
+        </p>
+        <button mat-button
+                type="button"
+                color="primary"
+                (click)="setShowEmail(settingCode, true)">
+          <mat-icon>add</mat-icon>
+          Add {{ setting }}
+        </button>
+      </ng-template>
+
       <ng-template #concise
                    let-provisioner="provisioner">
         <p class="mb-4">
