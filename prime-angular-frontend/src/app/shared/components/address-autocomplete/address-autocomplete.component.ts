@@ -20,7 +20,6 @@ export class AddressAutocompleteComponent implements OnInit {
 
   public form: FormGroup;
   public addressAutocompleteFields: AddressAutocompleteFindResponse[];
-  public usedAddressAutocomplete: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -50,12 +49,9 @@ export class AddressAutocompleteComponent implements OnInit {
             addressRetrieved.postalCode
           );
 
-          if (!this.bcOnly || address.provinceCode === 'BC') {
-            this.usedAddressAutocomplete = true;
-            this.autocompleteAddress.emit(address);
-          } else {
-            this.toastService.openErrorToast('Address must be located in BC');
-          }
+          (!this.bcOnly || address.provinceCode === 'BC')
+            ? this.autocompleteAddress.emit(address)
+            : this.toastService.openErrorToast('Address must be located in BC');
 
         } else {
           this.toastService.openErrorToast('Address could not be retrieved');

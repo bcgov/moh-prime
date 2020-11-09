@@ -84,7 +84,7 @@ export class SiteRoutes {
     return [
       this.HOURS_OPERATION,
       this.REMOTE_USERS,
-      this.REMOTE_USER, // included because it is the child of remote_users,
+      this.REMOTE_USER, // Included since it's a child of remote_users
       this.ADMINISTRATOR,
       this.PRIVACY_OFFICER,
       this.TECHNICAL_SUPPORT,
