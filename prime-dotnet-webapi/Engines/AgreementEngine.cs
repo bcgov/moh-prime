@@ -1,6 +1,7 @@
 using System.Linq;
 
 using Prime.Models;
+using Prime.Engines.AgreementEngineInternal;
 
 namespace Prime.Engines
 {
@@ -14,22 +15,14 @@ namespace Prime.Engines
         {
             if (enrollee.Certifications.Count() > 1)
             {
+                // Multiple College licences result in too many edge cases for automatic determination to be possible.
                 return null;
             }
 
-            if (!enrollee.IsRegulatedUser())
-            {
-                return AgreementType.OboTOA;
-            }
+            var certDigest = CertificationDigest.FromCertification(enrollee.Certifications.SingleOrDefault());
+            var settings = new SettingsDigest(enrollee.EnrolleeCareSettings);
 
-            if (enrollee.HasCareSetting(CareSettingType.CommunityPharmacy))
-            {
-                return AgreementType.CommunityPharmacistTOA;
-            }
-            else
-            {
-                return AgreementType.RegulatedUserTOA;
-            }
+            return certDigest.ResolveWith(settings);
         }
     }
 }

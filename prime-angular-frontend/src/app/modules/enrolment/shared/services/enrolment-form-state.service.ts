@@ -378,7 +378,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         FormControlValidators.email
       ]],
       smsPhone: [null, [FormControlValidators.phone]],
-      dateOfBirth: [{ value: null, disabled: false }, [Validators.required]]
+      // Disabled by default, but enabled for enrollee creation
+      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]]
     });
   }
 

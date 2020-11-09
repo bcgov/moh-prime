@@ -6,15 +6,16 @@ import { map, tap, catchError } from 'rxjs/operators';
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
+import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { Address } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
-import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 import { Admin } from '@auth/shared/models/admin.model';
@@ -289,6 +290,24 @@ export class AdjudicationResource {
         map(this.enrolleeSubmissionAdapterResponse()),
         catchError((error: any) => {
           this.logger.error('[Adjudication] AdjudicationResource::getSubmissionForAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * @description
+   * Assign a TOA agreement to a enrollee that is under review.
+   */
+  public assignToaAgreementType(enrolleeId: number, agreementType: AgreementType): Observable<HttpEnrollee> {
+    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/submissions/latest/type`, agreementType)
+      .pipe(
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap(() => this.toastService.openSuccessToast('TOA agreement has been assigned')),
+        tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('TOA agreement could not be assigned.');
+          this.logger.error('[Enrolment] EnrolmentResource::assignAgreementType error has occurred: ', error);
           throw error;
         })
       );
