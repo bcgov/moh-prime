@@ -11,7 +11,7 @@
   </div>
 
   <app-overview-container [showEditRedirect]="isSiteReview || (isOrganizationReview && !organization.hasSubmittedSite)"
-                          [organization]="organization"
+                          [organization]="(isOrganizationReview || (isSiteReview && !organization.hasSubmittedSite)) ? organization : null"
                           [site]="site"></app-overview-container>
 
   <ng-container *ngIf="showSubmission; else goBack">

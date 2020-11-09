@@ -1,0 +1,17 @@
+@import 'bootstrap/bootstrap-imports';
+
+p {
+  color: white;
+  font-size: 1.50rem;
+  margin-top: 8%;
+  line-height: 2.5rem;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+@include media-breakpoint-up(md) {
+  p {
+    font-size: 1.75rem;
+    padding: 0;
+  }
+}

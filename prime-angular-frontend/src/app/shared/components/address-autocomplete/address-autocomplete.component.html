@@ -1,11 +1,12 @@
 <div [formGroup]="form">
 
-  <div class="row">
+  <div class="row mb-4">
     <div class="col-12">
 
-      <mat-form-field class="w-100">
+      <mat-form-field class="w-100"
+                      appearance="fill">
+        <mat-label>Address autocompleted by Canada Post</mat-label>
         <input matInput
-               placeholder="Address (include suite # )"
                formControlName="autocomplete"
                [matAutocomplete]="auto">
         <mat-autocomplete #auto="matAutocomplete">
@@ -15,19 +16,13 @@
             {{ field.text }} {{ field.description }}
           </mat-option>
         </mat-autocomplete>
+        <mat-hint>
+          Start with unit number and street number. Address autocompleted by
+          <a href="https://www.canadapost.ca/pca" target="_blank">Canada Post</a>.
+        </mat-hint>
       </mat-form-field>
 
     </div>
   </div>
-
-  <app-alert *ngIf="usedAddressAutocomplete"
-             type="info"
-             icon="info"
-             class="mb-4">
-    <ng-container #alertContent
-                  class="alert-content">
-      This information was provided by Canada Post.
-    </ng-container>
-  </app-alert>
 
 </div>
