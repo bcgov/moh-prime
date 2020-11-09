@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Prime.Models;
 
 namespace Prime.ViewModels
@@ -19,16 +17,11 @@ namespace Prime.ViewModels
         {
             get
             {
-                var enrolleeRemoteUsers = Submission.ProfileSnapshot.Value<JArray>("enrolleeRemoteUsers");
-
-                if (enrolleeRemoteUsers != null)
+                if (Submission.RequestedRemoteAccess)
                 {
-                    if (enrolleeRemoteUsers.Count > 0)
-                    {
-                        return (AgreementAcceptedDate == null)
-                            ? "User Requested Remote Access"
-                            : "User Approved Remote Access";
-                    }
+                    return (AgreementAcceptedDate == null)
+                        ? "User Requested Remote Access"
+                        : "User Approved Remote Access";
                 }
                 return null;
             }
