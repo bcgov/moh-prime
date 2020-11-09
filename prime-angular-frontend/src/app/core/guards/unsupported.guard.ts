@@ -5,8 +5,8 @@ import {
 
 import { Observable } from 'rxjs';
 
-import { UtilsService } from '@core/services/utils.service';
 import { AppRoutes } from 'app/app.routes';
+import { UtilsService } from '@core/services/utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +37,8 @@ export class UnsupportedGuard implements CanActivate, CanActivateChild, CanLoad 
 
   private checkUnsupported(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.utilsService.isIE()) {
-      return this.router.navigate([AppRoutes.UNSUPPORTED]);
+      this.router.navigate([AppRoutes.UNSUPPORTED]);
+      return false;
     }
 
     return true;
