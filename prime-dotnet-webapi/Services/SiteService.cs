@@ -502,6 +502,8 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
 
+            await _businessEventService.CreateSiteEventAsync(siteId, "Site Adjudication Document attached");
+
             return document;
         }
 

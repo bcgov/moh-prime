@@ -718,6 +718,8 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
 
+            await _businessEventService.CreateEnrolleeEventAsync(enrolleeId, "Enrollee Adjudication Document attached");
+
             return document;
         }
 

@@ -11,6 +11,7 @@ namespace Prime.Services
         Task<BusinessEvent> CreateAdminActionEventAsync(int enrolleeId, string description);
         Task<BusinessEvent> CreateAdminViewEventAsync(int enrolleeId, string description);
         Task<BusinessEvent> CreateEnrolleeEventAsync(int enrolleeId, string description);
+        Task<BusinessEvent> CreateSiteEventAsync(int siteId, string description);
         Task<BusinessEvent> CreateSiteEventAsync(int siteId, int partyId, string description);
         Task<BusinessEvent> CreateOrganizationEventAsync(int organizationId, int partyId, string description);
     }
