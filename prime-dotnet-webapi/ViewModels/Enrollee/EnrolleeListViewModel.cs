@@ -1,5 +1,6 @@
 using System;
-
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using Prime.Models;
 
 namespace Prime.ViewModels
@@ -57,5 +58,7 @@ namespace Prime.ViewModels
         public string AdjudicatorIdir { get; set; }
 
         public bool AlwaysManual { get; set; }
+
+        public bool RemoteAccess { get; set; }
     }
 }
