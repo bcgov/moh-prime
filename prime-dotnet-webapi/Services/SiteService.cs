@@ -219,7 +219,8 @@ namespace Prime.Services
                         {
                             RemoteUser = remoteUser,
                             CollegeCode = certification.CollegeCode,
-                            LicenseNumber = certification.LicenseNumber
+                            LicenseNumber = certification.LicenseNumber,
+                            LicenseCode = certification.LicenseCode
                         };
                         _context.Entry(newCertification).State = EntityState.Added;
                         remoteUserCertifications.Add(newCertification);
