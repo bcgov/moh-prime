@@ -17,8 +17,8 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
@@ -31,6 +31,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public showProgressBar: boolean;
 
   public CareSettingEnum = CareSettingEnum;
+  public EnrolmentStatus = EnrolmentStatus;
 
   public showCommunityHealth: boolean;
   public showPharmacist: boolean;
@@ -68,16 +69,16 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return (this.enrolment) ? this.enrolment.careSettings : null;
   }
 
-  public isEmailHidden(careSettingCode: number) {
+  public isEmailVisible(careSettingCode: number) {
     switch (careSettingCode) {
       case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        return !this.showCommunityHealth;
+        return this.showCommunityHealth;
       }
       case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
-        return !this.showPharmacist;
+        return this.showPharmacist;
       }
       case this.CareSettingEnum.HEALTH_AUTHORITY: {
-        return !this.showHealthAuthority;
+        return this.showHealthAuthority;
       }
       default: {
         return false;

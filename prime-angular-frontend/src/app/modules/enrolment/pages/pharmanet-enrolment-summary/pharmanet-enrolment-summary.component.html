@@ -8,115 +8,129 @@
 
     <app-next-steps-infographic [enrolment]="enrolment">
 
-      <p class="mb-4">
-        Get your access to PharmaNet set up. Use the email option below to notify your PharmaNet administrator of your
-        completed enrolment.
-      </p>
+      <ng-container *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
 
-      <form [formGroup]="form">
+        <p class="mb-4">
+          Get your access to PharmaNet set up. Use the email option below to notify your PharmaNet administrator of your
+          completed enrolment.
+        </p>
 
-        <ng-container *ngFor="let careSetting of careSettings">
+        <form [formGroup]="form">
 
-          <ng-container [ngSwitch]="careSetting.careSettingCode">
+          <ng-container *ngFor="let careSetting of careSettings">
 
-            <app-page-subheader *ngSwitchCase="CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE"
-                                headerType="h6">
-              <ng-container appPageSubheaderTitle>
-                Private Community Health Practice
-              </ng-container>
-              <ng-container appPageSubheaderSummary>
-                Send your approval to your private community health practice's PharmaNet administrator (e.g., office
-                manager).
-              </ng-container>
-            </app-page-subheader>
+            <ng-container [ngSwitch]="careSetting.careSettingCode">
 
-            <app-page-subheader *ngSwitchCase="CareSettingEnum.COMMUNITY_PHARMACIST"
-                                headerType="h6">
-              <ng-container appPageSubheaderTitle>
-                Community Pharmacy
-              </ng-container>
-              <ng-container appPageSubheaderSummary>
-                Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).
-              </ng-container>
-            </app-page-subheader>
+              <app-page-subheader *ngSwitchCase="CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE"
+                                  headerType="h6">
+                <ng-container appPageSubheaderTitle>
+                  Private Community Health Practice
+                </ng-container>
+                <ng-container appPageSubheaderSummary>
+                  Send your approval to your private community health practice's PharmaNet administrator (e.g., office
+                  manager).
+                </ng-container>
 
-            <app-page-subheader *ngSwitchCase="CareSettingEnum.HEALTH_AUTHORITY"
-                                headerType="h6">
-              <ng-container appPageSubheaderTitle>
-                Health Authority
-              </ng-container>
-              <ng-container appPageSubheaderSummary>
-                Send your approval to your health authority's PharmaNet access administrator (ask your manager if you
-                are
-                unsure who this is).
-              </ng-container>
-            </app-page-subheader>
+                <ng-container *ngIf="isEmailVisible(careSetting.careSettingCode)"
+                              [ngTemplateOutlet]="emailSent"
+                              [ngTemplateOutletContext]="{
+                  setting: 'Private Community Health Practice',
+                  settingCode: careSetting.careSettingCode,
+                  email: 'emailHere'
+                }">
+                </ng-container>
+
+              </app-page-subheader>
+
+              <app-page-subheader *ngSwitchCase="CareSettingEnum.COMMUNITY_PHARMACIST"
+                                  headerType="h6">
+                <ng-container appPageSubheaderTitle>
+                  Community Pharmacy
+                </ng-container>
+                <ng-container appPageSubheaderSummary>
+                  Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).
+                </ng-container>
+              </app-page-subheader>
+
+              <app-page-subheader *ngSwitchCase="CareSettingEnum.HEALTH_AUTHORITY"
+                                  headerType="h6">
+                <ng-container appPageSubheaderTitle>
+                  Health Authority
+                </ng-container>
+                <ng-container appPageSubheaderSummary>
+                  Send your approval to your health authority's PharmaNet access administrator (ask your manager if you
+                  are
+                  unsure who this is).
+                </ng-container>
+              </app-page-subheader>
+
+            </ng-container>
+
+            <div class="row"
+                 [hidden]="!isEmailVisible(careSetting.careSettingCode)">
+              <div class="col-sm-8 col-xl-7">
+
+                <mat-form-field class="w-100 mb-3">
+                  <input matInput
+                         placeholder="Email"
+                         formControlName="recipients">
+                  <mat-error *ngIf="recipients.hasError('required')">Required</mat-error>
+                  <mat-error *ngIf="recipients.hasError('email')">Must be a valid email address</mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="col-sm-4 col-xl-3">
+
+                <button mat-flat-button
+                        type="button"
+                        color="primary"
+                        class="w-100 mb-4"
+                        (click)="sendProvisionerAccessLinkTo(careSetting.careSettingCode)">
+                  Send
+                </button>
+
+              </div>
+            </div>
 
           </ng-container>
+        </form>
 
-          <div class="row"
-               [hidden]="isEmailHidden(careSetting.careSettingCode)">
-            <div class="col-sm-8 col-xl-7">
+        <ng-template #emailSent
+                     let-email="email"
+                     let-setting="setting"
+                     let-settingCode="settingCode">
+          <p class="mb-4">
+            Email sent to: {{ email }}
+          </p>
+          <p class="mb-4">
+            If your work in multiple {{ setting }}'s you will need to notify them all.
+          </p>
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="setShowEmail(settingCode, true)">
+            <mat-icon>add</mat-icon>
+            Add {{ setting }}
+          </button>
+        </ng-template>
 
-              <mat-form-field class="w-100 mb-3">
-                <input matInput
-                       placeholder="Email"
-                       formControlName="recipients">
-                <mat-error *ngIf="recipients.hasError('required')">Required</mat-error>
-                <mat-error *ngIf="recipients.hasError('email')">Must be a valid email address</mat-error>
-              </mat-form-field>
+        <ng-template #concise
+                     let-provisioner="provisioner">
+          <p class="mb-4">
+            Your PharmaNet approval notification will be sent to {{ provisioner }}.
+          </p>
+        </ng-template>
 
-            </div>
-            <div class="col-sm-4 col-xl-3">
+        <ng-template #verbose
+                     let-provisioner="provisioner">
+          <p class="mb-4">
+            Provide the email address of the person in your organization who is responsible for contacting
+            {{ provisioner }} to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple
+            emails addresses. Do not enter your own email as you will be copied on the communication.
+          </p>
+        </ng-template>
 
-              <button mat-flat-button
-                      type="button"
-                      color="primary"
-                      class="w-100 mb-4"
-                      (click)="sendProvisionerAccessLinkTo(careSetting.careSettingCode)">
-                Send
-              </button>
-
-            </div>
-          </div>
-
-        </ng-container>
-      </form>
-
-      <ng-template #emailSent
-                   let-email="email"
-                   let-setting="setting"
-                   let-settingCode="settingCode">
-        <p class="mb-4">
-          Email sent to: {{ email }}
-        </p>
-        <p class="mb-4">
-          If your work in multiple {{ setting }}'s you will need to notify them all.
-        </p>
-        <button mat-button
-                type="button"
-                color="primary"
-                (click)="setShowEmail(settingCode, true)">
-          <mat-icon>add</mat-icon>
-          Add {{ setting }}
-        </button>
-      </ng-template>
-
-      <ng-template #concise
-                   let-provisioner="provisioner">
-        <p class="mb-4">
-          Your PharmaNet approval notification will be sent to {{ provisioner }}.
-        </p>
-      </ng-template>
-
-      <ng-template #verbose
-                   let-provisioner="provisioner">
-        <p class="mb-4">
-          Provide the email address of the person in your organization who is responsible for contacting
-          {{ provisioner }} to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple
-          emails addresses. Do not enter your own email as you will be copied on the communication.
-        </p>
-      </ng-template>
+      </ng-container>
 
     </app-next-steps-infographic>
 
