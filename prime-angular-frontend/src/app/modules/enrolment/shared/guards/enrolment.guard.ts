@@ -10,8 +10,6 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
@@ -167,9 +165,10 @@ export class EnrolmentGuard extends BaseGuard {
       blacklistedRoutes.push(EnrolmentRoutes.OVERVIEW);
     }
 
-    if (!enrolment.certifications.length
-      || enrolment.certifications.some(cert => cert.collegeCode === CollegeLicenceClass.CPBC)
-      || enrolment.careSettings.some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)) {
+    if (
+      !this.enrolmentService
+        .canRequestRemoteAccess(enrolment.certifications, enrolment.careSettings)
+    ) {
       // No access to remote access if OBO or pharmacist
       blacklistedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }
