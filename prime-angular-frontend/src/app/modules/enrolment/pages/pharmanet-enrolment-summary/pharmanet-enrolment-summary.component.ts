@@ -64,29 +64,29 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       : null;
   }
 
-  public get administratorRecipients(): FormControl {
-    return this.form.get('administratorRecipients') as FormControl;
+  public get recipients(): FormControl {
+    return this.form.get('recipients') as FormControl;
   }
 
   public getTokenUrl(tokenId: string): string {
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public sendProvisionerAccessLinkTo(provisionerName: string) {
-    const formControl = this.form.get(`${provisionerName.toLowerCase()}Recipients`) as FormControl;
+  public sendProvisionerAccessLinkTo() {
+    const formControl = this.form.get(`recipients`) as FormControl;
     if (!formControl) { return; }
 
     const emails = formControl.value.split(',').map((email: string) => email.trim()).join(',') || null;
 
     (formControl.valid)
-      ? this.sendProvisionerAccessLink(provisionerName, emails, formControl)
+      ? this.sendProvisionerAccessLink(emails, formControl)
       : formControl.markAllAsTouched();
   }
 
-  public sendProvisionerAccessLink(provisionerName: string, emails: string = null, formControl: FormControl = null) {
+  public sendProvisionerAccessLink(emails: string = null, formControl: FormControl = null) {
     const data: DialogOptions = {
       title: 'Confirm Email',
-      message: `Are you sure you want to send your Approval Notification to ${provisionerName}?`,
+      message: `Are you sure you want to send your Approval Notification?`,
       actionText: 'Send',
     };
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
@@ -94,7 +94,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) =>
           result
-            ? this.enrolmentResource.sendProvisionerAccessLink(provisionerName, emails)
+            ? this.enrolmentResource.sendProvisionerAccessLink(emails)
             : EMPTY
         )
       )
@@ -120,7 +120,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   private buildVendorEmailGroup(): FormGroup {
     return this.fb.group({
-      administratorRecipients: [null, [Validators.required, FormControlValidators.multipleEmails]]
+      recipients: [null, [Validators.required, FormControlValidators.multipleEmails]]
     });
   }
 }

@@ -11,7 +11,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { Address } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { Enrollee } from '@shared/models/enrollee.model';
@@ -19,10 +18,11 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 
+import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
+
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { EnrolleeEnrolmentsComponent } from '@adjudication/pages/enrollee-enrolments/enrollee-enrolments.component';
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +45,6 @@ export class EnrolmentResource {
           (enrollees.length) ? this.enrolleeAdapterResponse(enrollees.pop()) : null
         ),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee could not be found.');
           this.logger.error('[Enrolment] EnrolmentResource::enrollee error has occurred: ', error);
           throw error;
         })
@@ -112,9 +111,9 @@ export class EnrolmentResource {
   // Provisioner Access
   // ---
 
-  public sendProvisionerAccessLink(provisionerName: string, emails: string = null): Observable<EnrolmentCertificateAccessToken> {
+  public sendProvisionerAccessLink(emails: string = null): Observable<EnrolmentCertificateAccessToken> {
     const payload = { data: emails };
-    return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${provisionerName}`, payload)
+    return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link`, payload)
       .pipe(
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
@@ -225,6 +224,42 @@ export class EnrolmentResource {
       );
   }
 
+  public createEnrolleeAdjudicationDocument(enrolleeId: number, documentGuid: string): Observable<EnrolleeAdjudicationDocument> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this
+      .apiResource.post<EnrolleeAdjudicationDocument>(`enrollees/${enrolleeId}/adjudication-documents`, { enrolleeId }, params)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAdjudicationDocument>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::createEnrolleeAdjudicationDocument error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolleeAdjudicationDocuments(enrolleeId: number): Observable<EnrolleeAdjudicationDocument[]> {
+    return this.apiResource.get<EnrolleeAdjudicationDocument[]>(`enrollees/${enrolleeId}/adjudication-documents`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAdjudicationDocument[]>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAdjudicationDocuments error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId: number, documentId: number): Observable<string> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/adjudication-documents/${documentId}`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAdjudicationDocumentDownloadToken error has occurred: ',
+            error);
+          throw error;
+        })
+      );
+  }
+
   // ---
   // Enrollee and Enrolment Adapters
   // ---
@@ -242,7 +277,7 @@ export class EnrolmentResource {
         agreementType,
         createdDate
       };
-    }
+    };
   }
 
   private enrolleeSubmissionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {

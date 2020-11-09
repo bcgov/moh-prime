@@ -11,6 +11,7 @@ export class AdjudicationRoutes {
   public static ENROLLEE_LIMITS_CONDITIONS = 'limits-and-conditions';
   public static ADJUDICATOR_NOTES = 'notes';
   public static ENROLLEE_EVENT_LOG = 'event-log';
+  public static DOCUMENT_UPLOAD = 'documents';
 
   // SITE_REGISTRATIONS is an alias for ORGANIZATIONS in the routing hierarchy
   public static SITE_REGISTRATIONS = 'site-registrations';

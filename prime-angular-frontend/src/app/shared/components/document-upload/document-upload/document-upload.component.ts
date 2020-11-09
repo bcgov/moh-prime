@@ -39,7 +39,6 @@ export class DocumentUploadComponent implements OnInit {
   public filePondOptions: FilePondOptions & FilePondPluginFileValidateSizeProps & FilePondPluginFileValidateTypeProps;
 
   private jwt: string;
-  private apiSuffix: string;
 
   constructor(
     private accessTokenService: AccessTokenService,
@@ -47,7 +46,6 @@ export class DocumentUploadComponent implements OnInit {
   ) {
     this.labelMessage = 'Click to Browse or Drop files here';
     this.filePondFiles = [];
-    this.apiSuffix = 'document';
     this.completed = new EventEmitter();
     this.remove = new EventEmitter<string>();
   }
@@ -71,6 +69,12 @@ export class DocumentUploadComponent implements OnInit {
       maxTotalFileSize: null,
       server: this.constructServer()
     };
+  }
+
+  public removeFiles() {
+    // TODO temporary fix to get around type definitions not be up to date for filepond
+    const method = 'removeFiles';
+    this.filePondComponent[method]({ revert: false });
   }
 
   public onFilePondInit() {

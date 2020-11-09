@@ -151,13 +151,18 @@ namespace Prime.Services.Rules
         }
     }
 
-    public class RequestingRemoteAccessRule : AutomaticAdjudicationRule
+    public class NoAssignedAgreementRule : AutomaticAdjudicationRule
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (enrollee.EnrolleeRemoteUsers.Count > 0)
+            var newestAssignedAgreement = enrollee.Submissions
+                .OrderByDescending(s => s.CreatedDate)
+                .Select(s => s.AgreementType)
+                .First();
+
+            if (newestAssignedAgreement == null)
             {
-                enrollee.AddReasonToCurrentStatus(StatusReasonType.RequestingRemoteAccess);
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.NoAssignedAgreement);
                 return Task.FromResult(false);
             }
 

@@ -92,6 +92,21 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
+            if (!CompareCollections(comparitor, enrollee.EnrolleeRemoteUsers, _updatedProfile.EnrolleeRemoteUsers))
+            {
+                return Task.FromResult(false);
+            }
+
+            if (!CompareCollections(comparitor, enrollee.RemoteAccessSites, _updatedProfile.RemoteAccessSites))
+            {
+                return Task.FromResult(false);
+            }
+
+            if (!CompareCollections(comparitor, enrollee.RemoteAccessLocations, _updatedProfile.RemoteAccessLocations))
+            {
+                return Task.FromResult(false);
+            }
+
             // If the new profile has self declaration document GUIDs in it, the user has uploaded new documents
             if (_updatedProfile.SelfDeclarations.Any(sd => sd.DocumentGuids.Any())
                 || !CompareCollections(comparitor, enrollee.SelfDeclarations, _updatedProfile.SelfDeclarations))
@@ -145,6 +160,18 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<EnrolleeCareSetting>(x => x.Enrollee);
             config.IgnoreProperty<EnrolleeCareSetting>(x => x.EnrolleeId);
             config.IgnoreProperty<EnrolleeCareSetting>(x => x.CareSetting);
+
+            config.IgnoreProperty<EnrolleeRemoteUser>(x => x.Id);
+            config.IgnoreProperty<EnrolleeRemoteUser>(x => x.Enrollee);
+            config.IgnoreProperty<EnrolleeRemoteUser>(x => x.RemoteUser);
+
+            config.IgnoreProperty<RemoteAccessSite>(x => x.Id);
+            config.IgnoreProperty<RemoteAccessSite>(x => x.Enrollee);
+            config.IgnoreProperty<RemoteAccessSite>(x => x.Site);
+
+            config.IgnoreProperty<RemoteAccessLocation>(x => x.Id);
+            config.IgnoreProperty<RemoteAccessLocation>(x => x.Enrollee);
+            config.IgnoreProperty<RemoteAccessLocation>(x => x.EnrolleeId);
 
             config.IgnoreProperty<SelfDeclaration>(x => x.Id);
             config.IgnoreProperty<SelfDeclaration>(x => x.EnrolleeId);
