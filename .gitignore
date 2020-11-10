@@ -5,6 +5,9 @@ documentation/~$PRIME Test Cases and Results.xlsx
 .sonarqube/
 BuildReports/
 
+# IntelliJ
+/.idea
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json
