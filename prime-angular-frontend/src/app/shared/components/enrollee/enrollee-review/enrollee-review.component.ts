@@ -12,6 +12,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -22,19 +23,22 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;
   @Input() public enrolment: Enrolment;
-  @Output() public route: EventEmitter<string>;
+  @Input() public admin: boolean;
+  @Output() public route: EventEmitter<string | (string | number)[]>;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = selfDeclarationQuestions;
   public demographicRoutePath: string;
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentRoutes = EnrolmentRoutes;
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     private authService: AuthService
   ) {
     this.showEditRedirect = false;
-    this.route = new EventEmitter<string>();
+    this.admin = false;
+    this.route = new EventEmitter<string | (string | number)[]>();
 
     this.authService.identityProvider$()
       .subscribe((identityProvider: IdentityProviderEnum) => {
@@ -108,7 +112,8 @@ export class EnrolleeReviewComponent {
       : [];
   }
 
-  public onRoute(routePath: string): void {
+  public onRoute(routePath: string | (string | number)[], event?: Event): void {
+    event?.preventDefault();
     this.route.emit(routePath);
   }
 

@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable } from 'rxjs';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
+import moment from 'moment';
+
+import { MINIMUM_AGE } from '@lib/constants';
 import { AddressLine } from '@lib/types/address-line.type';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -35,6 +38,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
    */
   public user: BceidUser;
   public addressFormControlNames: AddressLine[];
+  public maxDateOfBirth: moment.Moment;
 
   constructor(
     protected route: ActivatedRoute,
@@ -69,29 +73,37 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
       'countryCode',
       'postal'
     ];
+    // Must be 18 years of age or older
+    this.maxDateOfBirth = moment().subtract(MINIMUM_AGE, 'years');
   }
 
   public get mailingAddress(): FormGroup {
     return this.form.get('mailingAddress') as FormGroup;
   }
 
+  public get dateOfBirth(): FormControl {
+    return this.form.get('dateOfBirth') as FormControl;
+  }
+
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm();
     this.initForm();
-    if (!this.enrolmentService.enrolment) {
-      this.getUser$()
-        .subscribe((enrollee: Enrollee) =>
-          this.form.patchValue(enrollee)
-        );
-    }
   }
 
   protected createFormInstance() {
     this.form = this.enrolmentFormStateService.bceidDemographicForm;
   }
 
-  protected initForm() { }
+  protected initForm() {
+    if (!this.enrolmentService.enrolment) {
+      this.getUser$()
+        .subscribe((enrollee: Enrollee) => {
+          this.dateOfBirth.enable();
+          this.form.patchValue(enrollee);
+        });
+    }
+  }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
     if (!enrolment.id && this.isInitialEnrolment) {

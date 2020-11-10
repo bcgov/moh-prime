@@ -2,10 +2,24 @@
 
   <button mat-flat-button
           color="primary"
+          class="mb-5 d-block"
           [disabled]="!enrollee"
           [matMenuTriggerFor]="menu">
     Adjudicator Actions <mat-icon>keyboard_arrow_down</mat-icon>
   </button>
+
+  <mat-form-field>
+    <mat-label>TOA Selection</mat-label>
+    <mat-select [formControl]="assignedTOAType">
+      <mat-option *ngFor="let agreement of termsOfAccessAgreements"
+                  [value]="agreement.type">
+        {{ agreement.name }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="assignedTOAType.hasError('requiredIn')">
+      A TOA must be assigned in order to approve an enrollee.
+    </mat-error>
+  </mat-form-field>
 
   <mat-menu #menu>
     <button mat-menu-item

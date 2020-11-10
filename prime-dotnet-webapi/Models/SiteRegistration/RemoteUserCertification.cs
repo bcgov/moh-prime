@@ -29,6 +29,8 @@ namespace Prime.Models
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string LicenseNumber { get; set; }
 
+        public int LicenseCode { get; set; }
+
         [NotMapped]
         [JsonIgnore]
         public string FullLicenseNumber { get { return $"{College?.Prefix}-{LicenseNumber}"; } }

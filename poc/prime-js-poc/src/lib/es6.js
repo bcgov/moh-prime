@@ -32,7 +32,7 @@ let keycloak;
  */
 const keycloakInit = (() => {
   keycloak = new Keycloak({
-    url: 'https://sso-dev.pathfinder.gov.bc.ca/auth',
+    url: 'https://dev.oidc.gov.bc.ca/auth',
     realm: 'v4mbqqas',
     clientId: 'prime-pos-gpid'
   });
