@@ -7,7 +7,7 @@
           <div class="text-nowrap">
             {{ item.date | formatDate }}
           </div>
-          <small *ngIf="hasTime"
+          <small *ngIf="showTime"
                  class="d-block text-mute font-weight-normal mb-2">
             {{ item.date | formatDate: 'h:mm a' }}
           </small>

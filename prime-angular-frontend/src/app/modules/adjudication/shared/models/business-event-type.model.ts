@@ -1,4 +1,4 @@
-export enum BusinessEventType {
+export enum BusinessEventTypeEnum {
   STATUS_CHANGE_CODE = 1,
   EMAIL_CODE,
   NOTE_CODE,

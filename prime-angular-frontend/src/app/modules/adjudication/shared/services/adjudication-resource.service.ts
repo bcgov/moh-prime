@@ -21,7 +21,7 @@ import { Admin } from '@auth/shared/models/admin.model';
 
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
-import { BusinessEventType } from '@adjudication/shared/models/business-event-type.model';
+import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 
 @Injectable({
   providedIn: 'root'
@@ -126,8 +126,8 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolleeBusinessEvents(enrolleeId: number, businessEventTypes: BusinessEventType[]): Observable<BusinessEvent[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ businessEventTypes: (businessEventTypes ?? []).join(',') });
+  public getEnrolleeBusinessEvents(enrolleeId: number, businessEventTypes: BusinessEventTypeEnum[]): Observable<BusinessEvent[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ businessEventTypeCodes: (businessEventTypes ?? []).join(',') });
     return this.apiResource.get<BusinessEvent[]>(`enrollees/${enrolleeId}/events`, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessEvent[]>) => response.result),
