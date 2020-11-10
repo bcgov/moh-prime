@@ -133,27 +133,29 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public sendProvisionerAccessLink(emails: string = null, formControl: FormControl = null, careSettingCode) {
-    const data: DialogOptions = {
-      title: 'Confirm Email',
-      message: `Are you sure you want to send your Approval Notification?`,
-      actionText: 'Send',
-    };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          result
-            ? this.enrolmentResource.sendProvisionerAccessLink(emails, careSettingCode)
-            : EMPTY
-        )
-      )
-      .subscribe(() => {
-        this.toastService.openSuccessToast('Email was successfully sent');
-        if (formControl) {
-          formControl.reset();
-        }
-        this.setShowEmail(careSettingCode, false);
-      });
+    // const data: DialogOptions = {
+    //   title: 'Confirm Email',
+    //   message: `Are you sure you want to send your Approval Notification?`,
+    //   actionText: 'Send',
+    // };
+    // this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+    //   .afterClosed()
+    //   .pipe(
+    //     exhaustMap((result: boolean) =>
+    //       result
+    //         ? this.enrolmentResource.sendProvisionerAccessLink(emails, careSettingCode)
+    //         : EMPTY
+    //     )
+    //   )
+    //   .subscribe(() => {
+    //     this.toastService.openSuccessToast('Email was successfully sent');
+    //     if (formControl) {
+    //       formControl.reset();
+    //     }
+    //     this.setShowEmail(careSettingCode, false);
+    //   });
+
+    this.setShowEmail(careSettingCode, false);
   }
 
   public ngOnInit() {
