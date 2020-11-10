@@ -207,7 +207,9 @@ import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-r
   ],
   providers: [
     FullnamePipe,
-    AddressPipe
+    AddressPipe,
+    CasePipe,
+    CapitalizePipe
   ]
 })
 export class SharedModule { }

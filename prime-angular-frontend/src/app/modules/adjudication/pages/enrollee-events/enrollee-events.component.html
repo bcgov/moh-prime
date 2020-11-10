@@ -7,6 +7,19 @@
 </app-adjudication-container>
 
 <ng-template #content>
+
+  <mat-form-field>
+    <mat-label>Filter By</mat-label>
+    <mat-select [formControl]="filter"
+                (menuClosed)="onMenuClose($event)"
+                multiple>
+      <mat-option *ngFor="let businessEventType of businessEventTypes"
+                  [value]="businessEventType.key">
+        {{ businessEventType.value }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <app-dated-content-table *ngIf="businessEvents$"
                            [items$]="businessEvents$"></app-dated-content-table>
 </ng-template>

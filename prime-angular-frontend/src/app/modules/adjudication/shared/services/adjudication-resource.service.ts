@@ -126,8 +126,8 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolleeBusinessEvents(enrolleeId: number, businessEventTypes: BusinessEventType[] = []): Observable<BusinessEvent[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ businessEventTypes: businessEventTypes.join(',') });
+  public getEnrolleeBusinessEvents(enrolleeId: number, businessEventTypes: BusinessEventType[]): Observable<BusinessEvent[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ businessEventTypes: (businessEventTypes ?? []).join(',') });
     return this.apiResource.get<BusinessEvent[]>(`enrollees/${enrolleeId}/events`, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessEvent[]>) => response.result),
