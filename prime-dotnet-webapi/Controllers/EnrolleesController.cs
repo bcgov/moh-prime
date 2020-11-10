@@ -130,7 +130,7 @@ namespace Prime.Controllers
             var createModel = payload.Enrollee;
             createModel.MapConditionalProperties(User);
 
-            if (createModel.IsUnderage())
+            if (createModel.IsUnder18())
             {
                 return Forbid();
             }

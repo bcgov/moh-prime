@@ -111,4 +111,5 @@ export interface EnrolleeListViewModel {
   hasNewestAgreement: boolean;
   adjudicatorIdir: string;
   alwaysManual: boolean;
+  remoteAccess: boolean;
 }
