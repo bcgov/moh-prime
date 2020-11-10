@@ -58,9 +58,9 @@ namespace Prime.ViewModels
             return IdentityProvider == AuthConstants.BC_SERVICES_CARD;
         }
 
-        public bool IsUnderage()
+        public bool IsUnder18()
         {
-            return (DateTime.Today.Year - DateOfBirth.Year) < 18;
+            return DateOfBirth > DateTime.Today.AddYears(-18);
         }
 
         public void MapConditionalProperties(ClaimsPrincipal user)

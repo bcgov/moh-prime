@@ -406,7 +406,8 @@ export class AdjudicationContainerComponent implements OnInit {
       assignedTOAType,
       hasNewestAgreement,
       adjudicator,
-      alwaysManual
+      alwaysManual,
+      enrolleeRemoteUsers
     } = enrollee;
     return {
       id,
@@ -423,7 +424,8 @@ export class AdjudicationContainerComponent implements OnInit {
       assignedTOAType,
       hasNewestAgreement,
       adjudicatorIdir: adjudicator?.idir,
-      alwaysManual
+      alwaysManual,
+      remoteAccess: (enrolleeRemoteUsers?.length) ? true : false
     };
   }
 }

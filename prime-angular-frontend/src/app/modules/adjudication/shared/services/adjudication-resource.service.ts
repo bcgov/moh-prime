@@ -17,6 +17,7 @@ import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
+import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
@@ -249,6 +250,20 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee agreements could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getAccessTerms error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolmentCardsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolmentCard[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
+    return this.apiResource.get<EnrolmentCard[]>(`enrollees/${enrolleeId}/cards`, params)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolmentCard[]>) => response.result),
+        tap((accessTerms: EnrolmentCard[]) => this.logger.info('ENROLMENT_CARDS', accessTerms)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment cards could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getEnrolmentCardsByYear error has occurred: ', error);
           throw error;
         })
       );
