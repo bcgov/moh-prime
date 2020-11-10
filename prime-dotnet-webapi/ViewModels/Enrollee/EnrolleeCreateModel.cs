@@ -60,9 +60,7 @@ namespace Prime.ViewModels
 
         public bool IsUnderage()
         {
-            var today = DateTime.Today;
-            var age = today.Year - DateOfBirth.Year;
-            return DateOfBirth > today.AddYears(-age);
+            return DateOfBirth > DateTime.Today.AddYears(-18);
         }
 
         public void MapConditionalProperties(ClaimsPrincipal user)
