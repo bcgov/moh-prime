@@ -69,10 +69,12 @@ export class EnrolmentService implements IEnrolmentService {
     const enrolleeLicenceCodes = certifications
       .map((certification: CollegeCertification) => certification.licenseCode);
 
-    const hasRemoteAccessLicence = this.configService.licenses
-      .filter((licence: LicenseWeightedConfig) => enrolleeLicenceCodes.includes(licence.code))
-      .some((licence: LicenseWeightedConfig) => (licence.licensedToProvideCare && licence.namedInImReg));
+    // const hasRemoteAccessLicence = this.configService.licenses
+    // .filter((licence: LicenseWeightedConfig) => enrolleeLicenceCodes.includes(licence.code))
+    // .some((licence: LicenseWeightedConfig) => (licence.licensedToProvideCare && licence.namedInImReg));
 
-    return hasRemoteAccessLicence;
+    // return hasRemoteAccessLicence;
+
+    return true;
   }
 }
