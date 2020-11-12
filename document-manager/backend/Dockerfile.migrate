@@ -17,6 +17,10 @@ RUN set -x && \
 
 COPY . .
 
+# ENV FLASK_APP app.py
+# ENV DB_HOST postgresql${SUFFIX}
+# ENV PGPASSWORD postgres
 # Run the server
 EXPOSE 5001 9191
-ENTRYPOINT ["./init.sh"]
+CMD ["flask", "db", "upgrade"]
+CMD ["tail", "-f", "/dev/null"]
