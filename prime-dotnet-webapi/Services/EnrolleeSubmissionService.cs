@@ -60,6 +60,7 @@ namespace Prime.Services
                 EnrolleeId = enrollee.Id,
                 ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
                 AgreementType = new AgreementEngine().DetermineAgreementType(enrollee),
+                RequestedRemoteAccess = enrollee.EnrolleeRemoteUsers.Any(),
                 CreatedDate = DateTimeOffset.Now
             };
 
