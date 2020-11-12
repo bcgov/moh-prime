@@ -26,7 +26,6 @@
                             [ngTemplateOutletContext]="{
                               setting: 'Private Community Health Practice',
                               settingCode: careSetting.careSettingCode,
-                              formControlName: 'communityHealthEmails',
                               formControl: communityHealthEmails
                             }">
               </ng-container>
@@ -36,7 +35,6 @@
                             [ngTemplateOutletContext]="{
                               setting: 'Community Pharmacy',
                               settingCode: careSetting.careSettingCode,
-                              formControlName: 'pharmacistEmails',
                               formControl: pharmacistEmails
                             }">
               </ng-container>
@@ -46,7 +44,6 @@
                             [ngTemplateOutletContext]="{
                               setting: 'Health Authority',
                               settingCode: careSetting.careSettingCode,
-                              formControlName: 'healthAuthorityEmails',
                               formControl: healthAuthorityEmails
                             }">
               </ng-container>
@@ -59,7 +56,6 @@
         <ng-template #settingEmail
                      let-setting="setting"
                      let-settingCode="settingCode"
-                     let-formControlName="formControlName"
                      let-formControl="formControl">
           <app-page-subheader headerType="h6">
             <ng-container appPageSubheaderTitle>
@@ -81,7 +77,7 @@
                 <mat-form-field class="w-100 mb-3">
                   <input matInput
                          placeholder="Email"
-                         [formControlName]="formControlName">
+                         [formControl]="formControl">
                   <mat-error *ngIf="formControl.hasError('required')">Required</mat-error>
                   <mat-error *ngIf="formControl.hasError('email')">Must be a valid email address</mat-error>
                 </mat-form-field>

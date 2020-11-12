@@ -104,13 +104,10 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         this.showHealthAuthority = show;
         break;
       }
-      default: {
-        return show;
-      }
     }
   }
 
-  public isEmailVisible(careSettingCode: number) {
+  public isEmailVisible(careSettingCode: number): boolean {
     switch (careSettingCode) {
       case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         return this.showCommunityHealth;
