@@ -64,6 +64,8 @@
                                             [index]="i"
                                             [total]="remoteUserCertifications.controls.length"
                                             [selectedColleges]="selectedCollegeCodes"
+                                            [collegeFilterPredicate]="collegeFilterPredicate"
+                                            [licenceFilterPredicate]="licenceFilterPredicate"
                                             (remove)="removeCertification($event)"
                                             [condensed]="true">
             </app-college-certification-form>
