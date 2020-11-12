@@ -10,6 +10,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AddressLine } from '@lib/types/address-line.type';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
@@ -39,7 +40,8 @@ export class RemoteUserComponent implements OnInit {
     private siteService: SiteService,
     private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private enrolmentService: EnrolmentService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.licenses = this.configService.licenses;
@@ -114,12 +116,14 @@ export class RemoteUserComponent implements OnInit {
     this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
   }
 
-  public collegeFilterPredicate(collegeConfig: CollegeConfig) {
-    return (collegeConfig.code === CollegeLicenceClass.CPSBC || collegeConfig.code === CollegeLicenceClass.BCCNM);
+  public collegeFilterPredicate() {
+    return (collegeConfig: CollegeConfig) =>
+      (collegeConfig.code === CollegeLicenceClass.CPSBC || collegeConfig.code === CollegeLicenceClass.BCCNM);
   }
 
-  public licenceFilterPredicate(licenceConfig: LicenseWeightedConfig) {
-    return (licenceConfig.namedInImReg && licenceConfig.licensedToProvideCare);
+  public licenceFilterPredicate() {
+    return (licenceConfig: LicenseWeightedConfig) =>
+      this.enrolmentService.allowedRemoteAccessLicences(licenceConfig);
   }
 
   public ngOnInit(): void {
