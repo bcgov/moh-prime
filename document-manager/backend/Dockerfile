@@ -1,6 +1,4 @@
 FROM python:3.6
-# USER 0
-ENV APP_ROOT /opt/app-root
 SHELL ["/bin/bash","-c"]
 
 # Update installation utility

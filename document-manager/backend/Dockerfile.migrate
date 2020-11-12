@@ -1,6 +1,4 @@
 FROM python:3.6
-# USER 0
-ENV APP_ROOT /opt/app-root
 SHELL ["/bin/bash","-c"]
 
 # Update installation utility
@@ -17,9 +15,6 @@ RUN set -x && \
 
 COPY . .
 
-# ENV FLASK_APP app.py
-# ENV DB_HOST postgresql${SUFFIX}
-# ENV PGPASSWORD postgres
 # Run the server
 EXPOSE 5001 9191
 CMD ["flask", "db", "upgrade"]

@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-######################################################### Database #
+####################### PostgreSQL Database Definition #######################
   postgres:
     restart: always
     container_name: primedb
@@ -16,7 +16,7 @@ services:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
       - primenet
-########################################################## MongoDB #
+####################### MongoDB Definition #######################
   mongo:
     restart: always
     container_name: primemongodb
@@ -30,7 +30,7 @@ services:
       - local_mongodb_data:/var/lib/mongodb/data
     networks:
       - primenet
-############################################################## API #
+####################### API Backend Definition #######################
   dotnet-webapi:
     container_name: primeapi
     restart: always
@@ -50,7 +50,7 @@ services:
       - primenet
     depends_on:
       - postgres
-##################################################### Web Frontend #
+####################### Web Frontend Definition #######################
   nginx-angular:
     container_name: primeweb
     build:
@@ -67,7 +67,7 @@ services:
       - primenet
     depends_on:
       - dotnet-webapi
-################################################ Local SMTP Server #
+####################### Local SMTP Server Definition #######################
   mailhog:
     container_name: mailhog
     restart: always
@@ -78,7 +78,7 @@ services:
       - 8025:8025 # visit localhost:8025 to see the list of captured emails
     networks:
       - primenet
-############################################## Database Inspection #
+####################### Database Inspection Definition #######################
   schema-spy:
     container_name: schema-spy
     build:
@@ -91,7 +91,7 @@ services:
       - postgres
     networks:
       - primenet
-########################################################### Backup #
+####################### Backup Definition #######################
   backup:
     container_name: backup
     build:
@@ -107,7 +107,7 @@ services:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
       - primenet
-####################### DOCUMENT_MANAGER_BACKEND Definition #######################
+####################### Document Manager Definition #######################
   document_manager_backend:
     restart: always
     container_name: document-manager-backend
@@ -117,7 +117,10 @@ services:
       - 6001:6001
     volumes:
       - ./document-manager/backend/:/app/
-    command: /opt/app-root/src/app.sh dev
+    depends_on:
+      - postgres
+      - redis
+      - document_manager_migrate
     env_file: ./document-manager/backend/.env-prime-local
     networks:
       - primenet
@@ -126,12 +129,12 @@ services:
     restart: on-failure
     container_name: document-manager-migrate
     build:
-      context: document-manager/backend 
+      context: document-manager/backend
+      dockerfile: Dockerfile.migrate
     depends_on:
       - postgres
     volumes:
       - ./document-manager/backend/:/app/
-    command: /opt/app-root/src/app.sh migrate
     env_file: ./document-manager/backend/.env-prime-local
     networks:
       - primenet
@@ -146,11 +149,13 @@ services:
     networks:
       - primenet
 
+####################### Networks Definition #######################
+networks:
+  primenet:
+    driver: bridge
+
+####################### Volumes Definition #######################
 volumes:
   local_postgres_data:
   local_mongodb_data:
   db_backup_data:
-
-networks:
-  primenet:
-    driver: bridge
