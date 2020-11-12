@@ -11,7 +11,7 @@ namespace Prime.Engines.AgreementEngineInternal
         public bool Multiple { get; set; }
         public bool HasCommunityPharmacy { get; set; }
 
-        public SettingsDigest(IEnumerable<EnrolleeCareSetting> careSettings)
+        public SettingsDigest(IEnumerable<CareSetting> careSettings)
         {
             if (!careSettings.Any())
             {

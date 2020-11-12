@@ -3,6 +3,7 @@ using AutoMapper;
 
 using Prime.Models;
 using Prime.ViewModels;
+using Prime.DTOs.AgreementEngine;
 
 /**
  * Automapper Documentation
@@ -41,5 +42,10 @@ public class AutoMapping : Profile
 
         CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
         CreateMap<SiteRegistrationNote, SiteRegistrationNoteViewModel>();
+
+        // DTOs
+        CreateMap<Enrollee, AgreementEngineDto>()
+            .ForMember(dest => dest.CareSettings, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSetting)));
+        CreateMap<Certification, CertificationDto>();
     }
 }
