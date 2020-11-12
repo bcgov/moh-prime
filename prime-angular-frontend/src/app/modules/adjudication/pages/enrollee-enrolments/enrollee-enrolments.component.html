@@ -36,7 +36,7 @@
                     isCurrent: first && !isUnderAdjudication(enrollee),
                     submittedDate: enrollee?.appliedDate,
                     acceptedDate: enrolmentCard.agreementAcceptedDate,
-                    remoteAccess: enrolmentCard.remoteAccess,
+                    remoteAccess: enrolmentCard.requestedRemoteAccess,
                     enrolmentRoute: [enrolmentCard.agreementId, AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT],
                     toaRoute: [enrolmentCard.agreementId, AdjudicationRoutes.ENROLLEE_ACCESS_TERM],
                     isLast: last
@@ -76,12 +76,7 @@
 
       <div *ngIf="remoteAccess"
            class="card-title">
-        <ng-container *ngIf="isCurrent; else currentRemoteAccess">
-          User Requested Remote Access
-        </ng-container>
-        <ng-template #currentRemoteAccess>
-          <small>{{ remoteAccess }}</small>
-        </ng-template>
+        User Requested Remote Access
       </div>
     </mat-card-content>
     <mat-card-actions>
