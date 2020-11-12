@@ -7,6 +7,22 @@
 </app-adjudication-container>
 
 <ng-template #content>
-  <app-dated-content-table *ngIf="businessEvents$"
+
+  <mat-form-field>
+    <mat-label>Filter By</mat-label>
+    <mat-select [formControl]="filter"
+                multiple>
+      <mat-option *ngFor="let businessEventType of businessEventTypes"
+                  [value]="businessEventType.key">
+        {{ businessEventType.value }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <app-dated-content-table *ngIf="(businessEvents$ | async)?.length; else empty"
                            [items$]="businessEvents$"></app-dated-content-table>
+
+  <ng-template #empty>
+    <h2 class="lead">No events found</h2>
+  </ng-template>
 </ng-template>

@@ -22,6 +22,8 @@ namespace Prime.Models
 
         public AgreementType? AgreementType { get; set; }
 
+        public bool RequestedRemoteAccess { get; set; }
+
         public DateTimeOffset CreatedDate { get; set; }
     }
 }

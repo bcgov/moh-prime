@@ -14,11 +14,11 @@ export interface DateContent {
   styleUrls: ['./dated-content-table.component.scss']
 })
 export class DatedContentTableComponent implements OnInit {
+  @Input() public showTime: boolean;
   @Input() public items$: Observable<DateContent[]>;
-  @Input() public hasTime: boolean;
 
   constructor() {
-    this.hasTime = true;
+    this.showTime = true;
   }
 
   public ngOnInit() { }
