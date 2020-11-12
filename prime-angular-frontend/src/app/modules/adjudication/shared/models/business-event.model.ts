@@ -1,8 +1,10 @@
+import { BusinessEventTypeEnum } from './business-event-type.model';
+
 export interface BusinessEvent {
   enrolleeId: number;
   adminId: number;
   adminIDIR: string;
-  businessEventTypeCode: number;
+  businessEventTypeCode: BusinessEventTypeEnum;
   description: string;
   eventDate: string;
 }
