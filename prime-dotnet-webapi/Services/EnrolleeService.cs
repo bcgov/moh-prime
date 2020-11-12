@@ -628,11 +628,11 @@ namespace Prime.Services
             return _mapper.Map<EnrolleeViewModel>(enrollee);
         }
 
-        public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId)
+        public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
         {
             return await _context.BusinessEvents
                 .Include(e => e.Admin)
-                .Where(e => e.EnrolleeId == enrolleeId)
+                .Where(e => e.EnrolleeId == enrolleeId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
         }
