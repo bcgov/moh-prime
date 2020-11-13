@@ -234,25 +234,25 @@ namespace Prime
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Configure security settings on a basic HTTP binding
-            Binding binding = new BasicHttpBinding
-            {
-                Security = new BasicHttpSecurity
-                {
-                    Mode = BasicHttpSecurityMode.TransportCredentialOnly,
-                    Transport = new HttpTransportSecurity
-                    {
-                        ClientCredentialType = HttpClientCredentialType.Basic
-                    }
-                }
-            };
+// Configure security settings on a basic HTTP binding
+Binding binding = new BasicHttpBinding
+{
+    Security = new BasicHttpSecurity
+    {
+        Mode = BasicHttpSecurityMode.TransportCredentialOnly,
+        Transport = new HttpTransportSecurity
+        {
+            ClientCredentialType = HttpClientCredentialType.Basic
+        }
+    }
+};
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapHealthChecks("/health");
-                endpoints.UseSoapEndpoint<ISoapService>("/api/PLRHL7/UpdateBCProvider", binding, SoapSerializer.XmlSerializer);
-            });
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHealthChecks("/health");
+    endpoints.UseSoapEndpoint<ISoapService>("/api/PLRHL7", binding, SoapSerializer.XmlSerializer);
+});
         }
 
         protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
