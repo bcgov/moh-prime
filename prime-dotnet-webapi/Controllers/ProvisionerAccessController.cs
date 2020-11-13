@@ -70,18 +70,20 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(tokens));
         }
 
-        // POST: api/provisioner-access/send-link
+        // POST: api/provisioner-access/send-link/1
         /// <summary>
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment,
-        /// then sends the link to a recipient by email.
+        /// then sends the link to a recipient by email based on Care Setting Code.
         /// </summary>
-        [HttpPost("send-link", Name = nameof(SendProvisionerLink))]
+        /// <param name="careSettingCode"></param>
+        /// <param name="providedEmails"></param>
+        [HttpPost("send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
         [Authorize(Policy = AuthConstants.USER_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(FromBodyText providedEmails)
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(int careSettingCode, FromBodyText providedEmails)
         {
             if (string.IsNullOrWhiteSpace(providedEmails))
             {
@@ -116,7 +118,7 @@ namespace Prime.Controllers
             }
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
 
-            await _emailService.SendProvisionerLinkAsync(emails, createdToken, enrollee.HasCareSetting(CareSettingType.CommunityPharmacy));
+            await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to email(s): " + string.Join(",", emails));
 
             return CreatedAtAction(
