@@ -102,11 +102,12 @@
             <p class="mb-4 text-green">
               Email sent to: {{ formControl.value }}
               <br>
-              If your work in multiple {{ setting }}'s you will need to notify them all.
+              If you work in multiple {{ setting }}'s you will need to notify them all.
             </p>
             <button mat-button
                     type="button"
                     color="primary"
+                    class="mb-3"
                     (click)="setShowEmail(settingCode, true, formControl)">
               <mat-icon>add</mat-icon>
               Add {{ setting }}
