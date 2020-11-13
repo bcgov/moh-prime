@@ -16,10 +16,5 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
-
-        public bool IsType(CareSettingType type)
-        {
-            return Code == (int)type;
-        }
     }
 }
