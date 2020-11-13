@@ -34,7 +34,6 @@ import { AccessAgreementCurrentComponent } from './pages/access-agreement-curren
 import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
 import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
-import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
 import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 
@@ -189,11 +188,6 @@ const routes: Routes = [
         path: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
         component: PharmanetEnrolmentSummaryComponent,
         data: { title: 'Next Steps to get PharmaNet' }
-      },
-      {
-        path: EnrolmentRoutes.NOTIFICATION_CONFIRMATION,
-        component: NotificationConfirmationComponent,
-        data: { title: 'Notification Confirmation' }
       },
       {
         path: EnrolmentRoutes.ACCESS_TERMS,

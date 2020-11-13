@@ -125,7 +125,7 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, enrolleeEmail, subject, body);
         }
 
-        public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, bool hasCommunityPharmacyCareSetting)
+        public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, int careSettingCode)
         {
             if (!AreValidEmails(recipients))
             {
@@ -142,9 +142,21 @@ namespace Prime.Services
             var ccEmails = new List<string>() { token.Enrollee.Email };
 
             string subject = "New Access Request";
-            string viewName = hasCommunityPharmacyCareSetting
-                ? "/Views/Emails/CommunityPharmacyManagerEmail.cshtml"
-                : "/Views/Emails/OfficeManagerEmail.cshtml";
+            string viewName = null;
+
+            switch (careSettingCode)
+            {
+                case (int)CareSettingType.CommunityPharmacy:
+                    viewName = "/Views/Emails/CommunityPharmacyManagerEmail.cshtml";
+                    break;
+                case (int)CareSettingType.HealthAuthority:
+                    viewName = "/Views/Emails/HealthAuthorityEmail.cshtml";
+                    break;
+                default:
+                    viewName = "/Views/Emails/OfficeManagerEmail.cshtml";
+                    break;
+            }
+
             string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
         }

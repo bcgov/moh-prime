@@ -1,7 +1,17 @@
 <div class="page-subheader d-flex"
      [ngClass]="{ 'divider': divider == true }">
-  <div class="w-100">
-    <h2 class="title">
+  <div class="w-100"
+       [ngSwitch]="headerType">
+    <h6 class="title"
+        *ngSwitchCase="'h6'">
+      <ng-container [ngTemplateOutlet]="subheaderTitle"></ng-container>
+    </h6>
+    <h2 class="title"
+        *ngSwitchDefault>
+      <ng-container [ngTemplateOutlet]="subheaderTitle"></ng-container>
+    </h2>
+
+    <ng-template #subheaderTitle>
       <ng-content select="[appPageSubheaderTitle]"></ng-content>
       <div *ngIf="hasContextualContent"
            class="help text-right">
@@ -16,7 +26,8 @@
           </ng-container>
         </app-contextual-help>
       </div>
-    </h2>
+    </ng-template>
+
     <p *ngIf="hasPageSubheaderSummary && showSummary"
        class="description">
       <ng-content #summary
