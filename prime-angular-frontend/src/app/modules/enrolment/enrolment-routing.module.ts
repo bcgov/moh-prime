@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ConfigResolver } from '@config/config-resolver';
+import { ConfigGuard } from '@config/config.guard';
 import { UnsupportedGuard } from '@core/guards/unsupported.guard';
-import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { UnderagedGuard } from '@core/guards/underaged.guard';
+import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { EnrolmentRoutes } from './enrolment.routes';
@@ -34,7 +34,6 @@ import { AccessAgreementCurrentComponent } from './pages/access-agreement-curren
 import { AccessAgreementHistoryEnrolmentComponent } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
 import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
-import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
 import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 
@@ -43,6 +42,11 @@ const routes: Routes = [
     path: EnrolmentRoutes.MODULE_PATH,
     component: DashboardV1Component,
     canActivate: [
+      // Ensure that the configuration is loaded prior to dependent
+      // guards, as well as, views, otherwise if it already exists NOOP
+      // NOTE: A resolver could not be used due to their execution
+      // occuring after parent and child guards
+      ConfigGuard,
       UnsupportedGuard,
       UnderagedGuard
     ],
@@ -51,9 +55,6 @@ const routes: Routes = [
       EnrolleeGuard,
       EnrolmentGuard
     ],
-    // Ensure that the configuration is loaded, otherwise
-    // if it already exists NOOP
-    resolve: [ConfigResolver],
     children: [
       {
         path: EnrolmentRoutes.COLLECTION_NOTICE,
@@ -187,11 +188,6 @@ const routes: Routes = [
         path: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
         component: PharmanetEnrolmentSummaryComponent,
         data: { title: 'Next Steps to get PharmaNet' }
-      },
-      {
-        path: EnrolmentRoutes.NOTIFICATION_CONFIRMATION,
-        component: NotificationConfirmationComponent,
-        data: { title: 'Notification Confirmation' }
       },
       {
         path: EnrolmentRoutes.ACCESS_TERMS,
