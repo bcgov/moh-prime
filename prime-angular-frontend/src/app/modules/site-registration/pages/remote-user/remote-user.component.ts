@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
+import { CollegeConfig, LicenseWeightedConfig } from '@config/config.model';
+import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AddressLine } from '@lib/types/address-line.type';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Country } from '@shared/enums/country.enum';
-import { Province } from '@shared/enums/province.enum';
+import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
@@ -28,18 +30,21 @@ export class RemoteUserComponent implements OnInit {
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public remoteUser: RemoteUser;
+  public licenses: LicenseWeightedConfig[];
   public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private siteService: SiteService,
     private siteFormStateService: SiteFormStateService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private configService: ConfigService,
+    private enrolmentService: EnrolmentService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.licenses = this.configService.licenses;
   }
 
   public get remoteUserCertifications(): FormArray {
@@ -109,6 +114,16 @@ export class RemoteUserComponent implements OnInit {
   public nextRoute() {
     // Inform the remote users view not to patch the form, otherwise updates will be lost
     this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
+  }
+
+  public collegeFilterPredicate() {
+    return (collegeConfig: CollegeConfig) =>
+      (collegeConfig.code === CollegeLicenceClass.CPSBC || collegeConfig.code === CollegeLicenceClass.BCCNM);
+  }
+
+  public licenceFilterPredicate() {
+    return (licenceConfig: LicenseWeightedConfig) =>
+      this.enrolmentService.allowedRemoteAccessLicences(licenceConfig);
   }
 
   public ngOnInit(): void {
