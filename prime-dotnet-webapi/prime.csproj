@@ -50,6 +50,7 @@
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v2.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v3.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v4.html" />
+    <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v5.html" />
     <EmbeddedResource Include="Configuration\Resources\com-practice-org-v1.html" />
     <EmbeddedResource Include="Configuration\Resources\com-pharmacy-org-v1.html" />
     <EmbeddedResource Include="Configuration\Resources\pharmacy-obo-toa-v1.html" />

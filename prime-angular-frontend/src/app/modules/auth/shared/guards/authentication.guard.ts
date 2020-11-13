@@ -30,7 +30,6 @@ export class AuthenticationGuard extends BaseGuard {
    */
   protected canAccess(authenticated: boolean, routePath: string): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
-      await this.configService.load().toPromise();
       if (authenticated) {
         // Allow route to resolve for an authenticated user
         return resolve(true);
