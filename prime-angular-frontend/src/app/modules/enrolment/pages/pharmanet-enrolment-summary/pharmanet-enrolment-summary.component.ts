@@ -17,7 +17,8 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
@@ -28,6 +29,13 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public form: FormGroup;
   public enrolment: Enrolment;
   public showProgressBar: boolean;
+
+  public CareSettingEnum = CareSettingEnum;
+  public EnrolmentStatus = EnrolmentStatus;
+
+  public showCommunityHealth: boolean;
+  public showPharmacist: boolean;
+  public showHealthAuthority: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -43,6 +51,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   ) {
     super(route, router);
     this.showProgressBar = false;
+    this.showCommunityHealth = true;
+    this.showPharmacist = true;
+    this.showHealthAuthority = true;
     this.form = this.buildVendorEmailGroup();
   }
 
@@ -64,26 +75,87 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       : null;
   }
 
-  public get recipients(): FormControl {
-    return this.form.get('recipients') as FormControl;
+  public get communityHealthEmails(): FormControl {
+    return this.form.get('communityHealthEmails') as FormControl;
+  }
+
+  public get pharmacistEmails(): FormControl {
+    return this.form.get('pharmacistEmails') as FormControl;
+  }
+
+  public get healthAuthorityEmails(): FormControl {
+    return this.form.get('healthAuthorityEmails') as FormControl;
+  }
+
+  public setShowEmail(careSettingCode: number, show: boolean, formControl: FormControl = null) {
+    if (formControl) {
+      formControl.reset();
+    }
+    switch (careSettingCode) {
+      case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+        this.showCommunityHealth = show;
+        break;
+      }
+      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
+        this.showPharmacist = show;
+        break;
+      }
+      case this.CareSettingEnum.HEALTH_AUTHORITY: {
+        this.showHealthAuthority = show;
+        break;
+      }
+    }
+  }
+
+  public isEmailVisible(careSettingCode: number): boolean {
+    switch (careSettingCode) {
+      case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+        return this.showCommunityHealth;
+      }
+      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
+        return this.showPharmacist;
+      }
+      case this.CareSettingEnum.HEALTH_AUTHORITY: {
+        return this.showHealthAuthority;
+      }
+      default: {
+        return false;
+      }
+    }
   }
 
   public getTokenUrl(tokenId: string): string {
     return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
-  public sendProvisionerAccessLinkTo() {
-    const formControl = this.form.get(`recipients`) as FormControl;
+  public sendProvisionerAccessLinkTo(careSettingCode: number) {
+    let formControl: FormControl;
+
+    switch (careSettingCode) {
+      case this.CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+        formControl = this.communityHealthEmails;
+        break;
+      }
+      case this.CareSettingEnum.COMMUNITY_PHARMACIST: {
+        formControl = this.pharmacistEmails;
+        break;
+      }
+      case this.CareSettingEnum.HEALTH_AUTHORITY: {
+        formControl = this.healthAuthorityEmails;
+        break;
+      }
+    }
+
     if (!formControl) { return; }
 
     const emails = formControl.value.split(',').map((email: string) => email.trim()).join(',') || null;
 
     (formControl.valid)
-      ? this.sendProvisionerAccessLink(emails, formControl)
+      ? this.sendProvisionerAccessLink(emails, formControl, careSettingCode)
       : formControl.markAllAsTouched();
   }
 
-  public sendProvisionerAccessLink(emails: string = null, formControl: FormControl = null) {
+  public sendProvisionerAccessLink(emails: string = null, formControl: FormControl = null, careSettingCode) {
     const data: DialogOptions = {
       title: 'Confirm Email',
       message: `Are you sure you want to send your Approval Notification?`,
@@ -94,16 +166,13 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) =>
           result
-            ? this.enrolmentResource.sendProvisionerAccessLink(emails)
+            ? this.enrolmentResource.sendProvisionerAccessLink(emails, careSettingCode)
             : EMPTY
         )
       )
       .subscribe(() => {
         this.toastService.openSuccessToast('Email was successfully sent');
-        if (formControl) {
-          formControl.reset();
-        }
-        this.router.navigate([EnrolmentRoutes.NOTIFICATION_CONFIRMATION], { relativeTo: this.route.parent });
+        this.setShowEmail(careSettingCode, false);
       });
   }
 
@@ -120,7 +189,9 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   private buildVendorEmailGroup(): FormGroup {
     return this.fb.group({
-      recipients: [null, [Validators.required, FormControlValidators.multipleEmails]]
+      communityHealthEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      pharmacistEmails: [null, [Validators.required, FormControlValidators.multipleEmails]],
+      healthAuthorityEmails: [null, [Validators.required, FormControlValidators.multipleEmails]]
     });
   }
 }

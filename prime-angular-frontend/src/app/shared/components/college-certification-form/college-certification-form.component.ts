@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/config.model';
+import { Config, CollegeConfig, LicenseConfig, PracticeConfig, LicenseWeightedConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -20,6 +20,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public index: number;
   @Input() public total: number;
   @Input() public selectedColleges: number[];
+  @Input() public collegeFilterPredicate: (collegeConfig: CollegeConfig) => boolean;
+  @Input() public licenceFilterPredicate: (licenceConfig: LicenseWeightedConfig) => boolean;
   @Input() public condensed: boolean;
   @Output() public remove: EventEmitter<number>;
 
@@ -77,10 +79,16 @@ export class CollegeCertificationFormComponent implements OnInit {
     );
   }
 
-  // Only show College of Physicians and Surgeons or College or Nurses for remote user cert.
-  public getDisplayedColleges(): CollegeConfig[] {
-    return this.filteredColleges
-      .filter(c => !this.condensed || (c.code === CollegeLicenceClass.CPSBC || c.code === CollegeLicenceClass.BCCNM));
+  public allowedColleges(): CollegeConfig[] {
+    return (this.collegeFilterPredicate)
+      ? this.filteredColleges.filter(this.collegeFilterPredicate)
+      : this.filteredColleges;
+  }
+
+  public allowedLicenses() {
+    return (this.licenceFilterPredicate)
+      ? this.filteredLicenses.filter(this.licenceFilterPredicate)
+      : this.filteredLicenses;
   }
 
   public removeCertification() {

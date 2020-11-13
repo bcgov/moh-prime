@@ -19,31 +19,19 @@ namespace Prime.Services
     public class EnrolleeService : BaseService, IEnrolleeService
     {
         private readonly IMapper _mapper;
-        private readonly ISubmissionRulesService _automaticAdjudicationService;
-        private readonly IEmailService _emailService;
-        private readonly IEnrolleeSubmissionService _enrolleeSubmisService;
         private readonly IBusinessEventService _businessEventService;
-        private readonly ISiteService _siteService;
         private readonly IDocumentManagerClient _documentClient;
 
         public EnrolleeService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IMapper mapper,
-            ISubmissionRulesService automaticAdjudicationService,
-            IEmailService emailService,
-            IEnrolleeSubmissionService enroleeSubmissionService,
             IBusinessEventService businessEventService,
-            ISiteService siteService,
             IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
-            _automaticAdjudicationService = automaticAdjudicationService;
-            _emailService = emailService;
-            _enrolleeSubmisService = enroleeSubmissionService;
             _businessEventService = businessEventService;
-            _siteService = siteService;
             _documentClient = documentClient;
         }
 

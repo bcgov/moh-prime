@@ -1,28 +1,29 @@
+using System;
 using System.Linq;
 
 using Prime.Models;
+using Prime.DTOs.AgreementEngine;
 using Prime.Engines.AgreementEngineInternal;
 
 namespace Prime.Engines
 {
-    public class AgreementEngine
+    public static class AgreementEngine
     {
         /// <summary>
         /// Determines the type of Agreement to asign to an Enrollee.
         /// May return null if no automatic Agreement Type could be determined.
         /// </summary>
-        public AgreementType? DetermineAgreementType(Enrollee enrollee)
+        public static AgreementType? DetermineAgreementType(AgreementEngineDto dto)
         {
-            if (enrollee.Certifications.Count() > 1)
+            if (dto.Certifications == null || dto.Certifications.Any(c => c.License == null))
             {
-                // Multiple College licences result in too many edge cases for automatic determination to be possible.
-                return null;
+                throw new ArgumentException($"Certifications must have Licences loaded.", nameof(dto));
             }
 
-            var certDigest = CertificationDigest.FromCertification(enrollee.Certifications.SingleOrDefault());
-            var settings = new SettingsDigest(enrollee.EnrolleeCareSettings);
+            var certDigest = CertificationDigest.Create(dto.Certifications);
+            var settingsDigest = new SettingsDigest(dto.CareSettingCodes);
 
-            return certDigest.ResolveWith(settings);
+            return certDigest.ResolveWith(settingsDigest);
         }
     }
 }
