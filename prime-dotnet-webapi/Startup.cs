@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,13 +22,13 @@ using IdentityModel.Client;
 using Newtonsoft.Json;
 using Serilog;
 using Wkhtmltopdf.NetCore;
+using SoapCore;
 
 using Prime.Auth;
 using Prime.Services;
 using Prime.HttpClients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
-using System.Collections.Generic;
 
 namespace Prime
 {
@@ -68,6 +70,7 @@ namespace Prime
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
+            services.AddScoped<ISoapService, SoapService>();
 
             ConfigureClients(services);
 
@@ -111,8 +114,9 @@ namespace Prime
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
             services.AddRazorPages();
+            services.AddSoapCore();
 
-            this.ConfigureDatabase(services);
+            ConfigureDatabase(services);
 
             AuthenticationSetup.Initialize(services, Configuration, Environment);
         }
@@ -230,10 +234,24 @@ namespace Prime
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // Configure security settings on a basic HTTP binding
+            Binding binding = new BasicHttpBinding
+            {
+                Security = new BasicHttpSecurity
+                {
+                    Mode = BasicHttpSecurityMode.TransportCredentialOnly,
+                    Transport = new HttpTransportSecurity
+                    {
+                        ClientCredentialType = HttpClientCredentialType.Basic
+                    }
+                }
+            };
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
+                endpoints.UseSoapEndpoint<ISoapService>("/api/PLRHL7/UpdateBCProvider", binding, SoapSerializer.XmlSerializer);
             });
         }
 
