@@ -19,7 +19,7 @@
     </app-page-subheader>
   </div>
 
-  <button *ngIf="!this.enrolment.enrolleeRemoteUsers?.length"
+  <button *ngIf="canRequestRemoteAccess()"
           class="mb-4"
           mat-stroked-button
           color="primary"
