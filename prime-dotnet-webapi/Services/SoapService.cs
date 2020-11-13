@@ -1,33 +1,45 @@
 using System;
+using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace Prime.Services
 {
-    [ServiceContract(Namespace = "urn:hl7-org:v3")]
+    public static class SoapServiceNamespace
+    {
+        public const string Value = "urn:hl7-org:v3";
+    }
+
+    [ServiceContract(Namespace = SoapServiceNamespace.Value)]
     public interface ISoapService
     {
         [OperationContract(Name = "PRPM_IN301030CA")]
-        void AddBcProvider(XElement controlActProcess);
+        void AddBcProvider(RequestObject controlActProcess);
 
         [OperationContract(Name = "PRPM_IN303030CA")]
-        void UpdateBcProvider(XElement controlActProcess);
+        void UpdateBcProvider(RequestObject controlActProcess);
     }
 
     public class SoapService : ISoapService
     {
-        public void AddBcProvider(XElement controlActProcess)
+        public void AddBcProvider(RequestObject request)
         {
             Console.WriteLine("AddBcProvider");
-            // TODO querying the object with Xpath or LINQ
-            Console.WriteLine(controlActProcess);
+            Console.WriteLine(request);
         }
 
-        public void UpdateBcProvider(XElement controlActProcess)
+        public void UpdateBcProvider(RequestObject request)
         {
             Console.WriteLine("UpdateBcProvider");
-            // TODO querying the object with Xpath or LINQ
-            Console.WriteLine(controlActProcess);
+            Console.WriteLine(request);
         }
+    }
+
+    [DataContract]
+    public class RequestObject
+    {
+        [DataMember]
+        public XElement controlActProcess { get; set; }
     }
 }
