@@ -1,4 +1,8 @@
+using System.Linq;
+using System.Collections.Generic;
+
 using Prime.Models;
+using Prime.DTOs.AgreementEngine;
 
 namespace Prime.Engines.AgreementEngineInternal
 {
@@ -9,12 +13,19 @@ namespace Prime.Engines.AgreementEngineInternal
 
     public static class CertificationDigest
     {
-        public static ICertificationDigest FromCertification(Certification cert)
+        public static ICertificationDigest Create(ICollection<CertificationDto> certs)
         {
-            if (cert == null)
+            if (certs.Count > 1)
+            {
+                return new MultipleColleges();
+            }
+
+            if (certs.Count == 0)
             {
                 return new NoCollege();
             }
+
+            var cert = certs.Single();
 
             if (!cert.License.LicensedToProvideCare)
             {
@@ -23,8 +34,7 @@ namespace Prime.Engines.AgreementEngineInternal
 
             bool regulated = cert.License.NamedInImReg;
 
-            //TODO: Move this logic somewhere better, remove magic integer
-            if (cert.CollegeCode == 2)
+            if (College.IsCollegeOfPharmacists(cert.CollegeCode))
             {
                 return new Pharmacist(regulated);
             }
@@ -35,23 +45,32 @@ namespace Prime.Engines.AgreementEngineInternal
         }
     }
 
+    public class MultipleColleges : ICertificationDigest
+    {
+        public AgreementType? ResolveWith(SettingsDigest settings)
+        {
+            // Multiple College licences result in too many edge cases for automatic determination to be possible.
+            return null;
+        }
+    }
+
     public class NoCollege : ICertificationDigest
     {
         public AgreementType? ResolveWith(SettingsDigest settings)
         {
-            if (!settings.HasCommunityPharmacy)
+            if (settings.HasCommunityPharmacy)
             {
-                return AgreementType.OboTOA;
-            }
+                if (settings.Multiple)
+                {
+                    // Normally, An OBO should not be working in both a Pharmacy setting and somewhere else
+                    return null;
+                }
 
-            if (settings.Multiple)
-            {
-                // Normally, An OBO should not be working in both a Pharmacy setting and somewhere else
-                return null;
+                return AgreementType.PharmacyOboTOA;
             }
             else
             {
-                return AgreementType.PharmacyOboTOA;
+                return AgreementType.OboTOA;
             }
         }
     }
