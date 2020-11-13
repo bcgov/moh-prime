@@ -42,9 +42,9 @@ namespace Prime.Configuration
                     new License { Code = 26, Weight = 2,  Manual = false, Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,  Name = "Limited Pharmacist", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 28, Weight = 3,  Manual = false, Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,  Name = "Student Pharmacist", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new License { Code = 27, Weight = 4,  Manual = false, Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,  Name = "Temporary Pharmacist", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new License { Code = 30, Weight = 5,  Manual = true,  Validate = true,  NamedInImReg = false, LicensedToProvideCare = false, Name = "Non-Practicing Pharmacist", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new License { Code = 29, Weight = 6,  Manual = false, Validate = true,  NamedInImReg = false, LicensedToProvideCare = true,  Name = "Pharmacy Technician", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new License { Code = 31, Weight = 7,  Manual = true,  Validate = true,  NamedInImReg = false, LicensedToProvideCare = false, Name = "Non-Practicing Pharmacy Technician", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 30, Weight = 5,  Manual = true,  Validate = true,  NamedInImReg = true,  LicensedToProvideCare = false, Name = "Non-Practicing Pharmacist", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 29, Weight = 6,  Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = true,  Name = "Pharmacy Technician", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new License { Code = 31, Weight = 7,  Manual = true,  Validate = false, NamedInImReg = false, LicensedToProvideCare = false, Name = "Non-Practicing Pharmacy Technician", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Nursing
                     new License { Code = 47, Weight = 1,  Manual = false, Validate = true,  NamedInImReg = true,  LicensedToProvideCare = true,  Name = "Practicing Nurse Practitioner", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },

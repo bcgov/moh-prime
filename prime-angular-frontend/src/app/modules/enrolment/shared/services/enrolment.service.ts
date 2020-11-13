@@ -71,8 +71,12 @@ export class EnrolmentService implements IEnrolmentService {
 
     const hasRemoteAccessLicence = this.configService.licenses
       .filter((licence: LicenseWeightedConfig) => enrolleeLicenceCodes.includes(licence.code))
-      .some((licence: LicenseWeightedConfig) => (licence.licensedToProvideCare && licence.namedInImReg));
+      .some(this.allowedRemoteAccessLicences);
 
     return hasRemoteAccessLicence;
+  }
+
+  public allowedRemoteAccessLicences(licenceConfig: LicenseWeightedConfig): boolean {
+    return (licenceConfig.licensedToProvideCare && licenceConfig.namedInImReg);
   }
 }

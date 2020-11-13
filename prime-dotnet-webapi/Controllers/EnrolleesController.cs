@@ -11,7 +11,6 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
-using AutoMapper;
 
 namespace Prime.Controllers
 {
@@ -130,7 +129,7 @@ namespace Prime.Controllers
             var createModel = payload.Enrollee;
             createModel.MapConditionalProperties(User);
 
-            if (createModel.IsUnderage())
+            if (createModel.IsUnder18())
             {
                 return Forbid();
             }
@@ -463,14 +462,15 @@ namespace Prime.Controllers
         /// Gets a list of enrollee events.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/events", Name = nameof(getEnrolleeBusinessEvents))]
+        /// <param name="businessEventTypeCodes"></param>
+        [HttpGet("{enrolleeId}/events", Name = nameof(GetEnrolleeBusinessEvents))]
         [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessEvent>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<BusinessEvent>>> getEnrolleeBusinessEvents(int enrolleeId)
+        public async Task<ActionResult<IEnumerable<BusinessEvent>>> GetEnrolleeBusinessEvents(int enrolleeId, [FromQuery] string businessEventTypeCodes)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -479,7 +479,8 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            var events = await _enrolleeService.GetEnrolleeBusinessEvents(enrolleeId);
+            var codes = businessEventTypeCodes?.Split(',').Select(int.Parse).ToArray() ?? new int[0];
+            var events = await _enrolleeService.GetEnrolleeBusinessEvents(enrolleeId, codes);
 
             return Ok(ApiResponse.Result(events));
         }
@@ -489,14 +490,14 @@ namespace Prime.Controllers
         /// Send an enrollee a reminder email.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/reminder", Name = nameof(sendEnrolleeReminderEmail))]
+        [HttpPost("{enrolleeId}/reminder", Name = nameof(SendEnrolleeReminderEmail))]
         [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> sendEnrolleeReminderEmail(int enrolleeId)
+        public async Task<ActionResult> SendEnrolleeReminderEmail(int enrolleeId)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -545,13 +546,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="selfDeclarationDocument"></param>
-        [HttpPost("{enrolleeId}/self-declaration-document", Name = nameof(createSelfDeclarationDocument))]
+        [HttpPost("{enrolleeId}/self-declaration-document", Name = nameof(CreateSelfDeclarationDocument))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<SelfDeclarationDocument>> createSelfDeclarationDocument(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument)
+        public async Task<ActionResult<SelfDeclarationDocument>> CreateSelfDeclarationDocument(int enrolleeId, SelfDeclarationDocument selfDeclarationDocument)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)

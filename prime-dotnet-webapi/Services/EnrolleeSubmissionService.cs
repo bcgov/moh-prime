@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -10,6 +11,7 @@ using Newtonsoft.Json.Serialization;
 
 using Prime.Engines;
 using Prime.Models;
+using Prime.DTOs.AgreementEngine;
 
 namespace Prime.Services
 {
@@ -22,11 +24,19 @@ namespace Prime.Services
             }
         );
 
+        private readonly IEnrolleeService _enrolleeService;
+        private readonly IMapper _mapper;
+
         public EnrolleeSubmissionService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext
+            IHttpContextAccessor httpContext,
+            IMapper mapper,
+            IEnrolleeService enrolleeService
             ) : base(context, httpContext)
-        { }
+        {
+            _mapper = mapper;
+            _enrolleeService = enrolleeService;
+        }
 
         public async Task<IEnumerable<Submission>> GetEnrolleeSubmissionsAsync(int enrolleeId)
         {
@@ -53,13 +63,17 @@ namespace Prime.Services
             .FirstOrDefaultAsync();
         }
 
-        public async Task CreateEnrolleeSubmissionAsync(Enrollee enrollee)
+        public async Task CreateEnrolleeSubmissionAsync(int enrolleeId)
         {
+            var enrollee = await _enrolleeService.GetEnrolleeNoTrackingAsync(enrolleeId);
+            var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
+
             var enrolleeSubmission = new Submission
             {
                 EnrolleeId = enrollee.Id,
                 ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
-                AgreementType = new AgreementEngine().DetermineAgreementType(enrollee),
+                AgreementType = AgreementEngine.DetermineAgreementType(agreementDto),
+                RequestedRemoteAccess = enrollee.EnrolleeRemoteUsers.Any(),
                 CreatedDate = DateTimeOffset.Now
             };
 
