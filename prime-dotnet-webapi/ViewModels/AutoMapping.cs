@@ -45,7 +45,7 @@ public class AutoMapping : Profile
 
         // DTOs
         CreateMap<Enrollee, AgreementEngineDto>()
-            .ForMember(dest => dest.CareSettings, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSetting)));
+            .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
         CreateMap<Certification, CertificationDto>();
     }
 }

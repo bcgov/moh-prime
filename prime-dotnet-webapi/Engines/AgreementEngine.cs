@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+
 using Prime.Models;
 using Prime.DTOs.AgreementEngine;
 using Prime.Engines.AgreementEngineInternal;
@@ -12,8 +15,13 @@ namespace Prime.Engines
         /// </summary>
         public static AgreementType? DetermineAgreementType(AgreementEngineDto dto)
         {
+            if (dto.Certifications == null || dto.Certifications.Any(c => c.License == null))
+            {
+                throw new ArgumentException($"Certifications must have Licences loaded.", nameof(dto));
+            }
+
             var certDigest = CertificationDigest.Create(dto.Certifications);
-            var settingsDigest = new SettingsDigest(dto.CareSettings);
+            var settingsDigest = new SettingsDigest(dto.CareSettingCodes);
 
             return certDigest.ResolveWith(settingsDigest);
         }

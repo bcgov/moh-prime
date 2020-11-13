@@ -9,7 +9,7 @@ namespace Prime.DTOs.AgreementEngine
     {
         public ICollection<CertificationDto> Certifications { get; set; }
 
-        public ICollection<CareSetting> CareSettings { get; set; }
+        public ICollection<int> CareSettingCodes { get; set; }
     }
 
     public class CertificationDto

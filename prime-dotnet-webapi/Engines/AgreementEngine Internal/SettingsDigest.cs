@@ -11,15 +11,15 @@ namespace Prime.Engines.AgreementEngineInternal
         public bool Multiple { get; set; }
         public bool HasCommunityPharmacy { get; set; }
 
-        public SettingsDigest(IEnumerable<CareSetting> careSettings)
+        public SettingsDigest(IEnumerable<int> careSettingCodes)
         {
-            if (!careSettings.Any())
+            if (!careSettingCodes.Any())
             {
-                throw new ArgumentException("Must have one or more care settings", nameof(careSettings));
+                throw new ArgumentException("Must have one or more care settings", nameof(careSettingCodes));
             }
 
-            Multiple = careSettings.Count() > 1;
-            HasCommunityPharmacy = careSettings.Any(cs => cs.IsType(CareSettingType.CommunityPharmacy));
+            Multiple = careSettingCodes.Count() > 1;
+            HasCommunityPharmacy = careSettingCodes.Any(cs => cs == (int)CareSettingType.CommunityPharmacy);
         }
     }
 }
