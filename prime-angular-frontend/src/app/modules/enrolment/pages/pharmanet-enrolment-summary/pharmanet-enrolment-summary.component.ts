@@ -19,7 +19,6 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { NgSwitch } from '@angular/common';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
