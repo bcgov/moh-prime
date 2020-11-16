@@ -72,6 +72,8 @@ namespace Prime
             services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<ISoapService, SoapService>();
 
+            services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
+
             ConfigureClients(services);
 
             services.AddControllers()
