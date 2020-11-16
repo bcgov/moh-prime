@@ -480,7 +480,7 @@ namespace Prime.Controllers
             }
 
             var codes = businessEventTypeCodes?.Split(',').Select(int.Parse).ToArray() ?? new int[0];
-            var events = await _enrolleeService.GetEnrolleeBusinessEvents(enrolleeId, codes);
+            var events = await _enrolleeService.GetEnrolleeBusinessEventsAsync(enrolleeId, codes);
 
             return Ok(ApiResponse.Result(events));
         }

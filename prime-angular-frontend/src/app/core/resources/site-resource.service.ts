@@ -20,6 +20,8 @@ import { BusinessLicenceDocument } from '@registration/shared/models/business-li
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
+import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
+import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 
 
 @Injectable({
@@ -358,6 +360,22 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getSiteBusinessEvents(siteId: number, businessEventTypes: BusinessEventTypeEnum[]): Observable<BusinessEvent[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ businessEventTypeCodes: (businessEventTypes ?? []).join(',') });
+    return this.apiResource.get<BusinessEvent[]>(`sites/${siteId}/events`, params)
+      .pipe(
+        map((response: ApiHttpResponse<BusinessEvent[]>) => response.result),
+        tap((businessEvents: BusinessEvent[]) =>
+          this.logger.info('SITE_BUSINESS_EVENTS', businessEvents)
+        ),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site business events could not be retrieved');
+          this.logger.error('[SiteRegistration] SiteResource::getSiteBusinessEvents error has occurred: ', error);
           throw error;
         })
       );
