@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Prime.Models;
 
 namespace Prime.HttpClients
 {
@@ -16,7 +17,7 @@ namespace Prime.HttpClients
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-        public async Task SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
+        public async Task<Guid> SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             var chesAttachments = new List<ChesAttachment>();
             foreach (var attachment in attachments)
@@ -44,8 +45,10 @@ namespace Prime.HttpClients
                 if (response.IsSuccessStatusCode)
                 {
                     var responseJsonString = await response.Content.ReadAsStringAsync();
-                    JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
+                    var successResponse = JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
+                    return successResponse.messages[0].msgId;
                 }
+                return Guid.Empty;
             }
             catch (Exception ex)
             {
@@ -123,7 +126,7 @@ namespace Prime.HttpClients
 
     public class EmailSuccessResponse
     {
-        public IEnumerable<Message> messages { get; set; }
+        public IList<Message> messages { get; set; }
         public Guid txId { get; set; }
     }
 
