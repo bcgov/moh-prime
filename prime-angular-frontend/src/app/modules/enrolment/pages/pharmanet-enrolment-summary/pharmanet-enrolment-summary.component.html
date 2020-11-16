@@ -28,6 +28,11 @@
                               settingCode: careSetting.careSettingCode,
                               formControl: communityHealthEmails
                             }">
+                <ng-container subheaderContent>
+                  Send your approval to your private community health practice's PharmaNet administrator (e.g., office
+                  manager).
+                </ng-container>
+
               </ng-container>
 
               <ng-container *ngSwitchCase="CareSettingEnum.COMMUNITY_PHARMACIST"
@@ -37,6 +42,9 @@
                               settingCode: careSetting.careSettingCode,
                               formControl: pharmacistEmails
                             }">
+                <ng-container subheaderContent>
+                  Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).
+                </ng-container>
               </ng-container>
 
               <ng-container *ngSwitchCase="CareSettingEnum.HEALTH_AUTHORITY"
@@ -46,6 +54,10 @@
                               settingCode: careSetting.careSettingCode,
                               formControl: healthAuthorityEmails
                             }">
+                <ng-container subheaderContent>
+                  Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are
+                  unsure who this is).
+                </ng-container>
               </ng-container>
 
             </ng-container>
@@ -54,16 +66,16 @@
         </form>
 
         <ng-template #settingEmail
+                     let-subheader="subheader"
                      let-setting="setting"
                      let-settingCode="settingCode"
                      let-formControl="formControl">
           <app-page-subheader headerType="h6">
             <ng-container appPageSubheaderTitle>
-              {{ setting }}
+              <ng-content select="[subheaderContent]"></ng-content>
             </ng-container>
             <ng-container appPageSubheaderSummary>
-              Send your approval to your private community health practice's PharmaNet administrator (e.g., office
-              manager).
+              {{ subheader }}
             </ng-container>
 
           </app-page-subheader>
