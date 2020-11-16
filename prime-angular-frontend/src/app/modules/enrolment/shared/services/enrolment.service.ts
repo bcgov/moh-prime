@@ -59,10 +59,10 @@ export class EnrolmentService implements IEnrolmentService {
   public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]) {
     const isCollegeOfPharmacists = certifications
       .some(cert => cert.collegeCode === CollegeLicenceClass.CPBC);
-    const isCommunityPharmacist = careSettings
-      .some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
+    const isCommunityPractice = careSettings
+      .some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
 
-    if (isCollegeOfPharmacists || isCommunityPharmacist) {
+    if (isCollegeOfPharmacists || !isCommunityPractice) {
       return false;
     }
 
