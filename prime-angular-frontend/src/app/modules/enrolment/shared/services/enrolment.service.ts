@@ -56,13 +56,11 @@ export class EnrolmentService implements IEnrolmentService {
    * - No Community Pharmacist care setting
    * - Licences "Named in IM Reg" or "Licenced to Provide Care"
    */
-  public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]) {
+  public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
     const isCollegeOfPharmacists = certifications
       .some(cert => cert.collegeCode === CollegeLicenceClass.CPBC);
-    const isCommunityPractice = careSettings
-      .some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
 
-    if (isCollegeOfPharmacists || !isCommunityPractice) {
+    if (isCollegeOfPharmacists || !this.allowedRemoteAccessCareSettings(careSettings)) {
       return false;
     }
 
@@ -74,6 +72,11 @@ export class EnrolmentService implements IEnrolmentService {
       .some(this.allowedRemoteAccessLicences);
 
     return hasRemoteAccessLicence;
+  }
+
+  public allowedRemoteAccessCareSettings(careSettings: CareSetting[]): boolean {
+    return careSettings
+      .some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
   }
 
   public allowedRemoteAccessLicences(licenceConfig: LicenseWeightedConfig): boolean {
