@@ -72,12 +72,11 @@
                      let-formControl="formControl">
           <app-page-subheader headerType="h6">
             <ng-container appPageSubheaderTitle>
-              <ng-content select="[subheaderContent]"></ng-content>
+              {{ setting }}
             </ng-container>
             <ng-container appPageSubheaderSummary>
-              {{ subheader }}
+              <ng-content select="[subheaderContent]"></ng-content>
             </ng-container>
-
           </app-page-subheader>
 
           <form [formGroup]="form">
