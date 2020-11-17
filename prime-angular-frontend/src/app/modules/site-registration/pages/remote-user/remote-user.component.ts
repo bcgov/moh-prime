@@ -123,7 +123,7 @@ export class RemoteUserComponent implements OnInit {
 
   public licenceFilterPredicate() {
     return (licenceConfig: LicenseWeightedConfig) =>
-      this.enrolmentService.allowedRemoteAccessLicences(licenceConfig);
+      this.enrolmentService.hasAllowedRemoteAccessLicences(licenceConfig);
   }
 
   public ngOnInit(): void {
