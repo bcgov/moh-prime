@@ -37,7 +37,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public showPharmacist: boolean;
   public showHealthAuthority: boolean;
 
-  public careSettingConfigs: any[];
+  public careSettingConfigs: { setting: string, settingCode: number, formControl: FormControl, subheaderContent: string }[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -189,42 +189,36 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
 
-    this.careSettings.forEach(careSetting => {
-      let setting: string;
-      let formControl: FormControl;
-      let subheaderContent: string;
-
+    this.careSettingConfigs = this.careSettings.map(careSetting => {
       switch (careSetting.careSettingCode) {
         case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-          setting = 'Private Community Health Practice';
-          formControl = this.communityHealthEmails,
-            subheaderContent = `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office
-          manager).`;
-          break;
+          return {
+            setting: 'Private Community Health Practice',
+            settingCode: careSetting.careSettingCode,
+            formControl: this.communityHealthEmails,
+            subheaderContent: `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office
+              manager).`
+          };
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
-          setting = 'Community Pharmacy';
-          formControl = this.pharmacistEmails,
-            subheaderContent = `Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).`;
-          break;
+          return {
+            setting: 'Community Pharmacy',
+            settingCode: careSetting.careSettingCode,
+            formControl: this.pharmacistEmails,
+            subheaderContent: `Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).`
+          };
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {
-          setting = 'Health Authority';
-          formControl = this.healthAuthorityEmails,
-            subheaderContent = `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are
-              unsure who this is).`;
-          break;
+          return {
+            setting: 'Health Authority',
+            settingCode: careSetting.careSettingCode,
+            formControl: this.healthAuthorityEmails,
+            subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are
+              unsure who this is).`
+          };
         }
       }
-
-      this.careSettingConfigs.push({
-        setting,
-        settingCode: careSetting.careSettingCode,
-        formControl,
-        subheaderContent
-      });
     });
-
   }
 
   private buildVendorEmailGroup(): FormGroup {
