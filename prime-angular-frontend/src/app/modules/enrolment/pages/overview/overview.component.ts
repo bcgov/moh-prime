@@ -89,7 +89,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public canRequestRemoteAccess(): boolean {
-    return this.enrolmentService.canRequestRemoteAccess(this.enrolment.certifications, this.enrolment.careSettings);
+    const certifications = this.enrolmentFormStateService.regulatoryForm.get('certifications').value;
+    const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
+
+    return this.enrolmentService
+      .canRequestRemoteAccess(certifications, careSettings);
   }
 
   public hasRegOrJob(): boolean {
