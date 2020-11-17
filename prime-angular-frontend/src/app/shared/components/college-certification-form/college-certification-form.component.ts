@@ -131,7 +131,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
     this.setValidations();
-    this.setPrefix(collegeCode);
+    this.setPrefix(this.doesLicenceHavePrefix(this.licenseCode.value));
 
     this.loadLicenses(collegeCode);
     if (this.filteredLicenses?.length === 1) {

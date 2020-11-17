@@ -151,9 +151,9 @@ export class EnrolleeReviewComponent {
     return this.getSelfDeclarationDetailsIfExist(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED);
   }
 
-  public shouldShowCollegePrefixe(licenceCode: number): number {
+  public showCollegePrefix(licenceCode: number, collegeCode: number): number {
     return (this.enrolmentService.shouldShowCollegePrefix(licenceCode))
-      ? licenceCode
+      ? collegeCode
       : null;
   }
 
