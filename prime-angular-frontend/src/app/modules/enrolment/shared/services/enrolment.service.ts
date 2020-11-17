@@ -60,7 +60,7 @@ export class EnrolmentService implements IEnrolmentService {
     const isCollegeOfPharmacists = certifications
       .some(cert => cert.collegeCode === CollegeLicenceClass.CPBC);
 
-    if (isCollegeOfPharmacists || !this.allowedRemoteAccessCareSettings(careSettings)) {
+    if (isCollegeOfPharmacists || !this.hasAllowedRemoteAccessCareSetting(careSettings)) {
       return false;
     }
 
@@ -69,17 +69,25 @@ export class EnrolmentService implements IEnrolmentService {
 
     const hasRemoteAccessLicence = this.configService.licenses
       .filter((licence: LicenseWeightedConfig) => enrolleeLicenceCodes.includes(licence.code))
-      .some(this.allowedRemoteAccessLicences);
+      .some(this.hasAllowedRemoteAccessLicences);
 
     return hasRemoteAccessLicence;
   }
 
-  public allowedRemoteAccessCareSettings(careSettings: CareSetting[]): boolean {
+  public hasAllowedRemoteAccessCareSetting(careSettings: CareSetting[]): boolean {
     return careSettings
       .some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
   }
 
-  public allowedRemoteAccessLicences(licenceConfig: LicenseWeightedConfig): boolean {
+  public hasAllowedRemoteAccessLicences(licenceConfig: LicenseWeightedConfig): boolean {
     return (licenceConfig.licensedToProvideCare && licenceConfig.namedInImReg);
+  }
+
+  public shouldShowCollegePrefix(licenseCode: number): boolean {
+    // No college prefix for:
+    // Pharmacy Technician (29),
+    // Non-Practicing Pharmacy Technician (31), and
+    // Podiatrists (59)
+    return ![29, 31, 59].includes(licenseCode);
   }
 }

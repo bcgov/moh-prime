@@ -6,13 +6,14 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -34,7 +35,8 @@ export class EnrolleeReviewComponent {
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private enrolmentService: EnrolmentService
   ) {
     this.showEditRedirect = false;
     this.admin = false;
@@ -147,6 +149,12 @@ export class EnrolleeReviewComponent {
 
   public getPharmaNetSuspendedDetails(): string {
     return this.getSelfDeclarationDetailsIfExist(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED);
+  }
+
+  public shouldShowCollegePrefixe(licenceCode: number): number {
+    return (this.enrolmentService.shouldShowCollegePrefix(licenceCode))
+      ? licenceCode
+      : null;
   }
 
   private hasSelfDeclaration(type: SelfDeclarationTypeEnum): boolean {

@@ -149,7 +149,7 @@
     </div>
 
     <app-enrollee-property title="Licence Class">
-      {{ certification.licenseCode | configCode: 'licenses' | default }}
+      {{ shouldShowCollegePrefixe(certification.licenseCode) | configCode: 'licenses' | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Renewal Date">
@@ -271,7 +271,7 @@
 
   <app-enrollee-property title="Requested"
                          [makeBold]="true">
-      User Requested Remote Access
+    User Requested Remote Access
   </app-enrollee-property>
 
   <ng-container *ngFor="let remoteAccessSite of remoteAccessSites">
