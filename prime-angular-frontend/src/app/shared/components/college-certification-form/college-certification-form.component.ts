@@ -9,6 +9,7 @@ import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -38,7 +39,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   constructor(
     private configService: ConfigService,
     private viewportService: ViewportService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private enrolmentService: EnrolmentService
   ) {
     this.remove = new EventEmitter<number>();
     this.colleges = this.configService.colleges;
@@ -107,6 +109,17 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.resetCollegeCertification();
         this.setCollegeCertification(collegeCode);
       });
+
+    this.licenseCode.valueChanges
+      .subscribe((licenseCode: number) =>
+        this.setPrefix(this.doesLicenceHavePrefix(licenseCode, this.collegeCode.value))
+      );
+  }
+
+  private doesLicenceHavePrefix(licenseCode: number, collegeCode: number): number {
+    return (this.enrolmentService.shouldShowCollegePrefix(licenseCode))
+      ? collegeCode
+      : null;
   }
 
   private setCollegeCertification(collegeCode: number): void {
@@ -118,7 +131,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
     this.setValidations();
-    this.setPrefix(collegeCode);
+    this.setPrefix(this.doesLicenceHavePrefix(this.licenseCode.value, collegeCode));
 
     this.loadLicenses(collegeCode);
     if (this.filteredLicenses?.length === 1) {
@@ -159,7 +172,10 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setPrefix(collegeCode: number) {
-    this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix || 'N/A';
+    this.licensePrefix = this.colleges
+      .filter(c => c.code === collegeCode)
+      .shift()
+      ?.prefix;
   }
 
   private loadLicenses(collegeCode: number) {
