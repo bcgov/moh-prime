@@ -112,13 +112,13 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     this.licenseCode.valueChanges
       .subscribe((licenseCode: number) =>
-        this.setPrefix(this.doesLicenceHavePrefix(licenseCode))
+        this.setPrefix(this.doesLicenceHavePrefix(licenseCode, this.collegeCode.value))
       );
   }
 
-  private doesLicenceHavePrefix(licenseCode: number): number {
+  private doesLicenceHavePrefix(licenseCode: number, collegeCode: number): number {
     return (this.enrolmentService.shouldShowCollegePrefix(licenseCode))
-      ? this.collegeCode.value
+      ? collegeCode
       : null;
   }
 
@@ -131,7 +131,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
     this.setValidations();
-    this.setPrefix(this.doesLicenceHavePrefix(this.licenseCode.value));
+    this.setPrefix(this.doesLicenceHavePrefix(this.licenseCode.value, collegeCode));
 
     this.loadLicenses(collegeCode);
     if (this.filteredLicenses?.length === 1) {
