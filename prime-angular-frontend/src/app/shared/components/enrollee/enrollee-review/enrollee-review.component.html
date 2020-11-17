@@ -255,7 +255,8 @@
 
 </section>
 
-<section class="mb-4">
+<section class="mb-4"
+         *ngIf="isRequestingRemoteAccess">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Remote Access</ng-container>
@@ -270,13 +271,7 @@
 
   <app-enrollee-property title="Requested"
                          [makeBold]="true">
-    <ng-container *ngIf="isRequestingRemoteAccess; else noAccessRequested">
       User Requested Remote Access
-    </ng-container>
-
-    <ng-template #noAccessRequested>
-      User Did Not Request Remote Access
-    </ng-template>
   </app-enrollee-property>
 
   <ng-container *ngFor="let remoteAccessSite of remoteAccessSites">

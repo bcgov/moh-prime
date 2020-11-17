@@ -37,6 +37,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public showPharmacist: boolean;
   public showHealthAuthority: boolean;
 
+  public careSettingConfigs: { setting: string, settingCode: number, formControl: FormControl, subheaderContent: string }[];
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -55,6 +57,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.showPharmacist = true;
     this.showHealthAuthority = true;
     this.form = this.buildVendorEmailGroup();
+    this.careSettingConfigs = [];
   }
 
   public get enrollee() {
@@ -185,6 +188,37 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+
+    this.careSettingConfigs = this.careSettings.map(careSetting => {
+      switch (careSetting.careSettingCode) {
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+          return {
+            setting: 'Private Community Health Practice',
+            settingCode: careSetting.careSettingCode,
+            formControl: this.communityHealthEmails,
+            subheaderContent: `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office
+              manager).`
+          };
+        }
+        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          return {
+            setting: 'Community Pharmacy',
+            settingCode: careSetting.careSettingCode,
+            formControl: this.pharmacistEmails,
+            subheaderContent: `Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).`
+          };
+        }
+        case CareSettingEnum.HEALTH_AUTHORITY: {
+          return {
+            setting: 'Health Authority',
+            settingCode: careSetting.careSettingCode,
+            formControl: this.healthAuthorityEmails,
+            subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are
+              unsure who this is).`
+          };
+        }
+      }
+    });
   }
 
   private buildVendorEmailGroup(): FormGroup {
