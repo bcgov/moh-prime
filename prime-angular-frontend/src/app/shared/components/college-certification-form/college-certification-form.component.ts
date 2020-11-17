@@ -107,6 +107,21 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.resetCollegeCertification();
         this.setCollegeCertification(collegeCode);
       });
+
+    this.licenseCode.valueChanges
+      .subscribe((licenseCode: number) =>
+        this.setPrefix(this.doesLicenceHavePrefix(licenseCode))
+      );
+  }
+
+  private doesLicenceHavePrefix(licenseCode: number): number {
+    // No college prefix for:
+    // Pharmacy Technician (29),
+    // Non-Practicing Pharmacy Technician (31), and
+    // Podiatrists (59)
+    return ([29, 31, 59].includes(licenseCode))
+      ? null
+      : this.collegeCode.value;
   }
 
   private setCollegeCertification(collegeCode: number): void {
@@ -159,7 +174,10 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setPrefix(collegeCode: number) {
-    this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix || 'N/A';
+    this.licensePrefix = this.colleges
+      .filter(c => c.code === collegeCode)
+      .shift()
+      ?.prefix;
   }
 
   private loadLicenses(collegeCode: number) {
