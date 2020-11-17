@@ -170,7 +170,7 @@ export class EnrolmentGuard extends BaseGuard {
     let certifications = enrolment.certifications;
     let careSettings = enrolment.careSettings;
 
-    if (this.enrolmentFormStateService.isDirty) {
+    if (this.enrolmentFormStateService.isPatched && this.enrolmentFormStateService.isDirty) {
       certifications = this.enrolmentFormStateService.regulatoryForm.get('certifications').value;
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
     }
