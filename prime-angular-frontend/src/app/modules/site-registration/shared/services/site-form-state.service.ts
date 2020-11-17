@@ -325,7 +325,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       ],
       email: [
         null,
-        [Validators.required]
+        [Validators.required, FormControlValidators.email]
       ],
       remoteUserCertifications: this.fb.array(
         [],
