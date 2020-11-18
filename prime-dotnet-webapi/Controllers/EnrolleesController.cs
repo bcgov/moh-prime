@@ -457,7 +457,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(updatedEnrollee));
         }
 
-        // GET: api/Enrollees/5/events
+        // GET: api/Enrollees/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
         /// <summary>
         /// Gets a list of enrollee events.
         /// </summary>
@@ -470,7 +470,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessEvent>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<BusinessEvent>>> GetEnrolleeBusinessEvents(int enrolleeId, [FromQuery] string businessEventTypeCodes)
+        public async Task<ActionResult<IEnumerable<BusinessEvent>>> GetEnrolleeBusinessEvents(int enrolleeId, [FromQuery] IEnumerable<int> businessEventTypeCodes)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -479,8 +479,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            var codes = businessEventTypeCodes?.Split(',').Select(int.Parse).ToArray() ?? new int[0];
-            var events = await _enrolleeService.GetEnrolleeBusinessEventsAsync(enrolleeId, codes);
+            var events = await _enrolleeService.GetEnrolleeBusinessEventsAsync(enrolleeId, businessEventTypeCodes);
 
             return Ok(ApiResponse.Result(events));
         }

@@ -365,8 +365,8 @@ export class SiteResource {
       );
   }
 
-  public getSiteBusinessEvents(siteId: number, businessEventTypes: BusinessEventTypeEnum[]): Observable<BusinessEvent[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ businessEventTypeCodes: (businessEventTypes ?? []).join(',') });
+  public getSiteBusinessEvents(siteId: number, businessEventTypeCodes: BusinessEventTypeEnum[]): Observable<BusinessEvent[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ businessEventTypeCodes });
     return this.apiResource.get<BusinessEvent[]>(`sites/${siteId}/events`, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessEvent[]>) => response.result),

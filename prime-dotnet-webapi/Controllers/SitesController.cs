@@ -720,7 +720,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(sites));
         }
 
-        // GET: api/Sites/5/events
+        // GET: api/Sites/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
         /// <summary>
         /// Gets all of the site registration notes for a specific site.
         /// </summary>
@@ -732,7 +732,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<BusinessEvent>>> GetSiteBusinessEvents(int siteId, [FromQuery] string businessEventTypeCodes)
+        public async Task<ActionResult<IEnumerable<BusinessEvent>>> GetSiteBusinessEvents(int siteId, [FromQuery] IEnumerable<int> businessEventTypeCodes)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -740,8 +740,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            var codes = businessEventTypeCodes?.Split(',').Select(int.Parse).ToArray() ?? new int[0];
-            var events = await _siteService.GetSiteBusinessEventsAsync(siteId, codes);
+            var events = await _siteService.GetSiteBusinessEventsAsync(siteId, businessEventTypeCodes);
 
             return Ok(ApiResponse.Result(events));
         }
