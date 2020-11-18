@@ -77,19 +77,19 @@ services:
       - 8025:8025 # visit localhost:8025 to see the list of captured emails
     networks:
       - primenet
-############################################## Database Inspection #
-  schema-spy:
-    container_name: schema-spy
-    build:
-      context: schemaspy/
-    image: openjdk:jre-alpine
-    ports:
-      - "8069:8069"
-      - "80:8069"
-    depends_on:
-      - postgres
-    networks:
-      - primenet
+# ############################################## Database Inspection #
+#   schema-spy:
+#     container_name: schema-spy
+#     build:
+#       context: schemaspy/
+#     image: openjdk:jre-alpine
+#     ports:
+#       - "8069:8069"
+#       - "80:8069"
+#     depends_on:
+#       - postgres
+#     networks:
+#       - primenet
 ########################################################### Backup #
   backup:
     container_name: backup
