@@ -24,10 +24,10 @@ namespace Prime.HttpClients
             {
                 var chesAttachment = new ChesAttachment()
                 {
-                    content = Convert.ToBase64String(attachment.Content),
-                    contentType = "application/pdf",
-                    encoding = "base64",
-                    filename = attachment.Filename
+                    Content = Convert.ToBase64String(attachment.Content),
+                    ContentType = "application/pdf",
+                    Encoding = "base64",
+                    Filename = attachment.Filename
                 };
 
                 chesAttachments.Add(chesAttachment);
@@ -36,17 +36,15 @@ namespace Prime.HttpClients
             var requestParams = new ChesEmailRequestParams(from, to, subject, body, chesAttachments);
 
             var requestContent = new StringContent(JsonConvert.SerializeObject(requestParams), Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = null;
             try
             {
-                response = await _client.PostAsync("email", requestContent);
+                HttpResponseMessage response = await _client.PostAsync("email", requestContent);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var responseJsonString = await response.Content.ReadAsStringAsync();
                     var successResponse = JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
-                    return successResponse.messages[0].msgId;
+                    return successResponse.Messages[0].MsgId;
                 }
                 return Guid.Empty;
             }
@@ -56,12 +54,26 @@ namespace Prime.HttpClients
             }
         }
 
-        public async Task<bool> HealthCheckAsync()
+        public async Task<string> GetStatusAsync(Guid msgId)
         {
-            HttpResponseMessage response = null;
             try
             {
-                response = await _client.GetAsync("health");
+                HttpResponseMessage response = await _client.GetAsync($"status?msgId={msgId}");
+                var statusResponse = JsonConvert.DeserializeObject<IList<StatusResponse>>(await response.Content.ReadAsStringAsync());
+                return statusResponse[0].Status;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
+            }
+
+        }
+
+        public async Task<bool> HealthCheckAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("health");
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -74,66 +86,73 @@ namespace Prime.HttpClients
 
     public class ChesEmailRequestParams
     {
-        public IEnumerable<ChesAttachment> attachments { get; set; }
-        public IEnumerable<string> bcc { get; set; }
-        public string bodyType { get; set; }
-        public string body { get; set; }
-        public IEnumerable<string> cc { get; set; }
-        public int? delayTS { get; set; }
-        public string encoding { get; set; }
-        public string from { get; set; }
-        public string priority { get; set; }
-        public string subject { get; set; }
-        public string tag { get; set; }
-        public IEnumerable<string> to { get; set; }
+        public IEnumerable<ChesAttachment> Attachments { get; set; }
+        public IEnumerable<string> Bcc { get; set; }
+        public string BodyType { get; set; }
+        public string Body { get; set; }
+        public IEnumerable<string> Cc { get; set; }
+        public int? DelayTS { get; set; }
+        public string Encoding { get; set; }
+        public string From { get; set; }
+        public string Priority { get; set; }
+        public string Subject { get; set; }
+        public string Tag { get; set; }
+        public IEnumerable<string> To { get; set; }
 
         public ChesEmailRequestParams(string from, IEnumerable<string> to, string subject, string body, IEnumerable<ChesAttachment> attachments)
         {
-            this.attachments = attachments;
-            bcc = new List<string>();
-            bodyType = "html";
-            this.body = body;
-            cc = new List<string>();
-            delayTS = 1570000000;
-            encoding = "utf-8";
-            this.from = from;
-            priority = "normal";
-            this.subject = subject;
-            tag = "tag";
-            this.to = to;
+            this.Attachments = attachments;
+            Bcc = new List<string>();
+            BodyType = "html";
+            this.Body = body;
+            Cc = new List<string>();
+            DelayTS = 1570000000;
+            Encoding = "utf-8";
+            this.From = from;
+            Priority = "normal";
+            this.Subject = subject;
+            Tag = "tag";
+            this.To = to;
         }
     }
 
     public class ChesAttachment
     {
-        public string content { get; set; }
-        public string contentType { get; set; }
-        public string encoding { get; set; }
-        public string filename { get; set; }
-    }
-
-    public class OpenIdSuccessResponse
-    {
-        public string access_token { get; set; }
-        public string expires_in { get; set; }
-        public string refresh_expires_in { get; set; }
-        public string refresh_token { get; set; }
-        public string token_type { get; set; }
-        public string not_before_policy { get; set; }
-        public string session_state { get; set; }
-        public string scope { get; set; }
+        public string Content { get; set; }
+        public string ContentType { get; set; }
+        public string Encoding { get; set; }
+        public string Filename { get; set; }
     }
 
     public class EmailSuccessResponse
     {
-        public IList<Message> messages { get; set; }
-        public Guid txId { get; set; }
+        public IList<Message> Messages { get; set; }
+        public Guid TxId { get; set; }
     }
 
     public class Message
     {
-        public Guid msgId { get; set; }
-        public string tag { get; set; }
-        public IEnumerable<string> to { get; set; }
+        public Guid MsgId { get; set; }
+        public string Tag { get; set; }
+        public IEnumerable<string> To { get; set; }
+    }
+
+    public class StatusResponse
+    {
+        public long CreatedTS { get; set; }
+        public long DelayTS { get; set; }
+        public Guid MsgId { get; set; }
+        public string Status { get; set; } // (StatusType)Enum: "accepted" "cancelled" "completed" "failed" "pending"
+        public ICollection<StatusHistoryObject> StatusHistory { get; set; }
+        public string Tag { get; set; }
+        public Guid TxId { get; set; }
+        public long UpdatedTS { get; set; }
+    }
+
+    public class StatusHistoryObject
+    {
+        public string Description { get; set; }
+        public string Status { get; set; }
+        public int Timestamp { get; set; }
     }
 }

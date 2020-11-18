@@ -24,6 +24,7 @@ namespace Prime.Auth
         public const string PRIME_READONLY_ADMIN = "prime_readonly_admin";
         public const string EXTERNAL_HPDID_ACCESS_ROLE = "external_hpdid_access";
         public const string EXTERNAL_GPID_VALIDATION_ROLE = "external_gpid_validation";
+        public const string PRIME_API_SERVICE_ACCOUNT_ROLE = "prime_api_service_account";
 
         // Feature Flags
         public const string FEATURE_SITE_REGISTRATION = "feature_site_registration";

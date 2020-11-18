@@ -297,6 +297,24 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<bool> UpdateEmailLogStatuses()
+        {
+            var emailLogs = await _context.EmailLogs
+                .Where(e => e.SendType == "CHES" && e.MsgId != Guid.Empty)
+                .ToListAsync();
+
+            foreach (var email in emailLogs)
+            {
+                var status = await _chesClient.GetStatusAsync((Guid)email.MsgId);
+                if (email.LatestStatus != status)
+                {
+                    email.LatestStatus = status;
+                }
+            }
+
+            return await _context.SaveChangesAsync() != 0;
+        }
+
         private async Task Send(string from, string to, string subject, string body)
         {
             await Send(from, new[] { to }, new string[0], subject, body, Enumerable.Empty<(string Filename, byte[] Content)>());
