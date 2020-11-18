@@ -1,4 +1,4 @@
-<div [formGroup]="form">
+<ng-container [formGroup]="form">
 
   <app-form-icon-group [show]="total > 1"
                        (event)="removeCertification()">
@@ -9,7 +9,7 @@
         <mat-select formControlName="collegeCode">
           <mat-option *ngIf="!condensed"
                       value="">None</mat-option>
-          <mat-option *ngFor="let college of getDisplayedColleges()"
+          <mat-option *ngFor="let college of allowedColleges()"
                       [value]="college.code">
             {{ college.name }}
           </mat-option>
@@ -45,7 +45,7 @@
               <mat-form-field class="w-100">
                 <input matInput
                        placeholder="College Number"
-                       [value]="licensePrefix"
+                       [value]="licensePrefix | default"
                        disabled>
               </mat-form-field>
 
@@ -111,7 +111,7 @@
           <mat-form-field class="w-100">
             <mat-label>Licence class issued by the college</mat-label>
             <mat-select formControlName="licenseCode">
-              <mat-option *ngFor="let license of filteredLicenses"
+              <mat-option *ngFor="let license of allowedLicenses()"
                           [value]="license.code">
                 {{ license.name }}
               </mat-option>
@@ -167,4 +167,4 @@
 
   </app-form-icon-group>
 
-</div>
+</ng-container>

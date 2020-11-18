@@ -22,5 +22,10 @@ namespace Prime.Models
         public ICollection<CollegeLicense> CollegeLicenses { get; set; }
 
         public ICollection<CollegePractice> CollegePractices { get; set; }
+
+        public static bool IsCollegeOfPharmacists(int collegeCode)
+        {
+            return collegeCode == 2;
+        }
     }
 }

@@ -56,13 +56,11 @@ export class EnrolmentService implements IEnrolmentService {
    * - No Community Pharmacist care setting
    * - Licences "Named in IM Reg" or "Licenced to Provide Care"
    */
-  public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]) {
+  public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
     const isCollegeOfPharmacists = certifications
       .some(cert => cert.collegeCode === CollegeLicenceClass.CPBC);
-    const isCommunityPharmacist = careSettings
-      .some(cs => cs.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST);
 
-    if (isCollegeOfPharmacists || isCommunityPharmacist) {
+    if (isCollegeOfPharmacists || !this.hasAllowedRemoteAccessCareSetting(careSettings)) {
       return false;
     }
 
@@ -71,8 +69,25 @@ export class EnrolmentService implements IEnrolmentService {
 
     const hasRemoteAccessLicence = this.configService.licenses
       .filter((licence: LicenseWeightedConfig) => enrolleeLicenceCodes.includes(licence.code))
-      .some((licence: LicenseWeightedConfig) => (licence.licensedToProvideCare && licence.namedInImReg));
+      .some(this.hasAllowedRemoteAccessLicences);
 
     return hasRemoteAccessLicence;
+  }
+
+  public hasAllowedRemoteAccessCareSetting(careSettings: CareSetting[]): boolean {
+    return careSettings
+      .some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
+  }
+
+  public hasAllowedRemoteAccessLicences(licenceConfig: LicenseWeightedConfig): boolean {
+    return (licenceConfig.licensedToProvideCare && licenceConfig.namedInImReg);
+  }
+
+  public shouldShowCollegePrefix(licenseCode: number): boolean {
+    // No college prefix for:
+    // Pharmacy Technician (29),
+    // Non-Practicing Pharmacy Technician (31), and
+    // Podiatrists (59)
+    return ![29, 31, 59].includes(licenseCode);
   }
 }

@@ -77,9 +77,9 @@ namespace Prime.Services
                 return;
             }
 
+            await _enrolleeSubmissionService.CreateEnrolleeSubmissionAsync(enrolleeId);
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
-            await _enrolleeSubmissionService.CreateEnrolleeSubmissionAsync(enrollee);
-            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
+            await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Submitted");
 
             if (_httpContext.HttpContext.User.hasVCIssuance())
             {
