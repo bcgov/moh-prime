@@ -3,31 +3,35 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Prime.Models;
 
 namespace Prime.HttpClients
 {
     public class ChesClient : IChesClient
     {
         private static HttpClient _client;
+        private readonly ILogger _logger;
 
-        public ChesClient(HttpClient httpClient)
+        public ChesClient(
+            HttpClient httpClient,
+            ILogger<ChesClient> logger)
         {
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _logger = logger;
         }
 
         public async Task<Guid> SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             var chesAttachments = new List<ChesAttachment>();
-            foreach (var attachment in attachments)
+            foreach (var (Filename, Content) in attachments)
             {
                 var chesAttachment = new ChesAttachment()
                 {
-                    Content = Convert.ToBase64String(attachment.Content),
+                    Content = Convert.ToBase64String(Content),
                     ContentType = "application/pdf",
                     Encoding = "base64",
-                    Filename = attachment.Filename
+                    Filename = Filename
                 };
 
                 chesAttachments.Add(chesAttachment);
@@ -39,17 +43,22 @@ namespace Prime.HttpClients
             try
             {
                 HttpResponseMessage response = await _client.PostAsync("email", requestContent);
+                var responseJsonString = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseJsonString = await response.Content.ReadAsStringAsync();
                     var successResponse = JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
                     return successResponse.Messages[0].MsgId;
                 }
-                return Guid.Empty;
+                else
+                {
+                    _logger.LogError($"CHES Response code: {(int)response.StatusCode}, response body:{responseJsonString}");
+                    return Guid.Empty;
+                }
             }
             catch (Exception ex)
             {
+                _logger.LogError($"CHES Exception: {ex.Message}");
                 throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
             }
         }
@@ -86,33 +95,34 @@ namespace Prime.HttpClients
 
     public class ChesEmailRequestParams
     {
-        public IEnumerable<ChesAttachment> Attachments { get; set; }
-        public IEnumerable<string> Bcc { get; set; }
-        public string BodyType { get; set; }
-        public string Body { get; set; }
-        public IEnumerable<string> Cc { get; set; }
-        public int? DelayTS { get; set; }
-        public string Encoding { get; set; }
-        public string From { get; set; }
-        public string Priority { get; set; }
-        public string Subject { get; set; }
-        public string Tag { get; set; }
-        public IEnumerable<string> To { get; set; }
+        // must be lower case for CHES to accept params
+        public IEnumerable<ChesAttachment> attachments { get; set; }
+        public IEnumerable<string> bcc { get; set; }
+        public string bodyType { get; set; }
+        public string body { get; set; }
+        public IEnumerable<string> cc { get; set; }
+        public int? delayTS { get; set; }
+        public string encoding { get; set; }
+        public string from { get; set; }
+        public string priority { get; set; }
+        public string subject { get; set; }
+        public string tag { get; set; }
+        public IEnumerable<string> to { get; set; }
 
         public ChesEmailRequestParams(string from, IEnumerable<string> to, string subject, string body, IEnumerable<ChesAttachment> attachments)
         {
-            this.Attachments = attachments;
-            Bcc = new List<string>();
-            BodyType = "html";
-            this.Body = body;
-            Cc = new List<string>();
-            DelayTS = 1570000000;
-            Encoding = "utf-8";
-            this.From = from;
-            Priority = "normal";
-            this.Subject = subject;
-            Tag = "tag";
-            this.To = to;
+            this.attachments = attachments;
+            bcc = new List<string>();
+            bodyType = "html";
+            this.body = body;
+            cc = new List<string>();
+            delayTS = 1570000000;
+            encoding = "utf-8";
+            this.from = from;
+            priority = "normal";
+            this.subject = subject;
+            tag = "tag";
+            this.to = to;
         }
     }
 

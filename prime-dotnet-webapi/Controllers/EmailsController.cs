@@ -25,15 +25,15 @@ namespace Prime.Controllers
         /// Update all logged email statuses sent using the CHES email service
         /// </summary>
         [HttpGet("management/statuses", Name = nameof(UpdateEmailLogStatuses))]
-        [Authorize(Roles = $"{AuthConstants.PRIME_API_SERVICE_ACCOUNT_ROLE}, {AuthConstants.ADMIN_POLICY}")]
+        [Authorize(Roles = AuthConstants.PRIME_API_SERVICE_ACCOUNT_ROLE + "," + AuthConstants.ADMIN_POLICY)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> UpdateEmailLogStatuses()
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<StatusCodeResult> UpdateEmailLogStatuses()
         {
             await _emailService.UpdateEmailLogStatuses();
 
-            return Ok();
+            return NoContent();
         }
 
     }
