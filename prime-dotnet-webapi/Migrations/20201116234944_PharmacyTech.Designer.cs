@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201116234944_PharmacyTech")]
+    partial class PharmacyTech
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -12602,54 +12604,6 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DocumentAccessToken");
-                });
-
-            modelBuilder.Entity("Prime.Models.EmailLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Body")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset?>("DateSent")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LatestStatus")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("MsgId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("SendType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SentTo")
-                        .HasColumnType("text");
-
-                    b.Property<string>("StatusMessage")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Subject")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailLog");
                 });
 
             modelBuilder.Entity("Prime.Models.Enrollee", b =>

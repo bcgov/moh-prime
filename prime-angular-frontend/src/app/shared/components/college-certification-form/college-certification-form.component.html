@@ -45,7 +45,7 @@
               <mat-form-field class="w-100">
                 <input matInput
                        placeholder="College Number"
-                       [value]="licensePrefix"
+                       [value]="licensePrefix | default"
                        disabled>
               </mat-form-field>
 

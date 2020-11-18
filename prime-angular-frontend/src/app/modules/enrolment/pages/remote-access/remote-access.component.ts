@@ -162,7 +162,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   private getRemoteAccess(): void {
     this.showProgress = true;
     this.noRemoteSites = false;
-    this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
+    this.siteResource.getSitesByRemoteUserInfo(this.enrolmentFormStateService.regulatoryForm.get('certifications').value)
       .pipe(delay(2000))
       .subscribe(
         (sites: Site[]) => {
