@@ -25,18 +25,20 @@
                 [ngTemplateOutletContext]="{
                   isCurrent: true,
                   submittedDate: enrollee?.appliedDate,
+                  remoteAccess: enrollee?.remoteAccess,
                   enrolmentRoute: [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT]
                 }">
   </ng-container>
 
-  <ng-container *ngFor="let accessTerm of accessTerms; let first = first; let last = last">
+  <ng-container *ngFor="let enrolmentCard of enrolmentCards; let first = first; let last = last">
     <ng-container [ngTemplateOutlet]="card"
                   [ngTemplateOutletContext]="{
                     isCurrent: first && !isUnderAdjudication(enrollee),
                     submittedDate: enrollee?.appliedDate,
-                    acceptedDate: accessTerm.acceptedDate,
-                    enrolmentRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT],
-                    toaRoute: [accessTerm.id, AdjudicationRoutes.ENROLLEE_ACCESS_TERM],
+                    acceptedDate: enrolmentCard.agreementAcceptedDate,
+                    remoteAccess: enrolmentCard.requestedRemoteAccess,
+                    enrolmentRoute: [enrolmentCard.agreementId, AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT],
+                    toaRoute: [enrolmentCard.agreementId, AdjudicationRoutes.ENROLLEE_ACCESS_TERM],
                     isLast: last
                   }">
     </ng-container>
@@ -47,6 +49,7 @@
              let-isCurrent="isCurrent"
              let-submittedDate="submittedDate"
              let-acceptedDate="acceptedDate"
+             let-remoteAccess="remoteAccess"
              let-enrolmentRoute="enrolmentRoute"
              let-toaRoute="toaRoute"
              let-isLast="isLast">
@@ -70,6 +73,11 @@
           Enrollee edited and submitted an Enrolment, but has not signed the Terms of Access
         </ng-template>
       </p>
+
+      <div *ngIf="remoteAccess"
+           class="card-title">
+        User Requested Remote Access
+      </div>
     </mat-card-content>
     <mat-card-actions>
       <button mat-button

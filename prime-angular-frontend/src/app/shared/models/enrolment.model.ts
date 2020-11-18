@@ -12,6 +12,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -27,6 +28,7 @@ export interface HttpEnrollee extends Enrollee {
   isInsulinPumpProvider: boolean;
   jobs: Job[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
+  remoteAccessSites: RemoteAccessSite[];
   remoteAccessLocations: RemoteAccessLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
@@ -35,6 +37,9 @@ export interface HttpEnrollee extends Enrollee {
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
+  currentTOAStatus: string;
+  assignedTOAType: number;
+  hasNewestAgreement: boolean;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
   accessAgreementNote: EnrolleeNote;
@@ -64,6 +69,7 @@ export interface Enrolment {
   isInsulinPumpProvider: boolean;
   jobs: Job[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
+  remoteAccessSites: RemoteAccessSite[];
   remoteAccessLocations: RemoteAccessLocation[];
   selfDeclarations: SelfDeclaration[];
   selfDeclarationDocuments: SelfDeclarationDocument[];
@@ -72,6 +78,9 @@ export interface Enrolment {
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
+  currentTOAStatus: string;
+  assignedTOAType: number;
+  hasNewestAgreement: boolean;
   enrolleeClassification: EnrolleeClassification;
   enrolmentCertificateNote: EnrolleeNote;
   accessAgreementNote: EnrolleeNote;
@@ -96,7 +105,11 @@ export interface EnrolleeListViewModel {
   approvedDate: string;
   expiryDate: string;
   currentStatusCode: number;
+  currentTOAStatus: string;
+  assignedTOAType: number;
   previousStatus: EnrolmentStatus;
+  hasNewestAgreement: boolean;
   adjudicatorIdir: string;
   alwaysManual: boolean;
+  remoteAccess: boolean;
 }

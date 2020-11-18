@@ -6,20 +6,23 @@ import { map, tap, catchError } from 'rxjs/operators';
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
+import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { Address } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
+import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
-import { HttpEnrolleeProfileVersion } from '@shared/models/enrollee-profile-history.model';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
+import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
+import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 
 @Injectable({
   providedIn: 'root'
@@ -124,8 +127,9 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolleeBusinessEvents(enrolleeId: number): Observable<BusinessEvent[]> {
-    return this.apiResource.get<BusinessEvent[]>(`enrollees/${enrolleeId}/events`)
+  public getEnrolleeBusinessEvents(enrolleeId: number, businessEventTypes: BusinessEventTypeEnum[]): Observable<BusinessEvent[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ businessEventTypeCodes: (businessEventTypes ?? []).join(',') });
+    return this.apiResource.get<BusinessEvent[]>(`enrollees/${enrolleeId}/events`, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessEvent[]>) => response.result),
         tap((businessEvents: BusinessEvent[]) =>
@@ -251,6 +255,20 @@ export class AdjudicationResource {
       );
   }
 
+  public getEnrolmentCardsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolmentCard[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
+    return this.apiResource.get<EnrolmentCard[]>(`enrollees/${enrolleeId}/cards`, params)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolmentCard[]>) => response.result),
+        tap((accessTerms: EnrolmentCard[]) => this.logger.info('ENROLMENT_CARDS', accessTerms)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment cards could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getEnrolmentCardsByYear error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getAccessTerm(enrolleeId: number, agreementId: number): Observable<EnrolleeAgreement> {
     return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}`)
       .pipe(
@@ -263,17 +281,35 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolmentForAccessTerm(enrolleeId: number, agreementId: number)
-    : Observable<HttpEnrolleeProfileVersion> {
-    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/enrolment`)
+  public getSubmissionForAgreement(enrolleeId: number, agreementId: number)
+    : Observable<HttpEnrolleeSubmission> {
+    return this.apiResource.get(`enrollees/${enrolleeId}/agreements/${agreementId}/submission`)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrolleeProfileVersion>) => response.result),
-        tap((enrolleeProfileVersion: HttpEnrolleeProfileVersion) =>
-          this.logger.info('ENROLLEE_PROFILE_VERSION', enrolleeProfileVersion)
+        map((response: ApiHttpResponse<HttpEnrolleeSubmission>) => response.result),
+        tap((enrolleeSubmission: HttpEnrolleeSubmission) =>
+          this.logger.info('ENROLLEE_SUBMISSION', enrolleeSubmission)
         ),
-        map(this.enrolleeVersionAdapterResponse()),
+        map(this.enrolleeSubmissionAdapterResponse()),
         catchError((error: any) => {
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolmentForAccessTerm error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getSubmissionForAgreement error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * @description
+   * Assign a TOA agreement to a enrollee that is under review.
+   */
+  public assignToaAgreementType(enrolleeId: number, agreementType: AgreementType): Observable<HttpEnrollee> {
+    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/submissions/latest/type`, agreementType)
+      .pipe(
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap(() => this.toastService.openSuccessToast('TOA agreement has been assigned')),
+        tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('TOA agreement could not be assigned.');
+          this.logger.error('[Enrolment] EnrolmentResource::assignAgreementType error has occurred: ', error);
           throw error;
         })
       );
@@ -354,22 +390,23 @@ export class AdjudicationResource {
     return enrollee;
   }
 
-  private enrolleeVersionAdapterResponse(): (enrolleeProfileVersion: HttpEnrolleeProfileVersion) => HttpEnrolleeProfileVersion {
-    return ({ id, enrolleeId, profileSnapshot, createdDate }: HttpEnrolleeProfileVersion) => {
+  private enrolleeSubmissionAdapterResponse(): (enrolleeSubmission: HttpEnrolleeSubmission) => HttpEnrolleeSubmission {
+    return ({ id, enrolleeId, profileSnapshot, agreementType, createdDate }: HttpEnrolleeSubmission) => {
       // Compensate for updates to the current enrolment model
       // that don't match enrolment versioning
-      this.enrolleeVersionSnapshotAdapter(profileSnapshot);
+      this.enrolleeSubmissionSnapshotAdapter(profileSnapshot);
 
       return {
         id,
         enrolleeId,
         profileSnapshot: this.enrolleeAdapterResponse(profileSnapshot),
+        agreementType,
         createdDate
       };
     };
   }
 
-  private enrolleeVersionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
+  private enrolleeSubmissionSnapshotAdapter(profileSnapshot: HttpEnrollee): void {
     const mapping = {
       voicePhone: 'phone',
       voiceExtension: 'phoneExtension',

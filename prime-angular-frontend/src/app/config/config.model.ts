@@ -24,12 +24,13 @@ export class Config<T> {
 }
 
 export interface LicenseConfig extends Config<number> {
-  regulatedUser: boolean;
   collegeLicenses: AssociatedCollegeConfig[];
 }
 
 export interface LicenseWeightedConfig extends LicenseConfig {
   weight: number;
+  licensedToProvideCare: boolean;
+  namedInImReg: boolean;
 }
 
 export interface PracticeConfig extends Config<number> {

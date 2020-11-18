@@ -24,6 +24,7 @@ export class PageSubheaderComponent implements OnInit {
   // be viewed using more information icon, but aren't initial displayed
   @Input() public summaryAsInfo: boolean;
   @Input() public divider: boolean;
+  @Input() public headerType: string;
 
   public showSummary: boolean;
 

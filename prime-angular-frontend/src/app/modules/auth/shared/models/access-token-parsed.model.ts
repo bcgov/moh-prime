@@ -1,7 +1,7 @@
 import { KeycloakTokenParsed } from 'keycloak-js';
 
 import { Role } from '@auth/shared/enum/role.enum';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 export interface AccessTokenParsed extends KeycloakTokenParsed {
   acr: string;
@@ -22,7 +22,7 @@ export interface AccessTokenParsed extends KeycloakTokenParsed {
   given_name: string;
   given_names: string;
   identity_assurance_level: number;
-  identity_provider: IdentityProvider;
+  identity_provider: IdentityProviderEnum;
   iss: string;
   jti: string;
   name: string;

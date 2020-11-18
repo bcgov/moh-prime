@@ -1,12 +1,12 @@
 import * as faker from 'faker';
-import { KeycloakTokenParsed, KeycloakLoginOptions } from 'keycloak-js';
+import { KeycloakLoginOptions } from 'keycloak-js';
 
 import { Role } from '@auth/shared/enum/role.enum';
 import { IAuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
-import { Observable, from, of } from 'rxjs';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { Observable, from } from 'rxjs';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 export class MockAuthService implements IAuthService {
   // tslint:disable-next-line: variable-name
@@ -41,11 +41,11 @@ export class MockAuthService implements IAuthService {
     });
   }
 
-  public async identityProvider(): Promise<IdentityProvider> {
-    return await Promise.resolve(IdentityProvider.BCSC);
+  public async identityProvider(): Promise<IdentityProviderEnum> {
+    return await Promise.resolve(IdentityProviderEnum.BCSC);
   }
 
-  public identityProvider$(): Observable<IdentityProvider> {
+  public identityProvider$(): Observable<IdentityProviderEnum> {
     return from(this.identityProvider());
   }
 
@@ -114,6 +114,10 @@ export class MockAuthService implements IAuthService {
 
   public hasCommunityPharmacist(): boolean {
     return this._role === Role.FEATURE_COMMUNITY_PHARMACIST;
+  }
+
+  public hasHealthAuthority(): boolean {
+    return this._role === Role.FEATURE_HEALTH_AUTHORITY;
   }
 
   public hasVCIssuance(): boolean {

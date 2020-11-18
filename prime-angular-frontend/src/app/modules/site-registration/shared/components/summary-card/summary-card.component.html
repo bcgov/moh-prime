@@ -13,6 +13,8 @@
                   [ngTemplateOutlet]="property"
                   [ngTemplateOutletContext]="{ property: prop }">
     </ng-container>
+
+    <ng-content></ng-content>
   </mat-card-content>
   <mat-card-actions *ngIf="actionButtonTitle">
     <button mat-stroked-button

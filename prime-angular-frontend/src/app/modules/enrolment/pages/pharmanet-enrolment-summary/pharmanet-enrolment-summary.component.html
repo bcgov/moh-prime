@@ -8,59 +8,102 @@
 
     <app-next-steps-infographic [enrolment]="enrolment">
 
-      <p class="mb-4">
-        Get your access to PharmaNet set up. Use the email option below to notify your PharmaNet administrator of your
-        completed enrolment. Enter in the email address of your PharmaNet administrator who may be your Pharmacy
-        Manager, Office Manager or Medical Office Assistant
-      </p>
+      <ng-container *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
 
-      <form [formGroup]="form">
         <p class="mb-4">
-          If you work at more than one site, enter the email addresses of all PharmaNet administrators, separated by a
-          comma.
+          Get your access to PharmaNet set up. Use the email option below to notify your PharmaNet administrator of your
+          completed enrolment.
         </p>
 
-        <div class="row">
-          <div class="col-sm-8 col-xl-7">
+        <form [formGroup]="form">
 
-            <mat-form-field class="w-100 mb-3">
-              <input matInput
-                     placeholder="Email"
-                     formControlName="administratorRecipients">
-              <mat-error *ngIf="administratorRecipients.hasError('required')">Required</mat-error>
-              <mat-error *ngIf="administratorRecipients.hasError('email')">Must be a valid email address</mat-error>
-            </mat-form-field>
+          <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
 
-          </div>
-          <div class="col-sm-4 col-xl-3">
+            <ng-container [ngTemplateOutlet]="settingEmail"
+                          [ngTemplateOutletContext]="careSettingConfig">
+            </ng-container>
 
-            <button mat-flat-button
+          </ng-container>
+        </form>
+
+        <ng-template #settingEmail
+                     let-setting="setting"
+                     let-settingCode="settingCode"
+                     let-formControl="formControl"
+                     let-subheaderContent="subheaderContent">
+          <app-page-subheader headerType="h6">
+            <ng-container appPageSubheaderTitle>
+              {{ setting }}
+            </ng-container>
+            <ng-container appPageSubheaderSummary>
+              {{ subheaderContent }}
+            </ng-container>
+          </app-page-subheader>
+
+          <form [formGroup]="form">
+
+            <div class="row"
+                 [hidden]="!isEmailVisible(settingCode)">
+              <div class="col-sm-8 col-xl-7">
+
+                <mat-form-field class="w-100 mb-3">
+                  <input matInput
+                         placeholder="Email"
+                         [formControl]="formControl">
+                  <mat-error *ngIf="formControl.hasError('required')">Required</mat-error>
+                  <mat-error *ngIf="formControl.hasError('email')">Must be a valid email address</mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="col-sm-4 col-xl-3">
+
+                <button mat-flat-button
+                        type="button"
+                        color="primary"
+                        class="w-100 mb-4"
+                        (click)="sendProvisionerAccessLinkTo(settingCode)">
+                  Send
+                </button>
+
+              </div>
+            </div>
+
+          </form>
+
+          <ng-container *ngIf="!isEmailVisible(settingCode)">
+            <p class="mb-4 text-green">
+              Email sent to: {{ formControl.value }}
+              <br>
+              If you work in multiple {{ setting }}'s you will need to notify them all.
+            </p>
+            <button mat-button
                     type="button"
                     color="primary"
-                    class="w-100 mb-4"
-                    (click)="sendProvisionerAccessLinkTo('Administrator')">
-              Send
+                    class="mb-3"
+                    (click)="setShowEmail(settingCode, true, formControl)">
+              <mat-icon>add</mat-icon>
+              Add {{ setting }}
             </button>
+          </ng-container>
+        </ng-template>
 
-          </div>
-        </div>
-      </form>
+        <ng-template #concise
+                     let-provisioner="provisioner">
+          <p class="mb-4">
+            Your PharmaNet approval notification will be sent to {{ provisioner }}.
+          </p>
+        </ng-template>
 
-      <ng-template #concise
-                   let-provisioner="provisioner">
-        <p class="mb-4">
-          Your PharmaNet approval notification will be sent to {{ provisioner }}.
-        </p>
-      </ng-template>
+        <ng-template #verbose
+                     let-provisioner="provisioner">
+          <p class="mb-4">
+            Provide the email address of the person in your organization who is responsible for contacting
+            {{ provisioner }} to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple
+            emails addresses. Do not enter your own email as you will be copied on the communication.
+          </p>
+        </ng-template>
 
-      <ng-template #verbose
-                   let-provisioner="provisioner">
-        <p class="mb-4">
-          Provide the email address of the person in your organization who is responsible for contacting
-          {{ provisioner }} to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple
-          emails addresses. Do not enter your own email as you will be copied on the communication.
-        </p>
-      </ng-template>
+      </ng-container>
 
     </app-next-steps-infographic>
 

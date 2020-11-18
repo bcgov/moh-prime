@@ -274,6 +274,9 @@ namespace PrimeTests.UnitTests
                 typeof(ICollection<Certification>),
                 typeof(ICollection<Job>),
                 typeof(ICollection<EnrolleeCareSetting>),
+                typeof(ICollection<EnrolleeRemoteUser>),
+                typeof(ICollection<RemoteAccessSite>),
+                typeof(ICollection<RemoteAccessLocation>),
                 typeof(ICollection<SelfDeclaration>),
             };
 

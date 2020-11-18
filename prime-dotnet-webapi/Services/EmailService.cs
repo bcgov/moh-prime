@@ -107,9 +107,14 @@ namespace Prime.Services
             return emails.All(e => IsValidEmail(e));
         }
 
-        public async Task SendReminderEmailAsync(Enrollee enrollee)
+        public async Task SendReminderEmailAsync(int enrolleeId)
         {
-            if (!IsValidEmail(enrollee.Email))
+            var enrolleeEmail = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => e.Email)
+                .SingleOrDefaultAsync();
+
+            if (!IsValidEmail(enrolleeEmail))
             {
                 // TODO Log invalid email, cannot send?
                 return;
@@ -117,10 +122,10 @@ namespace Prime.Services
 
             string subject = "PRIME Requires your Attention";
             string body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/ReminderEmail.cshtml", new EmailParams());
-            await Send(PRIME_EMAIL, enrollee.Email, subject, body);
+            await Send(PRIME_EMAIL, enrolleeEmail, subject, body);
         }
 
-        public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null)
+        public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, int careSettingCode)
         {
             if (!AreValidEmails(recipients))
             {
@@ -137,10 +142,22 @@ namespace Prime.Services
             var ccEmails = new List<string>() { token.Enrollee.Email };
 
             string subject = "New Access Request";
-            string viewName = string.IsNullOrEmpty(provisionerName)
-                ? "/Views/Emails/OfficeManagerEmail.cshtml"
-                : "/Views/Emails/VendorEmail.cshtml";
-            string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token, provisionerName));
+            string viewName = null;
+
+            switch (careSettingCode)
+            {
+                case (int)CareSettingType.CommunityPharmacy:
+                    viewName = "/Views/Emails/CommunityPharmacyManagerEmail.cshtml";
+                    break;
+                case (int)CareSettingType.HealthAuthority:
+                    viewName = "/Views/Emails/HealthAuthorityEmail.cshtml";
+                    break;
+                default:
+                    viewName = "/Views/Emails/OfficeManagerEmail.cshtml";
+                    break;
+            }
+
+            string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
 

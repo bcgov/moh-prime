@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ConfigResolver } from '@config/config-resolver';
+import { ConfigGuard } from '@config/config.guard';
 import { UnsupportedGuard } from '@core/guards/unsupported.guard';
+import { UnderagedGuard } from '@core/guards/underaged.guard';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
@@ -35,15 +36,20 @@ const routes: Routes = [
   {
     path: SiteRoutes.MODULE_PATH,
     component: SiteRegistrationDashboardComponent,
-    canActivate: [UnsupportedGuard],
+    canActivate: [
+      // Ensure that the configuration is loaded prior to dependent
+      // guards, as well as, views, otherwise if it already exists NOOP
+      // NOTE: A resolver could not be used due to their execution
+      // occuring after parent and child guards
+      ConfigGuard,
+      UnsupportedGuard,
+      UnderagedGuard
+    ],
     canActivateChild: [
       AuthenticationGuard,
       RegistrantGuard,
       RegistrationGuard
     ],
-    // Ensure that the configuration is loaded, otherwise
-    // if it already exists NOOP
-    resolve: [ConfigResolver],
     children: [
       {
         path: SiteRoutes.COLLECTION_NOTICE,

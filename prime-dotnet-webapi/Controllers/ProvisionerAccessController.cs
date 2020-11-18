@@ -70,38 +70,33 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(tokens));
         }
 
-        // POST: api/provisioner-access/send-link
+        // POST: api/provisioner-access/send-link/1
         /// <summary>
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment,
-        /// then sends the link to a recipient by email.
+        /// then sends the link to a recipient by email based on Care Setting Code.
         /// </summary>
-        [HttpPost("send-link/{provisionerName}", Name = nameof(SendProvisionerLink))]
+        /// <param name="careSettingCode"></param>
+        /// <param name="providedEmails"></param>
+        [HttpPost("send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
         [Authorize(Policy = AuthConstants.USER_POLICY)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(string provisionerName, FromBodyText providedEmails)
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(int careSettingCode, FromBodyText providedEmails)
         {
-            if (provisionerName != "Administrator" || string.IsNullOrWhiteSpace(providedEmails))
+            if (string.IsNullOrWhiteSpace(providedEmails))
             {
-                this.ModelState.AddModelError("Provisioner", "The provisioner provided is not valid.");
+                this.ModelState.AddModelError("Email(s)", "No emails were provided.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            string[] emails = string.IsNullOrWhiteSpace(providedEmails)
-                ? new string[0]
-                : ((string)providedEmails).Split(",");
+            string[] emails = ((string)providedEmails).Split(",");
 
             // Emails are either "Other" provisioners, or office manager(s)
             if (emails.Any() && !EmailService.AreValidEmails(emails))
             {
                 this.ModelState.AddModelError("Email(s)", "The email(s) provided are not valid.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
-            }
-            if (provisionerName == "Other" && emails.Count() > 1)
-            {
-                this.ModelState.AddModelError("Email", "Other provisioners can only provide a single email address.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
@@ -123,17 +118,7 @@ namespace Prime.Controllers
             }
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
 
-            // Only a few provisioners want emails sent directly, otherwise sent only to managers
-            if (provisionerName == "iClinic" || provisionerName == "MediNet" || provisionerName == "Other")
-            {
-                var provisionerEmail = (provisionerName != "Other")
-                    ? await _emailService.GetPharmaNetProvisionerEmailAsync(provisionerName)
-                    : emails[0];
-
-                emails = new[] { provisionerEmail };
-            }
-
-            await _emailService.SendProvisionerLinkAsync(emails, createdToken);
+            await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to email(s): " + string.Join(",", emails));
 
             return CreatedAtAction(

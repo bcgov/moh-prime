@@ -1,30 +1,29 @@
+using System;
 using System.Linq;
 
 using Prime.Models;
+using Prime.DTOs.AgreementEngine;
+using Prime.Engines.AgreementEngineInternal;
 
 namespace Prime.Engines
 {
-    public class AgreementEngine
+    public static class AgreementEngine
     {
         /// <summary>
         /// Determines the type of Agreement to asign to an Enrollee.
         /// May return null if no automatic Agreement Type could be determined.
         /// </summary>
-        public AgreementType? DetermineAgreementType(Enrollee enrollee)
+        public static AgreementType? DetermineAgreementType(AgreementEngineDto dto)
         {
-            if (!enrollee.IsRegulatedUser())
+            if (dto.Certifications == null || dto.Certifications.Any(c => c.License == null))
             {
-                return AgreementType.OboTOA;
+                throw new ArgumentException($"Certifications must have Licences loaded.", nameof(dto));
             }
 
-            if (enrollee.HasCareSetting(CareSettingType.CommunityPharmacy))
-            {
-                return AgreementType.CommunityPharmacistTOA;
-            }
-            else
-            {
-                return AgreementType.RegulatedUserTOA;
-            }
+            var certDigest = CertificationDigest.Create(dto.Certifications);
+            var settingsDigest = new SettingsDigest(dto.CareSettingCodes);
+
+            return certDigest.ResolveWith(settingsDigest);
         }
     }
 }

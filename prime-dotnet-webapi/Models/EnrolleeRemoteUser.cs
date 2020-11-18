@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
@@ -10,7 +9,7 @@ namespace Prime.Models
     {
         [Key]
         public int Id { get; set; }
-        
+
         public int EnrolleeId { get; set; }
 
         [JsonIgnore]

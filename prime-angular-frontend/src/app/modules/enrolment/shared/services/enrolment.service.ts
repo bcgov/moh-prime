@@ -2,7 +2,14 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
+import { ConfigService } from '@config/config.service';
+import { LicenseWeightedConfig } from '@config/config.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
+
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 export interface IEnrolmentService {
   enrolment$: BehaviorSubject<Enrolment>;
@@ -18,7 +25,9 @@ export class EnrolmentService implements IEnrolmentService {
   // tslint:disable-next-line: variable-name
   private _enrolment: BehaviorSubject<Enrolment>;
 
-  constructor() {
+  constructor(
+    private configService: ConfigService
+  ) {
     this._enrolment = new BehaviorSubject<Enrolment>(null);
   }
 
@@ -36,5 +45,49 @@ export class EnrolmentService implements IEnrolmentService {
 
   public get isProfileComplete(): boolean {
     return this.enrolment && this.enrolment.profileCompleted;
+  }
+
+  /**
+   * @description
+   * Determine whether an enrollee can request remote access.
+   *
+   * Remote access rules:
+   * - No College of Pharmacist can request remote access
+   * - No Community Pharmacist care setting
+   * - Licences "Named in IM Reg" or "Licenced to Provide Care"
+   */
+  public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
+    const isCollegeOfPharmacists = certifications
+      .some(cert => cert.collegeCode === CollegeLicenceClass.CPBC);
+
+    if (isCollegeOfPharmacists || !this.hasAllowedRemoteAccessCareSetting(careSettings)) {
+      return false;
+    }
+
+    const enrolleeLicenceCodes = certifications
+      .map((certification: CollegeCertification) => certification.licenseCode);
+
+    const hasRemoteAccessLicence = this.configService.licenses
+      .filter((licence: LicenseWeightedConfig) => enrolleeLicenceCodes.includes(licence.code))
+      .some(this.hasAllowedRemoteAccessLicences);
+
+    return hasRemoteAccessLicence;
+  }
+
+  public hasAllowedRemoteAccessCareSetting(careSettings: CareSetting[]): boolean {
+    return careSettings
+      .some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
+  }
+
+  public hasAllowedRemoteAccessLicences(licenceConfig: LicenseWeightedConfig): boolean {
+    return (licenceConfig.licensedToProvideCare && licenceConfig.namedInImReg);
+  }
+
+  public shouldShowCollegePrefix(licenseCode: number): boolean {
+    // No college prefix for:
+    // Pharmacy Technician (29),
+    // Non-Practicing Pharmacy Technician (31), and
+    // Podiatrists (59)
+    return ![29, 31, 59].includes(licenseCode);
   }
 }

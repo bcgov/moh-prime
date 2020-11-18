@@ -6,7 +6,7 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({
@@ -30,7 +30,6 @@ export class AuthenticationGuard extends BaseGuard {
    */
   protected canAccess(authenticated: boolean, routePath: string): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
-      await this.configService.load().toPromise();
       if (authenticated) {
         // Allow route to resolve for an authenticated user
         return resolve(true);
@@ -50,8 +49,8 @@ export class AuthenticationGuard extends BaseGuard {
         // once authenticated
         const redirectUri = `${environment.loginRedirectUrl}${routePath}`;
         const idpHint = (adminRoutes.includes(targetModule))
-          ? IdentityProvider.IDIR
-          : IdentityProvider.BCSC;
+          ? IdentityProviderEnum.IDIR
+          : IdentityProviderEnum.BCSC;
         const options = {
           redirectUri,
           idpHint

@@ -22,7 +22,7 @@ namespace PrimeTests.UnitTests
             IMapper mapper = null,
             ISubmissionRulesService automaticAdjudicationService = null,
             IEmailService emailService = null,
-            IEnrolleeProfileVersionService enroleeProfileVersionService = null,
+            IEnrolleeSubmissionService enrolleeSubmissionService = null,
             IBusinessEventService businessEventService = null,
             ISiteService siteService = null,
             IDocumentManagerClient documentClient = null)
@@ -33,7 +33,7 @@ namespace PrimeTests.UnitTests
                 mapper ?? DefaultMapper(),
                 automaticAdjudicationService ?? A.Fake<ISubmissionRulesService>(),
                 emailService ?? A.Fake<IEmailService>(),
-                enroleeProfileVersionService ?? A.Fake<IEnrolleeProfileVersionService>(),
+                enrolleeSubmissionService ?? A.Fake<IEnrolleeSubmissionService>(),
                 businessEventService ?? A.Fake<IBusinessEventService>(),
                 siteService ?? A.Fake<ISiteService>(),
                 documentClient ?? A.Fake<IDocumentManagerClient>()

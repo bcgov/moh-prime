@@ -32,7 +32,13 @@
                       title="Organization Information"
                       [menu]="organizationMenu"
                       [menuOutletContext]="{ organization: organization }"
-                      [properties]="getOrganizationProperties(organization)"></app-summary-card>
+                      [properties]="getOrganizationProperties(organization)">
+      <!-- TODO PRIME-1007
+        <ng-container *ngIf=""
+                      [ngTemplateOutlet]="notification"
+                      [ngTemplateOutletContext]="{ props: getOrganizationNotificationProperties(organization.id, site.id) }">
+      -->
+    </app-summary-card>
 
     <hr *ngIf="first"
         class="divider">
@@ -56,11 +62,29 @@
                         [menu]="siteMenu"
                         [menuOutletContext]="{ site: site, organizationId: organization.id }"
                         [properties]="getSiteProperties(site)"
-                        (action)="viewSiteRemoteUsers(organization.id, site)"></app-summary-card>
+                        (action)="viewSiteRemoteUsers(organization.id, site)">
+        <ng-container *ngIf="!site.submittedDate"
+                      [ngTemplateOutlet]="notification"
+                      [ngTemplateOutletContext]="{ props: getSiteNotificationProperties(organization.id, site) }">
+        </ng-container>
+      </app-summary-card>
 
     </ng-container>
 
   </ng-container>
+
+  <ng-template #notification
+               let-props="props">
+    <div class="d-flex align-items-center mt-2">
+      <mat-icon class="mr-2"
+                color="warn">{{ props.icon }}</mat-icon>
+      <span class="text-red">{{ props.text }}</span>
+      <button mat-flat-button
+              color="primary"
+              class="ml-auto"
+              (click)="props.route()">{{ props.label }}</button>
+    </div>
+  </ng-template>
 
   <ng-template #organizationMenu
                let-organization="organization">

@@ -7,6 +7,7 @@ import { UnsupportedComponent } from '@lib/modules/root-routes/components/unsupp
 import { MaintenanceComponent } from '@lib/modules/root-routes/components/maintenance/maintenance.component';
 import { PageNotFoundComponent } from '@lib/modules/root-routes/components/page-not-found/page-not-found.component';
 import { HelpComponent } from '@lib/modules/root-routes/components/help/help.component';
+import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,13 @@ const routes: Routes = [
     component: UnsupportedComponent,
     data: {
       title: 'Unsupported Browser'
+    }
+  },
+  {
+    path: AppRoutes.UNDERAGED,
+    component: UnderagedComponent,
+    data: {
+      title: 'Underaged'
     }
   },
   {

@@ -13,14 +13,14 @@ import { Admin } from '@auth/shared/models/admin.model';
 import { BrokerProfile } from '@auth/shared/models/broker-profile.model';
 import { AccessTokenParsed } from '@auth/shared/models/access-token-parsed.model';
 import { Role } from '@auth/shared/enum/role.enum';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 
 export interface IAuthService {
   login(options?: KeycloakLoginOptions): Promise<void>;
   isLoggedIn(): Promise<boolean>;
-  identityProvider(): Promise<IdentityProvider>;
-  identityProvider$(): Observable<IdentityProvider>;
+  identityProvider(): Promise<IdentityProviderEnum>;
+  identityProvider$(): Observable<IdentityProviderEnum>;
   logout(redirectUri: string): Promise<void>;
 
   getUser(forceReload?: boolean): Promise<BcscUser>;
@@ -34,6 +34,7 @@ export interface IAuthService {
   isSuperAdmin(): boolean;
   hasAdminView(): boolean;
   hasCommunityPharmacist(): boolean;
+  hasHealthAuthority(): boolean;
   hasVCIssuance(): boolean;
 }
 
@@ -66,12 +67,12 @@ export class AuthService implements IAuthService {
     return this.accessTokenService.isLoggedIn();
   }
 
-  public async identityProvider(): Promise<IdentityProvider> {
+  public async identityProvider(): Promise<IdentityProviderEnum> {
     return await this.accessTokenService.decodeToken()
       .then((token: AccessTokenParsed) => token.identity_provider);
   }
 
-  public identityProvider$(): Observable<IdentityProvider> {
+  public identityProvider$(): Observable<IdentityProviderEnum> {
     return from(this.identityProvider()).pipe(take(1));
   }
 
@@ -194,6 +195,10 @@ export class AuthService implements IAuthService {
 
   public hasCommunityPharmacist(): boolean {
     return this.accessTokenService.hasRole(Role.FEATURE_COMMUNITY_PHARMACIST);
+  }
+
+  public hasHealthAuthority(): boolean {
+    return this.accessTokenService.hasRole(Role.FEATURE_HEALTH_AUTHORITY);
   }
 
   public hasVCIssuance(): boolean {
