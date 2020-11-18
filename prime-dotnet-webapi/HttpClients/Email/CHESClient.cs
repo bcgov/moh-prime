@@ -68,8 +68,19 @@ namespace Prime.HttpClients
             try
             {
                 HttpResponseMessage response = await _client.GetAsync($"status?msgId={msgId}");
-                var statusResponse = JsonConvert.DeserializeObject<IList<StatusResponse>>(await response.Content.ReadAsStringAsync());
-                return statusResponse[0].Status;
+                var responseString = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var statusResponse = JsonConvert.DeserializeObject<IList<StatusResponse>>(responseString);
+                    return statusResponse[0].Status;
+                }
+                else
+                {
+                    _logger.LogError($"CHES Response code: {(int)response.StatusCode}, response body:{responseString}");
+                    return null;
+                }
+
             }
             catch (Exception ex)
             {
