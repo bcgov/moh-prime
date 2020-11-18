@@ -208,7 +208,7 @@ namespace Prime
                 app.UseDeveloperExceptionPage();
             }
 
-            this.ConfigureHealthCheck(app);
+            ConfigureHealthCheck(app);
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
@@ -220,11 +220,7 @@ namespace Prime
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Prime Web API V1");
             });
 
-            this.ConfigureLogging(app);
-
-            // Matches request to an endpoint
-            app.UseRouting();
-            app.UseCors(AllowSpecificOrigins);
+            ConfigureLogging(app);
 
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
@@ -233,28 +229,32 @@ namespace Prime
                 RequestPath = new PathString("/Resources")
             });
 
+            // Matches request to an endpoint
+            app.UseRouting();
+            app.UseCors(AllowSpecificOrigins);
+
             app.UseAuthentication();
             app.UseAuthorization();
 
-// Configure security settings on a basic HTTP binding
-Binding binding = new BasicHttpBinding
-{
-    Security = new BasicHttpSecurity
-    {
-        Mode = BasicHttpSecurityMode.TransportCredentialOnly,
-        Transport = new HttpTransportSecurity
-        {
-            ClientCredentialType = HttpClientCredentialType.Basic
-        }
-    }
-};
+            // Configure security settings on a basic HTTP binding
+            Binding binding = new BasicHttpBinding
+            {
+                Security = new BasicHttpSecurity
+                {
+                    Mode = BasicHttpSecurityMode.TransportCredentialOnly,
+                    Transport = new HttpTransportSecurity
+                    {
+                        ClientCredentialType = HttpClientCredentialType.Basic
+                    }
+                }
+            };
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-    endpoints.MapHealthChecks("/health");
-    endpoints.UseSoapEndpoint<ISoapService>("/api/PLRHL7", binding, SoapSerializer.XmlSerializer);
-});
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
+                endpoints.UseSoapEndpoint<ISoapService>("/api/PLRHL7", binding, SoapSerializer.XmlSerializer);
+            });
         }
 
         protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
