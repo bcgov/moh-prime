@@ -382,15 +382,9 @@ namespace PrimeTests.Utils
         {
             var request = CreateRequest<T>(method, requestUri, subject, payload);
 
-            var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-            if (audience == null)
-            {
-                audience = Startup.StaticConfig["Jwt:Audience"];
-            }
-
             // replace the token - with an admin version of the token
             var _token = TestUtils.TokenBuilder()
-                 .ForAudience(audience)
+                 .ForAudience(AuthConstants.Audience)
                  .ForSubject(subject.ToString())
                  .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_ADMIN_ROLE)
                  .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_READONLY_ADMIN)
@@ -410,15 +404,9 @@ namespace PrimeTests.Utils
         {
             var request = CreateRequest<T>(method, requestUri, subject, payload);
 
-            var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-            if (audience == null)
-            {
-                audience = Startup.StaticConfig["Jwt:Audience"];
-            }
-
             // replace the token - with an admin version of the token
             var _token = TestUtils.TokenBuilder()
-                 .ForAudience(audience)
+                 .ForAudience(AuthConstants.Audience)
                  .ForSubject(subject.ToString())
                  .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_SUPER_ADMIN_ROLE)
                  .BuildToken();

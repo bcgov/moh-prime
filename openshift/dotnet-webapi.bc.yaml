@@ -66,21 +66,13 @@ objects:
             value: "5001"
           - name: ASPNETCORE_URLS
             value: "http://+:8080"
-          - name: JWT_SIGNING_KEY
-            value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
-          - name: JWT_ADMIN_CLIENT
-            value: "prime-admin-${OC_APP}"
-          - name: JWT_USER_CLIENT
-            value: "prime-application-${OC_APP}"
-          - name: JWT_AUDIENCE
-            value: "prime-web-api"
-          
+
           # .NET database connection environment variables
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: DB_CONNECTION_STRING
             value: DB_CONNECTION_STRING "host=$DB_HOST;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
-          
+
           # JWT environment variable
           - name: JWT_WELL_KNOWN_CONFIG
             valueFrom:
@@ -104,7 +96,7 @@ objects:
               secretKeyRef:
                 key: KEYCLOAK_URL
                 name: "keycloak"
-          
+
           # PostgreSQL related environment variables
           - name: POSTGRESQL_USER
             valueFrom:
@@ -125,7 +117,7 @@ objects:
             valueFrom:
               secretKeyRef:
                 key: database-name
-                name: "postgresql-secret"     
+                name: "postgresql-secret"
       tags:
         - annotations: null
           from:
@@ -144,7 +136,7 @@ objects:
     runPolicy: Serial
     status:
       dockerImageRepository: ""
-  
+
   # .NET Web API - Build Configuration
   - apiVersion: v1
     kind: BuildConfig

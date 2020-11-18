@@ -4,13 +4,9 @@ namespace Prime.Auth
 {
     public static class AuthConstants
     {
-        public const string PRIME_ACCESS_TOKEN_KEY = "prime-access-token";
+        public const string Audience = "prime-web-api";
         public const string KEYCLOAK_ROLES_KEY = "roles";
         public const string KEYCLOAK_REALM_ACCESS_KEY = "realm_access";
-        public const string KEYCLOAK_RESOURCE_ACCESS_KEY = "resource_access";
-        public readonly static string PRIME_ADMIN_CLIENT = Environment.GetEnvironmentVariable("JWT_ADMIN_CLIENT") ?? Startup.StaticConfig["Jwt:AdminClient"];
-        public readonly static string PRIME_USER_CLIENT = Environment.GetEnvironmentVariable("JWT_USER_CLIENT") ?? Startup.StaticConfig["Jwt:UserClient"];
-        public readonly static string[] PRIME_CLIENT_IDS = { PRIME_ADMIN_CLIENT, PRIME_USER_CLIENT };
 
         // Claims
         public const string ASSURANCE_LEVEL_CLAIM_TYPE = "identity_assurance_level";
