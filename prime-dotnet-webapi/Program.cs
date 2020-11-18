@@ -48,7 +48,7 @@ namespace Prime
 
             try
             {
-                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development)
+                if (PrimeEnvironment.IsLocal)
                 {
                     Directory.CreateDirectory(path);
                 }
