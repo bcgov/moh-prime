@@ -79,19 +79,19 @@ objects:
             value: "https://${VANITY_URL}/api/docman"
           - name: KEYCLOAK_CLIENT_ID
             valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_CLIENT_ID
+              configMapKeyRef:
                 name: "keycloak"
+                key: keycloak_client_id
           - name: KEYCLOAK_REALM
             valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_REALM
+              configMapKeyRef:
                 name: "keycloak"
+                key: keycloak_realm
           - name: KEYCLOAK_URL
             valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_URL
+              configMapKeyRef:
                 name: "keycloak"
+                key: keycloak_url                
           image: " "
           name: primeweb
           ports:

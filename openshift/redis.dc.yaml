@@ -61,17 +61,7 @@ parameters:
     value: dev
   - name: VERSION
     required: false
-objects:
-  - kind: Secret
-    apiVersion: v1
-    metadata:
-      name: '${NAME}${SUFFIX}'
-      annotations:
-        template.openshift.io/expose-password: '{.data[''database-password'']}'
-        as-copy-of: 'template.${NAME}-secret'
-    stringData:
-      database-password: '${REDIS_PASSWORD}'
-  
+objects:  
   # Redis service (endpoint for internal routing to related pods)
   - kind: Service
     apiVersion: v1
@@ -149,8 +139,8 @@ objects:
                 - name: REDIS_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      name: '${NAME}${SUFFIX}'
-                      key: database-password
+                      name: "redis-secrets"
+                      key: redis-password
               resources: {}
               terminationMessagePath: /dev/termination-log
               imagePullPolicy: IfNotPresent

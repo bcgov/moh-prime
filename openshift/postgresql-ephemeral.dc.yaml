@@ -139,33 +139,35 @@ objects:
           containers:
             - capabilities: {}
               env:
+                - name: DB_HOST
+                  value: '${NAME}${SUFFIX}'
+
+                # PostgreSQL environment variables
                 - name: PGPASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: database-admin-password
-                      name: '${NAME}-secret'
+                      key: postgresql_database_admin_password
+                      name: "postgresql-secrets"
                 - name: POSTGRESQL_USER
                   valueFrom:
                     secretKeyRef:
-                      key: database-user
-                      name: '${NAME}-secret'
+                      key: postgresql_database_username
+                      name: "postgresql-secrets"
                 - name: POSTGRESQL_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: database-password
-                      name: '${NAME}-secret'
+                      key: postgresql_database_password
+                      name: "postgresql-secrets"
                 - name: POSTGRESQL_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
-                      key: database-admin-password
-                      name: '${NAME}-secret'
+                      key: postgresql_database_admin_password
+                      name: "postgresql-secrets"
                 - name: POSTGRESQL_DATABASE
                   valueFrom:
-                    secretKeyRef:
-                      key: database-name
-                      name: '${NAME}-secret'
-                - name: DB_HOST
-                  value: '${NAME}${SUFFIX}'
+                    configMapKeyRef:
+                      key: postgresql_database_name
+                      name: "postgresql"
               image: ' '
               imagePullPolicy: IfNotPresent
               lifecycle:

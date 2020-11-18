@@ -68,59 +68,68 @@ objects:
       spec:
         containers:
           - env:
-              - name: PGHOST
-                value: ${POSTGRESQL_HOST}
-              - name: POSTGRES_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    key: database-admin-password
-                    name: postgresql-secret
-              - name: PGDATABASE
-                valueFrom:
-                  secretKeyRef:
-                    key: database-name
-                    name: postgresql-secret
-              - name: PGUSERNAME
-                valueFrom:
-                  secretKeyRef:
-                    key: database-user
-                    name: postgresql-secret
+              # Metabase related environment variables
               - name: METABASE_HOST
                 value: ${METABASE_HOST}
               - name: METABASE_PASSWORD
                 valueFrom:
                   secretKeyRef:
+                    name: "metabase-database-credentials"
                     key: password
-                    name: metabase-database-credentials
               - name: METABASE_DATABASE
                 valueFrom:
                   secretKeyRef:
-                    key: database
-                    name: metabase-database-credentials
+                    name: "metabase-database-credentials"
+                    key: database                    
               - name: METABASE_USERNAME
                 valueFrom:
                   secretKeyRef:
+                    name: "metabase-database-credentials"
                     key: username
-                    name: metabase-database-credentials
+
+              # MongoDB related environment variables
               - name: MONGO_HOST
                 value: ${MONGO_HOST}
               - name: MONGO_USER
                 valueFrom:
                   secretKeyRef:
-                    key: database-user
-                    name: postgresql-secret
+                    name: "mongodb-secrets"
+                    key: mongodb_database_username
               - name: MONGO_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    key: database-password
-                    name: postgresql-secret
+                    name: "mongodb-secrets"
+                    key: mongodb_database_password
               - name: MONGO_ADMIN_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    key: database-admin-password
-                    name: postgresql-secret
+                    name: "mongodb-secrets"
+                    key: mongodb_database_admin_password
               - name: MONGO_DATABASE
-                value: prime
+                valueFrom:
+                  configMapKeyRef:
+                    name: "mongodb"
+                    key: mongodb_database_name
+
+              # PostgreSQL related environment variables
+              - name: PGHOST
+                value: ${POSTGRESQL_HOST}
+              - name: PGUSERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: "postgresql-secrets"
+                    key: postgresql_database_username
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: "postgresql-secrets"
+                    key: postgresql_database_admin_password
+              - name: PGDATABASE
+                valueFrom:
+                  configMapKeyRef:
+                    name: "postgresql"
+                    key: postgresql_database_name                 
+              
             image: ' '
             name: backup
             ports:

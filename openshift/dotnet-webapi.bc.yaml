@@ -79,53 +79,41 @@ objects:
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: DB_CONNECTION_STRING
-            value: DB_CONNECTION_STRING "host=$DB_HOST;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
-          
-          # JWT environment variable
-          - name: JWT_WELL_KNOWN_CONFIG
-            valueFrom:
-              secretKeyRef:
-                key: JWT_WELL_KNOWN_CONFIG
-                name: "keycloak"
+            value: DB_CONNECTION_STRING "host=$DB_HOST;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"          
 
           # Keycloak related environment variables
-          - name: KEYCLOAK_CLIENT_ID
+          - name: JWT_WELL_KNOWN_CONFIG
             valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_CLIENT_ID
-                name: "keycloak"
-          - name: KEYCLOAK_REALM
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_REALM
+              configKeyMapRef:
+                key: jwt_well_known_config
                 name: "keycloak"
           - name: KEYCLOAK_URL
             valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_URL
+              configKeyMapRef:
+                key: keycloak_url
                 name: "keycloak"
           
           # PostgreSQL related environment variables
           - name: POSTGRESQL_USER
             valueFrom:
               secretKeyRef:
-                key: database-user
-                name: "postgresql-secret"
+                key: postgresql_database_username
+                name: "postgresql-secrets"
           - name: POSTGRESQL_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: database-admin-password
-                name: "postgresql-secret"
+                key: postgresql_database_password
+                name: "postgresql-secrets"
           - name: POSTGRESQL_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: database-admin-password
-                name: "postgresql-secret"
+                key: postgresql_database_admin_password
+                name: "postgresql-secrets"
           - name: POSTGRESQL_DATABASE
             valueFrom:
-              secretKeyRef:
-                key: database-name
-                name: "postgresql-secret"     
+              configMapKeyRef:
+                key: postgresql_database_name
+                name: "postgresql"     
       tags:
         - annotations: null
           from:
@@ -188,23 +176,23 @@ objects:
           - name: POSTGRESQL_USER
             valueFrom:
               secretKeyRef:
-                key: database-user
-                name: "postgresql-secret"
+                key: postgresql_database_username
+                name: "postgresql-secrets"
           - name: POSTGRESQL_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: database-password
-                name: "postgresql-secret"
+                key: postgresql_database_password
+                name: "postgresql-secrets"
           - name: POSTGRESQL_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: database-admin-password
-                name: "postgresql-secret"
+                key: postgresql_database_admin_password
+                name: "postgresql-secrets"
           - name: POSTGRESQL_DATABASE
             valueFrom:
-              secretKeyRef:
-                key: database-name
-                name: "postgresql-secret"
+              configMapKeyRef:
+                key: postgresql_database_name
+                name: "postgresql"     
         type: Docker
       triggers:
         - type: ConfigChange

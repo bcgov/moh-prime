@@ -142,76 +142,85 @@ objects:
           - name: CACHE_REDIS_PASS
             valueFrom:
               secretKeyRef:
-                key: CACHE_REDIS_PASS
+                key: redis-password
                 name: "redis-secrets"
           - name: CACHE_REDIS_PORT
-            value: "6379"
+            valueFrom:
+              configMapKeyRef:
+                key: redis-port
+                name: "redis"
           
           # PostgreSQL related environment variables
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
           - name: DB_NAME
             valueFrom:
-              secretKeyRef: 
-                key: database-name
-                name: "postgresql-secret"
+              configMapKeyRef: 
+                key: postgresql_database_name
+                name: "postgresql"
           - name: DB_NAME_TEST
             valueFrom:
-              secretKeyRef:
-                key: database-name-test
-                name: "postgresql-secret"
+              configMapKeyRef:
+                key: postgresql_database_name_test
+                name: "postgresql"
           - name: DB_PASS
             valueFrom:
               secretKeyRef:
-                key: database-admin-password
-                name: "postgresql-secret"
+                key: postgresql_database_admin_password
+                name: "postgresql-secrets"
           - name: DB_PORT
-            value: "5432"
+            valueFrom:
+              configMapKeyRef:
+                key: postgresql_database_port
+                name: "postgresql"
           - name: DB_USER
             valueFrom:
               secretKeyRef:
-                key: database-user
-                name: "postgresql-secret"
+                key: postgresql_database_username
+                name: "postgresql-secrets"
           
           # Document Manager (incl. Flask) related environment variables
           - name: DOCUMENT_MANAGER_URL
             value: "https://${VANITY_URL}/api/docman/"
           - name: FLASK_APP
             valueFrom:
-              secretKeyRef:
-                key: FLASK_APP
-                name: "document-manager-secrets"
+              configMapKeyRef:
+                key: flask_app
+                name: "document-manager"
           - name: FLASK_DEBUG
             valueFrom:
-              secretKeyRef:
-                key: FLASK_DEBUG
-                name: "document-manager-secrets"
+              configMapKeyRef:
+                key: flask_debug
+                name: "document-manager"
           - name: FLASK_ENV
             valueFrom:
-              secretKeyRef:
-                key: FLASK_ENV
-                name: "document-manager-secrets"
+              configMapKeyRef:
+                key: flask_env
+                name: "document-manager"
           - name: FLASK_RUN_HOST
             valueFrom:
-              secretKeyRef:
-                key: FLASK_RUN_HOST
-                name: "document-manager-secrets"
+              configMapKeyRef:
+                key: flask_run_host
+                name: "document-manager"
           - name: FLASK_RUN_PORT
-            value: "6001"
+            valueFrom:
+              configMapKeyRef:
+                key: flask_run_port
+                name: "document-manager"
           
           # JWT environment variable
           - name: JWT_OIDC_WELL_KNOWN_CONFIG
             valueFrom:
-              secretKeyRef:
-                key: JWT_WELL_KNOWN_CONFIG
+              configMapKeyRef:
+                key: jwt_well_known_config
                 name: "keycloak"
           
           # PostgreSQL environment variable for database migration bash script
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
-                key: database-admin-password
-                name: "postgresql-secret"
+                key: postgresql_database_admin_password
+                name: "postgresql-secrets"
           image: " "
           name: document-manager-backend
           ports:
@@ -242,7 +251,7 @@ objects:
   status: {}
 
 # Document Manager - Migration Pod Deployment
-# Used for Alembic to run database migrations against the PostgreSQL database 
+# Runs Alembic to perform database migrations against the PostgreSQL database 
 # for all Document Manager related tables. This pod will run once PostgreSQL 
 # is verified to be open to query connections.
 - apiVersion: v1
@@ -269,81 +278,90 @@ objects:
         - name: CACHE_REDIS_PASS
           valueFrom:
             secretKeyRef:
-              key: CACHE_REDIS_PASS
               name: "redis-secrets"
+              key: redis-password              
         - name: CACHE_REDIS_PORT
-          value: "6379"
-        
+          valueFrom:
+            configMapKeyRef:
+              name: "redis"
+              key: redis-port
+
         # PostgreSQL related environment variables
         - name: DB_HOST
-          value: postgresql${SUFFIX}
+          value: "postgresql${SUFFIX}"
         - name: DB_NAME
           valueFrom:
-            secretKeyRef:
-              key: database-name
-              name: "postgresql-secret"
+            configMapKeyRef: 
+              name: "postgresql"
+              key: postgresql_database_name              
         - name: DB_NAME_TEST
           valueFrom:
-            secretKeyRef:
-              key: database-name-test
-              name: "postgresql-secret"
+            configMapKeyRef:
+              name: "postgresql"
+              key: postgresql_database_name_test              
         - name: DB_PASS
           valueFrom:
             secretKeyRef:
-              key: database-admin-password
-              name: "postgresql-secret"
+              name: "postgresql-secrets"
+              key: postgresql_database_admin_password              
         - name: DB_PORT
-          value: "5432"
+          valueFrom:
+            configMapKeyRef:
+              name: "postgresql"
+              key: postgresql_database_port              
         - name: DB_USER
           valueFrom:
             secretKeyRef:
-              key: database-user
-              name: "postgresql-secret"
+              name: "postgresql-secrets"
+              key: postgresql_database_username              
         
         # Document Manager (incl. Flask) related environment variables
         - name: DOCUMENT_MANAGER_CLIENT_SECRET
           valueFrom:
             secretKeyRef:
-              key: DOCUMENT_MANAGER_CLIENT_SECRET
               name: "document-manager-secrets"
+              key: document_manager_client_secret              
         - name: DOCUMENT_MANAGER_URL
           value: "https://${VANITY_URL}/api/docman/"
         - name: FLASK_APP
           valueFrom:
-            secretKeyRef:
-              key: FLASK_APP
-              name: "document-manager-secrets"
+            configMapKeyRef:
+              name: "document-manager"
+              key: flask_app              
         - name: FLASK_DEBUG
           valueFrom:
-            secretKeyRef:
-              key: FLASK_DEBUG
-              name: "document-manager-secrets"
+            configMapKeyRef:
+              name: "document-manager"
+              key: flask_debug              
         - name: FLASK_ENV
           valueFrom:
-            secretKeyRef:
-              key: FLASK_ENV
-              name: "document-manager-secrets"
+            configMapKeyRef:
+              name: "document-manager"
+              key: flask_env              
         - name: FLASK_RUN_HOST
           valueFrom:
-            secretKeyRef:
-              key: FLASK_RUN_HOST
-              name: "document-manager-secrets"
+            configMapKeyRef:
+              name: "document-manager"
+              key: flask_run_host              
         - name: FLASK_RUN_PORT
-          value: "6001"
+          valueFrom:
+            configMapKeyRef:
+              name: "document-manager"
+              key: flask_run_port              
         
-        # JWT environment variable
+        # Keycloak related environment variables
         - name: JWT_OIDC_WELL_KNOWN_CONFIG
           valueFrom:
-            secretKeyRef:
-              key: JWT_WELL_KNOWN_CONFIG
+            configMapKeyRef:
               name: "keycloak"
+              key: jwt_well_known_config              
         
         # PostgreSQL environment variable for database migration bash script
         - name: PGPASSWORD
           valueFrom:
             secretKeyRef:
-              key: database-admin-password
-              name: 'postgresql-secret'
+              name: "postgresql-secrets"
+              key: postgresql_database_admin_password              
       image: docker-registry.default.svc:5000/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
       name: ${NAME}${SUFFIX}-migrate
       resources: {}

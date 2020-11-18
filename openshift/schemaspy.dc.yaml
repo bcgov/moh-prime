@@ -126,19 +126,19 @@ objects:
               value: "postgresql"
             - name: "DATABASE_NAME"
               valueFrom:
-                secretKeyRef:
-                  key: database-name
-                  name: "postgresql-secret"
+                configMapKeyRef:
+                  name: "postgresql"
+                  key: postgresql_database_name                  
             - name: "DATABASE_USER"
               valueFrom:
-                secretKeyRef:
-                  name: "postgresql-secret"
-                  key: "database-user"
+                secretKeyRef:                  
+                  name: "postgresql-secrets"
+                  key: postgresql_database_username
             - name: "DATABASE_PASSWORD"
               valueFrom:
                 secretKeyRef:
-                  name: "postgresql-secret"
-                  key: "database-admin-password"
+                  key: postgresql_database_admin_password
+                  name: "postgresql-secrets"                  
           readinessProbe:
             timeoutSeconds: "300"
             initialDelaySeconds: "60"

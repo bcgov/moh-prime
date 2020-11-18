@@ -83,36 +83,36 @@ objects:
           containers:
             - env:
                 # MongoDB environment variables
-                - name: MONGODB_ADMIN_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-admin-password
-                      name: postgresql-secret
-                - name: MONGODB_DATABASE
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-name
-                      name: postgresql-secret
-                - name: MONGO_INITDB_ROOT_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-admin-password
-                      name: postgresql-secret
-                - name: MONGO_INITDB_ROOT_USERNAME
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-user
-                      name: postgresql-secret
-                - name: MONGODB_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: database-password
-                      name: postgresql-secret
                 - name: MONGODB_USER
                   valueFrom:
                     secretKeyRef:
-                      key: database-user
-                      name: postgresql-secret
+                      name: "mongodb-secrets"
+                      key: mongodb_database_username                    
+                - name: MONGODB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: "mongodb-secrets"
+                      key: mongodb_database_password  
+                - name: MONGODB_ADMIN_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: "mongodb-secrets"
+                      key: mongodb_database_admin_password
+                - name: MONGODB_DATABASE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: "mongodb"
+                      key: mongodb_database_name
+                - name: MONGO_INITDB_ROOT_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: "mongodb-secrets"
+                      key: mongodb_database_username
+                - name: MONGO_INITDB_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: "mongodb-secrets"
+                      key: mongodb_database_admin_password 
               image: >-
                 docker-registry.default.svc:5000/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
               imagePullPolicy: IfNotPresent

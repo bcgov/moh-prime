@@ -103,28 +103,32 @@ objects:
             value: "${REDIRECT_URL}"
           - name: OC_APP
             value: ${OC_APP}
-          - name: KEYCLOAK_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_CLIENT_ID
-                name: "keycloak"
-          - name: KEYCLOAK_REALM
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_REALM
-                name: "keycloak"
-          - name: KEYCLOAK_URL
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_URL
-                name: "keycloak"
-          - name: JWT_WELL_KNOWN_CONFIG
-            valueFrom:
-              secretKeyRef:
-                key: JWT_WELL_KNOWN_CONFIG
-                name: 'keycloak'
+          
+          # Document Manager related environment variables
           - name: DOCUMENT_MANAGER_URL
             value: "https://${VANITY_URL}/api/docman"
+
+          # Keycloak related environment variables
+          - name: JWT_WELL_KNOWN_CONFIG
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: jwt_well_known_config                
+          - name: KEYCLOAK_CLIENT_ID
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: keycloak_client_id                
+          - name: KEYCLOAK_REALM
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: keycloak_realm                
+          - name: KEYCLOAK_URL
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: keycloak_url                
       type: Docker
     triggers:
     - type: ConfigChange
