@@ -84,6 +84,7 @@ namespace Prime.HttpClients
             }
             catch (Exception ex)
             {
+                _logger.LogError($"CHES Exception: {ex.Message}");
                 throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
             }
 
