@@ -361,7 +361,6 @@ namespace Prime.Services
 
         private async Task CreateEmailLog(EmailLog emailLog)
         {
-
             _context.EmailLogs.Add(emailLog);
 
             await _context.SaveChangesAsync();
