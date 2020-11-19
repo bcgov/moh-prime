@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { PhsaLabtechRoutes } from './phsa-labtech.routes';
-import { AccessCodeComponent } from './pages/access-code/access-code.component';
-
 import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-dashboard/phsa-labtech-dashboard.component';
+
+import { ExampleComponent } from './pages/example/example.component';
 
 const routes: Routes = [
   {
@@ -12,13 +12,13 @@ const routes: Routes = [
     component: PhsaLabtechDashboardComponent,
     children: [
       {
-        path: PhsaLabtechRoutes.ACCESS_CODE,
-        component: AccessCodeComponent,
-        data: { title: 'Access Code' }
+        path: PhsaLabtechRoutes.EXAMPLE,
+        component: ExampleComponent,
+        data: { title: 'Example' }
       },
       {
-        path: '', // Equivalent to `/` and alias for `access-code`
-        redirectTo: PhsaLabtechRoutes.ACCESS_CODE,
+        path: '', // Equivalent to `/` and alias for the default route
+        redirectTo: PhsaLabtechRoutes.EXAMPLE,
         pathMatch: 'full'
       }
     ]
