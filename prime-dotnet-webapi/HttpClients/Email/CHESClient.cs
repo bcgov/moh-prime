@@ -23,7 +23,7 @@ namespace Prime.HttpClients
             _logger = logger;
         }
 
-        public async Task<Guid> SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
+        public async Task<Guid?> SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             var chesAttachments = new List<ChesAttachment>();
             foreach (var (Filename, Content) in attachments)
@@ -60,7 +60,7 @@ namespace Prime.HttpClients
                 else
                 {
                     _logger.LogError($"CHES Response code: {(int)response.StatusCode}, response body:{responseJsonString}");
-                    return Guid.Empty;
+                    return null;
                 }
             }
             catch (Exception ex)
@@ -169,7 +169,7 @@ namespace Prime.HttpClients
         public long CreatedTS { get; set; }
         public long DelayTS { get; set; }
         public Guid MsgId { get; set; }
-        public string Status { get; set; } // (StatusType)Enum: "accepted" "cancelled" "completed" "failed" "pending"
+        public string Status { get; set; }
         public ICollection<StatusHistoryObject> StatusHistory { get; set; }
         public string Tag { get; set; }
         public Guid TxId { get; set; }
@@ -181,5 +181,20 @@ namespace Prime.HttpClients
         public string Description { get; set; }
         public string Status { get; set; }
         public int Timestamp { get; set; }
+    }
+
+    public sealed class ChesStatus
+    {
+        public static ChesStatus Accepted = new ChesStatus("accepted");
+        public static ChesStatus Cancelled = new ChesStatus("cancelled");
+        public static ChesStatus Completed = new ChesStatus("completed");
+        public static ChesStatus Failed = new ChesStatus("failed");
+        public static ChesStatus Pending = new ChesStatus("pending");
+        public string Value { get; private set; }
+
+        private ChesStatus(string value)
+        {
+            Value = value;
+        }
     }
 }

@@ -301,8 +301,8 @@ namespace Prime.Services
         {
             var emailLogs = await _context.EmailLogs
                 .Where(e => e.SendType == "CHES"
-                    && e.MsgId != Guid.Empty
-                    && e.LatestStatus != "completed")
+                    && e.MsgId != null
+                    && e.LatestStatus != ChesStatus.Completed.Value)
                 .ToListAsync();
 
             foreach (var email in emailLogs)
