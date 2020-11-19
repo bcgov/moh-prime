@@ -307,7 +307,7 @@ namespace Prime.Services
 
             foreach (var email in emailLogs)
             {
-                var status = await _chesClient.GetStatusAsync((Guid)email.MsgId);
+                var status = await _chesClient.GetStatusAsync(email.MsgId.Value);
                 if (status != null && email.LatestStatus != status)
                 {
                     email.LatestStatus = status;
