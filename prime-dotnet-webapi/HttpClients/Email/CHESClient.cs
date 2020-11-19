@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Prime.HttpClients
 {
@@ -39,7 +40,12 @@ namespace Prime.HttpClients
 
             var requestParams = new ChesEmailRequestParams(from, to, subject, body, chesAttachments);
 
-            var requestContent = new StringContent(JsonConvert.SerializeObject(requestParams), Encoding.UTF8, "application/json");
+            var requestContent = new StringContent(
+                JsonConvert.SerializeObject(
+                    requestParams,
+                    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }
+                ),
+                Encoding.UTF8, "application/json");
             try
             {
                 HttpResponseMessage response = await _client.PostAsync("email", requestContent);
@@ -80,7 +86,6 @@ namespace Prime.HttpClients
                     _logger.LogError($"CHES Response code: {(int)response.StatusCode}, response body:{responseString}");
                     return null;
                 }
-
             }
             catch (Exception ex)
             {
@@ -108,33 +113,33 @@ namespace Prime.HttpClients
     public class ChesEmailRequestParams
     {
         // must be lower case for CHES to accept params
-        public IEnumerable<ChesAttachment> attachments { get; set; }
-        public IEnumerable<string> bcc { get; set; }
-        public string bodyType { get; set; }
-        public string body { get; set; }
-        public IEnumerable<string> cc { get; set; }
-        public int? delayTS { get; set; }
-        public string encoding { get; set; }
-        public string from { get; set; }
-        public string priority { get; set; }
-        public string subject { get; set; }
-        public string tag { get; set; }
-        public IEnumerable<string> to { get; set; }
+        public IEnumerable<ChesAttachment> Attachments { get; set; }
+        public IEnumerable<string> Bcc { get; set; }
+        public string BodyType { get; set; }
+        public string Body { get; set; }
+        public IEnumerable<string> Cc { get; set; }
+        public int? DelayTS { get; set; }
+        public string Encoding { get; set; }
+        public string From { get; set; }
+        public string Priority { get; set; }
+        public string Subject { get; set; }
+        public string Tag { get; set; }
+        public IEnumerable<string> To { get; set; }
 
         public ChesEmailRequestParams(string from, IEnumerable<string> to, string subject, string body, IEnumerable<ChesAttachment> attachments)
         {
-            this.attachments = attachments;
-            bcc = new List<string>();
-            bodyType = "html";
-            this.body = body;
-            cc = new List<string>();
-            delayTS = 1570000000;
-            encoding = "utf-8";
-            this.from = from;
-            priority = "normal";
-            this.subject = subject;
-            tag = "tag";
-            this.to = to;
+            this.Attachments = attachments;
+            Bcc = new List<string>();
+            BodyType = "html";
+            this.Body = body;
+            Cc = new List<string>();
+            DelayTS = 1570000000;
+            Encoding = "utf-8";
+            this.From = from;
+            Priority = "normal";
+            this.Subject = subject;
+            Tag = "tag";
+            this.To = to;
         }
     }
 
