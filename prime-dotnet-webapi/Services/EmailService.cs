@@ -339,24 +339,53 @@ namespace Prime.Services
                 subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
             }
 
+            if (PrimeEnvironment.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
+            {
+                var msgId = await SendChes(from, to, cc, subject, body, attachments);
+
+                if (msgId == null)
+                {
+                    // Ches failed, send using smtp client
+                    await SendSmtp(from, to, cc, subject, body, attachments);
+                }
+            }
+            else
+            {
+                await SendSmtp(from, to, cc, subject, body, attachments);
+            }
+        }
+
+        private async Task<Guid?> SendChes(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
+        {
+            var msgId = await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
+
             var emailLog = new EmailLog
             {
                 SentTo = string.Join(",", to),
                 Subject = subject,
                 Body = body,
+                SendType = "CHES",
+                MsgId = msgId,
                 DateSent = DateTimeOffset.Now
             };
 
-            if (PrimeEnvironment.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
+            await CreateEmailLog(emailLog);
+
+            return msgId;
+        }
+
+        private async Task SendSmtp(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
+        {
+            await _smtpEmailClient.SendAsync(from, to, cc, subject, body, attachments);
+
+            var emailLog = new EmailLog
             {
-                emailLog.MsgId = await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
-                emailLog.SendType = "CHES";
-            }
-            else
-            {
-                await _smtpEmailClient.SendAsync(from, to, cc, subject, body, attachments);
-                emailLog.SendType = "SMTP";
-            }
+                SentTo = string.Join(",", to),
+                Subject = subject,
+                Body = body,
+                SendType = "SMTP",
+                DateSent = DateTimeOffset.Now
+            };
 
             await CreateEmailLog(emailLog);
         }
