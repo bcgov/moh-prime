@@ -9,7 +9,7 @@ using Prime.Services;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/emails")]
+    [Route("api/[controller]")]
     [ApiController]
     public class EmailsController : ControllerBase
     {
@@ -20,12 +20,12 @@ namespace Prime.Controllers
             _emailService = emailService;
         }
 
-        // GET: api/emails/management/statuses
+        // POST: api/emails/management/statuses
         /// <summary>
         /// Update all logged email statuses sent using the CHES email service
         /// </summary>
-        [HttpGet("management/statuses", Name = nameof(UpdateEmailLogStatuses))]
-        [Authorize(Roles = AuthConstants.PRIME_API_SERVICE_ACCOUNT_ROLE + "," + AuthConstants.ADMIN_POLICY)]
+        [HttpPost("management/statuses", Name = nameof(UpdateEmailLogStatuses))]
+        [Authorize(Roles = AuthConstants.PRIME_API_SERVICE_ACCOUNT_ROLE + "," + AuthConstants.PRIME_ADMIN_ROLE)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

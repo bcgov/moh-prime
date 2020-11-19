@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace Prime.HttpClients
 {
     public class ChesClient : IChesClient
     {
-        private static HttpClient _client;
+        private readonly HttpClient _client;
         private readonly ILogger _logger;
 
         public ChesClient(
@@ -54,7 +55,7 @@ namespace Prime.HttpClients
                 if (response.IsSuccessStatusCode)
                 {
                     var successResponse = JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
-                    return successResponse.Messages[0].MsgId;
+                    return successResponse.Messages.Single().MsgId;
                 }
                 else
                 {
@@ -78,8 +79,8 @@ namespace Prime.HttpClients
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var statusResponse = JsonConvert.DeserializeObject<IList<StatusResponse>>(responseString);
-                    return statusResponse[0].Status;
+                    var statusResponse = JsonConvert.DeserializeObject<IEnumerable<StatusResponse>>(responseString);
+                    return statusResponse.Single().Status;
                 }
                 else
                 {
@@ -112,7 +113,6 @@ namespace Prime.HttpClients
 
     public class ChesEmailRequestParams
     {
-        // must be lower case for CHES to accept params
         public IEnumerable<ChesAttachment> Attachments { get; set; }
         public IEnumerable<string> Bcc { get; set; }
         public string BodyType { get; set; }

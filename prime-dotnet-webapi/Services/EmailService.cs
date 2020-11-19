@@ -300,7 +300,9 @@ namespace Prime.Services
         public async Task<bool> UpdateEmailLogStatuses()
         {
             var emailLogs = await _context.EmailLogs
-                .Where(e => e.SendType == "CHES" && e.MsgId != Guid.Empty)
+                .Where(e => e.SendType == "CHES"
+                    && e.MsgId != Guid.Empty
+                    && e.LatestStatus != "completed")
                 .ToListAsync();
 
             foreach (var email in emailLogs)
