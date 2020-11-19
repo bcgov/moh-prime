@@ -155,7 +155,7 @@ export class OrganizationFormStateService extends AbstractFormState<Organization
       ],
       registrationId: [
         { value: null, disabled: true },
-        [Validators.required]
+        []
       ],
       doingBusinessAs: [
         null,
