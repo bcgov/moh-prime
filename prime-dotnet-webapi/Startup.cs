@@ -202,7 +202,7 @@ namespace Prime
                 app.UseDeveloperExceptionPage();
             }
 
-            this.ConfigureHealthCheck(app);
+            ConfigureHealthCheck(app);
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
@@ -214,7 +214,7 @@ namespace Prime
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Prime Web API V1");
             });
 
-            this.ConfigureLogging(app);
+            ConfigureLogging(app);
 
             // Matches request to an endpoint
             app.UseRouting();
