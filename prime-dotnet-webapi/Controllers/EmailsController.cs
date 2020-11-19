@@ -35,6 +35,5 @@ namespace Prime.Controllers
 
             return NoContent();
         }
-
     }
 }
