@@ -5,30 +5,30 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 @Component({
-  selector: 'app-enrollee-events',
-  templateUrl: './enrollee-events.component.html',
-  styleUrls: ['./enrollee-events.component.scss']
+  selector: 'app-site-events',
+  templateUrl: './site-events.component.html',
+  styleUrls: ['./site-events.component.scss']
 })
-export class EnrolleeEventsComponent implements OnInit {
+export class SiteEventsComponent implements OnInit {
   public businessEvents$: Observable<DateContent[]>;
   public hasActions: boolean;
 
   constructor(
     private route: ActivatedRoute,
-    private adjucationResource: AdjudicationResource,
+    private siteResource: SiteResource,
   ) {
-    this.hasActions = true;
+    this.hasActions = false;
   }
 
   public getBusinessEvents(businessEventTypes?: BusinessEventTypeEnum[]) {
-    const enrolleeId = this.route.snapshot.params.id;
-    this.businessEvents$ = this.adjucationResource
-      .getEnrolleeBusinessEvents(enrolleeId, businessEventTypes ?? [])
+    const enrolleeId = this.route.snapshot.params.sid;
+    this.businessEvents$ = this.siteResource
+      .getSiteBusinessEvents(enrolleeId, businessEventTypes ?? [])
       .pipe(
         map((businessEvents: BusinessEvent[]) =>
           businessEvents.map((businessEvent: BusinessEvent) => {

@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { AdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
+
+import { Observable } from 'rxjs';
+
 import { DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-import { DateContent } from '../dated-content-table/dated-content-table.component';
+
+import { AdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 @Component({
   selector: 'app-adjudicator-documents',
