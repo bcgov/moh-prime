@@ -19,11 +19,17 @@ export class ApiResourceUtilsService {
         .reduce(
           (httpParams: HttpParams, key: string) =>
             (![null, undefined].includes(queryParams[key]))
-              ? httpParams.set(key, `${queryParams[key]}`)
+              ? this.createHttpParam(httpParams, key, queryParams[key])
               : httpParams,
           new HttpParams()
         )
       : null;
+  }
+
+  private createHttpParam(httpParams: HttpParams, key: string, value: any): HttpParams {
+    return (Array.isArray(value))
+      ? value.reduce((h, b) => this.createHttpParam(h, key, b), httpParams)
+      : httpParams.append(key, `${value}`);
   }
 
   /**

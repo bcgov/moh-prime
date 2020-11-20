@@ -27,6 +27,7 @@ import { EnrolleeAdjudicatorNotesComponent } from './pages/enrollee-adjudicator-
 import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/site-adjudicator-notes.component';
 import { SiteAdjudicatorDocumentsComponent } from './pages/site-adjudicator-documents/site-adjudicator-documents.component';
 import { EnrolleeAdjudicatorDocumentsComponent } from './pages/enrollee-adjudicator-documents/enrollee-adjudicator-documents.component';
+import { SiteEventsComponent } from './pages/site-events/site-events.component';
 
 const routes: Routes = [
   {
@@ -107,7 +108,7 @@ const routes: Routes = [
                 data: { title: 'Document Upload' }
               },
               {
-                path: AdjudicationRoutes.ENROLLEE_EVENT_LOG,
+                path: AdjudicationRoutes.EVENT_LOG,
                 component: EnrolleeEventsComponent,
                 data: { title: 'Event Log' }
               }
@@ -156,6 +157,11 @@ const routes: Routes = [
                 component: SiteAdjudicatorDocumentsComponent,
                 data: { title: 'Document Upload' }
               },
+              {
+                path: AdjudicationRoutes.EVENT_LOG,
+                component: SiteEventsComponent,
+                data: { title: 'Event Log' }
+              }
             ]
           }
         ]
