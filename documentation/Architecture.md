@@ -15,3 +15,5 @@ PRIME is a traditional N-Tier application architecture. It's composed of a front
 ## Architecture Diagram
 The following is a high level application component diagram of the PRIME application
 ![alt text](images/architecture.png "PRIME Architecture")
+
+A change to create a PR
