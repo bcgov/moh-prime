@@ -23,7 +23,6 @@ import { SiteAdjudicationDocument } from '@registration/shared/models/adjudicati
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 
-
 @Injectable({
   providedIn: 'root'
 })
