@@ -19,5 +19,7 @@ namespace Prime.Services
         Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName);
 
         Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync();
+
+        Task<bool> UpdateEmailLogStatuses();
     }
 }
