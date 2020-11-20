@@ -9,7 +9,13 @@ import { PageNotFoundComponent } from '@lib/modules/root-routes/components/page-
 import { HelpComponent } from '@lib/modules/root-routes/components/help/help.component';
 import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 
+import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
+
 const routes: Routes = [
+  {
+    path: PhsaLabtechRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/phsa-labtech/phsa-labtech.module').then(m => m.PhsaLabtechModule)
+  },
   {
     path: AppRoutes.DENIED,
     component: AccessDeniedComponent,
