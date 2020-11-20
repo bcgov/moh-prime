@@ -15,19 +15,16 @@ using SoapCore.Extensibility;
 
 namespace Prime.Services
 {
-    public static class SoapServiceNamespace
+    public class SoapServiceOperationTuner : IServiceOperationTuner
     {
         public const string Prefix = "plr";
         public const string Uri = "urn:hl7-org:v3";
-    }
 
-    public class SoapServiceOperationTuner : IServiceOperationTuner
-    {
         public void Tune(HttpContext httpContext, object serviceInstance, SoapCore.ServiceModel.OperationDescription operation)
         {
             if (serviceInstance is SoapService service)
             {
-                service.DocumentRoot = GetRequestBody(httpContext, SoapServiceNamespace.Prefix, SoapServiceNamespace.Uri, operation.Name);
+                service.DocumentRoot = GetRequestBody(httpContext, Prefix, Uri, operation.Name);
             }
         }
 
@@ -36,7 +33,7 @@ namespace Prime.Services
             // Rewinding seems a bit expensive, but can't figure out why the stream
             // is partially read at this point in the request, but it appears to
             // occur in SoapCore as custom inlined middleware indicates it is not
-            // partially read prior to SoapCore's middleware
+            // partially read prior to entering SoapCore's middleware
             httpContext.Request.Body.Seek(0, SeekOrigin.Begin);
 
             // Produces a graph of XNode objects, which depending on our use case
@@ -56,7 +53,7 @@ namespace Prime.Services
         }
     }
 
-    [ServiceContract(Namespace = SoapServiceNamespace.Uri)]
+    [ServiceContract(Namespace = SoapServiceOperationTuner.Uri)]
     public interface ISoapService
     {
         [OperationContract(Name = "PRPM_IN301030CA")]
