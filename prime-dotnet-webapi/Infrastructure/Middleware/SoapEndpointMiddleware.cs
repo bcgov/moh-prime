@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Microsoft.AspNetCore.Builder;
@@ -37,74 +39,48 @@ namespace Prime.Infrastructure.Middleware
         {
             if (httpContext.Request.Path.Equals(_endpointPath, StringComparison.Ordinal))
             {
-                // await httpContext.Response.WriteAsync("SOAP in 1\n");
-                // _logger.LogInformation("Test");
-                // await _next(httpContext);
-                // await httpContext.Response.WriteAsync("SOAP out 1\n");
+                using var reader = new StreamReader(httpContext.Request.Body);
+                var requestBody = await reader.ReadToEndAsync();
 
+                // Example 1 (XDocument and XPath)
+                var xDocument = XDocument.Parse(requestBody);
 
-                // var xml = XmlDictionaryReader
-                //     .CreateTextReader( httpContext.Response.Body, new XmlDictionaryReaderQuotas() );
-                // xml.ReadStartElement("PRPM_IN301030CA", "urn:hl7-org:v3");
-                //
-                // await httpContext.Response.WriteAsync(xml.ReadContentAsString());
+                var xmlnsManager = new XmlNamespaceManager(new NameTable());
+                xmlnsManager.AddNamespace("hl7", "urn:hl7-org:v3");
 
+                var root = xDocument.XPathSelectElements("//hl7:PRPM_IN301030CA", xmlnsManager);
 
-                using (var reader = new StreamReader(httpContext.Request.Body))
+                if (root != null)
                 {
-                    var body = await reader.ReadToEndAsync();
-                    // await httpContext.Response.WriteAsync(body);
-                    _logger.LogInformation(body);
-
-                    // var doc = new XmlDocument();
-                    // doc.LoadXml(body);
-                    //
-                    // var nsmgr = new XmlNamespaceManager(doc.NameTable);
-                    // nsmgr.AddNamespace("PLR", "urn:hl7-org:v3");
-                    //
-                    // var root = doc.DocumentElement;
-
-                    StringBuilder sb = new StringBuilder(1024);
-                    var doc = XDocument.Parse(body);
-                    // await httpContext.Response.WriteAsync(doc.Document.FirstNode.ToString());
-                    // await httpContext.Response.WriteAsync(doc.XPathSelectElement("/PRPM_IN301030CA").ToString());
-
-                    var root = doc.XPathSelectElements("/Customers/Customer");
+                    var sb = new StringBuilder(1024);
                     foreach (var el in root)
                     {
-                        sb.AppendLine(el.Element("versionCode")?.Value);
+                        sb.Append(el);
                     }
+
                     await httpContext.Response.WriteAsync(sb.ToString());
-
-                    // var nodeList = root.SelectNodes(
-                    //     "descendant::PLR:controlActProcess", nsmgr);
-                    // await httpContext.Response.WriteAsync(nodeList);
-
-                    // var xmlBody = doc.GetElementsByTagName("soap:Body");
-                    // await httpContext.Response.WriteAsync(xmlBody[0].InnerXml);
-                    // await httpContext.Response.WriteAsync(doc.DocumentElement.InnerXml);
-
-                    // await httpContext.Response.WriteAsync(test[0].InnerText);
-                    // await httpContext.Response.WriteAsync(test[0].Value);
-                    // using (XmlDictionaryReader xmlReader = requestMessage.GetReaderAtBodyContents())
-                    // {
-                    //     xmlReader.ReadStartElement(operation.Name, operation.Contract.Namespace);
-                    // }
+                }
+                else
+                {
+                    await httpContext.Response.WriteAsync("Not Found");
                 }
 
-                // XDocument doc;
-                // var input = httpContext.Request.Body;
-                // doc = XDocument.Load(httpContext.Request.Body);
-                // Console.WriteLine($"{doc}");
-                // using (XmlDictionaryReader xmlReader = requestMessage.GetReaderAtBodyContents())
+                // Example 2 (XmlDocument and XPath)
+                // var xmlDocument = new XmlDocument();
+                // xmlDocument.LoadXml(requestBody);
+                //
+                // var xmlnsManager = new XmlNamespaceManager(xmlDocument.NameTable);
+                // xmlnsManager.AddNamespace("hl7", "urn:hl7-org:v3");
+                //
+                // var root = xmlDocument.SelectSingleNode("//hl7:PRPM_IN301030CA", xmlnsManager);
+                //
+                // if (root != null)
                 // {
-                //     xmlReader.ReadStartElement(operation.Name, operation.Contract.Namespace);
+                //     await httpContext.Response.WriteAsync(root.InnerXml);
                 // }
-
-                // using (var stream = httpContext.Request.Body)
+                // else
                 // {
-                //     var doc = XDocument.Load(stream);
-                //     Console.WriteLine($"{doc.ToString()}");
+                //     await httpContext.Response.WriteAsync("Not Found");
                 // }
             }
             else

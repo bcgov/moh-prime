@@ -246,7 +246,6 @@ namespace Prime
                 }
             };
 
-            // app.Use(SoapMiddleware);
             app.UseSoapEndpointMiddleware<ISoapService>("/api/PLRHL7", binding);
 
             app.UseEndpoints(endpoints =>
