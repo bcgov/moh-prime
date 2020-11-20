@@ -10,6 +10,7 @@ import { ViewportService } from '@core/services/viewport.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -95,6 +96,19 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public removeCertification() {
     this.remove.emit(this.index);
+  }
+
+  public shouldShowPractices(): boolean {
+    if ((this.collegeCode.value == CollegeLicenceClass.BCCNM) &&
+        (this.licenseCode.value == NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE ||
+         this.licenseCode.value == NursingLicenseCode.PRACTICING_REGISTERED_NURSE ||
+         this.licenseCode.value == NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE ||
+         this.licenseCode.value == NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_EMERGENCY ||
+         this.licenseCode.value == NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_SPECIAL_EVENT)) {
+           return true;
+    } else {
+      return false;
+    }
   }
 
   public ngOnInit() {
