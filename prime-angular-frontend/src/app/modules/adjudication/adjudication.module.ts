@@ -39,6 +39,8 @@ import { AdjudicatorNotesComponent } from './shared/components/adjudicator-notes
 import { SiteAdjudicatorDocumentsComponent } from './pages/site-adjudicator-documents/site-adjudicator-documents.component';
 import { EnrolleeAdjudicatorDocumentsComponent } from './pages/enrollee-adjudicator-documents/enrollee-adjudicator-documents.component';
 import { AdjudicatorDocumentsComponent } from './shared/components/adjudicator-documents/adjudicator-documents.component';
+import { SiteEventsComponent } from './pages/site-events/site-events.component';
+import { AdjudicatorEventsComponent } from './shared/components/adjudicator-events/adjudicator-events.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +73,9 @@ import { AdjudicatorDocumentsComponent } from './shared/components/adjudicator-d
     SiteAdjudicatorNotesComponent,
     SiteAdjudicatorDocumentsComponent,
     EnrolleeAdjudicatorDocumentsComponent,
-    AdjudicatorDocumentsComponent
+    AdjudicatorDocumentsComponent,
+    SiteEventsComponent,
+    AdjudicatorEventsComponent
   ],
   imports: [
     AdjudicationRoutingModule,

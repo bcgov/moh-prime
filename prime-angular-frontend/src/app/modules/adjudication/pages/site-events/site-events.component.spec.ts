@@ -1,23 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
-import { AdjudicatorDocumentsComponent } from './adjudicator-documents.component';
+import { SiteEventsComponent } from './site-events.component';
 
-describe('AdjudicatorDocumentsComponent', () => {
-  let component: AdjudicatorDocumentsComponent;
-  let fixture: ComponentFixture<AdjudicatorDocumentsComponent>;
+describe('SiteEventsComponent', () => {
+  let component: SiteEventsComponent;
+  let fixture: ComponentFixture<SiteEventsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        AdjudicationModule
+        AdjudicationModule,
+        BrowserAnimationsModule,
       ],
       declarations: [],
       providers: [
@@ -32,7 +34,7 @@ describe('AdjudicatorDocumentsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AdjudicatorDocumentsComponent);
+    fixture = TestBed.createComponent(SiteEventsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
