@@ -39,49 +39,30 @@ namespace Prime.Infrastructure.Middleware
         {
             if (httpContext.Request.Path.Equals(_endpointPath, StringComparison.Ordinal))
             {
+                var namespacePrefix = "hl7";
+                var namespaceUri = "urn:hl7-org:v3";
+                var bodyElement = "PRPM_IN301030CA";
+
                 using var reader = new StreamReader(httpContext.Request.Body);
                 var requestBody = await reader.ReadToEndAsync();
 
                 // Example 1 (XDocument and XPath)
-                var xDocument = XDocument.Parse(requestBody);
-
                 var xmlnsManager = new XmlNamespaceManager(new NameTable());
-                xmlnsManager.AddNamespace("hl7", "urn:hl7-org:v3");
+                xmlnsManager.AddNamespace(namespacePrefix, namespaceUri);
 
-                var root = xDocument.XPathSelectElements("//hl7:PRPM_IN301030CA", xmlnsManager);
+                var xDocument = XDocument.Parse(requestBody);
+                var root = xDocument
+                    .XPathSelectElement($"//{namespacePrefix}:{bodyElement}", xmlnsManager);
 
                 if (root != null)
                 {
-                    var sb = new StringBuilder(1024);
-                    foreach (var el in root)
-                    {
-                        sb.Append(el);
-                    }
-
-                    await httpContext.Response.WriteAsync(sb.ToString());
+                    await httpContext.Response.WriteAsync(root.ToString());
                 }
                 else
                 {
+                    // TODO what should the SOAP response be?
                     await httpContext.Response.WriteAsync("Not Found");
                 }
-
-                // Example 2 (XmlDocument and XPath)
-                // var xmlDocument = new XmlDocument();
-                // xmlDocument.LoadXml(requestBody);
-                //
-                // var xmlnsManager = new XmlNamespaceManager(xmlDocument.NameTable);
-                // xmlnsManager.AddNamespace("hl7", "urn:hl7-org:v3");
-                //
-                // var root = xmlDocument.SelectSingleNode("//hl7:PRPM_IN301030CA", xmlnsManager);
-                //
-                // if (root != null)
-                // {
-                //     await httpContext.Response.WriteAsync(root.InnerXml);
-                // }
-                // else
-                // {
-                //     await httpContext.Response.WriteAsync("Not Found");
-                // }
             }
             else
             {

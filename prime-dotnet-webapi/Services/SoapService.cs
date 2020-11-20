@@ -4,23 +4,33 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Prime.Helpers;
 using SoapCore.Extensibility;
 
 namespace Prime.Services
 {
+    public class SoapServiceOperationTuner : IServiceOperationTuner
+    {
+        public void Tune(HttpContext httpContext,  object serviceInstance,  SoapCore.ServiceModel.OperationDescription operation)
+        {
+            if (serviceInstance is SoapService service)
+            {
+                service.Request = httpContext.Request;
+            }
+        }
+    }
+
     [ServiceContract(Namespace = "urn:hl7-org:v3")]
     public interface ISoapService
     {
-        // [OperationContract(Name = "PRPM_IN301030CA")]
-        // void AddBcProvider();
-        //
-        // [OperationContract(Name = "PRPM_IN303030CA")]
-        // void UpdateBcProvider();
-        //
-        // [OperationContract(Name = "PRPM_IN000000CA")]
-        // void Example(int id, string email);
+        [OperationContract(Name = "PRPM_IN301030CA")]
+        void AddBcProvider();
+
+        [OperationContract(Name = "PRPM_IN303030CA")]
+        void UpdateBcProvider();
     }
 
     public class SoapService : ISoapService
@@ -33,38 +43,14 @@ namespace Prime.Services
             _logger = logger;
         }
 
-        // public HttpRequest Request { get; set; }
+        public HttpRequest Request { get; set; }
 
-        // public async void AddBcProvider()
-        // {
-        //     Console.WriteLine(Request.Body);
-        // }
+        public async void AddBcProvider()
+        {
+        }
 
-        // public async void UpdateBcProvider()
-        // {
-        //     Console.WriteLine(Request.Body);
-        // }
-
-        // public async void PRPM_IN000000CA(ExampleModel example)
-        // {
-        //     Console.WriteLine($"Hello World!"); // Always null
-        // }
+        public async void UpdateBcProvider()
+        {
+        }
     }
-
-    // [DataContract]
-    // public class RequestObject
-    // {
-    //     // [DataMember]
-    //     // public XElement controlActProcess { get; set; }
-    // }
-
-    // [MessageContract(IsWrapped = false)]
-    // public class ExampleModel
-    // {
-    //     [MessageBodyMember]
-    //     public int Id { get; set; }
-    //
-    //     [MessageBodyMember]
-    //     public string Email { get; set; }
-    // }
 }
