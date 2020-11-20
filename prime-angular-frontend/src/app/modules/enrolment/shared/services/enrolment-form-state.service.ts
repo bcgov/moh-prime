@@ -8,15 +8,19 @@ import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { RemoteAccessSite } from '../models/remote-access-site.model';
+import { RemoteAccessLocation } from '../models/remote-access-location';
+import { Site } from '@registration/shared/models/site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,10 +33,13 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public regulatoryForm: FormGroup;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
+  public remoteAccessForm: FormGroup;
+  public remoteAccessLocationsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
+  public accessAgreementForm: FormGroup;
 
-  private identityProvider: IdentityProvider;
+  private identityProvider: IdentityProviderEnum;
   private enrolleeId: number;
   private userId: string;
 
@@ -74,14 +81,18 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public get json(): Enrolment {
     const id = this.enrolleeId;
     const userId = this.userId;
-    const profile = (this.identityProvider === IdentityProvider.BCEID)
+    const profile = (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicForm.getRawValue()
       : this.bcscDemographicForm.getRawValue();
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const jobs = this.jobsForm.getRawValue();
+    const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
+    const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
     const selfDeclarations = this.convertSelfDeclarationsToJson();
+    const remoteAccessSites = this.convertRemoteAccessSitesToJson();
+    const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
 
     return {
       id,
@@ -93,30 +104,35 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       ...deviceProvider,
       ...jobs,
       ...careSettings,
-      selfDeclarations
+      enrolleeRemoteUsers,
+      remoteAccessSites,
+      ...remoteAccessLocations,
+      selfDeclarations,
+      accessAgreementGuid
     };
   }
 
   /**
    * @description
-   * Helper for getting a list of organization forms.
+   * Helper for getting a list of enrolment forms.
    */
   public get forms(): AbstractControl[] {
     return [
       ...ArrayUtils.insertIf(
-        this.identityProvider === IdentityProvider.BCEID,
+        this.identityProvider === IdentityProviderEnum.BCEID,
         // Purposefully omitted accessForm and identityDocumentForm
         // from the list of forms since they are used out of band
         this.bceidDemographicForm
       ),
       ...ArrayUtils.insertIf(
-        this.identityProvider === IdentityProvider.BCSC,
+        this.identityProvider === IdentityProviderEnum.BCSC,
         this.bcscDemographicForm
       ),
       this.regulatoryForm,
       // TODO commented out until required to avoid it being validated
       // this.deviceProviderForm,
       this.jobsForm,
+      this.remoteAccessLocationsForm,
       this.selfDeclarationForm,
       this.careSettingsForm
     ];
@@ -157,8 +173,11 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     this.regulatoryForm = this.buildRegulatoryForm();
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
+    this.remoteAccessForm = this.buildRemoteAccessForm();
+    this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
+    this.accessAgreementForm = this.buildAccessAgreementForm();
   }
 
   /**
@@ -170,7 +189,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       return;
     }
 
-    (this.identityProvider === IdentityProvider.BCEID)
+    (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicForm.patchValue(enrolment.enrollee)
       : this.bcscDemographicForm.patchValue(enrolment.enrollee);
     this.deviceProviderForm.patchValue(enrolment);
@@ -195,8 +214,44 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       });
     }
 
+    if (enrolment.enrolleeRemoteUsers.length) {
+      const enrolleeRemoteUsers = this.remoteAccessForm.get('enrolleeRemoteUsers') as FormArray;
+      enrolleeRemoteUsers.clear();
+      enrolment.enrolleeRemoteUsers.forEach((eru: EnrolleeRemoteUser) => {
+        const enrolleeRemoteUser = this.enrolleeRemoteUserFormGroup();
+        enrolleeRemoteUser.patchValue(eru);
+        enrolleeRemoteUsers.push(enrolleeRemoteUser);
+      });
+    }
+
+    if (enrolment.remoteAccessSites.length) {
+      const remoteAccessSites = this.remoteAccessForm.get('remoteAccessSites') as FormArray;
+      remoteAccessSites.clear();
+      enrolment.remoteAccessSites.forEach((ras: RemoteAccessSite) => {
+        const remoteAccessSite = this.remoteAccessSiteFormGroup();
+        remoteAccessSite.patchValue({
+          enrolleeId: ras.enrolleeId,
+          siteId: ras.siteId,
+          doingBusinessAs: ras.site.doingBusinessAs
+        });
+        remoteAccessSites.push(remoteAccessSite);
+      });
+    }
+
+    if (enrolment.remoteAccessLocations.length) {
+      const remoteAccessLocations = this.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
+      remoteAccessLocations.clear();
+      enrolment.remoteAccessLocations.forEach((ral: RemoteAccessLocation) => {
+        const remoteAccessLocation = this.remoteAccessLocationFormGroup();
+        remoteAccessLocation.patchValue(ral);
+        remoteAccessLocations.push(remoteAccessLocation);
+      });
+    }
+
     this.regulatoryForm.patchValue(enrolment);
     this.jobsForm.patchValue(enrolment);
+    this.remoteAccessForm.patchValue(enrolment);
+    this.remoteAccessLocationsForm.patchValue(enrolment);
 
     const defaultValue = (enrolment.profileCompleted) ? false : null;
     const selfDeclarationsTypes = {
@@ -273,6 +328,18 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       }, []);
   }
 
+  private convertRemoteAccessSitesToJson(): RemoteAccessSite[] {
+    const { remoteAccessSites } = this.remoteAccessForm.getRawValue();
+
+    return remoteAccessSites.map((ras) => {
+      return {
+        enrolleeId: ras.enrolleeId,
+        siteId: ras.siteId,
+        site: { doingBusinessAs: ras.doingBusinessAs } as Site,
+      } as RemoteAccessSite;
+    });
+  }
+
   /**
    * Form Builders and Helpers
    */
@@ -311,7 +378,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         FormControlValidators.email
       ]],
       smsPhone: [null, [FormControlValidators.phone]],
-      dateOfBirth: [{ value: null, disabled: false }, [Validators.required]]
+      // Disabled by default, but enabled for enrollee creation
+      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]]
     });
   }
 
@@ -375,6 +443,49 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     });
   }
 
+  public buildRemoteAccessForm(): FormGroup {
+    return this.fb.group({
+      remoteAccessSites: this.fb.array([]),
+      enrolleeRemoteUsers: this.fb.array([])
+    });
+  }
+
+  public enrolleeRemoteUserFormGroup(): FormGroup {
+    return this.fb.group({
+      enrolleeId: [null, []],
+      remoteUserId: [null, []]
+    });
+  }
+
+  public remoteAccessSiteFormGroup(): FormGroup {
+    return this.fb.group({
+      enrolleeId: [null, []],
+      siteId: [null, []],
+      doingBusinessAs: [null, []]
+    });
+  }
+
+  public buildRemoteAccessLocationsForm(): FormGroup {
+    return this.fb.group({
+      remoteAccessLocations: this.fb.array([])
+    });
+  }
+
+  public remoteAccessLocationFormGroup(): FormGroup {
+    return this.fb.group({
+      internetProvider: [
+        null,
+        [Validators.required]
+      ],
+      physicalAddress: this.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        exclude: ['street2'],
+        useDefaults: ['provinceCode', 'countryCode'],
+        areDisabled: ['provinceCode', 'countryCode']
+      })
+    });
+  }
+
   private buildCareSettingsForm(): FormGroup {
     return this.fb.group({
       careSettings: this.fb.array([])
@@ -401,6 +512,15 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
       hasPharmaNetSuspendedDetails: [null, []],
       hasPharmaNetSuspendedDocumentGuids: this.fb.array([])
+    });
+  }
+
+  private buildAccessAgreementForm(): FormGroup {
+    return this.fb.group({
+      accessAgreementGuid: [
+        '',
+        []
+      ]
     });
   }
 

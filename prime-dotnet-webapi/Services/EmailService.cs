@@ -107,9 +107,14 @@ namespace Prime.Services
             return emails.All(e => IsValidEmail(e));
         }
 
-        public async Task SendReminderEmailAsync(Enrollee enrollee)
+        public async Task SendReminderEmailAsync(int enrolleeId)
         {
-            if (!IsValidEmail(enrollee.Email))
+            var enrolleeEmail = await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => e.Email)
+                .SingleOrDefaultAsync();
+
+            if (!IsValidEmail(enrolleeEmail))
             {
                 // TODO Log invalid email, cannot send?
                 return;
@@ -117,10 +122,10 @@ namespace Prime.Services
 
             string subject = "PRIME Requires your Attention";
             string body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/ReminderEmail.cshtml", new EmailParams());
-            await Send(PRIME_EMAIL, enrollee.Email, subject, body);
+            await Send(PRIME_EMAIL, enrolleeEmail, subject, body);
         }
 
-        public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null)
+        public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, int careSettingCode)
         {
             if (!AreValidEmails(recipients))
             {
@@ -137,10 +142,15 @@ namespace Prime.Services
             var ccEmails = new List<string>() { token.Enrollee.Email };
 
             string subject = "New Access Request";
-            string viewName = string.IsNullOrEmpty(provisionerName)
-                ? "/Views/Emails/OfficeManagerEmail.cshtml"
-                : "/Views/Emails/VendorEmail.cshtml";
-            string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token, provisionerName));
+            string viewName = null;
+
+            viewName = careSettingCode switch
+            {
+                (int)CareSettingType.CommunityPharmacy => "/Views/Emails/CommunityPharmacyManagerEmail.cshtml",
+                (int)CareSettingType.HealthAuthority => "/Views/Emails/HealthAuthorityEmail.cshtml",
+                _ => "/Views/Emails/OfficeManagerEmail.cshtml",
+            };
+            string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
 
@@ -153,7 +163,7 @@ namespace Prime.Services
 
             string registrationReviewFilename = "SiteRegistrationReview.pdf";
 
-            var attachments = await getSiteRegistrationAttachments(site);
+            var attachments = await GetSiteRegistrationAttachments(site);
 
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
 
@@ -168,7 +178,7 @@ namespace Prime.Services
                 "/Views/Emails/UpdateRemoteUsersEmail.cshtml",
                 new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
 
-            var attachments = await getSiteRegistrationAttachments(site);
+            var attachments = await GetSiteRegistrationAttachments(site);
 
             await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
         }
@@ -194,7 +204,7 @@ namespace Prime.Services
             return documentAccessToken.DownloadUrl;
         }
 
-        private async Task<IEnumerable<(string Filename, byte[] Content)>> getSiteRegistrationAttachments(Site site)
+        private async Task<IEnumerable<(string Filename, byte[] Content)>> GetSiteRegistrationAttachments(Site site)
         {
             var organization = site.Organization;
 
@@ -261,7 +271,7 @@ namespace Prime.Services
                 (organizationAgreementFilename, organizationAgreementHtml),
                 (registrationReviewFilename, siteRegistrationReviewHtml)
             }
-            .Select(content => (Filename: content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
+            .Select(content => (content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
         }
 
         private async Task SaveSiteRegistrationReview(int siteId, string filename, byte[] pdf)
@@ -287,14 +297,29 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<bool> UpdateEmailLogStatuses()
+        {
+            var emailLogs = await _context.EmailLogs
+                .Where(e => e.SendType == "CHES"
+                    && e.MsgId != null
+                    && e.LatestStatus != ChesStatus.Completed.Value)
+                .ToListAsync();
+
+            foreach (var email in emailLogs)
+            {
+                var status = await _chesClient.GetStatusAsync(email.MsgId.Value);
+                if (status != null && email.LatestStatus != status)
+                {
+                    email.LatestStatus = status;
+                }
+            }
+
+            return await _context.SaveChangesAsync() != 0;
+        }
+
         private async Task Send(string from, string to, string subject, string body)
         {
             await Send(from, new[] { to }, new string[0], subject, body, Enumerable.Empty<(string Filename, byte[] Content)>());
-        }
-
-        private async Task Send(string from, string to, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
-        {
-            await Send(from, new[] { to }, new string[0], subject, body, attachments);
         }
 
         private async Task Send(string from, IEnumerable<string> to, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
@@ -316,12 +341,60 @@ namespace Prime.Services
 
             if (PrimeEnvironment.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
             {
-                await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
+                var msgId = await SendChes(from, to, cc, subject, body, attachments);
+
+                if (msgId == null)
+                {
+                    // Ches failed, send using smtp client
+                    await SendSmtp(from, to, cc, subject, body, attachments);
+                }
             }
             else
             {
-                await _smtpEmailClient.SendAsync(from, to, cc, subject, body, attachments);
+                await SendSmtp(from, to, cc, subject, body, attachments);
             }
+        }
+
+        private async Task<Guid?> SendChes(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
+        {
+            var msgId = await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
+
+            var emailLog = new EmailLog
+            {
+                SentTo = string.Join(",", to),
+                Subject = subject,
+                Body = body,
+                SendType = "CHES",
+                MsgId = msgId,
+                DateSent = DateTimeOffset.Now
+            };
+
+            await CreateEmailLog(emailLog);
+
+            return msgId;
+        }
+
+        private async Task SendSmtp(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
+        {
+            await _smtpEmailClient.SendAsync(from, to, cc, subject, body, attachments);
+
+            var emailLog = new EmailLog
+            {
+                SentTo = string.Join(",", to),
+                Subject = subject,
+                Body = body,
+                SendType = "SMTP",
+                DateSent = DateTimeOffset.Now
+            };
+
+            await CreateEmailLog(emailLog);
+        }
+
+        private async Task CreateEmailLog(EmailLog emailLog)
+        {
+            _context.EmailLogs.Add(emailLog);
+
+            await _context.SaveChangesAsync();
         }
     }
 }

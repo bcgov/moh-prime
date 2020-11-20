@@ -14,8 +14,7 @@
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Care Setting</ng-container>
         <ng-container appPageSubheaderSummary>
-          Identify all of the care settings where you will be accessing PharmaNet. (Note:
-          “Private community health practice” is the only setting currently available in PRIME.)
+          Identify all of the care settings where you will be accessing PharmaNet.
         </ng-container>
       </app-page-subheader>
 
@@ -38,7 +37,8 @@
                       {{ careSettingType.name }}
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="careSetting.get('careSettingCode').hasError('required')">Required
+                  <mat-error *ngIf="careSetting.get('careSettingCode').hasError('required')">
+                    Required
                   </mat-error>
                 </mat-form-field>
 

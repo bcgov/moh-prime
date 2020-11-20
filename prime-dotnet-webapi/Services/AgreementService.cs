@@ -11,6 +11,7 @@ using AutoMapper.QueryableExtensions;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.ViewModels;
+using Prime.HttpClients;
 
 namespace Prime.Services
 {
@@ -21,17 +22,21 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly IPdfService _pdfService;
         private readonly IRazorConverterService _razorConverterService;
+        private readonly IDocumentManagerClient _documentClient;
 
         public AgreementService(
-            ApiDbContext context, IHttpContextAccessor httpContext,
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
             IMapper mapper,
             IPdfService pdfService,
-            IRazorConverterService razorConverterService)
+            IRazorConverterService razorConverterService,
+            IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
             _pdfService = pdfService;
             _razorConverterService = razorConverterService;
+            _documentClient = documentClient;
         }
 
         /// <summary>
@@ -89,19 +94,29 @@ namespace Prime.Services
 
         public async Task CreateEnrolleeAgreementAsync(int enrolleeId)
         {
-            var enrollee = await _context.Enrollees
+            var dto = await _context.Enrollees
                 .AsNoTracking()
-                .Include(e => e.EnrolleeCareSettings)
-                .Include(e => e.Certifications)
-                    .ThenInclude(c => c.License)
-                .Include(e => e.AccessAgreementNote)
-                .SingleAsync(e => e.Id == enrolleeId);
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => new
+                {
+                    NewestAssignedAgreement = e.Submissions
+                        .OrderByDescending(s => s.CreatedDate)
+                        .Select(s => s.AgreementType)
+                        .FirstOrDefault(),
+                    AccessAgreementNote = e.AccessAgreementNote
+                })
+                .SingleAsync();
+
+            if (dto.NewestAssignedAgreement == null)
+            {
+                throw new InvalidOperationException("Agreement type is required to approve an enrollee");
+            }
 
             var agreement = new Agreement
             {
                 EnrolleeId = enrolleeId,
-                AgreementVersionId = await GetCurrentAgreementVersionIdForUserAsync(enrollee),
-                LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(enrollee.AccessAgreementNote),
+                AgreementVersionId = await FetchNewestAgreementVersionIdOfType(dto.NewestAssignedAgreement.Value),
+                LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(dto.AccessAgreementNote),
                 CreatedDate = DateTimeOffset.Now
             };
 
@@ -110,13 +125,21 @@ namespace Prime.Services
         }
 
         /// <summary>
+        /// Gets the Enrollee's newest Agreement
+        /// </summary>
+        public async Task<Agreement> GetCurrentAgreementAsync(int enrolleeId)
+        {
+            return await _context.Agreements
+                .OrderByDescending(at => at.CreatedDate)
+                .FirstAsync(at => at.EnrolleeId == enrolleeId);
+        }
+
+        /// <summary>
         /// Accepts the Enrollee's newest Agreement, if it hasn't already been accepted.
         /// </summary>
         public async Task AcceptCurrentEnrolleeAgreementAsync(int enrolleeId)
         {
-            var agreement = await _context.Agreements
-                .OrderByDescending(a => a.CreatedDate)
-                .FirstAsync(a => a.EnrolleeId == enrolleeId);
+            var agreement = await this.GetCurrentAgreementAsync(enrolleeId);
 
             if (agreement.AcceptedDate == null)
             {
@@ -253,6 +276,28 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
+        public async Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid)
+        {
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_agreements");
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
+            var signedAgreement = new SignedAgreementDocument
+            {
+                DocumentGuid = documentGuid,
+                AgreementId = agreementId,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now
+            };
+            _context.SignedAgreementDocuments.Add(signedAgreement);
+
+            await _context.SaveChangesAsync();
+
+            return signedAgreement;
+        }
+
         /// <summary>
         /// Renders the HTML text of the Agreement for viewing on the frontend.
         /// </summary>
@@ -264,27 +309,6 @@ namespace Prime.Services
                 {
                     agreement.AgreementContent = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", agreement);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets the ID of the most current AgreementVersion based on the scope of practice of the Enrollee.
-        /// See JIRA PRIME-880
-        /// </summary>
-        private async Task<int> GetCurrentAgreementVersionIdForUserAsync(Enrollee enrollee)
-        {
-            if (!enrollee.IsRegulatedUser())
-            {
-                return await FetchNewestAgreementVersionIdOfType(AgreementType.OboTOA);
-            }
-
-            if (enrollee.HasCareSetting(CareSettingType.CommunityPharmacy))
-            {
-                return await FetchNewestAgreementVersionIdOfType(AgreementType.CommunityPharmacistTOA);
-            }
-            else
-            {
-                return await FetchNewestAgreementVersionIdOfType(AgreementType.RegulatedUserTOA);
             }
         }
 

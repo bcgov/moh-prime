@@ -18,8 +18,6 @@ namespace Prime.Models.Api
         LockProfile,
         [EnumMember(Value = "decline-profile")]
         DeclineProfile,
-        [EnumMember(Value = "enable-profile")]
-        EnableProfile,
         [EnumMember(Value = "rerun-rules")]
         RerunRules
     }

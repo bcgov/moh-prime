@@ -56,6 +56,7 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Date of Birth"
+                   [max]="maxDateOfBirth"
                    [matDatepicker]="myDatepicker"
                    formControlName="dateOfBirth"
                    (click)="myDatepicker.open()"

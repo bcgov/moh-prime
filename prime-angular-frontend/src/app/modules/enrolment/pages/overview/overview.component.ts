@@ -12,7 +12,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -31,8 +31,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public enrolment: Enrolment;
   public currentStatus: EnrolmentStatus;
   public demographicRoutePath: string;
-  public identityProvider: IdentityProvider;
-  public IdentityProvider = IdentityProvider;
+  public identityProvider: IdentityProviderEnum;
+  public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatus;
 
   protected allowRoutingWhenDirty: boolean;
@@ -54,9 +54,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     this.allowRoutingWhenDirty = true;
 
     this.authService.identityProvider$()
-      .subscribe((identityProvider: IdentityProvider) => {
+      .subscribe((identityProvider: IdentityProviderEnum) => {
         this.identityProvider = identityProvider;
-        this.demographicRoutePath = (identityProvider === IdentityProvider.BCEID)
+        this.demographicRoutePath = (identityProvider === IdentityProviderEnum.BCEID)
           ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
           : EnrolmentRoutes.BCSC_DEMOGRAPHIC;
       });
@@ -79,18 +79,21 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
               : EMPTY
           )
         )
-        .subscribe(
-          () => {
-            this.toastService.openSuccessToast('Enrolment has been submitted');
-            this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
-          },
-          (error: any) => {
-            this.toastService.openErrorToast('Enrolment could not be submitted');
-            this.logger.error('[Enrolment] Review::onSubmit error has occurred: ', error);
-          });
+        .subscribe(() => {
+          this.toastService.openSuccessToast('Enrolment has been submitted');
+          this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
+        });
     } else {
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
     }
+  }
+
+  public canRequestRemoteAccess(): boolean {
+    const certifications = this.enrolmentFormStateService.regulatoryForm.get('certifications').value;
+    const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
+
+    return this.enrolmentService
+      .canRequestRemoteAccess(certifications, careSettings);
   }
 
   public hasRegOrJob(): boolean {

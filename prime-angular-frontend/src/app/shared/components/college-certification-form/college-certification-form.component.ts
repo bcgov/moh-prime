@@ -1,14 +1,16 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import * as moment from 'moment';
+import moment from 'moment';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/config.model';
+import { Config, CollegeConfig, LicenseConfig, PracticeConfig, LicenseWeightedConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -20,6 +22,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public index: number;
   @Input() public total: number;
   @Input() public selectedColleges: number[];
+  @Input() public collegeFilterPredicate: (collegeConfig: CollegeConfig) => boolean;
+  @Input() public licenceFilterPredicate: (licenceConfig: LicenseWeightedConfig) => boolean;
   @Input() public condensed: boolean;
   @Output() public remove: EventEmitter<number>;
 
@@ -36,7 +40,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   constructor(
     private configService: ConfigService,
     private viewportService: ViewportService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private enrolmentService: EnrolmentService
   ) {
     this.remove = new EventEmitter<number>();
     this.colleges = this.configService.colleges;
@@ -77,66 +82,110 @@ export class CollegeCertificationFormComponent implements OnInit {
     );
   }
 
-  // Only show College of Physicians and Surgeons or College or Nurses for remote user cert.
-  public getDisplayedColleges(): CollegeConfig[] {
-    return this.filteredColleges
-      .filter(c => !this.condensed || (c.code === CollegeLicenceClass.CPSBC || c.code === CollegeLicenceClass.BCCNP));
+  public allowedColleges(): CollegeConfig[] {
+    return (this.collegeFilterPredicate)
+      ? this.filteredColleges.filter(this.collegeFilterPredicate)
+      : this.filteredColleges;
+  }
+
+  public allowedLicenses() {
+    return (this.licenceFilterPredicate)
+      ? this.filteredLicenses.filter(this.licenceFilterPredicate)
+      : this.filteredLicenses;
   }
 
   public removeCertification() {
     this.remove.emit(this.index);
   }
 
+  public shouldShowPractices(): boolean {
+    return ((this.collegeCode.value == CollegeLicenceClass.BCCNM) &&
+        ([NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE, 
+          NursingLicenseCode.PRACTICING_REGISTERED_NURSE,
+          NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE, 
+          NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_EMERGENCY,
+          NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_SPECIAL_EVENT].includes(this.licenseCode.value)));
+  }
+
   public ngOnInit() {
+    if (this.condensed) {
+      this.formUtilsService.setValidators(this.collegeCode, [Validators.required]);
+    }
+
     this.setCollegeCertification(this.collegeCode.value);
 
     this.collegeCode.valueChanges
-      .subscribe((collegeCode: number) => this.setCollegeCertification(collegeCode));
+      .subscribe((collegeCode: number) => {
+        this.resetCollegeCertification();
+        this.setCollegeCertification(collegeCode);
+      });
+
+    this.licenseCode.valueChanges
+      .subscribe((licenseCode: number) =>
+        this.setPrefix(this.doesLicenceHavePrefix(licenseCode, this.collegeCode.value))
+      );
   }
 
-  private setCollegeCertification(collegeCode: number) {
-    if (collegeCode) {
-      // Initialize the validations when the college code is not
-      // "None" to allow for submission when no college is selected
-      this.setValidations();
-      this.setPrefix(collegeCode);
+  private doesLicenceHavePrefix(licenseCode: number, collegeCode: number): number {
+    return (this.enrolmentService.shouldShowCollegePrefix(licenseCode))
+      ? collegeCode
+      : null;
+  }
 
-      if (!this.condensed) {
-        this.loadLicenses(collegeCode);
-        this.loadPractices(collegeCode);
-      }
-    } else {
+  private setCollegeCertification(collegeCode: number): void {
+    if (!collegeCode) {
       this.removeValidations();
+      return;
+    }
 
-      // Reset individually and not emitted to be handled by parent
-      // to prevent ExpressionChangedAfterItHasBeenCheckedError
-      this.licenseNumber.reset(null);
-      if (!this.condensed) {
-        this.licenseCode.reset(null);
-        this.renewalDate.reset(null);
-        this.practiceCode.reset(null);
-      }
+    // Initialize the validations when the college code is not
+    // "None" to allow for submission when no college is selected
+    this.setValidations();
+    this.setPrefix(this.doesLicenceHavePrefix(this.licenseCode.value, collegeCode));
+
+    this.loadLicenses(collegeCode);
+    if (this.filteredLicenses?.length === 1) {
+      this.licenseCode.patchValue(this.filteredLicenses[0].code);
+    }
+
+    if (!this.condensed) {
+      this.loadPractices(collegeCode);
     }
   }
 
   private setValidations() {
     this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
+    this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
+
     if (!this.condensed) {
-      this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
       this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
+    }
+  }
+
+  private resetCollegeCertification() {
+    this.licenseNumber.reset(null);
+    this.licenseCode.reset(null);
+
+    if (!this.condensed) {
+      this.renewalDate.reset(null);
+      this.practiceCode.reset(null);
     }
   }
 
   private removeValidations() {
     this.formUtilsService.setValidators(this.licenseNumber, []);
+    this.formUtilsService.setValidators(this.licenseCode, []);
+
     if (!this.condensed) {
-      this.formUtilsService.setValidators(this.licenseCode, []);
       this.formUtilsService.setValidators(this.renewalDate, []);
     }
   }
 
   private setPrefix(collegeCode: number) {
-    this.licensePrefix = this.colleges.filter(c => c.code === collegeCode).shift().prefix;
+    this.licensePrefix = this.colleges
+      .filter(c => c.code === collegeCode)
+      .shift()
+      ?.prefix;
   }
 
   private loadLicenses(collegeCode: number) {

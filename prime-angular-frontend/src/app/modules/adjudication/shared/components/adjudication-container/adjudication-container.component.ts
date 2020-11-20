@@ -11,6 +11,7 @@ import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-dat
 
 import { UtilsService } from '@core/services/utils.service';
 import { ToastService } from '@core/services/toast.service';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
@@ -91,8 +92,10 @@ export class AdjudicationContainerComponent implements OnInit {
           this.toastService.openErrorToast('Enrollee does not have a contact email.');
           return EMPTY;
         }),
-        exhaustMap((enrollee: HttpEnrollee) => this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
-          .pipe(map(() => enrollee)))
+        exhaustMap((enrollee: HttpEnrollee) =>
+          this.adjudicationResource.createInitiatedEnrolleeEmailEvent(enrollee.id)
+            .pipe(map(() => enrollee))
+        )
       )
       .subscribe((enrollee: HttpEnrollee) => {
         this.utilsService.mailTo(enrollee.email);
@@ -130,10 +133,10 @@ export class AdjudicationContainerComponent implements OnInit {
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
-  public onApprove(enrollee: EnrolleeListViewModel) {
+  public onApprove({ enrolleeId, agreementName }: { enrolleeId: number, agreementName: string }) {
     const data: DialogOptions = {
       title: 'Approve Enrolment',
-      message: 'Are you sure you want to approve this enrolment?',
+      message: `Are you sure you want to approve this enrolment with a ${agreementName} TOA agreement?`,
       actionText: 'Approve Enrolment',
       component: NoteComponent
     };
@@ -141,7 +144,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrollee.id, SubmissionAction.APPROVE)
+        this.adjudicationActionPipe(enrolleeId, SubmissionAction.APPROVE)
       )
       .subscribe((approvedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(approvedEnrollee);
@@ -222,7 +225,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrolleeId, SubmissionAction.ENABLE_PROFILE)
+        this.adjudicationActionPipe(enrolleeId, SubmissionAction.ENABLE_EDITING)
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
         this.updateEnrollee(enableEnrollee);
@@ -294,13 +297,12 @@ export class AdjudicationContainerComponent implements OnInit {
     }
   }
 
-  public onToggleManualAdj(enrollee: EnrolleeListViewModel) {
-    const flagText = enrollee.alwaysManual ? 'Unflag' : 'Flag';
+  public onToggleManualAdj({ enrolleeId, alwaysManual }: { enrolleeId: number, alwaysManual: boolean }) {
+    const flagText = (alwaysManual) ? 'Flag' : 'Unflag';
     const data: DialogOptions = {
       title: `${flagText} Enrollee`,
       message: `Are you sure you want to ${flagText} this enrollee for manual adjudication?`,
-      actionText: `${flagText} Enrollee`,
-      data: { enrollee }
+      actionText: `${flagText} Enrollee`
     };
 
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
@@ -312,9 +314,9 @@ export class AdjudicationContainerComponent implements OnInit {
             : EMPTY
         ),
         exhaustMap(() =>
-          this.adjudicationResource.updateEnrolleeAlwaysManual(enrollee.id, !enrollee.alwaysManual)
+          this.adjudicationResource.updateEnrolleeAlwaysManual(enrolleeId, alwaysManual)
         ),
-        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrollee.id))
+        exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
       )
       .subscribe((flaggedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(flaggedEnrollee);
@@ -324,6 +326,11 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onRoute(routePath: string | (string | number)[]) {
     this.routeUtils.routeWithin(routePath);
+  }
+
+  public onAssign({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
+    this.adjudicationResource.assignToaAgreementType(enrolleeId, agreementType)
+      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
   public ngOnInit() {
@@ -344,8 +351,7 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   private getEnrolleeById(enrolleeId: number): Observable<EnrolleeListViewModel[]> {
-    return this.adjudicationResource
-      .getEnrolleeById(enrolleeId)
+    return this.adjudicationResource.getEnrolleeById(enrolleeId)
       .pipe(
         map(this.toEnrolleeListViewModel),
         map((enrollee: EnrolleeListViewModel) => [enrollee]),
@@ -396,8 +402,12 @@ export class AdjudicationContainerComponent implements OnInit {
       expiryDate,
       currentStatus,
       previousStatus,
+      currentTOAStatus,
+      assignedTOAType,
+      hasNewestAgreement,
       adjudicator,
-      alwaysManual
+      alwaysManual,
+      enrolleeRemoteUsers
     } = enrollee;
     return {
       id,
@@ -410,8 +420,12 @@ export class AdjudicationContainerComponent implements OnInit {
       expiryDate,
       currentStatusCode: currentStatus?.statusCode,
       previousStatus,
+      currentTOAStatus,
+      assignedTOAType,
+      hasNewestAgreement,
       adjudicatorIdir: adjudicator?.idir,
-      alwaysManual
+      alwaysManual,
+      remoteAccess: (enrolleeRemoteUsers?.length) ? true : false
     };
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
 
 import { EMPTY } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { debounceTime, exhaustMap, switchMap } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { Address } from '@shared/models/address.model';
@@ -64,7 +64,8 @@ export class AddressAutocompleteComponent implements OnInit {
 
     this.autocomplete.valueChanges
       .pipe(
-        exhaustMap((value: string) => {
+        debounceTime(400),
+        switchMap((value: string) => {
           this.addressAutocompleteFields = [];
           return (value)
             ? this.addressAutocompleteResource.find(value)

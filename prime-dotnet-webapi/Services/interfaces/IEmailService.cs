@@ -6,9 +6,9 @@ namespace Prime.Services
 {
     public interface IEmailService
     {
-        Task SendReminderEmailAsync(Enrollee enrollee);
+        Task SendReminderEmailAsync(int enrolleeId);
 
-        Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null);
+        Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, int careSettingCode);
 
         Task SendSiteRegistrationAsync(Site site);
 
@@ -19,5 +19,7 @@ namespace Prime.Services
         Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName);
 
         Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync();
+
+        Task<bool> UpdateEmailLogStatuses();
     }
 }

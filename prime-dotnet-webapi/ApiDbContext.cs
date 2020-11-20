@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Prime.Models;
-using Prime.Configuration;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using System.Reflection;
 
 namespace Prime
 {
@@ -68,8 +66,9 @@ namespace Prime
         public DbSet<Privilege> Privileges { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
         public DbSet<AssignedPrivilege> AssignedPrivileges { get; set; }
-        public DbSet<EnrolleeProfileVersion> EnrolleeProfileVersions { get; set; }
+        public DbSet<Submission> Submissions { get; set; }
         public DbSet<EnrolleeNote> EnrolleeNotes { get; set; }
+        public DbSet<EmailLog> EmailLogs { get; set; }
         public DbSet<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
         public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
 
@@ -80,6 +79,8 @@ namespace Prime
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<Feedback> Feedback { get; set; }
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
+        public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
+        public DbSet<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
@@ -88,7 +89,6 @@ namespace Prime
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<RemoteUser> RemoteUsers { get; set; }
-        public DbSet<RemoteUserLocation> RemoteUserLocations { get; set; }
         public DbSet<RemoteUserCertification> RemoteUserCertifications { get; set; }
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
         public DbSet<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
@@ -98,6 +98,8 @@ namespace Prime
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
         public DbSet<IdentificationDocument> IdentificationDocuments { get; set; }
+        public DbSet<EnrolleeAdjudicationDocument> EnrolleeAdjudicationDocuments { get; set; }
+        public DbSet<SiteAdjudicationDocument> SiteAdjudicationDocuments { get; set; }
         public DbSet<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
         public DbSet<DocumentAccessToken> DocumentAccessToken { get; set; }
 
@@ -248,10 +250,17 @@ namespace Prime
                 .WithMany(s => s.RemoteUsers)
                 .HasForeignKey(ru => ru.SiteId);
 
-            modelBuilder.Entity<RemoteUserLocation>()
-                .HasOne(rul => rul.RemoteUser)
-                .WithMany(ru => ru.RemoteUserLocations)
-                .HasForeignKey(rul => rul.RemoteUserId);
+            modelBuilder.Entity<RemoteAccessLocation>()
+                .HasOne(ral => ral.Enrollee)
+                .WithMany(e => e.RemoteAccessLocations)
+                .HasForeignKey(ral => ral.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RemoteAccessSite>()
+                .HasOne(ras => ras.Enrollee)
+                .WithMany(e => e.RemoteAccessSites)
+                .HasForeignKey(ras => ras.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
         }

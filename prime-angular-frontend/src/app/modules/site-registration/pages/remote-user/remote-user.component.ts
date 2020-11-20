@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
+import { CollegeConfig, LicenseWeightedConfig } from '@config/config.model';
+import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AddressLine } from '@lib/types/address-line.type';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Country } from '@shared/enums/country.enum';
-import { Province } from '@shared/enums/province.enum';
+import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
@@ -28,28 +30,21 @@ export class RemoteUserComponent implements OnInit {
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public remoteUser: RemoteUser;
+  public licenses: LicenseWeightedConfig[];
   public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private siteService: SiteService,
     private siteFormStateService: SiteFormStateService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private configService: ConfigService,
+    private enrolmentService: EnrolmentService
   ) {
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.formControlNames = [
-      'street',
-      'city',
-      'provinceCode',
-      'postal'
-    ];
-  }
-
-  public get remoteUserLocations(): FormArray {
-    return this.form.get('remoteUserLocations') as FormArray;
+    this.licenses = this.configService.licenses;
   }
 
   public get remoteUserCertifications(): FormArray {
@@ -71,21 +66,10 @@ export class RemoteUserComponent implements OnInit {
 
       if (remoteUserIndex !== 'new') {
         const remoteUserFormGroup = remoteUsersFormArray.at(remoteUserIndex);
-        const remoteUserLocationsFormArray = remoteUserFormGroup.get('remoteUserLocations') as FormArray;
         const certificationFormArray = remoteUserFormGroup.get('remoteUserCertifications') as FormArray;
 
-        // Changes in the amount of locations requires adjusting the number of
-        // locations in the parent, which is not handled automatically
-        if (this.remoteUserLocations.length !== remoteUserLocationsFormArray.length) {
-          remoteUserLocationsFormArray.clear();
-
-          Object.keys(this.remoteUserLocations.controls)
-            .map(() => this.siteFormStateService.remoteUserLocationFormGroup())
-            .forEach((group: FormGroup) => remoteUserLocationsFormArray.push(group));
-        }
-
-        // Changes in the amount of locations requires adjusting the number of
-        // locations in the parent, which is not handled automatically
+        // Changes in the amount of certificates requires adjusting the number of
+        // certificates in the parent, which is not handled automatically
         if (this.remoteUserCertifications.length !== certificationFormArray.length) {
           certificationFormArray.clear();
 
@@ -102,18 +86,6 @@ export class RemoteUserComponent implements OnInit {
       }
 
       this.nextRoute();
-    }
-  }
-
-  public addLocation() {
-    this.addRemoteUserLocation();
-  }
-
-  public removeLocation(index: number) {
-    this.remoteUserLocations.removeAt(index);
-
-    if (!this.remoteUserLocations.controls.length) {
-      this.addRemoteUserLocation();
     }
   }
 
@@ -142,6 +114,16 @@ export class RemoteUserComponent implements OnInit {
   public nextRoute() {
     // Inform the remote users view not to patch the form, otherwise updates will be lost
     this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
+  }
+
+  public collegeFilterPredicate() {
+    return (collegeConfig: CollegeConfig) =>
+      (collegeConfig.code === CollegeLicenceClass.CPSBC || collegeConfig.code === CollegeLicenceClass.BCCNM);
+  }
+
+  public licenceFilterPredicate() {
+    return (licenceConfig: LicenseWeightedConfig) =>
+      this.enrolmentService.hasAllowedRemoteAccessLicences(licenceConfig);
   }
 
   public ngOnInit(): void {
@@ -176,37 +158,9 @@ export class RemoteUserComponent implements OnInit {
     this.form = this.siteFormStateService
       .createEmptyRemoteUserFormAndPatch(remoteUser);
 
-    // Remote user index and "new" were used instead of ID and 0 since the
-    // remote users can't be persisted immediately, and need to be stored
-    // locally for submission by the sibling view. Therefore, there could
-    // be multiple "new" entries without an unique identifier that might
-    // be edited prior to submission so it was necessary to use an index
-    (remoteUserIndex !== 'new' && remoteUser)
-      ? this.disableProvince(this.remoteUserLocations.controls as FormGroup[])
-      : this.addRemoteUserLocation();
-
     if (!this.remoteUserCertifications.length) {
       this.addCertification();
     }
-  }
-
-  private addRemoteUserLocation(): void {
-    const remoteUserLocation = this.siteFormStateService
-      .remoteUserLocationFormGroup();
-    remoteUserLocation.get('physicalAddress')
-      .patchValue({
-        countryCode: Country.CANADA,
-        provinceCode: Province.BRITISH_COLUMBIA
-      });
-    this.disableProvince(remoteUserLocation);
-
-    this.remoteUserLocations.push(remoteUserLocation);
-  }
-
-  private disableProvince(remoteUserLocationFormGroups: FormGroup | FormGroup[]): void {
-    (Array.isArray(remoteUserLocationFormGroups))
-      ? remoteUserLocationFormGroups.forEach(group => this.disableProvince(group))
-      : remoteUserLocationFormGroups.get('physicalAddress.provinceCode').disable();
   }
 
   /**

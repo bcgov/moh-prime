@@ -58,6 +58,11 @@ namespace Prime.ViewModels
             return IdentityProvider == AuthConstants.BC_SERVICES_CARD;
         }
 
+        public bool IsUnder18()
+        {
+            return DateOfBirth > DateTime.Today.AddYears(-18);
+        }
+
         public void MapConditionalProperties(ClaimsPrincipal user)
         {
             UserId = user.GetPrimeUserId();

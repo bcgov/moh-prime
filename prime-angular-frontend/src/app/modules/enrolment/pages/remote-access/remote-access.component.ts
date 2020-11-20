@@ -14,11 +14,11 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { EnrolleeRemoteAccessSite } from '@enrolment/shared/models/enrollee-remote-access.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { Site } from '@registration/shared/models/site.model';
 
 @Component({
   selector: 'app-remote-access',
@@ -31,7 +31,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   public form: FormGroup;
   public enrolment: Enrolment;
   public showProgress: boolean;
-  public remoteSites: EnrolleeRemoteAccessSite[];
+  public remoteSites: Site[];
   public noRemoteSites: boolean;
 
   constructor(
@@ -60,26 +60,51 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       utilService,
       formUtilsService
     );
-
-    this.enrolment = this.enrolmentService.enrolment;
   }
 
-  public get sitesFormArray(): FormArray {
+  // All sites returned from search that have remote users
+  // with the same college licence as the enrollee used as checkboxes
+  public get sites(): FormArray {
     return this.form.get('sites') as FormArray;
   }
 
-  public onSubmit() {
-    if (this.remoteSites?.length) {
-      const selectedSites = this.remoteSites
-        .filter((site, i) => this.sitesFormArray.value[i])
-        .map(site => site.id);
+  // Sites selected by the enrollee
+  public get remoteAccessSites(): FormArray {
+    return this.form.get('remoteAccessSites') as FormArray;
+  }
 
-      this.busy = this.enrolmentResource
-        .createEnrolleeRemoteUsers(this.enrolment.id, selectedSites)
-        .subscribe(() => this.nextRouteAfterSubmit());
-    } else {
-      this.nextRouteAfterSubmit();
+  public get enrolleeRemoteUsers(): FormArray {
+    return this.form.get('enrolleeRemoteUsers') as FormArray;
+  }
+
+  public onSubmit() {
+    this.enrolleeRemoteUsers.clear();
+    this.remoteAccessSites.clear();
+
+    // for each checked site, add a enrolleeRemoteUser and a remoteAccessSite
+    this.sites?.controls.forEach((checked, i) => {
+      if (checked.value) {
+        this.remoteSites[i].remoteUsers.forEach(remoteUser => {
+          const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
+          enrolleeRemoteUser.patchValue({ enrolleeId: this.enrolment.id, remoteUserId: remoteUser.id });
+          this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
+
+          const remoteAccessSite = this.enrolmentFormStateService.remoteAccessSiteFormGroup();
+          remoteAccessSite.patchValue({
+            enrolleeId: this.enrolment.id,
+            siteId: this.remoteSites[i].id,
+            doingBusinessAs: this.remoteSites[i].doingBusinessAs
+          });
+          this.remoteAccessSites.push(remoteAccessSite);
+        });
+      }
+    });
+
+    if (!this.enrolleeRemoteUsers.length) {
+      this.removeRemoteAccessLocations();
     }
+
+    super.onSubmit();
   }
 
   public onRequestAccess(event: MatSlideToggleChange) {
@@ -98,27 +123,33 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   }
 
   protected createFormInstance() {
-    this.form = this.fb.group({
-      sites: this.fb.array([])
-    });
+    this.form = this.enrolmentFormStateService.remoteAccessForm;
   }
 
   protected initForm() {
     this.form.controls.sites = this.fb.array(this.remoteSites.map(() => this.fb.control(false)));
     // Set already linked sites as checked
     const checked = [];
-    this.remoteSites.forEach(remoteSite =>
-      remoteSite.remoteUsers.forEach(remoteUser =>
-        checked.push(this.enrolment.enrolleeRemoteUsers?.some(eru => eru.remoteUserId === remoteUser.id))
-      )
-    );
-    this.sitesFormArray.patchValue(checked);
+    this.remoteSites.forEach(remoteSite => {
+      remoteSite.remoteUsers.forEach(remoteUser => {
+        this.enrolleeRemoteUsers.controls.forEach(control => {
+          if (control.get('remoteUserId').value === remoteUser.id) {
+            checked.push(true);
+          }
+        });
+      });
+    });
+    this.sites.patchValue(checked);
   }
 
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.SELF_DECLARATION;
+      nextRoutePath = this.enrolleeRemoteUsers.length
+        ? EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES
+        : EnrolmentRoutes.SELF_DECLARATION;
+    } else if (this.enrolleeRemoteUsers.length) {
+      nextRoutePath = EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
@@ -131,10 +162,10 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   private getRemoteAccess(): void {
     this.showProgress = true;
     this.noRemoteSites = false;
-    this.siteResource.getSitesByRemoteUserInfo(this.enrolment.certifications)
+    this.siteResource.getSitesByRemoteUserInfo(this.enrolmentFormStateService.regulatoryForm.get('certifications').value)
       .pipe(delay(2000))
       .subscribe(
-        (sites: EnrolleeRemoteAccessSite[]) => {
+        (sites: Site[]) => {
           if (sites.length) {
             this.noRemoteSites = false;
             this.remoteSites = sites;
@@ -147,5 +178,15 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
         (error: any) => { },
         () => this.showProgress = false
       );
+  }
+
+  /**
+   * @description
+   * Remove remoteAccessLocations from the enrolment if no remote sites have been chosen
+   */
+  private removeRemoteAccessLocations() {
+    const form = this.enrolmentFormStateService.remoteAccessLocationsForm;
+    const locations = form.get('remoteAccessLocations') as FormArray;
+    locations.clear();
   }
 }

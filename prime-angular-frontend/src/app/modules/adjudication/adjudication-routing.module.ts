@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ConfigResolver } from '@config/config-resolver';
+import { ConfigGuard } from '@config/config.guard';
 import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
@@ -25,19 +25,25 @@ import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-
 import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
 import { EnrolleeAdjudicatorNotesComponent } from './pages/enrollee-adjudicator-notes/enrollee-adjudicator-notes.component';
 import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/site-adjudicator-notes.component';
+import { SiteAdjudicatorDocumentsComponent } from './pages/site-adjudicator-documents/site-adjudicator-documents.component';
+import { EnrolleeAdjudicatorDocumentsComponent } from './pages/enrollee-adjudicator-documents/enrollee-adjudicator-documents.component';
 
 const routes: Routes = [
   {
     path: AdjudicationRoutes.MODULE_PATH,
     component: AdjudicationDashboardComponent,
     canActivate: [
+      // Ensure that the configuration is loaded prior to dependent
+      // guards, as well as, views, otherwise if it already exists NOOP
+      // NOTE: A resolver could not be used due to their execution
+      // occuring after parent and child guards
+      ConfigGuard,
       UnsupportedGuard,
       AdjudicationGuard
     ],
     canActivateChild: [
       AuthenticationGuard
     ],
-    resolve: [ConfigResolver],
     children: [
       {
         path: AdjudicationRoutes.ENROLLEES,
@@ -96,6 +102,11 @@ const routes: Routes = [
                 data: { title: 'Adjudicator Notes' }
               },
               {
+                path: AdjudicationRoutes.DOCUMENT_UPLOAD,
+                component: EnrolleeAdjudicatorDocumentsComponent,
+                data: { title: 'Document Upload' }
+              },
+              {
                 path: AdjudicationRoutes.ENROLLEE_EVENT_LOG,
                 component: EnrolleeEventsComponent,
                 data: { title: 'Event Log' }
@@ -139,6 +150,11 @@ const routes: Routes = [
                 path: AdjudicationRoutes.ADJUDICATOR_NOTES,
                 component: SiteAdjudicatorNotesComponent,
                 data: { title: 'Adjudicator Notes' }
+              },
+              {
+                path: AdjudicationRoutes.DOCUMENT_UPLOAD,
+                component: SiteAdjudicatorDocumentsComponent,
+                data: { title: 'Document Upload' }
               },
             ]
           }

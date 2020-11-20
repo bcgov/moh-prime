@@ -27,7 +27,6 @@ import { AccessDeclinedComponent } from './pages/access-declined/access-declined
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
-import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
 import {
   AccessAgreementHistoryEnrolmentComponent
 } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
@@ -40,6 +39,7 @@ import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.
 import { HeaderComponent } from './shared/components/header/header.component';
 import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
 import { ContactInformationFormComponent } from './shared/components/contact-information-form/contact-information-form.component';
+import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 
 @NgModule({
   declarations: [
@@ -72,8 +72,8 @@ import { ContactInformationFormComponent } from './shared/components/contact-inf
     NextStepsInfographicComponent,
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
-    NotificationConfirmationComponent,
-    ContactInformationFormComponent
+    ContactInformationFormComponent,
+    RemoteAccessAddressesComponent
   ],
   imports: [
     SharedModule,

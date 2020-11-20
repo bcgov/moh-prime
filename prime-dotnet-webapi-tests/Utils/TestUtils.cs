@@ -92,9 +92,10 @@ namespace PrimeTests.Utils
             .RuleFor(es => es.AcceptedDate, f => DateTime.Now)
             .RuleFor(es => es.ExpiryDate, f => DateTime.Now.AddYears(1));
 
-        public static Faker<EnrolleeProfileVersion> EnrolleeProfileVersionFaker = new Faker<EnrolleeProfileVersion>()
+        public static Faker<Submission> SubmissionFaker = new Faker<Submission>()
             .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
             .RuleFor(x => x.ProfileSnapshot, f => JObject.FromObject(EnrolleeFaker.Generate()))
+            .RuleFor(x => x.AgreementType, f => f.PickRandom<AgreementType>())
             .RuleFor(x => x.CreatedDate, f => DateTime.Now.AddDays(-5));
 
         public static string RandomProvinceCode(params string[] excludedProvinceCodes)
@@ -381,15 +382,9 @@ namespace PrimeTests.Utils
         {
             var request = CreateRequest<T>(method, requestUri, subject, payload);
 
-            var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-            if (audience == null)
-            {
-                audience = Startup.StaticConfig["Jwt:Audience"];
-            }
-
             // replace the token - with an admin version of the token
             var _token = TestUtils.TokenBuilder()
-                 .ForAudience(audience)
+                 .ForAudience(AuthConstants.Audience)
                  .ForSubject(subject.ToString())
                  .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_ADMIN_ROLE)
                  .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_READONLY_ADMIN)
@@ -409,15 +404,9 @@ namespace PrimeTests.Utils
         {
             var request = CreateRequest<T>(method, requestUri, subject, payload);
 
-            var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-            if (audience == null)
-            {
-                audience = Startup.StaticConfig["Jwt:Audience"];
-            }
-
             // replace the token - with an admin version of the token
             var _token = TestUtils.TokenBuilder()
-                 .ForAudience(audience)
+                 .ForAudience(AuthConstants.Audience)
                  .ForSubject(subject.ToString())
                  .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_SUPER_ADMIN_ROLE)
                  .BuildToken();

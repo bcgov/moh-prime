@@ -12,6 +12,7 @@ export class EnrolmentRoutes {
   // Enrollee enrolment:
   public static REGULATORY = 'regulatory';
   public static REMOTE_ACCESS = 'remote-access';
+  public static REMOTE_ACCESS_ADDRESSES = 'remote-access-addresses';
   public static DEVICE_PROVIDER = 'device-provider';
   public static JOB = 'job';
   public static CARE_SETTING = 'care-setting';
@@ -28,7 +29,6 @@ export class EnrolmentRoutes {
   // Replaces terms of access after accepting the terms of access (TOA)
   public static CURRENT_ACCESS_TERM = 'current-access-term';
   public static PHARMANET_ENROLMENT_SUMMARY = 'pharmanet-enrolment-summary';
-  public static NOTIFICATION_CONFIRMATION = 'notification-confirmation';
   public static PHARMANET_TRANSACTIONS = 'pharmanet-transactions';
   public static ACCESS_TERMS = 'access-terms';
 
@@ -58,6 +58,7 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.BCSC_DEMOGRAPHIC,
       EnrolmentRoutes.REGULATORY,
       EnrolmentRoutes.REMOTE_ACCESS,
+      EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES,
       // EnrolmentRoutes.DEVICE_PROVIDER,
       EnrolmentRoutes.JOB,
       EnrolmentRoutes.CARE_SETTING,
@@ -83,7 +84,6 @@ export class EnrolmentRoutes {
     return [
       EnrolmentRoutes.CURRENT_ACCESS_TERM,
       EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
-      EnrolmentRoutes.NOTIFICATION_CONFIRMATION,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
       EnrolmentRoutes.ACCESS_TERMS
     ];

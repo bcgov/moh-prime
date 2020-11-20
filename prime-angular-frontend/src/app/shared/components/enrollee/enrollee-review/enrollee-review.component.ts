@@ -5,11 +5,15 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { IdentityProvider } from '@auth/shared/enum/identity-provider.enum';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -20,24 +24,28 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;
   @Input() public enrolment: Enrolment;
-  @Output() public route: EventEmitter<string>;
+  @Input() public admin: boolean;
+  @Output() public route: EventEmitter<string | (string | number)[]>;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = selfDeclarationQuestions;
   public demographicRoutePath: string;
-  public identityProvider: IdentityProvider;
-  public IdentityProvider = IdentityProvider;
+  public identityProvider: IdentityProviderEnum;
+  public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentRoutes = EnrolmentRoutes;
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private enrolmentService: EnrolmentService
   ) {
     this.showEditRedirect = false;
-    this.route = new EventEmitter<string>();
+    this.admin = false;
+    this.route = new EventEmitter<string | (string | number)[]>();
 
     this.authService.identityProvider$()
-      .subscribe((identityProvider: IdentityProvider) => {
+      .subscribe((identityProvider: IdentityProviderEnum) => {
         this.identityProvider = identityProvider;
-        this.demographicRoutePath = (identityProvider === IdentityProvider.BCEID)
+        this.demographicRoutePath = (identityProvider === IdentityProviderEnum.BCEID)
           ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
           : EnrolmentRoutes.BCSC_DEMOGRAPHIC;
       });
@@ -86,15 +94,28 @@ export class EnrolleeReviewComponent {
     return (this.enrolment && !!this.enrolment.careSettings.length);
   }
 
-  public get isRequestingRemoteAccess(): boolean {
-    return (this.enrolment && !!this.enrolment.enrolleeRemoteUsers?.length);
-  }
-
   public get careSettings(): CareSetting[] {
     return (this.hasCareSetting) ? this.enrolment.careSettings : [];
   }
 
-  public onRoute(routePath: string): void {
+  public get isRequestingRemoteAccess(): boolean {
+    return (this.enrolment && !!this.enrolment.enrolleeRemoteUsers?.length);
+  }
+
+  public get remoteAccessSites(): RemoteAccessSite[] {
+    return (this.isRequestingRemoteAccess)
+      ? this.enrolment.remoteAccessSites
+      : [];
+  }
+
+  public get remoteAccessLocations(): RemoteAccessLocation[] {
+    return (this.isRequestingRemoteAccess)
+      ? this.enrolment.remoteAccessLocations
+      : [];
+  }
+
+  public onRoute(routePath: string | (string | number)[], event?: Event): void {
+    event?.preventDefault();
     this.route.emit(routePath);
   }
 
@@ -128,6 +149,12 @@ export class EnrolleeReviewComponent {
 
   public getPharmaNetSuspendedDetails(): string {
     return this.getSelfDeclarationDetailsIfExist(SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED);
+  }
+
+  public showCollegePrefix(licenceCode: number, collegeCode: number): number {
+    return (this.enrolmentService.shouldShowCollegePrefix(licenceCode))
+      ? collegeCode
+      : null;
   }
 
   private hasSelfDeclaration(type: SelfDeclarationTypeEnum): boolean {

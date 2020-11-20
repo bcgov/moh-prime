@@ -41,6 +41,8 @@ export class MockEnrolmentService implements IEnrolmentService {
       expiryDate: null,
       certifications: [],
       enrolleeRemoteUsers: [],
+      remoteAccessSites: [],
+      remoteAccessLocations: [],
       deviceProviderNumber: null,
       isInsulinPumpProvider: null,
       jobs: [],
@@ -101,6 +103,9 @@ export class MockEnrolmentService implements IEnrolmentService {
         adjudicator: null,
         enrolmentStatusReference: null
       },
+      currentTOAStatus: null,
+      assignedTOAType: null,
+      hasNewestAgreement: false,
       enrolleeClassification: EnrolleeClassification.OBO,
       enrolmentCertificateNote: null,
       accessAgreementNote: null,
