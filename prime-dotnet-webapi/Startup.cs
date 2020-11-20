@@ -29,7 +29,6 @@ using Prime.Services;
 using Prime.HttpClients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
-using Prime.Infrastructure.Middleware;
 
 namespace Prime
 {
@@ -249,8 +248,6 @@ namespace Prime
                     }
                 }
             };
-
-            // app.UseSoapEndpointMiddleware<ISoapService>("/api/PLRHL7", binding);
 
             app.UseEndpoints(endpoints =>
             {
