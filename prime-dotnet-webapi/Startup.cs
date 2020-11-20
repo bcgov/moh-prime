@@ -22,6 +22,7 @@ using IdentityModel.Client;
 using Newtonsoft.Json;
 using Serilog;
 using Wkhtmltopdf.NetCore;
+using SoapCore;
 
 using Prime.Auth;
 using Prime.Services;
@@ -72,6 +73,8 @@ namespace Prime
             services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<ISoapService, SoapService>();
 
+            services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
+
             ConfigureClients(services);
 
             services.AddControllers()
@@ -114,6 +117,7 @@ namespace Prime
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
             services.AddRazorPages();
+            services.AddSoapCore();
 
             ConfigureDatabase(services);
 
@@ -246,10 +250,11 @@ namespace Prime
                 }
             };
 
-            app.UseSoapEndpointMiddleware<ISoapService>("/api/PLRHL7", binding);
+            // app.UseSoapEndpointMiddleware<ISoapService>("/api/PLRHL7", binding);
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.UseSoapEndpoint<ISoapService>("/api/PLRHL7", binding, SoapSerializer.XmlSerializer);
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
             });

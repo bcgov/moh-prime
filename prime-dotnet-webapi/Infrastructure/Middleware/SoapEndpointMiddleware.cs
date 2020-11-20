@@ -10,6 +10,7 @@ using System.Xml.XPath;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Prime.Services;
 
 namespace Prime.Infrastructure.Middleware
 {
@@ -39,20 +40,8 @@ namespace Prime.Infrastructure.Middleware
         {
             if (httpContext.Request.Path.Equals(_endpointPath, StringComparison.Ordinal))
             {
-                var namespacePrefix = "hl7";
-                var namespaceUri = "urn:hl7-org:v3";
-                var bodyElement = "PRPM_IN301030CA";
-
-                using var reader = new StreamReader(httpContext.Request.Body);
-                var requestBody = await reader.ReadToEndAsync();
-
-                // Example 1 (XDocument and XPath)
-                var xmlnsManager = new XmlNamespaceManager(new NameTable());
-                xmlnsManager.AddNamespace(namespacePrefix, namespaceUri);
-
-                var xDocument = XDocument.Parse(requestBody);
-                var root = xDocument
-                    .XPathSelectElement($"//{namespacePrefix}:{bodyElement}", xmlnsManager);
+                var root = SoapServiceOperationTuner
+                    .GetRequestBody(httpContext, SoapServiceNamespace.Prefix, SoapServiceNamespace.Uri, "PRPM_IN301030CA");
 
                 if (root != null)
                 {
