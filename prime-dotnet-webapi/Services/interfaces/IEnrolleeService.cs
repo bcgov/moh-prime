@@ -48,7 +48,7 @@ namespace Prime.Services
 
         Task<EnrolleeViewModel> UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null);
 
-        Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId, IEnumerable<int> businessEventTypeCodes);
+        Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes);
 
         Task<IEnumerable<HpdidLookup>> HpdidLookupAsync(IEnumerable<string> hpdids);
 

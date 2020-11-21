@@ -1,10 +1,13 @@
 import { AdjudicatorDocumentsComponent } from '@adjudication/shared/components/adjudicator-documents/adjudicator-documents.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { forkJoin, Observable } from 'rxjs';
+
 import { UtilsService } from '@core/services/utils.service';
+
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-import { forkJoin, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-enrollee-adjudicator-documents',
