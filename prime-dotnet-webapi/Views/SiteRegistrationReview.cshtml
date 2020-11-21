@@ -1,30 +1,19 @@
 @using Prime.Models
 @model Site
 
-<link rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous">
+@{
+  Layout = "~/Views/Partials/_BaseLayout.cshtml";
+}
 
-@await Html.PartialAsync("~/Views/Partials/_BootstrapTheme.cshtml")
-@await Html.PartialAsync("~/Views/Partials/_FontTheme.cshtml")
+@section Title { Site Registration Review }
 
-<style>
+@section Theme {
+  @await Html.PartialAsync("~/Views/Partials/_BootstrapTheme.cshtml")
+  @await Html.PartialAsync("~/Views/Partials/_FontTheme.cshtml")
 
-  .container {
-    width: 85%;
-    margin: 50px auto 0 auto;
-  }
+}
 
-  h1, h2, h3, h4, h5, span {
-    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
-  }
-
-</style>
-
-<div class="container">
-
-  <h1 class="mb-4">SITE REGISTRATION REVIEW</h1>
+<h1 class="mb-4">SITE REGISTRATION REVIEW</h1>
 
   <h2 class="mb-2">Organization Information</h2>
 
