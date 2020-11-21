@@ -220,26 +220,19 @@ namespace Prime.Services
 
         public async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf)
         {
-            string viewName;
-            switch (type)
+            var viewName = type switch
             {
-                case AgreementType.CommunityPracticeOrgAgreement:
-                    viewName = forPdf
-                        ? "/Views/CommunityPracticeOrganizationAgreementPdf.cshtml"
-                        : "/Views/CommunityPracticeOrganizationAgreement.cshtml";
-                    break;
+                AgreementType.CommunityPracticeOrgAgreement => forPdf
+                    ? "/Views/Agreements/CommunityPracticeOrganizationAgreementPdf.cshtml"
+                    : "/Views/Agreements/CommunityPracticeOrganizationAgreement.cshtml",
+                AgreementType.CommunityPharmacyOrgAgreement => forPdf
+                    ? "/Views/Agreements/CommunityPharmacyOrganizationAgreementPdf.cshtml"
+                    : "/Views/Agreements/CommunityPharmacyOrganizationAgreement.cshtml",
+                _ => throw new ArgumentException(
+                    $"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}")
+            };
 
-                case AgreementType.CommunityPharmacyOrgAgreement:
-                    viewName = forPdf
-                        ? "/Views/CommunityPharmacyOrganizationAgreementPdf.cshtml"
-                        : "/Views/CommunityPharmacyOrganizationAgreement.cshtml";
-                    break;
-
-                default:
-                    throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}");
-            }
-
-            DateTimeOffset displayDate = acceptedDate ?? DateTimeOffset.Now;
+            var displayDate = acceptedDate ?? DateTimeOffset.Now;
             // Converting to BC time here since we aren't localizing this time in the web client
             displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
 
@@ -307,27 +300,20 @@ namespace Prime.Services
             {
                 if (agreement != null)
                 {
-                    agreement.AgreementContent = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccess.cshtml", agreement);
+                    agreement.AgreementContent = await _razorConverterService
+                        .RenderViewToStringAsync("/Views/Agreements/TermsOfAccess.cshtml", agreement);
                 }
             }
         }
 
         private string GetEncodedPdf(AgreementType type)
         {
-            string filename;
-            switch (type)
+            var filename = type switch
             {
-                case AgreementType.CommunityPracticeOrgAgreement:
-                    filename = "CommunityPracticeOrganizationAgreement.pdf";
-                    break;
-
-                case AgreementType.CommunityPharmacyOrgAgreement:
-                    filename = "CommunityPharmacyOrganizationAgreement.pdf";
-                    break;
-
-                default:
-                    throw new ArgumentException($"Invalid AgreementType {type} in {nameof(GetEncodedPdf)}");
-            }
+                AgreementType.CommunityPracticeOrgAgreement => "CommunityPracticeOrganizationAgreement.pdf",
+                AgreementType.CommunityPharmacyOrgAgreement => "CommunityPharmacyOrganizationAgreement.pdf",
+                _ => throw new ArgumentException($"Invalid AgreementType {type} in {nameof(GetEncodedPdf)}")
+            };
 
             var assembly = Assembly.GetExecutingAssembly();
             var resourcePath = assembly.GetManifestResourceNames()

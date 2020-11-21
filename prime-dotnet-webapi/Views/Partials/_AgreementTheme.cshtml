@@ -1,0 +1,82 @@
+@await Html.PartialAsync("_BootstrapTheme.cshtml")
+@await Html.PartialAsync("_FontTheme.cshtml")
+
+<style>
+
+  .container {
+  width: 85%;
+  margin: 50px auto 0 auto;
+  }
+
+  h1,
+  p,
+  li {
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  }
+
+  h1 {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  line-height: 1.8rem;
+  }
+
+  .italic {
+  font-style: italic;
+  }
+
+  .bold {
+  font-weight: bold;
+  }
+
+  .underline {
+  text-decoration: underline;
+  }
+
+  .text-indent {
+  text-indent: 1rem;
+  }
+
+  .text-center {
+  text-align: center;
+  }
+
+  ul {
+  list-style-type: disc;
+  }
+
+  li {
+  margin-bottom: 1rem;
+  }
+
+  ol[type="1"].decimal {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  }
+
+  ol[type="1"].decimal[start="1"] {
+  counter-reset: section 0;
+  }
+
+  ol[type="1"].decimal>li,
+  ol[type="1"].decimal ol[type="1"]>li {
+  counter-increment: section;
+  }
+
+  ol[type="1"].decimal>li>p:first-child,
+  ol[type="1"].decimal ol[type="1"]>li>p:first-child {
+  margin-top: -1.5rem;
+  }
+
+  ol[type="1"].decimal ol[type="1"] {
+  counter-reset: section;
+  list-style-type: none;
+  }
+
+  ol[type="1"].decimal ol[type="1"]>li::before {
+  content: counters(section, ".") " ";
+  margin-left: -26px;
+  }
+</style>
