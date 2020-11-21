@@ -209,8 +209,8 @@ namespace Prime.Services
             var organization = site.Organization;
 
             var organizationAgreementHtml = "";
-            string organizationAgreementFilename = "OrganizationAgreement.pdf";
-            string registrationReviewFilename = "SiteRegistrationReview.pdf";
+            var organizationAgreementFilename = "OrganizationAgreement.pdf";
+            var registrationReviewFilename = "SiteRegistrationReview.pdf";
 
             var siteRegistrationReviewHtml = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
 
@@ -233,12 +233,12 @@ namespace Prime.Services
                     };
                 }
 
-                Document organizationAgreementDoc = null;
-                string organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
+                Document organizationAgreementDoc;
+                var organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
                 try
                 {
                     var stream = await _documentService.GetStreamForLatestSignedAgreementDocument(organization.Id);
-                    MemoryStream ms = new MemoryStream();
+                    var ms = new MemoryStream();
                     stream.CopyTo(ms);
                     organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", ms.ToArray());
                 }

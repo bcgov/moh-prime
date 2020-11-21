@@ -1,14 +1,7 @@
 @model Tuple<string, DateTimeOffset>;
 
 @{
-  Layout = "~/Views/Partials/_BaseLayout.cshtml";
   var organizationName = Model.Item1;
-}
-
-@section Title { Organization Agreement }
-
-@section Theme {
-  @await Html.PartialAsync("~/Views/Partials/_AgreementTheme.cshtml")
 }
 
 @await Html.PartialAsync("~/Views/Partials/_AgreementDate.cshtml")
