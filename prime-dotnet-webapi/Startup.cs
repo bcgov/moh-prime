@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,13 +22,13 @@ using IdentityModel.Client;
 using Newtonsoft.Json;
 using Serilog;
 using Wkhtmltopdf.NetCore;
+using SoapCore;
 
 using Prime.Auth;
 using Prime.Services;
 using Prime.HttpClients;
 using Prime.Models.Api;
 using Prime.Infrastructure;
-using System.Collections.Generic;
 
 namespace Prime
 {
@@ -68,6 +70,9 @@ namespace Prime
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
+            services.AddScoped<ISoapService, SoapService>();
+
+            services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
             ConfigureClients(services);
 
@@ -111,8 +116,9 @@ namespace Prime
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Startup));
             services.AddRazorPages();
+            services.AddSoapCore();
 
-            this.ConfigureDatabase(services);
+            ConfigureDatabase(services);
 
             AuthenticationSetup.Initialize(services, Configuration, Environment);
         }
@@ -202,7 +208,7 @@ namespace Prime
                 app.UseDeveloperExceptionPage();
             }
 
-            this.ConfigureHealthCheck(app);
+            ConfigureHealthCheck(app);
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();
@@ -214,11 +220,7 @@ namespace Prime
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Prime Web API V1");
             });
 
-            this.ConfigureLogging(app);
-
-            // Matches request to an endpoint
-            app.UseRouting();
-            app.UseCors(AllowSpecificOrigins);
+            ConfigureLogging(app);
 
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
@@ -227,11 +229,29 @@ namespace Prime
                 RequestPath = new PathString("/Resources")
             });
 
+            // Matches request to an endpoint
+            app.UseRouting();
+            app.UseCors(AllowSpecificOrigins);
+
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // Configure security settings on a basic HTTP binding
+            Binding binding = new BasicHttpBinding
+            {
+                Security = new BasicHttpSecurity
+                {
+                    Mode = BasicHttpSecurityMode.TransportCredentialOnly,
+                    Transport = new HttpTransportSecurity
+                    {
+                        ClientCredentialType = HttpClientCredentialType.Basic
+                    }
+                }
+            };
+
             app.UseEndpoints(endpoints =>
             {
+                endpoints.UseSoapEndpoint<ISoapService>("/api/PLRHL7", binding, SoapSerializer.XmlSerializer);
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
             });
