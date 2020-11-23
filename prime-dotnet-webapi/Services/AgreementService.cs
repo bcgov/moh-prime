@@ -220,16 +220,13 @@ namespace Prime.Services
 
         public async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf)
         {
-            var viewName = type switch
+            var viewName = (type, forPdf) switch
             {
-                AgreementType.CommunityPracticeOrgAgreement => forPdf
-                    ? "/Views/Agreements/CommunityPracticeOrganizationAgreementPdf.cshtml"
-                    : "/Views/Agreements/CommunityPracticeOrganizationAgreement.cshtml",
-                AgreementType.CommunityPharmacyOrgAgreement => forPdf
-                    ? "/Views/Agreements/CommunityPharmacyOrganizationAgreementPdf.cshtml"
-                    : "/Views/Agreements/CommunityPharmacyOrganizationAgreement.cshtml",
-                _ => throw new ArgumentException(
-                    $"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}")
+                (AgreementType.CommunityPracticeOrgAgreement, true) => "/Views/Agreements/CommunityPracticeOrganizationAgreementPdf.cshtml",
+                (AgreementType.CommunityPracticeOrgAgreement, false) => "/Views/Agreements/CommunityPracticeOrganizationAgreement.cshtml",
+                (AgreementType.CommunityPharmacyOrgAgreement, true) => "/Views/Agreements/CommunityPharmacyOrganizationAgreementPdf.cshtml",
+                (AgreementType.CommunityPharmacyOrgAgreement, false) => "/Views/Agreements/CommunityPharmacyOrganizationAgreement.cshtml",
+                _ => throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}")
             };
 
             var displayDate = acceptedDate ?? DateTimeOffset.Now;
