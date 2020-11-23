@@ -68,4 +68,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\temp\CommunityPharmacyOrganizationAgreement.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\temp\CommunityPharmacyOrganizationAgreementPdf.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\temp\CommunityPracticeOrganizationAgreement.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\temp\CommunityPracticeOrganizationAgreementPdf.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\temp\TermsOfAccess.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\temp\TermsOfAccessPdf.cshtml" />
+  </ItemGroup>
 </Project>
