@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
 
@@ -17,7 +18,8 @@ describe('EnrolleeEventsComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        AdjudicationModule
+        AdjudicationModule,
+        BrowserAnimationsModule,
       ],
       declarations: [],
       providers: [
