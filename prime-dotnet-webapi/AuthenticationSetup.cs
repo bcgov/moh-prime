@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using IdentityModel;
+
 using Prime.Infrastructure;
 
 namespace Prime.Auth
@@ -67,12 +69,12 @@ namespace Prime.Auth
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(AuthConstants.USER_POLICY, policy => policy.Requirements.Add(new PrimeUserRequirement()));
-                options.AddPolicy(AuthConstants.ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_ADMIN_ROLE));
-                options.AddPolicy(AuthConstants.SUPER_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_SUPER_ADMIN_ROLE));
-                options.AddPolicy(AuthConstants.READONLY_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_READONLY_ADMIN));
-                options.AddPolicy(AuthConstants.EXTERNAL_HPDID_ACCESS_POLICY, policy => policy.RequireRole(AuthConstants.EXTERNAL_HPDID_ACCESS_ROLE));
-                options.AddPolicy(AuthConstants.EXTERNAL_GPID_VALIDATION_POLICY, policy => policy.RequireRole(AuthConstants.EXTERNAL_GPID_VALIDATION_ROLE));
+                options.AddPolicy(Policies.User, policy => policy.Requirements.Add(new PrimeUserRequirement()));
+                options.AddPolicy(Policies.Admin, policy => policy.RequireRole(Roles.PrimeAdmin));
+                options.AddPolicy(Policies.SuperAdmin, policy => policy.RequireRole(Roles.PrimeSuperAdmin));
+                options.AddPolicy(Policies.ReadonlyAdmin, policy => policy.RequireRole(Roles.PrimeReadonlyAdmin));
+                options.AddPolicy(Policies.ExternalHpdidAccess, policy => policy.RequireRole(Roles.ExternalHpdidAccess));
+                options.AddPolicy(Policies.ExternalGpidValidation, policy => policy.RequireRole(Roles.ExternalGpidValidation));
             });
         }
 
@@ -84,28 +86,32 @@ namespace Prime.Auth
             {
                 identity.AddClaim(new Claim(ClaimTypes.Name, accessToken.Subject));
 
-                AddRolesForRealmAccessClaims(identity);
+                FlattenRealmAccessRoles(identity);
             }
 
             return Task.CompletedTask;
         }
 
-        private static void AddRolesForRealmAccessClaims(ClaimsIdentity identity)
+        /// <summary>
+        /// Flattens the Realm Access claim, as Microsoft Identity Model doesn't support nested claims
+        /// </summary>
+        private static void FlattenRealmAccessRoles(ClaimsIdentity identity)
         {
-            // flatten realm_access because Microsoft identity model doesn't support nested claims
-            if (identity.HasClaim((claim) => claim.Type == AuthConstants.KEYCLOAK_REALM_ACCESS_KEY))
-            {
-                var realmAccessClaim = identity.Claims.Single((claim) => claim.Type == AuthConstants.KEYCLOAK_REALM_ACCESS_KEY);
-                var realmAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(realmAccessClaim.Value);
+            var realmAccessClaim = identity.Claims
+                .SingleOrDefault(claim => claim.Type == Claims.RealmAccess)
+                ?.Value;
 
-                if (realmAccessAsDict.ContainsKey(AuthConstants.KEYCLOAK_ROLES_KEY))
-                {
-                    foreach (var role in realmAccessAsDict[AuthConstants.KEYCLOAK_ROLES_KEY])
-                    {
-                        identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                    }
-                }
+            if (realmAccessClaim != null)
+            {
+                var realmAccess = JsonConvert.DeserializeObject<RealmAccess>(realmAccessClaim);
+
+                identity.AddClaims(realmAccess.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
             }
+        }
+
+        private class RealmAccess
+        {
+            public string[] Roles { get; set; }
         }
     }
 }

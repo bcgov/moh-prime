@@ -55,7 +55,7 @@ namespace Prime.ViewModels
 
         public bool IsBcServicesCard()
         {
-            return IdentityProvider == AuthConstants.BC_SERVICES_CARD;
+            return IdentityProvider == AuthConstants.BCServicesCard;
         }
 
         public bool IsUnder18()
@@ -69,7 +69,7 @@ namespace Prime.ViewModels
             IdentityProvider = user.GetIdentityProvider();
             IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
 
-            if (IdentityProvider == AuthConstants.BC_SERVICES_CARD)
+            if (IdentityProvider == AuthConstants.BCServicesCard)
             {
                 HPDID = user.GetStringClaim("preferred_username");
                 FirstName = user.GetStringClaim("given_name");
