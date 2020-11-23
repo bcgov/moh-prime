@@ -1,28 +1,12 @@
 <app-adjudication-container [content]="content"
                             [hasActions]="hasActions"
-                            (action)="onAction()">
+                            (action)="getBusinessEvents()">
 
   <app-page-header>Events</app-page-header>
 
 </app-adjudication-container>
 
 <ng-template #content>
-
-  <mat-form-field>
-    <mat-label>Filter By</mat-label>
-    <mat-select [formControl]="filter"
-                multiple>
-      <mat-option *ngFor="let businessEventType of businessEventTypes"
-                  [value]="businessEventType.key">
-        {{ businessEventType.value }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <app-dated-content-table *ngIf="(businessEvents$ | async)?.length; else empty"
-                           [items$]="businessEvents$"></app-dated-content-table>
-
-  <ng-template #empty>
-    <h2 class="lead">No events found</h2>
-  </ng-template>
+  <app-adjudicator-events [businessEvents$]="businessEvents$"
+                          (getBusinessEvents)="getBusinessEvents($event)"></app-adjudicator-events>
 </ng-template>

@@ -299,6 +299,8 @@ namespace Prime.Services
                 throw new InvalidOperationException($"Could not update the site.");
             }
 
+            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site ID (PEC Code) associated with site");
+
             return site;
         }
 
@@ -339,6 +341,8 @@ namespace Prime.Services
                 await _context.SaveChangesAsync();
             }
 
+            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Approved");
+
             return site;
         }
 
@@ -348,6 +352,8 @@ namespace Prime.Services
             site.Status = SiteStatusType.Declined;
             site.ApprovedDate = null;
             await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Declined");
 
             return site;
         }
@@ -375,6 +381,8 @@ namespace Prime.Services
             {
                 throw new InvalidOperationException($"Could not submit the site.");
             }
+
+            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Submitted");
 
             return site;
         }
@@ -467,7 +475,6 @@ namespace Prime.Services
             {
                 throw new InvalidOperationException("Could not create site registration note.");
             }
-            // TODO: Business events for sites?
 
             return SiteRegistrationNote;
         }
@@ -479,6 +486,15 @@ namespace Prime.Services
                 .Include(srn => srn.Adjudicator)
                 .OrderByDescending(srn => srn.NoteDate)
                 .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes)
+        {
+            return await _context.BusinessEvents
+                .Include(e => e.Admin)
+                .Where(e => e.SiteId == siteId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
+                .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
         }
 
