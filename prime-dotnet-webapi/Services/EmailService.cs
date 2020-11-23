@@ -17,6 +17,8 @@ namespace Prime.Services
         public string LastName { get; set; }
         public string TokenUrl { get; set; }
         public string ProvisionerName { get; set; }
+
+        public DateTimeOffset? RenewalDate { get; set; }
         public Site Site { get; set; }
         public string DocumentUrl { get; set; }
         public int MaxViews { get => EnrolmentCertificateAccessToken.MaxViews; }
@@ -33,6 +35,13 @@ namespace Prime.Services
             LastName = token.Enrollee.LastName;
             TokenUrl = token.FrontendUrl;
             ProvisionerName = provisionerName;
+        }
+
+        public EmailParams(Enrollee enrollee)
+        {
+            FirstName = enrollee.FirstName;
+            LastName = enrollee.LastName;
+            RenewalDate = enrollee.ExpiryDate;
         }
 
         public EmailParams(Site site, string documentUrl)
@@ -153,7 +162,6 @@ namespace Prime.Services
             string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
-
         public async Task SendSiteRegistrationAsync(Site site)
         {
             var subject = "PRIME Site Registration Submission";
@@ -315,6 +323,58 @@ namespace Prime.Services
             }
 
             return await _context.SaveChangesAsync() != 0;
+        }
+
+        public async Task<bool> SendEnrolleeRenewalEmails()
+        {
+            var enrollees = await _context.Enrollees
+                .Include(e => e.Agreements)
+                .ToListAsync();
+
+            var requiredRenewals = enrollees
+                .Where(e => e.ExpiryDate != null
+                    && (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == -14
+                    || (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == -7
+                    || (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == -3
+                    || (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == -2
+                    || (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == -1
+                    || (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == 0);
+
+            foreach (var enrollee in requiredRenewals)
+            {
+                await SendRenewalRequiredAsync(enrollee);
+            }
+
+            var passedRenewals = enrollees
+                .Where(e => e.ExpiryDate != null &&
+                    (DateTime.Now.Date - e.ExpiryDate.Value.Date).TotalDays == 1);
+
+            foreach (var enrollee in passedRenewals)
+            {
+                await SendRenewalPassedAsync(enrollee);
+            }
+
+            return true;
+        }
+
+        private async Task SendRenewalRequiredAsync(Enrollee enrollee)
+        {
+            var subject = "PRIME Renewal Required";
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/RenewalRequiredEmail.cshtml",
+                new EmailParams(enrollee));
+
+            await Send(PRIME_EMAIL, enrollee.Email, subject, body);
+        }
+
+        private async Task SendRenewalPassedAsync(Enrollee enrollee)
+        {
+            var subject = "Your PRIME Renewal Date Has Passed";
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/RenewalPassedEmail.cshtml",
+                new EmailParams(enrollee));
+
+            await Send(PRIME_EMAIL, enrollee.Email, subject, body);
         }
 
         private async Task Send(string from, string to, string subject, string body)
