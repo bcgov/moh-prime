@@ -17,23 +17,15 @@ import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
 })
 export class PhsaComponent implements OnInit {
 
-  private routeData: Data;
+  public title: string;
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private viewportService: ViewportService,
-    activatedRoute: ActivatedRoute
+    route: ActivatedRoute
   ) {
-    this.routeData = activatedRoute.snapshot.data;
-  }
-
-  public get loginButtonMarkup(): string {
-    return this.routeData.button;
-  }
-
-  public get subtitle(): string {
-    return this.routeData.subtitle;
+    this.title = route.snapshot.data.title;
   }
 
   public get isMobile(): boolean {

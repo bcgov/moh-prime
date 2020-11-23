@@ -46,7 +46,7 @@ const routes: Routes = [
       {
         path: AuthRoutes.PHSA,
         component: PhsaComponent,
-        data: { title: 'Enrol for access to PHSA eForms', subtitle: 'Request approval to access PHSA eForms', button: 'Logon with BCSC' }
+        data: { title: 'Enrol for access to PHSA eForms' }
       },
       {
         path: '', // Equivalent to `/` and alias for `info`
