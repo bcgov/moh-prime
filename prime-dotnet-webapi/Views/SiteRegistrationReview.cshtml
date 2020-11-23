@@ -14,7 +14,7 @@
 
 <h1 class="mb-4">SITE REGISTRATION REVIEW</h1>
 
-<h2 class="mb-2">Organization Information</h2>
+<h2 class="mb-3">Organization Information</h2>
 
 <div class="ml-2 mb-2">
   <h5>Organization Name (Legal Entity Operating Site)</h5>
@@ -31,15 +31,14 @@
   <span class="ml-2">@(Model.Organization.DoingBusinessAs ?? "-")</span>
 </div>
 
-<h2 class="mb-2">Site Information</h2>
+<h2 class="mb-3">Site Information</h2>
 
 <div class="ml-2 mb-2">
   <h5>Site Name (doing business as)</h5>
   <span class="ml-2">@(Model.DoingBusinessAs ?? "-")</span>
 </div>
 
-@* Site Address *@
-<h2 class="mb-2">Site Address</h2>
+<h2 class="mb-3">Site Address</h2>
 
 <div class="ml-2 mb-2">
   <h5>Address</h5>
@@ -71,8 +70,7 @@
   <span class="ml-2">@(Model.PhysicalAddress.CountryCode ?? "-")</span>
 </div>
 
-@* Business Licences *@
-<h2 class="mb-2">Business Licences</h2>
+<h2 class="mb-3">Business Licences</h2>
 
 @foreach(var licence in @Model.BusinessLicenceDocuments)
 {
@@ -82,8 +80,7 @@
   </div>
 }
 
-@* Hours of Operation *@
-<h2 class="mb-2">Hours of Operation</h2>
+<h2 class="mb-3">Hours of Operation</h2>
 
 @foreach (var businessHour in Model.BusinessHours) {
   <div class="ml-2 mb-2">
@@ -92,8 +89,7 @@
   </div>
 }
 
-@* Vendor *@
-<h2 class="mb-2">Vendors</h2>
+<h2 class="mb-3">Vendors</h2>
 
 @foreach (var siteVendor in Model.SiteVendors) {
 
@@ -108,8 +104,7 @@
   </div>
 }
 
-@* Remote Users *@
-<h2 class="mb-2">Remote Users</h2>
+<h2 class="mb-3">Remote Users</h2>
 
 @foreach(var user in @Model.RemoteUsers )
 {
@@ -136,8 +131,7 @@
   }
 }
 
-@* Signing Authority *@
-<h2 class="mb-2">Signing Authority</h2>
+<h2 class="mb-3">Signing Authority</h2>
 
 <div class="ml-2 mb-2">
   <h5>Job Title</h5>
@@ -169,7 +163,7 @@
   <span class="ml-2">@(Model.Provisioner.Email ?? "-")</span>
 </div>
 
-<h2 class="mb-2">Administrator of PharmaNet Onboarding</h2>
+<h2 class="mb-3">Administrator of PharmaNet Onboarding</h2>
 
 <div class="ml-2 mb-2">
   <h5>Job Title</h5>
@@ -201,7 +195,7 @@
   <span class="ml-2">@(Model.AdministratorPharmaNet.Email ?? "-")</span>
 </div>
 
-<h2 class="mb-2">Privacy Officer</h2>
+<h2 class="mb-3">Privacy Officer</h2>
 
 <div class="ml-2 mb-2">
   <h5>Job Title</h5>
@@ -233,7 +227,7 @@
   <span class="ml-2">@(Model.PrivacyOfficer.Email ?? "-")</span>
 </div>
 
-<h2 class="mb-2">Technical Support</h2>
+<h2 class="mb-3">Technical Support</h2>
 
 <div class="ml-2 mb-2">
   <h5>Job Title</h5>
@@ -264,5 +258,3 @@
   <h5>Email</h5>
   <span class="ml-2">@(Model.TechnicalSupport.Email ?? "-")</span>
 </div>
-
-
