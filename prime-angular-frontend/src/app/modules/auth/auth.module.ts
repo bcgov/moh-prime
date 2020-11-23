@@ -11,6 +11,7 @@ import { InfoComponent } from './pages/info/info.component';
 import { BceidComponent } from './pages/bceid/bceid.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { SiteComponent } from './pages/site/site.component';
+import { PhsaComponent } from './pages/phsa/phsa.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { SiteComponent } from './pages/site/site.component';
     InfoComponent,
     BceidComponent,
     PillComponent,
-    SiteComponent
+    SiteComponent,
+    PhsaComponent
   ],
   imports: [
     AuthRoutingModule,
