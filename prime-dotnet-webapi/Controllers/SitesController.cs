@@ -1,10 +1,10 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 using AutoMapper;
 
@@ -718,6 +718,31 @@ namespace Prime.Controllers
         {
             var sites = await _siteService.GetSitesByRemoteUserInfoAsync(certifications);
             return Ok(ApiResponse.Result(sites));
+        }
+
+        // GET: api/Sites/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
+        /// <summary>
+        /// Gets all of the site registration notes for a specific site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="businessEventTypeCodes"></param>
+        [HttpGet("{siteId}/events", Name = nameof(GetSiteBusinessEvents))]
+        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessEvent>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<BusinessEvent>>> GetSiteBusinessEvents(int siteId, [FromQuery] IEnumerable<int> businessEventTypeCodes)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var events = await _siteService.GetSiteBusinessEventsAsync(siteId, businessEventTypeCodes);
+
+            return Ok(ApiResponse.Result(events));
         }
     }
 }
