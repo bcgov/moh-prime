@@ -31,16 +31,11 @@ namespace Prime
 
         public static int GetIdentityAssuranceLevel(this ClaimsPrincipal User)
         {
-            Claim assuranceLevelClaim = User?.Claims?.SingleOrDefault(c => c.Type == Claims.AssuranceLevel);
+            string assuranceLevel = User?.FindFirstValue(Claims.AssuranceLevel);
 
-            Int32.TryParse(assuranceLevelClaim?.Value, out int assuranceLevel);
+            Int32.TryParse(assuranceLevel, out int assuranceLevelParsed);
 
-            return assuranceLevel;
-        }
-
-        public static string GetIdentityProvider(this ClaimsPrincipal User)
-        {
-            return User.GetStringClaim(Claims.IdentityProvider);
+            return assuranceLevelParsed;
         }
 
         public static bool HasVCIssuance(this ClaimsPrincipal User)
@@ -48,16 +43,11 @@ namespace Prime
             return User.IsInRole(FeatureFlags.VCIssuance);
         }
 
-        public static string GetStringClaim(this ClaimsPrincipal User, string claimType)
-        {
-            return User?.FindFirstValue(claimType);
-        }
-
         public static PhysicalAddress GetPhysicalAddress(this ClaimsPrincipal User)
         {
-            Claim addressClaim = User?.Claims?.SingleOrDefault(c => c.Type == Claims.Address);
+            string addressClaim = User?.FindFirstValue(Claims.Address);
 
-            var address = JsonConvert.DeserializeObject<TokenAddress>(addressClaim?.Value);
+            var address = JsonConvert.DeserializeObject<TokenAddress>(addressClaim);
 
             return address?.ToModel();
         }

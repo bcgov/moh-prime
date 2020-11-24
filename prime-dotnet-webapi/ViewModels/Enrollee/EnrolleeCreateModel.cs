@@ -66,15 +66,15 @@ namespace Prime.ViewModels
         public void MapConditionalProperties(ClaimsPrincipal user)
         {
             UserId = user.GetPrimeUserId();
-            IdentityProvider = user.GetIdentityProvider();
+            IdentityProvider = user.FindFirstValue(Claims.IdentityProvider);
             IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
 
             if (IdentityProvider == AuthConstants.BCServicesCard)
             {
-                HPDID = user.GetStringClaim("preferred_username");
-                FirstName = user.GetStringClaim("given_name");
-                LastName = user.GetStringClaim("family_name");
-                GivenNames = user.GetStringClaim("given_names");
+                HPDID = user.FindFirstValue(Claims.PreferredUsername);
+                FirstName = user.FindFirstValue(Claims.GivenName);
+                LastName = user.FindFirstValue(Claims.FamilyName);
+                GivenNames = user.FindFirstValue(Claims.GivenNames);
                 PhysicalAddress = user.GetPhysicalAddress();
             }
             else

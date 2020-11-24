@@ -64,18 +64,18 @@ namespace Prime.Controllers
             }
             if (updatedProfile == null)
             {
-                this.ModelState.AddModelError("EnrolleeUpdateModel", "New profile cannot be null.");
+                ModelState.AddModelError("EnrolleeUpdateModel", "New profile cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Application can not be submitted when the current status is not 'Active'.");
+                ModelState.AddModelError("Enrollee.CurrentStatus", "Application can not be submitted when the current status is not 'Active'.");
                 return BadRequest(ApiResponse.BadRequest(this.ModelState));
             }
 
-            updatedProfile.IdentityAssuranceLevel = User.GetIdentityAssuranceLevel();
-            updatedProfile.IdentityProvider = User.GetIdentityProvider();
+            updatedProfile.SetTokenProperties(User);
+
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
