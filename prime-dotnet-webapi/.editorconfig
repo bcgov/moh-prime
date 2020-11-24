@@ -24,7 +24,7 @@ indent_size = 4
 max_line_length = off
 trim_trailing_whitespace = false
 
-[*.Designer.cs]
+[Migrations/*]
 generated_code = true
 
 [Configuration/Resources/*.html]
