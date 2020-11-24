@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>
-    @RenderSection("Title", true)
+    @await RenderSectionAsync("Title", true)
   </title>
 
-  @RenderSection("Theme", required: true)
+  @await RenderSectionAsync("Theme", required: true)
 
 </head>
 <body>
