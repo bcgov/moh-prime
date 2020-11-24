@@ -143,7 +143,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(enrollee?.GPID));
         }
 
-        // GET: api/provisioner-access/gpids?hpdid=11111&hpdid=22222
+        // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222
         /// <summary>
         /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid direct access grant token.
         /// </summary>
@@ -152,9 +152,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HpdidLookup>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> HpdidLookup([FromQuery] string[] hpdid)
+        public async Task<ActionResult<string>> HpdidLookup([FromQuery] string[] hpdids)
         {
-            var result = await _enrolleeService.HpdidLookupAsync(hpdid);
+            var result = await _enrolleeService.HpdidLookupAsync(hpdids);
 
             return Ok(ApiResponse.Result(result));
         }
