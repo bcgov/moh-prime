@@ -29,6 +29,7 @@ namespace Prime.Auth
         public const string PrimeEnrollee = "prime_user";
         public const string ExternalHpdidAccess = "external_hpdid_access";
         public const string ExternalGpidValidation = "external_gpid_validation";
+        public const string PrimeApiServiceAccount = "prime_api_service_account";
     }
 
     public static class Policies

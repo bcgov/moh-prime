@@ -727,7 +727,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="businessEventTypeCodes"></param>
         [HttpGet("{siteId}/events", Name = nameof(GetSiteBusinessEvents))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [Authorize(Policy = Policies.ReadonlyAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
