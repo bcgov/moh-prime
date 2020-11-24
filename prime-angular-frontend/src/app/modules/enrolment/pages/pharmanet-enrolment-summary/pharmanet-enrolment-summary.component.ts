@@ -37,7 +37,13 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public showPharmacist: boolean;
   public showHealthAuthority: boolean;
 
-  public careSettingConfigs: { setting: string, settingCode: number, formControl: FormControl, subheaderContent: string }[];
+  public careSettingConfigs: { 
+    setting: string, 
+    settingPlural: string, 
+    settingCode: number, 
+    formControl: FormControl, 
+    subheaderContent: string 
+  }[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -194,6 +200,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
           return {
             setting: 'Private Community Health Practice',
+            settingPlural: 'Private Community Health Practices',
             settingCode: careSetting.careSettingCode,
             formControl: this.communityHealthEmails,
             subheaderContent: `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office
@@ -203,6 +210,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
           return {
             setting: 'Community Pharmacy',
+            settingPlural: 'Community Pharmacies',
             settingCode: careSetting.careSettingCode,
             formControl: this.pharmacistEmails,
             subheaderContent: `Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).`
@@ -211,6 +219,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         case CareSettingEnum.HEALTH_AUTHORITY: {
           return {
             setting: 'Health Authority',
+            settingPlural: 'Health Authorities',
             settingCode: careSetting.careSettingCode,
             formControl: this.healthAuthorityEmails,
             subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are
