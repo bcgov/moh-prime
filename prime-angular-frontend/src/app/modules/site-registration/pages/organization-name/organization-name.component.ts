@@ -67,7 +67,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
   }
 
   public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form) && !this.organizationService.organization.completed) {
+    if (this.formUtilsService.checkValidity(this.form)) {
       const organizationId = this.route.snapshot.params.oid;
       const payload = this.organizationFormStateService.json;
       this.organizationResource
