@@ -34,7 +34,7 @@ export class PhsaComponent implements OnInit {
 
   public loginUsingBCSC() {    
     // TODO: redirect route to the access code page in the PHSA Labtech module
-    const redirectRoute = PhsaLabtechRoutes.routePath(PhsaLabtechRoutes.EXAMPLE);
+    const redirectRoute = PhsaLabtechRoutes.routePath(PhsaLabtechRoutes.BCSC_DEMOGRAPHIC);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
