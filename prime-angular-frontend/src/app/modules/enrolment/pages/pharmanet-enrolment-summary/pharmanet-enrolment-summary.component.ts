@@ -37,7 +37,13 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public showPharmacist: boolean;
   public showHealthAuthority: boolean;
 
-  public careSettingConfigs: { setting: string, settingPlural: string, settingCode: number, formControl: FormControl, subheaderContent: string }[];
+  public careSettingConfigs: { 
+    setting: string, 
+    settingPlural: string, 
+    settingCode: number, 
+    formControl: FormControl, 
+    subheaderContent: string 
+  }[];
 
   constructor(
     protected route: ActivatedRoute,
