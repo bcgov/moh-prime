@@ -24,4 +24,5 @@
   },
   "omnisharp.enableEditorConfigSupport": true,
   "omnisharp.enableRoslynAnalyzers": true,
+  "git.enabled": false,
 }
