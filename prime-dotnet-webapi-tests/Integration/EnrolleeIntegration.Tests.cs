@@ -165,7 +165,6 @@ namespace PrimeTests.Integration
 
                 // try to update the enrollee
                 var response = await _client.SendAsync(request);
-                var stuff = await response.Content.ReadAsStringAsync();
                 Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
                 Enrollee updatedEnrollee = this.GetEnrollee(scope, enrollee.Id);
