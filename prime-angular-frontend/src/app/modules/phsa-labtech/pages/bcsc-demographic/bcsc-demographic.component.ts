@@ -3,6 +3,10 @@ import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -65,8 +69,13 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   ngOnInit(): void {
     this.createFormInstance();
-//    this.patchForm();
+    this.patchForm();
     this.initForm();
+
+    this.getUser$()
+      .subscribe((enrollee: Enrollee) =>
+        this.enrollee = enrollee
+      );    
   }
 
   protected createFormInstance(): void {
@@ -77,4 +86,31 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     // TODO:
     // throw new Error('Method not implemented.');
   }
+
+
+  // TODO:
+  private getUser$(): Observable<Enrollee> {
+
+    return this.authService.getUser$()
+      .pipe(
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: BcscUser) => {
+          // Enforced the enrollee type instead of using Partial<Enrollee>
+          // to avoid creating constructors and partials for every model
+          return {
+            // Providing only the minimum required fields for creating an enrollee
+            userId,
+            hpdid,
+            firstName,
+            lastName,
+            givenNames,
+            dateOfBirth,
+            physicalAddress,
+            phone: null,
+            email: null
+          } as Enrollee;
+        })
+      );
+  }
+
+
 }
