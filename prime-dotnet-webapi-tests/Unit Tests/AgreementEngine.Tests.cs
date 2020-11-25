@@ -10,6 +10,7 @@ using Prime.Models;
 using Prime.Engines;
 using Prime.Services;
 using Prime.HttpClients;
+using Prime.DTOs.AgreementEngine;
 using PrimeTests.Utils;
 using PrimeTests.ModelFactories;
 
@@ -29,70 +30,26 @@ namespace PrimeTests.UnitTests
         }
 
         [Theory]
-        [InlineData(CareSettingType.CommunityPractice)]
-        [InlineData(CareSettingType.CommunityPharmacy)]
-        public void TestDetermineAgreementType_Obo(CareSettingType careSetting)
+        [InlineData(CareSettingType.CommunityPractice, AgreementType.OboTOA)]
+        [InlineData(CareSettingType.CommunityPharmacy, AgreementType.PharmacyOboTOA)]
+        [InlineData(CareSettingType.HealthAuthority, AgreementType.OboTOA)]
+        public void TestDetermineAgreementType_NoCerts_OneCareSetting(CareSettingType careSetting, AgreementType expectedType)
         {
             // Arrange
-            var engine = new AgreementEngine();
-            var enrollee = new EnrolleeFactory().Generate();
-            enrollee.EnrolleeCareSettings.Single().CareSettingCode = (int)careSetting;
-            enrollee.Certifications.Clear();
-
-            // Act
-            var determinedType = engine.DetermineAgreementType(enrollee);
-
-            // Assert
-            Assert.Equal(AgreementType.OboTOA, determinedType);
-        }
-
-        [Theory]
-        [InlineData(CareSettingType.CommunityPractice)]
-        [InlineData(CareSettingType.CommunityPharmacy)]
-        public void TestDetermineAgreementType_LicencedObo(CareSettingType careSetting)
-        {
-            // Arrange
-            var engine = new AgreementEngine();
-            var enrollee = new EnrolleeFactory().Generate();
-            enrollee.EnrolleeCareSettings.Single().CareSettingCode = (int)careSetting;
-            enrollee.Certifications = GenerateOneCert(enrollee, false);
-
-            // Act
-            var determinedType = engine.DetermineAgreementType(enrollee);
-
-            // Assert
-            Assert.Equal(AgreementType.OboTOA, determinedType);
-        }
-
-        [Theory]
-        [InlineData(CareSettingType.CommunityPractice)]
-        [InlineData(CareSettingType.CommunityPharmacy)]
-        public void TestDetermineAgreementType_RegulatedUser(CareSettingType careSetting)
-        {
-            // Arrange
-            var engine = new AgreementEngine();
-            var enrollee = new EnrolleeFactory().Generate();
-            enrollee.EnrolleeCareSettings.Single().CareSettingCode = (int)careSetting;
-            enrollee.Certifications = GenerateOneCert(enrollee, true);
-
-            AgreementType expectedType;
-            switch (careSetting)
+            var dto = new AgreementEngineDto
             {
-                case CareSettingType.CommunityPractice:
-                    expectedType = AgreementType.RegulatedUserTOA;
-                    break;
-                case CareSettingType.CommunityPharmacy:
-                    expectedType = AgreementType.CommunityPharmacistTOA;
-                    break;
-                default:
-                    throw new Exception($"unknown care setting in {nameof(TestDetermineAgreementType_RegulatedUser)}");
-            }
+                Certifications = new CertificationDto[] { },
+                CareSettingCodes = new[] { (int)careSetting }
+            };
 
             // Act
-            var determinedType = engine.DetermineAgreementType(enrollee);
+            var determinedType = AgreementEngine.DetermineAgreementType(dto);
 
             // Assert
             Assert.Equal(expectedType, determinedType);
         }
+
+        [Fact(Skip = "Need more agreement engine tests now that it is more complicated")]
+        public void WriteMoreTests() { }
     }
 }

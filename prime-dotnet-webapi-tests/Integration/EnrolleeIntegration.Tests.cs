@@ -78,25 +78,24 @@ namespace PrimeTests.Integration
         }
 
         [Fact]
-        public async void TestCreateEnrollee()
+        public async void TestCreateBcscEnrollee()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 var testEnrollee = TestUtils.EnrolleeFaker.Generate();
-                // For integration tests, remove the enrolment status that the faker created, as it should get created by the service layer
-                testEnrollee.EnrolmentStatuses.Clear();
+                var payload = new
+                {
+                    Enrollee = testEnrollee
+                };
 
-                // create a request with an AUTH token
-                var request = TestUtils.CreateRequest<Enrollee>(HttpMethod.Post, "/api/enrollees", testEnrollee.UserId, testEnrollee);
+                var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrollees", testEnrollee.UserId, payload);
 
-                // try to create the enrollee
                 var response = await _client.SendAsync(request);
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
                 var body = await response.Content.ReadAsStringAsync();
-                Assert.Contains(testEnrollee.FirstName, body);
-
                 Enrollee createdEnrollee = JsonConvert.DeserializeObject<ApiResultResponse<Enrollee>>(body).Result;
+
                 Assert.Equal(testEnrollee.UserId, createdEnrollee.UserId);
             }
         }
@@ -162,7 +161,7 @@ namespace PrimeTests.Integration
                 };
 
                 // create a request with an AUTH token
-                var request = TestUtils.CreateRequest<EnrolleeUpdateModel>(HttpMethod.Put, $"/api/enrollees/{enrollee.Id}", enrollee.UserId, enrolleeProfile);
+                var request = TestUtils.CreateRequest(HttpMethod.Put, $"/api/enrollees/{enrollee.Id}", enrollee.UserId, enrolleeProfile);
 
                 // try to update the enrollee
                 var response = await _client.SendAsync(request);
