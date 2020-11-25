@@ -13,7 +13,7 @@ namespace Prime.Infrastructure
             context.ThrowIfNull(nameof(context));
 
             if (context.User.HasAdminView()
-                || context.User.IsInRole(AuthConstants.PRIME_ENROLLEE_ROLE))
+                || context.User.IsInRole(Roles.PrimeEnrollee))
             {
                 context.Succeed(requirement);
             }
