@@ -8,7 +8,7 @@ namespace Prime.Services
     {
         Task SendReminderEmailAsync(int enrolleeId);
 
-        Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, bool hasCommunityPharmacyCareSetting);
+        Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, int careSettingCode);
 
         Task SendSiteRegistrationAsync(Site site);
 
@@ -19,5 +19,7 @@ namespace Prime.Services
         Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName);
 
         Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync();
+
+        Task<bool> UpdateEmailLogStatuses();
     }
 }

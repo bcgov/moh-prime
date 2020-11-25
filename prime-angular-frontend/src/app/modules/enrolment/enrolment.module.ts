@@ -27,7 +27,6 @@ import { AccessDeclinedComponent } from './pages/access-declined/access-declined
 import { AccessAgreementHistoryComponent } from './pages/access-agreement-history/access-agreement-history.component';
 import { AccessTermsComponent } from './pages/access-terms/access-terms.component';
 import { AccessAgreementCurrentComponent } from './pages/access-agreement-current/access-agreement-current.component';
-import { NotificationConfirmationComponent } from './pages/notification-confirmation/notification-confirmation.component';
 import {
   AccessAgreementHistoryEnrolmentComponent
 } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
@@ -73,7 +72,6 @@ import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/
     NextStepsInfographicComponent,
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
-    NotificationConfirmationComponent,
     ContactInformationFormComponent,
     RemoteAccessAddressesComponent
   ],

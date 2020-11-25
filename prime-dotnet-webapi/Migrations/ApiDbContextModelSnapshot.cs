@@ -12604,6 +12604,54 @@ namespace Prime.Migrations
                     b.ToTable("DocumentAccessToken");
                 });
 
+            modelBuilder.Entity("Prime.Models.EmailLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Body")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("DateSent")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LatestStatus")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("MsgId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("SendType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SentTo")
+                        .HasColumnType("text");
+
+                    b.Property<string>("StatusMessage")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailLog");
+                });
+
             modelBuilder.Entity("Prime.Models.Enrollee", b =>
                 {
                     b.Property<int>("Id")
@@ -13675,7 +13723,7 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             LicensedToProvideCare = true,
-                            Manual = true,
+                            Manual = false,
                             Name = "Pharmacy Technician",
                             NamedInImReg = false,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),

@@ -29,7 +29,6 @@ export class EnrolmentRoutes {
   // Replaces terms of access after accepting the terms of access (TOA)
   public static CURRENT_ACCESS_TERM = 'current-access-term';
   public static PHARMANET_ENROLMENT_SUMMARY = 'pharmanet-enrolment-summary';
-  public static NOTIFICATION_CONFIRMATION = 'notification-confirmation';
   public static PHARMANET_TRANSACTIONS = 'pharmanet-transactions';
   public static ACCESS_TERMS = 'access-terms';
 
@@ -85,7 +84,6 @@ export class EnrolmentRoutes {
     return [
       EnrolmentRoutes.CURRENT_ACCESS_TERM,
       EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
-      EnrolmentRoutes.NOTIFICATION_CONFIRMATION,
       EnrolmentRoutes.PHARMANET_TRANSACTIONS,
       EnrolmentRoutes.ACCESS_TERMS
     ];
