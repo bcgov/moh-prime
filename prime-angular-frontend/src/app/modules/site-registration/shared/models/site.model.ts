@@ -8,6 +8,7 @@ import { RemoteUser } from './remote-user.model';
 import { Vendor } from './vendor.model';
 import { Contact } from './contact.model';
 import { SiteStatusType } from '../enum/site-status.enum';
+import { BusinessLicence } from './business-licence.model';
 
 export interface Site {
   id?: number;
@@ -18,8 +19,11 @@ export interface Site {
   // Forms -----
   careSettingCode: number;
   siteVendors: Vendor[];
+  businessLicence: BusinessLicence;
+
   businessLicenceDocuments: BusinessLicenceDocument[];
   businessLicenceGuid: string;
+
   doingBusinessAs: string;
   physicalAddressId?: number;
   physicalAddress: Address;

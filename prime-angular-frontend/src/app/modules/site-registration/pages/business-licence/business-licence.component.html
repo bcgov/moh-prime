@@ -30,14 +30,14 @@
         </ng-container>
       </app-alert>
 
-      <ng-container *ngIf="businessLicenceDocuments.length">
+      <ng-container *ngIf="businessLicence.businessLicenceDocument">
 
         <app-enrollee-property title="Filename">
           <button mat-stroked-button
                   color="primary"
-                  (click)="getBusinessLicence($event)">
+                  (click)="downloadBusinessLicence($event)">
             <mat-icon class="mr-1">attachment</mat-icon>
-            {{ businessLicenceDocuments[businessLicenceDocuments.length - 1].filename | default }}
+            {{ businessLicence.businessLicenceDocument.filename | default }}
           </button>
         </app-enrollee-property>
 

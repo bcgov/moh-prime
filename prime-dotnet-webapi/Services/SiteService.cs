@@ -408,7 +408,37 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(v => v.Code == vendorCode);
         }
 
-        public async Task<BusinessLicenceDocument> AddBusinessLicenceAsync(int siteId, Guid documentGuid)
+        public async Task<BusinessLicence> AddBusinessLicenceAsync(BusinessLicence businessLicence, Guid documentGuid)
+        {
+            businessLicence.Completed = false;
+            if (documentGuid != null)
+            {
+                businessLicence.BusinessLicenceDocument = await AddBusinessLicenceDocument(documentGuid);
+                // Completed once a Business Licence Document is attached to the licence
+                businessLicence.Completed = true;
+            }
+
+            _context.BusinessLicences.Add(businessLicence);
+            await _context.SaveChangesAsync();
+
+            return businessLicence;
+        }
+
+        public async Task<BusinessLicence> UpdateBusinessLicenceAsync(BusinessLicence businessLicence, Guid documentGuid)
+        {
+            if (documentGuid != null)
+            {
+                businessLicence.BusinessLicenceDocument = await AddBusinessLicenceDocument(documentGuid);
+                businessLicence.Completed = true;
+            }
+
+            _context.BusinessLicences.Update(businessLicence);
+            await _context.SaveChangesAsync();
+
+            return businessLicence;
+        }
+
+        private async Task<BusinessLicenceDocument> AddBusinessLicenceDocument(Guid documentGuid)
         {
             var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
             if (string.IsNullOrWhiteSpace(filename))
@@ -416,34 +446,21 @@ namespace Prime.Services
                 return null;
             }
 
-            var businessLicence = new BusinessLicenceDocument
+            return new BusinessLicenceDocument
             {
                 DocumentGuid = documentGuid,
-                SiteId = siteId,
                 Filename = filename,
                 UploadedDate = DateTimeOffset.Now
             };
-            _context.BusinessLicenceDocuments.Add(businessLicence);
-
-            await _context.SaveChangesAsync();
-
-            return businessLicence;
         }
 
-        public async Task<IEnumerable<BusinessLicenceDocument>> GetBusinessLicencesAsync(int siteId)
+        public async Task<BusinessLicence> GetBusinessLicenceAsync(int siteId)
         {
-            return await _context.BusinessLicenceDocuments
+            return await _context.BusinessLicences
                 .Where(bl => bl.SiteId == siteId)
-                .ToListAsync();
+                .SingleOrDefaultAsync();
         }
 
-        public async Task<BusinessLicenceDocument> GetLatestBusinessLicenceAsync(int siteId)
-        {
-            return await _context.BusinessLicenceDocuments
-                .Where(bl => bl.SiteId == siteId)
-                .OrderByDescending(bl => bl.UploadedDate)
-                .FirstOrDefaultAsync();
-        }
         public async Task<IEnumerable<Site>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
         {
             var sites = await this.GetBaseSiteQuery()
@@ -553,7 +570,8 @@ namespace Prime.Services
                 .Include(s => s.BusinessHours)
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserCertifications)
-                .Include(s => s.BusinessLicenceDocuments)
+                .Include(s => s.BusinessLicence)
+                    .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator);
         }
     }

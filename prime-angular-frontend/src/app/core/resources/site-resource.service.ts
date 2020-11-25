@@ -22,6 +22,7 @@ import { BusinessDayHours } from '@registration/shared/models/business-day-hours
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
+import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Injectable({
   providedIn: 'root'
@@ -222,11 +223,11 @@ export class SiteResource {
       );
   }
 
-  public createBusinessLicence(siteId: number, documentGuid: string): Observable<BusinessLicenceDocument> {
+  public createBusinessLicence(siteId: number, businessLicence: BusinessLicence, documentGuid: string): Observable<BusinessLicence> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licence`, { siteId }, params)
+    return this.apiResource.post<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence, params)
       .pipe(
-        map((response: ApiHttpResponse<BusinessLicenceDocument>) => response.result),
+        map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] SiteRegistrationResource::createBusinessLicence error has occurred: ', error);
           throw error;
@@ -234,10 +235,22 @@ export class SiteResource {
       );
   }
 
-  public getBusinessLicences(siteId: number): Observable<BusinessLicenceDocument[]> {
-    return this.apiResource.get<BusinessLicenceDocument[]>(`sites/${siteId}/business-licence`)
+  public updateBusinessLicence(siteId: number, businessLicence: BusinessLicence, documentGuid: string): Observable<BusinessLicence> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this.apiResource.put<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence, params)
       .pipe(
-        map((response: ApiHttpResponse<BusinessLicenceDocument[]>) => response.result),
+        map((response: ApiHttpResponse<BusinessLicence>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::updateBusinessLicence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getBusinessLicence(siteId: number): Observable<BusinessLicence> {
+    return this.apiResource.get<BusinessLicence>(`sites/${siteId}/business-licence`)
+      .pipe(
+        map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Business Licence could not be Retrieved');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicences error has occurred: ', error);
@@ -246,13 +259,13 @@ export class SiteResource {
       );
   }
 
-  public getBusinessLicenceDownloadToken(siteId: number): Observable<string> {
-    return this.apiResource.get<string>(`sites/${siteId}/latest-business-licence`)
+  public getBusinessLicenceDocumentToken(siteId: number): Observable<string> {
+    return this.apiResource.get<string>(`sites/${siteId}/business-licence/document-token`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Business Licence token could not be Retrieved');
-          this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicenceDownloadToken error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicenceDocumentToken error has occurred: ', error);
           throw error;
         })
       );

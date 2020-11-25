@@ -199,8 +199,9 @@ namespace Prime.Services
 
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
         {
-            var businessLicenceDoc = await _siteService.GetLatestBusinessLicenceAsync(siteId);
-            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicenceDoc.DocumentGuid);
+            // TODO:
+            var businessLicence = await _siteService.GetBusinessLicenceAsync(siteId);
+            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicence.BusinessLicenceDocument.DocumentGuid);
             return documentAccessToken.DownloadUrl;
         }
 

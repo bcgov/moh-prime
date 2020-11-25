@@ -259,6 +259,10 @@ export class SiteFormStateService extends AbstractFormState<Site> {
         '',
         []
       ],
+      deferredLicenceReason: [
+        '',
+        []
+      ],
       doingBusinessAs: [
         '',
         [Validators.required]

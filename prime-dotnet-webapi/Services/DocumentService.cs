@@ -30,10 +30,11 @@ namespace Prime.Services
             _documentManagerClient = documentManagerClient;
         }
 
-        public async Task<string> GetDownloadTokenForLatestBusinessLicenceDocument(int siteId)
+        public async Task<string> GetDownloadTokenForBusinessLicenceDocument(int siteId)
         {
-            var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
-            return await _documentManagerClient.CreateDownloadTokenAsync(licence.DocumentGuid);
+            // TODO: verify has a file attached?
+            var licence = await _siteService.GetBusinessLicenceAsync(siteId);
+            return await _documentManagerClient.CreateDownloadTokenAsync(licence.BusinessLicenceDocument.DocumentGuid);
         }
 
         public async Task<string> GetDownloadTokenForSignedAgreementDocument(int agreementId)
@@ -75,10 +76,11 @@ namespace Prime.Services
             return await _documentManagerClient.CreateDownloadTokenAsync(document.DocumentGuid);
         }
 
-        public async Task<Stream> GetStreamForLatestBusinessLicenceDocument(int siteId)
+        public async Task<Stream> GetStreamForBusinessLicenceDocument(int siteId)
         {
-            var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
-            return await _documentManagerClient.GetFileStreamAsync(licence.DocumentGuid);
+            // TODO: verify has a file attached?
+            var licence = await _siteService.GetBusinessLicenceAsync(siteId);
+            return await _documentManagerClient.GetFileStreamAsync(licence.BusinessLicenceDocument.DocumentGuid);
         }
 
         public async Task<Stream> GetStreamForLatestSignedAgreementDocument(int organizationId)
