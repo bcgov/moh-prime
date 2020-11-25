@@ -18,17 +18,6 @@ namespace PrimeTests.UnitTests
 {
     public class AgreementEngineTests : InMemoryDbTest
     {
-        private Certification[] GenerateOneCert(Enrollee enrollee, bool regulatedUser)
-        {
-            var cert = regulatedUser
-                ? new CertificationFactory(enrollee).Generate("default,licence.regulated")
-                : new CertificationFactory(enrollee).Generate("default,licence.nonRegulated");
-
-            cert.License = LicenseLookup.All.Single(l => l.Code == cert.LicenseCode);
-
-            return new[] { cert };
-        }
-
         [Theory]
         [InlineData(CareSettingType.CommunityPractice, AgreementType.OboTOA)]
         [InlineData(CareSettingType.CommunityPharmacy, AgreementType.PharmacyOboTOA)]
@@ -49,7 +38,7 @@ namespace PrimeTests.UnitTests
             Assert.Equal(expectedType, determinedType);
         }
 
-        [Fact(Skip = "Need more agreement engine tests now that it is more complicated")]
+        [Fact(Skip = "Need more agreement engine tests now that we have the fuller story")]
         public void WriteMoreTests() { }
     }
 }
