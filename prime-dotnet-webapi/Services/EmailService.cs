@@ -8,6 +8,7 @@ using System.Net.Mail;
 using Prime.Models;
 using System.IO;
 using Prime.HttpClients;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Prime.Services
 {
@@ -37,11 +38,11 @@ namespace Prime.Services
             ProvisionerName = provisionerName;
         }
 
-        public EmailParams(Enrollee enrollee)
+        public EmailParams(string firstName, string lastName, DateTimeOffset expiryDate)
         {
-            FirstName = enrollee.FirstName;
-            LastName = enrollee.LastName;
-            RenewalDate = enrollee.ExpiryDate;
+            FirstName = firstName;
+            LastName = lastName;
+            RenewalDate = expiryDate;
         }
 
         public EmailParams(Site site, string documentUrl)
@@ -325,56 +326,54 @@ namespace Prime.Services
             return await _context.SaveChangesAsync() != 0;
         }
 
-        public async Task<bool> SendEnrolleeRenewalEmails()
+        public async Task SendEnrolleeRenewalEmails()
         {
+            var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
+
             var enrollees = await _context.Enrollees
-                .Include(e => e.Agreements)
+                .Select(e => new
+                {
+                    e.FirstName,
+                    e.LastName,
+                    e.Email,
+                    e.ExpiryDate
+                })
+                .Where(e => e.ExpiryDate != null)
+                .DecompileAsync()
                 .ToListAsync();
 
-            var requiredRenewals = enrollees
-                .Where(e => e.ExpiryDate != null
-                    && (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == -14
-                    || (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == -7
-                    || (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == -3
-                    || (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == -2
-                    || (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == -1
-                    || (e.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays == 0);
-
-            foreach (var enrollee in requiredRenewals)
+            foreach (var enrollee in enrollees)
             {
-                await SendRenewalRequiredAsync(enrollee);
+                var expiryDays = (DateTime.Now.Date - enrollee.ExpiryDate.Value.Date).TotalDays;
+                if (reminderEmailsIntervals.Contains(expiryDays))
+                {
+                    await SendRenewalRequiredAsync(enrollee.Email, enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value);
+                }
+                if (expiryDays == -1)
+                {
+                    await SendRenewalPassedAsync(enrollee.Email, enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value);
+                }
             }
-
-            var passedRenewals = enrollees
-                .Where(e => e.ExpiryDate != null &&
-                    (DateTime.Now.Date - e.ExpiryDate.Value.Date).TotalDays == 1);
-
-            foreach (var enrollee in passedRenewals)
-            {
-                await SendRenewalPassedAsync(enrollee);
-            }
-
-            return true;
         }
 
-        private async Task SendRenewalRequiredAsync(Enrollee enrollee)
+        private async Task SendRenewalRequiredAsync(string email, string firstName, string lastName, DateTimeOffset expiryDate)
         {
             var subject = "PRIME Renewal Required";
             var body = await _razorConverterService.RenderViewToStringAsync(
                 "/Views/Emails/RenewalRequiredEmail.cshtml",
-                new EmailParams(enrollee));
+                new EmailParams(firstName, lastName, expiryDate));
 
-            await Send(PRIME_EMAIL, enrollee.Email, subject, body);
+            await Send(PRIME_EMAIL, email, subject, body);
         }
 
-        private async Task SendRenewalPassedAsync(Enrollee enrollee)
+        private async Task SendRenewalPassedAsync(string email, string firstName, string lastName, DateTimeOffset expiryDate)
         {
             var subject = "Your PRIME Renewal Date Has Passed";
             var body = await _razorConverterService.RenderViewToStringAsync(
                 "/Views/Emails/RenewalPassedEmail.cshtml",
-                new EmailParams(enrollee));
+                new EmailParams(firstName, lastName, expiryDate));
 
-            await Send(PRIME_EMAIL, enrollee.Email, subject, body);
+            await Send(PRIME_EMAIL, email, subject, body);
         }
 
         private async Task Send(string from, string to, string subject, string body)
