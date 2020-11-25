@@ -14,7 +14,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs the User role to use this controller
-    [Authorize(Policy = AuthConstants.USER_POLICY)]
+    [Authorize(Policy = Policies.User)]
     public class FeedbackController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;

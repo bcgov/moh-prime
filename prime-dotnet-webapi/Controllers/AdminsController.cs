@@ -16,7 +16,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs the ADMIN role to use this controller
-    [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+    [Authorize(Policy = Policies.Admin)]
     public class AdminsController : ControllerBase
     {
         private readonly IAdminService _adminService;
