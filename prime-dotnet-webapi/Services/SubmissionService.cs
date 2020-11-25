@@ -81,7 +81,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
             await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Submitted");
 
-            if (_httpContext.HttpContext.User.hasVCIssuance())
+            if (_httpContext.HttpContext.User.HasVCIssuance())
             {
                 try
                 {
