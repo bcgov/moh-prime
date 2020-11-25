@@ -1810,7 +1810,7 @@
     {
       "id": "0b79e39a-f8a7-4fe2-a1b7-105f70979cbb",
       "clientId": "prime-pos-gpid",
-      "name": "Provisioner System",
+      "name": "Requesting System",
       "description": "",
       "surrogateAuthRequired": false,
       "enabled": true,
@@ -1913,9 +1913,7 @@
         "identity_provider",
         "identity_assurance_level"
       ],
-      "optionalClientScopes": [
-        "microprofile-jwt"
-      ]
+      "optionalClientScopes": []
     },
     {
       "id": "8d153525-3e8e-4c14-ba27-eeefdf7d17e1",
