@@ -14,7 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = AuthConstants.USER_POLICY)]
+    [Authorize(Policy = Policies.User)]
     public class AddressAutocompleteController : ControllerBase
     {
         private readonly IAddressAutocompleteClient _addressAutocompleteClient;

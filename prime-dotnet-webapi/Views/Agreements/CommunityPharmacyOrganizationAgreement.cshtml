@@ -1,19 +1,10 @@
 @model Tuple<string, DateTimeOffset>;
 
 @{
-  /**
-   * Organization Agreement that is downloaded and rendered in the
-   * web client by the signing authority.
-   */
   var organizationName = Model.Item1;
-  var day = Model.Item2.ToString("dd");
-  var month = Model.Item2.ToString("MMMM");
-  var year = Model.Item2.ToString("yyyy");
 }
 
-<p class="text-center">
-  This Agreement is made the @day day of @month, @year
-</p>
+@await Html.PartialAsync("~/Views/Partials/_AgreementDate.cshtml")
 
 <h1>ORGANIZATION AGREEMENT FOR PHARMANET USE</h1>
 

@@ -20,18 +20,34 @@ namespace Prime.Controllers
             _emailService = emailService;
         }
 
-        // POST: api/emails/management/statuses
+        // POST: api/Emails/management/statuses
         /// <summary>
         /// Update all logged email statuses sent using the CHES email service
         /// </summary>
         [HttpPost("management/statuses", Name = nameof(UpdateEmailLogStatuses))]
-        [Authorize(Roles = AuthConstants.PRIME_API_SERVICE_ACCOUNT_ROLE + "," + AuthConstants.PRIME_ADMIN_ROLE)]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount + "," + Roles.PrimeAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<StatusCodeResult> UpdateEmailLogStatuses()
         {
             await _emailService.UpdateEmailLogStatuses();
+
+            return NoContent();
+        }
+
+        // POST: api/Emails/management/enrollees/renewal
+        /// <summary>
+        /// Send enrollee renewal reminder emails
+        /// </summary>
+        [HttpPost("management/enrollees/renewal", Name = nameof(SendEnrolleeRenewalEmails))]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount + "," + Roles.PrimeAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> SendEnrolleeRenewalEmails()
+        {
+            await _emailService.SendEnrolleeRenewalEmails();
 
             return NoContent();
         }
