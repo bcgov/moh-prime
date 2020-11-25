@@ -616,7 +616,7 @@ namespace Prime.Services
             return _mapper.Map<EnrolleeViewModel>(enrollee);
         }
 
-        public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
+        public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
         {
             return await _context.BusinessEvents
                 .Include(e => e.Admin)

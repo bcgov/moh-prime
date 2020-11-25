@@ -1,75 +1,61 @@
-<app-adjudication-container [content]="content">
+<section class="mb-4">
 
-  <app-page-header>Document Upload</app-page-header>
+  <app-document-upload #documentUpload
+                       componentName="adjudicator-documents"
+                       labelMessage="Drag and drop your documents or browse"
+                       [multiple]="true"
+                       (completed)="onUpload($event)"
+                       (remove)="onRemoveDocument($event)">
+  </app-document-upload>
 
-</app-adjudication-container>
+  <div class="col pt-2 text-right">
+    <button mat-flat-button
+            type="button"
+            color="primary"
+            (click)="onSubmit()">
+      Save
+    </button>
+  </div>
 
-<ng-template #content>
-  <div class="">
+</section>
 
+<section>
+  <h2 class="mb-2">Documents</h2>
 
-    <section class="mb-4">
-
-      <app-document-upload #documentUpload
-                           componentName="adjudicator-documents"
-                           labelMessage="Drag and drop your documents or browse"
-                           [multiple]="true"
-                           (completed)="onUpload($event)"
-                           (remove)="onRemoveDocument($event)">
-      </app-document-upload>
-
-      <div class="col pt-2 text-right">
-        <button mat-flat-button
-                type="button"
-                color="primary"
-                (click)="onSubmit()">
-          Save
-        </button>
-      </div>
-
-    </section>
-
-    <section>
-      <h2 class="mb-2">Documents</h2>
-
-      <ng-container *ngIf="(documents$ | async)?.length">
-        <div class="table-responsive">
-          <table class="table">
-            <tbody>
-              <tr *ngFor="let document of documents$ | async">
-                <th scope="row">
-                  <div class="text-nowrap">
-                    {{ document.uploadedDate | formatDate }}
-                  </div>
-                  <small *ngIf="true"
+  <ng-container *ngIf="(documents$ | async)?.length">
+    <div class="table-responsive">
+      <table class="table">
+        <tbody>
+          <tr *ngFor="let document of documents$ | async">
+            <th scope="row">
+              <div class="text-nowrap">
+                {{ document.uploadedDate | formatDate }}
+              </div>
+              <small *ngIf="true"
                          class="d-block text-mute font-weight-normal mb-2">
                       {{ document.uploadedDate | formatDate: 'h:mm a' }}
                     </small>
-                  <mat-chip-list [selectable]="false">
-                    <mat-chip selected
-                              color="primary"
-                              [disableRipple]="true">{{ document.adjudicator.idir | replace: '@idir': '' }}</mat-chip>
-                  </mat-chip-list>
-                </th>
-                <td>
-                  <button mat-stroked-button
+              <mat-chip-list [selectable]="false">
+                <mat-chip selected
                           color="primary"
-                          (click)="getDocument(document.id)">
-                    <mat-icon class="mr-1">attachment</mat-icon>
-                    {{ document.filename | default }}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </ng-container>
+                          [disableRipple]="true">{{ document.adjudicator.idir | replace: '@idir': '' }}</mat-chip>
+              </mat-chip-list>
+            </th>
+            <td>
+              <button mat-stroked-button
+                      color="primary"
+                      (click)="getDocument(document.id)">
+                <mat-icon class="mr-1">attachment</mat-icon>
+                {{ document.filename | default }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
 
-      <div *ngIf="!(documents$ | async)?.length">
-        No documents have been uploaded
-      </div>
-    </section>
-
+  <div *ngIf="!(documents$ | async)?.length">
+    No documents have been uploaded
   </div>
-
-</ng-template>
+</section>

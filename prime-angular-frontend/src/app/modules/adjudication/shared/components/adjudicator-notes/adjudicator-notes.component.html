@@ -1,57 +1,47 @@
-<app-adjudication-container [content]="content">
+<form (ngSubmit)="onSubmit()"
+      [formGroup]="form"
+      novalidate>
 
-  <app-page-header>Notes</app-page-header>
+  <div class="row mb-4">
+    <div class="col-sm-12 col-lg-9 col-xl-5 pb-4">
 
-</app-adjudication-container>
+      <mat-form-field class="w-100">
+        <textarea matInput
+                  placeholder="Write Note Here"
+                  rows="10"
+                  formControlName="note"></textarea>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
 
-<ng-template #content>
-
-  <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
-        novalidate>
-
-    <div class="row mb-4">
-      <div class="col-sm-12 col-lg-9 col-xl-5 pb-4">
-
-        <mat-form-field class="w-100">
-          <textarea matInput
-                    placeholder="Write Note Here"
-                    rows="10"
-                    formControlName="note"></textarea>
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-
-        <div class="text-right">
-          <button mat-flat-button
-                  color="primary"
-                  [disabled]="!canEdit && !note.value?.length">Save Note</button>
-        </div>
-
+      <div class="text-right">
+        <button mat-flat-button
+                color="primary"
+                [disabled]="!canEdit && !note.value?.length">Save Note</button>
       </div>
-      <div class="col-sm-12 col-lg-9 col-xl-7">
 
-        <div class="mb-4">
-          <button mat-stroked-button
-                  color="primary"
-                  type="button"
-                  (click)="onRoute([AdjudicationRoutes.DOCUMENT_UPLOAD])">
-            Document Upload
-          </button>
-        </div>
-
-        <h2 class="mb-2">Notes</h2>
-
-        <ng-container *ngIf="adjudicatorNotes$.value?.length; else noNotes">
-          <app-dated-content-table [items$]="adjudicatorNotes$"></app-dated-content-table>
-        </ng-container>
-
-        <ng-template #noNotes>
-          No notes have been created
-        </ng-template>
-
-      </div>
     </div>
+    <div class="col-sm-12 col-lg-9 col-xl-7">
 
-  </form>
+      <div class="mb-4">
+        <button mat-stroked-button
+                color="primary"
+                type="button"
+                (click)="onRoute([AdjudicationRoutes.DOCUMENT_UPLOAD])">
+          Document Upload
+        </button>
+      </div>
 
-</ng-template>
+      <h2 class="mb-2">Notes</h2>
+
+      <ng-container *ngIf="adjudicatorNotes$.value?.length; else noNotes">
+        <app-dated-content-table [items$]="adjudicatorNotes$"></app-dated-content-table>
+      </ng-container>
+
+      <ng-template #noNotes>
+        No notes have been created
+      </ng-template>
+
+    </div>
+  </div>
+
+</form>
