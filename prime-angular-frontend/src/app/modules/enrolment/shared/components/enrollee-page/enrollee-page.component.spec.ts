@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnrolleePageComponent } from './enrollee-page.component';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
@@ -14,7 +14,7 @@ describe('EnrolleePageComponent', () => {
   let component: EnrolleePageComponent;
   let fixture: ComponentFixture<EnrolleePageComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
