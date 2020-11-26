@@ -17,7 +17,7 @@ namespace Prime.Controllers
     [Route("api/enrollees")]
     [ApiController]
     // User needs at least the RO_ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = AuthConstants.USER_POLICY)]
+    [Authorize(Policy = Policies.User)]
     public class EnrolleeAgreementsController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -239,7 +239,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}"));
             }
 
-            var html = await _razorConverterService.RenderViewToStringAsync("/Views/TermsOfAccessPdf.cshtml", agreement);
+            var html = await _razorConverterService.RenderViewToStringAsync("/Views/Agreements/TermsOfAccessPdf.cshtml", agreement);
             var download = _pdfService.Generate(html);
 
             return Ok(ApiResponse.Result(download));
