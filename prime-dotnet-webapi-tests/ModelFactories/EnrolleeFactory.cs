@@ -50,7 +50,6 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new EnrolleeNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.Submissions, f => null);
-            RuleFor(x => x.isAdminView, f => true);
             // TODO: create rule sets for these ignores?
             Ignore(x => x.Agreements);
             Ignore(x => x.Adjudicator);
@@ -60,6 +59,9 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.Credential);
             Ignore(x => x.CredentialId);
             Ignore(x => x.EnrolleeRemoteUsers);
+            Ignore(x => x.RemoteAccessSites);
+            Ignore(x => x.RemoteAccessLocations);
+            Ignore(x => x.EnrolleeAdjudicationDocuments);
 
             RuleSet("status.submitted", (set) =>
             {

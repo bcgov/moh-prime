@@ -46,6 +46,10 @@ namespace Prime
         public static PhysicalAddress GetPhysicalAddress(this ClaimsPrincipal User)
         {
             string addressClaim = User?.FindFirstValue(Claims.Address);
+            if (addressClaim == null)
+            {
+                return null;
+            }
 
             var address = JsonConvert.DeserializeObject<TokenAddress>(addressClaim);
 

@@ -28,6 +28,8 @@
             <mat-autocomplete autoActiveFirstOption
                               #nameAuto="matAutocomplete"
                               (optionSelected)="onSelect($event)">
+              <mat-option *ngIf="organizations?.length"
+                          [disabled]="true">Top 10 results of {{ totalResults }} potential results</mat-option>
               <mat-option *ngFor="let organization of organizations"
                           [value]="organization">
                 {{ organization }}
