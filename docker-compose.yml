@@ -16,6 +16,7 @@ services:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
       - primenet
+
 ####################### MongoDB Definition #######################
   mongo:
     restart: always
@@ -30,6 +31,18 @@ services:
       - local_mongodb_data:/var/lib/mongodb/data
     networks:
       - primenet
+
+####################### Redis Definition #######################
+  redis:
+    image: redis:3.2-alpine
+    container_name: prime_cache
+    restart: always
+    command: redis-server --requirepass redis-password
+    ports:
+      - "6379:6379"
+    networks:
+      - primenet
+
 ####################### API Backend Definition #######################
   dotnet-webapi:
     container_name: primeapi
@@ -49,6 +62,7 @@ services:
       - primenet
     depends_on:
       - postgres
+
 ####################### Web Frontend Definition #######################
   nginx-angular:
     container_name: primeweb
@@ -66,6 +80,7 @@ services:
       - primenet
     depends_on:
       - dotnet-webapi
+
 ####################### Local SMTP Server Definition #######################
   mailhog:
     container_name: mailhog
@@ -74,9 +89,10 @@ services:
     ports:
       - 25:1025
       - 1025:1025
-      - 8025:8025 # visit localhost:8025 to see the list of captured emails
+      - 8025:8025 # Visit localhost:8025 to see the list of captured emails
     networks:
       - primenet
+
 ####################### Database Inspection Definition #######################
   schema-spy:
     container_name: schema-spy
@@ -90,6 +106,7 @@ services:
       - postgres
     networks:
       - primenet
+
 ####################### Backup Definition #######################
   backup:
     container_name: backup
@@ -106,6 +123,7 @@ services:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
       - primenet
+
 ####################### Document Manager Definition #######################
   document_manager_backend:
     restart: always
@@ -120,7 +138,7 @@ services:
       - postgres
       - redis
       - document_manager_migrate
-    env_file: ./document-manager/backend/.env-prime-local
+    env_file: ./document-manager/backend/.env-local
     networks:
       - primenet
 
@@ -132,19 +150,10 @@ services:
       dockerfile: Dockerfile.migrate
     depends_on:
       - postgres
+      - redis
     volumes:
       - ./document-manager/backend/:/app/
-    env_file: ./document-manager/backend/.env-prime-local
-    networks:
-      - primenet
-
-  redis:
-    image: redis:3.2-alpine
-    container_name: prime_cache
-    restart: always
-    command: redis-server --requirepass redis-password
-    ports:
-      - "6379:6379"
+    env_file: ./document-manager/backend/.env-local
     networks:
       - primenet
 

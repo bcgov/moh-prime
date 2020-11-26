@@ -3,6 +3,7 @@ SHELL ["/bin/bash","-c"]
 
 # Update installation utility
 RUN apt-get update -yqq
+RUN apt-get install -yqq postgresql-client
 
 # Create working directory
 RUN mkdir /app
@@ -17,5 +18,5 @@ COPY . .
 
 # Run the server
 EXPOSE 5001 9191
+ENTRYPOINT [ "./init-migrate.sh"]
 CMD ["flask", "db", "upgrade"]
-CMD ["tail", "-f", "/dev/null"]

@@ -17,4 +17,4 @@ COPY . .
 
 # Run the server
 EXPOSE 5001 9191
-ENTRYPOINT ["./init.sh"]
+ENTRYPOINT ["./init-backend.sh"]
