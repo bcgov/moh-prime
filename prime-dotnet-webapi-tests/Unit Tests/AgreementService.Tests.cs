@@ -8,6 +8,7 @@ using AutoMapper;
 
 using Prime.Models;
 using Prime.Services;
+using Prime.HttpClients;
 using PrimeTests.Utils;
 using PrimeTests.ModelFactories;
 
@@ -19,14 +20,16 @@ namespace PrimeTests.UnitTests
             IHttpContextAccessor httpContext = null,
             IMapper mapper = null,
             IPdfService pdfService = null,
-            IRazorConverterService razorConverterService = null)
+            IRazorConverterService razorConverterService = null,
+            IDocumentManagerClient documentClient = null)
         {
             return new AgreementService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 mapper ?? A.Fake<IMapper>(),
                 pdfService ?? A.Fake<IPdfService>(),
-                razorConverterService ?? A.Fake<IRazorConverterService>()
+                razorConverterService ?? A.Fake<IRazorConverterService>(),
+                documentClient ?? A.Fake<IDocumentManagerClient>()
             );
         }
 
@@ -54,81 +57,65 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Theory]
-        [InlineData(CareSettingType.CommunityPractice)]
-        [InlineData(CareSettingType.CommunityPharmacy)]
-        public async void TestCreateAgreement_Obo(CareSettingType careSetting)
+        [Fact]
+        public async void TestCreateAgreement_ThrowsWhenNull()
         {
             // Arrange
             var service = CreateService();
             var enrollee = new EnrolleeFactory().Generate();
-            enrollee.EnrolleeCareSettings.Single().CareSettingCode = (int)careSetting;
-            enrollee.Certifications.Clear();
-            enrollee.AccessAgreementNote = null;
-            TestDb.Has(enrollee);
-
-            var expectedAgreementId = TestDb.AgreementVersions.GetNewestIdOfType<OboAgreement>();
-
-            // Act
-            await service.CreateEnrolleeAgreementAsync(enrollee.Id);
-
-            // Assert
-            AssertAgreementGeneration(enrollee, expectedAgreementId);
-        }
-
-        [Theory]
-        [InlineData(CareSettingType.CommunityPractice)]
-        [InlineData(CareSettingType.CommunityPharmacy)]
-        public async void TestCreateAgreement_LicencedObo(CareSettingType careSetting)
-        {
-            // Arrange
-            var service = CreateService();
-            var enrollee = new EnrolleeFactory().Generate();
-            enrollee.EnrolleeCareSettings.Single().CareSettingCode = (int)careSetting;
-            enrollee.Certifications = new CertificationFactory(enrollee).Generate(1, "default,licence.nonRegulated");
-            enrollee.AccessAgreementNote = null;
-            TestDb.Has(enrollee);
-            TestDb.Entry(enrollee.Certifications.Single()).Reference(c => c.License).Load();
-
-            var expectedAgreementId = TestDb.AgreementVersions.GetNewestIdOfType<OboAgreement>();
-
-            // Act
-            await service.CreateEnrolleeAgreementAsync(enrollee.Id);
-
-            // Assert
-            AssertAgreementGeneration(enrollee, expectedAgreementId);
-        }
-
-        [Theory]
-        [InlineData(CareSettingType.CommunityPractice)]
-        [InlineData(CareSettingType.CommunityPharmacy)]
-        public async void TestCreateAgreement_RegulatedUser(CareSettingType careSetting)
-        {
-            // Arrange
-            var service = CreateService();
-            var enrollee = new EnrolleeFactory().Generate();
-            enrollee.EnrolleeCareSettings.Single().CareSettingCode = (int)careSetting;
-            enrollee.Certifications = new CertificationFactory(enrollee).Generate(1, "default,licence.regulated");
-            enrollee.AccessAgreementNote = null;
-            TestDb.Has(enrollee);
-            TestDb.Entry(enrollee.Certifications.Single()).Reference(c => c.License).Load();
-
-            int expectedAgreementId = 0;
-            switch (careSetting)
+            enrollee.Submissions = new[]
             {
-                case CareSettingType.CommunityPractice:
-                    expectedAgreementId = TestDb.AgreementVersions.GetNewestIdOfType<RegulatedUserAgreement>();
-                    break;
-                case CareSettingType.CommunityPharmacy:
-                    expectedAgreementId = TestDb.AgreementVersions.GetNewestIdOfType<CommunityPharmacistAgreement>();
-                    break;
-            }
+                new Submission
+                {
+                    AgreementType = null,
+                    CreatedDate = DateTimeOffset.Now,
+                }
+            };
+            enrollee.AccessAgreementNote = null;
+            TestDb.Has(enrollee);
+
+            // Act
+            // Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateEnrolleeAgreementAsync(enrollee.Id));
+        }
+
+        [Theory]
+        [MemberData(nameof(AgreementTypeData))]
+        public async void TestCreateAgreement(AgreementType determinedType)
+        {
+            // Arrange
+            var service = CreateService();
+            var enrollee = new EnrolleeFactory().Generate();
+            enrollee.Submissions = new[]
+            {
+                new Submission
+                {
+                    AgreementType = determinedType,
+                    CreatedDate = DateTimeOffset.Now,
+                }
+            };
+            enrollee.AccessAgreementNote = null;
+            TestDb.Has(enrollee);
+
+            var expectedAgreementId = TestDb.AgreementVersions
+                .Where(a => a.AgreementType == determinedType)
+                .OrderByDescending(a => a.EffectiveDate)
+                .Select(a => a.Id)
+                .First();
 
             // Act
             await service.CreateEnrolleeAgreementAsync(enrollee.Id);
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedAgreementId);
+        }
+
+        public static IEnumerable<object[]> AgreementTypeData()
+        {
+            foreach (var agreementType in Enum.GetValues(typeof(AgreementType)))
+            {
+                yield return new object[] { agreementType };
+            }
         }
 
         [Fact]
@@ -137,6 +124,14 @@ namespace PrimeTests.UnitTests
             // Arrange
             var service = CreateService();
             var enrollee = new EnrolleeFactory().Generate();
+            enrollee.Submissions = new[]
+            {
+                new Submission
+                {
+                    AgreementType = AgreementType.OboTOA,
+                    CreatedDate = DateTimeOffset.Now,
+                }
+            };
             var noteText = "oh dear";
             enrollee.AccessAgreementNote = new AccessAgreementNote { Note = noteText };
             TestDb.Has(enrollee);
@@ -146,18 +141,6 @@ namespace PrimeTests.UnitTests
 
             // Assert
             AssertAgreementGeneration(enrollee, expectedLimitsClauseText: noteText);
-        }
-    }
-
-    internal static class AgreementVersionExtensions
-    {
-        public static int GetNewestIdOfType<T>(this IEnumerable<AgreementVersion> agreements) where T : AgreementVersion
-        {
-            return agreements
-                .OfType<T>()
-                .OrderByDescending(a => a.EffectiveDate)
-                .Select(a => a.Id)
-                .First();
         }
     }
 }
