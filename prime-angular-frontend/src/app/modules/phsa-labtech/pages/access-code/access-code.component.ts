@@ -1,5 +1,3 @@
-import { PhsaLabtechFormStateService } from './../../shared/services/phsa-labtech-form-state.service';
-import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +10,8 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-
+import { PhsaLabtechFormStateService } from '@phsa/shared/services/phsa-labtech-form-state.service';
+import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
 
 @Component({
   selector: 'app-access-code',
