@@ -5,9 +5,9 @@ using Prime.Models.Api;
 
 namespace Prime.Engines
 {
-    public class SubmissionStateEngine
+    public static class SubmissionStateEngine
     {
-        public bool AllowableAction(SubmissionAction action, Enrollee enrollee, bool asAdmin)
+        public static bool AllowableAction(SubmissionAction action, Enrollee enrollee, bool asAdmin)
         {
             enrollee.ThrowIfNull(nameof(enrollee));
             if (enrollee.CurrentStatus == null)
