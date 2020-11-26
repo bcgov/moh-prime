@@ -75,6 +75,10 @@ import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/
     ContactInformationFormComponent,
     RemoteAccessAddressesComponent
   ],
+  exports: [
+    EnrolleePageComponent,
+    EnrolmentProgressIndicatorComponent
+  ],
   imports: [
     SharedModule,
     EnrolmentRoutingModule,
