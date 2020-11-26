@@ -6,11 +6,19 @@ import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-
 
 import { ExampleComponent } from './pages/example/example.component';
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
+import { ConfigGuard } from '@config/config.guard';
 
 const routes: Routes = [
   {
-    path: '',
+    path: PhsaLabtechRoutes.MODULE_PATH,
     component: PhsaLabtechDashboardComponent,
+    canActivate: [
+      // Ensure that the configuration is loaded prior to dependent
+      // guards, as well as, views, otherwise if it already exists NOOP
+      // NOTE: A resolver could not be used due to their execution
+      // occuring after parent and child guards
+      ConfigGuard
+    ],
     children: [
       {
         path: PhsaLabtechRoutes.EXAMPLE,
