@@ -59,7 +59,7 @@ namespace Prime.Controllers
         /// Gets all of the access tokens for the user.
         /// </summary>
         [HttpGet("token", Name = nameof(GetAccessTokens))]
-        [Authorize(Policy = AuthConstants.USER_POLICY)]
+        [Authorize(Policy = Policies.User)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
@@ -78,7 +78,7 @@ namespace Prime.Controllers
         /// <param name="careSettingCode"></param>
         /// <param name="providedEmails"></param>
         [HttpPost("send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
-        [Authorize(Policy = AuthConstants.USER_POLICY)]
+        [Authorize(Policy = Policies.User)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -143,18 +143,18 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(enrollee?.GPID));
         }
 
-        // GET: api/provisioner-access/gpids?hpdid=11111&hpdid=22222
+        // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222
         /// <summary>
         /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid direct access grant token.
         /// </summary>
         [HttpGet("gpids", Name = nameof(HpdidLookup))]
-        [Authorize(Policy = AuthConstants.EXTERNAL_HPDID_ACCESS_POLICY)]
+        [Authorize(Policy = Policies.ExternalHpdidAccess)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HpdidLookup>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> HpdidLookup([FromQuery] string[] hpdid)
+        public async Task<ActionResult<string>> HpdidLookup([FromQuery] string[] hpdids)
         {
-            var result = await _enrolleeService.HpdidLookupAsync(hpdid);
+            var result = await _enrolleeService.HpdidLookupAsync(hpdids);
 
             return Ok(ApiResponse.Result(result));
         }
@@ -164,7 +164,7 @@ namespace Prime.Controllers
         /// Validates the supplied information against the enrollee record with the given GPID. Requires a valid direct access grant token.
         /// </summary>
         [HttpPost("gpids/{gpid}/validate", Name = nameof(ValidateGpid))]
-        [Authorize(Policy = AuthConstants.EXTERNAL_GPID_VALIDATION_POLICY)]
+        [Authorize(Policy = Policies.ExternalGpidValidation)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
