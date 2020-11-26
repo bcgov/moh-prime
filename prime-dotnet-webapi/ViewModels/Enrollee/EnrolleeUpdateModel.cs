@@ -38,6 +38,8 @@ namespace Prime.ViewModels
 
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
+        public ICollection<OboSite> OboSites { get; set; }
+
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string DeviceProviderNumber { get; set; }
 

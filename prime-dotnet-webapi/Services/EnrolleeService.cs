@@ -179,6 +179,8 @@ namespace Prime.Services
                     .ThenInclude(ral => ral.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.SelfDeclarations)
+                .Include(e => e.OboSites)
+                    .ThenInclude(s => s.PhysicalAddress)
                 .SingleAsync(e => e.Id == enrolleeId);
 
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
@@ -209,6 +211,8 @@ namespace Prime.Services
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
             UpdateRemoteAccessSites(enrollee, updateModel);
             UpdateRemoteAccessLocations(enrollee, updateModel);
+
+            UpdateOboSites(enrollee, updateModel);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -367,6 +371,47 @@ namespace Prime.Services
 
                     _context.Entry(remoteAccessSite).State = EntityState.Added;
                 }
+            }
+        }
+
+        private void UpdateOboSites(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
+        {
+            // Wholesale replace the obo sites
+            foreach (var site in dbEnrollee.OboSites)
+            {
+                _context.Remove(site.PhysicalAddress);
+                _context.Remove(site);
+            }
+
+            if (updateEnrollee?.OboSites != null && updateEnrollee?.OboSites.Count() != 0)
+            {
+                var oboSites = new List<OboSite>();
+
+                foreach (var site in updateEnrollee.OboSites)
+                {
+                    var newAddress = new PhysicalAddress
+                    {
+                        CountryCode = site.PhysicalAddress.CountryCode,
+                        ProvinceCode = site.PhysicalAddress.ProvinceCode,
+                        Street = site.PhysicalAddress.Street,
+                        Street2 = site.PhysicalAddress.Street2,
+                        City = site.PhysicalAddress.City,
+                        Postal = site.PhysicalAddress.Postal
+                    };
+                    var newSite = new OboSite
+                    {
+                        Enrollee = dbEnrollee,
+                        CareSetting = site.CareSetting,
+                        PhysicalAddress = newAddress,
+                        SiteName = site.SiteName,
+                        PEC = site.PEC,
+                        Facility = site.Facility
+                    };
+                    _context.Entry(newAddress).State = EntityState.Added;
+                    _context.Entry(newSite).State = EntityState.Added;
+                    oboSites.Add(newSite);
+                }
+                updateEnrollee.OboSites = oboSites;
             }
         }
 

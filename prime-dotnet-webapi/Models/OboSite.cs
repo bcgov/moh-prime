@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("OboSite")]
-    public abstract class OboSite : BaseAuditable, IEnrolleeNavigationProperty
+    public class OboSite : BaseAuditable, IEnrolleeNavigationProperty
     {
         [Key]
         public int Id { get; set; }
@@ -15,25 +15,20 @@ namespace Prime.Models
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
+        public int CareSettingCode { get; set; }
+
+        [JsonIgnore]
+        public CareSetting CareSetting { get; set; }
+
+        public string SiteName { get; set; }
+
+        public string PEC { get; set; }
+
+        public string Facility { get; set; }
+
         [Required]
         public PhysicalAddress PhysicalAddress { get; set; }
     }
 
-    public class CommunityPracticeSite : OboSite
-    {
-        public string SiteName { get; set; }
-        public string PEC { get; set; }
-    }
-
-    public class CommunityPharmacySite : OboSite
-    {
-        public string SiteName { get; set; }
-        public string PEC { get; set; }
-    }
-
-    public class HealthAuthoritySite : OboSite
-    {
-        public string Facility { get; set; }
-    }
 }
 
