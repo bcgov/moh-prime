@@ -632,10 +632,15 @@ namespace Prime.Services
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
             return await _context.Enrollees
-                .Include(e => e.Agreements)
                 .Where(e => hpdids.Contains(e.HPDID))
-                .Where(e => !e.CurrentStatus.IsType(StatusType.Declined))
-                .Select(e => HpdidLookup.FromEnrollee(e))
+                .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Select(e => new HpdidLookup
+                {
+                    Gpid = e.GPID,
+                    Hpdid = e.HPDID,
+                    RenewalDate = e.ExpiryDate
+                })
+                .DecompileAsync()
                 .ToListAsync();
         }
 
