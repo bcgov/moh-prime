@@ -4,6 +4,7 @@ export class PhsaLabtechRoutes {
   public static DEMOGRAPHIC = 'demographic';
 
   public static EXAMPLE = 'example';
+  public static ACCESS_CODE = 'access-code';
 
   public static MODULE_PATH = PhsaLabtechRoutes.PHSA_LABTECH;
 

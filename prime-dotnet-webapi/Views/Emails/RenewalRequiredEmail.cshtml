@@ -1,0 +1,17 @@
+@using Prime
+@using Prime.Services
+@model EmailParams
+
+@{
+  var enrolleeName = $"{Model.FirstName} {Model.LastName}";
+  var url = PrimeEnvironment.FrontendUrl;
+  var renewalDate = Model.RenewalDate.Value.Date.ToShortDateString();
+}
+
+Dear @enrolleeName,
+<br>
+<br>
+Your enrolment for PharmaNet access will expire on @renewalDate. In order to continue to use PharmaNet, you must
+renew your enrolment information.
+<br>
+Click here to visit PRIME. <a href="@url">@url</a>
