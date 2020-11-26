@@ -8,6 +8,7 @@ using System.Net.Mail;
 using Prime.Models;
 using System.IO;
 using Prime.HttpClients;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Prime.Services
 {
@@ -17,6 +18,8 @@ namespace Prime.Services
         public string LastName { get; set; }
         public string TokenUrl { get; set; }
         public string ProvisionerName { get; set; }
+
+        public DateTimeOffset? RenewalDate { get; set; }
         public Site Site { get; set; }
         public string DocumentUrl { get; set; }
         public int MaxViews { get => EnrolmentCertificateAccessToken.MaxViews; }
@@ -33,6 +36,13 @@ namespace Prime.Services
             LastName = token.Enrollee.LastName;
             TokenUrl = token.FrontendUrl;
             ProvisionerName = provisionerName;
+        }
+
+        public EmailParams(string firstName, string lastName, DateTimeOffset expiryDate)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            RenewalDate = expiryDate;
         }
 
         public EmailParams(Site site, string documentUrl)
@@ -153,7 +163,6 @@ namespace Prime.Services
             string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
-
         public async Task SendSiteRegistrationAsync(Site site)
         {
             var subject = "PRIME Site Registration Submission";
@@ -209,8 +218,8 @@ namespace Prime.Services
             var organization = site.Organization;
 
             var organizationAgreementHtml = "";
-            string organizationAgreementFilename = "OrganizationAgreement.pdf";
-            string registrationReviewFilename = "SiteRegistrationReview.pdf";
+            var organizationAgreementFilename = "OrganizationAgreement.pdf";
+            var registrationReviewFilename = "SiteRegistrationReview.pdf";
 
             var siteRegistrationReviewHtml = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
 
@@ -233,12 +242,12 @@ namespace Prime.Services
                     };
                 }
 
-                Document organizationAgreementDoc = null;
-                string organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
+                Document organizationAgreementDoc;
+                var organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
                 try
                 {
                     var stream = await _documentService.GetStreamForLatestSignedAgreementDocument(organization.Id);
-                    MemoryStream ms = new MemoryStream();
+                    var ms = new MemoryStream();
                     stream.CopyTo(ms);
                     organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", ms.ToArray());
                 }
@@ -315,6 +324,56 @@ namespace Prime.Services
             }
 
             return await _context.SaveChangesAsync() != 0;
+        }
+
+        public async Task SendEnrolleeRenewalEmails()
+        {
+            var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
+
+            var enrollees = await _context.Enrollees
+                .Select(e => new
+                {
+                    e.FirstName,
+                    e.LastName,
+                    e.Email,
+                    e.ExpiryDate
+                })
+                .Where(e => e.ExpiryDate != null)
+                .DecompileAsync()
+                .ToListAsync();
+
+            foreach (var enrollee in enrollees)
+            {
+                var expiryDays = (DateTime.Now.Date - enrollee.ExpiryDate.Value.Date).TotalDays;
+                if (reminderEmailsIntervals.Contains(expiryDays))
+                {
+                    await SendRenewalRequiredAsync(enrollee.Email, enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value);
+                }
+                if (expiryDays == -1)
+                {
+                    await SendRenewalPassedAsync(enrollee.Email, enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value);
+                }
+            }
+        }
+
+        private async Task SendRenewalRequiredAsync(string email, string firstName, string lastName, DateTimeOffset expiryDate)
+        {
+            var subject = "PRIME Renewal Required";
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/RenewalRequiredEmail.cshtml",
+                new EmailParams(firstName, lastName, expiryDate));
+
+            await Send(PRIME_EMAIL, email, subject, body);
+        }
+
+        private async Task SendRenewalPassedAsync(string email, string firstName, string lastName, DateTimeOffset expiryDate)
+        {
+            var subject = "Your PRIME Renewal Date Has Passed";
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/RenewalPassedEmail.cshtml",
+                new EmailParams(firstName, lastName, expiryDate));
+
+            await Send(PRIME_EMAIL, email, subject, body);
         }
 
         private async Task Send(string from, string to, string subject, string body)
