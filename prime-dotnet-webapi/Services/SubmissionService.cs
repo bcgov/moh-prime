@@ -117,8 +117,7 @@ namespace Prime.Services
                     .ThenInclude(l => l.License)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            var allowed = new SubmissionStateEngine().AllowableAction(action, enrollee, isAdmin);
-            if (!allowed)
+            if (!SubmissionStateEngine.AllowableAction(action, enrollee, isAdmin))
             {
                 return false;
             }
