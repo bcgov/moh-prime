@@ -9,15 +9,5 @@ namespace Prime.Models.Api
         public string Hpdid { get; set; }
         public string Gpid { get; set; }
         public DateTimeOffset? RenewalDate { get; set; }
-
-        public static HpdidLookup FromEnrollee(Enrollee enrollee)
-        {
-            return new HpdidLookup
-            {
-                Hpdid = enrollee.HPDID,
-                Gpid = enrollee.GPID,
-                RenewalDate = enrollee.ExpiryDate
-            };
-        }
     }
 }
