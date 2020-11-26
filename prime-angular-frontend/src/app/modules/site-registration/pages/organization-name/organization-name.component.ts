@@ -17,7 +17,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { IForm } from '@registration/shared/interfaces/form.interface';
 import { Site } from '@registration/shared/models/site.model';
-import { OrgBookAutocompleteResult } from '@registration/shared/models/orgbook.model';
+import { OrgBookAutocompleteHttpResponse } from '@registration/shared/models/orgbook.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
@@ -33,6 +33,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
   public title: string;
   public routeUtils: RouteUtils;
   public organizations: string[];
+  public totalResults: number;
   public doingBusinessAsNames: string[];
   public isCompleted: boolean;
   public usedOrgBook: boolean;
@@ -166,9 +167,10 @@ export class OrganizationNameComponent implements OnInit, IPage, IForm {
         debounceTime(400),
         switchMap((value: string) => this.orgBookResource.autocomplete(value))
       )
-      .subscribe((organizations: OrgBookAutocompleteResult[]) => {
+      .subscribe((response: OrgBookAutocompleteHttpResponse) => {
         // Assumed only a single name per organization is relavent
-        this.organizations = organizations.map(o => o.names[0]?.text).filter(o => o);
+        this.organizations = response.results.map(o => o.names[0]?.text).filter(o => o);
+        this.totalResults = response.total;
       });
   }
 
