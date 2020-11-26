@@ -1,37 +1,49 @@
-using System;
-
 namespace Prime.Auth
 {
     public static class AuthConstants
     {
         public const string Audience = "prime-web-api";
-        public const string KEYCLOAK_ROLES_KEY = "roles";
-        public const string KEYCLOAK_REALM_ACCESS_KEY = "realm_access";
 
-        // Claims
-        public const string ASSURANCE_LEVEL_CLAIM_TYPE = "identity_assurance_level";
-        public const string IDENTITY_PROVIDER_CLAIM_TYPE = "identity_provider";
-        public const string BC_SERVICES_CARD = "bcsc";
+        public const string BCServicesCard = "bcsc";
+    }
 
-        // Roles
-        public const string PRIME_SUPER_ADMIN_ROLE = "prime_super_admin";
-        public const string PRIME_ADMIN_ROLE = "prime_admin";
-        public const string PRIME_ENROLLEE_ROLE = "prime_user";
-        public const string PRIME_READONLY_ADMIN = "prime_readonly_admin";
-        public const string EXTERNAL_HPDID_ACCESS_ROLE = "external_hpdid_access";
-        public const string EXTERNAL_GPID_VALIDATION_ROLE = "external_gpid_validation";
-        public const string PRIME_API_SERVICE_ACCOUNT_ROLE = "prime_api_service_account";
+    public static class Claims
+    {
+        public const string PreferredUsername = "preferred_username";
+        public const string GivenName = "given_name";
+        public const string GivenNames = "given_names";
+        public const string FamilyName = "family_name";
+        public const string Address = "address";
 
-        // Feature Flags
-        public const string FEATURE_SITE_REGISTRATION = "feature_site_registration";
-        public const string FEATURE_VC_ISSUANCE = "feature_vc_issuance";
+        public const string RealmAccess = "realm_access";
+        public const string AssuranceLevel = "identity_assurance_level";
+        public const string IdentityProvider = "identity_provider";
+    }
 
-        // Policies
-        public const string SUPER_ADMIN_POLICY = "super-admin-policy";
-        public const string READONLY_ADMIN_POLICY = "readonly-admin-policy";
-        public const string ADMIN_POLICY = "admin-policy";
-        public const string USER_POLICY = "user-policy";
-        public const string EXTERNAL_HPDID_ACCESS_POLICY = "external-hpdid-access-policy";
-        public const string EXTERNAL_GPID_VALIDATION_POLICY = "external-gpid-validation-policy";
+    public static class FeatureFlags
+    {
+        public const string SiteRegistration = "feature_site_registration";
+        public const string VCIssuance = "feature_vc_issuance";
+    }
+
+    public static class Roles
+    {
+        public const string PrimeSuperAdmin = "prime_super_admin";
+        public const string PrimeAdmin = "prime_admin";
+        public const string PrimeReadonlyAdmin = "prime_readonly_admin";
+        public const string PrimeEnrollee = "prime_user";
+        public const string ExternalHpdidAccess = "external_hpdid_access";
+        public const string ExternalGpidValidation = "external_gpid_validation";
+        public const string PrimeApiServiceAccount = "prime_api_service_account";
+    }
+
+    public static class Policies
+    {
+        public const string SuperAdmin = "super-admin-policy";
+        public const string Admin = "admin-policy";
+        public const string ReadonlyAdmin = "readonly-admin-policy";
+        public const string User = "user-policy";
+        public const string ExternalHpdidAccess = "external-hpdid-access-policy";
+        public const string ExternalGpidValidation = "external-gpid-validation-policy";
     }
 }
