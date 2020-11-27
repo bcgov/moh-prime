@@ -1,4 +1,5 @@
-<!-- <app-enrollee-page [busy]="busy"> -->
+<!-- TODO:
+  <app-enrollee-page [busy]="busy"> -->
 <div>
     <app-page-header>PRIME Enrolment</app-page-header>
     <app-progress-indicator *ngIf="isInitialEnrolment"
@@ -35,21 +36,8 @@
                               [showAddressTitle]="false"></app-enrollee-profile>  
       </section>
   
-      <ng-container *ngIf="hasMailingAddress">
-  
-        <section class="mb-3">
-  
-          <app-page-subheader>
-            <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
-          </app-page-subheader>
-  
-          <app-address [form]="mailingAddress"></app-address>
-  
-        </section>
-  
-      </ng-container>
-  
-      <app-contact-information-form [form]="form"></app-contact-information-form>
+      <app-contact-information-form [form]="form"
+                                    [showSmsPhone]="false"></app-contact-information-form>
   
     </form>
   
