@@ -57,7 +57,7 @@ namespace Prime.Migrations
           meanings given below:
         </p>
 
-        <ul class=""list-unstyled"">
+        <ul>
           <li>
             <strong>&quot;Act&quot;</strong> means the <em>Pharmaceutical Services Act</em>.
           </li>
@@ -84,7 +84,7 @@ namespace Prime.Migrations
                 PharmaNet Professional and Software Conformance Standards; and
               </li>
               <li>
-                ii.	Office of the Chief Information Officer: &quot;Submission for Technical Security Standard and High Level
+                Office of the Chief Information Officer: &quot;Submission for Technical Security Standard and High Level
                 Architecture for Wireless Local Area Network Connectivity&quot;.
               </li>
             </ol>
@@ -112,8 +112,6 @@ namespace Prime.Migrations
             <strong>&quot;PharmaCare Newsletter&quot;</strong> means the PharmaCare newsletter published by the Province
             on the following website (or such other website as may be specified by the Province from time to time for
             this purpose):
-
-            <br><br>
 
             <a href=""http://www.gov.bc.ca/pharmacarenewsletter"" target=""_blank"" rel=""noopener noreferrer"">
               www.gov.bc.ca/pharmacarenewsletter
