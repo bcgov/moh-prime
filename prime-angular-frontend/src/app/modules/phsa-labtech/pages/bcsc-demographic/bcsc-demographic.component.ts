@@ -51,7 +51,6 @@ export class BcscDemographicComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.initForm();
 
     this.getUser$()
       .subscribe((enrollee: PhsaLabtech) =>
@@ -72,10 +71,6 @@ export class BcscDemographicComponent implements OnInit {
       ]],
     });
 
-  }
-
-  protected initForm(): void {
-    // Nothing to do
   }
 
   /**
