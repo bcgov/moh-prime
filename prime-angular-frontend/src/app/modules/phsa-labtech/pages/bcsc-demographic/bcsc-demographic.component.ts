@@ -33,10 +33,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
    */
   public enrollee: Enrollee;
 
-  public hasMailingAddress: boolean;
-
-
-  constructor(
+  public constructor(
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
@@ -63,11 +60,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     );
   }
 
-  public get mailingAddress(): FormGroup {
-    return this.form.get('mailingAddress') as FormGroup;
-  }
-
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
     this.initForm();
@@ -75,7 +68,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     this.getUser$()
       .subscribe((enrollee: Enrollee) =>
         this.enrollee = enrollee
-      );    
+      );   
   }
 
   protected createFormInstance(): void {
@@ -87,8 +80,9 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     // throw new Error('Method not implemented.');
   }
 
-
-  // TODO:
+  /**
+   * Convert BcscUser (Observable) from AuthService to Enrollee (Observable)
+   */
   private getUser$(): Observable<Enrollee> {
 
     return this.authService.getUser$()
@@ -111,6 +105,4 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
         })
       );
   }
-
-
 }
