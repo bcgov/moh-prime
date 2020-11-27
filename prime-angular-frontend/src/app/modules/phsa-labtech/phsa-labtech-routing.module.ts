@@ -13,15 +13,15 @@ const routes: Routes = [
     component: PhsaLabtechDashboardComponent,
     children: [
       {
-        path: '', // Equivalent to `/` and alias for the default route
-        redirectTo: PhsaLabtechRoutes.ACCESS_CODE,
-        pathMatch: 'full'
-      },
-      {
         path: PhsaLabtechRoutes.ACCESS_CODE,
         component: AccessCodeComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Access Code' }
+      },
+      {
+        path: '', // Equivalent to `/` and alias for the default route
+        redirectTo: PhsaLabtechRoutes.ACCESS_CODE,
+        pathMatch: 'full'
       }
     ]
   }
