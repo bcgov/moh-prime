@@ -422,6 +422,7 @@ namespace Prime.Services
             var emailLog = new EmailLog
             {
                 SentTo = string.Join(",", to),
+                Cc = string.Join(",", cc),
                 Subject = subject,
                 Body = body,
                 SendType = "CHES",
@@ -441,6 +442,7 @@ namespace Prime.Services
             var emailLog = new EmailLog
             {
                 SentTo = string.Join(",", to),
+                Cc = string.Join(",", cc),
                 Subject = subject,
                 Body = body,
                 SendType = "SMTP",
