@@ -23,7 +23,7 @@ export interface Site {
 
   businessLicenceDocuments: BusinessLicenceDocument[];
   businessLicenceGuid: string;
-
+  deferredLicenceReason: string;
   doingBusinessAs: string;
   physicalAddressId?: number;
   physicalAddress: Address;

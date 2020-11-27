@@ -20,6 +20,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-business-licence',
@@ -68,8 +69,16 @@ export class BusinessLicenceComponent implements OnInit {
     return this.form.get('businessLicenceGuid') as FormControl;
   }
 
-  public get deferredLicenseReason(): FormControl {
-    return this.form.get('deferredLicenseReason') as FormControl;
+  public get deferredLicenceReason(): FormControl {
+    return this.form.get('deferredLicenceReason') as FormControl;
+  }
+
+  public get doingBusinessAs(): FormControl {
+    return this.form.get('doingBusinessAs') as FormControl;
+  }
+
+  public isCommPharm() {
+    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
   }
 
   public onSubmit() {
@@ -79,13 +88,14 @@ export class BusinessLicenceComponent implements OnInit {
 
     if (this.formUtilsService.checkValidity(this.form) && (this.uploadedFile || this.deferredLicence)) {
       const payload = this.siteFormStateService.json;
+      this.businessLicence.deferredLicenceReason = payload.deferredLicenceReason;
       this.siteResource
         .updateSite(payload)
         .pipe(
           exhaustMap(() =>
-            (payload.businessLicenceGuid)
-              ? this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)
-              : of(noop)
+            (this.businessLicence.id)
+              ? this.siteResource.updateBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)
+              : this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)
           )
         )
         .subscribe(() => {
@@ -136,10 +146,16 @@ export class BusinessLicenceComponent implements OnInit {
   public toggleDeferred() {
     if (this.deferredLicence) {
       this.deferredLicence = false;
-      this.deferredLicenseReason.setValidators([]);
+      this.deferredLicenceReason.setValidators([]);
+      this.doingBusinessAs.setValidators([Validators.required]);
+      this.doingBusinessAs.enable();
+      this.form.markAsUntouched();
     } else {
       this.deferredLicence = true;
-      this.deferredLicenseReason.setValidators([Validators.required]);
+      this.deferredLicenceReason.setValidators([Validators.required]);
+      this.doingBusinessAs.setValidators([]);
+      this.doingBusinessAs.disable();
+      this.form.markAsUntouched();
     }
   }
 
@@ -164,9 +180,12 @@ export class BusinessLicenceComponent implements OnInit {
 
   private getBusinessLicence(site: Site) {
     this.busy = this.siteResource.getBusinessLicence(site.id)
-      .subscribe((businessLicense: BusinessLicence) =>
-        this.businessLicence = businessLicense ?? this.businessLicence
-      );
+      .subscribe((businessLicense: BusinessLicence) => {
+        this.businessLicence = businessLicense ?? this.businessLicence;
+        if (businessLicense && !businessLicense.completed) {
+          this.toggleDeferred();
+        }
+      });
   }
 
   private getDoingBusinessAs(site: Site) {

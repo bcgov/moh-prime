@@ -12,14 +12,6 @@ namespace Prime.Migrations
                 name: "FK_BusinessLicenceDocument_Site_SiteId",
                 table: "BusinessLicenceDocument");
 
-            migrationBuilder.DropIndex(
-                name: "IX_BusinessLicenceDocument_SiteId",
-                table: "BusinessLicenceDocument");
-
-            migrationBuilder.DropColumn(
-                name: "SiteId",
-                table: "BusinessLicenceDocument");
-
             migrationBuilder.AddColumn<int>(
                 name: "BusinessLicenceId",
                 table: "BusinessLicenceDocument",
@@ -54,14 +46,57 @@ namespace Prime.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessLicenceDocument_BusinessLicenceId",
                 table: "BusinessLicenceDocument",
-                column: "BusinessLicenceId",
-                unique: true);
+                column: "BusinessLicenceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessLicence_SiteId",
                 table: "BusinessLicence",
                 column: "SiteId",
                 unique: true);
+
+            migrationBuilder.Sql(@"
+                insert into ""BusinessLicence""
+                (
+                    ""SiteId"",
+                    ""Completed"",
+                    ""CreatedUserId"",
+                    ""CreatedTimeStamp"",
+                    ""UpdatedUserId"",
+                    ""UpdatedTimeStamp""
+                )
+                select distinct on (bld.""SiteId"")
+                    bld.""SiteId"" as ""SiteId"",
+                    true as ""Completed"",
+                    bld.""CreatedUserId"" as ""CreatedUserId"",
+                    current_timestamp as ""CreatedTimeStamp"",
+                    bld.""UpdatedUserId"" as ""UpdatedUserId"",
+                    current_timestamp as ""UpdatedTimeStamp""
+                from ""BusinessLicenceDocument"" bld;
+            ");
+
+            migrationBuilder.Sql(@"
+                update ""BusinessLicenceDocument"" bld
+                set ""BusinessLicenceId"" = bl.""Id""
+                from ""BusinessLicence"" bl
+                where bl.""SiteId"" = bld.""SiteId"";
+            ");
+
+            migrationBuilder.Sql(@"
+                delete from ""BusinessLicenceDocument""
+                where ""Id"" not in (
+	                select distinct on (bld.""SiteId"") ""Id""
+	                from ""BusinessLicenceDocument"" bld
+	                ORDER  BY bld.""SiteId"", bld.""UploadedDate"" DESC
+                );
+            ");
+
+            migrationBuilder.DropIndex(
+                name: "IX_BusinessLicenceDocument_SiteId",
+                table: "BusinessLicenceDocument");
+
+            migrationBuilder.DropColumn(
+                name: "SiteId",
+                table: "BusinessLicenceDocument");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_BusinessLicenceDocument_BusinessLicence_BusinessLicenceId",
@@ -70,49 +105,6 @@ namespace Prime.Migrations
                 principalTable: "BusinessLicence",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
-
-
-
-            migrationBuilder.Sql(@"
-                INSERT INTO ""Agreement""
-                SELECT
-                    nextval('""AccessTerm_Id_seq""') as ""Id"",
-                    o.""CreatedUserId"",
-                    o.""CreatedTimeStamp"",
-                    o.""UpdatedUserId"",
-                    current_timestamp as ""UpdatedTimeStamp"",
-                    null as ""EnrolleeId"",
-                    11 as ""AgreementVersionId"",
-                    null as ""LimitsConditionsCaluseId"",
-                    o.""AcceptedAgreementDate"" as ""CreatedDate"",
-                    o.""AcceptedAgreementDate"" as ""AcceptedDate"",
-                    null as ""ExpiryDate"",
-                    o.""Id"" as ""OrganizationId"",
-                    null as ""PartyId""
-                FROM ""Organization"" as o
-                WHERE o.""AcceptedAgreementDate"" IS NOT null
-                    AND (
-                        SELECT Count(*)
-                        FROM ""SignedAgreementDocument"" sad
-                        WHERE sad.""OrganizationId"" = o.""Id"")
-                    = 0;
-            ");
-
-            migrationBuilder.Sql(@"
-                insert into ""BusinessLicence""
-                select distinct on (bld.""SiteId"")
-                    nextval('""BusinessLicence_Id_seq""') as ""Id"",
-                    distinct bld.""SiteId"" as ""SiteId"",
-                    true as ""Completed""
-                from ""BusinessLicenceDocument"" bld
-            ");
-
-            migrationBuilder.Sql(@"
-                update ""BusinessLicenceDocument"" bld
-                set bld.""BusinessLicenceId"" = bl.""Id""
-                from ""BusinessLicence"" bl
-                where bl.""SiteId"" = bld.""SiteId""
-            ");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

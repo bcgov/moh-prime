@@ -21,7 +21,7 @@
                            (remove)="onRemoveDocument($event)">
       </app-document-upload>
 
-      <app-alert *ngIf="hasNoBusinessLicenceError"
+      <app-alert *ngIf="hasNoBusinessLicenceError && !deferredLicence"
                  type="danger"
                  icon="warning">
         <ng-container #alertContent
@@ -69,6 +69,39 @@
             <mat-error>Required</mat-error>
           </mat-form-field>
 
+        </div>
+      </div>
+    </section>
+
+    <mat-slide-toggle *ngIf="isCommPharm()"
+                      class="mb-3"
+                      color="primary"
+                      (change)="toggleDeferred()"
+                      [checked]="deferredLicence">
+      This Community Pharmacy does not have a business licence
+    </mat-slide-toggle>
+
+    <section class="mb-3"
+             *ngIf="deferredLicence">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Missing Business Licence</ng-container>
+        <ng-container appPageSubheader2Summary>
+          If this Community Pharmacy does not have a business licence, explain below.
+          You may continue with the registration without a business licence, but you
+          are advised the Ministry of Health will not finalize your registration until
+          your business licence has been uploaded.
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="w-100">
+            <textarea matInput
+                      placeholder="Write here"
+                      rows="5"
+                      formControlName="deferredLicenceReason"></textarea>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
         </div>
       </div>
     </section>

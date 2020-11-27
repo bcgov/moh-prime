@@ -411,7 +411,7 @@ namespace Prime.Services
         public async Task<BusinessLicence> AddBusinessLicenceAsync(BusinessLicence businessLicence, Guid documentGuid)
         {
             businessLicence.Completed = false;
-            if (documentGuid != null)
+            if (documentGuid != Guid.Empty)
             {
                 businessLicence.BusinessLicenceDocument = await AddBusinessLicenceDocument(documentGuid);
                 // Completed once a Business Licence Document is attached to the licence

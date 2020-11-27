@@ -224,7 +224,7 @@ export class SiteResource {
   }
 
   public createBusinessLicence(siteId: number, businessLicence: BusinessLicence, documentGuid: string): Observable<BusinessLicence> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    const params = documentGuid ? this.apiResourceUtilsService.makeHttpParams({ documentGuid }) : null;
     return this.apiResource.post<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
@@ -236,7 +236,7 @@ export class SiteResource {
   }
 
   public updateBusinessLicence(siteId: number, businessLicence: BusinessLicence, documentGuid: string): Observable<BusinessLicence> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    const params = documentGuid ? this.apiResourceUtilsService.makeHttpParams({ documentGuid }) : null;
     return this.apiResource.put<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
