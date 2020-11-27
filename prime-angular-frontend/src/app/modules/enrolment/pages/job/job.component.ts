@@ -28,8 +28,11 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public jobNames: Config<number>[];
   public filteredJobNames: BehaviorSubject<Config<number>[]>;
+  public careSettingTypes: Config<number>[];
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
+
+  public formControlNames: string[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -59,12 +62,27 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
     this.jobNames = this.configService.jobNames;
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
+    this.careSettingTypes = this.configService.careSettings;
     this.allowDefaultOption = false;
     this.defaultOptionLabel = 'None';
+    this.formControlNames = [
+      'street',
+      'city',
+      'provinceCode',
+      'postal'
+    ];
   }
 
   public get jobs(): FormArray {
     return this.form.get('jobs') as FormArray;
+  }
+
+  public get oboSites(): FormArray {
+    return this.form.get('oboSites') as FormArray;
+  }
+
+  public get careSettings() {
+    return (this.enrolment) ? this.enrolment.careSettings : null;
   }
 
   public addJob(value: string = '') {

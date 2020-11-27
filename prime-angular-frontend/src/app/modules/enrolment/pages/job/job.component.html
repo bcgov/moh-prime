@@ -50,6 +50,55 @@
 
     </section>
 
+    <section>
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Site Information</ng-container>
+        <ng-container appPageSubheaderSummary>
+          You must provide at least one site per care setting selected.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3"
+             formArrayName="oboSites">
+
+          <ng-container *ngFor="let careSetting of careSettings">
+            <app-page-subheader headerType="h6">
+              <ng-container appPageSubheaderTitle>
+                {{ careSetting.careSettingCode | configCode: 'careSettings' }}
+              </ng-container>
+            </app-page-subheader>
+
+            <ng-container *ngFor="let site of oboSites.controls; let i = index;"
+                          [formGroupName]="i">
+              <section>
+                <div class="row">
+                  <div class="col-12">
+
+                    <mat-form-field class="w-100">
+                      <input matInput
+                             placeholder="Internet Provider at this location (e.g., Shaw, Telus)"
+                             formControlName="internetProvider">
+                      <mat-error>Required</mat-error>
+                    </mat-form-field>
+
+                  </div>
+                </div>
+
+                <app-address [form]="site.get('physicalAddress')"
+                             [formControlNames]="formControlNames"
+                             [bcOnly]="true"></app-address>
+              </section>
+            </ng-container>
+
+          </ng-container>
+
+        </div>
+      </div>
+
+    </section>
+
   </form>
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"

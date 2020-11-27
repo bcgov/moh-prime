@@ -424,12 +424,27 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public buildJobsForm(): FormGroup {
     return this.fb.group({
       jobs: this.fb.array([]),
+      oboSites: this.fb.array([])
     });
   }
 
   public buildJobForm(value: string = null): FormGroup {
     return this.fb.group({
       title: [value, [Validators.required]]
+    });
+  }
+
+  public buildOboSiteForm(): FormGroup {
+    return this.fb.group({
+      siteName: [null, []],
+      facility: [null, []],
+      physicalAddress: this.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        exclude: ['street2'],
+        useDefaults: ['provinceCode', 'countryCode'],
+        areDisabled: ['provinceCode', 'countryCode']
+      }),
+      pec: [null, []]
     });
   }
 
