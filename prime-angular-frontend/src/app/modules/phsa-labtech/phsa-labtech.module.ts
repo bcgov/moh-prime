@@ -7,21 +7,19 @@ import { SharedModule } from '@shared/shared.module';
 import { PhsaLabtechRoutingModule } from './phsa-labtech-routing.module';
 import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-dashboard/phsa-labtech-dashboard.component';
 
-import { ExampleComponent } from './pages/example/example.component';
 import { AccessCodeComponent } from './pages/access-code/access-code.component';
-import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { PhsaProgressIndicatorComponent } from './shared/components/phsa-progress-indicator/phsa-progress-indicator.component';
 
 @NgModule({
   declarations: [
     PhsaLabtechDashboardComponent,
-    ExampleComponent,
-    AccessCodeComponent
+    AccessCodeComponent,
+    PhsaProgressIndicatorComponent
   ],
   imports: [
     SharedModule,
     PhsaLabtechRoutingModule,
-    DashboardModule,
-    EnrolmentModule
+    DashboardModule
   ]
 })
 export class PhsaLabtechModule { }

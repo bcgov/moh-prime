@@ -9,15 +9,12 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class AccessCodeFormComponent implements OnInit {
   @Input() public form: FormGroup;
 
-  constructor() {
-
-  }
-
-  ngOnInit(): void {
-  }
+  constructor() { }
 
   public get accessCode(): FormControl {
     return this.form.get('accessCode') as FormControl;
   }
 
+  public ngOnInit(): void {
+  }
 }
