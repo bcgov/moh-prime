@@ -3,7 +3,7 @@ import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.serv
 import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { PhsaLabTech } from '../models/phsa-lab-tech.model';
+import { PhsaLabtech } from '../models/phsa-lab-tech.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class PhasLabtechResource {
     private logger: LoggerService
   ) { }
 
-  public createEnrollee(payload: PhsaLabTech): void {
+  public createEnrollee(payload: PhsaLabtech): void {
 
     this.logger.trace('TODO: call API', payload);
   }

@@ -13,7 +13,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { PhsaLabTech } from '@phsa/shared/models/phsa-lab-tech.model';
+import { PhsaLabtech } from '@phsa/shared/models/phsa-lab-tech.model';
 import { PhasLabtechResource } from '@phsa/shared/services/phas-labtech-resource.service';
 
 @Component({
@@ -23,7 +23,7 @@ import { PhasLabtechResource } from '@phsa/shared/services/phas-labtech-resource
 })
 export class BcscDemographicComponent implements OnInit {
 
-  public enrollee: PhsaLabTech;
+  public enrollee: PhsaLabtech;
   public form: FormGroup;
   // TODO: Set when API called
   public busy: Subscription;
@@ -54,7 +54,7 @@ export class BcscDemographicComponent implements OnInit {
     this.initForm();
 
     this.getUser$()
-      .subscribe((enrollee: PhsaLabTech) =>
+      .subscribe((enrollee: PhsaLabtech) =>
         this.enrollee = enrollee
       );
   }
@@ -79,9 +79,9 @@ export class BcscDemographicComponent implements OnInit {
   }
 
   /**
-   * Convert BcscUser (Observable) from AuthService to PhsaLabTech (Observable)
+   * Convert BcscUser (Observable) from AuthService to PhsaLabtech (Observable)
    */
-  private getUser$(): Observable<PhsaLabTech> {
+  private getUser$(): Observable<PhsaLabtech> {
     return this.authService.getUser$()
       .pipe(
         map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: BcscUser) => {
@@ -98,12 +98,12 @@ export class BcscDemographicComponent implements OnInit {
             physicalAddress,
             phone: null,
             email: null
-          } as PhsaLabTech;
+          } as PhsaLabtech;
         })
       );
   }
 
-  private get formAsJson(): PhsaLabTech {
+  private get formAsJson(): PhsaLabtech {
     return this.form.value;
   }
 }
