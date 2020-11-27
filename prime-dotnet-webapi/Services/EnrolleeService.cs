@@ -178,6 +178,7 @@ namespace Prime.Services
                 .Include(e => e.RemoteAccessLocations)
                     .ThenInclude(ral => ral.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
+                .Include(e => e.EnrolleeHealthAuthorities)
                 .Include(e => e.SelfDeclarations)
                 .SingleAsync(e => e.Id == enrolleeId);
 
@@ -205,6 +206,7 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
 
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
             UpdateRemoteAccessSites(enrollee, updateModel);
@@ -275,15 +277,14 @@ namespace Prime.Services
                 _context.Remove(item);
             }
 
+            if (newCollection == null) return;
+
             // Create new items
-            if (newCollection != null)
+            foreach (var item in newCollection)
             {
-                foreach (var item in newCollection)
-                {
-                    // Prevent the ID from being changed by the incoming changes
-                    item.EnrolleeId = enrolleeId;
-                    _context.Entry(item).State = EntityState.Added;
-                }
+                // Prevent the ID from being changed by the incoming changes
+                item.EnrolleeId = enrolleeId;
+                _context.Entry(item).State = EntityState.Added;
             }
         }
 
@@ -296,33 +297,33 @@ namespace Prime.Services
                 _context.Remove(location);
             }
 
-            if (updateEnrollee?.RemoteAccessLocations != null && updateEnrollee?.RemoteAccessLocations.Count() != 0)
-            {
-                var remoteAccessLocations = new List<RemoteAccessLocation>();
+            if (updateEnrollee?.RemoteAccessLocations == null || !(updateEnrollee.RemoteAccessLocations).Any()) return;
 
-                foreach (var location in updateEnrollee.RemoteAccessLocations)
+            var remoteAccessLocations = new List<RemoteAccessLocation>();
+
+            foreach (var location in updateEnrollee.RemoteAccessLocations)
+            {
+                var newAddress = new PhysicalAddress
                 {
-                    var newAddress = new PhysicalAddress
-                    {
-                        CountryCode = location.PhysicalAddress.CountryCode,
-                        ProvinceCode = location.PhysicalAddress.ProvinceCode,
-                        Street = location.PhysicalAddress.Street,
-                        Street2 = location.PhysicalAddress.Street2,
-                        City = location.PhysicalAddress.City,
-                        Postal = location.PhysicalAddress.Postal
-                    };
-                    var newLocation = new RemoteAccessLocation
-                    {
-                        Enrollee = dbEnrollee,
-                        InternetProvider = location.InternetProvider,
-                        PhysicalAddress = newAddress
-                    };
-                    _context.Entry(newAddress).State = EntityState.Added;
-                    _context.Entry(newLocation).State = EntityState.Added;
-                    remoteAccessLocations.Add(newLocation);
-                }
-                updateEnrollee.RemoteAccessLocations = remoteAccessLocations;
+                    CountryCode = location.PhysicalAddress.CountryCode,
+                    ProvinceCode = location.PhysicalAddress.ProvinceCode,
+                    Street = location.PhysicalAddress.Street,
+                    Street2 = location.PhysicalAddress.Street2,
+                    City = location.PhysicalAddress.City,
+                    Postal = location.PhysicalAddress.Postal
+                };
+                var newLocation = new RemoteAccessLocation
+                {
+                    Enrollee = dbEnrollee,
+                    InternetProvider = location.InternetProvider,
+                    PhysicalAddress = newAddress
+                };
+                _context.Entry(newAddress).State = EntityState.Added;
+                _context.Entry(newLocation).State = EntityState.Added;
+                remoteAccessLocations.Add(newLocation);
             }
+
+            updateEnrollee.RemoteAccessLocations = remoteAccessLocations;
         }
 
         private void UpdateEnrolleeRemoteUsers(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
@@ -458,6 +459,7 @@ namespace Prime.Services
                     .ThenInclude(c => c.License)
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeCareSettings)
+                .Include(e => e.EnrolleeHealthAuthorities)
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessSites)
                     .ThenInclude(ras => ras.Site)

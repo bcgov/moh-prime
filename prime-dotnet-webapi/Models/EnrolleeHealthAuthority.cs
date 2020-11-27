@@ -8,6 +8,7 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
+        [JsonIgnore]
         public int EnrolleeId { get; set; }
 
         [JsonIgnore]
