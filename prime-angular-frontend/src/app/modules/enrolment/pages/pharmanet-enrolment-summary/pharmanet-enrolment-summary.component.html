@@ -28,6 +28,7 @@
 
         <ng-template #settingEmail
                      let-setting="setting"
+                     let-settingPlural="settingPlural"
                      let-settingCode="settingCode"
                      let-formControl="formControl"
                      let-subheaderContent="subheaderContent">
@@ -74,7 +75,7 @@
             <p class="mb-4 text-green">
               Email sent to: {{ formControl.value }}
               <br>
-              If you work in multiple {{ setting }}'s you will need to notify them all.
+              If you work in multiple {{ settingPlural }} you will need to notify them all.
             </p>
             <button mat-button
                     type="button"

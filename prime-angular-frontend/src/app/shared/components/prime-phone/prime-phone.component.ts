@@ -8,7 +8,7 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 })
 export class PrimePhoneComponent {
   @Input() public mode: 'vanity' | 'normal';
-  @Input() public phoneNumber: string;
+  @Input() public phoneNumber: 'prime' | 'director';
 
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig
@@ -17,27 +17,24 @@ export class PrimePhoneComponent {
     this.phoneNumber = 'prime';
   }
 
-  public get primePhoneHref() {
+  public get primePhoneHref(): string {
     const phone = this.primePhone.replace(/[^0-9.]/g, '');
     return `tel:+${phone}`;
   }
 
-  public get primePhoneDisplay() {
+  public get primePhoneDisplay(): string {
     return (this.mode === 'vanity')
       ? this.primePhoneVanity
       : this.primePhone;
   }
 
-  private get primePhone() {
-    if (this.phoneNumber === 'prime') {
-      return this.config.prime.phone;
-    }
-    if (this.phoneNumber === 'director') {
-      return this.config.phoneNumbers.director;
-    }
+  private get primePhone(): string {
+    return (this.phoneNumber === 'prime')
+      ? this.config.prime.phone
+      : this.config.phoneNumbers.director;
   }
 
-  private get primePhoneVanity() {
+  private get primePhoneVanity(): string {
     return this.config.prime.displayPhone;
   }
 }

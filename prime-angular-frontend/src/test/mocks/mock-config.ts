@@ -1899,7 +1899,7 @@ export class MockConfig {
         },
         {
           "code": 16,
-          "name": "Terms of Agreement to be determined by an Adjudicator"
+          "name": "Terms of Access to be determined by an Adjudicator"
         }
       ],
       "privilegeGroups": [
