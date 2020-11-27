@@ -5,6 +5,7 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { IdentificationDocument } from '@shared/models/identification-document.model';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { Admin } from '@auth/shared/models/admin.model';
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
@@ -34,6 +35,7 @@ export interface HttpEnrollee extends Enrollee {
   selfDeclarationDocuments: SelfDeclarationDocument[];
   identificationDocuments: IdentificationDocument[];
   enrolleeCareSettings: CareSetting[];
+  enrolleeHealthAuthorities: HealthAuthority[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -75,6 +77,7 @@ export interface Enrolment {
   selfDeclarationDocuments: SelfDeclarationDocument[];
   identificationDocuments: IdentificationDocument[];
   careSettings: CareSetting[];
+  enrolleeHealthAuthorities: HealthAuthority[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;

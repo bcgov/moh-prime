@@ -16,6 +16,7 @@ export class EnrolmentRoutes {
   public static DEVICE_PROVIDER = 'device-provider';
   public static JOB = 'job';
   public static CARE_SETTING = 'care-setting';
+  public static HEALTH_AUTHORITY = 'health-authority';
   public static SELF_DECLARATION = 'self-declaration';
   // Enrolment submission:
   // Enrolment update was small, no auto or manual adjudication required, and
@@ -62,6 +63,7 @@ export class EnrolmentRoutes {
       // EnrolmentRoutes.DEVICE_PROVIDER,
       EnrolmentRoutes.JOB,
       EnrolmentRoutes.CARE_SETTING,
+      EnrolmentRoutes.HEALTH_AUTHORITY,
       EnrolmentRoutes.SELF_DECLARATION,
       EnrolmentRoutes.OVERVIEW
     ];
