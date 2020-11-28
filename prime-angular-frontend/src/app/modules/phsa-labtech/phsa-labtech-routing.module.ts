@@ -3,10 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ConfigGuard } from '@config/config.guard';
 
-import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
-import { ExampleComponent } from './pages/example/example.component';
 import { PhsaLabtechRoutes } from './phsa-labtech.routes';
 import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-dashboard/phsa-labtech-dashboard.component';
+
+import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
+import { ExampleComponent } from './pages/example/example.component';
 
 const routes: Routes = [
   {

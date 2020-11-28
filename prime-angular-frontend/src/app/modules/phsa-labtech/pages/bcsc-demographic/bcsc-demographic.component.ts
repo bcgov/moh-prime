@@ -6,13 +6,16 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { BcscUser } from '@auth/shared/models/bcsc-user.model';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
+
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
+
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { AuthService } from '@auth/shared/services/auth.service';
+
 import { PhsaLabtech } from '@phsa/shared/models/phsa-lab-tech.model';
 import { PhasLabtechResource } from '@phsa/shared/services/phas-labtech-resource.service';
 
