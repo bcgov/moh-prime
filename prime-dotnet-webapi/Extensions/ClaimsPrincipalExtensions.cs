@@ -21,67 +21,58 @@ namespace Prime
 
         public static bool IsAdmin(this ClaimsPrincipal User)
         {
-            return User.IsInRole(AuthConstants.PRIME_ADMIN_ROLE);
+            return User.IsInRole(Roles.PrimeAdmin);
         }
 
         public static bool HasAdminView(this ClaimsPrincipal User)
         {
-            return User.IsInRole(AuthConstants.PRIME_READONLY_ADMIN);
+            return User.IsInRole(Roles.PrimeReadonlyAdmin);
         }
 
         public static int GetIdentityAssuranceLevel(this ClaimsPrincipal User)
         {
-            Claim assuranceLevelClaim = User?.Claims?.SingleOrDefault(c => c.Type == AuthConstants.ASSURANCE_LEVEL_CLAIM_TYPE);
+            string assuranceLevel = User?.FindFirstValue(Claims.AssuranceLevel);
 
-            int assuranceLevel = 0;
-            Int32.TryParse(assuranceLevelClaim?.Value, out assuranceLevel);
+            Int32.TryParse(assuranceLevel, out int assuranceLevelParsed);
 
-            return assuranceLevel;
+            return assuranceLevelParsed;
         }
 
-        public static string GetIdentityProvider(this ClaimsPrincipal User)
+        public static bool HasVCIssuance(this ClaimsPrincipal User)
         {
-            return User.GetStringClaim(AuthConstants.IDENTITY_PROVIDER_CLAIM_TYPE);
-        }
-
-        public static bool hasVCIssuance(this ClaimsPrincipal User)
-        {
-            return User.IsInRole(AuthConstants.FEATURE_VC_ISSUANCE);
-        }
-
-        public static string GetStringClaim(this ClaimsPrincipal User, string claimType)
-        {
-            Claim claim = User?.Claims?.SingleOrDefault(c => c.Type == claimType);
-
-            return claim?.Value;
+            return User.IsInRole(FeatureFlags.VCIssuance);
         }
 
         public static PhysicalAddress GetPhysicalAddress(this ClaimsPrincipal User)
         {
-            Claim addressClaim = User?.Claims?.SingleOrDefault(c => c.Type == "address");
+            string addressClaim = User?.FindFirstValue(Claims.Address);
+            if (addressClaim == null)
+            {
+                return null;
+            }
 
-            var address = JsonConvert.DeserializeObject<TokenAddress>(addressClaim?.Value);
+            var address = JsonConvert.DeserializeObject<TokenAddress>(addressClaim);
 
             return address?.ToModel();
         }
 
         private class TokenAddress
         {
-            public string street_address { get; set; }
-            public string locality { get; set; }
-            public string region { get; set; }
-            public string postal_code { get; set; }
-            public string country { get; set; }
+            public string Street_address { get; set; }
+            public string Locality { get; set; }
+            public string Region { get; set; }
+            public string Postal_code { get; set; }
+            public string Country { get; set; }
 
             public PhysicalAddress ToModel()
             {
                 return new PhysicalAddress
                 {
-                    CountryCode = country,
-                    ProvinceCode = region,
-                    Street = street_address,
-                    City = locality,
-                    Postal = postal_code,
+                    CountryCode = Country,
+                    ProvinceCode = Region,
+                    Street = Street_address,
+                    City = Locality,
+                    Postal = Postal_code,
                 };
             }
         }

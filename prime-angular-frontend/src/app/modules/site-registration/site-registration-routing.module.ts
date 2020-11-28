@@ -108,7 +108,7 @@ const routes: Routes = [
                     component: BusinessLicenceComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
-                    data: { title: 'Business Licence' }
+                    data: { title: 'Site Business Licence' }
                   },
                   {
                     path: SiteRoutes.SITE_ADDRESS,

@@ -87,19 +87,11 @@ objects:
                 value: "http://+:8080"
               - name: FRONTEND_URL
                 value: "${HTTP_SCHEMA}://${VANITY_URL}"
-              - name: JWT_SIGNING_KEY
-                value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
-              - name: JWT_ADMIN_CLIENT
-                value: "prime-admin-${OC_APP}"
-              - name: JWT_USER_CLIENT
-                value: "prime-application-${OC_APP}"
-              - name: JWT_AUDIENCE
-                value: "prime-web-api"
               - name: BACKEND_URL
                 value: "https://${VANITY_URL}/api/v1/"
               - name: DB_HOST
                 value: "postgresql${SUFFIX}"
-              
+
               # Canada Post AddressComplete API related environment variables
               - name: ADDRESS_AUTOCOMPLETE_API_KEY
                 valueFrom:
@@ -133,7 +125,7 @@ objects:
                   secretKeyRef:
                     key: CHES_TOKEN_URL
                     name: "ches-secrets"
-              
+
               # Document Manager related environment variables
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 value: prime-document-manager
@@ -173,7 +165,7 @@ objects:
                   secretKeyRef:
                     key: KEYCLOAK_URL
                     name: "keycloak"
-              
+
               # Mail server environment variables
               - name: MAIL_SERVER_PORT
                 valueFrom:
@@ -185,7 +177,7 @@ objects:
                   secretKeyRef:
                     key: MAIL_SERVER_URL
                     name: "mailserver"
-              
+
               # Metabase embedded dashboard environment variables
               - name: METABASE_DASHBOARD_ID
                 valueFrom:
@@ -253,7 +245,7 @@ objects:
                   secretKeyRef:
                     key: database-name
                     name: "postgresql-secret"
-              
+
               # Verifiable Credential related environment variables
               - name: VERIFIABLE_CREDENTIAL_API_KEY
                 valueFrom:

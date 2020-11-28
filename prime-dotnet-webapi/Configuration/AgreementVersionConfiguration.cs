@@ -30,7 +30,7 @@ namespace Prime.Configuration.Agreements
                     new AgreementVersion { Id = 13, AgreementType = AgreementType.CommunityPharmacistTOA,        Text =  "com-pharm-terms-v3.html", EffectiveDate = DateTimeOffset.Parse("2020-10-22 00:00:00"), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new AgreementVersion { Id = 14, AgreementType = AgreementType.PharmacyOboTOA,                Text = "pharmacy-obo-toa-v1.html", EffectiveDate = SEEDING_DATE,                                CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new AgreementVersion { Id = 15, AgreementType = AgreementType.OboTOA,                        Text = "obo-access-terms-v5.html", EffectiveDate = DateTimeOffset.Parse("2020-11-12 00:00:00"), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-
+                    new AgreementVersion { Id = 16, AgreementType = AgreementType.RegulatedUserTOA,              Text =  "ru-access-terms-v5.html", EffectiveDate = DateTimeOffset.Parse("2020-11-27 00:00:00"), CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }

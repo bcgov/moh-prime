@@ -184,7 +184,7 @@ namespace Prime.Services
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
             // TODO currently doesn't update the date of birth
-            if (enrollee.IdentityProvider != AuthConstants.BC_SERVICES_CARD)
+            if (enrollee.IdentityProvider != AuthConstants.BCServicesCard)
             {
                 enrollee.FirstName = updateModel.PreferredFirstName;
                 enrollee.LastName = updateModel.PreferredLastName;
@@ -616,7 +616,7 @@ namespace Prime.Services
             return _mapper.Map<EnrolleeViewModel>(enrollee);
         }
 
-        public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
+        public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
         {
             return await _context.BusinessEvents
                 .Include(e => e.Admin)
@@ -632,10 +632,15 @@ namespace Prime.Services
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
             return await _context.Enrollees
-                .Include(e => e.Agreements)
                 .Where(e => hpdids.Contains(e.HPDID))
-                .Where(e => !e.CurrentStatus.IsType(StatusType.Declined))
-                .Select(e => HpdidLookup.FromEnrollee(e))
+                .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Select(e => new HpdidLookup
+                {
+                    Gpid = e.GPID,
+                    Hpdid = e.HPDID,
+                    RenewalDate = e.ExpiryDate
+                })
+                .DecompileAsync()
                 .ToListAsync();
         }
 

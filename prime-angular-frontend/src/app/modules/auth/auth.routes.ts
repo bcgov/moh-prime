@@ -4,6 +4,7 @@ export class AuthRoutes {
   public static BCEID = 'bceid';
   public static ADMIN = 'admin';
   public static SITE = 'site';
+  public static PHSA = 'phsa';
 
   public static MODULE_PATH = AuthRoutes.AUTH;
 
