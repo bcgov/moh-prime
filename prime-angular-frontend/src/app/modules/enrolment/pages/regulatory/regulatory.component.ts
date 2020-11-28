@@ -14,6 +14,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 @Component({
   selector: 'app-regulatory',
@@ -105,11 +106,19 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected nextRouteAfterSubmit() {
+    const certifications = this.enrolmentFormStateService.regulatoryForm
+      .get('certifications').value as CollegeCertification[];
+    const careSettings = this.enrolmentFormStateService.careSettingsForm
+      .get('careSettings').value as CareSetting[];
+
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = (!this.certifications.length)
         ? EnrolmentRoutes.JOB
-        : EnrolmentRoutes.CARE_SETTING;
+        : (this.enrolmentService
+          .canRequestRemoteAccess(certifications, careSettings))
+          ? EnrolmentRoutes.REMOTE_ACCESS
+          : EnrolmentRoutes.SELF_DECLARATION;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

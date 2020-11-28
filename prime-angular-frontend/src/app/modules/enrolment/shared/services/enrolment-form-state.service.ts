@@ -21,6 +21,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { RemoteAccessSite } from '../models/remote-access-site.model';
 import { RemoteAccessLocation } from '../models/remote-access-location';
 import { Site } from '@registration/shared/models/site.model';
+import { OboSite } from '../models/obo-site.model';
 
 @Injectable({
   providedIn: 'root'
@@ -211,6 +212,16 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         const job = this.buildJobForm();
         job.patchValue(j);
         jobs.push(job);
+      });
+    }
+
+    if (enrolment.oboSites.length) {
+      const oboSites = this.jobsForm.get('oboSites') as FormArray;
+      oboSites.clear();
+      enrolment.oboSites.forEach((s: OboSite) => {
+        const site = this.buildOboSiteForm();
+        site.patchValue(s);
+        oboSites.push(site);
       });
     }
 
@@ -436,8 +447,9 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   public buildOboSiteForm(): FormGroup {
     return this.fb.group({
-      siteName: [null, []],
-      facility: [null, []],
+      careSettingCode: [null, [Validators.required]],
+      siteName: [null, [Validators.required]],
+      facility: [null, [Validators.required]],
       physicalAddress: this.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         exclude: ['street2'],

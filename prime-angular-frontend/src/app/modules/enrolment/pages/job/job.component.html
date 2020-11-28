@@ -70,27 +70,70 @@
               </ng-container>
             </app-page-subheader>
 
-            <ng-container *ngFor="let site of oboSites.controls; let i = index;"
+            <ng-container *ngFor="let site of oboSitesByCareSetting(careSetting.careSettingCode).controls; let i = index; let last = last"
                           [formGroupName]="i">
-              <section>
-                <div class="row">
-                  <div class="col-12">
 
-                    <mat-form-field class="w-100">
-                      <input matInput
-                             placeholder="Internet Provider at this location (e.g., Shaw, Telus)"
-                             formControlName="internetProvider">
-                      <mat-error>Required</mat-error>
-                    </mat-form-field>
+              <app-form-icon-group [show]="oboSitesByCareSetting(careSetting.careSettingCode).controls.length > 1">
 
+                <section [class.mb-4]="!last">
+                  <div *ngIf="careSetting.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
+                       class="row">
+                    <div class="col-12">
+
+                      <mat-form-field class="w-100">
+                        <input matInput
+                               placeholder="Site Name"
+                               formControlName="siteName">
+                        <mat-error>Required</mat-error>
+                      </mat-form-field>
+
+                    </div>
                   </div>
-                </div>
 
-                <app-address [form]="site.get('physicalAddress')"
-                             [formControlNames]="formControlNames"
-                             [bcOnly]="true"></app-address>
-              </section>
+                  <div *ngIf="careSetting.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
+                       class="row">
+                    <div class="col-12">
+
+                      <mat-form-field class="w-100">
+                        <input matInput
+                               placeholder="Health Authority Facility"
+                               formControlName="facility">
+                        <mat-error>Required</mat-error>
+                      </mat-form-field>
+
+                    </div>
+                  </div>
+
+                  <app-address [form]="site.get('physicalAddress')"
+                               [formControlNames]="formControlNames"
+                               [bcOnly]="true"></app-address>
+
+                  <div *ngIf="careSetting.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
+                       class="row">
+                    <div class="col-12">
+
+                      <mat-form-field class="w-100">
+                        <input matInput
+                               placeholder="Site ID"
+                               formControlName="pec">
+                        <mat-error>Required</mat-error>
+                      </mat-form-field>
+
+                    </div>
+                  </div>
+
+                </section>
+              </app-form-icon-group>
             </ng-container>
+
+            <button mat-button
+                    class="mb-4"
+                    type="button"
+                    color="primary"
+                    (click)="addOboSite(careSetting.careSettingCode)">
+              <mat-icon>add</mat-icon>
+              Add Additional Site
+            </button>
 
           </ng-container>
 

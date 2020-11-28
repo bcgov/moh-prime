@@ -151,19 +151,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected nextRouteAfterSubmit() {
-    const certifications = this.enrolmentFormStateService.regulatoryForm
-      .get('certifications').value as CollegeCertification[];
-    const careSettings = this.enrolmentFormStateService.careSettingsForm
-      .get('careSettings').value as CareSetting[];
-
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = (
-        this.enrolmentService
-          .canRequestRemoteAccess(certifications, careSettings)
-      )
-        ? EnrolmentRoutes.REMOTE_ACCESS
-        : EnrolmentRoutes.SELF_DECLARATION;
+      nextRoutePath = EnrolmentRoutes.REGULATORY;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -19,6 +19,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-job',
@@ -28,11 +29,11 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public jobNames: Config<number>[];
   public filteredJobNames: BehaviorSubject<Config<number>[]>;
-  public careSettingTypes: Config<number>[];
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
-
   public formControlNames: string[];
+
+  public CareSettingEnum = CareSettingEnum;
 
   constructor(
     protected route: ActivatedRoute,
@@ -45,7 +46,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private fb: FormBuilder
   ) {
     super(
       route,
@@ -62,7 +64,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
     this.jobNames = this.configService.jobNames;
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
-    this.careSettingTypes = this.configService.careSettings;
     this.allowDefaultOption = false;
     this.defaultOptionLabel = 'None';
     this.formControlNames = [
@@ -85,6 +86,18 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     return (this.enrolment) ? this.enrolment.careSettings : null;
   }
 
+  public oboSitesByCareSetting(careSettingCode: number): FormArray {
+    const sites: FormArray = this.fb.array([]);
+    if (this.oboSites?.length) {
+      this.oboSites.controls.forEach((site, i) => {
+        if (site.value.careSettingCode === careSettingCode) {
+          sites.push(site as FormGroup);
+        }
+      });
+    }
+    return sites as FormArray;
+  }
+
   public addJob(value: string = '') {
     const defaultValue = (value)
       ? value : (this.allowDefaultOption)
@@ -95,6 +108,16 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
   public removeJob(index: number) {
     this.jobs.removeAt(index);
+  }
+
+  public addOboSite(careSettingCode: number) {
+    const site = this.enrolmentFormStateService.buildOboSiteForm();
+    const careSetting = site.get('careSettingCode').patchValue(careSettingCode);
+    this.oboSites.push(site);
+  }
+
+  public removeOboSite(index: number, careSettingCode: number) {
+    this.oboSites.removeAt(index);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -130,6 +153,13 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     if (!this.jobs.length) {
       this.addJob();
     }
+
+    // Add at least one site for each careSetting selected by enrollee
+    this.careSettings?.forEach((careSetting) => {
+      if (!this.oboSitesByCareSetting(careSetting.careSettingCode)?.length) {
+        this.addOboSite(careSetting.careSettingCode);
+      }
+    });
   }
 
   protected onSubmitFormIsValid() {
