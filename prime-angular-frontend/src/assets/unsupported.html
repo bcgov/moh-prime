@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Unsupported Browser</title>
+
+    <script>
+      /**
+       * TEMPORARY FIX
+       * Currently Angular is not bootstrapping in Internet Explorer, and this is
+       * a work around to patch and provide time until it can be resolved allowing
+       * the guards to redirect users.
+       */
+    </script>
+
+    <style>
+      h1 {
+        color: white;
+        font-size: 5rem;
+        margin-top: 6%;
+        line-height: 3rem;
+      }
+
+      h1.span {
+        font-size: 2.75rem;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <div class="wrapper">
+      <div class="header p-3 p-md-5">
+
+        <app-prime-logo fill="light"
+                        label="right"
+                        size="medium"></app-prime-logo>
+
+      </div>
+      <div class="container-fluid">
+
+        <div class="row justify-content-center">
+          <div class="col-sm-12 col-md-10 col-lg-8 text-center">
+            <h1 class="mb-5">
+              PRIME
+              <span class="d-block d-lg-inline">does not support Internet Explorer.</span>
+              <span class="d-block">Use Chrome, Firefox, or Safari.</span>
+            </h1>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </body>
+
+</html>
