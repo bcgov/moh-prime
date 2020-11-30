@@ -8,11 +8,13 @@ import { PhsaLabtechRoutingModule } from './phsa-labtech-routing.module';
 import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-dashboard/phsa-labtech-dashboard.component';
 
 import { ExampleComponent } from './pages/example/example.component';
+import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 
 @NgModule({
   declarations: [
     PhsaLabtechDashboardComponent,
-    ExampleComponent
+    ExampleComponent,
+    BcscDemographicComponent
   ],
   imports: [
     SharedModule,

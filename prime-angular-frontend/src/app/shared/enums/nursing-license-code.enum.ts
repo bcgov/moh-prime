@@ -6,4 +6,3 @@ export enum NursingLicenseCode {
     TEMPORARY_REGISTERED_NURSE_EMERGENCY = 39,
     NON_PRACTICING_REGISTERED_NURSE = 34
 }
-  
