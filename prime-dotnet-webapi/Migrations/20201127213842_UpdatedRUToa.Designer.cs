@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201127213842_UpdatedRUToa")]
+    partial class UpdatedRUToa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -8025,9 +8027,11 @@ namespace Prime.Migrations
                 the remote access technology used at the Approved Practice Site has been specifically approved in
                 writing by the Province,
               </li>
-              <li>
+              <li>.
                 the requirements of the Province’s Policy for Remote Access to PharmaNet
-                (<a href=""https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards"">https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards</a>) are met,
+                (<a href=""https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards"">
+                  https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards
+                </a>) are met,
               </li>
               <li>
                 your Approved Practice Site has registered you with the Province for remote access at the Approved
@@ -8695,51 +8699,12 @@ namespace Prime.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Prime.Models.BusinessLicence", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<bool>("Completed")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("DeferredLicenceReason")
-                        .HasColumnType("text");
-
-                    b.Property<int>("SiteId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SiteId")
-                        .IsUnique();
-
-                    b.ToTable("BusinessLicence");
-                });
-
             modelBuilder.Entity("Prime.Models.BusinessLicenceDocument", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("BusinessLicenceId")
-                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -8753,6 +8718,9 @@ namespace Prime.Migrations
                     b.Property<string>("Filename")
                         .HasColumnType("text");
 
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -8764,8 +8732,7 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessLicenceId")
-                        .IsUnique();
+                    b.HasIndex("SiteId");
 
                     b.ToTable("BusinessLicenceDocument");
                 });
@@ -17388,20 +17355,11 @@ namespace Prime.Migrations
                         .HasForeignKey("SiteId");
                 });
 
-            modelBuilder.Entity("Prime.Models.BusinessLicence", b =>
-                {
-                    b.HasOne("Prime.Models.Site", "Site")
-                        .WithOne("BusinessLicence")
-                        .HasForeignKey("Prime.Models.BusinessLicence", "SiteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Prime.Models.BusinessLicenceDocument", b =>
                 {
-                    b.HasOne("Prime.Models.BusinessLicence", "BusinessLicence")
-                        .WithOne("BusinessLicenceDocument")
-                        .HasForeignKey("Prime.Models.BusinessLicenceDocument", "BusinessLicenceId")
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithMany("BusinessLicenceDocuments")
+                        .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

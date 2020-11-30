@@ -73,6 +73,7 @@ import { CollegeCertificationFormComponent } from '@shared/components/college-ce
 import { AddressAutocompleteComponent } from '@shared/components/address-autocomplete/address-autocomplete.component';
 import { ClaimSiteComponent } from '@shared/components/dialogs/content/claim-site/claim-site.component';
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
+import { ContactInformationFormComponent } from '@shared/components/contact-information-form/contact-information-form.component';
 
 @NgModule({
   declarations: [
@@ -134,7 +135,8 @@ import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-r
     CollegeCertificationFormComponent,
     AddressAutocompleteComponent,
     ClaimSiteComponent,
-    RemoteUserReviewComponent
+    RemoteUserReviewComponent,
+    ContactInformationFormComponent
   ],
   imports: [
     CommonModule,
@@ -203,7 +205,8 @@ import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-r
     OverviewContainerComponent,
     CollegeCertificationFormComponent,
     ClaimSiteComponent,
-    RemoteUserReviewComponent
+    RemoteUserReviewComponent,
+    ContactInformationFormComponent
   ],
   providers: [
     FullnamePipe,
