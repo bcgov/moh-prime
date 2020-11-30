@@ -17,10 +17,10 @@ const routes: Routes = [
     path: ProvisionerAccessRoutes.MODULE_PATH,
     loadChildren: () => import('./modules/provisioner-access/provisioner-access.module').then(m => m.ProvisionerAccessModule)
   },
-  {
-    path: PhsaLabtechRoutes.MODULE_PATH,
-    loadChildren: () => import('./modules/phsa-labtech/phsa-labtech.module').then(m => m.PhsaLabtechModule)
-  },
+  // {
+  //   path: PhsaLabtechRoutes.MODULE_PATH,
+  //   loadChildren: () => import('./modules/phsa-labtech/phsa-labtech.module').then(m => m.PhsaLabtechModule)
+  // },
   {
     path: AppRoutes.DENIED,
     component: AccessDeniedComponent,
