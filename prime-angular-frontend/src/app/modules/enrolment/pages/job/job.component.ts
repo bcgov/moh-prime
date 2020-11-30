@@ -83,7 +83,12 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   public get careSettings() {
-    return (this.enrolment) ? this.enrolment.careSettings : null;
+    let careSettings = (this.enrolment.careSettings) ? this.enrolment.careSettings : null;
+
+    if (this.enrolmentFormStateService.isPatched && this.enrolmentFormStateService.isDirty) {
+      careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
+    }
+    return careSettings;
   }
 
   public oboSitesByCareSetting(careSettingCode: number): FormArray {
@@ -112,7 +117,15 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
   public addOboSite(careSettingCode: number) {
     const site = this.enrolmentFormStateService.buildOboSiteForm();
-    const careSetting = site.get('careSettingCode').patchValue(careSettingCode);
+    site.get('careSettingCode').patchValue(careSettingCode);
+
+    if (careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
+      const siteName = site.get('siteName') as FormControl;
+      this.formUtilsService.resetAndClearValidators(siteName);
+    } else {
+      const facility = site.get('facility') as FormControl;
+      this.formUtilsService.resetAndClearValidators(facility);
+    }
     this.oboSites.push(site);
   }
 
@@ -135,6 +148,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
   public ngOnDestroy() {
     this.removeIncompleteJobs(true);
+    this.removeIncompleteOboSites(true);
   }
 
   protected createFormInstance() {
@@ -207,6 +221,33 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     if (!noEmptyJob && !this.jobs.controls.length) {
       this.addJob();
     }
+  }
+
+  /**
+   * @description
+   * Removes incomplete oboSites from the list in preparation
+   * for submission, and allows for an empty list of oboSites if no jobs are solected.
+   */
+  private removeIncompleteOboSites(noEmptyOboSites: boolean = false) {
+    this.oboSites.controls
+      .forEach((control: FormGroup, index: number) => {
+        const value = control.get('physicalAddress').value.city;
+
+        // Remove when empty, default option, or group is invalid
+        if (!value || value === this.defaultOptionLabel || control.invalid) {
+          this.removeJob(index);
+        }
+      });
+
+    // Always have a single job available, and it prevents
+    // the page from jumping too much when routing
+
+    // Add at least one site for each careSetting selected by enrollee
+    this.careSettings?.forEach((careSetting) => {
+      if (!noEmptyOboSites && !this.oboSitesByCareSetting(careSetting.careSettingCode)?.length) {
+        this.addOboSite(careSetting.careSettingCode);
+      }
+    });
   }
 
   /**
