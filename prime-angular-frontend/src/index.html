@@ -30,7 +30,7 @@
        * @see https://caniuse.com/?search=reversed
        */
       function isIEOrPreChromiumEdge() {
-        // return !('reversed' in document.createElement('ol'));
+        return !('reversed' in document.createElement('ol'));
       }
 
       if (isIEOrPreChromiumEdge()) {
