@@ -3,6 +3,8 @@ export class PhsaLabtechRoutes {
   public static ACCESS_CODE = 'access-code';
   public static DEMOGRAPHIC = 'demographic';
 
+  public static BCSC_DEMOGRAPHIC = 'demographic';
+
   public static MODULE_PATH = PhsaLabtechRoutes.PHSA_LABTECH;
 
   public static routePath(route: string): string {

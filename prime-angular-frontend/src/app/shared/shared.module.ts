@@ -74,6 +74,7 @@ import { AddressAutocompleteComponent } from '@shared/components/address-autocom
 import { ClaimSiteComponent } from '@shared/components/dialogs/content/claim-site/claim-site.component';
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
 import { AccessCodeFormComponent } from '@shared/components/access-code-form/access-code-form.component';
+import { ContactInformationFormComponent } from '@shared/components/contact-information-form/contact-information-form.component';
 
 @NgModule({
   declarations: [
@@ -136,7 +137,8 @@ import { AccessCodeFormComponent } from '@shared/components/access-code-form/acc
     AddressAutocompleteComponent,
     ClaimSiteComponent,
     RemoteUserReviewComponent,
-    AccessCodeFormComponent
+    AccessCodeFormComponent,
+    ContactInformationFormComponent
   ],
   imports: [
     CommonModule,
@@ -206,7 +208,8 @@ import { AccessCodeFormComponent } from '@shared/components/access-code-form/acc
     CollegeCertificationFormComponent,
     ClaimSiteComponent,
     RemoteUserReviewComponent,
-    AccessCodeFormComponent
+    AccessCodeFormComponent,
+    ContactInformationFormComponent
   ],
   providers: [
     FullnamePipe,
