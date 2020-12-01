@@ -17,7 +17,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.EnrolleeId, f => owner.Id);
             RuleFor(x => x.LicenseNumber, f => f.Random.AlphaNumeric(5));
             RuleFor(x => x.RenewalDate, f => f.Date.Future());
-            RuleFor(x => x.College, f => f.PickRandom(CollegeLookup.All));
+            RuleFor(x => x.College, f => f.PickRandom(CollegeLookup.BigThree));
             RuleFor(x => x.CollegeCode, (f, x) => x.College.Code);
             RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode)).Code);
             RuleFor(x => x.PracticeCode, (f, x) => f.PickRandom(PracticeLookup.AllowedFor(x.CollegeCode))?.Code);
@@ -35,11 +35,11 @@ namespace PrimeTests.ModelFactories
             });
             RuleSet("licence.regulated", (set) =>
             {
-                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.RegulatedUser)).Code);
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => l.NamedInImReg)).Code);
             });
             RuleSet("licence.nonRegulated", (set) =>
             {
-                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.RegulatedUser)).Code);
+                RuleFor(x => x.LicenseCode, (f, x) => f.PickRandom(LicenseLookup.AllowedFor(x.CollegeCode).Where(l => !l.NamedInImReg)).Code);
             });
 
             FinishWith((f, x) =>

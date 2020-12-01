@@ -1,64 +1,106 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Prime.HttpClients
 {
     public class ChesClient : IChesClient
     {
-        private static HttpClient _client;
+        private readonly HttpClient _client;
+        private readonly ILogger _logger;
 
-        public ChesClient(HttpClient httpClient)
+        public ChesClient(
+            HttpClient httpClient,
+            ILogger<ChesClient> logger)
         {
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _logger = logger;
         }
 
-        public async Task SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
+        public async Task<Guid?> SendAsync(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
         {
             var chesAttachments = new List<ChesAttachment>();
-            foreach (var attachment in attachments)
+            foreach (var (Filename, Content) in attachments)
             {
                 var chesAttachment = new ChesAttachment()
                 {
-                    content = Convert.ToBase64String(attachment.Content),
-                    contentType = "application/pdf",
-                    encoding = "base64",
-                    filename = attachment.Filename
+                    Content = Convert.ToBase64String(Content),
+                    ContentType = "application/pdf",
+                    Encoding = "base64",
+                    Filename = Filename
                 };
 
                 chesAttachments.Add(chesAttachment);
             }
 
-            var requestParams = new ChesEmailRequestParams(from, to, subject, body, chesAttachments);
+            var requestParams = new ChesEmailRequestParams(from, to, cc, subject, body, chesAttachments);
 
-            var requestContent = new StringContent(JsonConvert.SerializeObject(requestParams), Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = null;
+            var requestContent = new StringContent(
+                JsonConvert.SerializeObject(
+                    requestParams,
+                    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }
+                ),
+                Encoding.UTF8, "application/json");
             try
             {
-                response = await _client.PostAsync("email", requestContent);
+                HttpResponseMessage response = await _client.PostAsync("email", requestContent);
+                var responseJsonString = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var responseJsonString = await response.Content.ReadAsStringAsync();
-                    JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
+                    var successResponse = JsonConvert.DeserializeObject<EmailSuccessResponse>(responseJsonString);
+                    return successResponse.Messages.Single().MsgId;
+                }
+                else
+                {
+                    _logger.LogError($"CHES Response code: {(int)response.StatusCode}, response body:{responseJsonString}");
+                    return null;
                 }
             }
             catch (Exception ex)
             {
+                _logger.LogError($"CHES Exception: {ex.Message}");
+                return null;
+            }
+        }
+
+        public async Task<string> GetStatusAsync(Guid msgId)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"status?msgId={msgId}");
+                var responseString = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var statusResponse = JsonConvert.DeserializeObject<IEnumerable<StatusResponse>>(responseString);
+                    return statusResponse.Single().Status;
+                }
+                else
+                {
+                    _logger.LogError($"CHES Response code: {(int)response.StatusCode}, response body:{responseString}");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"CHES Exception: {ex.Message}");
                 throw new Exception("Error occurred when calling CHES Email API. Try again later.", ex);
             }
+
         }
 
         public async Task<bool> HealthCheckAsync()
         {
-            HttpResponseMessage response = null;
             try
             {
-                response = await _client.GetAsync("health");
+                HttpResponseMessage response = await _client.GetAsync("health");
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -71,66 +113,88 @@ namespace Prime.HttpClients
 
     public class ChesEmailRequestParams
     {
-        public IEnumerable<ChesAttachment> attachments { get; set; }
-        public IEnumerable<string> bcc { get; set; }
-        public string bodyType { get; set; }
-        public string body { get; set; }
-        public IEnumerable<string> cc { get; set; }
-        public int? delayTS { get; set; }
-        public string encoding { get; set; }
-        public string from { get; set; }
-        public string priority { get; set; }
-        public string subject { get; set; }
-        public string tag { get; set; }
-        public IEnumerable<string> to { get; set; }
+        public IEnumerable<ChesAttachment> Attachments { get; set; }
+        public IEnumerable<string> Bcc { get; set; }
+        public string BodyType { get; set; }
+        public string Body { get; set; }
+        public IEnumerable<string> Cc { get; set; }
+        public int? DelayTS { get; set; }
+        public string Encoding { get; set; }
+        public string From { get; set; }
+        public string Priority { get; set; }
+        public string Subject { get; set; }
+        public string Tag { get; set; }
+        public IEnumerable<string> To { get; set; }
 
-        public ChesEmailRequestParams(string from, IEnumerable<string> to, string subject, string body, IEnumerable<ChesAttachment> attachments)
+        public ChesEmailRequestParams(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<ChesAttachment> attachments)
         {
-            this.attachments = attachments;
-            bcc = new List<string>();
-            bodyType = "html";
-            this.body = body;
-            cc = new List<string>();
-            delayTS = 1570000000;
-            encoding = "utf-8";
-            this.from = from;
-            priority = "normal";
-            this.subject = subject;
-            tag = "tag";
-            this.to = to;
+            this.Attachments = attachments;
+            Bcc = new List<string>();
+            BodyType = "html";
+            this.Body = body;
+            Cc = cc;
+            DelayTS = 1570000000;
+            Encoding = "utf-8";
+            this.From = from;
+            Priority = "normal";
+            this.Subject = subject;
+            Tag = "tag";
+            this.To = to;
         }
     }
 
     public class ChesAttachment
     {
-        public string content { get; set; }
-        public string contentType { get; set; }
-        public string encoding { get; set; }
-        public string filename { get; set; }
-    }
-
-    public class OpenIdSuccessResponse
-    {
-        public string access_token { get; set; }
-        public string expires_in { get; set; }
-        public string refresh_expires_in { get; set; }
-        public string refresh_token { get; set; }
-        public string token_type { get; set; }
-        public string not_before_policy { get; set; }
-        public string session_state { get; set; }
-        public string scope { get; set; }
+        public string Content { get; set; }
+        public string ContentType { get; set; }
+        public string Encoding { get; set; }
+        public string Filename { get; set; }
     }
 
     public class EmailSuccessResponse
     {
-        public IEnumerable<Message> messages { get; set; }
-        public Guid txId { get; set; }
+        public IList<Message> Messages { get; set; }
+        public Guid TxId { get; set; }
     }
 
     public class Message
     {
-        public Guid msgId { get; set; }
-        public string tag { get; set; }
-        public IEnumerable<string> to { get; set; }
+        public Guid MsgId { get; set; }
+        public string Tag { get; set; }
+        public IEnumerable<string> To { get; set; }
+    }
+
+    public class StatusResponse
+    {
+        public long CreatedTS { get; set; }
+        public long DelayTS { get; set; }
+        public Guid MsgId { get; set; }
+        public string Status { get; set; }
+        public ICollection<StatusHistoryObject> StatusHistory { get; set; }
+        public string Tag { get; set; }
+        public Guid TxId { get; set; }
+        public long UpdatedTS { get; set; }
+    }
+
+    public class StatusHistoryObject
+    {
+        public string Description { get; set; }
+        public string Status { get; set; }
+        public int Timestamp { get; set; }
+    }
+
+    public sealed class ChesStatus
+    {
+        public static ChesStatus Accepted = new ChesStatus("accepted");
+        public static ChesStatus Cancelled = new ChesStatus("cancelled");
+        public static ChesStatus Completed = new ChesStatus("completed");
+        public static ChesStatus Failed = new ChesStatus("failed");
+        public static ChesStatus Pending = new ChesStatus("pending");
+        public string Value { get; private set; }
+
+        private ChesStatus(string value)
+        {
+            Value = value;
+        }
     }
 }

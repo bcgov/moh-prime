@@ -111,14 +111,13 @@ namespace PrimeTests.Utils
         public static void AddAdminRoleToUser(ClaimsPrincipal user)
         {
             var identity = user.Identity as ClaimsIdentity;
-            identity.AddClaim(new Claim(ClaimTypes.Role, AuthConstants.PRIME_ADMIN_ROLE));
+            identity.AddClaim(new Claim(ClaimTypes.Role, Roles.PrimeAdmin));
         }
 
         public static void RemoveAdminRoleFromUser(ClaimsPrincipal user)
         {
             var claim = user.Claims
-                .Where(c => c.Value == AuthConstants.PRIME_ADMIN_ROLE)
-                .Single();
+                .Single(c => c.Value == Roles.PrimeAdmin);
             var identity = user.Identity as ClaimsIdentity;
             identity.RemoveClaim(claim);
         }
@@ -338,7 +337,7 @@ namespace PrimeTests.Utils
             string requestUri,
             Guid subject)
         {
-            return CreateRequest<string>(method, requestUri, subject, null);
+            return CreateRequest(method, requestUri, subject, null);
         }
 
         public static HttpRequestMessage CreateAdminRequest(
@@ -346,22 +345,24 @@ namespace PrimeTests.Utils
             string requestUri,
             Guid subject)
         {
-            return CreateAdminRequest<string>(method, requestUri, subject, null);
+            return CreateAdminRequest(method, requestUri, subject, null);
         }
 
-        public static HttpRequestMessage CreateRequest<T>(
+        public static HttpRequestMessage CreateRequest(
             HttpMethod method,
             string requestUri,
             Guid subject,
-            T payload)
+            object payload)
         {
             // create a request with an AUTH token
             var request = new HttpRequestMessage(method, requestUri);
             var _token = TestUtils.TokenBuilder()
-                .ForAudience(Startup.StaticConfig["Jwt:Audience"])
+                .ForAudience(AuthConstants.Audience)
                 .ForSubject(subject.ToString())
-                .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_ENROLLEE_ROLE)
-                .WithClaim(AuthConstants.ASSURANCE_LEVEL_CLAIM_TYPE, "3")
+                .WithClaim(ClaimTypes.Role, Roles.PrimeEnrollee)
+                .WithClaim(Claims.AssuranceLevel, "3")
+                .WithClaim(Claims.IdentityProvider, "bcsc")
+                .WithClaim(Claims.Address, "{}")
                 .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
@@ -374,26 +375,20 @@ namespace PrimeTests.Utils
             return request;
         }
 
-        public static HttpRequestMessage CreateAdminRequest<T>(
+        public static HttpRequestMessage CreateAdminRequest(
             HttpMethod method,
             string requestUri,
             Guid subject,
-            T payload)
+            object payload)
         {
-            var request = CreateRequest<T>(method, requestUri, subject, payload);
-
-            var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-            if (audience == null)
-            {
-                audience = Startup.StaticConfig["Jwt:Audience"];
-            }
+            var request = CreateRequest(method, requestUri, subject, payload);
 
             // replace the token - with an admin version of the token
             var _token = TestUtils.TokenBuilder()
-                 .ForAudience(audience)
+                 .ForAudience(AuthConstants.Audience)
                  .ForSubject(subject.ToString())
-                 .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_ADMIN_ROLE)
-                 .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_READONLY_ADMIN)
+                 .WithClaim(ClaimTypes.Role, Roles.PrimeAdmin)
+                 .WithClaim(ClaimTypes.Role, Roles.PrimeReadonlyAdmin)
                  .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
@@ -402,25 +397,19 @@ namespace PrimeTests.Utils
         }
 
 
-        public static HttpRequestMessage CreateSuperAdminRequest<T>(
+        public static HttpRequestMessage CreateSuperAdminRequest(
             HttpMethod method,
             string requestUri,
             Guid subject,
-            T payload)
+            object payload)
         {
-            var request = CreateRequest<T>(method, requestUri, subject, payload);
-
-            var audience = System.Environment.GetEnvironmentVariable("JWT_AUDIENCE");
-            if (audience == null)
-            {
-                audience = Startup.StaticConfig["Jwt:Audience"];
-            }
+            var request = CreateRequest(method, requestUri, subject, payload);
 
             // replace the token - with an admin version of the token
             var _token = TestUtils.TokenBuilder()
-                 .ForAudience(audience)
+                 .ForAudience(AuthConstants.Audience)
                  .ForSubject(subject.ToString())
-                 .WithClaim(ClaimTypes.Role, AuthConstants.PRIME_SUPER_ADMIN_ROLE)
+                 .WithClaim(ClaimTypes.Role, Roles.PrimeSuperAdmin)
                  .BuildToken();
 
             request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);

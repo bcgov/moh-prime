@@ -77,11 +77,11 @@ namespace Prime.Services
                 return;
             }
 
+            await _enrolleeSubmissionService.CreateEnrolleeSubmissionAsync(enrolleeId);
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
-            await _enrolleeSubmissionService.CreateEnrolleeSubmissionAsync(enrollee);
-            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Submitted");
+            await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Submitted");
 
-            if (_httpContext.HttpContext.User.hasVCIssuance())
+            if (_httpContext.HttpContext.User.HasVCIssuance())
             {
                 try
                 {
@@ -117,8 +117,7 @@ namespace Prime.Services
                     .ThenInclude(l => l.License)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            var allowed = new SubmissionStateEngine().AllowableAction(action, enrollee, isAdmin);
-            if (!allowed)
+            if (!SubmissionStateEngine.AllowableAction(action, enrollee, isAdmin))
             {
                 return false;
             }

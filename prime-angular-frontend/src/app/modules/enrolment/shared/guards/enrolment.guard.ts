@@ -16,6 +16,7 @@ import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,7 @@ export class EnrolmentGuard extends BaseGuard {
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
+    private enrolmentFormStateService: EnrolmentFormStateService,
     private router: Router
   ) {
     super(authService, logger);
@@ -165,9 +167,19 @@ export class EnrolmentGuard extends BaseGuard {
       blacklistedRoutes.push(EnrolmentRoutes.OVERVIEW);
     }
 
+    let certifications = enrolment.certifications;
+    let careSettings = enrolment.careSettings;
+
+    // When renewing an enrollee may have updates that allow or
+    // prevent routing to specific views, which should be
+    if (this.enrolmentFormStateService.isPatched && this.enrolmentFormStateService.isDirty) {
+      certifications = this.enrolmentFormStateService.regulatoryForm.get('certifications').value;
+      careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
+    }
+
     if (
       !this.enrolmentService
-        .canRequestRemoteAccess(enrolment.certifications, enrolment.careSettings)
+        .canRequestRemoteAccess(certifications, careSettings)
     ) {
       // No access to remote access if OBO or pharmacist
       blacklistedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);

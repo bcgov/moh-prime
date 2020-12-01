@@ -66,15 +66,7 @@ objects:
             value: "5001"
           - name: ASPNETCORE_URLS
             value: "http://+:8080"
-          - name: JWT_SIGNING_KEY
-            value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
-          - name: JWT_ADMIN_CLIENT
-            value: "prime-admin-${OC_APP}"
-          - name: JWT_USER_CLIENT
-            value: "prime-application-${OC_APP}"
-          - name: JWT_AUDIENCE
-            value: "prime-web-api"
-          
+
           # .NET database connection environment variables
           - name: DB_HOST
             value: "postgresql${SUFFIX}"
@@ -92,7 +84,7 @@ objects:
               configKeyMapRef:
                 key: keycloak_url
                 name: "keycloak"
-          
+
           # PostgreSQL related environment variables
           - name: POSTGRESQL_USER
             valueFrom:
@@ -132,7 +124,7 @@ objects:
     runPolicy: Serial
     status:
       dockerImageRepository: ""
-  
+
   # .NET Web API - Build Configuration
   - apiVersion: v1
     kind: BuildConfig

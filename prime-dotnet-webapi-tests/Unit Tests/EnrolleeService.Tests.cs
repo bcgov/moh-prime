@@ -20,22 +20,14 @@ namespace PrimeTests.UnitTests
         public EnrolleeService CreateService(
             IHttpContextAccessor httpContext = null,
             IMapper mapper = null,
-            ISubmissionRulesService automaticAdjudicationService = null,
-            IEmailService emailService = null,
-            IEnrolleeSubmissionService enrolleeSubmissionService = null,
             IBusinessEventService businessEventService = null,
-            ISiteService siteService = null,
             IDocumentManagerClient documentClient = null)
         {
             return new EnrolleeService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 mapper ?? DefaultMapper(),
-                automaticAdjudicationService ?? A.Fake<ISubmissionRulesService>(),
-                emailService ?? A.Fake<IEmailService>(),
-                enrolleeSubmissionService ?? A.Fake<IEnrolleeSubmissionService>(),
                 businessEventService ?? A.Fake<IBusinessEventService>(),
-                siteService ?? A.Fake<ISiteService>(),
                 documentClient ?? A.Fake<IDocumentManagerClient>()
             );
         }

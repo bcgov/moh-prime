@@ -1,10 +1,10 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 using AutoMapper;
 
@@ -19,7 +19,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = AuthConstants.USER_POLICY, Roles = AuthConstants.FEATURE_SITE_REGISTRATION)]
+    [Authorize(Policy = Policies.User, Roles = FeatureFlags.SiteRegistration)]
     public class SitesController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -203,7 +203,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="adjudicatorId"></param>
         [HttpPut("{siteId}/adjudicator", Name = nameof(SetSiteAdjudicator))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -239,7 +239,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpDelete("{siteId}/adjudicator", Name = nameof(RemoveSiteAdjudicator))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -383,7 +383,7 @@ namespace Prime.Controllers
         /// <param name="documentGuid"></param>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/adjudication-documents", Name = nameof(CreateSiteAdjudicationDocument))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -413,7 +413,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/adjudication-documents", Name = nameof(GetSiteAdjudicationDocuments))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -438,7 +438,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="documentId"></param>
         [HttpGet("{siteId}/adjudication-documents/{documentId}", Name = nameof(GetSiteAdjudicationDocument))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -608,7 +608,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/approve", Name = nameof(ApproveSite))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -631,7 +631,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/decline", Name = nameof(DeclineSite))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -655,7 +655,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="note"></param>
         [HttpPost("{siteId}/site-registration-notes", Name = nameof(CreateSiteRegistrationNote))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -687,7 +687,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/site-registration-notes", Name = nameof(GetSiteRegistrationNotes))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [Authorize(Policy = Policies.ReadonlyAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -718,6 +718,31 @@ namespace Prime.Controllers
         {
             var sites = await _siteService.GetSitesByRemoteUserInfoAsync(certifications);
             return Ok(ApiResponse.Result(sites));
+        }
+
+        // GET: api/Sites/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
+        /// <summary>
+        /// Gets all of the site registration notes for a specific site.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="businessEventTypeCodes"></param>
+        [HttpGet("{siteId}/events", Name = nameof(GetSiteBusinessEvents))]
+        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessEvent>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<BusinessEvent>>> GetSiteBusinessEvents(int siteId, [FromQuery] IEnumerable<int> businessEventTypeCodes)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var events = await _siteService.GetSiteBusinessEventsAsync(siteId, businessEventTypeCodes);
+
+            return Ok(ApiResponse.Result(events));
         }
     }
 }

@@ -19,31 +19,19 @@ namespace Prime.Services
     public class EnrolleeService : BaseService, IEnrolleeService
     {
         private readonly IMapper _mapper;
-        private readonly ISubmissionRulesService _automaticAdjudicationService;
-        private readonly IEmailService _emailService;
-        private readonly IEnrolleeSubmissionService _enrolleeSubmisService;
         private readonly IBusinessEventService _businessEventService;
-        private readonly ISiteService _siteService;
         private readonly IDocumentManagerClient _documentClient;
 
         public EnrolleeService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IMapper mapper,
-            ISubmissionRulesService automaticAdjudicationService,
-            IEmailService emailService,
-            IEnrolleeSubmissionService enroleeSubmissionService,
             IBusinessEventService businessEventService,
-            ISiteService siteService,
             IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
-            _automaticAdjudicationService = automaticAdjudicationService;
-            _emailService = emailService;
-            _enrolleeSubmisService = enroleeSubmissionService;
             _businessEventService = businessEventService;
-            _siteService = siteService;
             _documentClient = documentClient;
         }
 
@@ -196,7 +184,7 @@ namespace Prime.Services
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
             // TODO currently doesn't update the date of birth
-            if (enrollee.IdentityProvider != AuthConstants.BC_SERVICES_CARD)
+            if (enrollee.IdentityProvider != AuthConstants.BCServicesCard)
             {
                 enrollee.FirstName = updateModel.PreferredFirstName;
                 enrollee.LastName = updateModel.PreferredLastName;
@@ -628,7 +616,7 @@ namespace Prime.Services
             return _mapper.Map<EnrolleeViewModel>(enrollee);
         }
 
-        public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEvents(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
+        public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes)
         {
             return await _context.BusinessEvents
                 .Include(e => e.Admin)
@@ -644,10 +632,15 @@ namespace Prime.Services
             hpdids = hpdids.Where(h => !string.IsNullOrWhiteSpace(h));
 
             return await _context.Enrollees
-                .Include(e => e.Agreements)
                 .Where(e => hpdids.Contains(e.HPDID))
-                .Where(e => !e.CurrentStatus.IsType(StatusType.Declined))
-                .Select(e => HpdidLookup.FromEnrollee(e))
+                .Where(e => e.CurrentStatus.StatusCode != (int)StatusType.Declined)
+                .Select(e => new HpdidLookup
+                {
+                    Gpid = e.GPID,
+                    Hpdid = e.HPDID,
+                    RenewalDate = e.ExpiryDate
+                })
+                .DecompileAsync()
                 .ToListAsync();
         }
 

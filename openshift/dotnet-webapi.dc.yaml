@@ -87,19 +87,11 @@ objects:
                 value: "http://+:8080"
               - name: FRONTEND_URL
                 value: "${HTTP_SCHEMA}://${VANITY_URL}"
-              - name: JWT_SIGNING_KEY
-                value: SdqlA0Y5e6HMAK1wm6iHHHz2u37XGtlo
-              - name: JWT_ADMIN_CLIENT
-                value: "prime-admin-${OC_APP}"
-              - name: JWT_USER_CLIENT
-                value: "prime-application-${OC_APP}"
-              - name: JWT_AUDIENCE
-                value: "prime-web-api"
               - name: BACKEND_URL
                 value: "https://${VANITY_URL}/api/v1/"
               - name: DB_HOST
                 value: "postgresql${SUFFIX}"
-              
+
               # Canada Post AddressComplete API related environment variables
               - name: ADDRESS_AUTOCOMPLETE_API_KEY
                 valueFrom:
@@ -164,7 +156,7 @@ objects:
                   configKeyMapRef:
                     key: keycloak_url
                     name: "keycloak"
-              
+
               # Mail server environment variables
               - name: MAIL_SERVER_PORT
                 valueFrom:

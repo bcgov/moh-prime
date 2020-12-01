@@ -1,4 +1,12 @@
-<app-adjudicator-documents #adjudicationDocuments
-                           [documents$]="documents$"
-                           (saveDocuments)="onSaveDocuments($event)"
-                           (getDocumentByGuid)="onGetDocumentByGuid($event)"></app-adjudicator-documents>
+<app-site-registration-container [content]="content">
+
+  <app-page-header>Document Upload</app-page-header>
+
+</app-site-registration-container>
+
+<ng-template #content>
+  <app-adjudicator-documents #adjudicationDocuments
+                             [documents$]="documents$"
+                             (saveDocuments)="onSaveDocuments($event)"
+                             (getDocumentByGuid)="onGetDocumentByGuid($event)"></app-adjudicator-documents>
+</ng-template>
