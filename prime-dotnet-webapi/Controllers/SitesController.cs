@@ -327,8 +327,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<BusinessLicenceDocument>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<BusinessLicenceDocument>> CreateBusinessLicence(int siteId, BusinessLicence businessLicence, [FromQuery] Guid documentGuid)
+        [ProducesResponseType(typeof(ApiResultResponse<BusinessLicence>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<BusinessLicence>> CreateBusinessLicence(int siteId, BusinessLicence businessLicence, [FromQuery] Guid documentGuid)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -354,7 +354,6 @@ namespace Prime.Controllers
         /// <summary>
         /// Updates an existing Business Licence.
         /// </summary>
-        /// <param name="documentGuid"></param>
         /// <param name="businessLicence"></param>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/business-licence", Name = nameof(UpdateBusinessLicence))]
@@ -362,8 +361,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<BusinessLicenceDocument>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<BusinessLicenceDocument>> UpdateBusinessLicence(int siteId, BusinessLicence businessLicence, [FromQuery] Guid documentGuid)
+        [ProducesResponseType(typeof(ApiResultResponse<BusinessLicence>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<BusinessLicence>> UpdateBusinessLicence(int siteId, BusinessLicence businessLicence)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -375,9 +374,45 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var licence = await _siteService.UpdateBusinessLicenceAsync(businessLicence, documentGuid);
+            var licence = await _siteService.UpdateBusinessLicenceAsync(site.Id, businessLicence);
 
             return Ok(ApiResponse.Result(licence));
+        }
+
+        // POST: api/sites/5/business-licence/document
+        /// <summary>
+        /// Creates a new Business Licence Document.
+        /// </summary>
+        /// <param name="documentGuid"></param>
+        /// <param name="siteId"></param>
+        [HttpPost("{siteId}/business-licence/document", Name = nameof(CreateBusinessLicenceDocument))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<BusinessLicenceDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<BusinessLicenceDocument>> CreateBusinessLicenceDocument(int siteId, [FromQuery] Guid documentGuid)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            {
+                return Forbid();
+            }
+
+            var document = await _siteService.AddBusinessLicenceDocumentAsync(siteId, documentGuid);
+            if (document == null)
+            {
+                this.ModelState.AddModelError("documentGuid", "Business Licence Document could not be created; network error or upload is already submitted");
+                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+            }
+
+            await _emailService.SendSiteRegistrationAsync(site);
+
+            return Ok(ApiResponse.Result(document));
         }
 
         // Get: api/sites/5/business-licence

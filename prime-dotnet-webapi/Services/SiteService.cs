@@ -410,12 +410,9 @@ namespace Prime.Services
 
         public async Task<BusinessLicence> AddBusinessLicenceAsync(BusinessLicence businessLicence, Guid documentGuid)
         {
-            businessLicence.Completed = false;
             if (documentGuid != Guid.Empty)
             {
-                businessLicence.BusinessLicenceDocument = await AddBusinessLicenceDocument(documentGuid);
-                // Completed once a Business Licence Document is attached to the licence
-                businessLicence.Completed = true;
+                businessLicence.BusinessLicenceDocument = await CreateBusinessLicenceDocument(documentGuid);
             }
 
             _context.BusinessLicences.Add(businessLicence);
@@ -424,13 +421,11 @@ namespace Prime.Services
             return businessLicence;
         }
 
-        public async Task<BusinessLicence> UpdateBusinessLicenceAsync(BusinessLicence businessLicence, Guid documentGuid)
+        public async Task<BusinessLicence> UpdateBusinessLicenceAsync(int siteId, BusinessLicence updateBusinessLicence)
         {
-            if (documentGuid != null)
-            {
-                businessLicence.BusinessLicenceDocument = await AddBusinessLicenceDocument(documentGuid);
-                businessLicence.Completed = true;
-            }
+            var businessLicence = await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).SingleOrDefaultAsync();
+
+            businessLicence.DeferredLicenceReason = updateBusinessLicence.DeferredLicenceReason;
 
             _context.BusinessLicences.Update(businessLicence);
             await _context.SaveChangesAsync();
@@ -438,7 +433,31 @@ namespace Prime.Services
             return businessLicence;
         }
 
-        private async Task<BusinessLicenceDocument> AddBusinessLicenceDocument(Guid documentGuid)
+        public async Task<BusinessLicenceDocument> AddBusinessLicenceDocumentAsync(int siteId, Guid documentGuid)
+        {
+            var businessLicence = await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).SingleOrDefaultAsync();
+
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
+            if (string.IsNullOrWhiteSpace(filename))
+            {
+                return null;
+            }
+
+            var bld = new BusinessLicenceDocument
+            {
+                DocumentGuid = documentGuid,
+                Filename = filename,
+                UploadedDate = DateTimeOffset.Now,
+                BusinessLicenceId = businessLicence.Id
+            };
+
+            _context.BusinessLicenceDocuments.Add(bld);
+            await _context.SaveChangesAsync();
+
+            return bld;
+        }
+
+        private async Task<BusinessLicenceDocument> CreateBusinessLicenceDocument(Guid documentGuid)
         {
             var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
             if (string.IsNullOrWhiteSpace(filename))

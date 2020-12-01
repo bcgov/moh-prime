@@ -26,6 +26,9 @@
 <h2 class="mb-2">Site Information</h2>
 
 <p>
-  See the attached registration and organization agreement for more information. To access
-  the Business Licence, click this <a href="@documentUrl">link</a>.
+  See the attached registration and organization agreement for more information.
+  @if (documentUrl != null)
+  {
+    @("To access the Business Licence, click this") <a href="@documentUrl" target="_blank">link</a>@(".")
+  }
 </p>

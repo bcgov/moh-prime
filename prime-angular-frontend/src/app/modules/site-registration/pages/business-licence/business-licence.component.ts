@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { noop, of, Subscription } from 'rxjs';
+import { iif, noop, Observable, of, pipe, Subscription } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -92,10 +92,13 @@ export class BusinessLicenceComponent implements OnInit {
       this.siteResource
         .updateSite(payload)
         .pipe(
-          exhaustMap(() =>
-            (this.businessLicence.id)
-              ? this.siteResource.updateBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)
-              : this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)
+          exhaustMap(() => (this.businessLicence.id && payload.businessLicenceGuid)
+            ? this.siteResource.createBusinessLicenceDocument(siteId, payload.businessLicenceGuid)
+            : of(noop)
+          ),
+          exhaustMap(() => (this.businessLicence.id)
+            ? this.siteResource.updateBusinessLicence(siteId, this.businessLicence)
+            : this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)
           )
         )
         .subscribe(() => {

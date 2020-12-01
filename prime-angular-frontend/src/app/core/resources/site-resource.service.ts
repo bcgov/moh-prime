@@ -235,13 +235,24 @@ export class SiteResource {
       );
   }
 
-  public updateBusinessLicence(siteId: number, businessLicence: BusinessLicence, documentGuid: string): Observable<BusinessLicence> {
-    const params = documentGuid ? this.apiResourceUtilsService.makeHttpParams({ documentGuid }) : null;
-    return this.apiResource.put<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence, params)
+  public updateBusinessLicence(siteId: number, businessLicence: BusinessLicence): Observable<BusinessLicence> {
+    return this.apiResource.put<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] SiteRegistrationResource::updateBusinessLicence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createBusinessLicenceDocument(siteId: number, documentGuid: string): Observable<BusinessLicenceDocument> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
+    return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licence/document`, params)
+      .pipe(
+        map((response: ApiHttpResponse<BusinessLicenceDocument>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::createBusinessLicenceDocument error has occurred: ', error);
           throw error;
         })
       );

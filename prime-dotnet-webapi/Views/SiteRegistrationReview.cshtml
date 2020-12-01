@@ -70,16 +70,6 @@
   <span class="ml-2">@(Model.PhysicalAddress.CountryCode ?? "-")</span>
 </div>
 
-<h2 class="mb-3">Business Licences</h2>
-
-@foreach(var licence in @Model.BusinessLicenceDocuments)
-{
-  <div class="ml-2 mb-2">
-    <h5>Filename</h5>
-    <span class="ml-2">@licence.Filename</span>
-  </div>
-}
-
 <h2 class="mb-3">Hours of Operation</h2>
 
 @foreach (var businessHour in Model.BusinessHours) {
@@ -113,10 +103,12 @@
     <span class="ml-2">@user.FirstName @user.LastName</span>
   </div>
 
-  @* Hours of Operation *@
-  <h2 class="mb-2">Hours of Operation</h2>
+  @foreach(var certificate in @user.RemoteUserCertifications)
+  {
+    <div class="ml-2 mb-2">
+      <strong>Certification</strong>
+    </div>
 
-  @foreach (var BusinessHour in Model.BusinessHours) {
     <div class="ml-2 mb-2">
       <h5>College</h5>
       <span class="ml-2">@certificate.College</span>

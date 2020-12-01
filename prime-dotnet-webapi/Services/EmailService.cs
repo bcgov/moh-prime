@@ -210,6 +210,10 @@ namespace Prime.Services
         {
             // TODO:
             var businessLicence = await _siteService.GetBusinessLicenceAsync(siteId);
+            if (businessLicence.BusinessLicenceDocument == null)
+            {
+                return null;
+            }
             var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicence.BusinessLicenceDocument.DocumentGuid);
             return documentAccessToken.DownloadUrl;
         }
