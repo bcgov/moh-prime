@@ -44,7 +44,11 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Notification Information</ng-container>
       <ng-container appPageSubheaderSummary>
-        Provide an email address and phone number (optional) that may be used for sending notifications from the PRIME
+        Provide an email address 
+        <ng-container *ngIf="showSmsPhone">
+          and phone number (optional) 
+        </ng-container>
+        that may be used for sending notifications from the PRIME
         system.
       </ng-container>
     </app-page-subheader>
@@ -64,19 +68,23 @@
             </mat-form-field>
 
           </div>
-          <div class="col-6">
 
-            <mat-form-field class="w-100">
-              <input matInput
-                     placeholder="Optional SMS Phone Number"
-                     formControlName="smsPhone"
-                     mask="(000) 000-0000"
-                     [showMaskTyped]="false">
-              <mat-error *ngIf="smsPhone.hasError('required')">Required</mat-error>
-              <mat-error *ngIf="smsPhone.hasError('phone')">Must be a valid phone number</mat-error>
-            </mat-form-field>
+          <ng-container *ngIf="showSmsPhone">
 
-          </div>
+            <div class="col-6">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                      placeholder="Optional SMS Phone Number"
+                      formControlName="smsPhone"
+                      mask="(000) 000-0000"
+                      [showMaskTyped]="false">
+                <mat-error *ngIf="smsPhone.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="smsPhone.hasError('phone')">Must be a valid phone number</mat-error>
+              </mat-form-field>
+
+            </div>
+          </ng-container>
         </div>
 
       </div>

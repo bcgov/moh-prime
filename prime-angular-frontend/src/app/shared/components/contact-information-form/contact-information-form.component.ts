@@ -10,8 +10,12 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 })
 export class ContactInformationFormComponent implements OnInit {
   @Input() public form: FormGroup;
+  @Input() public showSmsPhone: boolean;
 
-  constructor() { }
+  constructor() {
+    // Defaults
+    this.showSmsPhone = true;
+  }
 
   public get phone(): FormControl {
     return this.form.get('phone') as FormControl;
