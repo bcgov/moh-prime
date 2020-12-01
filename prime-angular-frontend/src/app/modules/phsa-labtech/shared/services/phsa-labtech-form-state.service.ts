@@ -4,12 +4,12 @@ import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/fo
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
-import { PhsaLabTech } from '../models/phsa-lab-tech.model';
+import { PhsaLabtech } from '../models/phsa-lab-tech.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PhsaLabtechFormStateService extends AbstractFormState<PhsaLabTech>{
+export class PhsaLabtechFormStateService extends AbstractFormState<PhsaLabtech>{
   public accessForm: FormGroup;
 
   constructor(
@@ -19,7 +19,7 @@ export class PhsaLabtechFormStateService extends AbstractFormState<PhsaLabTech>{
     super(fb, routeStateService, logger, []);
   }
 
-  public get json(): PhsaLabTech {
+  public get json(): PhsaLabtech {
     throw new Error('Method not implemented.');
   }
 
@@ -31,7 +31,7 @@ export class PhsaLabtechFormStateService extends AbstractFormState<PhsaLabTech>{
     this.accessForm = this.buildAccessForm();
   }
 
-  protected patchForm(model: PhsaLabTech): void {
+  protected patchForm(model: PhsaLabtech): void {
     throw new Error('Method not implemented.');
   }
 
