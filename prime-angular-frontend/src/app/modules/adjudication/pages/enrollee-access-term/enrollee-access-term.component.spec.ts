@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -12,7 +12,7 @@ describe('EnrolleeAccessTermComponent', () => {
   let component: EnrolleeAccessTermComponent;
   let fixture: ComponentFixture<EnrolleeAccessTermComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,

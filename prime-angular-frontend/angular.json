@@ -54,6 +54,10 @@
             },
             "scripts": [
               "node_modules/tinymce/tinymce.min.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "keycloak-js",
+              "tus-js-client"
             ]
           },
           "configurations": {

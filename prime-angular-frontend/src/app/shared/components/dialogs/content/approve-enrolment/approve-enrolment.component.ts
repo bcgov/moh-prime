@@ -25,8 +25,8 @@ export class ApproveEnrolmentComponent implements OnInit, IDialogContent {
     return this.enrolment ? this.enrolment.alwaysManual : false;
   }
 
-  public onChange($event: MatCheckboxChange) {
-    this.output.emit($event.checked);
+  public onChange(change: MatCheckboxChange) {
+    this.output.emit(change.checked);
   }
 
   public ngOnInit() { }

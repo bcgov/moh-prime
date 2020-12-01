@@ -9,7 +9,7 @@ import { NoteType } from '@adjudication/shared/enums/note-type.enum';
 })
 export class SiteAdjudicatorNotesComponent implements OnInit {
   public noteType: NoteType;
-  
+
   constructor() {
     this.noteType = NoteType.SiteRegistrationNote;
   }

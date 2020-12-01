@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NgBusyModule } from 'ng-busy';
 
@@ -9,7 +9,7 @@ describe('BusyOverlayComponent', () => {
   let component: BusyOverlayComponent;
   let fixture: ComponentFixture<BusyOverlayComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         imports: [

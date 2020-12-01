@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrimeLogoComponent } from './prime-logo.component';
 
@@ -6,11 +6,11 @@ describe('PrimeLogoComponent', () => {
   let component: PrimeLogoComponent;
   let fixture: ComponentFixture<PrimeLogoComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PrimeLogoComponent ]
+      declarations: [PrimeLogoComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnrolleePropertyErrorComponent } from './enrollee-property-error.component';
 import { SharedModule } from '@shared/shared.module';
@@ -7,7 +7,7 @@ describe('EnrolleePropertyErrorComponent', () => {
   let component: EnrolleePropertyErrorComponent;
   let fixture: ComponentFixture<EnrolleePropertyErrorComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         SharedModule

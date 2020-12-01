@@ -16,7 +16,7 @@ describe('DialogContentDirective', () => {
   let component: TestDialogContentComponent;
   let fixture: ComponentFixture<TestDialogContentComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         declarations: [

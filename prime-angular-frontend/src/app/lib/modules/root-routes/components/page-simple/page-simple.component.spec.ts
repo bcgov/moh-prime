@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RootRoutesModule } from '../../root-routes.module';
 import { PageSimpleComponent } from './page-simple.component';
@@ -7,7 +7,7 @@ describe('PageSimpleComponent', () => {
   let component: PageSimpleComponent;
   let fixture: ComponentFixture<PageSimpleComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         imports: [

@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
@@ -23,7 +23,7 @@ describe('RemoteAccessAddressesComponent', () => {
     }
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
