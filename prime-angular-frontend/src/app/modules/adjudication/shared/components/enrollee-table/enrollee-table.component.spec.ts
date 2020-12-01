@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
@@ -11,7 +11,7 @@ describe('EnrolleeTableComponent', () => {
   let component: EnrolleeTableComponent;
   let fixture: ComponentFixture<EnrolleeTableComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         AdjudicationModule,

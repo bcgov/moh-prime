@@ -39,7 +39,7 @@ namespace Prime.HttpClients
                 chesAttachments.Add(chesAttachment);
             }
 
-            var requestParams = new ChesEmailRequestParams(from, to, subject, body, chesAttachments);
+            var requestParams = new ChesEmailRequestParams(from, to, cc, subject, body, chesAttachments);
 
             var requestContent = new StringContent(
                 JsonConvert.SerializeObject(
@@ -126,13 +126,13 @@ namespace Prime.HttpClients
         public string Tag { get; set; }
         public IEnumerable<string> To { get; set; }
 
-        public ChesEmailRequestParams(string from, IEnumerable<string> to, string subject, string body, IEnumerable<ChesAttachment> attachments)
+        public ChesEmailRequestParams(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<ChesAttachment> attachments)
         {
             this.Attachments = attachments;
             Bcc = new List<string>();
             BodyType = "html";
             this.Body = body;
-            Cc = new List<string>();
+            Cc = cc;
             DelayTS = 1570000000;
             Encoding = "utf-8";
             this.From = from;

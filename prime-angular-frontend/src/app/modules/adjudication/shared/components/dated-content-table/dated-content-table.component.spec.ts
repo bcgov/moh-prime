@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DatedContentTableComponent } from './dated-content-table.component';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
@@ -7,7 +7,7 @@ describe('DatedContentTableComponent', () => {
   let component: DatedContentTableComponent;
   let fixture: ComponentFixture<DatedContentTableComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         AdjudicationModule
