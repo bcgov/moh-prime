@@ -14,7 +14,7 @@ namespace Prime
 
         public static class DocumentManager
         {
-            public readonly static string Url = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_URL") ?? "http://localhost:6001/";
+            public readonly static string Url = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_URL") ?? "http://localhost:6001";
             public readonly static string ClientId = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_ID") ?? "prime-document-manager-local";
             public readonly static string ClientSecret = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_SECRET") ?? "b515de16-419b-49b1-bca9-f97eafc95d41";
         }
@@ -24,9 +24,9 @@ namespace Prime
         {
             public readonly static string WellKnownConfig = Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration";
             public readonly static string TokenUrl = Environment.GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
-            public readonly static string AdministrationUrl = Environment.GetEnvironmentVariable("") ?? "https://dev.oidc.gov.bc.ca/auth/admin/realms/v4mbqqas/";
+            public readonly static string AdministrationUrl = Environment.GetEnvironmentVariable("KEYCLOAK_ADMINISTRATION_URL") ?? "https://dev.oidc.gov.bc.ca/auth/admin/realms/v4mbqqas";
             public readonly static string AdministrationClientId = "keycloak-service-account";
-            public readonly static string AdministrationClientSecret = Environment.GetEnvironmentVariable("") ?? "";
+            public readonly static string AdministrationClientSecret = Environment.GetEnvironmentVariable("KEYCLOAK_ADMINISTRATION_CLIENT_SECRET") ?? "";
         }
 
         public static class MailServer
