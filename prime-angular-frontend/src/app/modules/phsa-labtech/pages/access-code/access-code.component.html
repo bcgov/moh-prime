@@ -1,8 +1,8 @@
-<app-enrollee-page [busy]="busy">
+<app-page [busy]="busy">
   <app-page-header>PRIME Enrolment</app-page-header>
-  <app-enrolment-progress-indicator [inProgress]="isInitialEnrolment"
-                                    message="Pre-enrolment Step">
-  </app-enrolment-progress-indicator>
+  <app-phsa-progress-indicator [inProgress]="isInitialEnrolment"
+                               message="Pre-enrolment Step">
+  </app-phsa-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -19,4 +19,4 @@
                    [hasSecondaryAction]="isProfileComplete"
                    (save)="onSubmit()"></app-page-footer>
 
-</app-enrollee-page>
+</app-page>
