@@ -10,6 +10,33 @@
           content="width=device-width, initial-scale=1" />
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons%7CMaterial+Icons+Outlined">
+
+    <script>
+      /**
+       * TEMPORARY FIX
+       * Currently Angular is not bootstrapping in Internet Explorer, and this is
+       * a work around to patch and provide time until it can be resolved allowing
+       * the guards to redirect users.
+       */
+
+      /**
+       * @description
+       * Checks if the browser is Internet Explorer, or pre-Chromium
+       * Edge.
+       *
+       * The reversed attribute of ordered lists is not supported in IE or
+       * pre-Chromium Edge, but has been supported in all other browsers
+       * forevers!!!
+       * @see https://caniuse.com/?search=reversed
+       */
+      function isIEOrPreChromiumEdge() {
+        return !('reversed' in document.createElement('ol'));
+      }
+
+      if (isIEOrPreChromiumEdge()) {
+        window.location.replace('/assets/unsupported.html');
+      }
+    </script>
   </head>
 
   <body>
