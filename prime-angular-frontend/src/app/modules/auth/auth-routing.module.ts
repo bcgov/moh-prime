@@ -11,6 +11,8 @@ import { InfoComponent } from './pages/info/info.component';
 import { BceidComponent } from './pages/bceid/bceid.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { SiteComponent } from './pages/site/site.component';
+import { PhsaComponent } from './pages/phsa/phsa.component';
+
 
 const routes: Routes = [
   {
@@ -40,6 +42,11 @@ const routes: Routes = [
         path: AuthRoutes.SITE,
         component: SiteComponent,
         data: { title: 'Welcome to PRIME' }
+      },
+      {
+        path: AuthRoutes.PHSA,
+        component: PhsaComponent,
+        data: { title: 'Enrol for access to PHSA eForms' }
       },
       {
         path: '', // Equivalent to `/` and alias for `info`

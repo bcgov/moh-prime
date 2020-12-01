@@ -18,7 +18,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // User needs at least the READONLY ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = AuthConstants.USER_POLICY)]
+    [Authorize(Policy = Policies.User)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -116,14 +116,14 @@ namespace Prime.Controllers
         {
             if (payload == null || payload.Enrollee == null)
             {
-                this.ModelState.AddModelError("Enrollee", "Could not create an enrollee, the passed in Enrollee cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Enrollee", "Could not create an enrollee, the passed in Enrollee cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             if (await _enrolleeService.UserIdExistsAsync(User.GetPrimeUserId()))
             {
-                this.ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var createModel = payload.Enrollee;
@@ -142,14 +142,14 @@ namespace Prime.Controllers
                     filename = await _documentService.FinalizeDocumentUpload((Guid)payload.IdentificationDocumentGuid, "identification_document");
                     if (string.IsNullOrWhiteSpace(filename))
                     {
-                        this.ModelState.AddModelError("documentGuid", "Identification document could not be created; network error or upload is already submitted");
-                        return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                        ModelState.AddModelError("documentGuid", "Identification document could not be created; network error or upload is already submitted");
+                        return BadRequest(ApiResponse.BadRequest(ModelState));
                     }
                 }
                 else
                 {
-                    this.ModelState.AddModelError("documentGuid", "Identification Document Guid was not supplied with request; Cannot create enrollee without identification.");
-                    return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                    ModelState.AddModelError("documentGuid", "Identification Document Guid was not supplied with request; Cannot create enrollee without identification.");
+                    return BadRequest(ApiResponse.BadRequest(ModelState));
                 }
             }
 
@@ -196,11 +196,11 @@ namespace Prime.Controllers
             // If the enrollee is not in the status of 'Editable', it cannot be updated
             if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable)))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Editable'.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Editable'.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            enrollee.MapConditionalProperties(User);
+            enrollee.SetTokenProperties(User);
 
             await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, enrollee, beenThroughTheWizard);
 
@@ -213,7 +213,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
-        [Authorize(Policy = AuthConstants.SUPER_ADMIN_POLICY)]
+        [Authorize(Policy = Policies.SuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -266,7 +266,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudicator-notes", Name = nameof(GetAdjudicatorNotes))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [Authorize(Policy = Policies.ReadonlyAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -292,7 +292,7 @@ namespace Prime.Controllers
         /// <param name="note"></param>
         /// <param name="link"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -305,8 +305,8 @@ namespace Prime.Controllers
             }
             if (string.IsNullOrWhiteSpace(note))
             {
-                this.ModelState.AddModelError("note", "Adjudicator notes can't be null or empty.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("note", "Adjudicator notes can't be null or empty.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -332,7 +332,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-reference", Name = nameof(CreateEnrolmentReference))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -363,7 +363,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="accessAgreementNote"></param>
         [HttpPut("{enrolleeId}/access-agreement-notes", Name = nameof(UpdateAccessAgreementNote))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -380,14 +380,14 @@ namespace Prime.Controllers
 
             if (accessAgreementNote.EnrolleeId != 0 && enrolleeId != accessAgreementNote.EnrolleeId)
             {
-                this.ModelState.AddModelError("AccessAgreementNote.EnrolleeId", "Enrollee Id does not match with the payload.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("AccessAgreementNote.EnrolleeId", "Enrollee Id does not match with the payload.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'Editable'.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'Editable'.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote);
@@ -402,7 +402,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="adjudicatorId"></param>
         [HttpPut("{enrolleeId}/adjudicator", Name = nameof(SetEnrolleeAdjudicator))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -437,7 +437,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/adjudicator", Name = nameof(RemoveEnrolleeAdjudicator))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -457,20 +457,20 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(updatedEnrollee));
         }
 
-        // GET: api/Enrollees/5/events
+        // GET: api/Enrollees/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
         /// <summary>
         /// Gets a list of enrollee events.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="businessEventTypeCodes"></param>
         [HttpGet("{enrolleeId}/events", Name = nameof(GetEnrolleeBusinessEvents))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [Authorize(Policy = Policies.ReadonlyAdmin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BusinessEvent>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<BusinessEvent>>> GetEnrolleeBusinessEvents(int enrolleeId, [FromQuery] string businessEventTypeCodes)
+        public async Task<ActionResult<IEnumerable<BusinessEvent>>> GetEnrolleeBusinessEvents(int enrolleeId, [FromQuery] IEnumerable<int> businessEventTypeCodes)
         {
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -479,8 +479,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            var codes = businessEventTypeCodes?.Split(',').Select(int.Parse).ToArray() ?? new int[0];
-            var events = await _enrolleeService.GetEnrolleeBusinessEvents(enrolleeId, codes);
+            var events = await _enrolleeService.GetEnrolleeBusinessEventsAsync(enrolleeId, businessEventTypeCodes);
 
             return Ok(ApiResponse.Result(events));
         }
@@ -491,7 +490,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/reminder", Name = nameof(SendEnrolleeReminderEmail))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [Authorize(Policy = Policies.ReadonlyAdmin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -520,7 +519,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/events/email-initiated", Name = nameof(CreateInitiatedEnrolleeEmailEvent))]
-        [Authorize(Policy = AuthConstants.READONLY_ADMIN_POLICY)]
+        [Authorize(Policy = Policies.ReadonlyAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -605,7 +604,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="identificationDocumentId"></param>
         [HttpGet("{enrolleeId}/identification-document/{identificationDocumentId}", Name = nameof(GetIdentificationDocument))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -635,7 +634,7 @@ namespace Prime.Controllers
         /// <param name="documentGuid"></param>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/adjudication-documents", Name = nameof(CreateEnrolleeAdjudicationDocument))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -651,8 +650,8 @@ namespace Prime.Controllers
             var document = await _enrolleeService.AddEnrolleeAdjudicationDocumentAsync(enrolleeId, documentGuid, admin.Id);
             if (document == null)
             {
-                this.ModelState.AddModelError("documentGuid", "Enrollee Adjudication Document could not be created; network error or upload is already submitted");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("documentGuid", "Enrollee Adjudication Document could not be created; network error or upload is already submitted");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             return Ok(ApiResponse.Result(document));
@@ -664,7 +663,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudication-documents", Name = nameof(GetEnrolleeAdjudicationDocuments))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -688,7 +687,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="documentId"></param>
         [HttpGet("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(GetEnrolleeAdjudicationDocument))]
-        [Authorize(Policy = AuthConstants.ADMIN_POLICY)]
+        [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

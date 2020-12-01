@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+
 using Prime.Infrastructure;
 
 namespace Prime.Auth
@@ -43,8 +42,8 @@ namespace Prime.Auth
                     options.RequireHttpsMetadata = false;
                 }
 
-                options.Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? configuration["Jwt:Audience"];
-                options.MetadataAddress = Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG") ?? configuration["Jwt:WellKnown"];
+                options.Audience = AuthConstants.Audience;
+                options.MetadataAddress = PrimeEnvironment.Keycloak.WellKnownConfig;
                 options.Events = new JwtBearerEvents
                 {
                     OnAuthenticationFailed = c =>
@@ -67,12 +66,12 @@ namespace Prime.Auth
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(AuthConstants.USER_POLICY, policy => policy.Requirements.Add(new PrimeUserRequirement()));
-                options.AddPolicy(AuthConstants.ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_ADMIN_ROLE));
-                options.AddPolicy(AuthConstants.SUPER_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_SUPER_ADMIN_ROLE));
-                options.AddPolicy(AuthConstants.READONLY_ADMIN_POLICY, policy => policy.RequireRole(AuthConstants.PRIME_READONLY_ADMIN));
-                options.AddPolicy(AuthConstants.EXTERNAL_HPDID_ACCESS_POLICY, policy => policy.RequireRole(AuthConstants.EXTERNAL_HPDID_ACCESS_ROLE));
-                options.AddPolicy(AuthConstants.EXTERNAL_GPID_VALIDATION_POLICY, policy => policy.RequireRole(AuthConstants.EXTERNAL_GPID_VALIDATION_ROLE));
+                options.AddPolicy(Policies.User, policy => policy.Requirements.Add(new PrimeUserRequirement()));
+                options.AddPolicy(Policies.Admin, policy => policy.RequireRole(Roles.PrimeAdmin));
+                options.AddPolicy(Policies.SuperAdmin, policy => policy.RequireRole(Roles.PrimeSuperAdmin));
+                options.AddPolicy(Policies.ReadonlyAdmin, policy => policy.RequireRole(Roles.PrimeReadonlyAdmin));
+                options.AddPolicy(Policies.ExternalHpdidAccess, policy => policy.RequireRole(Roles.ExternalHpdidAccess));
+                options.AddPolicy(Policies.ExternalGpidValidation, policy => policy.RequireRole(Roles.ExternalGpidValidation));
             });
         }
 
@@ -82,60 +81,34 @@ namespace Prime.Auth
                     && context.Principal.Identity is ClaimsIdentity identity
                     && identity.IsAuthenticated)
             {
-                // add the access token to the identity claims in case it is needed later
-                identity.AddClaim(new Claim(AuthConstants.PRIME_ACCESS_TOKEN_KEY, accessToken.RawData));
                 identity.AddClaim(new Claim(ClaimTypes.Name, accessToken.Subject));
 
-                // flatten realm_access because Microsoft identity model doesn't support nested claims
-                AddRolesForRealmAccessClaims(identity);
-
-                // flatten resource_access because Microsoft identity model doesn't support nested claims
-                AddRolesForResourceAccessClaims(identity);
+                FlattenRealmAccessRoles(identity);
             }
 
             return Task.CompletedTask;
         }
 
-        private static void AddRolesForRealmAccessClaims(ClaimsIdentity identity)
+        /// <summary>
+        /// Flattens the Realm Access claim, as Microsoft Identity Model doesn't support nested claims
+        /// </summary>
+        private static void FlattenRealmAccessRoles(ClaimsIdentity identity)
         {
-            // flatten realm_access because Microsoft identity model doesn't support nested claims
-            if (identity.HasClaim((claim) => claim.Type == AuthConstants.KEYCLOAK_REALM_ACCESS_KEY))
-            {
-                var realmAccessClaim = identity.Claims.Single((claim) => claim.Type == AuthConstants.KEYCLOAK_REALM_ACCESS_KEY);
-                var realmAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(realmAccessClaim.Value);
+            var realmAccessClaim = identity.Claims
+                .SingleOrDefault(claim => claim.Type == Claims.RealmAccess)
+                ?.Value;
 
-                if (realmAccessAsDict.ContainsKey(AuthConstants.KEYCLOAK_ROLES_KEY))
-                {
-                    foreach (var role in realmAccessAsDict[AuthConstants.KEYCLOAK_ROLES_KEY])
-                    {
-                        identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                    }
-                }
+            if (realmAccessClaim != null)
+            {
+                var realmAccess = JsonConvert.DeserializeObject<RealmAccess>(realmAccessClaim);
+
+                identity.AddClaims(realmAccess.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
             }
         }
 
-        private static void AddRolesForResourceAccessClaims(ClaimsIdentity identity)
+        private class RealmAccess
         {
-            // flatten resource_access because Microsoft identity model doesn't support nested claims
-            if (identity.HasClaim((claim) => claim.Type == AuthConstants.KEYCLOAK_RESOURCE_ACCESS_KEY))
-            {
-                var resourceAccessClaim = identity.Claims.Single((claim) => claim.Type == AuthConstants.KEYCLOAK_RESOURCE_ACCESS_KEY);
-                var resourceAccessAsDict = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string[]>>>(resourceAccessClaim.Value);
-
-                // get the roles from each potential client key that we care about
-                foreach (var clientId in AuthConstants.PRIME_CLIENT_IDS)
-                {
-                    Dictionary<string, string[]> clientKeyValue;
-                    if (resourceAccessAsDict.TryGetValue(clientId, out clientKeyValue)
-                            && clientKeyValue.ContainsKey(AuthConstants.KEYCLOAK_ROLES_KEY))
-                    {
-                        foreach (var role in clientKeyValue[AuthConstants.KEYCLOAK_ROLES_KEY])
-                        {
-                            identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                        }
-                    }
-                }
-            }
+            public string[] Roles { get; set; }
         }
     }
 }

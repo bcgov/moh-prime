@@ -28,13 +28,12 @@ export class OrgBookResource {
     private logger: LoggerService
   ) { }
 
-  public autocomplete(orgName: string, inactive: boolean = false): Observable<any> {
+  public autocomplete(orgName: string, inactive: boolean = false): Observable<OrgBookAutocompleteHttpResponse> {
     const params = this.apiResourceUtilsService.makeHttpParams({ q: orgName, inactive });
     return this.http.get<OrgBookAutocompleteHttpResponse>(`${this.ORGBOOK_API_URL}/search/autocomplete`, { params })
       .pipe(
         map((response: OrgBookAutocompleteHttpResponse) => response),
         tap((response: OrgBookAutocompleteHttpResponse) => this.logger.info('ORGBOOK_AUTOCOMPLETE', response)),
-        map((response: OrgBookAutocompleteHttpResponse) => response.results),
         catchError((error: any) => {
           this.logger.error('[Adjudication] OrgBookResource::autocomplete error has occurred: ', error);
           throw error;
