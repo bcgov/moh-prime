@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201127213842_UpdatedRUToa")]
+    partial class UpdatedRUToa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -8025,9 +8027,11 @@ namespace Prime.Migrations
                 the remote access technology used at the Approved Practice Site has been specifically approved in
                 writing by the Province,
               </li>
-              <li>
+              <li>.
                 the requirements of the Province’s Policy for Remote Access to PharmaNet
-                (<a href=""https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards"">https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards</a>) are met,
+                (<a href=""https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards"">
+                  https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/software/conformance-standards
+                </a>) are met,
               </li>
               <li>
                 your Approved Practice Site has registered you with the Province for remote access at the Approved

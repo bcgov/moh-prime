@@ -61,11 +61,16 @@ export class UtilsService {
 
   /**
    * @description
-   * Checks if the browser is Internet Explorer.
+   * Checks if the browser is Internet Explorer, or pre-Chromium
+   * Edge.
+   *
+   * The reversed attribute of ordered lists is not supported in IE or
+   * pre-Chromium Edge, but has been supported in all other browsers
+   * forevers!!!
+   * @see https://caniuse.com/?search=reversed
    */
-  public isIE(): boolean {
-    const isIE = /msie\s|trident\//i.test(window.navigator.userAgent);
-    return isIE;
+  public isIEOrPreChromiumEdge(): boolean {
+    return !('reversed' in document.createElement('ol'));
   }
 
   /**

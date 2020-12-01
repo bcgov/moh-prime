@@ -1,20 +1,20 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExampleComponent } from './example.component';
+import { AccessCodeComponent } from './access-code.component';
 
-describe('ExampleComponent', () => {
-  let component: ExampleComponent;
-  let fixture: ComponentFixture<ExampleComponent>;
+describe('AccessCodeComponent', () => {
+  let component: AccessCodeComponent;
+  let fixture: ComponentFixture<AccessCodeComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ExampleComponent]
+      declarations: [ AccessCodeComponent ]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExampleComponent);
+    fixture = TestBed.createComponent(AccessCodeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
