@@ -53,9 +53,6 @@ export class SiteRoutes {
     return [
       ...this.organizationRegistrationRouteOrder(),
       ...this.editSiteRegistrationRouteOrder(),
-      // Marty i did this to make work, but not sure what to do, can we conditionally check
-      // site in the guard since you should only be allowed to go here if not complete.
-      this.BUSINESS_LICENCE
     ];
   }
 
