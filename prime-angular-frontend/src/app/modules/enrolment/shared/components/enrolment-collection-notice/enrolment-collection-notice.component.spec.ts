@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnrolmentCollectionNoticeComponent } from './enrolment-collection-notice.component';
 
@@ -6,11 +6,11 @@ describe('EnrolmentCollectionNoticeComponent', () => {
   let component: EnrolmentCollectionNoticeComponent;
   let fixture: ComponentFixture<EnrolmentCollectionNoticeComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnrolmentCollectionNoticeComponent ]
+      declarations: [EnrolmentCollectionNoticeComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

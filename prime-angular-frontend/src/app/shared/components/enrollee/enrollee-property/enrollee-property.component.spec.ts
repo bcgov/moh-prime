@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EnrolleePropertyComponent } from './enrollee-property.component';
 
@@ -6,11 +6,11 @@ describe('EnrolleePropertyComponent', () => {
   let component: EnrolleePropertyComponent;
   let fixture: ComponentFixture<EnrolleePropertyComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EnrolleePropertyComponent ]
+      declarations: [EnrolleePropertyComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

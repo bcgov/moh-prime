@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ReviewStatusContentComponent } from './review-status-content.component';
@@ -9,7 +9,7 @@ describe('ReviewStatusContentComponent', () => {
   let component: ReviewStatusContentComponent;
   let fixture: ComponentFixture<ReviewStatusContentComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         AdjudicationModule,
