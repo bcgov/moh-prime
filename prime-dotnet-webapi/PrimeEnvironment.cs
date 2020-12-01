@@ -19,7 +19,6 @@ namespace Prime
             public readonly static string ClientSecret = Environment.GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_SECRET") ?? "b515de16-419b-49b1-bca9-f97eafc95d41";
         }
 
-        // TODO: Environment variables and service client. Client needs manage-users and view-realm roles to get and assign roles.
         public static class Keycloak
         {
             public readonly static string WellKnownConfig = Environment.GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration";
