@@ -135,20 +135,20 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        // const siteName = site.get('siteName') as FormControl;
-        // this.formUtilsService.setValidators(siteName, [Validators.required]);
+        const siteName = site.get('siteName') as FormControl;
+        this.formUtilsService.setValidators(siteName, [Validators.required]);
         this.communityHealthSites.push(site);
         break;
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
-        // const siteName = site.get('siteName') as FormControl;
-        // this.formUtilsService.setValidators(siteName, [Validators.required]);
+        const siteName = site.get('siteName') as FormControl;
+        this.formUtilsService.setValidators(siteName, [Validators.required]);
         this.communityPharmacySites.push(site);
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        // const facility = site.get('facility') as FormControl;
-        // this.formUtilsService.setValidators(facility, [Validators.required]);
+        const facility = site.get('facility') as FormControl;
+        this.formUtilsService.setValidators(facility, [Validators.required]);
         this.healthAuthoritySites.push(site);
         break;
       }
@@ -212,14 +212,20 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
       site.patchValue(s);
       switch (s.careSettingCode) {
         case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+          const siteName = site.get('siteName') as FormControl;
+          this.formUtilsService.setValidators(siteName, [Validators.required]);
           this.communityHealthSites.push(site);
           break;
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          const siteName = site.get('siteName') as FormControl;
+          this.formUtilsService.setValidators(siteName, [Validators.required]);
           this.communityPharmacySites.push(site);
           break;
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {
+          const facility = site.get('facility') as FormControl;
+          this.formUtilsService.setValidators(facility, [Validators.required]);
           this.healthAuthoritySites.push(site);
           break;
         }
