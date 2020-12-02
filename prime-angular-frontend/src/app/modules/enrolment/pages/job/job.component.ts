@@ -89,8 +89,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
   public get careSettings() {
     let careSettings = (this.enrolment?.careSettings) ? this.enrolment.careSettings : null;
-
-    if (this.enrolmentFormStateService.isPatched && this.enrolmentFormStateService.isDirty) {
+    if (this.enrolmentFormStateService.isPatched) {
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
     }
     return careSettings;
@@ -101,6 +100,10 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
     this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
+
+    this.communityHealthSites.markAllAsTouched();
+    this.communityPharmacySites.markAllAsTouched();
+    this.healthAuthoritySites.markAllAsTouched();
 
     super.onSubmit();
   }
@@ -153,10 +156,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         break;
       }
     }
-
-    console.log('communityHealthSites: ', this.communityHealthSites);
-    console.log('communityPharmacySites: ', this.communityPharmacySites);
-    console.log('healthAuthoritySites: ', this.healthAuthoritySites);
   }
 
   public removeOboSite(index: number, careSettingCode: number) {
@@ -187,7 +186,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
-    console.log('form after init', this.form);
   }
 
   public ngOnDestroy() {

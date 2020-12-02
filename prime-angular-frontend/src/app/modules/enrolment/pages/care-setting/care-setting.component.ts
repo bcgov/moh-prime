@@ -90,8 +90,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return disabled;
   }
 
-  public removeCareSetting(index: number) {
+  public removeCareSetting(index: number, careSettingCode: number) {
     this.careSettings.removeAt(index);
+    this.removeOboSites(careSettingCode);
   }
 
   public filterCareSettingTypes(careSetting: FormGroup) {
@@ -166,7 +167,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
         // Remove if care setting is empty or the group is invalid
         if (!value || control.invalid) {
-          this.removeCareSetting(index);
+          this.removeCareSetting(index, value);
         }
       });
 
@@ -174,6 +175,23 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     // the page from jumping too much when routing
     if (!this.careSettings?.controls.length) {
       this.addCareSetting();
+    }
+  }
+
+  /**
+   * @description
+   * Remove obo sites by care setting if a care setting was removed from the enrolment
+   */
+  private removeOboSites(careSettingCode: number) {
+
+    if (!this.careSettings.controls.find((careSetting) => careSetting.value.careSettingCode === careSettingCode)) {
+      const form = this.enrolmentFormStateService.jobsForm;
+      const oboSites = form.get('oboSites') as FormArray;
+      oboSites.controls.forEach((site, i) => {
+        if (site.value.careSettingCode === careSettingCode) {
+          oboSites.removeAt(i);
+        }
+      });
     }
   }
 

@@ -26,7 +26,7 @@
                         [formGroupName]="i">
 
             <app-form-icon-group [show]="careSettings.length > 1"
-                                 (event)="removeCareSetting(i)">
+                                 (event)="removeCareSetting(i, careSetting.careSettingCode)">
               <app-form-icon-group>
                 <mat-form-field class="w-100">
                   <mat-label>Care Setting</mat-label>
