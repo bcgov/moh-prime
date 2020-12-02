@@ -137,33 +137,26 @@ objects:
               - name: DOCUMENT_MANAGER_URL
                 value: "https://${VANITY_URL}/api/docman/"
 
-              # JWT environment variable
+              # Keycloak related environment variables
               - name: JWT_WELL_KNOWN_CONFIG
                 valueFrom:
                   secretKeyRef:
                     key: JWT_WELL_KNOWN_CONFIG
-                    name: "keycloak"
-
-              # Keycloak related environment variables
-              - name: KEYCLOAK_CLIENT_ID
-                valueFrom:
-                  secretKeyRef:
-                    key: KEYCLOAK_CLIENT_ID
-                    name: "keycloak"
-              - name: KEYCLOAK_REALM
-                valueFrom:
-                  secretKeyRef:
-                    key: KEYCLOAK_REALM
                     name: "keycloak"
               - name: KEYCLOAK_TOKEN_URL
                 valueFrom:
                   secretKeyRef:
                     key: KEYCLOAK_TOKEN_URL
                     name: "keycloak"
-              - name: KEYCLOAK_URL
+              - name: KEYCLOAK_ADMINISTRATION_URL
                 valueFrom:
                   secretKeyRef:
-                    key: KEYCLOAK_URL
+                    key: KEYCLOAK_ADMINISTRATION_URL
+                    name: "keycloak"
+              - name: KEYCLOAK_ADMINISTRATION_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: KEYCLOAK_ADMINISTRATION_CLIENT_SECRET
                     name: "keycloak"
 
               # Mail server environment variables

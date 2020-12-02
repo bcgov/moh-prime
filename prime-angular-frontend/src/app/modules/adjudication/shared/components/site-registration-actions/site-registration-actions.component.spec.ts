@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { KeycloakService } from 'keycloak-angular';
@@ -13,7 +13,7 @@ describe('SiteRegistrationActionsComponent', () => {
   let component: SiteRegistrationActionsComponent;
   let fixture: ComponentFixture<SiteRegistrationActionsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         SiteRegistrationModule,

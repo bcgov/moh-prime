@@ -16,7 +16,6 @@ import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
     '../../shared/styles/landing-page.scss']
 })
 export class PhsaComponent implements OnInit {
-
   public title: string;
 
   constructor(
@@ -32,9 +31,8 @@ export class PhsaComponent implements OnInit {
     return this.viewportService.isMobile;
   }
 
-  public loginUsingBCSC() {    
-    // TODO: redirect route to the access code page in the PHSA Labtech module
-    const redirectRoute = PhsaLabtechRoutes.routePath(PhsaLabtechRoutes.EXAMPLE);
+  public loginUsingBCSC() {
+    const redirectRoute = PhsaLabtechRoutes.routePath(PhsaLabtechRoutes.ACCESS_CODE);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
@@ -43,7 +41,5 @@ export class PhsaComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
