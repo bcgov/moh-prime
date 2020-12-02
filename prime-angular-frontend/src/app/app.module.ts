@@ -8,12 +8,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppConfigModule } from './app-config.module';
 import { AppComponent } from './app.component';
 
+import { RootRoutesModule } from '@lib/modules/root-routes/root-routes.module';
 import { AuthModule } from '@auth/auth.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { ProvisionerAccessModule } from '@certificate/provisioner-access.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
-import { RootRoutesModule } from '@lib/modules/root-routes/root-routes.module';
 import { PhsaLabtechModule } from '@phsa/phsa-labtech.module';
 
 @NgModule({
