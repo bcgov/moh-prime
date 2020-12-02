@@ -74,20 +74,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public disableCareSetting(careSettingCode: number): boolean {
-    let disabled = true;
-
-    if (careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
-      disabled = false;
-    }
-
-    if (careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
-      disabled = false;
-    }
-    if (careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
-      disabled = false;
-    }
-
-    return disabled;
+    return ![
+      CareSettingEnum.COMMUNITY_PHARMACIST,
+      CareSettingEnum.HEALTH_AUTHORITY,
+      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
+    ].includes(careSettingCode);
   }
 
   public removeCareSetting(index: number) {
