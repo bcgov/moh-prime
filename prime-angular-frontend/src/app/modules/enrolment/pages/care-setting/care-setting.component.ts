@@ -75,8 +75,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public disableCareSetting(careSettingCode: number): boolean {
     let disabled = true;
-    // If feature flagged enabled "Community Pharmacist"
-    if (this.authService.hasCommunityPharmacist() && careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+
+    if (careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
       disabled = false;
     }
     // If feature flagged enabled "Health Authority"

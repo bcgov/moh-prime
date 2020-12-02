@@ -32,7 +32,6 @@ export interface IAuthService {
   isAdmin(): boolean;
   isSuperAdmin(): boolean;
   hasAdminView(): boolean;
-  hasCommunityPharmacist(): boolean;
   hasHealthAuthority(): boolean;
   hasVCIssuance(): boolean;
   hasSitePharmacist(): boolean;
@@ -187,10 +186,6 @@ export class AuthService implements IAuthService {
 
   public hasAdminView(): boolean {
     return this.accessTokenService.hasRole(Role.READONLY_ADMIN);
-  }
-
-  public hasCommunityPharmacist(): boolean {
-    return this.accessTokenService.hasRole(Role.FEATURE_COMMUNITY_PHARMACIST);
   }
 
   public hasHealthAuthority(): boolean {
