@@ -1,0 +1,13 @@
+@using Prime
+@using Prime.Services
+@model EmailParams
+
+@{
+  var enrolleeName = $"{Model.FirstName} {Model.LastName}";
+}
+
+Dear @enrolleeName,
+<br>
+<br>
+Your enrolment has not been renewed. PRIME will be notifying your PharmaNet software vendor to deactivate your
+account.

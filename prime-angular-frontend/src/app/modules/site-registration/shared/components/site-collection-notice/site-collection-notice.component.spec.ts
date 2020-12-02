@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SiteCollectionNoticeComponent } from './site-collection-notice.component';
 
@@ -6,11 +6,11 @@ describe('SiteRegistrationCollectionNoticeComponent', () => {
   let component: SiteCollectionNoticeComponent;
   let fixture: ComponentFixture<SiteCollectionNoticeComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SiteCollectionNoticeComponent ]
+      declarations: [SiteCollectionNoticeComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

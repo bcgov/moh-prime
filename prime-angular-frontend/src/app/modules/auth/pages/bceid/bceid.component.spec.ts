@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
@@ -9,7 +9,7 @@ describe('BceidComponent', () => {
   let component: BceidComponent;
   let fixture: ComponentFixture<BceidComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         BceidComponent

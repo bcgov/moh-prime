@@ -1,0 +1,25 @@
+<section class="mb-3"
+         [formGroup]="form">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>What is your passcode?</ng-container>
+    <ng-container appPageSubheaderSummary>
+      Provide the passcode you were provided.
+    </ng-container>
+  </app-page-subheader>
+
+  <div class="row">
+    <div class="col-sm-8">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Passcode"
+               formControlName="accessCode">
+        <mat-error *ngIf="accessCode.hasError('required')">Required</mat-error>
+        <mat-error *ngIf="accessCode.hasError('pattern')">Invalid Passcode</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+</section>

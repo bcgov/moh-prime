@@ -29,7 +29,6 @@
     <PackageReference Include="SimpleBase" Version="3.0.0" />
     <PackageReference Include="SoapCore" Version="1.1.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
-    <PackageReference Include="Appccelerate.StateMachine" Version="5.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.0.0" />
     <PackageReference Include="CompareNETObjects" Version="4.65.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.4" />
@@ -46,6 +45,7 @@
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v2.html" />
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v3.html" />
     <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v4.html" />
+    <EmbeddedResource Include="Configuration\Resources\ru-access-terms-v5.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v1.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v2.html" />
     <EmbeddedResource Include="Configuration\Resources\obo-access-terms-v3.html" />

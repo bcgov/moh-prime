@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
@@ -21,7 +21,7 @@ describe('AddressComponent', () => {
   let component: AddressComponent;
   let fixture: ComponentFixture<AddressComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         imports: [

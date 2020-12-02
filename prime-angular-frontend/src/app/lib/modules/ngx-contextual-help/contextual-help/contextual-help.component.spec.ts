@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ContextualHelpComponent } from './contextual-help.component';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
@@ -7,7 +7,7 @@ describe('ContextualHelpComponent', () => {
   let component: ContextualHelpComponent;
   let fixture: ComponentFixture<ContextualHelpComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         imports: [
