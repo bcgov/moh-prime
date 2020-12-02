@@ -9,7 +9,7 @@ import { ToastService } from '@core/services/toast.service';
 import { AuthRoutes } from '@auth/auth.routes';
 
 function initializer(keycloak: KeycloakService, injector: Injector): () => Promise<void> {
-  const routeToDefault = (routePath: string) => injector.get(Router).navigateByUrl(routePath);
+  const routeToDefault = () => injector.get(Router).navigateByUrl(AuthRoutes.MODULE_PATH);
 
   return async (): Promise<void> => {
     const authenticated = await keycloak.init((environment.keycloakConfig as KeycloakOptions));
@@ -17,7 +17,7 @@ function initializer(keycloak: KeycloakService, injector: Injector): () => Promi
       keycloak.updateToken()
         .catch(() => {
           injector.get(ToastService).openErrorToast('Your session has expired, you will need to re-authenticate');
-          routeToDefault(AuthRoutes.MODULE_PATH);
+          routeToDefault();
         });
     };
 
@@ -29,7 +29,7 @@ function initializer(keycloak: KeycloakService, injector: Injector): () => Promi
       // Force refresh to begin expiry timer.
       keycloak.updateToken(-1);
     } else {
-      routeToDefault(AuthRoutes.MODULE_PATH);
+      routeToDefault();
     }
   };
 }
