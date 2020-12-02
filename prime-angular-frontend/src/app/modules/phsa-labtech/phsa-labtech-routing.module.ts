@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ConfigGuard } from '@config/config.guard';
-import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
-
 import { PhsaLabtechRoutes } from './phsa-labtech.routes';
 import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-dashboard/phsa-labtech-dashboard.component';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
@@ -15,13 +12,7 @@ const routes: Routes = [
   {
     path: PhsaLabtechRoutes.MODULE_PATH,
     component: PhsaLabtechDashboardComponent,
-    canActivate: [
-      AuthenticationGuard
-    ],
-    canActivateChild: [
-      // TOOD: ConfigGuard will be obsolete
-      ConfigGuard
-    ],
+    canActivate: [],
     children: [
       {
         path: PhsaLabtechRoutes.ACCESS_CODE,
