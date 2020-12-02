@@ -8,5 +8,6 @@ export enum Role {
   FEATURE_SITE_REGISTRATION = 'feature_site_registration',
   FEATURE_COMMUNITY_PHARMACIST = 'feature_community_pharmacist',
   FEATURE_HEALTH_AUTHORITY = 'feature_health_authority',
-  FEATURE_VC_ISSUANCE = 'feature_vc_issuance'
+  FEATURE_VC_ISSUANCE = 'feature_vc_issuance',
+  FEATURE_SITE_PHARMACIST = 'feature_site_pharmacist'
 }
