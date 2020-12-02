@@ -79,8 +79,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     if (careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
       disabled = false;
     }
-    // If feature flagged enabled "Health Authority"
-    if (this.authService.hasHealthAuthority() && careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
+
+    if (careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
       disabled = false;
     }
     if (careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {

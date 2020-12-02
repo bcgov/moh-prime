@@ -108,10 +108,6 @@ export class MockAuthService implements IAuthService {
     return this._role === Role.READONLY_ADMIN;
   }
 
-  public hasHealthAuthority(): boolean {
-    return this._role === Role.FEATURE_HEALTH_AUTHORITY;
-  }
-
   public hasVCIssuance(): boolean {
     return this._role === Role.FEATURE_VC_ISSUANCE;
   }
