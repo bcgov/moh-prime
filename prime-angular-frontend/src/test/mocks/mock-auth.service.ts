@@ -123,4 +123,8 @@ export class MockAuthService implements IAuthService {
   public hasVCIssuance(): boolean {
     return this._role === Role.FEATURE_VC_ISSUANCE;
   }
+
+  public hasSitePharmacist(): boolean {
+    return this._role === Role.FEATURE_SITE_PHARMACIST;
+  }
 }

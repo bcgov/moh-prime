@@ -36,6 +36,7 @@ export interface IAuthService {
   hasCommunityPharmacist(): boolean;
   hasHealthAuthority(): boolean;
   hasVCIssuance(): boolean;
+  hasSitePharmacist(): boolean;
 }
 
 @Injectable({
