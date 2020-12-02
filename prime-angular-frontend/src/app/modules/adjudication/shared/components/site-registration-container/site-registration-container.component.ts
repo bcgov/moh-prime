@@ -295,10 +295,10 @@ export class SiteRegistrationContainerComponent implements OnInit {
     const siteRegistrations = organizations.reduce((registrations, ovm) => {
       const { id: organizationId, sites, ...organization } = ovm;
       const registration = sites.map((svm: SiteListViewModel, index: number) => {
-        const { id: siteId, ...site } = svm;
+        const { id: siteId, doingBusinessAs, ...site } = svm;
         return (!index)
-          ? { organizationId, ...organization, siteId, ...site }
-          : { organizationId, siteId, ...site };
+          ? { organizationId, ...organization, siteId, siteDoingBusinessAs: doingBusinessAs, ...site }
+          : { organizationId, siteId, siteDoingBusinessAs: doingBusinessAs, ...site };
       });
       registrations.push(registration);
       return registrations;
