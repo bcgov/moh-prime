@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SiteRegistrationTableComponent } from './site-registration-table.component';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
@@ -16,7 +16,7 @@ describe('SiteRegistrationTableComponent', () => {
     }
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         AdjudicationModule

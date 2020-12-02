@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AccessAgreementCurrentComponent } from './access-agreement-current.component';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
@@ -15,7 +15,7 @@ describe('AccessAgreementCurrentComponent', () => {
   let component: AccessAgreementCurrentComponent;
   let fixture: ComponentFixture<AccessAgreementCurrentComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         NgxBusyModule,

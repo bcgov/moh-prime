@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { ProvisionerAccessComponent } from './provisioner-access.component';
@@ -14,7 +14,7 @@ describe('ProvisionerAccessComponent', () => {
   let component: ProvisionerAccessComponent;
   let fixture: ComponentFixture<ProvisionerAccessComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         ProvisionerAccessComponent,

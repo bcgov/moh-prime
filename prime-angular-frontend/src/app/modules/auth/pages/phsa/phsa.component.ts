@@ -16,7 +16,6 @@ import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
     '../../shared/styles/landing-page.scss']
 })
 export class PhsaComponent implements OnInit {
-
   public title: string;
 
   constructor(
@@ -42,7 +41,5 @@ export class PhsaComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }

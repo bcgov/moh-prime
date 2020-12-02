@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ApproveEnrolmentComponent } from './approve-enrolment.component';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
@@ -7,7 +7,7 @@ describe('ApproveEnrolmentComponent', () => {
   let component: ApproveEnrolmentComponent;
   let fixture: ComponentFixture<ApproveEnrolmentComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         NgxMaterialModule
