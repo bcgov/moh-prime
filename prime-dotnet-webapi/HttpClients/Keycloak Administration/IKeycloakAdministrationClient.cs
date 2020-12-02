@@ -9,6 +9,8 @@ namespace Prime.HttpClients
     {
         Task<Role> GetRoleByName(string role);
 
-        Task AssignRealmRole(Guid userId, string role);
+        Task<bool> AssignRealmRole(Guid userId, string role);
+
+        Task<bool> UpdateUserInfo(Guid userId, string email, string phoneNumber, string phoneExtension);
     }
 }
