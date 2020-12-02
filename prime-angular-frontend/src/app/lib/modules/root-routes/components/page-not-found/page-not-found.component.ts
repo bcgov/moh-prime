@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 
 @Component({
   selector: 'app-page-not-found',
@@ -8,12 +11,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class PageNotFoundComponent implements OnInit {
   constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private route: ActivatedRoute,
     private router: Router
   ) { }
 
   public routeToRoot() {
-    this.router.navigateByUrl(this.route.snapshot.url[0].path);
+    this.router.navigateByUrl(RouteUtils.currentModulePath(this.route));
   }
 
   public ngOnInit() { }
