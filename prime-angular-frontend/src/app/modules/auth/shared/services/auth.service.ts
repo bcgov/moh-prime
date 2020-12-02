@@ -29,7 +29,6 @@ export interface IAuthService {
   getAdmin$(forceReload?: boolean): Observable<Admin>;
 
   isEnrollee(): boolean;
-  isRegistrant(): boolean;
   isAdmin(): boolean;
   isSuperAdmin(): boolean;
   hasAdminView(): boolean;
@@ -176,10 +175,6 @@ export class AuthService implements IAuthService {
 
   public isEnrollee(): boolean {
     return this.accessTokenService.hasRole(Role.ENROLLEE);
-  }
-
-  public isRegistrant(): boolean {
-    return this.accessTokenService.hasRole(Role.FEATURE_SITE_REGISTRATION);
   }
 
   public isAdmin(): boolean {

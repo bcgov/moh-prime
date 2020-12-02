@@ -96,10 +96,6 @@ export class MockAuthService implements IAuthService {
     return this._role === Role.ENROLLEE;
   }
 
-  public isRegistrant(): boolean {
-    return this._role === Role.FEATURE_SITE_REGISTRATION;
-  }
-
   public isAdmin(): boolean {
     return this._role === Role.ADMIN;
   }
