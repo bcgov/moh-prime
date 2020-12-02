@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { ConfigGuard } from '@config/config.guard';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { PhsaLabtechRoutes } from './phsa-labtech.routes';
 import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-dashboard/phsa-labtech-dashboard.component';
@@ -15,10 +16,10 @@ const routes: Routes = [
     path: PhsaLabtechRoutes.MODULE_PATH,
     component: PhsaLabtechDashboardComponent,
     canActivate: [
-      // Ensure that the configuration is loaded prior to dependent
-      // guards, as well as, views, otherwise if it already exists NOOP
-      // NOTE: A resolver could not be used due to their execution
-      // occuring after parent and child guards
+      AuthenticationGuard
+    ],
+    canActivateChild: [
+      // TOOD: ConfigGuard will be obsolete
       ConfigGuard
     ],
     children: [
@@ -29,7 +30,7 @@ const routes: Routes = [
         data: { title: 'Access Code' }
       },
       {
-        path: PhsaLabtechRoutes.BCSC_DEMOGRAPHIC,
+        path: PhsaLabtechRoutes.DEMOGRAPHIC,
         component: BcscDemographicComponent,
         data: { title: 'PRIME Enrolment' }
       },
