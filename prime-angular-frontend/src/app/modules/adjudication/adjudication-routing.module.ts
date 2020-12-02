@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ConfigGuard } from '@config/config.guard';
-import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { AdjudicationRoutes } from './adjudication.routes';
@@ -34,12 +32,7 @@ const routes: Routes = [
     path: AdjudicationRoutes.MODULE_PATH,
     component: AdjudicationDashboardComponent,
     canActivate: [
-      // Ensure that the configuration is loaded prior to dependent
-      // guards, as well as, views, otherwise if it already exists NOOP
-      // NOTE: A resolver could not be used due to their execution
-      // occuring after parent and child guards
-      ConfigGuard,
-      UnsupportedGuard,
+      AuthenticationGuard,
       AdjudicationGuard
     ],
     canActivateChild: [

@@ -123,7 +123,7 @@ export class ConfigService implements IConfigService {
         );
     }
 
-    return of(this.configuration);
+    return of({ ...this.configuration });
   }
 
   /**
