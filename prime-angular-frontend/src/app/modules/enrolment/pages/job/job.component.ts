@@ -88,7 +88,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   public get careSettings() {
-    let careSettings = (this.enrolment.careSettings) ? this.enrolment.careSettings : null;
+    let careSettings = (this.enrolment?.careSettings) ? this.enrolment.careSettings : null;
 
     if (this.enrolmentFormStateService.isPatched && this.enrolmentFormStateService.isDirty) {
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
@@ -97,7 +97,10 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   public onSubmit() {
+    this.oboSites.clear();
     this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
+    this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
+    this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
 
     super.onSubmit();
   }
@@ -184,6 +187,45 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
+    console.log('form after init', this.form);
+  }
+
+  public ngOnDestroy() {
+    this.removeIncompleteJobs(true);
+    this.removeIncompleteOboSites(true);
+  }
+
+  protected createFormInstance() {
+    this.form = this.enrolmentFormStateService.jobsForm;
+  }
+
+  protected initForm() {
+    // Initialize listeners before patching
+    this.form.valueChanges
+      .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
+
+    this.patchForm();
+
+    // seperate obo sites by care setting
+    this.enrolment.oboSites.forEach(s => {
+      const site = this.enrolmentFormStateService.buildOboSiteForm();
+      site.patchValue(s);
+      switch (s.careSettingCode) {
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+          this.communityHealthSites.push(site);
+          break;
+        }
+        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          this.communityPharmacySites.push(site);
+          break;
+        }
+        case CareSettingEnum.HEALTH_AUTHORITY: {
+          this.healthAuthoritySites.push(site);
+          break;
+        }
+      }
+    });
+
     // Add at least one site for each careSetting selected by enrollee
     this.careSettings?.forEach((careSetting) => {
       switch (careSetting.careSettingCode) {
@@ -207,24 +249,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         }
       }
     });
-    console.log('form after init', this.form);
-  }
-
-  public ngOnDestroy() {
-    this.removeIncompleteJobs(true);
-    this.removeIncompleteOboSites(true);
-  }
-
-  protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.jobsForm;
-  }
-
-  protected initForm() {
-    // Initialize listeners before patching
-    this.form.valueChanges
-      .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
-
-    this.patchForm();
 
     // Always have at least one job ready for
     // the enrollee to fill out

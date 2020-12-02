@@ -225,29 +225,11 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormArray;
 
       oboSites.clear();
-      communityHealthSites.clear();
-      communityPharmacySites.clear();
-      healthAuthoritySites.clear();
 
       enrolment.oboSites.forEach((s: OboSite) => {
         const site = this.buildOboSiteForm();
         site.patchValue(s);
         oboSites.push(site);
-
-        switch (s.careSettingCode) {
-          case this.careSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            communityHealthSites.push(site);
-            break;
-          }
-          case this.careSettingEnum.COMMUNITY_PHARMACIST: {
-            communityPharmacySites.push(site);
-            break;
-          }
-          case this.careSettingEnum.HEALTH_AUTHORITY: {
-            healthAuthoritySites.push(site);
-            break;
-          }
-        }
       });
     }
 
