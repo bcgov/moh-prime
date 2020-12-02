@@ -80,23 +80,6 @@ objects:
                 key: JWT_WELL_KNOWN_CONFIG
                 name: "keycloak"
 
-          # Keycloak related environment variables
-          - name: KEYCLOAK_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_CLIENT_ID
-                name: "keycloak"
-          - name: KEYCLOAK_REALM
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_REALM
-                name: "keycloak"
-          - name: KEYCLOAK_URL
-            valueFrom:
-              secretKeyRef:
-                key: KEYCLOAK_URL
-                name: "keycloak"
-
           # PostgreSQL related environment variables
           - name: POSTGRESQL_USER
             valueFrom:

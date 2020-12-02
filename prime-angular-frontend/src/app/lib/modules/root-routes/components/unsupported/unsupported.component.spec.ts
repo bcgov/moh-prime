@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RootRoutesModule } from '../../root-routes.module';
 import { UnsupportedComponent } from './unsupported.component';
@@ -7,7 +7,7 @@ describe('UnsupportedComponent', () => {
   let component: UnsupportedComponent;
   let fixture: ComponentFixture<UnsupportedComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         imports: [

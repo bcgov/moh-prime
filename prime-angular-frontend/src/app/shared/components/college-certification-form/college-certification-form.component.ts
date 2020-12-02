@@ -99,6 +99,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   public shouldShowPractices(): boolean {
+    // Only display Advanced Practices for certain nursing licences
     return ((this.collegeCode.value == CollegeLicenceClass.BCCNM) &&
         ([NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE, 
           NursingLicenseCode.PRACTICING_REGISTERED_NURSE,

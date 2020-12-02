@@ -38,7 +38,6 @@ import { EnrolmentCollectionNoticeComponent } from './shared/components/enrolmen
 import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
-import { ContactInformationFormComponent } from './shared/components/contact-information-form/contact-information-form.component';
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site-form.component';
 
@@ -73,9 +72,12 @@ import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site
     NextStepsInfographicComponent,
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
-    ContactInformationFormComponent,
     RemoteAccessAddressesComponent,
     OboSiteFormComponent,
+  ],
+  exports: [
+    EnrolleePageComponent,
+    EnrolmentProgressIndicatorComponent
   ],
   imports: [
     SharedModule,

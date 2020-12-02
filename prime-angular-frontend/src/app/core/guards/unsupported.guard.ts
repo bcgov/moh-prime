@@ -36,7 +36,7 @@ export class UnsupportedGuard implements CanActivate, CanActivateChild, CanLoad 
   }
 
   private checkUnsupported(): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.utilsService.isIE()) {
+    if (this.utilsService.isIEOrPreChromiumEdge()) {
       this.router.navigate([AppRoutes.UNSUPPORTED]);
       return false;
     }

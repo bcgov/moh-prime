@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PhasLabtechResource } from './phas-labtech-resource.service';
+import { PhsaLabtechResource } from './phsa-labtech-resource.service';
 
-describe('PhasLabtechResource', () => {
-  let service: PhasLabtechResource;
+describe('PhsaLabtechResource', () => {
+  let service: PhsaLabtechResource;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PhasLabtechResource);
+    service = TestBed.inject(PhsaLabtechResource);
   });
 
   it('should be created', () => {

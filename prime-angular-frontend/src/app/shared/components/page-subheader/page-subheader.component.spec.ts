@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PageSubheaderComponent } from './page-subheader.component';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
@@ -7,7 +7,7 @@ describe('PageSubheaderComponent', () => {
   let component: PageSubheaderComponent;
   let fixture: ComponentFixture<PageSubheaderComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         imports: [

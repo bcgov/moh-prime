@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
@@ -18,7 +18,7 @@ describe('CollectionNoticeContainerComponent', () => {
   let component: CollectionNoticeContainerComponent;
   let fixture: ComponentFixture<CollectionNoticeContainerComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         imports: [

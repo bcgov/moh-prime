@@ -22,6 +22,7 @@ import { IForm } from '@registration/shared/interfaces/form.interface';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-care-setting',
@@ -51,7 +52,8 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     private siteFormStateService: SiteFormStateService,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private authService: AuthService
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -122,12 +124,15 @@ export class CareSettingComponent implements OnInit, IPage, IForm {
     }
   }
 
-  public disableCareSetting(careSettingCode: number): boolean {
-    return ![
-      // Omit care setting types that are not:
-      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE,
-      CareSettingEnum.COMMUNITY_PHARMACIST
-    ].includes(careSettingCode);
+  public enableCareSetting(careSettingCode: number): boolean {
+    switch (careSettingCode) {
+      case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
+        return true;
+      case CareSettingEnum.COMMUNITY_PHARMACIST:
+        return this.authService.hasSitePharmacist();
+      default:
+        return false;
+    }
   }
 
   public onBack() {
