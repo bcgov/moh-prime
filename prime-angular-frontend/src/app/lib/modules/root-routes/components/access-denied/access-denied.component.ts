@@ -1,4 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
@@ -9,11 +11,13 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 })
 export class AccessDeniedComponent implements OnInit {
   constructor(
-    @Inject(APP_CONFIG) private config: AppConfig
+    @Inject(APP_CONFIG) private config: AppConfig,
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
-  public get email(): string {
-    return this.config.prime.email;
+  public routeToRoot() {
+    this.router.navigateByUrl(RouteUtils.currentModulePath(this.route));
   }
 
   public ngOnInit() { }
