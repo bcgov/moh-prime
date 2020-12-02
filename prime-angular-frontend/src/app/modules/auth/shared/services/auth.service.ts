@@ -205,6 +205,10 @@ export class AuthService implements IAuthService {
     return this.accessTokenService.hasRole(Role.FEATURE_VC_ISSUANCE);
   }
 
+  public hasSitePharmacist(): boolean {
+    return this.accessTokenService.hasRole(Role.FEATURE_SITE_PHARMACIST);
+  }
+
   private async getUserId(): Promise<string> {
     const token = await this.accessTokenService.decodeToken();
 
