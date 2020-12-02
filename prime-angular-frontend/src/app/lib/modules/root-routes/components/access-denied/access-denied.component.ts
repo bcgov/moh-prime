@@ -11,7 +11,6 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 export class AccessDeniedComponent implements OnInit {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-
     private route: ActivatedRoute,
     private router: Router
   ) { }
