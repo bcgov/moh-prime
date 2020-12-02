@@ -49,7 +49,9 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
   }
 
   public onSubmit(beenThroughTheWizard: boolean = false): void {
-    console.log('form: ', this.form.getRawValue());
+    console.log('form: ', this.form);
+
+    console.log('formValue: ', this.form.getRawValue());
     if (this.formUtilsService.checkValidity(this.form)) {
       this.onSubmitFormIsValid();
       this.handleSubmission(beenThroughTheWizard);

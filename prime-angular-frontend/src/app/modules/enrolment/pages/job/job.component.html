@@ -60,8 +60,7 @@
       </app-page-subheader>
 
       <div class="row">
-        <div class="col col-sm-10 py-3"
-             formArrayName="oboSites">
+        <div class="col col-sm-10 py-3">
 
           <ng-container *ngFor="let careSetting of careSettings">
             <app-page-subheader headerType="h6">
@@ -70,60 +69,63 @@
               </ng-container>
             </app-page-subheader>
 
-            <ng-container *ngFor="let site of oboSitesByCareSetting(careSetting.careSettingCode).controls; let i = index; let last = last"
-                          [formGroupName]="i">
+            <ng-container [ngSwitch]="careSetting.careSettingCode">
 
-              <app-form-icon-group [show]="oboSitesByCareSetting(careSetting.careSettingCode).controls.length > 1">
+              <ng-container *ngSwitchCase="CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE"
+                            formArrayName="communityHealthSites">
 
-                <section [class.mb-4]="!last">
-                  <div *ngIf="careSetting.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
-                       class="row">
-                    <div class="col-12">
+                <ng-container *ngFor="let site of communityHealthSites.controls; let i = index; let last = last"
+                              [formGroupName]="i">
 
-                      <mat-form-field class="w-100">
-                        <input matInput
-                               placeholder="Site Name"
-                               formControlName="siteName">
-                        <mat-error>Required</mat-error>
-                      </mat-form-field>
+                  <app-obo-site-form [form]="site"
+                                     [index]="i"
+                                     [careSettingCode]="careSetting.careSettingCode"
+                                     [site]="site"
+                                     [total]="communityHealthSites.controls.length"
+                                     [last]="last"
+                                     (remove)="removeOboSite($event, careSetting.careSettingCode)"></app-obo-site-form>
 
-                    </div>
-                  </div>
 
-                  <div *ngIf="careSetting.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
-                       class="row">
-                    <div class="col-12">
+                </ng-container>
 
-                      <mat-form-field class="w-100">
-                        <input matInput
-                               placeholder="Health Authority Facility"
-                               formControlName="facility">
-                        <mat-error>Required</mat-error>
-                      </mat-form-field>
+              </ng-container>
 
-                    </div>
-                  </div>
+              <ng-container *ngSwitchCase="CareSettingEnum.COMMUNITY_PHARMACIST"
+                            formArrayName="communityPharmacySites">
 
-                  <app-address [form]="site.get('physicalAddress')"
-                               [formControlNames]="formControlNames"
-                               [bcOnly]="true"></app-address>
+                <ng-container *ngFor="let site of communityPharmacySites.controls; let i = index; let last = last"
+                              [formGroupName]="i">
 
-                  <div *ngIf="careSetting.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
-                       class="row">
-                    <div class="col-12">
+                  <app-obo-site-form [form]="site"
+                                     [index]="i"
+                                     [careSettingCode]="careSetting.careSettingCode"
+                                     [site]="site"
+                                     [total]="communityPharmacySites.controls.length"
+                                     [last]="last"
+                                     (remove)="removeOboSite($event, careSetting.careSettingCode)"></app-obo-site-form>
 
-                      <mat-form-field class="w-100">
-                        <input matInput
-                               placeholder="Site ID"
-                               formControlName="pec">
-                        <mat-error>Required</mat-error>
-                      </mat-form-field>
+                </ng-container>
 
-                    </div>
-                  </div>
+              </ng-container>
 
-                </section>
-              </app-form-icon-group>
+              <ng-container *ngSwitchCase="CareSettingEnum.HEALTH_AUTHORITY"
+                            formArrayName="healthAuthoritySites">
+
+                <ng-container *ngFor="let site of healthAuthoritySites.controls; let i = index; let last = last"
+                              [formGroupName]="i">
+
+                  <app-obo-site-form [form]="site"
+                                     [index]="i"
+                                     [careSettingCode]="careSetting.careSettingCode"
+                                     [site]="site"
+                                     [total]="healthAuthoritySites.controls.length"
+                                     [last]="last"
+                                     (remove)="removeOboSite($event, careSetting.careSettingCode)"></app-obo-site-form>
+
+                </ng-container>
+
+              </ng-container>
+
             </ng-container>
 
             <button mat-button
@@ -143,6 +145,69 @@
     </section>
 
   </form>
+
+  <!-- <ng-template #oboSite
+               let-careSettingCode="careSettingCode"
+               let-sites="sites"
+               let-site="site"
+               let-last="last">
+    <form [formGroup]="form">
+
+      <app-form-icon-group [show]="sites.controls.length > 1">
+
+        <section [class.mb-4]="!last">
+          <div *ngIf="careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
+               class="row">
+            <div class="col-12">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Site Name"
+                       formControlName="siteName">
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+          <div *ngIf="careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
+               class="row">
+            <div class="col-12">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Health Authority Facility"
+                       formControlName="facility">
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+          <app-address [form]="site.get('physicalAddress')"
+                       [formControlNames]="formControlNames"
+                       [bcOnly]="true"></app-address>
+
+          <div *ngIf="careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
+               class="row">
+            <div class="col-12">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Site ID"
+                       formControlName="pec">
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+        </section>
+      </app-form-icon-group>
+
+    </form>
+
+  </ng-template> -->
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"

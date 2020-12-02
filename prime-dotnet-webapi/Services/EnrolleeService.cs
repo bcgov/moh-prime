@@ -401,7 +401,7 @@ namespace Prime.Services
                     var newSite = new OboSite
                     {
                         Enrollee = dbEnrollee,
-                        CareSetting = site.CareSetting,
+                        CareSettingCode = site.CareSettingCode,
                         PhysicalAddress = newAddress,
                         SiteName = site.SiteName,
                         PEC = site.PEC,
@@ -502,6 +502,8 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
                 .Include(e => e.Jobs)
+                .Include(e => e.OboSites)
+                    .ThenInclude(s => s.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessSites)

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -31,7 +31,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   public filteredJobNames: BehaviorSubject<Config<number>[]>;
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
-  public formControlNames: string[];
 
   public CareSettingEnum = CareSettingEnum;
 
@@ -66,12 +65,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
     this.allowDefaultOption = false;
     this.defaultOptionLabel = 'None';
-    this.formControlNames = [
-      'street',
-      'city',
-      'provinceCode',
-      'postal'
-    ];
   }
 
   public get jobs(): FormArray {
@@ -82,6 +75,18 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     return this.form.get('oboSites') as FormArray;
   }
 
+  public get communityHealthSites(): FormArray {
+    return this.form.get('communityHealthSites') as FormArray;
+  }
+
+  public get communityPharmacySites(): FormArray {
+    return this.form.get('communityPharmacySites') as FormArray;
+  }
+
+  public get healthAuthoritySites(): FormArray {
+    return this.form.get('healthAuthoritySites') as FormArray;
+  }
+
   public get careSettings() {
     let careSettings = (this.enrolment.careSettings) ? this.enrolment.careSettings : null;
 
@@ -89,6 +94,12 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
     }
     return careSettings;
+  }
+
+  public onSubmit() {
+    this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
+
+    super.onSubmit();
   }
 
   public oboSitesByCareSetting(careSettingCode: number): FormArray {
@@ -119,18 +130,47 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     const site = this.enrolmentFormStateService.buildOboSiteForm();
     site.get('careSettingCode').patchValue(careSettingCode);
 
-    if (careSettingCode === CareSettingEnum.HEALTH_AUTHORITY) {
-      const siteName = site.get('siteName') as FormControl;
-      this.formUtilsService.resetAndClearValidators(siteName);
-    } else {
-      const facility = site.get('facility') as FormControl;
-      this.formUtilsService.resetAndClearValidators(facility);
+    switch (careSettingCode) {
+      case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+        // const siteName = site.get('siteName') as FormControl;
+        // this.formUtilsService.setValidators(siteName, [Validators.required]);
+        this.communityHealthSites.push(site);
+        break;
+      }
+      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+        // const siteName = site.get('siteName') as FormControl;
+        // this.formUtilsService.setValidators(siteName, [Validators.required]);
+        this.communityPharmacySites.push(site);
+        break;
+      }
+      case CareSettingEnum.HEALTH_AUTHORITY: {
+        // const facility = site.get('facility') as FormControl;
+        // this.formUtilsService.setValidators(facility, [Validators.required]);
+        this.healthAuthoritySites.push(site);
+        break;
+      }
     }
-    this.oboSites.push(site);
+
+    console.log('communityHealthSites: ', this.communityHealthSites);
+    console.log('communityPharmacySites: ', this.communityPharmacySites);
+    console.log('healthAuthoritySites: ', this.healthAuthoritySites);
   }
 
   public removeOboSite(index: number, careSettingCode: number) {
-    this.oboSites.removeAt(index);
+    switch (careSettingCode) {
+      case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+        this.communityHealthSites.removeAt(index);
+        break;
+      }
+      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+        this.communityPharmacySites.removeAt(index);
+        break;
+      }
+      case CareSettingEnum.HEALTH_AUTHORITY: {
+        this.healthAuthoritySites.removeAt(index);
+        break;
+      }
+    }
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -144,6 +184,30 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
+    // Add at least one site for each careSetting selected by enrollee
+    this.careSettings?.forEach((careSetting) => {
+      switch (careSetting.careSettingCode) {
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+          if (!this.communityHealthSites.length) {
+            this.addOboSite(careSetting.careSettingCode);
+          }
+          break;
+        }
+        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          if (!this.communityPharmacySites.length) {
+            this.addOboSite(careSetting.careSettingCode);
+          }
+          break;
+        }
+        case CareSettingEnum.HEALTH_AUTHORITY: {
+          if (!this.healthAuthoritySites.length) {
+            this.addOboSite(careSetting.careSettingCode);
+          }
+          break;
+        }
+      }
+    });
+    console.log('form after init', this.form);
   }
 
   public ngOnDestroy() {
@@ -167,13 +231,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     if (!this.jobs.length) {
       this.addJob();
     }
-
-    // Add at least one site for each careSetting selected by enrollee
-    this.careSettings?.forEach((careSetting) => {
-      if (!this.oboSitesByCareSetting(careSetting.careSettingCode)?.length) {
-        this.addOboSite(careSetting.careSettingCode);
-      }
-    });
   }
 
   protected onSubmitFormIsValid() {
@@ -184,7 +241,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.CARE_SETTING;
+      nextRoutePath = EnrolmentRoutes.SELF_DECLARATION;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
@@ -232,10 +289,11 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.oboSites.controls
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('physicalAddress').value.city;
+        const careSetting = control.get('careSettingCode').value;
 
         // Remove when empty, default option, or group is invalid
         if (!value || value === this.defaultOptionLabel || control.invalid) {
-          this.removeJob(index);
+          this.removeOboSite(index, careSetting);
         }
       });
 

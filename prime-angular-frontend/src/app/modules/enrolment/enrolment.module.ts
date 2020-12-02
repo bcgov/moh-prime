@@ -40,6 +40,7 @@ import { HeaderComponent } from './shared/components/header/header.component';
 import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
 import { ContactInformationFormComponent } from './shared/components/contact-information-form/contact-information-form.component';
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
+import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site-form.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
     ContactInformationFormComponent,
-    RemoteAccessAddressesComponent
+    RemoteAccessAddressesComponent,
+    OboSiteFormComponent,
   ],
   imports: [
     SharedModule,

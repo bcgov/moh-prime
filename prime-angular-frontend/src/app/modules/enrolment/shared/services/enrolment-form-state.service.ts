@@ -22,6 +22,7 @@ import { RemoteAccessSite } from '../models/remote-access-site.model';
 import { RemoteAccessLocation } from '../models/remote-access-location';
 import { Site } from '@registration/shared/models/site.model';
 import { OboSite } from '../models/obo-site.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public accessAgreementForm: FormGroup;
 
   private identityProvider: IdentityProviderEnum;
+  private careSettingEnum = CareSettingEnum;
   private enrolleeId: number;
   private userId: string;
 
@@ -87,7 +89,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       : this.bcscDemographicForm.getRawValue();
     const regulatory = this.regulatoryForm.getRawValue();
     const deviceProvider = this.deviceProviderForm.getRawValue();
-    const jobs = this.jobsForm.getRawValue();
+    const { jobs, oboSites } = this.jobsForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
@@ -103,7 +105,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       },
       ...regulatory,
       ...deviceProvider,
-      ...jobs,
+      jobs,
+      oboSites,
       ...careSettings,
       enrolleeRemoteUsers,
       remoteAccessSites,
@@ -217,11 +220,34 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
     if (enrolment.oboSites.length) {
       const oboSites = this.jobsForm.get('oboSites') as FormArray;
+      const communityHealthSites = this.jobsForm.get('communityHealthSites') as FormArray;
+      const communityPharmacySites = this.jobsForm.get('communityPharmacySites') as FormArray;
+      const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormArray;
+
       oboSites.clear();
+      communityHealthSites.clear();
+      communityPharmacySites.clear();
+      healthAuthoritySites.clear();
+
       enrolment.oboSites.forEach((s: OboSite) => {
         const site = this.buildOboSiteForm();
         site.patchValue(s);
         oboSites.push(site);
+
+        switch (s.careSettingCode) {
+          case this.careSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+            communityHealthSites.push(site);
+            break;
+          }
+          case this.careSettingEnum.COMMUNITY_PHARMACIST: {
+            communityPharmacySites.push(site);
+            break;
+          }
+          case this.careSettingEnum.HEALTH_AUTHORITY: {
+            healthAuthoritySites.push(site);
+            break;
+          }
+        }
       });
     }
 
@@ -435,7 +461,10 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public buildJobsForm(): FormGroup {
     return this.fb.group({
       jobs: this.fb.array([]),
-      oboSites: this.fb.array([])
+      oboSites: this.fb.array([]),
+      communityHealthSites: this.fb.array([]),
+      communityPharmacySites: this.fb.array([]),
+      healthAuthoritySites: this.fb.array([])
     });
   }
 
@@ -447,9 +476,9 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
 
   public buildOboSiteForm(): FormGroup {
     return this.fb.group({
-      careSettingCode: [null, [Validators.required]],
-      siteName: [null, [Validators.required]],
-      facility: [null, [Validators.required]],
+      careSettingCode: [null, []],
+      siteName: [null, []],
+      facility: [null, []],
       physicalAddress: this.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         exclude: ['street2'],
