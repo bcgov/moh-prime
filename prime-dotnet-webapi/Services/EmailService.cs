@@ -208,7 +208,6 @@ namespace Prime.Services
 
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
         {
-            // TODO:
             var businessLicence = await _siteService.GetBusinessLicenceAsync(siteId);
             if (businessLicence.BusinessLicenceDocument == null)
             {

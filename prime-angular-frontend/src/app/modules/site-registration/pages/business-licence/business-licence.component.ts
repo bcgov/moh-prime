@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { iif, noop, Observable, of, pipe, Subscription } from 'rxjs';
+import { noop, of, Subscription } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -21,6 +21,7 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-business-licence',
@@ -40,7 +41,7 @@ export class BusinessLicenceComponent implements OnInit {
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
 
-  public deferredLicence: boolean;
+  @ViewChild('deferredLicence') public deferredLicenceToggle: MatSlideToggle;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,8 +59,6 @@ export class BusinessLicenceComponent implements OnInit {
     this.uploadedFile = false;
 
     this.doingBusinessAsNames = [];
-
-    this.deferredLicence = false;
 
     this.businessLicenceDocuments = [];
     this.businessLicence = new BusinessLicence(this.siteService.site.id);
@@ -83,10 +82,8 @@ export class BusinessLicenceComponent implements OnInit {
 
   public onSubmit() {
     const siteId = this.route.snapshot.params.sid;
-    // TODO: Go back and look at this.businessLicenceDocuments
-    // const hasBusinessLicence = this.businessLicenceDocuments.length || this.uploadedFile;
 
-    if (this.formUtilsService.checkValidity(this.form) && (this.uploadedFile || this.deferredLicence)) {
+    if (this.formUtilsService.checkValidity(this.form) && (this.uploadedFile || this.deferredLicenceToggle?.checked)) {
       const payload = this.siteFormStateService.json;
       this.businessLicence.deferredLicenceReason = payload.deferredLicenceReason;
       this.siteResource
@@ -110,7 +107,7 @@ export class BusinessLicenceComponent implements OnInit {
           this.nextRoute();
         });
     } else {
-      if (!this.deferredLicence) {
+      if (!this.deferredLicenceToggle.checked) {
         this.hasNoBusinessLicenceError = true;
       }
     }
@@ -146,20 +143,18 @@ export class BusinessLicenceComponent implements OnInit {
       );
   }
 
-  public toggleDeferred() {
-    if (this.deferredLicence) {
-      this.deferredLicence = false;
-      this.deferredLicenceReason.setValidators([]);
+  public onDeferredLicenceChange($event: MatSlideToggleChange) {
+    if ($event.checked) {
+      this.deferredLicenceReason.setValidators([Validators.required]);
+      this.formUtilsService.resetAndClearValidators(this.doingBusinessAs);
+      this.hasNoBusinessLicenceError = false;
+      this.doingBusinessAs.disable();
+    } else {
+      this.formUtilsService.resetAndClearValidators(this.deferredLicenceReason);
       this.doingBusinessAs.setValidators([Validators.required]);
       this.doingBusinessAs.enable();
-      this.form.markAsUntouched();
-    } else {
-      this.deferredLicence = true;
-      this.deferredLicenceReason.setValidators([Validators.required]);
-      this.doingBusinessAs.setValidators([]);
-      this.doingBusinessAs.disable();
-      this.form.markAsUntouched();
     }
+    this.form.markAsUntouched();
   }
 
   public ngOnInit() {
@@ -186,7 +181,7 @@ export class BusinessLicenceComponent implements OnInit {
       .subscribe((businessLicense: BusinessLicence) => {
         this.businessLicence = businessLicense ?? this.businessLicence;
         if (businessLicense && !businessLicense.completed) {
-          this.toggleDeferred();
+          this.deferredLicenceToggle.checked = true;
         }
       });
   }
