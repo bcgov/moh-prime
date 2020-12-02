@@ -28,8 +28,6 @@ function initializer(keycloak: KeycloakService, injector: Injector): () => Promi
 
       // Force refresh to begin expiry timer.
       keycloak.updateToken(-1);
-    } else {
-      routeToDefault();
     }
   };
 }
