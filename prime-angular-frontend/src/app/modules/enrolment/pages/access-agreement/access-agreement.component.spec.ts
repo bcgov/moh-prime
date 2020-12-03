@@ -10,6 +10,10 @@ import { AccessAgreementComponent } from './access-agreement.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -29,8 +33,16 @@ describe('AccessAgreementComponent', () => {
             useValue: APP_DI_CONFIG
           },
           {
+            provide: ConfigService,
+            useClass: MockConfigService
+          },
+          {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
           },
           KeycloakService
         ]
