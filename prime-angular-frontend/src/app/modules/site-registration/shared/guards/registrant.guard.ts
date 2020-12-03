@@ -26,18 +26,14 @@ export class RegistrantGuard extends BaseGuard {
    */
   protected canAccess(authenticated: boolean, routePath: string): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
-      let destinationRoute = this.config.routes.denied;
-
-      if (!authenticated) {
-        destinationRoute = this.config.routes.auth;
-      } else if (this.authService.isRegistrant()) {
-        // Allow route to resolve
+      if (authenticated && this.authService.isEnrollee()) {
         return resolve(true);
-      } else if (this.authService.isEnrollee()) {
-        destinationRoute = this.config.routes.enrolment;
       }
 
-      // Otherwise, redirect to an appropriate destination
+      const destinationRoute = authenticated
+        ? this.config.routes.denied // Deny if authenticated but not a prime_user, i.e. adjudicator, BCeID, etc.
+        : this.config.routes.auth;
+
       this.router.navigate([destinationRoute]);
       return reject(false);
     });
