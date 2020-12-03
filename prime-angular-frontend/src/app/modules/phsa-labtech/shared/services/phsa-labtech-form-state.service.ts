@@ -4,7 +4,9 @@ import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/fo
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
-import { PhsaLabtech } from '../models/phsa-lab-tech.model';
+
+import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
+import { PhsaLabtech } from '@phsa/shared/models/phsa-lab-tech.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +17,11 @@ export class PhsaLabtechFormStateService extends AbstractFormState<PhsaLabtech>{
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService) {
-    super(fb, routeStateService, logger, []);
+    protected logger: LoggerService
+  ) {
+    super(fb, routeStateService, logger);
+
+    this.initialize([PhsaLabtechRoutes.ACCESS_CODE]);
   }
 
   public get json(): PhsaLabtech {

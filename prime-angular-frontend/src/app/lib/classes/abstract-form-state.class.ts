@@ -18,11 +18,8 @@ export abstract class AbstractFormState<T> {
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService,
-    protected resetRoutes: string[]
-  ) {
-    this.initialize(resetRoutes);
-  }
+    protected logger: LoggerService
+  ) { }
 
   /**
    * @description
@@ -289,6 +286,6 @@ export abstract class AbstractFormState<T> {
 
     this.buildForms();
 
-    this.routeStateResetListener(this.resetRoutes);
+    this.routeStateResetListener(resetRoutes);
   }
 }

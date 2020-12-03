@@ -23,8 +23,35 @@
       <div class="row">
         <div class="col col-sm-10 py-3">
 
-            <!-- TODO setup checkboxes using form groups and arrays -->
-            <!-- <mat-checkbox></mat-checkbox> -->
+          <app-alert *ngIf="hasNoHealthAuthorityError"
+                     type="danger"
+                     icon="warning">
+            <ng-container #alertContent
+                          class="alert-content">
+              At least one Health Authority must be chosen, and each chosen Health Authority
+              must have at least one chosen facility.
+            </ng-container>
+          </app-alert>
+
+          <ng-container *ngFor="let healthAuthority of enrolleeHealthAuthorities.controls"
+                        [formGroup]="healthAuthority">
+            <mat-checkbox #healthAuthorityGroup
+                          class="d-block"
+                          formControlName="checked">
+              {{ healthAuthority.get('code').value | configCode: 'healthAuthorities' | capitalize: true }}
+            </mat-checkbox>
+
+            <ng-container *ngIf="healthAuthorityGroup.checked">
+              <div *ngFor="let facility of getFacilities(healthAuthority).controls"
+                   [formGroup]="facility"
+                   class="pl-4">
+                <mat-checkbox class="d-block"
+                              formControlName="checked">
+                  {{ facility.get('code').value | configCode: 'facilities' | capitalize: true }}
+                </mat-checkbox>
+              </div>
+            </ng-container>
+          </ng-container>
 
         </div>
       </div>

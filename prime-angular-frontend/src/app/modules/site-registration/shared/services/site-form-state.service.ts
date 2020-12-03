@@ -40,7 +40,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     protected routeStateService: RouteStateService,
     protected logger: LoggerService
   ) {
-    super(fb, routeStateService, logger, [SiteRoutes.SITE_MANAGEMENT]);
+    super(fb, routeStateService, logger);
+
+    this.initialize([SiteRoutes.SITE_MANAGEMENT]);
   }
 
   /**

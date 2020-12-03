@@ -1,7 +1,0 @@
-export enum FacilityTypeEnum {
-  ACUTE_CARE = 1,
-  LONG_TERM_CARE,
-  IN_PATIENT_PHARMACY,
-  OUT_PATIENT_PHARMACY,
-  OUT_PATIENT_CLINIC
-}
