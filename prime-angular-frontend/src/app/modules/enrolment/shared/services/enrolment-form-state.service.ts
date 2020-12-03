@@ -23,6 +23,7 @@ import { RemoteAccessLocation } from '../models/remote-access-location';
 import { Site } from '@registration/shared/models/site.model';
 import { OboSite } from '../models/obo-site.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Injectable({
   providedIn: 'root'
@@ -218,7 +219,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       });
     }
 
-    if (enrolment.oboSites.length) {
+    if (enrolment.oboSites.length && enrolment.jobs.length) {
       const oboSites = this.jobsForm.get('oboSites') as FormArray;
       const communityHealthSites = this.jobsForm.get('communityHealthSites') as FormArray;
       const communityPharmacySites = this.jobsForm.get('communityPharmacySites') as FormArray;
@@ -230,6 +231,24 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         const site = this.buildOboSiteForm();
         site.patchValue(s);
         oboSites.push(site);
+      });
+
+      enrolment.careSettings.forEach((careSetting: CareSetting) => {
+        switch (careSetting.careSettingCode) {
+          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+            communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
+            break;
+          }
+          case CareSettingEnum.COMMUNITY_PHARMACIST: {
+            communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
+            break;
+          }
+          case CareSettingEnum.HEALTH_AUTHORITY: {
+            healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
+            break;
+          }
+        }
+
       });
     }
 
