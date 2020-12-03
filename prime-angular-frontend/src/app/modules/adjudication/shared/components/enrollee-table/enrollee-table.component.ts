@@ -1,14 +1,16 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
 
 import { UtilsService } from '@core/services/utils.service';
 
-import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
+import { EnrolleeListViewModel, Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import moment, { Moment } from 'moment';
+import { AbstractControl, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-enrollee-table',
@@ -26,9 +28,14 @@ export class EnrolleeTableComponent implements OnInit {
 
   public AdjudicationRoutes = AdjudicationRoutes;
 
+  readonly filterFormControl: AbstractControl;
+
+  showClearButton: boolean = false;
+
   constructor(
     private authService: AuthService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    fb: FormBuilder
   ) {
     this.notify = new EventEmitter<number>();
     this.claim = new EventEmitter<number>();
@@ -46,6 +53,13 @@ export class EnrolleeTableComponent implements OnInit {
       'adjudicator',
       'actions'
     ];
+
+    this.filterFormControl = fb.group({
+      appliedDateRangeStart: '',
+      appliedDateRangeEnd: '',
+      renewalDateRangeStart: '',
+      renewalDateRangeEnd: '',
+    });
   }
 
   public get canEdit(): boolean {
@@ -90,5 +104,30 @@ export class EnrolleeTableComponent implements OnInit {
     });
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.dataSource.filterPredicate = this.getFilterPredicate();
+
+    this.filterFormControl.valueChanges.subscribe(value => {
+      const filter = { ...value, name: value.name } as string;
+      this.dataSource.filter = filter;
+    });
+  }
+
+  private getFilterPredicate() {
+    return (row: EnrolleeListViewModel, filter) => {
+      const appliedDate = moment.utc(row.appliedDate);
+      const renewalDate = moment.utc(row.expiryDate);
+      // add 1 day to range end date for inclusive check
+      const searchByAppliedDate =
+        (!filter.appliedDateRangeStart || moment(filter.appliedDateRangeStart) <= appliedDate)
+        && (!filter.appliedDateRangeEnd || appliedDate <= moment(filter.appliedDateRangeEnd).add(1, 'd'));
+      const searchByRenewalDate =
+        (!filter.renewalDateRangeStart || moment(filter.renewalDateRangeStart) <= renewalDate)
+        && (!filter.renewalDateRangeEnd || renewalDate <= moment(filter.renewalDateRangeEnd).add(1, 'd'));
+      const matchFilter = [];
+      matchFilter.push(searchByAppliedDate);
+      matchFilter.push(searchByRenewalDate);
+      return matchFilter.every(Boolean);
+    };
+  }
 }
