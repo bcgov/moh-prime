@@ -325,9 +325,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         }
       });
 
-    // Always have a single job available, and it prevents
-    // the page from jumping too much when routing
-
     // Add at least one site for each careSetting selected by enrollee
     this.careSettings?.forEach((careSetting) => {
       if (!noEmptyOboSites && !this.oboSitesByCareSetting(careSetting.careSettingCode)?.length) {
