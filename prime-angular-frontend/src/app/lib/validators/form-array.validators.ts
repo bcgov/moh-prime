@@ -12,6 +12,7 @@ export class FormArrayValidators {
     predicate: (control: AbstractControl) => boolean = (control: AbstractControl) => !!control
   ): ValidatorFn {
     return (array: FormArray): ValidationErrors | null => {
+
       const atLeast = array &&
         array.controls?.length &&
         array.controls.filter(predicate).length >= minLength;

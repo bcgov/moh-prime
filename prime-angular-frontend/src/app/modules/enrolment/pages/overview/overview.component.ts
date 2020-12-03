@@ -64,25 +64,26 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
   public onSubmit() {
     if (this.enrolmentFormStateService.isValid) {
-      const enrolment = this.enrolmentFormStateService.json;
-      const data: DialogOptions = {
-        title: 'Submit Enrolment',
-        message: 'When your enrolment is submitted for adjudication, it can no longer be updated. Are you ready to submit your enrolment?',
-        actionText: 'Submit Enrolment'
-      };
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? this.enrolmentResource.submitApplication(enrolment)
-              : EMPTY
-          )
-        )
-        .subscribe(() => {
-          this.toastService.openSuccessToast('Enrolment has been submitted');
-          this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
-        });
+      console.log('this.enrolmentFormStateService ', this.enrolmentFormStateService);
+      // const enrolment = this.enrolmentFormStateService.json;
+      // const data: DialogOptions = {
+      //   title: 'Submit Enrolment',
+      //   message: 'When your enrolment is submitted for adjudication, it can no longer be updated. Are you ready to submit your enrolment?',
+      //   actionText: 'Submit Enrolment'
+      // };
+      // this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      //   .afterClosed()
+      //   .pipe(
+      //     exhaustMap((result: boolean) =>
+      //       (result)
+      //         ? this.enrolmentResource.submitApplication(enrolment)
+      //         : EMPTY
+      //     )
+      //   )
+      //   .subscribe(() => {
+      //     this.toastService.openSuccessToast('Enrolment has been submitted');
+      //     this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
+      //   });
     } else {
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
     }

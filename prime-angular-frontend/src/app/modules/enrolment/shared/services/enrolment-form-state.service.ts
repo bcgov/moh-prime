@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl, FormControl } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
@@ -24,6 +24,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { OboSite } from '../models/obo-site.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +44,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public accessAgreementForm: FormGroup;
 
   private identityProvider: IdentityProviderEnum;
-  private careSettingEnum = CareSettingEnum;
+  private CareSettingEnum = CareSettingEnum;
   private enrolleeId: number;
   private userId: string;
 
@@ -51,7 +52,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: LoggerService,
-    private authService: AuthService
+    protected formUtilsService: FormUtilsService,
+    private authService: AuthService,
   ) {
     super(fb, routeStateService, logger, [...EnrolmentRoutes.enrolmentProfileRoutes()]);
   }
@@ -199,6 +201,16 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       : this.bcscDemographicForm.patchValue(enrolment.enrollee);
     this.deviceProviderForm.patchValue(enrolment);
 
+    if (enrolment.careSettings.length) {
+      const careSettings = this.careSettingsForm.get('careSettings') as FormArray;
+      careSettings.clear();
+      enrolment.careSettings.forEach((s: CareSetting) => {
+        const careSetting = this.buildCareSettingForm();
+        careSetting.patchValue(s);
+        careSettings.push(careSetting);
+      });
+    }
+
     if (enrolment.certifications.length) {
       const certifications = this.regulatoryForm.get('certifications') as FormArray;
       certifications.clear();
@@ -226,11 +238,35 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormArray;
 
       oboSites.clear();
+      communityHealthSites.clear();
+      communityPharmacySites.clear();
+      healthAuthoritySites.clear();
 
       enrolment.oboSites.forEach((s: OboSite) => {
         const site = this.buildOboSiteForm();
         site.patchValue(s);
         oboSites.push(site);
+
+        switch (s.careSettingCode) {
+          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+            const siteName = site.get('siteName') as FormControl;
+            this.formUtilsService.setValidators(siteName, [Validators.required]);
+            communityHealthSites.push(site);
+            break;
+          }
+          case CareSettingEnum.COMMUNITY_PHARMACIST: {
+            const siteName = site.get('siteName') as FormControl;
+            this.formUtilsService.setValidators(siteName, [Validators.required]);
+            communityPharmacySites.push(site);
+            break;
+          }
+          case CareSettingEnum.HEALTH_AUTHORITY: {
+            const facility = site.get('facility') as FormControl;
+            this.formUtilsService.setValidators(facility, [Validators.required]);
+            healthAuthoritySites.push(site);
+            break;
+          }
+        }
       });
 
       enrolment.careSettings.forEach((careSetting: CareSetting) => {
@@ -248,7 +284,6 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
             break;
           }
         }
-
       });
     }
 
@@ -314,15 +349,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     this.selfDeclarationForm.patchValue(selfDeclarations);
     this.careSettingsForm.patchValue(enrolment);
 
-    if (enrolment.careSettings.length) {
-      const careSettings = this.careSettingsForm.get('careSettings') as FormArray;
-      careSettings.clear();
-      enrolment.careSettings.forEach((s: CareSetting) => {
-        const careSetting = this.buildCareSettingForm();
-        careSetting.patchValue(s);
-        careSettings.push(careSetting);
-      });
-    }
+
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly
