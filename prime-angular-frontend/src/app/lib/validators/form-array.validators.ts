@@ -2,11 +2,11 @@ import { AbstractControl, FormArray, ValidationErrors, ValidatorFn } from '@angu
 
 export class FormArrayValidators {
   /**
-    * @description
-    * Checks that at least # of abstract control(s) in a form array exist
-    * based on a predicate. For example, useful for a list of checkbox form
-    * controls, but can be extended using a custom predicate.
-    */
+   * @description
+   * Checks that at least # of abstract control(s) in a form array exist
+   * based on a predicate. For example, useful for a list of checkbox form
+   * controls, but can be extended using a custom predicate.
+   */
   public static atLeast(
     minLength: number,
     predicate: (control: AbstractControl) => boolean = (control: AbstractControl) => !!control
