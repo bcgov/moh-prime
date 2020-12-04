@@ -28,9 +28,10 @@ export class EnrolleeTableComponent implements OnInit {
 
   public AdjudicationRoutes = AdjudicationRoutes;
 
-  readonly filterFormControl: AbstractControl;
+  public hasAppliedDateRange: boolean = false;
+  public hasRenewalDateRange: boolean = false;
 
-  showClearButton: boolean = false;
+  readonly filterFormControl: AbstractControl;
 
   constructor(
     private authService: AuthService,
@@ -104,6 +105,18 @@ export class EnrolleeTableComponent implements OnInit {
     });
   }
 
+  public clearAppliedDateRange() {
+    this.filterFormControl.get('appliedDateRangeStart').reset();
+    this.filterFormControl.get('appliedDateRangeEnd').reset();
+    this.hasAppliedDateRange = false;
+  }
+
+  public clearRenewalDateRange() {
+    this.filterFormControl.get('renewalDateRangeStart').reset();
+    this.filterFormControl.get('renewalDateRangeEnd').reset();
+    this.hasRenewalDateRange = false;
+  }
+
   public ngOnInit(): void {
     this.dataSource.filterPredicate = this.getFilterPredicate();
 
@@ -111,6 +124,18 @@ export class EnrolleeTableComponent implements OnInit {
       const filter = { ...value, name: value.name } as string;
       this.dataSource.filter = filter;
     });
+
+    for (const name of ['appliedDateRangeStart', 'appliedDateRangeEnd']) {
+      this.filterFormControl.get(name).valueChanges.subscribe(value => {
+        this.hasAppliedDateRange = value || this.hasAppliedDateRange;
+      });
+    }
+
+    for (const name of ['renewalDateRangeStart', 'renewalDateRangeEnd']) {
+      this.filterFormControl.get(name).valueChanges.subscribe(value => {
+        this.hasRenewalDateRange = value || this.hasRenewalDateRange;
+      });
+    }
   }
 
   private getFilterPredicate() {

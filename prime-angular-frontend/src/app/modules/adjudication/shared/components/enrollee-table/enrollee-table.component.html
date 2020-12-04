@@ -44,8 +44,15 @@
                      formControlName="appliedDateRangeEnd">
             </mat-date-range-input>
             <mat-datepicker-toggle matSuffix
+                                   *ngIf="!hasAppliedDateRange"
                                    [for]="appliedDatePicker">
               <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix
+                                   *ngIf="hasAppliedDateRange">
+              <mat-icon matDatepickerToggleIcon
+                        matTooltip="Clear date range"
+                        (click)="clearAppliedDateRange()">clear</mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #appliedDatePicker></mat-date-range-picker>
           </th>
@@ -65,8 +72,15 @@
                      formControlName="renewalDateRangeEnd">
             </mat-date-range-input>
             <mat-datepicker-toggle matSuffix
+                                   *ngIf="!hasRenewalDateRange"
                                    [for]="renewalDatePicker">
               <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix
+                                   *ngIf="hasRenewalDateRange">
+              <mat-icon matDatepickerToggleIcon
+                        matTooltip="Clear date range"
+                        (click)="clearRenewalDateRange()">clear</mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #renewalDatePicker></mat-date-range-picker>
           </th>
