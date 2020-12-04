@@ -4,13 +4,16 @@ import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl, FormCon
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { ConfigService } from '@config/config.service';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -21,13 +24,10 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { RemoteAccessSite } from '../models/remote-access-site.model';
-import { RemoteAccessLocation } from '../models/remote-access-location';
-import { Site } from '@registration/shared/models/site.model';
-import { OboSite } from '../models/obo-site.model';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { FormUtilsService } from '@core/services/form-utils.service';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+
 import { HealthAuthorityFormState } from '@enrolment/pages/health-authority/health-authority-form-state';
 
 @Injectable({

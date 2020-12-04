@@ -100,25 +100,6 @@ const routes: Routes = [
       // Enrollee enrolment:
       //
       {
-        path: EnrolmentRoutes.REGULATORY,
-        component: RegulatoryComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PRIME Enrolment' }
-      },
-      // TODO Temporary removal of device provider for Community Practice
-      // {
-      //   path: EnrolmentRoutes.DEVICE_PROVIDER,
-      //   component: DeviceProviderComponent,
-      //   canDeactivate: [CanDeactivateFormGuard],
-      //   data: { title: 'PRIME Enrolment' }
-      // },
-      {
-        path: EnrolmentRoutes.JOB,
-        component: JobComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PRIME Enrolment' }
-      },
-      {
         path: EnrolmentRoutes.CARE_SETTING,
         component: CareSettingComponent,
         canDeactivate: [CanDeactivateFormGuard],
@@ -130,6 +111,25 @@ const routes: Routes = [
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
+      {
+        path: EnrolmentRoutes.REGULATORY,
+        component: RegulatoryComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.JOB,
+        component: JobComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      // TODO Temporary removal of device provider for Community Practice
+      // {
+      //   path: EnrolmentRoutes.DEVICE_PROVIDER,
+      //   component: DeviceProviderComponent,
+      //   canDeactivate: [CanDeactivateFormGuard],
+      //   data: { title: 'PRIME Enrolment' }
+      // },
       {
         path: EnrolmentRoutes.REMOTE_ACCESS,
         component: RemoteAccessComponent,
