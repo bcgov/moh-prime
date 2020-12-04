@@ -7,12 +7,19 @@ import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 
 import { AccessCodeComponent } from './pages/access-code/access-code.component';
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
+import { PhsaLabtechGuard } from './shared/guards/phsa-labtech.guard';
 
 const routes: Routes = [
   {
     path: PhsaLabtechRoutes.MODULE_PATH,
     component: PhsaLabtechDashboardComponent,
-    canActivate: [],
+    canActivate: [
+      AuthenticationGuard
+    ],
+    canActivateChild: [
+      PhsaLabtechGuard
+    ],
     children: [
       {
         path: PhsaLabtechRoutes.ACCESS_CODE,
@@ -21,7 +28,7 @@ const routes: Routes = [
         data: { title: 'Access Code' }
       },
       {
-        path: PhsaLabtechRoutes.BCSC_DEMOGRAPHIC,
+        path: PhsaLabtechRoutes.DEMOGRAPHIC,
         component: BcscDemographicComponent,
         data: { title: 'PRIME Enrolment' }
       },
