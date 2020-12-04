@@ -118,6 +118,36 @@
 <section class="mb-4">
 
   <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Care Setting</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Care Setting"
+            (click)="onRoute(EnrolmentRoutes.CARE_SETTING)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <ng-container *ngFor="let careSetting of careSettings">
+
+    <app-enrollee-property title="Care Setting"
+                           [makeBold]="true">
+      {{ careSetting.careSettingCode | configCode: 'careSettings' }}
+    </app-enrollee-property>
+
+  </ng-container>
+
+  <app-enrollee-property *ngIf="!hasCareSetting"
+                         title="Care Setting"
+                         [makeBold]="true">
+    None
+  </app-enrollee-property>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
     <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
 
     <button *ngIf="showEditRedirect"
@@ -249,7 +279,8 @@
 
           <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
                                  title="Site Name"
-                                 [makeBold]="true">
+                                 [makeBold]="true"
+                                 class="pt-4">
             {{ site.siteName | default }}
           </app-enrollee-property>
 
@@ -285,36 +316,6 @@
       </ng-container>
     </ng-container>
   </ng-container>
-
-</section>
-
-<section class="mb-4">
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Care Setting</ng-container>
-
-    <button *ngIf="showEditRedirect"
-            mat-icon-button
-            matTooltip="Edit Care Setting"
-            (click)="onRoute(EnrolmentRoutes.CARE_SETTING)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader>
-
-  <ng-container *ngFor="let careSetting of careSettings">
-
-    <app-enrollee-property title="Care Setting"
-                           [makeBold]="true">
-      {{ careSetting.careSettingCode | configCode: 'careSettings' }}
-    </app-enrollee-property>
-
-  </ng-container>
-
-  <app-enrollee-property *ngIf="!hasCareSetting"
-                         title="Care Setting"
-                         [makeBold]="true">
-    None
-  </app-enrollee-property>
 
 </section>
 
