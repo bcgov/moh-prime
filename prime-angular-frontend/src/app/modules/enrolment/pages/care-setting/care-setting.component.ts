@@ -23,6 +23,7 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { Job } from '@enrolment/shared/models/job.model';
 
 @Component({
   selector: 'app-care-setting',
@@ -143,9 +144,13 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected nextRouteAfterSubmit() {
+    const jobs = this.enrolmentFormStateService.jobsForm.get('jobs').value as Job[];
+
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
+    } else if (jobs.length) {
+      nextRoutePath = EnrolmentRoutes.JOB;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
@@ -174,16 +179,14 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
    * Remove obo sites by care setting if a care setting was removed from the enrolment
    */
   private removeOboSites(careSettingCode: number) {
+    const form = this.enrolmentFormStateService.jobsForm;
+    const oboSites = form.get('oboSites') as FormArray;
 
-    if (!this.careSettings.controls.find((careSetting) => careSetting.value.careSettingCode === careSettingCode)) {
-      const form = this.enrolmentFormStateService.jobsForm;
-      const oboSites = form.get('oboSites') as FormArray;
-      oboSites.controls.forEach((site, i) => {
-        if (site.value.careSettingCode === careSettingCode) {
-          oboSites.removeAt(i);
-        }
-      });
-    }
+    oboSites.controls.forEach((site, i) => {
+      if (site.value.careSettingCode === careSettingCode) {
+        oboSites.removeAt(i);
+      }
+    });
   }
 
   public routeBackTo() {

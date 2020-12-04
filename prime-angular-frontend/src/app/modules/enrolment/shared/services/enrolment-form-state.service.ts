@@ -242,6 +242,23 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       communityPharmacySites.clear();
       healthAuthoritySites.clear();
 
+      enrolment.careSettings.forEach((careSetting: CareSetting) => {
+        switch (careSetting.careSettingCode) {
+          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+            communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
+            break;
+          }
+          case CareSettingEnum.COMMUNITY_PHARMACIST: {
+            communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
+            break;
+          }
+          case CareSettingEnum.HEALTH_AUTHORITY: {
+            healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
+            break;
+          }
+        }
+      });
+
       enrolment.oboSites.forEach((s: OboSite) => {
         const site = this.buildOboSiteForm();
         site.patchValue(s);
@@ -264,23 +281,6 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
             const facility = site.get('facility') as FormControl;
             this.formUtilsService.setValidators(facility, [Validators.required]);
             healthAuthoritySites.push(site);
-            break;
-          }
-        }
-      });
-
-      enrolment.careSettings.forEach((careSetting: CareSetting) => {
-        switch (careSetting.careSettingCode) {
-          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
-            break;
-          }
-          case CareSettingEnum.COMMUNITY_PHARMACIST: {
-            communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
-            break;
-          }
-          case CareSettingEnum.HEALTH_AUTHORITY: {
-            healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
             break;
           }
         }
