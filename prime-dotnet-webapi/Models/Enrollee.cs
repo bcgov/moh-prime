@@ -117,6 +117,8 @@ namespace Prime.Models
 
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
+        public ICollection<OboSite> OboSites { get; set; }
+
         public int? CredentialId { get; set; }
 
         [JsonIgnore]

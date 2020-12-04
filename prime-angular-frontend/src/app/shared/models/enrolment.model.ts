@@ -14,6 +14,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -28,6 +29,7 @@ export interface HttpEnrollee extends Enrollee {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
+  oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   remoteAccessSites: RemoteAccessSite[];
   remoteAccessLocations: RemoteAccessLocation[];
@@ -70,6 +72,7 @@ export interface Enrolment {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
+  oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   remoteAccessSites: RemoteAccessSite[];
   remoteAccessLocations: RemoteAccessLocation[];

@@ -10,12 +10,12 @@ export class EnrolmentRoutes {
   public static BCEID_DEMOGRAPHIC = 'bceid-demographic';
   public static BCSC_DEMOGRAPHIC = 'bcsc-demographic';
   // Enrollee enrolment:
+  public static CARE_SETTING = 'care-setting';
   public static REGULATORY = 'regulatory';
   public static REMOTE_ACCESS = 'remote-access';
   public static REMOTE_ACCESS_ADDRESSES = 'remote-access-addresses';
   public static DEVICE_PROVIDER = 'device-provider';
   public static JOB = 'job';
-  public static CARE_SETTING = 'care-setting';
   public static HEALTH_AUTHORITY = 'health-authority';
   public static SELF_DECLARATION = 'self-declaration';
   // Enrolment submission:

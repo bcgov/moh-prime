@@ -26,7 +26,7 @@
                         [formGroupName]="i">
 
             <app-form-icon-group [show]="careSettings.length > 1"
-                                 (event)="removeCareSetting(i)">
+                                 (event)="removeCareSetting(i, careSetting.value.careSettingCode)">
               <app-form-icon-group>
                 <mat-form-field class="w-100">
                   <mat-label>Care Setting</mat-label>
@@ -67,6 +67,6 @@
 
   <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
                    (save)="onSubmit()"
-                   (back)="routeBackTo()"></app-page-footer>
+                   (back)="routeTo(EnrolmentRoutes.BCSC_DEMOGRAPHIC)"></app-page-footer>
 
 </app-enrollee-page>

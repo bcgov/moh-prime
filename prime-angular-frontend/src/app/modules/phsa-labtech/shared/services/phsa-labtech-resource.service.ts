@@ -8,7 +8,7 @@ import { PhsaLabtech } from '../models/phsa-lab-tech.model';
 @Injectable({
   providedIn: 'root'
 })
-export class PhasLabtechResource {
+export class PhsaLabtechResource {
   constructor(
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,

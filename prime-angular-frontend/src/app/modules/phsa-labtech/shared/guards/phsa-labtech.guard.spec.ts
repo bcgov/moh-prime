@@ -1,22 +1,25 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { KeycloakService } from 'keycloak-angular';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
-import { UnderagedGuard } from './underaged.guard';
+import { PhsaLabtechGuard } from './phsa-labtech.guard';
 
-describe('UnderagedGuard', () => {
-  let guard: UnderagedGuard;
+describe('PhsaLabtechGuard', () => {
+  let guard: PhsaLabtechGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
         RouterTestingModule
       ],
       providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
         {
           provide: AuthService,
           useClass: MockAuthService
@@ -24,7 +27,7 @@ describe('UnderagedGuard', () => {
         KeycloakService
       ]
     });
-    guard = TestBed.inject(UnderagedGuard);
+    guard = TestBed.inject(PhsaLabtechGuard);
   });
 
   it('should be created', () => {

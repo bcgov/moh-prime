@@ -331,7 +331,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       ],
       remoteUserCertifications: this.fb.array(
         [],
-        [FormArrayValidators.atLeast(1)]
+        { validators: FormArrayValidators.atLeast(1) }
       )
     });
   }
