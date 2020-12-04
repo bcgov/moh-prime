@@ -25,11 +25,11 @@
 
           <app-alert *ngIf="hasNoHealthAuthorityError"
                      type="danger"
-                     icon="warning">
+                     icon="warning"
+                     class="mb-5">
             <ng-container #alertContent
                           class="alert-content">
-              At least one Health Authority must be chosen, and each chosen Health Authority
-              must have at least one chosen facility.
+              At least one Facility under a Health Authority must be chosen.
             </ng-container>
           </app-alert>
 
