@@ -275,7 +275,7 @@
       <ng-container *ngIf="site.careSettingCode === careSetting.careSettingCode">
         <app-enrollee-property title="Care Setting"
                                [makeBold]="true">
-          <p>{{ careSetting.careSettingCode | configCode: 'careSettings' }}</p>
+          <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}</div>
 
           <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
                                  title="Site Name"
