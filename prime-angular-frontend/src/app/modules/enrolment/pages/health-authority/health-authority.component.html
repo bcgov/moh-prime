@@ -33,25 +33,38 @@
             </ng-container>
           </app-alert>
 
-          <ng-container *ngFor="let healthAuthority of enrolleeHealthAuthorities.controls"
-                        [formGroup]="healthAuthority">
-            <mat-checkbox #healthAuthorityGroup
-                          class="d-block"
-                          formControlName="checked">
-              {{ healthAuthority.get('code').value | configCode: 'healthAuthorities' | capitalize: true }}
-            </mat-checkbox>
+          <div class="row">
+            <div *ngFor="let healthAuthority of enrolleeHealthAuthorities.controls"
+                 class="col-sm-12 col-md-10 col-xl-8">
 
-            <ng-container *ngIf="healthAuthorityGroup.checked">
-              <div *ngFor="let facility of getFacilities(healthAuthority).controls"
-                   [formGroup]="facility"
-                   class="pl-4">
-                <mat-checkbox class="d-block"
-                              formControlName="checked">
-                  {{ facility.get('code').value | configCode: 'facilities' | capitalize: true }}
-                </mat-checkbox>
-              </div>
-            </ng-container>
-          </ng-container>
+              <mat-form-field [formGroup]="healthAuthority"
+                              class="w-100">
+                <mat-label>
+                  {{ +healthAuthority.value.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }}
+                </mat-label>
+                <mat-select formControlName="facilityCodes"
+                            multiple>
+                  <mat-select-trigger>
+                    <ng-container [ngTemplateOutlet]="selectTrigger"
+                                  [ngTemplateOutletContext]="{ facilityCodes: healthAuthority.value.facilityCodes }">
+                    </ng-container>
+                  </mat-select-trigger>
+                  <mat-option *ngFor="let facility of facilities"
+                              [value]="facility.code">{{ facility.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+          </div>
+
+          <ng-template #selectTrigger
+                       let-facilityCodes="facilityCodes">
+            {{ facilityCodes[0] | configCode: 'facilities' | capitalize: true }}
+
+            <span *ngIf="facilityCodes?.length > 1" class="trigger-label">
+              (+{{ facilityCodes.length - 1 }} {{ facilityCodes.length === 2 ? 'other' : 'others' }})
+            </span>
+          </ng-template>
 
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
-import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { StringUtils } from '@lib/utils/string-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
@@ -21,7 +21,7 @@ import { RemoteUserCertification } from '@registration/shared/models/remote-user
 @Injectable({
   providedIn: 'root'
 })
-export class SiteFormStateService extends AbstractFormState<Site> {
+export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingTypeForm: FormGroup;
   public businessForm: FormGroup;
   public siteAddressForm: FormGroup;

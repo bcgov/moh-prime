@@ -3,11 +3,12 @@ import { FormArray, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { ConfigService } from '@config/config.service';
+import { Config } from '@config/config.model';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { FacilityEnum } from '@shared/enums/facility.enum';
 
@@ -16,7 +17,6 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Component({
   selector: 'app-health-authority',
@@ -24,6 +24,7 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
   styleUrls: ['./health-authority.component.scss']
 })
 export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implements OnInit {
+  public facilities: Config<number>[];
   public hasNoHealthAuthorityError: boolean;
   public HealthAuthorityEnum = HealthAuthorityEnum;
   public FacilityEnum = FacilityEnum;
@@ -38,7 +39,8 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    private configService: ConfigService
   ) {
     super(
       route,
@@ -52,14 +54,12 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
       utilService,
       formUtilsService
     );
+
+    this.facilities = this.configService.facilities;
   }
 
   public get enrolleeHealthAuthorities(): FormArray {
     return this.form.get('enrolleeHealthAuthorities') as FormArray;
-  }
-
-  public getFacilities(formGroup: FormGroup): FormArray {
-    return formGroup.get('facilities') as FormArray;
   }
 
   public routeBackTo() {
@@ -74,21 +74,21 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.healthAuthoritiesForm;
+    this.form = this.enrolmentFormStateService.healthAuthoritiesFormState.form;
   }
 
   protected initForm() {
-    this.enrolleeHealthAuthorities.controls.forEach((group: FormGroup) => {
-      const array = this.getFacilities(group);
-      group.valueChanges.subscribe(value => {
-        if (value.checked) {
-          this.hasNoHealthAuthorityError = false;
-          array.setValidators(FormArrayValidators.atLeast(1, c => !Validators.requiredTrue(c.get('checked'))));
-        } else {
-          array.clearValidators();
-        }
-      });
-    });
+    // this.enrolleeHealthAuthorities.controls.forEach((group: FormGroup) => {
+    //   const array = this.getFacilities(group);
+    //   group.valueChanges.subscribe(value => {
+    //     if (value.checked) {
+    //       this.hasNoHealthAuthorityError = false;
+    //       array.setValidators(FormArrayValidators.atLeast(1, c => !Validators.requiredTrue(c.get('checked'))));
+    //     } else {
+    //       array.clearValidators();
+    //     }
+    //   });
+    // });
   }
 
   /**

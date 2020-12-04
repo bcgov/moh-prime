@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
-import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
@@ -24,12 +23,12 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
+import { HealthAuthorityFormState } from '@enrolment/pages/health-authority/health-authority-form-state';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
+export class EnrolmentFormStateService extends AbstractFormStateService<Enrolment> {
   public accessForm: FormGroup;
   public identityDocumentForm: FormGroup;
   public bceidDemographicForm: FormGroup;
@@ -41,7 +40,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public remoteAccessLocationsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
-  public healthAuthoritiesForm: FormGroup;
+  public healthAuthoritiesFormState: HealthAuthorityFormState;
   public accessAgreementForm: FormGroup;
 
   private identityProvider: IdentityProviderEnum;
@@ -98,14 +97,9 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
-    const enrolleeHealthAuthorities = this.healthAuthoritiesForm.getRawValue()
-      .enrolleeHealthAuthorities
-      .filter(ha => ha.checked)
-      .flatMap(ha =>
-        ha.facilities
-          .filter(f => f.checked)
-          .map(f => ({ healthAuthorityCode: ha.code, facilityCode: f.code }))
-      );
+
+    const enrolleeHealthAuthorities = this.healthAuthoritiesFormState.json;
+
     const selfDeclarations = this.convertSelfDeclarationsToJson();
     const remoteAccessSites = this.convertRemoteAccessSitesToJson();
     const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
@@ -152,7 +146,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       this.remoteAccessLocationsForm,
       this.selfDeclarationForm,
       this.careSettingsForm,
-      this.healthAuthoritiesForm
+      this.healthAuthoritiesFormState.form
     ];
   }
 
@@ -179,13 +173,14 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   /**
    * @description
    * Initialize and configure the forms for patching, which is also used
-   * clear previous form data from the service.
+   * to clear previous form data from the service.
    */
   protected buildForms() {
     // The accessForm and identityDocumentForm are used out of band
     // compared to the other form groups
     this.accessForm = this.buildAccessForm();
     this.identityDocumentForm = this.buildIdentityDocumentForm();
+
     this.bceidDemographicForm = this.buildBceidDemographicForm();
     this.bcscDemographicForm = this.buildBcscDemographicForm();
     this.regulatoryForm = this.buildRegulatoryForm();
@@ -195,7 +190,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
-    this.healthAuthoritiesForm = this.buildHealthAuthorityForm();
+    this.healthAuthoritiesFormState = new HealthAuthorityFormState(this.fb, this.configService);
     this.accessAgreementForm = this.buildAccessAgreementForm();
   }
 
@@ -295,13 +290,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     this.selfDeclarationForm.patchValue(selfDeclarations);
     this.careSettingsForm.patchValue(enrolment);
 
-    // TODO map health authorities into format for patching
-    const healthAuthorities = enrolment.enrolleeHealthAuthorities
-      .reduce((group, healthAuthority) => {
-        return group;
-      }, []); // fill default with HA and reduce to populate facilities
-
-    this.healthAuthoritiesForm.patchValue(enrolment);
+    this.healthAuthoritiesFormState.patchValue(enrolment.enrolleeHealthAuthorities);
 
     if (enrolment.careSettings.length) {
       const careSettings = this.careSettingsForm.get('careSettings') as FormArray;
@@ -516,22 +505,6 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   private buildCareSettingsForm(): FormGroup {
     return this.fb.group({
       careSettings: this.fb.array([])
-    });
-  }
-
-  private buildHealthAuthorityForm(): FormGroup {
-    const toFormGroup = (c: Config<number>, controls: { [key: string]: any } = {}) =>
-      this.fb.group({ code: c.code, checked: false, ...controls });
-    const facilities = () => this.fb.array(this.configService.facilities.map(f => toFormGroup(f)));
-
-    const healthAuthorities = this.configService.healthAuthorities
-      .map(h => toFormGroup(h, { facilities: facilities() }));
-
-    return this.fb.group({
-      enrolleeHealthAuthorities: this.fb.array(
-        healthAuthorities, {
-        validators: FormArrayValidators.atLeast(1, c => !Validators.requiredTrue(c.get('checked')))
-      })
     });
   }
 
