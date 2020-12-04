@@ -17,6 +17,20 @@ export class RouteUtils {
 
   /**
    * @description
+   * Determine the current module route path, or provide a default
+   * if the current route path is the module path.
+   */
+  public static currentModulePath(route: ActivatedRoute, defaultRoutePath: string = '/'): string {
+    const urlSegments = route.snapshot.url;
+
+    // Prevent cyclical routing
+    return (urlSegments.length > 1)
+      ? urlSegments[0].path
+      : defaultRoutePath;
+  }
+
+  /**
+   * @description
    * Determine the current route path of a URL by removing query and
    * URI params that can't be mapped to existing module routes.
    */

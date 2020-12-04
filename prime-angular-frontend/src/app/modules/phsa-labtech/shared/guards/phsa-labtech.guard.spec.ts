@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ConfigGuard } from './config.guard';
+import { PhsaLabtechGuard } from './phsa-labtech.guard';
 
-describe('ConfigGuard', () => {
-  let guard: ConfigGuard;
+describe('PhsaLabtechGuard', () => {
+  let guard: PhsaLabtechGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(ConfigGuard);
+    guard = TestBed.inject(PhsaLabtechGuard);
   });
 
   it('should be created', () => {

@@ -63,6 +63,15 @@
         "attributes": {}
       },
       {
+        "id": "8fca647e-c9a8-46f9-b701-4bff9c9c0c23",
+        "name": "feature_site_pharmacist",
+        "description": "Community Pharmacy for Site Registration feature flag",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "648cf4c5-ad27-45e7-9f0f-47ef1b18d0e3",
         "name": "prime_readonly_admin",
         "composite": false,
@@ -1248,6 +1257,16 @@
           }
         },
         {
+          "id": "1a04792f-2de9-4ec6-92e9-080f1497d10d",
+          "name": "feature-site_pharmacist",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "role": "feature_site_pharmacist"
+          }
+        },
+        {
           "id": "7d613b0e-9b84-4302-8d2e-c91dd4fe37a9",
           "name": "Client IP Address",
           "protocol": "openid-connect",
@@ -1433,6 +1452,16 @@
             "access.token.claim": "true",
             "claim.name": "clientHost",
             "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "7c02f281-2408-41d8-9f2f-cdd4a87a5c42",
+          "name": "feature-site_pharmacist",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "role": "feature_site_pharmacist"
           }
         },
         {

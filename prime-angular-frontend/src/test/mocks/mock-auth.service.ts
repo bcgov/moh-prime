@@ -96,10 +96,6 @@ export class MockAuthService implements IAuthService {
     return this._role === Role.ENROLLEE;
   }
 
-  public isRegistrant(): boolean {
-    return this._role === Role.FEATURE_SITE_REGISTRATION;
-  }
-
   public isAdmin(): boolean {
     return this._role === Role.ADMIN;
   }
@@ -112,15 +108,11 @@ export class MockAuthService implements IAuthService {
     return this._role === Role.READONLY_ADMIN;
   }
 
-  public hasCommunityPharmacist(): boolean {
-    return this._role === Role.FEATURE_COMMUNITY_PHARMACIST;
-  }
-
-  public hasHealthAuthority(): boolean {
-    return this._role === Role.FEATURE_HEALTH_AUTHORITY;
-  }
-
   public hasVCIssuance(): boolean {
     return this._role === Role.FEATURE_VC_ISSUANCE;
+  }
+
+  public hasSitePharmacist(): boolean {
+    return this._role === Role.FEATURE_SITE_PHARMACIST;
   }
 }

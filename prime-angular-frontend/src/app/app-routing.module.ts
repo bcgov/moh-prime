@@ -3,14 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AppRoutes } from './app.routes';
 import { AccessDeniedComponent } from '@lib/modules/root-routes/components/access-denied/access-denied.component';
-import { UnsupportedComponent } from '@lib/modules/root-routes/components/unsupported/unsupported.component';
 import { MaintenanceComponent } from '@lib/modules/root-routes/components/maintenance/maintenance.component';
 import { PageNotFoundComponent } from '@lib/modules/root-routes/components/page-not-found/page-not-found.component';
 import { HelpComponent } from '@lib/modules/root-routes/components/help/help.component';
 import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 
 import { ProvisionerAccessRoutes } from '@certificate/provisioner-access.routes';
-import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
 
 const routes: Routes = [
   {
@@ -26,13 +24,6 @@ const routes: Routes = [
     component: AccessDeniedComponent,
     data: {
       title: 'Access Denied'
-    }
-  },
-  {
-    path: AppRoutes.UNSUPPORTED,
-    component: UnsupportedComponent,
-    data: {
-      title: 'Unsupported Browser'
     }
   },
   {
