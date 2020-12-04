@@ -69,6 +69,19 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return this.form.get('careSettings') as FormArray;
   }
 
+  public onSubmit() {
+
+    // remove any oboSites belonging to careSetting which is no longer selected
+    this.careSettingTypes.forEach((type) => {
+      const careSetting = this.careSettings.controls.filter((c) => c.value.careSettingCode === type.code);
+      if (!careSetting.length) {
+        this.removeOboSites(type.code);
+      }
+    });
+
+    super.onSubmit();
+  }
+
   public addCareSetting() {
     const careSetting = this.enrolmentFormStateService.buildCareSettingForm();
     this.careSettings.push(careSetting);
@@ -181,12 +194,30 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   private removeOboSites(careSettingCode: number) {
     const form = this.enrolmentFormStateService.jobsForm;
     const oboSites = form.get('oboSites') as FormArray;
+    const communityHealthSites = form.get('communityHealthSites') as FormArray;
+    const communityPharmacySites = form.get('communityPharmacySites') as FormArray;
+    const healthAuthoritySites = form.get('healthAuthoritySites') as FormArray;
 
-    oboSites.controls.forEach((site, i) => {
+    oboSites?.controls?.forEach((site, i) => {
       if (site.value.careSettingCode === careSettingCode) {
         oboSites.removeAt(i);
       }
     });
+
+    switch (careSettingCode) {
+      case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+        communityHealthSites.reset();
+        break;
+      }
+      case CareSettingEnum.COMMUNITY_PHARMACIST: {
+        communityPharmacySites.reset();
+        break;
+      }
+      case CareSettingEnum.HEALTH_AUTHORITY: {
+        healthAuthoritySites.reset();
+        break;
+      }
+    }
   }
 
   public routeBackTo() {

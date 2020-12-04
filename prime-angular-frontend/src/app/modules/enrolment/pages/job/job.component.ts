@@ -101,9 +101,9 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
     this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
 
-    this.communityHealthSites.markAllAsTouched();
-    this.communityPharmacySites.markAllAsTouched();
-    this.healthAuthoritySites.markAllAsTouched();
+    // this.communityHealthSites.markAllAsTouched();
+    // this.communityPharmacySites.markAllAsTouched();
+    // this.healthAuthoritySites.markAllAsTouched();
 
     super.onSubmit();
   }
@@ -203,32 +203,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
       .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
 
     this.patchForm();
-
-    // // seperate obo sites by care setting
-    // this.enrolment.oboSites.forEach(s => {
-    //   const site = this.enrolmentFormStateService.buildOboSiteForm();
-    //   site.patchValue(s);
-    //   switch (s.careSettingCode) {
-    //     case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-    //       const siteName = site.get('siteName') as FormControl;
-    //       this.formUtilsService.setValidators(siteName, [Validators.required]);
-    //       this.communityHealthSites.push(site);
-    //       break;
-    //     }
-    //     case CareSettingEnum.COMMUNITY_PHARMACIST: {
-    //       const siteName = site.get('siteName') as FormControl;
-    //       this.formUtilsService.setValidators(siteName, [Validators.required]);
-    //       this.communityPharmacySites.push(site);
-    //       break;
-    //     }
-    //     case CareSettingEnum.HEALTH_AUTHORITY: {
-    //       const facility = site.get('facility') as FormControl;
-    //       this.formUtilsService.setValidators(facility, [Validators.required]);
-    //       this.healthAuthoritySites.push(site);
-    //       break;
-    //     }
-    //   }
-    // });
 
     // Add at least one site for each careSetting selected by enrollee
     this.careSettings?.forEach((careSetting) => {
