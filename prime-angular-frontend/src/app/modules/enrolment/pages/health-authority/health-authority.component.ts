@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormGroup, Validators } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -78,17 +78,9 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected initForm() {
-    // this.enrolleeHealthAuthorities.controls.forEach((group: FormGroup) => {
-    //   const array = this.getFacilities(group);
-    //   group.valueChanges.subscribe(value => {
-    //     if (value.checked) {
-    //       this.hasNoHealthAuthorityError = false;
-    //       array.setValidators(FormArrayValidators.atLeast(1, c => !Validators.requiredTrue(c.get('checked'))));
-    //     } else {
-    //       array.clearValidators();
-    //     }
-    //   });
-    // });
+    this.enrolleeHealthAuthorities.valueChanges.subscribe(() => {
+      this.hasNoHealthAuthorityError = false;
+    });
   }
 
   /**

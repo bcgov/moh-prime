@@ -49,7 +49,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public accessAgreementForm: FormGroup;
 
   private identityProvider: IdentityProviderEnum;
-  private CareSettingEnum = CareSettingEnum;
   private enrolleeId: number;
   private userId: string;
 
