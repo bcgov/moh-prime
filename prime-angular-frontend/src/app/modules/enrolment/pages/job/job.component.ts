@@ -175,6 +175,14 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     }
   }
 
+  public routeBackTo() {
+    // const routePath = (this.enrolmentFormStateService.json?.certifications?.length)
+    //   ? EnrolmentRoutes.REGULATORY
+    //   : EnrolmentRoutes.JOB;
+
+    // this.routeTo(routePath);
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
     const canDeactivate = super.canDeactivate();
 

@@ -17,6 +17,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { Job } from '@enrolment/shared/models/job.model';
 
 @Component({
   selector: 'app-health-authority',
@@ -63,7 +64,6 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
   }
 
   public routeBackTo() {
-    // TODO setup expected back route based on enrolment
     this.routeTo(EnrolmentRoutes.CARE_SETTING);
   }
 
@@ -108,7 +108,15 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected nextRouteAfterSubmit() {
-    // TODO setup expected next route based on enrolment
-    // super.nextRouteAfterSubmit();
+    const jobs = this.enrolmentFormStateService.jobsForm.get('jobs').value as Job[];
+
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.REGULATORY;
+    } else if (jobs.length) {
+      nextRoutePath = EnrolmentRoutes.JOB;
+    }
+
+    super.nextRouteAfterSubmit(nextRoutePath);
   }
 }

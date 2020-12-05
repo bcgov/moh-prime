@@ -13,7 +13,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -23,6 +22,7 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Job } from '@enrolment/shared/models/job.model';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 @Component({
   selector: 'app-care-setting',
@@ -69,8 +69,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public onSubmit() {
-
-    // remove any oboSites belonging to careSetting which is no longer selected
+    // Remove any oboSites belonging to careSetting which is no longer selected
     this.careSettingTypes.forEach((type) => {
       const careSetting = this.careSettings.controls.filter((c) => c.value.careSettingCode === type.code);
       if (!careSetting.length) {
@@ -125,6 +124,17 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return this.careSettingTypes;
   }
 
+  public routeBackTo() {
+    this.authService.identityProvider$()
+      .subscribe((identityProvider: IdentityProviderEnum) => {
+        const routePath = (identityProvider === IdentityProviderEnum.BCSC)
+          ? EnrolmentRoutes.BCSC_DEMOGRAPHIC
+          : EnrolmentRoutes.BCEID_DEMOGRAPHIC;
+
+        this.routeTo(routePath);
+      });
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
     const canDeactivate = super.canDeactivate();
 
@@ -159,8 +169,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     const jobs = this.enrolmentFormStateService.jobsForm.get('jobs').value as Job[];
 
     let nextRoutePath: string;
-    if (this.careSettings.value.some(cs => cs)) {
-
+    if (this.careSettings.value.some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
+      nextRoutePath = EnrolmentRoutes.HEALTH_AUTHORITY;
     } else if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
     } else if (jobs.length) {
@@ -219,13 +229,5 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
         break;
       }
     }
-  }
-
-  public routeBackTo() {
-    const routePath = (this.enrolmentFormStateService.json?.certifications?.length)
-      ? EnrolmentRoutes.REGULATORY
-      : EnrolmentRoutes.JOB;
-
-    this.routeTo(routePath);
   }
 }
