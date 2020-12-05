@@ -19,7 +19,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = Policies.User, Roles = FeatureFlags.SiteRegistration)]
+    [Authorize(Policy = Policies.User)]
     public class SitesController : ControllerBase
     {
         private readonly IMapper _mapper;
