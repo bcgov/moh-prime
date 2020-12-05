@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AbstractControl, FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
 import moment from 'moment';
@@ -31,12 +31,12 @@ export class EnrolleeTableComponent implements OnInit {
   public hasAppliedDateRange = false;
   public hasRenewalDateRange = false;
 
-  readonly filterFormControl: AbstractControl;
+  public filterFormControl: FormGroup;
 
   constructor(
     private authService: AuthService,
     private utilsService: UtilsService,
-    fb: FormBuilder
+    private fb: FormBuilder
   ) {
     this.notify = new EventEmitter<number>();
     this.claim = new EventEmitter<number>();
@@ -54,13 +54,6 @@ export class EnrolleeTableComponent implements OnInit {
       'adjudicator',
       'actions'
     ];
-
-    this.filterFormControl = fb.group({
-      appliedDateRangeStart: '',
-      appliedDateRangeEnd: '',
-      renewalDateRangeStart: '',
-      renewalDateRangeEnd: '',
-    });
   }
 
   public get canEdit(): boolean {
@@ -118,6 +111,20 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.createFormInstance();
+    this.initForm();
+  }
+
+  private createFormInstance() {
+    this.filterFormControl = this.fb.group({
+      appliedDateRangeStart: '',
+      appliedDateRangeEnd: '',
+      renewalDateRangeStart: '',
+      renewalDateRangeEnd: '',
+    });
+  }
+
+  private initForm() {
     this.dataSource.filterPredicate = this.getFilterPredicate();
 
     this.filterFormControl.valueChanges.subscribe(value => {
