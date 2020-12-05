@@ -66,7 +66,7 @@ export class HealthAuthorityFormState extends AbstractFormState<HealthAuthority[
         healthAuthorities,
         {
           validators: FormArrayValidators
-            .atLeast(1, (control: AbstractControl) => control.get('facilityCodes').value.length > 1)
+            .atLeast(1, (control: AbstractControl) => control.get('facilityCodes').value.length)
         }
       )
     });
