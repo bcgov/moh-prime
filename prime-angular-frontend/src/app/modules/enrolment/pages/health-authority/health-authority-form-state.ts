@@ -75,6 +75,6 @@ export class HealthAuthorityFormState extends AbstractFormState<HealthAuthority[
   private getHealthAuthorityFacilities(healthAutorities: HealthAuthority[], healthAuthorityCode: HealthAuthorityEnum) {
     return healthAutorities
       .filter(ha => ha.healthAuthorityCode === healthAuthorityCode)
-      .map(ha => ha.healthAuthorityCode);
+      .map(ha => ha.facilityCode);
   }
 }
