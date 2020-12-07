@@ -1,16 +1,16 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
+import moment from 'moment';
 
 import { UtilsService } from '@core/services/utils.service';
 
-import { EnrolleeListViewModel, Enrolment } from '@shared/models/enrolment.model';
+import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import moment, { Moment } from 'moment';
-import { AbstractControl, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-enrollee-table',
@@ -28,15 +28,15 @@ export class EnrolleeTableComponent implements OnInit {
 
   public AdjudicationRoutes = AdjudicationRoutes;
 
-  public hasAppliedDateRange: boolean = false;
-  public hasRenewalDateRange: boolean = false;
+  public hasAppliedDateRange = false;
+  public hasRenewalDateRange = false;
 
-  readonly filterFormControl: AbstractControl;
+  public filterFormControl: FormGroup;
 
   constructor(
     private authService: AuthService,
     private utilsService: UtilsService,
-    fb: FormBuilder
+    private fb: FormBuilder
   ) {
     this.notify = new EventEmitter<number>();
     this.claim = new EventEmitter<number>();
@@ -54,13 +54,6 @@ export class EnrolleeTableComponent implements OnInit {
       'adjudicator',
       'actions'
     ];
-
-    this.filterFormControl = fb.group({
-      appliedDateRangeStart: '',
-      appliedDateRangeEnd: '',
-      renewalDateRangeStart: '',
-      renewalDateRangeEnd: '',
-    });
   }
 
   public get canEdit(): boolean {
@@ -118,6 +111,20 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.createFormInstance();
+    this.initForm();
+  }
+
+  private createFormInstance() {
+    this.filterFormControl = this.fb.group({
+      appliedDateRangeStart: '',
+      appliedDateRangeEnd: '',
+      renewalDateRangeStart: '',
+      renewalDateRangeEnd: '',
+    });
+  }
+
+  private initForm() {
     this.dataSource.filterPredicate = this.getFilterPredicate();
 
     this.filterFormControl.valueChanges.subscribe(value => {
