@@ -70,7 +70,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public onSubmit() {
-
     // remove any oboSites belonging to careSetting which is no longer selected
     this.careSettingTypes.forEach((type) => {
       const careSetting = this.careSettings.controls.filter((c) => c.value.careSettingCode === type.code);

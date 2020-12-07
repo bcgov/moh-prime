@@ -57,7 +57,6 @@ export class RemoteUserComponent implements OnInit {
   }
 
   public onSubmit() {
-    console.log(this.form)
     if (this.formUtilsService.checkValidity(this.form)) {
 
       this.removeIncompleteCertifications(true);
