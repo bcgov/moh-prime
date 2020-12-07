@@ -34,7 +34,5 @@ export class OboSiteFormComponent implements OnInit {
     this.remove.emit(index);
   }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
