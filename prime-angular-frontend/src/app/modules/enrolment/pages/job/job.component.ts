@@ -101,9 +101,9 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
     this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
 
-    // this.communityHealthSites.markAllAsTouched();
-    // this.communityPharmacySites.markAllAsTouched();
-    // this.healthAuthoritySites.markAllAsTouched();
+    this.communityHealthSites.updateValueAndValidity();
+    this.communityPharmacySites.updateValueAndValidity();
+    this.healthAuthoritySites.updateValueAndValidity();
 
     super.onSubmit();
   }
