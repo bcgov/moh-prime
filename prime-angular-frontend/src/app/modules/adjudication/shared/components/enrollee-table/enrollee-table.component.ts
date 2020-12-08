@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
+import moment from 'moment';
 
 import { UtilsService } from '@core/services/utils.service';
 
@@ -26,9 +28,15 @@ export class EnrolleeTableComponent implements OnInit {
 
   public AdjudicationRoutes = AdjudicationRoutes;
 
+  public hasAppliedDateRange = false;
+  public hasRenewalDateRange = false;
+
+  public filterFormControl: FormGroup;
+
   constructor(
     private authService: AuthService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private fb: FormBuilder
   ) {
     this.notify = new EventEmitter<number>();
     this.claim = new EventEmitter<number>();
@@ -90,5 +98,68 @@ export class EnrolleeTableComponent implements OnInit {
     });
   }
 
-  public ngOnInit(): void { }
+  public clearAppliedDateRange() {
+    this.filterFormControl.get('appliedDateRangeStart').reset();
+    this.filterFormControl.get('appliedDateRangeEnd').reset();
+    this.hasAppliedDateRange = false;
+  }
+
+  public clearRenewalDateRange() {
+    this.filterFormControl.get('renewalDateRangeStart').reset();
+    this.filterFormControl.get('renewalDateRangeEnd').reset();
+    this.hasRenewalDateRange = false;
+  }
+
+  public ngOnInit(): void {
+    this.createFormInstance();
+    this.initForm();
+  }
+
+  private createFormInstance() {
+    this.filterFormControl = this.fb.group({
+      appliedDateRangeStart: '',
+      appliedDateRangeEnd: '',
+      renewalDateRangeStart: '',
+      renewalDateRangeEnd: '',
+    });
+  }
+
+  private initForm() {
+    this.dataSource.filterPredicate = this.getFilterPredicate();
+
+    this.filterFormControl.valueChanges.subscribe(value => {
+      const filter = { ...value, name: value.name } as string;
+      this.dataSource.filter = filter;
+    });
+
+    for (const name of ['appliedDateRangeStart', 'appliedDateRangeEnd']) {
+      this.filterFormControl.get(name).valueChanges.subscribe(value => {
+        this.hasAppliedDateRange = value || this.hasAppliedDateRange;
+      });
+    }
+
+    for (const name of ['renewalDateRangeStart', 'renewalDateRangeEnd']) {
+      this.filterFormControl.get(name).valueChanges.subscribe(value => {
+        this.hasRenewalDateRange = value || this.hasRenewalDateRange;
+      });
+    }
+  }
+
+  private getFilterPredicate() {
+    return (row: EnrolleeListViewModel, filter) => {
+      const appliedDate = moment.utc(row.appliedDate);
+      const renewalDate = moment.utc(row.expiryDate);
+      // add 1 day to range end date for inclusive check
+      const searchByAppliedDate =
+        (!filter.appliedDateRangeStart || moment(filter.appliedDateRangeStart) <= appliedDate)
+        && (!filter.appliedDateRangeEnd || appliedDate <= moment(filter.appliedDateRangeEnd).add(1, 'd'));
+      const searchByRenewalDate =
+        (!filter.renewalDateRangeStart || moment(filter.renewalDateRangeStart) <= renewalDate)
+        && (!filter.renewalDateRangeEnd || renewalDate <= moment(filter.renewalDateRangeEnd).add(1, 'd'));
+      const matchFilter = [];
+      matchFilter.push(searchByAppliedDate);
+      matchFilter.push(searchByRenewalDate);
+      return matchFilter.every(Boolean);
+    };
+  }
 }
