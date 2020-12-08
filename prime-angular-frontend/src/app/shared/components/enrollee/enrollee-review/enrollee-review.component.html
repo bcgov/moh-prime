@@ -284,9 +284,9 @@
           </app-enrollee-property>
 
           <app-enrollee-property *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
-                                 title="Facility"
+                                 title="Facility Name"
                                  [makeBold]="true">
-            {{ site.facility | default }}
+            {{ site.facilityName | default }}
           </app-enrollee-property>
 
           <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"

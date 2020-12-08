@@ -150,8 +150,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        const facility = site.get('facility') as FormControl;
-        this.formUtilsService.setValidators(facility, [Validators.required]);
+        const facilityName = site.get('facilityName') as FormControl;
+        this.formUtilsService.setValidators(facilityName, [Validators.required]);
         this.healthAuthoritySites.push(site);
         break;
       }

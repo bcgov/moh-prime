@@ -3,7 +3,7 @@ import { Address } from '@shared/models/address.model';
 export interface OboSite {
   careSettingCode: number;
   siteName: string;
-  facility: string;
+  facilityName: string;
   physicalAddress: Address;
   pec: string;
 }
