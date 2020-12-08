@@ -222,7 +222,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Health Authorities',
             settingCode: careSetting.careSettingCode,
             formControl: this.healthAuthorityEmails,
-            subheaderContent: `Send your approval to your facilityName’s PharmaNet access administrator (ask your manager if you are
+            subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are
               unsure who this is).`
           };
         }
