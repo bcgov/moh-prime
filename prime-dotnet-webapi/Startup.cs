@@ -71,6 +71,7 @@ namespace Prime
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<ISoapService, SoapService>();
+            services.AddScoped<ILabtechService, LabtechService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
