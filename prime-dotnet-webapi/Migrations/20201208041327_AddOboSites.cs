@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class OboSites : Migration
+    public partial class AddOboSites : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,7 +22,7 @@ namespace Prime.Migrations
                     CareSettingCode = table.Column<int>(nullable: false),
                     SiteName = table.Column<string>(nullable: true),
                     PEC = table.Column<string>(nullable: true),
-                    Facility = table.Column<string>(nullable: true),
+                    FacilityName = table.Column<string>(nullable: true),
                     PhysicalAddressId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

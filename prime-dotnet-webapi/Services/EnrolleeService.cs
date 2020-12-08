@@ -405,7 +405,7 @@ namespace Prime.Services
                         PhysicalAddress = newAddress,
                         SiteName = site.SiteName,
                         PEC = site.PEC,
-                        Facility = site.Facility
+                        FacilityName = site.FacilityName
                     };
                     _context.Entry(newAddress).State = EntityState.Added;
                     _context.Entry(newSite).State = EntityState.Added;

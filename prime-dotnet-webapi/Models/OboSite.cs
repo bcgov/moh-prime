@@ -24,7 +24,7 @@ namespace Prime.Models
 
         public string PEC { get; set; }
 
-        public string Facility { get; set; }
+        public string FacilityName { get; set; }
 
         [Required]
         public PhysicalAddress PhysicalAddress { get; set; }
