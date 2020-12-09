@@ -4,6 +4,7 @@ import { FeedbackResourceService } from './feedback-resource.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SharedModule } from '@shared/shared.module';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('FeedbackResourceService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -15,7 +16,8 @@ describe('FeedbackResourceService', () => {
       {
         provide: APP_CONFIG,
         useValue: APP_DI_CONFIG
-      }
+      },
+      KeycloakService
     ]
   }));
 
