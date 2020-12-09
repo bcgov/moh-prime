@@ -240,7 +240,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   private removeHealthAuthorities() {
     const form = this.enrolmentFormStateService.healthAuthoritiesFormState.form
     const healthAuthorities = form.get('enrolleeHealthAuthorities') as FormArray;
-    healthAuthorities.reset();
-    form.reset();
+    healthAuthorities.controls.forEach(ha => {
+      ha.get('facilityCodes').reset();
+    });
   }
 }
