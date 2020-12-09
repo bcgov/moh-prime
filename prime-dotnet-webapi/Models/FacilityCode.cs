@@ -3,9 +3,9 @@ namespace Prime.Models
     public enum FacilityCode
     {
         AcuteAmbulatoryCare = 1,
-        LongTermCare,
-        InPatientPharmacy,
-        OutPatientPharmacy,
-        OutPatientCommunityClinic
+        LongTermCare = 2,
+        InPatientPharmacy = 3,
+        OutPatientPharmacy = 4,
+        OutPatientCommunityClinic = 5
     }
 }
