@@ -281,7 +281,9 @@ namespace Prime.Services
                 _context.Remove(item);
             }
 
-            if (newCollection == null) return;
+            if (newCollection == null) {
+                return;
+            }
 
             // Create new items
             foreach (var item in newCollection)
@@ -301,7 +303,10 @@ namespace Prime.Services
                 _context.Remove(location);
             }
 
-            if (updateEnrollee?.RemoteAccessLocations == null || !(updateEnrollee.RemoteAccessLocations).Any()) return;
+            if (updateEnrollee?.RemoteAccessLocations == null || !(updateEnrollee.RemoteAccessLocations).Any()) 
+            { 
+                return;
+            }
 
             var remoteAccessLocations = new List<RemoteAccessLocation>();
 
