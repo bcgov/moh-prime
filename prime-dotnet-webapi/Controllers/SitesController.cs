@@ -582,7 +582,7 @@ namespace Prime.Controllers
         /// Gets a download token for the latest business licence on a site.
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpGet("{siteId}/business-licence/document-token", Name = nameof(GetBusinessLicenceDocumentToken))]
+        [HttpGet("{siteId}/business-licence/document/token", Name = nameof(GetBusinessLicenceDocumentToken))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

@@ -271,7 +271,7 @@ export class SiteResource {
   }
 
   public getBusinessLicenceDocumentToken(siteId: number): Observable<string> {
-    return this.apiResource.get<string>(`sites/${siteId}/business-licence/document-token`)
+    return this.apiResource.get<string>(`sites/${siteId}/business-licence/document/token`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
