@@ -10,6 +10,7 @@
     "msjsdiag.debugger-for-chrome",
     "christian-kohler.path-intellisense",
     "gruntfuggly.todo-tree",
-    "ms-vscode.vscode-typescript-tslint-plugin"
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "angular.ng-template"
   ]
 }

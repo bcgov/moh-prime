@@ -33,11 +33,6 @@
                       [menu]="organizationMenu"
                       [menuOutletContext]="{ organization: organization }"
                       [properties]="getOrganizationProperties(organization)">
-      <!-- TODO PRIME-1007
-        <ng-container *ngIf=""
-                      [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props: getOrganizationNotificationProperties(organization.id, site.id) }">
-      -->
     </app-summary-card>
 
     <hr *ngIf="first"

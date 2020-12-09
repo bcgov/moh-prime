@@ -124,6 +124,8 @@ namespace Prime.Models
         [JsonIgnore]
         public Credential Credential { get; set; }
 
+        public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
+
         [NotMapped]
         public string Base64QRCode
         {
