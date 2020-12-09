@@ -101,9 +101,9 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
     this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
 
-    // this.communityHealthSites.markAllAsTouched();
-    // this.communityPharmacySites.markAllAsTouched();
-    // this.healthAuthoritySites.markAllAsTouched();
+    this.communityHealthSites.updateValueAndValidity();
+    this.communityPharmacySites.updateValueAndValidity();
+    this.healthAuthoritySites.updateValueAndValidity();
 
     super.onSubmit();
   }
@@ -150,8 +150,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        const facility = site.get('facility') as FormControl;
-        this.formUtilsService.setValidators(facility, [Validators.required]);
+        const facilityName = site.get('facilityName') as FormControl;
+        this.formUtilsService.setValidators(facilityName, [Validators.required]);
         this.healthAuthoritySites.push(site);
         break;
       }
@@ -173,22 +173,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         break;
       }
     }
-  }
-
-  public routeBackTo() {
-    let routePath: string;
-    if (this.enrolmentFormStateService.json?.certifications?.length) {
-      routePath = EnrolmentRoutes.REGULATORY;
-    } else if (
-      this.enrolmentFormStateService.careSettingsForm.value.careSettings
-        .some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
-    ) {
-      routePath = EnrolmentRoutes.HEALTH_AUTHORITY;
-    } else if (!this.isProfileComplete) {
-      routePath = EnrolmentRoutes.CARE_SETTING;
-    }
-
-    this.routeTo(routePath);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {

@@ -24,9 +24,13 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
-import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { RemoteAccessSite } from '../models/remote-access-site.model';
+import { RemoteAccessLocation } from '../models/remote-access-location';
+import { Site } from '@registration/shared/models/site.model';
+import { OboSite } from '../models/obo-site.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { HealthAuthorityFormState } from '@enrolment/pages/health-authority/health-authority-form-state';
 
@@ -49,6 +53,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public accessAgreementForm: FormGroup;
 
   private identityProvider: IdentityProviderEnum;
+  private CareSettingEnum = CareSettingEnum;
   private enrolleeId: number;
   private userId: string;
 
@@ -292,8 +297,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
             break;
           }
           case CareSettingEnum.HEALTH_AUTHORITY: {
-            const facility = site.get('facility') as FormControl;
-            this.formUtilsService.setValidators(facility, [Validators.required]);
+            const facilityName = site.get('facilityName') as FormControl;
+            this.formUtilsService.setValidators(facilityName, [Validators.required]);
             healthAuthoritySites.push(site);
             break;
           }
@@ -364,6 +369,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.careSettingsForm.patchValue(enrolment);
 
     this.healthAuthoritiesFormState.patchValue(enrolment.enrolleeHealthAuthorities);
+
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly
@@ -520,7 +526,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     return this.fb.group({
       careSettingCode: [null, []],
       siteName: [null, []],
-      facility: [null, []],
+      facilityName: [null, []],
       physicalAddress: this.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         exclude: ['street2'],

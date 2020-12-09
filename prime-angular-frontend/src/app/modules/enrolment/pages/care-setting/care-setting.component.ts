@@ -69,7 +69,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public onSubmit() {
-    // Remove any oboSites belonging to careSetting which is no longer selected
+    // remove any oboSites belonging to careSetting which is no longer selected
     this.careSettingTypes.forEach((type) => {
       const careSetting = this.careSettings.controls.filter((c) => c.value.careSettingCode === type.code);
       if (!careSetting.length) {
@@ -208,6 +208,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     const communityHealthSites = form.get('communityHealthSites') as FormArray;
     const communityPharmacySites = form.get('communityPharmacySites') as FormArray;
     const healthAuthoritySites = form.get('healthAuthoritySites') as FormArray;
+
+    oboSites?.controls?.forEach((site, i) => {
+      if (site.value.careSettingCode === careSettingCode) {
+        oboSites.removeAt(i);
+      }
+    });
 
     oboSites?.controls?.forEach((site, i) => {
       if (site.value.careSettingCode === careSettingCode) {

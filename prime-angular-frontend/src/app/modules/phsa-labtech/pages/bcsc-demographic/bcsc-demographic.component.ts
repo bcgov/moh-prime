@@ -36,7 +36,7 @@ export class BcscDemographicComponent implements OnInit {
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    protected phasLabtechResource: PhsaLabtechResource,
+    protected phsaLabtechResource: PhsaLabtechResource,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
@@ -46,7 +46,7 @@ export class BcscDemographicComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      this.phasLabtechResource.createEnrollee(this.formAsJson);
+      this.phsaLabtechResource.createEnrollee(this.formAsJson);
     } else {
       this.utilService.scrollToErrorSection();
     }
