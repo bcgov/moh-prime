@@ -16,6 +16,7 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -103,6 +104,22 @@ export class EnrolleeReviewComponent {
 
   public get careSettings(): CareSetting[] {
     return (this.hasCareSetting) ? this.enrolment.careSettings : [];
+  }
+
+  public get healthAuthorities(): { healthAuthorityCode: number, facilityCodes: number[] }[] {
+    const healthAuthoritiesGrouped = this.enrolment.enrolleeHealthAuthorities
+      .reduce((grouped: { [key: number]: number[] }, ha: HealthAuthority) => {
+        grouped[ha.healthAuthorityCode] = [].concat([...(grouped[ha.healthAuthorityCode] ?? []), ha.facilityCode]);
+        return grouped;
+      }, {});
+
+    const healthAuthorities = Object.keys(healthAuthoritiesGrouped)
+      .map(key => ({
+        healthAuthorityCode: +key,
+        facilityCodes: healthAuthoritiesGrouped[key]
+      }));
+
+    return (healthAuthorities?.length) ? healthAuthorities : [];
   }
 
   public get isRequestingRemoteAccess(): boolean {
