@@ -5,9 +5,10 @@
         403 <span class="d-block d-lg-inline">You don't appear to have the proper authorization.</span>
       </h1>
 
-      <a mat-flat-button href="/">
-      Let us help you find your way to your destination
-    </a>
+      <button mat-flat-button
+              (click)="routeToRoot()">
+        Let us help you find your way to your destination
+      </button>
     </div>
   </div>
 </app-page-simple>

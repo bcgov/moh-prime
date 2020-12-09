@@ -1,6 +1,6 @@
-<app-page [busy]="busy">
+<app-page>
   <app-page-header>PRIME Enrolment</app-page-header>
-  <app-phsa-progress-indicator [inProgress]="isInitialEnrolment"
+  <app-phsa-progress-indicator [inProgress]="true"
                                message="Pre-enrolment Step">
   </app-phsa-progress-indicator>
 
@@ -15,8 +15,7 @@
   </form>
 
   <app-page-footer primaryActionLabel="Continue"
-                   [isInitialEnrolment]="isInitialEnrolment"
-                   [hasSecondaryAction]="isProfileComplete"
+                   [hasSecondaryAction]="false"
                    (save)="onSubmit()"></app-page-footer>
 
 </app-page>
