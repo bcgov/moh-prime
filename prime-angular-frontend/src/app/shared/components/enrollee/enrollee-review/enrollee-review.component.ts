@@ -14,6 +14,8 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -31,6 +33,7 @@ export class EnrolleeReviewComponent {
   public demographicRoutePath: string;
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
+  public CareSettingEnum = CareSettingEnum;
   public EnrolmentRoutes = EnrolmentRoutes;
   public AdjudicationRoutes = AdjudicationRoutes;
 
@@ -88,6 +91,10 @@ export class EnrolleeReviewComponent {
 
   public get jobs(): Job[] {
     return (this.hasJob) ? this.enrolment.jobs : [];
+  }
+
+  public get oboSites(): OboSite[] {
+    return this.enrolment.oboSites ? this.enrolment.oboSites : [];
   }
 
   public get hasCareSetting(): boolean {

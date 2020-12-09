@@ -1,0 +1,56 @@
+<ng-container [formGroup]="form">
+
+  <app-form-icon-group [show]="total > 1"
+                       (event)="removeOboSite(index)">
+
+    <section [class.mb-4]="!last">
+      <div *ngIf="careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
+           class="row">
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Site Name"
+                   formControlName="siteName">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <div *ngIf="careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
+           class="row">
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Health Authority Facility Name"
+                   formControlName="facilityName">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <app-address [form]="site.get('physicalAddress')"
+                   [formControlNames]="formControlNames"
+                   [bcOnly]="true"></app-address>
+
+      <div *ngIf="careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
+           class="row">
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Site ID"
+                   formControlName="pec">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+    </section>
+  </app-form-icon-group>
+
+</ng-container>
