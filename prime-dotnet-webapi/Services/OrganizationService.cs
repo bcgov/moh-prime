@@ -51,7 +51,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
-        public async Task<int> CreateOrganizationAsync(Party signingAuthority)
+        public async Task<int> CreateOrganizationAsync(SigningAuthority signingAuthority)
         {
             signingAuthority.ThrowIfNull(nameof(signingAuthority));
 
@@ -64,7 +64,7 @@ namespace Prime.Services
                 await _partyService.CreatePartyAsync(signingAuthority);
             }
 
-            signingAuthority = await _partyService.GetPartyForUserIdAsync(userId);
+            signingAuthority = await _partyService.GetPartyForUserIdAsync<SigningAuthority>(userId);
 
             var organizations = await GetOrganizationsAsync(signingAuthority.Id);
             if (organizations.Count() != 0)

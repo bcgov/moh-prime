@@ -70,7 +70,7 @@ namespace Prime.Controllers
             }
             else
             {
-                var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+                var party = await _partyService.GetPartyForUserIdAsync<SigningAuthority>(User.GetPrimeUserId());
 
                 organizations = (party != null)
                     ? await _organizationService.GetOrganizationsAsync(party.Id)
@@ -119,15 +119,15 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Organization>> CreateOrganization(Party party)
+        public async Task<ActionResult<Organization>> CreateOrganization(SigningAuthority signingAuthority)
         {
-            if (party == null)
+            if (signingAuthority == null)
             {
-                this.ModelState.AddModelError("Party", "Could not create an organization, the passed in Party cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Party", "Could not create an organization, the passed in Party cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            var createdOrganizationId = await _organizationService.CreateOrganizationAsync(party);
+            var createdOrganizationId = await _organizationService.CreateOrganizationAsync(signingAuthority);
 
             var createdOrganization = await _organizationService.GetOrganizationAsync(createdOrganizationId);
 

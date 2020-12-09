@@ -10,7 +10,7 @@ namespace Prime.Services
     {
         Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId = null);
         Task<Organization> GetOrganizationAsync(int organizationId);
-        Task<int> CreateOrganizationAsync(Party signingAuthority);
+        Task<int> CreateOrganizationAsync(SigningAuthority signingAuthority);
         Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization);
         Task<int> UpdateCompletedAsync(int organizationId);
         Task DeleteOrganizationAsync(int organizationId);
