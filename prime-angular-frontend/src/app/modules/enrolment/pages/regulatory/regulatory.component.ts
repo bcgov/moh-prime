@@ -15,6 +15,8 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-regulatory',
@@ -74,6 +76,16 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.certifications.removeAt(index);
   }
 
+  public routeBackTo() {
+    const hasHealthAuthCareSetting = this.enrolmentFormStateService.careSettingsForm.value.careSettings
+      .some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
+    const routePath = (hasHealthAuthCareSetting)
+      ? EnrolmentRoutes.HEALTH_AUTHORITY
+      : EnrolmentRoutes.CARE_SETTING;
+
+    this.routeTo(routePath);
+  }
+
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm();
@@ -115,8 +127,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     if (!this.isProfileComplete) {
       nextRoutePath = (!this.certifications.length)
         ? EnrolmentRoutes.JOB
-        : (this.enrolmentService
-          .canRequestRemoteAccess(certifications, careSettings))
+        : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
           ? EnrolmentRoutes.REMOTE_ACCESS
           : EnrolmentRoutes.SELF_DECLARATION;
     }

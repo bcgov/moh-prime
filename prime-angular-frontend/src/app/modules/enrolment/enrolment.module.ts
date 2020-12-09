@@ -17,6 +17,7 @@ import { JobComponent } from './pages/job/job.component';
 import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
+import { HealthAuthorityComponent } from './pages/health-authority/health-authority.component';
 import { OverviewComponent } from './pages/overview/overview.component';
 import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmation/minor-update-confirmation.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
@@ -56,6 +57,7 @@ import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site
     RemoteAccessComponent,
     SelfDeclarationComponent,
     CareSettingComponent,
+    HealthAuthorityComponent,
     OverviewComponent,
     MinorUpdateConfirmationComponent,
     SubmissionConfirmationComponent,
@@ -74,10 +76,6 @@ import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site
     EnrolmentProgressIndicatorComponent,
     RemoteAccessAddressesComponent,
     OboSiteFormComponent,
-  ],
-  exports: [
-    EnrolleePageComponent,
-    EnrolmentProgressIndicatorComponent
   ],
   imports: [
     SharedModule,

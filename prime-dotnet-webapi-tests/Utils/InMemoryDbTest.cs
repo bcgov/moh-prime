@@ -58,6 +58,8 @@ namespace PrimeTests.Utils
             TestDb.AddRange(new StatusConfiguration().SeedData);
             TestDb.AddRange(new StatusReasonConfiguration().SeedData);
             TestDb.AddRange(new VendorConfiguration().SeedData);
+            TestDb.AddRange(new HealthAuthorityConfiguration().SeedData);
+            TestDb.AddRange(new FacilityConfiguration().SeedData);
 
             TestDb.AddRange(new AgreementVersionConfiguration().SeedData);
 

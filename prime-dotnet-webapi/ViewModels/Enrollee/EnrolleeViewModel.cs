@@ -51,6 +51,8 @@ namespace Prime.ViewModels
 
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
+        public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
+
         public string DeviceProviderNumber { get; set; }
 
         public bool? IsInsulinPumpProvider { get; set; }
@@ -109,7 +111,7 @@ namespace Prime.ViewModels
         public bool IsRegulatedUser { get; set; }
 
         public AgreementType? AssignedTOAType { get; set; }
-        
+
         public string CurrentTOAStatus
         {
             get

@@ -175,6 +175,22 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     }
   }
 
+  public routeBackTo() {
+    let routePath: string;
+    if (this.enrolmentFormStateService.json?.certifications?.length) {
+      routePath = EnrolmentRoutes.REGULATORY;
+    } else if (
+      this.enrolmentFormStateService.careSettingsForm.value.careSettings
+        .some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
+    ) {
+      routePath = EnrolmentRoutes.HEALTH_AUTHORITY;
+    } else if (!this.isProfileComplete) {
+      routePath = EnrolmentRoutes.CARE_SETTING;
+    }
+
+    this.routeTo(routePath);
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
     const canDeactivate = super.canDeactivate();
 
