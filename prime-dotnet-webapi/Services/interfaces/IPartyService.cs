@@ -6,7 +6,7 @@ namespace Prime.Services
 {
     public interface IPartyService
     {
-        Task<Party> GetPartyForUserIdAsync(Guid userId);
+        Task<T> GetPartyForUserIdAsync<T>(Guid userId) where T : Party;
         Task<bool> PartyExistsAsync(int partyId);
         Task<bool> PartyUserIdExistsAsync(Guid userId);
         Task<Party> GetPartyAsync(int partyId);

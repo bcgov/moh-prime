@@ -29,10 +29,11 @@ namespace Prime.Services
         }
 
 
-        public async Task<Party> GetPartyForUserIdAsync(Guid userId)
+        public async Task<T> GetPartyForUserIdAsync<T>(Guid userId) where T : Party
         {
             return await GetBasePartyQuery()
                 .AsNoTracking()
+                .OfType<T>()
                 .FirstOrDefaultAsync(e => e.UserId == userId);
         }
 
