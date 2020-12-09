@@ -248,7 +248,7 @@ export class SiteResource {
 
   public createBusinessLicenceDocument(siteId: number, documentGuid: string): Observable<BusinessLicenceDocument> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licence/document`, params)
+    return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licence/document`, null, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicenceDocument>) => response.result),
         catchError((error: any) => {

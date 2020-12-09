@@ -327,6 +327,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiResultResponse<BusinessLicence>), StatusCodes.Status200OK)]
         public async Task<ActionResult<BusinessLicence>> CreateBusinessLicence(int siteId, BusinessLicence businessLicence, [FromQuery] Guid documentGuid)
         {
@@ -338,6 +339,10 @@ namespace Prime.Controllers
             if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
+            }
+            if (site.BusinessLicence != null)
+            {
+                return Conflict(ApiResponse.Message($"Business Licence exists for site with id {siteId}"));
             }
 
             var licence = await _siteService.AddBusinessLicenceAsync(businessLicence, documentGuid);
@@ -361,6 +366,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiResultResponse<BusinessLicence>), StatusCodes.Status200OK)]
         public async Task<ActionResult<BusinessLicence>> UpdateBusinessLicence(int siteId, BusinessLicence businessLicence)
         {
@@ -372,6 +378,10 @@ namespace Prime.Controllers
             if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
+            }
+            if (site.BusinessLicence.BusinessLicenceDocument != null)
+            {
+                return Conflict(ApiResponse.Message($"Business licence already uploaded, update not allowed."));
             }
 
             var licence = await _siteService.UpdateBusinessLicenceAsync(site.Id, businessLicence);
@@ -390,6 +400,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status409Conflict)]
         [ProducesResponseType(typeof(ApiResultResponse<BusinessLicenceDocument>), StatusCodes.Status200OK)]
         public async Task<ActionResult<BusinessLicenceDocument>> CreateBusinessLicenceDocument(int siteId, [FromQuery] Guid documentGuid)
         {
@@ -398,9 +409,17 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
+            if (site.BusinessLicence == null)
+            {
+                return NotFound(ApiResponse.Message($"Business Licence not found on site with id {siteId}"));
+            }
             if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
+            }
+            if (site.BusinessLicence.BusinessLicenceDocument != null)
+            {
+                return Conflict(ApiResponse.Message($"Business Licence Document exists for site with id {siteId}"));
             }
 
             var document = await _siteService.AddBusinessLicenceDocumentAsync(siteId, documentGuid);

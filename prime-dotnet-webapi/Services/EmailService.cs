@@ -211,7 +211,7 @@ namespace Prime.Services
             var businessLicence = await _siteService.GetBusinessLicenceAsync(siteId);
             if (businessLicence.BusinessLicenceDocument == null)
             {
-                return null;
+                return "";
             }
             var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicence.BusinessLicenceDocument.DocumentGuid);
             return documentAccessToken.DownloadUrl;

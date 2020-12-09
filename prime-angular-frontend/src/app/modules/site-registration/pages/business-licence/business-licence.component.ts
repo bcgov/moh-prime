@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { noop, of, Subscription } from 'rxjs';
+import { noop, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -82,34 +82,31 @@ export class BusinessLicenceComponent implements OnInit {
 
   public onSubmit() {
     const siteId = this.route.snapshot.params.sid;
-
+    let method$: Observable<any>;
     if (this.formUtilsService.checkValidity(this.form) && (this.uploadedFile || this.deferredLicenceToggle?.checked)) {
       const payload = this.siteFormStateService.json;
-      this.businessLicence.deferredLicenceReason = payload.deferredLicenceReason;
-      this.siteResource
-        .updateSite(payload)
-        .pipe(
-          exhaustMap(() => (this.businessLicence.id && payload.businessLicenceGuid)
-            ? this.siteResource.createBusinessLicenceDocument(siteId, payload.businessLicenceGuid)
-            : of(noop)
-          ),
-          exhaustMap(() => (this.businessLicence.id)
-            ? this.siteResource.updateBusinessLicence(siteId, this.businessLicence)
-            : this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)
-          )
-        )
-        .subscribe(() => {
-          // TODO should make this cleaner, but for now good enough
-          // Remove the business licence GUID to prevent 404 already
-          // submitted if resubmited in same session
-          this.businessLicenceGuid.patchValue(null);
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    } else {
-      if (!this.deferredLicenceToggle.checked) {
-        this.hasNoBusinessLicenceError = true;
+      if (this.deferredLicenceToggle?.checked) {
+        this.businessLicence.deferredLicenceReason = payload.deferredLicenceReason;
+        method$ = (this.businessLicence.id)
+          ? this.siteResource.updateBusinessLicence(siteId, this.businessLicence)
+          : this.siteResource.createBusinessLicence(siteId, this.businessLicence, null);
+      } else {
+        const updateSite = this.siteResource.updateSite(payload);
+        method$ = (this.businessLicence.id)
+          ? updateSite.pipe(exhaustMap(() => this.siteResource.createBusinessLicenceDocument(siteId, payload.businessLicenceGuid)))
+          : updateSite.pipe(exhaustMap(() =>
+            this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)));
       }
+      method$.subscribe(() => {
+        // TODO should make this cleaner, but for now good enough
+        // Remove the business licence GUID to prevent 404 already
+        // submitted if resubmited in same session
+        this.businessLicenceGuid.patchValue(null);
+        this.form.markAsPristine();
+        this.nextRoute();
+      });
+    } else if (!this.deferredLicenceToggle.checked) {
+      this.hasNoBusinessLicenceError = true;
     }
   }
 
@@ -182,6 +179,10 @@ export class BusinessLicenceComponent implements OnInit {
         this.businessLicence = businessLicense ?? this.businessLicence;
         if (businessLicense && !businessLicense.completed) {
           this.deferredLicenceToggle.checked = true;
+          this.deferredLicenceReason.setValidators([Validators.required]);
+          this.formUtilsService.resetAndClearValidators(this.doingBusinessAs);
+          this.hasNoBusinessLicenceError = false;
+          this.doingBusinessAs.disable();
         }
       });
   }
