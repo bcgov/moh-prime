@@ -303,7 +303,7 @@ namespace Prime.Services
                 _context.Remove(location);
             }
 
-            if (updateEnrollee?.RemoteAccessLocations == null || !(updateEnrollee.RemoteAccessLocations).Any()) 
+            if (updateEnrollee.RemoteAccessLocations == null || !updateEnrollee.RemoteAccessLocations.Any()) 
             { 
                 return;
             }
