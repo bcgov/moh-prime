@@ -41,33 +41,38 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col">
-          <app-form-icon-group>
-            <mat-form-field class="w-100">
-              <input matInput
-                     placeholder="Organization Registration ID"
-                     formControlName="registrationId">
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-            <ng-container appContextualContent>
-              This number can be found on the Certificate of Registration issued to the organization by the BC Corporate
-              Registry.
-            </ng-container>
-          </app-form-icon-group>
+      <ng-container *ngIf="usedOrgBook">
 
+        <div class="row">
+          <div class="col">
+            <app-form-icon-group>
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Organization Registration ID"
+                       formControlName="registrationId">
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+            </app-form-icon-group>
+
+          </div>
         </div>
-      </div>
 
-      <app-alert *ngIf="usedOrgBook"
-                 type="info"
-                 icon="info">
-        <ng-container #alertContent
-                      class="alert-content">
-          Verify your chosen organization by viewing it on BC Corporate Registry at
-          <a [href]="getOrgBookLink(registrationId.value)" target="_blank">{{ getOrgBookLink(registrationId.value, true) }}</a>
-        </ng-container>
-      </app-alert>
+        <app-alert type="info"
+                   icon="info">
+          <ng-container #alertContent
+                        class="alert-content">
+            We found the organization’s name and registration number in OrgBook.
+            <div class="text-right">
+              <a mat-raised-button
+              color="primary"
+
+              [href]="getOrgBookLink(registrationId.value)"
+              target="_blank">View organization in OrgBook</a>
+            </div>
+          </ng-container>
+        </app-alert>
+
+      </ng-container>
 
     </section>
 
