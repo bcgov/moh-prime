@@ -13,6 +13,8 @@ import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('AccessAgreementHistoryEnrolmentComponent', () => {
   let component: AccessAgreementHistoryEnrolmentComponent;
@@ -38,6 +40,10 @@ describe('AccessAgreementHistoryEnrolmentComponent', () => {
         {
           provide: EnrolmentService,
           useClass: MockEnrolmentService
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
         },
         KeycloakService
       ]
