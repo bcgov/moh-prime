@@ -101,6 +101,16 @@ export class ConfigService implements IConfigService {
       .sort(this.sortConfigByName());
   }
 
+  public get healthAuthorities() {
+    return [...this.configuration.healthAuthorities]
+      .sort(this.sortConfigByName());
+  }
+
+  public get facilities() {
+    return [...this.configuration.facilities]
+      .sort(this.sortConfigByName());
+  }
+
   /**
    * @description
    * Load the runtime configuration.
