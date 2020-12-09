@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -12,36 +9,45 @@ using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
 using Prime.ViewModels.Labtech;
+using Prime.HttpClients;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
     [Route("api/parties/[controller]")]
     [ApiController]
-    // User needs at least the READONLY ADMIN or ENROLLEE role to use this controller
-    //[Authorize(Policy = Policies.User)]
+    [Authorize(Policy = Policies.User)]
     public class LabtechsController : ControllerBase
     {
-        private readonly ILabtechService _labtechService;
+        private readonly IPartyService _partyService;
+        private readonly IKeycloakAdministrationClient _keycloakClient;
 
-        public LabtechsController(ILabtechService labtechService)
+        public LabtechsController(
+            IPartyService partyService,
+            IKeycloakAdministrationClient keycloakClient)
         {
-            _labtechService = labtechService;
+            _partyService = partyService;
+            _keycloakClient = keycloakClient;
         }
 
         // POST: api/parties/labtechs
         /// <summary>
-        /// Creates a new Enrollee.
+        /// Creates a new Labtech.
+        /// If successful, also updates Keycloak with additional user info and the Labtech role.
         /// </summary>
         [HttpPost(Name = nameof(CreateLabtech))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> CreateLabtech(LabtechCreateModel labtech)
         {
-            await _labtechService.CreateLabtechAsync(labtech, User);
-            return Created();
+            var model = Labtech.From(labtech, User);
+            await _partyService.CreatePartyAsync(model);
+
+            await _keycloakClient.AssignRealmRole(model.UserId, Roles.PhsaLabtech);
+            await _keycloakClient.UpdateUserInfo(model.UserId, email: labtech.Email, phoneNumber: labtech.Phone, phoneExtension: labtech.PhoneExtension);
+
+            return Ok();
         }
     }
 }
