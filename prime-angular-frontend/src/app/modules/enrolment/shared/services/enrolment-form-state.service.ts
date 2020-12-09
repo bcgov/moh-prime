@@ -26,12 +26,7 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { RemoteAccessSite } from '../models/remote-access-site.model';
 import { RemoteAccessLocation } from '../models/remote-access-location';
-import { Site } from '@registration/shared/models/site.model';
 import { OboSite } from '../models/obo-site.model';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { FormUtilsService } from '@core/services/form-utils.service';
-
 import { HealthAuthorityFormState } from '@enrolment/pages/health-authority/health-authority-form-state';
 
 @Injectable({
