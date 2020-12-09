@@ -32,9 +32,12 @@ namespace Prime.Auth
         public const string PrimeAdmin = "prime_admin";
         public const string PrimeReadonlyAdmin = "prime_readonly_admin";
         public const string PrimeEnrollee = "prime_user";
+
         public const string ExternalHpdidAccess = "external_hpdid_access";
         public const string ExternalGpidValidation = "external_gpid_validation";
         public const string PrimeApiServiceAccount = "prime_api_service_account";
+
+        public const string PhsaLabtech = "phsa_eforms_labtech";
     }
 
     public static class Policies
