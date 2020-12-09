@@ -28,7 +28,7 @@ export class HealthAuthorityFormState extends AbstractFormState<HealthAuthority[
 
     return this.formInstance.getRawValue()
       .enrolleeHealthAuthorities
-      .filter((ha: HealthAuthorityFormModel) => ha.facilityCodes.length)
+      .filter((ha: HealthAuthorityFormModel) => ha.facilityCodes?.length)
       .flatMap((ha: HealthAuthorityFormModel) =>
         ha.facilityCodes.map(f => ({
           healthAuthorityCode: ha.healthAuthorityCode,
@@ -66,7 +66,7 @@ export class HealthAuthorityFormState extends AbstractFormState<HealthAuthority[
         healthAuthorities,
         {
           validators: FormArrayValidators
-            .atLeast(1, (control: AbstractControl) => control.get('facilityCodes').value.length)
+            .atLeast(1, (control: AbstractControl) => control.get('facilityCodes').value?.length)
         }
       )
     });

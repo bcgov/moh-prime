@@ -77,6 +77,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       }
     });
 
+    // remove health authorities if health authority care setting not chosen
+    const careSetting = this.careSettings.controls.filter((c) => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
+    if (!careSetting.length) {
+      this.removeHealthAuthorities();
+    }
+
     super.onSubmit();
   }
 
@@ -215,12 +221,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       }
     });
 
-    oboSites?.controls?.forEach((site, i) => {
-      if (site.value.careSettingCode === careSettingCode) {
-        oboSites.removeAt(i);
-      }
-    });
-
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         communityHealthSites.reset();
@@ -235,5 +235,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
         break;
       }
     }
+  }
+
+  private removeHealthAuthorities() {
+    const form = this.enrolmentFormStateService.healthAuthoritiesFormState.form
+    const healthAuthorities = form.get('enrolleeHealthAuthorities') as FormArray;
+    healthAuthorities.reset();
+    form.reset();
   }
 }
