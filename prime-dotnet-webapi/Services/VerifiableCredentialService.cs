@@ -265,7 +265,7 @@ namespace Prime.Services
 
                 attributes.Add(new JObject
                 {
-                    { "name", "care_setting" },
+                    { "name", "organization_type" },
                     { "value", careSetting.CareSetting.Name }
                 });
             }
