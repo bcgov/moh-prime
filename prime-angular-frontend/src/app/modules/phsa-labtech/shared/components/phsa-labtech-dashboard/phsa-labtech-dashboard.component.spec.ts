@@ -1,4 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 import { PhsaLabtechDashboardComponent } from './phsa-labtech-dashboard.component';
 
@@ -8,7 +9,13 @@ describe('PhsaLabtechDashboardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PhsaLabtechDashboardComponent]
+      declarations: [PhsaLabtechDashboardComponent],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+      ],
     })
       .compileComponents();
   }));

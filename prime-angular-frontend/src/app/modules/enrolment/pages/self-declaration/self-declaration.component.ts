@@ -123,7 +123,9 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
           .canRequestRemoteAccess(certifications, careSettings)
       )
         ? EnrolmentRoutes.REMOTE_ACCESS
-        : EnrolmentRoutes.CARE_SETTING;
+        : (certifications.length)
+          ? EnrolmentRoutes.REGULATORY
+          : EnrolmentRoutes.JOB;
     }
 
     this.routeTo(backRoutePath);

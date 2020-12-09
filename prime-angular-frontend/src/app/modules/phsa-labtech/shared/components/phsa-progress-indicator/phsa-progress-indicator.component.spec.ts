@@ -1,4 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { PhsaProgressIndicatorComponent } from './phsa-progress-indicator.component';
 
@@ -6,11 +8,15 @@ describe('PhsaProgressIndicatorComponent', () => {
   let component: PhsaProgressIndicatorComponent;
   let fixture: ComponentFixture<PhsaProgressIndicatorComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PhsaProgressIndicatorComponent ]
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      declarations: [PhsaProgressIndicatorComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

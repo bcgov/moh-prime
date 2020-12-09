@@ -328,6 +328,10 @@ export class EnrolmentResource {
       enrollee.jobs = [];
     }
 
+    if (!enrollee.oboSites) {
+      enrollee.oboSites = [];
+    }
+
     if (!enrollee.enrolleeCareSettings) {
       enrollee.enrolleeCareSettings = [];
     }
