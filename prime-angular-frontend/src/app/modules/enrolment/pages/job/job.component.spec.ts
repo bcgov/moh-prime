@@ -18,6 +18,8 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('JobComponent', () => {
   let component: JobComponent;
@@ -47,6 +49,10 @@ describe('JobComponent', () => {
         {
           provide: EnrolmentService,
           useClass: MockEnrolmentService
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
         },
         EnrolmentFormStateService,
         KeycloakService

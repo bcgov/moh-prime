@@ -3,6 +3,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { EnrolmentProgressIndicatorComponent } from './enrolment-progress-indicator.component';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('EnrolmentProgressIndicatorComponent', () => {
   let component: EnrolmentProgressIndicatorComponent;
@@ -11,8 +13,15 @@ describe('EnrolmentProgressIndicatorComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
+        HttpClientTestingModule,
         RouterTestingModule,
         EnrolmentModule
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
       ]
     })
       .compileComponents();
