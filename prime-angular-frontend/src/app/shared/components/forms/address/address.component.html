@@ -1,7 +1,12 @@
 <app-address-autocomplete [bcOnly]="bcOnly"
                           (autocompleteAddress)="onAutocomplete($event)"></app-address-autocomplete>
 
-<div [formGroup]="form">
+<button *ngIf="simpleMode"
+        mat-flat-button
+        (click)="switchToManualAddress()">+ Add address manually</button>
+
+<div [formGroup]="form"
+     [hidden]="simpleMode">
 
   <div class="row">
 
