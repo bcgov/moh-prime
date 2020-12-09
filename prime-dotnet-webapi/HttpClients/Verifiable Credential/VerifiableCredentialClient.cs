@@ -18,7 +18,7 @@ namespace Prime.HttpClients
         // If schema version is updated in dev, make sure it is updated in test and prod agent
         // (and update cred_def_id) so versions are the same between dev, test, and prod
         // and have verifier app updated by aries team in each environment
-        private static readonly string SchemaVersion = "2.1";
+        private static readonly string SchemaVersion = "2.0";
 
         public VerifiableCredentialClient(
             HttpClient client,
