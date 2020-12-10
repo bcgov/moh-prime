@@ -224,14 +224,17 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         communityHealthSites.reset();
+        communityHealthSites.clearValidators();
         break;
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
         communityPharmacySites.reset();
+        communityPharmacySites.clearValidators();
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
         healthAuthoritySites.reset();
+        healthAuthoritySites.clearValidators();
         break;
       }
     }
@@ -241,7 +244,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     const form = this.enrolmentFormStateService.healthAuthoritiesFormState.form
     const healthAuthorities = form.get('enrolleeHealthAuthorities') as FormArray;
     healthAuthorities.controls.forEach(ha => {
-      ha.get('facilityCodes').reset();
+      ha.get('facilityCodes').patchValue([]);
     });
   }
 }
