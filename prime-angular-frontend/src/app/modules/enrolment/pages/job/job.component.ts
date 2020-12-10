@@ -176,7 +176,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   public routeBackTo() {
-    let routePath: string;
+    let routePath = EnrolmentRoutes.CARE_SETTING;
     if (this.enrolmentFormStateService.json?.certifications?.length) {
       routePath = EnrolmentRoutes.REGULATORY;
     } else if (
@@ -184,8 +184,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         .some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
     ) {
       routePath = EnrolmentRoutes.HEALTH_AUTHORITY;
-    } else if (!this.isProfileComplete) {
-      routePath = EnrolmentRoutes.CARE_SETTING;
     }
 
     this.routeTo(routePath);
