@@ -10,7 +10,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
@@ -42,6 +42,7 @@ export class BusinessLicenceComponent implements OnInit {
   public SiteRoutes = SiteRoutes;
 
   @ViewChild('deferredLicence') public deferredLicenceToggle: MatSlideToggle;
+  @ViewChild('documentUpload') public documentUpload: DocumentUploadComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -146,10 +147,12 @@ export class BusinessLicenceComponent implements OnInit {
       this.formUtilsService.resetAndClearValidators(this.doingBusinessAs);
       this.hasNoBusinessLicenceError = false;
       this.doingBusinessAs.disable();
+      this.documentUpload.disable();
     } else {
       this.formUtilsService.resetAndClearValidators(this.deferredLicenceReason);
       this.doingBusinessAs.setValidators([Validators.required]);
       this.doingBusinessAs.enable();
+      this.documentUpload.enable();
     }
     this.form.markAsUntouched();
   }
@@ -183,6 +186,7 @@ export class BusinessLicenceComponent implements OnInit {
           this.formUtilsService.resetAndClearValidators(this.doingBusinessAs);
           this.hasNoBusinessLicenceError = false;
           this.doingBusinessAs.disable();
+          this.documentUpload.disable();
         }
       });
   }

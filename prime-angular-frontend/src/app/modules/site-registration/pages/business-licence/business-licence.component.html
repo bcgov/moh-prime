@@ -14,7 +14,8 @@
         </ng-container>
       </app-page-subheader2>
 
-      <app-document-upload componentName="business-licence"
+      <app-document-upload #documentUpload
+                           componentName="business-licence"
                            labelMessage="Drag and drop your business licence or browse"
                            [multiple]="false"
                            (completed)="onUpload($event)"
