@@ -46,7 +46,7 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
   }
 
   public getBusinessLicence() {
-    this.siteResource.getBusinessLicenceDownloadToken(this.site.id)
+    this.siteResource.getBusinessLicenceDocumentToken(this.site.id)
       .subscribe((token: string) => {
         this.utilsService.downloadToken(token);
       });

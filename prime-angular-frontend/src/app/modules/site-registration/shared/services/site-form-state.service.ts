@@ -65,7 +65,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, vendorCode } = this.careSettingTypeForm.getRawValue();
-    const { businessLicenceGuid, doingBusinessAs } = this.businessForm.getRawValue();
+    const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason } = this.businessForm.getRawValue();
     const { physicalAddress } = this.siteAddressForm.getRawValue();
     const businessHours = this.hoursOperationForm.getRawValue().businessDays
       .map((hours: BusinessDayHours, dayOfWeek: number) => {
@@ -103,6 +103,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
         vendorCode
       }],
       businessLicenceGuid,
+      deferredLicenceReason,
       doingBusinessAs,
       physicalAddressId: physicalAddress?.id,
       physicalAddress,
@@ -171,6 +172,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
 
     if (site.doingBusinessAs) {
       this.businessForm.get('doingBusinessAs').patchValue(site.doingBusinessAs);
+    }
+
+    if (site.businessLicence) {
+      this.businessForm.get('deferredLicenceReason').patchValue(site.businessLicence.deferredLicenceReason);
     }
 
     if (site.physicalAddress) {
@@ -258,6 +263,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   private buildBusinessForm(): FormGroup {
     return this.fb.group({
       businessLicenceGuid: [
+        '',
+        []
+      ],
+      deferredLicenceReason: [
         '',
         []
       ],
