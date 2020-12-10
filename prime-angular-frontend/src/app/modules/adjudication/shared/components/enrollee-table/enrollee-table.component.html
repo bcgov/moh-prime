@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col">
-    <form [formGroup]="filterFormControl">
+    <form [formGroup]="form">
       <table mat-table
              matSort
              (matSortChange)="sortData($event)"
@@ -156,63 +156,63 @@
       </table>
     </form>
 
-      <p *ngIf="!dataSource?.data.length"
-         class="px-4 py-2 text-muted">
-        No Enrolments Found
-      </p>
+    <p *ngIf="!dataSource?.data.length"
+       class="px-4 py-2 text-muted">
+      No Enrolments Found
+    </p>
 
-      <ng-template #menu
-                   let-row="row">
-        <button mat-icon-button
-                [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
+    <ng-template #menu
+                 let-row="row">
+      <button mat-icon-button
+              [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item
+                *ngIf="canReviewStatusReasons(row)"
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_REVIEW])">
+          <mat-icon>rate_review</mat-icon>
+          <span>Adjudication</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_ENROLMENTS])">
+          <mat-icon>history</mat-icon>
+          <span>Enrolments</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.EVENT_LOG])">
+          <mat-icon>list_alt</mat-icon>
+          <span>Event Log</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.ADJUDICATOR_NOTES])">
+          <mat-icon>message</mat-icon>
+          <span>Add and View Notes</span>
         </button>
 
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item
-                  *ngIf="canReviewStatusReasons(row)"
-                  (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_REVIEW])">
-            <mat-icon>rate_review</mat-icon>
-            <span>Adjudication</span>
-          </button>
-          <button mat-menu-item
-                  (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_ENROLMENTS])">
-            <mat-icon>history</mat-icon>
-            <span>Enrolments</span>
-          </button>
-          <button mat-menu-item
-                  (click)="onRoute([row.id, AdjudicationRoutes.EVENT_LOG])">
-            <mat-icon>list_alt</mat-icon>
-            <span>Event Log</span>
-          </button>
-          <button mat-menu-item
-                  (click)="onRoute([row.id, AdjudicationRoutes.ADJUDICATOR_NOTES])">
-            <mat-icon>message</mat-icon>
-            <span>Add and View Notes</span>
-          </button>
+        <mat-divider [inset]="true"></mat-divider>
 
-          <mat-divider [inset]="true"></mat-divider>
-
-          <button mat-menu-item
-                  (click)="onNotify(row.id)">
-            <mat-icon>email</mat-icon>
-            <span>Send Email</span>
-          </button>
-          <button mat-menu-item
-                  *ngIf="!row?.adjudicatorIdir"
-                  [disabled]="!canEdit"
-                  (click)="onClaim(row.id)">
-            <mat-icon>pan_tool</mat-icon>
-            <span>Claim Enrolment</span>
-          </button>
-          <button mat-menu-item
-                  *ngIf="row?.adjudicatorIdir"
-                  [disabled]="!canEdit"
-                  (click)="onDisclaim(row.id)">
-            <mat-icon>pan_tool</mat-icon>
-            <span>Disclaim Enrolment</span>
-          </button>
-        </mat-menu>
-      </ng-template>
+        <button mat-menu-item
+                (click)="onNotify(row.id)">
+          <mat-icon>email</mat-icon>
+          <span>Send Email</span>
+        </button>
+        <button mat-menu-item
+                *ngIf="!row?.adjudicatorIdir"
+                [disabled]="!canEdit"
+                (click)="onClaim(row.id)">
+          <mat-icon>pan_tool</mat-icon>
+          <span>Claim Enrolment</span>
+        </button>
+        <button mat-menu-item
+                *ngIf="row?.adjudicatorIdir"
+                [disabled]="!canEdit"
+                (click)="onDisclaim(row.id)">
+          <mat-icon>pan_tool</mat-icon>
+          <span>Disclaim Enrolment</span>
+        </button>
+      </mat-menu>
+    </ng-template>
   </div>
 </div>

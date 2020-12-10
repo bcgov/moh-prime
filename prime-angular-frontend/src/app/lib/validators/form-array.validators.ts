@@ -8,14 +8,14 @@ export class FormArrayValidators {
    * controls, but can be extended using a custom predicate.
    */
   public static atLeast(
-    minLength: number,
+    minNumber: number,
     predicate: (control: AbstractControl) => boolean = (control: AbstractControl) => !!control
   ): ValidatorFn {
     return (array: FormArray): ValidationErrors | null => {
 
       const atLeast = array &&
         array.controls?.length &&
-        array.controls.filter(predicate).length >= minLength;
+        array.controls.filter(predicate).length >= minNumber;
       return (atLeast) ? null : { atleast: true };
     };
   }

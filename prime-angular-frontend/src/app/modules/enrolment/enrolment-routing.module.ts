@@ -21,6 +21,7 @@ import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { JobComponent } from './pages/job/job.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
+import { HealthAuthorityComponent } from './pages/health-authority/health-authority.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -99,8 +100,26 @@ const routes: Routes = [
       // Enrollee enrolment:
       //
       {
+        path: EnrolmentRoutes.CARE_SETTING,
+        component: CareSettingComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.HEALTH_AUTHORITY,
+        component: HealthAuthorityComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
         path: EnrolmentRoutes.REGULATORY,
         component: RegulatoryComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.JOB,
+        component: JobComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
@@ -111,18 +130,6 @@ const routes: Routes = [
       //   canDeactivate: [CanDeactivateFormGuard],
       //   data: { title: 'PRIME Enrolment' }
       // },
-      {
-        path: EnrolmentRoutes.JOB,
-        component: JobComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PRIME Enrolment' }
-      },
-      {
-        path: EnrolmentRoutes.CARE_SETTING,
-        component: CareSettingComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PRIME Enrolment' }
-      },
       {
         path: EnrolmentRoutes.REMOTE_ACCESS,
         component: RemoteAccessComponent,

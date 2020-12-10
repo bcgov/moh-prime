@@ -14,6 +14,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteService } from '@registration/shared/services/site.service';
+import { ArrayUtils } from '@lib/utils/array-utils.class';
 
 @Injectable({
   providedIn: 'root'
@@ -73,7 +74,13 @@ export class SiteGuard extends BaseGuard {
     }
 
     const whiteListedRoutes = site.submittedDate
-      ? SiteRoutes.editRegistrationRouteAccess()
+      ? [
+        ...SiteRoutes.editRegistrationRouteAccess(),
+        ...ArrayUtils.insertIf(
+          !site.businessLicence.completed,
+          SiteRoutes.BUSINESS_LICENCE
+        )
+      ]
       : SiteRoutes.siteRegistrationRoutes();
 
     // Redirect to an appropriate default route

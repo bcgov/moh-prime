@@ -13,7 +13,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -22,8 +21,8 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmen
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 @Component({
   selector: 'app-care-setting',
@@ -78,6 +77,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       }
     });
 
+    // remove health authorities if health authority care setting not chosen
+    const careSetting = this.careSettings.controls.filter((c) => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
+    if (!careSetting.length) {
+      this.removeHealthAuthorities();
+    }
+
     super.onSubmit();
   }
 
@@ -125,6 +130,17 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return this.careSettingTypes;
   }
 
+  public routeBackTo() {
+    this.authService.identityProvider$()
+      .subscribe((identityProvider: IdentityProviderEnum) => {
+        const routePath = (identityProvider === IdentityProviderEnum.BCSC)
+          ? EnrolmentRoutes.BCSC_DEMOGRAPHIC
+          : EnrolmentRoutes.BCEID_DEMOGRAPHIC;
+
+        this.routeTo(routePath);
+      });
+  }
+
   public canDeactivate(): Observable<boolean> | boolean {
     const canDeactivate = super.canDeactivate();
 
@@ -159,7 +175,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     const jobs = this.enrolmentFormStateService.jobsForm.get('jobs').value as Job[];
 
     let nextRoutePath: string;
-    if (!this.isProfileComplete) {
+    if (this.careSettings.value.some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
+      nextRoutePath = EnrolmentRoutes.HEALTH_AUTHORITY;
+    } else if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
     } else if (jobs.length) {
       nextRoutePath = EnrolmentRoutes.JOB;
@@ -206,24 +224,27 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         communityHealthSites.reset();
+        communityHealthSites.clearValidators();
         break;
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
         communityPharmacySites.reset();
+        communityPharmacySites.clearValidators();
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
         healthAuthoritySites.reset();
+        healthAuthoritySites.clearValidators();
         break;
       }
     }
   }
 
-  public routeBackTo() {
-    const routePath = (this.enrolmentFormStateService.json?.certifications?.length)
-      ? EnrolmentRoutes.REGULATORY
-      : EnrolmentRoutes.JOB;
-
-    this.routeTo(routePath);
+  private removeHealthAuthorities() {
+    const form = this.enrolmentFormStateService.healthAuthoritiesFormState.form
+    const healthAuthorities = form.get('enrolleeHealthAuthorities') as FormArray;
+    healthAuthorities.controls.forEach(ha => {
+      ha.get('facilityCodes').patchValue([]);
+    });
   }
 }
