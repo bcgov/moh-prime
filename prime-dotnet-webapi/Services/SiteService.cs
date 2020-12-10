@@ -408,8 +408,10 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(v => v.Code == vendorCode);
         }
 
-        public async Task<BusinessLicence> AddBusinessLicenceAsync(BusinessLicence businessLicence, Guid documentGuid)
+        public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, BusinessLicence businessLicence, Guid documentGuid)
         {
+            businessLicence.SiteId = siteId;
+
             if (documentGuid != Guid.Empty)
             {
                 businessLicence.BusinessLicenceDocument = await CreateBusinessLicenceDocument(documentGuid);

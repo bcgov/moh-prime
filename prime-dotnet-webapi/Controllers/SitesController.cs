@@ -345,7 +345,7 @@ namespace Prime.Controllers
                 return Conflict(ApiResponse.Message($"Business Licence exists for site with id {siteId}"));
             }
 
-            var licence = await _siteService.AddBusinessLicenceAsync(businessLicence, documentGuid);
+            var licence = await _siteService.AddBusinessLicenceAsync(siteId, businessLicence, documentGuid);
             if (licence == null)
             {
                 this.ModelState.AddModelError("documentGuid", "Business Licence could not be created; network error or upload is already submitted");
@@ -597,6 +597,10 @@ namespace Prime.Controllers
             if (!site.Provisioner.PermissionsRecord().EditableBy(User))
             {
                 return Forbid();
+            }
+            if (site.BusinessLicence?.BusinessLicenceDocument == null)
+            {
+                return NotFound(ApiResponse.Message($"No business licence document found for site with id {siteId}"));
             }
 
             var token = await _documentService.GetDownloadTokenForBusinessLicenceDocument(siteId);

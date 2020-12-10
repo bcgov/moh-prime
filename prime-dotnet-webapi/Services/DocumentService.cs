@@ -32,7 +32,6 @@ namespace Prime.Services
 
         public async Task<string> GetDownloadTokenForBusinessLicenceDocument(int siteId)
         {
-            // TODO: verify has a file attached?
             var licence = await _siteService.GetBusinessLicenceAsync(siteId);
             return await _documentManagerClient.CreateDownloadTokenAsync(licence.BusinessLicenceDocument.DocumentGuid);
         }
@@ -78,7 +77,6 @@ namespace Prime.Services
 
         public async Task<Stream> GetStreamForBusinessLicenceDocument(int siteId)
         {
-            // TODO: verify has a file attached?
             var licence = await _siteService.GetBusinessLicenceAsync(siteId);
             return await _documentManagerClient.GetFileStreamAsync(licence.BusinessLicenceDocument.DocumentGuid);
         }
