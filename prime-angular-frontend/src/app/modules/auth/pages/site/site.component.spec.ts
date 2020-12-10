@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SiteComponent } from './site.component';
 import { SharedModule } from '@shared/shared.module';
@@ -11,7 +11,7 @@ describe('SiteComponent', () => {
   let component: SiteComponent;
   let fixture: ComponentFixture<SiteComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         AuthModule

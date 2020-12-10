@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
-import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { StringUtils } from '@lib/utils/string-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
@@ -21,7 +21,7 @@ import { RemoteUserCertification } from '@registration/shared/models/remote-user
 @Injectable({
   providedIn: 'root'
 })
-export class SiteFormStateService extends AbstractFormState<Site> {
+export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingTypeForm: FormGroup;
   public businessForm: FormGroup;
   public siteAddressForm: FormGroup;
@@ -40,7 +40,9 @@ export class SiteFormStateService extends AbstractFormState<Site> {
     protected routeStateService: RouteStateService,
     protected logger: LoggerService
   ) {
-    super(fb, routeStateService, logger, [SiteRoutes.SITE_MANAGEMENT]);
+    super(fb, routeStateService, logger);
+
+    this.initialize([SiteRoutes.SITE_MANAGEMENT]);
   }
 
   /**
@@ -329,7 +331,7 @@ export class SiteFormStateService extends AbstractFormState<Site> {
       ],
       remoteUserCertifications: this.fb.array(
         [],
-        [FormArrayValidators.atLeast(1)]
+        { validators: FormArrayValidators.atLeast(1) }
       )
     });
   }

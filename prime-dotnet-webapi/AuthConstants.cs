@@ -22,7 +22,6 @@ namespace Prime.Auth
 
     public static class FeatureFlags
     {
-        public const string SiteRegistration = "feature_site_registration";
         public const string VCIssuance = "feature_vc_issuance";
     }
 

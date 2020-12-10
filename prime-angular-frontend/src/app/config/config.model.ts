@@ -11,6 +11,8 @@ export interface Configuration {
   privilegeTypes: Config<number>[];
   statusReasons: Config<number>[];
   vendors: VendorConfig[];
+  healthAuthorities: Config<number>[];
+  facilities: Config<number>[];
 }
 
 export class Config<T> {

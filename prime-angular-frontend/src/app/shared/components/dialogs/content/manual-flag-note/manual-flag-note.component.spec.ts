@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ManualFlagNoteComponent } from './manual-flag-note.component';
 import { SharedModule } from '@shared/shared.module';
@@ -11,7 +11,7 @@ describe('ManualFlagNoteComponent', () => {
   let component: ManualFlagNoteComponent;
   let fixture: ComponentFixture<ManualFlagNoteComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         SharedModule,

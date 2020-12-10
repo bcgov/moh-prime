@@ -1,3 +1,9 @@
 @import 'mixins/statuses';
 
 @include statuses;
+
+mat-date-range-input {
+  display: inline-block;
+  width: 1px;
+  visibility: hidden;
+}

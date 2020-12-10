@@ -21,7 +21,7 @@ export class PhsaLabtechDashboardComponent implements OnInit, IDashboard {
   constructor(
     @Inject(APP_CONFIG) protected config: AppConfig
   ) {
-    this.logoutRedirectUrl = `${this.config.loginRedirectUrl}/${AuthRoutes.routePath(AuthRoutes.ADMIN)}`;
+    this.logoutRedirectUrl = `${this.config.loginRedirectUrl}/${AuthRoutes.routePath(AuthRoutes.PHSA)}`;
   }
 
   public ngOnInit(): void {

@@ -6,7 +6,6 @@ import { AccessDeniedComponent } from './components/access-denied/access-denied.
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { MaintenanceComponent } from './components/maintenance/maintenance.component';
 import { PageSimpleComponent } from './components/page-simple/page-simple.component';
-import { UnsupportedComponent } from './components/unsupported/unsupported.component';
 import { HelpComponent } from './components/help/help.component';
 import { UnderagedComponent } from './components/underaged/underaged.component';
 
@@ -19,7 +18,6 @@ import { UnderagedComponent } from './components/underaged/underaged.component';
     AccessDeniedComponent,
     PageNotFoundComponent,
     MaintenanceComponent,
-    UnsupportedComponent,
     HelpComponent,
     UnderagedComponent
   ],
@@ -28,7 +26,6 @@ import { UnderagedComponent } from './components/underaged/underaged.component';
     AccessDeniedComponent,
     PageNotFoundComponent,
     MaintenanceComponent,
-    UnsupportedComponent,
     HelpComponent,
     UnderagedComponent
   ]

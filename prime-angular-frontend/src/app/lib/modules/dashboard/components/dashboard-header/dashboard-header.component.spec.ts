@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 
 import { DashboardHeaderComponent } from './dashboard-header.component';
@@ -9,7 +9,7 @@ describe('DashboardHeaderComponent', () => {
   let component: DashboardHeaderComponent;
   let fixture: ComponentFixture<DashboardHeaderComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         imports: [

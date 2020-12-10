@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -10,12 +10,16 @@ import { AccessAgreementComponent } from './access-agreement.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
   let fixture: ComponentFixture<AccessAgreementComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         imports: [
@@ -29,8 +33,16 @@ describe('AccessAgreementComponent', () => {
             useValue: APP_DI_CONFIG
           },
           {
+            provide: ConfigService,
+            useClass: MockConfigService
+          },
+          {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
           },
           KeycloakService
         ]

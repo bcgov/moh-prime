@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
@@ -9,14 +9,20 @@ import { DashboardComponent } from './dashboard.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [DashboardComponent],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
       providers: [
         {
           provide: APP_CONFIG,

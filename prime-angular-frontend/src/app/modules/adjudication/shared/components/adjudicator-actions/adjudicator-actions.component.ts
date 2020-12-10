@@ -158,7 +158,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   }
 
   private initForm() {
-    this.assignedTOAType.patchValue(this.enrollee.assignedTOAType ?? 0);
+    this.assignedTOAType.patchValue(this.enrollee?.assignedTOAType ?? 0);
 
     this.assignedTOAType.valueChanges
       .subscribe((agreementType: AgreementType) =>

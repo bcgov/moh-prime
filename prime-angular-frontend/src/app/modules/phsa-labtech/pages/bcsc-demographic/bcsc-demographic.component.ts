@@ -17,7 +17,7 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { PhsaLabtech } from '@phsa/shared/models/phsa-lab-tech.model';
-import { PhasLabtechResource } from '@phsa/shared/services/phas-labtech-resource.service';
+import { PhsaLabtechResource } from '@phsa/shared/services/phsa-labtech-resource.service';
 
 @Component({
   selector: 'app-bcsc-demographic',
@@ -36,7 +36,7 @@ export class BcscDemographicComponent implements OnInit {
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    protected phasLabtechResource: PhasLabtechResource,
+    protected phsaLabtechResource: PhsaLabtechResource,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
@@ -46,7 +46,7 @@ export class BcscDemographicComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      this.phasLabtechResource.createEnrollee(this.formAsJson);
+      this.phsaLabtechResource.createEnrollee(this.formAsJson);
     } else {
       this.utilService.scrollToErrorSection();
     }

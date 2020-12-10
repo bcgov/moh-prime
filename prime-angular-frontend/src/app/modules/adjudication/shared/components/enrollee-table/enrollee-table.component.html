@@ -1,121 +1,160 @@
 <div class="row">
   <div class="col">
+    <form [formGroup]="form">
+      <table mat-table
+             matSort
+             (matSortChange)="sortData($event)"
+             [dataSource]="dataSource"
+             class="w-100">
 
-    <table mat-table
-           matSort
-           (matSortChange)="sortData($event)"
-           [dataSource]="dataSource"
-           class="w-100">
+        <ng-container matColumnDef="displayId">
+          <th mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              scope="col"> Reference ID </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.displayId }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="displayId">
-        <th mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            scope="col"> Reference ID </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.displayId }} </td>
-      </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col"> Enrollee Name </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row | fullname }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Enrollee Name </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row | fullname }} </td>
-      </ng-container>
+        <ng-container matColumnDef="givenNames">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col"> Given Names </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.givenNames | default }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="givenNames">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Given Names </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.givenNames | default }} </td>
-      </ng-container>
+        <ng-container matColumnDef="appliedDate">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col">
+            <span class="d-inline-block" mat-sort-header> Submission Date </span>
+            <mat-date-range-input [rangePicker]="appliedDatePicker">
+              <input matStartDate
+                     formControlName="appliedDateRangeStart">
+              <input matEndDate
+                     formControlName="appliedDateRangeEnd">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix
+                                   *ngIf="!hasAppliedDateRange"
+                                   [for]="appliedDatePicker">
+              <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix
+                                   *ngIf="hasAppliedDateRange">
+              <mat-icon matDatepickerToggleIcon
+                        matTooltip="Clear date range"
+                        (click)="clearAppliedDateRange()">clear</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-date-range-picker #appliedDatePicker></mat-date-range-picker>
+          </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.appliedDate | formatDate | default }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="appliedDate">
-        <th mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            scope="col"> Submission Date </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.appliedDate | formatDate | default }} </td>
-      </ng-container>
+        <ng-container matColumnDef="renewalDate">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col">
+            <span class="d-inline-block" mat-sort-header> Renewal Date </span>
+            <mat-date-range-input [rangePicker]="renewalDatePicker">
+              <input matStartDate
+                     formControlName="renewalDateRangeStart">
+              <input matEndDate
+                     formControlName="renewalDateRangeEnd">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix
+                                   *ngIf="!hasRenewalDateRange"
+                                   [for]="renewalDatePicker">
+              <mat-icon matDatepickerToggleIcon>date_range</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-datepicker-toggle matSuffix
+                                   *ngIf="hasRenewalDateRange">
+              <mat-icon matDatepickerToggleIcon
+                        matTooltip="Clear date range"
+                        (click)="clearRenewalDateRange()">clear</mat-icon>
+            </mat-datepicker-toggle>
+            <mat-date-range-picker #renewalDatePicker></mat-date-range-picker>
+          </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.expiryDate | formatDate | default }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="renewalDate">
-        <th mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            scope="col"> Renewal Date </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.expiryDate | formatDate | default }} </td>
-      </ng-container>
+        <ng-container matColumnDef="currentTOA">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col"> Current ToA </th>
+          <td mat-cell
+              *matCellDef="let row;">
+            <mat-chip-list [selectable]="false">
+              <mat-chip [disableRipple]="true">{{ row.currentTOAStatus | default }}</mat-chip>
+            </mat-chip-list>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="currentTOA">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Current ToA </th>
-        <td mat-cell
-            *matCellDef="let row;">
-          <mat-chip-list [selectable]="false">
-            <mat-chip [disableRipple]="true">{{ row.currentTOAStatus | default }}</mat-chip>
-          </mat-chip-list>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col"> State </th>
+          <td mat-cell
+              *matCellDef="let row;"
+              class="status"
+              [class]="row.currentStatusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
+            {{ row.currentStatusCode | configCode: 'statuses' | default }}
+            <mat-icon *ngIf="row.alwaysManual"
+                      matTooltip="Enrollee flagged for manual adjudication"
+                      matTooltipPosition="after">flag</mat-icon>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="status">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> State </th>
-        <td mat-cell
-            *matCellDef="let row;"
-            class="status"
-            [class]="row.currentStatusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
-          {{ row.currentStatusCode | configCode: 'statuses' | default }}
-          <mat-icon *ngIf="row.alwaysManual"
-                    matTooltip="Enrollee flagged for manual adjudication"
-                    matTooltipPosition="after">flag</mat-icon>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="remoteAccess">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col"> Remote Access </th>
+          <td mat-cell
+              *matCellDef="let row;">
+            <mat-chip-list [selectable]="false">
+              <mat-chip [disableRipple]="true">{{ row.remoteAccess ? "Yes" : "No" | default }}</mat-chip>
+            </mat-chip-list>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="remoteAccess">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Remote Access </th>
-        <td mat-cell
-            *matCellDef="let row;">
-          <mat-chip-list [selectable]="false">
-            <mat-chip [disableRipple]="true">{{ row.remoteAccess ? "Yes" : "No" | default }}</mat-chip>
-          </mat-chip-list>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="adjudicator">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col"> Adjudicator </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="adjudicator">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Adjudicator </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
-      </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col">&nbsp;</th>
+          <td mat-cell
+              *matCellDef="let row;"
+              class="text-right">
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col">&nbsp;</th>
-        <td mat-cell
-            *matCellDef="let row;"
-            class="text-right">
+            <ng-container [ngTemplateOutlet]="menu"
+                          [ngTemplateOutletContext]="{ row: row }"></ng-container>
 
-          <ng-container [ngTemplateOutlet]="menu"
-                        [ngTemplateOutletContext]="{ row: row }"></ng-container>
+          </td>
+        </ng-container>
 
-        </td>
-      </ng-container>
-
-      <tr mat-header-row
-          *matHeaderRowDef="columns; sticky: true"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: columns;"></tr>
-    </table>
+        <tr mat-header-row
+            *matHeaderRowDef="columns; sticky: true"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: columns;"></tr>
+      </table>
+    </form>
 
     <p *ngIf="!dataSource?.data.length"
        class="px-4 py-2 text-muted">
@@ -175,6 +214,5 @@
         </button>
       </mat-menu>
     </ng-template>
-
   </div>
 </div>

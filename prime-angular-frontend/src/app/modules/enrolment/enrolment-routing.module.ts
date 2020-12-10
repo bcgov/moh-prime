@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ConfigGuard } from '@config/config.guard';
-import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { UnderagedGuard } from '@core/guards/underaged.guard';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
@@ -23,6 +21,7 @@ import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { JobComponent } from './pages/job/job.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
+import { HealthAuthorityComponent } from './pages/health-authority/health-authority.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -42,12 +41,7 @@ const routes: Routes = [
     path: EnrolmentRoutes.MODULE_PATH,
     component: DashboardV1Component,
     canActivate: [
-      // Ensure that the configuration is loaded prior to dependent
-      // guards, as well as, views, otherwise if it already exists NOOP
-      // NOTE: A resolver could not be used due to their execution
-      // occuring after parent and child guards
-      ConfigGuard,
-      UnsupportedGuard,
+      AuthenticationGuard,
       UnderagedGuard
     ],
     canActivateChild: [
@@ -106,8 +100,26 @@ const routes: Routes = [
       // Enrollee enrolment:
       //
       {
+        path: EnrolmentRoutes.CARE_SETTING,
+        component: CareSettingComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.HEALTH_AUTHORITY,
+        component: HealthAuthorityComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
         path: EnrolmentRoutes.REGULATORY,
         component: RegulatoryComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        path: EnrolmentRoutes.JOB,
+        component: JobComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
@@ -118,18 +130,6 @@ const routes: Routes = [
       //   canDeactivate: [CanDeactivateFormGuard],
       //   data: { title: 'PRIME Enrolment' }
       // },
-      {
-        path: EnrolmentRoutes.JOB,
-        component: JobComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PRIME Enrolment' }
-      },
-      {
-        path: EnrolmentRoutes.CARE_SETTING,
-        component: CareSettingComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PRIME Enrolment' }
-      },
       {
         path: EnrolmentRoutes.REMOTE_ACCESS,
         component: RemoteAccessComponent,
