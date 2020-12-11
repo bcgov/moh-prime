@@ -156,6 +156,10 @@ namespace Prime
                 .HasDiscriminator<AddressType>("AddressType")
                 .HasValue<PhysicalAddress>(AddressType.Physical)
                 .HasValue<MailingAddress>(AddressType.Mailing);
+
+            // Derived types must be discoverable by the DB Model for the Discriminator to be automatically set.
+            // Labtechs are currently not referenced by any other model or DbSet and so are included here to be discoverable.
+            modelBuilder.Entity<Labtech>();
             #endregion
 
             #region IAuditable
