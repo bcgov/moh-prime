@@ -8,6 +8,17 @@
 
 ### Installation
 
+If you are developing on Linux, to avoid this error during the Site Registration user story:
+```
+System.ComponentModel.Win32Exception (13): Permission denied
+   at Wkhtmltopdf.NetCore.WkhtmlDriver.Convert(String wkhtmlPath, String switches, String html)
+   at Wkhtmltopdf.NetCore.GeneratePdf.GetPDF(String html)
+   at Prime.Services.PdfService.Generate(String htmlContent) in /moh-prime/prime-dotnet-webapi/Services/PdfService.cs:line 16
+```
+
+Make sure you enable execution permissions for `wkhtmltopdf`, i.e. `/moh-prime/prime-dotnet-webapi/Resources/wkhtmltopdf/Linux$ chmod +x wkhtmltopdf` 
+
+
 ## Database (PostgreSQL + .NET Core EF)
 
 ### Installation
