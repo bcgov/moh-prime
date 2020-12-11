@@ -2,11 +2,17 @@
 @model EmailParams
 
 @{
+
   var documentUrl = Model.DocumentUrl;
 }
 
 <p>
   A new PharmaNet site registration has been received. See the attached registration and
-  organization agreement for more information. To access the Business Licence, click this
-  <a href="@documentUrl" target="_blank">link</a>.
+  organization agreement for more information.
+  @if (documentUrl != "")
+
+  {
+    @("To access the Business Licence, click this") <a href="@documentUrl" target="_blank">link</a>@(".")
+
+  }
 </p>

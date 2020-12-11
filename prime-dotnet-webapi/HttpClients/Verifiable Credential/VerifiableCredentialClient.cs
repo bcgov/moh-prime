@@ -15,9 +15,9 @@ namespace Prime.HttpClients
         private readonly ILogger _logger;
 
         private static readonly string SchemaName = "enrollee";
-        // If schema version is updated in dev, make sure it is updated in test agent
-        // (and update cred_def_id) so versions are the same between dev and test
-        // and have verifier app updated by aries team
+        // If schema version is updated in dev, make sure it is updated in test and prod agent
+        // (and update cred_def_id) so versions are the same between dev, test, and prod
+        // and have verifier app updated by aries team in each environment
         private static readonly string SchemaVersion = "2.0";
 
         public VerifiableCredentialClient(

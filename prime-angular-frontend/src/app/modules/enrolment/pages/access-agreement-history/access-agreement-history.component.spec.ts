@@ -10,6 +10,9 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { KeycloakService } from 'keycloak-angular';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('AccessAgreementHistoryComponent', () => {
   let component: AccessAgreementHistoryComponent;
@@ -36,6 +39,11 @@ describe('AccessAgreementHistoryComponent', () => {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
           },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
+          },
+          KeycloakService
         ]
       }
     ).compileComponents();

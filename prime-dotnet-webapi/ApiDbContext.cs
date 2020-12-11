@@ -92,6 +92,7 @@ namespace Prime
         public DbSet<RemoteUserCertification> RemoteUserCertifications { get; set; }
         public DbSet<EnrolmentStatusReference> EnrolmentStatusReference { get; set; }
         public DbSet<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
+        public DbSet<BusinessLicence> BusinessLicences { get; set; }
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
         public DbSet<SelfDeclaration> SelfDeclarations { get; set; }
         public DbSet<Credential> Credentials { get; set; }
@@ -243,11 +244,6 @@ namespace Prime
                 .WithMany(o => o.Sites)
                 .HasForeignKey(l => l.OrganizationId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<BusinessLicenceDocument>()
-                .HasOne(bl => bl.Site)
-                .WithMany(s => s.BusinessLicenceDocuments)
-                .HasForeignKey(bl => bl.SiteId);
 
             modelBuilder.Entity<RemoteUser>()
                 .HasOne(ru => ru.Site)
