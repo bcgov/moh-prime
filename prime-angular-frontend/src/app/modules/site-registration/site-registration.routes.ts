@@ -52,7 +52,7 @@ export class SiteRoutes {
   public static editRegistrationRouteAccess(): string[] {
     return [
       ...this.organizationRegistrationRouteOrder(),
-      ...this.editSiteRegistrationRouteOrder()
+      ...this.editSiteRegistrationRouteOrder(),
     ];
   }
 

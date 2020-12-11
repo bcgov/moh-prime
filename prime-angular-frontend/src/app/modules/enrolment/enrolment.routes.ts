@@ -10,12 +10,13 @@ export class EnrolmentRoutes {
   public static BCEID_DEMOGRAPHIC = 'bceid-demographic';
   public static BCSC_DEMOGRAPHIC = 'bcsc-demographic';
   // Enrollee enrolment:
+  public static CARE_SETTING = 'care-setting';
+  public static HEALTH_AUTHORITY = 'health-authority';
   public static REGULATORY = 'regulatory';
+  public static JOB = 'job';
+  public static DEVICE_PROVIDER = 'device-provider';
   public static REMOTE_ACCESS = 'remote-access';
   public static REMOTE_ACCESS_ADDRESSES = 'remote-access-addresses';
-  public static DEVICE_PROVIDER = 'device-provider';
-  public static JOB = 'job';
-  public static CARE_SETTING = 'care-setting';
   public static SELF_DECLARATION = 'self-declaration';
   // Enrolment submission:
   // Enrolment update was small, no auto or manual adjudication required, and
@@ -56,12 +57,13 @@ export class EnrolmentRoutes {
     return [
       EnrolmentRoutes.BCEID_DEMOGRAPHIC,
       EnrolmentRoutes.BCSC_DEMOGRAPHIC,
+      EnrolmentRoutes.CARE_SETTING,
+      EnrolmentRoutes.HEALTH_AUTHORITY,
       EnrolmentRoutes.REGULATORY,
+      EnrolmentRoutes.JOB,
+      // EnrolmentRoutes.DEVICE_PROVIDER,
       EnrolmentRoutes.REMOTE_ACCESS,
       EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES,
-      // EnrolmentRoutes.DEVICE_PROVIDER,
-      EnrolmentRoutes.JOB,
-      EnrolmentRoutes.CARE_SETTING,
       EnrolmentRoutes.SELF_DECLARATION,
       EnrolmentRoutes.OVERVIEW
     ];

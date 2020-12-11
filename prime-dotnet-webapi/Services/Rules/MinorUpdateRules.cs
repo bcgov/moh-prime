@@ -87,6 +87,11 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
+            if (!CompareCollections(comparitor, enrollee.OboSites, _updatedProfile.OboSites))
+            {
+                return Task.FromResult(false);
+            }
+
             if (!CompareCollections(comparitor, enrollee.EnrolleeCareSettings, _updatedProfile.EnrolleeCareSettings))
             {
                 return Task.FromResult(false);

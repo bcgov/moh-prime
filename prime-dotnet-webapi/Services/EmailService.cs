@@ -208,8 +208,12 @@ namespace Prime.Services
 
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
         {
-            var businessLicenceDoc = await _siteService.GetLatestBusinessLicenceAsync(siteId);
-            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicenceDoc.DocumentGuid);
+            var businessLicence = await _siteService.GetBusinessLicenceAsync(siteId);
+            if (businessLicence.BusinessLicenceDocument == null)
+            {
+                return "";
+            }
+            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicence.BusinessLicenceDocument.DocumentGuid);
             return documentAccessToken.DownloadUrl;
         }
 

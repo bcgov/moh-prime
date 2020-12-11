@@ -37,6 +37,8 @@ namespace Prime.Services
             lookupEntity.PrivilegeGroups = await _context.Set<PrivilegeGroup>().ToListAsync();
             lookupEntity.PrivilegeTypes = await _context.Set<PrivilegeType>().ToListAsync();
             lookupEntity.Vendors = await _context.Set<Vendor>().ToListAsync();
+            lookupEntity.HealthAuthorities = await _context.Set<HealthAuthority>().ToListAsync();
+            lookupEntity.Facilities = await _context.Set<Facility>().ToListAsync();
 
             return lookupEntity;
         }

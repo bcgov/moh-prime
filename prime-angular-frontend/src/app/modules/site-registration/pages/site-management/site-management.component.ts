@@ -101,15 +101,6 @@ export class SiteManagementComponent implements OnInit {
     ];
   }
 
-  public getOrganizationNotificationProperties(organizationId: number, siteId: number) {
-    return {
-      icon: 'assignment_late',
-      text: 'Signed agreement has not been updated',
-      label: 'Upload Agreement',
-      route: () => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, siteId, SiteRoutes.ORGANIZATION_AGREEMENT])
-    };
-  }
-
   public getSiteProperties(site: SiteListViewModel): { key: string, value: string }[] {
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
