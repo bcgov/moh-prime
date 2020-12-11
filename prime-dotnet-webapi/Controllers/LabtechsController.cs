@@ -36,11 +36,18 @@ namespace Prime.Controllers
         /// If successful, also updates Keycloak with additional user info and the Labtech role.
         /// </summary>
         [HttpPost(Name = nameof(CreateLabtech))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> CreateLabtech(LabtechCreateModel labtech)
         {
+            if(await _partyService.UserIdExistsAsync<Labtech>(User.GetPrimeUserId()))
+            {
+                ModelState.AddModelError("Labtech.UserId", "A Labtech already exists with this User Id.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+
             var model = Labtech.From(labtech, User);
             await _partyService.CreatePartyAsync(model);
 
