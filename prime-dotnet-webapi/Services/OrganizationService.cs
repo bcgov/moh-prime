@@ -57,7 +57,7 @@ namespace Prime.Services
 
             var userId = _httpContext.HttpContext.User.GetPrimeUserId();
 
-            var partyExists = await _partyService.PartyUserIdExistsAsync(userId);
+            var partyExists = await _partyService.UserIdExistsAsync<SigningAuthority>(userId);
 
             if (!partyExists)
             {
