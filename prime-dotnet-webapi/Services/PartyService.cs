@@ -16,25 +16,25 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<bool> PartyExistsAsync(int partyId)
+        public async Task<bool> UserIdExistsAsync<T>(Guid userId) where T : Party
         {
-            return await GetBasePartyQuery()
-                .AnyAsync(e => e.Id == partyId);
-        }
-
-        public async Task<bool> PartyUserIdExistsAsync(Guid userId)
-        {
-            return await GetBasePartyQuery()
+            return await _context.Parties
+                .OfType<T>()
                 .AnyAsync(e => e.UserId == userId);
         }
 
+        public async Task<Party> GetPartyAsync(int partyId)
+        {
+            return await GetBasePartyQuery()
+                .SingleOrDefaultAsync(e => e.Id == partyId);
+        }
 
         public async Task<T> GetPartyForUserIdAsync<T>(Guid userId) where T : Party
         {
             return await GetBasePartyQuery()
                 .AsNoTracking()
                 .OfType<T>()
-                .FirstOrDefaultAsync(e => e.UserId == userId);
+                .SingleOrDefaultAsync(e => e.UserId == userId);
         }
 
         public async Task<int> CreatePartyAsync(Party party)
@@ -76,7 +76,7 @@ namespace Prime.Services
         {
             if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
             {
-                this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                _context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
             }
             else
             {
@@ -88,7 +88,7 @@ namespace Prime.Services
         {
             if (updated.MailingAddress != null && current.MailingAddress != null)
             {
-                this._context.Entry(current.MailingAddress).CurrentValues.SetValues(updated.MailingAddress);
+                _context.Entry(current.MailingAddress).CurrentValues.SetValues(updated.MailingAddress);
             }
             else
             {
@@ -115,12 +115,6 @@ namespace Prime.Services
         {
             return _context.Parties
                 .Include(p => p.PhysicalAddress);
-        }
-
-        public async Task<Party> GetPartyAsync(int partyId)
-        {
-            return await this.GetBasePartyQuery()
-            .SingleOrDefaultAsync(e => e.Id == partyId);
         }
     }
 }
