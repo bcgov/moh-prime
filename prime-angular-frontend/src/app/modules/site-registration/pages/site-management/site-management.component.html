@@ -53,7 +53,7 @@
                         (action)="viewSiteRemoteUsers(organization.id, site)">
         <ng-container *ngIf="!site.submittedDate"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props: getSiteNotificationProperties(organization.id, site) }">
+                      [ngTemplateOutletContext]="{ props: getNotSubmittedSiteNotificationProperties(organization.id, site) }">
         </ng-container>
         <ng-container *ngIf="isUnderReview(site)"
                       [ngTemplateOutlet]="notification"

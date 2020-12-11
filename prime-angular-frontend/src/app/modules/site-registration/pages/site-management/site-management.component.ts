@@ -124,7 +124,7 @@ export class SiteManagementComponent implements OnInit {
     ];
   }
 
-  public getSiteNotificationProperties(organizationId: number, site: SiteListViewModel) {
+  public getNotSubmittedSiteNotificationProperties(organizationId: number, site: SiteListViewModel) {
     return {
       icon: 'notification_important',
       text: 'Submission not completed',
@@ -136,7 +136,7 @@ export class SiteManagementComponent implements OnInit {
   public isUnderReview(site: SiteListViewModel): boolean {
     this.logger.trace("Site id", site.id);
     this.logger.trace("Site status", site.status);
-    return (site.status === 0 || site.status === SiteStatusType.UNDER_REVIEW);
+    return (site.submittedDate && (site.status === 0 || site.status === SiteStatusType.UNDER_REVIEW));
   }
 
   public getUnderReviewSiteNotificationProperties() {
