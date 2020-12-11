@@ -24,8 +24,10 @@ export class AddressComponent implements OnInit {
   @Input() public formControlNames: AddressLine[];
   // Whether BC addresses can only be selected using autocomplete
   @Input() bcOnly: boolean;
-  // In simple mode, address fields are hidden
-  @Input() simpleMode: boolean;
+  // Wether to show the add manual address button, default to false
+  @Input() showManualButton: boolean;
+  // Wether to show the address fields, default to true
+  @Input() showAddressFields: boolean;
 
   public countries: Config<string>[];
   // Includes provinces and states
@@ -51,6 +53,8 @@ export class AddressComponent implements OnInit {
     this.countries = this.configService.countries;
     this.provinces = this.configService.provinces;
     this.setAddressLabels();
+    this.showManualButton = false;
+    this.showAddressFields = true;
   }
 
   public get countryCode(): FormControl {
@@ -83,12 +87,12 @@ export class AddressComponent implements OnInit {
     this.countryCode.patchValue(countryCode);
     // Patch the remaining address, which includes the province/state
     this.form.patchValue(address);
-    // turn off simple mode to show the address fields upon selection
-    this.simpleMode = false;
+    // show the manual address fields upon selection
+    this.showManualAddress();
   }
 
-  public switchToManualAddress() {
-    this.simpleMode = false;
+  public showManualAddress() {
+    this.showAddressFields = true;
   }
 
   public ngOnInit() {
@@ -110,6 +114,7 @@ export class AddressComponent implements OnInit {
         }
         this.setAddress(nextCountry);
       });
+    this.showAddressFields = !this.showManualButton;
   }
 
   private setAddress(countryCode: string) {
