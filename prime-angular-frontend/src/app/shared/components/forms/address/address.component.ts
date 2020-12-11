@@ -114,7 +114,14 @@ export class AddressComponent implements OnInit {
         }
         this.setAddress(nextCountry);
       });
-    this.showAddressFields = !this.showManualButton;
+    if (this.showManualButton) {
+      // For initialization, show the form if it's valid otherwise hide
+      this.showAddressFields = this.form.valid;
+    }
+    // Always show address fields when show manual button is not present
+    else {
+      this.showAddressFields = true;
+    }
   }
 
   private setAddress(countryCode: string) {
