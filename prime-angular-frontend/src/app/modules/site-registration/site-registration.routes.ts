@@ -25,6 +25,7 @@ export class SiteRoutes {
   public static REMOTE_USERS = 'remote-users';
   public static REMOTE_USER = 'remote-user';
   public static SITE_REVIEW = 'site-review';
+  public static NEXT_STEPS = 'next-steps';
 
   public static MODULE_PATH = SiteRoutes.SITE_REGISTRATION;
 
@@ -75,7 +76,9 @@ export class SiteRoutes {
       this.REMOTE_USERS,
       this.ADMINISTRATOR,
       this.PRIVACY_OFFICER,
-      this.TECHNICAL_SUPPORT
+      this.TECHNICAL_SUPPORT,
+      // this.SITE_REVIEW,
+      this.NEXT_STEPS
     ];
   }
 
@@ -88,7 +91,8 @@ export class SiteRoutes {
       this.ADMINISTRATOR,
       this.PRIVACY_OFFICER,
       this.TECHNICAL_SUPPORT,
-      this.SITE_REVIEW
+      this.SITE_REVIEW,
+      this.NEXT_STEPS
     ];
   }
 

@@ -15,6 +15,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { LoggerService } from '@core/services/logger.service';
 
 @Component({
   selector: 'app-overview',
@@ -40,6 +41,7 @@ export class OverviewComponent implements OnInit {
     private dialog: MatDialog,
     private siteService: SiteService,
     private organizationService: OrganizationService,
+    private logger: LoggerService,
   ) {
     this.routeUtils = (this.isOrganizationReview)
       ? new RouteUtils(route, router, SiteRoutes.routePath(SiteRoutes.ORGANIZATION_REVIEW))
@@ -84,6 +86,9 @@ export class OverviewComponent implements OnInit {
   }
 
   public nextRoute(): void {
+
+    this.logger.trace("Going to nextRoute");
+
     this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
   }
 
