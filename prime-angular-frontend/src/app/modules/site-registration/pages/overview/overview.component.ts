@@ -25,6 +25,8 @@ export class OverviewComponent implements OnInit {
   public busy: Subscription;
   public site: Site;
   public organization: Organization;
+  // public isCompleted: boolean;
+
 
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
@@ -82,13 +84,12 @@ export class OverviewComponent implements OnInit {
   }
 
   public nextRoute(): void {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT], {
-      queryParams: { submitted: true }
-    });
+    this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
   }
 
   public ngOnInit(): void {
     this.organization = this.organizationService.organization;
+    // this.isCompleted = this.organization.completed;
 
     if (this.isOrganizationReview) {
       this.showSubmission = false;
