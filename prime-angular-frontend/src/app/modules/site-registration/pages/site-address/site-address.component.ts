@@ -34,7 +34,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
 
   constructor(
     private route: ActivatedRoute,
-    router: Router,
+    private router: Router,
     private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
