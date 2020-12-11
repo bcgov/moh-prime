@@ -8,6 +8,7 @@ import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { LoggerService } from '@core/services/logger.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
@@ -20,6 +21,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-site-management',
@@ -47,7 +49,8 @@ export class SiteManagementComponent implements OnInit {
     private configCodePipe: ConfigCodePipe,
     private utilsService: UtilsService,
     // Temporary hack to show success message until guards can be refactored
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private logger: LoggerService
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -94,6 +97,8 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public getOrganizationProperties(organization: OrganizationListViewModel): { key: string, value: string }[] {
+    // TODO: Why are these methods called so often despite no user interaction?
+    // this.logger.trace("getOrganizationProperties");
     return [
       { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
       { key: 'Organization Name', value: organization.name },
@@ -125,6 +130,41 @@ export class SiteManagementComponent implements OnInit {
       text: 'Submission not completed',
       label: 'Continue Site Submission',
       route: () => this.viewSite(organizationId, site)
+    };
+  }
+
+  public isUnderReview(site: SiteListViewModel): boolean {
+    this.logger.trace("Site id", site.id);
+    this.logger.trace("Site status", site.status);
+    return (site.status === 0 || site.status === SiteStatusType.UNDER_REVIEW);
+  }
+
+  public getUnderReviewSiteNotificationProperties() {
+    return {
+      icon: 'notification_important',
+      text: 'This site is waiting for approval and an assigned Site ID',
+    };
+  }
+
+  public isDeclined(site: SiteListViewModel): boolean {
+    return (site.status === SiteStatusType.DECLINED);
+  }
+
+  public getDeclinedSiteNotificationProperties() {
+    return {
+      icon: 'not_interested',
+      text: 'Declined',
+    };
+  }
+
+  public isApproved(site: SiteListViewModel): boolean {
+    return (site.status === SiteStatusType.APPROVED);
+  }
+
+  public getApprovedSiteNotificationProperties(site: SiteListViewModel) {
+    return {
+      icon: 'task_alt',
+      text: 'Site Approved<br />Site ID: ' + site.pec
     };
   }
 

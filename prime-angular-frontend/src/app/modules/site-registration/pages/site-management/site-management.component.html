@@ -1,17 +1,5 @@
 <app-page [busy]="busy">
-  <app-page-header>PharmaNet Site Registration</app-page-header>
-
-  <div *ngIf="hasSubmittedSite"
-       class="alert-message">
-    <app-alert type="success">
-      <ng-container #alertContent
-                    class="alert-content">
-        You have accepted the Organization Agreement for PharmaNet Use. Your application has been submitted for
-        adjudication. The Ministry of Health will contact you once your site has been approved.
-        <strong>Questions: Health Insurance BC at 1-844-397-7463 (toll free)</strong>
-      </ng-container>
-    </app-alert>
-  </div>
+  <app-page-header>Site Management</app-page-header>
 
   <section class="mb-3">
     <app-page-subheader2>
@@ -67,6 +55,18 @@
                       [ngTemplateOutlet]="notification"
                       [ngTemplateOutletContext]="{ props: getSiteNotificationProperties(organization.id, site) }">
         </ng-container>
+        <ng-container *ngIf="isUnderReview(site)"
+                      [ngTemplateOutlet]="notification"
+                      [ngTemplateOutletContext]="{ props: getUnderReviewSiteNotificationProperties() }">
+        </ng-container>
+        <ng-container *ngIf="isDeclined(site)"
+                      [ngTemplateOutlet]="notification"
+                      [ngTemplateOutletContext]="{ props: getDeclinedSiteNotificationProperties() }">
+        </ng-container>
+        <ng-container *ngIf="isApproved(site)"
+                      [ngTemplateOutlet]="success_notification"
+                      [ngTemplateOutletContext]="{ props: getApprovedSiteNotificationProperties(site) }">
+        </ng-container>
       </app-summary-card>
 
     </ng-container>
@@ -83,6 +83,14 @@
               color="primary"
               class="ml-auto"
               (click)="props.route()">{{ props.label }}</button>
+    </div>
+  </ng-template>
+
+  <ng-template #success_notification
+               let-props="props">
+    <div class="d-flex align-self-center mt-2">
+      <mat-icon class="mr-2 green-icon">{{ props.icon }}</mat-icon>
+      <p class="text-green" [innerHTML]="props.text"></p>
     </div>
   </ng-template>
 
