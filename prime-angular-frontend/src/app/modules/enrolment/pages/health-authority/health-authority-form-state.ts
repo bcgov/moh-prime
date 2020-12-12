@@ -1,4 +1,4 @@
-import { AbstractControl, FormBuilder } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -63,13 +63,14 @@ export class HealthAuthorityFormState extends AbstractFormState<HealthAuthority[
 
     this.formInstance = this.fb.group({
       enrolleeHealthAuthorities: this.fb.array(
-        healthAuthorities,
-        {
-          validators: FormArrayValidators
-            .atLeast(1, (control: AbstractControl) => control.get('facilityCodes').value?.length)
-        }
+        healthAuthorities, []
       )
     });
+  }
+
+  public setValidators() {
+    const enrolleeHealthAuthorities = this.formInstance.get('enrolleeHealthAuthorities') as FormArray;
+    enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: AbstractControl) => control.get('facilityCodes').value?.length));
   }
 
   private getHealthAuthorityFacilities(healthAutorities: HealthAuthority[], healthAuthorityCode: HealthAuthorityEnum) {

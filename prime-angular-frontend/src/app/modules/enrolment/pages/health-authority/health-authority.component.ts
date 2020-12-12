@@ -81,6 +81,8 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
     this.enrolleeHealthAuthorities.valueChanges.subscribe(() => {
       this.hasNoHealthAuthorityError = false;
     });
+
+    this.enrolmentFormStateService.healthAuthoritiesFormState.setValidators();
   }
 
   /**

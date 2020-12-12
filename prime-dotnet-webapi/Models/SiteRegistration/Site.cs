@@ -56,7 +56,7 @@ namespace Prime.Models
 
         public ICollection<SiteVendor> SiteVendors { get; set; }
 
-        public ICollection<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
+        public BusinessLicence BusinessLicence { get; set; }
 
         public ICollection<RemoteUser> RemoteUsers { get; set; }
 
