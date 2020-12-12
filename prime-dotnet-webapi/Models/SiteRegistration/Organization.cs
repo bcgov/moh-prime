@@ -25,7 +25,7 @@ namespace Prime.Models
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
-        public SigningAuthority SigningAuthority { get; set; }
+        public Party SigningAuthority { get; set; }
 
         public int SigningAuthorityId { get; set; }
 

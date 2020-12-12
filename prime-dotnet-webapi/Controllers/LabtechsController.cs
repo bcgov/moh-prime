@@ -42,13 +42,13 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> CreateLabtech(LabtechCreateModel labtech)
         {
-            if(await _partyService.UserIdExistsAsync<Labtech>(User.GetPrimeUserId()))
+            if(await _partyService.UserIdExistsAsync(User.GetPrimeUserId()))
             {
                 ModelState.AddModelError("Labtech.UserId", "A Labtech already exists with this User Id.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            var model = Labtech.From(labtech, User);
+            Party model = null; //TODOD: temp Labtech.From(labtech, User);
             await _partyService.CreatePartyAsync(model);
 
             await _keycloakClient.AssignRealmRole(model.UserId, Roles.PhsaLabtech);

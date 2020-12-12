@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
-using Prime.Models;
 
 namespace Prime.Migrations
 {
@@ -13898,7 +13897,7 @@ namespace Prime.Migrations
                             Code = 1,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Acute/ambulatory care",
+                            Name = "Acute/Ambulatory Care",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -13934,7 +13933,7 @@ namespace Prime.Migrations
                             Code = 5,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Outpatient or community-based clinic",
+                            Name = "Outpatient or Community-based Clinic",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -15281,10 +15280,6 @@ namespace Prime.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
@@ -15293,9 +15288,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("GivenNames")
                         .HasColumnType("text");
 
                     b.Property<string>("HPDID")
@@ -15312,10 +15304,10 @@ namespace Prime.Migrations
                     b.Property<int?>("MailingAddressId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("MiddleName")
                         .HasColumnType("text");
 
-                    b.Property<string>("PhoneExtension")
+                    b.Property<string>("Phone")
                         .HasColumnType("text");
 
                     b.Property<int?>("PhysicalAddressId")
@@ -15349,8 +15341,6 @@ namespace Prime.Migrations
                     b.HasIndex("PhysicalAddressId");
 
                     b.ToTable("Party");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Party");
                 });
 
             modelBuilder.Entity("Prime.Models.Practice", b =>
@@ -17549,8 +17539,6 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
-
-                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
@@ -17560,24 +17548,6 @@ namespace Prime.Migrations
                     b.ToTable("Address");
 
                     b.HasDiscriminator().HasValue(1);
-                });
-
-            modelBuilder.Entity("Prime.Models.Labtech", b =>
-                {
-                    b.HasBaseType("Prime.Models.Party");
-
-                    b.ToTable("Party");
-
-                    b.HasDiscriminator().HasValue("Labtech");
-                });
-
-            modelBuilder.Entity("Prime.Models.SigningAuthority", b =>
-                {
-                    b.HasBaseType("Prime.Models.Party");
-
-                    b.ToTable("Party");
-
-                    b.HasDiscriminator().HasValue("SigningAuthority");
                 });
 
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
@@ -17981,7 +17951,7 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.Organization", b =>
                 {
-                    b.HasOne("Prime.Models.SigningAuthority", "SigningAuthority")
+                    b.HasOne("Prime.Models.Party", "SigningAuthority")
                         .WithMany()
                         .HasForeignKey("SigningAuthorityId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -18147,7 +18117,7 @@ namespace Prime.Migrations
                         .WithMany()
                         .HasForeignKey("PrivacyOfficerId");
 
-                    b.HasOne("Prime.Models.SigningAuthority", "Provisioner")
+                    b.HasOne("Prime.Models.Party", "Provisioner")
                         .WithMany()
                         .HasForeignKey("ProvisionerId");
 

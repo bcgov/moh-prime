@@ -1,0 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Prime.Models;
+
+namespace Prime.Configuration
+{
+    public class PartyConfiguration : IEntityTypeConfiguration<Party>
+    {
+        public void Configure(EntityTypeBuilder<Party> builder)
+        {
+
+        }
+    }
+}

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("Party")]
-    public abstract class Party : BaseAuditable, IUserBoundModel, IAgreeable
+    public class Party : BaseAuditable, IUserBoundModel, IAgreeable
     {
         [Key]
         public int Id { get; set; }

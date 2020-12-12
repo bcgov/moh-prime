@@ -1,7 +1,7 @@
-namespace Prime.Models
-{
-    public class SigningAuthority : Party
-    {
+// namespace Prime.Models
+// {
+//     public class SigningAuthority : Party
+//     {
 
-    }
-}
+//     }
+// }

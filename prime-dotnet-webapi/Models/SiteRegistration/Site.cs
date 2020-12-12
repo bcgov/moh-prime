@@ -35,7 +35,7 @@ namespace Prime.Models
 
         public int? ProvisionerId { get; set; }
 
-        public SigningAuthority Provisioner { get; set; }
+        public Party Provisioner { get; set; }
 
         public int? CareSettingCode { get; set; }
 

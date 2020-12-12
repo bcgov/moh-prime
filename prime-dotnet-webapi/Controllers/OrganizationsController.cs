@@ -70,7 +70,7 @@ namespace Prime.Controllers
             }
             else
             {
-                var party = await _partyService.GetPartyForUserIdAsync<SigningAuthority>(User.GetPrimeUserId());
+                var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
 
                 organizations = (party != null)
                     ? await _organizationService.GetOrganizationsAsync(party.Id)
@@ -119,7 +119,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Organization>> CreateOrganization(SigningAuthority signingAuthority)
+        public async Task<ActionResult<Organization>> CreateOrganization(Party signingAuthority)
         {
             if (signingAuthority == null)
             {
