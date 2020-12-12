@@ -186,12 +186,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public ngOnInit() {
-    // Only shown the first time the enrollee reaches the summary
-    const routeState = this.windowRef.nativeWindow.history.state;
-    this.showProgressBar = (routeState && routeState.showProgressBar)
-      ? routeState.showProgressBar
-      : false;
-
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
 
@@ -204,7 +198,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingCode: careSetting.careSettingCode,
             formControl: this.communityHealthEmails,
             subheaderContent: `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office
-              manager).`
+              manager). If you work in more than one clinic you can include the email addresses for all the PharmaNet administrators separated by a comma.`
           };
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
@@ -213,7 +207,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Community Pharmacies',
             settingCode: careSetting.careSettingCode,
             formControl: this.pharmacistEmails,
-            subheaderContent: `Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).`
+            subheaderContent: `Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).
+            If you work in more than one clinic you can include the email addresses for all the PharmaNet administrators separated by a comma.`
           };
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {
@@ -223,7 +218,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingCode: careSetting.careSettingCode,
             formControl: this.healthAuthorityEmails,
             subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are
-              unsure who this is).`
+              unsure who this is). If you work in more than one clinic you can include the email addresses for all the PharmaNet
+              administrators separated by a comma.`
           };
         }
       }
