@@ -86,15 +86,21 @@ export class OverviewComponent implements OnInit {
   }
 
   public nextRoute(): void {
-
-    this.logger.trace("Going to nextRoute");
-
-    this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
+    if (this.requiredOrgAgreement()) {
+      this.logger.trace("Going to Next Steps");
+      this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
+    } else {
+      this.logger.trace("Going to Site Management");
+      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+    }
   }
 
   public ngOnInit(): void {
     this.organization = this.organizationService.organization;
     // this.isCompleted = this.organization.completed;
+
+    this.requiredOrgAgreement();
+
 
     if (this.isOrganizationReview) {
       this.showSubmission = false;
@@ -102,5 +108,27 @@ export class OverviewComponent implements OnInit {
       this.site = this.siteService.site;
       this.showSubmission = !this.site.submittedDate;
     }
+  }
+
+  /**
+   * @description
+   * Infer whether user was required to accept an Organization Agreement.
+   * User saw an Organization Agreement if any Site has a care setting that is unique
+   * for that Organization.
+   */
+  private requiredOrgAgreement(): boolean {
+    const careSettingCounts: { [careSetting: number]: number } = {};
+
+    // TODO: Unsaved Organization
+    const sites = this.siteResource.getSites(this.organization.id);
+    sites.subscribe(value => value.forEach(site => {
+      this.logger.trace("careSettingCode", site.careSettingCode);
+      this.logger.trace("doingBusinessAs", site.doingBusinessAs);
+    }));
+
+    // });
+
+    return true;
+
   }
 }
