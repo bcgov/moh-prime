@@ -250,7 +250,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "renewal_date" },
-                    { "value", enrollee.ExpiryDate.Value.Date }
+                    { "value", enrollee.ExpiryDate.Value.Date.ToShortDateString() }
                 },
                 new JObject
                 {
