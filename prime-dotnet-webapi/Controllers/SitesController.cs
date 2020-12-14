@@ -460,6 +460,10 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
+            if (site.SubmittedDate != null)
+            {
+                return Conflict(ApiResponse.Message($"Unable to remove document once site has been submitted"));
+            }
 
             await _siteService.DeleteBusinessLicenceDocumentAsync(siteId);
             return Ok();
