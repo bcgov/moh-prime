@@ -435,9 +435,11 @@ namespace Prime.Services
             return businessLicence;
         }
 
-        public async Task<BusinessLicenceDocument> AddOrReplaceBusinessLicenceDocumentAsync(int siteId, Guid documentGuid)
+        public async Task<BusinessLicenceDocument> AddOrReplaceBusinessLicenceDocumentAsync(int businessLicenceId, Guid documentGuid)
         {
-            var businessLicence = await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).SingleOrDefaultAsync();
+            var businessLicence = await _context.BusinessLicences
+                .Include(bl => bl.BusinessLicenceDocument)
+                .Where(bl => bl.Id == businessLicenceId).SingleOrDefaultAsync();
             if (businessLicence.BusinessLicenceDocument != null)
             {
                 _context.BusinessLicenceDocuments.Remove(businessLicence.BusinessLicenceDocument);

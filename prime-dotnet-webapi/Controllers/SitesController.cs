@@ -422,7 +422,7 @@ namespace Prime.Controllers
                 return Conflict(ApiResponse.Message($"Business Licence Document exists for submitted site with id {siteId}"));
             }
 
-            var document = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(siteId, documentGuid);
+            var document = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(site.BusinessLicence.Id, documentGuid);
             if (document == null)
             {
                 this.ModelState.AddModelError("documentGuid", "Business Licence Document could not be created; network error or upload is already submitted");
