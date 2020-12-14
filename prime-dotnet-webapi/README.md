@@ -16,7 +16,8 @@ System.ComponentModel.Win32Exception (13): Permission denied
    at Prime.Services.PdfService.Generate(String htmlContent) in /moh-prime/prime-dotnet-webapi/Services/PdfService.cs:line 16
 ```
 
-Make sure you enable execution permissions for `wkhtmltopdf`, i.e. `/moh-prime/prime-dotnet-webapi/Resources/wkhtmltopdf/Linux$ chmod +x wkhtmltopdf` 
+make sure you enable execution permissions for `wkhtmltopdf`, i.e. `/moh-prime/prime-dotnet-webapi/Resources/wkhtmltopdf/Linux$ chmod +x wkhtmltopdf`.
+If you have already built the binaries, you will need to re-build to include `wkhtmltopdf` with the correct permissions.
 
 
 ## Database (PostgreSQL + .NET Core EF)
