@@ -260,7 +260,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "organization_type" },
-                    { "value", string.Join(',', enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting.Name)) }
+                    { "value", string.Join(', ', enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting.Name)) }
                 },
                 new JObject
                 {
