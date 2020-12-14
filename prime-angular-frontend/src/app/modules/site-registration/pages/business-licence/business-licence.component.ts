@@ -126,7 +126,7 @@ export class BusinessLicenceComponent implements OnInit {
         this.form.markAsPristine();
         this.nextRoute();
       });
-    } else if (!this.deferredLicenceToggle.checked) {
+    } else if (!this.deferredLicenceToggle?.checked) {
       this.hasNoBusinessLicenceError = true;
     }
   }
