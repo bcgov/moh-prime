@@ -42,19 +42,24 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> CreateLabtech(LabtechCreateModel labtech)
         {
-            if(await _partyService.UserIdExistsAsync(User.GetPrimeUserId()))
-            {
-                ModelState.AddModelError("Labtech.UserId", "A Labtech already exists with this User Id.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
-            }
-
-            Party model = null; //TODOD: temp Labtech.From(labtech, User);
-            await _partyService.CreatePartyAsync(model);
-
-            await _keycloakClient.AssignRealmRole(model.UserId, Roles.PhsaLabtech);
-            await _keycloakClient.UpdateUserInfo(model.UserId, email: labtech.Email, phoneNumber: labtech.Phone, phoneExtension: labtech.PhoneExtension);
-
+            await _partyService.UserIdExistsAsync(User.GetPrimeUserId());
             return Ok();
+
+            // if(await _partyService.UserIdExistsAsync(User.GetPrimeUserId()))
+            // {
+            //     ModelState.AddModelError("Labtech.UserId", "A Labtech already exists with this User Id.");
+            //     return BadRequest(ApiResponse.BadRequest(ModelState));
+            // }
+
+
+
+            // Party model = null; //TODOD: temp Labtech.From(labtech, User);
+            // await _partyService.CreatePartyAsync(model);
+
+            // await _keycloakClient.AssignRealmRole(model.UserId, Roles.PhsaLabtech);
+            // await _keycloakClient.UpdateUserInfo(model.UserId, email: labtech.Email, phoneNumber: labtech.Phone, phoneExtension: labtech.PhoneExtension);
+
+            // return Ok();
         }
     }
 }
