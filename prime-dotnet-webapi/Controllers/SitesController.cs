@@ -417,12 +417,12 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            if (site.BusinessLicence.BusinessLicenceDocument != null)
+            if (site.BusinessLicence.BusinessLicenceDocument != null && site.SubmittedDate != null)
             {
-                return Conflict(ApiResponse.Message($"Business Licence Document exists for site with id {siteId}"));
+                return Conflict(ApiResponse.Message($"Business Licence Document exists for submitted site with id {siteId}"));
             }
 
-            var document = await _siteService.AddBusinessLicenceDocumentAsync(siteId, documentGuid);
+            var document = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(siteId, documentGuid);
             if (document == null)
             {
                 this.ModelState.AddModelError("documentGuid", "Business Licence Document could not be created; network error or upload is already submitted");
@@ -432,6 +432,37 @@ namespace Prime.Controllers
             await _emailService.SendSiteRegistrationAsync(site);
 
             return Ok(ApiResponse.Result(document));
+        }
+
+        // DELETE: api/sites/5/business-licence/document
+        /// <summary>
+        /// Deletes a sites business Licence Document.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpDelete("{siteId}/business-licence/document", Name = nameof(RemoveBusinessLicenceDocument))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult> RemoveBusinessLicenceDocument(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+            if (site.BusinessLicence == null)
+            {
+                return NotFound(ApiResponse.Message($"Business Licence not found on site with id {siteId}"));
+            }
+            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _siteService.DeleteBusinessLicenceDocumentAsync(siteId);
+            return Ok();
         }
 
         // Get: api/sites/5/business-licence

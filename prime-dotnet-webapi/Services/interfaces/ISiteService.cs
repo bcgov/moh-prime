@@ -25,7 +25,8 @@ namespace Prime.Services
         Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, BusinessLicence businessLicence, Guid documentGuid);
         Task<BusinessLicence> UpdateBusinessLicenceAsync(int siteId, BusinessLicence updateBusinessLicence);
         Task<BusinessLicence> GetBusinessLicenceAsync(int siteId);
-        Task<BusinessLicenceDocument> AddBusinessLicenceDocumentAsync(int siteId, Guid documentGuid);
+        Task<BusinessLicenceDocument> AddOrReplaceBusinessLicenceDocumentAsync(int siteId, Guid documentGuid);
+        Task DeleteBusinessLicenceDocumentAsync(int siteId);
         Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId);
         Task<IEnumerable<SiteAdjudicationDocument>> GetSiteAdjudicationDocumentsAsync(int siteId);
         Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId);
