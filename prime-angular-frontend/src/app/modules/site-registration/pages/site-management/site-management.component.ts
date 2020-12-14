@@ -134,8 +134,8 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public isUnderReview(site: SiteListViewModel): boolean {
-    this.logger.trace("Site id", site.id);
-    this.logger.trace("Site status", site.status);
+    // this.logger.trace("Site id", site.id);
+    // this.logger.trace("Site status", site.status);
     return (site.submittedDate && (site.status === 0 || site.status === SiteStatusType.UNDER_REVIEW));
   }
 
