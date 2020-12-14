@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Subscription, EMPTY } from 'rxjs';
+import { Observable, Subscription, EMPTY } from 'rxjs';
 import { exhaustMap, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -12,7 +12,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Site } from '@registration/shared/models/site.model';
+import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -33,6 +33,9 @@ export class OverviewComponent implements OnInit {
   public SiteRoutes = SiteRoutes;
 
   public showSubmission: boolean;
+
+  private numSameCareSetting: number = 0;
+
 
   constructor(
     protected route: ActivatedRoute,
@@ -86,21 +89,22 @@ export class OverviewComponent implements OnInit {
   }
 
   public nextRoute(): void {
-    if (this.requiredOrgAgreement()) {
-      this.logger.trace("Going to Next Steps");
-      this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
-    } else {
-      this.logger.trace("Going to Site Management");
-      this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
-    }
+    this.busy = this.determineOrgAgreementRequired$().subscribe(
+      ignored => {
+        if (this.numSameCareSetting < 2) {
+          this.logger.trace("Going to Next Steps");
+          this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
+        } else {
+          this.logger.trace("Going to Site Management");
+          this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+        }
+      });
   }
 
   public ngOnInit(): void {
     this.organization = this.organizationService.organization;
     // this.isCompleted = this.organization.completed;
-
-    this.requiredOrgAgreement();
-
+    this.site = this.siteService.site;
 
     if (this.isOrganizationReview) {
       this.showSubmission = false;
@@ -113,22 +117,23 @@ export class OverviewComponent implements OnInit {
   /**
    * @description
    * Infer whether user was required to accept an Organization Agreement.
-   * User saw an Organization Agreement if any Site has a care setting that is unique
+   * User saw an Organization Agreement if the current Site has a care setting that is unique
    * for that Organization.
    */
-  private requiredOrgAgreement(): boolean {
-    const careSettingCounts: { [careSetting: number]: number } = {};
+  private determineOrgAgreementRequired$(): Observable<SiteListViewModel[]> {
+    const currentCareSettingCode: number = this.site.careSettingCode;
 
-    // TODO: Unsaved Organization
-    const sites = this.siteResource.getSites(this.organization.id);
-    sites.subscribe(value => value.forEach(site => {
-      this.logger.trace("careSettingCode", site.careSettingCode);
-      this.logger.trace("doingBusinessAs", site.doingBusinessAs);
-    }));
-
-    // });
-
-    return true;
-
+    return this.siteResource.getSites(this.organization.id).pipe(
+      tap(sites => {
+        sites.forEach(
+          site => {
+            this.logger.trace("doingBusinessAs", site.doingBusinessAs);
+            this.logger.trace("careSettingCode", site.careSettingCode);
+            if (site.careSettingCode === currentCareSettingCode) {
+              // TODO: Better implementation that doesn't use member variable?
+              ++this.numSameCareSetting;
+            }
+          })
+      }));
   }
 }
