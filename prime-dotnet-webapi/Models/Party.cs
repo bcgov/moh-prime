@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -51,5 +52,27 @@ namespace Prime.Models
 
         [JsonIgnore]
         public ICollection<Agreement> Agreements { get; set; }
+
+        public ICollection<PartyEnrolment> PartyEnrolments { get; set; }
+
+        /// <summary>
+        /// Adds a new PartyEnrolment with the given PartyType if that type is not already present.
+        /// </summary>
+        /// <param name="type"></param>
+        public void SetPartyType(PartyType type)
+        {
+            if (PartyEnrolments == null)
+            {
+                PartyEnrolments = new List<PartyEnrolment>(1);
+            }
+
+            if (!PartyEnrolments.Any(x => x.PartyType == type))
+            {
+                PartyEnrolments.Add(new PartyEnrolment
+                {
+                    PartyType = type
+                });
+            }
+        }
     }
 }
