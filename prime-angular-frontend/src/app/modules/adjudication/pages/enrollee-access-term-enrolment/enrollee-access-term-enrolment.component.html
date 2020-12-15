@@ -1,10 +1,14 @@
-<app-page [busy]="busy">
+<app-adjudication-container [content]="content">
 
-  <app-page-header>Enrolment</app-page-header>
+  <app-page-header>Enrolment History</app-page-header>
 
+</app-adjudication-container>
+
+<ng-template #content>
+  <h6 class="text-green">Submitted {{ enrolmentSubmission?.createdDate | formatDate }}</h6>
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>
-      Enrolment From {{ enrolmentSubmission?.createdDate | formatDate }}
+      Submitted {{ enrolmentSubmission?.createdDate | formatDate }}
     </ng-container>
   </app-page-subheader>
 
@@ -30,4 +34,4 @@
     </div>
   </div>
 
-</app-page>
+</ng-template>
