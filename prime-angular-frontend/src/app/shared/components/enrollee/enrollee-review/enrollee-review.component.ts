@@ -14,6 +14,9 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -31,6 +34,7 @@ export class EnrolleeReviewComponent {
   public demographicRoutePath: string;
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
+  public CareSettingEnum = CareSettingEnum;
   public EnrolmentRoutes = EnrolmentRoutes;
   public AdjudicationRoutes = AdjudicationRoutes;
 
@@ -90,12 +94,32 @@ export class EnrolleeReviewComponent {
     return (this.hasJob) ? this.enrolment.jobs : [];
   }
 
+  public get oboSites(): OboSite[] {
+    return this.enrolment.oboSites ? this.enrolment.oboSites : [];
+  }
+
   public get hasCareSetting(): boolean {
     return (this.enrolment && !!this.enrolment.careSettings.length);
   }
 
   public get careSettings(): CareSetting[] {
     return (this.hasCareSetting) ? this.enrolment.careSettings : [];
+  }
+
+  public get healthAuthorities(): { healthAuthorityCode: number, facilityCodes: number[] }[] {
+    const healthAuthoritiesGrouped = this.enrolment.enrolleeHealthAuthorities
+      .reduce((grouped: { [key: number]: number[] }, ha: HealthAuthority) => {
+        grouped[ha.healthAuthorityCode] = [].concat([...(grouped[ha.healthAuthorityCode] ?? []), ha.facilityCode]);
+        return grouped;
+      }, {});
+
+    const healthAuthorities = Object.keys(healthAuthoritiesGrouped)
+      .map(key => ({
+        healthAuthorityCode: +key,
+        facilityCodes: healthAuthoritiesGrouped[key]
+      }));
+
+    return (healthAuthorities?.length) ? healthAuthorities : [];
   }
 
   public get isRequestingRemoteAccess(): boolean {

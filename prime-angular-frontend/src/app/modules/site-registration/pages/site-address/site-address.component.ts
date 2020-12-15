@@ -30,6 +30,7 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
   public formControlNames: AddressLine[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public showAddressFields: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +50,8 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
       'provinceCode',
       'postal'
     ];
+
+    this.showAddressFields = false;
   }
 
   public get name(): FormGroup {
@@ -68,6 +71,10 @@ export class SiteAddressComponent implements OnInit, IPage, IForm {
           this.form.markAsPristine();
           this.nextRoute();
         });
+    }
+    else {
+      // show the address fields when form is invalid
+      this.showAddressFields = true;
     }
   }
 
