@@ -22,13 +22,11 @@ export class PhsaLabtechResource {
   ) { }
 
   public createEnrollee(payload: PhsaLabtech): Observable<PhsaLabtech> {
-    this.logger.trace('TODO: call API', payload);
-
     return this.apiResource.post<PhsaLabtech>('parties/labtechs', payload)
       .pipe(
         map((response: ApiHttpResponse<PhsaLabtech>) => response.result),
         tap((enrollee: PhsaLabtech) => this.logger.info('ENROLLEE', enrollee)),
-//        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
+        tap((enrollee: PhsaLabtech) => this.toastService.openSuccessToast('Enrolment information has been saved')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be created.');
           this.logger.error('[Enrolment] PhasLabtechResource::createEnrollee error has occurred: ', error);
