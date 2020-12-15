@@ -6,11 +6,28 @@
 
 ## .NET API
 
+This project can be built and run with the following commands:
+
+```
+dotnet publish -c Debug
+dotnet bin/Debug/netcoreapp3.1/prime.dll
+```
+
+But this requires the .NET Core SDK.
+
 ### Installation
+
+The .NET Core SDK can be obtained directly from [Microsoft](https://dotnet.microsoft.com/download)
+or third-party package managers such as [Chocolatey](https://chocolatey.org/packages/dotnetcore-sdk).
 
 ## Database (PostgreSQL + .NET Core EF)
 
+The database schema and default contents is setup by the command `dotnet ef database update --verbose`
+but the expected database server must be running.
+
 ### Installation
+
+The database server is provided by the `postgres` service listed in the `docker-compose.yml` file at the root of the repository.
 
 ### Creating Migration
 
