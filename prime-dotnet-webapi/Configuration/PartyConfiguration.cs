@@ -8,7 +8,9 @@ namespace Prime.Configuration
     {
         public void Configure(EntityTypeBuilder<Party> builder)
         {
-
+            builder
+                .HasIndex(e => e.UserId)
+                .IsUnique();
         }
     }
 }
