@@ -55,25 +55,28 @@ namespace Prime.Services
         {
             signingAuthority.ThrowIfNull(nameof(signingAuthority));
 
-            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
+            var partyId = await _partyService.GetPartyIdForUserIdAsync(_httpContext.HttpContext.User.GetPrimeUserId());
 
-            var partyExists = await _partyService.UserIdExistsAsync(userId);
-
-            if (!partyExists)
+            if (partyId == -1)
             {
-                await _partyService.CreatePartyAsync(signingAuthority);
+                // Party is new
+                partyId = await _partyService.CreatePartyAsync(signingAuthority, PartyType.SigningAuthority);
+            }
+            else
+            {
+                await _partyService.UpdatePartyAsync(partyId, signingAuthority, PartyType.SigningAuthority);
             }
 
-            signingAuthority = await _partyService.GetPartyForUserIdAsync(userId);
-
-            var organizations = await GetOrganizationsAsync(signingAuthority.Id);
+            var organizations = await GetOrganizationsAsync(partyId);
             if (organizations.Count() != 0)
             {
                 throw new InvalidOperationException("Could not create Organization. Only one organization can exist for a party.");
             }
 
             var organization = new Organization
-            { SigningAuthorityId = signingAuthority.Id };
+            {
+                SigningAuthorityId = partyId
+            };
 
             _context.Organizations.Add(organization);
 
@@ -83,7 +86,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create Organization.");
             }
 
-            await _businessEventService.CreateOrganizationEventAsync(organization.Id, signingAuthority.Id, "Organization Created");
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, partyId, "Organization Created");
 
             return organization.Id;
         }

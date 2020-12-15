@@ -22,6 +22,20 @@ namespace Prime.Services
                 .AnyAsync(e => e.UserId == userId);
         }
 
+        /// <summary>
+        /// Gets the PartyId for a given UserId. Returns -1 if the UserId does not exist.
+        /// </summary>
+        /// <param name="userId"></param>
+        public async Task<int> GetPartyIdForUserIdAsync(Guid userId)
+        {
+            var Id = await _context.Parties
+                .Where(p => p.UserId == userId)
+                .Select(p => (int?)p.Id)
+                .SingleOrDefaultAsync();
+
+            return Id ?? -1;
+        }
+
         public async Task<Party> GetPartyAsync(int partyId)
         {
             return await GetBasePartyQuery()
@@ -35,9 +49,11 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.UserId == userId);
         }
 
-        public async Task<int> CreatePartyAsync(Party party)
+        public async Task<int> CreatePartyAsync(Party party, PartyType type)
         {
             party.ThrowIfNull(nameof(party));
+
+            party.SetPartyType(type);
 
             _context.Parties.Add(party);
 
@@ -50,15 +66,26 @@ namespace Prime.Services
             return party.Id;
         }
 
-        public async Task<int> UpdatePartyAsync(int partyId, Party party)
+        /// <summary>
+        /// Updates a Party and/or sets a PartyType on a Party.
+        /// </summary>
+        /// <param name="partyId"></param>
+        /// <param name="party"></param>
+        /// <param name="type"></param>
+        public async Task<int> UpdatePartyAsync(int partyId, Party party = null, PartyType? type = null)
         {
             var currentParty = await GetBasePartyQuery()
+                .If(type.HasValue, q => q.Include(x => x.PartyEnrolments))
                 .SingleAsync(e => e.Id == partyId);
 
-            _context.Entry(currentParty).CurrentValues.SetValues(party);
-
-            UpdatePartyPhysicalAddress(currentParty, party);
-            UpdatePartyMailingAddress(currentParty, party);
+            if (party != null)
+            {
+                UpdatePartyInternal(currentParty, party);
+            }
+            if (type.HasValue)
+            {
+                party.SetPartyType(type.Value);
+            }
 
             try
             {
@@ -94,7 +121,6 @@ namespace Prime.Services
             }
         }
 
-
         public async Task DeletePartyAsync(int partyId)
         {
             var party = await GetBasePartyQuery()
@@ -113,6 +139,14 @@ namespace Prime.Services
         {
             return _context.Parties
                 .Include(p => p.PhysicalAddress);
+        }
+
+        private void UpdatePartyInternal(Party current, Party updated)
+        {
+            _context.Entry(current).CurrentValues.SetValues(updated);
+
+            UpdatePartyPhysicalAddress(current, updated);
+            UpdatePartyMailingAddress(current, updated);
         }
     }
 }
