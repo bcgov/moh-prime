@@ -75,6 +75,7 @@ import { ClaimSiteComponent } from '@shared/components/dialogs/content/claim-sit
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
 import { AccessCodeFormComponent } from '@shared/components/access-code-form/access-code-form.component';
 import { ContactInformationFormComponent } from '@shared/components/contact-information-form/contact-information-form.component';
+import { CareSettingAbbrPipe } from './pipes/care-setting-abbr.pipe';
 
 @NgModule({
   declarations: [
@@ -138,7 +139,8 @@ import { ContactInformationFormComponent } from '@shared/components/contact-info
     ClaimSiteComponent,
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
-    ContactInformationFormComponent
+    ContactInformationFormComponent,
+    CareSettingAbbrPipe
   ],
   imports: [
     CommonModule,
@@ -209,7 +211,8 @@ import { ContactInformationFormComponent } from '@shared/components/contact-info
     ClaimSiteComponent,
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
-    ContactInformationFormComponent
+    ContactInformationFormComponent,
+    CareSettingAbbrPipe
   ],
   providers: [
     FullnamePipe,

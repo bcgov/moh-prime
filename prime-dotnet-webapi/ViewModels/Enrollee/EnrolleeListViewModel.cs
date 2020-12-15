@@ -60,5 +60,7 @@ namespace Prime.ViewModels
         public bool AlwaysManual { get; set; }
 
         public bool RemoteAccess { get; set; }
+
+        public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
     }
 }
