@@ -24,14 +24,11 @@ export class EnrolleeTableComponent implements OnInit {
   @Output() public disclaim: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
+  public form: FormGroup;
   public columns: string[];
-
-  public AdjudicationRoutes = AdjudicationRoutes;
-
   public hasAppliedDateRange = false;
   public hasRenewalDateRange = false;
-
-  public filterFormControl: FormGroup;
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     private authService: AuthService,
@@ -99,14 +96,14 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   public clearAppliedDateRange() {
-    this.filterFormControl.get('appliedDateRangeStart').reset();
-    this.filterFormControl.get('appliedDateRangeEnd').reset();
+    this.form.get('appliedDateRangeStart').reset();
+    this.form.get('appliedDateRangeEnd').reset();
     this.hasAppliedDateRange = false;
   }
 
   public clearRenewalDateRange() {
-    this.filterFormControl.get('renewalDateRangeStart').reset();
-    this.filterFormControl.get('renewalDateRangeEnd').reset();
+    this.form.get('renewalDateRangeStart').reset();
+    this.form.get('renewalDateRangeEnd').reset();
     this.hasRenewalDateRange = false;
   }
 
@@ -116,7 +113,7 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   private createFormInstance() {
-    this.filterFormControl = this.fb.group({
+    this.form = this.fb.group({
       appliedDateRangeStart: '',
       appliedDateRangeEnd: '',
       renewalDateRangeStart: '',
@@ -127,19 +124,19 @@ export class EnrolleeTableComponent implements OnInit {
   private initForm() {
     this.dataSource.filterPredicate = this.getFilterPredicate();
 
-    this.filterFormControl.valueChanges.subscribe(value => {
+    this.form.valueChanges.subscribe(value => {
       const filter = { ...value, name: value.name } as string;
       this.dataSource.filter = filter;
     });
 
     for (const name of ['appliedDateRangeStart', 'appliedDateRangeEnd']) {
-      this.filterFormControl.get(name).valueChanges.subscribe(value => {
+      this.form.get(name).valueChanges.subscribe(value => {
         this.hasAppliedDateRange = value || this.hasAppliedDateRange;
       });
     }
 
     for (const name of ['renewalDateRangeStart', 'renewalDateRangeEnd']) {
-      this.filterFormControl.get(name).valueChanges.subscribe(value => {
+      this.form.get(name).valueChanges.subscribe(value => {
         this.hasRenewalDateRange = value || this.hasRenewalDateRange;
       });
     }
@@ -149,7 +146,7 @@ export class EnrolleeTableComponent implements OnInit {
     return (row: EnrolleeListViewModel, filter) => {
       const appliedDate = moment.utc(row.appliedDate);
       const renewalDate = moment.utc(row.expiryDate);
-      // add 1 day to range end date for inclusive check
+      // Add 1 day to range end date for inclusive check
       const searchByAppliedDate =
         (!filter.appliedDateRangeStart || moment(filter.appliedDateRangeStart) <= appliedDate)
         && (!filter.appliedDateRangeEnd || appliedDate <= moment(filter.appliedDateRangeEnd).add(1, 'd'));

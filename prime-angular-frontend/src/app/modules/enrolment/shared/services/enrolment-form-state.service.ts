@@ -1,18 +1,24 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl, FormControl } from '@angular/forms';
 
-import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
+import { ConfigService } from '@config/config.service';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+// TODO business models to shared or lib so there's no dependencies between feature modules
+import { Site } from '@registration/shared/models/site.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
@@ -20,16 +26,13 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { RemoteAccessSite } from '../models/remote-access-site.model';
 import { RemoteAccessLocation } from '../models/remote-access-location';
-import { Site } from '@registration/shared/models/site.model';
 import { OboSite } from '../models/obo-site.model';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { FormUtilsService } from '@core/services/form-utils.service';
+import { HealthAuthorityFormState } from '@enrolment/pages/health-authority/health-authority-form-state';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
+export class EnrolmentFormStateService extends AbstractFormStateService<Enrolment> {
   public accessForm: FormGroup;
   public identityDocumentForm: FormGroup;
   public bceidDemographicForm: FormGroup;
@@ -41,6 +44,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   public remoteAccessLocationsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
+  public healthAuthoritiesFormState: HealthAuthorityFormState;
   public accessAgreementForm: FormGroup;
 
   private identityProvider: IdentityProviderEnum;
@@ -54,8 +58,11 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     protected logger: LoggerService,
     protected formUtilsService: FormUtilsService,
     private authService: AuthService,
+    private configService: ConfigService
   ) {
-    super(fb, routeStateService, logger, [...EnrolmentRoutes.enrolmentProfileRoutes()]);
+    super(fb, routeStateService, logger);
+
+    this.initialize([...EnrolmentRoutes.enrolmentProfileRoutes()]);
   }
 
   /**
@@ -96,6 +103,9 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
+
+    const enrolleeHealthAuthorities = this.healthAuthoritiesFormState.json;
+
     const selfDeclarations = this.convertSelfDeclarationsToJson();
     const remoteAccessSites = this.convertRemoteAccessSitesToJson();
     const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
@@ -111,6 +121,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       jobs,
       oboSites,
       ...careSettings,
+      enrolleeHealthAuthorities,
       enrolleeRemoteUsers,
       remoteAccessSites,
       ...remoteAccessLocations,
@@ -141,7 +152,8 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
       this.jobsForm,
       this.remoteAccessLocationsForm,
       this.selfDeclarationForm,
-      this.careSettingsForm
+      this.careSettingsForm,
+      this.healthAuthoritiesFormState.form
     ];
   }
 
@@ -168,13 +180,14 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
   /**
    * @description
    * Initialize and configure the forms for patching, which is also used
-   * clear previous form data from the service.
+   * to clear previous form data from the service.
    */
   protected buildForms() {
     // The accessForm and identityDocumentForm are used out of band
     // compared to the other form groups
     this.accessForm = this.buildAccessForm();
     this.identityDocumentForm = this.buildIdentityDocumentForm();
+
     this.bceidDemographicForm = this.buildBceidDemographicForm();
     this.bcscDemographicForm = this.buildBcscDemographicForm();
     this.regulatoryForm = this.buildRegulatoryForm();
@@ -184,6 +197,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
+    this.healthAuthoritiesFormState = new HealthAuthorityFormState(this.fb, this.configService);
     this.accessAgreementForm = this.buildAccessAgreementForm();
   }
 
@@ -209,6 +223,10 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
         careSetting.patchValue(s);
         careSettings.push(careSetting);
       });
+
+      if (enrolment.careSettings.filter(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY).length) {
+        this.healthAuthoritiesFormState.setValidators();
+      }
     }
 
     if (enrolment.certifications.length) {
@@ -349,6 +367,7 @@ export class EnrolmentFormStateService extends AbstractFormState<Enrolment> {
     this.selfDeclarationForm.patchValue(selfDeclarations);
     this.careSettingsForm.patchValue(enrolment);
 
+    this.healthAuthoritiesFormState.patchValue(enrolment.enrolleeHealthAuthorities);
 
 
     // After patching the form is dirty, and needs to be pristine
