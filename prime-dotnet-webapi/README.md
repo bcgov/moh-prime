@@ -61,3 +61,5 @@ Note: you will have to bring down your api if you are running it in debug mode t
 
 ### TIPS + TRICKS
 
+- if you have the API running, it will conflict with `dotnet ef database update`
+- if while running `dotnet ef database update`, you get the error `"csc.dll" exited with code 137`, it may be because you don't have enough memory (e.g. if running command inside a VM)
