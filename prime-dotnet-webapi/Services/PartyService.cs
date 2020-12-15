@@ -19,6 +19,7 @@ namespace Prime.Services
         public async Task<bool> UserIdExistsAsync(Guid userId)
         {
             return await _context.Parties
+                .AsNoTracking()
                 .AnyAsync(e => e.UserId == userId);
         }
 
@@ -29,6 +30,7 @@ namespace Prime.Services
         public async Task<int> GetPartyIdForUserIdAsync(Guid userId)
         {
             var Id = await _context.Parties
+                .AsNoTracking()
                 .Where(p => p.UserId == userId)
                 .Select(p => (int?)p.Id)
                 .SingleOrDefaultAsync();
