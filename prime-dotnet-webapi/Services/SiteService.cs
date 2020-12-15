@@ -439,7 +439,7 @@ namespace Prime.Services
         {
             var businessLicence = await _context.BusinessLicences
                 .Include(bl => bl.BusinessLicenceDocument)
-                .Where(bl => bl.Id == businessLicenceId).SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(bl => bl.Id == businessLicenceId);
             if (businessLicence.BusinessLicenceDocument != null)
             {
                 _context.BusinessLicenceDocuments.Remove(businessLicence.BusinessLicenceDocument);
