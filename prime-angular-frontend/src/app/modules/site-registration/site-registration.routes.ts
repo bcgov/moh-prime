@@ -77,7 +77,6 @@ export class SiteRoutes {
       this.ADMINISTRATOR,
       this.PRIVACY_OFFICER,
       this.TECHNICAL_SUPPORT,
-      // this.SITE_REVIEW,
       this.NEXT_STEPS
     ];
   }

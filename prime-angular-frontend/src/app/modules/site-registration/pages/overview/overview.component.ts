@@ -26,8 +26,6 @@ export class OverviewComponent implements OnInit {
   public busy: Subscription;
   public site: Site;
   public organization: Organization;
-  // public isCompleted: boolean;
-
 
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
@@ -103,7 +101,6 @@ export class OverviewComponent implements OnInit {
 
   public ngOnInit(): void {
     this.organization = this.organizationService.organization;
-    // this.isCompleted = this.organization.completed;
     this.site = this.siteService.site;
 
     if (this.isOrganizationReview) {
