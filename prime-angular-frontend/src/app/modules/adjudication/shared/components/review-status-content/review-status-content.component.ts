@@ -43,6 +43,7 @@ class Reason {
 })
 export class ReviewStatusContentComponent implements OnInit, OnChanges {
   @Input() public enrollee: HttpEnrollee;
+  @Input() public hideStatusHistory: boolean;
   public previousStatuses: Status[];
   public reasons: Reason[];
   private questions: { [key: number]: string } = selfDeclarationQuestions;
@@ -50,7 +51,9 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
   constructor(
     private utilsService: UtilsService,
     private enrolmentResource: EnrolmentResource,
-  ) { }
+  ) {
+    this.hideStatusHistory = false;
+  }
 
   public downloadDocument(document: BaseDocument, isSelfDeclaration: boolean): void {
     if (isSelfDeclaration) {

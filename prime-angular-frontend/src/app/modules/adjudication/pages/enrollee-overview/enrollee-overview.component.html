@@ -1,0 +1,56 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <app-page-header>Overview</app-page-header>
+
+  <app-enrollee-table *ngIf="busy.closed || dataSource.data.length"
+                      [dataSource]="dataSource"
+                      (notify)="onNotify($event)"
+                      (claim)="onClaim($event)"
+                      (disclaim)="onDisclaim($event)"
+                      (route)="onRoute($event)"></app-enrollee-table>
+
+  <div class="row d-flex mt-4">
+
+    <div class="col-6">
+      <h3>Enrolment</h3>
+      <mat-card id="enrolmentCard">
+        <mat-card-content>
+          <app-enrollee-review *ngIf="enrolment"
+          [enrolment]="enrolment"
+          [admin]="true"
+          (route)="onRoute($event)"></app-enrollee-review>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-6">
+      <h3>Adjudication</h3>
+      <mat-card id="adjudicationCard">
+        <mat-card-content>
+          <app-review-status-content [enrollee]="enrollee"
+                                     [hideStatusHistory]="true">
+          </app-review-status-content>
+        </mat-card-content>
+      </mat-card>
+
+      <app-adjudicator-actions *ngIf="dataSource?.data[0]"
+                              class="float-right"
+                              [enrollee]="dataSource?.data[0]"
+                              (approve)="onApprove($event)"
+                              (decline)="onDecline($event)"
+                              (lock)="onLock($event)"
+                              (unlock)="onUnlock($event)"
+                              (delete)="onDelete($event)"
+                              (route)="onRoute($event)"
+                              (assign)="onAssign($event)"
+                              (enableEnrollee)="onEnableEnrollee($event)"
+                              (enableEditing)="onEnableEditing($event)"
+                              (rerunRules)="onRerunRules($event)"
+                              (toggleManualAdj)="onToggleManualAdj($event)">
+      </app-adjudicator-actions>
+
+    </div>
+  </div>
+
+
+</app-page>
