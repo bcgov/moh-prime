@@ -258,6 +258,17 @@ export class SiteResource {
       );
   }
 
+  public removeBusinessLicenceDocument(siteId: number): Observable<ApiHttpResponse<any>> {
+    return this.apiResource.delete<BusinessLicenceDocument>(`sites/${siteId}/business-licence/document`)
+      .pipe(
+        map((response: ApiHttpResponse<any>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::removeBusinessLicenceDocument error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getBusinessLicence(siteId: number): Observable<BusinessLicence> {
     return this.apiResource.get<BusinessLicence>(`sites/${siteId}/business-licence`)
       .pipe(

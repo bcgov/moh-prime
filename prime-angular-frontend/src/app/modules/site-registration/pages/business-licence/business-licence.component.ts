@@ -84,19 +84,39 @@ export class BusinessLicenceComponent implements OnInit {
   public onSubmit() {
     const siteId = this.route.snapshot.params.sid;
     let method$: Observable<any>;
-    if (this.formUtilsService.checkValidity(this.form) && (this.uploadedFile || this.deferredLicenceToggle?.checked)) {
+    if (this.formUtilsService.checkValidity(this.form)
+      && (this.uploadedFile || this.deferredLicenceToggle?.checked || this.businessLicence?.businessLicenceDocument)) {
       const payload = this.siteFormStateService.json;
+
       if (this.deferredLicenceToggle?.checked) {
+
         this.businessLicence.deferredLicenceReason = payload.deferredLicenceReason;
-        method$ = (this.businessLicence.id)
-          ? this.siteResource.updateBusinessLicence(siteId, this.businessLicence)
-          : this.siteResource.createBusinessLicence(siteId, this.businessLicence, null);
+        if (this.businessLicence.id) {
+          method$ = (this.businessLicence.businessLicenceDocument)
+            // Returning: [Previously attached document] * [Document removed, Business Licence Updated] --> [...]
+            ? this.siteResource.removeBusinessLicenceDocument(siteId).pipe(exhaustMap(() => this.siteResource.updateBusinessLicence(siteId, this.businessLicence)))
+            // Returning: [] * [Business Licence Updated] --> [...]
+            : this.siteResource.updateBusinessLicence(siteId, this.businessLicence);
+        } else {
+          // First time through: [] * [Business Licence Created] --> [...]
+          method$ = this.siteResource.createBusinessLicence(siteId, this.businessLicence, null);
+        }
       } else {
         const updateSite = this.siteResource.updateSite(payload);
-        method$ = (this.businessLicence.id)
-          ? updateSite.pipe(exhaustMap(() => this.siteResource.createBusinessLicenceDocument(siteId, payload.businessLicenceGuid)))
-          : updateSite.pipe(exhaustMap(() =>
+
+        if (this.businessLicence.id) {
+          method$ = (!this.uploadedFile)
+            // Returning: [Previously attached document] * [Site Updated] --> [...]
+            ? updateSite
+            // Returning: [Previously attached document] * [Site Updated, New document uploaded] --> [...]
+            : updateSite.pipe(exhaustMap(() =>
+              this.siteResource.createBusinessLicenceDocument(siteId, payload.businessLicenceGuid)));
+        } else {
+          // First time through: [] * [Business Licence Created, New document uploaded] --> [...]
+          method$ = updateSite.pipe(exhaustMap(() =>
             this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)));
+        }
+
       }
       method$.subscribe(() => {
         // TODO should make this cleaner, but for now good enough
@@ -106,7 +126,7 @@ export class BusinessLicenceComponent implements OnInit {
         this.form.markAsPristine();
         this.nextRoute();
       });
-    } else if (!this.deferredLicenceToggle.checked) {
+    } else if (!this.deferredLicenceToggle?.checked) {
       this.hasNoBusinessLicenceError = true;
     }
   }
