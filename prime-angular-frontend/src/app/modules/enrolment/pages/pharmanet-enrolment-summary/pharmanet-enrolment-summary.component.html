@@ -4,8 +4,6 @@
 
     <app-page-header>Next Steps to get PharmaNet</app-page-header>
 
-    <app-enrolment-progress-indicator *ngIf="showProgressBar"></app-enrolment-progress-indicator>
-
     <app-next-steps-infographic [enrolment]="enrolment">
 
       <ng-container *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
