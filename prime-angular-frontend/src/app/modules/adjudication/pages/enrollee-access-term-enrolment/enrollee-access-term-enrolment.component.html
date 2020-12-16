@@ -23,7 +23,8 @@
   </div>
 
   <app-enrollee-review [enrolment]="enrolmentSubmission?.profileSnapshot"
-                       [admin]="true"></app-enrollee-review>
+                       [admin]="true"
+                       (route)="onRoute($event)"></app-enrollee-review>
 
   <div class="row justify-content-between">
     <div class="col pt-4">

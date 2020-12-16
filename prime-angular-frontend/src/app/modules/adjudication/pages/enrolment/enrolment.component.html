@@ -1,6 +1,16 @@
-<app-page [busy]="busy">
+<app-adjudication-container [content]="content">
 
   <app-page-header>Enrolment</app-page-header>
+
+</app-adjudication-container>
+
+<ng-template #content>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>
+      Enrollee Information
+    </ng-container>
+  </app-page-subheader>
 
   <app-enrollee-review *ngIf="enrollee"
                        [enrolment]="enrollee"
@@ -17,4 +27,4 @@
     </div>
   </div>
 
-</app-page>
+</ng-template>

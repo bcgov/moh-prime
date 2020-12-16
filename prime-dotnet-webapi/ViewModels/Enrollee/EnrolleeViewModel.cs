@@ -86,6 +86,8 @@ namespace Prime.ViewModels
 
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
+        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
+
         public int? CredentialId { get; set; }
 
         public string Base64QRCode { get; set; }
