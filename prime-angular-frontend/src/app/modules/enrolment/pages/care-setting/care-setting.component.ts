@@ -80,7 +80,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     // remove health authorities if health authority care setting not chosen
     const careSetting = this.careSettings.controls.filter((c) => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
     if (!careSetting.length) {
-      this.removeHealthAuthorities();
+      this.enrolmentFormStateService.healthAuthoritiesFormState.removeHealthAuthorities();
     }
 
     super.onSubmit();
@@ -240,13 +240,5 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
         break;
       }
     }
-  }
-
-  private removeHealthAuthorities() {
-    const form = this.enrolmentFormStateService.healthAuthoritiesFormState.form
-    const healthAuthorities = form.get('enrolleeHealthAuthorities') as FormArray;
-    healthAuthorities.controls.forEach(ha => {
-      ha.get('facilityCodes').patchValue([]);
-    });
   }
 }
