@@ -107,11 +107,10 @@ export class EnrolleeReviewComponent {
   }
 
   public get healthAuthorities(): { healthAuthorityCode: number, facilityCodes: number[] }[] {
-    const healthAuthoritiesGrouped = this.enrolment?.enrolleeHealthAuthorities
-      .reduce((grouped: { [key: number]: number[] }, ha: HealthAuthority) => {
-        grouped[ha.healthAuthorityCode] = [].concat([...(grouped[ha.healthAuthorityCode] ?? []), ha.facilityCode]);
-        return grouped;
-      }, {});
+    const healthAuthoritiesGrouped = this.enrolment?.enrolleeHealthAuthorities?.reduce((grouped: { [key: number]: number[] }, ha: HealthAuthority) => {
+      grouped[ha.healthAuthorityCode] = [].concat([...(grouped[ha.healthAuthorityCode] ?? []), ha.facilityCode]);
+      return grouped;
+    }, {});
 
     const healthAuthorities = healthAuthoritiesGrouped
       ? Object.keys(healthAuthoritiesGrouped)

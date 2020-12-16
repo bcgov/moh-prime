@@ -101,7 +101,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public removeCareSetting(index: number, careSettingCode: number) {
     this.careSettings.removeAt(index);
-    this.removeOboSites(careSettingCode);
   }
 
   public filterCareSettingTypes(careSetting: FormGroup) {
@@ -223,18 +222,21 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        communityHealthSites.reset();
+        communityHealthSites.clear();
         communityHealthSites.clearValidators();
+        communityHealthSites.updateValueAndValidity();
         break;
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
-        communityPharmacySites.reset();
+        communityPharmacySites.clear()
         communityPharmacySites.clearValidators();
+        communityPharmacySites.updateValueAndValidity();
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        healthAuthoritySites.reset();
+        healthAuthoritySites.clear();
         healthAuthoritySites.clearValidators();
+        healthAuthoritySites.updateValueAndValidity();
         break;
       }
     }

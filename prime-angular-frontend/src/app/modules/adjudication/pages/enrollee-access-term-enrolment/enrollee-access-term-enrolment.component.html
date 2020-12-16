@@ -5,10 +5,10 @@
 </app-adjudication-container>
 
 <ng-template #content>
-  <h6 class="text-green">Submitted {{ enrolmentSubmission?.createdDate | formatDate }}</h6>
+  <h6 class="text-green text-italic">Submitted {{ enrolmentSubmission?.createdDate | formatDate }}</h6>
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>
-      Submitted {{ enrolmentSubmission?.createdDate | formatDate }}
+      Enrollee Information
     </ng-container>
   </app-page-subheader>
 
@@ -22,7 +22,8 @@
     </div>
   </div>
 
-  <app-enrollee-review [enrolment]="enrolmentSubmission?.profileSnapshot"></app-enrollee-review>
+  <app-enrollee-review [enrolment]="enrolmentSubmission?.profileSnapshot"
+                       [admin]="true"></app-enrollee-review>
 
   <div class="row justify-content-between">
     <div class="col pt-4">
