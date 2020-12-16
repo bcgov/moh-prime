@@ -61,6 +61,6 @@ namespace Prime.ViewModels
 
         public bool RemoteAccess { get; set; }
 
-        public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
+        public ICollection<int> CareSettingCodes { get; set; }
     }
 }

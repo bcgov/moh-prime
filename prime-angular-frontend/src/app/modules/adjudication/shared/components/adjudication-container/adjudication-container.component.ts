@@ -427,7 +427,7 @@ export class AdjudicationContainerComponent implements OnInit {
       adjudicatorIdir: adjudicator?.idir,
       alwaysManual,
       remoteAccess: (enrolleeRemoteUsers?.length) ? true : false,
-      enrolleeCareSettings
+      careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode)
     };
   }
 }

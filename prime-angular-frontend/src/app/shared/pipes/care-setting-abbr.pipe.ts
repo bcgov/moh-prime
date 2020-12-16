@@ -7,11 +7,11 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 })
 export class CareSettingAbbrPipe implements PipeTransform {
 
-  transform(value: CareSetting | CareSetting[]): string {
+  transform(value: number | number[]): string {
     if (Array.isArray(value)) {
-      return value.map(item => this.getAbbr(item.careSettingCode)).join(', ');
+      return value.map(item => this.getAbbr(item)).join(', ');
     }
-    return this.getAbbr(<CareSettingEnum>value.careSettingCode);
+    return this.getAbbr(<CareSettingEnum>value);
   }
 
   private getAbbr(careSetting: CareSettingEnum) {

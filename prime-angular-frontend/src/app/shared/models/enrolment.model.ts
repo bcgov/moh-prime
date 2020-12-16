@@ -118,5 +118,5 @@ export interface EnrolleeListViewModel {
   adjudicatorIdir: string;
   alwaysManual: boolean;
   remoteAccess: boolean;
-  enrolleeCareSettings: CareSetting[];
+  careSettingCodes: number[];
 }
