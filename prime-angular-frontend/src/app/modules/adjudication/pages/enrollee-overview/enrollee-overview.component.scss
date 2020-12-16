@@ -1,13 +1,9 @@
-mat-card {
-  overflow-y: scroll;
-  overflow-x: auto;
-}
-
 #enrolmentCard {
-  height: 210px;
+  overflow: auto;
+  height: calc(100vh - 380px);
 }
 
 #adjudicationCard {
-  height: 120px;
+  overflow: auto;
+  height: calc(100vh - 500px);
 }
-
