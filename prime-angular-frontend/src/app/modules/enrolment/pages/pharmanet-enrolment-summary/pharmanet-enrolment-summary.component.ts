@@ -198,7 +198,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingCode: careSetting.careSettingCode,
             formControl: this.communityHealthEmails,
             subheaderContent: `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office
-              manager). If you work in more than one clinic you can include the email addresses for all the PharmaNet administrators separated by a comma.`
+              manager).`
           };
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
@@ -207,8 +207,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Community Pharmacies',
             settingCode: careSetting.careSettingCode,
             formControl: this.pharmacistEmails,
-            subheaderContent: `Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).
-            If you work in more than one clinic you can include the email addresses for all the PharmaNet administrators separated by a comma.`
+            subheaderContent: `Send your approval to your pharmacy's PharmaNet administrator (e.g., pharmacy manager).`
           };
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {
@@ -218,8 +217,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingCode: careSetting.careSettingCode,
             formControl: this.healthAuthorityEmails,
             subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are
-              unsure who this is). If you work in more than one clinic you can include the email addresses for all the PharmaNet
-              administrators separated by a comma.`
+              unsure who this is).`
           };
         }
       }
