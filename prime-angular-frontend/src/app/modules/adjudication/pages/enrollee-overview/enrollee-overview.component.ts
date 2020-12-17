@@ -1,14 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs/operators';
+
 import { AuthService } from '@auth/shared/services/auth.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { AdjudicationContainerComponent } from '@adjudication/shared/components/adjudication-container/adjudication-container.component';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -48,9 +51,12 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent
     const enrolleeId = this.route.snapshot.params.id;
 
     this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
-      .subscribe((enrollee: HttpEnrollee) => {
+      .pipe(
+        map((enrollee: HttpEnrollee) => [enrollee, this.enrolmentAdapter(enrollee)])
+      )
+      .subscribe(([enrollee, enrolment]: [HttpEnrollee, Enrolment]) => {
         this.enrollee = enrollee;
-        this.enrolment = this.enrolmentAdapter(enrollee);
+        this.enrolment = enrolment;
       });
   }
 
