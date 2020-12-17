@@ -214,14 +214,15 @@ namespace Prime.Services
                     { "schema_version", schema.Value<string>("version") },
                     { "cred_def_id", credentialDefinitionId },
                     { "comment", "PharmaNet GPID" },
-                    { "auto_remove", true },
+                    { "auto_remove", false },
                     { "trace", false },
                     { "credential_proposal", new JObject
                         {
                             { "@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview" },
                             { "attributes", attributes }
                         }
-                    }
+                    },
+                    { "revoc_registry_id", "Cc6hpJk61DjGcztPiAwJyK:4:Cc6hpJk61DjGcztPiAwJyK:3:CL:166842:prime_enrollee_credential:CL_ACCUM:3a3ef3ba-146d-4945-8022-a71dc282d379" }
                 };
 
             _logger.LogInformation("Credential offer for connection ID \"{connectionId}\" for {@JObject}", connectionId, JsonConvert.SerializeObject(credentialOffer));
