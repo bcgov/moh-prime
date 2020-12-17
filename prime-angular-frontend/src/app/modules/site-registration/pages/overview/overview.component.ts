@@ -2,20 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Observable, Subscription, EMPTY } from 'rxjs';
-import { exhaustMap, tap } from 'rxjs/operators';
+import { Observable, Subscription, EMPTY, ObservableInput } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { LoggerService } from '@core/services/logger.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { LoggerService } from '@core/services/logger.service';
 
 @Component({
   selector: 'app-overview',
@@ -88,12 +89,10 @@ export class OverviewComponent implements OnInit {
 
   public nextRoute(): void {
     this.busy = this.determineOrgAgreementRequired$().subscribe(
-      ignored => {
-        if (this.numSameCareSetting < 2) {
-          this.logger.trace("Going to Next Steps");
+      wasRequired => {
+        if (wasRequired) {
           this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
         } else {
-          this.logger.trace("Going to Site Management");
           this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
         }
       });
@@ -116,21 +115,14 @@ export class OverviewComponent implements OnInit {
    * Infer whether user was required to accept an Organization Agreement.
    * User saw an Organization Agreement if the current Site has a care setting that is unique
    * for that Organization.
+   * @returns
+   * Was Org Agreement required to be shown (yes if there is only 1 site with current care setting)
    */
-  private determineOrgAgreementRequired$(): Observable<SiteListViewModel[]> {
-    const currentCareSettingCode: number = this.site.careSettingCode;
+  private determineOrgAgreementRequired$(): Observable<boolean> {
+    const currentCareSettingCode: CareSettingEnum = this.site.careSettingCode;
 
     return this.siteResource.getSites(this.organization.id).pipe(
-      tap(sites => {
-        sites.forEach(
-          site => {
-            this.logger.trace("doingBusinessAs", site.doingBusinessAs);
-            this.logger.trace("careSettingCode", site.careSettingCode);
-            if (site.careSettingCode === currentCareSettingCode) {
-              // TODO: Better implementation that doesn't use member variable?
-              ++this.numSameCareSetting;
-            }
-          })
-      }));
+      map(sites =>
+        sites.filter(site => site.careSettingCode === currentCareSettingCode).length < 2));
   }
 }
