@@ -235,6 +235,11 @@ namespace Prime.Services
             // TODO Update schema to rename organization_type to care_setting
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
+            foreach (var careSetting in enrollee.EnrolleeCareSettings)
+            {
+                await _context.Entry(careSetting).Reference(o => o.CareSetting).LoadAsync();
+            }
+
             JArray attributes = new JArray
             {
                 new JObject
@@ -245,7 +250,7 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "renewal_date" },
-                    { "value", enrollee.ExpiryDate }
+                    { "value", enrollee.ExpiryDate.Value.Date.ToShortDateString() }
                 },
                 new JObject
                 {
@@ -254,21 +259,15 @@ namespace Prime.Services
                 },
                 new JObject
                 {
+                    { "name", "organization_type" },
+                    { "value", string.Join(',', enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting.Name)) }
+                },
+                new JObject
+                {
                     { "name", "remote_access" },
                     { "value", enrollee.EnrolleeRemoteUsers.Count > 0 ? "true" : "false"}
                 }
             };
-
-            foreach (var careSetting in enrollee.EnrolleeCareSettings)
-            {
-                await _context.Entry(careSetting).Reference(o => o.CareSetting).LoadAsync();
-
-                attributes.Add(new JObject
-                {
-                    { "name", "organization_type" },
-                    { "value", careSetting.CareSetting.Name }
-                });
-            }
 
             _logger.LogInformation("Credential offer attributes for {@JObject}", JsonConvert.SerializeObject(attributes));
 
