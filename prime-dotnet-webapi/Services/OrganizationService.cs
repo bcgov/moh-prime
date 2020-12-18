@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.HttpClients;
+using Prime.ViewModels.Parties;
+using System.Security.Claims;
 
 namespace Prime.Services
 {
@@ -51,20 +53,14 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
-        public async Task<int> CreateOrganizationAsync(Party signingAuthority)
+        public async Task<int> CreateOrganizationAsync(SigningAuthorityChangeModel signingAuthority, ClaimsPrincipal user)
         {
             signingAuthority.ThrowIfNull(nameof(signingAuthority));
 
-            var partyId = await _partyService.GetPartyIdForUserIdAsync(_httpContext.HttpContext.User.GetPrimeUserId());
-
+            var partyId = await _partyService.CreateOrUpdatePartyAsync(signingAuthority, user);
             if (partyId == -1)
             {
-                // Party is new
-                partyId = await _partyService.CreatePartyAsync(signingAuthority, PartyType.SigningAuthority);
-            }
-            else
-            {
-                await _partyService.UpdatePartyAsync(partyId, signingAuthority, PartyType.SigningAuthority);
+                throw new InvalidOperationException("Could not create Organization. Error when updating Signing Authority");
             }
 
             var organizations = await GetOrganizationsAsync(partyId);

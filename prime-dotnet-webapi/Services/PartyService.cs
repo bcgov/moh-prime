@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
-
+using Prime.ViewModels.Parties;
 
 namespace Prime.Services
 {
@@ -15,28 +16,6 @@ namespace Prime.Services
             IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
-
-        public async Task<bool> UserIdExistsAsync(Guid userId)
-        {
-            return await _context.Parties
-                .AsNoTracking()
-                .AnyAsync(e => e.UserId == userId);
-        }
-
-        /// <summary>
-        /// Gets the PartyId for a given UserId. Returns -1 if the UserId does not exist.
-        /// </summary>
-        /// <param name="userId"></param>
-        public async Task<int> GetPartyIdForUserIdAsync(Guid userId)
-        {
-            var Id = await _context.Parties
-                .AsNoTracking()
-                .Where(p => p.UserId == userId)
-                .Select(p => (int?)p.Id)
-                .SingleOrDefaultAsync();
-
-            return Id ?? -1;
-        }
 
         public async Task<Party> GetPartyAsync(int partyId)
         {
@@ -51,75 +30,58 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.UserId == userId);
         }
 
-        public async Task<int> CreatePartyAsync(Party party, PartyType type)
-        {
-            party.ThrowIfNull(nameof(party));
-
-            party.SetPartyType(type);
-
-            _context.Parties.Add(party);
-
-            var created = await _context.SaveChangesAsync();
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could not create party.");
-            }
-
-            return party.Id;
-        }
-
         /// <summary>
-        /// Updates a Party and/or sets a PartyType on a Party.
+        /// Creates or updates a party based on the User ID of the supplied user.
+        /// Returns the Id of the affected Party.
         /// </summary>
-        /// <param name="partyId"></param>
-        /// <param name="party"></param>
-        /// <param name="type"></param>
-        public async Task<int> UpdatePartyAsync(int partyId, Party party = null, PartyType? type = null)
+        /// <param name="changeModel"></param>
+        /// <param name="user"></param>
+        public async Task<int> CreateOrUpdatePartyAsync(IPartyChangeModel changeModel, ClaimsPrincipal user)
         {
             var currentParty = await GetBasePartyQuery()
-                .If(type.HasValue, q => q.Include(x => x.PartyEnrolments))
-                .SingleAsync(e => e.Id == partyId);
+                .SingleOrDefaultAsync(p => p.UserId == user.GetPrimeUserId());
 
-            if (party != null)
+            if (currentParty == null)
             {
-                UpdatePartyInternal(currentParty, party);
+                currentParty = new Party();
+                _context.Parties.Add(currentParty);
             }
-            if (type.HasValue)
-            {
-                party.SetPartyType(type.Value);
-            }
+
+            changeModel.UpdateParty(currentParty, user);
 
             try
             {
-                return await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                return 0;
+                return -1;
             }
+
+            return currentParty.Id;
         }
 
         public void UpdatePartyPhysicalAddress(Party current, Party updated)
         {
-            if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
+            if (current.PhysicalAddress == null)
             {
-                _context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                current.PhysicalAddress = updated.PhysicalAddress;
             }
             else
             {
-                current.PhysicalAddress = updated.PhysicalAddress;
+                current.PhysicalAddress.SetValues(updated.PhysicalAddress);
             }
         }
 
         public void UpdatePartyMailingAddress(Party current, Party updated)
         {
-            if (updated.MailingAddress != null && current.MailingAddress != null)
+            if (current.MailingAddress == null)
             {
-                _context.Entry(current.MailingAddress).CurrentValues.SetValues(updated.MailingAddress);
+                current.MailingAddress = updated.MailingAddress;
             }
             else
             {
-                current.MailingAddress = updated.MailingAddress;
+                current.MailingAddress.SetValues(updated.MailingAddress);
             }
         }
 
@@ -140,15 +102,9 @@ namespace Prime.Services
         private IQueryable<Party> GetBasePartyQuery()
         {
             return _context.Parties
-                .Include(p => p.PhysicalAddress);
-        }
-
-        private void UpdatePartyInternal(Party current, Party updated)
-        {
-            _context.Entry(current).CurrentValues.SetValues(updated);
-
-            UpdatePartyPhysicalAddress(current, updated);
-            UpdatePartyMailingAddress(current, updated);
+                .Include(p => p.PhysicalAddress)
+                .Include(p => p.MailingAddress)
+                .Include(p => p.PartyEnrolments);
         }
     }
 }

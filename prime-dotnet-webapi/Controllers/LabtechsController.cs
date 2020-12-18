@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
-using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
-using Prime.ViewModels.Labtech;
 using Prime.HttpClients;
+using Prime.ViewModels.Parties;
 
 namespace Prime.Controllers
 {
@@ -35,26 +34,15 @@ namespace Prime.Controllers
         /// If successful, also updates Keycloak with additional user info and the Labtech role.
         /// </summary>
         [HttpPost(Name = nameof(CreateLabtech))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CreateLabtech(LabtechCreateModel labtech)
+        public async Task<ActionResult> CreateLabtech(LabtechChangeModel labtech)
         {
-            Party model = labtech.Create(User);
-            var partyId = await _partyService.GetPartyIdForUserIdAsync(model.UserId);
+            await _partyService.CreateOrUpdatePartyAsync(labtech, User);
 
-            if (partyId == -1)
-            {
-                await _partyService.CreatePartyAsync(model, PartyType.Labtech);
-            }
-            else
-            {
-                await _partyService.UpdatePartyAsync(partyId, model, PartyType.Labtech);
-            }
-
-            await _keycloakClient.AssignRealmRole(model.UserId, Roles.PhsaLabtech);
-            await _keycloakClient.UpdateUserInfo(model.UserId, email: model.Email, phoneNumber: model.Phone, phoneExtension: model.PhoneExtension);
+            await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaLabtech);
+            await _keycloakClient.UpdateUserInfo(User.GetPrimeUserId(), email: labtech.Email, phoneNumber: labtech.Phone, phoneExtension: labtech.PhoneExtension);
 
             return Ok();
         }
