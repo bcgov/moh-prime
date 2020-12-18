@@ -435,9 +435,15 @@ namespace Prime.Services
             return businessLicence;
         }
 
-        public async Task<BusinessLicenceDocument> AddBusinessLicenceDocumentAsync(int siteId, Guid documentGuid)
+        public async Task<BusinessLicenceDocument> AddOrReplaceBusinessLicenceDocumentAsync(int businessLicenceId, Guid documentGuid)
         {
-            var businessLicence = await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).SingleOrDefaultAsync();
+            var businessLicence = await _context.BusinessLicences
+                .Include(bl => bl.BusinessLicenceDocument)
+                .SingleOrDefaultAsync(bl => bl.Id == businessLicenceId);
+            if (businessLicence.BusinessLicenceDocument != null)
+            {
+                _context.BusinessLicenceDocuments.Remove(businessLicence.BusinessLicenceDocument);
+            }
 
             var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
             if (string.IsNullOrWhiteSpace(filename))
@@ -457,6 +463,16 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return bld;
+        }
+
+        public async Task DeleteBusinessLicenceDocumentAsync(int siteId)
+        {
+            var businessLicence = await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).SingleOrDefaultAsync();
+            if (businessLicence.BusinessLicenceDocument != null)
+            {
+                _context.BusinessLicenceDocuments.Remove(businessLicence.BusinessLicenceDocument);
+                await _context.SaveChangesAsync();
+            }
         }
 
         private async Task<BusinessLicenceDocument> CreateBusinessLicenceDocument(Guid documentGuid)
