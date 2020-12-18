@@ -61,6 +61,18 @@ namespace Prime.Migrations
                 name: "IX_PartyEnrolment_PartyId",
                 table: "PartyEnrolment",
                 column: "PartyId");
+
+            migrationBuilder.Sql(@"
+                insert into ""PartyEnrolment""
+                (
+                    ""PartyId"",
+                    ""PartyType""
+                )
+                select
+                    p.""Id"" as ""PartyId"",
+                    2 as ""PartyType""
+                from ""Party"" p
+            ");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
