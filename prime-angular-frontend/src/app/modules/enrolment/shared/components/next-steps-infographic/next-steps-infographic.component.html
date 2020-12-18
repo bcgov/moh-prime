@@ -1,15 +1,8 @@
 <div class="row">
+
   <div class="col-12 info">
     <h5>
-      1. You have been approved to use PharmaNet by the Ministry of Health.
-    </h5>
-    <a *ngIf="hasVCIssuance"
-       href="#"
-       (click)="openQR($event)">Access your verified credential</a>
-  </div>
-  <div class="col-12 info">
-    <h5>
-      2. Send your approval to your PharmaNet administrator.
+      1. Send your approval to your PharmaNet administrator.
     </h5>
     <p>
       Who is my PharmaNet administrator?
@@ -27,7 +20,21 @@
   </div>
   <div class="col-12 info">
     <h5>
-      3. Your PharmaNet administrator will let you know when your access is set up.
+      2. Your PharmaNet administrator will let you know when your access is set up.
     </h5>
+  </div>
+  <div class="col-12 info">
+    <h5>
+      3. Access your verified credential (optional)
+    </h5>
+    <p>
+      <button mat-flat-button
+        type="button"
+        color="primary"
+        *ngIf="hasVCIssuance"
+        (click)="openQR($event)">
+        Verified Credential
+      </button>
+    </p>
   </div>
 </div>
