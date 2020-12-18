@@ -28,7 +28,6 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implements OnInit {
   public form: FormGroup;
   public enrolment: Enrolment;
-  public showProgressBar: boolean;
 
   public CareSettingEnum = CareSettingEnum;
   public EnrolmentStatus = EnrolmentStatus;
@@ -58,7 +57,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     private windowRef: WindowRefService
   ) {
     super(route, router);
-    this.showProgressBar = false;
     this.showCommunityHealth = true;
     this.showPharmacist = true;
     this.showHealthAuthority = true;
@@ -186,12 +184,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public ngOnInit() {
-    // Only shown the first time the enrollee reaches the summary
-    const routeState = this.windowRef.nativeWindow.history.state;
-    this.showProgressBar = (routeState && routeState.showProgressBar)
-      ? routeState.showProgressBar
-      : false;
-
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
 
