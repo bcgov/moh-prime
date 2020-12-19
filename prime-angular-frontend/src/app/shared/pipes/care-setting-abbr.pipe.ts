@@ -7,26 +7,11 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 })
 export class CareSettingAbbrPipe implements PipeTransform {
 
-  transform(value: number | number[]): string {
+  transform(value: CareSettingEnum | CareSettingEnum[]): string | string[] {
     if (Array.isArray(value)) {
-      return value.map(item => this.getAbbr(item)).join(', ');
+      return value.map(item => CareSettingEnum.abbr(item));
     }
-    return this.getAbbr(<CareSettingEnum>value);
-  }
-
-  private getAbbr(careSetting: CareSettingEnum) {
-    switch (careSetting) {
-      case CareSettingEnum.COMMUNITY_PHARMACIST:
-        return 'CP';
-      case CareSettingEnum.DEVICE_PROVIDER:
-        return 'DP';
-      case CareSettingEnum.HEALTH_AUTHORITY:
-        return 'HA';
-      case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
-        return 'PCHP';
-      default:
-        return '-';
-    }
+    return CareSettingEnum.abbr(<CareSettingEnum>value);
   }
 
 }
