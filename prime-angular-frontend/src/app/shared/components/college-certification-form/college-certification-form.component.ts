@@ -127,7 +127,6 @@ export class CollegeCertificationFormComponent implements OnInit {
       .subscribe((licenseCode: number) => {
 
         const matchingLicenses = this.licenses.filter(licenseConfig => licenseConfig.code === licenseCode);
-        this.logger.trace("Matching licenses", matchingLicenses);
         if (matchingLicenses.length != 1) {
           this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
         } else if ((matchingLicenses[0] as LicenseWeightedConfig).validate) {
