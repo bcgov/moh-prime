@@ -30,7 +30,7 @@ namespace Prime.Controllers
 
         // POST: api/parties/labtechs
         /// <summary>
-        /// Creates a new Labtech.
+        /// Creates or updates a Labtech record.
         /// If successful, also updates Keycloak with additional user info and the Labtech role.
         /// </summary>
         [HttpPost(Name = nameof(CreateLabtech))]
