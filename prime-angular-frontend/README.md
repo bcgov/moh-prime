@@ -26,13 +26,6 @@ git clone https://github.com/bcgov/moh-prime
 
 [Download](https://nodejs.org/en/) and install **Node v12.x**
 
-#### Code dependencies and Angular CLI
-
-```bash
-npm install
-npm install -g @angular/cli
-```
-
 #### VS Code
 
 [Download](https://code.visualstudio.com/) and install VSCode and accept the prompt to install the recommended extensions when the PRIME repository is initially opened in VSCode.
