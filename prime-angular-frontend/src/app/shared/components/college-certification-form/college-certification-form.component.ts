@@ -127,9 +127,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       .subscribe((licenseCode: number) => {
 
         const matchingLicenses = this.licenses.filter(licenseConfig => licenseConfig.code === licenseCode);
-        if (matchingLicenses.length != 1) {
-          this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
-        } else if ((matchingLicenses[0] as LicenseWeightedConfig).validate) {
+        if ((matchingLicenses[0] as LicenseWeightedConfig)?.validate) {
           // For college licences that we validate against the pharmanet tables, restrict the licence # to 5 digits
           this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.numeric, FormControlValidators.requiredLength(5, 5)]);
         } else {
