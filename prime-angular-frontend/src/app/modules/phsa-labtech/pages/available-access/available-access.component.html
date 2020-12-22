@@ -1,0 +1,27 @@
+<app-page [busy]="busy"
+          [mode]="'default'">
+  <app-page-header>Enrol for access to PHSA eForms</app-page-header>
+  <app-progress-indicator></app-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>System Check</ng-container>
+        <ng-container appPageSubheaderSummary>
+          You
+        </ng-container>
+      </app-page-subheader>
+    </section>
+
+
+
+  </form>
+
+  <app-page-footer [primaryActionLabel]="'Submit'"
+                   (save)="onSubmit()"
+                   (back)="routeBackTo()"></app-page-footer>
+</app-page>

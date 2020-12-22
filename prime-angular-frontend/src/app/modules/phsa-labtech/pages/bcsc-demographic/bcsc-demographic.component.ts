@@ -7,6 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -18,6 +19,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 
 import { PhsaLabtech } from '@phsa/shared/models/phsa-lab-tech.model';
 import { PhsaLabtechResource } from '@phsa/shared/services/phsa-labtech-resource.service';
+import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
 
 @Component({
   selector: 'app-bcsc-demographic',
@@ -28,8 +30,9 @@ export class BcscDemographicComponent implements OnInit {
 
   public enrollee: PhsaLabtech;
   public form: FormGroup;
-  // TODO: Set when API called
   public busy: Subscription;
+
+  private routeUtils: RouteUtils;
 
   public constructor(
     protected fb: FormBuilder,
@@ -41,12 +44,15 @@ export class BcscDemographicComponent implements OnInit {
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+  ) {
+    this.routeUtils = new RouteUtils(route, router, PhsaLabtechRoutes.MODULE_PATH);
+  }
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       this.busy = this.phsaLabtechResource.createEnrollee(this.formAsJson).subscribe();
+      this.routeUtils.routeRelativeTo(PhsaLabtechRoutes.AVAILABLE_ACCESS);
     } else {
       this.utilService.scrollToErrorSection();
     }
