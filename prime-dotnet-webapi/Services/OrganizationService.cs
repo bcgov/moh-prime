@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.HttpClients;
+using Prime.ViewModels.Parties;
+using System.Security.Claims;
 
 namespace Prime.Services
 {
@@ -51,29 +53,26 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
-        public async Task<int> CreateOrganizationAsync(Party signingAuthority)
+        public async Task<int> CreateOrganizationAsync(SigningAuthorityChangeModel signingAuthority, ClaimsPrincipal user)
         {
             signingAuthority.ThrowIfNull(nameof(signingAuthority));
 
-            var userId = _httpContext.HttpContext.User.GetPrimeUserId();
-
-            var partyExists = await _partyService.PartyUserIdExistsAsync(userId);
-
-            if (!partyExists)
+            var partyId = await _partyService.CreateOrUpdatePartyAsync(signingAuthority, user);
+            if (partyId == -1)
             {
-                await _partyService.CreatePartyAsync(signingAuthority);
+                throw new InvalidOperationException("Could not create Organization. Error when updating Signing Authority");
             }
 
-            signingAuthority = await _partyService.GetPartyForUserIdAsync(userId);
-
-            var organizations = await GetOrganizationsAsync(signingAuthority.Id);
+            var organizations = await GetOrganizationsAsync(partyId);
             if (organizations.Count() != 0)
             {
                 throw new InvalidOperationException("Could not create Organization. Only one organization can exist for a party.");
             }
 
             var organization = new Organization
-            { SigningAuthorityId = signingAuthority.Id };
+            {
+                SigningAuthorityId = partyId
+            };
 
             _context.Organizations.Add(organization);
 
@@ -83,7 +82,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create Organization.");
             }
 
-            await _businessEventService.CreateOrganizationEventAsync(organization.Id, signingAuthority.Id, "Organization Created");
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, partyId, "Organization Created");
 
             return organization.Id;
         }
