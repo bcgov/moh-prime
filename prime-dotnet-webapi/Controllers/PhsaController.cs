@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Prime.Models.Api;
 using Prime.Services;
 using Prime.HttpClients;
 using Prime.ViewModels.Parties;
+using Prime.Models;
 
 namespace Prime.Controllers
 {
@@ -19,19 +21,16 @@ namespace Prime.Controllers
     {
         private readonly IPartyService _partyService;
         private readonly IKeycloakAdministrationClient _keycloakClient;
-        private readonly IPreApprovedRegistrationService _preApprovedRegistrationService;
 
         public PhsaController(
             IPartyService partyService,
-            IPreApprovedRegistrationService preApprovedRegistrationService,
             IKeycloakAdministrationClient keycloakClient)
         {
             _partyService = partyService;
-            _preApprovedRegistrationService = preApprovedRegistrationService;
             _keycloakClient = keycloakClient;
         }
 
-        // POST: api/parties/labtechs
+        // POST: api/parties/phsa
         /// <summary>
         /// Creates a new Labtech.
         /// If successful, also updates Keycloak with additional user info and the Labtech role.
@@ -50,17 +49,19 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // GET: api/...
+        // GET: api/parties/phsa/pre-approved
         /// <summary>
-        ///
+        /// Returns a list of PHSA eForms registrations this person is pre-approved for.
         /// </summary>
-        [HttpGet]
+        [HttpGet("pre-approved", Name = nameof(GetPreApprovedRegistrations))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetPreApprovedRegistrations()
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<PartyType>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetPreApprovedRegistrations([FromQuery] string firstName, [FromQuery] string lastName, [FromQuery] string email)
         {
-            throw new System.NotImplementedException();
+            var partyTypes = await _partyService.GetPreApprovedRegistrationsAsync(firstName: firstName, lastName: lastName, email: email);
+
+            return Ok(ApiResponse.Result(partyTypes));
         }
     }
 }
