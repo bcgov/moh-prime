@@ -80,7 +80,8 @@
               <mat-error *ngIf="form.get('licenseNumber').hasError('alphanumeric')">
                 Must contain only alphanumeric characters
               </mat-error>
-              <mat-error *ngIf="form.get('licenseNumber').hasError('length')">
+              <mat-error
+                         *ngIf="form.get('licenseNumber').hasError('length') || form.get('licenseNumber').hasError('numeric')">
                 College license number needs to be 5 digits
               </mat-error>
             </mat-form-field>
