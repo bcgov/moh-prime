@@ -34,11 +34,23 @@ namespace Prime.Controllers
         /// If successful, also updates Keycloak with additional user info and the Labtech role.
         /// </summary>
         [HttpPost(Name = nameof(CreateLabtech))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> CreateLabtech(LabtechChangeModel labtech)
         {
+            if (labtech == null)
+            {
+                ModelState.AddModelError("Labtech", "Could not create the Labtech, the passed in model cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+            if (!labtech.IsValid())
+            {
+                ModelState.AddModelError("Labtech", "Email and Phone Number are required.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+
             await _partyService.CreateOrUpdatePartyAsync(labtech, User);
 
             await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaLabtech);

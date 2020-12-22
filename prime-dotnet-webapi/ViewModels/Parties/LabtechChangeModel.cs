@@ -7,8 +7,12 @@ namespace Prime.ViewModels.Parties
 {
     public class LabtechChangeModel : IPartyChangeModel
     {
+        /// <summary> Required </summary>
         public string Email { get; set; }
+
+        /// <summary> Required </summary>
         public string Phone { get; set; }
+
         public string PhoneExtension { get; set; }
 
         /// <summary>
@@ -44,6 +48,12 @@ namespace Prime.ViewModels.Parties
             party.SetPartyType(PartyType.Labtech);
 
             return party;
+        }
+
+        public bool IsValid()
+        {
+            return !string.IsNullOrWhiteSpace(Email)
+                && !string.IsNullOrWhiteSpace(Phone);
         }
     }
 }
