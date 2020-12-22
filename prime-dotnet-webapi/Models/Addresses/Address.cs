@@ -40,8 +40,26 @@ namespace Prime.Models
         {
             get => Province.BRITISH_COLUMBIA_CODE.Equals(ProvinceCode, StringComparison.OrdinalIgnoreCase);
         }
-    }
 
+        /// <summary>
+        /// Updates this Address with the values from another address, if not null.
+        /// </summary>
+        /// <param name="other"></param>
+        public void SetValues(Address other)
+        {
+            if (other == null)
+            {
+                return;
+            }
+
+            CountryCode = other.CountryCode;
+            ProvinceCode = other.ProvinceCode;
+            Street = other.Street;
+            Street2 = other.Street2;
+            City = other.City;
+            Postal = other.Postal;
+        }
+    }
     public class PhysicalAddress : Address
     { }
 
