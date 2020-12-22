@@ -31,13 +31,18 @@ export class PhsaLabtechGuard extends BaseGuard {
     const nextRoutePath = RouteUtils.currentRoutePath(routePath);
 
     if (
-      currentRoutePath === PhsaLabtechRoutes.ACCESS_CODE &&
-      nextRoutePath === PhsaLabtechRoutes.DEMOGRAPHIC
+      currentRoutePath === PhsaLabtechRoutes.DEMOGRAPHIC &&
+      nextRoutePath === PhsaLabtechRoutes.AVAILABLE_ACCESS
     ) {
-      return of(this.navigate(routePath, PhsaLabtechRoutes.DEMOGRAPHIC));
+      return of(this.navigate(routePath, PhsaLabtechRoutes.AVAILABLE_ACCESS));
+    } else if (
+      currentRoutePath === PhsaLabtechRoutes.AVAILABLE_ACCESS &&
+      nextRoutePath === PhsaLabtechRoutes.SUBMISSION_CONFIRMATION
+    ) {
+      return of(this.navigate(routePath, PhsaLabtechRoutes.SUBMISSION_CONFIRMATION));
     } else {
       // Otherwise, start at the beginning of the enrolment process
-      return of(this.navigate(routePath, PhsaLabtechRoutes.ACCESS_CODE));
+      return of(this.navigate(routePath, PhsaLabtechRoutes.DEMOGRAPHIC));
     }
   }
 
