@@ -80,15 +80,6 @@
         "attributes": {}
       },
       {
-        "id": "30f9e848-4864-4465-9d29-5a5b0f24553c",
-        "name": "feature_site_registration",
-        "description": "Site Registration feature flag",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "790e6ec6-559c-4ee2-a070-e98e86d080dc",
         "name": "uma_authorization",
         "description": "${role_uma_authorization}",
@@ -138,6 +129,14 @@
         "attributes": {}
       },
       {
+        "id": "bc258c8a-0a49-46df-933d-74886fbadcf3",
+        "name": "phsa_eforms_immunizer_covid19",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "33ba3d4c-92d3-4c41-ac30-8de902c046fb",
         "name": "external_hpdid_access",
         "description": "Access to the HPDID => GPID API endpoint",
@@ -147,27 +146,9 @@
         "attributes": {}
       },
       {
-        "id": "671f7848-4a12-461e-b7c4-c13d89581af2",
-        "name": "feature_health_authority",
-        "description": "Health Authority feature flag",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "301349dc-e58b-4666-90c0-f6d9782af655",
         "name": "prime_user",
         "description": "BCSC authenticated primary application user",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "990d7361-86e1-4a69-a004-cb18d7510afc",
-        "name": "feature_community_pharmacist",
-        "description": "Community Pharmacist feature flag",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -1247,16 +1228,6 @@
       "nodeReRegistrationTimeout": -1,
       "protocolMappers": [
         {
-          "id": "23be91a5-10f7-4bd8-beec-315d1222ee7a",
-          "name": "feature-community_pharmacist",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_community_pharmacist"
-          }
-        },
-        {
           "id": "1a04792f-2de9-4ec6-92e9-080f1497d10d",
           "name": "feature-site_pharmacist",
           "protocol": "openid-connect",
@@ -1278,26 +1249,6 @@
             "access.token.claim": "true",
             "claim.name": "clientAddress",
             "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "789b61d3-bdd4-4a53-b322-8010fbd34388",
-          "name": "feature-site_registration",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_site_registration"
-          }
-        },
-        {
-          "id": "442afdf0-64aa-4d09-a2ed-f181bebd8667",
-          "name": "feature-health_authority",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_health_authority"
           }
         },
         {
@@ -1417,16 +1368,6 @@
       "nodeReRegistrationTimeout": -1,
       "protocolMappers": [
         {
-          "id": "25d1e831-2051-4104-8a12-3f7b5f5fb694",
-          "name": "feature-community_pharmacist",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_community_pharmacist"
-          }
-        },
-        {
           "id": "be217bc6-ec69-4849-9a19-19e77aadf3b1",
           "name": "Client ID",
           "protocol": "openid-connect",
@@ -1465,16 +1406,6 @@
           }
         },
         {
-          "id": "87baf495-7163-4aaf-bd67-2e661a3d6f7e",
-          "name": "feature-site_registration",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_site_registration"
-          }
-        },
-        {
           "id": "5096902d-1050-4ad6-a3ed-f70a376cb721",
           "name": "feature-vc_issuance",
           "protocol": "openid-connect",
@@ -1497,16 +1428,6 @@
             "access.token.claim": "true",
             "claim.name": "aud",
             "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "0e3d0ac8-24c7-4748-ae69-266e614c56e4",
-          "name": "feature-health_authority",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_health_authority"
           }
         },
         {
@@ -1634,17 +1555,9 @@
       ],
       "defaultClientScopes": [
         "web-origins",
-        "identity_provider",
-        "address",
-        "profile",
-        "roles",
-        "identity_assurance_level",
-        "email"
+        "roles"
       ],
-      "optionalClientScopes": [
-        "offline_access",
-        "microprofile-jwt"
-      ]
+      "optionalClientScopes": []
     },
     {
       "id": "f774dec3-891f-45d4-9fb8-3e786cd56ddd",
