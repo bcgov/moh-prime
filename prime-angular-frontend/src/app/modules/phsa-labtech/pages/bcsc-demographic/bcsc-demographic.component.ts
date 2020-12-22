@@ -53,7 +53,6 @@ export class BcscDemographicComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      this.busy = this.phsaLabtechResource.createEnrollee(this.formAsJson).subscribe();
       this.routeUtils.routeRelativeTo(PhsaLabtechRoutes.AVAILABLE_ACCESS);
     } else {
       this.utilService.scrollToErrorSection();
@@ -99,9 +98,5 @@ export class BcscDemographicComponent implements OnInit {
           } as PhsaEnrollee;
         })
       );
-  }
-
-  private get formAsJson(): PhsaEnrollee {
-    return this.form.value;
   }
 }

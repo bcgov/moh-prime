@@ -9,6 +9,8 @@ import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { PhsaEnrollee } from '../models/phsa-lab-tech.model';
+import { PartyTypeEnum } from '@shared/enums/party-type.enum';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -34,4 +36,22 @@ export class PhsaLabtechResource {
         })
       );
   }
+
+  public getPreApprovals(payload: PhsaEnrollee): Observable<PartyTypeEnum[]> {
+
+    const params = this.apiResourceUtilsService.makeHttpParams(payload);
+
+    return this.apiResource.get<PartyTypeEnum[]>('parties/phsa/pre-approved', params)
+      .pipe(
+        map((response: ApiHttpResponse<PartyTypeEnum[]>) => response.result),
+        tap((result: PartyTypeEnum[]) => this.logger.info('RESULT', result)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Could not locate system access.');
+          this.logger.error('PhasLabtechResource::getPreApprovals error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+
 }

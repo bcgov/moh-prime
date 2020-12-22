@@ -24,7 +24,7 @@ export class PhsaFormStateService extends AbstractFormStateService<PhsaEnrollee>
   ) {
     super(fb, routeStateService, logger);
 
-    this.initialize([PhsaLabtechRoutes.ACCESS_CODE]);
+    this.initialize();
   }
 
   public get json(): PhsaEnrollee {
@@ -52,7 +52,7 @@ export class PhsaFormStateService extends AbstractFormStateService<PhsaEnrollee>
   protected buildForms(): void {
     this.accessForm = this.buildAccessForm();
     this.demographicsForm = this.buildDemographicsForm();
-//    this.availableAccessForm = this.buildAvailableAccessForm();
+    //    this.availableAccessForm = this.buildAvailableAccessForm();
   }
 
   protected patchForm(enrollee: PhsaEnrollee): void {
