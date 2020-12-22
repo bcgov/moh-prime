@@ -28,19 +28,20 @@ export class PhsaFormStateService extends AbstractFormStateService<PhsaEnrollee>
   }
 
   public get json(): PhsaEnrollee {
-    const { phone, phoneExtension, email } = this.demographicsForm.getRawValue();
+    const { phone, phoneExtension, email, partyTypes } = this.demographicsForm.getRawValue();
 
     return {
       phone,
       phoneExtension,
-      email
+      email,
+      partyTypes
     } as PhsaEnrollee
   }
 
   public get forms(): AbstractControl[] {
     return [
       this.demographicsForm,
-      this.availableAccessForm ];
+      this.availableAccessForm];
   }
 
   /**

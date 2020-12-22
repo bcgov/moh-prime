@@ -9,4 +9,5 @@ export interface PhsaEnrollee {
     phone: string;
     phoneExtension?: string;
     email: string;
+    partyTypes: number[];
 }
