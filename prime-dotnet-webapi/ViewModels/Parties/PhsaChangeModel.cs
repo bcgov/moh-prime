@@ -58,7 +58,7 @@ namespace Prime.ViewModels.Parties
         {
             var validPartyTypes = new[] { PartyType.Labtech, PartyType.Immunizer };
 
-            if (!PartyTypes.All(t => validPartyTypes.Contains(t)))
+            if (!PartyTypes.Any() || PartyTypes.Except(validPartyTypes).Any())
             {
                 return false;
             }
