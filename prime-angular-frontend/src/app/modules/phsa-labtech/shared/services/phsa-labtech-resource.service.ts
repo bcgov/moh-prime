@@ -8,7 +8,7 @@ import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.serv
 import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { PhsaLabtech } from '../models/phsa-lab-tech.model';
+import { PhsaEnrollee } from '../models/phsa-lab-tech.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +21,12 @@ export class PhsaLabtechResource {
     private logger: LoggerService
   ) { }
 
-  public createEnrollee(payload: PhsaLabtech): Observable<PhsaLabtech> {
-    return this.apiResource.post<PhsaLabtech>('parties/labtechs', payload)
+  public createEnrollee(payload: PhsaEnrollee): Observable<PhsaEnrollee> {
+    return this.apiResource.post<PhsaEnrollee>('parties/labtechs', payload)
       .pipe(
-        map((response: ApiHttpResponse<PhsaLabtech>) => response.result),
-        tap((enrollee: PhsaLabtech) => this.logger.info('ENROLLEE', enrollee)),
-        tap((enrollee: PhsaLabtech) => this.toastService.openSuccessToast('Enrolment information has been saved')),
+        map((response: ApiHttpResponse<PhsaEnrollee>) => response.result),
+        tap((enrollee: PhsaEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+        tap((enrollee: PhsaEnrollee) => this.toastService.openSuccessToast('Enrolment information has been saved')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be created.');
           this.logger.error('[Enrolment] PhasLabtechResource::createEnrollee error has occurred: ', error);

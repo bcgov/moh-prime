@@ -1,6 +1,6 @@
 import { Address } from '@shared/models/address.model';
 
-export interface PhsaLabtech {
+export interface PhsaEnrollee {
     firstName: string;
     lastName: string;
     givenNames: string;
