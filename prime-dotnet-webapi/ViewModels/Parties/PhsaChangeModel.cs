@@ -35,8 +35,8 @@ namespace Prime.ViewModels.Parties
 
             party.UserId = user.GetPrimeUserId();
             party.HPDID = user.FindFirstValue(Claims.PreferredUsername);
-            party.FirstName = user.FindFirstValue(Claims.GivenName);
-            party.LastName = user.FindFirstValue(Claims.FamilyName);
+            party.FirstName = user.GetFirstName();
+            party.LastName = user.GetLastName();
             party.GivenNames = user.FindFirstValue(Claims.GivenNames);
             party.DateOfBirth = user.GetDateOfBirth().Value;
 

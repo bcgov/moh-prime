@@ -108,6 +108,7 @@ namespace Prime.Services
                     && pre.LastName == lastName
                     && pre.Email == email)
                 .Select(pre => pre.PartyType)
+                .Distinct()
                 .ToListAsync();
         }
 

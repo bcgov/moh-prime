@@ -61,17 +61,17 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // GET: api/parties/phsa/pre-approved
+        // GET: api/parties/phsa/pre-approved?email=example@example.com
         /// <summary>
-        /// Returns a list of PHSA eForms registrations this person is pre-approved for.
+        /// Returns a list of PHSA eForms registrations this User is pre-approved for.
         /// </summary>
         [HttpGet("pre-approved", Name = nameof(GetPreApprovedRegistrations))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<PartyType>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetPreApprovedRegistrations([FromQuery] string firstName, [FromQuery] string lastName, [FromQuery] string email)
+        public async Task<ActionResult> GetPreApprovedRegistrations([FromQuery] string email)
         {
-            var partyTypes = await _partyService.GetPreApprovedRegistrationsAsync(firstName: firstName, lastName: lastName, email: email);
+            var partyTypes = await _partyService.GetPreApprovedRegistrationsAsync(firstName: User.GetFirstName(), lastName: User.GetLastName(), email: email);
 
             return Ok(ApiResponse.Result(partyTypes));
         }
