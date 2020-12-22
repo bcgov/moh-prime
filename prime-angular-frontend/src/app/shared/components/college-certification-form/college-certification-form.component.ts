@@ -8,6 +8,7 @@ import { Config, CollegeConfig, LicenseConfig, PracticeConfig, LicenseWeightedCo
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { LoggerService } from '@core/services/logger.service';
 import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -41,7 +42,8 @@ export class CollegeCertificationFormComponent implements OnInit {
     private configService: ConfigService,
     private viewportService: ViewportService,
     private formUtilsService: FormUtilsService,
-    private enrolmentService: EnrolmentService
+    private enrolmentService: EnrolmentService,
+    private logger: LoggerService
   ) {
     this.remove = new EventEmitter<number>();
     this.colleges = this.configService.colleges;
@@ -101,11 +103,11 @@ export class CollegeCertificationFormComponent implements OnInit {
   public shouldShowPractices(): boolean {
     // Only display Advanced Practices for certain nursing licences
     return ((this.collegeCode.value == CollegeLicenceClass.BCCNM) &&
-        ([NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE, 
-          NursingLicenseCode.PRACTICING_REGISTERED_NURSE,
-          NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE, 
-          NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_EMERGENCY,
-          NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_SPECIAL_EVENT].includes(this.licenseCode.value)));
+      ([NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE,
+      NursingLicenseCode.PRACTICING_REGISTERED_NURSE,
+      NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE,
+      NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_EMERGENCY,
+      NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_SPECIAL_EVENT].includes(this.licenseCode.value)));
   }
 
   public ngOnInit() {
@@ -122,8 +124,17 @@ export class CollegeCertificationFormComponent implements OnInit {
       });
 
     this.licenseCode.valueChanges
-      .subscribe((licenseCode: number) =>
+      .subscribe((licenseCode: number) => {
+
+        const matchingLicenses = this.licenses.filter(licenseConfig => licenseConfig.code === licenseCode);
+        if ((matchingLicenses[0] as LicenseWeightedConfig)?.validate) {
+          // For college licences that we validate against the pharmanet tables, restrict the licence # to 5 digits
+          this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.numeric, FormControlValidators.requiredLength(5, 5)]);
+        } else {
+          this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
+        }
         this.setPrefix(this.doesLicenceHavePrefix(licenseCode, this.collegeCode.value))
+      }
       );
   }
 
@@ -155,7 +166,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setValidations() {
-    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
+    // Note that type of License Number validation is dependent on License Code selected
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
 
     if (!this.condensed) {
