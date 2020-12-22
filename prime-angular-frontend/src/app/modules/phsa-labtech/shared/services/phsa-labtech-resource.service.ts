@@ -24,7 +24,7 @@ export class PhsaLabtechResource {
   ) { }
 
   public createEnrollee(payload: PhsaEnrollee): Observable<PhsaEnrollee> {
-    return this.apiResource.post<PhsaEnrollee>('parties/labtechs', payload)
+    return this.apiResource.post<PhsaEnrollee>('parties/phsa', payload)
       .pipe(
         map((response: ApiHttpResponse<PhsaEnrollee>) => response.result),
         tap((enrollee: PhsaEnrollee) => this.logger.info('ENROLLEE', enrollee)),

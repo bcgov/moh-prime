@@ -93,7 +93,8 @@ export class BcscDemographicComponent implements OnInit {
             dateOfBirth,
             physicalAddress,
             phone: null,
-            email: null
+            email: null,
+            partyTypes: []
           } as PhsaEnrollee;
         })
       );

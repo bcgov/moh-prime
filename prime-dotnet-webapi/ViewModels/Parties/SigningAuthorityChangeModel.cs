@@ -57,7 +57,7 @@ namespace Prime.ViewModels.Parties
                 party.PhysicalAddress.SetValues(user.GetPhysicalAddress());
             }
 
-            party.SetPartyType(PartyType.SigningAuthority);
+            party.SetPartyTypes(PartyType.SigningAuthority);
 
             return party;
         }

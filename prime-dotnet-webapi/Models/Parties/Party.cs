@@ -56,22 +56,25 @@ namespace Prime.Models
         public ICollection<PartyEnrolment> PartyEnrolments { get; set; }
 
         /// <summary>
-        /// Adds a new PartyEnrolment with the given PartyType if that type is not already present.
+        /// Adds new PartyEnrolments with the given PartyTypes if not already present.
         /// </summary>
-        /// <param name="type"></param>
-        public void SetPartyType(PartyType type)
+        /// <param name="types"></param>
+        public void SetPartyTypes(params PartyType[] types)
         {
             if (PartyEnrolments == null)
             {
-                PartyEnrolments = new List<PartyEnrolment>(1);
+                PartyEnrolments = new List<PartyEnrolment>();
             }
 
-            if (!PartyEnrolments.Any(x => x.PartyType == type))
+            foreach (var type in types)
             {
-                PartyEnrolments.Add(new PartyEnrolment
+                if (PartyEnrolments.All(x => x.PartyType != type))
                 {
-                    PartyType = type
-                });
+                    PartyEnrolments.Add(new PartyEnrolment
+                    {
+                        PartyType = type
+                    });
+                }
             }
         }
     }

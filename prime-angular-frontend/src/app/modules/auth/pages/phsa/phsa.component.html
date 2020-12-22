@@ -1,48 +1,30 @@
 <div class="container">
-    <div class="row">
-      <div class="col-sm-12 logo">
-  
-        <app-prime-logo label="right"
-                        [size]="(isMobile) ? 'small' : 'medium'"></app-prime-logo>
-  
-      </div>
-      <div class="col-sm-12 header">
-  
-        <h1>{{title}}</h1>
-        <p>for health professionals of British Columbia</p>
-  
-      </div>
-      <div class="col-sm-12">
-  
-        <div class="row actions">
-          <div class="col col-md-auto">
-  
-            <button mat-flat-button
-                    color="primary"
-                    class="large"
-                    (click)="loginUsingBCSC()">Logon with BCSC</button>
-  
-          </div>
+  <div class="row">
+    <div class="col-sm-12 logo">
+
+      <app-prime-logo label="right"
+                      [size]="(isMobile) ? 'small' : 'medium'"></app-prime-logo>
+
+    </div>
+    <div class="col-sm-12 header">
+
+      <h1>{{title}}</h1>
+      <p>for health professionals of British Columbia</p>
+
+    </div>
+    <div class="col-sm-12">
+
+      <div class="row actions">
+        <div class="col col-md-auto">
+
+          <button mat-flat-button
+                  color="primary"
+                  class="large"
+                  (click)="loginUsingBCSC()">Logon with BCSC</button>
+
         </div>
-  
       </div>
-      <div class="col-sm-12 support">
-  
-        <app-pill>
-          <section>
-            <h2>Get Support</h2>
-  
-            <p>
-              Questions about PRIME should be directed to:
-              <br>
-              <app-prime-phone></app-prime-phone>
-              <br>
-              <app-prime-support-email></app-prime-support-email>
-            </p>
-          </section>
-        </app-pill>
-  
-      </div>
+
     </div>
   </div>
-  
+</div>

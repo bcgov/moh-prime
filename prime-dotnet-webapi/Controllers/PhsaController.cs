@@ -32,30 +32,31 @@ namespace Prime.Controllers
 
         // POST: api/parties/phsa
         /// <summary>
-        /// Creates a new Labtech.
-        /// If successful, also updates Keycloak with additional user info and the Labtech role.
+        /// Creates a new PHSA eForms Party of one or more types (currently Labtech and/or Immunizer).
+        /// If successful, also updates Keycloak with additional user info and the relevant role(s).
         /// </summary>
-        [HttpPost(Name = nameof(CreateLabtech))]
+        [HttpPost(Name = nameof(CreatePhsaParty))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CreateLabtech(LabtechChangeModel labtech)
+        public async Task<ActionResult> CreatePhsaParty(PhsaChangeModel changeModel)
         {
-            if (labtech == null)
+            if (changeModel == null)
             {
-                ModelState.AddModelError("Labtech", "Could not create the Labtech, the passed in model cannot be null.");
+                ModelState.AddModelError("Party", "Could not create the Party, the passed in model cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
-            if (!labtech.IsValid())
+            if (!changeModel.IsValid())
             {
-                ModelState.AddModelError("Labtech", "Email and Phone Number are required.");
+                ModelState.AddModelError("Party", "Validation failed: Email and Phone Number are required, and at least one valid Pre-Approved Registration must be specified.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            await _partyService.CreateOrUpdatePartyAsync(labtech, User);
+            await _partyService.CreateOrUpdatePartyAsync(changeModel, User);
 
             await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaLabtech);
-            await _keycloakClient.UpdateUserInfo(User.GetPrimeUserId(), email: labtech.Email, phoneNumber: labtech.Phone, phoneExtension: labtech.PhoneExtension);
+            await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaImmunizer);
+            await _keycloakClient.UpdateUserInfo(User.GetPrimeUserId(), email: changeModel.Email, phoneNumber: changeModel.Phone, phoneExtension: changeModel.PhoneExtension);
 
             return Ok();
         }
