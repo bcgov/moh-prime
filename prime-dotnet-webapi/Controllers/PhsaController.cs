@@ -32,14 +32,14 @@ namespace Prime.Controllers
 
         // POST: api/parties/phsa
         /// <summary>
-        /// Creates a new Labtech.
-        /// If successful, also updates Keycloak with additional user info and the Labtech role.
+        /// Creates a new PHSA eForms Party of one or more types (currently Labtech and/or Immunizer).
+        /// If successful, also updates Keycloak with additional user info and the relevant role(s).
         /// </summary>
-        [HttpPost(Name = nameof(CreateLabtech))]
+        [HttpPost(Name = nameof(CreatePhsaParty))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CreateLabtech(LabtechChangeModel labtech)
+        public async Task<ActionResult> CreatePhsaParty(PhsaChangeModel labtech)
         {
             if (labtech == null)
             {

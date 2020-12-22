@@ -1,11 +1,13 @@
+using System.Linq;
 using System.Security.Claims;
+using System.Collections.Generic;
 
 using Prime.Auth;
 using Prime.Models;
 
 namespace Prime.ViewModels.Parties
 {
-    public class LabtechChangeModel : IPartyChangeModel
+    public class PhsaChangeModel : IPartyChangeModel
     {
         /// <summary> Required </summary>
         public string Email { get; set; }
@@ -15,8 +17,10 @@ namespace Prime.ViewModels.Parties
 
         public string PhoneExtension { get; set; }
 
+        public IEnumerable<PartyType> PartyTypes { get; set; }
+
         /// <summary>
-        /// Updates the given Party with values from this LabtechCreateModel and the User. Also sets Labtech in the Party's PartyEnrolments.
+        /// Updates the given Party with values from this CreateModel and the User. Also sets the relevant types in the Party's PartyEnrolments.
         /// Returns the updated Party for convienience.
         /// </summary>
         /// <param name="party"></param>
@@ -52,6 +56,13 @@ namespace Prime.ViewModels.Parties
 
         public bool IsValid()
         {
+            var validPartyTypes = new[] { PartyType.Labtech, PartyType.Immunizer };
+
+            if (!PartyTypes.All(t => validPartyTypes.Contains(t)))
+            {
+                return false;
+            }
+
             return !string.IsNullOrWhiteSpace(Email)
                 && !string.IsNullOrWhiteSpace(Phone);
         }
