@@ -2,17 +2,20 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 
 import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
-import { PhsaLabtech } from '@phsa/shared/models/phsa-lab-tech.model';
+import { PhsaEnrollee } from '@phsa/shared/models/phsa-lab-tech.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PhsaLabtechFormStateService extends AbstractFormStateService<PhsaLabtech>{
+export class PhsaFormStateService extends AbstractFormStateService<PhsaEnrollee>{
   public accessForm: FormGroup;
+  public demographicsForm: FormGroup;
+  public availableAccessForm: FormGroup;
 
   constructor(
     protected fb: FormBuilder,
@@ -24,20 +27,53 @@ export class PhsaLabtechFormStateService extends AbstractFormStateService<PhsaLa
     this.initialize([PhsaLabtechRoutes.ACCESS_CODE]);
   }
 
-  public get json(): PhsaLabtech {
-    throw new Error('Method not implemented.');
+  public get json(): PhsaEnrollee {
+    const { phone, phoneExtension, email } = this.demographicsForm.getRawValue();
+
+    return {
+      phone,
+      phoneExtension,
+      email
+    } as PhsaEnrollee
   }
 
   public get forms(): AbstractControl[] {
-    throw new Error('Method not implemented.');
+    return [
+      this.demographicsForm,
+      this.availableAccessForm ];
   }
 
+  /**
+   * @description
+   * Initialize and configure the forms for patching, which is also used to
+   * clear previous form data from the service.
+   */
   protected buildForms(): void {
     this.accessForm = this.buildAccessForm();
+    this.demographicsForm = this.buildDemographicsForm();
+//    this.availableAccessForm = this.buildAvailableAccessForm();
   }
 
-  protected patchForm(model: PhsaLabtech): void {
+  protected patchForm(enrollee: PhsaEnrollee): void {
+    this.demographicsForm.patchValue(enrollee);
+  }
+
+  private buildAvailableAccessForm(): FormGroup {
     throw new Error('Method not implemented.');
+  }
+
+  private buildDemographicsForm(): FormGroup {
+    return this.fb.group({
+      phone: [null, [
+        Validators.required,
+        FormControlValidators.phone
+      ]],
+      phoneExtension: [null, [FormControlValidators.numeric]],
+      email: [null, [
+        Validators.required,
+        FormControlValidators.email
+      ]],
+    });
   }
 
   private buildAccessForm(): FormGroup {
