@@ -46,7 +46,7 @@ export class BcscDemographicComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      this.phsaLabtechResource.createEnrollee(this.formAsJson);
+      this.busy = this.phsaLabtechResource.createEnrollee(this.formAsJson).subscribe();
     } else {
       this.utilService.scrollToErrorSection();
     }
