@@ -33,7 +33,7 @@ namespace Prime
         {
             string assuranceLevel = User?.FindFirstValue(Claims.AssuranceLevel);
 
-            Int32.TryParse(assuranceLevel, out int assuranceLevelParsed);
+            int.TryParse(assuranceLevel, out int assuranceLevelParsed);
 
             return assuranceLevelParsed;
         }
@@ -74,6 +74,20 @@ namespace Prime
                     City = Locality,
                     Postal = Postal_code,
                 };
+            }
+        }
+
+        public static DateTime? GetDateOfBirth(this ClaimsPrincipal user)
+        {
+            var birthdate = user.FindFirstValue(Claims.Birthdate);
+
+            if (DateTime.TryParse(birthdate, out DateTime parsed))
+            {
+                return parsed;
+            }
+            else
+            {
+                return null;
             }
         }
     }
