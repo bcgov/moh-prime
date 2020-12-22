@@ -49,7 +49,7 @@ namespace Prime.ViewModels.Parties
                 party.PhysicalAddress.SetValues(user.GetPhysicalAddress());
             }
 
-            party.SetPartyType(PartyType.Labtech);
+            party.SetPartyTypes(PartyTypes.ToArray());
 
             return party;
         }
