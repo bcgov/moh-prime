@@ -102,14 +102,11 @@ namespace Prime.Services
 
         public async Task<IEnumerable<PartyType>> GetPreApprovedRegistrationsAsync(string firstName, string lastName, string email)
         {
-            firstName = firstName.ToLower();
-            lastName = lastName.ToLower();
-            email = email.ToLower();
             return await _context.PreApprovedRegistrations
                 .AsNoTracking()
-                .Where(pre => pre.FirstName.ToLower() == firstName
-                    && pre.LastName.ToLower() == lastName
-                    && pre.Email.ToLower() == email)
+                .Where(pre => pre.FirstName.ToLower() == firstName.ToLower()
+                    && pre.LastName.ToLower() == lastName.ToLower()
+                    && pre.Email.ToLower() == email.ToLower())
                 .Select(pre => pre.PartyType)
                 .Distinct()
                 .ToListAsync();
