@@ -70,7 +70,7 @@ export class AvailableAccessComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.phsaFormStateService.availableAccessForm;
     this.showProgress = true;
-    this.busy = this.phsaLabtechResource.getPreApprovals(this.phsaFormStateService.json).subscribe(result => {
+    this.busy = this.phsaLabtechResource.getPreApprovals(this.phsaFormStateService.json.email).subscribe(result => {
       this.availablePartyTypes = result;
       this.availablePartyTypes.forEach(partyType => this.partyTypes.push(this.fb.control(false)));
       this.showProgress = false;
