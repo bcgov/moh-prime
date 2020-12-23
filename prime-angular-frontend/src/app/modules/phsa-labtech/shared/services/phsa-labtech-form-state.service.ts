@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, AbstractControl, FormArray, ValidatorFn } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -62,7 +62,28 @@ export class PhsaFormStateService extends AbstractFormStateService<PhsaEnrollee>
 
   private buildAvailableAccessForm(): FormGroup {
     return this.fb.group({
+      partyTypes: new FormArray([], [this.atLeastOneCheckboxCheckedValidator()]),
     });
+  }
+
+  private atLeastOneCheckboxCheckedValidator(
+    minRequired = 1
+  ): ValidatorFn {
+    return function validate(formGroup: FormArray) {
+      let checked = 0
+      Object.keys(formGroup.controls).forEach(key => {
+        const control = formGroup.controls[key]
+        if (control.value) {
+          checked++
+        }
+      })
+      if (checked < minRequired) {
+        return {
+          requireCheckboxToBeChecked: true,
+        }
+      }
+      return null
+    }
   }
 
   private buildDemographicsForm(): FormGroup {

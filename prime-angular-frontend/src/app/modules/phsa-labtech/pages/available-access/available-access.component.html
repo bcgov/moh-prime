@@ -38,6 +38,10 @@
               </div>
             </mat-checkbox>
           </div>
+          <mat-error class="ml-2"
+                     *ngIf="partyTypes.hasError('requireCheckboxToBeChecked')">
+            At least one choice required
+          </mat-error>
         </ng-container>
 
         <ng-container *ngIf="availablePartyTypes?.length == 0">
