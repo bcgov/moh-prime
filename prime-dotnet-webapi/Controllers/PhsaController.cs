@@ -37,6 +37,7 @@ namespace Prime.Controllers
         /// If successful, also updates Keycloak with additional user info and the relevant role(s).
         /// </summary>
         [HttpPost(Name = nameof(CreatePhsaParty))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -56,16 +57,14 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            await _partyService.CreateOrUpdatePartyAsync(changeModel, User);
-
-            await _keycloakClient.UpdateUserInfo(User.GetPrimeUserId(), email: changeModel.Email, phoneNumber: changeModel.Phone, phoneExtension: changeModel.PhoneExtension);
-            if (changeModel.PartyTypes.Contains(PartyType.Labtech))
+            if (await _partyService.CreateOrUpdatePartyAsync(changeModel, User) == -1)
             {
-                await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaLabtech);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Error when saving the Party." });
             }
-            if (changeModel.PartyTypes.Contains(PartyType.Immunizer))
+
+            if (!await _keycloakClient.UpdatePhsaUserInfo(User.GetPrimeUserId(), changeModel))
             {
-                await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaImmunizer);
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Error when updating Keycloak." });
             }
 
             return Ok();
