@@ -104,9 +104,9 @@ namespace Prime.Services
         {
             return await _context.PreApprovedRegistrations
                 .AsNoTracking()
-                .Where(pre => pre.FirstName == firstName
-                    && pre.LastName == lastName
-                    && pre.Email == email)
+                .Where(pre => string.Equals(pre.FirstName, firstName, StringComparison.CurrentCultureIgnoreCase)
+                    && string.Equals(pre.LastName, lastName, StringComparison.CurrentCultureIgnoreCase)
+                    && string.Equals(pre.Email, email, StringComparison.CurrentCultureIgnoreCase))
                 .Select(pre => pre.PartyType)
                 .Distinct()
                 .ToListAsync();
