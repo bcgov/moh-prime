@@ -38,7 +38,6 @@ export class PhsaLabtechResource {
   }
 
   public getPreApprovals(payload: PhsaEnrollee): Observable<PartyTypeEnum[]> {
-
     const params = this.apiResourceUtilsService.makeHttpParams(payload);
 
     return this.apiResource.get<PartyTypeEnum[]>('parties/phsa/pre-approved', params)

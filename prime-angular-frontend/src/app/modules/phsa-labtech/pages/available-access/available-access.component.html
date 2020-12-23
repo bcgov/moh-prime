@@ -29,13 +29,12 @@
             </ng-container>
           </app-page-subheader>
 
-          <div formArrayName="sites"
+          <div formArrayName="partyTypes"
                class="mb-3"
                *ngFor="let partyType of availablePartyTypes; let i = index">
             <mat-checkbox [formControlName]="i">
               <div class="pl-2">
-                {{partyType}}
-                <!-- Vendor: {{ remoteSite.siteVendors[0].vendorCode | configCode: 'vendors' | default }} -->
+                {{ partyTypeText(partyType) }}
               </div>
             </mat-checkbox>
           </div>
@@ -71,5 +70,6 @@
 
   <app-page-footer [primaryActionLabel]="'Submit'"
                    (save)="onSubmit()"
-                   (back)="routeBackTo()"></app-page-footer>
+                   (back)="routeBackTo()"
+                   [disableSave]="availablePartyTypes?.length == 0"></app-page-footer>
 </app-page>

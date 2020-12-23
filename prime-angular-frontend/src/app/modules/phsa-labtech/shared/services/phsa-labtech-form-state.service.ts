@@ -28,8 +28,9 @@ export class PhsaFormStateService extends AbstractFormStateService<PhsaEnrollee>
   }
 
   public get json(): PhsaEnrollee {
-    const { phone, phoneExtension, email, partyTypes } = this.demographicsForm.getRawValue();
-
+    const { phone, phoneExtension, email } = this.demographicsForm.getRawValue();
+    // TODO: Needs to get value (code) of selected checkboxes
+    const { partyTypes } = this.availableAccessForm.getRawValue();
     return {
       phone,
       phoneExtension,
@@ -52,7 +53,7 @@ export class PhsaFormStateService extends AbstractFormStateService<PhsaEnrollee>
   protected buildForms(): void {
     this.accessForm = this.buildAccessForm();
     this.demographicsForm = this.buildDemographicsForm();
-    //    this.availableAccessForm = this.buildAvailableAccessForm();
+    this.availableAccessForm = this.buildAvailableAccessForm();
   }
 
   protected patchForm(enrollee: PhsaEnrollee): void {
@@ -60,7 +61,8 @@ export class PhsaFormStateService extends AbstractFormStateService<PhsaEnrollee>
   }
 
   private buildAvailableAccessForm(): FormGroup {
-    throw new Error('Method not implemented.');
+    return this.fb.group({
+    });
   }
 
   private buildDemographicsForm(): FormGroup {

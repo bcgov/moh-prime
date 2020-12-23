@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -37,6 +37,14 @@ export class AvailableAccessComponent implements OnInit {
   }
 
 
+  public get partyTypes(): FormArray {
+    return this.form.get('partyTypes') as FormArray;
+  }
+
+  public partyTypeText(partyType: PartyTypeEnum): string {
+    return PartyTypeEnum.text(partyType);
+  }
+
   public onSubmit(): void {
     this.busy = this.phsaLabtechResource.createEnrollee(
       this.enrolmentFormStateService.json).subscribe(() =>
@@ -48,16 +56,13 @@ export class AvailableAccessComponent implements OnInit {
     this.routeUtils.routeRelativeTo(PhsaLabtechRoutes.DEMOGRAPHIC);
   }
 
-
   ngOnInit(): void {
+    this.form = this.enrolmentFormStateService.availableAccessForm;
     this.showProgress = true;
-
     this.busy = this.phsaLabtechResource.getPreApprovals(this.enrolmentFormStateService.json).subscribe(result => {
       this.availablePartyTypes = result;
+      this.form.controls.partyTypes = this.fb.array(this.availablePartyTypes.map(partyType => this.fb.control(false)));
       this.showProgress = false;
-    });
-
-    this.form = this.fb.group({
     });
   }
 
