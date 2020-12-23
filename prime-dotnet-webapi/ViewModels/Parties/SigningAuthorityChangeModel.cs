@@ -35,8 +35,8 @@ namespace Prime.ViewModels.Parties
             party.JobRoleTitle = JobRoleTitle;
 
             party.UserId = user.GetPrimeUserId();
-            party.FirstName = user.FindFirstValue(Claims.GivenName);
-            party.LastName = user.FindFirstValue(Claims.FamilyName);
+            party.FirstName = user.GetFirstName();
+            party.LastName = user.GetLastName();
             party.DateOfBirth = user.GetDateOfBirth().Value;
 
             if (party.MailingAddress == null)
@@ -57,7 +57,7 @@ namespace Prime.ViewModels.Parties
                 party.PhysicalAddress.SetValues(user.GetPhysicalAddress());
             }
 
-            party.SetPartyType(PartyType.SigningAuthority);
+            party.SetPartyTypes(PartyType.SigningAuthority);
 
             return party;
         }

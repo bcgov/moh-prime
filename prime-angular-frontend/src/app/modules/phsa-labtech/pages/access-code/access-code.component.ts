@@ -8,7 +8,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 
-import { PhsaLabtechFormStateService } from '@phsa/shared/services/phsa-labtech-form-state.service';
+import { PhsaFormStateService } from '@phsa/shared/services/phsa-labtech-form-state.service';
 import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
 
 @Component({
@@ -28,7 +28,7 @@ export class AccessCodeComponent implements OnInit {
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    protected phsaLabtechFormStateService: PhsaLabtechFormStateService,
+    protected phsaLabtechFormStateService: PhsaFormStateService,
   ) { }
 
   public get accessCode(): FormControl {

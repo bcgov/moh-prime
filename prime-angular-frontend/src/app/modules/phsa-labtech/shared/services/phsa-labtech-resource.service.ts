@@ -8,7 +8,9 @@ import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.serv
 import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { PhsaLabtech } from '../models/phsa-lab-tech.model';
+import { PhsaEnrollee } from '../models/phsa-lab-tech.model';
+import { PartyTypeEnum } from '@shared/enums/party-type.enum';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +23,12 @@ export class PhsaLabtechResource {
     private logger: LoggerService
   ) { }
 
-  public createEnrollee(payload: PhsaLabtech): Observable<PhsaLabtech> {
-    return this.apiResource.post<PhsaLabtech>('parties/labtechs', payload)
+  public createEnrollee(payload: PhsaEnrollee): Observable<PhsaEnrollee> {
+    return this.apiResource.post<PhsaEnrollee>('parties/phsa', payload)
       .pipe(
-        map((response: ApiHttpResponse<PhsaLabtech>) => response.result),
-        tap((enrollee: PhsaLabtech) => this.logger.info('ENROLLEE', enrollee)),
-        tap((enrollee: PhsaLabtech) => this.toastService.openSuccessToast('Enrolment information has been saved')),
+        map((response: ApiHttpResponse<PhsaEnrollee>) => response.result),
+        tap((enrollee: PhsaEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+        tap((enrollee: PhsaEnrollee) => this.toastService.openSuccessToast('Enrolment information has been saved')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be created.');
           this.logger.error('[Enrolment] PhasLabtechResource::createEnrollee error has occurred: ', error);
@@ -34,4 +36,21 @@ export class PhsaLabtechResource {
         })
       );
   }
+
+  public getPreApprovals(payload: PhsaEnrollee): Observable<PartyTypeEnum[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams(payload);
+
+    return this.apiResource.get<PartyTypeEnum[]>('parties/phsa/pre-approved', params)
+      .pipe(
+        map((response: ApiHttpResponse<PartyTypeEnum[]>) => response.result),
+        tap((result: PartyTypeEnum[]) => this.logger.info('RESULT', result)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Could not locate system access.');
+          this.logger.error('PhasLabtechResource::getPreApprovals error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+
 }

@@ -38,6 +38,7 @@ namespace Prime.Auth
         public const string PrimeApiServiceAccount = "prime_api_service_account";
 
         public const string PhsaLabtech = "phsa_eforms_labtech";
+        public const string PhsaImmunizer = "phsa_eforms_immunizer_covid19";
     }
 
     public static class Policies
