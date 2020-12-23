@@ -54,10 +54,8 @@ namespace Prime.ViewModels.Parties
             return party;
         }
 
-        public bool IsValid()
+        public bool Validate(IEnumerable<PartyType> validPartyTypes)
         {
-            var validPartyTypes = new[] { PartyType.Labtech, PartyType.Immunizer };
-
             if (!PartyTypes.Any() || PartyTypes.Except(validPartyTypes).Any())
             {
                 return false;

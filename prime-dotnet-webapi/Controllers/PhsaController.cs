@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
@@ -46,17 +47,26 @@ namespace Prime.Controllers
                 ModelState.AddModelError("Party", "Could not create the Party, the passed in model cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
-            if (!changeModel.IsValid())
+
+            var validPartyTypes = await _partyService.GetPreApprovedRegistrationsAsync(firstName: User.GetFirstName(), lastName: User.GetLastName(), email: changeModel.Email);
+
+            if (!changeModel.Validate(validPartyTypes))
             {
-                ModelState.AddModelError("Party", "Validation failed: Email and Phone Number are required, and at least one valid Pre-Approved Registration must be specified.");
+                ModelState.AddModelError("Party", "Validation failed: Email and Phone Number are required, and at least one Pre-Approved PHSA Party Type must be specified.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             await _partyService.CreateOrUpdatePartyAsync(changeModel, User);
 
-            await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaLabtech);
-            await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaImmunizer);
             await _keycloakClient.UpdateUserInfo(User.GetPrimeUserId(), email: changeModel.Email, phoneNumber: changeModel.Phone, phoneExtension: changeModel.PhoneExtension);
+            if (changeModel.PartyTypes.Contains(PartyType.Labtech))
+            {
+                await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaLabtech);
+            }
+            if (changeModel.PartyTypes.Contains(PartyType.Immunizer))
+            {
+                await _keycloakClient.AssignRealmRole(User.GetPrimeUserId(), Roles.PhsaImmunizer);
+            }
 
             return Ok();
         }
