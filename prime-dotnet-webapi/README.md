@@ -6,28 +6,11 @@
 
 ## .NET API
 
-This project can be built and run with the following commands:
-
-```
-dotnet publish -c Debug
-dotnet bin/Debug/netcoreapp3.1/prime.dll
-```
-
-But this requires the .NET Core SDK.
-
 ### Installation
-
-The .NET Core SDK can be obtained directly from [Microsoft](https://dotnet.microsoft.com/download)
-or third-party package managers such as [Chocolatey](https://chocolatey.org/packages/dotnetcore-sdk).
 
 ## Database (PostgreSQL + .NET Core EF)
 
-The database schema and default contents is setup by the command `dotnet ef database update --verbose`
-but the expected database server must be running.
-
 ### Installation
-
-The database server is provided by the `postgres` service listed in the `docker-compose.yml` file at the root of the repository.
 
 ### Creating Migration
 
@@ -61,5 +44,3 @@ Note: you will have to bring down your api if you are running it in debug mode t
 
 ### TIPS + TRICKS
 
-- if you have the API running, it will conflict with `dotnet ef database update`
-- if while running `dotnet ef database update`, you get the error `"csc.dll" exited with code 137`, it may be because you don't have enough memory (e.g. if running command inside a VM)

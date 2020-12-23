@@ -33,7 +33,6 @@ export interface LicenseWeightedConfig extends LicenseConfig {
   weight: number;
   licensedToProvideCare: boolean;
   namedInImReg: boolean;
-  validate: boolean;
 }
 
 export interface PracticeConfig extends Config<number> {
