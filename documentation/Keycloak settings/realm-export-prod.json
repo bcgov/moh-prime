@@ -1208,7 +1208,8 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "https://pharmanetenrolment.gov.bc.ca/*"
+        "https://pharmanetenrolment.gov.bc.ca/*",
+        "https://healthpractionerregistration.pathfinder.gov.bc.ca/*"
       ],
       "webOrigins": [
         "*"
