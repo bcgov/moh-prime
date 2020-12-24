@@ -13,13 +13,17 @@ import { PhsaProgressIndicatorComponent } from './shared/components/phsa-progres
 
 
 
-import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component'; 
+import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
+import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
+import { AvailableAccessComponent } from './pages/available-access/available-access.component';
 @NgModule({
   declarations: [
     PhsaLabtechDashboardComponent,
     AccessCodeComponent,
     PhsaProgressIndicatorComponent,
-    BcscDemographicComponent
+    BcscDemographicComponent,
+    SubmissionConfirmationComponent,
+    AvailableAccessComponent
   ],
   imports: [
     SharedModule,

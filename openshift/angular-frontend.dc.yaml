@@ -97,6 +97,7 @@ objects:
           ports:
           - containerPort: 8080
           - containerPort: 8443
+          - containerPort: 8888
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -129,7 +130,7 @@ objects:
         type: ImageChange
   status: {}
 
-# Angular route definition to direct external traffic to frontend component
+# Route definition to direct external traffic via Pharmanet Enrolment URL
 - apiVersion: v1
   kind: Route
   metadata:
@@ -141,6 +142,22 @@ objects:
     tls:
         insecureEdgeTerminationPolicy: Redirect
         termination: passthrough
+    to:
+      kind: Service
+      name: "${NAME}${SUFFIX}"
+
+# Route definition to direct external traffic via PHSA eForms URL
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: "${NAME}${SUFFIX}-hrp"
+  spec:
+    host: "healthpractionerregistration${SUFFIX}.pathfinder.gov.bc.ca"
+    port:
+      targetPort: "8888"
+    tls:
+        insecureEdgeTerminationPolicy: Allow
+        termination: edge
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"
@@ -161,6 +178,9 @@ objects:
     - name: "8443"
       port: 8443
       targetPort: 8443
+    - name: "8888"
+      port: 8888
+      targetPort: 8888
     selector:
       io.kompose.service: "${NAME}${SUFFIX}"
   status:
