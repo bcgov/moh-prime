@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -13,12 +13,14 @@ import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('AccessAgreementHistoryEnrolmentComponent', () => {
   let component: AccessAgreementHistoryEnrolmentComponent;
   let fixture: ComponentFixture<AccessAgreementHistoryEnrolmentComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         NgxBusyModule,
@@ -38,6 +40,10 @@ describe('AccessAgreementHistoryEnrolmentComponent', () => {
         {
           provide: EnrolmentService,
           useClass: MockEnrolmentService
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
         },
         KeycloakService
       ]

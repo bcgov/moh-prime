@@ -26,10 +26,6 @@ git clone https://github.com/bcgov/moh-prime
 
 [Download](https://nodejs.org/en/) and install **Node v12.x**
 
-#### Yarn
-
-[Download](https://yarnpkg.com/lang/en) and install the Yarn package manager.
-
 #### VS Code
 
 [Download](https://code.visualstudio.com/) and install VSCode and accept the prompt to install the recommended extensions when the PRIME repository is initially opened in VSCode.

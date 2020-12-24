@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ClaimSiteComponent } from './claim-site.component';
 import { SharedModule } from '@shared/shared.module';
@@ -14,7 +14,7 @@ describe('ClaimSiteComponent', () => {
   let component: ClaimSiteComponent;
   let fixture: ComponentFixture<ClaimSiteComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         BrowserAnimationsModule,

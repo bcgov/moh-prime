@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { KeycloakService } from 'keycloak-angular';
 
@@ -14,7 +14,7 @@ describe('NextStepsInfographicComponent', () => {
   let component: NextStepsInfographicComponent;
   let fixture: ComponentFixture<NextStepsInfographicComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         SharedModule,

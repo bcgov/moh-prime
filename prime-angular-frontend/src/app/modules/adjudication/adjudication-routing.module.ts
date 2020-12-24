@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { ConfigGuard } from '@config/config.guard';
-import { UnsupportedGuard } from '@core/guards/unsupported.guard';
 import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { AdjudicationRoutes } from './adjudication.routes';
@@ -28,18 +26,14 @@ import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/si
 import { SiteAdjudicatorDocumentsComponent } from './pages/site-adjudicator-documents/site-adjudicator-documents.component';
 import { EnrolleeAdjudicatorDocumentsComponent } from './pages/enrollee-adjudicator-documents/enrollee-adjudicator-documents.component';
 import { SiteEventsComponent } from './pages/site-events/site-events.component';
+import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-overview.component';
 
 const routes: Routes = [
   {
     path: AdjudicationRoutes.MODULE_PATH,
     component: AdjudicationDashboardComponent,
     canActivate: [
-      // Ensure that the configuration is loaded prior to dependent
-      // guards, as well as, views, otherwise if it already exists NOOP
-      // NOTE: A resolver could not be used due to their execution
-      // occuring after parent and child guards
-      ConfigGuard,
-      UnsupportedGuard,
+      AuthenticationGuard,
       AdjudicationGuard
     ],
     canActivateChild: [
@@ -91,6 +85,11 @@ const routes: Routes = [
                 path: AdjudicationRoutes.ENROLLEE_REVIEW,
                 component: EnrolleeReviewStatusComponent,
                 data: { title: 'Adjudication' }
+              },
+              {
+                path: AdjudicationRoutes.ENROLLEE_OVERVIEW,
+                component: EnrolleeOverviewComponent,
+                data: { title: 'Overview' }
               },
               {
                 path: AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS,

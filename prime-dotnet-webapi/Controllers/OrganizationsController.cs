@@ -15,13 +15,14 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using Prime.ViewModels.Parties;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = Policies.User, Roles = FeatureFlags.SiteRegistration)]
+    [Authorize(Policy = Policies.User)]
     public class OrganizationsController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -119,15 +120,15 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Organization>> CreateOrganization(Party party)
+        public async Task<ActionResult<Organization>> CreateOrganization(SigningAuthorityChangeModel signingAuthority)
         {
-            if (party == null)
+            if (signingAuthority == null)
             {
-                this.ModelState.AddModelError("Party", "Could not create an organization, the passed in Party cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("SigningAuthority", "Could not create an organization, the passed in Signing Authority cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            var createdOrganizationId = await _organizationService.CreateOrganizationAsync(party);
+            var createdOrganizationId = await _organizationService.CreateOrganizationAsync(signingAuthority, User);
 
             var createdOrganization = await _organizationService.GetOrganizationAsync(createdOrganizationId);
 

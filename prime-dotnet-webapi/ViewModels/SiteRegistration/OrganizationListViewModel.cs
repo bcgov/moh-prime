@@ -21,7 +21,5 @@ namespace Prime.ViewModels
         public IEnumerable<SiteListViewModel> Sites { get; set; }
 
         public bool Completed { get; set; }
-
-        public DateTimeOffset? AcceptedAgreementDate { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
+using Prime.ViewModels.Parties;
 using Prime.HttpClients.KeycloakApiDefinitions;
 
 namespace Prime.HttpClients
@@ -9,6 +10,8 @@ namespace Prime.HttpClients
     {
         Task<Role> GetRoleByName(string role);
 
-        Task AssignRealmRole(Guid userId, string role);
+        Task<bool> AssignRealmRole(Guid userId, string role);
+
+        Task<bool> UpdatePhsaUserInfo(Guid userId, PhsaChangeModel party);
     }
 }

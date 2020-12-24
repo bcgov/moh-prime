@@ -5,6 +5,7 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { IdentificationDocument } from '@shared/models/identification-document.model';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { Admin } from '@auth/shared/models/admin.model';
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
@@ -13,6 +14,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
@@ -27,6 +29,7 @@ export interface HttpEnrollee extends Enrollee {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
+  oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   remoteAccessSites: RemoteAccessSite[];
   remoteAccessLocations: RemoteAccessLocation[];
@@ -34,6 +37,7 @@ export interface HttpEnrollee extends Enrollee {
   selfDeclarationDocuments: SelfDeclarationDocument[];
   identificationDocuments: IdentificationDocument[];
   enrolleeCareSettings: CareSetting[];
+  enrolleeHealthAuthorities: HealthAuthority[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -68,6 +72,7 @@ export interface Enrolment {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   jobs: Job[];
+  oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   remoteAccessSites: RemoteAccessSite[];
   remoteAccessLocations: RemoteAccessLocation[];
@@ -75,6 +80,7 @@ export interface Enrolment {
   selfDeclarationDocuments: SelfDeclarationDocument[];
   identificationDocuments: IdentificationDocument[];
   careSettings: CareSetting[];
+  enrolleeHealthAuthorities: HealthAuthority[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -112,4 +118,5 @@ export interface EnrolleeListViewModel {
   adjudicatorIdir: string;
   alwaysManual: boolean;
   remoteAccess: boolean;
+  careSettingCodes: number[];
 }
