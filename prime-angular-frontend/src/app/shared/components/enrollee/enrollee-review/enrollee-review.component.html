@@ -400,7 +400,7 @@
         {{ remoteAccessSite.site?.physicalAddress?.provinceCode | default }}
         {{ remoteAccessSite.site?.physicalAddress?.postal | default }}
       </address>
-      Vendor: {{ remoteAccessSite.site?.siteVendors[0].vendorCode | configCode: 'vendors' | default }}
+      Vendor: {{ remoteAccessSite.site?.siteVendors[0]?.vendorCode | configCode: 'vendors' | default }}
     </app-enrollee-property>
   </ng-container>
 
