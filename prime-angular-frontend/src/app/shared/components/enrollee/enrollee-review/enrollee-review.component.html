@@ -394,9 +394,14 @@
         {{ remoteAccessSite.site?.doingBusinessAs | default }}
 
       </ng-template>
-
+      <address>
+        {{ remoteAccessSite.site?.physicalAddress?.street | default }},
+        {{ remoteAccessSite.site?.physicalAddress?.city | default }}
+        {{ remoteAccessSite.site?.physicalAddress?.provinceCode | default }}
+        {{ remoteAccessSite.site?.physicalAddress?.postal | default }}
+      </address>
+      Vendor: {{ remoteAccessSite.site?.siteVendors[0].vendorCode | configCode: 'vendors' | default }}
     </app-enrollee-property>
-
   </ng-container>
 
   <ng-container *ngFor="let remoteAccessLocation of remoteAccessLocations">
