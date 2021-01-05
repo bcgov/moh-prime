@@ -77,13 +77,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public routeBackTo() {
-    const hasHealthAuthCareSetting = this.enrolmentFormStateService.careSettingsForm.value.careSettings
-      .some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
-    const routePath = (hasHealthAuthCareSetting)
-      ? EnrolmentRoutes.HEALTH_AUTHORITY
-      : EnrolmentRoutes.CARE_SETTING;
-
-    this.routeTo(routePath);
+    this.routeTo(EnrolmentRoutes.CARE_SETTING);
   }
 
   public ngOnInit() {

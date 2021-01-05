@@ -175,9 +175,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     const jobs = this.enrolmentFormStateService.jobsForm.get('jobs').value as Job[];
 
     let nextRoutePath: string;
-    if (this.careSettings.value.some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
-      nextRoutePath = EnrolmentRoutes.HEALTH_AUTHORITY;
-    } else if (!this.isProfileComplete) {
+    if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
     } else if (jobs.length) {
       nextRoutePath = EnrolmentRoutes.JOB;
