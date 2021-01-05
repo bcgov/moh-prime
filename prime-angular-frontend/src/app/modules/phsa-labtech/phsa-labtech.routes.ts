@@ -1,7 +1,9 @@
 export class PhsaLabtechRoutes {
-  public static PHSA_LABTECH = 'phsa';
+  public static PHSA_LABTECH = 'phsa-labtech';
   public static ACCESS_CODE = 'access-code';
   public static DEMOGRAPHIC = 'demographic';
+  public static AVAILABLE_ACCESS = 'available-access';
+  public static SUBMISSION_CONFIRMATION = 'submission-confirmation';
 
   public static MODULE_PATH = PhsaLabtechRoutes.PHSA_LABTECH;
 
@@ -13,8 +15,9 @@ export class PhsaLabtechRoutes {
   // of the enrolment process
   public static initialEnrolmentRouteOrder(): string[] {
     return [
-      PhsaLabtechRoutes.ACCESS_CODE,
-      PhsaLabtechRoutes.DEMOGRAPHIC
+      PhsaLabtechRoutes.DEMOGRAPHIC,
+      PhsaLabtechRoutes.AVAILABLE_ACCESS,
+      PhsaLabtechRoutes.SUBMISSION_CONFIRMATION
     ];
   }
 }

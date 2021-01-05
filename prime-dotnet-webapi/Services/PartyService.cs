@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -97,6 +98,18 @@ namespace Prime.Services
 
             _context.Parties.Remove(party);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<PartyType>> GetPreApprovedRegistrationsAsync(string firstName, string lastName, string email)
+        {
+            return await _context.PreApprovedRegistrations
+                .AsNoTracking()
+                .Where(pre => pre.FirstName.ToLower() == firstName.ToLower()
+                    && pre.LastName.ToLower() == lastName.ToLower()
+                    && pre.Email.ToLower() == email.ToLower())
+                .Select(pre => pre.PartyType)
+                .Distinct()
+                .ToListAsync();
         }
 
         private IQueryable<Party> GetBasePartyQuery()

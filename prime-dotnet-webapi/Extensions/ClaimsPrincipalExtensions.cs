@@ -43,6 +43,16 @@ namespace Prime
             return User.IsInRole(FeatureFlags.VCIssuance);
         }
 
+        public static string GetFirstName(this ClaimsPrincipal user)
+        {
+            return user.FindFirstValue(Claims.GivenName);
+        }
+
+        public static string GetLastName(this ClaimsPrincipal user)
+        {
+            return user.FindFirstValue(Claims.FamilyName);
+        }
+
         public static PhysicalAddress GetPhysicalAddress(this ClaimsPrincipal User)
         {
             string addressClaim = User?.FindFirstValue(Claims.Address);

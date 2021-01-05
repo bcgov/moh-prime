@@ -104,6 +104,8 @@ namespace Prime
         public DbSet<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
         public DbSet<DocumentAccessToken> DocumentAccessToken { get; set; }
 
+        public DbSet<PreApprovedRegistration> PreApprovedRegistrations { get; set; }
+
         public override int SaveChanges()
         {
             this.ApplyAudits();
