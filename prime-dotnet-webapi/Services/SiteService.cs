@@ -584,6 +584,23 @@ namespace Prime.Services
                .ToListAsync();
         }
 
+        public async Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId)
+        {
+            return await _context.SiteAdjudicationDocuments
+               .SingleOrDefaultAsync(d => d.Id == documentId);
+        }
+
+        public async Task DeleteSiteAdjudicationDocumentAsync(int documentId)
+        {
+            var document = await _context.SiteAdjudicationDocuments
+                .SingleOrDefaultAsync(d => d.Id == documentId);
+            if (document == null)
+                return;
+
+            _context.SiteAdjudicationDocuments.Remove(document);
+            await _context.SaveChangesAsync();
+        }
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites

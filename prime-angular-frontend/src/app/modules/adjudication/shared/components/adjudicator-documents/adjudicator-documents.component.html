@@ -48,6 +48,10 @@
                 <mat-icon class="mr-1">attachment</mat-icon>
                 {{ document.filename | default }}
               </button>
+              <button mat-button
+                      (click)="onDelete(document.id)">
+                <mat-icon class="mr-1">delete</mat-icon>
+              </button>
             </td>
           </tr>
         </tbody>

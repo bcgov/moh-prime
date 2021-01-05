@@ -2,9 +2,10 @@ import { AdjudicatorDocumentsComponent } from '@adjudication/shared/components/a
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, Subscription } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils.service';
+import { ToastService } from '@core/services/toast.service';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
@@ -16,6 +17,7 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 })
 export class EnrolleeAdjudicatorDocumentsComponent implements OnInit {
   public documents$: Observable<EnrolleeAdjudicationDocument[]>;
+  public busy: Subscription;
   private enrolleeId: number;
   @ViewChild('adjudicationDocuments') public adjudicatorDocumentsComponent: AdjudicatorDocumentsComponent;
 
@@ -23,6 +25,7 @@ export class EnrolleeAdjudicatorDocumentsComponent implements OnInit {
     private enrolmentResource: EnrolmentResource,
     private route: ActivatedRoute,
     private utilsService: UtilsService,
+    private toastService: ToastService
   ) {
     this.enrolleeId = this.route.snapshot.params.id;
   }
@@ -43,6 +46,14 @@ export class EnrolleeAdjudicatorDocumentsComponent implements OnInit {
       .subscribe((token: string) =>
         this.utilsService.downloadToken(token)
       );
+  }
+
+  public onDeleteDocumentById(documentId: number) {
+    this.busy = this.enrolmentResource.deleteEnrolleeAdjudicationDocument(this.enrolleeId, documentId)
+      .subscribe((document: EnrolleeAdjudicationDocument) => {
+        this.getDocuments();
+        this.toastService.openSuccessToast('Document has been deleted');
+      });
   }
 
   ngOnInit(): void {

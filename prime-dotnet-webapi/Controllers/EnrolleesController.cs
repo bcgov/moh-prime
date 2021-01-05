@@ -704,5 +704,30 @@ namespace Prime.Controllers
 
             return Ok(ApiResponse.Result(token));
         }
+
+        // DELETE: api/Enrollees/{enrolleeId}/adjudication-documents/{documentId}
+        /// <summary>
+        /// Delete the enrollee's adjudication document
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        [HttpDelete("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(DeleteEnrolleeAdjudicationDocument))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeAdjudicationDocument>> DeleteEnrolleeAdjudicationDocument(int documentId)
+        {
+            var document = await _enrolleeService.GetEnrolleeAdjudicationDocumentAsync(documentId);
+            if (document == null)
+            {
+                return NotFound(ApiResponse.Message($"Document not found with id {documentId}"));
+            }
+
+            await _enrolleeService.DeleteEnrolleeAdjudicationDocumentAsync(documentId);
+
+            return Ok(ApiResponse.Result(document));
+        }
     }
 }

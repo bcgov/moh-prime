@@ -33,5 +33,8 @@ namespace Prime.Services
         Task<IEnumerable<Site>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> certifications);
         Task<IEnumerable<SiteRegistrationNoteViewModel>> GetSiteRegistrationNotesAsync(Site site);
         Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes);
+        Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId);
+        Task DeleteSiteAdjudicationDocumentAsync(int documentId);
+
     }
 }
