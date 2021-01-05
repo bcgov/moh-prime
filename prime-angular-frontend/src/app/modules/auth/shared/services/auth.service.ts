@@ -175,6 +175,10 @@ export class AuthService implements IAuthService {
     return this.accessTokenService.hasRole(Role.ENROLLEE);
   }
 
+  public isPhsa(): boolean {
+    return this.accessTokenService.hasRole(Role.PHSA_LABTECH) || this.accessTokenService.hasRole(Role.PHSA_IMMUNIZER);
+  }
+
   public isAdmin(): boolean {
     return this.accessTokenService.hasRole(Role.ADMIN);
   }
