@@ -10,16 +10,18 @@ import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-
 import { AccessCodeComponent } from './pages/access-code/access-code.component';
 import { PhsaProgressIndicatorComponent } from './shared/components/phsa-progress-indicator/phsa-progress-indicator.component';
 
+import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
+import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
+import { AvailableAccessComponent } from './pages/available-access/available-access.component';
 
-
-
-import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component'; 
 @NgModule({
   declarations: [
     PhsaLabtechDashboardComponent,
     AccessCodeComponent,
     PhsaProgressIndicatorComponent,
-    BcscDemographicComponent
+    BcscDemographicComponent,
+    SubmissionConfirmationComponent,
+    AvailableAccessComponent
   ],
   imports: [
     SharedModule,

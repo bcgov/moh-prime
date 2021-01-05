@@ -1,14 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { PhsaLabtechRoutes } from './phsa-labtech.routes';
-import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-dashboard/phsa-labtech-dashboard.component';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
+
+import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-dashboard/phsa-labtech-dashboard.component';
+import { PhsaLabtechRoutes } from './phsa-labtech.routes';
+import { PhsaLabtechGuard } from './shared/guards/phsa-labtech.guard';
 import { AccessCodeComponent } from './pages/access-code/access-code.component';
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
-import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
-import { PhsaLabtechGuard } from './shared/guards/phsa-labtech.guard';
+import { AvailableAccessComponent } from './pages/available-access/available-access.component';
+import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 
 const routes: Routes = [
   {
@@ -30,11 +33,21 @@ const routes: Routes = [
       {
         path: PhsaLabtechRoutes.DEMOGRAPHIC,
         component: BcscDemographicComponent,
-        data: { title: 'PRIME Enrolment' }
+        data: { title: 'Enrolment' }
+      },
+      {
+        path: PhsaLabtechRoutes.AVAILABLE_ACCESS,
+        component: AvailableAccessComponent,
+        data: { title: 'Available Access' }
+      },
+      {
+        path: PhsaLabtechRoutes.SUBMISSION_CONFIRMATION,
+        component: SubmissionConfirmationComponent,
+        data: { title: 'Submission Confirmation' }
       },
       {
         path: '', // Equivalent to `/` and alias for the default route
-        redirectTo: PhsaLabtechRoutes.ACCESS_CODE,
+        redirectTo: PhsaLabtechRoutes.DEMOGRAPHIC,
         pathMatch: 'full'
       }
     ]

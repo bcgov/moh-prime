@@ -41,41 +41,6 @@
   "roles": {
     "realm": [
       {
-        "id": "6491e5ea-4980-4078-855c-b74834768f20",
-        "name": "prime_readonly_admin",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "9967f54a-09a9-4063-bcee-641ef4b183cd",
-        "name": "feature_community_pharmacist",
-        "description": "Community Pharmacist feature flag",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "cb33c4dd-2416-42bc-ac4d-cdb7252e486d",
-        "name": "offline_access",
-        "description": "${role_offline-access}",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "70d24374-c0fc-4617-8282-acd69dabf91c",
-        "name": "feature_health_authority",
-        "description": "Health Authority feature flag",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "9bef3a33-bdaa-4284-baee-33d07ef1c66d",
         "name": "prime_admin",
         "description": "IDIR authenticated admin role",
@@ -92,6 +57,14 @@
       {
         "id": "facc11fb-1efc-4c64-967a-93c25bd197fd",
         "name": "phsa_eforms_labtech",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "73406245-eeeb-401b-ae3c-d4c2e4ed2d83",
+        "name": "feature_site_pharmacist",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -129,6 +102,14 @@
         "attributes": {}
       },
       {
+        "id": "6491e5ea-4980-4078-855c-b74834768f20",
+        "name": "prime_readonly_admin",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "36f84275-b9f0-4202-a9c2-8fbf858183dd",
         "name": "uma_authorization",
         "description": "${role_uma_authorization}",
@@ -147,18 +128,26 @@
         "attributes": {}
       },
       {
-        "id": "c818a30d-79c1-4ba1-aab8-d7908f30fdf6",
-        "name": "feature_site_registration",
-        "description": "Site Registration feature flag",
+        "id": "360afc11-1938-484d-a69d-d1faed48c222",
+        "name": "prime_user",
+        "description": "BCSC authenticated primary application user",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
       },
       {
-        "id": "360afc11-1938-484d-a69d-d1faed48c222",
-        "name": "prime_user",
-        "description": "BCSC authenticated primary application user",
+        "id": "5b8fe0cd-8f66-4b50-958c-a3c555d3d9a4",
+        "name": "phsa_eforms_immunizer_covid19",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "cb33c4dd-2416-42bc-ac4d-cdb7252e486d",
+        "name": "offline_access",
+        "description": "${role_offline-access}",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -478,8 +467,7 @@
       "path": "/Prime Admin",
       "attributes": {},
       "realmRoles": [
-        "prime_super_admin",
-        "feature_site_registration"
+        "prime_super_admin"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -1106,16 +1094,6 @@
           }
         },
         {
-          "id": "5b851824-c2dd-41fd-82a8-00807a2b52dc",
-          "name": "feature-site_registration",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_site_registration"
-          }
-        },
-        {
           "id": "d6d241bd-5a05-429f-b6cf-8d972765b172",
           "name": "Client Host",
           "protocol": "openid-connect",
@@ -1128,16 +1106,6 @@
             "access.token.claim": "true",
             "claim.name": "clientHost",
             "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "7e59f0fb-7a30-4a1c-8eb7-e0087d11e4f0",
-          "name": "feature-community_pharmacist",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_community_pharmacist"
           }
         },
         {
@@ -1166,13 +1134,13 @@
           }
         },
         {
-          "id": "3f8fd182-ea75-44bd-a2d1-0e24d14f3865",
-          "name": "feature-health_authority",
+          "id": "39ed0b38-df5f-4d6d-92ed-e8286ed7e5bc",
+          "name": "feature-site_pharmacist",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-hardcoded-role-mapper",
           "consentRequired": false,
           "config": {
-            "role": "feature_health_authority"
+            "role": "feature_site_pharmacist"
           }
         }
       ],
