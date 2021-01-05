@@ -33,8 +33,6 @@ export class OverviewComponent implements OnInit {
 
   public showSubmission: boolean;
 
-  private numSameCareSetting: number = 0;
-
 
   constructor(
     protected route: ActivatedRoute,
@@ -90,7 +88,7 @@ export class OverviewComponent implements OnInit {
   public nextRoute(): void {
     this.busy = this.determineOrgAgreementRequired$()
       .subscribe(
-        wasRequired => {
+        (wasRequired: boolean) => {
           if (wasRequired) {
             this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
           } else {
@@ -122,8 +120,9 @@ export class OverviewComponent implements OnInit {
   private determineOrgAgreementRequired$(): Observable<boolean> {
     const currentCareSettingCode: CareSettingEnum = this.site.careSettingCode;
 
-    return this.siteResource.getSites(this.organization.id).pipe(
-      map(sites =>
-        sites.filter(site => site.careSettingCode === currentCareSettingCode).length < 2));
+    return this.siteResource.getSites(this.organization.id)
+      .pipe(
+        map(sites =>
+          sites.filter(site => site.careSettingCode === currentCareSettingCode).length < 2));
   }
 }
