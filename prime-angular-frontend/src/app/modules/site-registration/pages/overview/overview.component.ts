@@ -88,14 +88,15 @@ export class OverviewComponent implements OnInit {
   }
 
   public nextRoute(): void {
-    this.busy = this.determineOrgAgreementRequired$().subscribe(
-      wasRequired => {
-        if (wasRequired) {
-          this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
-        } else {
-          this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
-        }
-      });
+    this.busy = this.determineOrgAgreementRequired$()
+      .subscribe(
+        wasRequired => {
+          if (wasRequired) {
+            this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
+          } else {
+            this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
+          }
+        });
   }
 
   public ngOnInit(): void {

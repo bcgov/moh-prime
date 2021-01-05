@@ -97,7 +97,6 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public getOrganizationProperties(organization: OrganizationListViewModel): { key: string, value: string }[] {
-    // TODO: Why are these methods called so often despite no user interaction?
     return [
       { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
       { key: 'Organization Name', value: organization.name },
@@ -124,7 +123,7 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public isUnderReview(site: SiteListViewModel): boolean {
-    return (site.submittedDate && (site.status === 0 || site.status === SiteStatusType.UNDER_REVIEW));
+    return (site.submittedDate && (site.status === SiteStatusType.DRAFT || site.status === SiteStatusType.UNDER_REVIEW));
   }
 
   public getUnderReviewSiteNotificationProperties() {
@@ -152,7 +151,7 @@ export class SiteManagementComponent implements OnInit {
   public getApprovedSiteNotificationProperties(site: SiteListViewModel) {
     return {
       icon: 'task_alt',
-      text: 'Site Approved<br />Site ID: ' + site.pec
+      text: `Site Approved<br>Site ID: ${site.pec}`
     };
   }
 
