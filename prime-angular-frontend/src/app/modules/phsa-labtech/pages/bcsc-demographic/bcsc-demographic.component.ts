@@ -7,6 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -16,8 +17,10 @@ import { UtilsService } from '@core/services/utils.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-import { PhsaLabtech } from '@phsa/shared/models/phsa-lab-tech.model';
+import { PhsaEnrollee } from '@phsa/shared/models/phsa-lab-tech.model';
 import { PhsaLabtechResource } from '@phsa/shared/services/phsa-labtech-resource.service';
+import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
+import { PhsaFormStateService } from '@phsa/shared/services/phsa-labtech-form-state.service';
 
 @Component({
   selector: 'app-bcsc-demographic',
@@ -26,10 +29,11 @@ import { PhsaLabtechResource } from '@phsa/shared/services/phsa-labtech-resource
 })
 export class BcscDemographicComponent implements OnInit {
 
-  public enrollee: PhsaLabtech;
+  public enrollee: PhsaEnrollee;
   public form: FormGroup;
-  // TODO: Set when API called
   public busy: Subscription;
+
+  private routeUtils: RouteUtils;
 
   public constructor(
     protected fb: FormBuilder,
@@ -37,16 +41,19 @@ export class BcscDemographicComponent implements OnInit {
     protected router: Router,
     protected dialog: MatDialog,
     protected phsaLabtechResource: PhsaLabtechResource,
+    protected enrolmentFormStateService: PhsaFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    private authService: AuthService
-  ) { }
+    private authService: AuthService,
+  ) {
+    this.routeUtils = new RouteUtils(route, router, PhsaLabtechRoutes.MODULE_PATH);
+  }
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      this.phsaLabtechResource.createEnrollee(this.formAsJson);
+      this.routeUtils.routeRelativeTo(PhsaLabtechRoutes.AVAILABLE_ACCESS);
     } else {
       this.utilService.scrollToErrorSection();
     }
@@ -56,30 +63,21 @@ export class BcscDemographicComponent implements OnInit {
     this.createFormInstance();
 
     this.getUser$()
-      .subscribe((enrollee: PhsaLabtech) =>
-        this.enrollee = enrollee
-      );
+      .subscribe((enrollee: PhsaEnrollee) => {
+        this.enrollee = enrollee;
+        this.enrolmentFormStateService.setForm(enrollee);
+      });
   }
 
   protected createFormInstance(): void {
-    this.form = this.fb.group({
-      phone: [null, [
-        Validators.required,
-        FormControlValidators.phone
-      ]],
-      phoneExtension: [null, [FormControlValidators.numeric]],
-      email: [null, [
-        Validators.required,
-        FormControlValidators.email
-      ]],
-    });
+    this.form = this.enrolmentFormStateService.demographicsForm;
 
   }
 
   /**
    * Convert BcscUser (Observable) from AuthService to PhsaLabtech (Observable)
    */
-  private getUser$(): Observable<PhsaLabtech> {
+  private getUser$(): Observable<PhsaEnrollee> {
     return this.authService.getUser$()
       .pipe(
         map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: BcscUser) => {
@@ -95,13 +93,10 @@ export class BcscDemographicComponent implements OnInit {
             dateOfBirth,
             physicalAddress,
             phone: null,
-            email: null
-          } as PhsaLabtech;
+            email: null,
+            partyTypes: []
+          } as PhsaEnrollee;
         })
       );
-  }
-
-  private get formAsJson(): PhsaLabtech {
-    return this.form.value;
   }
 }

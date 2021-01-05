@@ -32,7 +32,7 @@ export class PhsaComponent implements OnInit {
   }
 
   public loginUsingBCSC() {
-    const redirectRoute = PhsaLabtechRoutes.routePath(PhsaLabtechRoutes.ACCESS_CODE);
+    const redirectRoute = PhsaLabtechRoutes.routePath(PhsaLabtechRoutes.DEMOGRAPHIC);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({

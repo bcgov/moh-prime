@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
+using Prime.Models;
 
 namespace Prime.Migrations
 {
@@ -13897,7 +13898,7 @@ namespace Prime.Migrations
                             Code = 1,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Acute/Ambulatory Care",
+                            Name = "Acute/ambulatory care",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -13933,7 +13934,7 @@ namespace Prime.Migrations
                             Code = 5,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Outpatient or Community-based Clinic",
+                            Name = "Outpatient or community-based clinic",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -15290,6 +15291,9 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("GivenNames")
+                        .HasColumnType("text");
+
                     b.Property<string>("HPDID")
                         .HasColumnType("character varying(255)")
                         .HasMaxLength(255);
@@ -15304,10 +15308,10 @@ namespace Prime.Migrations
                     b.Property<int?>("MailingAddressId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("MiddleName")
+                    b.Property<string>("Phone")
                         .HasColumnType("text");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("PhoneExtension")
                         .HasColumnType("text");
 
                     b.Property<int?>("PhysicalAddressId")
@@ -15340,7 +15344,30 @@ namespace Prime.Migrations
 
                     b.HasIndex("PhysicalAddressId");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Party");
+                });
+
+            modelBuilder.Entity("Prime.Models.PartyEnrolment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PartyType")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("PartyEnrolment");
                 });
 
             modelBuilder.Entity("Prime.Models.Practice", b =>
@@ -15407,6 +15434,48 @@ namespace Prime.Migrations
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
+                });
+
+            modelBuilder.Entity("Prime.Models.PreApprovedRegistration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PartyType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PreApprovedRegistration");
                 });
 
             modelBuilder.Entity("Prime.Models.Privilege", b =>
@@ -17539,6 +17608,8 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
+
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
@@ -17967,6 +18038,15 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()
                         .HasForeignKey("PhysicalAddressId");
+                });
+
+            modelBuilder.Entity("Prime.Models.PartyEnrolment", b =>
+                {
+                    b.HasOne("Prime.Models.Party", "Party")
+                        .WithMany("PartyEnrolments")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.Privilege", b =>

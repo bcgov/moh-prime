@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
-
+using Prime.ViewModels.Parties;
 
 namespace Prime.Services
 {
@@ -16,85 +18,73 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<bool> PartyExistsAsync(int partyId)
+        public async Task<Party> GetPartyAsync(int partyId)
         {
             return await GetBasePartyQuery()
-                .AnyAsync(e => e.Id == partyId);
+                .SingleOrDefaultAsync(e => e.Id == partyId);
         }
-
-        public async Task<bool> PartyUserIdExistsAsync(Guid userId)
-        {
-            return await GetBasePartyQuery()
-                .AnyAsync(e => e.UserId == userId);
-        }
-
 
         public async Task<Party> GetPartyForUserIdAsync(Guid userId)
         {
             return await GetBasePartyQuery()
                 .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.UserId == userId);
+                .SingleOrDefaultAsync(e => e.UserId == userId);
         }
 
-        public async Task<int> CreatePartyAsync(Party party)
-        {
-            party.ThrowIfNull(nameof(party));
-
-            _context.Parties.Add(party);
-
-            var created = await _context.SaveChangesAsync();
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could not create party.");
-            }
-
-            return party.Id;
-        }
-
-        public async Task<int> UpdatePartyAsync(int partyId, Party party)
+        /// <summary>
+        /// Creates or updates a party based on the User ID of the supplied user.
+        /// Returns the Id of the affected Party.
+        /// </summary>
+        /// <param name="changeModel"></param>
+        /// <param name="user"></param>
+        public async Task<int> CreateOrUpdatePartyAsync(IPartyChangeModel changeModel, ClaimsPrincipal user)
         {
             var currentParty = await GetBasePartyQuery()
-                .SingleAsync(e => e.Id == partyId);
+                .SingleOrDefaultAsync(p => p.UserId == user.GetPrimeUserId());
 
-            _context.Entry(currentParty).CurrentValues.SetValues(party);
+            if (currentParty == null)
+            {
+                currentParty = new Party();
+                _context.Parties.Add(currentParty);
+            }
 
-            UpdatePartyPhysicalAddress(currentParty, party);
-            UpdatePartyMailingAddress(currentParty, party);
+            changeModel.UpdateParty(currentParty, user);
 
             try
             {
-                return await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                return 0;
+                return -1;
             }
+
+            return currentParty.Id;
         }
 
         public void UpdatePartyPhysicalAddress(Party current, Party updated)
         {
-            if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
+            if (current.PhysicalAddress == null)
             {
-                this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                current.PhysicalAddress = updated.PhysicalAddress;
             }
             else
             {
-                current.PhysicalAddress = updated.PhysicalAddress;
+                current.PhysicalAddress.SetValues(updated.PhysicalAddress);
             }
         }
 
         public void UpdatePartyMailingAddress(Party current, Party updated)
         {
-            if (updated.MailingAddress != null && current.MailingAddress != null)
-            {
-                this._context.Entry(current.MailingAddress).CurrentValues.SetValues(updated.MailingAddress);
-            }
-            else
+            if (current.MailingAddress == null)
             {
                 current.MailingAddress = updated.MailingAddress;
             }
+            else
+            {
+                current.MailingAddress.SetValues(updated.MailingAddress);
+            }
         }
-
 
         public async Task DeletePartyAsync(int partyId)
         {
@@ -110,16 +100,24 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<PartyType>> GetPreApprovedRegistrationsAsync(string firstName, string lastName, string email)
+        {
+            return await _context.PreApprovedRegistrations
+                .AsNoTracking()
+                .Where(pre => pre.FirstName.ToLower() == firstName.ToLower()
+                    && pre.LastName.ToLower() == lastName.ToLower()
+                    && pre.Email.ToLower() == email.ToLower())
+                .Select(pre => pre.PartyType)
+                .Distinct()
+                .ToListAsync();
+        }
+
         private IQueryable<Party> GetBasePartyQuery()
         {
             return _context.Parties
-                .Include(p => p.PhysicalAddress);
-        }
-
-        public async Task<Party> GetPartyAsync(int partyId)
-        {
-            return await this.GetBasePartyQuery()
-            .SingleOrDefaultAsync(e => e.Id == partyId);
+                .Include(p => p.PhysicalAddress)
+                .Include(p => p.MailingAddress)
+                .Include(p => p.PartyEnrolments);
         }
     }
 }
