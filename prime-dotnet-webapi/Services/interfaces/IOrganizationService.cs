@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Prime.Models;
 using Prime.ViewModels;
+using Prime.ViewModels.Parties;
 
 namespace Prime.Services
 {
@@ -10,7 +12,7 @@ namespace Prime.Services
     {
         Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId = null);
         Task<Organization> GetOrganizationAsync(int organizationId);
-        Task<int> CreateOrganizationAsync(Party signingAuthority);
+        Task<int> CreateOrganizationAsync(SigningAuthorityChangeModel signingAuthority, ClaimsPrincipal user);
         Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization);
         Task<int> UpdateCompletedAsync(int organizationId);
         Task DeleteOrganizationAsync(int organizationId);

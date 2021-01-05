@@ -1,0 +1,19 @@
+<app-page [mode]="'default'">
+  <app-page-header>Enrol for access to PHSA eForms</app-page-header>
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+
+  <section class="mb-3">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        You are ready to access your PHSA eForms
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        Log into your application using your BC Services Card
+      </ng-container>
+    </app-alert>
+  </section>
+
+</app-page>

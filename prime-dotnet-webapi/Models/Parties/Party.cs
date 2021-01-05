@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,7 +21,7 @@ namespace Prime.Models
         [Required]
         public string FirstName { get; set; }
 
-        public string MiddleName { get; set; }
+        public string GivenNames { get; set; }
 
         [Required]
         public string LastName { get; set; }
@@ -43,11 +44,38 @@ namespace Prime.Models
 
         public string Phone { get; set; }
 
+        public string PhoneExtension { get; set; }
+
         public string Fax { get; set; }
 
         public string SMSPhone { get; set; }
 
         [JsonIgnore]
         public ICollection<Agreement> Agreements { get; set; }
+
+        public ICollection<PartyEnrolment> PartyEnrolments { get; set; }
+
+        /// <summary>
+        /// Adds new PartyEnrolments with the given PartyTypes if not already present.
+        /// </summary>
+        /// <param name="types"></param>
+        public void SetPartyTypes(params PartyType[] types)
+        {
+            if (PartyEnrolments == null)
+            {
+                PartyEnrolments = new List<PartyEnrolment>();
+            }
+
+            foreach (var type in types)
+            {
+                if (PartyEnrolments.All(x => x.PartyType != type))
+                {
+                    PartyEnrolments.Add(new PartyEnrolment
+                    {
+                        PartyType = type
+                    });
+                }
+            }
+        }
     }
 }

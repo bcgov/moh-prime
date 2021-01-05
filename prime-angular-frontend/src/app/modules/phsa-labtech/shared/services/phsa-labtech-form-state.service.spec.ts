@@ -8,7 +8,7 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 
-import { PhsaLabtechFormStateService } from './phsa-labtech-form-state.service';
+import { PhsaFormStateService } from './phsa-labtech-form-state.service';
 
 describe('PhsaLabtechFormStateService', () => {
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('PhsaLabtechFormStateService', () => {
   });
 
   it('should be created', () => {
-    const service: PhsaLabtechFormStateService = TestBed.inject(PhsaLabtechFormStateService);
+    const service: PhsaFormStateService = TestBed.inject(PhsaFormStateService);
     expect(service).toBeTruthy();
   });
 });

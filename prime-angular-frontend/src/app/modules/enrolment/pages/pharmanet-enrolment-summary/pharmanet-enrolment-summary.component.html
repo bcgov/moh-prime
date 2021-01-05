@@ -4,8 +4,6 @@
 
     <app-page-header>Next Steps to get PharmaNet</app-page-header>
 
-    <app-enrolment-progress-indicator *ngIf="showProgressBar"></app-enrolment-progress-indicator>
-
     <app-next-steps-infographic [enrolment]="enrolment">
 
       <ng-container *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
@@ -37,7 +35,8 @@
               {{ setting }}
             </ng-container>
             <ng-container appPageSubheaderSummary>
-              {{ subheaderContent }}
+              {{ subheaderContent }} If you work in more than one clinic you can include the email addresses for all the
+              PharmaNet administrators separated by a comma.
             </ng-container>
           </app-page-subheader>
 

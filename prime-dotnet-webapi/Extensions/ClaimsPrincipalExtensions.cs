@@ -33,7 +33,7 @@ namespace Prime
         {
             string assuranceLevel = User?.FindFirstValue(Claims.AssuranceLevel);
 
-            Int32.TryParse(assuranceLevel, out int assuranceLevelParsed);
+            int.TryParse(assuranceLevel, out int assuranceLevelParsed);
 
             return assuranceLevelParsed;
         }
@@ -41,6 +41,16 @@ namespace Prime
         public static bool HasVCIssuance(this ClaimsPrincipal User)
         {
             return User.IsInRole(FeatureFlags.VCIssuance);
+        }
+
+        public static string GetFirstName(this ClaimsPrincipal user)
+        {
+            return user.FindFirstValue(Claims.GivenName);
+        }
+
+        public static string GetLastName(this ClaimsPrincipal user)
+        {
+            return user.FindFirstValue(Claims.FamilyName);
         }
 
         public static PhysicalAddress GetPhysicalAddress(this ClaimsPrincipal User)
@@ -74,6 +84,20 @@ namespace Prime
                     City = Locality,
                     Postal = Postal_code,
                 };
+            }
+        }
+
+        public static DateTime? GetDateOfBirth(this ClaimsPrincipal user)
+        {
+            var birthdate = user.FindFirstValue(Claims.Birthdate);
+
+            if (DateTime.TryParse(birthdate, out DateTime parsed))
+            {
+                return parsed;
+            }
+            else
+            {
+                return null;
             }
         }
     }
