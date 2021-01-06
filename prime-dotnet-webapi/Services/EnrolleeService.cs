@@ -782,5 +782,23 @@ namespace Prime.Services
                 .OrderByDescending(bl => bl.UploadedDate)
                .ToListAsync();
         }
+
+        public async Task<EnrolleeAdjudicationDocument> GetEnrolleeAdjudicationDocumentAsync(int documentId)
+        {
+            return await _context.EnrolleeAdjudicationDocuments
+               .SingleOrDefaultAsync(d => d.Id == documentId);
+        }
+
+        public async Task DeleteEnrolleeAdjudicationDocumentAsync(int documentId)
+        {
+            var document = await _context.EnrolleeAdjudicationDocuments
+                .SingleOrDefaultAsync(d => d.Id == documentId);
+            if (document == null)
+            {
+                return;
+            }
+            _context.EnrolleeAdjudicationDocuments.Remove(document);
+            await _context.SaveChangesAsync();
+        }
     }
 }

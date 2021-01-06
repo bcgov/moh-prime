@@ -317,6 +317,24 @@ export class SiteResource {
       );
   }
 
+  public deleteSiteAdjudicationDocument(siteId: number, documentId: number) {
+    return this.apiResource.delete<SiteAdjudicationDocument>(
+      `sites/${siteId}/adjudication-documents/${documentId}`)
+      .pipe(
+        map((response: ApiHttpResponse<SiteAdjudicationDocument>) => response.result),
+        map((document: SiteAdjudicationDocument) => document),
+        tap((document: SiteAdjudicationDocument) => {
+          this.toastService.openSuccessToast('Document has been deleted')
+          this.logger.info('DELETED_DOCUMENT', document);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Document could not be deleted');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::deleteSiteAdjudicationDocument error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getSiteAdjudicationDocumentDownloadToken(siteId: number, documentId: number): Observable<string> {
     return this.apiResource.get<string>(`sites/${siteId}/adjudication-documents/${documentId}`)
       .pipe(

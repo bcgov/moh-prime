@@ -8,5 +8,6 @@
   <app-adjudicator-documents #adjudicationDocuments
                              [documents$]="documents$"
                              (saveDocuments)="onSaveDocuments($event)"
-                             (getDocumentByGuid)="onGetDocumentByGuid($event)"></app-adjudicator-documents>
+                             (getDocumentByGuid)="onGetDocumentByGuid($event)"
+                             (deleteDocumentById)="onDeleteDocumentById($event)"></app-adjudicator-documents>
 </ng-template>

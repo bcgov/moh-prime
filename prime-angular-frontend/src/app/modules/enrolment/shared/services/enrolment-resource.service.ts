@@ -260,6 +260,24 @@ export class EnrolmentResource {
       );
   }
 
+  public deleteEnrolleeAdjudicationDocument(enrolleeId: number, documentId: number) {
+    return this.apiResource.delete<EnrolleeAdjudicationDocument>(
+      `enrollees/${enrolleeId}/adjudication-documents/${documentId}`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAdjudicationDocument>) => response.result),
+        map((document: EnrolleeAdjudicationDocument) => document),
+        tap((document: EnrolleeAdjudicationDocument) => {
+          this.toastService.openSuccessToast('Document has been deleted')
+          this.logger.info('DELETED_DOCUMENT', document);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Document could not be deleted');
+          this.logger.error('[Adjudication] EnrolmentResource::deleteEnrolleeAdjudicationDocument error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   // ---
   // Enrollee and Enrolment Adapters
   // ---

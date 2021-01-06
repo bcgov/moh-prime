@@ -2,10 +2,11 @@ import { AdjudicatorDocumentsComponent } from '@adjudication/shared/components/a
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of, Subscription } from 'rxjs';
 
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
+import { ToastService } from '@core/services/toast.service';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 @Component({
@@ -15,6 +16,7 @@ import { SiteAdjudicationDocument } from '@registration/shared/models/adjudicati
 })
 export class SiteAdjudicatorDocumentsComponent implements OnInit {
   public documents$: Observable<SiteAdjudicationDocument[]>;
+  public busy: Subscription;
   @ViewChild('adjudicationDocuments') public adjudicatorDocumentsComponent: AdjudicatorDocumentsComponent;
 
   private siteId: number;
@@ -23,6 +25,7 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
     private siteResource: SiteResource,
     private route: ActivatedRoute,
     private utilsService: UtilsService,
+    private toastService: ToastService
   ) {
     this.siteId = this.route.snapshot.params.sid;
   }
@@ -43,6 +46,11 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
       .subscribe((token: string) =>
         this.utilsService.downloadToken(token)
       );
+  }
+
+  public onDeleteDocumentById(documentId: number) {
+    this.busy = this.siteResource.deleteSiteAdjudicationDocument(this.siteId, documentId)
+      .subscribe((document: SiteAdjudicationDocument) => this.getDocuments());
   }
 
   public ngOnInit(): void {
