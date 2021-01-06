@@ -290,7 +290,7 @@
 
 </section>
 
-<section *ngIf="hasJob && oboSites.length || (!hasJob && !hasCertification)"
+<section *ngIf="(hasJob && oboSites.length) || (!hasJob && !hasCertification)"
          class="mb-4">
 
   <app-page-subheader>
@@ -353,8 +353,8 @@
 
 </section>
 
-<section class="mb-4"
-         *ngIf="isRequestingRemoteAccess">
+<section *ngIf="isRequestingRemoteAccess"
+         class="mb-4">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Remote Access</ng-container>
@@ -440,7 +440,7 @@
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
-  <app-enrollee-property *ngIf="admin && hasRegistrationSuspended() === true || !admin"
+  <app-enrollee-property *ngIf="(admin && hasRegistrationSuspended()) || !admin"
                          [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED]"
                          [makeBold]="false">
     {{ hasRegistrationSuspended() | yesNo: true }}
@@ -452,7 +452,7 @@
     {{ getRegistrationSuspendedDetails() }}
   </app-enrollee-property>
 
-  <app-enrollee-property *ngIf="admin && hasConviction() === true || !admin"
+  <app-enrollee-property *ngIf="(admin && hasConviction()) || !admin"
                          [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION]"
                          [makeBold]="false">
     {{ hasConviction() | yesNo: true }}
@@ -464,7 +464,7 @@
     {{ getConvictionDetails() }}
   </app-enrollee-property>
 
-  <app-enrollee-property *ngIf="admin && hasPharmaNetSuspended() === true || !admin"
+  <app-enrollee-property *ngIf="(admin && hasPharmaNetSuspended()) || !admin"
                          [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED]"
                          [makeBold]="false">
     {{ hasPharmaNetSuspended() | yesNo: true }}
@@ -476,7 +476,7 @@
     {{ getPharmaNetSuspendedDetails() }}
   </app-enrollee-property>
 
-  <app-enrollee-property *ngIf="admin && hasDisciplinaryAction() === true || !admin"
+  <app-enrollee-property *ngIf="(admin && hasDisciplinaryAction()) || !admin"
                          [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION]"
                          [makeBold]="false">
     {{ hasDisciplinaryAction() | yesNo: true }}
