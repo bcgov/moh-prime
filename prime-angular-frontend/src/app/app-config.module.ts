@@ -1,4 +1,3 @@
-
 import { NgModule, InjectionToken } from '@angular/core';
 
 import { AppRoutes } from './app.routes';
@@ -8,6 +7,7 @@ import { AuthRoutes } from '@auth/auth.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRoutes } from './modules/site-registration/site-registration.routes';
+import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
 
 export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 
@@ -31,6 +31,7 @@ export class AppConfig {
     enrolment: string;
     adjudication: string;
     site: string;
+    phsa: string;
   };
 }
 
@@ -53,7 +54,8 @@ export const APP_DI_CONFIG: AppConfig = {
     auth: AuthRoutes.MODULE_PATH,
     enrolment: EnrolmentRoutes.MODULE_PATH,
     adjudication: AdjudicationRoutes.MODULE_PATH,
-    site: SiteRoutes.MODULE_PATH
+    site: SiteRoutes.MODULE_PATH,
+    phsa: PhsaLabtechRoutes.MODULE_PATH
   }
 };
 

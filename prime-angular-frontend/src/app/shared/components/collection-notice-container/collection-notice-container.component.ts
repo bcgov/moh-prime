@@ -1,7 +1,8 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, Directive } from '@angular/core';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 
+@Directive()
 export abstract class AbstractCollectionNoticeAlert {
   @Input() public isFull: boolean;
   @Output() public accepted: EventEmitter<void>;

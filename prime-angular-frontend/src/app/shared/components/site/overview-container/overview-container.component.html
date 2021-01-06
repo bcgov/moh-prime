@@ -7,6 +7,14 @@
     <app-enrollee-profile [enrollee]="organization?.signingAuthority"></app-enrollee-profile>
   </app-overview-section>
 
+  <app-overview-section title="Contact Information"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
+                        (route)="onRoute($event)">
+    <app-party-review [party]="organization?.signingAuthority"
+                      [showName]="false"></app-party-review>
+  </app-overview-section>
+
   <app-overview-section title="Organization Information"
                         [showEditRedirect]="showEditRedirect"
                         [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_NAME]"
@@ -42,21 +50,26 @@
   </app-overview-section>
 
   <app-overview-section title="Site Business Licence"
-                        [showEditRedirect]="!site.submittedDate"
+                        [showEditRedirect]="!site.submittedDate || !site.businessLicence.completed"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Doing Business As">
       {{ site?.doingBusinessAs | default }}
     </app-enrollee-property>
 
-    <ng-container *ngIf="site.businessLicenceDocuments[0]">
+    <app-enrollee-property title="Deferred Business Licence Reason"
+                           *ngIf="site.businessLicence?.deferredLicenceReason">
+      {{ site.businessLicence.deferredLicenceReason | default }}
+    </app-enrollee-property>
+
+    <ng-container *ngIf="site.businessLicence?.businessLicenceDocument">
 
       <app-enrollee-property title="Filename">
         <button mat-stroked-button
                 color="primary"
                 (click)="getBusinessLicence()">
           <mat-icon class="mr-1">attachment</mat-icon>
-          {{ site.businessLicenceDocuments[site.businessLicenceDocuments.length -1].filename | default }}
+          {{ site.businessLicence?.businessLicenceDocument?.filename | default }}
         </button>
       </app-enrollee-property>
 

@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
@@ -12,6 +12,8 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 import { RemoteAccessAddressesComponent } from './remote-access-addresses.component';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('RemoteAccessAddressesComponent', () => {
   let component: RemoteAccessAddressesComponent;
@@ -23,7 +25,7 @@ describe('RemoteAccessAddressesComponent', () => {
     }
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
@@ -41,6 +43,10 @@ describe('RemoteAccessAddressesComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
         },
         KeycloakService
       ]

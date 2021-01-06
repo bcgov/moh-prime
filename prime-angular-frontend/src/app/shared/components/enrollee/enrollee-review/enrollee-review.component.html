@@ -118,6 +118,70 @@
 <section class="mb-4">
 
   <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Care Setting</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Care Setting"
+            (click)="onRoute(EnrolmentRoutes.CARE_SETTING)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <ng-container *ngFor="let careSetting of careSettings">
+
+    <app-enrollee-property title="Care Setting"
+                           [makeBold]="true">
+      {{ careSetting.careSettingCode | configCode: 'careSettings' }}
+    </app-enrollee-property>
+
+  </ng-container>
+
+  <app-enrollee-property *ngIf="!hasCareSetting"
+                         title="Care Setting"
+                         [makeBold]="true">
+    None
+  </app-enrollee-property>
+
+</section>
+
+<section *ngIf="healthAuthorities?.length"
+         class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Health Authority</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Health Authority"
+            (click)="onRoute(EnrolmentRoutes.HEALTH_AUTHORITY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <ng-container *ngFor="let healthAuthority of healthAuthorities">
+
+    <app-enrollee-property title="Health Authority"
+                           [makeBold]="true">
+      <div class="mb-3">{{ healthAuthority.healthAuthorityCode | configCode: 'healthAuthorities' }}</div>
+
+      <app-enrollee-property title="Facility">
+        <ul class="list-unstyled">
+          <li *ngFor="let facilitiy of healthAuthority.facilityCodes"
+              class="mb-2">
+            {{ facilitiy | configCode: 'facilities' }}
+          </li>
+        </ul>
+      </app-enrollee-property>
+    </app-enrollee-property>
+
+  </ng-container>
+
+</section>
+
+<section class="mb-4">
+
+  <app-page-subheader>
     <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
 
     <button *ngIf="showEditRedirect"
@@ -225,33 +289,66 @@
 
 </section>
 
-<section class="mb-4">
+<section *ngIf="hasJob && oboSites.length || (!hasJob && !hasCertification)"
+         class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Care Setting</ng-container>
+    <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
 
     <button *ngIf="showEditRedirect"
             mat-icon-button
-            matTooltip="Edit Care Setting"
-            (click)="onRoute(EnrolmentRoutes.CARE_SETTING)">
+            matTooltip="Edit Job Site Information"
+            (click)="onRoute(EnrolmentRoutes.JOB)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
 
   <ng-container *ngFor="let careSetting of careSettings">
 
-    <app-enrollee-property title="Care Setting"
-                           [makeBold]="true">
-      {{ careSetting.careSettingCode | configCode: 'careSettings' }}
-    </app-enrollee-property>
+    <ng-container *ngFor="let site of oboSites">
+      <ng-container *ngIf="site.careSettingCode === careSetting.careSettingCode">
+        <app-enrollee-property title="Care Setting"
+                               [makeBold]="true">
+          <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}</div>
 
+          <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
+                                 title="Site Name"
+                                 [makeBold]="true">
+            {{ site.siteName | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
+                                 title="Facility Name"
+                                 [makeBold]="true">
+            {{ site.facilityName | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
+                                 title="Site Id"
+                                 [makeBold]="true">
+            {{ site.pec | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Site Address">
+            <div class="mb-3">{{ site.physicalAddress?.street | default }}</div>
+
+            <app-enrollee-property title="City">
+              {{ site.physicalAddress?.city | default }}
+            </app-enrollee-property>
+
+            <app-enrollee-property title="Province">
+              {{ site.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+            </app-enrollee-property>
+
+            <app-enrollee-property title="Postal Code">
+              {{ site.physicalAddress?.postal | postal | default }}
+            </app-enrollee-property>
+
+          </app-enrollee-property>
+        </app-enrollee-property>
+      </ng-container>
+    </ng-container>
   </ng-container>
-
-  <app-enrollee-property *ngIf="!hasCareSetting"
-                         title="Care Setting"
-                         [makeBold]="true">
-    None
-  </app-enrollee-property>
 
 </section>
 
@@ -297,9 +394,15 @@
         {{ remoteAccessSite.site?.doingBusinessAs | default }}
 
       </ng-template>
-
+      <address>
+        {{ remoteAccessSite.site?.physicalAddress?.street | default }},
+        {{ remoteAccessSite.site?.physicalAddress?.city | default }}
+        {{ remoteAccessSite.site?.physicalAddress?.provinceCode | default }}
+        {{ remoteAccessSite.site?.physicalAddress?.postal | default }}
+      </address>
+      Vendor: {{ (remoteAccessSite.site?.siteVendors?.length)
+      ? remoteAccessSite.site?.siteVendors[0].vendorCode : null | configCode:'vendors' | default }}
     </app-enrollee-property>
-
   </ng-container>
 
   <ng-container *ngFor="let remoteAccessLocation of remoteAccessLocations">

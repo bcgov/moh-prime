@@ -10,11 +10,12 @@
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>{{ title }}</ng-container>
         <ng-container appPageSubheader2Summary>
-          Scan and upload.
+          Scan and upload a single file of the business licence
         </ng-container>
       </app-page-subheader2>
 
-      <app-document-upload componentName="business-licence"
+      <app-document-upload #documentUpload
+                           componentName="business-licence"
                            labelMessage="Drag and drop your business licence or browse"
                            [multiple]="false"
                            (completed)="onUpload($event)"
@@ -30,14 +31,14 @@
         </ng-container>
       </app-alert>
 
-      <ng-container *ngIf="businessLicenceDocuments.length">
+      <ng-container *ngIf="businessLicence.businessLicenceDocument">
 
         <app-enrollee-property title="Filename">
           <button mat-stroked-button
                   color="primary"
-                  (click)="getBusinessLicence($event)">
+                  (click)="downloadBusinessLicence($event)">
             <mat-icon class="mr-1">attachment</mat-icon>
-            {{ businessLicenceDocuments[businessLicenceDocuments.length - 1].filename | default }}
+            {{ businessLicence.businessLicenceDocument.filename | default }}
           </button>
         </app-enrollee-property>
 
@@ -72,6 +73,41 @@
         </div>
       </div>
     </section>
+
+    <ng-container *ngIf="isCommPharm()">
+
+      <mat-slide-toggle #deferredLicence
+                        class="mb-3"
+                        color="primary"
+                        (change)="onDeferredLicenceChange($event)">
+        This Community Pharmacy does not have a business licence
+      </mat-slide-toggle>
+
+      <section class="mb-3"
+               *ngIf="deferredLicence?.checked">
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>Missing Business Licence</ng-container>
+          <ng-container appPageSubheader2Summary>
+            If this Community Pharmacy does not have a business licence, explain below.
+            You may continue with the registration without a business licence, but you
+            are advised the Ministry of Health will not finalize your registration until
+            your business licence has been uploaded.
+          </ng-container>
+        </app-page-subheader2>
+
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Write here"
+                        rows="5"
+                        formControlName="deferredLicenceReason"></textarea>
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </section>
+    </ng-container>
 
   </form>
 

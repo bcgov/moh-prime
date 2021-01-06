@@ -16,9 +16,9 @@ import { SiteAdjudicationDocument } from '@registration/shared/models/adjudicati
 export class SiteAdjudicatorDocumentsComponent implements OnInit {
   public documents$: Observable<SiteAdjudicationDocument[]>;
   @ViewChild('adjudicationDocuments') public adjudicatorDocumentsComponent: AdjudicatorDocumentsComponent;
-  
+
   private siteId: number;
-  
+
   constructor(
     private siteResource: SiteResource,
     private route: ActivatedRoute,

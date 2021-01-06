@@ -234,8 +234,11 @@ namespace Prime.Services
         {
             // TODO Update schema to rename organization_type to care_setting
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            var enrolleeCareSetting = enrollee.EnrolleeCareSettings.Single();
-            await _context.Entry(enrolleeCareSetting).Reference(o => o.CareSetting).LoadAsync();
+
+            foreach (var careSetting in enrollee.EnrolleeCareSettings)
+            {
+                await _context.Entry(careSetting).Reference(o => o.CareSetting).LoadAsync();
+            }
 
             JArray attributes = new JArray
             {
@@ -247,17 +250,17 @@ namespace Prime.Services
                 new JObject
                 {
                     { "name", "renewal_date" },
-                    { "value", enrollee.ExpiryDate }
-                },
-                new JObject
-                {
-                    { "name", "organization_type" },
-                    { "value", enrolleeCareSetting.CareSetting.Name }
+                    { "value", enrollee.ExpiryDate.Value.Date.ToShortDateString() }
                 },
                 new JObject
                 {
                     { "name", "user_class" },
                     { "value", enrollee.IsRegulatedUser ? "RU" : "OBO" }
+                },
+                new JObject
+                {
+                    { "name", "organization_type" },
+                    { "value", string.Join(',', enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting.Name)) }
                 },
                 new JObject
                 {

@@ -1,46 +1,120 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
-
+using Prime.ViewModels.Parties;
 using Prime.HttpClients.KeycloakApiDefinitions;
+using Prime.Models;
+using Prime.Auth;
 
 namespace Prime.HttpClients
 {
-    public class KeycloakAdministrationClient : IKeycloakAdministrationClient
+    public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationClient
     {
         private readonly HttpClient _client;
+        private readonly ILogger _logger;
 
-        public KeycloakAdministrationClient(HttpClient httpClient)
+        public KeycloakAdministrationClient(
+            HttpClient httpClient,
+            ILogger<KeycloakAdministrationClient> logger)
+            : base(PropertySerialization.CamelCase)
         {
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _logger = logger;
         }
 
+        /// <summary>
+        /// Gets the Keycloak Role representation by name. Returns null if unccessful.
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
         public async Task<Role> GetRoleByName(string role)
         {
-            throw new NotImplementedException("Environment variables and Keycloak Client have not yet been set up.");
-
             var response = await _client.GetAsync($"roles/{WebUtility.UrlEncode(role)}");
 
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseMessage = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Could not retrieve the role {role} from Keycloak. Response message: {responseMessage}");
+                return null;
+            }
 
             return await response.Content.ReadAsAsync<Role>();
         }
 
-        public async Task AssignRealmRole(Guid userId, string role)
+        /// <summary>
+        /// Assigns a realm-level role to the user, if it exists.
+        /// Returns true if the operation was successful.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="role"></param>
+        public async Task<bool> AssignRealmRole(Guid userId, string role)
         {
-            throw new NotImplementedException("Environment variables and Keycloak Client have not yet been set up.");
-
-            // Keycloak expects an array of roles to assign, of which we need both the name and ID
+            // We need both the name and ID of the role to assign it.
             var keycloakRole = await GetRoleByName(role);
-            string serialized = JsonConvert.SerializeObject(new[] { keycloakRole });
+            if (keycloakRole == null)
+            {
+                return false;
+            }
 
-            var response = await _client.PostAsync($"users/{userId}/role-mappings/realm", new StringContent(serialized, Encoding.UTF8, "application/json"));
+            // Keycloak expects an array of roles.
+            var content = CreateStringContent(new[] { keycloakRole });
+            var response = await _client.PostAsync($"users/{userId}/role-mappings/realm", content);
 
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseMessage = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Could not assign the role {role} to user {userId}. Response message: {responseMessage}");
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Updates the User's email, phone number, and phone extension in Keycloak. Will remove any attribute set to null. Also gives the User the role(s) relevant to the PartyType(s) selected.
+        /// Returns true if the operation was successful.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="party"></param>
+        public async Task<bool> UpdatePhsaUserInfo(Guid userId, PhsaChangeModel party)
+        {
+            var response = await _client.GetAsync($"users/{userId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseMessage = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Could not retrieve user {userId} from keycloak. Response message: {responseMessage}");
+                return false;
+            }
+            var userRep = await response.Content.ReadAsAsync<UserInfoUpdateRepresentation>();
+
+            userRep.Email = party.Email;
+            userRep.SetPhoneNumber(party.Phone);
+            userRep.SetPhoneExtension(party.PhoneExtension);
+
+            response = await _client.PutAsync($"users/{userId}", CreateStringContent(userRep));
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseMessage = await response.Content.ReadAsStringAsync();
+                _logger.LogDebug($"Could not update the user {userId}. Response message: {responseMessage}");
+                return false;
+            }
+
+            bool success = true;
+            if (party.PartyTypes.Contains(PartyType.Labtech))
+            {
+                success &= await AssignRealmRole(userId, Roles.PhsaLabtech);
+            }
+
+            if (party.PartyTypes.Contains(PartyType.Immunizer))
+            {
+                success &= await AssignRealmRole(userId, Roles.PhsaImmunizer);
+            }
+
+            return success;
         }
     }
 }

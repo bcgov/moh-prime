@@ -14,6 +14,7 @@ namespace Prime.Auth
         public const string GivenNames = "given_names";
         public const string FamilyName = "family_name";
         public const string Address = "address";
+        public const string Birthdate = "birthdate";
 
         public const string RealmAccess = "realm_access";
         public const string AssuranceLevel = "identity_assurance_level";
@@ -22,7 +23,6 @@ namespace Prime.Auth
 
     public static class FeatureFlags
     {
-        public const string SiteRegistration = "feature_site_registration";
         public const string VCIssuance = "feature_vc_issuance";
     }
 
@@ -32,9 +32,13 @@ namespace Prime.Auth
         public const string PrimeAdmin = "prime_admin";
         public const string PrimeReadonlyAdmin = "prime_readonly_admin";
         public const string PrimeEnrollee = "prime_user";
+
         public const string ExternalHpdidAccess = "external_hpdid_access";
         public const string ExternalGpidValidation = "external_gpid_validation";
         public const string PrimeApiServiceAccount = "prime_api_service_account";
+
+        public const string PhsaLabtech = "phsa_eforms_labtech";
+        public const string PhsaImmunizer = "phsa_eforms_immunizer_covid19";
     }
 
     public static class Policies

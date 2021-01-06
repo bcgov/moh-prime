@@ -1,5 +1,5 @@
 import { ViewContainerRef, Component } from '@angular/core';
-import { inject, TestBed, async, ComponentFixture } from '@angular/core/testing';
+import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
 
 import { DialogContentDirective } from './dialog-content.directive';
 
@@ -16,7 +16,7 @@ describe('DialogContentDirective', () => {
   let component: TestDialogContentComponent;
   let fixture: ComponentFixture<TestDialogContentComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
         declarations: [

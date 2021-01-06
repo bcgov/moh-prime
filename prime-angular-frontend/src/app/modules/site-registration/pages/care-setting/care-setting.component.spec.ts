@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
@@ -11,12 +11,13 @@ import { CareSettingComponent } from './care-setting.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('CareSettingComponent', () => {
   let component: CareSettingComponent;
   let fixture: ComponentFixture<CareSettingComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         CareSettingComponent
@@ -36,7 +37,8 @@ describe('CareSettingComponent', () => {
         {
           provide: ConfigService,
           useClass: MockConfigService
-        }
+        },
+        KeycloakService
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

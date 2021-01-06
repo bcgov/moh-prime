@@ -178,7 +178,10 @@ namespace Prime.Services
                 .Include(e => e.RemoteAccessLocations)
                     .ThenInclude(ral => ral.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
+                .Include(e => e.EnrolleeHealthAuthorities)
                 .Include(e => e.SelfDeclarations)
+                .Include(e => e.OboSites)
+                    .ThenInclude(s => s.PhysicalAddress)
                 .SingleAsync(e => e.Id == enrolleeId);
 
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
@@ -205,10 +208,13 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
 
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
             UpdateRemoteAccessSites(enrollee, updateModel);
             UpdateRemoteAccessLocations(enrollee, updateModel);
+
+            UpdateOboSites(enrollee, updateModel);
 
             // If profileCompleted is true, this is the first time the enrollee
             // has completed their profile by traversing the wizard, and indicates
@@ -275,15 +281,16 @@ namespace Prime.Services
                 _context.Remove(item);
             }
 
+            if (newCollection == null) {
+                return;
+            }
+
             // Create new items
-            if (newCollection != null)
+            foreach (var item in newCollection)
             {
-                foreach (var item in newCollection)
-                {
-                    // Prevent the ID from being changed by the incoming changes
-                    item.EnrolleeId = enrolleeId;
-                    _context.Entry(item).State = EntityState.Added;
-                }
+                // Prevent the ID from being changed by the incoming changes
+                item.EnrolleeId = enrolleeId;
+                _context.Entry(item).State = EntityState.Added;
             }
         }
 
@@ -296,33 +303,36 @@ namespace Prime.Services
                 _context.Remove(location);
             }
 
-            if (updateEnrollee?.RemoteAccessLocations != null && updateEnrollee?.RemoteAccessLocations.Count() != 0)
-            {
-                var remoteAccessLocations = new List<RemoteAccessLocation>();
-
-                foreach (var location in updateEnrollee.RemoteAccessLocations)
-                {
-                    var newAddress = new PhysicalAddress
-                    {
-                        CountryCode = location.PhysicalAddress.CountryCode,
-                        ProvinceCode = location.PhysicalAddress.ProvinceCode,
-                        Street = location.PhysicalAddress.Street,
-                        Street2 = location.PhysicalAddress.Street2,
-                        City = location.PhysicalAddress.City,
-                        Postal = location.PhysicalAddress.Postal
-                    };
-                    var newLocation = new RemoteAccessLocation
-                    {
-                        Enrollee = dbEnrollee,
-                        InternetProvider = location.InternetProvider,
-                        PhysicalAddress = newAddress
-                    };
-                    _context.Entry(newAddress).State = EntityState.Added;
-                    _context.Entry(newLocation).State = EntityState.Added;
-                    remoteAccessLocations.Add(newLocation);
-                }
-                updateEnrollee.RemoteAccessLocations = remoteAccessLocations;
+            if (updateEnrollee.RemoteAccessLocations == null || !updateEnrollee.RemoteAccessLocations.Any()) 
+            { 
+                return;
             }
+
+            var remoteAccessLocations = new List<RemoteAccessLocation>();
+
+            foreach (var location in updateEnrollee.RemoteAccessLocations)
+            {
+                var newAddress = new PhysicalAddress
+                {
+                    CountryCode = location.PhysicalAddress.CountryCode,
+                    ProvinceCode = location.PhysicalAddress.ProvinceCode,
+                    Street = location.PhysicalAddress.Street,
+                    Street2 = location.PhysicalAddress.Street2,
+                    City = location.PhysicalAddress.City,
+                    Postal = location.PhysicalAddress.Postal
+                };
+                var newLocation = new RemoteAccessLocation
+                {
+                    Enrollee = dbEnrollee,
+                    InternetProvider = location.InternetProvider,
+                    PhysicalAddress = newAddress
+                };
+                _context.Entry(newAddress).State = EntityState.Added;
+                _context.Entry(newLocation).State = EntityState.Added;
+                remoteAccessLocations.Add(newLocation);
+            }
+
+            updateEnrollee.RemoteAccessLocations = remoteAccessLocations;
         }
 
         private void UpdateEnrolleeRemoteUsers(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
@@ -367,6 +377,47 @@ namespace Prime.Services
 
                     _context.Entry(remoteAccessSite).State = EntityState.Added;
                 }
+            }
+        }
+
+        private void UpdateOboSites(Enrollee dbEnrollee, EnrolleeUpdateModel updateEnrollee)
+        {
+            // Wholesale replace the obo sites
+            foreach (var site in dbEnrollee.OboSites)
+            {
+                _context.Remove(site.PhysicalAddress);
+                _context.Remove(site);
+            }
+
+            if (updateEnrollee?.OboSites != null && updateEnrollee?.OboSites.Count() != 0)
+            {
+                var oboSites = new List<OboSite>();
+
+                foreach (var site in updateEnrollee.OboSites)
+                {
+                    var newAddress = new PhysicalAddress
+                    {
+                        CountryCode = site.PhysicalAddress.CountryCode,
+                        ProvinceCode = site.PhysicalAddress.ProvinceCode,
+                        Street = site.PhysicalAddress.Street,
+                        Street2 = site.PhysicalAddress.Street2,
+                        City = site.PhysicalAddress.City,
+                        Postal = site.PhysicalAddress.Postal
+                    };
+                    var newSite = new OboSite
+                    {
+                        Enrollee = dbEnrollee,
+                        CareSettingCode = site.CareSettingCode,
+                        PhysicalAddress = newAddress,
+                        SiteName = site.SiteName,
+                        PEC = site.PEC,
+                        FacilityName = site.FacilityName
+                    };
+                    _context.Entry(newAddress).State = EntityState.Added;
+                    _context.Entry(newSite).State = EntityState.Added;
+                    oboSites.Add(newSite);
+                }
+                updateEnrollee.OboSites = oboSites;
             }
         }
 
@@ -457,7 +508,10 @@ namespace Prime.Services
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
                 .Include(e => e.Jobs)
+                .Include(e => e.OboSites)
+                    .ThenInclude(s => s.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
+                .Include(e => e.EnrolleeHealthAuthorities)
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessSites)
                     .ThenInclude(ras => ras.Site)
@@ -479,6 +533,12 @@ namespace Prime.Services
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
         {
             var entity = await GetBaseEnrolleeQuery()
+                .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
+                        .ThenInclude(site => site.PhysicalAddress)
+                .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
+                        .ThenInclude(site => site.SiteVendors)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 

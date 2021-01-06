@@ -153,7 +153,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.REGULATORY;
+      nextRoutePath = EnrolmentRoutes.CARE_SETTING;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

@@ -111,6 +111,18 @@ export class FormControlValidators {
 
   /**
    * @description
+   * Checks that at least a # of values have been added to an
+   * array on a form control.
+   */
+  public static atLeast(control: AbstractControl, minNumber: number): ValidationErrors | null {
+    if (!Array.isArray(control.value)) { return null; }
+    const atLeast = control.value?.length &&
+      control.value.length >= minNumber;
+    return (atLeast) ? null : { atLeast: true };
+  }
+
+  /**
+   * @description
    * Checks a form control is a non-zero index (eg. database record ID).
    */
   public static requiredIndex(control: AbstractControl): ValidationErrors | null {

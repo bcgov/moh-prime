@@ -130,7 +130,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
   protected nextRouteAfterSubmit() {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.REGULATORY;
+      nextRoutePath = EnrolmentRoutes.CARE_SETTING;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

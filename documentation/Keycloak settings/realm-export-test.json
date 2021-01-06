@@ -55,6 +55,22 @@
         "attributes": {}
       },
       {
+        "id": "facc11fb-1efc-4c64-967a-93c25bd197fd",
+        "name": "phsa_eforms_labtech",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "73406245-eeeb-401b-ae3c-d4c2e4ed2d83",
+        "name": "feature_site_pharmacist",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "10ed3e62-be89-45d8-b050-64c5d0106c65",
         "name": "feature_vc_issuance",
         "description": "Verified Credential feature flag",
@@ -112,15 +128,6 @@
         "attributes": {}
       },
       {
-        "id": "c818a30d-79c1-4ba1-aab8-d7908f30fdf6",
-        "name": "feature_site_registration",
-        "description": "Site Registration feature flag",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "360afc11-1938-484d-a69d-d1faed48c222",
         "name": "prime_user",
         "description": "BCSC authenticated primary application user",
@@ -130,9 +137,8 @@
         "attributes": {}
       },
       {
-        "id": "9967f54a-09a9-4063-bcee-641ef4b183cd",
-        "name": "feature_community_pharmacist",
-        "description": "Community Pharmacist feature flag",
+        "id": "5b8fe0cd-8f66-4b50-958c-a3c555d3d9a4",
+        "name": "phsa_eforms_immunizer_covid19",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -142,15 +148,6 @@
         "id": "cb33c4dd-2416-42bc-ac4d-cdb7252e486d",
         "name": "offline_access",
         "description": "${role_offline-access}",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "70d24374-c0fc-4617-8282-acd69dabf91c",
-        "name": "feature_health_authority",
-        "description": "Health Authority feature flag",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -371,10 +368,9 @@
           "attributes": {}
         }
       ],
-      "prime-pos-gpid": [],
+      "phsa-eforms": [],
       "prime-careconnect-access": [],
       "security-admin-console": [],
-      "admin-cli": [],
       "account-console": [],
       "broker": [
         {
@@ -387,6 +383,10 @@
           "attributes": {}
         }
       ],
+      "prime-document-manager": [],
+      "prime-pos-gpid": [],
+      "keycloak-service-account": [],
+      "admin-cli": [],
       "prime-application-test": [],
       "account": [
         {
@@ -457,8 +457,7 @@
           "containerId": "c8fd9ca5-37bf-48a0-9139-feef552d0843",
           "attributes": {}
         }
-      ],
-      "prime-document-manager": []
+      ]
     }
   },
   "groups": [
@@ -468,8 +467,7 @@
       "path": "/Prime Admin",
       "attributes": {},
       "realmRoles": [
-        "prime_super_admin",
-        "feature_site_registration"
+        "prime_super_admin"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -530,6 +528,33 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "users": [
+    {
+      "id": "02559c19-b2a0-455c-9e26-5b3b86083ad5",
+      "createdTimestamp": 1606784136330,
+      "username": "service-account-keycloak-service-account",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": false,
+      "serviceAccountClientId": "keycloak-service-account",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "uma_authorization",
+        "offline_access"
+      ],
+      "clientRoles": {
+        "realm-management": [
+          "manage-users",
+          "view-realm"
+        ],
+        "account": [
+          "manage-account",
+          "view-profile"
+        ]
+      },
+      "notBefore": 0,
+      "groups": []
+    },
     {
       "id": "ce35e06c-6fbe-49c4-9be4-0400b89be792",
       "createdTimestamp": 1585184801512,
@@ -801,6 +826,196 @@
       ]
     },
     {
+      "id": "d01bdad1-74bf-476a-ac54-4fd3712629fa",
+      "clientId": "keycloak-service-account",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [],
+      "webOrigins": [],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "publicClient": false,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "6e4fa85d-409f-4306-aea5-e904ce6c6a0e",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientId",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientId",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "0e7a3251-fd2b-41d9-b54c-218016532d63",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "be217b3b-8cc8-453a-b82b-7d668f30b35a",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "userinfo.token.claim": "true",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "roles"
+      ],
+      "optionalClientScopes": []
+    },
+    {
+      "id": "99153d11-b337-4d09-a281-c2e36a796032",
+      "clientId": "phsa-eforms",
+      "description": "PHSA eForms for Labtechs",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [
+        "*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": true,
+      "frontchannelLogout": false,
+      "protocol": "openid-connect",
+      "attributes": {
+        "saml.assertion.signature": "false",
+        "saml.multivalued.roles": "false",
+        "saml.force.post.binding": "false",
+        "saml.encrypt": "false",
+        "saml.server.signature": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "exclude.session.state.from.auth.response": "false",
+        "saml_force_name_id_format": "false",
+        "saml.client.signature": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "false",
+        "display.on.consent.screen": "false",
+        "saml.onetimeuse.condition": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "a54d35af-ee00-4f73-9cba-1ed711eabf0a",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "720d3812-2708-4166-bee0-cafe138840a8",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "2531f1d5-161e-4b95-b9d3-720d14877135",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientId",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientId",
+            "jsonType.label": "String"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "web-origins",
+        "identity_provider",
+        "address",
+        "phone",
+        "profile",
+        "roles",
+        "identity_assurance_level",
+        "email"
+      ],
+      "optionalClientScopes": []
+    },
+    {
       "id": "c16dce58-3ef3-432e-b43d-8cece1e2fcf2",
       "clientId": "prime-application-test",
       "rootUrl": "",
@@ -812,8 +1027,12 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
+        "https://healthpractionerregistration-demo.pathfinder.gov.bc.ca/*",
         "https://test.pharmanetenrolment.gov.bc.ca/*",
-        "https://demo.pharmanetenrolment.gov.bc.ca/*"
+        "https://demo.pharmanetenrolment.gov.bc.ca/*",
+        "https://demo.healthpractionerregistration.pathfinder.gov.bc.ca/*",
+        "https://test.healthpractionerregistration.pathfinder.gov.bc.ca/*",
+        "https://healthpractionerregistration-test.pathfinder.gov.bc.ca/*"
       ],
       "webOrigins": [
         "*"
@@ -879,16 +1098,6 @@
           }
         },
         {
-          "id": "5b851824-c2dd-41fd-82a8-00807a2b52dc",
-          "name": "feature-site_registration",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_site_registration"
-          }
-        },
-        {
           "id": "d6d241bd-5a05-429f-b6cf-8d972765b172",
           "name": "Client Host",
           "protocol": "openid-connect",
@@ -901,16 +1110,6 @@
             "access.token.claim": "true",
             "claim.name": "clientHost",
             "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "7e59f0fb-7a30-4a1c-8eb7-e0087d11e4f0",
-          "name": "feature-community_pharmacist",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_community_pharmacist"
           }
         },
         {
@@ -939,13 +1138,13 @@
           }
         },
         {
-          "id": "3f8fd182-ea75-44bd-a2d1-0e24d14f3865",
-          "name": "feature-health_authority",
+          "id": "39ed0b38-df5f-4d6d-92ed-e8286ed7e5bc",
+          "name": "feature-site_pharmacist",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-hardcoded-role-mapper",
           "consentRequired": false,
           "config": {
-            "role": "feature_health_authority"
+            "role": "feature_site_pharmacist"
           }
         }
       ],
@@ -1875,6 +2074,21 @@
             "access.token.claim": "true",
             "claim.name": "phone_number_verified",
             "jsonType.label": "boolean"
+          }
+        },
+        {
+          "id": "01cd8023-9ed0-4545-942e-b9bb74356fee",
+          "name": "phone extension",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "phoneExtension",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "phone_extension",
+            "jsonType.label": "String"
           }
         }
       ]

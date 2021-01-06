@@ -71,6 +71,18 @@ export class DocumentUploadComponent implements OnInit {
     };
   }
 
+  public disable() {
+    // TODO temporary fix to get around type definitions not be up to date for filepond
+    const attribute = 'pond';
+    this.filePondComponent[attribute].setOptions({ disabled: true });
+  }
+
+  public enable() {
+    // TODO temporary fix to get around type definitions not be up to date for filepond
+    const attribute = 'pond';
+    this.filePondComponent[attribute].setOptions({ disabled: false });
+  }
+
   public removeFiles() {
     // TODO temporary fix to get around type definitions not be up to date for filepond
     const method = 'removeFiles';
