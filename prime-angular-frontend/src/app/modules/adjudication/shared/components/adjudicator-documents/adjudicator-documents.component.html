@@ -45,12 +45,12 @@
               <button mat-stroked-button
                       color="primary"
                       (click)="getDocument(document.id)">
-                <mat-icon class="mr-1">attachment</mat-icon>
+                <mat-icon class="mr-2">attachment</mat-icon>
                 {{ document.filename | default }}
               </button>
-              <button mat-button
+              <button mat-icon-button
                       (click)="onDelete(document.id)">
-                <mat-icon class="mr-1">delete</mat-icon>
+                <mat-icon>delete</mat-icon>
               </button>
             </td>
           </tr>
