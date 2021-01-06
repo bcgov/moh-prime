@@ -223,10 +223,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         careSetting.patchValue(s);
         careSettings.push(careSetting);
       });
-
-      if (enrolment.careSettings.filter(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY).length) {
-        this.healthAuthoritiesFormState.setValidators();
-      }
     }
 
     if (enrolment.certifications.length) {

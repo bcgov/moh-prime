@@ -29,6 +29,7 @@ import { TechnicalSupportComponent } from './pages/technical-support/technical-s
 import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { OverviewComponent } from './pages/overview/overview.component';
+import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
 const routes: Routes = [
   {
@@ -169,6 +170,12 @@ const routes: Routes = [
                     canActivate: [SiteGuard, OrganizationGuard],
                     component: OverviewComponent,
                     data: { title: 'Site Registration Review' }
+                  },
+                  {
+                    path: SiteRoutes.NEXT_STEPS,
+                    canActivate: [SiteGuard, OrganizationGuard],
+                    component: NextStepsComponent,
+                    data: { title: 'Next Steps' }
                   },
                   {
                     path: '', // Equivalent to `/` and alias for `site-review`

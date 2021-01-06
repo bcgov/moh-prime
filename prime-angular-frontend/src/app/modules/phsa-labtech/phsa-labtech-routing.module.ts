@@ -3,15 +3,15 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
+
 import { PhsaLabtechDashboardComponent } from './shared/components/phsa-labtech-dashboard/phsa-labtech-dashboard.component';
+import { PhsaLabtechRoutes } from './phsa-labtech.routes';
 import { PhsaLabtechGuard } from './shared/guards/phsa-labtech.guard';
 import { AccessCodeComponent } from './pages/access-code/access-code.component';
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
-import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 import { AvailableAccessComponent } from './pages/available-access/available-access.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
-import { PhsaLabtechRoutes } from './phsa-labtech.routes';
-
 
 const routes: Routes = [
   {

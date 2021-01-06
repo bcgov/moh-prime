@@ -1137,7 +1137,9 @@
         "display.on.consent.screen": "false",
         "saml.onetimeuse.condition": "false"
       },
-      "authenticationFlowBindingOverrides": {},
+      "authenticationFlowBindingOverrides": {
+        "browser": "0f2257f9-235e-4e8b-945c-fee0eabb2123"
+      },
       "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
       "protocolMappers": [
@@ -1208,7 +1210,8 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "https://pharmanetenrolment.gov.bc.ca/*"
+        "https://pharmanetenrolment.gov.bc.ca/*",
+        "https://healthpractionerregistration.pathfinder.gov.bc.ca/*"
       ],
       "webOrigins": [
         "*"
@@ -2988,6 +2991,93 @@
   "supportedLocales": [],
   "authenticationFlows": [
     {
+      "id": "0f2257f9-235e-4e8b-945c-fee0eabb2123",
+      "alias": "Browser - BCSC",
+      "description": "browser based authentication",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-cookie",
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "auth-spnego",
+          "requirement": "DISABLED",
+          "priority": 20,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticatorConfig": "bcsc",
+          "authenticator": "identity-provider-redirector",
+          "requirement": "ALTERNATIVE",
+          "priority": 25,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "requirement": "ALTERNATIVE",
+          "priority": 30,
+          "flowAlias": "Browser - BCSC forms",
+          "userSetupAllowed": false,
+          "autheticatorFlow": true
+        }
+      ]
+    },
+    {
+      "id": "bfa428a1-9f78-4948-a7ad-f8f7abc448a4",
+      "alias": "Browser - BCSC forms",
+      "description": "Username, password, otp and other auth forms.",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-username-password-form",
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "requirement": "CONDITIONAL",
+          "priority": 20,
+          "flowAlias": "Browser - BCSC forms - auth-otp-form - Conditional",
+          "userSetupAllowed": false,
+          "autheticatorFlow": true
+        }
+      ]
+    },
+    {
+      "id": "e4554a92-49d9-4203-b5b7-61c89cd91709",
+      "alias": "Browser - BCSC forms - auth-otp-form - Conditional",
+      "description": "Flow to determine if the auth-otp-form authenticator should be used or not.",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "conditional-user-configured",
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        },
+        {
+          "authenticator": "auth-otp-form",
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "userSetupAllowed": false,
+          "autheticatorFlow": false
+        }
+      ]
+    },
+    {
       "id": "02b02997-3388-4771-9d18-0a5b866ddfed",
       "alias": "Handle Existing Account",
       "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
@@ -3504,6 +3594,13 @@
     }
   ],
   "authenticatorConfig": [
+    {
+      "id": "982272f6-e515-44ec-a2df-62e2e6cd2473",
+      "alias": "bcsc",
+      "config": {
+        "defaultProvider": "bcsc"
+      }
+    },
     {
       "id": "b016bb45-ccea-4fec-9248-8e9718cbf86d",
       "alias": "create unique user config",
