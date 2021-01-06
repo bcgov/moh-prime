@@ -2,7 +2,7 @@ pipeline {
     agent none
     environment {
         BRANCH_LOWER=BRANCH_NAME.toLowerCase()
-        VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
+        VANITY_URL="develop-temp-ocp4.pharmanetenrolment.gov.bc.ca"
         SCHEMA="https"
         PORT="8443"
         SUFFIX="-${BRANCH_LOWER}"
