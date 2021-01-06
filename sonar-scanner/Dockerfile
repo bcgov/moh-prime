@@ -1,4 +1,4 @@
-#FROM docker-registry.default.svc:5000/dqszvc-tools/jenkins-slave-base-centos7
+#FROM docker-registry.default.svc:5000/9c33a9-tools/jenkins-slave-base-centos7
 FROM openjdk:8-jdk
 ARG VERSION=3.35
 ARG user=jenkins
@@ -30,7 +30,7 @@ RUN mkdir /home/jenkins/.jenkins && \
         maven \
         pciutils \
         apt-transport-https && \
-    curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/jnlpJars/agent.jar && \
+    curl --create-dirs -fsSLo /usr/share/jenkins/agent.jar http://jenkins-moh-prime.apps.silver.devops.gov.bc.ca/jnlpJars/agent.jar && \
     chmod 755 /usr/share/jenkins && \
     chmod 644 /usr/share/jenkins/agent.jar && \
     ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
@@ -143,5 +143,5 @@ RUN chown -R default:0 /home/jenkins && \
 
 # For local testing
 #COPY ../ ./moh-prime
-ENTRYPOINT sleep 60 && /usr/local/openjdk-8/bin/java -jar /home/jenkins/agent/agent.jar -jnlpUrl http://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/computer/code-tests/slave-agent.jnlp -secret c598ca95983a9f6df4d06cc7f770b0d1ea404b806851f1a7f1066d89515c2c12 -workDir /home/jenkins
+ENTRYPOINT sleep 60 && /usr/local/openjdk-8/bin/java -jar /home/jenkins/agent/agent.jar -jnlpUrl http://jenkins-moh-prime.apps.silver.devops.gov.bc.ca/computer/code-tests/slave-agent.jnlp -secret c598ca95983a9f6df4d06cc7f770b0d1ea404b806851f1a7f1066d89515c2c12 -workDir /home/jenkins
 #CMD [ "/bin/bash","-c","/home/jenkins/agent/entrypoint.bash" ]

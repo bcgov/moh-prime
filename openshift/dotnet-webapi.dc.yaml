@@ -146,15 +146,20 @@ objects:
                   configKeyMapRef:
                     key: jwt_well_known_config
                     name: "keycloak"
+              - name: KEYCLOAK_ADMINISTRATION_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: keycloak_administration_client_secret
+                    name: "keycloak-secrets"
+              - name: KEYCLOAK_ADMINISTRATION_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: keycloak_administration_url
+                    name: "keycloak"
               - name: KEYCLOAK_TOKEN_URL
                 valueFrom:
                   configKeyMapRef:
                     key: keycloak_token_url
-                    name: "keycloak"
-              - name: KEYCLOAK_URL
-                valueFrom:
-                  configKeyMapRef:
-                    key: keycloak_url
                     name: "keycloak"
 
               # Mail server environment variables

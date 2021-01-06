@@ -43,7 +43,7 @@ parameters:
   - description: The OpenShift Namespace where the ImageStream resides.
     displayName: Namespace
     name: IMAGE_STREAM_NAMESPACE
-    value: 'dqszvc-tools'
+    value: '9c33a9-tools'
   - description: 'Version of PostgreSQL image to be used (9.2, 9.4, 9.5 or latest).'
     displayName: Version of PostgreSQL Image
     name: IMAGE_STREAM_VERSION
@@ -219,7 +219,7 @@ objects:
             from:
               kind: ImageStreamTag
               name: 'postgresql-10:latest'
-              namespace: dqszvc-tools
+              namespace: 9c33a9-tools
             lastTriggeredImage: ''
           type: ImageChange
         - type: ConfigChange

@@ -38,4 +38,4 @@
   parameters:
   - description: Project name
     name: NAMESPACE
-    value: dqszvc-test
+    value: 9c33a9-test

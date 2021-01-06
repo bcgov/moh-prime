@@ -1,6 +1,6 @@
-#FROM docker-registry.default.svc:5000/dqszvc-${OC_APP}/dotnet-22-rhel7 AS build
+#FROM docker-registry.default.svc:5000/9c33a9-${OC_APP}/dotnet-22-rhel7 AS build
 #FROM registry.redhat.io/dotnet/dotnet-22-rhel7 AS build
-FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-30 AS build
+FROM docker-registry.default.svc:5000/9c33a9-tools/dotnet-30 AS build
 #FROM dotnet-22-rhel7 AS build
 WORKDIR /opt/app-root/app
 USER 0
@@ -29,7 +29,7 @@ RUN dotnet tool install --global dotnet-ef --version 3.1.1
 RUN dotnet ef migrations script --idempotent --output "${WORKDIR}/databaseMigrations.sql"
 
 
-FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-30-runtime-rhel7 AS runtime
+FROM docker-registry.default.svc:5000/9c33a9-tools/dotnet-30-runtime-rhel7 AS runtime
 
 #FROM registry.redhat.io/dotnet/dotnet-22-runtime-rhel7 AS runtime
 #FROM dotnet-22-runtime-rhel7 AS runtime

@@ -79,11 +79,6 @@ objects:
               configKeyMapRef:
                 key: jwt_well_known_config
                 name: "keycloak"
-          - name: KEYCLOAK_URL
-            valueFrom:
-              configKeyMapRef:
-                key: keycloak_url
-                name: "keycloak"
 
           # PostgreSQL related environment variables
           - name: POSTGRESQL_USER

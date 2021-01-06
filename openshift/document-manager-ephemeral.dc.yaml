@@ -41,7 +41,7 @@ parameters:
     required: false
   - name: OC_NAMESPACE
     required: true
-    value: dqszvc
+    value: 9c33a9
   - name: OC_APP
     required: true
     value: dev

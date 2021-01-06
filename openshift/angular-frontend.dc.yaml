@@ -75,8 +75,12 @@ objects:
             value: ${OC_APP}
           - name: REDIRECT_URL
             value: "${REDIRECT_URL}"
+          
+          # Document Manager related environment variables
           - name: DOCUMENT_MANAGER_URL
             value: "https://${VANITY_URL}/api/docman"
+          
+          # Keycloak related environment variables
           - name: KEYCLOAK_CLIENT_ID
             valueFrom:
               configMapKeyRef:

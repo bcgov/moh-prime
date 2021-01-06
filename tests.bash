@@ -1,5 +1,5 @@
 export uuid=$(cat /proc/sys/kernel/random/uuid)
-export SONAR_URL=http://sonar-backend-dqszvc-tools.pathfinder.gov.bc.ca
+export SONAR_URL=http://sonar-backend-9c33a9-tools.apps.silver.devops.gov.bc.ca
 
 function headless(){
     export DISPLAY=:1.0

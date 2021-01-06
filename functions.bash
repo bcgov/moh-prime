@@ -110,7 +110,7 @@ function getAllAssets() {
 }
 
 function getAllPrRoutes() {
-    declare -p ROUTE_ARRAY=( $(oc get route -n $PROJECT_PREFIX-dev | awk '{print $2}' | grep "pr-" | sed 's/.pharmanetenrolment-dqszvc-dev.pathfinder.gov.bc.ca//g' | sed 's/pr-//g') )
+    declare -p ROUTE_ARRAY=( $(oc get route -n $PROJECT_PREFIX-dev | awk '{print $2}' | grep "pr-" | sed 's/.pharmanetenrolment-9c33a9-dev.apps.silver.devops.gov.bc.ca//g' | sed 's/pr-//g') )
 }
 function getAllOpenPr () {
     curl -o openPRs.txt "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/pulls?status=open&sort=number"
@@ -128,7 +128,7 @@ function notifyGitHub() {
     -H "Accept: application/vnd.github.v3+json" \
     -u "${4}" \
     "https://api.github.com/repos/${PROJECT_OWNER}/${PROJECT_NAME}/statuses/${GIT_COMMIT}" \
-    -d "{\"state\": \"${2}\",\"context\": \"${3}\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-prod-dqszvc-tools.pathfinder.gov.bc.ca/job/Development/jenkins/Development/job/${BRANCH_NAME}/${BUILD_NUMBER}/display/redirect\"}"
+    -d "{\"state\": \"${2}\",\"context\": \"${3}\", \"description\": \"Jenkins\", \"target_url\": \"https://jenkins-moh-prime.apps.silver.devops.gov.bc.ca/job/Development/jenkins/Development/job/${BRANCH_NAME}/${BUILD_NUMBER}/display/redirect\"}"
 }
 
 function getOldPr () {
