@@ -73,7 +73,8 @@ export class HealthAuthorityFormState extends AbstractFormState<HealthAuthority[
   }
 
   public setValidators() {
-    this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: AbstractControl) => control.get('facilityCodes').value?.length));
+    const predicate = (control: AbstractControl) => control.get('facilityCodes').value?.length;
+    this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, predicate));
   }
 
   public removeHealthAuthorities() {
