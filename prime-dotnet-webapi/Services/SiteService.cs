@@ -595,8 +595,9 @@ namespace Prime.Services
             var document = await _context.SiteAdjudicationDocuments
                 .SingleOrDefaultAsync(d => d.Id == documentId);
             if (document == null)
+            {
                 return;
-
+            }
             _context.SiteAdjudicationDocuments.Remove(document);
             await _context.SaveChangesAsync();
         }

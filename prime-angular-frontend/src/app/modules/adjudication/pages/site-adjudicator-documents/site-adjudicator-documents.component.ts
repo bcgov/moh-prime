@@ -50,10 +50,7 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
 
   public onDeleteDocumentById(documentId: number) {
     this.busy = this.siteResource.deleteSiteAdjudicationDocument(this.siteId, documentId)
-      .subscribe((document: SiteAdjudicationDocument) => {
-        this.getDocuments();
-        this.toastService.openSuccessToast('Document has been deleted');
-      });
+      .subscribe((document: SiteAdjudicationDocument) => this.getDocuments());
   }
 
   public ngOnInit(): void {

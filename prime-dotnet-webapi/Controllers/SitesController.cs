@@ -874,7 +874,6 @@ namespace Prime.Controllers
         /// Delete the site's adjudication document
         /// </summary>
         /// <param name="documentId"></param>
-        /// <returns></returns>
         [HttpDelete("{siteId}/adjudication-documents/{documentId}", Name = nameof(DeleteSiteAdjudicationDocument))]
         [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

@@ -710,7 +710,6 @@ namespace Prime.Controllers
         /// Delete the enrollee's adjudication document
         /// </summary>
         /// <param name="documentId"></param>
-        /// <returns></returns>
         [HttpDelete("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(DeleteEnrolleeAdjudicationDocument))]
         [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

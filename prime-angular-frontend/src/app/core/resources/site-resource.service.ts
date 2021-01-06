@@ -323,7 +323,10 @@ export class SiteResource {
       .pipe(
         map((response: ApiHttpResponse<SiteAdjudicationDocument>) => response.result),
         map((document: SiteAdjudicationDocument) => document),
-        tap((document: SiteAdjudicationDocument) => this.logger.info('DELETED_DOCUMENT', document)),
+        tap((document: SiteAdjudicationDocument) => {
+          this.toastService.openSuccessToast('Document has been deleted')
+          this.logger.info('DELETED_DOCUMENT', document);
+        }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Document could not be deleted');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::deleteSiteAdjudicationDocument error has occurred: ', error);

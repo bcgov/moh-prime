@@ -266,7 +266,10 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<EnrolleeAdjudicationDocument>) => response.result),
         map((document: EnrolleeAdjudicationDocument) => document),
-        tap((document: EnrolleeAdjudicationDocument) => this.logger.info('DELETED_DOCUMENT', document)),
+        tap((document: EnrolleeAdjudicationDocument) => {
+          this.toastService.openSuccessToast('Document has been deleted')
+          this.logger.info('DELETED_DOCUMENT', document);
+        }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Document could not be deleted');
           this.logger.error('[Adjudication] EnrolmentResource::deleteEnrolleeAdjudicationDocument error has occurred: ', error);
