@@ -2,15 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Prime.HttpClients
 {
-    public class ChesClient : IChesClient
+    public class ChesClient : BaseClient, IChesClient
     {
         private readonly HttpClient _client;
         private readonly ILogger _logger;
@@ -18,6 +16,7 @@ namespace Prime.HttpClients
         public ChesClient(
             HttpClient httpClient,
             ILogger<ChesClient> logger)
+            : base(PropertySerialization.CamelCase)
         {
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _logger = logger;
@@ -41,15 +40,9 @@ namespace Prime.HttpClients
 
             var requestParams = new ChesEmailRequestParams(from, to, cc, subject, body, chesAttachments);
 
-            var requestContent = new StringContent(
-                JsonConvert.SerializeObject(
-                    requestParams,
-                    new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }
-                ),
-                Encoding.UTF8, "application/json");
             try
             {
-                HttpResponseMessage response = await _client.PostAsync("email", requestContent);
+                HttpResponseMessage response = await _client.PostAsync("email", CreateStringContent(requestParams));
                 var responseJsonString = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
@@ -128,18 +121,18 @@ namespace Prime.HttpClients
 
         public ChesEmailRequestParams(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<ChesAttachment> attachments)
         {
-            this.Attachments = attachments;
+            Attachments = attachments;
             Bcc = new List<string>();
             BodyType = "html";
-            this.Body = body;
+            Body = body;
             Cc = cc;
             DelayTS = 1570000000;
             Encoding = "utf-8";
-            this.From = from;
+            From = from;
             Priority = "normal";
-            this.Subject = subject;
+            Subject = subject;
             Tag = "tag";
-            this.To = to;
+            To = to;
         }
     }
 
