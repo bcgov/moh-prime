@@ -6,16 +6,22 @@
 
 <ng-template #content>
 
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>
-      Enrollee Information
-    </ng-container>
-  </app-page-subheader>
+  <div class="row">
+    <div class="col-sm-12 col-md-8 col-xl-7">
 
-  <app-enrollee-review *ngIf="enrollee"
-                       [enrolment]="enrollee"
-                       [admin]="true"
-                       (route)="onRoute($event)"></app-enrollee-review>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>
+          Enrollee Information
+        </ng-container>
+      </app-page-subheader>
+
+      <app-enrollee-review *ngIf="enrollee"
+                           [enrolment]="enrollee"
+                           [admin]="true"
+                           (route)="onRoute($event)"></app-enrollee-review>
+
+    </div>
+  </div>
 
   <div class="row justify-content-between">
     <div class="col pt-4">
