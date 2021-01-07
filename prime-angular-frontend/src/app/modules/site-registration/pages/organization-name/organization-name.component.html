@@ -45,6 +45,7 @@
 
         <div class="row">
           <div class="col">
+
             <app-form-icon-group>
               <mat-form-field class="w-100">
                 <input matInput
@@ -61,13 +62,15 @@
                    icon="info">
           <ng-container #alertContent
                         class="alert-content">
-            We found the organization’s name and registration number in OrgBook.
-            <div class="text-right">
-              <a mat-raised-button
-              color="primary"
+            We found the organization's name and registration number in OrgBook.
 
-              [href]="getOrgBookLink(registrationId.value)"
-              target="_blank">View organization in OrgBook</a>
+            <div class="text-right pt-3">
+              <a mat-flat-button
+                 color="primary"
+                 target="_blank"
+                 [href]="getOrgBookLink(registrationId.value)">
+                View organization in OrgBook
+              </a>
             </div>
           </ng-container>
         </app-alert>
