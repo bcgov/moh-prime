@@ -38,19 +38,18 @@ export class EnrolleeSelfDeclarationsComponent implements OnInit {
   }
 
   public downloadSelfDeclarationDocument(documentId: number): void {
-    console.log('ENROLLEE', this.enrolment.enrollee);
-
     this.enrolmentResource.getDownloadTokenSelfDeclarationDocument(this.enrolment.id, documentId)
       .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
   public ngOnInit(): void {
-    console.log('MARTIN', this.enrolment);
-
     this.createSelfDeclarationComposites();
   }
 
   private createSelfDeclarationComposites() {
+    console.log('WHAT', this.enrolment);
+
+
     const answered = this.enrolment.selfDeclarations
       .map(s => s.selfDeclarationTypeCode);
     const unanswered = (this.isEnrollee)

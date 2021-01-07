@@ -22,7 +22,8 @@
     </div>
   </div>
 
-  <app-enrollee-review [enrolment]="enrolmentSubmission?.profileSnapshot"
+  <app-enrollee-review *ngIf="enrolmentSubmission"
+                       [enrolment]="enrolmentSubmission?.profileSnapshot"
                        [admin]="true"
                        (route)="onRoute($event)"></app-enrollee-review>
 
