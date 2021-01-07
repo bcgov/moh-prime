@@ -533,6 +533,12 @@ namespace Prime.Services
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
         {
             var entity = await GetBaseEnrolleeQuery()
+                .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
+                        .ThenInclude(site => site.PhysicalAddress)
+                .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
+                        .ThenInclude(site => site.SiteVendors)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
@@ -775,6 +781,24 @@ namespace Prime.Services
                .Include(bl => bl.Adjudicator)
                 .OrderByDescending(bl => bl.UploadedDate)
                .ToListAsync();
+        }
+
+        public async Task<EnrolleeAdjudicationDocument> GetEnrolleeAdjudicationDocumentAsync(int documentId)
+        {
+            return await _context.EnrolleeAdjudicationDocuments
+               .SingleOrDefaultAsync(d => d.Id == documentId);
+        }
+
+        public async Task DeleteEnrolleeAdjudicationDocumentAsync(int documentId)
+        {
+            var document = await _context.EnrolleeAdjudicationDocuments
+                .SingleOrDefaultAsync(d => d.Id == documentId);
+            if (document == null)
+            {
+                return;
+            }
+            _context.EnrolleeAdjudicationDocuments.Remove(document);
+            await _context.SaveChangesAsync();
         }
     }
 }

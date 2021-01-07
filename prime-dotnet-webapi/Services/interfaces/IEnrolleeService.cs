@@ -65,5 +65,9 @@ namespace Prime.Services
         Task<EnrolleeAdjudicationDocument> AddEnrolleeAdjudicationDocumentAsync(int enrolleeId, Guid documentGuid, int adminId);
 
         Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId);
+
+        Task<EnrolleeAdjudicationDocument> GetEnrolleeAdjudicationDocumentAsync(int documentId);
+
+        Task DeleteEnrolleeAdjudicationDocumentAsync(int documentId);
     }
 }
