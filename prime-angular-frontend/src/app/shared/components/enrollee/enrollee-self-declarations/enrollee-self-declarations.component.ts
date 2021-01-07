@@ -59,7 +59,7 @@ export class EnrolleeSelfDeclarationsComponent implements OnInit {
       .map((selfDeclaration: SelfDeclaration) => {
         const selfDeclarationTypeCode = selfDeclaration.selfDeclarationTypeCode;
         const selfDeclarationDocuments = this.enrolment.selfDeclarationDocuments
-          .filter(d => d.selfDeclarationTypeCode === selfDeclarationTypeCode);
+          ?.filter(d => d.selfDeclarationTypeCode === selfDeclarationTypeCode) ?? [];
 
         return this.createSelfDeclarationComposite(selfDeclarationTypeCode, selfDeclaration, selfDeclarationDocuments);
       })
