@@ -10,7 +10,7 @@ pipeline {
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
         // TODO request made for adding human-readable ID to moh-prime credential of jenkins-git-credential
         // to reduce changes required if credentials change similar to the access token credential I created
-        GITHUB_CREDENTIAL = credentials('42118129-086b-40a0-b800-bf490c2a2e82')
+        GITHUB_CREDENTIAL = credentials('08aa8f58-7a41-42d6-9dc3-f66be1bb8e62')
     }
     options {
         disableResume()
