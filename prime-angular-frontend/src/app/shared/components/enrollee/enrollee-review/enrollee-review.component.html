@@ -427,65 +427,11 @@
 
 </section>
 
-<section *ngIf="enrolment?.selfDeclarations?.length"
-         class="mb-4">
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
-
-    <button *ngIf="showEditRedirect"
-            mat-icon-button
-            matTooltip="Edit Self-declaration"
-            (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader>
-  <app-enrollee-property *ngIf="(admin && hasRegistrationSuspended()) || !admin"
-                         [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED]"
-                         [makeBold]="false">
-    {{ hasRegistrationSuspended() | yesNo: true }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="hasRegistrationSuspended()"
-                         title="Description"
-                         [makeBold]="false">
-    {{ getRegistrationSuspendedDetails() }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="(admin && hasConviction()) || !admin"
-                         [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION]"
-                         [makeBold]="false">
-    {{ hasConviction() | yesNo: true }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="hasConviction()"
-                         title="Description"
-                         [makeBold]="false">
-    {{ getConvictionDetails() }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="(admin && hasPharmaNetSuspended()) || !admin"
-                         [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED]"
-                         [makeBold]="false">
-    {{ hasPharmaNetSuspended() | yesNo: true }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="hasPharmaNetSuspended()"
-                         title="Description"
-                         [makeBold]="false">
-    {{ getPharmaNetSuspendedDetails() }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="(admin && hasDisciplinaryAction()) || !admin"
-                         [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION]"
-                         [makeBold]="false">
-    {{ hasDisciplinaryAction() | yesNo: true }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="hasDisciplinaryAction()"
-                         title="Description"
-                         [makeBold]="false">
-    {{ getDisciplinaryActionDetails() }}
-  </app-enrollee-property>
-
-</section>
+<app-enrollee-self-declarations [enrolment]="enrolment">
+  <button *ngIf="showEditRedirect"
+          mat-icon-button
+          matTooltip="Edit Self-declaration"
+          (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">
+    <mat-icon>edit</mat-icon>
+  </button>
+</app-enrollee-self-declarations>
