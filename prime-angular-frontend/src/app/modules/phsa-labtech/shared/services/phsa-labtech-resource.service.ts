@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -8,9 +9,9 @@ import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.serv
 import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { PhsaEnrollee } from '../models/phsa-lab-tech.model';
+
+import { PhsaEnrollee } from '@phsa/shared/models/phsa-lab-tech.model';
 import { PartyTypeEnum } from '@phsa/shared/enums/party-type.enum';
-import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,4 @@ export class PhsaLabtechResource {
         })
       );
   }
-
-
 }
