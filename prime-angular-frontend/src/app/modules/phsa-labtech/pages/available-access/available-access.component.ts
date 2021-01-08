@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
@@ -60,14 +60,14 @@ export class AvailableAccessComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.form = this.phsaFormStateService.availableAccessForm;
+    this.form = this.phsaFormStateService.availableAccessFormState.form;
     this.showProgress = true;
 
     this.busy = this.phsaLabtechResource
       .getPreApprovals(this.phsaFormStateService.json.email)
-      .subscribe((partyTypeCodes: PartyTypeEnum[]) => {
-        this.availablePartyTypes = partyTypeCodes;
-        this.phsaFormStateService.buildAvailableAccessFormControls(partyTypeCodes);
+      .subscribe((availablePartyTypeCodes: PartyTypeEnum[]) => {
+        this.availablePartyTypes = availablePartyTypeCodes;
+        this.phsaFormStateService.availableAccessFormState.buildAvailableAccessFormControls(availablePartyTypeCodes);
         this.showProgress = false;
       });
   }

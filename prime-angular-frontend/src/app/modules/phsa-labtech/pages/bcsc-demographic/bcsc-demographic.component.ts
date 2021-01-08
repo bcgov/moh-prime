@@ -61,7 +61,7 @@ export class BcscDemographicComponent implements OnInit {
   }
 
   protected createFormInstance(): void {
-    this.form = this.enrolmentFormStateService.demographicsForm;
+    this.form = this.enrolmentFormStateService.demographicFormState.form;
 
   }
 

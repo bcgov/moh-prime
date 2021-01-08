@@ -37,7 +37,7 @@ export class AccessCodeComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      this.router.navigate([ PhsaLabtechRoutes.DEMOGRAPHIC ], {
+      this.router.navigate([PhsaLabtechRoutes.DEMOGRAPHIC], {
         relativeTo: this.route.parent
       });
     } else {
@@ -50,6 +50,6 @@ export class AccessCodeComponent implements OnInit {
   }
 
   protected createFormInstance() {
-    this.form = this.phsaLabtechFormStateService.accessForm;
+    this.form = this.phsaLabtechFormStateService.accessCodeFormState.form;
   }
 }
