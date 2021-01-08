@@ -4,17 +4,17 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
-using Newtonsoft.Json;
 
 using Prime.Models;
 
 namespace Prime.HttpClients
 {
-    public class CollegeLicenceClient : ICollegeLicenceClient
+    public class CollegeLicenceClient : BaseClient, ICollegeLicenceClient
     {
         private readonly HttpClient _client;
 
         public CollegeLicenceClient(HttpClient client)
+            : base(PropertySerialization.CamelCase)
         {
             // Auth header and cert are injected in Startup.cs
             _client = client;
@@ -29,7 +29,7 @@ namespace Prime.HttpClients
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.PostAsync(PrimeEnvironment.PharmanetApi.Url, requestParams.ToRequestContent());
+                response = await _client.PostAsync(PrimeEnvironment.PharmanetApi.Url, CreateStringContent(requestParams));
             }
             catch (Exception ex)
             {
@@ -47,9 +47,9 @@ namespace Prime.HttpClients
             var practicionerRecord = content.SingleOrDefault();
 
             // If we get a record back, it should have the same transaction UUID as our request.
-            if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.applicationUUID)
+            if (practicionerRecord != null && practicionerRecord.applicationUUID != requestParams.ApplicationUUID)
             {
-                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was \"{requestParams.applicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
+                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was \"{requestParams.ApplicationUUID}\", response was \"{practicionerRecord.applicationUUID}\".");
             }
 
             return practicionerRecord;
@@ -73,27 +73,22 @@ namespace Prime.HttpClients
                 secondaryMessage = "no additional message. Http response and exception were null.";
             }
 
-            Console.WriteLine($"{DateTime.Now} - Error validating college licence. UUID:{requestParams.applicationUUID}, with {secondaryMessage}.");
+            Console.WriteLine($"{DateTime.Now} - Error validating college licence. UUID:{requestParams.ApplicationUUID}, with {secondaryMessage}.");
         }
 
         private class CollegeRecordRequestParams
         {
-            public string applicationUUID { get; set; }
-            public string programArea { get; set; }
-            public string licenceNumber { get; set; }
-            public string collegeReferenceId { get; set; }
+            public string ApplicationUUID { get; set; }
+            public string ProgramArea { get; set; }
+            public string LicenceNumber { get; set; }
+            public string CollegeReferenceId { get; set; }
 
             public CollegeRecordRequestParams(Certification cert)
             {
-                applicationUUID = Guid.NewGuid().ToString();
-                programArea = "PRIME";
-                licenceNumber = cert.LicenseNumber ?? throw new ArgumentNullException(nameof(licenceNumber));
-                collegeReferenceId = cert.College?.Prefix ?? throw new ArgumentNullException(nameof(collegeReferenceId));
-            }
-
-            public StringContent ToRequestContent()
-            {
-                return new StringContent(JsonConvert.SerializeObject(this));
+                ApplicationUUID = Guid.NewGuid().ToString();
+                ProgramArea = "PRIME";
+                LicenceNumber = cert.LicenseNumber ?? throw new ArgumentNullException(nameof(LicenceNumber));
+                CollegeReferenceId = cert.College?.Prefix ?? throw new ArgumentNullException(nameof(CollegeReferenceId));
             }
         }
     }
