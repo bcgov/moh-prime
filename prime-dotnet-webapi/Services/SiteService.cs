@@ -121,7 +121,7 @@ namespace Prime.Services
                 }
                 else
                 {
-                    this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                    _context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
                 }
             }
         }
@@ -259,7 +259,7 @@ namespace Prime.Services
 
             site.Completed = true;
 
-            this._context.Update(site);
+            _context.Update(site);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
@@ -286,7 +286,7 @@ namespace Prime.Services
 
             site.PEC = pecCode;
 
-            this._context.Update(site);
+            _context.Update(site);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)

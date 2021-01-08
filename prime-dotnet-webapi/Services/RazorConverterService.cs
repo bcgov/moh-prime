@@ -27,10 +27,10 @@ namespace Prime.Services
             IServiceProvider serviceProvider,
             IHttpContextAccessor contextAccessor)
         {
-            this._viewEngine = viewEngine;
-            this._tempDataProvider = tempDataProvider;
-            this._serviceProvider = serviceProvider;
-            this._contextAccessor = contextAccessor;
+            _viewEngine = viewEngine;
+            _tempDataProvider = tempDataProvider;
+            _serviceProvider = serviceProvider;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
