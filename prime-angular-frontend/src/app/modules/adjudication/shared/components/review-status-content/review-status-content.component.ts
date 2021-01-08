@@ -13,7 +13,6 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
-import { IdentificationDocument } from '@shared/models/identification-document.model';
 
 class Status {
   constructor(

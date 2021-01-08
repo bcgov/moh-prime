@@ -96,6 +96,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   public onSubmit() {
+    this.removeIncompleteOboSites();
+
     this.oboSites.clear();
     this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
