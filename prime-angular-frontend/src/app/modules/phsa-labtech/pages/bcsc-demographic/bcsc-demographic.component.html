@@ -1,5 +1,4 @@
-<app-page [busy]="busy"
-          [mode]="'default'">
+<app-page [busy]="busy">
   <app-page-header>Enrol for access to PHSA eForms</app-page-header>
   <app-progress-indicator [noContent]="true"></app-progress-indicator>
 
@@ -8,7 +7,6 @@
         novalidate>
 
     <section class="mb-3">
-
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Enrollee Information</ng-container>
         <ng-container appPageSubheaderSummary>
@@ -21,7 +19,6 @@
     </section>
 
     <section class="mb-3">
-
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Address</ng-container>
         <ng-container appPageSubheaderSummary>
@@ -39,7 +36,7 @@
 
   </form>
 
-  <app-page-footer [primaryActionLabel]="'Submit'"
+  <app-page-footer primaryActionLabel="Submit"
                    [hasSecondaryAction]="false"
                    (save)="onSubmit()"></app-page-footer>
 </app-page>

@@ -1,4 +1,4 @@
-import { PartyTypeEnum } from '@shared/enums/party-type.enum';
+import { PartyTypeEnum } from '@phsa/shared/enums/party-type.enum';
 import { Address } from '@shared/models/address.model';
 
 export interface PhsaEnrollee {

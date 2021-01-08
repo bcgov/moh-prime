@@ -9,7 +9,7 @@ import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { PhsaEnrollee } from '../models/phsa-lab-tech.model';
-import { PartyTypeEnum } from '@shared/enums/party-type.enum';
+import { PartyTypeEnum } from '@phsa/shared/enums/party-type.enum';
 import { HttpParams } from '@angular/common/http';
 
 @Injectable({
