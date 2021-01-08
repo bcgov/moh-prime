@@ -4,7 +4,8 @@
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
 
-    <ng-content select="mat-icon-button"></ng-content>
+    <ng-content select="[mat-icon-button]"
+                ngProjectAs="[mat-icon-button]"></ng-content>
   </app-page-subheader>
 
   <div *ngFor="let selfDeclarationComposite of selfDeclarationComposites"
