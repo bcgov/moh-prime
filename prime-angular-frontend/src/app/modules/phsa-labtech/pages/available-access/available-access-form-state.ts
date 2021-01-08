@@ -58,20 +58,9 @@ export class AvailableAccessFormState extends AbstractFormState<PartyTypeFormMod
 
   /**
    * @description
-   * Convert checkbox values into a party type.
-   *
-   * NOTE: availablePartyTypes MUST be the exact list of party types in the same
-   * order that was passed to buildAvailableAccessFormControls, otherwise you'll
-   * break the internet!
+   * Convert checkbox values (booleans) into a party type.
    */
   private toPartyTypes(availablePartyTypes: PartyTypeEnum[]): PartyTypeEnum[] {
-    // const formArray = this.formInstance.get('partyTypes') as FormArray;
-    // return formArray.controls
-    //   .map((control: AbstractControl, index: number) =>
-    //     (control.value) ? availablePartyTypes[index] : 0
-    //   )
-    //   .filter(code => code);
-
     return this.formInstance.value
       .partyTypes
       .map((selected: boolean, index: number) =>
