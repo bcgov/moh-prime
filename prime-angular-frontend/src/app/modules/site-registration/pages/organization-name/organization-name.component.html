@@ -45,32 +45,30 @@
 
         <div class="row">
           <div class="col">
-            <app-form-icon-group>
-              <mat-form-field class="w-100">
-                <input matInput
-                       placeholder="Organization Registration ID"
-                       formControlName="registrationId">
-                <mat-error>Required</mat-error>
-              </mat-form-field>
-            </app-form-icon-group>
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Organization Registration ID"
+                     formControlName="registrationId">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+            <app-alert type="info"
+                       icon="info">
+              <ng-container #alertContent
+                            class="alert-content">
+                We found the organization’s name and registration number in OrgBook.
+                <div class="text-right">
+                  <a mat-raised-button
+                     color="primary"
+                     [href]="getOrgBookLink(registrationId.value)"
+                     target="_blank">View organization in OrgBook</a>
+                </div>
+              </ng-container>
+            </app-alert>
 
           </div>
         </div>
-
-        <app-alert type="info"
-                   icon="info">
-          <ng-container #alertContent
-                        class="alert-content">
-            We found the organization’s name and registration number in OrgBook.
-            <div class="text-right">
-              <a mat-raised-button
-              color="primary"
-
-              [href]="getOrgBookLink(registrationId.value)"
-              target="_blank">View organization in OrgBook</a>
-            </div>
-          </ng-container>
-        </app-alert>
 
       </ng-container>
 
