@@ -153,12 +153,12 @@ namespace Prime.Services
                         }
                         else
                         {
-                            this._context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
+                            _context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
                         }
 
                         if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
                         {
-                            this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                            _context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
                         }
                         else
                         {
