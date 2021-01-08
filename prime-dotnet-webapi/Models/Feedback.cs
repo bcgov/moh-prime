@@ -13,8 +13,7 @@ namespace Prime.Models
         public int EnrolleeId { get; set; }
 
         [Required]
-        [Column("route")]
-        public string Route { get; set; }
+        public string route { get; set; }
 
         public string Comment { get; set; }
     }
