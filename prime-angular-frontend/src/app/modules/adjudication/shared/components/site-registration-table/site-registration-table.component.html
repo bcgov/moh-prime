@@ -53,10 +53,10 @@
             *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="siteAdjudication">
+      <ng-container matColumnDef="state">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Site Adjudication </th>
+            scope="col"> State </th>
         <td mat-cell
             *matCellDef="let row;"
             class="status"
