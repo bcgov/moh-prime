@@ -267,7 +267,7 @@ export class EnrolmentResource {
         map((response: ApiHttpResponse<EnrolleeAdjudicationDocument>) => response.result),
         map((document: EnrolleeAdjudicationDocument) => document),
         tap((document: EnrolleeAdjudicationDocument) => {
-          this.toastService.openSuccessToast('Document has been deleted')
+          this.toastService.openSuccessToast('Document has been deleted');
           this.logger.info('DELETED_DOCUMENT', document);
         }),
         catchError((error: any) => {

@@ -6,12 +6,10 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
   name: 'careSettingAbbr'
 })
 export class CareSettingAbbrPipe implements PipeTransform {
-
-  transform(value: CareSettingEnum | CareSettingEnum[]): string | string[] {
+  public transform(value: CareSettingEnum | CareSettingEnum[]): string | string[] {
     if (Array.isArray(value)) {
       return value.map(item => CareSettingEnum.abbr(item));
     }
-    return CareSettingEnum.abbr(<CareSettingEnum>value);
+    return CareSettingEnum.abbr(value as CareSettingEnum);
   }
-
 }
