@@ -35,7 +35,7 @@ export class SiteRegistrationTableComponent implements OnInit {
       'signingAuthority',
       'siteDoingBusinessAs',
       'submissionDate',
-      'adjudicator',
+      'claimedBy',
       'siteAdjudication',
       'siteId',
       'remoteUsers',
