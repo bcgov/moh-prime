@@ -14,6 +14,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
@@ -22,7 +23,7 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { Job } from '@enrolment/shared/models/job.model';
-import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-care-setting',
@@ -80,7 +81,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     // remove health authorities if health authority care setting not chosen
     const careSetting = this.careSettings.controls.filter((c) => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
     if (!careSetting.length) {
-      this.removeHealthAuthorities();
+      this.enrolmentFormStateService.healthAuthoritiesFormState.removeHealthAuthorities();
     }
 
     super.onSubmit();
@@ -101,7 +102,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public removeCareSetting(index: number, careSettingCode: number) {
     this.careSettings.removeAt(index);
-    this.removeOboSites(careSettingCode);
   }
 
   public filterCareSettingTypes(careSetting: FormGroup) {
@@ -206,43 +206,32 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
    * @description
    * Remove obo sites by care setting if a care setting was removed from the enrolment
    */
-  private removeOboSites(careSettingCode: number) {
+  private removeOboSites(careSettingCode: number): void {
     const form = this.enrolmentFormStateService.jobsForm;
     const oboSites = form.get('oboSites') as FormArray;
-    const communityHealthSites = form.get('communityHealthSites') as FormArray;
-    const communityPharmacySites = form.get('communityPharmacySites') as FormArray;
-    const healthAuthoritySites = form.get('healthAuthoritySites') as FormArray;
 
-    oboSites?.controls?.forEach((site, i) => {
-      if (site.value.careSettingCode === careSettingCode) {
-        oboSites.removeAt(i);
+    oboSites.value?.forEach((site: OboSite, index: number) => {
+      if (site.careSettingCode === careSettingCode) {
+        oboSites.removeAt(index);
       }
     });
+
+    const clear = (fa: FormArray) => {
+      fa.clear();
+      fa.clearValidators();
+      fa.updateValueAndValidity();
+    }
 
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        communityHealthSites.reset();
-        communityHealthSites.clearValidators();
-        break;
+        return clear(form.get('communityHealthSites') as FormArray);
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
-        communityPharmacySites.reset();
-        communityPharmacySites.clearValidators();
-        break;
+        return clear(form.get('communityPharmacySites') as FormArray);
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        healthAuthoritySites.reset();
-        healthAuthoritySites.clearValidators();
-        break;
+        return clear(form.get('healthAuthoritySites') as FormArray);
       }
     }
-  }
-
-  private removeHealthAuthorities() {
-    const form = this.enrolmentFormStateService.healthAuthoritiesFormState.form
-    const healthAuthorities = form.get('enrolleeHealthAuthorities') as FormArray;
-    healthAuthorities.controls.forEach(ha => {
-      ha.get('facilityCodes').patchValue([]);
-    });
   }
 }
