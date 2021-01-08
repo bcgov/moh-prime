@@ -38,7 +38,7 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
         {
-            IQueryable<Site> query = this.GetBaseSiteQuery();
+            IQueryable<Site> query = GetBaseSiteQuery();
 
             if (organizationId != null)
             {
@@ -50,7 +50,7 @@ namespace Prime.Services
 
         public async Task<Site> GetSiteAsync(int siteId)
         {
-            return await this.GetBaseSiteQuery()
+            return await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
         }
 
@@ -85,7 +85,7 @@ namespace Prime.Services
 
         public async Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite)
         {
-            var currentSite = await this.GetSiteAsync(siteId);
+            var currentSite = await GetSiteAsync(siteId);
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
@@ -254,7 +254,7 @@ namespace Prime.Services
 
         public async Task<int> UpdateCompletedAsync(int siteId)
         {
-            var site = await this.GetBaseSiteQuery()
+            var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             site.Completed = true;
@@ -281,7 +281,7 @@ namespace Prime.Services
 
         public async Task<Site> UpdatePecCode(int siteId, string pecCode)
         {
-            var site = await this.GetBaseSiteQuery()
+            var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             site.PEC = pecCode;
@@ -301,7 +301,7 @@ namespace Prime.Services
 
         public async Task DeleteSiteAsync(int siteId)
         {
-            var site = await this.GetBaseSiteQuery()
+            var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             if (site != null)
@@ -384,7 +384,7 @@ namespace Prime.Services
 
         public async Task<Site> GetSiteNoTrackingAsync(int siteId)
         {
-            return await this.GetBaseSiteQuery()
+            return await GetBaseSiteQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
         }
@@ -495,7 +495,7 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Site>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
         {
-            var sites = await this.GetBaseSiteQuery()
+            var sites = await GetBaseSiteQuery()
                 .Where(s => s.ApprovedDate != null)
                 .ToListAsync();
 

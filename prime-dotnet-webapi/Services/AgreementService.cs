@@ -139,7 +139,7 @@ namespace Prime.Services
         /// </summary>
         public async Task AcceptCurrentEnrolleeAgreementAsync(int enrolleeId)
         {
-            var agreement = await this.GetCurrentAgreementAsync(enrolleeId);
+            var agreement = await GetCurrentAgreementAsync(enrolleeId);
 
             if (agreement.AcceptedDate == null)
             {
