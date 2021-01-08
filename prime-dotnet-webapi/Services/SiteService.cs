@@ -18,7 +18,6 @@ namespace Prime.Services
     {
         private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
-        private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
         private readonly IDocumentManagerClient _documentClient;
 
@@ -27,14 +26,12 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             IMapper mapper,
             IBusinessEventService businessEventService,
-            IPartyService partyService,
             IOrganizationService organizationService,
             IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
             _businessEventService = businessEventService;
-            _partyService = partyService;
             _organizationService = organizationService;
             _documentClient = documentClient;
         }
@@ -141,9 +138,8 @@ namespace Prime.Services
             {
                 var contactIdName = $"{contactType}Id";
                 Contact currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
-                Contact updatedContact = typeof(SiteUpdateModel).GetProperty(contactType).GetValue(updated) as Contact;
 
-                if (updatedContact != null)
+                if (typeof(SiteUpdateModel).GetProperty(contactType).GetValue(updated) is Contact updatedContact)
                 {
                     if (updatedContact.Id != 0)
                     {
@@ -154,7 +150,6 @@ namespace Prime.Services
                         if (currentContact == null)
                         {
                             _context.Entry(current).Reference(contactType).CurrentValue = updatedContact;
-                            currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
                         }
                         else
                         {
