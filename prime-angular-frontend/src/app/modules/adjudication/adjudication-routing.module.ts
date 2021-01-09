@@ -46,7 +46,7 @@ const routes: Routes = [
           {
             path: '',
             component: EnrolleesComponent,
-            data: { title: 'PRIME Enrollees' }
+            data: { title: 'Enrollees' }
           },
           {
             path: ':id',
