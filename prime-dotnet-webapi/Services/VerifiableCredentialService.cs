@@ -62,9 +62,9 @@ namespace Prime.Services
             var invitationUrl = invitation.Value<string>("invitation_url");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
-            QRCodeGenerator qrGenerator = new();
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
-            Base64QRCode qrCode = new(qrCodeData);
+            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
             string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
 
             enrollee.Credential = new Credential
@@ -204,7 +204,7 @@ namespace Prime.Services
             var schema = (await _verifiableCredentialClient.GetSchema(schemaId)).Value<JObject>("schema");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
-            JObject credentialOffer = new()
+            JObject credentialOffer = new JObject
             {
                 { "connection_id", connectionId },
                 { "issuer_did", issuerDid },
@@ -243,7 +243,7 @@ namespace Prime.Services
                 await _context.Entry(careSetting).Reference(o => o.CareSetting).LoadAsync();
             }
 
-            JArray attributes = new()
+            JArray attributes = new JArray
             {
                 new JObject
                 {
