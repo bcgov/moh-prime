@@ -62,9 +62,9 @@ namespace Prime.Services
             var invitationUrl = invitation.Value<string>("invitation_url");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeGenerator qrGenerator = new();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
-            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
+            Base64QRCode qrCode = new(qrCodeData);
             string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
 
             enrollee.Credential = new Credential
@@ -204,25 +204,28 @@ namespace Prime.Services
             var schema = (await _verifiableCredentialClient.GetSchema(schemaId)).Value<JObject>("schema");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
-            JObject credentialOffer = new JObject
+            JObject credentialOffer = new()
+            {
+                { "connection_id", connectionId },
+                { "issuer_did", issuerDid },
+                { "schema_id", schemaId },
+                { "schema_issuer_did", issuerDid },
+                { "schema_name", schema.Value<string>("name") },
+                { "schema_version", schema.Value<string>("version") },
+                { "cred_def_id", credentialDefinitionId },
+                { "comment", "PharmaNet GPID" },
+                { "auto_remove", false },
+                { "trace", false },
+                { "revoc_registry_id", "Cc6hpJk61DjGcztPiAwJyK:4:Cc6hpJk61DjGcztPiAwJyK:3:CL:166842:prime_enrollee_credential:CL_ACCUM:508a3839-e50d-486e-9c1a-c39bfd039ea8" },
                 {
-                    { "connection_id", connectionId },
-                    { "issuer_did", issuerDid },
-                    { "schema_id", schemaId },
-                    { "schema_issuer_did", issuerDid },
-                    { "schema_name", schema.Value<string>("name") },
-                    { "schema_version", schema.Value<string>("version") },
-                    { "cred_def_id", credentialDefinitionId },
-                    { "comment", "PharmaNet GPID" },
-                    { "auto_remove", true },
-                    { "trace", false },
-                    { "credential_proposal", new JObject
+                    "credential_proposal",
+                    new JObject
                         {
                             { "@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview" },
                             { "attributes", attributes }
                         }
-                    }
-                };
+                }
+            };
 
             _logger.LogInformation("Credential offer for connection ID \"{connectionId}\" for {@JObject}", connectionId, JsonConvert.SerializeObject(credentialOffer));
 
@@ -240,7 +243,7 @@ namespace Prime.Services
                 await _context.Entry(careSetting).Reference(o => o.CareSetting).LoadAsync();
             }
 
-            JArray attributes = new JArray
+            JArray attributes = new()
             {
                 new JObject
                 {
