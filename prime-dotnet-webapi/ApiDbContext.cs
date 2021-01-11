@@ -104,16 +104,18 @@ namespace Prime
         public DbSet<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
         public DbSet<DocumentAccessToken> DocumentAccessToken { get; set; }
 
+        public DbSet<PreApprovedRegistration> PreApprovedRegistrations { get; set; }
+
         public override int SaveChanges()
         {
-            this.ApplyAudits();
+            ApplyAudits();
 
             return base.SaveChanges();
         }
 
-        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            this.ApplyAudits();
+            ApplyAudits();
 
             return await base.SaveChangesAsync(cancellationToken);
         }

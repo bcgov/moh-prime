@@ -58,7 +58,7 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.BCEID_DEMOGRAPHIC,
       EnrolmentRoutes.BCSC_DEMOGRAPHIC,
       EnrolmentRoutes.CARE_SETTING,
-      EnrolmentRoutes.HEALTH_AUTHORITY,
+      // EnrolmentRoutes.HEALTH_AUTHORITY,
       EnrolmentRoutes.REGULATORY,
       EnrolmentRoutes.JOB,
       // EnrolmentRoutes.DEVICE_PROVIDER,

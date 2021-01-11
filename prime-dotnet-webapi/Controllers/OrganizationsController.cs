@@ -15,6 +15,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using Prime.ViewModels.Parties;
 
 namespace Prime.Controllers
 {
@@ -62,7 +63,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Organization>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizations([FromQuery] bool verbose)
         {
-            IEnumerable<Organization> organizations = null;
+            IEnumerable<Organization> organizations;
 
             if (User.HasAdminView())
             {
@@ -119,15 +120,15 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Organization>> CreateOrganization(Party party)
+        public async Task<ActionResult<Organization>> CreateOrganization(SigningAuthorityChangeModel signingAuthority)
         {
-            if (party == null)
+            if (signingAuthority == null)
             {
-                this.ModelState.AddModelError("Party", "Could not create an organization, the passed in Party cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("SigningAuthority", "Could not create an organization, the passed in Signing Authority cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            var createdOrganizationId = await _organizationService.CreateOrganizationAsync(party);
+            var createdOrganizationId = await _organizationService.CreateOrganizationAsync(signingAuthority, User);
 
             var createdOrganization = await _organizationService.GetOrganizationAsync(createdOrganizationId);
 
@@ -276,7 +277,7 @@ namespace Prime.Controllers
             {
                 return CreatedAtAction(
                     nameof(GetOrganizationAgreement),
-                    new { organizationId = organizationId, agreementId = agreement.Id },
+                    new { organizationId, agreementId = agreement.Id },
                     ApiResponse.Result(agreement)
                 );
             }
@@ -367,8 +368,8 @@ namespace Prime.Controllers
                 var signedAgreement = await _organizationService.AddSignedAgreementAsync(organizationId, agreementId, organizationAgreementGuid.Value);
                 if (signedAgreement == null)
                 {
-                    this.ModelState.AddModelError(nameof(organizationAgreementGuid), "Signed Organization Agreement could not be created; network error or upload is already submitted");
-                    return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                    ModelState.AddModelError(nameof(organizationAgreementGuid), "Signed Organization Agreement could not be created; network error or upload is already submitted");
+                    return BadRequest(ApiResponse.BadRequest(ModelState));
                 }
             }
 

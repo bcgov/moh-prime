@@ -54,8 +54,8 @@ export class AdjudicationContainerComponent implements OnInit {
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
     protected route: ActivatedRoute,
     protected router: Router,
+    protected adjudicationResource: AdjudicationResource,
     private authService: AuthService,
-    private adjudicationResource: AdjudicationResource,
     private dialog: MatDialog,
     private utilsService: UtilsService,
     private toastService: ToastService,
@@ -155,8 +155,7 @@ export class AdjudicationContainerComponent implements OnInit {
   public onDecline(enrolleeId: number) {
     const data: DialogOptions = {
       title: 'Decline Enrollee',
-      message: `When declined the enrollee will not have access to PRIME, and their Terms of Access will be terminated. 
-        Are you sure you want to decline this enrollment?`,
+      message: `When declined the enrollee will not have access to PRIME, and their Terms of Access will be terminated. Are you sure you want to decline this enrollment?`,
       actionType: 'warn',
       actionText: 'Decline Enrollee',
       component: NoteComponent,
@@ -407,7 +406,8 @@ export class AdjudicationContainerComponent implements OnInit {
       hasNewestAgreement,
       adjudicator,
       alwaysManual,
-      enrolleeRemoteUsers
+      enrolleeRemoteUsers,
+      enrolleeCareSettings,
     } = enrollee;
     return {
       id,
@@ -425,7 +425,8 @@ export class AdjudicationContainerComponent implements OnInit {
       hasNewestAgreement,
       adjudicatorIdir: adjudicator?.idir,
       alwaysManual,
-      remoteAccess: (enrolleeRemoteUsers?.length) ? true : false
+      remoteAccess: (enrolleeRemoteUsers?.length) ? true : false,
+      careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode)
     };
   }
 }

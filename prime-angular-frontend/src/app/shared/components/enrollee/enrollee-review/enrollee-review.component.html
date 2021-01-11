@@ -82,11 +82,11 @@
     </button>
   </app-page-subheader>
 
-  <app-enrollee-property title="Voice Phone">
+  <app-enrollee-property title="Phone Number">
     {{ enrollee?.phone | phone | default }}
   </app-enrollee-property>
 
-  <app-enrollee-property title="Extension">
+  <app-enrollee-property title="Optional Extension Number">
     {{ enrollee?.phoneExtension | default }}
   </app-enrollee-property>
 
@@ -105,11 +105,11 @@
     </button>
   </app-page-subheader>
 
-  <app-enrollee-property title="Email Notification">
+  <app-enrollee-property title="Email">
     {{ enrollee?.email | default }}
   </app-enrollee-property>
 
-  <app-enrollee-property title="Text Notification (SMS)">
+  <app-enrollee-property title="Optional SMS Phone Number">
     {{ enrollee?.smsPhone | phone | default }}
   </app-enrollee-property>
 
@@ -202,7 +202,8 @@
     <div class="row">
       <div class="col col-sm-4 col-md-4 col-lg-3">
         <app-enrollee-property title="College Number">
-          {{ showCollegePrefix(certification.licenseCode, certification.collegeCode) | configCode: 'colleges' : 'prefix' | default }}
+          {{ showCollegePrefix(certification.licenseCode, certification.collegeCode) | configCode: 'colleges' : 'prefix'
+          | default }}
         </app-enrollee-property>
       </div>
       <div class="col">
@@ -289,7 +290,7 @@
 
 </section>
 
-<section *ngIf="hasJob && oboSites.length || (!hasJob && !hasCertification)"
+<section *ngIf="(hasJob && oboSites.length) || (!hasJob && !hasCertification)"
          class="mb-4">
 
   <app-page-subheader>
@@ -352,8 +353,8 @@
 
 </section>
 
-<section class="mb-4"
-         *ngIf="isRequestingRemoteAccess">
+<section *ngIf="isRequestingRemoteAccess"
+         class="mb-4">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Remote Access</ng-container>
@@ -394,9 +395,15 @@
         {{ remoteAccessSite.site?.doingBusinessAs | default }}
 
       </ng-template>
-
+      <address>
+        {{ remoteAccessSite.site?.physicalAddress?.street | default }},
+        {{ remoteAccessSite.site?.physicalAddress?.city | default }}
+        {{ remoteAccessSite.site?.physicalAddress?.provinceCode | default }}
+        {{ remoteAccessSite.site?.physicalAddress?.postal | default }}
+      </address>
+      Vendor: {{ (remoteAccessSite.site?.siteVendors?.length)
+      ? remoteAccessSite.site?.siteVendors[0].vendorCode : null | configCode:'vendors' | default }}
     </app-enrollee-property>
-
   </ng-container>
 
   <ng-container *ngFor="let remoteAccessLocation of remoteAccessLocations">
@@ -426,60 +433,11 @@
 
 </section>
 
-<section class="mb-4">
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
-
-    <button *ngIf="showEditRedirect"
-            mat-icon-button
-            matTooltip="Edit Self-declaration"
-            (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader>
-  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED]"
-                         [makeBold]="false">
-    {{ hasRegistrationSuspended() | yesNo: true }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="hasRegistrationSuspended()"
-                         title="Description"
-                         [makeBold]="false">
-    {{ getRegistrationSuspendedDetails() }}
-  </app-enrollee-property>
-
-  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION]"
-                         [makeBold]="false">
-    {{ hasConviction() | yesNo: true }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="hasConviction()"
-                         title="Description"
-                         [makeBold]="false">
-    {{ getConvictionDetails() }}
-  </app-enrollee-property>
-
-  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED]"
-                         [makeBold]="false">
-    {{ hasPharmaNetSuspended() | yesNo: true }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="hasPharmaNetSuspended()"
-                         title="Description"
-                         [makeBold]="false">
-    {{ getPharmaNetSuspendedDetails() }}
-  </app-enrollee-property>
-
-  <app-enrollee-property [title]="selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION]"
-                         [makeBold]="false">
-    {{ hasDisciplinaryAction() | yesNo: true }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="hasDisciplinaryAction()"
-                         title="Description"
-                         [makeBold]="false">
-    {{ getDisciplinaryActionDetails() }}
-  </app-enrollee-property>
-
-</section>
+<app-enrollee-self-declarations [enrolment]="enrolment">
+  <button *ngIf="showEditRedirect"
+          mat-icon-button
+          matTooltip="Edit Self-declaration"
+          (click)="onRoute(EnrolmentRoutes.SELF_DECLARATION)">
+    <mat-icon>edit</mat-icon>
+  </button>
+</app-enrollee-self-declarations>

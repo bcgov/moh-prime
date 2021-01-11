@@ -52,8 +52,7 @@ namespace Prime.Controllers
                 .Select(x => x.Split(' '))
                 .ToDictionary(x => x[0], x => x[1]);
 
-            string value;
-            if (!dictionary.TryGetValue("filename", out value))
+            if (!dictionary.TryGetValue("filename", out string value))
             {
                 throw new ArgumentException($"Could not parse Upload-Metadata [{metadata}], could not find the filename");
             }

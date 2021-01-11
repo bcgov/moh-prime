@@ -26,6 +26,7 @@ import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/si
 import { SiteAdjudicatorDocumentsComponent } from './pages/site-adjudicator-documents/site-adjudicator-documents.component';
 import { EnrolleeAdjudicatorDocumentsComponent } from './pages/enrollee-adjudicator-documents/enrollee-adjudicator-documents.component';
 import { SiteEventsComponent } from './pages/site-events/site-events.component';
+import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-overview.component';
 
 const routes: Routes = [
   {
@@ -45,7 +46,7 @@ const routes: Routes = [
           {
             path: '',
             component: EnrolleesComponent,
-            data: { title: 'PRIME Enrollees' }
+            data: { title: 'Enrollees' }
           },
           {
             path: ':id',
@@ -84,6 +85,11 @@ const routes: Routes = [
                 path: AdjudicationRoutes.ENROLLEE_REVIEW,
                 component: EnrolleeReviewStatusComponent,
                 data: { title: 'Adjudication' }
+              },
+              {
+                path: AdjudicationRoutes.ENROLLEE_OVERVIEW,
+                component: EnrolleeOverviewComponent,
+                data: { title: 'Overview' }
               },
               {
                 path: AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS,

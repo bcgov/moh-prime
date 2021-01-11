@@ -6,7 +6,7 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { PhsaLabtechRoutes } from '@phsa/phsa-labtech.routes';
+import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 
 @Component({
   selector: 'app-phsa',
@@ -32,7 +32,7 @@ export class PhsaComponent implements OnInit {
   }
 
   public loginUsingBCSC() {
-    const redirectRoute = PhsaLabtechRoutes.routePath(PhsaLabtechRoutes.ACCESS_CODE);
+    const redirectRoute = PhsaEformsRoutes.routePath(PhsaEformsRoutes.DEMOGRAPHIC);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({

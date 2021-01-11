@@ -1,10 +1,15 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
+using Prime.ViewModels.Parties;
 using Prime.HttpClients.KeycloakApiDefinitions;
+using Prime.Models;
+using Prime.Auth;
+
 namespace Prime.HttpClients
 {
     public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationClient
@@ -70,14 +75,12 @@ namespace Prime.HttpClients
         }
 
         /// <summary>
-        /// Updates the User's email, phone number, and phone extension in keycloak. Will remove any attribute set to null.
+        /// Updates the User's email, phone number, and phone extension in Keycloak. Will remove any attribute set to null. Also gives the User the role(s) relevant to the PartyType(s) selected.
         /// Returns true if the operation was successful.
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="email"></param>
-        /// <param name="phoneNumber"></param>
-        /// <param name="phoneExtension"></param>
-        public async Task<bool> UpdateUserInfo(Guid userId, string email, string phoneNumber, string phoneExtension)
+        /// <param name="party"></param>
+        public async Task<bool> UpdatePhsaUserInfo(Guid userId, PhsaChangeModel party)
         {
             var response = await _client.GetAsync($"users/{userId}");
             if (!response.IsSuccessStatusCode)
@@ -88,9 +91,9 @@ namespace Prime.HttpClients
             }
             var userRep = await response.Content.ReadAsAsync<UserInfoUpdateRepresentation>();
 
-            userRep.Email = email;
-            userRep.SetPhoneNumber(phoneNumber);
-            userRep.SetPhoneExtension(phoneExtension);
+            userRep.Email = party.Email;
+            userRep.SetPhoneNumber(party.Phone);
+            userRep.SetPhoneExtension(party.PhoneExtension);
 
             response = await _client.PutAsync($"users/{userId}", CreateStringContent(userRep));
             if (!response.IsSuccessStatusCode)
@@ -100,7 +103,18 @@ namespace Prime.HttpClients
                 return false;
             }
 
-            return true;
+            bool success = true;
+            if (party.PartyTypes.Contains(PartyType.Labtech))
+            {
+                success &= await AssignRealmRole(userId, Roles.PhsaLabtech);
+            }
+
+            if (party.PartyTypes.Contains(PartyType.Immunizer))
+            {
+                success &= await AssignRealmRole(userId, Roles.PhsaImmunizer);
+            }
+
+            return success;
         }
     }
 }

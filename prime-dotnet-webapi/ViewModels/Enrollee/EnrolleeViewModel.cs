@@ -49,6 +49,8 @@ namespace Prime.ViewModels
 
         public ICollection<Job> Jobs { get; set; }
 
+        public ICollection<OboSite> OboSites { get; set; }
+
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
@@ -83,6 +85,8 @@ namespace Prime.ViewModels
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
+
+        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
 
         public int? CredentialId { get; set; }
 

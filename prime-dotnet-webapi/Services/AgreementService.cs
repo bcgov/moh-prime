@@ -64,7 +64,7 @@ namespace Prime.Services
         /// </summary>
         public async Task<IEnumerable<Agreement>> GetEnrolleeAgreementsAsync(int enrolleeId, AgreementFilters filters)
         {
-            filters = filters ?? new AgreementFilters();
+            filters ??= new AgreementFilters();
 
             var agreements = await _context.Agreements
                 .AsNoTracking()
@@ -103,7 +103,7 @@ namespace Prime.Services
                         .OrderByDescending(s => s.CreatedDate)
                         .Select(s => s.AgreementType)
                         .FirstOrDefault(),
-                    AccessAgreementNote = e.AccessAgreementNote
+                    e.AccessAgreementNote
                 })
                 .SingleAsync();
 
@@ -139,7 +139,7 @@ namespace Prime.Services
         /// </summary>
         public async Task AcceptCurrentEnrolleeAgreementAsync(int enrolleeId)
         {
-            var agreement = await this.GetCurrentAgreementAsync(enrolleeId);
+            var agreement = await GetCurrentAgreementAsync(enrolleeId);
 
             if (agreement.AcceptedDate == null)
             {
@@ -316,12 +316,10 @@ namespace Prime.Services
             var resourcePath = assembly.GetManifestResourceNames()
                 .Single(str => str.EndsWith(filename));
 
-            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
-            using (var reader = new MemoryStream())
-            {
-                stream.CopyTo(reader);
-                return Convert.ToBase64String(reader.ToArray());
-            }
+            using Stream stream = assembly.GetManifestResourceStream(resourcePath);
+            using var reader = new MemoryStream();
+            stream.CopyTo(reader);
+            return Convert.ToBase64String(reader.ToArray());
         }
 
         private async Task<int> FetchNewestAgreementVersionIdOfType(AgreementType type)

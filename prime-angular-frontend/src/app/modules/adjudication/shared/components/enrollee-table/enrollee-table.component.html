@@ -127,12 +127,20 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="adjudicator">
+        <ng-container matColumnDef="claimedBy">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Adjudicator </th>
+              scope="col"> Claimed By </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="careSetting">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col"> Care Setting </th>
+          <td mat-cell
+              *matCellDef="let row;"> {{ row.careSettingCodes | careSetting: 'abbr' | join | default }} </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
@@ -169,6 +177,11 @@
       </button>
 
       <mat-menu #menu="matMenu">
+        <button mat-menu-item
+                (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_OVERVIEW])">
+          <mat-icon>all_inclusive</mat-icon>
+          <span>Overview</span>
+        </button>
         <button mat-menu-item
                 *ngIf="canReviewStatusReasons(row)"
                 (click)="onRoute([row.id, AdjudicationRoutes.ENROLLEE_REVIEW])">

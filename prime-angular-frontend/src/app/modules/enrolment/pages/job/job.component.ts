@@ -96,6 +96,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   public onSubmit() {
+    this.removeIncompleteOboSites();
+
     this.oboSites.clear();
     this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
@@ -176,17 +178,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   public routeBackTo() {
-    let routePath = EnrolmentRoutes.CARE_SETTING;
-    if (this.enrolmentFormStateService.json?.certifications?.length) {
-      routePath = EnrolmentRoutes.REGULATORY;
-    } else if (
-      this.enrolmentFormStateService.careSettingsForm.value.careSettings
-        .some(cs => cs.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)
-    ) {
-      routePath = EnrolmentRoutes.HEALTH_AUTHORITY;
-    }
-
-    this.routeTo(routePath);
+    this.routeTo(EnrolmentRoutes.REGULATORY);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {

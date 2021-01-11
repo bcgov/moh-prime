@@ -45,7 +45,7 @@
     background-image: url(/assets/approval.svg);
 
     @include media-breakpoint-up(md) {
-      background-image: url(/assets/approval-full.svg);
+      background-image: url(/assets/notification-full.svg);
     }
   }
 
@@ -53,7 +53,7 @@
     background-image: url(/assets/notification.svg);
 
     @include media-breakpoint-up(md) {
-      background-image: url(/assets/notification-full.svg);
+      background-image: url(/assets/moa-full.svg);
     }
   }
 
@@ -61,7 +61,7 @@
     background-image: url(/assets/moa.svg);
 
     @include media-breakpoint-up(md) {
-      background-image: url(/assets/moa-full.svg);
+      background-image: url(/assets/approval-full.svg);
     }
   }
 

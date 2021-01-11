@@ -1,4 +1,4 @@
-import { FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 import * as moment from 'moment';
 
@@ -22,7 +22,7 @@ export class FormGroupValidators {
    * @description
    * Checks that at least one field has been chosen within a form group.
    */
-  public static atLeastOne(validator: ValidatorFn, whitelist: string[] = []): ValidatorFn {
+  public static atLeastOne(validator: ValidatorFn = Validators.required, whitelist: string[] = []): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
       const atLeastOne = group && group.controls &&
         Object.keys(group.controls)
