@@ -51,9 +51,13 @@ namespace Prime.Services
                     .ToListAsync(),
                 Vendors = await _context.Set<Vendor>()
                     .AsNoTracking()
-                    .ToListAsync()
-                // HealthAuthorities = await _context.Set<HealthAuthority>().ToListAsync();
-                // Facilities = await _context.Set<Facility>().ToListAsync();
+                    .ToListAsync(),
+                HealthAuthorities = await _context.Set<HealthAuthority>()
+                    .AsNoTracking()
+                    .ToListAsync(),
+                Facilities = await _context.Set<Facility>()
+                    .AsNoTracking()
+                    .ToListAsync(),
             };
         }
     }

@@ -14,7 +14,7 @@ namespace Prime.Models.Api
         public List<Province> Provinces { get; set; }
         public List<StatusReason> StatusReasons { get; set; }
         public List<Vendor> Vendors { get; set; }
-        // public List<HealthAuthority> HealthAuthorities { get; set; }
-        // public List<Facility> Facilities { get; set; }
+        public List<HealthAuthority> HealthAuthorities { get; set; }
+        public List<Facility> Facilities { get; set; }
     }
 }
