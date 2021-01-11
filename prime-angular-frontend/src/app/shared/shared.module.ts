@@ -63,7 +63,6 @@ import { AccessTermComponent } from '@shared/components/access-term/access-term.
 import { ClaimEnrolleeComponent } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
-import { FeedbackComponent } from '@shared/components/dialogs/content/feedback/feedback.component';
 import { CollectionNoticeContainerComponent } from '@shared/components/collection-notice-container/collection-notice-container.component';
 import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.component';
 import { PartyReviewComponent } from '@shared/components/site/party-review/party-review.component';
@@ -128,7 +127,6 @@ import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/e
     NoteComponent,
     ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
-    FeedbackComponent,
     ImageComponent,
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
