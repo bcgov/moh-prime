@@ -348,8 +348,8 @@ namespace Prime.Controllers
             var licence = await _siteService.AddBusinessLicenceAsync(siteId, businessLicence, documentGuid);
             if (licence == null)
             {
-                this.ModelState.AddModelError("documentGuid", "Business Licence could not be created; network error or upload is already submitted");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("documentGuid", "Business Licence could not be created; network error or upload is already submitted");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             return Ok(ApiResponse.Result(licence));
@@ -425,8 +425,8 @@ namespace Prime.Controllers
             var document = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(site.BusinessLicence.Id, documentGuid);
             if (document == null)
             {
-                this.ModelState.AddModelError("documentGuid", "Business Licence Document could not be created; network error or upload is already submitted");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("documentGuid", "Business Licence Document could not be created; network error or upload is already submitted");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             await _emailService.SendSiteRegistrationAsync(site);
@@ -520,8 +520,8 @@ namespace Prime.Controllers
             var document = await _siteService.AddSiteAdjudicationDocumentAsync(site.Id, documentGuid, admin.Id);
             if (document == null)
             {
-                this.ModelState.AddModelError("documentGuid", "Site Adjudication Document could not be created; network error or upload is already submitted");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("documentGuid", "Site Adjudication Document could not be created; network error or upload is already submitted");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             return Ok(ApiResponse.Result(document));
@@ -592,8 +592,8 @@ namespace Prime.Controllers
         {
             if (string.IsNullOrWhiteSpace(pecCode))
             {
-                this.ModelState.AddModelError("Site.PEC", "PEC Code was not provided");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Site.PEC", "PEC Code was not provided");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
@@ -794,8 +794,8 @@ namespace Prime.Controllers
             }
             if (string.IsNullOrWhiteSpace(note))
             {
-                this.ModelState.AddModelError("note", "site registration notes can't be null or empty.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("note", "site registration notes can't be null or empty.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());

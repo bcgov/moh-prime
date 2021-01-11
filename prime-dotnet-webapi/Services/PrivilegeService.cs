@@ -17,7 +17,7 @@ namespace Prime.Services
 
         public async Task AssignPrivilegesToEnrolleeAsync(int enrolleeId, Enrollee enrollee)
         {
-            ICollection<AssignedPrivilege> assignedPrivileges = await this.GetAssignedPrivilegesForEnrolleeAsync(enrolleeId);
+            ICollection<AssignedPrivilege> assignedPrivileges = await GetAssignedPrivilegesForEnrolleeAsync(enrolleeId);
 
             if (assignedPrivileges != null)
             {
@@ -42,7 +42,7 @@ namespace Prime.Services
                 ICollection<DefaultPrivilege> defaultPrivileges = new List<DefaultPrivilege>();
                 foreach (var cert in certifications)
                 {
-                    ICollection<DefaultPrivilege> result = await this.GetDefaultPrivilegesForLicenseCodeAsync(cert.LicenseCode);
+                    ICollection<DefaultPrivilege> result = await GetDefaultPrivilegesForLicenseCodeAsync(cert.LicenseCode);
 
                     foreach (var p in result)
                     {
@@ -76,7 +76,7 @@ namespace Prime.Services
         public async Task<ICollection<Privilege>> GetPrivilegesForEnrolleeAsync(Enrollee enrollee)
         {
             ICollection<Privilege> privileges = new List<Privilege>();
-            var results = await this.GetPrivilegesForEnrolleeQueryAsync(enrollee.Id);
+            var results = await GetPrivilegesForEnrolleeQueryAsync(enrollee.Id);
 
             foreach (var item in results)
             {
