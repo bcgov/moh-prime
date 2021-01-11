@@ -107,14 +107,14 @@ namespace Prime
 
         public override int SaveChanges()
         {
-            this.ApplyAudits();
+            ApplyAudits();
 
             return base.SaveChanges();
         }
 
-        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            this.ApplyAudits();
+            ApplyAudits();
 
             return await base.SaveChangesAsync(cancellationToken);
         }

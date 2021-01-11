@@ -34,9 +34,7 @@ namespace Prime.Models
 
         public override int GetHashCode()
         {
-            var hashCode = 1_655_539_742;
-            hashCode = hashCode * -1_521_134_295 + Code.GetHashCode();
-            return hashCode;
+            return HashCode.Combine(Code);
         }
     }
 }

@@ -16,37 +16,35 @@ namespace Prime.HttpClients
                 throw new PharmanetCollegeApiException();
             }
 
-            int parsed;
-            if (!Int32.TryParse(certification.LicenseNumber, out parsed) || parsed < 1 || parsed > 11)
+            var info = certification.LicenseNumber switch
+            {
+                "1" => new { Date = "2000-05-17", Name = "ONE" },
+                "2" => new { Date = "1998-08-07", Name = "TWO" },
+                "3" => new { Date = "1998-08-08", Name = "THREE" },
+                "4" => new { Date = "1999-10-01", Name = "FOUR" },
+                "5" => new { Date = "1999-01-31", Name = "FIVE" },
+                "6" => new { Date = "2000-02-25", Name = "SIX" },
+                "7" => new { Date = "1999-03-14", Name = "SEVEN" },
+                "8" => new { Date = "1999-01-04", Name = "EIGHT" },
+                "9" => new { Date = "1997-10-12", Name = "NINE" },
+                "10" => new { Date = "2000-05-30", Name = "TEN" },
+                "11" => new { Date = "2000-06-07", Name = "ELEVEN" },
+                _ => null,
+            };
+
+            if (info == null)
             {
                 return Task.FromResult<PharmanetCollegeRecord>(null);
             }
 
-            var lookup = new[]
-            {
-                null,
-                new {Date = "2000-05-17", Name = "ONE"},
-                new {Date = "1998-08-07", Name = "TWO"},
-                new {Date = "1998-08-08", Name = "THREE"},
-                new {Date = "1999-10-01", Name = "FOUR"},
-                new {Date = "1999-01-31", Name = "FIVE"},
-                new {Date = "2000-02-25", Name = "SIX"},
-                new {Date = "1999-03-14", Name = "SEVEN"},
-                new {Date = "1999-01-04", Name = "EIGHT"},
-                new {Date = "1997-10-12", Name = "NINE"},
-                new {Date = "2000-05-30", Name = "TEN"},
-                new {Date = "2000-06-07", Name = "ELEVEN"}
-            };
-            var info = lookup[parsed];
-
             return Task.FromResult(new PharmanetCollegeRecord
             {
-                applicationUUID = new Guid().ToString(),
-                firstName = "PRIMET",
-                lastName = info.Name,
-                dateofBirth = DateTime.Parse(info.Date),
-                status = "P",
-                effectiveDate = DateTime.Today
+                ApplicationUUID = new Guid().ToString(),
+                FirstName = "PRIMET",
+                LastName = info.Name,
+                DateofBirth = DateTime.Parse(info.Date),
+                Status = "P",
+                EffectiveDate = DateTime.Today
             });
         }
     }

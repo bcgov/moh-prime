@@ -21,7 +21,7 @@ namespace Prime.Models
         [NotMapped]
         public string AdminIDIR
         {
-            get => this.Admin?.IDIR;
+            get => Admin?.IDIR;
         }
 
         [JsonIgnore]

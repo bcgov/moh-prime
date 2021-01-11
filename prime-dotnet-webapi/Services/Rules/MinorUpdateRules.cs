@@ -124,11 +124,13 @@ namespace Prime.Services.Rules
 
         private static CompareLogic InitComparitor(bool isObo)
         {
-            ComparisonConfig config = new ComparisonConfig();
-            config.IgnoreObjectTypes = true; // To match Enrollee to EnrolleeViewModel
-            config.CompareFields = false;
-            config.MaxDifferences = 100;
-            config.IgnoreCollectionOrder = true;
+            ComparisonConfig config = new ComparisonConfig
+            {
+                IgnoreObjectTypes = true, // To match Enrollee to EnrolleeViewModel
+                CompareFields = false,
+                MaxDifferences = 100,
+                IgnoreCollectionOrder = true
+            };
 
             // Fields considered "minor" changes
             config.IgnoreProperty<Enrollee>(x => x.Email);
