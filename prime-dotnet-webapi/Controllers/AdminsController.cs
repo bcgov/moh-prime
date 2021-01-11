@@ -42,8 +42,8 @@ namespace Prime.Controllers
         {
             if (admin == null)
             {
-                this.ModelState.AddModelError("Admin", "Could not create an admin, the passed in Admin cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Admin", "Could not create an admin, the passed in Admin cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
             if (!admin.PermissionsRecord().MatchesUserIdOf(User))
             {

@@ -100,7 +100,7 @@ namespace Prime.Services
 
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            searchOptions = searchOptions ?? new EnrolleeSearchOptions();
+            searchOptions ??= new EnrolleeSearchOptions();
 
             IQueryable<int> newestAgreementIds = _context.AgreementVersions
                 .Select(a => a.AgreementType)
@@ -126,7 +126,7 @@ namespace Prime.Services
                 .If(searchOptions.StatusCode.HasValue, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds = newestAgreementIds })
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();
@@ -281,7 +281,8 @@ namespace Prime.Services
                 _context.Remove(item);
             }
 
-            if (newCollection == null) {
+            if (newCollection == null)
+            {
                 return;
             }
 
@@ -303,8 +304,8 @@ namespace Prime.Services
                 _context.Remove(location);
             }
 
-            if (updateEnrollee.RemoteAccessLocations == null || !updateEnrollee.RemoteAccessLocations.Any()) 
-            { 
+            if (updateEnrollee.RemoteAccessLocations == null || !updateEnrollee.RemoteAccessLocations.Any())
+            {
                 return;
             }
 
