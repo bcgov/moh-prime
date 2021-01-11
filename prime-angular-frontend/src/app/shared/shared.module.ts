@@ -31,7 +31,7 @@ import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SafePipe } from '@shared/pipes/safe.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
-import { CareSettingAbbrPipe } from '@shared/pipes/care-setting-abbr.pipe';
+import { CareSettingPipe } from '@shared/pipes/care-setting.pipe';
 import { JoinPipe } from '@shared/pipes/join.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -143,7 +143,7 @@ import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/e
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
     ContactInformationFormComponent,
-    CareSettingAbbrPipe,
+    CareSettingPipe,
     JoinPipe
   ],
   imports: [
@@ -217,7 +217,7 @@ import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/e
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
     ContactInformationFormComponent,
-    CareSettingAbbrPipe,
+    CareSettingPipe,
     JoinPipe
   ],
   providers: [

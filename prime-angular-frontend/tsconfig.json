@@ -54,7 +54,7 @@
         "./app/modules/site-registration/*"
       ],
       "@phsa/*": [
-        "./app/modules/phsa-labtech/*"
+        "./app/modules/phsa-eforms/*"
       ]
     }
   },

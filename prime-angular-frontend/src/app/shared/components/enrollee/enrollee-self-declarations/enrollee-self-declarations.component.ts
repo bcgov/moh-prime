@@ -11,10 +11,10 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 
 interface SelfDeclarationComposite {
-  selfDeclarationTypeCode: SelfDeclarationTypeEnum,
-  selfDeclarationQuestion: string,
-  selfDeclaration: SelfDeclaration,
-  selfDeclarationDocuments: SelfDeclarationDocument[]
+  selfDeclarationTypeCode: SelfDeclarationTypeEnum;
+  selfDeclarationQuestion: string;
+  selfDeclaration: SelfDeclaration;
+  selfDeclarationDocuments: SelfDeclarationDocument[];
 }
 
 @Component({
