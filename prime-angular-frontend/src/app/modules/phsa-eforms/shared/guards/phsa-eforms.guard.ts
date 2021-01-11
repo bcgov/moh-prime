@@ -27,6 +27,11 @@ export class PhsaEformsGuard extends BaseGuard {
   }
 
   protected checkAccess(routePath: string = null): Observable<boolean> | Promise<boolean> {
+    // On login the user will always be redirected to the collection notice
+    if (routePath.includes(PhsaEformsRoutes.COLLECTION_NOTICE)) {
+      return of(true);
+    }
+
     // Current route path is empty when URL manually inserted by user
     const currentRoutePath = RouteUtils.currentRoutePath(this.router.url);
     const nextRoutePath = RouteUtils.currentRoutePath(routePath);
