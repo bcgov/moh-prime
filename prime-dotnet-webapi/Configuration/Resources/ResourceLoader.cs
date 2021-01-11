@@ -13,11 +13,9 @@ namespace Prime.Configuration.Resources
             string resourceName = assembly.GetManifestResourceNames()
                 .Single(str => str.EndsWith(fileName));
 
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
+            using Stream stream = assembly.GetManifestResourceStream(resourceName);
+            using StreamReader reader = new StreamReader(stream);
+            return reader.ReadToEnd();
         }
     }
 }

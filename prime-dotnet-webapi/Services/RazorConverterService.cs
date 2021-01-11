@@ -27,10 +27,10 @@ namespace Prime.Services
             IServiceProvider serviceProvider,
             IHttpContextAccessor contextAccessor)
         {
-            this._viewEngine = viewEngine;
-            this._tempDataProvider = tempDataProvider;
-            this._serviceProvider = serviceProvider;
-            this._contextAccessor = contextAccessor;
+            _viewEngine = viewEngine;
+            _tempDataProvider = tempDataProvider;
+            _serviceProvider = serviceProvider;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
@@ -38,25 +38,23 @@ namespace Prime.Services
             var actionContext = GetActionContext();
             var view = GetView(actionContext, viewName);
 
-            using (var output = new StringWriter())
-            {
-                var viewContext = new ViewContext(
-                    actionContext,
-                    view,
-                    new ViewDataDictionary<TModel>(
-                        metadataProvider: new EmptyModelMetadataProvider(),
-                        modelState: new ModelStateDictionary())
-                    {
-                        Model = model
-                    },
-                    new TempDataDictionary(actionContext.HttpContext, _tempDataProvider),
-                    output,
-                    new HtmlHelperOptions());
+            using var output = new StringWriter();
+            var viewContext = new ViewContext(
+                actionContext,
+                view,
+                new ViewDataDictionary<TModel>(
+                    metadataProvider: new EmptyModelMetadataProvider(),
+                    modelState: new ModelStateDictionary())
+                {
+                    Model = model
+                },
+                new TempDataDictionary(actionContext.HttpContext, _tempDataProvider),
+                output,
+                new HtmlHelperOptions());
 
-                await view.RenderAsync(viewContext);
+            await view.RenderAsync(viewContext);
 
-                return output.ToString();
-            }
+            return output.ToString();
         }
 
         private IView GetView(ActionContext actionContext, string viewName)

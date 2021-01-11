@@ -321,7 +321,7 @@ namespace Prime.Controllers
 
             return CreatedAtAction(
                 nameof(CreateAdjudicatorNote),
-                new { enrolleeId = enrolleeId },
+                new { enrolleeId },
                 ApiResponse.Result(createdAdjudicatorNote)
             );
         }
@@ -351,7 +351,7 @@ namespace Prime.Controllers
 
             return CreatedAtAction(
                 nameof(CreateEnrolmentReference),
-                new { enrolleeId = enrolleeId },
+                new { enrolleeId },
                 ApiResponse.Result(createdEnrolmentStatusReference)
             );
         }
