@@ -262,7 +262,7 @@ namespace Prime.Services
         {
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator manually ran the enrollee application rules");
-            await this.ProcessEnrolleeApplicationRules(enrollee.Id);
+            await ProcessEnrolleeApplicationRules(enrollee.Id);
             await _context.SaveChangesAsync();
         }
 

@@ -14,10 +14,10 @@ namespace Prime.Models
 
         public SiteRegistrationReviewDocument(int siteId, Guid documentGuid, string filename)
         {
-            this.SiteId = siteId;
-            this.DocumentGuid = documentGuid;
-            this.Filename = filename;
-            this.UploadedDate = DateTimeOffset.Now;
+            SiteId = siteId;
+            DocumentGuid = documentGuid;
+            Filename = filename;
+            UploadedDate = DateTimeOffset.Now;
         }
     }
 }
