@@ -16,8 +16,8 @@ const routes: Routes = [
     loadChildren: () => import('./modules/provisioner-access/provisioner-access.module').then(m => m.ProvisionerAccessModule)
   },
   // {
-  //   path: PhsaLabtechRoutes.MODULE_PATH,
-  //   loadChildren: () => import('./modules/phsa-labtech/phsa-labtech.module').then(m => m.PhsaLabtechModule)
+  //   path: PhsaEformsRoutes.MODULE_PATH,
+  //   loadChildren: () => import('./modules/phsa-eforms/phsa-eforms.module').then(m => m.PhsaEformsModule)
   // },
   {
     path: AppRoutes.DENIED,

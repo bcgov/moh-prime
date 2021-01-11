@@ -100,12 +100,13 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public shouldShowPractices(): boolean {
     // Only display Advanced Practices for certain nursing licences
-    return ((this.collegeCode.value == CollegeLicenceClass.BCCNM) &&
-        ([NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE, 
-          NursingLicenseCode.PRACTICING_REGISTERED_NURSE,
-          NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE, 
-          NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_EMERGENCY,
-          NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_SPECIAL_EVENT].includes(this.licenseCode.value)));
+    return ((+this.collegeCode.value === CollegeLicenceClass.BCCNM) && ([
+      NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE,
+      NursingLicenseCode.PRACTICING_REGISTERED_NURSE,
+      NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE,
+      NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_EMERGENCY,
+      NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_SPECIAL_EVENT
+    ].includes(this.licenseCode.value)));
   }
 
   public ngOnInit() {
