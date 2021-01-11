@@ -70,17 +70,17 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public onSubmit() {
-    // remove any oboSites belonging to careSetting which is no longer selected
-    this.careSettingTypes.forEach((type) => {
-      const careSetting = this.careSettings.controls.filter((c) => c.value.careSettingCode === type.code);
-      if (!careSetting.length) {
+    const controls = this.careSettings.controls;
+
+    // Remove any oboSites belonging to careSetting which is no longer selected
+    this.careSettingTypes.forEach(type => {
+      if (!controls.some(c => c.value.careSettingCode === type.code)) {
         this.removeOboSites(type.code);
       }
     });
 
-    // remove health authorities if health authority care setting not chosen
-    const careSetting = this.careSettings.controls.filter((c) => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
-    if (!careSetting.length) {
+    // Remove health authorities if health authority care setting not chosen
+    if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
       this.enrolmentFormStateService.healthAuthoritiesFormState.removeHealthAuthorities();
     }
 
@@ -220,7 +220,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       fa.clear();
       fa.clearValidators();
       fa.updateValueAndValidity();
-    }
+    };
 
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {

@@ -96,7 +96,8 @@ export class BusinessLicenceComponent implements OnInit {
         if (this.businessLicence.id) {
           method$ = (this.businessLicence.businessLicenceDocument)
             // Returning: [Previously attached document] * [Document removed, Business Licence Updated] --> [...]
-            ? this.siteResource.removeBusinessLicenceDocument(siteId).pipe(exhaustMap(() => this.siteResource.updateBusinessLicence(siteId, this.businessLicence)))
+            ? this.siteResource.removeBusinessLicenceDocument(siteId)
+              .pipe(exhaustMap(() => this.siteResource.updateBusinessLicence(siteId, this.businessLicence)))
             // Returning: [] * [Business Licence Updated] --> [...]
             : this.siteResource.updateBusinessLicence(siteId, this.businessLicence);
         } else {
