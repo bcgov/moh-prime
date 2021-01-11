@@ -87,7 +87,7 @@ export class EnrolmentService implements IEnrolmentService {
     // No college prefix for:
     // Pharmacy Technician (29),
     // Non-Practicing Pharmacy Technician (31), and
-    // Podiatrists (59)
-    return ![29, 31, 59].includes(licenseCode);
+    // Podiatrists (59, 65, 66, 67)
+    return ![29, 31, 59, 65, 66, 67].includes(licenseCode);
   }
 }
