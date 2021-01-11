@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace Prime.Infrastructure
+namespace Prime.Auth.Internal
 {
     public class PrimeUserRequirement : IAuthorizationRequirement
     {

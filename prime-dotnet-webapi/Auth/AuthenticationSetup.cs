@@ -11,7 +11,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
-using Prime.Infrastructure;
+using Prime.Auth.Internal;
 
 namespace Prime.Auth
 {

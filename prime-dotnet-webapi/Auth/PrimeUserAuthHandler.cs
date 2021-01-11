@@ -1,10 +1,7 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 
-using Prime.Auth;
-
-namespace Prime.Infrastructure
+namespace Prime.Auth.Internal
 {
     public class PrimeUserAuthHandler : AuthorizationHandler<PrimeUserRequirement>
     {
