@@ -29,7 +29,7 @@ export interface IBaseEnrolmentProfilePage {
 
 export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage implements IBaseEnrolmentProfilePage {
   public form: FormGroup;
-  // TODO added temporarily to allow gradual refactoring of with formState, and
+  // TODO added temporarily to allow gradual refactoring with formState, and
   // will be removed forcing responsibility on each page to manage formState
   public formState: AbstractFormState<unknown>;
   public enrolment: Enrolment;
