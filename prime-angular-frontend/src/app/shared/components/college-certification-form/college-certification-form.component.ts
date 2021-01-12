@@ -33,7 +33,6 @@ export class CollegeCertificationFormComponent implements OnInit {
   public filteredLicenses: Config<number>[];
   public filteredPractices: Config<number>[];
   public hasPractices: boolean;
-  public licensePrefix: string;
   public minRenewalDate: moment.Moment;
   public CollegeLicenceClass = CollegeLicenceClass;
 
@@ -121,11 +120,6 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.resetCollegeCertification();
         this.setCollegeCertification(collegeCode);
       });
-
-    this.licenseCode.valueChanges
-      .subscribe((licenseCode: number) =>
-        this.setPrefix(this.doesLicenceHavePrefix(licenseCode, this.collegeCode.value))
-      );
   }
 
   private doesLicenceHavePrefix(licenseCode: number, collegeCode: number): number {
@@ -143,7 +137,6 @@ export class CollegeCertificationFormComponent implements OnInit {
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
     this.setValidations();
-    this.setPrefix(this.doesLicenceHavePrefix(this.licenseCode.value, collegeCode));
 
     this.loadLicenses(collegeCode);
     if (this.filteredLicenses?.length === 1) {
@@ -181,13 +174,6 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, []);
     }
-  }
-
-  private setPrefix(collegeCode: number) {
-    this.licensePrefix = this.colleges
-      .filter(c => c.code === collegeCode)
-      .shift()
-      ?.prefix;
   }
 
   private loadLicenses(collegeCode: number) {
