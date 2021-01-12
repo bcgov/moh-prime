@@ -10,26 +10,26 @@ import { exhaustMap, map } from 'rxjs/operators';
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { IFormPage } from '@lib/classes/abstract-form-page.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { VendorEnum } from '@shared/enums/vendor.enum';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { IForm } from '@registration/shared/interfaces/form.interface';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
-import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-care-setting',
   templateUrl: './care-setting.component.html',
   styleUrls: ['./care-setting.component.scss']
 })
-export class CareSettingComponent implements OnInit, IPage, IForm {
+export class CareSettingComponent implements OnInit, IPage, IFormPage {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

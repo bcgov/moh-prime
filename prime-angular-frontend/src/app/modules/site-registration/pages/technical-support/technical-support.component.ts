@@ -7,16 +7,16 @@ import { Subscription, Observable, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { IFormPage } from '@lib/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { OrganizationAgreement } from '@shared/models/agreement.model';
+import { Address } from '@shared/models/address.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { IForm } from '@registration/shared/interfaces/form.interface';
-import { Address } from '@shared/models/address.model';
 import { Contact } from '@registration/shared/models/contact.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -27,7 +27,7 @@ import { SiteService } from '@registration/shared/services/site.service';
   templateUrl: './technical-support.component.html',
   styleUrls: ['./technical-support.component.scss']
 })
-export class TechnicalSupportComponent implements OnInit, IPage, IForm {
+export class TechnicalSupportComponent implements OnInit, IPage, IFormPage {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
