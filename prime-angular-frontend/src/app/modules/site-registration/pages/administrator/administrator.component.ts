@@ -15,7 +15,7 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { IForm } from '@registration/shared/interfaces/form.interface';
+import { IFormPage } from '@lib/classes/abstract-form-page.interface';
 import { Site } from '@registration/shared/models/site.model';
 import { Contact } from '@registration/shared/models/contact.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -26,7 +26,7 @@ import { SiteService } from '@registration/shared/services/site.service';
   templateUrl: './administrator.component.html',
   styleUrls: ['./administrator.component.scss']
 })
-export class AdministratorComponent implements OnInit, IPage, IForm {
+export class AdministratorComponent implements OnInit, IPage, IFormPage {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

@@ -66,9 +66,7 @@ export class HealthAuthorityFormState extends AbstractFormState<HealthAuthority[
       }));
 
     this.formInstance = this.fb.group({
-      enrolleeHealthAuthorities: this.fb.array(
-        healthAuthorities, []
-      )
+      enrolleeHealthAuthorities: this.fb.array(healthAuthorities, [])
     });
   }
 

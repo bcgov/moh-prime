@@ -12,7 +12,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { IForm } from '@registration/shared/interfaces/form.interface';
+import { IFormPage } from '@lib/classes/abstract-form-page.interface';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
@@ -22,7 +22,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
   templateUrl: './organization-signing-authority.component.html',
   styleUrls: ['./organization-signing-authority.component.scss']
 })
-export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IForm {
+export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFormPage {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

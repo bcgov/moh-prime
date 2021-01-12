@@ -12,7 +12,7 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { IForm } from '@registration/shared/interfaces/form.interface';
+import { IFormPage } from '@lib/classes/abstract-form-page.interface';
 import { Address } from '@shared/models/address.model';
 import { Contact } from '@registration/shared/models/contact.model';
 import { Site } from '@registration/shared/models/site.model';
@@ -24,7 +24,7 @@ import { SiteService } from '@registration/shared/services/site.service';
   templateUrl: './privacy-officer.component.html',
   styleUrls: ['./privacy-officer.component.scss']
 })
-export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
+export class PrivacyOfficerComponent implements OnInit, IPage, IFormPage {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

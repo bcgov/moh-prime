@@ -23,10 +23,11 @@ import { Site } from '@registration/shared/models/site.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { RemoteAccessSite } from '../models/remote-access-site.model';
-import { RemoteAccessLocation } from '../models/remote-access-location';
-import { OboSite } from '../models/obo-site.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
+
+import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { HealthAuthorityFormState } from '@enrolment/pages/health-authority/health-authority-form-state';
 
 @Injectable({
@@ -37,7 +38,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public identityDocumentForm: FormGroup;
   public bceidDemographicForm: FormGroup;
   public bcscDemographicForm: FormGroup;
-  public regulatoryForm: FormGroup;
+  public regulatoryFormState: RegulatoryFormState;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
   public remoteAccessForm: FormGroup;
@@ -48,7 +49,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public accessAgreementForm: FormGroup;
 
   private identityProvider: IdentityProviderEnum;
-  private CareSettingEnum = CareSettingEnum;
   private enrolleeId: number;
   private userId: string;
 
@@ -97,7 +97,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const profile = (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicForm.getRawValue()
       : this.bcscDemographicForm.getRawValue();
-    const regulatory = this.regulatoryForm.getRawValue();
+    const certications = this.regulatoryFormState.json;
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const { jobs, oboSites } = this.jobsForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
@@ -116,7 +116,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         userId,
         ...profile
       },
-      ...regulatory,
+      certications,
       ...deviceProvider,
       jobs,
       oboSites,
@@ -146,7 +146,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         this.identityProvider === IdentityProviderEnum.BCSC,
         this.bcscDemographicForm
       ),
-      this.regulatoryForm,
+      this.regulatoryFormState.form,
       // TODO commented out until required to avoid it being validated
       // this.deviceProviderForm,
       this.jobsForm,
@@ -171,7 +171,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    */
   public hasCertificateOrJob(): boolean {
     const jobs = this.jobsForm.get('jobs') as FormArray;
-    const certifications = this.regulatoryForm.get('certifications') as FormArray;
+    const certifications = this.regulatoryFormState.certifications;
     // When you set certifications to 'None' there still exists an item in
     // the FormArray, and this checks for its existence
     return jobs.length || (certifications.length && certifications.value[0].licenseNumber);
@@ -190,7 +190,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     this.bceidDemographicForm = this.buildBceidDemographicForm();
     this.bcscDemographicForm = this.buildBcscDemographicForm();
-    this.regulatoryForm = this.buildRegulatoryForm();
+    this.regulatoryFormState = new RegulatoryFormState(this.fb);
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
     this.remoteAccessForm = this.buildRemoteAccessForm();
@@ -225,15 +225,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       });
     }
 
-    if (enrolment.certifications.length) {
-      const certifications = this.regulatoryForm.get('certifications') as FormArray;
-      certifications.clear();
-      enrolment.certifications.forEach((c: CollegeCertification) => {
-        const certification = this.buildCollegeCertificationForm();
-        certification.patchValue(c);
-        certifications.push(certification);
-      });
-    }
 
     if (enrolment.jobs.length) {
       const jobs = this.jobsForm.get('jobs') as FormArray;
@@ -334,8 +325,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         remoteAccessLocations.push(remoteAccessLocation);
       });
     }
-
-    this.regulatoryForm.patchValue(enrolment);
+    this.regulatoryFormState.patchValue(enrolment.certifications);
     this.jobsForm.patchValue(enrolment);
     this.remoteAccessForm.patchValue(enrolment);
     this.remoteAccessLocationsForm.patchValue(enrolment);
@@ -363,8 +353,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.selfDeclarationForm.patchValue(selfDeclarations);
     this.careSettingsForm.patchValue(enrolment);
 
+    this.regulatoryFormState.patchValue(enrolment.certifications);
     this.healthAuthoritiesFormState.patchValue(enrolment.enrolleeHealthAuthorities);
-
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly
@@ -479,25 +469,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         FormControlValidators.email
       ]],
       smsPhone: [null, [FormControlValidators.phone]]
-    });
-  }
-
-  public buildRegulatoryForm(): FormGroup {
-    return this.fb.group({
-      certifications: this.fb.array([]),
-    });
-  }
-
-  public buildCollegeCertificationForm(): FormGroup {
-    return this.fb.group({
-      // Force selection of "None" on new certifications
-      collegeCode: ['', []],
-      // Validators are applied at the component-level when
-      // fields are made visible to allow empty submissions
-      licenseNumber: [null, []],
-      licenseCode: [null, []],
-      renewalDate: [null, []],
-      practiceCode: [null, []]
     });
   }
 

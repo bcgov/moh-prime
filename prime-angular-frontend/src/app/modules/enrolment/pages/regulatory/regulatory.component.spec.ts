@@ -61,7 +61,7 @@ describe('RegulatoryComponent', () => {
     fixture = TestBed.createComponent(RegulatoryComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
-    component.form = enrolmentFormStateService.buildRegulatoryForm();
+    component.form = enrolmentFormStateService.regulatoryFormState.form;
     fixture.detectChanges();
   }));
 

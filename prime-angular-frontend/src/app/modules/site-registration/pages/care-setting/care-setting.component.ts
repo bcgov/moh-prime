@@ -18,7 +18,7 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { IForm } from '@registration/shared/interfaces/form.interface';
+import { IFormPage } from '@lib/classes/abstract-form-page.interface';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -29,7 +29,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
   templateUrl: './care-setting.component.html',
   styleUrls: ['./care-setting.component.scss']
 })
-export class CareSettingComponent implements OnInit, IPage, IForm {
+export class CareSettingComponent implements OnInit, IPage, IFormPage {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

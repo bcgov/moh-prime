@@ -14,7 +14,7 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -111,8 +111,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onBack() {
-    const certifications = this.enrolmentFormStateService.regulatoryForm
-      .get('certifications').value as CollegeCertification[];
+    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm
       .get('careSettings').value as CareSetting[];
 

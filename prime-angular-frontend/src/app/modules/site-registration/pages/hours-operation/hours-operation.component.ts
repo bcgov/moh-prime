@@ -18,7 +18,7 @@ import { VendorEnum } from '@shared/enums/vendor.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { IForm } from '@registration/shared/interfaces/form.interface';
+import { IFormPage } from '@lib/classes/abstract-form-page.interface';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
@@ -38,7 +38,7 @@ export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatc
   templateUrl: './hours-operation.component.html',
   styleUrls: ['./hours-operation.component.scss']
 })
-export class HoursOperationComponent implements OnInit, IPage, IForm {
+export class HoursOperationComponent implements OnInit, IPage, IFormPage {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

@@ -5,9 +5,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, pipe } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -15,11 +17,11 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
-import { FormUtilsService } from '@core/services/form-utils.service';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 
 export interface IBaseEnrolmentProfilePage {
   form: FormGroup;
+  formState: AbstractFormState<unknown>;
   enrolment: Enrolment;
   onSubmit(): void;
   canDeactivate(): Observable<boolean> | boolean;
@@ -27,6 +29,9 @@ export interface IBaseEnrolmentProfilePage {
 
 export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage implements IBaseEnrolmentProfilePage {
   public form: FormGroup;
+  // TODO added temporarily to allow gradual refactoring of with formState, and
+  // will be removed forcing responsibility on each page to manage formState
+  public formState: AbstractFormState<unknown>;
   public enrolment: Enrolment;
 
   protected allowRoutingWhenDirty: boolean;
