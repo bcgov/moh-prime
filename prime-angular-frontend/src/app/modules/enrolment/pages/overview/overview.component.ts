@@ -16,7 +16,7 @@ import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -89,7 +89,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public canRequestRemoteAccess(): boolean {
-    const certifications = this.enrolmentFormStateService.regulatoryForm.get('certifications').value;
+    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
     const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
 
     return this.enrolmentService
