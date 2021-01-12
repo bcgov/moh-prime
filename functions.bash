@@ -39,6 +39,7 @@ function build() {
     echo "Building $2 ($APP_NAME$SUFFIX) to $PROJECT_PREFIX-$3..."
     buildPresent=$(oc get bc/"$APP_NAME$SUFFIX" --ignore-not-found=true | wc -l)
     determineMode
+    echo "Hello there..."
     echo "oc process -f ./${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE} -p NAME=$APP_NAME -p VERSION=${BUILD_NUMBER} -p SOURCE_CONTEXT_DIR=${SOURCE_CONTEXT_DIR} -p SOURCE_REPOSITORY_URL=${GIT_URL} -p SOURCE_REPOSITORY_REF=${BRANCH_NAME} -p OC_NAMESPACE=$PROJECT_PREFIX -p OC_APP=$3 ${@:4} | oc ${MODE} -f - --namespace=$PROJECT_PREFIX-$3"
     oc process -f ./"${TEMPLATE_DIRECTORY}/${BUILD_CONFIG_TEMPLATE}" \
     -p NAME="$APP_NAME" \
@@ -52,6 +53,7 @@ function build() {
     then
         echo "Building oc start-build $APP_NAME$SUFFIX -n ${PROJECT_PREFIX}-$3 --wait --follow ..."
         oc start-build "$APP_NAME$SUFFIX" -n "${PROJECT_PREFIX}-$3" --wait --follow
+        echo "General Kenobi!"
     else
         echo "Deployment should be automatic..."
     fi
