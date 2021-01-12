@@ -97,7 +97,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const profile = (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicForm.getRawValue()
       : this.bcscDemographicForm.getRawValue();
-    const certications = this.regulatoryFormState.json;
+    const certifications = this.regulatoryFormState.json;
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const { jobs, oboSites } = this.jobsForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
@@ -116,7 +116,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         userId,
         ...profile
       },
-      certications,
+      certifications,
       ...deviceProvider,
       jobs,
       oboSites,
