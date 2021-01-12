@@ -2,15 +2,15 @@
 
   <app-enrollee-page [busy]="busy">
 
-    <app-page-header>Next Steps to get PharmaNet</app-page-header>
+    <app-page-header>Next Steps to Get PharmaNet</app-page-header>
 
     <app-next-steps-infographic [enrolment]="enrolment">
 
       <ng-container *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
 
         <p class="mb-4">
-          Get your access to PharmaNet set up. Use the email option below to notify your PharmaNet administrator of your
-          completed enrolment.
+          To get your access to PharmaNet set up, use the email option below to notify your PharmaNet administrator of
+          your completed enrolment.
         </p>
 
         <form [formGroup]="form">
@@ -98,7 +98,7 @@
                      let-provisioner="provisioner">
           <p class="mb-4">
             Provide the email address of the person in your organization who is responsible for contacting
-            {{ provisioner }} to set up accounts (e.g., your Office Manager or MOA). Use a comma to separate multiple
+            {{ provisioner }} to set up accounts (e.g. your Office Manager or MOA). Use a comma to separate multiple
             emails addresses. Do not enter your own email as you will be copied on the communication.
           </p>
         </ng-template>

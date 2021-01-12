@@ -23,7 +23,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -94,7 +94,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
 
       const data: DialogOptions = {
         title: 'Terms of Access',
-        message: `Are you sure you want to ${status.verb.toLowerCase()} the terms of access?`,
+        message: `Are you sure you want to ${status.verb.toLowerCase()} the Terms of Access?`,
         actionText: `${status.verb} Terms of Access`,
         actionType: (!isAcceptingToa) ? 'warn' : 'primary'
       };
