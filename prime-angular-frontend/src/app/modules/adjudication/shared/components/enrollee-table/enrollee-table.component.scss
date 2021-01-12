@@ -7,3 +7,32 @@ mat-date-range-input {
   width: 1px;
   visibility: hidden;
 }
+
+.flex-container {
+  display: flex;
+  height: 48px;
+  width: 24px;
+  flex-wrap: wrap;
+}
+
+.start {
+  align-self: flex-start;
+}
+
+.end {
+  align-self: flex-end;
+}
+
+.small {
+  font-size: 18px;
+}
+
+.stacked {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+}
+
+.red {
+  color: red;
+}
