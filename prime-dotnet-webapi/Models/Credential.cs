@@ -11,6 +11,8 @@ namespace Prime.Models
         public int Id { get; set; }
         public string SchemaId { get; set; }
         public string CredentialDefinitionId { get; set; }
+        public string RevocationRegistryId { get; set; }
+        public string CredentialRevocationId { get; set; }
         public string Alias { get; set; }
         public string Base64QRCode { get; set; }
         public DateTimeOffset? AcceptedCredentialDate { get; set; }
