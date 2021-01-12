@@ -10,18 +10,18 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { Subscription, Observable } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { IFormPage } from '@lib/classes/abstract-form-page.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { VendorEnum } from '@shared/enums/vendor.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { IFormPage } from '@lib/classes/abstract-form-page.interface';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {

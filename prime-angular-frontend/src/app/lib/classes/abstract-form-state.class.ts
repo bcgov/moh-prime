@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms';
 
-import { IForm } from '@lib/classes/form.interface';
+import { IForm } from '@lib/interfaces/form.interface';
 
 export abstract class AbstractFormState<T> implements IForm {
   protected formInstance: FormGroup;
