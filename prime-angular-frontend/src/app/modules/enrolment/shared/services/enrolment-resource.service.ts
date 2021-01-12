@@ -23,6 +23,7 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
+import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 
 @Injectable({
   providedIn: 'root'
@@ -102,6 +103,19 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Submission could not be completed.');
           this.logger.error('[Enrolment] EnrolmentResource::submissionAction error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getCurrentStatus(enrolleeId: number): Observable<EnrolmentStatus> {
+    return this.apiResource.get<EnrolmentStatus>(`enrollees/${enrolleeId}/current-status`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolmentStatus>) => response.result),
+        tap((accessTerms: EnrolmentStatus) => this.logger.info('ENROLLEE_AGREEMENTS', accessTerms)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee current status could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getCurrentStatus error has occurred: ', error);
           throw error;
         })
       );

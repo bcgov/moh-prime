@@ -7,6 +7,28 @@
              [dataSource]="dataSource"
              class="w-100">
 
+        <ng-container matColumnDef="prefixes">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col">&nbsp;</th>
+          <td mat-cell
+              *matCellDef="let row;">
+            <div class="flex-container">
+              <button mat-icon-button
+                      class="stacked start"
+                      *ngIf="hasTriage(row)"
+                      (click)="onTriage(row)">
+                <mat-icon class="small">topic</mat-icon>
+              </button>
+              <button mat-icon-button
+                      class="stacked red end"
+                      *ngIf="false">
+                <mat-icon class="small">new_releases</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="displayId">
           <th mat-header-cell
               *matHeaderCellDef
