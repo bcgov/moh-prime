@@ -182,10 +182,11 @@ namespace Prime.HttpClients
             }
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+            JArray credentialDefinitionIds = (JArray)body.SelectToken("credential_definition_ids");
 
             _logger.LogInformation("GET Credential Definition IDs {@JObject}", JsonConvert.SerializeObject(body));
 
-            return (string)body.SelectToken("credential_definition_ids[0]");
+            return (string)body.SelectToken($"credential_definition_ids[{credentialDefinitionIds.Count - 1}]");
         }
 
         public async Task<JObject> GetPresentationProof(string presentationExchangeId)
