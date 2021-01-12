@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using Prime.Models;
 
 namespace Prime.HttpClients
 {
@@ -77,6 +78,28 @@ namespace Prime.HttpClients
             {
                 await LogError(response);
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::IssueCredentialAsync");
+            }
+
+            return JObject.Parse(await response.Content.ReadAsStringAsync());
+        }
+
+        public async Task<JObject> RevokeCredentialAsync(Credential credential)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.PostAsync($"issue-credential/revoke?cred_rev_id={credential.CredentialRevocationId}&rev_reg_id={credential.RevocationRegistryId}&publish=true", null);
+            }
+            catch (Exception ex)
+            {
+                await LogError(response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to revoke a credential: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::RevokeCredentialAsync");
             }
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());

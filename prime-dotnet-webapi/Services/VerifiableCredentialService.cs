@@ -67,13 +67,22 @@ namespace Prime.Services
             Base64QRCode qrCode = new Base64QRCode(qrCodeData);
             string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
 
-            enrollee.Credential = new Credential
+            var credential = new Credential
             {
                 SchemaId = schemaId,
                 CredentialDefinitionId = credentialDefinitionId,
                 Alias = alias,
                 Base64QRCode = qrCodeImageAsBase64
             };
+
+            var enrolleeCredential = new EnrolleeCredential
+            {
+                Enrollee = enrollee,
+                Credential = credential
+            };
+
+            _context.Credentials.Add(credential);
+            _context.EnrolleeCredentials.Add(enrolleeCredential);
 
             var created = await _context.SaveChangesAsync();
             if (created < 1)
@@ -102,21 +111,36 @@ namespace Prime.Services
             }
         }
 
+        public async Task<bool> RevokeCredentialsAsync(int enrolleeId)
+        {
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
         // Handle webhook events for connection states.
         private async Task<bool> HandleConnectionAsync(JObject data)
         {
             var state = data.Value<string>("state");
+            string connectionId;
 
             _logger.LogInformation("Connection state \"{state}\" for {@JObject}", state, JsonConvert.SerializeObject(data));
 
             switch (state)
             {
                 case ConnectionState.Invitation:
+                    // Enrollee Id stored as alias on invitation
+                    var enrolleeId = data.Value<int>("alias");
+                    connectionId = data.Value<string>("connection_id");
+                    await UpdateCredentialConnectionId(enrolleeId, connectionId);
+                    return true;
+
                 case ConnectionState.Request:
                     return true;
+
                 case ConnectionState.Response:
-                    var connectionId = data.Value<string>("connection_id");
+
                     var alias = data.Value<int>("alias");
+                    connectionId = data.Value<string>("connection_id");
 
                     _logger.LogInformation("Issuing a credential with this connection_id: {connectionId}", connectionId);
 
@@ -128,8 +152,10 @@ namespace Prime.Services
                     _logger.LogInformation("Credential has been issued for connection_id: {connectionId} with response {@JObject}", connectionId, JsonConvert.SerializeObject(issueCredentialResponse));
 
                     return true;
+
                 case ConnectionState.Active:
                     return true;
+
                 default:
                     _logger.LogError("Connection state {state} is not supported", state);
                     return false;
@@ -159,31 +185,38 @@ namespace Prime.Services
 
         private async Task<int> UpdateCredentialAfterIssued(JObject data)
         {
-            var gpid = (string)data.SelectToken("credential_proposal_dict.credential_proposal.attributes[?(@.name == 'gpid')].value");
+            var connection_id = (string)data.SelectToken("connection_id");
             var revoc_reg_id = (string)data.SelectToken("revoc_reg_id");
             var revocation_id = (string)data.SelectToken("revocation_id");
 
             _logger.LogInformation("Revocation Registry Id {revoc_reg_id}", revoc_reg_id);
             _logger.LogInformation("Credential Revocation Id {revocation_id}", revocation_id);
 
-            var enrollee = _context.Enrollees
-                .SingleOrDefault(e => e.GPID == gpid);
-
-            if (enrollee != null)
-            {
-                var credential = GetCredentialByIdAsync((int)enrollee.CredentialId);
-                credential.AcceptedCredentialDate = DateTimeOffset.Now;
-                credential.RevocationRegistryId = revoc_reg_id;
-                credential.CredentialRevocationId = revocation_id;
-            }
+            var credential = GetCredentialByConnectionIdAsync(connection_id);
+            credential.AcceptedCredentialDate = DateTimeOffset.Now;
+            credential.RevocationRegistryId = revoc_reg_id;
+            credential.CredentialRevocationId = revocation_id;
 
             return await _context.SaveChangesAsync();
         }
 
-        private Credential GetCredentialByIdAsync(int credentialId)
+        private async Task<int> UpdateCredentialConnectionId(int enrolleeId, string connection_id)
+        {
+            // Add ConnectionId to Enrollee's newest credential which does not have a connection_id
+            var enrolleeCredential = _context.EnrolleeCredentials
+                .Where(ec => ec.EnrolleeId == enrolleeId)
+                .OrderByDescending(ec => ec.Id)
+                .First();
+
+            enrolleeCredential.Credential.ConnectionId = connection_id;
+
+            return await _context.SaveChangesAsync();
+        }
+
+        private Credential GetCredentialByConnectionIdAsync(string connectionId)
         {
             return _context.Credentials
-                    .SingleOrDefault(c => c.Id == credentialId);
+                    .SingleOrDefault(c => c.ConnectionId == connectionId);
         }
 
         // Issue a credential to an active connection.
@@ -192,7 +225,7 @@ namespace Prime.Services
             var enrollee = _context.Enrollees
                 .SingleOrDefault(e => e.Id == enrolleeId);
 
-            var credential = GetCredentialByIdAsync((int)enrollee.CredentialId);
+            var credential = GetCredentialByConnectionIdAsync(connectionId);
 
             if (credential.AcceptedCredentialDate != null)
             {
