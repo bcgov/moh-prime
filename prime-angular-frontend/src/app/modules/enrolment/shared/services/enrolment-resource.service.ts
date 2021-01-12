@@ -171,7 +171,7 @@ export class EnrolmentResource {
   }
 
   public getAccessTermSignable(enrolleeId: number, accessTermsId: number): Observable<string> {
-    return this.apiResource.get<string>(`enrollees/${enrolleeId}/agreements/${accessTermsId}/signable`)
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/agreements/${accessTermsId}/signable2`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result)
       );

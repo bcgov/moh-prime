@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using Prime.Services.Razor;
 using System;
 using System.IO;
 using System.Linq;
@@ -55,6 +56,11 @@ namespace Prime.Services
             await view.RenderAsync(viewContext);
 
             return output.ToString();
+        }
+
+        public async Task<string> RenderViewToStringAsync<TModel>(RazorRenderingPackage<TModel> razorView)
+        {
+            return await RenderViewToStringAsync(razorView.ViewPath, razorView.ViewModel);
         }
 
         private IView GetView(ActionContext actionContext, string viewName)

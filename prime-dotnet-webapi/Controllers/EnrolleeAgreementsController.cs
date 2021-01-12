@@ -10,6 +10,7 @@ using Prime.Models;
 using Prime.Services;
 using Prime.Models.Api;
 using Prime.ViewModels;
+using Prime.Services.Razor;
 
 namespace Prime.Controllers
 {
@@ -17,7 +18,6 @@ namespace Prime.Controllers
     [Route("api/enrollees")]
     [ApiController]
     // User needs at least the RO_ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = Policies.User)]
     public class EnrolleeAgreementsController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
@@ -227,10 +227,10 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
-            {
-                return Forbid();
-            }
+            // if (!record.ViewableBy(User))
+            // {
+            //     return Forbid();
+            // }
 
             Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
 
@@ -240,6 +240,40 @@ namespace Prime.Controllers
             }
 
             var html = await _razorConverterService.RenderViewToStringAsync("/Views/Agreements/TermsOfAccessPdf.cshtml", agreement);
+            var download = _pdfService.Generate(html);
+
+            return Ok(ApiResponse.Result(download));
+        }
+
+        // GET: api/Enrollees/5/agreements/2/signable
+        /// <summary>
+        /// Downloads a specific unsigned access term for an enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="agreementId"></param>
+        [HttpGet("{enrolleeId}/agreements/{agreementId}/signable2", Name = nameof(GetAccessTermSignable2))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<byte[]>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<byte[]>> GetAccessTermSignable2(int enrolleeId, int agreementId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            // if (!record.ViewableBy(User))
+            // {
+            //     return Forbid();
+            // }
+
+            Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
+
+            var vm = new EnrolleeAgreementRazorViewModel { PrimaryText = agreement.AgreementVersion.Text };
+
+            var html = await _razorConverterService.RenderViewToStringAsync(new EnrolleeAgreementRazorPackage(vm));
             var download = _pdfService.Generate(html);
 
             return Ok(ApiResponse.Result(download));
