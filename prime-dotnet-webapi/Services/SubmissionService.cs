@@ -256,6 +256,7 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
             await _agreementService.ExpireCurrentEnrolleeAgreementAsync(enrollee.Id);
+            // await _verifiableCredentialService.RevokeCredentialsAsync(enrollee.Id);
         }
 
         private async Task RerunRulesAsync(Enrollee enrollee)
