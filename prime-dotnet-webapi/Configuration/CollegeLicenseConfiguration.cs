@@ -49,6 +49,7 @@ namespace Prime.Configuration
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 29, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 30, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 31, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegeLicense { CollegeCode = 2, LicenseCode = 68, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Nurses
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 32, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
