@@ -21,6 +21,10 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
   }
 
   /**
+   * @description
+   * Access to college certifications where a self-documenting
+   * API is beneficial for readability.
+   *
    * @alias json
    */
   public get collegeCertifications(): CollegeCertification[] {
