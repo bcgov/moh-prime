@@ -149,7 +149,7 @@ namespace Prime.Services
                 case CredentialExchangeState.RequestReceived:
                     return true;
                 case CredentialExchangeState.CredentialIssued:
-                    await UpdateAcceptedCredentialDate(data);
+                    await UpdateCredentialAfterIssued(data);
                     return true;
                 default:
                     _logger.LogError("Credential exchange state {state} is not supported", state);
@@ -157,9 +157,15 @@ namespace Prime.Services
             }
         }
 
-        private async Task<int> UpdateAcceptedCredentialDate(JObject data)
+        private async Task<int> UpdateCredentialAfterIssued(JObject data)
         {
             var gpid = (string)data.SelectToken("credential_proposal_dict.credential_proposal.attributes[?(@.name == 'gpid')].value");
+            var revoc_reg_id = (string)data.SelectToken("revoc_reg_id");
+            var revocation_id = (string)data.SelectToken("revocation_id");
+
+            _logger.LogInformation("Revocation Registry Id {revoc_reg_id}", revoc_reg_id);
+            _logger.LogInformation("Credential Revocation Id {revocation_id}", revocation_id);
+
             var enrollee = _context.Enrollees
                 .SingleOrDefault(e => e.GPID == gpid);
 
@@ -167,6 +173,8 @@ namespace Prime.Services
             {
                 var credential = GetCredentialByIdAsync((int)enrollee.CredentialId);
                 credential.AcceptedCredentialDate = DateTimeOffset.Now;
+                credential.RevocationRegistryId = revoc_reg_id;
+                credential.CredentialRevocationId = revocation_id;
             }
 
             return await _context.SaveChangesAsync();
