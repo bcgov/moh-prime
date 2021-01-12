@@ -40,6 +40,7 @@ export class SiteRegistrationTableComponent implements OnInit {
       'siteId',
       'remoteUsers',
       'careSetting',
+      'missingBusinessLicence',
       'actions'
     ];
     this.claim = new EventEmitter<number>();
@@ -79,6 +80,13 @@ export class SiteRegistrationTableComponent implements OnInit {
       ? (!this.activatedRoute.snapshot.params.sid)
         ? (count) ? 'Yes' : 'No'
         : count
+      : 'N/A';
+  }
+
+  public missingBusinessLicence(siteRegistration: SiteRegistrationListViewModel) {
+    return (siteRegistration.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+      ? (!siteRegistration.businessLicence?.businessLicenceDocument)
+        ? 'Yes' : 'No'
       : 'N/A';
   }
 

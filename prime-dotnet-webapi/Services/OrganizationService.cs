@@ -42,6 +42,9 @@ namespace Prime.Services
                     .ThenInclude(s => s.Adjudicator)
                 .Include(o => o.Sites)
                     .ThenInclude(s => s.RemoteUsers)
+                .Include(o => o.Sites)
+                    .ThenInclude(s => s.BusinessLicence)
+                        .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .If(partyId != null, q => q.Where(o => o.SigningAuthorityId == partyId))
                 .ToListAsync();
         }

@@ -90,6 +90,14 @@
             *matCellDef="let row;"> {{ row.careSettingCode | configCode: 'careSettings' | default }} </td>
       </ng-container>
 
+      <ng-container matColumnDef="missingBusinessLicence">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Missing Business Licence </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ missingBusinessLicence(row) }}</td>
+      </ng-container>
+
       <ng-container matColumnDef="actions">
         <th mat-header-cell
             *matHeaderCellDef
