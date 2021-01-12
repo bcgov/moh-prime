@@ -173,7 +173,7 @@ export class EnrolmentGuard extends BaseGuard {
     // When renewing an enrollee may have updates that allow or
     // prevent routing to specific views, which should be
     if (this.enrolmentFormStateService.isPatched && this.enrolmentFormStateService.isDirty) {
-      certifications = this.enrolmentFormStateService.regulatoryForm.get('certifications').value;
+      certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
     }
 

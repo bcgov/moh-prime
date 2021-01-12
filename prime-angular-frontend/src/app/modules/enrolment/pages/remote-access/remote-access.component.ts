@@ -14,7 +14,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -162,7 +162,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   private getRemoteAccess(): void {
     this.showProgress = true;
     this.noRemoteSites = false;
-    this.siteResource.getSitesByRemoteUserInfo(this.enrolmentFormStateService.regulatoryForm.get('certifications').value)
+    this.siteResource.getSitesByRemoteUserInfo(this.enrolmentFormStateService.regulatoryFormState.collegeCertifications)
       .pipe(delay(2000))
       .subscribe(
         (sites: Site[]) => {
