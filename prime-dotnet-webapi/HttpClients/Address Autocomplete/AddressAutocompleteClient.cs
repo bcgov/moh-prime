@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Microsoft.AspNetCore.WebUtilities;
+
+using Prime.Extensions;
 
 namespace Prime.HttpClients
 {
@@ -29,18 +29,13 @@ namespace Prime.HttpClients
 
         public async Task<IEnumerable<AddressAutocompleteFindResponse>> Find(string searchTerm, string lastId)
         {
-            var dict = new Dictionary<string, string>()
+            var url = new Dictionary<string, string>()
             {
                 { "Key", _credentials.ApiKey },
-                { "SearchTerm", searchTerm }
-            };
-
-            if (lastId != null)
-            {
-                dict.Add("LastId", lastId);
+                { "SearchTerm", searchTerm },
+                { "LastId", lastId }
             }
-
-            var url = QueryHelpers.AddQueryString("Find/v2.10/json3ex.ws", dict);
+            .ToQueryStringUrl("Find/v2.10/json3ex.ws");
 
             HttpResponseMessage response = null;
             try
@@ -66,13 +61,12 @@ namespace Prime.HttpClients
 
         public async Task<IEnumerable<AddressAutocompleteRetrieveResponse>> Retrieve(string Id)
         {
-            var dict = new Dictionary<string, string>()
+            var url = new Dictionary<string, string>()
             {
                 { "Key", _credentials.ApiKey },
                 { "Id", Id }
-            };
-
-            var url = QueryHelpers.AddQueryString("Retrieve/v2.11/json3ex.ws", dict);
+            }
+            .ToQueryStringUrl("Retrieve/v2.11/json3ex.ws");
 
             HttpResponseMessage response = null;
             try

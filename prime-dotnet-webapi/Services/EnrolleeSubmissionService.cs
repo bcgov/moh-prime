@@ -17,7 +17,7 @@ namespace Prime.Services
 {
     public class EnrolleeSubmissionService : BaseService, IEnrolleeSubmissionService
     {
-        private JsonSerializer _camelCaseSerializer = JsonSerializer.Create(
+        private readonly JsonSerializer _camelCaseSerializer = JsonSerializer.Create(
             new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()

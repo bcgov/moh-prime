@@ -63,7 +63,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Organization>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizations([FromQuery] bool verbose)
         {
-            IEnumerable<Organization> organizations = null;
+            IEnumerable<Organization> organizations;
 
             if (User.HasAdminView())
             {
@@ -277,7 +277,7 @@ namespace Prime.Controllers
             {
                 return CreatedAtAction(
                     nameof(GetOrganizationAgreement),
-                    new { organizationId = organizationId, agreementId = agreement.Id },
+                    new { organizationId, agreementId = agreement.Id },
                     ApiResponse.Result(agreement)
                 );
             }
@@ -368,8 +368,8 @@ namespace Prime.Controllers
                 var signedAgreement = await _organizationService.AddSignedAgreementAsync(organizationId, agreementId, organizationAgreementGuid.Value);
                 if (signedAgreement == null)
                 {
-                    this.ModelState.AddModelError(nameof(organizationAgreementGuid), "Signed Organization Agreement could not be created; network error or upload is already submitted");
-                    return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                    ModelState.AddModelError(nameof(organizationAgreementGuid), "Signed Organization Agreement could not be created; network error or upload is already submitted");
+                    return BadRequest(ApiResponse.BadRequest(ModelState));
                 }
             }
 

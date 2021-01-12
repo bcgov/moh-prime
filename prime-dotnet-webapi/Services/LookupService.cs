@@ -16,31 +16,49 @@ namespace Prime.Services
 
         public async Task<LookupEntity> GetLookupsAsync()
         {
-            LookupEntity lookupEntity = new LookupEntity();
-
-            lookupEntity.Colleges = await _context.Set<College>()
-                .Include(c => c.CollegeLicenses)
-                .Include(c => c.CollegePractices)
-                .ToListAsync();
-            lookupEntity.JobNames = await _context.Set<JobName>().ToListAsync();
-            lookupEntity.Licenses = await _context.Set<License>()
-                .Include(l => l.CollegeLicenses)
-                .ToListAsync();
-            lookupEntity.CareSettings = await _context.Set<CareSetting>().ToListAsync();
-            lookupEntity.Practices = await _context.Set<Practice>()
-                .Include(p => p.CollegePractices)
-                .ToListAsync();
-            lookupEntity.Statuses = await _context.Set<Status>().ToListAsync();
-            lookupEntity.Countries = await _context.Set<Country>().ToListAsync();
-            lookupEntity.Provinces = await _context.Set<Province>().ToListAsync();
-            lookupEntity.StatusReasons = await _context.Set<StatusReason>().ToListAsync();
-            lookupEntity.PrivilegeGroups = await _context.Set<PrivilegeGroup>().ToListAsync();
-            lookupEntity.PrivilegeTypes = await _context.Set<PrivilegeType>().ToListAsync();
-            lookupEntity.Vendors = await _context.Set<Vendor>().ToListAsync();
-            lookupEntity.HealthAuthorities = await _context.Set<HealthAuthority>().ToListAsync();
-            lookupEntity.Facilities = await _context.Set<Facility>().ToListAsync();
-
-            return lookupEntity;
+            return new LookupEntity
+            {
+                Colleges = await _context.Set<College>()
+                    .AsNoTracking()
+                    .Include(c => c.CollegeLicenses)
+                    .Include(c => c.CollegePractices)
+                    .ToListAsync(),
+                JobNames = await _context.Set<JobName>()
+                    .AsNoTracking()
+                    .ToListAsync(),
+                Licenses = await _context.Set<License>()
+                    .AsNoTracking()
+                    .Include(l => l.CollegeLicenses)
+                    .ToListAsync(),
+                CareSettings = await _context.Set<CareSetting>()
+                    .AsNoTracking()
+                    .ToListAsync(),
+                Practices = await _context.Set<Practice>()
+                    .AsNoTracking()
+                    .Include(p => p.CollegePractices)
+                    .ToListAsync(),
+                Statuses = await _context.Set<Status>()
+                    .AsNoTracking()
+                    .ToListAsync(),
+                Countries = await _context.Set<Country>()
+                    .AsNoTracking()
+                    .ToListAsync(),
+                Provinces = await _context.Set<Province>()
+                    .AsNoTracking()
+                    .ToListAsync(),
+                StatusReasons = await _context.Set<StatusReason>()
+                    .AsNoTracking()
+                    .ToListAsync(),
+                Vendors = await _context.Set<Vendor>()
+                    .AsNoTracking()
+                    .ToListAsync(),
+                HealthAuthorities = await _context.Set<HealthAuthority>()
+                    .AsNoTracking()
+                    .ToListAsync(),
+                Facilities = await _context.Set<Facility>()
+                    .AsNoTracking()
+                    .ToListAsync(),
+            };
         }
     }
 }

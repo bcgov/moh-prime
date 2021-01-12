@@ -247,7 +247,7 @@ namespace Prime.Models
 
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
-            var newStatus = EnrolmentStatus.FromType(statusType, this.Id);
+            var newStatus = EnrolmentStatus.FromType(statusType, Id);
 
             if (EnrolmentStatuses == null)
             {
@@ -316,9 +316,9 @@ namespace Prime.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (Guid.Empty.Equals(this.UserId))
+            if (Guid.Empty.Equals(UserId))
             {
-                yield return new ValidationResult($"UserId cannot be the empty value: {this.UserId.ToString()}");
+                yield return new ValidationResult($"UserId cannot be empty");
             }
         }
     }

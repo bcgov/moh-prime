@@ -65,13 +65,13 @@ namespace Prime.Controllers
             if (updatedProfile == null)
             {
                 ModelState.AddModelError("EnrolleeUpdateModel", "New profile cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
                 ModelState.AddModelError("Enrollee.CurrentStatus", "Application can not be submitted when the current status is not 'Active'.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             updatedProfile.SetTokenProperties(User);
@@ -110,8 +110,8 @@ namespace Prime.Controllers
             var success = await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin(), documentGuid);
             if (!success)
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Action could not be performed.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Enrollee.CurrentStatus", "Action could not be performed.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
@@ -146,14 +146,14 @@ namespace Prime.Controllers
 
             if (assignedToaType.HasValue && !agreementType.IsEnrolleeAgreement())
             {
-                this.ModelState.AddModelError("AgreementType", "Agreement type must be a TOA.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("AgreementType", "Agreement type must be a TOA.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
             {
-                this.ModelState.AddModelError("Enrollee.CurrentStatus", "Assigned agreement type can not be updated when the current status is not 'Under Review'.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Enrollee.CurrentStatus", "Assigned agreement type can not be updated when the current status is not 'Under Review'.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             await _enrolleeService.AssignToaAgreementType(enrolleeId, assignedToaType);
