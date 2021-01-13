@@ -1,50 +1,57 @@
-<section>
-  <h2 class="h3 mb-4">
-    Reason for manual adjudication:
-  </h2>
-  <div class="pl-2 mb-4">
-    <ng-container *ngFor="let reason of (status$ | async)?.enrolmentStatusReasons">
-      <div class="mb-4 font-weight-bold blue">
-        {{ reason.statusReason.name }}
-      </div>
-    </ng-container>
-  </div>
-</section>
+<app-contextual-help icon="topic"
+                     [small]="true"
+                     titleIcon="network_check">
+  <ng-container appContextualTitle>
+    Triage
+  </ng-container>
+  <ng-container appContextualContent>
+    <h2 class="h5 mb-4">
+      Reason for manual adjudication:
+    </h2>
+    <div class="pl-2 mb-4">
+      <ng-container *ngFor="let reason of (status$ | async)?.enrolmentStatusReasons">
+        <div class="mb-4 blue">
+          {{ reason.statusReason.name }}
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
 
-<button mat-flat-button
-        color="primary"
-        class="mb-5 d-block"
-        [matMenuTriggerFor]="menu">
-  Triage Actions <mat-icon>keyboard_arrow_down</mat-icon>
-</button>
-
-<mat-menu #menu>
-  <button mat-menu-item
-          [disabled]="!canEdit"
-          (click)="onEscalate()">
-    <mat-icon>error_outline</mat-icon>
-    <span>Enrolment Escalation</span>
+  <button mat-flat-button
+          color="primary"
+          class="mb-5 d-block"
+          [matMenuTriggerFor]="menu"
+          (click)="$event.stopPropagation()">
+    Triage Actions <mat-icon>keyboard_arrow_down</mat-icon>
   </button>
 
-  <button mat-menu-item
-          [disabled]="!canEdit"
-          (click)="onEnableEditing()">
-    <mat-icon>lock_open</mat-icon>
-    <span>Enable Editing</span>
-  </button>
+  <mat-menu #menu>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="onEscalate()">
+      <mat-icon>error_outline</mat-icon>
+      <span>Enrolment Escalation</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="onEnableEditing()">
+      <mat-icon>lock_open</mat-icon>
+      <span>Enable Editing</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="onRerunRules()">
+      <mat-icon>redo</mat-icon>
+      <span>Rerun Rules</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="onNotify()">
+      <mat-icon>mail</mat-icon>
+      <span>Send Email</span>
+    </button>
+  </mat-menu>
 
-  <button mat-menu-item
-          [disabled]="!canEdit"
-          (click)="onRerunRules()">
-    <mat-icon>redo</mat-icon>
-    <span>Rerun Rules</span>
-  </button>
 
-  <button mat-menu-item
-          [disabled]="!canEdit"
-          (click)="onNotify()">
-    <mat-icon>mail</mat-icon>
-    <span>Send Email</span>
-  </button>
 
-</mat-menu>
+</app-contextual-help>

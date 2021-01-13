@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
@@ -11,9 +11,6 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { TriageComponent } from '@shared/components/dialogs/content/triage/triage.component';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 
@@ -40,7 +37,6 @@ export class EnrolleeTableComponent implements OnInit {
     private authService: AuthService,
     private utilsService: UtilsService,
     private fb: FormBuilder,
-    private dialog: MatDialog,
   ) {
     this.notify = new EventEmitter<number>();
     this.claim = new EventEmitter<number>();
@@ -118,20 +114,6 @@ export class EnrolleeTableComponent implements OnInit {
 
   public hasTriage(row: EnrolleeListViewModel) {
     return row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW;
-  }
-
-  public onTriage(row: EnrolleeListViewModel) {
-    const data: DialogOptions = {
-      title: 'Triage',
-      actionHide: true,
-      icon: 'network_check',
-      component: TriageComponent,
-      data: {
-        enrolleeId: row.id,
-      }
-    };
-
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data }).afterClosed().subscribe();
   }
 
   public ngOnInit(): void {

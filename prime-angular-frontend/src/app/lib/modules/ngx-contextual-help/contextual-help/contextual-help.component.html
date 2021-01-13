@@ -1,9 +1,10 @@
 <a mat-icon-button
-   color="primary"
+   [color]="color"
    aria-label="Help"
+   class="{{ small ? 'small-container' : ''}}"
    [matMenuTriggerFor]="help"
    (click)="$event.stopPropagation()">
-  <mat-icon>info</mat-icon>
+  <mat-icon class="{{ small ? 'small-icon' : ''}}">{{icon}}</mat-icon>
 </a>
 <mat-menu #help="matMenu"
           class="p-3"
@@ -11,8 +12,13 @@
           [yPosition]="yPosition">
   <ng-template matMenuContent>
     <!-- Content project contextual help components when available -->
+
+
     <h1 *ngIf="contextualHelpTitleChildren.length"
         class="title lead">
+      <mat-icon *ngIf="titleIcon"
+                color="primary"
+                class="mr-2">{{ titleIcon }}</mat-icon>
       <ng-content select="[appContextualTitle]"></ng-content>
     </h1>
     <p *ngIf="contextualHelpContentChildren.length"

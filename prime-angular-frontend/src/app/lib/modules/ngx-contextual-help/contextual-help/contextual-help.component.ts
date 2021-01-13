@@ -11,6 +11,10 @@ import { ContextualContentDirective } from '../contextual-content.directive';
 export class ContextualHelpComponent {
   @Input() xPosition: MenuPositionX = 'after';
   @Input() yPosition: MenuPositionY = 'below';
+  @Input() icon: string = 'info';
+  @Input() color: string = 'primary';
+  @Input() small: boolean = false;
+  @Input() titleIcon: string;
 
   @ContentChildren(ContextualTitleDirective, { descendants: true })
   public contextualHelpTitleChildren: QueryList<ContextualTitleDirective>;

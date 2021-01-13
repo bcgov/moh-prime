@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SharedModule } from '@shared/shared.module';
@@ -22,16 +21,6 @@ describe('TriageComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        },
-        {
-          provide: MatDialogRef,
-          useValue: {
-            close: (dialogResult: any) => { }
-          }
-        },
-        {
-          provide: MAT_DIALOG_DATA,
-          useValue: {}
         },
       ]
     })
