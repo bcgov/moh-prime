@@ -2,17 +2,18 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+
+import { Subscription } from 'rxjs';
+
 import moment from 'moment';
 
 import { UtilsService } from '@core/services/utils.service';
-
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-
 import { AuthService } from '@auth/shared/services/auth.service';
+
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { MatDialog } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-enrollee-table',
