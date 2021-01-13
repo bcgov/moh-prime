@@ -208,7 +208,9 @@ namespace Prime.Services
                 .Include(ec => ec.Credential)
                 .OrderByDescending(ec => ec.CreatedTimeStamp)
                 .Where(ec => ec.Credential.ConnectionId == null)
-                .FirstAsync(ec => ec.EnrolleeId == enrolleeId);
+                .FirstOrDefaultAsync(ec => ec.EnrolleeId == enrolleeId);
+
+            _logger.LogInformation("Updating this credential's connectionId to {connection_id}: {@JObject}", JsonConvert.SerializeObject(enrolleeCredential), connection_id);
 
             enrolleeCredential.Credential.ConnectionId = connection_id;
 
