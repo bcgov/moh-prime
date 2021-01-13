@@ -43,6 +43,6 @@ namespace Prime.Models
 
         [NotMapped]
         [JsonIgnore]
-        public string FullLicenseNumber { get { return $"{College?.Prefix}-{LicenseNumber}"; } }
+        public string FullLicenseNumber { get { return $"{License?.Prefix}-{LicenseNumber}"; } }
     }
 }
