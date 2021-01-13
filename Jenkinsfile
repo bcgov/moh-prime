@@ -1,11 +1,11 @@
 pipeline {
     agent none
     environment {
-        BRANCH_LOWER=BRANCH_NAME.toLowerCase()
-        VANITY_URL="develop-temp-ocp4.pharmanetenrolment.gov.bc.ca"
+        BRANCH_LOWER="develop-temp-ocp4"
+        VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
         SCHEMA="https"
         PORT="8443"
-        SUFFIX="-develop-temp-oc4"
+        SUFFIX="${BRANCH_LOWER}"
         FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
         // TODO request made for adding human-readable ID to moh-prime credential of jenkins-git-credential
@@ -83,7 +83,7 @@ pipeline {
             options {
                 timeout(time: 10, unit: 'MINUTES') // timeout on this stage
             }
-            when { expression { ( GIT_BRANCH == 'develop' ) } }
+            when { expression { ( GIT_BRANCH == 'feature/' ) } }
             agent { label 'master' }
             steps {
                 script {
