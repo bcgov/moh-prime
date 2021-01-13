@@ -431,6 +431,16 @@ namespace Prime.Controllers
 
             await _emailService.SendSiteRegistrationAsync(site);
 
+            // Send an notifying email to the adjudicator
+            // if the site is calimed by a adjudicator, is a community pharmacy,
+            // and previsouly deferred the business licence document.
+            if (site.Adjudicator != null
+                && site.CareSetting.Code == (int)CareSettingType.CommunityPharmacy
+                && !string.IsNullOrEmpty(site.BusinessLicence.DeferredLicenceReason))
+            {
+                await _emailService.SendBusinessLicenceUploadedAsync(site);
+            }
+
             return Ok(ApiResponse.Result(document));
         }
 
