@@ -8,7 +8,7 @@ import { ToastService } from '@core/services/toast.service';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 

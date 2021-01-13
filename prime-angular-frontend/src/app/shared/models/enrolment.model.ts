@@ -12,7 +12,7 @@ import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.mode
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
@@ -60,9 +60,16 @@ export interface HttpEnrollee extends Enrollee {
 
 /**
  * @deprecated
+ * With the Enrolent table being dropped this is artifact
+ * that needs to be removed to reduce confusion.
+ *
+ * NOTE: Enrolment contains equivalent data when compared to
+ * HttpEnrollee, but HttpEnrollee has the enrollee information
+ * flattened within the root of the object versus the Enrolment
+ * model having a enrollee key
  */
 export interface Enrolment {
-  id?: number;
+  id?: number; // Equivalent to enrollee.id
   displayId?: number;
   enrollee: Enrollee;
   appliedDate: string;

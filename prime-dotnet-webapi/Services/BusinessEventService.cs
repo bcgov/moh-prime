@@ -88,7 +88,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateEnrolleeEventAsync(int enrolleeId, string description)
         {
-            var businessEvent = await this.CreateBusinessEvent(BusinessEventType.ENROLLEE_CODE, enrolleeId, description);
+            var businessEvent = await CreateBusinessEvent(BusinessEventType.ENROLLEE_CODE, enrolleeId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 
@@ -102,7 +102,7 @@ namespace Prime.Services
 
         public async Task<BusinessEvent> CreateSiteEventAsync(int siteId, int partyId, string description)
         {
-            var businessEvent = await this.CreateSiteBusinessEvent(BusinessEventType.SITE_CODE, siteId, partyId, description);
+            var businessEvent = await CreateSiteBusinessEvent(BusinessEventType.SITE_CODE, siteId, partyId, description);
             _context.BusinessEvents.Add(businessEvent);
             var created = await _context.SaveChangesAsync();
 

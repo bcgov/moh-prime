@@ -158,7 +158,7 @@ namespace Prime.Services
             {
                 (int)CareSettingType.CommunityPharmacy => "/Views/Emails/CommunityPharmacyManagerEmail.cshtml",
                 (int)CareSettingType.HealthAuthority => "/Views/Emails/HealthAuthorityEmail.cshtml",
-                _ => "/Views/Emails/OfficeManagerEmail.cshtml",
+                _ => "/Views/Emails/CommunityPracticeEmail.cshtml",
             };
             string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());

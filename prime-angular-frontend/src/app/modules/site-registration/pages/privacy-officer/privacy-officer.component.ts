@@ -6,14 +6,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { IFormPage } from '@lib/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { Address } from '@shared/models/address.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
-import { IForm } from '@registration/shared/interfaces/form.interface';
-import { Address } from '@shared/models/address.model';
 import { Contact } from '@registration/shared/models/contact.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -24,7 +24,7 @@ import { SiteService } from '@registration/shared/services/site.service';
   templateUrl: './privacy-officer.component.html',
   styleUrls: ['./privacy-officer.component.scss']
 })
-export class PrivacyOfficerComponent implements OnInit, IPage, IForm {
+export class PrivacyOfficerComponent implements OnInit, IPage, IFormPage {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

@@ -15,7 +15,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -96,6 +96,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   public onSubmit() {
+    this.removeIncompleteOboSites();
+
     this.oboSites.clear();
     this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
@@ -317,8 +319,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
    * job(s), as well as, college certification(s).
    */
   private removeCollegeCertifications() {
-    const form = this.enrolmentFormStateService.regulatoryForm;
-    const certifications = form.get('certifications') as FormArray;
-    certifications.clear();
+    this.enrolmentFormStateService.regulatoryFormState.removeCollegeCertifications();
   }
 }

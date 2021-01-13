@@ -21,6 +21,10 @@ export class HealthAuthorityFormState extends AbstractFormState<HealthAuthority[
     this.buildForm();
   }
 
+  public get enrolleeHealthAuthorities(): FormArray {
+    return this.formInstance.get('enrolleeHealthAuthorities') as FormArray;
+  }
+
   public get json(): HealthAuthority[] {
     if (!this.formInstance) {
       return;
@@ -62,15 +66,22 @@ export class HealthAuthorityFormState extends AbstractFormState<HealthAuthority[
       }));
 
     this.formInstance = this.fb.group({
-      enrolleeHealthAuthorities: this.fb.array(
-        healthAuthorities, []
-      )
+      enrolleeHealthAuthorities: this.fb.array(healthAuthorities, [])
     });
   }
 
   public setValidators() {
-    const enrolleeHealthAuthorities = this.formInstance.get('enrolleeHealthAuthorities') as FormArray;
-    enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: AbstractControl) => control.get('facilityCodes').value?.length));
+    const predicate = (control: AbstractControl) => control.get('facilityCodes').value?.length;
+    this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, predicate));
+  }
+
+  public removeHealthAuthorities() {
+    this.enrolleeHealthAuthorities.controls.forEach(ha => {
+      ha.get('facilityCodes').patchValue([]);
+    });
+    this.enrolleeHealthAuthorities.clearValidators();
+    this.enrolleeHealthAuthorities.updateValueAndValidity();
+    this.formInstance.updateValueAndValidity();
   }
 
   private getHealthAuthorityFacilities(healthAutorities: HealthAuthority[], healthAuthorityCode: HealthAuthorityEnum) {

@@ -1,0 +1,36 @@
+<section *ngIf="selfDeclarationComposites?.length"
+         class="mb-4">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
+
+    <ng-content select="[mat-icon-button]"
+                ngProjectAs="[mat-icon-button]"></ng-content>
+  </app-page-subheader>
+
+  <div *ngFor="let selfDeclarationComposite of selfDeclarationComposites"
+       class="mb-3">
+
+    <app-enrollee-property [title]="selfDeclarationComposite.selfDeclarationQuestion"
+                           [makeBold]="false">
+      {{ selfDeclarationComposite.selfDeclaration | yesNo: true }}
+    </app-enrollee-property>
+
+    <app-enrollee-property *ngIf="selfDeclarationComposite.selfDeclaration"
+                           title="Description"
+                           [makeBold]="false">
+      {{ selfDeclarationComposite.selfDeclaration.selfDeclarationDetails }}
+    </app-enrollee-property>
+
+    <button *ngFor="let selfDeclarationDocument of selfDeclarationComposite.selfDeclarationDocuments"
+            mat-stroked-button
+            color="primary"
+            class="pl-2 mb-2 mt-2"
+            (click)="downloadSelfDeclarationDocument(selfDeclarationDocument.id)">
+      <mat-icon class="mr-1">attachment</mat-icon>
+      {{ selfDeclarationDocument.filename }}
+    </button>
+
+  </div>
+
+</section>

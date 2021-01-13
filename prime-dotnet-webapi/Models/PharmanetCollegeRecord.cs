@@ -6,25 +6,25 @@ namespace Prime.Models
     [NotMapped]
     public class PharmanetCollegeRecord
     {
-        public string applicationUUID { get; set; }
-        public string firstName { get; set; }
-        public string middleInitial { get; set; }
-        public string lastName { get; set; }
-        public DateTime dateofBirth { get; set; }
-        public string status { get; set; }
-        public DateTimeOffset effectiveDate { get; set; }
+        public string ApplicationUUID { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleInitial { get; set; }
+        public string LastName { get; set; }
+        public DateTime DateofBirth { get; set; }
+        public string Status { get; set; }
+        public DateTimeOffset EffectiveDate { get; set; }
 
         public bool MatchesEnrolleeByName(Enrollee enrollee)
         {
-            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
+            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName))
             {
                 throw new InvalidOperationException("PharmaNet college record is missing the first or last name, cannot be a valid record.");
             }
 
-            bool IsMatch(string name1, string name2) => name1.Equals(name2, StringComparison.CurrentCultureIgnoreCase);
+            static bool IsMatch(string name1, string name2) => name1.Equals(name2, StringComparison.CurrentCultureIgnoreCase);
 
-            return (IsMatch(firstName, enrollee.FirstName) && IsMatch(lastName, enrollee.LastName))
-                || (IsMatch(firstName, enrollee.PreferredFirstName) && IsMatch(lastName, enrollee.PreferredLastName));
+            return (IsMatch(FirstName, enrollee.FirstName) && IsMatch(LastName, enrollee.LastName))
+                || (IsMatch(FirstName, enrollee.PreferredFirstName) && IsMatch(LastName, enrollee.PreferredLastName));
         }
     }
 }

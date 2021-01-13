@@ -155,8 +155,7 @@ export class AdjudicationContainerComponent implements OnInit {
   public onDecline(enrolleeId: number) {
     const data: DialogOptions = {
       title: 'Decline Enrollee',
-      message: `When declined the enrollee will not have access to PRIME, and their Terms of Access will be terminated. 
-        Are you sure you want to decline this enrollment?`,
+      message: `When declined the enrollee will not have access to PRIME, and their Terms of Access will be terminated. Are you sure you want to decline this enrollment?`,
       actionType: 'warn',
       actionText: 'Decline Enrollee',
       component: NoteComponent,

@@ -37,6 +37,9 @@ namespace Prime.Configuration
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 23, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 24, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new CollegeLicense { CollegeCode = 1, LicenseCode = 59, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 65, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 66, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegeLicense { CollegeCode = 1, LicenseCode = 67, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Pharmacists
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 25, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
@@ -46,6 +49,7 @@ namespace Prime.Configuration
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 29, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 30, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new CollegeLicense { CollegeCode = 2, LicenseCode = 31, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new CollegeLicense { CollegeCode = 2, LicenseCode = 68, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
 
                     // Nurses
                     new CollegeLicense { CollegeCode = 3, LicenseCode = 32, CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },

@@ -77,7 +77,6 @@ namespace Prime
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
 
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
-        public DbSet<Feedback> Feedback { get; set; }
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
         public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
         public DbSet<RemoteAccessLocation> RemoteAccessLocations { get; set; }
@@ -108,14 +107,14 @@ namespace Prime
 
         public override int SaveChanges()
         {
-            this.ApplyAudits();
+            ApplyAudits();
 
             return base.SaveChanges();
         }
 
-        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            this.ApplyAudits();
+            ApplyAudits();
 
             return await base.SaveChangesAsync(cancellationToken);
         }
