@@ -114,6 +114,17 @@ namespace Prime.Services
 
         public async Task<bool> RevokeCredentialsAsync(int enrolleeId)
         {
+            var enrolleeCredentials = await _context.EnrolleeCredentials
+                .Include(ec => ec.Credential)
+                .Where(ec => ec.EnrolleeId == enrolleeId)
+                .Select(ec => ec.Credential)
+                .ToListAsync();
+
+            foreach (var credential in enrolleeCredentials)
+            {
+                await _verifiableCredentialClient.RevokeCredentialAsync(credential);
+            }
+
             await _context.SaveChangesAsync();
             return true;
         }
