@@ -5,7 +5,7 @@ pipeline {
         VANITY_URL="${BRANCH_LOWER}.pharmanetenrolment.gov.bc.ca"
         SCHEMA="https"
         PORT="8443"
-        SUFFIX="${BRANCH_LOWER}"
+        SUFFIX="-${BRANCH_LOWER}"
         FRONTEND_ARGS="-p REDIRECT_URL=${SCHEMA}://${VANITY_URL} -p VANITY_URL=${VANITY_URL}"
         API_ARGS="-p ASPNETCORE_ENVIRONMENT=Release -p VANITY_URL=${VANITY_URL}"
         // TODO request made for adding human-readable ID to moh-prime credential of jenkins-git-credential
