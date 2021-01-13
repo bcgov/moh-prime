@@ -9,6 +9,7 @@ using QRCoder;
 
 using Prime.Models;
 using Prime.HttpClients;
+using Microsoft.EntityFrameworkCore;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services
@@ -203,10 +204,10 @@ namespace Prime.Services
         private async Task<int> UpdateCredentialConnectionId(int enrolleeId, string connection_id)
         {
             // Add ConnectionId to Enrollee's newest credential which does not have a connection_id
-            var enrolleeCredential = _context.EnrolleeCredentials
-                .Where(ec => ec.EnrolleeId == enrolleeId)
-                .OrderByDescending(ec => ec.Id)
-                .First();
+            var enrolleeCredential = await _context.EnrolleeCredentials
+                .OrderByDescending(ec => ec.CreatedTimeStamp)
+                .Where(ec => ec.Credential.ConnectionId == null)
+                .FirstAsync(ec => ec.EnrolleeId == enrolleeId);
 
             enrolleeCredential.Credential.ConnectionId = connection_id;
 
