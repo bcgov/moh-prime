@@ -14,9 +14,9 @@
           <td mat-cell
               *matCellDef="let row;">
             <div class="flex-container">
-              <app-triage [enrolleeId]="row.id"
-                          *ngIf="hasTriage(row)"
-                          class="start lh-24"></app-triage>
+              <app-triage *ngIf="row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
+                          class="start"
+                          [enrolleeId]="row.id"></app-triage>
             </div>
           </td>
         </ng-container>

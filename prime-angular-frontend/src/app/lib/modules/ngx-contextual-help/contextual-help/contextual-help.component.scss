@@ -6,12 +6,11 @@
   padding-bottom: .3em;
 }
 
-.small-container {
+a.small {
   height: 24px;
   width: 24px;
   line-height: 24px;
-}
-
-.small-icon {
-  font-size: 18px;
-}
+  .mat-icon {
+    font-size: 18px;
+   }
+ }

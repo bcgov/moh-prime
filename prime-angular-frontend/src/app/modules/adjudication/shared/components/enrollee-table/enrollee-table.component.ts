@@ -32,6 +32,7 @@ export class EnrolleeTableComponent implements OnInit {
   public hasAppliedDateRange = false;
   public hasRenewalDateRange = false;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public EnrolmentStatus = EnrolmentStatus;
 
   constructor(
     private authService: AuthService,
@@ -110,10 +111,6 @@ export class EnrolleeTableComponent implements OnInit {
     this.form.get('renewalDateRangeStart').reset();
     this.form.get('renewalDateRangeEnd').reset();
     this.hasRenewalDateRange = false;
-  }
-
-  public hasTriage(row: EnrolleeListViewModel) {
-    return row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW;
   }
 
   public ngOnInit(): void {

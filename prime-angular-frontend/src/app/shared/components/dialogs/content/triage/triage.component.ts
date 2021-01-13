@@ -26,11 +26,11 @@ export class TriageComponent implements OnInit {
   public status$: Observable<EnrolmentStatus>;
 
   constructor(
-    public enrolmentResource: EnrolmentResource,
-    public authService: AuthService,
-    public adjudicationResource: AdjudicationResource,
-    public toastService: ToastService,
-    public utilsService: UtilsService,
+    private enrolmentResource: EnrolmentResource,
+    private authService: AuthService,
+    private adjudicationResource: AdjudicationResource,
+    private toastService: ToastService,
+    private utilsService: UtilsService,
   ) {
   }
 
@@ -72,7 +72,7 @@ export class TriageComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getCurrentStatus();
   }
 

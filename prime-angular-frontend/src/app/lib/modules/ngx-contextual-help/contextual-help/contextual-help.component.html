@@ -1,10 +1,10 @@
 <a mat-icon-button
    [color]="color"
    aria-label="Help"
-   class="{{ small ? 'small-container' : ''}}"
+   [class.small]="small"
    [matMenuTriggerFor]="help"
    (click)="$event.stopPropagation()">
-  <mat-icon class="{{ small ? 'small-icon' : ''}}">{{icon}}</mat-icon>
+  <mat-icon>{{icon}}</mat-icon>
 </a>
 <mat-menu #help="matMenu"
           class="p-3"
