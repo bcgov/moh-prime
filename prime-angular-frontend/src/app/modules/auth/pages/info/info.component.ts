@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 
-import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { AbstractComponent } from '@lib/classes/abstract-component.class';
 import { ViewportService } from '@core/services/viewport.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -18,15 +18,13 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
     '../../shared/styles/landing-page.scss'
   ]
 })
-export class InfoComponent implements OnInit, OnDestroy {
-  private unsubscribe$: Subject<void>;
-
+export class InfoComponent extends AbstractComponent implements OnInit {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private viewportService: ViewportService
   ) {
-    this.unsubscribe$ = new Subject<void>();
+    super();
   }
 
   public get isMobile(): boolean {
@@ -46,12 +44,7 @@ export class InfoComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.viewportService.onResize()
-      .pipe(takeUntil(this.unsubscribe$))
+      .pipe(takeUntil(this.componentDestroyed$))
       .subscribe();
-  }
-
-  public ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
 }
