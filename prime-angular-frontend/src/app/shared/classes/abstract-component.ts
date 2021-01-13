@@ -4,7 +4,10 @@ export interface IAbstractPage {
   routeTo(routePath: string | string[], navigationExtras: NavigationExtras): void;
 }
 
-// TODO remove and update views to use FormUtils
+/**
+ * @deprecated
+ * TODO Remove this component and update views to use RouteUtils
+ */
 export abstract class AbstractComponent implements IAbstractPage {
   protected baseRoutePath: (string | number)[];
 
