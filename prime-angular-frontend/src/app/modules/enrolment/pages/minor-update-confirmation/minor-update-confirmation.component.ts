@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 
 @Component({
   selector: 'app-minor-update-confirmation',

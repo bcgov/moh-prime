@@ -11,12 +11,12 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+
+import { RegulatoryFormState } from './regulatory-form-state';
 
 @Component({
   selector: 'app-regulatory',
@@ -24,6 +24,8 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
   styleUrls: ['./regulatory.component.scss']
 })
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
+  public formState: RegulatoryFormState;
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -51,7 +53,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public get certifications(): FormArray {
-    return this.form.get('certifications') as FormArray;
+    return this.formState.certifications;
   }
 
   public get selectedCollegeCodes(): number[] {
@@ -59,9 +61,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       .map((certification: CollegeCertification) => +certification.collegeCode);
   }
 
-  public addCertification() {
-    const certification = this.enrolmentFormStateService.buildCollegeCertificationForm();
-    this.certifications.push(certification);
+  public addEmptyCollegeCertification() {
+    this.formState.addCollegeCertification();
   }
 
   /**
@@ -81,6 +82,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public ngOnInit() {
+    this.formState = this.enrolmentFormStateService.regulatoryFormState;
+
     this.createFormInstance();
     this.patchForm();
     this.initForm();
@@ -91,14 +94,14 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.regulatoryForm;
+    this.form = this.formState.form;
   }
 
   protected initForm() {
     // Always have at least one certification ready for
     // the enrollee to fill out
     if (!this.certifications.length) {
-      this.addCertification();
+      this.addEmptyCollegeCertification();
     }
   }
 
@@ -112,10 +115,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected nextRouteAfterSubmit() {
-    const certifications = this.enrolmentFormStateService.regulatoryForm
-      .get('certifications').value as CollegeCertification[];
-    const careSettings = this.enrolmentFormStateService.careSettingsForm
-      .get('careSettings').value as CareSetting[];
+    const certifications = this.formState.collegeCertifications;
+    const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value as CareSetting[];
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
@@ -146,7 +147,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     // Always have a single cerfication available, and it prevents
     // the page from jumping too much when routing
     if (!noEmptyCert && !this.certifications.controls.length) {
-      this.addCertification();
+      this.addEmptyCollegeCertification();
     }
   }
 

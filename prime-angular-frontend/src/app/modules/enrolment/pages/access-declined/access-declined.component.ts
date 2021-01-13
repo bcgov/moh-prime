@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 
 @Component({
   selector: 'app-access-declined',

@@ -16,7 +16,7 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
