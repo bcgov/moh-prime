@@ -79,5 +79,4 @@ export class TriageComponent implements OnInit {
   private getCurrentStatus() {
     this.status$ = this.enrolmentResource.getCurrentStatus(this.enrolleeId);
   }
-
 }
