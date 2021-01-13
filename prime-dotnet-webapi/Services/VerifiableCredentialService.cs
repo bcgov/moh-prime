@@ -205,6 +205,7 @@ namespace Prime.Services
         {
             // Add ConnectionId to Enrollee's newest credential which does not have a connection_id
             var enrolleeCredential = await _context.EnrolleeCredentials
+                .Include(ec => ec.Credential)
                 .OrderByDescending(ec => ec.CreatedTimeStamp)
                 .Where(ec => ec.Credential.ConnectionId == null)
                 .FirstAsync(ec => ec.EnrolleeId == enrolleeId);
