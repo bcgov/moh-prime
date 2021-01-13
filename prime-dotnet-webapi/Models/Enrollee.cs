@@ -129,7 +129,7 @@ namespace Prime.Models
             get => EnrolleeCredentials
                 .OrderByDescending(ec => ec.CreatedTimeStamp)
                 .ThenByDescending(s => s.Id)
-                .Select(ec => ec.Credential.Base64QRCode)
+                .Select(ec => ec.Credential?.Base64QRCode)
                 .FirstOrDefault();
         }
 

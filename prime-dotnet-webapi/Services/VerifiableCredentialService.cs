@@ -204,16 +204,19 @@ namespace Prime.Services
         private async Task<int> UpdateCredentialConnectionId(int enrolleeId, string connection_id)
         {
             // Add ConnectionId to Enrollee's newest credential which does not have a connection_id
-            var enrolleeCredential = await _context.EnrolleeCredentials
+            var credential = await _context.EnrolleeCredentials
                 .Include(ec => ec.Credential)
                 .Where(ec => ec.Credential.ConnectionId == null)
-                .OrderByDescending(ec => ec.Id)
-                .FirstOrDefaultAsync(ec => ec.EnrolleeId == enrolleeId);
+                .Where(ec => ec.EnrolleeId == enrolleeId)
+                .OrderByDescending(ec => ec.CreatedTimeStamp)
+                .ThenByDescending(ec => ec.Id)
+                .Select(ec => ec.Credential)
+                .FirstOrDefaultAsync();
 
-            _logger.LogInformation("Updating this credential's connectionId to {connection_id}: {@JObject}", JsonConvert.SerializeObject(enrolleeCredential), connection_id);
+            _logger.LogInformation("Updating this credential's {id} connectionId to {connection_id}", credential.Id, connection_id);
 
-            enrolleeCredential.Credential.ConnectionId = connection_id;
-            _context.Credentials.Update(enrolleeCredential.Credential);
+            credential.ConnectionId = connection_id;
+            _context.Credentials.Update(credential);
 
             return await _context.SaveChangesAsync();
         }
