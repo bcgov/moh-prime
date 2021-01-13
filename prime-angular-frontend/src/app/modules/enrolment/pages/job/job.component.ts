@@ -290,8 +290,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
 
   /**
    * @description
-   * Removes incomplete oboSites from the list in preparation
-   * for submission, and allows for an empty list of oboSites if no jobs are solected.
+   * Removes incomplete oboSites from the list in preparation for submission, and
+   * allows for an empty list of oboSites if no jobs are solected.
    */
   private removeIncompleteOboSites(noEmptyOboSites: boolean = false) {
     this.oboSites.controls
