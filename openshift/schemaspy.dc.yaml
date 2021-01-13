@@ -117,7 +117,7 @@ objects:
       spec:
         containers:
         - name: "schemaspy"
-          image: "docker-registry.default.svc:5000/${OC_NAMESPACE}-${OC_APP}/schemaspy"
+          image: "image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-${OC_APP}/schemaspy"
           ports:
           - containerPort: "8080"
             protocol: "TCP"

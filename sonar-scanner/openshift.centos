@@ -1,4 +1,4 @@
-FROM docker-registry.default.svc:5000/9c33a9-tools/jenkins-slave-base-centos7
+FROM image-registry.openshift-image-registry.svc:5000/9c33a9-tools/jenkins-slave-base-centos7
 #FROM openshift/jenkins-slave-base-centos7
 SHELL ["/bin/bash", "-c"]
 COPY . /var/lib/origin 

@@ -42,7 +42,7 @@ spec:
         - name: DATABASE_USER
           value: postgres
       image: >-
-        docker-registry.default.svc:5000/9c33a9-dev/schemaspy@sha256:d463ef48ad0839b58a2903c5aac20879916c8d14f6b3be5551e0e54119566338
+        image-registry.openshift-image-registry.svc:5000/9c33a9-dev/schemaspy@sha256:d463ef48ad0839b58a2903c5aac20879916c8d14f6b3be5551e0e54119566338
       imagePullPolicy: Always
       name: schemaspy
       ports:

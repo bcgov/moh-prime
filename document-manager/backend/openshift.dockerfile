@@ -1,4 +1,4 @@
-FROM docker-registry.default.svc:5000/9c33a9-tools/python:3.6
+FROM image-registry.openshift-image-registry.svc:5000/9c33a9-tools/python:3.6
 USER 0
 ENV APP_ROOT /opt/app-root
 SHELL ["/bin/bash","-c"]
