@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -19,8 +19,7 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 @Component({
   selector: 'app-enrollee-review',
   templateUrl: './enrollee-review.component.html',
-  styleUrls: ['./enrollee-review.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./enrollee-review.component.scss']
 })
 export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;
