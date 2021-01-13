@@ -12,7 +12,7 @@ import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.mode
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
