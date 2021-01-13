@@ -31,7 +31,6 @@
     </button>
     <button mat-menu-item
             [disabled]="!canEdit"
-            *ngIf="isUnderReview"
             (click)="onDecline()">
       <mat-icon>block</mat-icon>
       <span>Decline Enrollee</span>
