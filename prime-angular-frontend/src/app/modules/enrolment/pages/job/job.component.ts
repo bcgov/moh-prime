@@ -95,21 +95,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     return careSettings;
   }
 
-  public onSubmit() {
-    this.removeIncompleteOboSites();
-
-    this.oboSites.clear();
-    this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
-    this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
-    this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
-
-    this.communityHealthSites.updateValueAndValidity();
-    this.communityPharmacySites.updateValueAndValidity();
-    this.healthAuthoritySites.updateValueAndValidity();
-
-    super.onSubmit();
-  }
-
   public oboSitesByCareSetting(careSettingCode: number): FormArray {
     const sites: FormArray = this.fb.array([]);
     if (this.oboSites?.length) {
@@ -197,6 +182,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   public ngOnDestroy() {
     this.removeIncompleteJobs(true);
     this.removeIncompleteOboSites(true);
+    this.removeCareSettingSites();
   }
 
   protected createFormInstance() {
@@ -244,6 +230,14 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   protected onSubmitFormIsValid() {
     // Enrollees can not have jobs and certifications
     this.removeCollegeCertifications();
+    this.removeIncompleteOboSites();
+
+    this.oboSites.clear();
+    this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
+    this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
+    this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
+
+    this.removeCareSettingSites();
   }
 
   protected nextRouteAfterSubmit() {
@@ -320,5 +314,12 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
    */
   private removeCollegeCertifications() {
     this.enrolmentFormStateService.regulatoryFormState.removeCollegeCertifications();
+  }
+
+  private removeCareSettingSites() {
+    // Clear out sites so validation don't interrupt submissions
+    this.communityHealthSites.clear();
+    this.communityPharmacySites.clear();
+    this.healthAuthoritySites.clear();
   }
 }
