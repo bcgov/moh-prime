@@ -527,8 +527,7 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.IdentificationDocuments)
-                .Include(e => e.Agreements)
-                .Include(e => e.Credential);
+                .Include(e => e.Agreements);
         }
 
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
