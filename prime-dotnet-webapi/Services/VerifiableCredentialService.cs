@@ -206,13 +206,14 @@ namespace Prime.Services
             // Add ConnectionId to Enrollee's newest credential which does not have a connection_id
             var enrolleeCredential = await _context.EnrolleeCredentials
                 .Include(ec => ec.Credential)
-                .OrderByDescending(ec => ec.CreatedTimeStamp)
                 .Where(ec => ec.Credential.ConnectionId == null)
+                .OrderByDescending(ec => ec.Id)
                 .FirstOrDefaultAsync(ec => ec.EnrolleeId == enrolleeId);
 
             _logger.LogInformation("Updating this credential's connectionId to {connection_id}: {@JObject}", JsonConvert.SerializeObject(enrolleeCredential), connection_id);
 
             enrolleeCredential.Credential.ConnectionId = connection_id;
+            _context.Credentials.Update(enrolleeCredential.Credential);
 
             return await _context.SaveChangesAsync();
         }
