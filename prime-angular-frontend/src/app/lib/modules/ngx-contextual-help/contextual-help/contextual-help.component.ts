@@ -15,6 +15,7 @@ export class ContextualHelpComponent {
   @Input() public icon: string;
   @Input() public color: ThemePalette;
   @Input() public small: boolean;
+  @Input() public advanced: boolean;
   @Input() public titleIcon: string;
 
   @ContentChildren(ContextualTitleDirective, { descendants: true })
@@ -28,5 +29,6 @@ export class ContextualHelpComponent {
     this.icon = 'info';
     this.color = 'primary';
     this.small = false;
+    this.advanced = false;
   }
 }

@@ -9,16 +9,6 @@ mat-date-range-input {
 }
 
 .flex-container {
-  display: flex;
   height: 48px;
   width: 24px;
-  flex-wrap: wrap;
-}
-
-.start {
-  align-self: flex-start;
-}
-
-.end {
-  align-self: flex-end;
 }

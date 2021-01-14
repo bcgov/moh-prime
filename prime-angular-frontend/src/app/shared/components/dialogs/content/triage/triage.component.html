@@ -1,27 +1,29 @@
 <app-contextual-help icon="topic"
                      [small]="true"
-                     titleIcon="network_check">
-  
+                     [advanced]="true"
+                     titleIcon="network_check"
+                     class="test">
+
   <ng-container appContextualTitle>
     Triage
   </ng-container>
-  
+
   <ng-container appContextualContent>
-    <h2 class="h5 mb-4">
+    <h2 class="h5 mb-3">
       Reason for manual adjudication:
     </h2>
     <div class="pl-2 mb-4">
       <ng-container *ngFor="let reason of (status$ | async)?.enrolmentStatusReasons">
-        <div class="mb-4 blue">
+        <ul class="mb-4 blue pl-0">
           {{ reason.statusReason.name }}
-        </div>
+        </ul>
       </ng-container>
     </div>
   </ng-container>
 
   <button mat-flat-button
           color="primary"
-          class="mb-5 d-block"
+          class="mb-2 d-block"
           [matMenuTriggerFor]="menu"
           (click)="$event.stopPropagation()">
     Triage Actions <mat-icon>keyboard_arrow_down</mat-icon>

@@ -1,9 +1,7 @@
 @import 'palette';
 
-.title {
+.underline {
   border-bottom: 1px solid theme-palette(grey, lightest);
-  color: theme-palette(blue);
-  padding-bottom: .3em;
 }
 
 a.small {
@@ -14,3 +12,11 @@ a.small {
     font-size: 18px;
    }
  }
+
+.mat-menu-panel {
+  max-width: 380px;
+}
+
+.title-icon {
+  font-size: 2.2rem;
+}

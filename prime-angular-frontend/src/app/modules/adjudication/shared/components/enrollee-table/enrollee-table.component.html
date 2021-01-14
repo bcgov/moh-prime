@@ -13,9 +13,9 @@
               scope="col">&nbsp;</th>
           <td mat-cell
               *matCellDef="let row;">
-            <div class="flex-container">
+            <div class="flex-container flex-wrap d-flex">
               <app-triage *ngIf="row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
-                          class="start"
+                          class="align-self-start"
                           [enrolleeId]="row.id"></app-triage>
             </div>
           </td>
