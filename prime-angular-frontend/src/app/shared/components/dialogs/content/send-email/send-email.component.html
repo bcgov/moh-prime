@@ -1,0 +1,38 @@
+<h2 mat-dialog-title
+    class="d-flex align-items-stretch">
+  <mat-icon [color]="'primary'">help</mat-icon>
+  <span class="flex-grow-1">
+    {{ this.title }}
+  </span>
+</h2>
+
+<mat-dialog-content>
+  <span>Send email to:</span>
+
+  <div class="row mt-4">
+    <div class="col-auto">
+      <button mat-stroked-button
+              cdkFocusInitial
+              (click)="onCancel()">Cancel</button>
+    </div>
+    <div class="col-auto">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Send To:</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-action-list>
+            <button mat-list-item
+                    (click)="onSelect(site?.provisioner?.email)">Signing Authority</button>
+            <button mat-list-item
+                    (click)="onSelect(site?.administratorPharmaNet?.email)">PharmaNet Administrator</button>
+            <button mat-list-item
+                    (click)="onSelect(site?.privacyOfficer?.email)">Privacy Officer</button>
+            <button mat-list-item
+                    (click)="onSelect(site?.technicalSupport?.email)">Technical Support Contact</button>
+          </mat-action-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</mat-dialog-content>
