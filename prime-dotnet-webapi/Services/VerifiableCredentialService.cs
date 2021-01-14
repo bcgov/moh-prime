@@ -92,6 +92,8 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not store connection invitation.");
             }
 
+            _logger.LogInformation("Enrollee Credential count at end of CreateConnection: {length}", _context.EnrolleeCredentials.ToList().Count);
+
             // TODO after testing don't need to pass back the invitation
             return invitation;
         }
@@ -215,6 +217,8 @@ namespace Prime.Services
 
         private async Task<int> UpdateCredentialConnectionId(int enrolleeId, string connection_id)
         {
+            _logger.LogInformation("Enrollee Credential count at UpdateConnectionId: {length}", _context.EnrolleeCredentials.ToList().Count);
+
             // Add ConnectionId to Enrollee's newest credential
             var credential = await _context.EnrolleeCredentials
                 .Include(ec => ec.Credential)
