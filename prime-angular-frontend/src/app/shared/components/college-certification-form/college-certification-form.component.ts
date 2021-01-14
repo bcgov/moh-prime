@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import moment from 'moment';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { Config, CollegeConfig, LicenseConfig, PracticeConfig, LicenseWeightedConfig } from '@config/config.model';
+import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -23,7 +23,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public total: number;
   @Input() public selectedColleges: number[];
   @Input() public collegeFilterPredicate: (collegeConfig: CollegeConfig) => boolean;
-  @Input() public licenceFilterPredicate: (licenceConfig: LicenseWeightedConfig) => boolean;
+  @Input() public licenceFilterPredicate: (licenceConfig: LicenseConfig) => boolean;
   @Input() public condensed: boolean;
   @Output() public remove: EventEmitter<number>;
 
