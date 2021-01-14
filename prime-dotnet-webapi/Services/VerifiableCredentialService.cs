@@ -252,7 +252,15 @@ namespace Prime.Services
 
             var credentialAttributes = await CreateCredentialAttributesAsync(enrolleeId);
             var credentialOffer = await CreateCredentialOfferAsync(connectionId, credentialAttributes);
-            return await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
+            var issueCredentialResponse = await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
+
+            // Set credentials CredentialExchangeId from issue credential response
+            credential.CredentialExchangeId = (string)issueCredentialResponse.SelectToken("credential_exchange_id");
+            _context.Credentials.Update(credential);
+
+            await _context.SaveChangesAsync();
+
+            return issueCredentialResponse;
         }
 
         // Create the credential offer.
