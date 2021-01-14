@@ -85,10 +85,20 @@ namespace Prime.HttpClients
 
         public async Task<JObject> RevokeCredentialAsync(Credential credential)
         {
+            JObject revocationObject = new JObject
+            {
+                // { "cred_ex_id", credential.CredentialExchangeId },
+                { "cred_rev_id", credential.CredentialRevocationId },
+                { "publish", true },
+                { "revoc_reg_id", credential.RevocationRegistryId },
+            };
+
+            var httpContent = new StringContent(revocationObject.ToString(), Encoding.UTF8, "application/json");
+
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.PostAsync($"issue-credential/revoke?cred_rev_id={credential.CredentialRevocationId}&rev_reg_id={credential.RevocationRegistryId}&publish=true", null);
+                response = await _client.PostAsync($"revocation/revoke", httpContent);
             }
             catch (Exception ex)
             {

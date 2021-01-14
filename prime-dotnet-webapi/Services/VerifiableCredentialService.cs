@@ -214,17 +214,16 @@ namespace Prime.Services
 
         private async Task<int> UpdateCredentialConnectionId(int enrolleeId, string connection_id)
         {
-            // Add ConnectionId to Enrollee's newest credential which does not have a connection_id
+            // Add ConnectionId to Enrollee's newest credential
             var credential = await _context.EnrolleeCredentials
                 .Include(ec => ec.Credential)
-                .Where(ec => ec.Credential.ConnectionId == null)
                 .Where(ec => ec.EnrolleeId == enrolleeId)
                 .OrderByDescending(ec => ec.CreatedTimeStamp)
                 .ThenByDescending(ec => ec.Id)
                 .Select(ec => ec.Credential)
                 .FirstOrDefaultAsync();
 
-            _logger.LogInformation("Updating this credential's {id} connectionId to {connection_id}", credential.Id, connection_id);
+            _logger.LogInformation("Updating this credential's {$JObject} connectionId to {connection_id}", credential, connection_id);
 
             credential.ConnectionId = connection_id;
             _context.Credentials.Update(credential);
