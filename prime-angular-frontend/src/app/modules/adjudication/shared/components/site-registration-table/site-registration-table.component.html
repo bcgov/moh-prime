@@ -95,7 +95,8 @@
             *matHeaderCellDef
             scope="col"> Missing Business Licence </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ missingBusinessLicence(row) }}</td>
+            *matCellDef="let row;"> {{ ((row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+          ? !row.businessLicence?.businessLicenceDocument : null) | yesNo | default: 'N/A' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">

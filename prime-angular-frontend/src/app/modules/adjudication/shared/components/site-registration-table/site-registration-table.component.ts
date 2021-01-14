@@ -83,12 +83,5 @@ export class SiteRegistrationTableComponent implements OnInit {
       : 'N/A';
   }
 
-  public missingBusinessLicence(siteRegistration: SiteRegistrationListViewModel) {
-    return (siteRegistration.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
-      ? (!siteRegistration.businessLicence?.businessLicenceDocument)
-        ? 'Yes' : 'No'
-      : 'N/A';
-  }
-
   public ngOnInit(): void { }
 }
