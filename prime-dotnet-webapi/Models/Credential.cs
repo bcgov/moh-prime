@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Prime.Models
 {
     [Table("Credential")]
@@ -11,6 +10,7 @@ namespace Prime.Models
         public int Id { get; set; }
         public string ConnectionId { get; set; }
         public string SchemaId { get; set; }
+        public string CredentialExchangeId { get; set; }
         public string CredentialDefinitionId { get; set; }
         public string RevocationRegistryId { get; set; }
         public string CredentialRevocationId { get; set; }
