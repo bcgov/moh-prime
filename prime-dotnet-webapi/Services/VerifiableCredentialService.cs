@@ -75,15 +75,14 @@ namespace Prime.Services
                 Alias = alias,
                 Base64QRCode = qrCodeImageAsBase64
             };
-            _context.Credentials.Add(credential);
-            await _context.SaveChangesAsync();
 
             var enrolleeCredential = new EnrolleeCredential
             {
-                EnrolleeId = enrollee.Id,
-                CredentialId = credential.Id
+                Enrollee = enrollee,
+                Credential = credential
             };
 
+            _context.Credentials.Add(credential);
             _context.EnrolleeCredentials.Add(enrolleeCredential);
 
             var created = await _context.SaveChangesAsync();
