@@ -219,14 +219,13 @@ namespace Prime.Services
             var credential = await _context.EnrolleeCredentials
                 .Include(ec => ec.Credential)
                 .Where(ec => ec.EnrolleeId == enrolleeId)
-                .OrderByDescending(ec => ec.CreatedTimeStamp)
-                .ThenByDescending(ec => ec.Id)
+                .OrderByDescending(ec => ec.Id)
                 .Select(ec => ec.Credential)
                 .FirstOrDefaultAsync();
 
             if (credential != null)
             {
-                _logger.LogInformation("Updating this credential's {$JObject} connectionId to {connection_id}", credential, connection_id);
+                _logger.LogInformation("Updating this credential's (Id = {id}) connectionId to {connection_id}", credential.Id, connection_id);
 
                 credential.ConnectionId = connection_id;
                 _context.Credentials.Update(credential);
