@@ -86,7 +86,7 @@ namespace Prime.Services
 
             _context.EnrolleeCredentials.Add(enrolleeCredential);
 
-            created = await _context.SaveChangesAsync();
+            var created = await _context.SaveChangesAsync();
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not store connection invitation.");
