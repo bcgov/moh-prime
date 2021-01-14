@@ -224,10 +224,13 @@ namespace Prime.Services
                 .Select(ec => ec.Credential)
                 .FirstOrDefaultAsync();
 
-            _logger.LogInformation("Updating this credential's {$JObject} connectionId to {connection_id}", credential, connection_id);
+            if (credential != null)
+            {
+                _logger.LogInformation("Updating this credential's {$JObject} connectionId to {connection_id}", credential, connection_id);
 
-            credential.ConnectionId = connection_id;
-            _context.Credentials.Update(credential);
+                credential.ConnectionId = connection_id;
+                _context.Credentials.Update(credential);
+            }
 
             return await _context.SaveChangesAsync();
         }
