@@ -13,7 +13,7 @@ export class ContextualHelpComponent {
   @Input() public xPosition: MenuPositionX;
   @Input() public yPosition: MenuPositionY;
   @Input() public icon: string;
-  @Input() public color: ThemePalette;
+  @Input() public menuIconColor: ThemePalette;
   @Input() public small: boolean;
   @Input() public advanced: boolean;
   @Input() public titleIcon: string;
@@ -27,7 +27,7 @@ export class ContextualHelpComponent {
     this.xPosition = 'after';
     this.yPosition = 'below';
     this.icon = 'info';
-    this.color = 'primary';
+    this.menuIconColor = 'primary';
     this.small = false;
     this.advanced = false;
   }
