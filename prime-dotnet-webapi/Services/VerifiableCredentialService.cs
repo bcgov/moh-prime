@@ -143,13 +143,13 @@ namespace Prime.Services
             switch (state)
             {
                 case ConnectionState.Invitation:
+                    return true;
+
+                case ConnectionState.Request:
                     // Enrollee Id stored as alias on invitation
                     var enrolleeId = data.Value<int>("alias");
                     connectionId = data.Value<string>("connection_id");
                     await UpdateCredentialConnectionId(enrolleeId, connectionId);
-                    return true;
-
-                case ConnectionState.Request:
                     return true;
 
                 case ConnectionState.Response:
