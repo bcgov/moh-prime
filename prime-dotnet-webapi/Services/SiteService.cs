@@ -1,22 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using LinqKit;
 
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.HttpClients;
-using Prime.DTOs;
-using System.Linq.Expressions;
-using System.Diagnostics.CodeAnalysis;
-using DelegateDecompiler.EntityFrameworkCore;
-using LinqKit;
-
 
 namespace Prime.Services
 {
