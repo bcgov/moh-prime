@@ -33,9 +33,5 @@ namespace Prime.Models
 
         [JsonIgnore]
         public License License { get; set; }
-
-        [NotMapped]
-        [JsonIgnore]
-        public string FullLicenseNumber { get { return $"{License?.Prefix}-{LicenseNumber}"; } }
     }
 }
