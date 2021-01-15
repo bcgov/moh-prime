@@ -4,12 +4,39 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class CredentialAddConnectionId : Migration
+    public partial class CredentialUpdatesforRevocation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Enrollee_Credential_CredentialId",
+                table: "Enrollee");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Enrollee_CredentialId",
+                table: "Enrollee");
+
+            migrationBuilder.DropColumn(
+                name: "CredentialId",
+                table: "Enrollee");
+
             migrationBuilder.AddColumn<string>(
                 name: "ConnectionId",
+                table: "Credential",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "CredentialExchangeId",
+                table: "Credential",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "CredentialRevocationId",
+                table: "Credential",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "RevocationRegistryId",
                 table: "Credential",
                 nullable: true);
 
@@ -62,6 +89,37 @@ namespace Prime.Migrations
             migrationBuilder.DropColumn(
                 name: "ConnectionId",
                 table: "Credential");
+
+            migrationBuilder.DropColumn(
+                name: "CredentialExchangeId",
+                table: "Credential");
+
+            migrationBuilder.DropColumn(
+                name: "CredentialRevocationId",
+                table: "Credential");
+
+            migrationBuilder.DropColumn(
+                name: "RevocationRegistryId",
+                table: "Credential");
+
+            migrationBuilder.AddColumn<int>(
+                name: "CredentialId",
+                table: "Enrollee",
+                type: "integer",
+                nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Enrollee_CredentialId",
+                table: "Enrollee",
+                column: "CredentialId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Enrollee_Credential_CredentialId",
+                table: "Enrollee",
+                column: "CredentialId",
+                principalTable: "Credential",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
     }
 }

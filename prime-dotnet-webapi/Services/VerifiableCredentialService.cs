@@ -92,8 +92,6 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not store connection invitation.");
             }
 
-            _logger.LogInformation("Enrollee Credential count at end of CreateConnection: {length}", _context.EnrolleeCredentials.ToList().Count);
-
             // TODO after testing don't need to pass back the invitation
             return invitation;
         }
@@ -154,7 +152,6 @@ namespace Prime.Services
                     return true;
 
                 case ConnectionState.Response:
-
                     var alias = data.Value<int>("alias");
                     connectionId = data.Value<string>("connection_id");
 
@@ -163,9 +160,8 @@ namespace Prime.Services
                     // Assumed that when a connection invitation has been sent and accepted
                     // the enrollee has been approved, and has a GPID for issuing a credential
                     // TODO should be queued and managed outside of webhook callback
-                    var issueCredentialResponse = await IssueCredential(connectionId, alias);
-
-                    _logger.LogInformation("Credential has been issued for connection_id: {connectionId} with response {@JObject}", connectionId, JsonConvert.SerializeObject(issueCredentialResponse));
+                    await IssueCredential(connectionId, alias);
+                    _logger.LogInformation("Credential has been issued for connection_id: {connectionId}", connectionId);
 
                     return true;
 
@@ -209,17 +205,19 @@ namespace Prime.Services
             _logger.LogInformation("Credential Revocation Id {revocation_id}", revocation_id);
 
             var credential = GetCredentialByConnectionIdAsync(connection_id);
-            credential.AcceptedCredentialDate = DateTimeOffset.Now;
-            credential.RevocationRegistryId = revoc_reg_id;
-            credential.CredentialRevocationId = revocation_id;
+
+            if (credential != null)
+            {
+                credential.AcceptedCredentialDate = DateTimeOffset.Now;
+                credential.RevocationRegistryId = revoc_reg_id;
+                credential.CredentialRevocationId = revocation_id;
+            }
 
             return await _context.SaveChangesAsync();
         }
 
         private async Task<int> UpdateCredentialConnectionId(int enrolleeId, string connection_id)
         {
-            _logger.LogInformation("Enrollee Credential count at UpdateConnectionId: {length}", _context.EnrolleeCredentials.ToList().Count);
-
             // Add ConnectionId to Enrollee's newest credential
             var credential = await _context.EnrolleeCredentials
                 .Include(ec => ec.Credential)
@@ -253,7 +251,7 @@ namespace Prime.Services
 
             var credential = GetCredentialByConnectionIdAsync(connectionId);
 
-            if (credential.AcceptedCredentialDate != null)
+            if (credential == null || credential.AcceptedCredentialDate != null)
             {
                 return null;
             }
