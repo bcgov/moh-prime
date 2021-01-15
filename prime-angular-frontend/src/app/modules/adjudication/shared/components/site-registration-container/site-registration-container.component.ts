@@ -341,7 +341,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       remoteUsers,
       adjudicator,
       pec,
-      status
+      status,
+      businessLicence
     } = site;
 
     return {
@@ -354,7 +355,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       remoteUserCount: remoteUsers.length,
       adjudicatorIdir: adjudicator?.idir,
       pec,
-      status
+      status,
+      businessLicence
     };
   }
 }
