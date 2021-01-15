@@ -110,7 +110,7 @@ namespace Prime.HttpClients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::RevokeCredentialAsync");
             }
 
-            _logger.LogInformation("Revoke credential response {@JObject}", JsonConvert.SerializeObject(response.Content.ReadAsStringAsync()));
+            _logger.LogInformation("Revoke credential id={id} success", credential.Id);
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
@@ -137,7 +137,6 @@ namespace Prime.HttpClients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            _logger.LogInformation("GET Schema id by issuer id response {@JObject}", JsonConvert.SerializeObject(body));
             _logger.LogInformation("SCHEMA_ID: {schemaid}", (string)body.SelectToken("schema_ids[0]"));
 
             return (string)body.SelectToken("schema_ids[0]");
@@ -190,7 +189,7 @@ namespace Prime.HttpClients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            _logger.LogInformation("GET Issuer DID response {@JObject}", JsonConvert.SerializeObject(body));
+            _logger.LogInformation("GET Issuer DID response {did}", (string)body.SelectToken("result.did"));
 
             return (string)body.SelectToken("result.did");
         }
@@ -243,7 +242,7 @@ namespace Prime.HttpClients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            _logger.LogInformation("GET GetRevocationRegistryId response {@JObject}", JsonConvert.SerializeObject(body));
+            _logger.LogInformation("GET GetRevocationRegistryId response {revoc_reg_id}", (string)body.SelectToken("result.revoc_reg_id"));
 
             return (string)body.SelectToken("result.revoc_reg_id");
         }
