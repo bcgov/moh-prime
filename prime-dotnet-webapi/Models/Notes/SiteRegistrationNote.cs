@@ -12,5 +12,8 @@ namespace Prime.Models
 
         [JsonIgnore]
         public Site Site { get; set; }
+
+        [JsonIgnore]
+        public SiteEscalation SiteEscalation { get; set; }
     }
 }

@@ -13,5 +13,8 @@ namespace Prime.Models
 
         [JsonIgnore]
         public EnrolmentStatusReference EnrolmentStatusReference { get; set; }
+
+        [JsonIgnore]
+        public EnrolmentEscalation EnrolmentEscalation { get; set; }
     }
 }

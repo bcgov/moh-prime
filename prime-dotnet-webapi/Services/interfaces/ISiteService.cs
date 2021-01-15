@@ -35,6 +35,7 @@ namespace Prime.Services
         Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes);
         Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId);
         Task DeleteSiteAdjudicationDocumentAsync(int documentId);
+        Task<SiteEscalation> CreateSiteEscalationAsync(int siteRegistrationNoteId, int adminId, int assineeId);
 
     }
 }

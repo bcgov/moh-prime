@@ -597,6 +597,22 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<SiteEscalation> CreateSiteEscalationAsync(int siteRegistrationNoteId, int adminId, int assineeId)
+        {
+            var escalation = new SiteEscalation
+            {
+                SiteRegistrationNoteId = siteRegistrationNoteId,
+                AdminId = adminId,
+                AssigneeId = assineeId,
+            };
+
+            _context.SiteEscalations.Add(escalation);
+
+            await _context.SaveChangesAsync();
+
+            return escalation;
+        }
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites

@@ -556,6 +556,15 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<EnrolleeNoteViewModel> GetEnrolleeAdjudicatorNoteAsync(int enrolleeId, int noteId)
+        {
+            return await _context.EnrolleeNotes
+                .Where(an => an.EnrolleeId == enrolleeId)
+                .Include(an => an.Adjudicator)
+                .ProjectTo<EnrolleeNoteViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(n => n.Id == noteId);
+        }
+
         public async Task<EnrolleeNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId)
         {
             var adjudicatorNote = new EnrolleeNote
@@ -594,6 +603,34 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return reference;
+        }
+
+        public async Task<EnrolmentEscalation> CreateEnrolmentEscalationAsync(int EnrolleeNoteId, int adminId, int assineeId)
+        {
+            var escalation = new EnrolmentEscalation
+            {
+                EnrolleeNoteId = EnrolleeNoteId,
+                AdminId = adminId,
+                AssigneeId = assineeId,
+            };
+
+            _context.EnrolmentEscalations.Add(escalation);
+
+            await _context.SaveChangesAsync();
+
+            return escalation;
+        }
+
+        public async Task RemoveEnrolmentEscalationAsync(int enrolmentEscalationId)
+        {
+            var escalation = await _context.EnrolmentEscalations
+                .SingleOrDefaultAsync(ee => ee.Id == enrolmentEscalationId);
+            if (escalation == null)
+            {
+                return;
+            }
+            _context.EnrolmentEscalations.Remove(escalation);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<EnrolmentStatusReference> AddAdjudicatorNoteToReferenceIdAsync(int statusId, int noteId)
@@ -802,7 +839,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<EnrolmentStatus> GetEnrolleeCurrentStatus(int enrolleeId)
+        public async Task<EnrolmentStatus> GetEnrolleeCurrentStatusAsync(int enrolleeId)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.EnrolmentStatuses)

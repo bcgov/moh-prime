@@ -40,6 +40,8 @@ namespace Prime.Services
 
         Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId);
 
+        Task<EnrolleeNoteViewModel> GetEnrolleeAdjudicatorNoteAsync(int enrolleeId, int noteId);
+
         Task<EnrolleeNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId);
 
         Task<IBaseEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IBaseEnrolleeNote newNote);
@@ -70,6 +72,8 @@ namespace Prime.Services
 
         Task DeleteEnrolleeAdjudicationDocumentAsync(int documentId);
 
-        Task<EnrolmentStatus> GetEnrolleeCurrentStatus(int enrolleeId);
+        Task<EnrolmentStatus> GetEnrolleeCurrentStatusAsync(int enrolleeId);
+        Task<EnrolmentEscalation> CreateEnrolmentEscalationAsync(int EnrolleeNoteId, int adminId, int assineeId);
+        Task RemoveEnrolmentEscalationAsync(int enrolmentEscalationId);
     }
 }
