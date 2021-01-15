@@ -112,6 +112,8 @@ namespace Prime.HttpClients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::RevokeCredentialAsync");
             }
 
+            _logger.LogInformation("Revoke credential response {@JObject}", JsonConvert.SerializeObject(response));
+
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
