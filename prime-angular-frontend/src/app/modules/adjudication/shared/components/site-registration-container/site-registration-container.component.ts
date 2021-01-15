@@ -116,11 +116,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.busy = this.dialog.open(SendEmailComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: string) => {
-          if (!result) { return EMPTY; }
-
-          return of(result);
-        })
+        exhaustMap((result: string) => (result) ? of(result) : EMPTY)
       )
       .subscribe((email: string) => this.utilResource.mailTo(email));
   }

@@ -9,30 +9,36 @@
 <mat-dialog-content>
   <span>Send email to:</span>
 
-  <div class="row mt-4">
-    <div class="col-auto">
-      <button mat-stroked-button
-              cdkFocusInitial
-              (click)="onCancel()">Cancel</button>
-    </div>
-    <div class="col-auto">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Send To:</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-action-list>
-            <button mat-list-item
-                    (click)="onSelect(site?.provisioner?.email)">Signing Authority</button>
-            <button mat-list-item
-                    (click)="onSelect(site?.administratorPharmaNet?.email)">PharmaNet Administrator</button>
-            <button mat-list-item
-                    (click)="onSelect(site?.privacyOfficer?.email)">Privacy Officer</button>
-            <button mat-list-item
-                    (click)="onSelect(site?.technicalSupport?.email)">Technical Support Contact</button>
-          </mat-action-list>
-        </mat-card-content>
-      </mat-card>
-    </div>
+  <div class="mt-4">
+    <button mat-stroked-button
+            class="mr-4"
+            cdkFocusInitial
+            (click)="onCancel()">Cancel</button>
+
+    <button mat-flat-button
+            color="primary"
+            class="mb-5 d-inline"
+            [matMenuTriggerFor]="menu">
+      Send To: <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+
+    <mat-menu #menu>
+      <button mat-menu-item
+              (click)="onSelect(site?.provisioner?.email)">
+        <span>Signing Authority</span>
+      </button>
+      <button mat-menu-item
+              (click)="onSelect(site?.administratorPharmaNet?.email)">
+        <span>PharmaNet Administrator</span>
+      </button>
+      <button mat-menu-item
+              (click)="onSelect(site?.privacyOfficer?.email)">
+        <span>Privacy Officer</span>
+      </button>
+      <button mat-menu-item
+              (click)="onSelect(site?.technicalSupport?.email)">
+        <span>Technical Support Contact</span>
+      </button>
+    </mat-menu>
   </div>
 </mat-dialog-content>
