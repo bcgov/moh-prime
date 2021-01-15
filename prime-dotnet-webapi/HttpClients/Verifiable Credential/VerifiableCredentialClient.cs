@@ -227,7 +227,7 @@ namespace Prime.HttpClients
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.GetAsync($"revocation?active-registry/{credentialDefinitionId}");
+                response = await _client.GetAsync($"revocation/active-registry/{credentialDefinitionId}");
             }
             catch (Exception ex)
             {
