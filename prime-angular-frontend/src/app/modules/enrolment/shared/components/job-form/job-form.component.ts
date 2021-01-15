@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
+import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import { map, startWith, switchMap } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 
 @Component({
   selector: 'app-job-form',

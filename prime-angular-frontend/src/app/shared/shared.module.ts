@@ -218,7 +218,8 @@ import { TriageComponent } from './components/dialogs/content/triage/triage.comp
     AccessCodeFormComponent,
     ContactInformationFormComponent,
     CareSettingPipe,
-    JoinPipe
+    JoinPipe,
+    TriageComponent
   ],
   providers: [
     FullnamePipe,

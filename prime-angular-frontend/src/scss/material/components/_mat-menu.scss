@@ -1,0 +1,13 @@
+// For an example of use see \src\app\lib\modules\ngx-contextual-help\contextual-help
+@mixin set-width($width) {
+  width: $width;
+  max-width: $width;
+}
+
+$context-width: 380px;
+
+.advanced-context {
+  &.mat-menu-panel {
+    @include set-width($context-width);
+  }
+}

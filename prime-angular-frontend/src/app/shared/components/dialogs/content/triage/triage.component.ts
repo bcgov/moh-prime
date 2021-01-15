@@ -1,5 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { EMPTY, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
@@ -16,28 +15,23 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
-import { DialogOptions } from '../../dialog-options.model';
-
 @Component({
   selector: 'app-triage',
   templateUrl: './triage.component.html',
   styleUrls: ['./triage.component.scss']
 })
 export class TriageComponent implements OnInit {
-  public enrolleeId: number;
+  @Input() public enrolleeId: number;
   public busy: Subscription;
   public status$: Observable<EnrolmentStatus>;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
-    public enrolmentResource: EnrolmentResource,
-    public authService: AuthService,
-    public adjudicationResource: AdjudicationResource,
-    public toastService: ToastService,
-    public utilsService: UtilsService,
-    private dialogRef: MatDialogRef<TriageComponent>
+    private enrolmentResource: EnrolmentResource,
+    private authService: AuthService,
+    private adjudicationResource: AdjudicationResource,
+    private toastService: ToastService,
+    private utilsService: UtilsService,
   ) {
-    this.enrolleeId = data.data.enrolleeId;
   }
 
   public get canEdit(): boolean {
@@ -50,12 +44,12 @@ export class TriageComponent implements OnInit {
 
   public onEnableEditing() {
     this.adjudicationResource.submissionAction(this.enrolleeId, SubmissionAction.ENABLE_EDITING)
-      .subscribe(() => this.dialogRef.close());
+      .subscribe();
   }
 
   public onRerunRules() {
     this.adjudicationResource.submissionAction(this.enrolleeId, SubmissionAction.RERUN_RULES)
-      .subscribe(() => this.dialogRef.close());
+      .subscribe();
   }
 
   public onNotify() {
@@ -78,12 +72,11 @@ export class TriageComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getCurrentStatus();
   }
 
   private getCurrentStatus() {
     this.status$ = this.enrolmentResource.getCurrentStatus(this.enrolleeId);
   }
-
 }

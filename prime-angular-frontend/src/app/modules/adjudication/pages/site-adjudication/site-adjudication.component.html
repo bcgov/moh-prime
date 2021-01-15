@@ -6,8 +6,7 @@
 
 </app-site-registration-container>
 
-<ng-template #content
-             let-site="site">
+<ng-template #content>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
@@ -43,4 +42,23 @@
 
   </form>
 
+
+  <ng-container *ngIf="site?.businessLicence?.businessLicenceDocument; else noBusinessLicence">
+
+    <h2 role="button"
+        (click)="onRoute([site.organizationId, AdjudicationRoutes.SITE_REGISTRATION, site.id])">
+      <mat-icon>notifications</mat-icon>
+      <u>
+        View recently uploaded business licence
+      </u>
+    </h2>
+  </ng-container>
+  <ng-template #noBusinessLicence>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>No Business Licence</ng-container>
+      <ng-container appPageSubheader2Summary>
+        {{ site?.businessLicence?.deferredLicenceReason }}
+      </ng-container>
+    </app-page-subheader2>
+  </ng-template>
 </ng-template>

@@ -2,6 +2,7 @@ import { Component, Input, ContentChildren, QueryList } from '@angular/core';
 import { MenuPositionX, MenuPositionY } from '@angular/material/menu';
 import { ContextualTitleDirective } from '../contextual-title.directive';
 import { ContextualContentDirective } from '../contextual-content.directive';
+import { ThemePalette } from '@angular/material/core';
 
 @Component({
   selector: 'app-contextual-help',
@@ -9,13 +10,25 @@ import { ContextualContentDirective } from '../contextual-content.directive';
   styleUrls: ['./contextual-help.component.scss']
 })
 export class ContextualHelpComponent {
-  @Input() xPosition: MenuPositionX = 'after';
-  @Input() yPosition: MenuPositionY = 'below';
+  @Input() public xPosition: MenuPositionX;
+  @Input() public yPosition: MenuPositionY;
+  @Input() public icon: string;
+  @Input() public menuIconColor: ThemePalette;
+  @Input() public small: boolean;
+  @Input() public advanced: boolean;
+  @Input() public titleIcon: string;
 
   @ContentChildren(ContextualTitleDirective, { descendants: true })
   public contextualHelpTitleChildren: QueryList<ContextualTitleDirective>;
   @ContentChildren(ContextualContentDirective, { descendants: true })
   public contextualHelpContentChildren: QueryList<ContextualContentDirective>;
 
-  constructor() { }
+  constructor() {
+    this.xPosition = 'after';
+    this.yPosition = 'below';
+    this.icon = 'info';
+    this.menuIconColor = 'primary';
+    this.small = false;
+    this.advanced = false;
+  }
 }
