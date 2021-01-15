@@ -207,6 +207,12 @@ namespace Prime
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
 
+            modelBuilder.Entity<EnrolleeCredential>()
+                .HasOne(ec => ec.Enrollee)
+                .WithMany(e => e.EnrolleeCredentials)
+                .HasForeignKey(ec => ec.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Agreement>()
                 .HasOne(toa => toa.Enrollee)
                 .WithMany(e => e.Agreements)
