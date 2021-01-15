@@ -230,7 +230,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   protected onSubmitFormIsValid() {
     // Enrollees can not have jobs and certifications
     this.removeCollegeCertifications();
-    this.removeIncompleteOboSites();
+    this.removeIncompleteOboSites(true);
 
     this.oboSites.clear();
     this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
@@ -281,6 +281,16 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
       this.addJob();
     }
   }
+
+  // private removeIncompleteCareSettingSites() {
+  //   [
+  //     this.communityHealthSites,
+  //     this.communityPharmacySites,
+  //     this.healthAuthoritySites
+  //   ].forEach(cs => {
+  //     cs.controls
+  //   });
+  // }
 
   /**
    * @description
