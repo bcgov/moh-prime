@@ -362,7 +362,7 @@ objects:
             secretKeyRef:
               name: "postgresql-secrets"
               key: postgresql_database_admin_password              
-      image: image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
+      image: image-registry.apps.silver.devops.gov.bc.ca/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
       name: ${NAME}${SUFFIX}-migrate
       resources: {}
   status: {}

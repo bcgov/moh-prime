@@ -50,7 +50,7 @@ spec:
                 -XX:MaxMetaspaceSize=512m -Duser.timezone=America/Vancouver
                 -Dhudson.model.DirectoryBrowserSupport.CSP=
           image: >-
-            image-registry.openshift-image-registry.svc:5000/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
+            image-registry.apps.silver.devops.gov.bc.ca/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 30
@@ -115,7 +115,7 @@ spec:
           name: 'jenkins:2'
           namespace: openshift
         lastTriggeredImage: >-
-          image-registry.openshift-image-registry.svc:5000/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
+          image-registry.apps.silver.devops.gov.bc.ca/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
       type: ImageChange
     - type: ConfigChange
 status:
