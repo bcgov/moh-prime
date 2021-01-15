@@ -125,7 +125,10 @@ namespace Prime.Services
 
             foreach (var credential in enrolleeCredentials)
             {
-                await _verifiableCredentialClient.RevokeCredentialAsync(credential);
+                if (credential.CredentialExchangeId != null)
+                {
+                    await _verifiableCredentialClient.RevokeCredentialAsync(credential);
+                }
             }
 
             await _context.SaveChangesAsync();
