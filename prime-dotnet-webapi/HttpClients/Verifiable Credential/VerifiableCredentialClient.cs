@@ -87,7 +87,7 @@ namespace Prime.HttpClients
         {
             JObject revocationObject = new JObject
             {
-                // { "cred_ex_id", credential.CredentialExchangeId },
+                { "cred_ex_id", credential.CredentialExchangeId },
                 { "cred_rev_id", credential.CredentialRevocationId },
                 { "publish", true },
                 { "revoc_reg_id", credential.RevocationRegistryId },
