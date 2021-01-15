@@ -147,9 +147,7 @@ namespace Prime.Services
 
                 case ConnectionState.Request:
                     // Enrollee Id stored as alias on invitation
-                    var enrolleeId = data.Value<int>("alias");
-                    connectionId = data.Value<string>("connection_id");
-                    await UpdateCredentialConnectionId(enrolleeId, connectionId);
+                    await UpdateCredentialConnectionId(data.Value<int>("alias"), data.Value<string>("connection_id"));
                     return true;
 
                 case ConnectionState.Response:
@@ -277,6 +275,7 @@ namespace Prime.Services
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
             var schema = (await _verifiableCredentialClient.GetSchema(schemaId)).Value<JObject>("schema");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
+            var revocationRegistryId = await _verifiableCredentialClient.GetRevocationRegistryIdAsync(credentialDefinitionId);
 
             JObject credentialOffer = new JObject
             {
@@ -290,7 +289,7 @@ namespace Prime.Services
                 { "comment", "PharmaNet GPID" },
                 { "auto_remove", false },
                 { "trace", false },
-                { "revoc_registry_id", "Cc6hpJk61DjGcztPiAwJyK:4:Cc6hpJk61DjGcztPiAwJyK:3:CL:166842:prime_enrollee_credential:CL_ACCUM:508a3839-e50d-486e-9c1a-c39bfd039ea8" },
+                { "revoc_registry_id", revocationRegistryId },
                 {
                     "credential_proposal",
                     new JObject

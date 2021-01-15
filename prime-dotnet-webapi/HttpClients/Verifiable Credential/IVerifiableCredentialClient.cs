@@ -13,6 +13,7 @@ namespace Prime.HttpClients
         Task<JObject> GetSchema(string schemaId);
         Task<string> GetIssuerDidAsync();
         Task<string> GetCredentialDefinitionIdAsync(string schemaId);
+        Task<string> GetRevocationRegistryIdAsync(string credentialDefinitionId);
         Task<JObject> GetPresentationProof(string presentationExchangeId);
     }
 }

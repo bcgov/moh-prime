@@ -88,9 +88,7 @@ namespace Prime.HttpClients
             JObject revocationObject = new JObject
             {
                 { "cred_ex_id", credential.CredentialExchangeId },
-                // { "cred_rev_id", credential.CredentialRevocationId },
                 { "publish", true }
-                // { "revoc_reg_id", credential.RevocationRegistryId },
             };
 
             var httpContent = new StringContent(revocationObject.ToString(), Encoding.UTF8, "application/json");
@@ -112,7 +110,7 @@ namespace Prime.HttpClients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::RevokeCredentialAsync");
             }
 
-            _logger.LogInformation("Revoke credential response {@JObject}", JsonConvert.SerializeObject(response));
+            _logger.LogInformation("Revoke credential response {@JObject}", JsonConvert.SerializeObject(response.Content.ReadAsStringAsync()));
 
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
@@ -222,6 +220,32 @@ namespace Prime.HttpClients
             _logger.LogInformation("GET Credential Definition IDs {@JObject}", JsonConvert.SerializeObject(body));
 
             return (string)body.SelectToken($"credential_definition_ids[{credentialDefinitionIds.Count - 1}]");
+        }
+
+        public async Task<string> GetRevocationRegistryIdAsync(string credentialDefinitionId)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.GetAsync($"revocation?active-registry/{credentialDefinitionId}");
+            }
+            catch (Exception ex)
+            {
+                await LogError(response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to get the current active revocation registry by credential definition id: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetRevocationRegistryIdAsync");
+            }
+
+            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+            _logger.LogInformation("GET GetRevocationRegistryId response {@JObject}", JsonConvert.SerializeObject(body));
+
+            return (string)body.SelectToken("result.revoc_reg_id");
         }
 
         public async Task<JObject> GetPresentationProof(string presentationExchangeId)
