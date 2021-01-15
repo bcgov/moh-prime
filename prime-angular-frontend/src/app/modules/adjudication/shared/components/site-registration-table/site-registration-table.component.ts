@@ -41,6 +41,7 @@ export class SiteRegistrationTableComponent implements OnInit {
       'siteId',
       'remoteUsers',
       'careSetting',
+      'missingBusinessLicence',
       'actions'
     ];
     this.claim = new EventEmitter<number>();
