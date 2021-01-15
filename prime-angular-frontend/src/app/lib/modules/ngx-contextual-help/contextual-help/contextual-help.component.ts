@@ -1,8 +1,9 @@
 import { Component, Input, ContentChildren, QueryList } from '@angular/core';
 import { MenuPositionX, MenuPositionY } from '@angular/material/menu';
+import { ThemePalette } from '@angular/material/core';
+
 import { ContextualTitleDirective } from '../contextual-title.directive';
 import { ContextualContentDirective } from '../contextual-content.directive';
-import { ThemePalette } from '@angular/material/core';
 
 @Component({
   selector: 'app-contextual-help',
