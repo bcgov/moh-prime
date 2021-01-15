@@ -843,14 +843,14 @@ namespace Prime.Controllers
         /// <summary>
         /// Searches for Remote User Certifications by College Code + Licence Number and returns related Site data
         /// </summary>
-        /// <param name="certs"></param>
+        /// <param name="certifications"></param>
         [HttpPost("remote-users", Name = nameof(GetSitesByRemoteUserInfo))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<RemoteAccessSearchViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<RemoteAccessSearchViewModel>>> GetSitesByRemoteUserInfo(IEnumerable<CertSearchViewModel> certs)
+        public async Task<ActionResult<IEnumerable<RemoteAccessSearchViewModel>>> GetSitesByRemoteUserInfo(IEnumerable<CertSearchViewModel> certifications)
         {
-            var info = await _siteService.GetRemoteUserInfoAsync(certs);
+            var info = await _siteService.GetRemoteUserInfoAsync(certifications);
             return Ok(ApiResponse.Result(info));
         }
 
