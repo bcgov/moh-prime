@@ -11,6 +11,12 @@ using AutoMapper.QueryableExtensions;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.HttpClients;
+using Prime.DTOs;
+using System.Linq.Expressions;
+using System.Diagnostics.CodeAnalysis;
+using DelegateDecompiler.EntityFrameworkCore;
+using LinqKit;
+
 
 namespace Prime.Services
 {
@@ -493,18 +499,32 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Site>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
+        public async Task<IEnumerable<RemoteAccessSearchViewModel>> GetRemoteUserInfoAsync(IEnumerable<CertSearchViewModel> certs)
         {
-            var sites = await GetBaseSiteQuery()
-                .Where(s => s.ApprovedDate != null)
-                .ToListAsync();
-
-            sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
-            foreach (var site in sites)
+            if (certs == null || !certs.Any())
             {
-                site.RemoteUsers = site.RemoteUsers.Where(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))).ToList();
+                return Enumerable.Empty<RemoteAccessSearchViewModel>();
             }
-            return sites;
+
+            var predicate = PredicateBuilder.New<RemoteUserCertification>();
+            foreach (var cert in certs)
+            {
+                predicate.Or(ruc => ruc.CollegeCode == cert.CollegeCode && ruc.LicenseNumber == cert.LicenceNumber);
+            }
+
+            return await _context.RemoteUserCertifications
+                .AsNoTracking()
+                .AsExpandable()
+                .Where(predicate)
+                .Select(ruc => ruc.RemoteUser)
+                .Distinct()
+                .Select(ru => new RemoteAccessSearchViewModel
+                {
+                    RemoteUserId = ru.Id,
+                    SiteDoingBusinessAs = ru.Site.DoingBusinessAs,
+                    SiteAddress = ru.Site.PhysicalAddress
+                })
+                .ToListAsync();
         }
 
         public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
