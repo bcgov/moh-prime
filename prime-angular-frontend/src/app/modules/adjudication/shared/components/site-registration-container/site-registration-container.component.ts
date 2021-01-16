@@ -17,9 +17,10 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { ClaimSiteComponent, ClaimSiteAction } from '@shared/components/dialogs/content/claim-site/claim-site.component';
 import { ClaimActionEnum } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
-import { OrganizationAgreement } from '@shared/models/agreement.model';
+import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
+import { UtilsService } from '@core/services/utils.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
@@ -53,6 +54,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     private authService: AuthService,
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource,
+    private utilResource: UtilsService,
     private dialog: MatDialog
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
@@ -103,6 +105,20 @@ export class SiteRegistrationContainerComponent implements OnInit {
         })
       )
       .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
+  }
+
+  public onNotify(siteId: number) {
+    const data: DialogOptions = {
+      title: 'Send Email',
+      data: { 'siteId': siteId }
+    };
+
+    this.busy = this.dialog.open(SendEmailComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: string) => (result) ? of(result) : EMPTY)
+      )
+      .subscribe((email: string) => this.utilResource.mailTo(email));
   }
 
   public onRoute(routePath: string | (string | number)[]) {
