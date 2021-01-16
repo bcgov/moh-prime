@@ -8,7 +8,7 @@
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <ng-container *ngIf="currentPage > 0; else preamble">
-    <ng-container *ngIf="identityProvider !== IdentityProviderEnum.BCSC; else uploadTOA">
+    <ng-container *ngIf="identityProvider === IdentityProviderEnum.BCSC; else uploadTOA">
       <app-access-term [accessTerms]="accessTerm"></app-access-term>
     </ng-container>
   </ng-container>
