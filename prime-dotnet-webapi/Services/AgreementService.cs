@@ -234,7 +234,7 @@ namespace Prime.Services
             // Converting to BC time here since we aren't localizing this time in the web client
             displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
 
-            return await _razorConverterService.RenderViewToStringAsync(template, new Tuple<string, DateTimeOffset>(orgName, displayDate));
+            return await _razorConverterService.RenderTemplateToStringAsync(template, new Tuple<string, DateTimeOffset>(orgName, displayDate));
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace Prime.Services
             {
                 if (agreement != null)
                 {
-                    agreement.AgreementContent = await _razorConverterService.RenderViewToStringAsync(new AgreementTemplate(), agreement);
+                    agreement.AgreementContent = await _razorConverterService.RenderTemplateToStringAsync(new AgreementTemplate(), agreement);
                 }
             }
         }

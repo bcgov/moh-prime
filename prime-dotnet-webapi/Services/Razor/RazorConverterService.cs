@@ -34,10 +34,10 @@ namespace Prime.Services
             _contextAccessor = contextAccessor;
         }
 
-        private async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
+        public async Task<string> RenderTemplateToStringAsync<TModel>(RazorTemplate<TModel> template, TModel viewModel)
         {
             var actionContext = GetActionContext();
-            var view = GetView(actionContext, viewName);
+            var view = GetView(actionContext, template.ViewPath);
 
             using var output = new StringWriter();
             var viewContext = new ViewContext(
@@ -47,7 +47,7 @@ namespace Prime.Services
                     metadataProvider: new EmptyModelMetadataProvider(),
                     modelState: new ModelStateDictionary())
                 {
-                    Model = model
+                    Model = viewModel
                 },
                 new TempDataDictionary(actionContext.HttpContext, _tempDataProvider),
                 output,
@@ -56,11 +56,6 @@ namespace Prime.Services
             await view.RenderAsync(viewContext);
 
             return output.ToString();
-        }
-
-        public async Task<string> RenderViewToStringAsync<TModel>(RazorTemplate<TModel> template, TModel viewModel)
-        {
-            return await RenderViewToStringAsync(template.ViewPath, viewModel);
         }
 
         private IView GetView(ActionContext actionContext, string viewName)
