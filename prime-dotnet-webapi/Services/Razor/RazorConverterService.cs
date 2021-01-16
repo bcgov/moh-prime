@@ -34,7 +34,7 @@ namespace Prime.Services
             _contextAccessor = contextAccessor;
         }
 
-        public async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
+        private async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
         {
             var actionContext = GetActionContext();
             var view = GetView(actionContext, viewName);
@@ -58,9 +58,9 @@ namespace Prime.Services
             return output.ToString();
         }
 
-        public async Task<string> RenderViewToStringAsync<TModel>(RazorRenderingPackage<TModel> razorView)
+        public async Task<string> RenderViewToStringAsync<TModel>(RazorTemplate<TModel> template, TModel viewModel)
         {
-            return await RenderViewToStringAsync(razorView.ViewPath, razorView.ViewModel);
+            return await RenderViewToStringAsync(template.ViewPath, viewModel);
         }
 
         private IView GetView(ActionContext actionContext, string viewName)
