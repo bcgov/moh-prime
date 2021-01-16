@@ -82,7 +82,10 @@ export class DashboardV1Component implements OnInit {
   }
 
   public onLogout() {
-    let routePath = this.config.loginRedirectUrl;
+    // Dashboard is only used for Enrolments now, and will eventually
+    // be replaced, but logout needs to force auth route now with
+    // the existence of PHSA
+    let routePath = AuthRoutes.routePath(AuthRoutes.INFO);
 
     if (this.authService.hasAdminView()) {
       routePath = `${routePath}/${AuthRoutes.ADMIN}`;
