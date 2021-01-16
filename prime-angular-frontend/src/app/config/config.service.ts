@@ -102,7 +102,7 @@ export class ConfigService implements IConfigService {
   }
 
   public get healthAuthorities() {
-    return []
+    return [...this.configuration.healthAuthorities]
       .sort(this.sortConfigByName());
   }
 
