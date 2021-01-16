@@ -515,8 +515,10 @@ namespace Prime.Services
                 .Select(ru => new RemoteAccessSearchViewModel
                 {
                     RemoteUserId = ru.Id,
+                    SiteId = ru.SiteId,
                     SiteDoingBusinessAs = ru.Site.DoingBusinessAs,
-                    SiteAddress = ru.Site.PhysicalAddress
+                    SiteAddress = ru.Site.PhysicalAddress,
+                    VendorCodes = ru.Site.SiteVendors.Select(sv => sv.VendorCode)
                 })
                 .ToListAsync();
         }
