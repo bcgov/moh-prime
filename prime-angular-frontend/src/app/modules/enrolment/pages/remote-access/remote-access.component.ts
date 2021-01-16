@@ -101,6 +101,8 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
     const remoteAccessSite = this.enrolmentFormStateService.remoteAccessSiteFormGroup();
 
+    // Any checked sites are converted into an enrollee remote user, and
+    // remote access site forming the submission payload
     this.sites?.controls.forEach((checked) => {
       if (checked.value) {
         this.remoteAccessSearch.forEach(r => {
