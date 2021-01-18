@@ -15,6 +15,7 @@
                                [dataSource]="dataSource"
                                (claim)="onClaim($event)"
                                (disclaim)="onDisclaim($event)"
+                               (notify)="onNotify($event)"
                                (route)="onRoute($event)"></app-site-registration-table>
 
   <ng-container *ngIf="content">

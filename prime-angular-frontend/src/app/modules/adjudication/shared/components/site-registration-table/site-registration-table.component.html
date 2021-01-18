@@ -180,6 +180,15 @@
           <mat-icon>pan_tool</mat-icon>
           <span>Disclaim Enrolment</span>
         </button>
+
+        <mat-divider [inset]="true"></mat-divider>
+
+        <button mat-menu-item
+                (click)="onNotify(row.siteId)">
+          <mat-icon>email</mat-icon>
+          <span>Send Email</span>
+        </button>
+
       </mat-menu>
     </ng-template>
 
