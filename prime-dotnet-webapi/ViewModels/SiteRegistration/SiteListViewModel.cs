@@ -27,5 +27,7 @@ namespace Prime.ViewModels
         public SiteStatusType Status { get; set; }
 
         public string PEC { get; set; }
+
+        public BusinessLicence BusinessLicence { get; set; }
     }
 }

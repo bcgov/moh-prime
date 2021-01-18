@@ -98,9 +98,9 @@ export class RemoteUsersComponent implements OnInit {
     const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
 
     const collegeLicence = (remoteUserCertifications.length > 1)
-      ? 'More than one college licence'
+      ? 'More than one College licence'
       : (remoteUserCertifications.length === 0)
-        ? 'No college licence'
+        ? 'No College licence'
         : remoteUserCertifications.value[0].licenseNumber;
 
     return [

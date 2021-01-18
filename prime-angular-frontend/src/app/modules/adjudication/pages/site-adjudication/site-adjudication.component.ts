@@ -4,9 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription, Observable, BehaviorSubject } from 'rxjs';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Site } from '@registration/shared/models/site.model';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-site-adjudication',
@@ -18,6 +20,10 @@ export class SiteAdjudicationComponent implements OnInit {
   public form: FormGroup;
   public hasActions: boolean;
   public refresh: BehaviorSubject<boolean>;
+  public site: Site;
+  public AdjudicationRoutes = AdjudicationRoutes;
+
+  private routeUtils: RouteUtils;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,6 +34,7 @@ export class SiteAdjudicationComponent implements OnInit {
   ) {
     this.hasActions = true;
     this.refresh = new BehaviorSubject<boolean>(null);
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
 
   public onSubmit() {
@@ -39,11 +46,18 @@ export class SiteAdjudicationComponent implements OnInit {
     }
   }
 
+  public onRoute(routePath: string | (string | number)[]) {
+    this.routeUtils.routeWithin(routePath);
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
 
     this.busy = this.getSite()
-      .subscribe((site: Site) => this.form.patchValue(site));
+      .subscribe((site: Site) => {
+        this.site = site;
+        this.form.patchValue(site);
+      });
   }
 
   private createFormInstance() {

@@ -13,7 +13,7 @@ import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { FacilityEnum } from '@shared/enums/facility.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';

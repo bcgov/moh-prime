@@ -206,6 +206,16 @@ namespace Prime.Services
 
         }
 
+        public async Task SendBusinessLicenceUploadedAsync(Site site)
+        {
+            var subject = "Site Business Licence Uploaded";
+            var body = await _razorConverterService.RenderViewToStringAsync(
+                "/Views/Emails/BusinessLicenceUploadedEmail.cshtml",
+                new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
+
+            await Send(PRIME_EMAIL, site.Adjudicator.Email, subject, body);
+        }
+
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
         {
             var businessLicence = await _siteService.GetBusinessLicenceAsync(siteId);

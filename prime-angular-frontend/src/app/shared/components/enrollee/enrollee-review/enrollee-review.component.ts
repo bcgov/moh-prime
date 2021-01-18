@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -12,15 +12,14 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
-import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-enrollee-review',
   templateUrl: './enrollee-review.component.html',
-  styleUrls: ['./enrollee-review.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./enrollee-review.component.scss']
 })
 export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;

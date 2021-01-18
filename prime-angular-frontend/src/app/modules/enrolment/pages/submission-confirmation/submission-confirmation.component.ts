@@ -5,7 +5,7 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
 
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/BaseEnrolmentPage';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({

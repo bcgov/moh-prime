@@ -187,7 +187,7 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
         component: PharmanetEnrolmentSummaryComponent,
-        data: { title: 'Next Steps to get PharmaNet' }
+        data: { title: 'Next Steps to Get PharmaNet' }
       },
       {
         path: EnrolmentRoutes.ACCESS_TERMS,

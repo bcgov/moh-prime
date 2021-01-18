@@ -728,5 +728,29 @@ namespace Prime.Controllers
 
             return Ok(ApiResponse.Result(document));
         }
+
+        // GET: api/Enrollees/{enrolleeId}/current-status
+        /// <summary>
+        /// Get the enrollees current status
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/current-status", Name = nameof(GetEnrolleeCurrentStatus))]
+        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolmentStatus>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetEnrolleeCurrentStatus(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var status = await _enrolleeService.GetEnrolleeCurrentStatus(enrolleeId);
+
+            return Ok(ApiResponse.Result(status));
+        }
     }
 }
