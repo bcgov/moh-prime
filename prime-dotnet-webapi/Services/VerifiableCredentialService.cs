@@ -321,27 +321,27 @@ namespace Prime.Services
             {
                 new JObject
                 {
-                    { "name", "gpid" },
+                    { "name", "GPID" },
                     { "value", enrollee.GPID }
                 },
                 new JObject
                 {
-                    { "name", "renewal_date" },
+                    { "name", "Renewal Date" },
                     { "value", enrollee.ExpiryDate.Value.Date.ToShortDateString() }
                 },
                 new JObject
                 {
-                    { "name", "user_class" },
-                    { "value", enrollee.IsRegulatedUser ? "RU" : "OBO" }
+                    { "name", "TOA Name" },
+                    { "value", enrollee.AssignedTOAType.Value.ToString() }
                 },
                 new JObject
                 {
-                    { "name", "organization_type" },
+                    { "name", "Care Type Setting" },
                     { "value", string.Join(',', enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting.Name)) }
                 },
                 new JObject
                 {
-                    { "name", "remote_access" },
+                    { "name", "Remote User" },
                     { "value", enrollee.EnrolleeRemoteUsers.Count > 0 ? "true" : "false"}
                 }
             };
