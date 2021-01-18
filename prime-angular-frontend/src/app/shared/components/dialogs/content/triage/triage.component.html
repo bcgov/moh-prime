@@ -1,0 +1,59 @@
+<app-contextual-help icon="topic"
+                     [small]="true"
+                     [advanced]="true"
+                     titleIcon="network_check"
+                     class="test">
+
+  <ng-container appContextualTitle>
+    Triage
+  </ng-container>
+
+  <ng-container appContextualContent>
+    <h2 class="h5 mb-3">
+      Reason for manual adjudication:
+    </h2>
+    <ul class="list-unstyled mb-4 ml-3">
+      <li *ngFor="let reason of (status$ | async)?.enrolmentStatusReasons; let last = last"
+          class="blue"
+          [class.pb-2]="!last">
+        {{ reason.statusReason.name }}
+      </li>
+    </ul>
+  </ng-container>
+
+  <button mat-flat-button
+          color="primary"
+          class="mb-2 d-block"
+          [matMenuTriggerFor]="menu"
+          (click)="$event.stopPropagation()">
+    Triage Actions <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
+
+  <mat-menu #menu>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="onEscalate()">
+      <mat-icon>error_outline</mat-icon>
+      <span>Enrolment Escalation</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="onEnableEditing()">
+      <mat-icon>lock_open</mat-icon>
+      <span>Enable Editing</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="onRerunRules()">
+      <mat-icon>redo</mat-icon>
+      <span>Rerun Rules</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!canEdit"
+            (click)="onNotify()">
+      <mat-icon>mail</mat-icon>
+      <span>Send Email</span>
+    </button>
+  </mat-menu>
+
+</app-contextual-help>

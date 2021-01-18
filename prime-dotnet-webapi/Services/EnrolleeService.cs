@@ -802,5 +802,19 @@ namespace Prime.Services
             _context.EnrolleeAdjudicationDocuments.Remove(document);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<EnrolmentStatus> GetEnrolleeCurrentStatus(int enrolleeId)
+        {
+            var enrollee = await _context.Enrollees
+                .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.EnrolmentStatusReasons)
+                            .ThenInclude(esr => esr.StatusReason)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            if (enrollee != null)
+            {
+                return enrollee.CurrentStatus;
+            }
+            return null;
+        }
     }
 }

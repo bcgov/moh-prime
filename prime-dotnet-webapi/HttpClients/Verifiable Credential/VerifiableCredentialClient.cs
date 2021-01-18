@@ -16,10 +16,13 @@ namespace Prime.HttpClients
         private readonly ILogger _logger;
 
         private static readonly string SchemaName = "enrollee";
-        // If schema version is updated in dev, make sure it is updated in test and prod agent
-        // (and update cred_def_id) so versions are the same between dev, test, and prod
+        private static readonly string SchemaVersion = "2.1";
+        // If schema changes, the following must be updated in all agents for each environment as the code changes are pushed so versions are the same
         // and have verifier app updated by aries team in each environment
-        private static readonly string SchemaVersion = "2.0";
+        // Update the following through postman:
+        // 1. Add new schema, incrementing schema version -> schema_name = enrollee
+        // 2. Create a credential definition for schema -> support_revocation = true, tag = prime, revocation_registry_size = 100
+        // 3. Create a new revocation registry using the credential_definition_id
 
         public VerifiableCredentialClient(
             HttpClient client,

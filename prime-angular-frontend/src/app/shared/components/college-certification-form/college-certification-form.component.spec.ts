@@ -65,7 +65,7 @@ describe('CollegeCertificationFormComponent', () => {
       fixture = TestBed.createComponent(CollegeCertificationFormComponent);
       component = fixture.componentInstance;
       // Add the bound FormGroup to the component
-      component.form = enrolmentFormStateService.buildCollegeCertificationForm();
+      component.form = enrolmentFormStateService.regulatoryFormState.buildCollegeCertificationForm();
       component.selectedColleges = configService.colleges.map((college: CollegeConfig) => college.code);
       fixture.detectChanges();
     }));
