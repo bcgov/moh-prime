@@ -114,7 +114,7 @@ objects:
                       name: "mongodb-secrets"
                       key: mongodb_database_admin_password 
               image: >-
-                image-registry.apps.silver.devops.gov.bc.ca/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
+                image-registry.openshift-image-registry.svc:5000/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
               imagePullPolicy: IfNotPresent
               readinessProbe:
                 failureThreshold: 3
@@ -159,7 +159,7 @@ objects:
               name: 'mongodb:3.2'
               namespace: openshift
             lastTriggeredImage: >-
-              image-registry.apps.silver.devops.gov.bc.ca/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
+              image-registry.openshift-image-registry.svc:5000/openshift/mongodb@sha256:fae76f90d3f00fec19a6da648f590de7c1cee63f42915cdf04416682864ce6b9
           type: ImageChange
         - type: ConfigChange
       details:

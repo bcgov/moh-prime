@@ -1,4 +1,4 @@
-FROM image-registry.apps.silver.devops.gov.bc.ca/9c33a9-tools/dotnet-core-sdk:3.1 AS build
+FROM image-registry.openshift-image-registry.svc:5000/9c33a9-tools/dotnet-core-sdk:3.1 AS build
 WORKDIR /opt/app-root/app
 
 USER 0
@@ -29,7 +29,7 @@ RUN dotnet publish -c Release -o /opt/app-root/app/out/ /p:MicrosoftNETPlatformL
 RUN dotnet tool install --global dotnet-ef --version 3.1.1
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
 
-FROM image-registry.apps.silver.devops.gov.bc.ca/9c33a9-tools/aspnet:3.1 AS runtime
+FROM image-registry.openshift-image-registry.svc:5000/9c33a9-tools/aspnet:3.1 AS runtime
 USER 0
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
