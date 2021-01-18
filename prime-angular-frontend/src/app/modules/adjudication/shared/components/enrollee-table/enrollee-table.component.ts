@@ -1,15 +1,18 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+
+import { Subscription } from 'rxjs';
+
 import moment from 'moment';
 
 import { UtilsService } from '@core/services/utils.service';
-
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-
 import { AuthService } from '@auth/shared/services/auth.service';
+
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
@@ -24,22 +27,25 @@ export class EnrolleeTableComponent implements OnInit {
   @Output() public disclaim: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
+  public busy: Subscription;
   public form: FormGroup;
   public columns: string[];
   public hasAppliedDateRange = false;
   public hasRenewalDateRange = false;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public EnrolmentStatus = EnrolmentStatus;
 
   constructor(
     private authService: AuthService,
     private utilsService: UtilsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.notify = new EventEmitter<number>();
     this.claim = new EventEmitter<number>();
     this.disclaim = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.columns = [
+      'prefixes',
       'displayId',
       'name',
       'givenNames',

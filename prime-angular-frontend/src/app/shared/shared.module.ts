@@ -77,6 +77,7 @@ import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-r
 import { AccessCodeFormComponent } from '@shared/components/access-code-form/access-code-form.component';
 import { ContactInformationFormComponent } from '@shared/components/contact-information-form/contact-information-form.component';
 import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
+import { TriageComponent } from './components/dialogs/content/triage/triage.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 
 @NgModule({
@@ -144,7 +145,8 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
     ContactInformationFormComponent,
     SendEmailComponent,
     CareSettingPipe,
-    JoinPipe
+    JoinPipe,
+    TriageComponent
   ],
   imports: [
     CommonModule,
@@ -218,7 +220,8 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
     AccessCodeFormComponent,
     ContactInformationFormComponent,
     CareSettingPipe,
-    JoinPipe
+    JoinPipe,
+    TriageComponent
   ],
   providers: [
     FullnamePipe,

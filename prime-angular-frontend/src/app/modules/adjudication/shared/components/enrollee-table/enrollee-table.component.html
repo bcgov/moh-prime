@@ -7,6 +7,20 @@
              [dataSource]="dataSource"
              class="w-100">
 
+        <ng-container matColumnDef="prefixes">
+          <th mat-header-cell
+              *matHeaderCellDef
+              scope="col">&nbsp;</th>
+          <td mat-cell
+              *matCellDef="let row;">
+            <div class="flex-container flex-wrap d-flex">
+              <app-triage *ngIf="row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
+                          class="align-self-start"
+                          [enrolleeId]="row.id"></app-triage>
+            </div>
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="displayId">
           <th mat-header-cell
               *matHeaderCellDef
