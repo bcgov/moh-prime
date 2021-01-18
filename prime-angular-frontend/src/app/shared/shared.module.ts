@@ -78,6 +78,7 @@ import { AccessCodeFormComponent } from '@shared/components/access-code-form/acc
 import { ContactInformationFormComponent } from '@shared/components/contact-information-form/contact-information-form.component';
 import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
 import { TriageComponent } from './components/dialogs/content/triage/triage.component';
+import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 
 @NgModule({
   declarations: [
@@ -142,6 +143,7 @@ import { TriageComponent } from './components/dialogs/content/triage/triage.comp
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
     ContactInformationFormComponent,
+    SendEmailComponent,
     CareSettingPipe,
     JoinPipe,
     TriageComponent

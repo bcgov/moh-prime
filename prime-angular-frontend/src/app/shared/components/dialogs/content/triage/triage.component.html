@@ -12,13 +12,13 @@
     <h2 class="h5 mb-3">
       Reason for manual adjudication:
     </h2>
-    <div class="pl-2 mb-4">
-      <ng-container *ngFor="let reason of (status$ | async)?.enrolmentStatusReasons">
-        <ul class="mb-4 blue pl-0">
-          {{ reason.statusReason.name }}
-        </ul>
-      </ng-container>
-    </div>
+    <ul class="list-unstyled mb-4 ml-3">
+      <li *ngFor="let reason of (status$ | async)?.enrolmentStatusReasons; let last = last"
+          class="blue"
+          [class.pb-2]="!last">
+        {{ reason.statusReason.name }}
+      </li>
+    </ul>
   </ng-container>
 
   <button mat-flat-button
