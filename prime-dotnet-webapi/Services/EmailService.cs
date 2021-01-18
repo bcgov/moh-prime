@@ -210,7 +210,7 @@ namespace Prime.Services
         {
             var subject = "Site Business Licence Uploaded";
             var body = await _razorConverterService.RenderViewToStringAsync(
-                "/Views/Emails/BusinessLicenceUploadedEmail.cshtml",
+                new BusinessLicenceUploadedEmailTemplate(),
                 new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
 
             await Send(PRIME_EMAIL, site.Adjudicator.Email, subject, body);

@@ -35,6 +35,11 @@ namespace Prime.Services.Razor
     }
 
     // Emails
+    public class BusinessLicenceUploadedEmailTemplate : RazorTemplate<EmailParams>
+    {
+        public override string ViewPath => "/Views/Emails/BusinessLicenceUploadedEmail.cshtml";
+    }
+
     public class CommunityPharmacyManagerEmailTemplate : RazorTemplate<EmailParams>
     {
         public override string ViewPath => "/Views/Emails/CommunityPharmacyManagerEmail.cshtml";
