@@ -16,5 +16,8 @@ namespace Prime.Services
         Task<bool> UpdateEmailLogStatuses();
         Task SendEnrolleeRenewalEmails();
         Task SendBusinessLicenceUploadedAsync(Site site);
+        Task SendSiteApprovedPharmaNetAdministratorAsync(Site site);
+        Task SendSiteApprovedSigningAuthorityAsync(Site site);
+        Task SendSiteApprovedHIBCAsync(Site site);
     }
 }

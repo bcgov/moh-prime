@@ -85,6 +85,21 @@ namespace Prime.Services.Razor
         public override string ViewPath => "/Views/Emails/UpdateRemoteUsersEmail.cshtml";
     }
 
+    public class SiteApprovedPharmaNetAdministratorEmailTemplate : RazorTemplate<EmailParams>
+    {
+        public override string ViewPath => "Views/Emails/SiteApprovedPharmaNetAdministratorEmail.cshtml";
+    }
+
+    public class SiteApprovedSigningAuthorityEmailTemplate : RazorTemplate<EmailParams>
+    {
+        public override string ViewPath => "Views/Emails/SiteApprovedSigningAuthorityEmailTemplate.cshtml";
+    }
+
+    public class SiteApprovedHIBCEmailTemplate : RazorTemplate<EmailParams>
+    {
+        public override string ViewPath => "Views/Emails/SiteApprovedHIBCEmailTemplate.cshtml";
+    }
+
     // Others
     public class SiteRegistrationReviewTemplate : RazorTemplate<Site>
     {
