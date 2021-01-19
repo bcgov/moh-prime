@@ -85,9 +85,9 @@ namespace Prime.HttpClients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<JObject> RevokeCredentialAsync(Credential credential)
+        public async Task<bool> RevokeCredentialAsync(Credential credential)
         {
-            _logger.LogInformation("Revoking credential id={id}", credential.Id);
+            _logger.LogInformation("Revoking credential cred_ex-Id={id}", credential.CredentialExchangeId);
 
             JObject revocationObject = new JObject
             {
@@ -114,9 +114,9 @@ namespace Prime.HttpClients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::RevokeCredentialAsync");
             }
 
-            _logger.LogInformation("Revoke credential id={id} success", credential.Id);
+            _logger.LogInformation("Revoke credential cred_ex_id={id} success", credential.CredentialExchangeId);
 
-            return JObject.Parse(await response.Content.ReadAsStringAsync());
+            return true;
         }
 
 

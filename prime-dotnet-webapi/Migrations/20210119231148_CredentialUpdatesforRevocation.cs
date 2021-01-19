@@ -30,13 +30,8 @@ namespace Prime.Migrations
                 table: "Credential",
                 nullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "CredentialRevocationId",
-                table: "Credential",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "RevocationRegistryId",
+            migrationBuilder.AddColumn<DateTimeOffset>(
+                name: "RevokedCredentialDate",
                 table: "Credential",
                 nullable: true);
 
@@ -95,11 +90,7 @@ namespace Prime.Migrations
                 table: "Credential");
 
             migrationBuilder.DropColumn(
-                name: "CredentialRevocationId",
-                table: "Credential");
-
-            migrationBuilder.DropColumn(
-                name: "RevocationRegistryId",
+                name: "RevokedCredentialDate",
                 table: "Credential");
 
             migrationBuilder.AddColumn<int>(

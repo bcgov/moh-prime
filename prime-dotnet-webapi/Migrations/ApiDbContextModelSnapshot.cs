@@ -10043,11 +10043,8 @@ namespace Prime.Migrations
                     b.Property<string>("CredentialExchangeId")
                         .HasColumnType("text");
 
-                    b.Property<string>("CredentialRevocationId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("RevocationRegistryId")
-                        .HasColumnType("text");
+                    b.Property<DateTimeOffset?>("RevokedCredentialDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SchemaId")
                         .HasColumnType("text");
