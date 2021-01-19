@@ -30,9 +30,9 @@ RUN touch /etc/nginx/conf.d/default.conf
 RUN chmod -R 777 /etc/nginx
 RUN chmod -R 777 /var/cache/nginx
 RUN chmod -R 777 /var/lib/nginx
-RUN chmod -R 777 /var/run
-RUN chmod -R 777 /var/lib
-RUN chmod -R 777 /var/log
+RUN chmod -R 755 /var/run
+RUN chmod -R 755 /var/lib
+RUN chmod -R 755 /var/log
 COPY nginx.conf /etc/nginx/
 COPY nginx.template.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
