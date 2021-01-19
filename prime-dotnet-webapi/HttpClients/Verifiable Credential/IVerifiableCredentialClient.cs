@@ -8,7 +8,7 @@ namespace Prime.HttpClients
     {
         Task<JObject> CreateInvitationAsync(string alias);
         Task<JObject> IssueCredentialAsync(JObject credentialOffer);
-        Task<JObject> RevokeCredentialAsync(Credential credential);
+        Task<bool> RevokeCredentialAsync(Credential credential);
         Task<string> GetSchemaId(string did);
         Task<JObject> GetSchema(string schemaId);
         Task<string> GetIssuerDidAsync();
