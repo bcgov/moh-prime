@@ -2,14 +2,19 @@ apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   annotations:
-    description: Template for job that curls your api
+    description: Template for job that activates api to send renewal emails
     tags: cronjob
+  # TODO: Removable?
   creationTimestamp: '2021-01-06T18:51:11Z'
-  name: cronjob-template
+  name: send-renewal-emails-cronjob-template
+  # TODO: Removable?
   namespace: dqszvc-dev
+  # TODO: Removable?
   resourceVersion: '2440024327'
+  # TODO: Removable?
   selfLink: >-
     /apis/template.openshift.io/v1/namespaces/dqszvc-dev/templates/cronjob-template
+  # TODO: Removable?
   uid: 251e0532-5050-11eb-9613-0050568348cc
 objects:
   - apiVersion: batch/v1beta1
@@ -83,8 +88,8 @@ objects:
               restartPolicy: Never
       schedule: '${CRON_SCHEDULE}'
 parameters:
-  - description: 'Cron-like schedule expression. Default: Once every day at 12:00 AM'
+  - description: 'Cron-like schedule expression. Default: Once every 5 minutes'
     name: CRON_SCHEDULE
     value: '*/5 * * * *'
   - name: CRON_NAME
-    value: prime-api-vX-cronjob
+    value: send-renewal-emails-cronjob
