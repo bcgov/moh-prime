@@ -23,6 +23,7 @@ namespace Prime.HttpClients
         // 1. Add new schema, incrementing schema version -> schema_name = enrollee
         // 2. Create a credential definition for schema -> support_revocation = true, tag = prime, revocation_registry_size = 100
         // 3. Create a new revocation registry using the credential_definition_id
+        // 4. Manually set revocation registry state to active
 
         public VerifiableCredentialClient(
             HttpClient client,

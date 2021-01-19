@@ -88,6 +88,7 @@ namespace Prime.Services
             {
                 try
                 {
+                    await _verifiableCredentialService.RevokeCredentialsAsync(enrollee.Id);
                     await _verifiableCredentialService.CreateConnectionAsync(enrollee);
                 }
                 catch (Exception ex)
