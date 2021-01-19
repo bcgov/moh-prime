@@ -20,19 +20,19 @@ ENV KEYCLOAK_REALM $KEYCLOAK_REALM
 ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
-RUN apt-get update && \
-  apt-get install -y nginx gettext-base && \
-  mkdir -p /var/cache/nginx && \
-  mkdir -p /var/lib/nginx && \
-  mkdir -p /var/log/nginx && \
-  mkdir -p /var/cache/nginx/client_temp && \
-  touch /etc/nginx/conf.d/default.conf && \
-  chmod -R 777 /etc/nginx && \
-  chmod -R 777 /var/cache/nginx && \
-  chmod -R 777 /var/lib/nginx && \
-  chmod -R 777 /var/run && \
-  chmod -R 777 /var/lib && \
-  chmod -R 777 /var/log
+RUN apt-get update
+RUN apt-get install -y nginx gettext-base
+RUN mkdir -p /var/cache/nginx
+RUN mkdir -p /var/lib/nginx
+RUN mkdir -p /var/log/nginx
+RUN mkdir -p /var/cache/nginx/client_temp
+RUN touch /etc/nginx/conf.d/default.conf
+RUN chmod -R 777 /etc/nginx
+RUN chmod -R 777 /var/cache/nginx
+RUN chmod -R 777 /var/lib/nginx
+RUN chmod -R 777 /var/run
+RUN chmod -R 777 /var/lib
+RUN chmod -R 777 /var/log
 COPY nginx.conf /etc/nginx/
 COPY nginx.template.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /

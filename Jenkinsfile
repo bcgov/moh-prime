@@ -83,7 +83,7 @@ pipeline {
             options {
                 timeout(time: 10, unit: 'MINUTES') // timeout on this stage
             }
-            when { expression { ( GIT_BRANCH == 'feature/' ) } }
+            when { expression { ( GIT_BRANCH == 'develop' ) } }
             agent { label 'master' }
             steps {
                 script {
