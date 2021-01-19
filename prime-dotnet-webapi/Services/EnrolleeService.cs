@@ -208,7 +208,8 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
-            ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
+            // Removed Temporarily
+            // ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
 
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
             UpdateRemoteAccessSites(enrollee, updateModel);
@@ -800,6 +801,20 @@ namespace Prime.Services
             }
             _context.EnrolleeAdjudicationDocuments.Remove(document);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<EnrolmentStatus> GetEnrolleeCurrentStatus(int enrolleeId)
+        {
+            var enrollee = await _context.Enrollees
+                .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.EnrolmentStatusReasons)
+                            .ThenInclude(esr => esr.StatusReason)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            if (enrollee != null)
+            {
+                return enrollee.CurrentStatus;
+            }
+            return null;
         }
     }
 }

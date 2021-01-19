@@ -1,0 +1,26 @@
+// 
+// Mat-Menu
+//
+
+
+
+//
+// Context-Menu
+//
+
+// Customized use of a mat-menu for displaying information or performing 
+// actions that do not warrant the use of a modal.
+// Example usage: @lib\modules\ngx-contextual-help\contextual-help
+
+@mixin set-width($width) {
+  width: $width;
+  max-width: $width;
+}
+
+$context-width: 380px;
+
+.advanced-context {
+  &.mat-menu-panel {
+    @include set-width($context-width);
+  }
+}
