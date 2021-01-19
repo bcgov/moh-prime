@@ -21,9 +21,7 @@ namespace Prime.HttpClients
         // and have verifier app updated by aries team in each environment
         // Update the following through postman:
         // 1. Add new schema, incrementing schema version -> schema_name = enrollee
-        // 2. Create a credential definition for schema -> support_revocation = true, tag = prime, revocation_registry_size = 100
-        // 3. Create a new revocation registry using the credential_definition_id
-        // 4. Manually set revocation registry state to active
+        // 2. Create a credential definition for schema -> support_revocation = true, tag = prime
 
         public VerifiableCredentialClient(
             HttpClient client,
@@ -225,32 +223,6 @@ namespace Prime.HttpClients
             _logger.LogInformation("GET Credential Definition IDs {@JObject}", JsonConvert.SerializeObject(body));
 
             return (string)body.SelectToken($"credential_definition_ids[{credentialDefinitionIds.Count - 1}]");
-        }
-
-        public async Task<string> GetRevocationRegistryIdAsync(string credentialDefinitionId)
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                response = await _client.GetAsync($"revocation/active-registry/{credentialDefinitionId}");
-            }
-            catch (Exception ex)
-            {
-                await LogError(response, ex);
-                throw new VerifiableCredentialApiException("Error occurred attempting to get the current active revocation registry by credential definition id: ", ex);
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                await LogError(response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetRevocationRegistryIdAsync");
-            }
-
-            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
-
-            _logger.LogInformation("GET GetRevocationRegistryId response {revoc_reg_id}", (string)body.SelectToken("result.revoc_reg_id"));
-
-            return (string)body.SelectToken("result.revoc_reg_id");
         }
 
         public async Task<JObject> GetPresentationProof(string presentationExchangeId)
