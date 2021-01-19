@@ -89,6 +89,8 @@ namespace Prime.HttpClients
 
         public async Task<JObject> RevokeCredentialAsync(Credential credential)
         {
+            _logger.LogInformation("Revoking credential id={id}", credential.Id);
+
             JObject revocationObject = new JObject
             {
                 { "cred_ex_id", credential.CredentialExchangeId },
