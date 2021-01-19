@@ -69,5 +69,7 @@ namespace Prime.Services
         Task<EnrolleeAdjudicationDocument> GetEnrolleeAdjudicationDocumentAsync(int documentId);
 
         Task DeleteEnrolleeAdjudicationDocumentAsync(int documentId);
+
+        Task<EnrolmentStatus> GetEnrolleeCurrentStatus(int enrolleeId);
     }
 }
