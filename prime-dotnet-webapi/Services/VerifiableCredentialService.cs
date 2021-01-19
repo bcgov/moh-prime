@@ -122,17 +122,16 @@ namespace Prime.Services
             var enrolleeCredentials = await _context.EnrolleeCredentials
                 .Include(ec => ec.Credential)
                 .Where(ec => ec.EnrolleeId == enrolleeId)
+                .Where(ec => ec.Credential.CredentialExchangeId != null)
+                .Where(ec => ec.Credential.RevokedCredentialDate == null)
                 .Select(ec => ec.Credential)
                 .ToListAsync();
 
             foreach (var credential in enrolleeCredentials)
             {
-                if (credential.CredentialExchangeId != null)
+                if (await _verifiableCredentialClient.RevokeCredentialAsync(credential))
                 {
-                    if (await _verifiableCredentialClient.RevokeCredentialAsync(credential))
-                    {
-                        credential.RevokedCredentialDate = DateTimeOffset.Now;
-                    }
+                    credential.RevokedCredentialDate = DateTimeOffset.Now;
                 }
             }
 
