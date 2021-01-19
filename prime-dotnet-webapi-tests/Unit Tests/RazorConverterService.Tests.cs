@@ -17,19 +17,15 @@ namespace PrimeTests.UnitTests
 {
     public class RazorConverterServiceTests
     {
-        public static RazorConverterService CreateService(
-            IRazorViewEngine viewEngine = null,
-            ITempDataProvider tempDataProvider = null,
-            IServiceProvider serviceProvider = null,
-            IHttpContextAccessor contextAccessor = null)
+        public static RazorConverterService CreateService()
         {
             var provider = new WebApplicationFactory<Startup>().Services.CreateScope().ServiceProvider;
 
             return new RazorConverterService(
                 provider.GetService<IRazorViewEngine>(),
-                tempDataProvider ?? A.Fake<ITempDataProvider>(),
+                A.Fake<ITempDataProvider>(),
                 provider,
-                contextAccessor ?? A.Fake<IHttpContextAccessor>()
+                A.Fake<IHttpContextAccessor>()
             );
         }
 
@@ -39,7 +35,7 @@ namespace PrimeTests.UnitTests
         {
             var service = CreateService();
             var agreementText = "AGREEMENT TEXT";
-            var agreement = new Agreement
+            var model = new Agreement
             {
                 AgreementVersion = new AgreementVersion
                 {
@@ -47,7 +43,7 @@ namespace PrimeTests.UnitTests
                 }
             };
 
-            var html = await service.RenderTemplateToStringAsync(template, agreement);
+            var html = await service.RenderTemplateToStringAsync(template, model);
 
             Assert.NotNull(html);
             Assert.Contains(agreementText, html);
@@ -60,7 +56,7 @@ namespace PrimeTests.UnitTests
             var service = CreateService();
             var agreementText = "AGREEMENT TEXT";
             var limitsText = "ThIs iS a LiMIt";
-            var agreement = new Agreement
+            var model = new Agreement
             {
                 AgreementVersion = new AgreementVersion
                 {
@@ -72,7 +68,7 @@ namespace PrimeTests.UnitTests
                 }
             };
 
-            var html = await service.RenderTemplateToStringAsync(template, agreement);
+            var html = await service.RenderTemplateToStringAsync(template, model);
 
             Assert.NotNull(html);
             Assert.Contains(agreementText, html);
@@ -95,10 +91,65 @@ namespace PrimeTests.UnitTests
             Assert.Contains(date.Day.ToString(), html);
         }
 
+        // TODO Emails are about to be refactored, write better tests at that point?
+        [Theory]
+        [MemberData(nameof(EmailTemplates))]
+        public async void TestRender_Emails(RazorTemplate<EmailParams> template)
+        {
+            var service = CreateService();
+            var model = new EmailParams
+            {
+                FirstName = "",
+                LastName = "",
+                TokenUrl = "",
+                ProvisionerName = "",
+                RenewalDate = DateTimeOffset.Now,
+                Site = new Site
+                {
+                    Organization = new Organization(),
+                    PhysicalAddress = new PhysicalAddress(),
+                    RemoteUsers = new RemoteUser[] { }
+                },
+                DocumentUrl = "",
+            };
+
+            var html = await service.RenderTemplateToStringAsync(template, model);
+
+            Assert.NotNull(html);
+        }
+
         [Fact]
         public async void TestRender_SiteSummary()
         {
+            var service = CreateService();
+            var model = new Site
+            {
+                Organization = new Organization { },
+                PhysicalAddress = new PhysicalAddress { },
+                BusinessHours = new BusinessDay[] { },
+                SiteVendors = new SiteVendor[] { },
+                RemoteUsers = new RemoteUser[] { },
+                Provisioner = new Party(),
+                AdministratorPharmaNet = new Contact(),
+                PrivacyOfficer = new Contact(),
+                TechnicalSupport = new Contact(),
+            };
 
+            var html = await service.RenderTemplateToStringAsync(new SiteRegistrationReviewTemplate(), model);
+
+            Assert.NotNull(html);
+        }
+
+        [Theory]
+        [MemberData(nameof(DocumentTemplates))]
+        public async void TestRender_Documents(RazorTemplate<Document> template)
+        {
+            var service = CreateService();
+            var model = new Document("filename.ext", new byte[] { });
+
+            var html = await service.RenderTemplateToStringAsync(template, model);
+
+            Assert.NotNull(html);
         }
 
 
