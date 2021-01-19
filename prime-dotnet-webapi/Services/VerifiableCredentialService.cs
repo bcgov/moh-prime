@@ -276,7 +276,6 @@ namespace Prime.Services
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
             var schema = (await _verifiableCredentialClient.GetSchema(schemaId)).Value<JObject>("schema");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
-            var revocationRegistryId = await _verifiableCredentialClient.GetRevocationRegistryIdAsync(credentialDefinitionId);
 
             JObject credentialOffer = new JObject
             {
@@ -290,7 +289,6 @@ namespace Prime.Services
                 { "comment", "PharmaNet GPID" },
                 { "auto_remove", false },
                 { "trace", false },
-                { "revoc_registry_id", revocationRegistryId },
                 {
                     "credential_proposal",
                     new JObject
