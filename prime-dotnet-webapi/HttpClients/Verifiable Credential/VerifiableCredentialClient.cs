@@ -16,7 +16,7 @@ namespace Prime.HttpClients
         private readonly ILogger _logger;
 
         private static readonly string SchemaName = "enrollee";
-        private static readonly string SchemaVersion = "2.1";
+        private static readonly string SchemaVersion = "2.2";
         // If schema changes, the following must be updated in all agents for each environment as the code changes are pushed so versions are the same
         // and have verifier app updated by aries team in each environment
         // Update the following through postman:
