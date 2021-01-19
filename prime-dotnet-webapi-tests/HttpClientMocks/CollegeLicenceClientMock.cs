@@ -50,21 +50,21 @@ namespace PrimeTests.HttpClientMocks
 
             var record = new PharmanetCollegeRecord
             {
-                applicationUUID = new Guid().ToString(),
-                firstName = _expectedEnrollee.FirstName,
-                lastName = _expectedEnrollee.LastName,
-                dateofBirth = _expectedEnrollee.DateOfBirth,
-                status = mode.HasFlag(OperationMode.NotPracticing) ? "N" : "P",
-                effectiveDate = DateTime.Today
+                ApplicationUUID = new Guid().ToString(),
+                FirstName = _expectedEnrollee.FirstName,
+                LastName = _expectedEnrollee.LastName,
+                DateofBirth = _expectedEnrollee.DateOfBirth,
+                Status = mode.HasFlag(OperationMode.NotPracticing) ? "N" : "P",
+                EffectiveDate = DateTime.Today
             };
 
             if (mode.HasFlag(OperationMode.NameDiscrepancy))
             {
-                record.lastName += "extracharacters";
+                record.LastName += "extracharacters";
             }
             if (mode.HasFlag(OperationMode.DateDiscrepancy))
             {
-                record.dateofBirth = record.dateofBirth.AddDays(1);
+                record.DateofBirth = record.DateofBirth.AddDays(1);
             }
 
             return Task.FromResult(record);
