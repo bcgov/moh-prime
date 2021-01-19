@@ -1,16 +1,17 @@
-using System.Linq;
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using FakeItEasy;
 
 using Prime;
 using Prime.Models;
 using Prime.Services;
-using PrimeTests.Utils;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System;
+using Prime.Services.Razor;
 
 namespace PrimeTests.UnitTests
 {
@@ -22,20 +23,117 @@ namespace PrimeTests.UnitTests
             IServiceProvider serviceProvider = null,
             IHttpContextAccessor contextAccessor = null)
         {
+            var provider = new WebApplicationFactory<Startup>().Services.CreateScope().ServiceProvider;
+
             return new RazorConverterService(
-                viewEngine ?? A.Fake<IRazorViewEngine>(),
+                provider.GetService<IRazorViewEngine>(),
                 tempDataProvider ?? A.Fake<ITempDataProvider>(),
-                serviceProvider ?? A.Fake<IServiceProvider>(),
+                provider,
                 contextAccessor ?? A.Fake<IHttpContextAccessor>()
             );
         }
+
+        [Theory]
+        [MemberData(nameof(AgreementTemplates))]
+        public async void TestRender_Agreement(RazorTemplate<Agreement> template)
+        {
+            var service = CreateService();
+            var agreementText = "AGREEMENT TEXT";
+            var agreement = new Agreement
+            {
+                AgreementVersion = new AgreementVersion
+                {
+                    Text = agreementText
+                }
+            };
+
+            var html = await service.RenderTemplateToStringAsync(template, agreement);
+
+            Assert.NotNull(html);
+            Assert.Contains(agreementText, html);
+        }
+
+        [Theory]
+        [MemberData(nameof(AgreementTemplates))]
+        public async void TestRender_Agreement_WithLimits(RazorTemplate<Agreement> template)
+        {
+            var service = CreateService();
+            var agreementText = "AGREEMENT TEXT";
+            var limitsText = "ThIs iS a LiMIt";
+            var agreement = new Agreement
+            {
+                AgreementVersion = new AgreementVersion
+                {
+                    Text = "AGREEMENT TEXT"
+                },
+                LimitsConditionsClause = new LimitsConditionsClause
+                {
+                    Text = limitsText
+                }
+            };
+
+            var html = await service.RenderTemplateToStringAsync(template, agreement);
+
+            Assert.NotNull(html);
+            Assert.Contains(agreementText, html);
+            Assert.Contains(limitsText, html);
+        }
+
+        [Theory]
+        [MemberData(nameof(OrgAgreementTemplates))]
+        public async void TestRender_OrgAgreement(RazorTemplate<Tuple<string, DateTimeOffset>> template)
+        {
+            var service = CreateService();
+            var siteName = "My Cool Site";
+            var date = DateTimeOffset.Now;
+            var model = new Tuple<string, DateTimeOffset>(siteName, date);
+
+            var html = await service.RenderTemplateToStringAsync(template, model);
+
+            Assert.NotNull(html);
+            Assert.Contains(siteName, html);
+            Assert.Contains(date.Day.ToString(), html);
+        }
+
+        [Fact]
+        public async void TestRender_SiteSummary()
+        {
+
+        }
+
+
+        public static IEnumerable<object[]> AgreementTemplates()
+        {
+            yield return new[] { new AgreementTemplate() };
+            yield return new[] { new AgreementPdfTemplate() };
+        }
+
+        public static IEnumerable<object[]> OrgAgreementTemplates()
+        {
+            yield return new[] { new CommunityPracticeOrganizationAgreementTemplate() };
+            yield return new[] { new CommunityPracticeOrganizationAgreementPdfTemplate() };
+            yield return new[] { new CommunityPharmacyOrganizationAgreementTemplate() };
+            yield return new[] { new CommunityPharmacyOrganizationAgreementPdfTemplate() };
+        }
+
+        public static IEnumerable<object[]> EmailTemplates()
+        {
+            yield return new[] { new BusinessLicenceUploadedEmailTemplate() };
+            yield return new[] { new CommunityPharmacyManagerEmailTemplate() };
+            yield return new[] { new CommunityPracticeEmailTemplate() };
+            yield return new[] { new HealthAuthorityEmailTemplate() };
+            yield return new[] { new ReminderEmailTemplate() };
+            yield return new[] { new RemoteUserNotificationEmailTemplate() };
+            yield return new[] { new RenewalPassedEmailTemplate() };
+            yield return new[] { new RenewalRequiredEmailTemplate() };
+            yield return new[] { new SiteRegistrationSubmissionEmailTemplate() };
+            yield return new[] { new UpdateRemoteUsersEmailTemplate() };
+        }
+
+        public static IEnumerable<object[]> DocumentTemplates()
+        {
+            yield return new[] { new DocumentTemplate() };
+            yield return new[] { new ApologyDocumentTemplate() };
+        }
     }
 }
-
-// namespace Prime.Services
-// {
-//     public interface IRazorConverterService
-//     {
-//         Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model);
-//     }
-// }
