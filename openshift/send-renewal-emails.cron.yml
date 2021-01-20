@@ -4,18 +4,7 @@ metadata:
   annotations:
     description: Template for job that activates api to send renewal emails
     tags: cronjob
-  # TODO: Removable?
-  creationTimestamp: '2021-01-06T18:51:11Z'
   name: send-renewal-emails-cronjob-template
-  # TODO: Removable?
-  namespace: dqszvc-dev
-  # TODO: Removable?
-  resourceVersion: '2440024327'
-  # TODO: Removable?
-  selfLink: >-
-    /apis/template.openshift.io/v1/namespaces/dqszvc-dev/templates/cronjob-template
-  # TODO: Removable?
-  uid: 251e0532-5050-11eb-9613-0050568348cc
 objects:
   - apiVersion: batch/v1beta1
     kind: CronJob
@@ -29,31 +18,32 @@ objects:
             spec:
               containers:
                 - command:
-                    - bash
-                    - '-c'
-                    - >-
-                      echo -e "-------- STARTING CRON --------\n"    echo -e
-                      "-------- GETTING ACCESS TOKEN --------\n"
+                  - bash
+                  - '-c'
+                  - >-
+                    echo -e "-------- STARTING CRON --------\n"
 
-                      TOKEN=$(curl -X POST
-                      "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token"
-                      \
-                        -H "Content-Type: application/x-www-form-urlencoded" \
-                        -d "grant_type=client_credentials" \
-                        -d "client_id=${KEYCLOAK_CLIENT_ID}" \
-                        -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | python -c "import sys, json; print json.load(sys.stdin)['access_token']")
+                    echo -e "-------- Getting access_token --------\n"
 
-                      echo -e ${TOKEN}
+                    TOKEN=$(curl -X POST
+                    "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token"
+                    \
+                      -H "Content-Type: application/x-www-form-urlencoded" \
+                      -d "grant_type=client_credentials" \
+                      -d "client_id=${KEYCLOAK_CLIENT_ID}" \
+                      -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | python -c "import sys, json; print json.load(sys.stdin)['access_token']")
 
-                      echo -e "-------- Calling PRIME --------\n"
+                    echo -e ${TOKEN}
 
-                      curl -X POST
-                      https://develop.pharmanetenrolment.gov.bc.ca/api/v1/Emails/management/enrollees/renewal
-                      \
-                        -H "Authorization: Bearer ${TOKEN}" \
-                        -H "Content-Type: application/json" \
+                    echo -e "-------- Calling PRIME API --------\n"
 
-                      echo -e "-------- CRON COMPLETE --------\n"
+                    curl -v -X POST
+                    http://dotnet-webapi-develop:8080/api/Emails/management/enrollees/renewal
+                    \
+                      -H "Authorization: Bearer ${TOKEN}" \
+                      -H "Content-Length: 0"
+
+                    echo -e "-------- CRON COMPLETE --------\n"
                   env:
                     - name: KEYCLOAK_CLIENT_SECRET
                       valueFrom:
