@@ -43,6 +43,12 @@
       @include logo-spacing($width-large);
     }
   }
+
+  // Change visibility to hidden, but don't remove the effect the
+  // image has in the DOM and with adjacent elements
+  &.hidden {
+    visibility: hidden;
+  }
 }
 
 @media print {

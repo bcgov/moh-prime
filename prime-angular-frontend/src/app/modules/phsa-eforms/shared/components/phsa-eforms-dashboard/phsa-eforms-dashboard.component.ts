@@ -17,11 +17,13 @@ import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 export class PhsaEformsDashboardComponent implements OnInit, IDashboard {
   public dashboardMenuItems: Observable<DashboardMenuItem[]>;
   public logoutRedirectUrl: string;
+  public showBrand: boolean;
 
   constructor(
     @Inject(APP_CONFIG) protected config: AppConfig
   ) {
     this.logoutRedirectUrl = `${this.config.loginRedirectUrl}/${AuthRoutes.routePath(AuthRoutes.PHSA)}`;
+    this.showBrand = false;
   }
 
   public ngOnInit(): void {

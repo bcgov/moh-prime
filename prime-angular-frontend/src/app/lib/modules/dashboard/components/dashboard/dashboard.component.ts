@@ -43,6 +43,11 @@ export class DashboardComponent implements OnInit {
   @Input() public logoutRedirectUrl: string;
   /**
    * @description
+   * Show the sidenav default branding.
+   */
+  @Input() public showBrand: boolean;
+  /**
+   * @description
    * Side navigation reference.
    */
   @ViewChild('sidenav') public sideNav: MatSidenav;
@@ -57,6 +62,7 @@ export class DashboardComponent implements OnInit {
   ) {
     this.responsiveMenuItems = true;
     this.showMenuItemIcons = true;
+    this.showBrand = true;
   }
 
   public get isMobile(): boolean {
