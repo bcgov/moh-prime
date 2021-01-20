@@ -143,7 +143,7 @@ objects:
               # Keycloak related environment variables
               - name: JWT_WELL_KNOWN_CONFIG
                 valueFrom:
-                  configKeyMapRef:
+                  configMapKeyRef:
                     key: jwt_well_known_config
                     name: "keycloak"
               - name: KEYCLOAK_ADMINISTRATION_CLIENT_SECRET
@@ -158,26 +158,26 @@ objects:
                     name: "keycloak"
               - name: KEYCLOAK_TOKEN_URL
                 valueFrom:
-                  configKeyMapRef:
+                  configMapKeyRef:
                     key: keycloak_token_url
                     name: "keycloak"
 
               # Mail server environment variables
               - name: MAIL_SERVER_PORT
                 valueFrom:
-                  configKeyMapRef:
+                  configMapKeyRef:
                     key: mail_server_port
                     name: "mail-server"
               - name: MAIL_SERVER_URL
                 valueFrom:
-                  configKeyMapRef:
+                  configMapKeyRef:
                     key: mail_server_url
                     name: "mail-server"
               
               # Metabase embedded dashboard environment variables
               - name: METABASE_DASHBOARD_ID
                 valueFrom:
-                  configKeyMapRef:
+                  configMapKeyRef:
                     key: metabase_dashboard_id
                     name: "metabase-embedded"
               - name: METABASE_SECRET_KEY
@@ -187,7 +187,7 @@ objects:
                     name: "metabase-embedded-secrets"
               - name: METABASE_SITE_URL
                 valueFrom:
-                  configKeyMapRef:
+                  configMapKeyRef:
                     key: metabase_site_url
                     name: "metabase-embedded"
 
