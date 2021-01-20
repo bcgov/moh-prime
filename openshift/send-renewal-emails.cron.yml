@@ -38,7 +38,7 @@ objects:
                     echo -e "-------- Calling PRIME API --------\n"
 
                     curl -v -X POST
-                    http://dotnet-webapi-develop:8080/api/Emails/management/enrollees/renewal
+                    http://dotnet-webapi${SUFFIX}:8080/api/Emails/management/enrollees/renewal
                     \
                       -H "Authorization: Bearer ${TOKEN}" \
                       -H "Content-Length: 0"
@@ -78,8 +78,11 @@ objects:
               restartPolicy: Never
       schedule: '${CRON_SCHEDULE}'
 parameters:
-  - description: 'Cron-like schedule expression. Default: Once every 5 minutes'
+  - description: 'Cron-like schedule expression. Default: Once a day at 11 PM'
     name: CRON_SCHEDULE
-    value: '*/5 * * * *'
+    value: '0 23 * * *'
   - name: CRON_NAME
     value: send-renewal-emails-cronjob
+  - description: 'Environment name suffix appended to all OpenShift objects'
+    name: SUFFIX
+    required: false
