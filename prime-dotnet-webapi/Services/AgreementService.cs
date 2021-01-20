@@ -223,10 +223,10 @@ namespace Prime.Services
         {
             RazorTemplate<Tuple<string, DateTimeOffset>> template = (type, forPdf) switch
             {
-                (AgreementType.CommunityPracticeOrgAgreement, true) => new CommunityPracticeOrganizationAgreementPdfTemplate(),
-                (AgreementType.CommunityPracticeOrgAgreement, false) => new CommunityPracticeOrganizationAgreementTemplate(),
-                (AgreementType.CommunityPharmacyOrgAgreement, true) => new CommunityPharmacyOrganizationAgreementPdfTemplate(),
-                (AgreementType.CommunityPharmacyOrgAgreement, false) => new CommunityPharmacyOrganizationAgreementTemplate(),
+                (AgreementType.CommunityPharmacyOrgAgreement, false) => RazorTemplates.OrgAgreements.CommunityPharmacy,
+                (AgreementType.CommunityPharmacyOrgAgreement, true) => RazorTemplates.OrgAgreements.CommunityPharmacyPdf,
+                (AgreementType.CommunityPracticeOrgAgreement, false) => RazorTemplates.OrgAgreements.CommunityPractice,
+                (AgreementType.CommunityPracticeOrgAgreement, true) => RazorTemplates.OrgAgreements.CommunityPracticePdf,
                 _ => throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}")
             };
 
@@ -298,7 +298,7 @@ namespace Prime.Services
             {
                 if (agreement != null)
                 {
-                    agreement.AgreementContent = await _razorConverterService.RenderTemplateToStringAsync(new AgreementTemplate(), agreement);
+                    agreement.AgreementContent = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.Base, agreement);
                 }
             }
         }

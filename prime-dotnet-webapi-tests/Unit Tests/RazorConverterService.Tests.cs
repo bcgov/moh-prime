@@ -135,7 +135,7 @@ namespace PrimeTests.UnitTests
                 TechnicalSupport = new Contact(),
             };
 
-            var html = await service.RenderTemplateToStringAsync(new SiteRegistrationReviewTemplate(), model);
+            var html = await service.RenderTemplateToStringAsync(RazorTemplates.SiteRegistrationReview, model);
 
             Assert.NotNull(html);
         }
@@ -155,36 +155,36 @@ namespace PrimeTests.UnitTests
 
         public static IEnumerable<object[]> AgreementTemplates()
         {
-            yield return new[] { new AgreementTemplate() };
-            yield return new[] { new AgreementPdfTemplate() };
+            yield return new[] { RazorTemplates.Agreements.Base };
+            yield return new[] { RazorTemplates.Agreements.Pdf };
         }
 
         public static IEnumerable<object[]> OrgAgreementTemplates()
         {
-            yield return new[] { new CommunityPracticeOrganizationAgreementTemplate() };
-            yield return new[] { new CommunityPracticeOrganizationAgreementPdfTemplate() };
-            yield return new[] { new CommunityPharmacyOrganizationAgreementTemplate() };
-            yield return new[] { new CommunityPharmacyOrganizationAgreementPdfTemplate() };
+            yield return new[] { RazorTemplates.OrgAgreements.CommunityPharmacy };
+            yield return new[] { RazorTemplates.OrgAgreements.CommunityPharmacyPdf };
+            yield return new[] { RazorTemplates.OrgAgreements.CommunityPractice };
+            yield return new[] { RazorTemplates.OrgAgreements.CommunityPracticePdf };
         }
 
         public static IEnumerable<object[]> EmailTemplates()
         {
-            yield return new[] { new BusinessLicenceUploadedEmailTemplate() };
-            yield return new[] { new CommunityPharmacyManagerEmailTemplate() };
-            yield return new[] { new CommunityPracticeEmailTemplate() };
-            yield return new[] { new HealthAuthorityEmailTemplate() };
-            yield return new[] { new ReminderEmailTemplate() };
-            yield return new[] { new RemoteUserNotificationEmailTemplate() };
-            yield return new[] { new RenewalPassedEmailTemplate() };
-            yield return new[] { new RenewalRequiredEmailTemplate() };
-            yield return new[] { new SiteRegistrationSubmissionEmailTemplate() };
-            yield return new[] { new UpdateRemoteUsersEmailTemplate() };
+            yield return new[] { RazorTemplates.Emails.BusinessLicenceUploaded };
+            yield return new[] { RazorTemplates.Emails.CommunityPharmacyManager };
+            yield return new[] { RazorTemplates.Emails.CommunityPractice };
+            yield return new[] { RazorTemplates.Emails.HealthAuthority };
+            yield return new[] { RazorTemplates.Emails.Reminder };
+            yield return new[] { RazorTemplates.Emails.RemoteUserNotification };
+            yield return new[] { RazorTemplates.Emails.RenewalPassed };
+            yield return new[] { RazorTemplates.Emails.RenewalRequired };
+            yield return new[] { RazorTemplates.Emails.SiteRegistrationSubmission };
+            yield return new[] { RazorTemplates.Emails.UpdateRemoteUsers };
         }
 
         public static IEnumerable<object[]> DocumentTemplates()
         {
-            yield return new[] { new DocumentTemplate() };
-            yield return new[] { new ApologyDocumentTemplate() };
+            yield return new[] { RazorTemplates.Document };
+            yield return new[] { RazorTemplates.ApologyDocument };
         }
     }
 }

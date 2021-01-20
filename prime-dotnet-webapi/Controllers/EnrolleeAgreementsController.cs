@@ -240,7 +240,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}"));
             }
 
-            var html = await _razorConverterService.RenderTemplateToStringAsync(new AgreementPdfTemplate(), agreement);
+            var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.Pdf, agreement);
             var download = _pdfService.Generate(html);
 
             return Ok(ApiResponse.Result(download));
