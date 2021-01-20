@@ -98,27 +98,26 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     this.remoteAccessSites.clear();
 
     const enrolleeId = this.enrolment.id;
-    const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
-    const remoteAccessSite = this.enrolmentFormStateService.remoteAccessSiteFormGroup();
 
     // Any checked sites are converted into an enrollee remote user, and
     // remote access site forming the submission payload
-    this.sites?.controls.forEach((checked) => {
+    this.sites?.controls.forEach((checked, i) => {
       if (checked.value) {
-        this.remoteAccessSearch.forEach(r => {
-          enrolleeRemoteUser.patchValue({
-            enrolleeId,
-            remoteUserId: r.remoteUserId
-          });
-          this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
-
-          remoteAccessSite.patchValue({
-            enrolleeId,
-            siteId: r.siteId,
-            doingBusinessAs: r.siteDoingBusinessAs
-          });
-          this.remoteAccessSites.push(remoteAccessSite);
+        var ras = this.remoteAccessSearch[i];
+        const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
+        enrolleeRemoteUser.patchValue({
+          enrolleeId,
+          remoteUserId: ras.remoteUserId
         });
+        this.enrolleeRemoteUsers.push(enrolleeRemoteUser);
+
+        const remoteAccessSite = this.enrolmentFormStateService.remoteAccessSiteFormGroup();
+        remoteAccessSite.patchValue({
+          enrolleeId,
+          siteId: ras.siteId,
+          doingBusinessAs: ras.siteDoingBusinessAs
+        });
+        this.remoteAccessSites.push(remoteAccessSite);
       }
     });
 
@@ -158,6 +157,8 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
         if (alreadyLinked) {
           checked.push(true);
+        } else {
+          checked.push(false);
         }
 
         return checked;
