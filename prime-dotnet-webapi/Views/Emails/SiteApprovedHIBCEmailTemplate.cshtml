@@ -1,0 +1,20 @@
+@using Prime.Services
+@model EmailParams
+
+@{
+  var site = Model.Site;
+}
+
+<p>
+  @site.DoingBusinessAs with PEC/SiteID @site.PEC has been approved by the
+  Ministry of Health for PharmaNet access. Please notify the PharmaNet software
+  vendor for this site and complete any remaining tasks to activate the site.
+</p>
+
+<p>
+  Thank you.
+</p>
+
+<p>
+  PRIME Support Team.
+</p>
