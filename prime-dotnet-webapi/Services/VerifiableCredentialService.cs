@@ -18,6 +18,7 @@ namespace Prime.Services
     {
         public const string Connections = "connections";
         public const string IssueCredential = "issue_credential";
+        public const string RevocationRegistry = "revocation_registry";
     }
 
     public class ConnectionState
@@ -107,6 +108,9 @@ namespace Prime.Services
                     return await HandleConnectionAsync(data);
                 case WebhookTopic.IssueCredential:
                     return await HandleIssueCredentialAsync(data);
+                case WebhookTopic.RevocationRegistry:
+                    _logger.LogInformation("Revocation Registry data: for {@JObject}", JsonConvert.SerializeObject(data));
+                    return true;
                 default:
                     _logger.LogError("Webhook {topic} is not supported", topic);
                     return false;
@@ -118,14 +122,16 @@ namespace Prime.Services
             var enrolleeCredentials = await _context.EnrolleeCredentials
                 .Include(ec => ec.Credential)
                 .Where(ec => ec.EnrolleeId == enrolleeId)
+                .Where(ec => ec.Credential.CredentialExchangeId != null)
+                .Where(ec => ec.Credential.RevokedCredentialDate == null)
                 .Select(ec => ec.Credential)
                 .ToListAsync();
 
             foreach (var credential in enrolleeCredentials)
             {
-                if (credential.CredentialExchangeId != null)
+                if (await _verifiableCredentialClient.RevokeCredentialAsync(credential))
                 {
-                    await _verifiableCredentialClient.RevokeCredentialAsync(credential);
+                    credential.RevokedCredentialDate = DateTimeOffset.Now;
                 }
             }
 
@@ -198,19 +204,12 @@ namespace Prime.Services
         private async Task<int> UpdateCredentialAfterIssued(JObject data)
         {
             var connection_id = (string)data.SelectToken("connection_id");
-            var revoc_reg_id = (string)data.SelectToken("revoc_reg_id");
-            var revocation_id = (string)data.SelectToken("revocation_id");
-
-            _logger.LogInformation("Revocation Registry Id {revoc_reg_id}", revoc_reg_id);
-            _logger.LogInformation("Credential Revocation Id {revocation_id}", revocation_id);
 
             var credential = GetCredentialByConnectionIdAsync(connection_id);
 
             if (credential != null)
             {
                 credential.AcceptedCredentialDate = DateTimeOffset.Now;
-                credential.RevocationRegistryId = revoc_reg_id;
-                credential.CredentialRevocationId = revocation_id;
             }
 
             return await _context.SaveChangesAsync();
@@ -276,7 +275,6 @@ namespace Prime.Services
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
             var schema = (await _verifiableCredentialClient.GetSchema(schemaId)).Value<JObject>("schema");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
-            var revocationRegistryId = await _verifiableCredentialClient.GetRevocationRegistryIdAsync(credentialDefinitionId);
 
             JObject credentialOffer = new JObject
             {
@@ -290,7 +288,6 @@ namespace Prime.Services
                 { "comment", "PharmaNet GPID" },
                 { "auto_remove", false },
                 { "trace", false },
-                { "revoc_registry_id", revocationRegistryId },
                 {
                     "credential_proposal",
                     new JObject
@@ -321,27 +318,27 @@ namespace Prime.Services
             {
                 new JObject
                 {
-                    { "name", "gpid" },
+                    { "name", "GPID" },
                     { "value", enrollee.GPID }
                 },
                 new JObject
                 {
-                    { "name", "renewal_date" },
+                    { "name", "Renewal Date" },
                     { "value", enrollee.ExpiryDate.Value.Date.ToShortDateString() }
                 },
                 new JObject
                 {
-                    { "name", "user_class" },
-                    { "value", enrollee.IsRegulatedUser ? "RU" : "OBO" }
+                    { "name", "TOA Name" },
+                    { "value", enrollee.AssignedTOAType.Value.ToString() }
                 },
                 new JObject
                 {
-                    { "name", "organization_type" },
+                    { "name", "Care Type Setting" },
                     { "value", string.Join(',', enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting.Name)) }
                 },
                 new JObject
                 {
-                    { "name", "remote_access" },
+                    { "name", "Remote User" },
                     { "value", enrollee.EnrolleeRemoteUsers.Count > 0 ? "true" : "false"}
                 }
             };

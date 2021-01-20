@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210115234458_CredentialUpdatesforRevocation")]
+    [Migration("20210119231148_CredentialUpdatesforRevocation")]
     partial class CredentialUpdatesforRevocation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -10045,11 +10045,8 @@ namespace Prime.Migrations
                     b.Property<string>("CredentialExchangeId")
                         .HasColumnType("text");
 
-                    b.Property<string>("CredentialRevocationId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("RevocationRegistryId")
-                        .HasColumnType("text");
+                    b.Property<DateTimeOffset?>("RevokedCredentialDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SchemaId")
                         .HasColumnType("text");

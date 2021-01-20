@@ -88,6 +88,7 @@ namespace Prime.Services
             {
                 try
                 {
+                    await _verifiableCredentialService.RevokeCredentialsAsync(enrollee.Id);
                     await _verifiableCredentialService.CreateConnectionAsync(enrollee);
                 }
                 catch (Exception ex)
@@ -256,7 +257,18 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
             await _agreementService.ExpireCurrentEnrolleeAgreementAsync(enrollee.Id);
-            await _verifiableCredentialService.RevokeCredentialsAsync(enrollee.Id);
+
+            if (_httpContext.HttpContext.User.HasVCIssuance())
+            {
+                try
+                {
+                    await _verifiableCredentialService.RevokeCredentialsAsync(enrollee.Id);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Error occurred attempting to revoke credentials through the Verifiable Credential agent: ${ex}", ex);
+                }
+            }
         }
 
         private async Task RerunRulesAsync(Enrollee enrollee)

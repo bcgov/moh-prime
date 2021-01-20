@@ -16,10 +16,12 @@ namespace Prime.HttpClients
         private readonly ILogger _logger;
 
         private static readonly string SchemaName = "enrollee";
-        // If schema version is updated in dev, make sure it is updated in test and prod agent
-        // (and update cred_def_id) so versions are the same between dev, test, and prod
-        // and have verifier app updated by aries team in each environment
-        private static readonly string SchemaVersion = "2.0";
+        private static readonly string SchemaVersion = "2.2";
+        // If schema changes, the following must be updated in all agents for each environment as the code changes are pushed so versions are the same
+        // and have verifier app updated by aries team in each environment (send them schema id, if claims change send them new attributes)
+        // Update the following through postman:
+        // 1. Add new schema, incrementing schema version -> schema_name = enrollee
+        // 2. Create a credential definition for schema -> support_revocation = true, tag = prime
 
         public VerifiableCredentialClient(
             HttpClient client,
@@ -83,8 +85,10 @@ namespace Prime.HttpClients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
-        public async Task<JObject> RevokeCredentialAsync(Credential credential)
+        public async Task<bool> RevokeCredentialAsync(Credential credential)
         {
+            _logger.LogInformation("Revoking credential cred_ex-Id={id}", credential.CredentialExchangeId);
+
             JObject revocationObject = new JObject
             {
                 { "cred_ex_id", credential.CredentialExchangeId },
@@ -110,9 +114,9 @@ namespace Prime.HttpClients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::RevokeCredentialAsync");
             }
 
-            _logger.LogInformation("Revoke credential id={id} success", credential.Id);
+            _logger.LogInformation("Revoke credential cred_ex_id={id} success", credential.CredentialExchangeId);
 
-            return JObject.Parse(await response.Content.ReadAsStringAsync());
+            return true;
         }
 
 
@@ -219,32 +223,6 @@ namespace Prime.HttpClients
             _logger.LogInformation("GET Credential Definition IDs {@JObject}", JsonConvert.SerializeObject(body));
 
             return (string)body.SelectToken($"credential_definition_ids[{credentialDefinitionIds.Count - 1}]");
-        }
-
-        public async Task<string> GetRevocationRegistryIdAsync(string credentialDefinitionId)
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                response = await _client.GetAsync($"revocation/active-registry/{credentialDefinitionId}");
-            }
-            catch (Exception ex)
-            {
-                await LogError(response, ex);
-                throw new VerifiableCredentialApiException("Error occurred attempting to get the current active revocation registry by credential definition id: ", ex);
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                await LogError(response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetRevocationRegistryIdAsync");
-            }
-
-            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
-
-            _logger.LogInformation("GET GetRevocationRegistryId response {revoc_reg_id}", (string)body.SelectToken("result.revoc_reg_id"));
-
-            return (string)body.SelectToken("result.revoc_reg_id");
         }
 
         public async Task<JObject> GetPresentationProof(string presentationExchangeId)
