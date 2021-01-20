@@ -12,6 +12,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.ViewModels;
 using Prime.HttpClients;
+using Prime.Services.Razor;
 
 namespace Prime.Services
 {
@@ -220,12 +221,12 @@ namespace Prime.Services
 
         public async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf)
         {
-            var viewName = (type, forPdf) switch
+            RazorTemplate<Tuple<string, DateTimeOffset>> template = (type, forPdf) switch
             {
-                (AgreementType.CommunityPracticeOrgAgreement, true) => "/Views/Agreements/CommunityPracticeOrganizationAgreementPdf.cshtml",
-                (AgreementType.CommunityPracticeOrgAgreement, false) => "/Views/Agreements/CommunityPracticeOrganizationAgreement.cshtml",
-                (AgreementType.CommunityPharmacyOrgAgreement, true) => "/Views/Agreements/CommunityPharmacyOrganizationAgreementPdf.cshtml",
-                (AgreementType.CommunityPharmacyOrgAgreement, false) => "/Views/Agreements/CommunityPharmacyOrganizationAgreement.cshtml",
+                (AgreementType.CommunityPharmacyOrgAgreement, false) => RazorTemplates.OrgAgreements.CommunityPharmacy,
+                (AgreementType.CommunityPharmacyOrgAgreement, true) => RazorTemplates.OrgAgreements.CommunityPharmacyPdf,
+                (AgreementType.CommunityPracticeOrgAgreement, false) => RazorTemplates.OrgAgreements.CommunityPractice,
+                (AgreementType.CommunityPracticeOrgAgreement, true) => RazorTemplates.OrgAgreements.CommunityPracticePdf,
                 _ => throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}")
             };
 
@@ -233,7 +234,7 @@ namespace Prime.Services
             // Converting to BC time here since we aren't localizing this time in the web client
             displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
 
-            return await _razorConverterService.RenderViewToStringAsync(viewName, new Tuple<string, DateTimeOffset>(orgName, displayDate));
+            return await _razorConverterService.RenderTemplateToStringAsync(template, new Tuple<string, DateTimeOffset>(orgName, displayDate));
         }
 
         /// <summary>
@@ -297,8 +298,7 @@ namespace Prime.Services
             {
                 if (agreement != null)
                 {
-                    agreement.AgreementContent = await _razorConverterService
-                        .RenderViewToStringAsync("/Views/Agreements/TermsOfAccess.cshtml", agreement);
+                    agreement.AgreementContent = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.Base, agreement);
                 }
             }
         }
