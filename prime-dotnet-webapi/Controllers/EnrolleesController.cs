@@ -765,54 +765,83 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNote>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EnrolleeNote>> CreateEnrolmentEscalation(int enrolleeId, int adjudicatorNoteId, [FromQuery] int assigneeId)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolmentEscalation>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolmentEscalation>> CreateEnrolmentEscalation(int enrolleeId, int adjudicatorNoteId, FromBodyData<int> assigneeId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            var note = _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
+            var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
+            if (note == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee note not found with id {adjudicatorNoteId}"));
+            }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var escalation = await _enrolleeService.CreateEnrolmentEscalationAsync(note.Id, admin.Id, assigneeId);
 
-            return CreatedAtAction(
-                nameof(CreateEnrolmentEscalation),
-                new { enrolleeId },
-                ApiResponse.Result(escalation)
-            );
+            return Ok(ApiResponse.Result(escalation));
         }
 
         // DELETE: api/Enrollees/5/adjudicator-notes/6/escalate
         /// <summary>
-        /// Creates a new enrollee escalation on an enrollees adjudicator note.
+        /// deletes the enrollee escalation on an enrollees adjudicator note.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="adjudicatorNoteId"></param>
-        /// <param name="assigneeId"></param>
         [HttpDelete("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/escalate", Name = nameof(DeleteEnrolmentEscalation))]
         [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNote>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EnrolleeNote>> DeleteEnrolmentEscalation(int enrolleeId, int adjudicatorNoteId)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNote>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> DeleteEnrolmentEscalation(int enrolleeId, int adjudicatorNoteId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            var note = _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
+            var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
+            if (note == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee note not found with id {adjudicatorNoteId}"));
+            }
 
-            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
-            var escalation = await _enrolleeService.CreateEnrolmentEscalationAsync(note.Id, admin.Id, assigneeId);
+            await _enrolleeService.RemoveEnrolmentEscalationAsync(note.EnrolmentEscalation.Id);
 
-            return CreatedAtAction(
-                nameof(CreateEnrolmentEscalation),
-                new { enrolleeId },
-                ApiResponse.Result(escalation)
-            );
+            return Ok();
+        }
+
+        // Get: api/Enrollees/5/adjudicator-notes/6/escalate
+        /// <summary>
+        /// Get the enrollee escalation on an enrollees adjudicator note.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="adjudicatorNoteId"></param>
+        [HttpGet("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/escalate", Name = nameof(GetEscalatedNote))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNoteViewModel>), StatusCodes.Status201Created)]
+        public async Task<ActionResult<EnrolleeNoteViewModel>> GetEscalatedNote(int enrolleeId, int adjudicatorNoteId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
+            if (note == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee note not found with id {adjudicatorNoteId}"));
+            }
+            if (note.EnrolmentEscalation == null)
+            {
+                return NotFound(ApiResponse.Message($"No escalation found on adjudicator note with id: {adjudicatorNoteId}"));
+            }
+
+            return Ok(ApiResponse.Result(note));
         }
     }
 }

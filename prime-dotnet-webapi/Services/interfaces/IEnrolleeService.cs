@@ -73,7 +73,8 @@ namespace Prime.Services
         Task DeleteEnrolleeAdjudicationDocumentAsync(int documentId);
 
         Task<EnrolmentStatus> GetEnrolleeCurrentStatusAsync(int enrolleeId);
-        Task<EnrolmentEscalation> CreateEnrolmentEscalationAsync(int EnrolleeNoteId, int adminId, int assineeId);
+        Task<EnrolmentEscalation> CreateEnrolmentEscalationAsync(int EnrolleeNoteId, int adminId, int assigneeId);
         Task RemoveEnrolmentEscalationAsync(int enrolmentEscalationId);
+        Task<EnrolmentEscalation> GetEnrolmentEscalationAsync(int enrolmentEscalationId);
     }
 }

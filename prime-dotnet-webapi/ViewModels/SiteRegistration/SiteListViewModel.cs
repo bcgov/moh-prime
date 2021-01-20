@@ -29,5 +29,7 @@ namespace Prime.ViewModels
         public string PEC { get; set; }
 
         public BusinessLicence BusinessLicence { get; set; }
+
+        public int? EscalatedNoteId { get; set; }
     }
 }

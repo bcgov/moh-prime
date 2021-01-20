@@ -26,6 +26,7 @@ export class EnrolleeTableComponent implements OnInit {
   @Output() public claim: EventEmitter<number>;
   @Output() public disclaim: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
+  @Output() public reload: EventEmitter<boolean>;
 
   public busy: Subscription;
   public form: FormGroup;
@@ -43,6 +44,7 @@ export class EnrolleeTableComponent implements OnInit {
     this.notify = new EventEmitter<number>();
     this.claim = new EventEmitter<number>();
     this.disclaim = new EventEmitter<number>();
+    this.reload = new EventEmitter<boolean>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.columns = [
       'prefixes',
@@ -85,6 +87,10 @@ export class EnrolleeTableComponent implements OnInit {
 
   public onRoute(routePath: string | (string | number)[]): void {
     this.route.emit(routePath);
+  }
+
+  public onReload(reload: boolean): void {
+    this.reload.emit(reload);
   }
 
   public sortData(sort: Sort) {

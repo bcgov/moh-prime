@@ -36,6 +36,10 @@ namespace Prime.Services
         Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId);
         Task DeleteSiteAdjudicationDocumentAsync(int documentId);
         Task<SiteEscalation> CreateSiteEscalationAsync(int siteRegistrationNoteId, int adminId, int assineeId);
+        Task RemoveSiteEscalationAsync(int siteEscalationId);
+        Task<SiteEscalation> GetSiteEscalationAsync(int siteEscalationId);
+
+        Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId);
 
     }
 }

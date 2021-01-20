@@ -79,6 +79,8 @@ import { ContactInformationFormComponent } from '@shared/components/contact-info
 import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
 import { TriageComponent } from './components/dialogs/content/triage/triage.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
+import { EscalationContextualComponent } from './components/dialogs/content/escalation-contextual/escalation-contextual.component';
+import { EscalationNoteComponent } from './components/dialogs/content/escalation-note/escalation-note.component';
 
 @NgModule({
   declarations: [
@@ -146,7 +148,9 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
     SendEmailComponent,
     CareSettingPipe,
     JoinPipe,
-    TriageComponent
+    TriageComponent,
+    EscalationContextualComponent,
+    EscalationNoteComponent
   ],
   imports: [
     CommonModule,
@@ -221,7 +225,9 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
     ContactInformationFormComponent,
     CareSettingPipe,
     JoinPipe,
-    TriageComponent
+    TriageComponent,
+    EscalationContextualComponent,
+    EscalationNoteComponent
   ],
   providers: [
     FullnamePipe,

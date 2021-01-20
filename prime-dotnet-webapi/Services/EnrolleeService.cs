@@ -79,7 +79,9 @@ namespace Prime.Services
                             .ThenInclude(esan => esan.AdjudicatorNote)
                     .Include(e => e.EnrolmentStatuses)
                         .ThenInclude(es => es.EnrolmentStatusReference)
-                            .ThenInclude(esr => esr.Adjudicator);
+                            .ThenInclude(esr => esr.Adjudicator)
+                    .Include(e => e.AdjudicatorNotes)
+                        .ThenInclude(an => an.EnrolmentEscalation);
             }
 
             var enrollee = await query
@@ -562,6 +564,8 @@ namespace Prime.Services
             return await _context.EnrolleeNotes
                 .Where(an => an.EnrolleeId == enrolleeId)
                 .Include(an => an.Adjudicator)
+                .Include(an => an.EnrolmentEscalation)
+                    .ThenInclude(ee => ee.Admin)
                 .ProjectTo<EnrolleeNoteViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(n => n.Id == noteId);
         }
@@ -606,13 +610,13 @@ namespace Prime.Services
             return reference;
         }
 
-        public async Task<EnrolmentEscalation> CreateEnrolmentEscalationAsync(int EnrolleeNoteId, int adminId, int assineeId)
+        public async Task<EnrolmentEscalation> CreateEnrolmentEscalationAsync(int EnrolleeNoteId, int adminId, int assigneeId)
         {
             var escalation = new EnrolmentEscalation
             {
                 EnrolleeNoteId = EnrolleeNoteId,
                 AdminId = adminId,
-                AssigneeId = assineeId,
+                AssigneeId = assigneeId,
             };
 
             _context.EnrolmentEscalations.Add(escalation);
@@ -632,6 +636,12 @@ namespace Prime.Services
             }
             _context.EnrolmentEscalations.Remove(escalation);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<EnrolmentEscalation> GetEnrolmentEscalationAsync(int enrolmentEscalationId)
+        {
+            return await _context.EnrolmentEscalations
+                .SingleOrDefaultAsync(ee => ee.Id == enrolmentEscalationId);
         }
 
         public async Task<EnrolmentStatusReference> AddAdjudicatorNoteToReferenceIdAsync(int statusId, int noteId)

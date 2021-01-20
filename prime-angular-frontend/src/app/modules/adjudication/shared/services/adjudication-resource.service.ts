@@ -23,6 +23,7 @@ import { Admin } from '@auth/shared/models/admin.model';
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
+import { EnrolmentEscalation } from '../models/enrolment-escalation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -216,6 +217,49 @@ export class AdjudicationResource {
         })
       );
   }
+
+  public getEscalatedNote(enrolleeId: number, enrolleeNoteId: number): Observable<EnrolleeNote> {
+    return this.apiResource.get(`enrollees/${enrolleeId}/adjudicator-notes/${enrolleeNoteId}/escalate`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeNote>) => response.result),
+        tap((adjudicatorNote: EnrolleeNote) => this.logger.info('ESCALATED_ADJUDICATOR_NOTE', adjudicatorNote)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Escalated note could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getEscalatedNote error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createEnrolmentEscalation(enrolleeId: number, enrolleeNoteId: number, assigneeId: number): Observable<EnrolmentEscalation> {
+    const payload = { data: assigneeId };
+    return this.apiResource.post(`enrollees/${enrolleeId}/adjudicator-notes/${enrolleeNoteId}/escalate`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolmentEscalation>) => response.result),
+        tap((escalation: EnrolmentEscalation) => {
+          this.toastService.openErrorToast('Enrolment Escalation has been saved');
+          this.logger.info('NEW_ENROLMENT_ESCALTION', escalation);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment Escalation has been saved');
+          this.logger.error('[Adjudication] AdjudicationResource::createEnrolmentEscalation error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteEnrolmentEscalation(enrolleeId: number, enrolleeNoteId: number) {
+    return this.apiResource.delete<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator-notes/${enrolleeNoteId}/escalate`)
+      .pipe(
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment Escalation could not be deleted');
+          this.logger.error('[Adjudication] AdjudicationResource::deleteEnrolmentEscalation error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+
 
   public updateAccessAgreementNote(
     enrolleeId: number,

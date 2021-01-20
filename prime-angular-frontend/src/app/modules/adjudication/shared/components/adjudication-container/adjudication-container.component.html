@@ -15,7 +15,8 @@
                       (notify)="onNotify($event)"
                       (claim)="onClaim($event)"
                       (disclaim)="onDisclaim($event)"
-                      (route)="onRoute($event)"></app-enrollee-table>
+                      (route)="onRoute($event)"
+                      (reload)="onRefresh()"></app-enrollee-table>
 
   <ng-container *ngIf="content">
 
@@ -41,7 +42,8 @@
                                  (enableEnrollee)="onEnableEnrollee($event)"
                                  (enableEditing)="onEnableEditing($event)"
                                  (rerunRules)="onRerunRules($event)"
-                                 (toggleManualAdj)="onToggleManualAdj($event)"></app-adjudicator-actions>
+                                 (toggleManualAdj)="onToggleManualAdj($event)"
+                                 (reload)="onRefresh()"></app-adjudicator-actions>
 
       </div>
     </div>

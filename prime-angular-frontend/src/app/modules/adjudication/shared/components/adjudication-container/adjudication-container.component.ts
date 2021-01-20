@@ -408,7 +408,9 @@ export class AdjudicationContainerComponent implements OnInit {
       alwaysManual,
       enrolleeRemoteUsers,
       enrolleeCareSettings,
+      escalatedNoteId,
     } = enrollee;
+
     return {
       id,
       displayId,
@@ -426,7 +428,8 @@ export class AdjudicationContainerComponent implements OnInit {
       adjudicatorIdir: adjudicator?.idir,
       alwaysManual,
       remoteAccess: (enrolleeRemoteUsers?.length) ? true : false,
-      careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode)
+      careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode),
+      escalatedNoteId
     };
   }
 }

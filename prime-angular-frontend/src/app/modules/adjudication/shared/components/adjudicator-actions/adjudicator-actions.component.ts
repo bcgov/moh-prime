@@ -11,6 +11,10 @@ import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { exhaustMap } from 'rxjs/operators';
+import { noop } from 'rxjs';
 
 @Component({
   selector: 'app-adjudicator-actions',
@@ -30,6 +34,8 @@ export class AdjudicatorActionsComponent implements OnInit {
   @Output() public delete: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public assign: EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>;
+  @Output() public reload: EventEmitter<boolean>;
+
   public form: FormGroup;
   public termsOfAccessAgreements: { type: AgreementType, name: string }[];
 
@@ -53,6 +59,7 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.assign = new EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>();
     this.toggleManualAdj = new EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>();
     this.route = new EventEmitter<string | (string | number)[]>();
+    this.reload = new EventEmitter<boolean>();
 
     this.termsOfAccessAgreements = [
       { type: 0, name: 'None' },
@@ -137,6 +144,17 @@ export class AdjudicatorActionsComponent implements OnInit {
         alwaysManual: !this.enrollee.alwaysManual
       });
     }
+  }
+
+  public onEscalate() {
+    const data: DialogOptions = {
+      data: {
+        enrolleeId: this.enrollee.id,
+      }
+    };
+
+    this.dialog.open(EscalationNoteComponent, { data }).afterClosed()
+      .subscribe((result: { reload: boolean }) => (result?.reload) ? this.reload.emit(true) : noop);
   }
 
   public onRoute(routePath: string | (string | number)[]) {

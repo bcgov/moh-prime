@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using DelegateDecompiler;
 
 using Newtonsoft.Json;
 
@@ -83,6 +84,18 @@ namespace Prime.Models
                 .Where(h => atTime == null || h.IsOpen(atTime.Value))
                 .Select(b => b.Day)
                 .Distinct();
+        }
+
+        /// <summary>
+        /// Id for an escalated note on a site
+        /// </summary>
+        [NotMapped]
+        [Computed]
+        public int? EscalatedNoteId
+        {
+            get => SiteRegistrationNotes
+                .Where(an => an.SiteEscalation != null)
+                .SingleOrDefault()?.Id;
         }
     }
 }

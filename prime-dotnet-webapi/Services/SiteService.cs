@@ -538,6 +538,17 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId)
+        {
+            return await _context.SiteRegistrationNotes
+                .Where(srn => srn.SiteId == siteId)
+                .Include(srn => srn.Adjudicator)
+                .Include(srn => srn.SiteEscalation)
+                    .ThenInclude(sre => sre.Admin)
+                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(srn => srn.Id == siteRegistrationNoteId);
+        }
+
         public async Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes)
         {
             return await _context.BusinessEvents
@@ -611,6 +622,24 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return escalation;
+        }
+
+        public async Task RemoveSiteEscalationAsync(int siteEscalationId)
+        {
+            var escalation = await _context.SiteEscalations
+                .SingleOrDefaultAsync(se => se.Id == siteEscalationId);
+            if (escalation == null)
+            {
+                return;
+            }
+            _context.SiteEscalations.Remove(escalation);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<SiteEscalation> GetSiteEscalationAsync(int siteEscalationId)
+        {
+            return await _context.SiteEscalations
+                .SingleOrDefaultAsync(se => se.Id == siteEscalationId);
         }
 
         private IQueryable<Site> GetBaseSiteQuery()

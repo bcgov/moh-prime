@@ -27,7 +27,7 @@ export class ClaimEnrolleeComponent implements OnInit {
 
   constructor(
     private adjudicationResource: AdjudicationResource,
-    private dialogRef: MatDialogRef<ConfirmDialogComponent>,
+    private dialogRef: MatDialogRef<ClaimEnrolleeComponent>,
   ) {
     this.adjudicators$ = new BehaviorSubject<Admin[]>([]);
   }

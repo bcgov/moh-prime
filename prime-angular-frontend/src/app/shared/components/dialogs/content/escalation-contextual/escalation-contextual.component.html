@@ -1,0 +1,31 @@
+<app-contextual-help [small]="true"
+                     [advanced]="true"
+                     icon="new_releases"
+                     menuIconColor="warn"
+                     titleIcon="help"
+                     class="test">
+
+  <ng-container appContextualTitle>
+    Escalation
+  </ng-container>
+
+  <ng-container appContextualContent
+                ng>
+    <h2 class="h5 mb-3">
+      {{ note?.enrolmentEscalation?.admin.idir }} has escalated this enrolment and assigned it to you.
+    </h2>
+    <ul class="list-unstyled mb-4 ml-3">
+      <li class="blue pb-2">
+        {{ note?.note }}
+      </li>
+    </ul>
+  </ng-container>
+
+  <button mat-flat-button
+          color="secondary"
+          class="mb-2 d-block"
+          (click)="onRemove()">
+    Remove Notice
+  </button>
+
+</app-contextual-help>

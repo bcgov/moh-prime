@@ -16,7 +16,14 @@
             <div class="flex-container flex-wrap d-flex">
               <app-triage *ngIf="row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
                           class="align-self-start"
-                          [enrolleeId]="row.id"></app-triage>
+                          [enrolleeId]="row.id"
+                          [escalated]="(row.escalatedNoteId)"
+                          (reload)="onReload($event)"></app-triage>
+              <app-escalation-contextual *ngIf="row.escalatedNoteId"
+                                         class="align-self-end"
+                                         [enrolleeId]="row.id"
+                                         [adjudicatorNoteId]="row.escalatedNoteId"
+                                         (removed)="onReload($event)"></app-escalation-contextual>
             </div>
           </td>
         </ng-container>

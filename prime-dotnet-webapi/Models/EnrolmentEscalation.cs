@@ -12,6 +12,7 @@ namespace Prime.Models
 
         public int EnrolleeNoteId { get; set; }
 
+        [JsonIgnore]
         public EnrolleeNote EnrolleeNote { get; set; }
 
         public int AdminId { get; set; }
