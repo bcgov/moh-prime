@@ -364,5 +364,11 @@ objects:
               key: postgresql_database_admin_password              
       image: image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
       name: ${NAME}${SUFFIX}-migrate
-      resources: {}
+      resources:
+        limits:
+          cpu: 500m
+          memory: 2Gi
+        requests:
+          cpu: 250m
+          memory: 1Gi
   status: {}
