@@ -206,7 +206,13 @@ objects:
           ports:
           - containerPort: 6001
           - containerPort: 9191
-          resources: {}
+          resources:
+            limits:
+              cpu: 500m
+              memory: 2Gi
+            requests:
+              cpu: 250m
+              memory: 1Gi
           volumeMounts:
           # Create directory and mount Document Manager app to it
           - mountPath: /app/
