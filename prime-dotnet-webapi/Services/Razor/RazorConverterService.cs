@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -7,10 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+
+using Prime.Services.Razor;
 
 namespace Prime.Services
 {
@@ -33,10 +35,10 @@ namespace Prime.Services
             _contextAccessor = contextAccessor;
         }
 
-        public async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
+        public async Task<string> RenderTemplateToStringAsync<TModel>(RazorTemplate<TModel> template, TModel viewModel)
         {
             var actionContext = GetActionContext();
-            var view = GetView(actionContext, viewName);
+            var view = GetView(actionContext, template.ViewPath);
 
             using var output = new StringWriter();
             var viewContext = new ViewContext(
@@ -46,7 +48,7 @@ namespace Prime.Services
                     metadataProvider: new EmptyModelMetadataProvider(),
                     modelState: new ModelStateDictionary())
                 {
-                    Model = model
+                    Model = viewModel
                 },
                 new TempDataDictionary(actionContext.HttpContext, _tempDataProvider),
                 output,
