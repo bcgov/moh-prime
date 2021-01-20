@@ -40,6 +40,9 @@ namespace Prime.Services.Razor
             public static readonly RazorTemplate<EmailParams> RenewalRequired = new RazorTemplate<EmailParams> { ViewPath = "/Views/Emails/RenewalRequiredEmail.cshtml" };
             public static readonly RazorTemplate<EmailParams> SiteRegistrationSubmission = new RazorTemplate<EmailParams> { ViewPath = "/Views/Emails/SiteRegistrationSubmissionEmail.cshtml" };
             public static readonly RazorTemplate<EmailParams> UpdateRemoteUsers = new RazorTemplate<EmailParams> { ViewPath = "/Views/Emails/UpdateRemoteUsersEmail.cshtml" };
+            public static readonly RazorTemplate<EmailParams> SiteApprovedPharmaNetAdministratorEmailTemplate = new RazorTemplate<EmailParams> { ViewPath = "Views/Emails/SiteApprovedPharmaNetAdministratorEmail.cshtml" };
+            public static readonly RazorTemplate<EmailParams> SiteApprovedSigningAuthorityEmailTemplate = new RazorTemplate<EmailParams> { ViewPath = "Views/Emails/SiteApprovedSigningAuthorityEmailTemplate.cshtml" };
+            public static readonly RazorTemplate<EmailParams> SiteApprovedHIBCEmailTemplate = new RazorTemplate<EmailParams> { ViewPath = "Views/Emails/SiteApprovedHIBCEmailTemplate.cshtml" };
         }
     }
 }

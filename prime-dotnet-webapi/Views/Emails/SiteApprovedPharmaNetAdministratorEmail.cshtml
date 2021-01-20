@@ -1,0 +1,31 @@
+@using Prime.Services
+@model EmailParams
+
+@{
+  var site = Model.Site;
+}
+
+<p>
+  @site.DoingBusinessAs has been approved for PharmaNet access by the Ministry
+  of Health. The site’s Signing Authority provided your name and contact information
+  as the PharmaNet Administrator for this site. Your PharmaNet software vendor may
+  contact you to complete the site setup process, and to help set up user access accounts.
+</p>
+
+<p>
+  Individuals who will be accessing PharmaNet at your site should enrol in PRIME
+  now if they have not already done so. For more information, please visit
+  http://www.gov.bc.ca/pharmanet/PRIME. [for private community practice only:
+  If you have registered any physicians or nurse practitioners for remote access to PharmaNet,
+  they must enroll in PRIME before they use remote access, which they can do here:
+  https://pharmanetenrolment.gov.bc.ca. You must not permit remote use of PharmaNet until these users are approved in
+  PRIME.]
+</p>
+
+<p>
+  If you have any questions or concerns, please phone 1-844-397-7463 or email PRIMESupport@gov.bc.ca.
+</p>
+
+<p>
+  Thank you.
+</p>
