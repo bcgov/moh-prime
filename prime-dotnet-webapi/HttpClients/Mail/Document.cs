@@ -1,12 +1,12 @@
 namespace Prime.HttpClients.Mail
 {
-    public class File
+    public class Document
     {
         public string Filename { get; set; }
         public byte[] Data { get; set; }
         public string MediaType { get; set; }
 
-        public File(string filename, byte[] data, string mediaType)
+        public Document(string filename, byte[] data, string mediaType)
         {
             Filename = filename;
             Data = data;
@@ -14,7 +14,7 @@ namespace Prime.HttpClients.Mail
         }
     }
 
-    public class Pdf : File
+    public class Pdf : Document
     {
         public Pdf(string filename, byte[] data)
             : base(filename, data, "application/pdf")

@@ -12,6 +12,7 @@ using Prime;
 using Prime.Models;
 using Prime.Services;
 using Prime.Services.Razor;
+using Prime.HttpClients.Mail;
 
 namespace PrimeTests.UnitTests
 {
@@ -145,7 +146,7 @@ namespace PrimeTests.UnitTests
         public async void TestRender_Documents(RazorTemplate<Document> template)
         {
             var service = CreateService();
-            var model = new Document("filename.ext", new byte[] { });
+            var model = new Document("filename.ext", new byte[] { }, "");
 
             var html = await service.RenderTemplateToStringAsync(template, model);
 

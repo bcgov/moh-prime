@@ -14,10 +14,14 @@ namespace Prime.Controllers
     public class EmailsController : ControllerBase
     {
         private readonly IEmailService _emailService;
+        private readonly IEmailManagementService _emailManagementService;
 
-        public EmailsController(IEmailService emailService)
+        public EmailsController(
+            IEmailService emailService,
+            IEmailManagementService emailManagementService)
         {
             _emailService = emailService;
+            _emailManagementService = emailManagementService;
         }
 
         // POST: api/Emails/management/statuses
@@ -31,7 +35,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<StatusCodeResult> UpdateEmailLogStatuses()
         {
-            await _emailService.UpdateEmailLogStatuses();
+            await _emailManagementService.UpdateEmailLogStatuses();
 
             return NoContent();
         }

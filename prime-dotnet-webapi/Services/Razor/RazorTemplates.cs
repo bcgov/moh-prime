@@ -1,6 +1,7 @@
 using System;
-using Prime.Engines;
 using Prime.Models;
+using Prime.HttpClients.Mail;
+using Prime.ViewModels.Emails;
 
 namespace Prime.Services.Razor
 {

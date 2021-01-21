@@ -9,6 +9,7 @@ using Prime.Models;
 using Prime.Services;
 using PrimeTests.Utils;
 using Prime.HttpClients;
+using Prime.HttpClients.Mail;
 
 namespace PrimeTests.UnitTests
 {
@@ -25,7 +26,8 @@ namespace PrimeTests.UnitTests
             IDocumentManagerClient documentManagerClient = null,
             IDocumentAccessTokenService documentAccessTokenService = null,
             ISiteService siteService = null,
-            IAgreementService agreementService = null
+            IAgreementService agreementService = null,
+            IEmailManagementService emailManagementService = null
             )
         {
             return new EmailService(
@@ -40,7 +42,8 @@ namespace PrimeTests.UnitTests
                 documentManagerClient,
                 documentAccessTokenService,
                 siteService,
-                agreementService
+                agreementService,
+                emailManagementService
             );
         }
     }

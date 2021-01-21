@@ -1,6 +1,6 @@
 using Prime.Models;
 
-namespace Prime.Engines
+namespace Prime.ViewModels.Emails
 {
     public class ProvisionerAccessEmailViewModel
     {

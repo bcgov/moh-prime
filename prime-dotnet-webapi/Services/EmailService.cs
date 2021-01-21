@@ -12,8 +12,7 @@ using Prime.Models;
 using Prime.HttpClients;
 using Prime.Services.Razor;
 using Prime.HttpClients.Mail;
-using Prime.HttpClients.Mail.ChesApiDefinitions;
-using Prime.Engines;
+using Prime.ViewModels.Emails;
 
 namespace Prime.Services
 {
@@ -163,31 +162,35 @@ namespace Prime.Services
 
         public async Task SendSiteRegistrationAsync(Site site)
         {
-            var subject = "PRIME Site Registration Submission";
-            var body = await _razorConverterService.RenderTemplateToStringAsync(
-                RazorTemplates.Emails.SiteRegistrationSubmission,
-                new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
+            var downloadUrl = await GetBusinessLicenceDownloadLink(site.Id);
 
-            string registrationReviewFilename = "SiteRegistrationReview.pdf";
+            var email = new Email
+            (
+                from: PrimeEmail,
+                to: new[] { MohEmail, PrimeSupportEmail },
+                subject: "PRIME Site Registration Submission",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteRegistrationSubmission, new EmailParams(site, downloadUrl)),
+                attachments: await GetSiteRegistrationAttachments(site)
+            );
+            await Send(email);
 
-            var attachments = await GetSiteRegistrationAttachments(site);
-
-            await Send(PrimeEmail, new[] { MohEmail, PrimeSupportEmail }, subject, body, attachments);
-
-            var siteRegReviewPdf = attachments.Single(a => a.Filename == registrationReviewFilename).Content;
-            await SaveSiteRegistrationReview(site.Id, registrationReviewFilename, siteRegReviewPdf);
+            var siteRegReviewPdf = email.Attachments.Single(a => a.Filename == "SiteRegistrationReview.pdf");
+            await SaveSiteRegistrationReview(site.Id, siteRegReviewPdf);
         }
 
         public async Task SendRemoteUsersUpdatedAsync(Site site)
         {
-            var subject = "Remote Practioners Added";
-            var body = await _razorConverterService.RenderTemplateToStringAsync(
-               RazorTemplates.Emails.UpdateRemoteUsers,
-                new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
+            var downloadUrl = await GetBusinessLicenceDownloadLink(site.Id);
 
-            var attachments = await GetSiteRegistrationAttachments(site);
-
-            await Send(PrimeEmail, new[] { MohEmail, PrimeSupportEmail }, subject, body, attachments);
+            var email = new Email
+            (
+                from: PrimeEmail,
+                to: new[] { MohEmail, PrimeSupportEmail },
+                subject: "Remote Practioners Added",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.UpdateRemoteUsers, new EmailParams(site, downloadUrl)),
+                attachments: await GetSiteRegistrationAttachments(site)
+            );
+            await Send(email);
         }
 
         public async Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
@@ -205,17 +208,20 @@ namespace Prime.Services
                 );
                 await Send(email);
             }
-
         }
 
         public async Task SendBusinessLicenceUploadedAsync(Site site)
         {
-            var subject = "Site Business Licence Uploaded";
-            var body = await _razorConverterService.RenderTemplateToStringAsync(
-                RazorTemplates.Emails.BusinessLicenceUploaded,
-                new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
+            var downloadUrl = await GetBusinessLicenceDownloadLink(site.Id);
 
-            await Send(PrimeEmail, site.Adjudicator.Email, subject, body);
+            var email = new Email
+            (
+                from: PrimeEmail,
+                to: site.Adjudicator.Email,
+                subject: "Site Business Licence Uploaded",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.BusinessLicenceUploaded, new EmailParams(site, downloadUrl))
+            );
+            await Send(email);
         }
 
         public async Task SendSiteApprovedPharmaNetAdministratorAsync(Site site)
@@ -265,7 +271,7 @@ namespace Prime.Services
             return documentAccessToken.DownloadUrl;
         }
 
-        private async Task<IEnumerable<(string Filename, byte[] Content)>> GetSiteRegistrationAttachments(Site site)
+        private async Task<IEnumerable<Pdf>> GetSiteRegistrationAttachments(Site site)
         {
             var organization = site.Organization;
 
@@ -287,25 +293,25 @@ namespace Prime.Services
                     MemoryStream ms = new MemoryStream();
                     stream.CopyTo(ms);
 
-                    return new (string Filename, byte[] HtmlContent)[]
+                    return new []
                     {
-                        (organizationAgreementFilename, ms.ToArray()),
-                        (registrationReviewFilename, _pdfService.Generate(siteRegistrationReviewHtml))
+                        new Pdf(organizationAgreementFilename, ms.ToArray()),
+                        new Pdf(registrationReviewFilename, _pdfService.Generate(siteRegistrationReviewHtml))
                     };
                 }
 
-                Document organizationAgreementDoc;
+                Pdf organizationAgreementDoc;
                 RazorTemplate<Document> template = RazorTemplates.Document;
                 try
                 {
                     var stream = await _documentService.GetStreamForLatestSignedAgreementDocument(organization.Id);
                     var ms = new MemoryStream();
                     stream.CopyTo(ms);
-                    organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", ms.ToArray());
+                    organizationAgreementDoc = new Pdf("SignedOrganizationAgreement.pdf", ms.ToArray());
                 }
                 catch (NullReferenceException)
                 {
-                    organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", new byte[20]);
+                    organizationAgreementDoc = new Pdf("SignedOrganizationAgreement.pdf", new byte[20]);
                     template = RazorTemplates.ApologyDocument;
                 }
 
@@ -327,19 +333,18 @@ namespace Prime.Services
                 organizationAgreementHtml = await _agreementService.RenderOrgAgreementHtmlAsync(agreementType, organization.Name, agreementDate, true);
             }
 
-            return new (string Filename, string HtmlContent)[]
+            return new[]
             {
-                (organizationAgreementFilename, organizationAgreementHtml),
-                (registrationReviewFilename, siteRegistrationReviewHtml)
-            }
-            .Select(content => (content.Filename, Content: _pdfService.Generate(content.HtmlContent)));
+                new Pdf(organizationAgreementFilename, _pdfService.Generate(organizationAgreementHtml)),
+                new Pdf(registrationReviewFilename, _pdfService.Generate(siteRegistrationReviewHtml))
+            };
         }
 
-        private async Task SaveSiteRegistrationReview(int siteId, string filename, byte[] pdf)
+        private async Task SaveSiteRegistrationReview(int siteId, Pdf pdf)
         {
-            var documentGuid = await _documentManagerClient.SendFileAsync(new MemoryStream(pdf), filename, $"sites/{siteId}/site_registration_reviews");
+            var documentGuid = await _documentManagerClient.SendFileAsync(new MemoryStream(pdf.Data), pdf.Filename, $"sites/{siteId}/site_registration_reviews");
 
-            _context.SiteRegistrationReviewDocuments.Add(new SiteRegistrationReviewDocument(siteId, documentGuid, filename));
+            _context.SiteRegistrationReviewDocuments.Add(new SiteRegistrationReviewDocument(siteId, documentGuid, pdf.Filename));
             await _context.SaveChangesAsync();
         }
 
