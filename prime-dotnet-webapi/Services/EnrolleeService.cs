@@ -714,7 +714,7 @@ namespace Prime.Services
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.Certifications)
-                    .ThenInclude(c => c.College)
+                    .ThenInclude(c => c.License)
                 .SingleOrDefaultAsync(e => e.GPID == gpid);
 
             if (enrollee == null)
