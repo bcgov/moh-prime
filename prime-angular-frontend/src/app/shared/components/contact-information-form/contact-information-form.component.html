@@ -44,12 +44,15 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Notification Information</ng-container>
       <ng-container appPageSubheaderSummary>
-        Provide an email address 
-        <ng-container *ngIf="showSmsPhone">
-          and phone number (optional) 
-        </ng-container>
-        that may be used for sending notifications from the PRIME
-        system.
+        <div *ngIf="!forPhsa else PhsaSummary">
+          Provide an email address and phone number (optional)
+          that may be used for sending notifications from the PRIME
+          system.
+        </div>
+        <ng-template #PhsaSummary>
+          Please provide the email address you have provided to your Health Authority
+          to be associated with your eForms enrolment.
+        </ng-template>
       </ng-container>
     </app-page-subheader>
 
@@ -69,16 +72,16 @@
 
           </div>
 
-          <ng-container *ngIf="showSmsPhone">
+          <ng-container *ngIf="!forPhsa">
 
             <div class="col-6">
 
               <mat-form-field class="w-100">
                 <input matInput
-                      placeholder="Optional SMS Phone Number"
-                      formControlName="smsPhone"
-                      mask="(000) 000-0000"
-                      [showMaskTyped]="false">
+                       placeholder="Optional SMS Phone Number"
+                       formControlName="smsPhone"
+                       mask="(000) 000-0000"
+                       [showMaskTyped]="false">
                 <mat-error *ngIf="smsPhone.hasError('required')">Required</mat-error>
                 <mat-error *ngIf="smsPhone.hasError('phone')">Must be a valid phone number</mat-error>
               </mat-form-field>
