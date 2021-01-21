@@ -1,4 +1,5 @@
 using System;
+using Prime.Engines;
 using Prime.Models;
 
 namespace Prime.Services.Razor
@@ -31,9 +32,9 @@ namespace Prime.Services.Razor
         public static class Emails
         {
             public static readonly RazorTemplate<EmailParams> BusinessLicenceUploaded = new RazorTemplate<EmailParams> { ViewPath = "/Views/Emails/BusinessLicenceUploadedEmail.cshtml" };
-            public static readonly RazorTemplate<EmailParams> CommunityPharmacyManager = new RazorTemplate<EmailParams> { ViewPath = "/Views/Emails/CommunityPharmacyManagerEmail.cshtml" };
-            public static readonly RazorTemplate<EmailParams> CommunityPractice = new RazorTemplate<EmailParams> { ViewPath = "/Views/Emails/CommunityPracticeEmail.cshtml" };
-            public static readonly RazorTemplate<EmailParams> HealthAuthority = new RazorTemplate<EmailParams> { ViewPath = "/Views/Emails/HealthAuthorityEmail.cshtml" };
+            public static readonly RazorTemplate<ProvisionerAccessEmailViewModel> CommunityPharmacyManager = new RazorTemplate<ProvisionerAccessEmailViewModel> { ViewPath = "/Views/Emails/CommunityPharmacyManagerEmail.cshtml" };
+            public static readonly RazorTemplate<ProvisionerAccessEmailViewModel> CommunityPractice = new RazorTemplate<ProvisionerAccessEmailViewModel> { ViewPath = "/Views/Emails/CommunityPracticeEmail.cshtml" };
+            public static readonly RazorTemplate<ProvisionerAccessEmailViewModel> HealthAuthority = new RazorTemplate<ProvisionerAccessEmailViewModel> { ViewPath = "/Views/Emails/HealthAuthorityEmail.cshtml" };
             public static readonly RazorTemplate<EmailParams> Reminder = new RazorTemplate<EmailParams> { ViewPath = "/Views/Emails/ReminderEmail.cshtml" };
             public static readonly RazorTemplate<EmailParams> RemoteUserNotification = new RazorTemplate<EmailParams> { ViewPath = "/Views/Emails/RemoteUserNotificationEmail.cshtml" };
             public static readonly RazorTemplate<EmailParams> RenewalPassed = new RazorTemplate<EmailParams> { ViewPath = "/Views/Emails/RenewalPassedEmail.cshtml" };

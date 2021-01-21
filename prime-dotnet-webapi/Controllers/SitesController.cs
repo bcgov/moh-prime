@@ -310,7 +310,7 @@ namespace Prime.Controllers
 
             site = await _siteService.SubmitRegistrationAsync(siteId);
             await _emailService.SendSiteRegistrationAsync(site);
-            await _emailService.SendRemoteUsersNotificationAsync(site, site.RemoteUsers);
+            await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
 
             return Ok(ApiResponse.Result(site));
         }
@@ -732,7 +732,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _emailService.SendRemoteUsersNotificationAsync(site, remoteUsers);
+            await _emailService.SendRemoteUserNotificationsAsync(site, remoteUsers);
             return NoContent();
         }
 

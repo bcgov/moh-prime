@@ -1,25 +1,18 @@
-@using Prime.Services
-@model EmailParams
-
-@{
-  var enrolleeName = $"{Model.FirstName} {Model.LastName}";
-  var tokenUrl = Model.TokenUrl;
-  var maxViews = Model.MaxViews;
-  var expiryDays = Model.ExpiryDays;
-}
+@using Prime.Engines
+@model ProvisionerAccessEmailViewModel
 
 To: PharmNet Access administrator
 
 <br>
 <br>
 
-@enrolleeName has been approved for <strong>Health Authority Access to PharmaNet.</strong>
+@Model.FullName has been approved for <strong>Health Authority Access to PharmaNet.</strong>
 <br>
 They can now be set up with their PharmaNet Access account in your local software.
 You must include their <strong>Global PharmaNet ID (GPID)</strong> on their account profile.
 <br>
 You can access their GPID via this link here.
 <br>
-<a href="@tokenUrl">@tokenUrl</a>
+<a href="@Model.TokenUrl">@Model.TokenUrl</a>
 <br>
-<strong>This link will expire after @expiryDays days</strong>.
+<strong>This link will expire after @Model.ExpiresInDays days</strong>.

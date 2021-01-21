@@ -1,15 +1,19 @@
 using System;
+using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Mail;
-using Prime.Models;
-using System.IO;
-using Prime.HttpClients;
 using DelegateDecompiler.EntityFrameworkCore;
+
+using Prime.Models;
+using Prime.HttpClients;
 using Prime.Services.Razor;
+using Prime.HttpClients.Mail;
+using Prime.HttpClients.Mail.ChesApiDefinitions;
+using Prime.Engines;
 
 namespace Prime.Services
 {
@@ -60,9 +64,9 @@ namespace Prime.Services
 
     public class EmailService : BaseService, IEmailService
     {
-        private const string PRIME_EMAIL = "no-reply-prime@gov.bc.ca";
-        private const string PRIME_SUPPORT_EMAIL = "primesupport@gov.bc.ca";
-        private const string MOH_EMAIL = "HLTH.HnetConnection@gov.bc.ca";
+        private const string PrimeEmail = "no-reply-prime@gov.bc.ca";
+        private const string PrimeSupportEmail = "primesupport@gov.bc.ca";
+        private const string MohEmail = "HLTH.HnetConnection@gov.bc.ca";
         private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
         private readonly IPdfService _pdfService;
@@ -73,6 +77,8 @@ namespace Prime.Services
         private readonly IDocumentAccessTokenService _documentAccessTokenService;
         private readonly ISiteService _siteService;
         private readonly IAgreementService _agreementService;
+        private readonly IEmailManagementService _emailManagementService;
+
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
@@ -85,7 +91,8 @@ namespace Prime.Services
             IDocumentManagerClient documentManagerClient,
             IDocumentAccessTokenService documentAccessTokenService,
             ISiteService siteService,
-            IAgreementService agreementService)
+            IAgreementService agreementService,
+            IEmailManagementService emailManagementService)
             : base(context, httpContext)
         {
             _razorConverterService = razorConverterService;
@@ -98,24 +105,7 @@ namespace Prime.Services
             _smtpEmailClient = smtpEmailClient;
             _siteService = siteService;
             _agreementService = agreementService;
-        }
-
-        public static bool IsValidEmail(string email)
-        {
-            try
-            {
-                var addr = new MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public static bool AreValidEmails(string[] emails)
-        {
-            return emails.All(e => IsValidEmail(e));
+            _emailManagementService = emailManagementService;
         }
 
         public async Task SendReminderEmailAsync(int enrolleeId)
@@ -125,44 +115,52 @@ namespace Prime.Services
                 .Select(e => e.Email)
                 .SingleOrDefaultAsync();
 
-            if (!IsValidEmail(enrolleeEmail))
-            {
-                // TODO Log invalid email, cannot send?
-                return;
-            }
-
-            string subject = "PRIME Requires your Attention";
-            string body = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.Reminder, new EmailParams());
-            await Send(PRIME_EMAIL, enrolleeEmail, subject, body);
+            var email = new Email
+            (
+                from: PrimeEmail,
+                to: enrolleeEmail,
+                subject: "PRIME Requires your Attention",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.Reminder, null)
+            );
+            await Send(email);
         }
 
-        public async Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, int careSettingCode)
+        public async Task SendProvisionerLinkAsync(IEnumerable<string> emails, EnrolmentCertificateAccessToken token, int careSettingCode)
         {
-            if (!AreValidEmails(recipients))
-            {
-                // TODO Log invalid email, cannot send
-                throw new ArgumentException("Cannot send provisioner link, supplied email address(es) are invalid.");
-            }
+            var enrolleeDto = await _context.Enrollees
+                .Where(e => e.Id == token.EnrolleeId)
+                .Select(e => new
+                {
+                    e.FirstName,
+                    e.LastName,
+                    e.Email
+                })
+                .SingleAsync();
 
-            if (token.Enrollee == null)
-            {
-                await _context.Entry(token).Reference(t => t.Enrollee).LoadAsync();
-            }
-
-            // Always send a copy to the enrollee
-            var ccEmails = new List<string>() { token.Enrollee.Email };
-
-            string subject = "New Access Request";
-
-            RazorTemplate<EmailParams> template = careSettingCode switch
+            var template = careSettingCode switch
             {
                 (int)CareSettingType.CommunityPharmacy => RazorTemplates.Emails.CommunityPharmacyManager,
                 (int)CareSettingType.HealthAuthority => RazorTemplates.Emails.HealthAuthority,
                 _ => RazorTemplates.Emails.CommunityPractice,
             };
-            string emailBody = await _razorConverterService.RenderTemplateToStringAsync(template, new EmailParams(token));
-            await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
+
+            var viewModel = new ProvisionerAccessEmailViewModel
+            {
+                FullName = $"{enrolleeDto.FirstName} {enrolleeDto.LastName}",
+                TokenUrl = token.FrontendUrl,
+                ExpiresInDays = EnrolmentCertificateAccessToken.Lifespan.Days
+            };
+
+            var email = new Email(
+                from: PrimeEmail,
+                to: emails,
+                cc: enrolleeDto.Email,
+                subject: "New Access Request",
+                body: await _razorConverterService.RenderTemplateToStringAsync(template, viewModel)
+            );
+            await Send(email);
         }
+
         public async Task SendSiteRegistrationAsync(Site site)
         {
             var subject = "PRIME Site Registration Submission";
@@ -174,7 +172,7 @@ namespace Prime.Services
 
             var attachments = await GetSiteRegistrationAttachments(site);
 
-            await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
+            await Send(PrimeEmail, new[] { MohEmail, PrimeSupportEmail }, subject, body, attachments);
 
             var siteRegReviewPdf = attachments.Single(a => a.Filename == registrationReviewFilename).Content;
             await SaveSiteRegistrationReview(site.Id, registrationReviewFilename, siteRegReviewPdf);
@@ -189,19 +187,23 @@ namespace Prime.Services
 
             var attachments = await GetSiteRegistrationAttachments(site);
 
-            await Send(PRIME_EMAIL, new[] { MOH_EMAIL, PRIME_SUPPORT_EMAIL }, subject, body, attachments);
+            await Send(PrimeEmail, new[] { MohEmail, PrimeSupportEmail }, subject, body, attachments);
         }
 
-        public async Task SendRemoteUsersNotificationAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
+        public async Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
         {
-            var subject = "Remote Practitioner Notification";
-            var body = await _razorConverterService.RenderTemplateToStringAsync(
-                RazorTemplates.Emails.RemoteUserNotification,
-                new EmailParams(site));
+            var body = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RemoteUserNotification, new EmailParams(site));
 
             foreach (var remoteUser in remoteUsers)
             {
-                await Send(PRIME_EMAIL, remoteUser.Email, subject, body);
+                var email = new Email
+                (
+                    from: PrimeEmail,
+                    to: remoteUser.Email,
+                    subject: "Remote Practitioner Notification",
+                    body: body
+                );
+                await Send(email);
             }
 
         }
@@ -213,37 +215,43 @@ namespace Prime.Services
                 RazorTemplates.Emails.BusinessLicenceUploaded,
                 new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
 
-            await Send(PRIME_EMAIL, site.Adjudicator.Email, subject, body);
+            await Send(PrimeEmail, site.Adjudicator.Email, subject, body);
         }
 
         public async Task SendSiteApprovedPharmaNetAdministratorAsync(Site site)
         {
-            var subject = "Site Registration Approved";
-            var body = await _razorConverterService.RenderTemplateToStringAsync(
-                RazorTemplates.Emails.SiteApprovedPharmaNetAdministratorEmailTemplate,
-                new EmailParams(site));
-
-            await Send(PRIME_EMAIL, site.AdministratorPharmaNet.Email, subject, body);
+            var email = new Email
+            (
+                from: PrimeEmail,
+                to: site.AdministratorPharmaNet.Email,
+                subject: "Site Registration Approved",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteApprovedPharmaNetAdministratorEmailTemplate, new EmailParams(site))
+            );
+            await Send(email);
         }
 
         public async Task SendSiteApprovedSigningAuthorityAsync(Site site)
         {
-            var subject = "Site Registration Approved";
-            var body = await _razorConverterService.RenderTemplateToStringAsync(
-                RazorTemplates.Emails.SiteApprovedSigningAuthorityEmailTemplate,
-                new EmailParams(site));
-
-            await Send(PRIME_EMAIL, site.Provisioner.Email, subject, body);
+            var email = new Email
+            (
+                from: PrimeEmail,
+                to: site.Provisioner.Email,
+                subject: "Site Registration Approved",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteApprovedSigningAuthorityEmailTemplate, new EmailParams(site))
+            );
+            await Send(email);
         }
 
         public async Task SendSiteApprovedHIBCAsync(Site site)
         {
-            var subject = "Site Approval Notification";
-            var body = await _razorConverterService.RenderTemplateToStringAsync(
-                RazorTemplates.Emails.SiteApprovedHIBCEmailTemplate,
-                new EmailParams(site));
-
-            await Send(PRIME_EMAIL, MOH_EMAIL, subject, body);
+            var email = new Email
+            (
+                from: PrimeEmail,
+                to: MohEmail,
+                subject: "Site Registration Approved",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteApprovedHIBCEmailTemplate, new EmailParams(site))
+            );
+            await Send(email);
         }
 
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
@@ -335,41 +343,6 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName)
-        {
-            var vendor = await _context.Vendors
-                .SingleOrDefaultAsync(v => v.Name == provisionerName);
-
-            return vendor?.Email;
-        }
-
-        public async Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync()
-        {
-            return await _context.Vendors
-                .Select(v => v.Name)
-                .ToListAsync();
-        }
-
-        public async Task<bool> UpdateEmailLogStatuses()
-        {
-            var emailLogs = await _context.EmailLogs
-                .Where(e => e.SendType == "CHES"
-                    && e.MsgId != null
-                    && e.LatestStatus != ChesStatus.Completed.Value)
-                .ToListAsync();
-
-            foreach (var email in emailLogs)
-            {
-                var status = await _chesClient.GetStatusAsync(email.MsgId.Value);
-                if (status != null && email.LatestStatus != status)
-                {
-                    email.LatestStatus = status;
-                }
-            }
-
-            return await _context.SaveChangesAsync() != 0;
-        }
-
         public async Task SendEnrolleeRenewalEmails()
         {
             var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
@@ -400,106 +373,51 @@ namespace Prime.Services
             }
         }
 
-        private async Task SendRenewalRequiredAsync(string email, string firstName, string lastName, DateTimeOffset expiryDate)
+        private async Task SendRenewalRequiredAsync(string enrolleeEmail, string firstName, string lastName, DateTimeOffset expiryDate)
         {
-            var subject = "PRIME Renewal Required";
-            var body = await _razorConverterService.RenderTemplateToStringAsync(
-                RazorTemplates.Emails.RenewalRequired,
-                new EmailParams(firstName, lastName, expiryDate));
-
-            await Send(PRIME_EMAIL, email, subject, body);
+            var email = new Email
+            (
+                from: PrimeEmail,
+                to: enrolleeEmail,
+                subject: "PRIME Renewal Required",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RenewalRequired, new EmailParams(firstName, lastName, expiryDate))
+            );
+            await Send(email);
         }
 
-        private async Task SendRenewalPassedAsync(string email, string firstName, string lastName, DateTimeOffset expiryDate)
+        private async Task SendRenewalPassedAsync(string enrolleeEmail, string firstName, string lastName, DateTimeOffset expiryDate)
         {
-            var subject = "Your PRIME Renewal Date Has Passed";
-            var body = await _razorConverterService.RenderTemplateToStringAsync(
-                RazorTemplates.Emails.RenewalPassed,
-                new EmailParams(firstName, lastName, expiryDate));
-
-            await Send(PRIME_EMAIL, email, subject, body);
+            var email = new Email
+            (
+                from: PrimeEmail,
+                to: enrolleeEmail,
+                subject: "Your PRIME Renewal Date Has Passed",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RenewalPassed, new EmailParams(firstName, lastName, expiryDate))
+            );
+            await Send(email);
         }
 
-        private async Task Send(string from, string to, string subject, string body)
+        private async Task Send(Email email)
         {
-            await Send(from, new[] { to }, new string[0], subject, body, Enumerable.Empty<(string Filename, byte[] Content)>());
-        }
-
-        private async Task Send(string from, IEnumerable<string> to, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
-        {
-            await Send(from, to, new string[0], subject, body, attachments);
-        }
-
-        private async Task Send(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
-        {
-            if (!to.Any())
-            {
-                throw new ArgumentException("Must specify at least one \"To\" email address.");
-            }
-
             if (!PrimeEnvironment.IsProduction)
             {
-                subject = $"THE FOLLOWING EMAIL IS A TEST: {subject}";
+                email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
             }
 
             if (PrimeEnvironment.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
             {
-                var msgId = await SendChes(from, to, cc, subject, body, attachments);
+                var msgId = await _chesClient.SendAsync(email);
+                await _emailManagementService.CreateChesEmailLog(email, msgId);
 
-                if (msgId == null)
+                if (msgId != null)
                 {
-                    // Ches failed, send using smtp client
-                    await SendSmtp(from, to, cc, subject, body, attachments);
+                    return;
                 }
             }
-            else
-            {
-                await SendSmtp(from, to, cc, subject, body, attachments);
-            }
-        }
 
-        private async Task<Guid?> SendChes(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
-        {
-            var msgId = await _chesClient.SendAsync(from, to, cc, subject, body, attachments);
-
-            var emailLog = new EmailLog
-            {
-                SentTo = string.Join(",", to),
-                Cc = string.Join(",", cc),
-                Subject = subject,
-                Body = body,
-                SendType = "CHES",
-                MsgId = msgId,
-                DateSent = DateTimeOffset.Now
-            };
-
-            await CreateEmailLog(emailLog);
-
-            return msgId;
-        }
-
-        private async Task SendSmtp(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<(string Filename, byte[] Content)> attachments)
-        {
-            await _smtpEmailClient.SendAsync(from, to, cc, subject, body, attachments);
-
-            var emailLog = new EmailLog
-            {
-                SentTo = string.Join(",", to),
-                Cc = string.Join(",", cc),
-                Subject = subject,
-                Body = body,
-                SendType = "SMTP",
-                DateSent = DateTimeOffset.Now
-            };
-
-            await CreateEmailLog(emailLog);
-        }
-
-        private async Task CreateEmailLog(EmailLog emailLog)
-        {
-            _context.EmailLogs.Add(emailLog);
-
-            await _context.SaveChangesAsync();
+            // Allways fall back to smtp
+            await _smtpEmailClient.SendAsync(email);
+            await _emailManagementService.CreateSmtpEmailLog(email);
         }
     }
 }
