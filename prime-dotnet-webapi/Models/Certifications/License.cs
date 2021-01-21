@@ -13,13 +13,15 @@ namespace Prime.Models
 
         public int Weight { get; set; }
 
+        public string Prefix { get; set; }
+
         [JsonIgnore]
         public bool Manual { get; set; }
 
         [JsonIgnore]
         public bool Validate { get; set; }
 
-        public bool NamedInImReg  { get; set; }
+        public bool NamedInImReg { get; set; }
 
         public bool LicensedToProvideCare { get; set; }
 
