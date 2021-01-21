@@ -202,7 +202,6 @@ namespace PrimeTests.UnitTests
                     LicenseNumber = "33333"
                 }
             };
-            TestDb.SaveChanges();
 
             var matchingRecord = new GpidValidationParameters.CollegeRecord
             {
