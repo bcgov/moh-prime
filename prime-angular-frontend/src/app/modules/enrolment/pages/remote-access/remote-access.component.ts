@@ -115,7 +115,9 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
         remoteAccessSite.patchValue({
           enrolleeId,
           siteId: ras.siteId,
-          doingBusinessAs: ras.siteDoingBusinessAs
+          doingBusinessAs: ras.siteDoingBusinessAs,
+          physicalAddress: ras.siteAddress,
+          siteVendors: [{ vendorCode: ras.vendorCodes[0] }]
         });
         this.remoteAccessSites.push(remoteAccessSite);
       }

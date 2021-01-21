@@ -142,6 +142,11 @@ export class EnrolleeReviewComponent {
       : null;
   }
 
+  public getRemoteAccessSiteVendor(remoteAccessSiteId: number) {
+    const ras = this.remoteAccessSites.find((site => site.id == remoteAccessSiteId));
+    return ras.site.siteVendors?.length ? ras.site.siteVendors[0].vendorCode : null;
+  }
+
   public onRoute(routePath: string | (string | number)[], event?: Event): void {
     event?.preventDefault();
     this.route.emit(routePath);
