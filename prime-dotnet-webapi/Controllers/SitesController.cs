@@ -756,6 +756,10 @@ namespace Prime.Controllers
             }
 
             var updatedSite = await _siteService.ApproveSite(siteId);
+            await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(site);
+            await _emailService.SendSiteApprovedSigningAuthorityAsync(site);
+            await _emailService.SendSiteApprovedHIBCAsync(site);
+
             return Ok(ApiResponse.Result(updatedSite));
         }
 

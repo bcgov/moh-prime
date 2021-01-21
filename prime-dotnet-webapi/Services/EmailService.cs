@@ -216,6 +216,36 @@ namespace Prime.Services
             await Send(PRIME_EMAIL, site.Adjudicator.Email, subject, body);
         }
 
+        public async Task SendSiteApprovedPharmaNetAdministratorAsync(Site site)
+        {
+            var subject = "Site Registration Approved";
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.SiteApprovedPharmaNetAdministratorEmailTemplate,
+                new EmailParams(site));
+
+            await Send(PRIME_EMAIL, site.AdministratorPharmaNet.Email, subject, body);
+        }
+
+        public async Task SendSiteApprovedSigningAuthorityAsync(Site site)
+        {
+            var subject = "Site Registration Approved";
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.SiteApprovedSigningAuthorityEmailTemplate,
+                new EmailParams(site));
+
+            await Send(PRIME_EMAIL, site.Provisioner.Email, subject, body);
+        }
+
+        public async Task SendSiteApprovedHIBCAsync(Site site)
+        {
+            var subject = "Site Approval Notification";
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.SiteApprovedHIBCEmailTemplate,
+                new EmailParams(site));
+
+            await Send(PRIME_EMAIL, MOH_EMAIL, subject, body);
+        }
+
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
         {
             var businessLicence = await _siteService.GetBusinessLicenceAsync(siteId);
