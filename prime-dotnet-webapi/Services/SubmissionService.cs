@@ -293,18 +293,14 @@ namespace Prime.Services
         {
             // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
             var enrollee = await _context.Enrollees
-                .Include(e => e.PhysicalAddress)
                 .Include(e => e.Submissions)
+                .Include(e => e.PhysicalAddress)
                 .Include(e => e.MailingAddress)
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.EnrolmentStatusReasons)
                 .Include(e => e.Certifications)
-                    .ThenInclude(cer => cer.College)
-                .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
-                        .ThenInclude(l => l.DefaultPrivileges)
-                .Include(e => e.EnrolleeRemoteUsers)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))

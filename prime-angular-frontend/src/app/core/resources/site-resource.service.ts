@@ -13,6 +13,10 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { CertSearch } from '@enrolment/shared/models/cert-search.model';
+import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
+import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
+import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 
 import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
@@ -20,8 +24,6 @@ import { BusinessLicenceDocument } from '@registration/shared/models/business-li
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
-import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Injectable({
@@ -404,11 +406,11 @@ export class SiteResource {
       );
   }
 
-  public getSitesByRemoteUserInfo(certifications: CollegeCertification[]): Observable<Site[]> {
-    return this.apiResource.post(`sites/remote-users`, certifications)
+  public getSitesByRemoteUserInfo(certSearch: CertSearch[]): Observable<RemoteAccessSearch[]> {
+    return this.apiResource.post(`sites/remote-users`, certSearch)
       .pipe(
-        map((response: ApiHttpResponse<Site[]>) => response.result),
-        tap((sites: Site[]) => this.logger.info('SITES', sites)),
+        map((response: ApiHttpResponse<RemoteAccessSearch[]>) => response.result),
+        tap((sites: RemoteAccessSearch[]) => this.logger.info('SITES', sites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Sites could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSites error has occurred: ', error);

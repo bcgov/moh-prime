@@ -51,7 +51,7 @@ namespace Prime.Controllers
             Certification cert = new Certification
             {
                 LicenseNumber = licenceNumber,
-                College = new College
+                License = new License
                 {
                     Prefix = collegePrefix
                 }

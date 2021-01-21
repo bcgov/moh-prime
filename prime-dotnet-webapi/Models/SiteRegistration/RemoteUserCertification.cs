@@ -31,8 +31,7 @@ namespace Prime.Models
 
         public int LicenseCode { get; set; }
 
-        [NotMapped]
         [JsonIgnore]
-        public string FullLicenseNumber { get { return $"{College?.Prefix}-{LicenseNumber}"; } }
+        public License License { get; set; }
     }
 }
