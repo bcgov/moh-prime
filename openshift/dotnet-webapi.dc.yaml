@@ -100,7 +100,7 @@ objects:
                     name: "canada-post-addresscomplete-secrets"
               - name: ADDRESS_AUTOCOMPLETE_API_URL
                 valueFrom:
-                  secretKeyRef:
+                  configMapKeyRef:
                     key: address_autocomplete_api_url
                     name: "canada-post-addresscomplete"
 
