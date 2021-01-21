@@ -128,10 +128,10 @@ namespace PrimeTests.Utils
 
             if (!db.Set<College>().Any())
             {
-                db.AddRange(new College { Code = 1, Name = "College of Physicians and Surgeons of BC (CPSBC)", Prefix = "91" });
-                db.AddRange(new College { Code = 2, Name = "College of Pharmacists of BC (CPBC)", Prefix = "P1" });
-                db.AddRange(new College { Code = 3, Name = "College of Registered Nurses of BC (CRNBC)", Prefix = "96" });
-                db.AddRange(new College { Code = 4, Name = "None", Prefix = null });
+                db.AddRange(new College { Code = 1, Name = "College of Physicians and Surgeons of BC (CPSBC)" });
+                db.AddRange(new College { Code = 2, Name = "College of Pharmacists of BC (CPBC)" });
+                db.AddRange(new College { Code = 3, Name = "College of Registered Nurses of BC (CRNBC)" });
+                db.AddRange(new College { Code = 4, Name = "None" });
             }
 
             if (!db.Set<License>().Any())

@@ -11,9 +11,6 @@ namespace PrimeTests.ModelFactories
 
         public static IEnumerable<College> All { get { return _seedData; } }
 
-        public static College PhysiciansAndSurgeons { get { return _seedData.Single(c => c.Prefix == "91"); } }
-        public static College Pharmacists { get { return _seedData.Single(c => c.Prefix == "P1"); } }
-        public static College NursesAndMidwives { get { return _seedData.Single(c => c.Prefix == "96"); } }
-        public static IEnumerable<College> BigThree { get { return new[] { PhysiciansAndSurgeons, Pharmacists, NursesAndMidwives }; } }
+        public static IEnumerable<College> BigThree { get { return _seedData.Where(c => new[] { 1, 2, 3 }.Contains(c.Code)); } }
     }
 }
