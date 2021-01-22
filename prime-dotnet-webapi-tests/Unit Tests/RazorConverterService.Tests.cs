@@ -177,6 +177,9 @@ namespace PrimeTests.UnitTests
             yield return new[] { RazorTemplates.Emails.RemoteUserNotification };
             yield return new[] { RazorTemplates.Emails.RenewalPassed };
             yield return new[] { RazorTemplates.Emails.RenewalRequired };
+            yield return new[] { RazorTemplates.Emails.SiteApprovedHIBCEmailTemplate };
+            yield return new[] { RazorTemplates.Emails.SiteApprovedPharmaNetAdministratorEmailTemplate };
+            yield return new[] { RazorTemplates.Emails.SiteApprovedSigningAuthorityEmailTemplate };
             yield return new[] { RazorTemplates.Emails.SiteRegistrationSubmission };
             yield return new[] { RazorTemplates.Emails.UpdateRemoteUsers };
         }
