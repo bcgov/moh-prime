@@ -517,6 +517,10 @@ namespace Prime.Services
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessSites)
                     .ThenInclude(ras => ras.Site)
+                        .ThenInclude(ras => ras.PhysicalAddress)
+                .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
+                        .ThenInclude(ras => ras.SiteVendors)
                 .Include(r => r.RemoteAccessLocations)
                     .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(e => e.EnrolmentStatuses)
@@ -711,7 +715,7 @@ namespace Prime.Services
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.Certifications)
-                    .ThenInclude(c => c.College)
+                    .ThenInclude(c => c.License)
                 .SingleOrDefaultAsync(e => e.GPID == gpid);
 
             if (enrollee == null)
