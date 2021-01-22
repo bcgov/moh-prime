@@ -37,7 +37,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDocumentByAccessToken(Guid accessTokenId)
         {
-            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessNoTrackingAsync(accessTokenId);
+            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessTokenAsync(accessTokenId);
 
             if (documentAccessToken == null)
             {
@@ -67,7 +67,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteDocumentAccessToken(Guid accessTokenId)
         {
-            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessNoTrackingAsync(accessTokenId);
+            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessTokenAsync(accessTokenId);
 
             if (documentAccessToken == null)
             {
