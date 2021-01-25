@@ -329,7 +329,7 @@ namespace Prime.Models
         [Computed]
         public int? EscalatedNoteId
         {
-            get => AdjudicatorNotes
+            get => AdjudicatorNotes?
                 .Where(an => an.EnrolmentEscalation != null)
                 .SingleOrDefault()?.Id;
         }

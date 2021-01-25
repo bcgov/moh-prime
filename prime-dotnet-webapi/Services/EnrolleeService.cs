@@ -79,9 +79,7 @@ namespace Prime.Services
                             .ThenInclude(esan => esan.AdjudicatorNote)
                     .Include(e => e.EnrolmentStatuses)
                         .ThenInclude(es => es.EnrolmentStatusReference)
-                            .ThenInclude(esr => esr.Adjudicator)
-                    .Include(e => e.AdjudicatorNotes)
-                        .ThenInclude(an => an.EnrolmentEscalation);
+                            .ThenInclude(esr => esr.Adjudicator);
             }
 
             var enrollee = await query
@@ -95,6 +93,16 @@ namespace Prime.Services
                     .Id
                 )
                 .ToListAsync();
+
+            if (isAdmin)
+            {
+                var notes = await _context.EnrolleeNotes
+                    .Where(en => en.EnrolleeId == enrolleeId)
+                    .Include(en => en.EnrolmentEscalation)
+                    .ToListAsync();
+
+                enrollee.AdjudicatorNotes = notes;
+            }
 
             return _mapper.Map<Enrollee, EnrolleeViewModel>(enrollee,
                 opt => opt.AfterMap((src, dest) => dest.HasNewestAgreement = newestAgreementIds.Any(n => n == src.CurrentAgreementId)));

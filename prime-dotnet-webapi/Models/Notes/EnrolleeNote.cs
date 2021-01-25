@@ -9,6 +9,7 @@ namespace Prime.Models
         public int EnrolleeId { get; set; }
 
         [JsonIgnore]
+        [NotMapped]
         public Enrollee Enrollee { get; set; }
 
         [JsonIgnore]
