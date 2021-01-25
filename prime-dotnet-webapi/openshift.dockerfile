@@ -69,4 +69,5 @@ RUN chmod -R 777 /opt/app-root
 RUN chmod -R 777 /opt/app-root/.*
 
 EXPOSE 8080 5001 1025
+CMD ls
 # ENTRYPOINT [ "./entrypoint.sh" ]
