@@ -9,7 +9,6 @@ export class MockConfig {
         {
           "code": 1,
           "name": "College of Physicians and Surgeons of BC (CPSBC)",
-          "prefix": "91",
           "collegeLicenses": [
             {
               "collegeCode": 1,
@@ -110,6 +109,18 @@ export class MockConfig {
             {
               "collegeCode": 1,
               "licenseCode": 59
+            },
+            {
+              "collegeCode": 1,
+              "licenseCode": 65
+            },
+            {
+              "collegeCode": 1,
+              "licenseCode": 66
+            },
+            {
+              "collegeCode": 1,
+              "licenseCode": 67
             }
           ],
           "collegePractices": []
@@ -117,7 +128,6 @@ export class MockConfig {
         {
           "code": 2,
           "name": "College of Pharmacists of BC (CPBC)",
-          "prefix": "P1",
           "collegeLicenses": [
             {
               "collegeCode": 2,
@@ -146,6 +156,10 @@ export class MockConfig {
             {
               "collegeCode": 2,
               "licenseCode": 31
+            },
+            {
+              "collegeCode": 2,
+              "licenseCode": 68
             }
           ],
           "collegePractices": []
@@ -153,7 +167,6 @@ export class MockConfig {
         {
           "code": 3,
           "name": "BC College of Nurses and Midwives (BCCNM)",
-          "prefix": "96",
           "collegeLicenses": [
             {
               "collegeCode": 3,
@@ -302,7 +315,6 @@ export class MockConfig {
         {
           "code": 4,
           "name": "College of Chiropractors of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 4,
@@ -314,7 +326,6 @@ export class MockConfig {
         {
           "code": 5,
           "name": "College of Dental Hygenists of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 5,
@@ -326,7 +337,6 @@ export class MockConfig {
         {
           "code": 6,
           "name": "College of Dental Technicians of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 6,
@@ -338,7 +348,6 @@ export class MockConfig {
         {
           "code": 7,
           "name": "College of Dental Surgeons of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 7,
@@ -350,7 +359,6 @@ export class MockConfig {
         {
           "code": 8,
           "name": "College of Denturists of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 8,
@@ -362,7 +370,6 @@ export class MockConfig {
         {
           "code": 9,
           "name": "College of Dietitians of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 9,
@@ -374,7 +381,6 @@ export class MockConfig {
         {
           "code": 10,
           "name": "College of Massage Therapists of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 10,
@@ -386,7 +392,6 @@ export class MockConfig {
         {
           "code": 11,
           "name": "College of Naturopathic Physicians of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 11,
@@ -398,7 +403,6 @@ export class MockConfig {
         {
           "code": 12,
           "name": "College of Occupational Therapists of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 12,
@@ -410,7 +414,6 @@ export class MockConfig {
         {
           "code": 13,
           "name": "College of Opticians of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 13,
@@ -422,7 +425,6 @@ export class MockConfig {
         {
           "code": 14,
           "name": "College of Optometrists of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 14,
@@ -434,7 +436,6 @@ export class MockConfig {
         {
           "code": 15,
           "name": "College of Physical Therapists of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 15,
@@ -446,7 +447,6 @@ export class MockConfig {
         {
           "code": 16,
           "name": "College of Psychologists of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 16,
@@ -458,7 +458,6 @@ export class MockConfig {
         {
           "code": 17,
           "name": "College of Speech and Hearing Health Professionals of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 17,
@@ -470,7 +469,6 @@ export class MockConfig {
         {
           "code": 18,
           "name": "College of Traditional Chinese Medicine Practitioners and Acupuncturists of BC",
-          "prefix": null,
           "collegeLicenses": [
             {
               "collegeCode": 18,
@@ -506,6 +504,7 @@ export class MockConfig {
         {
           "code": 1,
           "weight": 1,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Full - Family",
@@ -519,6 +518,7 @@ export class MockConfig {
         {
           "code": 2,
           "weight": 2,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Full - Specialty",
@@ -532,6 +532,7 @@ export class MockConfig {
         {
           "code": 3,
           "weight": 12,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Special",
@@ -545,6 +546,7 @@ export class MockConfig {
         {
           "code": 4,
           "weight": 11,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Osteopathic",
@@ -558,6 +560,7 @@ export class MockConfig {
         {
           "code": 5,
           "weight": 3,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Provisional - Family",
@@ -571,6 +574,7 @@ export class MockConfig {
         {
           "code": 6,
           "weight": 4,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Provisional - Specialty",
@@ -584,6 +588,7 @@ export class MockConfig {
         {
           "code": 7,
           "weight": 10,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Academic",
@@ -597,6 +602,7 @@ export class MockConfig {
         {
           "code": 8,
           "weight": 6,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Conditional - Practice Limitations",
@@ -610,6 +616,7 @@ export class MockConfig {
         {
           "code": 9,
           "weight": 5,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Conditional - Practice Setting",
@@ -623,6 +630,7 @@ export class MockConfig {
         {
           "code": 10,
           "weight": 7,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Conditional - Disciplined",
@@ -636,6 +644,7 @@ export class MockConfig {
         {
           "code": 11,
           "weight": 18,
+          "prefix": "91",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Educational - Medical Student",
@@ -649,6 +658,7 @@ export class MockConfig {
         {
           "code": 12,
           "weight": 14,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Educational - Postgraduate Resident",
@@ -662,6 +672,7 @@ export class MockConfig {
         {
           "code": 13,
           "weight": 15,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Educational - Postgraduate Resident Elective",
@@ -675,6 +686,7 @@ export class MockConfig {
         {
           "code": 14,
           "weight": 16,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Educational - Postgraduate Fellow",
@@ -688,6 +700,7 @@ export class MockConfig {
         {
           "code": 15,
           "weight": 17,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Educational - Postgraduate Trainee",
@@ -701,6 +714,7 @@ export class MockConfig {
         {
           "code": 16,
           "weight": 9,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Clinical Observership",
@@ -714,6 +728,7 @@ export class MockConfig {
         {
           "code": 17,
           "weight": 13,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Visitor",
@@ -727,6 +742,7 @@ export class MockConfig {
         {
           "code": 18,
           "weight": 22,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Emergency - Family",
@@ -740,6 +756,7 @@ export class MockConfig {
         {
           "code": 19,
           "weight": 23,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Emergency - Specialty",
@@ -753,6 +770,7 @@ export class MockConfig {
         {
           "code": 20,
           "weight": 20,
+          "prefix": "91",
           "namedInImReg": false,
           "licensedToProvideCare": false,
           "name": "Retired - Life ",
@@ -766,6 +784,7 @@ export class MockConfig {
         {
           "code": 21,
           "weight": 24,
+          "prefix": "91",
           "namedInImReg": false,
           "licensedToProvideCare": false,
           "name": "Temporarily Inactive",
@@ -779,6 +798,7 @@ export class MockConfig {
         {
           "code": 22,
           "weight": 8,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Surgical Assistant",
@@ -792,6 +812,7 @@ export class MockConfig {
         {
           "code": 23,
           "weight": 19,
+          "prefix": "91",
           "namedInImReg": false,
           "licensedToProvideCare": false,
           "name": "Administrative",
@@ -805,6 +826,7 @@ export class MockConfig {
         {
           "code": 24,
           "weight": 21,
+          "prefix": "91",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Assessment",
@@ -818,6 +840,7 @@ export class MockConfig {
         {
           "code": 25,
           "weight": 1,
+          "prefix": "P1",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Full Pharmacist",
@@ -831,6 +854,7 @@ export class MockConfig {
         {
           "code": 26,
           "weight": 2,
+          "prefix": "P1",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Limited Pharmacist",
@@ -844,6 +868,7 @@ export class MockConfig {
         {
           "code": 27,
           "weight": 4,
+          "prefix": "P1",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Temporary Pharmacist",
@@ -857,6 +882,7 @@ export class MockConfig {
         {
           "code": 28,
           "weight": 3,
+          "prefix": "P1",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Student Pharmacist",
@@ -870,6 +896,7 @@ export class MockConfig {
         {
           "code": 29,
           "weight": 6,
+          "prefix": "T9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Pharmacy Technician",
@@ -883,7 +910,8 @@ export class MockConfig {
         {
           "code": 30,
           "weight": 5,
-          "namedInImReg": false,
+          "prefix": "P1",
+          "namedInImReg": true,
           "licensedToProvideCare": false,
           "name": "Non-Practicing Pharmacist",
           "collegeLicenses": [
@@ -896,6 +924,7 @@ export class MockConfig {
         {
           "code": 31,
           "weight": 7,
+          "prefix": "T9",
           "namedInImReg": false,
           "licensedToProvideCare": false,
           "name": "Non-Practicing Pharmacy Technician",
@@ -909,6 +938,7 @@ export class MockConfig {
         {
           "code": 32,
           "weight": 6,
+          "prefix": "R9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Practicing Registered Nurse",
@@ -922,6 +952,7 @@ export class MockConfig {
         {
           "code": 33,
           "weight": 7,
+          "prefix": "R9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Provisional Registered Nurse",
@@ -935,6 +966,7 @@ export class MockConfig {
         {
           "code": 34,
           "weight": 10,
+          "prefix": "R9",
           "namedInImReg": false,
           "licensedToProvideCare": false,
           "name": "Non-Practicing Registered Nurse",
@@ -948,6 +980,7 @@ export class MockConfig {
         {
           "code": 35,
           "weight": 12,
+          "prefix": "96",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Practicing Licensed Graduate Nurse",
@@ -961,6 +994,7 @@ export class MockConfig {
         {
           "code": 36,
           "weight": 13,
+          "prefix": "96",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Provisional Licensed Graduate Nurse",
@@ -974,6 +1008,7 @@ export class MockConfig {
         {
           "code": 37,
           "weight": 14,
+          "prefix": "96",
           "namedInImReg": false,
           "licensedToProvideCare": false,
           "name": "Non-Practicing Licensed Graduate Nurse",
@@ -987,6 +1022,7 @@ export class MockConfig {
         {
           "code": 38,
           "weight": 8,
+          "prefix": "R9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Temporary Registered Nurse (Special Event)",
@@ -1000,6 +1036,7 @@ export class MockConfig {
         {
           "code": 39,
           "weight": 9,
+          "prefix": "R9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Temporary Registered Nurse (Emergency)",
@@ -1013,6 +1050,7 @@ export class MockConfig {
         {
           "code": 40,
           "weight": 11,
+          "prefix": "96",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Employed Student Nurse",
@@ -1026,6 +1064,7 @@ export class MockConfig {
         {
           "code": 41,
           "weight": 15,
+          "prefix": "Y9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Practicing Registered Psychiatric Nurse",
@@ -1039,6 +1078,7 @@ export class MockConfig {
         {
           "code": 42,
           "weight": 16,
+          "prefix": "Y9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Provisional Registered Psychiatric Nurse",
@@ -1052,6 +1092,7 @@ export class MockConfig {
         {
           "code": 43,
           "weight": 19,
+          "prefix": "Y9",
           "namedInImReg": false,
           "licensedToProvideCare": false,
           "name": "Non-Practicing Registered Psychiatric Nurse",
@@ -1065,6 +1106,7 @@ export class MockConfig {
         {
           "code": 44,
           "weight": 17,
+          "prefix": "Y9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Temporary Registered Psychiatric Nurse (Special Event)",
@@ -1078,6 +1120,7 @@ export class MockConfig {
         {
           "code": 45,
           "weight": 18,
+          "prefix": "Y9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Temporary Registered Psychiatric Nurse (Emergency)",
@@ -1091,6 +1134,7 @@ export class MockConfig {
         {
           "code": 46,
           "weight": 20,
+          "prefix": "Y9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Employed Student Psychiatric Nurse",
@@ -1104,6 +1148,7 @@ export class MockConfig {
         {
           "code": 47,
           "weight": 1,
+          "prefix": "96",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Practicing Nurse Practitioner",
@@ -1117,6 +1162,7 @@ export class MockConfig {
         {
           "code": 48,
           "weight": 2,
+          "prefix": "96",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Provisional Nurse Practitioner",
@@ -1130,6 +1176,7 @@ export class MockConfig {
         {
           "code": 49,
           "weight": 5,
+          "prefix": "96",
           "namedInImReg": true,
           "licensedToProvideCare": false,
           "name": "Non-Practicing Nurse Practitioner",
@@ -1143,6 +1190,7 @@ export class MockConfig {
         {
           "code": 50,
           "weight": 3,
+          "prefix": "96",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Temporary Nurse Practitioner (Special Event)",
@@ -1156,6 +1204,7 @@ export class MockConfig {
         {
           "code": 51,
           "weight": 4,
+          "prefix": "96",
           "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Temporary Nurse Practitioner (Emergency)",
@@ -1169,6 +1218,7 @@ export class MockConfig {
         {
           "code": 52,
           "weight": 21,
+          "prefix": "L9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Practicing Licensed Practical Nurse",
@@ -1182,6 +1232,7 @@ export class MockConfig {
         {
           "code": 53,
           "weight": 22,
+          "prefix": "L9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Provisional Licensed Practical Nurse",
@@ -1195,6 +1246,7 @@ export class MockConfig {
         {
           "code": 54,
           "weight": 25,
+          "prefix": "L9",
           "namedInImReg": false,
           "licensedToProvideCare": false,
           "name": "Non-Practicing Licensed Practical Nurse",
@@ -1208,6 +1260,7 @@ export class MockConfig {
         {
           "code": 55,
           "weight": 23,
+          "prefix": "L9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Temporary Licensed Practical Nurse (Emergency)",
@@ -1221,6 +1274,7 @@ export class MockConfig {
         {
           "code": 56,
           "weight": 24,
+          "prefix": "L9",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Temporary Licensed Practical Nurse (Special Event)",
@@ -1234,8 +1288,9 @@ export class MockConfig {
         {
           "code": 57,
           "weight": 26,
-          "namedInImReg": false,
-          "licensedToProvideCare": true,
+          "prefix": "96",
+          "namedInImReg": true,
+          "licensedToProvideCare": false,
           "name": "Non-Practicing Licensed Nurse Practitioner",
           "collegeLicenses": [
             {
@@ -1247,7 +1302,8 @@ export class MockConfig {
         {
           "code": 58,
           "weight": 27,
-          "namedInImReg": false,
+          "prefix": "96",
+          "namedInImReg": true,
           "licensedToProvideCare": true,
           "name": "Temporary Nurse Practitioner (time-limited)",
           "collegeLicenses": [
@@ -1260,6 +1316,7 @@ export class MockConfig {
         {
           "code": 59,
           "weight": 25,
+          "prefix": "93",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Podiatrists",
@@ -1273,6 +1330,7 @@ export class MockConfig {
         {
           "code": 60,
           "weight": 28,
+          "prefix": "98",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Practising Midwife",
@@ -1286,6 +1344,7 @@ export class MockConfig {
         {
           "code": 61,
           "weight": 29,
+          "prefix": "98",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Provisional Midwife",
@@ -1299,6 +1358,7 @@ export class MockConfig {
         {
           "code": 62,
           "weight": 30,
+          "prefix": "98",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Temporary Midwife (Emergency)",
@@ -1312,6 +1372,7 @@ export class MockConfig {
         {
           "code": 63,
           "weight": 31,
+          "prefix": "98",
           "namedInImReg": false,
           "licensedToProvideCare": true,
           "name": "Non-Practising Midwife",
@@ -1325,6 +1386,7 @@ export class MockConfig {
         {
           "code": 64,
           "weight": 1,
+          "prefix": "",
           "namedInImReg": false,
           "licensedToProvideCare": false,
           "name": "Not Displayed",
@@ -1388,6 +1450,62 @@ export class MockConfig {
             {
               "collegeCode": 18,
               "licenseCode": 64
+            }
+          ]
+        },
+        {
+          "code": 65,
+          "weight": 26,
+          "prefix": "93",
+          "namedInImReg": false,
+          "licensedToProvideCare": true,
+          "name": "Educational - Podiatric Surgeon Student (Elective)",
+          "collegeLicenses": [
+            {
+              "collegeCode": 1,
+              "licenseCode": 65
+            }
+          ]
+        },
+        {
+          "code": 66,
+          "weight": 27,
+          "prefix": "93",
+          "namedInImReg": false,
+          "licensedToProvideCare": true,
+          "name": "Educational - Podiatric Surgeon Resident (Elective)",
+          "collegeLicenses": [
+            {
+              "collegeCode": 1,
+              "licenseCode": 66
+            }
+          ]
+        },
+        {
+          "code": 67,
+          "weight": 28,
+          "prefix": "93",
+          "namedInImReg": false,
+          "licensedToProvideCare": true,
+          "name": "Conditional - Podiatric Surgeon Disciplined",
+          "collegeLicenses": [
+            {
+              "collegeCode": 1,
+              "licenseCode": 67
+            }
+          ]
+        },
+        {
+          "code": 68,
+          "weight": 8,
+          "prefix": "T9",
+          "namedInImReg": false,
+          "licensedToProvideCare": true,
+          "name": "Temporary Pharmacy Technician",
+          "collegeLicenses": [
+            {
+              "collegeCode": 2,
+              "licenseCode": 68
             }
           ]
         }
@@ -1902,128 +2020,123 @@ export class MockConfig {
           "name": "Terms of Access to be determined by an Adjudicator"
         }
       ],
-      "privilegeGroups": [
-        {
-          "code": 1,
-          "privilegeTypeCode": 2,
-          "name": "Submit and Access Claims"
-        },
-        {
-          "code": 2,
-          "privilegeTypeCode": 2,
-          "name": "Record Medical History"
-        },
-        {
-          "code": 3,
-          "privilegeTypeCode": 2,
-          "name": "Access Medical History"
-        },
-        {
-          "code": 5,
-          "privilegeTypeCode": 1,
-          "name": "RU That Can Have OBOs"
-        }
-      ],
-      "privilegeTypes": [
-        {
-          "code": 1,
-          "name": "Allowable Role"
-        },
-        {
-          "code": 2,
-          "name": "Allowable Transaction"
-        }
-      ],
       "vendors": [
         {
           "code": 1,
           "careSettingCode": 2,
-          "careSetting": {
-            "code": 2,
-            "name": "Private Community Health Practice"
-          },
           "name": "CareConnect"
         },
         {
           "code": 2,
           "careSettingCode": 2,
-          "careSetting": {
-            "code": 2,
-            "name": "Private Community Health Practice"
-          },
           "name": "Excelleris"
         },
         {
           "code": 3,
           "careSettingCode": 2,
-          "careSetting": {
-            "code": 2,
-            "name": "Private Community Health Practice"
-          },
           "name": "iClinic"
         },
         {
           "code": 4,
           "careSettingCode": 2,
-          "careSetting": {
-            "code": 2,
-            "name": "Private Community Health Practice"
-          },
           "name": "Medinet"
         },
         {
           "code": 5,
           "careSettingCode": 2,
-          "careSetting": {
-            "code": 2,
-            "name": "Private Community Health Practice"
-          },
           "name": "Plexia"
         },
         {
           "code": 6,
           "careSettingCode": 3,
-          "careSetting": {
-            "code": 3,
-            "name": "Community Pharmacy"
-          },
-          "name": "Telus Health"
+          "name": "PharmaClik"
         },
         {
           "code": 7,
           "careSettingCode": 3,
-          "careSetting": {
-            "code": 3,
-            "name": "Community Pharmacy"
-          },
-          "name": "Shoppers Drug Mart"
+          "name": "Nexxsys"
         },
         {
           "code": 8,
           "careSettingCode": 3,
-          "careSetting": {
-            "code": 3,
-            "name": "Community Pharmacy"
-          },
-          "name": "Applied Robotics"
+          "name": "Kroll"
         },
         {
           "code": 9,
           "careSettingCode": 3,
-          "careSetting": {
-            "code": 3,
-            "name": "Community Pharmacy"
-          },
-          "name": "McKesson"
+          "name": "Assyst Rx-A"
         },
         {
           "code": 10,
           "careSettingCode": 3,
-          "careSetting": {
-            "code": 3,
-            "name": "Community Pharmacy"
-          },
+          "name": "WinRx"
+        },
+        {
+          "code": 11,
+          "careSettingCode": 3,
+          "name": "Shoppers Drug Mart HealthWatch NG"
+        },
+        {
+          "code": 12,
+          "careSettingCode": 3,
           "name": "Commander Group"
+        },
+        {
+          "code": 13,
+          "careSettingCode": 3,
+          "name": "BDM"
+        }
+      ],
+      "healthAuthorities": [
+        {
+          "code": 1,
+          "name": "Northern Health"
+        },
+        {
+          "code": 2,
+          "name": "Interior Health"
+        },
+        {
+          "code": 3,
+          "name": "Vancouver Coastal Health"
+        },
+        {
+          "code": 4,
+          "name": "Island Health"
+        },
+        {
+          "code": 5,
+          "name": "Fraser Health"
+        },
+        {
+          "code": 6,
+          "name": "Provincial Health Services Authority"
+        }
+      ],
+      "facilities": [
+        {
+          "code": 2,
+          "name": "Long-term care"
+        },
+        {
+          "code": 1,
+          "name": "Acute/ambulatory care"
+        },
+        {
+          "code": 3,
+          "name": "Inpatient pharmacy"
+        },
+        {
+          "code": 4,
+          "name": "Outpatient pharmacy"
+        },
+        {
+          "code": 5,
+          "name": "Outpatient or community-based pharmacy"
+        },
+        {
+          "code": 6,
+          "name": "Outpatient or community-based facility"
         }
       ]
     };

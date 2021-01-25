@@ -405,7 +405,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       return {
         enrolleeId: ras.enrolleeId,
         siteId: ras.siteId,
-        site: { doingBusinessAs: ras.doingBusinessAs } as Site,
+        site: {
+          doingBusinessAs: ras.doingBusinessAs,
+          physicalAddress: ras.physicalAddress,
+          siteVendors: ras.siteVendors
+        } as Site,
       } as RemoteAccessSite;
     });
   }
@@ -531,7 +535,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     return this.fb.group({
       enrolleeId: [null, []],
       siteId: [null, []],
-      doingBusinessAs: [null, []]
+      doingBusinessAs: [null, []],
+      physicalAddress: [null, []],
+      siteVendors: [null, []]
     });
   }
 

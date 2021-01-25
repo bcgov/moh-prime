@@ -9,6 +9,7 @@ using Prime.Models;
 using System.IO;
 using Prime.HttpClients;
 using DelegateDecompiler.EntityFrameworkCore;
+using Prime.Services.Razor;
 
 namespace Prime.Services
 {
@@ -131,7 +132,7 @@ namespace Prime.Services
             }
 
             string subject = "PRIME Requires your Attention";
-            string body = await _razorConverterService.RenderViewToStringAsync("/Views/Emails/ReminderEmail.cshtml", new EmailParams());
+            string body = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.Reminder, new EmailParams());
             await Send(PRIME_EMAIL, enrolleeEmail, subject, body);
         }
 
@@ -152,22 +153,21 @@ namespace Prime.Services
             var ccEmails = new List<string>() { token.Enrollee.Email };
 
             string subject = "New Access Request";
-            string viewName = null;
 
-            viewName = careSettingCode switch
+            RazorTemplate<EmailParams> template = careSettingCode switch
             {
-                (int)CareSettingType.CommunityPharmacy => "/Views/Emails/CommunityPharmacyManagerEmail.cshtml",
-                (int)CareSettingType.HealthAuthority => "/Views/Emails/HealthAuthorityEmail.cshtml",
-                _ => "/Views/Emails/CommunityPracticeEmail.cshtml",
+                (int)CareSettingType.CommunityPharmacy => RazorTemplates.Emails.CommunityPharmacyManager,
+                (int)CareSettingType.HealthAuthority => RazorTemplates.Emails.HealthAuthority,
+                _ => RazorTemplates.Emails.CommunityPractice,
             };
-            string emailBody = await _razorConverterService.RenderViewToStringAsync(viewName, new EmailParams(token));
+            string emailBody = await _razorConverterService.RenderTemplateToStringAsync(template, new EmailParams(token));
             await Send(PRIME_EMAIL, recipients, ccEmails, subject, emailBody, Enumerable.Empty<(string Filename, byte[] Content)>());
         }
         public async Task SendSiteRegistrationAsync(Site site)
         {
             var subject = "PRIME Site Registration Submission";
-            var body = await _razorConverterService.RenderViewToStringAsync(
-                "/Views/Emails/SiteRegistrationSubmissionEmail.cshtml",
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.SiteRegistrationSubmission,
                 new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
 
             string registrationReviewFilename = "SiteRegistrationReview.pdf";
@@ -183,8 +183,8 @@ namespace Prime.Services
         public async Task SendRemoteUsersUpdatedAsync(Site site)
         {
             var subject = "Remote Practioners Added";
-            var body = await _razorConverterService.RenderViewToStringAsync(
-                "/Views/Emails/UpdateRemoteUsersEmail.cshtml",
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+               RazorTemplates.Emails.UpdateRemoteUsers,
                 new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
 
             var attachments = await GetSiteRegistrationAttachments(site);
@@ -195,8 +195,8 @@ namespace Prime.Services
         public async Task SendRemoteUsersNotificationAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
         {
             var subject = "Remote Practitioner Notification";
-            var body = await _razorConverterService.RenderViewToStringAsync(
-                "/Views/Emails/RemoteUserNotificationEmail.cshtml",
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.RemoteUserNotification,
                 new EmailParams(site));
 
             foreach (var remoteUser in remoteUsers)
@@ -209,11 +209,41 @@ namespace Prime.Services
         public async Task SendBusinessLicenceUploadedAsync(Site site)
         {
             var subject = "Site Business Licence Uploaded";
-            var body = await _razorConverterService.RenderViewToStringAsync(
-                "/Views/Emails/BusinessLicenceUploadedEmail.cshtml",
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.BusinessLicenceUploaded,
                 new EmailParams(site, await GetBusinessLicenceDownloadLink(site.Id)));
 
             await Send(PRIME_EMAIL, site.Adjudicator.Email, subject, body);
+        }
+
+        public async Task SendSiteApprovedPharmaNetAdministratorAsync(Site site)
+        {
+            var subject = "Site Registration Approved";
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.SiteApprovedPharmaNetAdministratorEmailTemplate,
+                new EmailParams(site));
+
+            await Send(PRIME_EMAIL, site.AdministratorPharmaNet.Email, subject, body);
+        }
+
+        public async Task SendSiteApprovedSigningAuthorityAsync(Site site)
+        {
+            var subject = "Site Registration Approved";
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.SiteApprovedSigningAuthorityEmailTemplate,
+                new EmailParams(site));
+
+            await Send(PRIME_EMAIL, site.Provisioner.Email, subject, body);
+        }
+
+        public async Task SendSiteApprovedHIBCAsync(Site site)
+        {
+            var subject = "Site Approval Notification";
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.SiteApprovedHIBCEmailTemplate,
+                new EmailParams(site));
+
+            await Send(PRIME_EMAIL, MOH_EMAIL, subject, body);
         }
 
         private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
@@ -235,7 +265,7 @@ namespace Prime.Services
             var organizationAgreementFilename = "OrganizationAgreement.pdf";
             var registrationReviewFilename = "SiteRegistrationReview.pdf";
 
-            var siteRegistrationReviewHtml = await _razorConverterService.RenderViewToStringAsync("/Views/SiteRegistrationReview.cshtml", site);
+            var siteRegistrationReviewHtml = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.SiteRegistrationReview, site);
 
             var signedOrganizationAgreementDocument = await _organizationService.GetLatestSignedAgreementAsync(organization.Id);
             if (signedOrganizationAgreementDocument != null)
@@ -257,7 +287,7 @@ namespace Prime.Services
                 }
 
                 Document organizationAgreementDoc;
-                var organizationAgreementTemplate = "/Views/Helpers/Document.cshtml";
+                RazorTemplate<Document> template = RazorTemplates.Document;
                 try
                 {
                     var stream = await _documentService.GetStreamForLatestSignedAgreementDocument(organization.Id);
@@ -268,10 +298,10 @@ namespace Prime.Services
                 catch (NullReferenceException)
                 {
                     organizationAgreementDoc = new Document("SignedOrganizationAgreement.pdf", new byte[20]);
-                    organizationAgreementTemplate = "/Views/Helpers/ApologyDocument.cshtml";
+                    template = RazorTemplates.ApologyDocument;
                 }
 
-                organizationAgreementHtml = await _razorConverterService.RenderViewToStringAsync(organizationAgreementTemplate, organizationAgreementDoc);
+                organizationAgreementHtml = await _razorConverterService.RenderTemplateToStringAsync(template, organizationAgreementDoc);
             }
             else
             {
@@ -373,8 +403,8 @@ namespace Prime.Services
         private async Task SendRenewalRequiredAsync(string email, string firstName, string lastName, DateTimeOffset expiryDate)
         {
             var subject = "PRIME Renewal Required";
-            var body = await _razorConverterService.RenderViewToStringAsync(
-                "/Views/Emails/RenewalRequiredEmail.cshtml",
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.RenewalRequired,
                 new EmailParams(firstName, lastName, expiryDate));
 
             await Send(PRIME_EMAIL, email, subject, body);
@@ -383,8 +413,8 @@ namespace Prime.Services
         private async Task SendRenewalPassedAsync(string email, string firstName, string lastName, DateTimeOffset expiryDate)
         {
             var subject = "Your PRIME Renewal Date Has Passed";
-            var body = await _razorConverterService.RenderViewToStringAsync(
-                "/Views/Emails/RenewalPassedEmail.cshtml",
+            var body = await _razorConverterService.RenderTemplateToStringAsync(
+                RazorTemplates.Emails.RenewalPassed,
                 new EmailParams(firstName, lastName, expiryDate));
 
             await Send(PRIME_EMAIL, email, subject, body);

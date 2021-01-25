@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210113193958_CollegeLicencePrefix")]
+    partial class CollegeLicencePrefix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -10022,9 +10024,6 @@ namespace Prime.Migrations
                     b.Property<string>("Base64QRCode")
                         .HasColumnType("text");
 
-                    b.Property<string>("ConnectionId")
-                        .HasColumnType("text");
-
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -10033,12 +10032,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("CredentialDefinitionId")
                         .HasColumnType("text");
-
-                    b.Property<string>("CredentialExchangeId")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset?>("RevokedCredentialDate")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SchemaId")
                         .HasColumnType("text");
@@ -13464,6 +13457,9 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<int?>("CredentialId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
@@ -13541,6 +13537,8 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdjudicatorId");
+
+                    b.HasIndex("CredentialId");
 
                     b.HasIndex("GPID")
                         .IsUnique();
@@ -13633,40 +13631,6 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.ToTable("EnrolleeCareSetting");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolleeCredential", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("CredentialId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CredentialId");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.ToTable("EnrolleeCredential");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeHealthAuthority", b =>
@@ -18004,6 +17968,10 @@ namespace Prime.Migrations
                         .WithMany("Enrollees")
                         .HasForeignKey("AdjudicatorId");
 
+                    b.HasOne("Prime.Models.Credential", "Credential")
+                        .WithMany()
+                        .HasForeignKey("CredentialId");
+
                     b.HasOne("Prime.Models.MailingAddress", "MailingAddress")
                         .WithMany()
                         .HasForeignKey("MailingAddressId");
@@ -18040,21 +18008,6 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("EnrolleeCareSettings")
-                        .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolleeCredential", b =>
-                {
-                    b.HasOne("Prime.Models.Credential", "Credential")
-                        .WithMany()
-                        .HasForeignKey("CredentialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany("EnrolleeCredentials")
                         .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
