@@ -2,19 +2,26 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRegistrationContainerComponent } from '@adjudication/shared/components/site-registration-container/site-registration-container.component';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { Organization } from '@registration/shared/models/organization.model';
+import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { Site } from '@registration/shared/models/site.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { Observable, Subscription } from 'rxjs';
+import { OrganizationAgreementViewModel } from '@shared/models/agreement.model';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { exhaustMap, map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-site-overview',
@@ -25,12 +32,17 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   @Input() public hasActions: boolean;
   @Input() public actions: TemplateRef<any>;
   @Input() public content: TemplateRef<any>;
-  @Input() public refresh: Observable<boolean>;
+  // @Input() public refresh: Observable<boolean>;
   @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
   public columns: string[];
-  public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
+  // public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
+  public organization: Organization;
+  public site: Site;
+  public remoteUsers: Observable<RemoteUser[]>;
+  public form: FormGroup;
+  public refresh: BehaviorSubject<boolean>;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -42,6 +54,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     protected adjudicationResource: AdjudicationResource,
     protected organizationResource: OrganizationResource,
     protected siteResource: SiteResource,
+    private formUtilsService: FormUtilsService,
+    private fb: FormBuilder,
     authService: AuthService,
     dialog: MatDialog,
     utilsService: UtilsService,
@@ -50,13 +64,65 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     super(defaultOptions,
       route,
       router,
-      authService,
       organizationResource,
       siteResource,
+      authService,
       utilsService,
       dialog);
 
     this.hasActions = true;
+    this.refresh = new BehaviorSubject<boolean>(null);
+    this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
+
+  }
+
+  public onSubmit() {
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const siteId = this.route.snapshot.params.sid;
+      this.busy = this.siteResource
+        .updatePecCode(siteId, this.form.value.pec)
+        .subscribe(() => this.refresh.next(true));
+    }
+  }
+
+  public ngOnInit(): void {
+    super.ngOnInit();
+
+    this.createFormInstance();
+
+    this.busy = this.getOrganization()
+      .pipe(
+        map((organization: Organization) => this.organization = organization),
+      )
+      .subscribe(() => {
+        this.getSite(this.route.snapshot.params.sid);
+        this.getRemoteUsers(this.route.snapshot.params.sid);
+      });
+  }
+
+  private createFormInstance() {
+    this.form = this.fb.group({
+      pec: [
+        '',
+        [Validators.required]
+      ]
+    });
+  }
+
+  private getOrganization(): Observable<Organization> {
+    return this.organizationResource.getOrganizationById(this.route.snapshot.params.oid);
+  }
+
+  private getSite(siteId: number, statusCode?: number): void {
+    this.busy = this.siteResource.getSiteById(siteId, statusCode)
+      .subscribe((site: Site) => this.site = site);
+  }
+
+  private getRemoteUsers(siteId: number): void {
+    this.remoteUsers = this.siteResource.getSiteById(siteId)
+      .pipe(
+        map((site: Site) => site.remoteUsers)
+      );
   }
 
 }

@@ -138,39 +138,22 @@
           <span>Overview</span>
         </button>
         <button mat-menu-item
-                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
-          <mat-icon>location_city</mat-icon>
-          <span>Organization Information</span>
-        </button>
-        <button mat-menu-item
-                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId])">
-          <mat-icon>store</mat-icon>
-          <span>Site Information</span>
+                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.EVENT_LOG])">
+          <mat-icon>list_alt</mat-icon>
+          <span>Event Log</span>
         </button>
         <button mat-menu-item
                 (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.ADJUDICATOR_NOTES])">
           <mat-icon>message</mat-icon>
           <span>Add and View Notes</span>
         </button>
-        <button mat-menu-item
-                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.EVENT_LOG])">
-          <mat-icon>list_alt</mat-icon>
-          <span>Event Log</span>
-        </button>
-        <button mat-menu-item
-                [disabled]="!row.remoteUserCount || row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST"
-                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.SITE_REMOTE_USERS])">
-          <mat-icon>account_circle</mat-icon>
-          <span>Remote Practitioners</span>
-        </button>
-
-        <mat-divider [inset]="true"></mat-divider>
 
         <button mat-menu-item
-                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.ADJUDICATION])">
-          <mat-icon>rate_review</mat-icon>
-          <span>Site Adjudication</span>
+                (click)="onNotify(row.siteId)">
+          <mat-icon>email</mat-icon>
+          <span>Send Email</span>
         </button>
+
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
                 [disabled]="!canEdit"
@@ -184,14 +167,6 @@
                 (click)="onDisclaim(row.siteId)">
           <mat-icon>pan_tool</mat-icon>
           <span>Disclaim Enrolment</span>
-        </button>
-
-        <mat-divider [inset]="true"></mat-divider>
-
-        <button mat-menu-item
-                (click)="onNotify(row.siteId)">
-          <mat-icon>email</mat-icon>
-          <span>Send Email</span>
         </button>
 
       </mat-menu>

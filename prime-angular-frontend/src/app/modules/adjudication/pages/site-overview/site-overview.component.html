@@ -13,38 +13,85 @@
   <div class="row mt-4">
 
     <div class="col-6">
-      <h2>Enrolment</h2>
+      <h2>Organization Information</h2>
       <mat-card id="enrolmentCard">
         <mat-card-content>
-          <p class="text-success font-italic">
-            Submitted {{ enrollee?.appliedDate | formatDate: 'MMMM Do YYYY' }}
-          </p>
-          <h3>Enrollee Information</h3>
-          <hr>
-          <app-enrollee-review *ngIf="enrolment"
-                               [enrolment]="enrolment"
-                               [admin]="true"
-                               (route)="onRoute($event)">
-          </app-enrollee-review>
+          <app-overview-container [organization]="organization"
+                                  [showEditRedirect]="false"></app-overview-container>
         </mat-card-content>
       </mat-card>
     </div>
+
     <div class="col-6">
-      <h2>Adjudication</h2>
-      <mat-card id="adjudicationCard">
+      <div class="row d-flex justify-content-end">
+        <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
+                                       (approve)="onApprove($event)"
+                                       (decline)="onDecline($event)"
+                                       (delete)="onDelete($event)">
+        </app-site-registration-actions>
+      </div>
+      <div class="row">
+        <div class="d-flex justify-content-end">
+          <form (ngSubmit)="onSubmit()"
+                [formGroup]="form"
+                novalidate>
+
+            <section class="mb-3">
+
+              <app-page-subheader2>
+                <ng-container appPageSubheader2Title>Enter Site ID</ng-container>
+                <ng-container appPageSubheader2Summary>
+                  The Site ID will be sent to the Signing Authority, Administrator of PharmaNet onboarding and the
+                  vendor
+                  associated to this submission.
+                </ng-container>
+              </app-page-subheader2>
+
+              <div class="row mb-3">
+                <div class="col-sm-12 col-lg-9 col-xl-5">
+
+                  <mat-form-field class="w-100">
+                    <input matInput
+                           placeholder="Site ID"
+                           formControlName="pec">
+                    <mat-error>Required</mat-error>
+                  </mat-form-field>
+
+                </div>
+              </div>
+
+              <button mat-flat-button
+                      color="primary">Save Site ID</button>
+
+            </section>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-6">
+      <h2>Site Information</h2>
+      <mat-card id="enrolmentCard">
         <mat-card-content>
-          <app-review-status-content [enrollee]="enrollee"
-                                     [hideStatusHistory]="true">
-          </app-review-status-content>
+          <app-overview-container [site]="site"
+                                  [showEditRedirect]="false"></app-overview-container>
         </mat-card-content>
       </mat-card>
+    </div>
+  </div>
 
-      <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
-                                     (approve)="onApprove($event)"
-                                     (decline)="onDecline($event)"
-                                     (delete)="onDelete($event)">
-      </app-site-registration-actions>
-
+  <div class="row mt-4">
+    <div class="col-6">
+      <h2>Remote Practitioners</h2>
+      <mat-card id="enrolmentCard">
+        <mat-card-content>
+          <app-remote-user-review [remoteUsers]="remoteUsers | async"></app-remote-user-review>
+        </mat-card-content>
+      </mat-card>
     </div>
   </div>
 
