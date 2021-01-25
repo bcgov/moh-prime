@@ -1,0 +1,52 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <app-page-header>Overview</app-page-header>
+
+  <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
+                               [dataSource]="dataSource"
+                               (claim)="onClaim($event)"
+                               (disclaim)="onDisclaim($event)"
+                               (notify)="onNotify($event)"
+                               (route)="onRoute($event)"></app-site-registration-table>
+
+  <div class="row mt-4">
+
+    <div class="col-6">
+      <h2>Enrolment</h2>
+      <mat-card id="enrolmentCard">
+        <mat-card-content>
+          <p class="text-success font-italic">
+            Submitted {{ enrollee?.appliedDate | formatDate: 'MMMM Do YYYY' }}
+          </p>
+          <h3>Enrollee Information</h3>
+          <hr>
+          <app-enrollee-review *ngIf="enrolment"
+                               [enrolment]="enrolment"
+                               [admin]="true"
+                               (route)="onRoute($event)">
+          </app-enrollee-review>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-6">
+      <h2>Adjudication</h2>
+      <mat-card id="adjudicationCard">
+        <mat-card-content>
+          <app-review-status-content [enrollee]="enrollee"
+                                     [hideStatusHistory]="true">
+          </app-review-status-content>
+        </mat-card-content>
+      </mat-card>
+
+      <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
+                                     (approve)="onApprove($event)"
+                                     (decline)="onDecline($event)"
+                                     (delete)="onDelete($event)">
+      </app-site-registration-actions>
+
+    </div>
+  </div>
+
+
+</app-page>

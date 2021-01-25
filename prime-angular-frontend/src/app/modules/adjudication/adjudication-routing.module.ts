@@ -27,6 +27,7 @@ import { SiteAdjudicatorDocumentsComponent } from './pages/site-adjudicator-docu
 import { EnrolleeAdjudicatorDocumentsComponent } from './pages/enrollee-adjudicator-documents/enrollee-adjudicator-documents.component';
 import { SiteEventsComponent } from './pages/site-events/site-events.component';
 import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-overview.component';
+import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 
 const routes: Routes = [
   {
@@ -135,6 +136,11 @@ const routes: Routes = [
                 path: AdjudicationRoutes.ADJUDICATION,
                 component: SiteAdjudicationComponent,
                 data: { title: 'Site Adjudication' }
+              },
+              {
+                path: AdjudicationRoutes.SITE_OVERVIEW,
+                component: SiteOverviewComponent,
+                data: { title: 'Overview' }
               },
               {
                 path: AdjudicationRoutes.ORGANIZATION_INFORMATION,

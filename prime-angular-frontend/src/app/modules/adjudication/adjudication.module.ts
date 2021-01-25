@@ -42,6 +42,7 @@ import { AdjudicatorDocumentsComponent } from './shared/components/adjudicator-d
 import { SiteEventsComponent } from './pages/site-events/site-events.component';
 import { AdjudicatorEventsComponent } from './shared/components/adjudicator-events/adjudicator-events.component';
 import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-overview.component';
+import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-ov
     AdjudicatorDocumentsComponent,
     SiteEventsComponent,
     AdjudicatorEventsComponent,
-    EnrolleeOverviewComponent
+    EnrolleeOverviewComponent,
+    SiteOverviewComponent
   ],
   imports: [
     AdjudicationRoutingModule,
