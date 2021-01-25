@@ -535,7 +535,8 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.IdentificationDocuments)
                 .Include(e => e.Agreements)
-                .Include(e => e.Credential);
+                .Include(e => e.EnrolleeCredentials)
+                    .ThenInclude(ec => ec.Credential);
         }
 
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
@@ -761,7 +762,7 @@ namespace Prime.Services
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.Certifications)
-                    .ThenInclude(c => c.College)
+                    .ThenInclude(c => c.License)
                 .SingleOrDefaultAsync(e => e.GPID == gpid);
 
             if (enrollee == null)

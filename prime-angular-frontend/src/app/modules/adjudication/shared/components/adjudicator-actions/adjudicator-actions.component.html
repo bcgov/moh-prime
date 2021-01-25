@@ -30,8 +30,8 @@
       <span>Approve Enrollee</span>
     </button>
     <button mat-menu-item
+            *ngIf="enrollee.currentStatusCode !== EnrolmentStatus.DECLINED"
             [disabled]="!canEdit"
-            *ngIf="isUnderReview"
             (click)="onDecline()">
       <mat-icon>block</mat-icon>
       <span>Decline Enrollee</span>
