@@ -37,6 +37,22 @@
       </div>
 
       <ng-container *ngIf="collegeCode.value">
+        <div *ngIf="filteredLicenses?.length > 1"
+             class="col-sm-12 pl-5">
+
+          <mat-form-field class="w-100">
+            <mat-label>Licence class issued by the college</mat-label>
+            <mat-select formControlName="licenseCode">
+              <mat-option *ngFor="let license of allowedLicenses()"
+                          [value]="license.code">
+                {{ license.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('licenseCode').hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+        </div>
+
         <div class="col-sm-12 pl-5">
 
           <div class="row">
@@ -91,22 +107,6 @@
 
             </div>
           </div>
-
-        </div>
-
-        <div *ngIf="filteredLicenses?.length > 1"
-             class="col-sm-12 pl-5">
-
-          <mat-form-field class="w-100">
-            <mat-label>Licence class issued by the college</mat-label>
-            <mat-select formControlName="licenseCode">
-              <mat-option *ngFor="let license of allowedLicenses()"
-                          [value]="license.code">
-                {{ license.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="form.get('licenseCode').hasError('required')">Required</mat-error>
-          </mat-form-field>
 
         </div>
 
