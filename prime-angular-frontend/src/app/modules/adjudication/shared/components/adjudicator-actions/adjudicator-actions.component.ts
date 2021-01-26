@@ -89,7 +89,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   }
 
   public onDecline() {
-    if (this.canEdit && this.isUnderReview) {
+    if (this.canEdit) {
       this.decline.emit(this.enrollee.id);
     }
   }

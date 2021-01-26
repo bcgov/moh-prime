@@ -53,7 +53,7 @@ namespace Prime.Models.Api
         {
             if (enrollee == null
                 || enrollee.Certifications == null
-                || enrollee.Certifications.Any(cert => cert.College == null))
+                || enrollee.Certifications.Any(cert => cert.License == null))
             {
                 throw new ArgumentException("Could not validate against enrollee; enrollee or certs were null");
             }

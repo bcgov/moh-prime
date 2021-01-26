@@ -9,6 +9,7 @@ using QRCoder;
 
 using Prime.Models;
 using Prime.HttpClients;
+using Microsoft.EntityFrameworkCore;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services
@@ -17,6 +18,7 @@ namespace Prime.Services
     {
         public const string Connections = "connections";
         public const string IssueCredential = "issue_credential";
+        public const string RevocationRegistry = "revocation_registry";
     }
 
     public class ConnectionState
@@ -67,13 +69,23 @@ namespace Prime.Services
             Base64QRCode qrCode = new Base64QRCode(qrCodeData);
             string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
 
-            enrollee.Credential = new Credential
+            var credential = new Credential
             {
                 SchemaId = schemaId,
                 CredentialDefinitionId = credentialDefinitionId,
                 Alias = alias,
                 Base64QRCode = qrCodeImageAsBase64
             };
+            _context.Credentials.Add(credential);
+            await _context.SaveChangesAsync();
+
+            var enrolleeCredential = new EnrolleeCredential
+            {
+                EnrolleeId = enrollee.Id,
+                CredentialId = credential.Id
+            };
+
+            _context.EnrolleeCredentials.Add(enrolleeCredential);
 
             var created = await _context.SaveChangesAsync();
             if (created < 1)
@@ -96,40 +108,72 @@ namespace Prime.Services
                     return await HandleConnectionAsync(data);
                 case WebhookTopic.IssueCredential:
                     return await HandleIssueCredentialAsync(data);
+                case WebhookTopic.RevocationRegistry:
+                    _logger.LogInformation("Revocation Registry data: for {@JObject}", JsonConvert.SerializeObject(data));
+                    return true;
                 default:
                     _logger.LogError("Webhook {topic} is not supported", topic);
                     return false;
             }
         }
 
+        public async Task<bool> RevokeCredentialsAsync(int enrolleeId)
+        {
+            var enrolleeCredentials = await _context.EnrolleeCredentials
+                .Include(ec => ec.Credential)
+                .Where(ec => ec.EnrolleeId == enrolleeId)
+                .Where(ec => ec.Credential.CredentialExchangeId != null)
+                .Where(ec => ec.Credential.RevokedCredentialDate == null)
+                .Select(ec => ec.Credential)
+                .ToListAsync();
+
+            foreach (var credential in enrolleeCredentials)
+            {
+                if (await _verifiableCredentialClient.RevokeCredentialAsync(credential))
+                {
+                    credential.RevokedCredentialDate = DateTimeOffset.Now;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
         // Handle webhook events for connection states.
         private async Task<bool> HandleConnectionAsync(JObject data)
         {
             var state = data.Value<string>("state");
+            string connectionId;
 
             _logger.LogInformation("Connection state \"{state}\" for {@JObject}", state, JsonConvert.SerializeObject(data));
 
             switch (state)
             {
                 case ConnectionState.Invitation:
-                case ConnectionState.Request:
                     return true;
+
+                case ConnectionState.Request:
+                    // Enrollee Id stored as alias on invitation
+                    await UpdateCredentialConnectionId(data.Value<int>("alias"), data.Value<string>("connection_id"));
+                    return true;
+
                 case ConnectionState.Response:
-                    var connectionId = data.Value<string>("connection_id");
                     var alias = data.Value<int>("alias");
+                    connectionId = data.Value<string>("connection_id");
 
                     _logger.LogInformation("Issuing a credential with this connection_id: {connectionId}", connectionId);
 
                     // Assumed that when a connection invitation has been sent and accepted
                     // the enrollee has been approved, and has a GPID for issuing a credential
                     // TODO should be queued and managed outside of webhook callback
-                    var issueCredentialResponse = await IssueCredential(connectionId, alias);
-
-                    _logger.LogInformation("Credential has been issued for connection_id: {connectionId} with response {@JObject}", connectionId, JsonConvert.SerializeObject(issueCredentialResponse));
+                    await IssueCredential(connectionId, alias);
+                    _logger.LogInformation("Credential has been issued for connection_id: {connectionId}", connectionId);
 
                     return true;
+
                 case ConnectionState.Active:
                     return true;
+
                 default:
                     _logger.LogError("Connection state {state} is not supported", state);
                     return false;
@@ -149,7 +193,7 @@ namespace Prime.Services
                 case CredentialExchangeState.RequestReceived:
                     return true;
                 case CredentialExchangeState.CredentialIssued:
-                    await UpdateAcceptedCredentialDate(data);
+                    await UpdateCredentialAfterIssued(data);
                     return true;
                 default:
                     _logger.LogError("Credential exchange state {state} is not supported", state);
@@ -157,25 +201,45 @@ namespace Prime.Services
             }
         }
 
-        private async Task<int> UpdateAcceptedCredentialDate(JObject data)
+        private async Task<int> UpdateCredentialAfterIssued(JObject data)
         {
-            var gpid = (string)data.SelectToken("credential_proposal_dict.credential_proposal.attributes[?(@.name == 'gpid')].value");
-            var enrollee = _context.Enrollees
-                .SingleOrDefault(e => e.GPID == gpid);
+            var connection_id = (string)data.SelectToken("connection_id");
 
-            if (enrollee != null)
+            var credential = GetCredentialByConnectionIdAsync(connection_id);
+
+            if (credential != null)
             {
-                var credential = GetCredentialByIdAsync((int)enrollee.CredentialId);
                 credential.AcceptedCredentialDate = DateTimeOffset.Now;
             }
 
             return await _context.SaveChangesAsync();
         }
 
-        private Credential GetCredentialByIdAsync(int credentialId)
+        private async Task<int> UpdateCredentialConnectionId(int enrolleeId, string connection_id)
+        {
+            // Add ConnectionId to Enrollee's newest credential
+            var credential = await _context.EnrolleeCredentials
+                .Include(ec => ec.Credential)
+                .Where(ec => ec.EnrolleeId == enrolleeId)
+                .OrderByDescending(ec => ec.Id)
+                .Select(ec => ec.Credential)
+                .FirstOrDefaultAsync();
+
+            if (credential != null)
+            {
+                _logger.LogInformation("Updating this credential's (Id = {id}) connectionId to {connection_id}", credential.Id, connection_id);
+
+                credential.ConnectionId = connection_id;
+                _context.Credentials.Update(credential);
+            }
+
+            return await _context.SaveChangesAsync();
+        }
+
+        private Credential GetCredentialByConnectionIdAsync(string connectionId)
         {
             return _context.Credentials
-                    .SingleOrDefault(c => c.Id == credentialId);
+                    .SingleOrDefault(c => c.ConnectionId == connectionId);
         }
 
         // Issue a credential to an active connection.
@@ -184,16 +248,24 @@ namespace Prime.Services
             var enrollee = _context.Enrollees
                 .SingleOrDefault(e => e.Id == enrolleeId);
 
-            var credential = GetCredentialByIdAsync((int)enrollee.CredentialId);
+            var credential = GetCredentialByConnectionIdAsync(connectionId);
 
-            if (credential.AcceptedCredentialDate != null)
+            if (credential == null || credential.AcceptedCredentialDate != null)
             {
                 return null;
             }
 
             var credentialAttributes = await CreateCredentialAttributesAsync(enrolleeId);
             var credentialOffer = await CreateCredentialOfferAsync(connectionId, credentialAttributes);
-            return await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
+            var issueCredentialResponse = await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
+
+            // Set credentials CredentialExchangeId from issue credential response
+            credential.CredentialExchangeId = (string)issueCredentialResponse.SelectToken("credential_exchange_id");
+            _context.Credentials.Update(credential);
+
+            await _context.SaveChangesAsync();
+
+            return issueCredentialResponse;
         }
 
         // Create the credential offer.
@@ -205,24 +277,26 @@ namespace Prime.Services
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
             JObject credentialOffer = new JObject
+            {
+                { "connection_id", connectionId },
+                { "issuer_did", issuerDid },
+                { "schema_id", schemaId },
+                { "schema_issuer_did", issuerDid },
+                { "schema_name", schema.Value<string>("name") },
+                { "schema_version", schema.Value<string>("version") },
+                { "cred_def_id", credentialDefinitionId },
+                { "comment", "PharmaNet GPID" },
+                { "auto_remove", false },
+                { "trace", false },
                 {
-                    { "connection_id", connectionId },
-                    { "issuer_did", issuerDid },
-                    { "schema_id", schemaId },
-                    { "schema_issuer_did", issuerDid },
-                    { "schema_name", schema.Value<string>("name") },
-                    { "schema_version", schema.Value<string>("version") },
-                    { "cred_def_id", credentialDefinitionId },
-                    { "comment", "PharmaNet GPID" },
-                    { "auto_remove", true },
-                    { "trace", false },
-                    { "credential_proposal", new JObject
+                    "credential_proposal",
+                    new JObject
                         {
                             { "@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview" },
                             { "attributes", attributes }
                         }
-                    }
-                };
+                }
+            };
 
             _logger.LogInformation("Credential offer for connection ID \"{connectionId}\" for {@JObject}", connectionId, JsonConvert.SerializeObject(credentialOffer));
 
@@ -244,27 +318,27 @@ namespace Prime.Services
             {
                 new JObject
                 {
-                    { "name", "gpid" },
+                    { "name", "GPID" },
                     { "value", enrollee.GPID }
                 },
                 new JObject
                 {
-                    { "name", "renewal_date" },
+                    { "name", "Renewal Date" },
                     { "value", enrollee.ExpiryDate.Value.Date.ToShortDateString() }
                 },
                 new JObject
                 {
-                    { "name", "user_class" },
-                    { "value", enrollee.IsRegulatedUser ? "RU" : "OBO" }
+                    { "name", "TOA Name" },
+                    { "value", enrollee.AssignedTOAType.Value.ToString() }
                 },
                 new JObject
                 {
-                    { "name", "organization_type" },
+                    { "name", "Care Type Setting" },
                     { "value", string.Join(',', enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting.Name)) }
                 },
                 new JObject
                 {
-                    { "name", "remote_access" },
+                    { "name", "Remote User" },
                     { "value", enrollee.EnrolleeRemoteUsers.Count > 0 ? "true" : "false"}
                 }
             };
