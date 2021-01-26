@@ -127,8 +127,8 @@ const routes: Routes = [
             children: [
               {
                 path: '',
-                component: SiteRegistrationComponent,
-                data: { title: 'Site Registration' }
+                component: SiteOverviewComponent,
+                data: { title: 'Site Overview' }
               },
               {
                 path: AdjudicationRoutes.ADJUDICATION,
