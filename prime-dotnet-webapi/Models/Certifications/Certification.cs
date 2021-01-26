@@ -24,12 +24,15 @@ namespace Prime.Models
         [JsonIgnore]
         public College College { get; set; }
 
+        public int LicenseCode { get; set; }
+
         [Required]
         [RegularExpression(@"([a-zA-Z0-9]+)", ErrorMessage = "License Number should be alpha numeric characters")]
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string LicenseNumber { get; set; }
 
-        public int LicenseCode { get; set; }
+        [RegularExpression(@"([0-9]{5})", ErrorMessage = "Practitioner ID should be 5 numeric characters")]
+        public string PractitionerId { get; set; }
 
         [JsonIgnore]
         public License License { get; set; }
