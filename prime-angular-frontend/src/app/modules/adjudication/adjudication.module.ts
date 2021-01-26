@@ -31,6 +31,7 @@ import {
 import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
 import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
 import { SiteRegistrationActionsComponent } from './shared/components/site-registration-actions/site-registration-actions.component';
+import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-users.component';
 import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
 import { EnrolleeAdjudicatorNotesComponent } from './pages/enrollee-adjudicator-notes/enrollee-adjudicator-notes.component';
 import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/site-adjudicator-notes.component';
@@ -67,6 +68,7 @@ import { SiteOverviewComponent } from './pages/site-overview/site-overview.compo
     SiteRegistrationActionsComponent,
     SiteAdjudicationComponent,
     OrganizationInformationComponent,
+    SiteRemoteUsersComponent,
     AdjudicationDashboardComponent,
     MetabaseReportsComponent,
     EnrolleeAdjudicatorNotesComponent,

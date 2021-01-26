@@ -19,6 +19,7 @@ import { SiteRegistrationsComponent } from './pages/site-registrations/site-regi
 import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
 import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
+import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-users.component';
 import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
 import { EnrolleeAdjudicatorNotesComponent } from './pages/enrollee-adjudicator-notes/enrollee-adjudicator-notes.component';
 import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/site-adjudicator-notes.component';
@@ -145,6 +146,11 @@ const routes: Routes = [
                 path: AdjudicationRoutes.ORGANIZATION_INFORMATION,
                 component: OrganizationInformationComponent,
                 data: { title: 'Organization Information' }
+              },
+              {
+                path: AdjudicationRoutes.SITE_REMOTE_USERS,
+                component: SiteRemoteUsersComponent,
+                data: { title: 'Remote Practitioners' }
               },
               {
                 path: AdjudicationRoutes.ADJUDICATOR_NOTES,
