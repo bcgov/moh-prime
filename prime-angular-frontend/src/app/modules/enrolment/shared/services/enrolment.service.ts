@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { ConfigService } from '@config/config.service';
-import { LicenseWeightedConfig } from '@config/config.model';
+import { LicenseConfig } from '@config/config.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -68,7 +68,7 @@ export class EnrolmentService implements IEnrolmentService {
       .map((certification: CollegeCertification) => certification.licenseCode);
 
     const hasRemoteAccessLicence = this.configService.licenses
-      .filter((licence: LicenseWeightedConfig) => enrolleeLicenceCodes.includes(licence.code))
+      .filter((licence: LicenseConfig) => enrolleeLicenceCodes.includes(licence.code))
       .some(this.hasAllowedRemoteAccessLicences);
 
     return hasRemoteAccessLicence;
@@ -79,7 +79,7 @@ export class EnrolmentService implements IEnrolmentService {
       .some(cs => cs.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
   }
 
-  public hasAllowedRemoteAccessLicences(licenceConfig: LicenseWeightedConfig): boolean {
+  public hasAllowedRemoteAccessLicences(licenceConfig: LicenseConfig): boolean {
     return (licenceConfig.licensedToProvideCare && licenceConfig.namedInImReg);
   }
 

@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, LicenseWeightedConfig } from '@config/config.model';
+import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, LicenseConfig } from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
@@ -32,13 +32,7 @@ export class ConfigService implements IConfigService {
 
   public get colleges(): CollegeConfig[] {
     return [...this.configuration.colleges]
-      .reduce((colleges: [CollegeConfig[], CollegeConfig[]], college: CollegeConfig) => {
-        const group = (college.prefix) ? colleges[0] : colleges[1];
-        group.push(college);
-        return colleges;
-      }, [[], []]) // Group by existence of prefix
-      .map((group: CollegeConfig[]) => group.sort(this.sortConfigByName()))
-      .reduce((acc, arr) => acc.concat(arr), []);
+      .sort(this.sortConfigByCode());
   }
 
   public get countries(): Config<string>[] {
@@ -51,7 +45,7 @@ export class ConfigService implements IConfigService {
       .sort(this.sortConfigByName());
   }
 
-  public get licenses(): LicenseWeightedConfig[] {
+  public get licenses(): LicenseConfig[] {
     return [...this.configuration.licenses]
       .sort(this.sortConfigByWeight());
   }
@@ -83,16 +77,6 @@ export class ConfigService implements IConfigService {
 
   public get statusReasons() {
     return [...this.configuration.statusReasons]
-      .sort(this.sortConfigByName());
-  }
-
-  public get privilegeGroups() {
-    return [...this.configuration.privilegeGroups]
-      .sort(this.sortConfigByName());
-  }
-
-  public get privilegeTypes() {
-    return [...this.configuration.privilegeTypes]
       .sort(this.sortConfigByName());
   }
 
@@ -139,19 +123,35 @@ export class ConfigService implements IConfigService {
 
   /**
    * @description
+   * Sort the configuration by code.
+   */
+  private sortConfigByCode() {
+    return this.sortConfigByKey('code');
+  }
+
+  /**
+   * @description
    * Sort the configuration by name.
    */
-  private sortConfigByName(): (a: Config<number | string>, b: Config<number | string>) => SortWeight {
+  private sortConfigByName() {
+    return this.sortConfigByKey('name');
+  }
+
+  /**
+   * @description
+   * Sort the configuration by a specific key.
+   */
+  private sortConfigByKey(key: string): (a: Config<number | string>, b: Config<number | string>) => SortWeight {
     return (a: Config<number | string>, b: Config<number | string>) =>
-      this.utilsService.sortByKey<Config<number | string>>(a, b, 'name');
+      this.utilsService.sortByKey<Config<number | string>>(a, b, key);
   }
 
   /**
    * @description
    * Sort the configuration by weight.
    */
-  private sortConfigByWeight(): (a: LicenseWeightedConfig, b: LicenseWeightedConfig) => SortWeight {
-    return (a: LicenseWeightedConfig, b: LicenseWeightedConfig) =>
-      this.utilsService.sortByKey<LicenseWeightedConfig>(a, b, 'weight');
+  private sortConfigByWeight(): (a: LicenseConfig, b: LicenseConfig) => SortWeight {
+    return (a: LicenseConfig, b: LicenseConfig) =>
+      this.utilsService.sortByKey<LicenseConfig>(a, b, 'weight');
   }
 }

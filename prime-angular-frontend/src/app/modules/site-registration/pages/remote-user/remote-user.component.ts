@@ -4,7 +4,7 @@ import { FormGroup, FormArray } from '@angular/forms';
 
 import { Subscription } from 'rxjs';
 
-import { CollegeConfig, LicenseWeightedConfig } from '@config/config.model';
+import { CollegeConfig, LicenseConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AddressLine } from '@lib/types/address-line.type';
@@ -30,7 +30,7 @@ export class RemoteUserComponent implements OnInit {
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public remoteUser: RemoteUser;
-  public licenses: LicenseWeightedConfig[];
+  public licenses: LicenseConfig[];
   public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
 
@@ -122,7 +122,7 @@ export class RemoteUserComponent implements OnInit {
   }
 
   public licenceFilterPredicate() {
-    return (licenceConfig: LicenseWeightedConfig) =>
+    return (licenceConfig: LicenseConfig) =>
       this.enrolmentService.hasAllowedRemoteAccessLicences(licenceConfig);
   }
 

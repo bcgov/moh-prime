@@ -39,7 +39,7 @@
         </div>
 
         <ng-template #results>
-          <ng-container *ngIf="remoteSites?.length">
+          <ng-container *ngIf="remoteAccessSearch?.length">
             <app-page-subheader>
               <ng-container appPageSubheaderSummary>
                 The sites below have registered you for remote access. Check to confirm that you want remote access for
@@ -50,18 +50,18 @@
 
             <div formArrayName="sites"
                  class="mb-3"
-                 *ngFor="let remoteSite of remoteSites; let i = index">
+                 *ngFor="let remoteAccessResult of remoteAccessSearch; let i = index">
               <mat-checkbox [formControlName]="i">
                 <div class="pl-2">
                   <address class="mb-0">
-                    {{ remoteSite.doingBusinessAs }}<br>
-                    {{ remoteSite.physicalAddress.street }},
-                    {{ remoteSite.physicalAddress.city }}
-                    {{ remoteSite.physicalAddress.provinceCode }}
-                    {{ remoteSite.physicalAddress.postal }}
+                    {{ remoteAccessResult.siteDoingBusinessAs }}<br>
+                    {{ remoteAccessResult.siteAddress.street }},
+                    {{ remoteAccessResult.siteAddress.city }}
+                    {{ remoteAccessResult.siteAddress.provinceCode }}
+                    {{ remoteAccessResult.siteAddress.postal }}
                   </address>
 
-                  Vendor: {{ remoteSite.siteVendors[0].vendorCode | configCode: 'vendors' | default }}
+                  Vendor: {{ remoteAccessResult.vendorCodes[0] | configCode: 'vendors' | default }}
                 </div>
               </mat-checkbox>
             </div>
@@ -70,7 +70,7 @@
 
       </ng-container>
 
-      <ng-container *ngIf="noRemoteSites">
+      <ng-container *ngIf="noRemoteAccess">
         <p class="red">
           No site has registered you for remote access. Please continue in PRIME; your enrolment will be processed
           for onsite PharmaNet access. Ask your PharmaNet administrator to register your site in PRIME and add you

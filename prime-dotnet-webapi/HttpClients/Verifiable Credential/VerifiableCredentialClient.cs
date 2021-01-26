@@ -82,6 +82,8 @@ namespace Prime.HttpClients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::IssueCredentialAsync");
             }
 
+            _logger.LogInformation("Issue Credential response {response}", response.Content.ReadAsStringAsync());
+
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 

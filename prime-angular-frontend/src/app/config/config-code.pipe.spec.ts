@@ -33,13 +33,7 @@ describe('ConfigCodePipe', () => {
 
   it('should get college name from a config code', inject([ConfigService], (configService: ConfigService) => {
     const pipe = new ConfigCodePipe(configService);
-    const prefix = pipe.transform(configService.colleges[0].code, 'colleges');
-    expect(prefix).toBe(configService.colleges[0].name);
-  }));
-
-  it('should get a college prefix from a config code', inject([ConfigService], (configService: ConfigService) => {
-    const pipe = new ConfigCodePipe(configService);
-    const prefix = pipe.transform(configService.colleges[1].code, 'colleges', 'prefix');
-    expect(prefix).toBe(configService.colleges[1].prefix);
+    const code = pipe.transform(configService.colleges[0].code, 'colleges');
+    expect(code).toBe(configService.colleges[0].name);
   }));
 });
