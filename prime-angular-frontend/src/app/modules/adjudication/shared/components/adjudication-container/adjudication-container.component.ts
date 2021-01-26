@@ -109,6 +109,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
     this.busy = this.dialog.open(ClaimEnrolleeComponent, { data }).afterClosed().subscribe();
 
+    // TODO: Execute only if user performed Claim/Assign action
     this.adjudicationResource
       .setEnrolleeAdjudicator(enrolleeId)
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
