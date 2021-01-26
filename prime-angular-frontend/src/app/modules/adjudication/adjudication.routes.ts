@@ -18,8 +18,6 @@ export class AdjudicationRoutes {
   public static SITE_REGISTRATIONS = 'site-registrations';
   // SITE_REGISTRATION is an alias for SITES in the routing hierarchy
   public static SITE_REGISTRATION = 'site-registration';
-
-  public static ORGANIZATION_INFORMATION = 'organization-information';
   public static SITE_OVERVIEW = 'site-overview';
 
   public static MODULE_PATH = AdjudicationRoutes.ADJUDICATION;

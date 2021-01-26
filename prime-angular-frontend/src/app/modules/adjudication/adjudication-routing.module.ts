@@ -18,7 +18,6 @@ import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/en
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
 import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
 import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
-import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
 import { EnrolleeAdjudicatorNotesComponent } from './pages/enrollee-adjudicator-notes/enrollee-adjudicator-notes.component';
 import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/site-adjudicator-notes.component';
@@ -140,11 +139,6 @@ const routes: Routes = [
                 path: AdjudicationRoutes.SITE_OVERVIEW,
                 component: SiteOverviewComponent,
                 data: { title: 'Overview' }
-              },
-              {
-                path: AdjudicationRoutes.ORGANIZATION_INFORMATION,
-                component: OrganizationInformationComponent,
-                data: { title: 'Organization Information' }
               },
               {
                 path: AdjudicationRoutes.ADJUDICATOR_NOTES,
