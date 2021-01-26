@@ -29,6 +29,11 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public colleges: CollegeConfig[];
   public licenses: LicenseConfig[];
+  /**
+   * @description
+   * Indicates the licenceCode is validated by PharmaNet.
+   */
+  public licenceValidatedByPharmaNet: boolean;
   public practices: PracticeConfig[];
   public filteredLicenses: Config<number>[];
   public filteredPractices: Config<number>[];
@@ -66,6 +71,10 @@ export class CollegeCertificationFormComponent implements OnInit {
     return this.form.get('licenseCode') as FormControl;
   }
 
+  public get practitionerId(): FormControl {
+    return this.form.get('practitionerId') as FormControl;
+  }
+
   public get renewalDate(): FormControl {
     return this.form.get('renewalDate') as FormControl;
   }
@@ -97,6 +106,12 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.remove.emit(this.index);
   }
 
+  public onLicenceNumberBlur() {
+    if (this.licenceValidatedByPharmaNet && /^\d{5}$/.test(this.licenseNumber.value)) {
+      this.practitionerId.patchValue(this.licenseNumber.value);
+    }
+  }
+
   public shouldShowPractices(): boolean {
     // Only display Advanced Practices for certain nursing licences
     return ((+this.collegeCode.value === CollegeLicenceClass.BCCNM) && ([
@@ -120,12 +135,21 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.resetCollegeCertification();
         this.setCollegeCertification(collegeCode);
       });
-  }
 
-  private doesLicenceHavePrefix(licenseCode: number, collegeCode: number): number {
-    return (this.enrolmentService.shouldShowCollegePrefix(licenseCode))
-      ? collegeCode
-      : null;
+    this.licenseCode.valueChanges
+      .subscribe((licenseCode: number) => {
+        this.licenceValidatedByPharmaNet = this.licenses
+          .filter(licenseConfig => licenseConfig.code === licenseCode)
+          .some(licenseConfig => licenseConfig.validate);
+
+        (this.licenceValidatedByPharmaNet)
+          ? this.formUtilsService.setValidators(this.practitionerId, [
+            Validators.required,
+            FormControlValidators.numeric,
+            FormControlValidators.requiredLength(5)
+          ])
+          : this.formUtilsService.resetAndClearValidators(this.practitionerId);
+      });
   }
 
   private setCollegeCertification(collegeCode: number): void {
@@ -149,7 +173,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setValidations() {
-    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
+    // this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
 
     if (!this.condensed) {

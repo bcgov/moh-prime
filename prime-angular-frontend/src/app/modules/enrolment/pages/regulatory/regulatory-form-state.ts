@@ -2,6 +2,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 export interface RegulatoryFormModel {
   certifications: CollegeCertification[];
@@ -64,10 +65,14 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
     return this.fb.group({
       // Force selection of "None" on new certifications
       collegeCode: ['', []],
+      licenseCode: [null, []],
       // Validators are applied at the component-level when
       // fields are made visible to allow empty submissions
       licenseNumber: [null, []],
-      licenseCode: [null, []],
+      practitionerId: [null, [
+        FormControlValidators.requiredLength(5),
+        FormControlValidators.numeric
+      ]],
       renewalDate: [null, []],
       practiceCode: [null, []]
     });
