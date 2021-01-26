@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using LinqKit;
 
 using Prime.Models;
 using Prime.ViewModels;
@@ -18,7 +18,6 @@ namespace Prime.Services
     {
         private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
-        private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
         private readonly IDocumentManagerClient _documentClient;
 
@@ -27,21 +26,19 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             IMapper mapper,
             IBusinessEventService businessEventService,
-            IPartyService partyService,
             IOrganizationService organizationService,
             IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
             _businessEventService = businessEventService;
-            _partyService = partyService;
             _organizationService = organizationService;
             _documentClient = documentClient;
         }
 
         public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
         {
-            IQueryable<Site> query = this.GetBaseSiteQuery();
+            IQueryable<Site> query = GetBaseSiteQuery();
 
             if (organizationId != null)
             {
@@ -53,7 +50,7 @@ namespace Prime.Services
 
         public async Task<Site> GetSiteAsync(int siteId)
         {
-            return await this.GetBaseSiteQuery()
+            return await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
         }
 
@@ -88,7 +85,7 @@ namespace Prime.Services
 
         public async Task<int> UpdateSiteAsync(int siteId, SiteUpdateModel updatedSite)
         {
-            var currentSite = await this.GetSiteAsync(siteId);
+            var currentSite = await GetSiteAsync(siteId);
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
@@ -124,7 +121,7 @@ namespace Prime.Services
                 }
                 else
                 {
-                    this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                    _context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
                 }
             }
         }
@@ -141,9 +138,8 @@ namespace Prime.Services
             {
                 var contactIdName = $"{contactType}Id";
                 Contact currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
-                Contact updatedContact = typeof(SiteUpdateModel).GetProperty(contactType).GetValue(updated) as Contact;
 
-                if (updatedContact != null)
+                if (typeof(SiteUpdateModel).GetProperty(contactType).GetValue(updated) is Contact updatedContact)
                 {
                     if (updatedContact.Id != 0)
                     {
@@ -154,16 +150,15 @@ namespace Prime.Services
                         if (currentContact == null)
                         {
                             _context.Entry(current).Reference(contactType).CurrentValue = updatedContact;
-                            currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
                         }
                         else
                         {
-                            this._context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
+                            _context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
                         }
 
                         if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
                         {
-                            this._context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
+                            _context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
                         }
                         else
                         {
@@ -259,12 +254,12 @@ namespace Prime.Services
 
         public async Task<int> UpdateCompletedAsync(int siteId)
         {
-            var site = await this.GetBaseSiteQuery()
+            var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             site.Completed = true;
 
-            this._context.Update(site);
+            _context.Update(site);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
@@ -286,12 +281,12 @@ namespace Prime.Services
 
         public async Task<Site> UpdatePecCode(int siteId, string pecCode)
         {
-            var site = await this.GetBaseSiteQuery()
+            var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             site.PEC = pecCode;
 
-            this._context.Update(site);
+            _context.Update(site);
 
             var updated = await _context.SaveChangesAsync();
             if (updated < 1)
@@ -306,7 +301,7 @@ namespace Prime.Services
 
         public async Task DeleteSiteAsync(int siteId)
         {
-            var site = await this.GetBaseSiteQuery()
+            var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             if (site != null)
@@ -389,7 +384,7 @@ namespace Prime.Services
 
         public async Task<Site> GetSiteNoTrackingAsync(int siteId)
         {
-            return await this.GetBaseSiteQuery()
+            return await GetBaseSiteQuery()
                 .AsNoTracking()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
         }
@@ -498,18 +493,34 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Site>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
+        public async Task<IEnumerable<RemoteAccessSearchViewModel>> GetRemoteUserInfoAsync(IEnumerable<CertSearchViewModel> certs)
         {
-            var sites = await this.GetBaseSiteQuery()
-                .Where(s => s.ApprovedDate != null)
-                .ToListAsync();
-
-            sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
-            foreach (var site in sites)
+            if (certs == null || !certs.Any())
             {
-                site.RemoteUsers = site.RemoteUsers.Where(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))).ToList();
+                return Enumerable.Empty<RemoteAccessSearchViewModel>();
             }
-            return sites;
+
+            var predicate = PredicateBuilder.New<RemoteUserCertification>();
+            foreach (var cert in certs)
+            {
+                predicate.Or(ruc => ruc.CollegeCode == cert.CollegeCode && ruc.LicenseNumber == cert.LicenceNumber);
+            }
+
+            return await _context.RemoteUserCertifications
+                .AsNoTracking()
+                .AsExpandable()
+                .Where(predicate)
+                .Select(ruc => ruc.RemoteUser)
+                .Distinct()
+                .Select(ru => new RemoteAccessSearchViewModel
+                {
+                    RemoteUserId = ru.Id,
+                    SiteId = ru.SiteId,
+                    SiteDoingBusinessAs = ru.Site.DoingBusinessAs,
+                    SiteAddress = ru.Site.PhysicalAddress,
+                    VendorCodes = ru.Site.SiteVendors.Select(sv => sv.VendorCode)
+                })
+                .ToListAsync();
         }
 
         public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)
@@ -582,6 +593,24 @@ namespace Prime.Services
                .Include(bl => bl.Adjudicator)
                 .OrderByDescending(bl => bl.UploadedDate)
                .ToListAsync();
+        }
+
+        public async Task<SiteAdjudicationDocument> GetSiteAdjudicationDocumentAsync(int documentId)
+        {
+            return await _context.SiteAdjudicationDocuments
+               .SingleOrDefaultAsync(d => d.Id == documentId);
+        }
+
+        public async Task DeleteSiteAdjudicationDocumentAsync(int documentId)
+        {
+            var document = await _context.SiteAdjudicationDocuments
+                .SingleOrDefaultAsync(d => d.Id == documentId);
+            if (document == null)
+            {
+                return;
+            }
+            _context.SiteAdjudicationDocuments.Remove(document);
+            await _context.SaveChangesAsync();
         }
 
         private IQueryable<Site> GetBaseSiteQuery()

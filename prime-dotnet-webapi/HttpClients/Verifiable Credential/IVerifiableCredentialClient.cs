@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Prime.Models;
 
 namespace Prime.HttpClients
 {
@@ -7,6 +8,7 @@ namespace Prime.HttpClients
     {
         Task<JObject> CreateInvitationAsync(string alias);
         Task<JObject> IssueCredentialAsync(JObject credentialOffer);
+        Task<bool> RevokeCredentialAsync(Credential credential);
         Task<string> GetSchemaId(string did);
         Task<JObject> GetSchema(string schemaId);
         Task<string> GetIssuerDidAsync();

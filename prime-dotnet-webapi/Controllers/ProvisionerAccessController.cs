@@ -87,8 +87,8 @@ namespace Prime.Controllers
         {
             if (string.IsNullOrWhiteSpace(providedEmails))
             {
-                this.ModelState.AddModelError("Email(s)", "No emails were provided.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Email(s)", "No emails were provided.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             string[] emails = ((string)providedEmails).Split(",");
@@ -96,25 +96,25 @@ namespace Prime.Controllers
             // Emails are either "Other" provisioners, or office manager(s)
             if (emails.Any() && !EmailService.AreValidEmails(emails))
             {
-                this.ModelState.AddModelError("Email(s)", "The email(s) provided are not valid.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Email(s)", "The email(s) provided are not valid.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
             if (enrollee == null)
             {
-                this.ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
             if (enrollee.ExpiryDate == null)
             {
-                this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
             if (!enrollee.CurrentStatus.IsType(StatusType.Editable))
             {
-                this.ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in an editable state.");
-                return BadRequest(ApiResponse.BadRequest(this.ModelState));
+                ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in an editable state.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
 

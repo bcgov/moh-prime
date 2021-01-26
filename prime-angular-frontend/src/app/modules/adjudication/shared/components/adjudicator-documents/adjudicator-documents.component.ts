@@ -15,6 +15,7 @@ export class AdjudicatorDocumentsComponent implements OnInit {
   @Input() public documents$: Observable<AdjudicationDocument[]>;
   @Output() public saveDocuments: EventEmitter<string[]>;
   @Output() public getDocumentByGuid: EventEmitter<number>;
+  @Output() public deleteDocumentById: EventEmitter<number>;
   @ViewChild('documentUpload') public documentUploadComponent: DocumentUploadComponent;
   public documentGuids: string[];
   public uploadedFile: boolean;
@@ -23,6 +24,7 @@ export class AdjudicatorDocumentsComponent implements OnInit {
   ) {
     this.saveDocuments = new EventEmitter<string[]>();
     this.getDocumentByGuid = new EventEmitter<number>();
+    this.deleteDocumentById = new EventEmitter<number>();
     this.documentGuids = [];
   }
 
@@ -46,6 +48,10 @@ export class AdjudicatorDocumentsComponent implements OnInit {
 
   public getDocument(documentId: number) {
     this.getDocumentByGuid.emit(documentId);
+  }
+
+  public onDelete(documentId: number) {
+    this.deleteDocumentById.emit(documentId);
   }
 
   public ngOnInit(): void { }

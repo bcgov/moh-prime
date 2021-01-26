@@ -15,7 +15,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/BaseEnrolmentProfilePage';
+import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -93,19 +93,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
     }
     return careSettings;
-  }
-
-  public onSubmit() {
-    this.oboSites.clear();
-    this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
-    this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
-    this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
-
-    this.communityHealthSites.updateValueAndValidity();
-    this.communityPharmacySites.updateValueAndValidity();
-    this.healthAuthoritySites.updateValueAndValidity();
-
-    super.onSubmit();
   }
 
   public oboSitesByCareSetting(careSettingCode: number): FormArray {
@@ -195,6 +182,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   public ngOnDestroy() {
     this.removeIncompleteJobs(true);
     this.removeIncompleteOboSites(true);
+    this.removeCareSettingSites();
   }
 
   protected createFormInstance() {
@@ -242,6 +230,14 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   protected onSubmitFormIsValid() {
     // Enrollees can not have jobs and certifications
     this.removeCollegeCertifications();
+    this.removeIncompleteOboSites(true);
+
+    this.oboSites.clear();
+    this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
+    this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
+    this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
+
+    this.removeCareSettingSites();
   }
 
   protected nextRouteAfterSubmit() {
@@ -286,10 +282,20 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     }
   }
 
+  // private removeIncompleteCareSettingSites() {
+  //   [
+  //     this.communityHealthSites,
+  //     this.communityPharmacySites,
+  //     this.healthAuthoritySites
+  //   ].forEach(cs => {
+  //     cs.controls
+  //   });
+  // }
+
   /**
    * @description
-   * Removes incomplete oboSites from the list in preparation
-   * for submission, and allows for an empty list of oboSites if no jobs are solected.
+   * Removes incomplete oboSites from the list in preparation for submission, and
+   * allows for an empty list of oboSites if no jobs are solected.
    */
   private removeIncompleteOboSites(noEmptyOboSites: boolean = false) {
     this.oboSites.controls
@@ -317,8 +323,13 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
    * job(s), as well as, college certification(s).
    */
   private removeCollegeCertifications() {
-    const form = this.enrolmentFormStateService.regulatoryForm;
-    const certifications = form.get('certifications') as FormArray;
-    certifications.clear();
+    this.enrolmentFormStateService.regulatoryFormState.removeCollegeCertifications();
+  }
+
+  private removeCareSettingSites() {
+    // Clear out sites so validation don't interrupt submissions
+    this.communityHealthSites.clear();
+    this.communityPharmacySites.clear();
+    this.healthAuthoritySites.clear();
   }
 }

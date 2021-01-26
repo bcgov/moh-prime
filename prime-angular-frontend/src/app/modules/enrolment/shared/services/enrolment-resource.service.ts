@@ -17,6 +17,7 @@ import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
+import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
@@ -102,6 +103,19 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Submission could not be completed.');
           this.logger.error('[Enrolment] EnrolmentResource::submissionAction error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getCurrentStatus(enrolleeId: number): Observable<EnrolmentStatus> {
+    return this.apiResource.get<EnrolmentStatus>(`enrollees/${enrolleeId}/current-status`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolmentStatus>) => response.result),
+        tap((accessTerms: EnrolmentStatus) => this.logger.info('ENROLLEE_AGREEMENTS', accessTerms)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee current status could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getCurrentStatus error has occurred: ', error);
           throw error;
         })
       );
@@ -255,6 +269,24 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAdjudicationDocumentDownloadToken error has occurred: ',
             error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteEnrolleeAdjudicationDocument(enrolleeId: number, documentId: number) {
+    return this.apiResource.delete<EnrolleeAdjudicationDocument>(
+      `enrollees/${enrolleeId}/adjudication-documents/${documentId}`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAdjudicationDocument>) => response.result),
+        map((document: EnrolleeAdjudicationDocument) => document),
+        tap((document: EnrolleeAdjudicationDocument) => {
+          this.toastService.openSuccessToast('Document has been deleted');
+          this.logger.info('DELETED_DOCUMENT', document);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Document could not be deleted');
+          this.logger.error('[Adjudication] EnrolmentResource::deleteEnrolleeAdjudicationDocument error has occurred: ', error);
           throw error;
         })
       );

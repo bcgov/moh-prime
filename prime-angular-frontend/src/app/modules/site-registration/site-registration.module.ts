@@ -30,6 +30,7 @@ import { TechnicalSupportComponent } from './pages/technical-support/technical-s
 import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { OverviewComponent } from './pages/overview/overview.component';
+import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { OverviewComponent } from './pages/overview/overview.component';
     ContactProfileFormComponent,
     SameAsComponent,
     SummaryCardComponent,
-    OverviewComponent
+    OverviewComponent,
+    NextStepsComponent
   ],
   imports: [
     SiteRegistrationRoutingModule,

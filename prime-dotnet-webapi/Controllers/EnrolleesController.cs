@@ -321,7 +321,7 @@ namespace Prime.Controllers
 
             return CreatedAtAction(
                 nameof(CreateAdjudicatorNote),
-                new { enrolleeId = enrolleeId },
+                new { enrolleeId },
                 ApiResponse.Result(createdAdjudicatorNote)
             );
         }
@@ -351,7 +351,7 @@ namespace Prime.Controllers
 
             return CreatedAtAction(
                 nameof(CreateEnrolmentReference),
-                new { enrolleeId = enrolleeId },
+                new { enrolleeId },
                 ApiResponse.Result(createdEnrolmentStatusReference)
             );
         }
@@ -703,6 +703,54 @@ namespace Prime.Controllers
             var token = await _documentService.GetDownloadTokenForEnrolleeAdjudicationDocument(documentId);
 
             return Ok(ApiResponse.Result(token));
+        }
+
+        // DELETE: api/Enrollees/{enrolleeId}/adjudication-documents/{documentId}
+        /// <summary>
+        /// Delete the enrollee's adjudication document
+        /// </summary>
+        /// <param name="documentId"></param>
+        [HttpDelete("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(DeleteEnrolleeAdjudicationDocument))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeAdjudicationDocument>> DeleteEnrolleeAdjudicationDocument(int documentId)
+        {
+            var document = await _enrolleeService.GetEnrolleeAdjudicationDocumentAsync(documentId);
+            if (document == null)
+            {
+                return NotFound(ApiResponse.Message($"Document not found with id {documentId}"));
+            }
+
+            await _enrolleeService.DeleteEnrolleeAdjudicationDocumentAsync(documentId);
+
+            return Ok(ApiResponse.Result(document));
+        }
+
+        // GET: api/Enrollees/{enrolleeId}/current-status
+        /// <summary>
+        /// Get the enrollees current status
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/current-status", Name = nameof(GetEnrolleeCurrentStatus))]
+        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolmentStatus>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<string>> GetEnrolleeCurrentStatus(int enrolleeId)
+        {
+            var enrollee = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (enrollee == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var status = await _enrolleeService.GetEnrolleeCurrentStatus(enrolleeId);
+
+            return Ok(ApiResponse.Result(status));
         }
     }
 }

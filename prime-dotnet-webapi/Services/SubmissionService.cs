@@ -88,6 +88,7 @@ namespace Prime.Services
             {
                 try
                 {
+                    await _verifiableCredentialService.RevokeCredentialsAsync(enrollee.Id);
                     await _verifiableCredentialService.CreateConnectionAsync(enrollee);
                 }
                 catch (Exception ex)
@@ -256,13 +257,25 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
             await _agreementService.ExpireCurrentEnrolleeAgreementAsync(enrollee.Id);
+
+            if (_httpContext.HttpContext.User.HasVCIssuance())
+            {
+                try
+                {
+                    await _verifiableCredentialService.RevokeCredentialsAsync(enrollee.Id);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Error occurred attempting to revoke credentials through the Verifiable Credential agent: ${ex}", ex);
+                }
+            }
         }
 
         private async Task RerunRulesAsync(Enrollee enrollee)
         {
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator manually ran the enrollee application rules");
-            await this.ProcessEnrolleeApplicationRules(enrollee.Id);
+            await ProcessEnrolleeApplicationRules(enrollee.Id);
             await _context.SaveChangesAsync();
         }
 
@@ -293,17 +306,14 @@ namespace Prime.Services
         {
             // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
             var enrollee = await _context.Enrollees
+                .Include(e => e.Submissions)
                 .Include(e => e.PhysicalAddress)
                 .Include(e => e.MailingAddress)
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.EnrolmentStatusReasons)
                 .Include(e => e.Certifications)
-                    .ThenInclude(cer => cer.College)
-                .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
-                        .ThenInclude(l => l.DefaultPrivileges)
-                .Include(e => e.EnrolleeRemoteUsers)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))

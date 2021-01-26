@@ -8,7 +8,7 @@ namespace Prime.Infrastructure
 {
     public class TextSearchQuery<T>
     {
-        private IQueryable<T> _originalQuery;
+        private readonly IQueryable<T> _originalQuery;
         private IEnumerable<Expression<Func<T, string>>> _propertySelectors;
         private IEnumerable<Expression<Func<T, IEnumerable<string>>>> _collectionSelectors;
 

@@ -119,17 +119,17 @@ namespace Prime.Models
 
         public ICollection<OboSite> OboSites { get; set; }
 
-        public int? CredentialId { get; set; }
-
-        [JsonIgnore]
-        public Credential Credential { get; set; }
+        public ICollection<EnrolleeCredential> EnrolleeCredentials { get; set; }
 
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
         [NotMapped]
         public string Base64QRCode
         {
-            get => Credential?.Base64QRCode;
+            get => EnrolleeCredentials
+                .OrderByDescending(s => s.Id)
+                .Select(ec => ec.Credential?.Base64QRCode)
+                .FirstOrDefault();
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace Prime.Models
 
         public EnrolmentStatus AddEnrolmentStatus(StatusType statusType)
         {
-            var newStatus = EnrolmentStatus.FromType(statusType, this.Id);
+            var newStatus = EnrolmentStatus.FromType(statusType, Id);
 
             if (EnrolmentStatuses == null)
             {
@@ -316,9 +316,9 @@ namespace Prime.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (Guid.Empty.Equals(this.UserId))
+            if (Guid.Empty.Equals(UserId))
             {
-                yield return new ValidationResult($"UserId cannot be the empty value: {this.UserId.ToString()}");
+                yield return new ValidationResult($"UserId cannot be empty");
             }
         }
     }

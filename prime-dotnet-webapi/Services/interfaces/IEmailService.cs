@@ -15,5 +15,9 @@ namespace Prime.Services
         Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync();
         Task<bool> UpdateEmailLogStatuses();
         Task SendEnrolleeRenewalEmails();
+        Task SendBusinessLicenceUploadedAsync(Site site);
+        Task SendSiteApprovedPharmaNetAdministratorAsync(Site site);
+        Task SendSiteApprovedSigningAuthorityAsync(Site site);
+        Task SendSiteApprovedHIBCAsync(Site site);
     }
 }

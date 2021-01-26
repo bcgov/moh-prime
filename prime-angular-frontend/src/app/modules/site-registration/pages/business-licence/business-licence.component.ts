@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { noop, Observable, of, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -11,6 +12,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
@@ -20,8 +22,6 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-business-licence',
@@ -84,8 +84,10 @@ export class BusinessLicenceComponent implements OnInit {
   public onSubmit() {
     const siteId = this.route.snapshot.params.sid;
     let method$: Observable<any>;
-    if (this.formUtilsService.checkValidity(this.form)
-      && (this.uploadedFile || this.deferredLicenceToggle?.checked || this.businessLicence?.businessLicenceDocument)) {
+    if (
+      this.formUtilsService.checkValidity(this.form) &&
+      (this.uploadedFile || this.deferredLicenceToggle?.checked || this.businessLicence?.businessLicenceDocument)
+    ) {
       const payload = this.siteFormStateService.json;
 
       if (this.deferredLicenceToggle?.checked) {
@@ -94,7 +96,8 @@ export class BusinessLicenceComponent implements OnInit {
         if (this.businessLicence.id) {
           method$ = (this.businessLicence.businessLicenceDocument)
             // Returning: [Previously attached document] * [Document removed, Business Licence Updated] --> [...]
-            ? this.siteResource.removeBusinessLicenceDocument(siteId).pipe(exhaustMap(() => this.siteResource.updateBusinessLicence(siteId, this.businessLicence)))
+            ? this.siteResource.removeBusinessLicenceDocument(siteId)
+              .pipe(exhaustMap(() => this.siteResource.updateBusinessLicence(siteId, this.businessLicence)))
             // Returning: [] * [Business Licence Updated] --> [...]
             : this.siteResource.updateBusinessLicence(siteId, this.businessLicence);
         } else {
@@ -116,8 +119,8 @@ export class BusinessLicenceComponent implements OnInit {
           method$ = updateSite.pipe(exhaustMap(() =>
             this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)));
         }
-
       }
+
       method$.subscribe(() => {
         // TODO should make this cleaner, but for now good enough
         // Remove the business licence GUID to prevent 404 already
@@ -126,7 +129,7 @@ export class BusinessLicenceComponent implements OnInit {
         this.form.markAsPristine();
         this.nextRoute();
       });
-    } else if (!this.deferredLicenceToggle?.checked) {
+    } else if (!this.uploadedFile && !this.deferredLicenceToggle?.checked && !this.businessLicence?.businessLicenceDocument) {
       this.hasNoBusinessLicenceError = true;
     }
   }
@@ -139,6 +142,7 @@ export class BusinessLicenceComponent implements OnInit {
 
   public onRemoveDocument(documentGuid: string) {
     this.businessLicenceGuid.patchValue(null);
+    this.uploadedFile = false;
   }
 
   public onBack() {

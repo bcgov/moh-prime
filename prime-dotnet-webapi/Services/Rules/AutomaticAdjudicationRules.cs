@@ -86,15 +86,15 @@ namespace Prime.Services.Rules
 
                 if (!record.MatchesEnrolleeByName(enrollee))
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{cert.FullLicenseNumber} returned \"{record.firstName} {record.lastName}\".");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{cert.FullLicenseNumber} returned \"{record.FirstName} {record.LastName}\".");
                     passed = false;
                 }
-                if (record.dateofBirth.Date != enrollee.DateOfBirth.Date)
+                if (record.DateofBirth.Date != enrollee.DateOfBirth.Date)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{cert.FullLicenseNumber} returned {record.dateofBirth.ToString("d MMM yyyy")}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{cert.FullLicenseNumber} returned {record.DateofBirth:d MMM yyyy}");
                     passed = false;
                 }
-                if (record.status != "P")
+                if (record.Status != "P")
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.Practicing, $"{cert.FullLicenseNumber}");
                     passed = false;

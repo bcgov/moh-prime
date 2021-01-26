@@ -13,6 +13,7 @@ namespace Prime.Models
 
         public int CareSettingCode { get; set; }
 
+        [JsonIgnore]
         public CareSetting CareSetting { get; set; }
 
         public string Name { get; set; }

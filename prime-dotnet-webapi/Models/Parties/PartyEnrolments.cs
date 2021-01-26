@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public class PartyEnrolment
+    public class PartyEnrolment : BaseAuditable
     {
         [Key]
         public int Id { get; set; }

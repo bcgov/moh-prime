@@ -17,6 +17,7 @@ export class SiteRegistrationTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
   @Output() public claim: EventEmitter<number>;
   @Output() public disclaim: EventEmitter<number>;
+  @Output() public notify: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
   public columns: string[];
@@ -35,15 +36,17 @@ export class SiteRegistrationTableComponent implements OnInit {
       'signingAuthority',
       'siteDoingBusinessAs',
       'submissionDate',
-      'adjudicator',
-      'siteAdjudication',
+      'claimedBy',
+      'state',
       'siteId',
       'remoteUsers',
       'careSetting',
+      'missingBusinessLicence',
       'actions'
     ];
     this.claim = new EventEmitter<number>();
     this.disclaim = new EventEmitter<number>();
+    this.notify = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
   }
 
@@ -57,6 +60,10 @@ export class SiteRegistrationTableComponent implements OnInit {
 
   public onDisclaim(siteId: number): void {
     this.disclaim.emit(siteId);
+  }
+
+  public onNotify(siteId: number): void {
+    this.notify.emit(siteId);
   }
 
   public onRoute(routePath: string | (string | number)[]) {

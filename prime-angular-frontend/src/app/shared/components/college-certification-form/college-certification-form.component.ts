@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import moment from 'moment';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { Config, CollegeConfig, LicenseConfig, PracticeConfig, LicenseWeightedConfig } from '@config/config.model';
+import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -23,7 +23,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public total: number;
   @Input() public selectedColleges: number[];
   @Input() public collegeFilterPredicate: (collegeConfig: CollegeConfig) => boolean;
-  @Input() public licenceFilterPredicate: (licenceConfig: LicenseWeightedConfig) => boolean;
+  @Input() public licenceFilterPredicate: (licenceConfig: LicenseConfig) => boolean;
   @Input() public condensed: boolean;
   @Output() public remove: EventEmitter<number>;
 
@@ -33,7 +33,6 @@ export class CollegeCertificationFormComponent implements OnInit {
   public filteredLicenses: Config<number>[];
   public filteredPractices: Config<number>[];
   public hasPractices: boolean;
-  public licensePrefix: string;
   public minRenewalDate: moment.Moment;
   public CollegeLicenceClass = CollegeLicenceClass;
 
@@ -100,12 +99,13 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public shouldShowPractices(): boolean {
     // Only display Advanced Practices for certain nursing licences
-    return ((this.collegeCode.value == CollegeLicenceClass.BCCNM) &&
-        ([NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE, 
-          NursingLicenseCode.PRACTICING_REGISTERED_NURSE,
-          NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE, 
-          NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_EMERGENCY,
-          NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_SPECIAL_EVENT].includes(this.licenseCode.value)));
+    return ((+this.collegeCode.value === CollegeLicenceClass.BCCNM) && ([
+      NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE,
+      NursingLicenseCode.PRACTICING_REGISTERED_NURSE,
+      NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE,
+      NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_EMERGENCY,
+      NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_SPECIAL_EVENT
+    ].includes(this.licenseCode.value)));
   }
 
   public ngOnInit() {
@@ -120,11 +120,6 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.resetCollegeCertification();
         this.setCollegeCertification(collegeCode);
       });
-
-    this.licenseCode.valueChanges
-      .subscribe((licenseCode: number) =>
-        this.setPrefix(this.doesLicenceHavePrefix(licenseCode, this.collegeCode.value))
-      );
   }
 
   private doesLicenceHavePrefix(licenseCode: number, collegeCode: number): number {
@@ -142,7 +137,6 @@ export class CollegeCertificationFormComponent implements OnInit {
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
     this.setValidations();
-    this.setPrefix(this.doesLicenceHavePrefix(this.licenseCode.value, collegeCode));
 
     this.loadLicenses(collegeCode);
     if (this.filteredLicenses?.length === 1) {
@@ -180,13 +174,6 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, []);
     }
-  }
-
-  private setPrefix(collegeCode: number) {
-    this.licensePrefix = this.colleges
-      .filter(c => c.code === collegeCode)
-      .shift()
-      ?.prefix;
   }
 
   private loadLicenses(collegeCode: number) {

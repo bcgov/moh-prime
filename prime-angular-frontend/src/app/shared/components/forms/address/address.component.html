@@ -1,12 +1,16 @@
 <app-address-autocomplete [bcOnly]="bcOnly"
-                          (autocompleteAddress)="onAutocomplete($event)"></app-address-autocomplete>
-<p>
-  <button mat-flat-button
-        *ngIf="showManualButton"
-        [disabled]="showAddressFields"
-        (click)="showManualAddress()">+ Add address manually
+                          (autocompleteAddress)="onAutocomplete($event)">
+  <button *ngIf="showManualButton"
+          mat-button
+          type="button"
+          color="primary"
+          [disabled]="showAddressFields"
+          (click)="showManualAddress()">
+    <mat-icon>add</mat-icon>
+    Add address manually
   </button>
-</p>
+</app-address-autocomplete>
+
 <div [formGroup]="form"
      [hidden]="!showAddressFields">
 

@@ -1,4 +1,4 @@
-# Document Manager API
+# PRIME - Document Manager API
 
 The project uses a Python 3.6 runtime environment and [Flask REST-plus](https://flask-restplus.readthedocs.io/en/stable/) framework for the API.
 
@@ -19,10 +19,19 @@ The application directory is structured as follows:
 |-- tests (Unit/Integration tests for the application)
 |-- app.sh (Shell script used by the python OpenShift s2i image to run the application)
 |-- Dockerfile (Dockerfile for running the application locally using Docker)
+|-- Dockerfile.migrate (Dockerfile for running database migrations related to Document Manager locally using Docker)
+|-- init.sh (Shell script used by Docker to locally deploy Flask web server)
 |-- requirements.txt (Libraries required by the project)
 ```
 
 ## Pre-requisites and Installation
+
+At PRIME, we deploy Document Manager in two components; a backend service, as well as a database migration service powered by Alembic. Both are locally deploy via `docker-compose` (see respective Dockerfiles for build/config/deploy steps), where the backend service is dependent on the database migration service running and completing. 
+
+If you wish to deploy only Document Manager components, please follow the instructions below.
+
+
+### Deployment of Document Manager components only
 
 The application assumes you already have a working postgres DB with the required schema and tables and have the connection details in the .env file.
 

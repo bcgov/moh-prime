@@ -1,0 +1,15 @@
+@using Prime.Services
+@model EmailParams
+
+@{
+  var documentUrl = Model.DocumentUrl;
+}
+
+<p>
+  A user has uploaded business licence to their PharmaNet site registration.
+  @if (documentUrl != "")
+
+  {
+    @("To access the Business Licence, click this") <a href="@documentUrl" target="_blank">link</a>@(".")
+  }
+</p>
