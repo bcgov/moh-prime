@@ -20,7 +20,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { OrganizationAgreementViewModel } from '@shared/models/agreement.model';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, Observable, Subscription } from 'rxjs';
 import { exhaustMap, map, mergeMap } from 'rxjs/operators';
 
 @Component({
@@ -32,15 +32,12 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   @Input() public hasActions: boolean;
   @Input() public actions: TemplateRef<any>;
   @Input() public content: TemplateRef<any>;
-  // @Input() public refresh: Observable<boolean>;
   @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
   public columns: string[];
-  // public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
   public organization: Organization;
   public site: Site;
-  public remoteUsers: Observable<RemoteUser[]>;
   public form: FormGroup;
   public refresh: BehaviorSubject<boolean>;
 
@@ -90,14 +87,15 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
 
     this.createFormInstance();
 
-    this.busy = this.getOrganization()
-      .pipe(
-        map((organization: Organization) => this.organization = organization),
-      )
-      .subscribe(() => {
-        this.getSite(this.route.snapshot.params.sid);
-        this.getRemoteUsers(this.route.snapshot.params.sid);
-      });
+    const { oid, sid } = this.route.snapshot.params;
+
+    this.busy = forkJoin({
+      organization: this.organizationResource.getOrganizationById(oid),
+      site: this.siteResource.getSiteById(sid)
+    }).subscribe(({ organization, site }) => {
+      this.organization = organization;
+      this.site = site;
+    });
   }
 
   private createFormInstance() {
@@ -108,21 +106,4 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       ]
     });
   }
-
-  private getOrganization(): Observable<Organization> {
-    return this.organizationResource.getOrganizationById(this.route.snapshot.params.oid);
-  }
-
-  private getSite(siteId: number, statusCode?: number): void {
-    this.busy = this.siteResource.getSiteById(siteId, statusCode)
-      .subscribe((site: Site) => this.site = site);
-  }
-
-  private getRemoteUsers(siteId: number): void {
-    this.remoteUsers = this.siteResource.getSiteById(siteId)
-      .pipe(
-        map((site: Site) => site.remoteUsers)
-      );
-  }
-
 }

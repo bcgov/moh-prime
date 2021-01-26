@@ -136,11 +136,6 @@ const routes: Routes = [
                 data: { title: 'Site Adjudication' }
               },
               {
-                path: AdjudicationRoutes.SITE_OVERVIEW,
-                component: SiteOverviewComponent,
-                data: { title: 'Overview' }
-              },
-              {
                 path: AdjudicationRoutes.ADJUDICATOR_NOTES,
                 component: SiteAdjudicatorNotesComponent,
                 data: { title: 'Adjudicator Notes' }
