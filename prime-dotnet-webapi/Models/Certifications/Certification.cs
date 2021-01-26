@@ -6,7 +6,6 @@ using Prime.Infrastructure;
 
 namespace Prime.Models
 {
-
     [Table("Certification")]
     public class Certification : BaseAuditable, IEnrolleeNavigationProperty
     {
@@ -31,6 +30,9 @@ namespace Prime.Models
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string LicenseNumber { get; set; }
 
+        /// <summary>
+        ///  5-digit numeric number that the PharmaNet College API expects
+        /// </summary>
         [RegularExpression(@"([0-9]{5})", ErrorMessage = "Practitioner ID should be 5 numeric characters")]
         public string PractitionerId { get; set; }
 
