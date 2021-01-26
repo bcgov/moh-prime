@@ -103,6 +103,12 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onClaim(enrolleeId: number) {
+    const data: DialogOptions = {
+      data: { possibleAction: ClaimActionEnum.Claim },
+    };
+
+    this.busy = this.dialog.open(ClaimEnrolleeComponent, { data }).afterClosed().subscribe();
+
     this.adjudicationResource
       .setEnrolleeAdjudicator(enrolleeId)
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
@@ -110,7 +116,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onDisclaim(enrolleeId: number) {
     const data: DialogOptions = {
-      title: 'Disclaim Enrolment',
+      data: { possibleAction: ClaimActionEnum.Disclaim },
       component: ManualFlagNoteComponent
     };
 

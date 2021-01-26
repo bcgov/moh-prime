@@ -1,17 +1,25 @@
 <h2 mat-dialog-title
     class="d-flex align-items-stretch">
   <span class="flex-grow-1">
-    Disclaim Enrollee
+    {{ this.getTitle() }}
   </span>
 </h2>
 <mat-dialog-content>
-  <span>You can unclaim the enrollee or assign them to a colleague.</span>
+  <span>{{ this.getPromptText() }}</span>
 
   <div class="mt-4">
-    <button mat-flat-button
-            color="primary"
-            (click)="onDisclaim()"
-            class="mr-4">Disclaim Enrollee</button>
+    <span *ngIf="displayAsClaimPrompt()">
+      <button mat-flat-button
+              color="primary"
+              (click)="onClaim()"
+              class="mr-4">Claim</button>
+    </span>
+    <span *ngIf="!displayAsClaimPrompt()">
+      <button mat-flat-button
+              color="primary"
+              (click)="onDisclaim()"
+              class="mr-4">Disclaim Enrollee</button>
+    </span>
     <button mat-flat-button
             color="primary"
             [matMenuTriggerFor]="menu"

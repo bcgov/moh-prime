@@ -230,14 +230,14 @@
                 [disabled]="!canEdit"
                 (click)="onClaim(row.id)">
           <mat-icon>pan_tool</mat-icon>
-          <span>Claim Enrolment</span>
+          <span>Claim or Send Enrolment</span>
         </button>
         <button mat-menu-item
                 *ngIf="row?.adjudicatorIdir"
                 [disabled]="!canEdit"
                 (click)="onDisclaim(row.id)">
           <mat-icon>pan_tool</mat-icon>
-          <span>Disclaim Enrolment</span>
+          <span>Disclaim or Send Enrolment</span>
         </button>
       </mat-menu>
     </ng-template>
