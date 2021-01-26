@@ -20,7 +20,6 @@ export class AdjudicationRoutes {
   public static SITE_REGISTRATION = 'site-registration';
 
   public static ORGANIZATION_INFORMATION = 'organization-information';
-  public static SITE_REMOTE_USERS = 'remote-users';
   public static SITE_OVERVIEW = 'site-overview';
 
   public static MODULE_PATH = AdjudicationRoutes.ADJUDICATION;
