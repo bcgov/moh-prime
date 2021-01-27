@@ -99,40 +99,34 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   }
 
   public ngOnInit() {
-    this.formState = this.enrolmentFormStateService.bcscDemographicFormState;
-
     this.createFormInstance();
-    this.patchForm();
-    this.initForm();
-    this.getUser$()
-      .subscribe((enrollee: Enrollee) => this.enrollee = enrollee);
+    this.patchForm().subscribe(() => this.initForm());
+
+    this.getUser$().subscribe((enrollee: Enrollee) => this.enrollee = enrollee);
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.bcscDemographicFormState.form;
+    this.formState = this.enrolmentFormStateService.bcscDemographicFormState;
+    this.form = this.formState.form;
   }
 
   protected initForm() {
     // Show preferred name if it exists
     this.hasPreferredName = !!(
-      this.form.get('preferredFirstName').value ||
-      this.form.get('preferredMiddleName').value ||
-      this.form.get('preferredLastName').value
+      this.preferredFirstName.value ||
+      this.preferredLastName.value
     );
 
     this.togglePreferredNameValidators(this.preferredFirstName, this.preferredLastName);
 
     // Show mailing address if it exists
-    this.hasMailingAddress = !!(
-      this.mailingAddress.get('countryCode').value ||
-      this.mailingAddress.get('provinceCode').value ||
-      this.mailingAddress.get('street').value ||
-      this.mailingAddress.get('street2').value ||
-      this.mailingAddress.get('city').value ||
-      this.mailingAddress.get('postal').value
-    );
+    const mailingAddress = this.mailingAddress.value;
+    const blacklisted = ['id', 'street2'];
+    this.hasMailingAddress = Object.keys(mailingAddress)
+      .filter(key => !blacklisted.includes(key))
+      .some(key => mailingAddress[key])
 
-    this.toggleMailingAddressValidators(this.mailingAddress, ['id', 'street2']);
+    this.toggleMailingAddressValidators(this.mailingAddress, blacklisted);
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
