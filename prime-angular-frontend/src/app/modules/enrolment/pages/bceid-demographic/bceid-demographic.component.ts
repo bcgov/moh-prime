@@ -92,7 +92,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.bceidDemographicForm;
+    this.form = this.enrolmentFormStateService.bceidDemographicFormState.form;
   }
 
   protected initForm() {

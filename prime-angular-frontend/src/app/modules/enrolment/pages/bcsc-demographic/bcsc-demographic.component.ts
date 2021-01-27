@@ -22,12 +22,15 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
+import { BcscDemographicFormState } from './bcsc-demographic-form-state.class';
+
 @Component({
   selector: 'app-bcsc-demographic',
   templateUrl: './bcsc-demographic.component.html',
   styleUrls: ['./bcsc-demographic.component.scss']
 })
 export class BcscDemographicComponent extends BaseEnrolmentProfilePage implements OnInit {
+  public formState: BcscDemographicFormState;
   /**
    * @description
    * Enrollee information from the provider not
@@ -96,17 +99,17 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   }
 
   public ngOnInit() {
+    this.formState = this.enrolmentFormStateService.bcscDemographicFormState;
+
     this.createFormInstance();
     this.patchForm();
     this.initForm();
     this.getUser$()
-      .subscribe((enrollee: Enrollee) =>
-        this.enrollee = enrollee
-      );
+      .subscribe((enrollee: Enrollee) => this.enrollee = enrollee);
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.bcscDemographicForm;
+    this.form = this.enrolmentFormStateService.bcscDemographicFormState.form;
   }
 
   protected initForm() {
