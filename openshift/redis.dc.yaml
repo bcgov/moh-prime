@@ -140,7 +140,7 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       name: "redis-secrets"
-                      key: redis-password
+                      key: redis_password
               resources: {}
               terminationMessagePath: /dev/termination-log
               imagePullPolicy: IfNotPresent
