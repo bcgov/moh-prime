@@ -101,8 +101,8 @@ objects:
               - redis
             from:
               kind: ImageStreamTag
-              name: 'redis:latest'
-              namespace: 9c33a9-tools
+              name: 'redis:${REDIS_VERSION}'
+              namespace: openshift
             lastTriggeredImage: ''
         - type: ConfigChange
       replicas: 1
