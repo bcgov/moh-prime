@@ -16,6 +16,8 @@ import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-te
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
+import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
+import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
 import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
 import { EnrolleeAdjudicatorNotesComponent } from './pages/enrollee-adjudicator-notes/enrollee-adjudicator-notes.component';
 import { SiteAdjudicatorNotesComponent } from './pages/site-adjudicator-notes/site-adjudicator-notes.component';
@@ -127,6 +129,11 @@ const routes: Routes = [
                 path: '',
                 component: SiteOverviewComponent,
                 data: { title: 'Site Overview' }
+              },
+              {
+                path: AdjudicationRoutes.ADJUDICATION,
+                component: SiteAdjudicationComponent,
+                data: { title: 'Site Adjudication' }
               },
               {
                 path: AdjudicationRoutes.ADJUDICATOR_NOTES,

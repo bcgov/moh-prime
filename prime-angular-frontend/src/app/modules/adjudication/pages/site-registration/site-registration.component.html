@@ -1,0 +1,13 @@
+<app-site-registration-container [content]="content"
+                                 [hasActions]="hasActions">
+
+  <app-page-header>Site Information</app-page-header>
+
+</app-site-registration-container>
+
+<ng-template #content>
+
+  <app-overview-container [site]="site"
+                          [showEditRedirect]="false"></app-overview-container>
+
+</ng-template>
