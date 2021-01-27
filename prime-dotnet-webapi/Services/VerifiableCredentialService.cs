@@ -156,6 +156,7 @@ namespace Prime.Services
                 case ConnectionState.Request:
                     // Enrollee Id stored as alias on invitation
                     await UpdateCredentialConnectionId(data.Value<int>("alias"), data.Value<string>("connection_id"));
+                    System.Threading.Thread.Sleep(4000);
                     return true;
 
                 case ConnectionState.Response:
