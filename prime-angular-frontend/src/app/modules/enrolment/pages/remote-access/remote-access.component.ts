@@ -11,7 +11,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
@@ -30,7 +29,6 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
   @ViewChild('requestAccess') public requestAccess: MatSlideToggle;
 
   public form: FormGroup;
-  public enrolment: Enrolment;
   public showProgress: boolean;
   public remoteAccessSearch: RemoteAccessSearch[];
   public noRemoteAccess: boolean;
