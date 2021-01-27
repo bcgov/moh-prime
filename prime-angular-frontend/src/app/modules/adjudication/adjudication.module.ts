@@ -18,8 +18,6 @@ import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-te
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
-import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
-import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
 import { AdjudicationDashboardComponent } from './shared/components/adjudication-dashboard/adjudication-dashboard.component';
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
@@ -60,11 +58,9 @@ import { SiteOverviewComponent } from './pages/site-overview/site-overview.compo
     DatedContentTableComponent,
     ReviewStatusContentComponent,
     SiteRegistrationsComponent,
-    SiteRegistrationComponent,
     SiteRegistrationContainerComponent,
     SiteRegistrationTableComponent,
     SiteRegistrationActionsComponent,
-    SiteAdjudicationComponent,
     AdjudicationDashboardComponent,
     MetabaseReportsComponent,
     EnrolleeAdjudicatorNotesComponent,
