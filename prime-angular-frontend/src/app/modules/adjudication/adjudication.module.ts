@@ -20,6 +20,7 @@ import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/en
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
 import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
 import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
+import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { AdjudicationDashboardComponent } from './shared/components/adjudication-dashboard/adjudication-dashboard.component';
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
@@ -65,6 +66,7 @@ import { SiteOverviewComponent } from './pages/site-overview/site-overview.compo
     SiteRegistrationTableComponent,
     SiteRegistrationActionsComponent,
     SiteAdjudicationComponent,
+    OrganizationInformationComponent,
     AdjudicationDashboardComponent,
     MetabaseReportsComponent,
     EnrolleeAdjudicatorNotesComponent,
