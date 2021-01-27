@@ -8,21 +8,17 @@ namespace Prime.Services
 {
     public interface IEmailService
     {
-        Task SendReminderEmailAsync(int enrolleeId);
-        Task SendProvisionerLinkAsync(IEnumerable<string> recipientEmails, EnrolmentCertificateAccessToken token, int careSettingCode);
-        Task SendSiteRegistrationAsync(Site site);
-        Task SendRemoteUsersUpdatedAsync(Site site);
-        Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers);
-        Task SendEnrolleeRenewalEmails();
         Task SendBusinessLicenceUploadedAsync(Site site);
+        Task SendProvisionerLinkAsync(IEnumerable<string> recipientEmails, EnrolmentCertificateAccessToken token, int careSettingCode);
+        Task SendReminderEmailAsync(int enrolleeId);
+        Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers);
+        Task SendRemoteUsersUpdatedAsync(Site site);
+        Task SendSiteApprovedHIBCAsync(Site site);
         Task SendSiteApprovedPharmaNetAdministratorAsync(Site site);
         Task SendSiteApprovedSigningAuthorityAsync(Site site);
-        Task SendSiteApprovedHIBCAsync(Site site);
+        Task SendSiteRegistrationSubmissionAsync(int siteId);
 
-
-        Task Send(Email email);
-        Task CreateChesEmailLog(Email email, Guid? msgId);
-        Task CreateSmtpEmailLog(Email email);
+        Task SendEnrolleeRenewalEmails();
         Task<bool> UpdateEmailLogStatuses();
     }
 }

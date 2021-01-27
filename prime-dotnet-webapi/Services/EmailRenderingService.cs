@@ -1,192 +1,154 @@
 using System;
-using System.Linq;
-using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using DelegateDecompiler.EntityFrameworkCore;
 
 using Prime.Models;
-using Prime.HttpClients;
 using Prime.Services.Razor;
 using Prime.HttpClients.Mail;
-using Prime.Models.Documents;
-using Prime.ViewModels.SiteRegistration;
-
-namespace Prime.Services
+using Prime.ViewModels.Emails;
+namespace Prime.Services.EmailInternal
 {
-    public class EmailRenderingService : BaseService, IEmailRenderingService
+    public class EmailRenderingService : IEmailRenderingService
     {
-        private readonly IAgreementService _agreementService;
-        private readonly IDocumentAccessTokenService _documentAccessTokenService;
-        private readonly IDocumentManagerClient _documentClient;
-        private readonly IOrganizationService _organizationService;
-        private readonly IPdfService _pdfService;
+        private const string PrimeEmail = "no-reply-prime@gov.bc.ca";
+        private const string PrimeSupportEmail = "primesupport@gov.bc.ca";
+        private const string MohEmail = "HLTH.HnetConnection@gov.bc.ca";
+
         private readonly IRazorConverterService _razorConverterService;
 
-        public EmailRenderingService(
-            ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IAgreementService agreementService,
-            IDocumentAccessTokenService documentAccessTokenService,
-            IDocumentManagerClient documentClient,
-            IOrganizationService organizationService,
-            IPdfService pdfService,
-            IRazorConverterService razorConverterService)
-            : base(context, httpContext)
+        public EmailRenderingService(IRazorConverterService razorConverterService)
         {
-            _agreementService = agreementService;
-            _documentAccessTokenService = documentAccessTokenService;
-            _documentClient = documentClient;
-            _organizationService = organizationService;
-            _pdfService = pdfService;
             _razorConverterService = razorConverterService;
         }
 
-        public async Task<IEnumerable<Pdf>> GenerateSiteRegistrationAttachmentsAsync(int siteId)
+        public async Task<Email> RenderBusinessLicenceUploadedEmailAsync(string recipientEmail, LinkedEmailViewModel viewModel)
         {
-            return new[]
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "Site Business Licence Uploaded",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.BusinessLicenceUploaded, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderProvisionerLinkEmailAsync(IEnumerable<string> recipientEmails, string cc, CareSettingType careSetting, ProvisionerAccessEmailViewModel viewModel)
+        {
+            var template = careSetting switch
             {
-                await GenerateRegistrationReviewAttachmentAsync(siteId),
-                await GenerateOrganizationAgreementAttachmentAsync(siteId)
+                CareSettingType.CommunityPharmacy => RazorTemplates.Emails.CommunityPharmacyManager,
+                CareSettingType.HealthAuthority => RazorTemplates.Emails.HealthAuthority,
+                CareSettingType.CommunityPractice => RazorTemplates.Emails.CommunityPractice,
+                _ => throw new ArgumentException($"Could not recognize CareSetting {careSetting} in {nameof(RenderProvisionerLinkEmailAsync)}")
             };
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmails,
+                cc: cc,
+                subject: "New Access Request",
+                body: await _razorConverterService.RenderTemplateToStringAsync(template, viewModel)
+            );
         }
 
-        private async Task<Pdf> GenerateRegistrationReviewAttachmentAsync(int siteId)
+        public async Task<Email> RenderReminderEmailAsync(string recipientEmail, LinkedEmailViewModel viewModel)
         {
-            var model = await _context.Sites
-                .Where(s => s.Id == siteId)
-                .Select(s => new SiteRegistrationReviewViewModel
-                {
-                    OrganizationName = s.Organization.Name,
-                    OrganizationRegistrationId = s.Organization.RegistrationId,
-                    OrganizationDoingBusinessAs = s.Organization.DoingBusinessAs,
-                    SiteName = s.DoingBusinessAs,
-                    SiteAddress = s.PhysicalAddress,
-                    BusinessHours = s.BusinessHours.Select(h => new BusinessHourViewModel
-                    {
-                        Day = h.Day,
-                        StartTime = h.StartTime,
-                        EndTime = h.EndTime
-                    }),
-                    Vendors = s.SiteVendors.Select(sv => new VendorViewModel
-                    {
-                        Name = sv.Vendor.Name,
-                        Email = sv.Vendor.Email
-                    }),
-                    RemoteUsers = s.RemoteUsers.Select(ru => new RemoteUserViewModel
-                    {
-                        FullName = $"{ru.FirstName} {ru.LastName}",
-                        Certifications = ru.RemoteUserCertifications.Select(c => new CertViewModel
-                        {
-                            CollegeName = c.College.Name,
-                            LicenceNumber = c.LicenseNumber
-                        })
-                    }),
-                    SigningAuthority = new ContactViewModel
-                    {
-                        JobTitle = s.Provisioner.JobRoleTitle,
-                        FullName = $"{s.Provisioner.FirstName} {s.Provisioner.LastName}",
-                        Phone = s.Provisioner.Phone,
-                        Fax = s.Provisioner.Fax,
-                        SmsPhone = s.Provisioner.SMSPhone,
-                        Email = s.Provisioner.Email
-                    },
-                    AdministratorOfPharmaNet = new ContactViewModel
-                    {
-                        JobTitle = s.AdministratorPharmaNet.JobRoleTitle,
-                        FullName = $"{s.AdministratorPharmaNet.FirstName} {s.AdministratorPharmaNet.LastName}",
-                        Phone = s.AdministratorPharmaNet.Phone,
-                        Fax = s.AdministratorPharmaNet.Fax,
-                        SmsPhone = s.AdministratorPharmaNet.SMSPhone,
-                        Email = s.AdministratorPharmaNet.Email
-                    },
-                    PrivacyOfficer = new ContactViewModel
-                    {
-                        JobTitle = s.PrivacyOfficer.JobRoleTitle,
-                        FullName = $"{s.PrivacyOfficer.FirstName} {s.PrivacyOfficer.LastName}",
-                        Phone = s.PrivacyOfficer.Phone,
-                        Fax = s.PrivacyOfficer.Fax,
-                        SmsPhone = s.PrivacyOfficer.SMSPhone,
-                        Email = s.PrivacyOfficer.Email
-                    },
-                    TechnicalSupport = new ContactViewModel
-                    {
-                        JobTitle = s.TechnicalSupport.JobRoleTitle,
-                        FullName = $"{s.TechnicalSupport.FirstName} {s.TechnicalSupport.LastName}",
-                        Phone = s.TechnicalSupport.Phone,
-                        Fax = s.TechnicalSupport.Fax,
-                        SmsPhone = s.TechnicalSupport.SMSPhone,
-                        Email = s.TechnicalSupport.Email
-                    },
-                })
-                .SingleAsync();
-
-            var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.SiteRegistrationReview, model);
-            return new Pdf("SiteRegistrationReview.pdf", _pdfService.Generate(html));
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "PRIME Requires your Attention",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.Reminder, viewModel)
+            );
         }
 
-        private async Task<Pdf> GenerateOrganizationAgreementAttachmentAsync(int siteId)
+        public async Task<Email> RenderRemoteUserNotificationEmailAsync(string recipientEmail, RemoteUserNotificationEmailViewModel viewModel)
         {
-            var careSetting = await _context.Sites
-                .Where(s => s.Id == siteId)
-                .Select(s => s.CareSettingCode)
-                .SingleOrDefaultAsync();
-
-            if (careSetting == null)
-            {
-                return null;
-            }
-
-            var agreementType = _organizationService.OrgAgreementTypeForSiteSetting(careSetting.Value);
-            var agreementDto = await _context.Sites
-                .Where(s => s.Id == siteId)
-                .SelectMany(s => s.Organization.Agreements)
-                .Where(a => a.AgreementVersion.AgreementType == agreementType
-                    && a.AcceptedDate.HasValue)
-                .OrderByDescending(a => a.AcceptedDate)
-                .Select(a => new
-                {
-                    OrganizationName = a.Organization.Name,
-                    a.AcceptedDate,
-                    a.SignedAgreement
-                })
-                .FirstOrDefaultAsync();
-
-            if (agreementDto == null)
-            {
-                return null;
-            }
-
-            byte[] fileData = null;
-            if (agreementDto.SignedAgreement == null)
-            {
-                var html = await _agreementService.RenderOrgAgreementHtmlAsync(agreementType, agreementDto.OrganizationName, agreementDto.AcceptedDate, true);
-                fileData = _pdfService.Generate(html);
-            }
-            else
-            {
-                fileData = await _documentClient.GetFileDataAsync(agreementDto.SignedAgreement.DocumentGuid);
-                if (fileData == null)
-                {
-                    return await ApologyDocument(agreementDto.SignedAgreement.Filename);
-                }
-
-                if (!agreementDto.SignedAgreement.HasFileExtension("pdf"))
-                {
-                    var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Document, new File(agreementDto.SignedAgreement.Filename, fileData));
-                    fileData = _pdfService.Generate(html);
-                }
-            }
-
-            return new Pdf("OrganizationAgreement.pdf", fileData);
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "Remote Practitioner Notification",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RemoteUserNotification, viewModel)
+            );
         }
 
-        private async Task<Pdf> ApologyDocument(string filename)
+        public async Task<Email> RenderRemoteUsersUpdatedEmailAsync(RemoteUsersUpdatedEmailViewModel viewModel)
         {
-            var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.ApologyDocument, new File(filename, null));
-            return new Pdf("OrganizationAgreement.pdf", _pdfService.Generate(html));
+            return new Email
+            (
+                from: PrimeEmail,
+                to: new[] { MohEmail, PrimeSupportEmail },
+                subject: "Remote Practioners Added",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RemoteUsersUpdated, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderRenewalPassedEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "Your PRIME Renewal Date Has Passed",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RenewalPassed, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderRenewalRequiredEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "PRIME Renewal Required",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RenewalRequired, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderSiteApprovedHibcEmailAsync(SiteApprovalEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: MohEmail,
+                subject: "Site Registration Approved",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteApprovedHibcEmailTemplate, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderSiteApprovedPharmaNetAdministratorEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "Site Registration Approved",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteApprovedPharmaNetAdministratorEmailTemplate, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderSiteApprovedSigningAuthorityEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "Site Registration Approved",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteApprovedSigningAuthorityEmailTemplate, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: new[] { MohEmail, PrimeSupportEmail },
+                subject: "PRIME Site Registration Submission",
+                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteRegistrationSubmission, viewModel)
+            );
         }
     }
 }

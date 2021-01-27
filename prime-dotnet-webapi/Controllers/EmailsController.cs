@@ -14,10 +14,10 @@ namespace Prime.Controllers
     public class EmailsController : ControllerBase
     {
         private readonly IEmailService _emailService;
-        private readonly IEmailRenderingService _emailR;
+        private readonly IEmailDocumentsService _emailR;
         public EmailsController(
             IEmailService emailService,
-            IEmailRenderingService renderingService)
+            IEmailDocumentsService renderingService)
         {
             _emailR = renderingService;
             _emailService = emailService;

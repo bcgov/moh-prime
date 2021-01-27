@@ -1,0 +1,28 @@
+@using Prime.ViewModels.Emails
+@model RemoteUsersUpdatedEmailViewModel
+
+<p>
+  Notification: The list of Remote Practitioners at @Model.SiteStreetAddress of
+  @Model.OrganizationName (PEC: @Model.SitePec) has been updated. The Remote Practitioners
+  at this site are:
+</p>
+
+<h2 class="mb-2">Remote Users</h2>
+
+@foreach (var name in Model.RemoteUserNames)
+{
+  <div class="ml-2 mb-2">
+    <h5>Name</h5>
+    <span class="ml-2">@name</span>
+  </div>
+}
+
+<h2 class="mb-2">Site Information</h2>
+
+<p>
+  See the attached registration and organization agreement for more information.
+  @if (!string.IsNullOrWhiteSpace(Model.DocumentUrl))
+  {
+    @("To access the Business Licence, click this") <a href="@Model.DocumentUrl" target="_blank">link</a>@(".")
+  }
+</p>

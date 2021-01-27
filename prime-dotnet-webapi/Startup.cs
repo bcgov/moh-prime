@@ -55,6 +55,7 @@ namespace Prime
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IEmailDocumentsService, EmailDocumentsService>();
             services.AddScoped<IEmailRenderingService, EmailRenderingService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IAgreementService, AgreementService>();
