@@ -55,8 +55,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     private fb: FormBuilder,
     authService: AuthService,
     dialog: MatDialog,
-    utilsService: UtilsService,
-    toastService: ToastService,
+    utilsService: UtilsService
   ) {
     super(defaultOptions,
       route,
