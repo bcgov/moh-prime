@@ -13,6 +13,8 @@ using Prime.HttpClients;
 using Prime.Services.Razor;
 using Prime.HttpClients.Mail;
 using Prime.ViewModels.Emails;
+using Prime.HttpClients.Mail.ChesApiDefinitions;
+using Prime.Models.Documents;
 
 namespace Prime.Services
 {
@@ -63,9 +65,16 @@ namespace Prime.Services
 
     public class EmailService : BaseService, IEmailService
     {
+        private static class SendType
+        {
+            public const string Ches = "CHES";
+            public const string Smtp = "SMTP";
+        }
+
         private const string PrimeEmail = "no-reply-prime@gov.bc.ca";
         private const string PrimeSupportEmail = "primesupport@gov.bc.ca";
         private const string MohEmail = "HLTH.HnetConnection@gov.bc.ca";
+        private readonly IEmailRenderingService _emailRenderingService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
         private readonly IPdfService _pdfService;
@@ -76,11 +85,11 @@ namespace Prime.Services
         private readonly IDocumentAccessTokenService _documentAccessTokenService;
         private readonly ISiteService _siteService;
         private readonly IAgreementService _agreementService;
-        private readonly IEmailManagementService _emailManagementService;
 
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
+            IEmailRenderingService emailRenderingService,
             IRazorConverterService razorConverterService,
             IDocumentService documentService,
             IPdfService pdfService,
@@ -90,10 +99,10 @@ namespace Prime.Services
             IDocumentManagerClient documentManagerClient,
             IDocumentAccessTokenService documentAccessTokenService,
             ISiteService siteService,
-            IAgreementService agreementService,
-            IEmailManagementService emailManagementService)
+            IAgreementService agreementService)
             : base(context, httpContext)
         {
+            _emailRenderingService = emailRenderingService;
             _razorConverterService = razorConverterService;
             _documentService = documentService;
             _pdfService = pdfService;
@@ -104,7 +113,6 @@ namespace Prime.Services
             _smtpEmailClient = smtpEmailClient;
             _siteService = siteService;
             _agreementService = agreementService;
-            _emailManagementService = emailManagementService;
         }
 
         public async Task SendReminderEmailAsync(int enrolleeId)
@@ -170,7 +178,7 @@ namespace Prime.Services
                 to: new[] { MohEmail, PrimeSupportEmail },
                 subject: "PRIME Site Registration Submission",
                 body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteRegistrationSubmission, new EmailParams(site, downloadUrl)),
-                attachments: await GetSiteRegistrationAttachments(site)
+                attachments: await _emailRenderingService.GenerateSiteRegistrationAttachmentsAsync(site.Id)
             );
             await Send(email);
 
@@ -188,7 +196,7 @@ namespace Prime.Services
                 to: new[] { MohEmail, PrimeSupportEmail },
                 subject: "Remote Practioners Added",
                 body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.UpdateRemoteUsers, new EmailParams(site, downloadUrl)),
-                attachments: await GetSiteRegistrationAttachments(site)
+                attachments: await _emailRenderingService.GenerateSiteRegistrationAttachmentsAsync(site.Id)
             );
             await Send(email);
         }
@@ -271,75 +279,6 @@ namespace Prime.Services
             return documentAccessToken.DownloadUrl;
         }
 
-        private async Task<IEnumerable<Pdf>> GetSiteRegistrationAttachments(Site site)
-        {
-            var organization = site.Organization;
-
-            var organizationAgreementHtml = "";
-            var organizationAgreementFilename = "OrganizationAgreement.pdf";
-            var registrationReviewFilename = "SiteRegistrationReview.pdf";
-
-            var siteRegistrationReviewHtml = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.SiteRegistrationReview, site);
-
-            var signedOrganizationAgreementDocument = await _organizationService.GetLatestSignedAgreementAsync(organization.Id);
-            if (signedOrganizationAgreementDocument != null)
-            {
-                var fileExt = signedOrganizationAgreementDocument.Filename.Split(".").Last();
-
-                if (fileExt.Equals("pdf"))
-                {
-                    // If the file is already a pdf we can skip the conversion steps and return it.
-                    var stream = await _documentService.GetStreamForLatestSignedAgreementDocument(organization.Id);
-                    MemoryStream ms = new MemoryStream();
-                    stream.CopyTo(ms);
-
-                    return new []
-                    {
-                        new Pdf(organizationAgreementFilename, ms.ToArray()),
-                        new Pdf(registrationReviewFilename, _pdfService.Generate(siteRegistrationReviewHtml))
-                    };
-                }
-
-                Pdf organizationAgreementDoc;
-                RazorTemplate<Document> template = RazorTemplates.Document;
-                try
-                {
-                    var stream = await _documentService.GetStreamForLatestSignedAgreementDocument(organization.Id);
-                    var ms = new MemoryStream();
-                    stream.CopyTo(ms);
-                    organizationAgreementDoc = new Pdf("SignedOrganizationAgreement.pdf", ms.ToArray());
-                }
-                catch (NullReferenceException)
-                {
-                    organizationAgreementDoc = new Pdf("SignedOrganizationAgreement.pdf", new byte[20]);
-                    template = RazorTemplates.ApologyDocument;
-                }
-
-                organizationAgreementHtml = await _razorConverterService.RenderTemplateToStringAsync(template, organizationAgreementDoc);
-            }
-            else
-            {
-                var agreementType = _organizationService.OrgAgreementTypeForSiteSetting(site.CareSettingCode.Value);
-                var agreementDate = await _context.Agreements
-                    .AsNoTracking()
-                    .Include(a => a.AgreementVersion)
-                    .Where(a => a.OrganizationId == organization.Id
-                        && a.AgreementVersion.AgreementType == agreementType
-                        && a.AcceptedDate.HasValue)
-                    .OrderByDescending(a => a.AcceptedDate)
-                    .Select(a => a.AcceptedDate)
-                    .FirstAsync();
-
-                organizationAgreementHtml = await _agreementService.RenderOrgAgreementHtmlAsync(agreementType, organization.Name, agreementDate, true);
-            }
-
-            return new[]
-            {
-                new Pdf(organizationAgreementFilename, _pdfService.Generate(organizationAgreementHtml)),
-                new Pdf(registrationReviewFilename, _pdfService.Generate(siteRegistrationReviewHtml))
-            };
-        }
-
         private async Task SaveSiteRegistrationReview(int siteId, Pdf pdf)
         {
             var documentGuid = await _documentManagerClient.SendFileAsync(new MemoryStream(pdf.Data), pdf.Filename, $"sites/{siteId}/site_registration_reviews");
@@ -402,7 +341,7 @@ namespace Prime.Services
             await Send(email);
         }
 
-        private async Task Send(Email email)
+        public async Task Send(Email email)
         {
             if (!PrimeEnvironment.IsProduction)
             {
@@ -412,7 +351,7 @@ namespace Prime.Services
             if (PrimeEnvironment.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
             {
                 var msgId = await _chesClient.SendAsync(email);
-                await _emailManagementService.CreateChesEmailLog(email, msgId);
+                await CreateChesEmailLog(email, msgId);
 
                 if (msgId != null)
                 {
@@ -422,7 +361,58 @@ namespace Prime.Services
 
             // Allways fall back to smtp
             await _smtpEmailClient.SendAsync(email);
-            await _emailManagementService.CreateSmtpEmailLog(email);
+            await CreateSmtpEmailLog(email);
+        }
+
+        public async Task<bool> UpdateEmailLogStatuses()
+        {
+            var emailLogs = await _context.EmailLogs
+                .Where(e => e.SendType == SendType.Ches
+                    && e.MsgId != null
+                    && e.LatestStatus != ChesStatus.Completed)
+                .ToListAsync();
+
+            foreach (var email in emailLogs)
+            {
+                var status = await _chesClient.GetStatusAsync(email.MsgId.Value);
+                if (status != null && email.LatestStatus != status)
+                {
+                    email.LatestStatus = status;
+                }
+            }
+
+            return await _context.SaveChangesAsync() != 0;
+        }
+
+        public async Task CreateChesEmailLog(Email email, Guid? msgId)
+        {
+            _context.EmailLogs.Add(new EmailLog
+            {
+                SentTo = string.Join(",", email.To),
+                Cc = string.Join(",", email.Cc),
+                Subject = email.Subject,
+                Body = email.Body,
+                SendType = SendType.Ches,
+                MsgId = msgId,
+                DateSent = DateTimeOffset.Now
+            });
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CreateSmtpEmailLog(Email email)
+        {
+            _context.EmailLogs.Add(new EmailLog
+            {
+                SentTo = string.Join(",", email.To),
+                Cc = string.Join(",", email.Cc),
+                Subject = email.Subject,
+                Body = email.Body,
+                SendType = SendType.Smtp,
+                DateSent = DateTimeOffset.Now
+            });
+
+            await _context.SaveChangesAsync();
         }
     }
 }

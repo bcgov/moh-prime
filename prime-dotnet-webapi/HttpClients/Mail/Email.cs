@@ -3,6 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Net.Mail;
 
+using Prime.Models.Documents;
+
 namespace Prime.HttpClients.Mail
 {
     public class Email

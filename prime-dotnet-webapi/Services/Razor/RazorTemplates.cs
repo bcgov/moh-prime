@@ -1,7 +1,8 @@
 using System;
 using Prime.Models;
-using Prime.HttpClients.Mail;
+using Prime.Models.Documents;
 using Prime.ViewModels.Emails;
+using Prime.ViewModels.SiteRegistration;
 
 namespace Prime.Services.Razor
 {
@@ -12,9 +13,9 @@ namespace Prime.Services.Razor
 
     public static class RazorTemplates
     {
-        public static readonly RazorTemplate<Site> SiteRegistrationReview = new RazorTemplate<Site> { ViewPath = "/Views/SiteRegistrationReview.cshtml" };
-        public static readonly RazorTemplate<Document> Document = new RazorTemplate<Document> { ViewPath = "/Views/Helpers/Document.cshtml" };
-        public static readonly RazorTemplate<Document> ApologyDocument = new RazorTemplate<Document> { ViewPath = "/Views/Helpers/ApologyDocument.cshtml" };
+        public static readonly RazorTemplate<SiteRegistrationReviewViewModel> SiteRegistrationReview = new RazorTemplate<SiteRegistrationReviewViewModel> { ViewPath = "/Views/SiteRegistrationReview.cshtml" };
+        public static readonly RazorTemplate<File> Document = new RazorTemplate<File> { ViewPath = "/Views/Helpers/Document.cshtml" };
+        public static readonly RazorTemplate<File> ApologyDocument = new RazorTemplate<File> { ViewPath = "/Views/Helpers/ApologyDocument.cshtml" };
 
         public static class Agreements
         {

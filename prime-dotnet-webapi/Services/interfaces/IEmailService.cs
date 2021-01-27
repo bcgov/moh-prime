@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
+using Prime.HttpClients.Mail;
 
 namespace Prime.Services
 {
@@ -16,5 +18,11 @@ namespace Prime.Services
         Task SendSiteApprovedPharmaNetAdministratorAsync(Site site);
         Task SendSiteApprovedSigningAuthorityAsync(Site site);
         Task SendSiteApprovedHIBCAsync(Site site);
+
+
+        Task Send(Email email);
+        Task CreateChesEmailLog(Email email, Guid? msgId);
+        Task CreateSmtpEmailLog(Email email);
+        Task<bool> UpdateEmailLogStatuses();
     }
 }

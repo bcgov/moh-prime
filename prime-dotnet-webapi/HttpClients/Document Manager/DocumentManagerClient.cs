@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Prime.Extensions;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.HttpClients
 {
@@ -78,39 +79,10 @@ namespace Prime.HttpClients
             return await response.Content.ReadAsStreamAsync();
         }
 
-        private class FileMetadata
+        public async Task<byte[]> GetFileDataAsync(Guid documentGuid)
         {
-            private readonly Dictionary<string, string> _metadata;
-
-            public FileMetadata(string filename = null, string destinationFolder = null)
-            {
-                _metadata = new Dictionary<string, string>
-                {
-                    { "filename", filename },
-                    { "folder", destinationFolder }
-                }
-                .RemoveNullValues();
-            }
-
-            public HttpContent AsHttpContent()
-            {
-                return new FormUrlEncodedContent(_metadata);
-            }
-
-            public string AsQueryStringUrl(string baseUrl)
-            {
-                return _metadata.ToQueryStringUrl(baseUrl, false);
-            }
-        }
-
-        private class DownloadToken
-        {
-            public string Token { get; set; }
-        }
-
-        private class DocumentResponse
-        {
-            public Guid Document_guid { get; set; }
+            var response = await GetFileAsync(documentGuid);
+            return await response.Content.ReadAsByteArrayAsync();
         }
     }
 }

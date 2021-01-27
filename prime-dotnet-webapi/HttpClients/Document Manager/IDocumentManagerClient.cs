@@ -18,5 +18,7 @@ namespace Prime.HttpClients
         Task<HttpResponseMessage> GetFileAsync(Guid documentGuid);
 
         Task<Stream> GetFileStreamAsync(Guid documentGuid);
+
+        Task<byte[]> GetFileDataAsync(Guid documentGuid);
     }
 }

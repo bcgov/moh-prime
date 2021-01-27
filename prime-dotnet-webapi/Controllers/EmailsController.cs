@@ -14,14 +14,24 @@ namespace Prime.Controllers
     public class EmailsController : ControllerBase
     {
         private readonly IEmailService _emailService;
-        private readonly IEmailManagementService _emailManagementService;
-
+        private readonly IEmailRenderingService _emailR;
         public EmailsController(
             IEmailService emailService,
-            IEmailManagementService emailManagementService)
+            IEmailRenderingService renderingService)
         {
+            _emailR = renderingService;
             _emailService = emailService;
-            _emailManagementService = emailManagementService;
+        }
+
+        [HttpGet(Name = nameof(TEST))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<StatusCodeResult> TEST()
+        {
+            await _emailR.GenerateSiteRegistrationAttachmentsAsync(1);
+
+            return NoContent();
         }
 
         // POST: api/Emails/management/statuses
@@ -35,7 +45,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<StatusCodeResult> UpdateEmailLogStatuses()
         {
-            await _emailManagementService.UpdateEmailLogStatuses();
+            await _emailService.UpdateEmailLogStatuses();
 
             return NoContent();
         }
