@@ -16,7 +16,7 @@ import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-te
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
-import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
+import { SiteInformationComponent } from './pages/site-information/site-information.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-users.component';
 import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
@@ -133,7 +133,7 @@ const routes: Routes = [
               },
               {
                 path: AdjudicationRoutes.SITE_INFORMATION,
-                component: SiteRegistrationComponent,
+                component: SiteInformationComponent,
                 data: { title: 'Site Information' }
               },
               {
