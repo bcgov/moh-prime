@@ -119,17 +119,17 @@ namespace Prime.Models
 
         public ICollection<OboSite> OboSites { get; set; }
 
-        public int? CredentialId { get; set; }
-
-        [JsonIgnore]
-        public Credential Credential { get; set; }
+        public ICollection<EnrolleeCredential> EnrolleeCredentials { get; set; }
 
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
         [NotMapped]
         public string Base64QRCode
         {
-            get => Credential?.Base64QRCode;
+            get => EnrolleeCredentials
+                .OrderByDescending(s => s.Id)
+                .Select(ec => ec.Credential?.Base64QRCode)
+                .FirstOrDefault();
         }
 
         /// <summary>

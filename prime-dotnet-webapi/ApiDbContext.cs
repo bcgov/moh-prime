@@ -95,6 +95,7 @@ namespace Prime
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
         public DbSet<SelfDeclaration> SelfDeclarations { get; set; }
         public DbSet<Credential> Credentials { get; set; }
+        public DbSet<EnrolleeCredential> EnrolleeCredentials { get; set; }
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
         public DbSet<IdentificationDocument> IdentificationDocuments { get; set; }
@@ -205,6 +206,12 @@ namespace Prime
                 .HasOne(an => an.Enrollee)
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
+
+            modelBuilder.Entity<EnrolleeCredential>()
+                .HasOne(ec => ec.Enrollee)
+                .WithMany(e => e.EnrolleeCredentials)
+                .HasForeignKey(ec => ec.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Agreement>()
                 .HasOne(toa => toa.Enrollee)
