@@ -138,9 +138,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     this.licenseCode.valueChanges
       .subscribe((licenseCode: number) => {
-        this.licenceValidatedByPharmaNet = this.licenses
-          .filter(licenseConfig => licenseConfig.code === licenseCode)
-          .some(licenseConfig => licenseConfig.validate);
+        this.licenceValidatedByPharmaNet = this.checkLicenceCodeValidatedByPharmaNet(licenseCode);
 
         (this.licenceValidatedByPharmaNet)
           ? this.formUtilsService.setValidators(this.practitionerId, [
@@ -150,6 +148,8 @@ export class CollegeCertificationFormComponent implements OnInit {
           ])
           : this.formUtilsService.resetAndClearValidators(this.practitionerId);
       });
+
+    this.licenceValidatedByPharmaNet = this.checkLicenceCodeValidatedByPharmaNet(this.licenseCode.value);
   }
 
   private setCollegeCertification(collegeCode: number): void {
@@ -217,5 +217,11 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private filterPractices(collegeCode: number): PracticeConfig[] {
     return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
+  }
+
+  private checkLicenceCodeValidatedByPharmaNet(licenceCode: number): boolean {
+    return this.licenses
+      .filter(licenseConfig => licenseConfig.code === licenceCode)
+      .some(licenseConfig => licenseConfig.validate);
   }
 }
