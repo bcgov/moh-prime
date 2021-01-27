@@ -1,20 +1,16 @@
-using System;
 using System.Linq;
-using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using DelegateDecompiler.EntityFrameworkCore;
 
 using Prime.Models;
 using Prime.HttpClients;
 using Prime.Services.Razor;
-using Prime.HttpClients.Mail;
 using Prime.Models.Documents;
 using Prime.ViewModels.SiteRegistration;
 
-namespace Prime.Services
+namespace Prime.Services.EmailInternal
 {
     public class EmailDocumentsService : BaseService, IEmailDocumentsService
     {
@@ -44,7 +40,7 @@ namespace Prime.Services
             _razorConverterService = razorConverterService;
         }
 
-        public async Task<IEnumerable<Pdf>> GenerateSiteRegistrationAttachmentsAsync(int siteId)
+        public async Task<IEnumerable<Pdf>> GenerateSiteRegistrationSubmissionAttachmentsAsync(int siteId)
         {
             return new[]
             {
@@ -53,8 +49,31 @@ namespace Prime.Services
             };
         }
 
+        public async Task<string> GetBusinessLicenceDownloadLink(int siteId)
+        {
+            var document = await _context.BusinessLicenceDocuments
+                .SingleOrDefaultAsync(doc => doc.BusinessLicence.SiteId == siteId);
+
+            if (document == null)
+            {
+                return null;
+            }
+
+            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(document.DocumentGuid);
+            return documentAccessToken.DownloadUrl;
+        }
+
+        public async Task SaveSiteRegistrationReview(int siteId, Pdf pdf)
+        {
+            var documentGuid = await _documentClient.SendFileAsync(new System.IO.MemoryStream(pdf.Data), pdf.Filename, $"sites/{siteId}/site_registration_reviews");
+
+            _context.SiteRegistrationReviewDocuments.Add(new SiteRegistrationReviewDocument(siteId, documentGuid, pdf.Filename));
+            await _context.SaveChangesAsync();
+        }
+
         private async Task<Pdf> GenerateRegistrationReviewAttachmentAsync(int siteId)
         {
+            // TODO use Automapper
             var model = await _context.Sites
                 .Where(s => s.Id == siteId)
                 .Select(s => new SiteRegistrationReviewViewModel
@@ -167,7 +186,7 @@ namespace Prime.Services
             }
             else
             {
-                fileData = await _documentClient.GetFileDataAsync(agreementDto.SignedAgreement.DocumentGuid);
+                fileData = await _documentClient.GetFileAsync(agreementDto.SignedAgreement.DocumentGuid);
                 if (fileData == null)
                 {
                     return await ApologyDocument(agreementDto.SignedAgreement.Filename);

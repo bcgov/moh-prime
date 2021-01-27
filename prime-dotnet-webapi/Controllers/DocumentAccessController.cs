@@ -38,21 +38,18 @@ namespace Prime.Controllers
         public async Task<IActionResult> GetDocumentByAccessToken(Guid accessTokenId)
         {
             var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessTokenAsync(accessTokenId);
-
             if (documentAccessToken == null)
             {
                 return NotFound();
             }
 
-            var response = await _documentManagerClient.GetFileAsync(documentAccessToken.DocumentGuid);
-
+            var response = await _documentManagerClient.GetFileResponseAsync(documentAccessToken.DocumentGuid);
             if (response == null)
             {
                 return NotFound();
             }
 
             Response.Headers.Add("Content-Disposition", response.Content.Headers.ContentDisposition.ToString());
-
             return File(await response.Content.ReadAsStreamAsync(), "application/octet-stream");
         }
 

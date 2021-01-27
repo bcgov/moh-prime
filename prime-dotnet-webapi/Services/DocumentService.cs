@@ -12,7 +12,6 @@ namespace Prime.Services
     {
         private readonly IAgreementService _agreementService;
         private readonly ISiteService _siteService;
-        private readonly IOrganizationService _organizationService;
         private readonly IDocumentManagerClient _documentManagerClient;
 
         public DocumentService(
@@ -20,13 +19,11 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             IAgreementService agreementService,
             ISiteService siteService,
-            IOrganizationService organizationService,
             IDocumentManagerClient documentManagerClient)
             : base(context, httpContext)
         {
             _agreementService = agreementService;
             _siteService = siteService;
-            _organizationService = organizationService;
             _documentManagerClient = documentManagerClient;
         }
 
@@ -73,18 +70,6 @@ namespace Prime.Services
             var document = await _context.SiteAdjudicationDocuments
                 .Where(sa => sa.Id == siteAdjudicationDocumentId).SingleAsync();
             return await _documentManagerClient.CreateDownloadTokenAsync(document.DocumentGuid);
-        }
-
-        public async Task<Stream> GetStreamForBusinessLicenceDocument(int siteId)
-        {
-            var licence = await _siteService.GetBusinessLicenceAsync(siteId);
-            return await _documentManagerClient.GetFileStreamAsync(licence.BusinessLicenceDocument.DocumentGuid);
-        }
-
-        public async Task<Stream> GetStreamForLatestSignedAgreementDocument(int organizationId)
-        {
-            var agreement = await _organizationService.GetLatestSignedAgreementAsync(organizationId);
-            return await _documentManagerClient.GetFileStreamAsync(agreement.DocumentGuid);
         }
 
         public async Task<string> FinalizeDocumentUpload(Guid documentGuid, string filePath)

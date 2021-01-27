@@ -26,6 +26,7 @@ using SoapCore;
 
 using Prime.Auth;
 using Prime.Services;
+using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Models.Api;

@@ -1,7 +1,5 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
@@ -9,13 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using DelegateDecompiler.EntityFrameworkCore;
 
 using Prime.Models;
-using Prime.HttpClients;
-using Prime.Services.Razor;
 using Prime.Services.EmailInternal;
 using Prime.HttpClients.Mail;
 using Prime.ViewModels.Emails;
 using Prime.HttpClients.Mail.ChesApiDefinitions;
-using Prime.Models.Documents;
 
 namespace Prime.Services
 {
@@ -31,9 +26,6 @@ namespace Prime.Services
         private readonly IEmailRenderingService _emailRenderingService;
         private readonly IChesClient _chesClient;
         private readonly ISmtpEmailClient _smtpEmailClient;
-        private readonly IDocumentManagerClient _documentManagerClient;
-        private readonly IDocumentAccessTokenService _documentAccessTokenService;
-        private readonly ISiteService _siteService;
 
         public EmailService(
             ApiDbContext context,
@@ -41,19 +33,13 @@ namespace Prime.Services
             IEmailDocumentsService emailDocumentService,
             IEmailRenderingService emailRenderingService,
             IChesClient chesClient,
-            ISmtpEmailClient smtpEmailClient,
-            IDocumentManagerClient documentManagerClient,
-            IDocumentAccessTokenService documentAccessTokenService,
-            ISiteService siteService)
+            ISmtpEmailClient smtpEmailClient)
             : base(context, httpContext)
         {
             _emailDocumentService = emailDocumentService;
             _emailRenderingService = emailRenderingService;
             _chesClient = chesClient;
-            _documentManagerClient = documentManagerClient;
-            _documentAccessTokenService = documentAccessTokenService;
             _smtpEmailClient = smtpEmailClient;
-            _siteService = siteService;
         }
 
         public async Task SendReminderEmailAsync(int enrolleeId)
@@ -92,19 +78,19 @@ namespace Prime.Services
 
         public async Task SendSiteRegistrationSubmissionAsync(int siteId)
         {
-            var downloadUrl = await GetBusinessLicenceDownloadLink(siteId);
+            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(siteId);
 
             var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl));
-            email.Attachments = await _emailDocumentService.GenerateSiteRegistrationAttachmentsAsync(siteId);
+            email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(siteId);
             await Send(email);
 
             var siteRegReviewPdf = email.Attachments.Single(a => a.Filename == "SiteRegistrationReview.pdf");
-            await SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
+            await _emailDocumentService.SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
         }
 
         public async Task SendRemoteUsersUpdatedAsync(Site site)
         {
-            var downloadUrl = await GetBusinessLicenceDownloadLink(site.Id);
+            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.Id);
             var viewModel = new RemoteUsersUpdatedEmailViewModel
             {
                 SiteStreetAddress = site.PhysicalAddress.Street,
@@ -115,7 +101,7 @@ namespace Prime.Services
             };
 
             var email = await _emailRenderingService.RenderRemoteUsersUpdatedEmailAsync(viewModel);
-            email.Attachments = await _emailDocumentService.GenerateSiteRegistrationAttachmentsAsync(site.Id);
+            email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(site.Id);
             await Send(email);
         }
 
@@ -142,7 +128,7 @@ namespace Prime.Services
 
         public async Task SendBusinessLicenceUploadedAsync(Site site)
         {
-            var downloadUrl = await GetBusinessLicenceDownloadLink(site.Id);
+            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.Id);
 
             var email = await _emailRenderingService.RenderBusinessLicenceUploadedEmailAsync(site.Adjudicator.Email, new LinkedEmailViewModel(downloadUrl));
             await Send(email);
@@ -182,25 +168,6 @@ namespace Prime.Services
 
             var email = await _emailRenderingService.RenderSiteApprovedHibcEmailAsync(viewModel);
             await Send(email);
-        }
-
-        private async Task<string> GetBusinessLicenceDownloadLink(int siteId)
-        {
-            var businessLicence = await _siteService.GetBusinessLicenceAsync(siteId);
-            if (businessLicence.BusinessLicenceDocument == null)
-            {
-                return "";
-            }
-            var documentAccessToken = await _documentAccessTokenService.CreateDocumentAccessTokenAsync(businessLicence.BusinessLicenceDocument.DocumentGuid);
-            return documentAccessToken.DownloadUrl;
-        }
-
-        private async Task SaveSiteRegistrationReview(int siteId, Pdf pdf)
-        {
-            var documentGuid = await _documentManagerClient.SendFileAsync(new MemoryStream(pdf.Data), pdf.Filename, $"sites/{siteId}/site_registration_reviews");
-
-            _context.SiteRegistrationReviewDocuments.Add(new SiteRegistrationReviewDocument(siteId, documentGuid, pdf.Filename));
-            await _context.SaveChangesAsync();
         }
 
         public async Task SendEnrolleeRenewalEmails()
