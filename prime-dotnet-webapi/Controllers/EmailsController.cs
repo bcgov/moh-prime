@@ -15,8 +15,7 @@ namespace Prime.Controllers
     {
         private readonly IEmailService _emailService;
 
-        public EmailsController(
-            IEmailService emailService)
+        public EmailsController(IEmailService emailService)
         {
             _emailService = emailService;
         }
