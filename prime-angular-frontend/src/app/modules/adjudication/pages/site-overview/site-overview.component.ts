@@ -69,7 +69,6 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     this.hasActions = true;
     this.refresh = new BehaviorSubject<boolean>(null);
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
-
   }
 
   public onSubmit() {
