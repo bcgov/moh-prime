@@ -29,43 +29,31 @@ namespace Prime.Services
 
         private readonly IEmailDocumentsService _emailDocumentService;
         private readonly IEmailRenderingService _emailRenderingService;
-        private readonly IDocumentService _documentService;
-        private readonly IPdfService _pdfService;
-        private readonly IOrganizationService _organizationService;
         private readonly IChesClient _chesClient;
         private readonly ISmtpEmailClient _smtpEmailClient;
         private readonly IDocumentManagerClient _documentManagerClient;
         private readonly IDocumentAccessTokenService _documentAccessTokenService;
         private readonly ISiteService _siteService;
-        private readonly IAgreementService _agreementService;
 
         public EmailService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IEmailDocumentsService emailDocumentService,
             IEmailRenderingService emailRenderingService,
-            IDocumentService documentService,
-            IPdfService pdfService,
-            IOrganizationService organizationService,
             IChesClient chesClient,
             ISmtpEmailClient smtpEmailClient,
             IDocumentManagerClient documentManagerClient,
             IDocumentAccessTokenService documentAccessTokenService,
-            ISiteService siteService,
-            IAgreementService agreementService)
+            ISiteService siteService)
             : base(context, httpContext)
         {
             _emailDocumentService = emailDocumentService;
             _emailRenderingService = emailRenderingService;
-            _documentService = documentService;
-            _pdfService = pdfService;
-            _organizationService = organizationService;
             _chesClient = chesClient;
             _documentManagerClient = documentManagerClient;
             _documentAccessTokenService = documentAccessTokenService;
             _smtpEmailClient = smtpEmailClient;
             _siteService = siteService;
-            _agreementService = agreementService;
         }
 
         public async Task SendReminderEmailAsync(int enrolleeId)
@@ -75,7 +63,7 @@ namespace Prime.Services
                 .Select(e => e.Email)
                 .SingleOrDefaultAsync();
 
-            var email = await _emailRenderingService.RenderReminderEmailAsync(enrolleeEmail, new LinkedEmailViewModel { Url = PrimeEnvironment.FrontendUrl });
+            var email = await _emailRenderingService.RenderReminderEmailAsync(enrolleeEmail, new LinkedEmailViewModel(PrimeEnvironment.FrontendUrl));
             await Send(email);
         }
 
@@ -106,14 +94,8 @@ namespace Prime.Services
         {
             var downloadUrl = await GetBusinessLicenceDownloadLink(siteId);
 
-            var email = new Email
-            (
-                from: PrimeEmail,
-                to: new[] { MohEmail, PrimeSupportEmail },
-                subject: "PRIME Site Registration Submission",
-                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteRegistrationSubmission, new SiteRegistrationSubmissionEmailViewModel { DocumentUrl = downloadUrl }),
-                attachments: await _emailRenderingService.GenerateSiteRegistrationAttachmentsAsync(siteId)
-            );
+            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl));
+            email.Attachments = await _emailDocumentService.GenerateSiteRegistrationAttachmentsAsync(siteId);
             await Send(email);
 
             var siteRegReviewPdf = email.Attachments.Single(a => a.Filename == "SiteRegistrationReview.pdf");
@@ -123,31 +105,37 @@ namespace Prime.Services
         public async Task SendRemoteUsersUpdatedAsync(Site site)
         {
             var downloadUrl = await GetBusinessLicenceDownloadLink(site.Id);
+            var viewModel = new RemoteUsersUpdatedEmailViewModel
+            {
+                SiteStreetAddress = site.PhysicalAddress.Street,
+                OrganizationName = site.Organization.Name,
+                SitePec = site.PEC,
+                RemoteUserNames = site.RemoteUsers.Select(ru => $"{ru.FirstName} {ru.LastName}"),
+                DocumentUrl = downloadUrl
+            };
 
-            var email = new Email
-            (
-                from: PrimeEmail,
-                to: new[] { MohEmail, PrimeSupportEmail },
-                subject: "Remote Practioners Added",
-                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RemoteUsersUpdated, new EmailParams(site, downloadUrl)),
-                attachments: await _emailRenderingService.GenerateSiteRegistrationAttachmentsAsync(site.Id)
-            );
+            var email = await _emailRenderingService.RenderRemoteUsersUpdatedEmailAsync(viewModel);
+            email.Attachments = await _emailDocumentService.GenerateSiteRegistrationAttachmentsAsync(site.Id);
             await Send(email);
         }
 
         public async Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
         {
-            var body = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RemoteUserNotification, new EmailParams(site));
-
-            foreach (var remoteUser in remoteUsers)
+            var recipients = remoteUsers.Select(ru => ru.Email);
+            var viewModel = new RemoteUserNotificationEmailViewModel
             {
-                var email = new Email
-                (
-                    from: PrimeEmail,
-                    to: remoteUser.Email,
-                    subject: "Remote Practitioner Notification",
-                    body: body
-                );
+                OrganizationName = site.Organization.Name,
+                SiteStreetAddress = site.PhysicalAddress.Street,
+                SiteCity = site.PhysicalAddress.City,
+                PrimeUrl = PrimeEnvironment.FrontendUrl
+            };
+
+            var email = await _emailRenderingService.RenderRemoteUserNotificationEmailAsync(recipients.First(), viewModel);
+            await Send(email);
+
+            foreach (var recipient in recipients.Skip(1))
+            {
+                email.To = new[] { recipient };
                 await Send(email);
             }
         }
@@ -156,43 +144,43 @@ namespace Prime.Services
         {
             var downloadUrl = await GetBusinessLicenceDownloadLink(site.Id);
 
-            var email = site.Adjudicator.Email
+            var email = await _emailRenderingService.RenderBusinessLicenceUploadedEmailAsync(site.Adjudicator.Email, new LinkedEmailViewModel(downloadUrl));
             await Send(email);
         }
 
         public async Task SendSiteApprovedPharmaNetAdministratorAsync(Site site)
         {
-            var email = new Email
-            (
-                from: PrimeEmail,
-                to: site.AdministratorPharmaNet.Email,
-                subject: "Site Registration Approved",
-                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteApprovedPharmaNetAdministratorEmailTemplate, new EmailParams(site))
-            );
+            var viewModel = new SiteApprovalEmailViewModel
+            {
+                DoingBusinessAs = site.DoingBusinessAs,
+                Pec = site.PEC
+            };
+
+            var email = await _emailRenderingService.RenderSiteApprovedPharmaNetAdministratorEmailAsync(site.AdministratorPharmaNet.Email, viewModel);
             await Send(email);
         }
 
         public async Task SendSiteApprovedSigningAuthorityAsync(Site site)
         {
-            var email = new Email
-            (
-                from: PrimeEmail,
-                to: site.Provisioner.Email,
-                subject: "Site Registration Approved",
-                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteApprovedSigningAuthorityEmailTemplate, new EmailParams(site))
-            );
+            var viewModel = new SiteApprovalEmailViewModel
+            {
+                DoingBusinessAs = site.DoingBusinessAs,
+                Pec = site.PEC
+            };
+
+            var email = await _emailRenderingService.RenderSiteApprovedSigningAuthorityEmailAsync(site.Provisioner.Email, viewModel);
             await Send(email);
         }
 
         public async Task SendSiteApprovedHIBCAsync(Site site)
         {
-            var email = new Email
-            (
-                from: PrimeEmail,
-                to: MohEmail,
-                subject: "Site Registration Approved",
-                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.SiteApprovedHibcEmailTemplate, new EmailParams(site))
-            );
+            var viewModel = new SiteApprovalEmailViewModel
+            {
+                DoingBusinessAs = site.DoingBusinessAs,
+                Pec = site.PEC
+            };
+
+            var email = await _emailRenderingService.RenderSiteApprovedHibcEmailAsync(viewModel);
             await Send(email);
         }
 
@@ -236,37 +224,15 @@ namespace Prime.Services
                 var expiryDays = (DateTime.Now.Date - enrollee.ExpiryDate.Value.Date).TotalDays;
                 if (reminderEmailsIntervals.Contains(expiryDays))
                 {
-                    await SendRenewalRequiredAsync(enrollee.Email, enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value);
+                    var email = await _emailRenderingService.RenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    await Send(email);
                 }
                 if (expiryDays == -1)
                 {
-                    await SendRenewalPassedAsync(enrollee.Email, enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value);
+                    var email = await _emailRenderingService.RenderRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    await Send(email);
                 }
             }
-        }
-
-        private async Task SendRenewalRequiredAsync(string enrolleeEmail, string firstName, string lastName, DateTimeOffset expiryDate)
-        {
-            var email = new Email
-            (
-                from: PrimeEmail,
-                to: enrolleeEmail,
-                subject: "PRIME Renewal Required",
-                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RenewalRequired, new EmailParams(firstName, lastName, expiryDate))
-            );
-            await Send(email);
-        }
-
-        private async Task SendRenewalPassedAsync(string enrolleeEmail, string firstName, string lastName, DateTimeOffset expiryDate)
-        {
-            var email = new Email
-            (
-                from: PrimeEmail,
-                to: enrolleeEmail,
-                subject: "Your PRIME Renewal Date Has Passed",
-                body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RenewalPassed, new EmailParams(firstName, lastName, expiryDate))
-            );
-            await Send(email);
         }
 
         public async Task<bool> UpdateEmailLogStatuses()
