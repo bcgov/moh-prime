@@ -13,7 +13,12 @@
   <div class="row mt-4">
 
     <div class="col-6 mb-3">
-      <h2>Organization Information</h2>
+      <mat-icon>location_city</mat-icon>
+      <button mat-button
+              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+        <h2>Organization Information</h2>
+      </button>
+
       <mat-card class="enrolmentCard">
         <mat-card-content>
           <app-overview-container [organization]="organization"
@@ -74,7 +79,11 @@
 
   <div class="row mt-4">
     <div class="col-6">
-      <h2>Site Information</h2>
+      <mat-icon>store</mat-icon>
+      <button mat-button
+              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_INFORMATION])">
+        <h2>Site Information</h2>
+      </button>
       <mat-card class="enrolmentCard">
         <mat-card-content>
           <app-overview-container [site]="site"
@@ -84,9 +93,15 @@
     </div>
   </div>
 
-  <div class="row mt-4">
+  <div *ngIf="site?.remoteUsers.length"
+       class="row mt-4">
     <div class="col-6">
-      <h2>Remote Practitioners</h2>
+      <mat-icon>account_circle</mat-icon>
+      <button mat-button
+              [disabled]="!site?.remoteUsers"
+              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_REMOTE_USERS])">
+        <h2>Remote Practitioners</h2>
+      </button>
       <mat-card class="enrolmentCard">
         <mat-card-content>
           <app-remote-user-review [remoteUsers]="site?.remoteUsers"></app-remote-user-review>

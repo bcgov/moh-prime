@@ -138,9 +138,9 @@ const routes: Routes = [
                 data: { title: 'Site Adjudication' }
               },
               {
-                path: AdjudicationRoutes.SITE_OVERVIEW,
-                component: SiteOverviewComponent,
-                data: { title: 'Overview' }
+                path: AdjudicationRoutes.SITE_INFORMATION,
+                component: SiteRegistrationComponent,
+                data: { title: 'Site Information' }
               },
               {
                 path: AdjudicationRoutes.ORGANIZATION_INFORMATION,
