@@ -31,6 +31,9 @@ export class CollectionNoticeComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.authService.hasJustLoggedIn = true;
+    // TODO temporarily commented out until a PHSA collection notice is provided
+    // this.authService.hasJustLoggedIn = true;
+    // TODO added until a PHSA collection notice is provided
+    this.router.navigate([PhsaEformsRoutes.DEMOGRAPHIC], { relativeTo: this.route.parent });
   }
 }
