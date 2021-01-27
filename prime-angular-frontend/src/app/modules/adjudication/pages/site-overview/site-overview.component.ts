@@ -1,27 +1,25 @@
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { SiteRegistrationContainerComponent } from '@adjudication/shared/components/site-registration-container/site-registration-container.component';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '@auth/shared/services/auth.service';
+
+import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
+
+import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
+import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { RouteUtils } from '@lib/utils/route-utils.class';
+
+import { AuthService } from '@auth/shared/services/auth.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { SiteRegistrationContainerComponent } from '@adjudication/shared/components/site-registration-container/site-registration-container.component';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { Site } from '@registration/shared/models/site.model';
-import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
-import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { OrganizationAgreementViewModel } from '@shared/models/agreement.model';
-import { BehaviorSubject, EMPTY, forkJoin, Observable, Subscription } from 'rxjs';
-import { exhaustMap, map, mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-site-overview',

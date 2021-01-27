@@ -14,7 +14,7 @@
 
     <div class="col-6 mb-3">
       <h2>Organization Information</h2>
-      <mat-card id="enrolmentCard">
+      <mat-card class="enrolmentCard">
         <mat-card-content>
           <app-overview-container [organization]="organization"
                                   [showEditRedirect]="false"></app-overview-container>
@@ -75,7 +75,7 @@
   <div class="row mt-4">
     <div class="col-6">
       <h2>Site Information</h2>
-      <mat-card id="enrolmentCard">
+      <mat-card class="enrolmentCard">
         <mat-card-content>
           <app-overview-container [site]="site"
                                   [showEditRedirect]="false"></app-overview-container>
@@ -87,7 +87,7 @@
   <div class="row mt-4">
     <div class="col-6">
       <h2>Remote Practitioners</h2>
-      <mat-card id="enrolmentCard">
+      <mat-card class="enrolmentCard">
         <mat-card-content>
           <app-remote-user-review [remoteUsers]="site?.remoteUsers"></app-remote-user-review>
         </mat-card-content>
