@@ -173,8 +173,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setValidations() {
-    // this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
+    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
 
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
@@ -182,8 +182,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private resetCollegeCertification() {
-    this.licenseNumber.reset(null);
     this.licenseCode.reset(null);
+    this.licenseNumber.reset(null);
 
     if (!this.condensed) {
       this.renewalDate.reset(null);
@@ -192,8 +192,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private removeValidations() {
-    this.formUtilsService.setValidators(this.licenseNumber, []);
     this.formUtilsService.setValidators(this.licenseCode, []);
+    this.formUtilsService.setValidators(this.licenseNumber, []);
 
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, []);
