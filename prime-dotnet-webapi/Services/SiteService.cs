@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using LinqKit;
 
 using Prime.Models;
 using Prime.ViewModels;
@@ -67,7 +67,8 @@ namespace Prime.Services
             var site = new Site
             {
                 ProvisionerId = organization.SigningAuthorityId,
-                OrganizationId = organization.Id
+                OrganizationId = organization.Id,
+                Status = SiteStatusType.UnderReview
             };
 
             _context.Sites.Add(site);
@@ -493,18 +494,34 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Site>> GetSitesByRemoteUserInfoAsync(IEnumerable<Certification> enrolleeCerts)
+        public async Task<IEnumerable<RemoteAccessSearchViewModel>> GetRemoteUserInfoAsync(IEnumerable<CertSearchViewModel> certs)
         {
-            var sites = await GetBaseSiteQuery()
-                .Where(s => s.ApprovedDate != null)
-                .ToListAsync();
-
-            sites = sites.FindAll(s => s.RemoteUsers.Any(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))));
-            foreach (var site in sites)
+            if (certs == null || !certs.Any())
             {
-                site.RemoteUsers = site.RemoteUsers.Where(ru => ru.RemoteUserCertifications.Any(ruc => enrolleeCerts.Any(c => c.FullLicenseNumber == ruc.FullLicenseNumber))).ToList();
+                return Enumerable.Empty<RemoteAccessSearchViewModel>();
             }
-            return sites;
+
+            var predicate = PredicateBuilder.New<RemoteUserCertification>();
+            foreach (var cert in certs)
+            {
+                predicate.Or(ruc => ruc.CollegeCode == cert.CollegeCode && ruc.LicenseNumber == cert.LicenceNumber);
+            }
+
+            return await _context.RemoteUserCertifications
+                .AsNoTracking()
+                .AsExpandable()
+                .Where(predicate)
+                .Select(ruc => ruc.RemoteUser)
+                .Distinct()
+                .Select(ru => new RemoteAccessSearchViewModel
+                {
+                    RemoteUserId = ru.Id,
+                    SiteId = ru.SiteId,
+                    SiteDoingBusinessAs = ru.Site.DoingBusinessAs,
+                    SiteAddress = ru.Site.PhysicalAddress,
+                    VendorCodes = ru.Site.SiteVendors.Select(sv => sv.VendorCode)
+                })
+                .ToListAsync();
         }
 
         public async Task<SiteRegistrationNote> CreateSiteRegistrationNoteAsync(int siteId, string note, int adminId)

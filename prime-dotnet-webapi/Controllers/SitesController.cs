@@ -756,6 +756,10 @@ namespace Prime.Controllers
             }
 
             var updatedSite = await _siteService.ApproveSite(siteId);
+            await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(site);
+            await _emailService.SendSiteApprovedSigningAuthorityAsync(site);
+            await _emailService.SendSiteApprovedHIBCAsync(site);
+
             return Ok(ApiResponse.Result(updatedSite));
         }
 
@@ -841,17 +845,17 @@ namespace Prime.Controllers
 
         // POST: api/Sites/remote-users
         /// <summary>
-        /// Gets all of the Sites which have remote users who match college ID + licence num
+        /// Searches for Remote User Certifications by College Code + Licence Number and returns related Site data
         /// </summary>
         /// <param name="certifications"></param>
         [HttpPost("remote-users", Name = nameof(GetSitesByRemoteUserInfo))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Site>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Site>>> GetSitesByRemoteUserInfo(List<Certification> certifications)
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<RemoteAccessSearchViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<RemoteAccessSearchViewModel>>> GetSitesByRemoteUserInfo(IEnumerable<CertSearchViewModel> certifications)
         {
-            var sites = await _siteService.GetSitesByRemoteUserInfoAsync(certifications);
-            return Ok(ApiResponse.Result(sites));
+            var info = await _siteService.GetRemoteUserInfoAsync(certifications);
+            return Ok(ApiResponse.Result(info));
         }
 
         // GET: api/Sites/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2

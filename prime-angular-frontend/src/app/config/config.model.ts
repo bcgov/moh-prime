@@ -3,12 +3,10 @@ export interface Configuration {
   colleges: CollegeConfig[];
   countries: Config<string>[];
   jobNames: Config<number>[];
-  licenses: LicenseWeightedConfig[];
+  licenses: LicenseConfig[];
   careSettings: Config<number>[];
   provinces: ProvinceConfig[];
   statuses: Config<number>[];
-  privilegeGroups: PrivilegeGroupConfig[];
-  privilegeTypes: Config<number>[];
   statusReasons: Config<number>[];
   vendors: VendorConfig[];
   healthAuthorities: Config<number>[];
@@ -25,38 +23,37 @@ export class Config<T> {
   }
 }
 
-export interface LicenseConfig extends Config<number> {
-  collegeLicenses: AssociatedCollegeConfig[];
-}
-
-export interface LicenseWeightedConfig extends LicenseConfig {
-  weight: number;
-  licensedToProvideCare: boolean;
-  namedInImReg: boolean;
+export interface CollegeConfig extends PracticeConfig {
+  collegeLicenses: CollegeLicenseConfig[];
 }
 
 export interface PracticeConfig extends Config<number> {
-  collegePractices: AssociatedCollegeConfig[];
+  collegePractices: CollegePracticeConfig[];
 }
 
-export interface ProvinceConfig extends Config<string> {
-  countryCode: string;
-}
-
-export interface AssociatedCollegeConfig {
-  collegeCode: number;
-  [key: string]: number;
-}
-
-export interface CollegeConfig extends LicenseConfig, PracticeConfig {
+export interface LicenseConfig extends Config<number> {
   prefix: string;
+  collegeLicenses: CollegeLicenseConfig[];
+  licensedToProvideCare: boolean;
+  namedInImReg: boolean;
+  weight: number;
+  validate: boolean;
 }
 
-export interface PrivilegeGroupConfig extends Config<number> {
-  privilegeTypeCode: number;
+export interface CollegeLicenseConfig {
+  collegeCode: number;
+  licenseCode: number;
+}
+
+export interface CollegePracticeConfig {
+  collegeCode: number;
+  practiceCode: number;
 }
 
 export interface VendorConfig extends Config<number> {
   careSettingCode: number;
-  careSetting: Config<number>;
+}
+
+export interface ProvinceConfig extends Config<string> {
+  countryCode: string;
 }

@@ -123,7 +123,7 @@ export class SiteManagementComponent implements OnInit {
   }
 
   public isUnderReview(site: SiteListViewModel): boolean {
-    return (site.submittedDate && (site.status === SiteStatusType.DRAFT || site.status === SiteStatusType.UNDER_REVIEW));
+    return site.submittedDate && site.status === SiteStatusType.UNDER_REVIEW;
   }
 
   public getUnderReviewSiteNotificationProperties() {

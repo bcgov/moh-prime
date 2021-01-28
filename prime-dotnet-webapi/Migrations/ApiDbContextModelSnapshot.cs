@@ -8862,6 +8862,9 @@ namespace Prime.Migrations
                     b.Property<int?>("PracticeCode")
                         .HasColumnType("integer");
 
+                    b.Property<string>("PractitionerId")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("RenewalDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -8901,9 +8904,6 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Prefix")
-                        .HasColumnType("text");
-
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -8921,7 +8921,6 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "College of Physicians and Surgeons of BC (CPSBC)",
-                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -8931,7 +8930,6 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "College of Pharmacists of BC (CPBC)",
-                            Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -8941,7 +8939,6 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "BC College of Nurses and Midwives (BCCNM)",
-                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -10028,6 +10025,9 @@ namespace Prime.Migrations
                     b.Property<string>("Base64QRCode")
                         .HasColumnType("text");
 
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -10036,6 +10036,12 @@ namespace Prime.Migrations
 
                     b.Property<string>("CredentialDefinitionId")
                         .HasColumnType("text");
+
+                    b.Property<string>("CredentialExchangeId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("RevokedCredentialDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SchemaId")
                         .HasColumnType("text");
@@ -13461,9 +13467,6 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("CredentialId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
@@ -13541,8 +13544,6 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdjudicatorId");
-
-                    b.HasIndex("CredentialId");
 
                     b.HasIndex("GPID")
                         .IsUnique();
@@ -13635,6 +13636,40 @@ namespace Prime.Migrations
                     b.HasIndex("EnrolleeId");
 
                     b.ToTable("EnrolleeCareSetting");
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolleeCredential", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("CredentialId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CredentialId");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("EnrolleeCredential");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeHealthAuthority", b =>
@@ -14230,6 +14265,9 @@ namespace Prime.Migrations
                     b.Property<bool>("NamedInImReg")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Prefix")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -14256,6 +14294,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Full - Family",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14270,6 +14309,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Full - Specialty",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14284,6 +14324,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Provisional - Family",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14298,6 +14339,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Provisional - Specialty",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14312,6 +14354,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Conditional - Practice Setting",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14326,6 +14369,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Conditional - Practice Limitations",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14340,6 +14384,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Conditional - Disciplined",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14354,6 +14399,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Surgical Assistant",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14368,6 +14414,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Clinical Observership",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14382,6 +14429,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Academic",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14396,6 +14444,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Osteopathic",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14410,6 +14459,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Special",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14424,6 +14474,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Visitor",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14438,6 +14489,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Educational - Postgraduate Resident",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14452,6 +14504,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Educational - Postgraduate Resident Elective",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14466,6 +14519,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Educational - Postgraduate Fellow",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14480,6 +14534,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Educational - Postgraduate Trainee",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14494,6 +14549,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Educational - Medical Student",
                             NamedInImReg = false,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14508,6 +14564,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Administrative",
                             NamedInImReg = false,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14522,6 +14579,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Retired - Life ",
                             NamedInImReg = false,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14536,6 +14594,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Assessment",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14550,6 +14609,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Emergency - Family",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14564,6 +14624,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Emergency - Specialty",
                             NamedInImReg = true,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14578,6 +14639,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Temporarily Inactive",
                             NamedInImReg = false,
+                            Prefix = "91",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14592,6 +14654,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Podiatrists",
                             NamedInImReg = false,
+                            Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14606,6 +14669,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Educational - Podiatric Surgeon Student (Elective)",
                             NamedInImReg = false,
+                            Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14620,6 +14684,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Educational - Podiatric Surgeon Resident (Elective)",
                             NamedInImReg = false,
+                            Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14634,6 +14699,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Conditional - Podiatric Surgeon Disciplined",
                             NamedInImReg = false,
+                            Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14648,6 +14714,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Full Pharmacist",
                             NamedInImReg = true,
+                            Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14662,6 +14729,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Limited Pharmacist",
                             NamedInImReg = true,
+                            Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14676,6 +14744,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Student Pharmacist",
                             NamedInImReg = true,
+                            Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14690,6 +14759,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Temporary Pharmacist",
                             NamedInImReg = true,
+                            Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14704,6 +14774,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Non-Practicing Pharmacist",
                             NamedInImReg = true,
+                            Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14718,6 +14789,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Pharmacy Technician",
                             NamedInImReg = false,
+                            Prefix = "T9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14732,6 +14804,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Non-Practicing Pharmacy Technician",
                             NamedInImReg = false,
+                            Prefix = "T9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14746,6 +14819,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Temporary Pharmacy Technician",
                             NamedInImReg = false,
+                            Prefix = "T9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14760,6 +14834,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Practicing Nurse Practitioner",
                             NamedInImReg = true,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14774,6 +14849,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Provisional Nurse Practitioner",
                             NamedInImReg = true,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14788,6 +14864,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Temporary Nurse Practitioner (Special Event)",
                             NamedInImReg = true,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14802,6 +14879,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Temporary Nurse Practitioner (Emergency)",
                             NamedInImReg = true,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14816,6 +14894,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Non-Practicing Nurse Practitioner",
                             NamedInImReg = true,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14830,6 +14909,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Practicing Registered Nurse",
                             NamedInImReg = false,
+                            Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14844,6 +14924,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Provisional Registered Nurse",
                             NamedInImReg = false,
+                            Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14858,6 +14939,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Temporary Registered Nurse (Special Event)",
                             NamedInImReg = false,
+                            Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14872,6 +14954,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Temporary Registered Nurse (Emergency)",
                             NamedInImReg = false,
+                            Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14886,6 +14969,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Non-Practicing Registered Nurse",
                             NamedInImReg = false,
+                            Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14900,6 +14984,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Employed Student Nurse",
                             NamedInImReg = false,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14914,6 +14999,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Practicing Licensed Graduate Nurse",
                             NamedInImReg = false,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14928,6 +15014,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Provisional Licensed Graduate Nurse",
                             NamedInImReg = false,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14942,6 +15029,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Non-Practicing Licensed Graduate Nurse",
                             NamedInImReg = false,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14956,6 +15044,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Practicing Registered Psychiatric Nurse",
                             NamedInImReg = false,
+                            Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14970,6 +15059,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Provisional Registered Psychiatric Nurse",
                             NamedInImReg = false,
+                            Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14984,6 +15074,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Temporary Registered Psychiatric Nurse (Special Event)",
                             NamedInImReg = false,
+                            Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -14998,6 +15089,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Temporary Registered Psychiatric Nurse (Emergency)",
                             NamedInImReg = false,
+                            Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -15012,6 +15104,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Non-Practicing Registered Psychiatric Nurse",
                             NamedInImReg = false,
+                            Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15026,6 +15119,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Employed Student Psychiatric Nurse",
                             NamedInImReg = false,
+                            Prefix = "Y9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15040,6 +15134,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Practicing Licensed Practical Nurse",
                             NamedInImReg = false,
+                            Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15054,6 +15149,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Provisional Licensed Practical Nurse",
                             NamedInImReg = false,
+                            Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15068,6 +15164,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Temporary Licensed Practical Nurse (Emergency)",
                             NamedInImReg = false,
+                            Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15082,6 +15179,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Temporary Licensed Practical Nurse (Special Event)",
                             NamedInImReg = false,
+                            Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15096,6 +15194,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Non-Practicing Licensed Practical Nurse",
                             NamedInImReg = false,
+                            Prefix = "L9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15106,10 +15205,11 @@ namespace Prime.Migrations
                             Code = 57,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            LicensedToProvideCare = true,
+                            LicensedToProvideCare = false,
                             Manual = true,
                             Name = "Non-Practicing Licensed Nurse Practitioner",
-                            NamedInImReg = false,
+                            NamedInImReg = true,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -15123,7 +15223,8 @@ namespace Prime.Migrations
                             LicensedToProvideCare = true,
                             Manual = true,
                             Name = "Temporary Nurse Practitioner (time-limited)",
-                            NamedInImReg = false,
+                            NamedInImReg = true,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -15138,6 +15239,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Practising Midwife",
                             NamedInImReg = false,
+                            Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15152,6 +15254,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Provisional Midwife",
                             NamedInImReg = false,
+                            Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15166,6 +15269,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Temporary Midwife (Emergency)",
                             NamedInImReg = false,
+                            Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15180,6 +15284,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Non-Practising Midwife",
                             NamedInImReg = false,
+                            Prefix = "98",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15194,6 +15299,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Not Displayed",
                             NamedInImReg = false,
+                            Prefix = "",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -16776,6 +16882,8 @@ namespace Prime.Migrations
 
                     b.HasIndex("CollegeCode");
 
+                    b.HasIndex("LicenseCode");
+
                     b.HasIndex("RemoteUserId");
 
                     b.ToTable("RemoteUserCertification");
@@ -17899,10 +18007,6 @@ namespace Prime.Migrations
                         .WithMany("Enrollees")
                         .HasForeignKey("AdjudicatorId");
 
-                    b.HasOne("Prime.Models.Credential", "Credential")
-                        .WithMany()
-                        .HasForeignKey("CredentialId");
-
                     b.HasOne("Prime.Models.MailingAddress", "MailingAddress")
                         .WithMany()
                         .HasForeignKey("MailingAddressId");
@@ -17939,6 +18043,21 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany("EnrolleeCareSettings")
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolleeCredential", b =>
+                {
+                    b.HasOne("Prime.Models.Credential", "Credential")
+                        .WithMany()
+                        .HasForeignKey("CredentialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany("EnrolleeCredentials")
                         .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -18190,6 +18309,12 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.College", "College")
                         .WithMany()
                         .HasForeignKey("CollegeCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.License", "License")
+                        .WithMany()
+                        .HasForeignKey("LicenseCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

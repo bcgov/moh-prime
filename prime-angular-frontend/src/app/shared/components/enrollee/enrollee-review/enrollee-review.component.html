@@ -1,7 +1,9 @@
 <app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
 
-<section *ngIf="hasPreferredName && identityProvider === IdentityProviderEnum.BCSC"
+<section *ngIf="hasPreferredName && (identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR)"
          class="mb-4">
+  <!-- Note that for BCeID enrollees, the application forces their preferred names to be identical to their non-preferred counterparts,
+       so it is pointless to show the preferred names -->
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
@@ -199,22 +201,16 @@
       {{ certification.collegeCode | configCode: 'colleges' | default }}
     </app-enrollee-property>
 
-    <div class="row">
-      <div class="col col-sm-4 col-md-4 col-lg-3">
-        <app-enrollee-property title="College Number">
-          {{ showCollegePrefix(certification.licenseCode, certification.collegeCode) | configCode: 'colleges' : 'prefix'
-          | default }}
-        </app-enrollee-property>
-      </div>
-      <div class="col">
-        <app-enrollee-property title="Licence Number">
-          {{ certification.licenseNumber | default }}
-        </app-enrollee-property>
-      </div>
-    </div>
-
     <app-enrollee-property title="Licence Class">
       {{ certification.licenseCode | configCode: 'licenses' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Licence Number">
+      {{ certification.licenseNumber | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Pratitioner ID">
+      {{ certification.practitionerId | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Renewal Date">
@@ -401,8 +397,7 @@
         {{ remoteAccessSite.site?.physicalAddress?.provinceCode | default }}
         {{ remoteAccessSite.site?.physicalAddress?.postal | default }}
       </address>
-      Vendor: {{ (remoteAccessSite.site?.siteVendors?.length)
-      ? remoteAccessSite.site?.siteVendors[0].vendorCode : null | configCode:'vendors' | default }}
+      Vendor: {{ getRemoteAccessSiteVendor(remoteAccessSite.id) | configCode:'vendors' | default }}
     </app-enrollee-property>
   </ng-container>
 

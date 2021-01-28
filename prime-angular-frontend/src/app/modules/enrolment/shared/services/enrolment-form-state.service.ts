@@ -28,6 +28,8 @@ import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.mo
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 
 import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
+import { BcscDemographicFormState } from '@enrolment/pages/bcsc-demographic/bcsc-demographic-form-state.class';
+import { BceidDemographicFormState } from '@enrolment/pages/bceid-demographic/bceid-demographic-form-state.class';
 import { HealthAuthorityFormState } from '@enrolment/pages/health-authority/health-authority-form-state';
 
 @Injectable({
@@ -36,8 +38,8 @@ import { HealthAuthorityFormState } from '@enrolment/pages/health-authority/heal
 export class EnrolmentFormStateService extends AbstractFormStateService<Enrolment> {
   public accessForm: FormGroup;
   public identityDocumentForm: FormGroup;
-  public bceidDemographicForm: FormGroup;
-  public bcscDemographicForm: FormGroup;
+  public bceidDemographicFormState: BceidDemographicFormState;
+  public bcscDemographicFormState: BcscDemographicFormState;
   public regulatoryFormState: RegulatoryFormState;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
@@ -95,8 +97,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const id = this.enrolleeId;
     const userId = this.userId;
     const profile = (this.identityProvider === IdentityProviderEnum.BCEID)
-      ? this.bceidDemographicForm.getRawValue()
-      : this.bcscDemographicForm.getRawValue();
+      ? this.bceidDemographicFormState.json
+      : this.bcscDemographicFormState.json;
     const certifications = this.regulatoryFormState.json;
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const { jobs, oboSites } = this.jobsForm.getRawValue();
@@ -140,11 +142,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         this.identityProvider === IdentityProviderEnum.BCEID,
         // Purposefully omitted accessForm and identityDocumentForm
         // from the list of forms since they are used out of band
-        this.bceidDemographicForm
+        this.bceidDemographicFormState.form
       ),
       ...ArrayUtils.insertIf(
         this.identityProvider === IdentityProviderEnum.BCSC,
-        this.bcscDemographicForm
+        this.bcscDemographicFormState.form
       ),
       this.regulatoryFormState.form,
       // TODO commented out until required to avoid it being validated
@@ -188,8 +190,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.accessForm = this.buildAccessForm();
     this.identityDocumentForm = this.buildIdentityDocumentForm();
 
-    this.bceidDemographicForm = this.buildBceidDemographicForm();
-    this.bcscDemographicForm = this.buildBcscDemographicForm();
+    this.bceidDemographicFormState = new BceidDemographicFormState(this.fb, this.formUtilsService);
+    this.bcscDemographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
     this.regulatoryFormState = new RegulatoryFormState(this.fb);
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
@@ -211,8 +213,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     }
 
     (this.identityProvider === IdentityProviderEnum.BCEID)
-      ? this.bceidDemographicForm.patchValue(enrolment.enrollee)
-      : this.bcscDemographicForm.patchValue(enrolment.enrollee);
+      ? this.bceidDemographicFormState.patchValue(enrolment.enrollee)
+      : this.bcscDemographicFormState.patchValue(enrolment.enrollee);
     this.deviceProviderForm.patchValue(enrolment);
 
     if (enrolment.careSettings.length) {
@@ -405,7 +407,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       return {
         enrolleeId: ras.enrolleeId,
         siteId: ras.siteId,
-        site: { doingBusinessAs: ras.doingBusinessAs } as Site,
+        site: {
+          doingBusinessAs: ras.doingBusinessAs,
+          physicalAddress: ras.physicalAddress,
+          siteVendors: ras.siteVendors
+        } as Site,
       } as RemoteAccessSite;
     });
   }
@@ -426,49 +432,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   private buildIdentityDocumentForm(): FormGroup {
     return this.fb.group({
       identificationDocumentGuid: [null, [Validators.required]]
-    });
-  }
-
-  private buildBceidDemographicForm(): FormGroup {
-    return this.fb.group({
-      preferredFirstName: [null, [Validators.required]],
-      preferredMiddleName: [null, []],
-      preferredLastName: [null, [Validators.required]],
-      mailingAddress: this.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        useDefaults: ['countryCode']
-      }),
-      phone: [null, [
-        Validators.required,
-        FormControlValidators.phone
-      ]],
-      phoneExtension: [null, [FormControlValidators.numeric]],
-      email: [null, [
-        Validators.required,
-        FormControlValidators.email
-      ]],
-      smsPhone: [null, [FormControlValidators.phone]],
-      // Disabled by default, but enabled for enrollee creation
-      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]]
-    });
-  }
-
-  private buildBcscDemographicForm(): FormGroup {
-    return this.fb.group({
-      preferredFirstName: [null, []],
-      preferredMiddleName: [null, []],
-      preferredLastName: [null, []],
-      mailingAddress: this.buildAddressForm(),
-      phone: [null, [
-        Validators.required,
-        FormControlValidators.phone
-      ]],
-      phoneExtension: [null, [FormControlValidators.numeric]],
-      email: [null, [
-        Validators.required,
-        FormControlValidators.email
-      ]],
-      smsPhone: [null, [FormControlValidators.phone]]
     });
   }
 
@@ -493,7 +456,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       careSettingCode: [null, []],
       siteName: [null, []],
       facilityName: [null, []],
-      physicalAddress: this.buildAddressForm({
+      physicalAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         exclude: ['street2'],
         useDefaults: ['provinceCode', 'countryCode'],
@@ -531,7 +494,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     return this.fb.group({
       enrolleeId: [null, []],
       siteId: [null, []],
-      doingBusinessAs: [null, []]
+      doingBusinessAs: [null, []],
+      physicalAddress: [null, []],
+      siteVendors: [null, []]
     });
   }
 
@@ -547,7 +512,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         null,
         [Validators.required]
       ],
-      physicalAddress: this.buildAddressForm({
+      physicalAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         exclude: ['street2'],
         useDefaults: ['provinceCode', 'countryCode'],

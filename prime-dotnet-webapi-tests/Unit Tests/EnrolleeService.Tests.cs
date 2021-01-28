@@ -179,7 +179,7 @@ namespace PrimeTests.UnitTests
             {
                 new Certification
                 {
-                    College = new College
+                    License = new License
                     {
                         Prefix = "91"
                     },
@@ -187,7 +187,7 @@ namespace PrimeTests.UnitTests
                 },
                 new Certification
                 {
-                    College = new College
+                    License = new License
                     {
                         Prefix = "P1"
                     },
@@ -195,7 +195,7 @@ namespace PrimeTests.UnitTests
                 },
                 new Certification
                 {
-                    College = new College
+                    License = new License
                     {
                         Prefix = "96"
                     },

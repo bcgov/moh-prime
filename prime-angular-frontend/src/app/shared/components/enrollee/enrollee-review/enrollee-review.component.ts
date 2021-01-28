@@ -44,6 +44,7 @@ export class EnrolleeReviewComponent {
 
     this.authService.identityProvider$()
       .subscribe((identityProvider: IdentityProviderEnum) => {
+        // Note that identityProvider may be equal to IdentityProviderEnum.IDIR
         this.identityProvider = identityProvider;
         this.demographicRoutePath = (identityProvider === IdentityProviderEnum.BCEID)
           ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
@@ -140,6 +141,11 @@ export class EnrolleeReviewComponent {
     return (this.enrolmentService.shouldShowCollegePrefix(licenceCode))
       ? collegeCode
       : null;
+  }
+
+  public getRemoteAccessSiteVendor(remoteAccessSiteId: number) {
+    const ras = this.remoteAccessSites.find((site => site.id == remoteAccessSiteId));
+    return ras.site.siteVendors?.length ? ras.site.siteVendors[0].vendorCode : null;
   }
 
   public onRoute(routePath: string | (string | number)[], event?: Event): void {
