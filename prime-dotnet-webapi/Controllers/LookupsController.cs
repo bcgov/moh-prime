@@ -46,11 +46,11 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("validate-licence", Name = nameof(LicenceCodeTest))]
         [Authorize(Policy = Policies.SuperAdmin)]
-        public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string licenceNumber)
+        public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string practitionerId)
         {
-            Certification cert = new Certification
+            var cert = new Certification
             {
-                LicenseNumber = licenceNumber,
+                PractitionerId = practitionerId,
                 License = new License
                 {
                     Prefix = collegePrefix
