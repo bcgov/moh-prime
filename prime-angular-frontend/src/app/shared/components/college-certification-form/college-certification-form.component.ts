@@ -107,7 +107,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   public onLicenceNumberBlur() {
-    if (this.licenceValidatedByPharmaNet && /^\d{5}$/.test(this.licenseNumber.value)) {
+    if (!this.condensed && this.licenceValidatedByPharmaNet && /^\d{5}$/.test(this.licenseNumber.value)) {
       this.practitionerId.patchValue(this.licenseNumber.value);
     }
   }
@@ -136,18 +136,20 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.setCollegeCertification(collegeCode);
       });
 
-    this.licenseCode.valueChanges
-      .subscribe((licenseCode: number) => {
-        this.licenceValidatedByPharmaNet = this.checkLicenceCodeValidatedByPharmaNet(licenseCode);
+    if (!this.condensed) {
+      this.licenseCode.valueChanges
+        .subscribe((licenseCode: number) => {
+          this.licenceValidatedByPharmaNet = this.checkLicenceCodeValidatedByPharmaNet(licenseCode);
 
-        (this.licenceValidatedByPharmaNet)
-          ? this.formUtilsService.setValidators(this.practitionerId, [
-            Validators.required,
-            FormControlValidators.numeric,
-            FormControlValidators.requiredLength(5)
-          ])
-          : this.formUtilsService.resetAndClearValidators(this.practitionerId);
-      });
+          (this.licenceValidatedByPharmaNet)
+            ? this.formUtilsService.setValidators(this.practitionerId, [
+              Validators.required,
+              FormControlValidators.numeric,
+              FormControlValidators.requiredLength(5)
+            ])
+            : this.formUtilsService.resetAndClearValidators(this.practitionerId);
+        });
+    }
 
     this.licenceValidatedByPharmaNet = this.checkLicenceCodeValidatedByPharmaNet(this.licenseCode.value);
   }
