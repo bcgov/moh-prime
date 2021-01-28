@@ -8,11 +8,11 @@ import { AbstractComponent } from '@shared/classes/abstract-component';
 import { Site } from '@registration/shared/models/site.model';
 
 @Component({
-  selector: 'app-site-registration',
-  templateUrl: './site-registration.component.html',
-  styleUrls: ['./site-registration.component.scss']
+  selector: 'app-site-information',
+  templateUrl: './site-information.component.html',
+  styleUrls: ['./site-information.component.scss']
 })
-export class SiteRegistrationComponent extends AbstractComponent implements OnInit {
+export class SiteInformationComponent extends AbstractComponent implements OnInit {
   public busy: Subscription;
   public site: Site;
   public hasActions: boolean;
