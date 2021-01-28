@@ -74,7 +74,8 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.healthAuthoritiesFormState.form;
+    this.formState = this.enrolmentFormStateService.healthAuthoritiesFormState;
+    this.form = this.formState.form;
   }
 
   protected initForm() {
