@@ -37,6 +37,7 @@ export interface LicenseConfig extends Config<number> {
   licensedToProvideCare: boolean;
   namedInImReg: boolean;
   weight: number;
+  validate: boolean;
 }
 
 export interface CollegeLicenseConfig {
