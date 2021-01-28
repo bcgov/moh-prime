@@ -18,7 +18,6 @@ namespace Prime.Models
         [JsonIgnore]
         public bool Manual { get; set; }
 
-        [JsonIgnore]
         public bool Validate { get; set; }
 
         public bool NamedInImReg { get; set; }

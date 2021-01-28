@@ -201,12 +201,16 @@
       {{ certification.collegeCode | configCode: 'colleges' | default }}
     </app-enrollee-property>
 
+    <app-enrollee-property title="Licence Class">
+      {{ certification.licenseCode | configCode: 'licenses' | default }}
+    </app-enrollee-property>
+
     <app-enrollee-property title="Licence Number">
       {{ certification.licenseNumber | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Licence Class">
-      {{ certification.licenseCode | configCode: 'licenses' | default }}
+    <app-enrollee-property title="Pratitioner ID">
+      {{ certification.practitionerId | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Renewal Date">
