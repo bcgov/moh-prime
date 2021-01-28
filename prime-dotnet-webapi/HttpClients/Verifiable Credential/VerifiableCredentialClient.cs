@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using Prime.Models;
 
 namespace Prime.HttpClients
 {
@@ -15,10 +16,12 @@ namespace Prime.HttpClients
         private readonly ILogger _logger;
 
         private static readonly string SchemaName = "enrollee";
-        // If schema version is updated in dev, make sure it is updated in test and prod agent
-        // (and update cred_def_id) so versions are the same between dev, test, and prod
-        // and have verifier app updated by aries team in each environment
-        private static readonly string SchemaVersion = "2.0";
+        private static readonly string SchemaVersion = "2.2";
+        // If schema changes, the following must be updated in all agents for each environment as the code changes are pushed so versions are the same
+        // and have verifier app updated by aries team in each environment (send them schema id, if claims change send them new attributes)
+        // Update the following through postman:
+        // 1. Add new schema, incrementing schema version -> schema_name = enrollee
+        // 2. Create a credential definition for schema -> support_revocation = true, tag = prime
 
         public VerifiableCredentialClient(
             HttpClient client,
@@ -82,6 +85,40 @@ namespace Prime.HttpClients
             return JObject.Parse(await response.Content.ReadAsStringAsync());
         }
 
+        public async Task<bool> RevokeCredentialAsync(Credential credential)
+        {
+            _logger.LogInformation("Revoking credential cred_ex-Id={id}", credential.CredentialExchangeId);
+
+            JObject revocationObject = new JObject
+            {
+                { "cred_ex_id", credential.CredentialExchangeId },
+                { "publish", true }
+            };
+
+            var httpContent = new StringContent(revocationObject.ToString(), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.PostAsync($"revocation/revoke", httpContent);
+            }
+            catch (Exception ex)
+            {
+                await LogError(response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to revoke a credential: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(response);
+                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::RevokeCredentialAsync");
+            }
+
+            _logger.LogInformation("Revoke credential cred_ex_id={id} success", credential.CredentialExchangeId);
+
+            return true;
+        }
+
 
         public async Task<string> GetSchemaId(string did)
         {
@@ -104,7 +141,6 @@ namespace Prime.HttpClients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            _logger.LogInformation("GET Schema id by issuer id response {@JObject}", JsonConvert.SerializeObject(body));
             _logger.LogInformation("SCHEMA_ID: {schemaid}", (string)body.SelectToken("schema_ids[0]"));
 
             return (string)body.SelectToken("schema_ids[0]");
@@ -157,7 +193,7 @@ namespace Prime.HttpClients
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            _logger.LogInformation("GET Issuer DID response {@JObject}", JsonConvert.SerializeObject(body));
+            _logger.LogInformation("GET Issuer DID response {did}", (string)body.SelectToken("result.did"));
 
             return (string)body.SelectToken("result.did");
         }
@@ -182,10 +218,11 @@ namespace Prime.HttpClients
             }
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+            JArray credentialDefinitionIds = (JArray)body.SelectToken("credential_definition_ids");
 
             _logger.LogInformation("GET Credential Definition IDs {@JObject}", JsonConvert.SerializeObject(body));
 
-            return (string)body.SelectToken("credential_definition_ids[0]");
+            return (string)body.SelectToken($"credential_definition_ids[{credentialDefinitionIds.Count - 1}]");
         }
 
         public async Task<JObject> GetPresentationProof(string presentationExchangeId)

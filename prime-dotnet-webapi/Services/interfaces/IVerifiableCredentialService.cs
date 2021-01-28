@@ -9,5 +9,6 @@ namespace Prime.Services
     {
         Task<JObject> CreateConnectionAsync(Enrollee enrollee);
         Task<bool> WebhookAsync(JObject data, string topic);
+        Task<bool> RevokeCredentialsAsync(int enrolleeId);
     }
 }
