@@ -2,7 +2,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, pipe } from 'rxjs';
+import { Observable, pipe, from } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
@@ -20,18 +20,48 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 
 export interface IBaseEnrolmentProfilePage {
-  form: FormGroup;
+  /**
+   * @description
+   * Instance of the form state providing access to its API.
+   */
   formState: AbstractFormState<unknown>;
+  /**
+   * @description
+   * Instance of the form loaded from the form state.
+   */
+  form: FormGroup;
+  /**
+   * @description
+   * Local copy of the enrolment for use in views.
+   */
   enrolment: Enrolment;
+  /**
+   * @description
+   * Handle submission of forms.
+   */
   onSubmit(): void;
+  /**
+   * @description
+   * Handle redirection from the view when the form is
+   * dirty to prevent loss of form data.
+   */
   canDeactivate(): Observable<boolean> | boolean;
 }
 
 export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage implements IBaseEnrolmentProfilePage {
-  public form: FormGroup;
   // TODO added temporarily to allow gradual refactoring with formState, and
   // will be removed forcing responsibility on each page to manage formState
+  /**
+   * @description
+   * Instance of the form state providing access to its API.
+   */
   public formState: AbstractFormState<unknown>;
+  /**
+   * @description
+   * Instance of the form loaded from the form state.
+   */
+  public form: FormGroup;
+
   public enrolment: Enrolment;
 
   protected allowRoutingWhenDirty: boolean;
@@ -101,14 +131,14 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * @description
    * Patch the form with enrollee information.
    */
-  protected patchForm(): void {
+  protected patchForm(): Observable<void> {
     // Store a local copy of the enrolment for views
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.isProfileComplete = this.enrolmentService.isProfileComplete;
 
     // Attempt to patch the form if not already patched
-    this.enrolmentFormStateService.setForm(this.enrolment);
+    return from(this.enrolmentFormStateService.setForm(this.enrolment));
   }
 
   /**
