@@ -18,19 +18,19 @@ services:
       - primenet
 
 ####################### MongoDB Definition #######################
-  mongo:
-    restart: always
-    container_name: primemongodb
-    image: mongo:3
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: prime
-    ports:
-      - 8081:8081
-    volumes:
-      - local_mongodb_data:/var/lib/mongodb/data
-    networks:
-      - primenet
+  # mongo:
+  #   restart: always
+  #   container_name: primemongodb
+  #   image: mongo:3
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: prime
+  #   ports:
+  #     - 8081:8081
+  #   volumes:
+  #     - local_mongodb_data:/var/lib/mongodb/data
+  #   networks:
+  #     - primenet
 
 ####################### Redis Definition #######################
   redis:
@@ -64,22 +64,22 @@ services:
       - postgres
 
 ####################### Web Frontend Definition #######################
-  nginx-angular:
-    container_name: primeweb
-    build:
-         context: prime-angular-frontend/
-    command: "nginx -g 'daemon off;'"
-    restart: always
-    ports:
-       - "8080:8080"
-       - "4200:8080"
-    expose:
-       - "8080"
-       - "4200"
-    networks:
-      - primenet
-    depends_on:
-      - dotnet-webapi
+  # nginx-angular:
+  #   container_name: primeweb
+  #   build:
+  #        context: prime-angular-frontend/
+  #   command: "nginx -g 'daemon off;'"
+  #   restart: always
+  #   ports:
+  #      - "8080:8080"
+  #      - "4200:8080"
+  #   expose:
+  #      - "8080"
+  #      - "4200"
+  #   networks:
+  #     - primenet
+  #   depends_on:
+  #     - dotnet-webapi
 
 ####################### Local SMTP Server Definition #######################
   mailhog:
@@ -94,35 +94,35 @@ services:
       - primenet
 
 ####################### Database Inspection Definition #######################
-  schema-spy:
-    container_name: schema-spy
-    build:
-      context: schemaspy/
-    image: openjdk:jre-alpine
-    ports:
-      - "8069:8069"
-      - "80:8069"
-    depends_on:
-      - postgres
-    networks:
-      - primenet
+  # schema-spy:
+  #   container_name: schema-spy
+  #   build:
+  #     context: schemaspy/
+  #   image: openjdk:jre-alpine
+  #   ports:
+  #     - "8069:8069"
+  #     - "80:8069"
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - primenet
 
 ####################### Backup Definition #######################
-  backup:
-    container_name: backup
-    build:
-      context: prime-database-backup
-    ports:
-      - 6432:5432
-      - 9081:8081
-    depends_on:
-      - postgres
-      - mongo
-    volumes:
-      - db_backup_data:/opt/backup
-      - local_postgres_data:/var/lib/postgresql/data
-    networks:
-      - primenet
+  # backup:
+  #   container_name: backup
+  #   build:
+  #     context: prime-database-backup
+  #   ports:
+  #     - 6432:5432
+  #     - 9081:8081
+  #   depends_on:
+  #     - postgres
+  #     - mongo
+  #   volumes:
+  #     - db_backup_data:/opt/backup
+  #     - local_postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - primenet
 
 ####################### Document Manager Definition #######################
   document_manager_backend:
