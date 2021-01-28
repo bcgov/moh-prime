@@ -63,7 +63,7 @@ namespace Prime.Controllers
         {
             if (User.HasAdminView())
             {
-                return Ok(ApiResponse.Result(await _enrolleeService.GetEnrolleesAsync(searchOptions)));
+                return Ok(ApiResponse.Result(await _enrolleeService.GetEnrolleesAsync(User, searchOptions)));
             }
             else
             {
@@ -753,20 +753,20 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(status));
         }
 
-        // POST: api/Enrollees/5/adjudicator-notes/6/escalate
+        // POST: api/Enrollees/5/adjudicator-notes/6/notification
         /// <summary>
-        /// Creates a new enrollee escalation on an enrollees adjudicator note.
+        /// Creates a new enrollee notification on an enrollee note.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="adjudicatorNoteId"></param>
         /// <param name="assigneeId"></param>
-        [HttpPost("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/escalate", Name = nameof(CreateEnrolmentEscalation))]
+        [HttpPost("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/notification", Name = nameof(CreateEnrolleeNotification))]
         [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolmentEscalation>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolmentEscalation>> CreateEnrolmentEscalation(int enrolleeId, int adjudicatorNoteId, FromBodyData<int> assigneeId)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNotification>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeNotification>> CreateEnrolleeNotification(int enrolleeId, int adjudicatorNoteId, FromBodyData<int> assigneeId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
@@ -779,69 +779,86 @@ namespace Prime.Controllers
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
-            var escalation = await _enrolleeService.CreateEnrolmentEscalationAsync(note.Id, admin.Id, assigneeId);
+            var notification = await _enrolleeService.CreateEnrolleeNotificationAsync(note.Id, admin.Id, assigneeId);
 
-            return Ok(ApiResponse.Result(escalation));
+            return Ok(ApiResponse.Result(notification));
         }
 
-        // DELETE: api/Enrollees/5/adjudicator-notes/6/escalate
+        // DELETE: api/Enrollees/5/adjudicator-notes/6/notification
         /// <summary>
-        /// deletes the enrollee escalation on an enrollees adjudicator note.
+        /// deletes the notification on an enrollees note.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="adjudicatorNoteId"></param>
-        [HttpDelete("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/escalate", Name = nameof(DeleteEnrolmentEscalation))]
+        [HttpDelete("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/notification", Name = nameof(DeleteEnrolleeNotification))]
         [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNote>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> DeleteEnrolmentEscalation(int enrolleeId, int adjudicatorNoteId)
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult> DeleteEnrolleeNotification(int enrolleeId, int adjudicatorNoteId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
             var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
-            if (note == null)
+            if (note == null || note.EnrolleeNotification == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee note not found with id {adjudicatorNoteId}"));
+                return NotFound(ApiResponse.Message($"Enrollee note with notification not found with id {adjudicatorNoteId}"));
             }
 
-            await _enrolleeService.RemoveEnrolmentEscalationAsync(note.EnrolmentEscalation.Id);
+            await _enrolleeService.RemoveEnrolleeNotificationAsync(note.EnrolleeNotification.Id);
 
             return Ok();
         }
 
-        // Get: api/Enrollees/5/adjudicator-notes/6/escalate
+        // Get: api/Enrollees/5/notifications
         /// <summary>
-        /// Get the enrollee escalation on an enrollees adjudicator note.
+        /// Get the enrollee note on an enrollee that has a notification  for current admin user.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="adjudicatorNoteId"></param>
-        [HttpGet("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/escalate", Name = nameof(GetEscalatedNote))]
+        [HttpGet("{enrolleeId}/notifications", Name = nameof(GetNotifications))]
         [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNoteViewModel>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EnrolleeNoteViewModel>> GetEscalatedNote(int enrolleeId, int adjudicatorNoteId)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNoteViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeNoteViewModel>> GetNotifications(int enrolleeId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
-            if (note == null)
+
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            var notes = await _enrolleeService.GetNotificationsAsync(enrolleeId, admin.Id);
+
+            return Ok(ApiResponse.Result(notes));
+        }
+
+        // Delete: api/Enrollees/5/notifications
+        /// <summary>
+        ///     Delete all notifications on a enrollee
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpDelete("{enrolleeId}/notifications", Name = nameof(DeleteEnrolleeNotifications))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeNoteViewModel>> DeleteEnrolleeNotifications(int enrolleeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee note not found with id {adjudicatorNoteId}"));
-            }
-            if (note.EnrolmentEscalation == null)
-            {
-                return NotFound(ApiResponse.Message($"No escalation found on adjudicator note with id: {adjudicatorNoteId}"));
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            return Ok(ApiResponse.Result(note));
+            await _enrolleeService.RemoveNotificationsAsync(enrolleeId);
+
+            return Ok();
         }
     }
 }

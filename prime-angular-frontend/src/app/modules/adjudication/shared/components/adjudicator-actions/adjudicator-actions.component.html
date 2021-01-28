@@ -80,7 +80,7 @@
       <span>Rerun Rules</span>
     </button>
     <button mat-menu-item
-            [disabled]="!canEdit || enrollee.escalatedNoteId"
+            [disabled]="!canEdit || enrollee.adjudicatorIdir"
             (click)="onEscalate()">
       <mat-icon>error_outline</mat-icon>
       <span>Enrolment Escalation</span>

@@ -4,12 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class CreateEscalationTablesAndReferences : Migration
+    public partial class CreateNotificationTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "EnrolmentEscalation",
+                name: "EnrolleeNotification",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -18,27 +18,27 @@ namespace Prime.Migrations
                     CreatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
-                    EnrolleeNoteId = table.Column<int>(nullable: false),
                     AdminId = table.Column<int>(nullable: false),
-                    AssigneeId = table.Column<int>(nullable: false)
+                    AssigneeId = table.Column<int>(nullable: false),
+                    EnrolleeNoteId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EnrolmentEscalation", x => x.Id);
+                    table.PrimaryKey("PK_EnrolleeNotification", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EnrolmentEscalation_Admin_AdminId",
+                        name: "FK_EnrolleeNotification_Admin_AdminId",
                         column: x => x.AdminId,
                         principalTable: "Admin",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EnrolmentEscalation_Admin_AssigneeId",
+                        name: "FK_EnrolleeNotification_Admin_AssigneeId",
                         column: x => x.AssigneeId,
                         principalTable: "Admin",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EnrolmentEscalation_EnrolleeNote_EnrolleeNoteId",
+                        name: "FK_EnrolleeNotification_EnrolleeNote_EnrolleeNoteId",
                         column: x => x.EnrolleeNoteId,
                         principalTable: "EnrolleeNote",
                         principalColumn: "Id",
@@ -46,7 +46,7 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SiteEscalation",
+                name: "SiteNotification",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -55,27 +55,27 @@ namespace Prime.Migrations
                     CreatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
-                    SiteRegistrationNoteId = table.Column<int>(nullable: false),
                     AdminId = table.Column<int>(nullable: false),
-                    AssigneeId = table.Column<int>(nullable: false)
+                    AssigneeId = table.Column<int>(nullable: false),
+                    SiteRegistrationNoteId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SiteEscalation", x => x.Id);
+                    table.PrimaryKey("PK_SiteNotification", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SiteEscalation_Admin_AdminId",
+                        name: "FK_SiteNotification_Admin_AdminId",
                         column: x => x.AdminId,
                         principalTable: "Admin",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SiteEscalation_Admin_AssigneeId",
+                        name: "FK_SiteNotification_Admin_AssigneeId",
                         column: x => x.AssigneeId,
                         principalTable: "Admin",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SiteEscalation_SiteRegistrationNote_SiteRegistrationNoteId",
+                        name: "FK_SiteNotification_SiteRegistrationNote_SiteRegistrationNoteId",
                         column: x => x.SiteRegistrationNoteId,
                         principalTable: "SiteRegistrationNote",
                         principalColumn: "Id",
@@ -83,34 +83,34 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EnrolmentEscalation_AdminId",
-                table: "EnrolmentEscalation",
+                name: "IX_EnrolleeNotification_AdminId",
+                table: "EnrolleeNotification",
                 column: "AdminId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EnrolmentEscalation_AssigneeId",
-                table: "EnrolmentEscalation",
+                name: "IX_EnrolleeNotification_AssigneeId",
+                table: "EnrolleeNotification",
                 column: "AssigneeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EnrolmentEscalation_EnrolleeNoteId",
-                table: "EnrolmentEscalation",
+                name: "IX_EnrolleeNotification_EnrolleeNoteId",
+                table: "EnrolleeNotification",
                 column: "EnrolleeNoteId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_SiteEscalation_AdminId",
-                table: "SiteEscalation",
+                name: "IX_SiteNotification_AdminId",
+                table: "SiteNotification",
                 column: "AdminId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SiteEscalation_AssigneeId",
-                table: "SiteEscalation",
+                name: "IX_SiteNotification_AssigneeId",
+                table: "SiteNotification",
                 column: "AssigneeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SiteEscalation_SiteRegistrationNoteId",
-                table: "SiteEscalation",
+                name: "IX_SiteNotification_SiteRegistrationNoteId",
+                table: "SiteNotification",
                 column: "SiteRegistrationNoteId",
                 unique: true);
         }
@@ -118,10 +118,10 @@ namespace Prime.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EnrolmentEscalation");
+                name: "EnrolleeNotification");
 
             migrationBuilder.DropTable(
-                name: "SiteEscalation");
+                name: "SiteNotification");
         }
     }
 }

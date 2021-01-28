@@ -1,6 +1,6 @@
 import { Admin } from '@auth/shared/models/admin.model';
 import { BaseAdjudicatorNote } from '@shared/models/adjudicator-note.model';
-import { EnrolmentEscalation } from './enrolment-escalation.model';
+import { EnrolleeNotification } from './enrollee-notification.model';
 
 /**
  * @description
@@ -13,5 +13,5 @@ export interface EnrolleeNote extends BaseAdjudicatorNote {
   adjudicator: Admin;
   note: string;
   noteDate?: string;
-  enrolmentEscalation: EnrolmentEscalation;
+  enrolleeNotification: EnrolleeNotification;
 }

@@ -16,6 +16,6 @@ namespace Prime.Models
         public EnrolmentStatusReference EnrolmentStatusReference { get; set; }
 
         [JsonIgnore]
-        public EnrolmentEscalation EnrolmentEscalation { get; set; }
+        public EnrolleeNotification EnrolleeNotification { get; set; }
     }
 }

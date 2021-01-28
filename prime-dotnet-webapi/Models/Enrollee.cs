@@ -321,17 +321,5 @@ namespace Prime.Models
                 yield return new ValidationResult($"UserId cannot be empty");
             }
         }
-
-        /// <summary>
-        /// Id for an escalated note on the enrollee
-        /// </summary>
-        [NotMapped]
-        [Computed]
-        public int? EscalatedNoteId
-        {
-            get => AdjudicatorNotes?
-                .Where(an => an.EnrolmentEscalation != null)
-                .SingleOrDefault()?.Id;
-        }
     }
 }

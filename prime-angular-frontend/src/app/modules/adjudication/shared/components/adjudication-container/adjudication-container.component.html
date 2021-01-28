@@ -13,8 +13,8 @@
   <app-enrollee-table *ngIf="busy.closed || dataSource.data.length"
                       [dataSource]="dataSource"
                       (notify)="onNotify($event)"
-                      (claim)="onClaim($event)"
-                      (disclaim)="onDisclaim($event)"
+                      (assign)="onAssign($event)"
+                      (reassign)="onReassign($event)"
                       (route)="onRoute($event)"
                       (reload)="onRefresh()"></app-enrollee-table>
 
@@ -38,7 +38,7 @@
                                  (unlock)="onUnlock($event)"
                                  (delete)="onDelete($event)"
                                  (route)="onRoute($event)"
-                                 (assign)="onAssign($event)"
+                                 (assignToa)="onAssignToa($event)"
                                  (enableEnrollee)="onEnableEnrollee($event)"
                                  (enableEditing)="onEnableEditing($event)"
                                  (rerunRules)="onRerunRules($event)"

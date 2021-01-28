@@ -9,9 +9,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class EscalationContextualComponent implements OnInit {
   @Input() public enrolleeId: number;
-  @Input() public adjudicatorNoteId: number;
   @Output() public removed: EventEmitter<boolean>;
-  public note: EnrolleeNote;
+  public notes: EnrolleeNote[];
 
   constructor(
     private adjudicationResource: AdjudicationResource,
@@ -19,8 +18,8 @@ export class EscalationContextualComponent implements OnInit {
     this.removed = new EventEmitter<boolean>();
   }
 
-  public onRemove() {
-    this.adjudicationResource.deleteEnrolmentEscalation(this.enrolleeId, this.adjudicatorNoteId)
+  public onRemove(adjudicatorNoteId: number) {
+    this.adjudicationResource.deleteEnrolleeNotification(this.enrolleeId, adjudicatorNoteId)
       .subscribe(() => this.removed.emit(true));
   }
 
@@ -29,8 +28,8 @@ export class EscalationContextualComponent implements OnInit {
   }
 
   private getEscalatedNote() {
-    this.adjudicationResource.getEscalatedNote(this.enrolleeId, this.adjudicatorNoteId)
-      .subscribe(note => this.note = note);
+    this.adjudicationResource.getNotificationsByEnrollee(this.enrolleeId)
+      .subscribe(notes => this.notes = notes);
   }
 
 }

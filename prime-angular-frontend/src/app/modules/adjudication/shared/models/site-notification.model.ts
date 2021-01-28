@@ -4,9 +4,9 @@ import { Admin } from '@auth/shared/models/admin.model';
  * @description
  *
  */
-export interface EnrolmentEscalation {
+export interface SiteNotification {
   id: number;
-  enrolleeNoteId: number;
+  siteRegistrationNoteId: number;
   adminId: number;
   admin: Admin;
   assigneeId: number;

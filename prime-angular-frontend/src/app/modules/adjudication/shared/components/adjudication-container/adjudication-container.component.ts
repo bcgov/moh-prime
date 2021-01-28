@@ -20,8 +20,8 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import {
   ClaimEnrolleeComponent,
-  ClaimEnrolleeAction,
-  ClaimActionEnum
+  AssignEnrolleeAction,
+  AssignActionEnum
 } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
@@ -31,6 +31,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
+import { EnrolleeNotification } from '@adjudication/shared/models/enrollee-notification.model';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -102,33 +104,65 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  public onClaim(enrolleeId: number) {
-    this.adjudicationResource
-      .setEnrolleeAdjudicator(enrolleeId)
-      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
-  }
-
-  public onDisclaim(enrolleeId: number) {
+  public onAssign(enrolleeId: number) {
     const data: DialogOptions = {
-      title: 'Disclaim Enrolment',
-      component: ManualFlagNoteComponent
+      title: 'Assign Enrolment',
+      component: ManualFlagNoteComponent,
+      data: { reassign: false }
     };
 
     this.busy = this.dialog.open(ClaimEnrolleeComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: ClaimEnrolleeAction }) => {
-          if (!result) { return EMPTY; }
+        exhaustMap((result: { output: AssignEnrolleeAction }) => (result) ? of(result.output ?? null) : EMPTY),
+        exhaustMap((action: AssignEnrolleeAction) => this.adjudicationResource.deleteEnrolleeNotifications(enrolleeId).pipe(map(() => action))),
+        exhaustMap((action: AssignEnrolleeAction) =>
+          (action.note)
+            ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
+              .pipe(map((note: EnrolleeNote) => <any>{ note, assigneeId: action.adjudicatorId }))
+            : of({ assigneeId: action.adjudicatorId })
+        ),
+        exhaustMap((result: { note: EnrolleeNote, assigneeId: number }) =>
+          (result.note)
+            ? this.adjudicationResource.createEnrolleeNotification(enrolleeId, result.note.id, result.assigneeId).pipe(map(() => result.assigneeId))
+            : of(noop).pipe(map(() => result.assigneeId))
+        ),
+        exhaustMap((adjudicatorId: number) => this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, adjudicatorId)),
+      )
+      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
+  }
 
-          if (result.output.action === ClaimActionEnum.Disclaim) {
-            return this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId);
-          } else if (result.output.action === ClaimActionEnum.Claim) {
-            return concat(
+  public onReassign(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Reassign Enrolment',
+      component: ManualFlagNoteComponent,
+      data: { reassign: true }
+    };
+
+    this.busy = this.dialog.open(ClaimEnrolleeComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: AssignEnrolleeAction }) => (result) ? of(result.output ?? null) : EMPTY),
+        exhaustMap((action: AssignEnrolleeAction) => this.adjudicationResource.deleteEnrolleeNotifications(enrolleeId).pipe(map(() => action))),
+        exhaustMap((action: AssignEnrolleeAction) =>
+          (action.note)
+            ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
+              .pipe(map((note: EnrolleeNote) => <any>{ note, action: action }))
+            : of(null).pipe(map(() => <any>{ action: action }))
+        ),
+        exhaustMap((result: { note: EnrolleeNote, action: AssignEnrolleeAction }) =>
+          (result.note)
+            ? this.adjudicationResource.createEnrolleeNotification(enrolleeId, result.note.id, result.action.adjudicatorId).pipe(map(() => result.action))
+            : of(noop).pipe(map(() => result.action))
+        ),
+        exhaustMap((action: AssignEnrolleeAction) =>
+          (action.action === AssignActionEnum.Disclaim)
+            ? this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId)
+            : concat(
               this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId),
-              this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, result.output.adjudicatorId)
-            );
-          }
-        })
+              this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, action.adjudicatorId)
+            )
+        )
       )
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
@@ -327,7 +361,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.routeUtils.routeWithin(routePath);
   }
 
-  public onAssign({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
+  public onAssignToa({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
     this.adjudicationResource.assignToaAgreementType(enrolleeId, agreementType)
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
@@ -408,7 +442,6 @@ export class AdjudicationContainerComponent implements OnInit {
       alwaysManual,
       enrolleeRemoteUsers,
       enrolleeCareSettings,
-      escalatedNoteId,
     } = enrollee;
 
     return {
@@ -429,7 +462,7 @@ export class AdjudicationContainerComponent implements OnInit {
       alwaysManual,
       remoteAccess: (enrolleeRemoteUsers?.length) ? true : false,
       careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode),
-      escalatedNoteId
+      hasNotification: false,
     };
   }
 }

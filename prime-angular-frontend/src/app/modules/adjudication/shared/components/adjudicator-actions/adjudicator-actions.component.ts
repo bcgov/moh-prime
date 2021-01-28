@@ -33,7 +33,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   @Output() public rerunRules: EventEmitter<number>;
   @Output() public delete: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
-  @Output() public assign: EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>;
+  @Output() public assignToa: EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>;
   @Output() public reload: EventEmitter<boolean>;
 
   public form: FormGroup;
@@ -56,7 +56,7 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.enableEditing = new EventEmitter<number>();
     this.rerunRules = new EventEmitter<number>();
     this.delete = new EventEmitter<number>();
-    this.assign = new EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>();
+    this.assignToa = new EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>();
     this.toggleManualAdj = new EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.reload = new EventEmitter<boolean>();
@@ -180,7 +180,7 @@ export class AdjudicatorActionsComponent implements OnInit {
 
     this.assignedTOAType.valueChanges
       .subscribe((agreementType: AgreementType) =>
-        this.assign.emit({ enrolleeId: this.enrollee.id, agreementType })
+        this.assignToa.emit({ enrolleeId: this.enrollee.id, agreementType })
       );
   }
 }

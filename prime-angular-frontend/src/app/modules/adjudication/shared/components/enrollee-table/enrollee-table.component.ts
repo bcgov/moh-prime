@@ -23,8 +23,8 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class EnrolleeTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<EnrolleeListViewModel>;
   @Output() public notify: EventEmitter<number>;
-  @Output() public claim: EventEmitter<number>;
-  @Output() public disclaim: EventEmitter<number>;
+  @Output() public assign: EventEmitter<number>;
+  @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public reload: EventEmitter<boolean>;
 
@@ -42,8 +42,8 @@ export class EnrolleeTableComponent implements OnInit {
     private fb: FormBuilder,
   ) {
     this.notify = new EventEmitter<number>();
-    this.claim = new EventEmitter<number>();
-    this.disclaim = new EventEmitter<number>();
+    this.assign = new EventEmitter<number>();
+    this.reassign = new EventEmitter<number>();
     this.reload = new EventEmitter<boolean>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.columns = [
@@ -56,7 +56,7 @@ export class EnrolleeTableComponent implements OnInit {
       'remoteAccess',
       'renewalDate',
       'currentTOA',
-      'claimedBy',
+      'assignedTo',
       'careSetting',
       'actions'
     ];
@@ -77,12 +77,12 @@ export class EnrolleeTableComponent implements OnInit {
     this.notify.emit(enrolleeId);
   }
 
-  public onClaim(enrolleeId: number): void {
-    this.claim.emit(enrolleeId);
+  public onAssign(enrolleeId: number): void {
+    this.assign.emit(enrolleeId);
   }
 
-  public onDisclaim(enrolleeId: number): void {
-    this.disclaim.emit(enrolleeId);
+  public onReassign(enrolleeId: number): void {
+    this.reassign.emit(enrolleeId);
   }
 
   public onRoute(routePath: string | (string | number)[]): void {

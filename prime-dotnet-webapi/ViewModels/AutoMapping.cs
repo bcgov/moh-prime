@@ -22,12 +22,14 @@ public class AutoMapping : Profile
         CreateMap<EnrolleeCreateModel, Enrollee>();
 
         IQueryable<int> newestAgreementIds = null;
+        IQueryable<int> currentAdminId = null;
         CreateMap<Enrollee, EnrolleeListViewModel>()
             .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
             .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(n => n == src.CurrentAgreementId)))
             .ForMember(dest => dest.RemoteAccess, opt => opt.MapFrom(src => src.EnrolleeRemoteUsers.Any()))
-            .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
+            .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)))
+            .ForMember(dest => dest.HasNotification, opt => opt.MapFrom(src => src.AdjudicatorNotes.Select(an => an.EnrolleeNotification).Select(en => en.AssigneeId).Any(id => currentAdminId.Contains(id))));
 
         CreateMap<Enrollee, EnrolleeViewModel>()
             .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))

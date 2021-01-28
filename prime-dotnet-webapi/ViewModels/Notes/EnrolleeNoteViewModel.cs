@@ -18,6 +18,6 @@ namespace Prime.ViewModels
         public DateTimeOffset NoteDate { get; set; }
 
         public EnrolmentStatusReference EnrolmentStatusReference { get; set; }
-        public EnrolmentEscalation EnrolmentEscalation { get; set; }
+        public EnrolleeNotification EnrolleeNotification { get; set; }
     }
 }

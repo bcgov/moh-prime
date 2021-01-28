@@ -1,17 +1,36 @@
 <h2 mat-dialog-title
     class="d-flex align-items-stretch">
   <span class="flex-grow-1">
-    Disclaim Enrollee
+    {{title}}
   </span>
 </h2>
 <mat-dialog-content>
-  <span>You can unclaim the enrollee or assign them to a colleague.</span>
+  <span>You can {{reassign ? "unclaim" : "claim"}} the enrollee or assign them to a colleague.</span>
+
+  <form [formGroup]="form">
+    <mat-form-field class="w-100">
+      <textarea matInput
+                placeholder="Note"
+                rows="10"
+                formControlName="note"></textarea>
+      <mat-hint [ngClass]="{ 'text-green': !!note.value }">
+        {{ (note.value) ? 'Your note will be saved upon submission.' : 'A note is required when assigning an enrollee.'
+        }}
+      </mat-hint>
+    </mat-form-field>
+  </form>
 
   <div class="mt-4">
-    <button mat-flat-button
+    <button *ngIf="reassign"
+            mat-flat-button
             color="primary"
             (click)="onDisclaim()"
-            class="mr-4">Disclaim Enrollee</button>
+            class="mr-4">Unclaim Enrollee</button>
+    <button *ngIf="!reassign"
+            mat-flat-button
+            color="primary"
+            (click)="onClaim()"
+            class="mr-4">Claim Enrollee</button>
     <button mat-flat-button
             color="primary"
             [matMenuTriggerFor]="menu"
@@ -20,7 +39,7 @@
 
   <mat-menu #menu="matMenu">
     <button mat-menu-item
-            (click)="onClaim(adjudicator.id)"
+            (click)="onAssign(adjudicator.id)"
             *ngFor="let adjudicator of adjudicators$ | async">
       {{ adjudicator.lastName }}, {{ adjudicator.firstName }}
     </button>

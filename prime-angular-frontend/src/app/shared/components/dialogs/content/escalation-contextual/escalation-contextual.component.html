@@ -11,21 +11,22 @@
 
   <ng-container appContextualContent
                 ng>
-    <h2 class="h5 mb-3">
-      {{ note?.enrolmentEscalation?.admin.idir }} has escalated this enrolment and assigned it to you.
-    </h2>
-    <ul class="list-unstyled mb-4 ml-3">
-      <li class="blue pb-2">
-        {{ note?.note }}
-      </li>
-    </ul>
+    <ng-container *ngFor="let note of notes">
+      <h2 class="h5 mb-3">
+        {{ note?.enrolleeNotification?.admin.idir }} has assigned this enrolment to you.
+      </h2>
+      <ul class="list-unstyled mb-4 ml-3">
+        <li class="blue pb-2">
+          {{ note?.note }}
+        </li>
+      </ul>
+      <button mat-stroked-button
+              color="secondary"
+              class="mb-2 d-block"
+              (click)="onRemove(note.id)">
+        Remove Notice
+      </button>
+    </ng-container>
   </ng-container>
-
-  <button mat-stroked-button
-          color="secondary"
-          class="mb-2 d-block"
-          (click)="onRemove()">
-    Remove Notice
-  </button>
 
 </app-contextual-help>

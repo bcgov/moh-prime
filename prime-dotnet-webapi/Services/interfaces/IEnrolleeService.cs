@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 using Prime.Models;
@@ -24,7 +25,7 @@ namespace Prime.Services
 
         Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
 
-        Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
+        Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(ClaimsPrincipal user, EnrolleeSearchOptions searchOptions = null);
 
         Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
 
@@ -73,8 +74,10 @@ namespace Prime.Services
         Task DeleteEnrolleeAdjudicationDocumentAsync(int documentId);
 
         Task<EnrolmentStatus> GetEnrolleeCurrentStatusAsync(int enrolleeId);
-        Task<EnrolmentEscalation> CreateEnrolmentEscalationAsync(int EnrolleeNoteId, int adminId, int assigneeId);
-        Task RemoveEnrolmentEscalationAsync(int enrolmentEscalationId);
-        Task<EnrolmentEscalation> GetEnrolmentEscalationAsync(int enrolmentEscalationId);
+        Task<EnrolleeNotification> CreateEnrolleeNotificationAsync(int EnrolleeNoteId, int adminId, int assigneeId);
+        Task RemoveEnrolleeNotificationAsync(int enrolleeNotificationId);
+        Task<EnrolleeNotification> GetEnrolleeNotificationAsync(int enrolleeNotificationId);
+        Task<IEnumerable<EnrolleeNoteViewModel>> GetNotificationsAsync(int enrolleeId, int adminId);
+        Task RemoveNotificationsAsync(int enrolleeId);
     }
 }

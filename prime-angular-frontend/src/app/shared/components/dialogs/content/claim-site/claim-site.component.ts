@@ -9,13 +9,13 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
-export enum ClaimActionEnum {
+export enum AssignActionEnum {
   Disclaim = 0,
-  Claim = 1
+  Assign = 1
 }
 
-export class ClaimSiteAction {
-  public action: ClaimActionEnum;
+export class AssignSiteAction {
+  public action: AssignActionEnum;
   public adjudicatorId?: number;
 }
 
@@ -38,14 +38,14 @@ export class ClaimSiteComponent implements OnInit {
   }
 
   public onDisclaim(): void {
-    const output = new ClaimSiteAction();
-    output.action = ClaimActionEnum.Disclaim;
+    const output = new AssignSiteAction();
+    output.action = AssignActionEnum.Disclaim;
     this.dialogRef.close({ output });
   }
 
   public onClaim(adminId: number): void {
-    const output = new ClaimSiteAction();
-    output.action = ClaimActionEnum.Claim;
+    const output = new AssignSiteAction();
+    output.action = AssignActionEnum.Assign;
     output.adjudicatorId = adminId;
     this.dialogRef.close({ output });
   }

@@ -25,7 +25,7 @@ import { DialogOptions } from '../../dialog-options.model';
 })
 export class TriageComponent implements OnInit {
   @Input() public enrolleeId: number;
-  @Input() public escalated: boolean;
+  @Input() public assigned: boolean;
   @Output() public reload: EventEmitter<boolean>;
 
   public busy: Subscription;
@@ -40,7 +40,7 @@ export class TriageComponent implements OnInit {
     private dialog: MatDialog,
   ) {
     this.reload = new EventEmitter<boolean>();
-    this.escalated = false;
+    this.assigned = false;
   }
 
   public get canEdit(): boolean {

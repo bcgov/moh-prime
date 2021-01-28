@@ -143,7 +143,5 @@ namespace Prime.ViewModels
                 }
             }
         }
-
-        public int? EscalatedNoteId { get; set; }
     }
 }

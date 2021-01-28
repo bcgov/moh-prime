@@ -14,8 +14,8 @@ import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-proper
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { ClaimSiteComponent, ClaimSiteAction } from '@shared/components/dialogs/content/claim-site/claim-site.component';
-import { ClaimActionEnum } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
+import { ClaimSiteComponent, AssignSiteAction } from '@shared/components/dialogs/content/claim-site/claim-site.component';
+import { AssignActionEnum } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 
@@ -91,12 +91,12 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ClaimSiteComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: ClaimSiteAction }) => {
+        exhaustMap((result: { output: AssignSiteAction }) => {
           if (!result) { return EMPTY; }
 
-          if (result.output.action === ClaimActionEnum.Disclaim) {
+          if (result.output.action === AssignActionEnum.Disclaim) {
             return this.siteResource.removeSiteAdjudicator(siteId);
-          } else if (result.output.action === ClaimActionEnum.Claim) {
+          } else if (result.output.action === AssignActionEnum.Assign) {
             return concat(
               this.siteResource.removeSiteAdjudicator(siteId),
               this.siteResource.setSiteAdjudicator(siteId, result.output.adjudicatorId)

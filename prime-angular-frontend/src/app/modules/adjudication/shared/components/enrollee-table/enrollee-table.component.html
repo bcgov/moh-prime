@@ -17,12 +17,11 @@
               <app-triage *ngIf="row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
                           class="align-self-start"
                           [enrolleeId]="row.id"
-                          [escalated]="(row.escalatedNoteId)"
+                          [assigned]="(row.adjudicatorIdir)"
                           (reload)="onReload($event)"></app-triage>
-              <app-escalation-contextual *ngIf="row.escalatedNoteId"
+              <app-escalation-contextual *ngIf="row.hasNotification"
                                          class="align-self-end"
                                          [enrolleeId]="row.id"
-                                         [adjudicatorNoteId]="row.escalatedNoteId"
                                          (removed)="onReload($event)"></app-escalation-contextual>
             </div>
           </td>
@@ -148,10 +147,10 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="claimedBy">
+        <ng-container matColumnDef="assignedTo">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Claimed By </th>
+              scope="col"> Assigned To </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
         </ng-container>
@@ -235,16 +234,16 @@
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
                 [disabled]="!canEdit"
-                (click)="onClaim(row.id)">
+                (click)="onAssign(row.id)">
           <mat-icon>pan_tool</mat-icon>
-          <span>Claim Enrolment</span>
+          <span>Assign Enrolment</span>
         </button>
         <button mat-menu-item
                 *ngIf="row?.adjudicatorIdir"
                 [disabled]="!canEdit"
-                (click)="onDisclaim(row.id)">
+                (click)="onReassign(row.id)">
           <mat-icon>pan_tool</mat-icon>
-          <span>Disclaim Enrolment</span>
+          <span>Reassign Enrolment</span>
         </button>
       </mat-menu>
     </ng-template>

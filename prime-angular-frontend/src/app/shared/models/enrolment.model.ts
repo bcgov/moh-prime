@@ -56,7 +56,6 @@ export interface HttpEnrollee extends Enrollee {
   adjudicatorId: number;
   adjudicator: Admin;
   base64QRCode: string;
-  escalatedNoteId: number;
 }
 
 /**
@@ -107,7 +106,6 @@ export interface Enrolment {
   adjudicatorId: number;
   adjudicator: Admin;
   base64QRCode: string;
-  escalatedNoteId: number;
 }
 
 export interface EnrolleeListViewModel {
@@ -128,5 +126,5 @@ export interface EnrolleeListViewModel {
   alwaysManual: boolean;
   remoteAccess: boolean;
   careSettingCodes: number[];
-  escalatedNoteId: number;
+  hasNotification: boolean;
 }

@@ -13,6 +13,7 @@ using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
 using Prime.HttpClients;
+using System.Security.Claims;
 
 namespace Prime.Services
 {
@@ -94,21 +95,11 @@ namespace Prime.Services
                 )
                 .ToListAsync();
 
-            if (isAdmin)
-            {
-                var notes = await _context.EnrolleeNotes
-                    .Where(en => en.EnrolleeId == enrolleeId)
-                    .Include(en => en.EnrolmentEscalation)
-                    .ToListAsync();
-
-                enrollee.AdjudicatorNotes = notes;
-            }
-
             return _mapper.Map<Enrollee, EnrolleeViewModel>(enrollee,
                 opt => opt.AfterMap((src, dest) => dest.HasNewestAgreement = newestAgreementIds.Any(n => n == src.CurrentAgreementId)));
         }
 
-        public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
+        public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(ClaimsPrincipal user, EnrolleeSearchOptions searchOptions = null)
         {
             searchOptions ??= new EnrolleeSearchOptions();
 
@@ -120,6 +111,10 @@ namespace Prime.Services
                     .First(a => a.AgreementType == type)
                     .Id
                 );
+
+            IQueryable<int> currentAdminId = _context.Admins
+                .Where(a => a.UserId == user.GetPrimeUserId())
+                .Select(a => a.Id);
 
             return await _context.Enrollees
                 .AsNoTracking()
@@ -136,7 +131,7 @@ namespace Prime.Services
                 .If(searchOptions.StatusCode.HasValue, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, currentAdminId })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();
@@ -577,10 +572,22 @@ namespace Prime.Services
             return await _context.EnrolleeNotes
                 .Where(an => an.EnrolleeId == enrolleeId)
                 .Include(an => an.Adjudicator)
-                .Include(an => an.EnrolmentEscalation)
+                .Include(an => an.EnrolleeNotification)
                     .ThenInclude(ee => ee.Admin)
                 .ProjectTo<EnrolleeNoteViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(n => n.Id == noteId);
+        }
+
+        public async Task<IEnumerable<EnrolleeNoteViewModel>> GetNotificationsAsync(int enrolleeId, int adminId)
+        {
+            return await _context.EnrolleeNotes
+                .Include(an => an.Adjudicator)
+                .Include(an => an.EnrolleeNotification)
+                    .ThenInclude(ee => ee.Admin)
+                .Where(an => an.EnrolleeId == enrolleeId)
+                .Where(an => an.EnrolleeNotification != null && an.EnrolleeNotification.AssigneeId == adminId)
+                .ProjectTo<EnrolleeNoteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task<EnrolleeNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId)
@@ -623,38 +630,48 @@ namespace Prime.Services
             return reference;
         }
 
-        public async Task<EnrolmentEscalation> CreateEnrolmentEscalationAsync(int EnrolleeNoteId, int adminId, int assigneeId)
+        public async Task<EnrolleeNotification> CreateEnrolleeNotificationAsync(int EnrolleeNoteId, int adminId, int assigneeId)
         {
-            var escalation = new EnrolmentEscalation
+            var notification = new EnrolleeNotification
             {
                 EnrolleeNoteId = EnrolleeNoteId,
                 AdminId = adminId,
                 AssigneeId = assigneeId,
             };
 
-            _context.EnrolmentEscalations.Add(escalation);
+            _context.EnrolleeNotifications.Add(notification);
 
             await _context.SaveChangesAsync();
 
-            return escalation;
+            return notification;
         }
 
-        public async Task RemoveEnrolmentEscalationAsync(int enrolmentEscalationId)
+        public async Task RemoveEnrolleeNotificationAsync(int enrolleeNotificationId)
         {
-            var escalation = await _context.EnrolmentEscalations
-                .SingleOrDefaultAsync(ee => ee.Id == enrolmentEscalationId);
-            if (escalation == null)
+            var notification = await _context.EnrolleeNotifications
+                .SingleOrDefaultAsync(ee => ee.Id == enrolleeNotificationId);
+            if (notification == null)
             {
                 return;
             }
-            _context.EnrolmentEscalations.Remove(escalation);
+            _context.EnrolleeNotifications.Remove(notification);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<EnrolmentEscalation> GetEnrolmentEscalationAsync(int enrolmentEscalationId)
+        public async Task RemoveNotificationsAsync(int enrolleeId)
         {
-            return await _context.EnrolmentEscalations
-                .SingleOrDefaultAsync(ee => ee.Id == enrolmentEscalationId);
+            var notifications = await _context.EnrolleeNotifications
+                .Where(en => en.EnrolleeNote.EnrolleeId == enrolleeId)
+                .ToListAsync();
+
+            _context.EnrolleeNotifications.RemoveRange(notifications);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<EnrolleeNotification> GetEnrolleeNotificationAsync(int enrolleeNotificationId)
+        {
+            return await _context.EnrolleeNotifications
+                .SingleOrDefaultAsync(ee => ee.Id == enrolleeNotificationId);
         }
 
         public async Task<EnrolmentStatusReference> AddAdjudicatorNoteToReferenceIdAsync(int statusId, int noteId)

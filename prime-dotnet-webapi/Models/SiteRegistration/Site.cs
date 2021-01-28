@@ -94,7 +94,7 @@ namespace Prime.Models
         public int? EscalatedNoteId
         {
             get => SiteRegistrationNotes
-                .Where(an => an.SiteEscalation != null)
+                .Where(an => an.SiteNotification != null)
                 .SingleOrDefault()?.Id;
         }
     }

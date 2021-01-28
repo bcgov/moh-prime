@@ -17,6 +17,6 @@ namespace Prime.ViewModels
 
         public DateTimeOffset NoteDate { get; set; }
 
-        public SiteEscalation SiteEscalation { get; set; }
+        public SiteNotification SiteNotification { get; set; }
     }
 }

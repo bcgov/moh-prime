@@ -63,7 +63,7 @@ namespace Prime.ViewModels
 
         public ICollection<int> CareSettingCodes { get; set; }
 
-        public int? EscalatedNoteId { get; set; }
+        public bool HasNotification { get; set; }
 
     }
 }

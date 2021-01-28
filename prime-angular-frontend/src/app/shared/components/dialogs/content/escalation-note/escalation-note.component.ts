@@ -47,7 +47,7 @@ export class EscalationNoteComponent implements OnInit {
       this.adjudicationResource.createAdjudicatorNote(this.enrolleeId, this.note.value)
         .pipe(
           exhaustMap((note: EnrolleeNote) =>
-            this.adjudicationResource.createEnrolmentEscalation(this.enrolleeId, note.id, assigneeId)
+            this.adjudicationResource.createEnrolleeNotification(this.enrolleeId, note.id, assigneeId)
           ),
           exhaustMap(() => this.adjudicationResource.setEnrolleeAdjudicator(this.enrolleeId, assigneeId))
         ).subscribe(() => this.dialogRef.close({ reload: true }))

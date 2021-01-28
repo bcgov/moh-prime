@@ -559,7 +559,7 @@ namespace Prime.Services
             return await _context.SiteRegistrationNotes
                 .Where(srn => srn.SiteId == siteId)
                 .Include(srn => srn.Adjudicator)
-                .Include(srn => srn.SiteEscalation)
+                .Include(srn => srn.SiteNotification)
                     .ThenInclude(sre => sre.Admin)
                 .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(srn => srn.Id == siteRegistrationNoteId);
@@ -624,39 +624,60 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<SiteEscalation> CreateSiteEscalationAsync(int siteRegistrationNoteId, int adminId, int assineeId)
+        public async Task<SiteNotification> CreateSiteNotificationAsync(int siteRegistrationNoteId, int adminId, int assineeId)
         {
-            var escalation = new SiteEscalation
+            var notification = new SiteNotification
             {
                 SiteRegistrationNoteId = siteRegistrationNoteId,
                 AdminId = adminId,
                 AssigneeId = assineeId,
             };
 
-            _context.SiteEscalations.Add(escalation);
+            _context.SiteNotifications.Add(notification);
 
             await _context.SaveChangesAsync();
 
-            return escalation;
+            return notification;
         }
 
-        public async Task RemoveSiteEscalationAsync(int siteEscalationId)
+        public async Task RemoveSiteNotificationAsync(int siteNotificationId)
         {
-            var escalation = await _context.SiteEscalations
-                .SingleOrDefaultAsync(se => se.Id == siteEscalationId);
-            if (escalation == null)
+            var notification = await _context.SiteNotifications
+                .SingleOrDefaultAsync(se => se.Id == siteNotificationId);
+            if (notification == null)
             {
                 return;
             }
-            _context.SiteEscalations.Remove(escalation);
+            _context.SiteNotifications.Remove(notification);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<SiteEscalation> GetSiteEscalationAsync(int siteEscalationId)
+        public async Task<SiteNotification> GetSiteNotificationAsync(int siteNotificationId)
         {
-            return await _context.SiteEscalations
-                .SingleOrDefaultAsync(se => se.Id == siteEscalationId);
+            return await _context.SiteNotifications.SingleOrDefaultAsync(sn => sn.Id == siteNotificationId);
         }
+        public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetNotificationsAsync(int siteId, int adminId)
+        {
+            return await _context.SiteRegistrationNotes
+                .Include(n => n.Adjudicator)
+                .Include(n => n.SiteNotification)
+                    .ThenInclude(ee => ee.Admin)
+                .Where(n => n.SiteId == siteId)
+                .Where(n => n.SiteNotification != null && n.SiteNotification.AssigneeId == adminId)
+                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task RemoveNotificationsAsync(int siteId)
+        {
+            var notifications = await _context.SiteNotifications
+                .Where(en => en.SiteRegistrationNote.SiteId == siteId)
+                .ToListAsync();
+
+            _context.SiteNotifications.RemoveRange(notifications);
+            await _context.SaveChangesAsync();
+        }
+
 
         private IQueryable<Site> GetBaseSiteQuery()
         {

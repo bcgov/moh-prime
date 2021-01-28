@@ -883,7 +883,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(events));
         }
 
-        // DELETE: api/Sites/{enrolleeId}/adjudication-documents/{documentId}
+        // DELETE: api/Sites/{siteId}/adjudication-documents/{documentId}
         /// <summary>
         /// Delete the site's adjudication document
         /// </summary>
@@ -905,6 +905,118 @@ namespace Prime.Controllers
             await _siteService.DeleteSiteAdjudicationDocumentAsync(documentId);
 
             return Ok(ApiResponse.Result(document));
+        }
+
+        // POST: api/sites/5/site-registration-notes/6/notification
+        /// <summary>
+        /// Creates a new site notification on a site registration note.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="siteRegistrationNoteId"></param>
+        /// <param name="assigneeId"></param>
+        [HttpPost("{siteId}/site-registration-notes/{siteRegistrationNoteId}/notification", Name = nameof(CreateSiteNotification))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<SiteNotification>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<SiteNotification>> CreateSiteNotification(int siteId, int siteRegistrationNoteId, FromBodyData<int> assigneeId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+            var note = await _siteService.GetSiteRegistrationNoteAsync(siteId, siteRegistrationNoteId);
+            if (note == null)
+            {
+                return NotFound(ApiResponse.Message($"Site Registration Note not found with id {siteRegistrationNoteId}"));
+            }
+
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var notification = await _siteService.CreateSiteNotificationAsync(note.Id, admin.Id, assigneeId);
+
+            return Ok(ApiResponse.Result(notification));
+        }
+
+        // DELETE: api/Enrollees/5/site-registration-notes/6/notification
+        /// <summary>
+        /// deletes the notification on an site registration note.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="siteRegistrationNoteId"></param>
+        [HttpDelete("{siteId}/site-registration-notes/{siteRegistrationNoteId}/notification", Name = nameof(DeleteSiteNotification))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult> DeleteSiteNotification(int siteId, int siteRegistrationNoteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+            var note = await _siteService.GetSiteRegistrationNoteAsync(siteId, siteRegistrationNoteId);
+            if (note == null || note.SiteNotification == null)
+            {
+                return NotFound(ApiResponse.Message($"Site Registration Note with notification not found with id {siteRegistrationNoteId}"));
+            }
+
+            await _siteService.RemoveSiteNotificationAsync(note.SiteNotification.Id);
+
+            return Ok();
+        }
+
+        // Get: api/sites/5/notifications
+        /// <summary>
+        /// Get the site registration notes on an enrollee that has a notification for current admin user.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpGet("{siteId}/notification", Name = nameof(GetSiteNotifications))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<SiteRegistrationNoteViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<SiteRegistrationNoteViewModel>> GetSiteNotifications(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            var notes = await _siteService.GetNotificationsAsync(siteId, admin.Id);
+
+            return Ok(ApiResponse.Result(notes));
+        }
+
+        // Delete: api/sites/5/notifications
+        /// <summary>
+        ///     Delete all notifications on a enrollee
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpDelete("{siteId}/notifications", Name = nameof(DeleteSiteNotifications))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeNoteViewModel>> DeleteSiteNotifications(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            await _siteService.RemoveNotificationsAsync(siteId);
+
+            return Ok();
         }
     }
 }
