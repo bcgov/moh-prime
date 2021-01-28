@@ -156,6 +156,8 @@ export abstract class AbstractFormStateService<T> {
    *  areDisabled control names that are disabled
    *  useDefaults for province and country, otherwise empty
    *  exclude control names that are not needed
+   *
+   * @deprecated moved into FormUtilsService
    */
   protected buildAddressForm(options: {
     areRequired?: AddressLine[],
@@ -225,6 +227,8 @@ export abstract class AbstractFormStateService<T> {
   /**
    * @description
    * Convert party JSON to form model for reactive forms.
+   *
+   * @deprecated moved into FormUtilsService
    */
   protected toPersonFormModel<P extends Person>([formGroup, data]: [FormGroup, P]): void {
     if (data) {
@@ -252,6 +256,8 @@ export abstract class AbstractFormStateService<T> {
   /**
    * @description
    * Convert the party form model into JSON.
+   *
+   * @deprecated moved into FormUtilsService
    */
   protected toPersonJson<P extends Person>(person: P, addressKey: 'physicalAddress' | 'mailingAddress' = 'physicalAddress'): P {
     if (!person.firstName) {
