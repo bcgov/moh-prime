@@ -1,7 +1,9 @@
 <app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
 
-<section *ngIf="hasPreferredName && identityProvider === IdentityProviderEnum.BCSC"
+<section *ngIf="hasPreferredName && (identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR)"
          class="mb-4">
+  <!-- Note that for BCeID enrollees, the application forces their preferred names to be identical to their non-preferred counterparts,
+       so it is pointless to show the preferred names -->
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
@@ -199,12 +201,16 @@
       {{ certification.collegeCode | configCode: 'colleges' | default }}
     </app-enrollee-property>
 
+    <app-enrollee-property title="Licence Class">
+      {{ certification.licenseCode | configCode: 'licenses' | default }}
+    </app-enrollee-property>
+
     <app-enrollee-property title="Licence Number">
       {{ certification.licenseNumber | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Licence Class">
-      {{ certification.licenseCode | configCode: 'licenses' | default }}
+    <app-enrollee-property title="Pratitioner ID">
+      {{ certification.practitionerId | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Renewal Date">

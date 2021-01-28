@@ -44,6 +44,7 @@ export class EnrolleeReviewComponent {
 
     this.authService.identityProvider$()
       .subscribe((identityProvider: IdentityProviderEnum) => {
+        // Note that identityProvider may be equal to IdentityProviderEnum.IDIR
         this.identityProvider = identityProvider;
         this.demographicRoutePath = (identityProvider === IdentityProviderEnum.BCEID)
           ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
