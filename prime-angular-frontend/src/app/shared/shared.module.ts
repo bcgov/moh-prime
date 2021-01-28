@@ -18,7 +18,6 @@ import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-co
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
-import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
@@ -87,7 +86,6 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
     DefaultPipe,
     EnrolleePipe,
     EnrolmentPipe,
-    FirstKeyPipe,
     FormatDatePipe,
     PhonePipe,
     PostalPipe,
@@ -173,7 +171,6 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
     DefaultPipe,
     EnrolleePipe,
     EnrolmentPipe,
-    FirstKeyPipe,
     FormatDatePipe,
     PhonePipe,
     PostalPipe,
