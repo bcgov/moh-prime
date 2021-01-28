@@ -11,8 +11,6 @@ import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { CertSearch } from '@enrolment/shared/models/cert-search.model';
 import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
