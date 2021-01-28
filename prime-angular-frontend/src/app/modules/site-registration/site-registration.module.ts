@@ -10,7 +10,6 @@ import { SiteRegistrationDashboardComponent } from './shared/components/site-reg
 import { ContactProfileFormComponent } from './shared/components/contact-profile-form/contact-profile-form.component';
 import { SameAsComponent } from './shared/components/same-as/same-as.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
-import { SiteCollectionNoticeComponent } from './shared/components/site-collection-notice/site-collection-notice.component';
 import { SummaryCardComponent } from './shared/components/summary-card/summary-card.component';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -35,7 +34,6 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 @NgModule({
   declarations: [
     CollectionNoticeComponent,
-    SiteCollectionNoticeComponent,
     SiteManagementComponent,
 
     OrganizationSigningAuthorityComponent,
