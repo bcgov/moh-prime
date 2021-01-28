@@ -1,8 +1,9 @@
 export interface CollegeCertification {
   id?: number;
   collegeCode: number;
-  licenseNumber: string;
   licenseCode: number;
+  licenseNumber: string;
+  practitionerId: string;
   renewalDate: string;
   practiceCode?: number;
 }
