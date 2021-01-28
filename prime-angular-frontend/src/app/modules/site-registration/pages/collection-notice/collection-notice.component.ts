@@ -34,7 +34,7 @@ export class CollectionNoticeComponent implements OnInit {
 
     // Collection notice is the initial route after login, and used as a hub
     // for redirection to an appropriate view based on the organization
-    organization.completed
+    (organization.completed)
       ? this.router.navigate([SiteRoutes.SITE_MANAGEMENT], { relativeTo: this.route.parent })
       : this.router.navigate(
         [SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY],
