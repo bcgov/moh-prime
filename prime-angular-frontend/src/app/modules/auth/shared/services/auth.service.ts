@@ -85,7 +85,7 @@ export class AuthService implements IAuthService {
    * NOTE: Careful using this in Angular lifecycle hooks. It is preferrable to
    * use the Observable based method getUser$().
    */
-  // TODO should be based this on provider now
+  // TODO should be based on provider now
   // TODO use this as a base method for all other types of users
   // TODO multiple return types through switch-case, and new up objects for narrowing
   public async getUser(forceReload?: boolean): Promise<BcscUser> {
@@ -112,19 +112,19 @@ export class AuthService implements IAuthService {
     };
     ObjectUtils.keyMapping(claims, mapping);
 
+    // BCSC does not guarantee an address
+    const addressLine = { countryCode, provinceCode, street, city, postal };
+    const physicalAddress = (Object.keys(addressLine).every(key => addressLine[key]))
+      ? addressLine
+      : null;
+
     return {
       userId,
       firstName,
       lastName,
       givenNames,
       dateOfBirth,
-      physicalAddress: {
-        countryCode,
-        provinceCode,
-        street,
-        city,
-        postal
-      },
+      physicalAddress,
       email,
       ...claims
     } as BcscUser;
