@@ -44,15 +44,15 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Notification Information</ng-container>
       <ng-container appPageSubheaderSummary>
-        <div *ngIf="!forPhsa else PhsaSummary">
-          Provide an email address and phone number (optional)
+        <div #notificationInfoSummaryRef>
+          <ng-content select="[notificationInfoSummary]"></ng-content>
+        </div>
+        <div *ngIf="notificationInfoSummaryRef.children.length == 0">
+          Provide an email address
+          <ng-container *ngIf="showSmsPhone">and phone number (optional) </ng-container>
           that may be used for sending notifications from the PRIME
           system.
         </div>
-        <ng-template #PhsaSummary>
-          Please provide the email address you have provided to your Health Authority
-          to be associated with your eForms enrolment.
-        </ng-template>
       </ng-container>
     </app-page-subheader>
 
@@ -72,7 +72,7 @@
 
           </div>
 
-          <ng-container *ngIf="!forPhsa">
+          <ng-container *ngIf="showSmsPhone">
 
             <div class="col-6">
 
