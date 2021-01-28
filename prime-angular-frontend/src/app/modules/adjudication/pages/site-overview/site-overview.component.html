@@ -13,12 +13,17 @@
   <div class="row mt-4">
 
     <div class="col-6 mb-3">
-      <mat-icon>location_city</mat-icon>
-      <button mat-button
-              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
-        <h2>Organization Information</h2>
-      </button>
-
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>
+          <mat-icon class="mr-2">location_city</mat-icon>
+          Organization Information
+        </ng-container>
+        <button mat-icon-button
+                matTooltip="View Organization"
+                (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+          <mat-icon>navigate_next icon</mat-icon>
+        </button>
+      </app-page-subheader>
       <mat-card class="enrolmentCard">
         <mat-card-content>
           <app-overview-container [organization]="organization"
@@ -79,11 +84,17 @@
 
   <div class="row mt-4">
     <div class="col-6">
-      <mat-icon>store</mat-icon>
-      <button mat-button
-              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_INFORMATION])">
-        <h2>Site Information</h2>
-      </button>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>
+          <mat-icon class="mr-2">store</mat-icon>
+          Site Information
+        </ng-container>
+        <button mat-icon-button
+                matTooltip="View Site"
+                (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_INFORMATION])">
+          <mat-icon>navigate_next icon</mat-icon>
+        </button>
+      </app-page-subheader>
       <mat-card class="enrolmentCard">
         <mat-card-content>
           <app-overview-container [site]="site"
@@ -96,12 +107,17 @@
   <div *ngIf="site?.remoteUsers.length"
        class="row mt-4">
     <div class="col-6">
-      <mat-icon>account_circle</mat-icon>
-      <button mat-button
-              [disabled]="!site?.remoteUsers"
-              (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_REMOTE_USERS])">
-        <h2>Remote Practitioners</h2>
-      </button>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>
+          <mat-icon class="mr-2">account_circle</mat-icon>
+          Remote Practitioners
+        </ng-container>
+        <button mat-icon-button
+                matTooltip="View Remote Practitioners"
+                (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_REMOTE_USERS])">
+          <mat-icon>navigate_next icon</mat-icon>
+        </button>
+      </app-page-subheader>
       <mat-card class="enrolmentCard">
         <mat-card-content>
           <app-remote-user-review [remoteUsers]="site?.remoteUsers"></app-remote-user-review>
