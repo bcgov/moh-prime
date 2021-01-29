@@ -1,11 +1,11 @@
 <h2 mat-dialog-title
     class="d-flex align-items-stretch">
   <span class="flex-grow-1">
-    {{title}}
+    {{ title }}
   </span>
 </h2>
 <mat-dialog-content>
-  <span>You can {{reassign ? "unclaim" : "claim"}} the enrollee or assign them to a colleague.</span>
+  <span>You can {{reassign ? "unclaim" : "claim"}} the {{type}} or assign to a colleague.</span>
 
   <form [formGroup]="form">
     <mat-form-field class="w-100">
@@ -14,7 +14,7 @@
                 rows="10"
                 formControlName="note"></textarea>
       <mat-hint [ngClass]="{ 'text-green': !!note.value }">
-        {{ (note.value) ? 'Your note will be saved upon submission.' : 'A note is required when assigning an enrollee.'
+        {{ (note.value) ? 'Your note will be saved upon submission.' : 'A note is required when assigning.'
         }}
       </mat-hint>
     </mat-form-field>
@@ -25,12 +25,12 @@
             mat-flat-button
             color="primary"
             (click)="onDisclaim()"
-            class="mr-4">Unclaim Enrollee</button>
+            class="mr-4">Unclaim {{type | capitalize}}</button>
     <button *ngIf="!reassign"
             mat-flat-button
             color="primary"
             (click)="onClaim()"
-            class="mr-4">Claim Enrollee</button>
+            class="mr-4">Claim {{type | capitalize}}</button>
     <button mat-flat-button
             color="primary"
             [matMenuTriggerFor]="menu"

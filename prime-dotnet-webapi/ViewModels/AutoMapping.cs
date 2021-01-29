@@ -13,16 +13,20 @@ public class AutoMapping : Profile
 {
     public AutoMapping()
     {
+        IQueryable<int> currentAdminId = null;
         CreateMap<Organization, OrganizationListViewModel>();
         CreateMap<Site, SiteListViewModel>()
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
             .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count))
-            .ForMember(dest => dest.BusinessLicence, opt => opt.MapFrom(src => src.BusinessLicence));
+            .ForMember(dest => dest.HasNotification, opt =>
+             {
+                 opt.PreCondition((Site src) => currentAdminId != null);
+                 opt.MapFrom(src => src.SiteRegistrationNotes.Select(an => an.SiteNotification).Select(en => en.AssigneeId).Any(id => currentAdminId.Contains(id)));
+             });
 
         CreateMap<EnrolleeCreateModel, Enrollee>();
 
         IQueryable<int> newestAgreementIds = null;
-        IQueryable<int> currentAdminId = null;
         CreateMap<Enrollee, EnrolleeListViewModel>()
             .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))

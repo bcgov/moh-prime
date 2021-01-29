@@ -14,7 +14,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EscalationNoteComponent } from '../escalation-note/escalation-note.component';
+import { EscalationNoteComponent, EscalationType } from '../escalation-note/escalation-note.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogOptions } from '../../dialog-options.model';
 
@@ -50,7 +50,8 @@ export class TriageComponent implements OnInit {
   public onEscalate() {
     const data: DialogOptions = {
       data: {
-        enrolleeId: this.enrolleeId,
+        id: this.enrolleeId,
+        escalationType: EscalationType.ENROLLEE
       }
     };
 

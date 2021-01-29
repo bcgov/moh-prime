@@ -4,14 +4,16 @@ import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Admin } from '@auth/shared/models/admin.model';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { BehaviorSubject } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '../../dialog-options.model';
 
-export class EscalateEnrolleeAction {
-  public note: string;
-  public assigneeId: number;
+export enum EscalationType {
+  ENROLLEE = 1,
+  SITE_REGISTRATION,
 }
 
 @Component({
@@ -20,17 +22,20 @@ export class EscalateEnrolleeAction {
   styleUrls: ['./escalation-note.component.scss']
 })
 export class EscalationNoteComponent implements OnInit {
-  @Input() public enrolleeId: number;
+  public id: number;
+  public type: EscalationType;
   public adjudicators$: BehaviorSubject<Admin[]>;
   public form: FormGroup;
 
   constructor(
     private adjudicationResource: AdjudicationResource,
+    private siteResource: SiteResource,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
   ) {
-    this.enrolleeId = data.data.enrolleeId;
+    this.id = data.data.id;
+    this.type = data.data.escalationType;
     this.adjudicators$ = new BehaviorSubject<Admin[]>([]);
   }
 
@@ -44,13 +49,16 @@ export class EscalationNoteComponent implements OnInit {
 
   public onEscalate(assigneeId: number) {
     if (this.form.valid) {
-      this.adjudicationResource.createAdjudicatorNote(this.enrolleeId, this.note.value)
-        .pipe(
-          exhaustMap((note: EnrolleeNote) =>
-            this.adjudicationResource.createEnrolleeNotification(this.enrolleeId, note.id, assigneeId)
-          ),
-          exhaustMap(() => this.adjudicationResource.setEnrolleeAdjudicator(this.enrolleeId, assigneeId))
-        ).subscribe(() => this.dialogRef.close({ reload: true }))
+      switch (this.type) {
+        case EscalationType.ENROLLEE:
+          this.createEnrolleeEscalation(assigneeId);
+          break;
+        case EscalationType.SITE_REGISTRATION:
+          this.createSiteRegistrationEscalation(assigneeId);
+          break;
+        default:
+          break;
+      }
     }
     this.note.markAsTouched();
   }
@@ -63,6 +71,26 @@ export class EscalationNoteComponent implements OnInit {
   private getAdjudicators() {
     this.adjudicationResource.getAdjudicators()
       .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));
+  }
+
+  private createSiteRegistrationEscalation(assigneeId) {
+    this.siteResource.createSiteRegistrationNote(this.id, this.note.value)
+      .pipe(
+        exhaustMap((note: SiteRegistrationNote) =>
+          this.adjudicationResource.createSiteNotification(this.id, note.id, assigneeId)
+        ),
+        exhaustMap(() => this.siteResource.setSiteAdjudicator(this.id, assigneeId))
+      ).subscribe(() => this.dialogRef.close({ reload: true }));
+  }
+
+  private createEnrolleeEscalation(assigneeId) {
+    this.adjudicationResource.createAdjudicatorNote(this.id, this.note.value)
+      .pipe(
+        exhaustMap((note: EnrolleeNote) =>
+          this.adjudicationResource.createEnrolleeNotification(this.id, note.id, assigneeId)
+        ),
+        exhaustMap(() => this.adjudicationResource.setEnrolleeAdjudicator(this.id, assigneeId))
+      ).subscribe(() => this.dialogRef.close({ reload: true }));
   }
 
   protected createFormInstance() {

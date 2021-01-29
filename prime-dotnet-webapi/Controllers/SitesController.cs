@@ -974,7 +974,7 @@ namespace Prime.Controllers
         /// Get the site registration notes on an enrollee that has a notification for current admin user.
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpGet("{siteId}/notification", Name = nameof(GetSiteNotifications))]
+        [HttpGet("{siteId}/notifications", Name = nameof(GetSiteNotifications))]
         [Authorize(Policy = Policies.Admin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

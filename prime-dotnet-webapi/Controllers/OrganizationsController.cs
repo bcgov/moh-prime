@@ -56,36 +56,28 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets all of the Organizations for a user, or all organizations if user has ADMIN role
         /// </summary>
-        /// <param name="verbose"></param>
         [HttpGet(Name = nameof(GetOrganizations))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Organization>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizations([FromQuery] bool verbose)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<OrganizationListViewModel>>> GetOrganizations()
         {
-            IEnumerable<Organization> organizations;
+            IEnumerable<OrganizationListViewModel> organizations;
 
             if (User.HasAdminView())
             {
-                organizations = await _organizationService.GetOrganizationsAsync();
+                organizations = await _organizationService.GetOrganizationsAsync(User);
             }
             else
             {
                 var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
 
                 organizations = (party != null)
-                    ? await _organizationService.GetOrganizationsAsync(party.Id)
-                    : Enumerable.Empty<Organization>();
+                    ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
+                    : Enumerable.Empty<OrganizationListViewModel>();
             }
 
-            if (verbose)
-            {
-                return Ok(ApiResponse.Result(organizations));
-            }
-            else
-            {
-                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<OrganizationListViewModel>>(organizations)));
-            }
+            return Ok(ApiResponse.Result(organizations));
         }
 
         // GET: api/Organizations/5

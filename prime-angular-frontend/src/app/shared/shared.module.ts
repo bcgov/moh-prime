@@ -60,7 +60,6 @@ import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/ap
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 import { AccessTermsTableComponent } from '@shared/components/access-terms-table/access-terms-table.component';
 import { AccessTermComponent } from '@shared/components/access-term/access-term.component';
-import { ClaimEnrolleeComponent } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { CollectionNoticeContainerComponent } from '@shared/components/collection-notice-container/collection-notice-container.component';
@@ -72,15 +71,14 @@ import { OverviewSectionComponent } from '@shared/components/overview-section/ov
 import { OverviewContainerComponent } from '@shared/components/site/overview-container/overview-container.component';
 import { CollegeCertificationFormComponent } from '@shared/components/college-certification-form/college-certification-form.component';
 import { AddressAutocompleteComponent } from '@shared/components/address-autocomplete/address-autocomplete.component';
-import { ClaimSiteComponent } from '@shared/components/dialogs/content/claim-site/claim-site.component';
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
 import { AccessCodeFormComponent } from '@shared/components/access-code-form/access-code-form.component';
 import { ContactInformationFormComponent } from '@shared/components/contact-information-form/contact-information-form.component';
 import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
 import { TriageComponent } from './components/dialogs/content/triage/triage.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
-import { EscalationContextualComponent } from './components/dialogs/content/escalation-contextual/escalation-contextual.component';
 import { EscalationNoteComponent } from './components/dialogs/content/escalation-note/escalation-note.component';
+import { ClaimNoteComponent } from './components/dialogs/content/claim-note/claim-note.component';
 
 @NgModule({
   declarations: [
@@ -129,7 +127,6 @@ import { EscalationNoteComponent } from './components/dialogs/content/escalation
     AccessTermsTableComponent,
     AccessTermComponent,
     NoteComponent,
-    ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
     ImageComponent,
     CollectionNoticeContainerComponent,
@@ -141,7 +138,6 @@ import { EscalationNoteComponent } from './components/dialogs/content/escalation
     OverviewContainerComponent,
     CollegeCertificationFormComponent,
     AddressAutocompleteComponent,
-    ClaimSiteComponent,
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
     ContactInformationFormComponent,
@@ -149,8 +145,8 @@ import { EscalationNoteComponent } from './components/dialogs/content/escalation
     CareSettingPipe,
     JoinPipe,
     TriageComponent,
-    EscalationContextualComponent,
-    EscalationNoteComponent
+    EscalationNoteComponent,
+    ClaimNoteComponent
   ],
   imports: [
     CommonModule,
@@ -219,15 +215,14 @@ import { EscalationNoteComponent } from './components/dialogs/content/escalation
     OverviewSectionComponent,
     OverviewContainerComponent,
     CollegeCertificationFormComponent,
-    ClaimSiteComponent,
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
     ContactInformationFormComponent,
     CareSettingPipe,
     JoinPipe,
     TriageComponent,
-    EscalationContextualComponent,
-    EscalationNoteComponent
+    EscalationNoteComponent,
+    ClaimNoteComponent
   ],
   providers: [
     FullnamePipe,

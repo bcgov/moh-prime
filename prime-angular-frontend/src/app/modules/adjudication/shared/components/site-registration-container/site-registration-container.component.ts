@@ -14,17 +14,20 @@ import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-proper
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { ClaimSiteComponent, AssignSiteAction } from '@shared/components/dialogs/content/claim-site/claim-site.component';
-import { AssignActionEnum } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { UtilsService } from '@core/services/utils.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
+import { Organization } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';
+import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { AssignAction, AssignActionEnum, ClaimNoteComponent, ClaimType } from '@shared/components/dialogs/content/claim-note/claim-note.component';
+import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -53,6 +56,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     protected router: Router,
     protected organizationResource: OrganizationResource,
     protected siteResource: SiteResource,
+    protected adjudicationResource: AdjudicationResource,
     private authService: AuthService,
     private utilResource: UtilsService,
     private dialog: MatDialog
@@ -77,34 +81,73 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.getDataset(this.route.snapshot.queryParams);
   }
 
-  public onClaim(siteId: number) {
-    this.siteResource
-      .setSiteAdjudicator(siteId)
-      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
-  }
-
-  public onDisclaim(siteId: number) {
+  public onAssign(siteId: number) {
     const data: DialogOptions = {
-      title: 'Disclaim Site'
+      title: 'Assign Site',
+      component: ManualFlagNoteComponent,
+      data: {
+        reassign: false,
+        type: ClaimType.SITE
+      }
     };
 
-    this.busy = this.dialog.open(ClaimSiteComponent, { data })
+    this.busy = this.dialog.open(ClaimNoteComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: AssignSiteAction }) => {
-          if (!result) { return EMPTY; }
-
-          if (result.output.action === AssignActionEnum.Disclaim) {
-            return this.siteResource.removeSiteAdjudicator(siteId);
-          } else if (result.output.action === AssignActionEnum.Assign) {
-            return concat(
-              this.siteResource.removeSiteAdjudicator(siteId),
-              this.siteResource.setSiteAdjudicator(siteId, result.output.adjudicatorId)
-            );
-          }
-        })
+        exhaustMap((result: { output: AssignAction }) => (result) ? of(result.output ?? null) : EMPTY),
+        exhaustMap((action: AssignAction) => this.adjudicationResource.deleteSiteNotifications(siteId).pipe(map(() => action))),
+        exhaustMap((action: AssignAction) =>
+          (action.note)
+            ? this.siteResource.createSiteRegistrationNote(siteId, action.note)
+              .pipe(map((note: SiteRegistrationNote) => <any>{ note, assigneeId: action.adjudicatorId }))
+            : of({ assigneeId: action.adjudicatorId })
+        ),
+        exhaustMap((result: { note: SiteRegistrationNote, assigneeId: number }) =>
+          (result.note)
+            ? this.adjudicationResource.createSiteNotification(siteId, result.note.id, result.assigneeId).pipe(map(() => result.assigneeId))
+            : of(noop).pipe(map(() => result.assigneeId))
+        ),
+        exhaustMap((adjudicatorId: number) => this.siteResource.setSiteAdjudicator(siteId, adjudicatorId)),
       )
-      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
+      .subscribe(() => this.getDataset(this.route.snapshot.queryParams));
+  }
+
+  public onReassign(siteId: number) {
+    const data: DialogOptions = {
+      title: 'Reassign Site',
+      component: ManualFlagNoteComponent,
+      data: {
+        reassign: true,
+        type: ClaimType.SITE
+      }
+    };
+
+    this.busy = this.dialog.open(ClaimNoteComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: AssignAction }) => (result) ? of(result.output ?? null) : EMPTY),
+        exhaustMap((action: AssignAction) => this.adjudicationResource.deleteSiteNotifications(siteId).pipe(map(() => action))),
+        exhaustMap((action: AssignAction) =>
+          (action.note)
+            ? this.siteResource.createSiteRegistrationNote(siteId, action.note)
+              .pipe(map((note: SiteRegistrationNote) => <any>{ note, action: action }))
+            : of(null).pipe(map(() => <any>{ action: action }))
+        ),
+        exhaustMap((result: { note: SiteRegistrationNote, action: AssignAction }) =>
+          (result.note)
+            ? this.adjudicationResource.createSiteNotification(siteId, result.note.id, result.action.adjudicatorId).pipe(map(() => result.action))
+            : of(noop).pipe(map(() => result.action))
+        ),
+        exhaustMap((action: AssignAction) =>
+          (action.action === AssignActionEnum.Disclaim)
+            ? this.siteResource.removeSiteAdjudicator(siteId)
+            : concat(
+              this.siteResource.removeSiteAdjudicator(siteId),
+              this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
+            )
+        )
+      )
+      .subscribe(() => this.getDataset(this.route.snapshot.queryParams));
   }
 
   public onNotify(siteId: number) {
@@ -123,6 +166,18 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   public onRoute(routePath: string | (string | number)[]) {
     this.routeUtils.routeWithin(routePath);
+  }
+
+  public onEscalate(siteId: number) {
+    const data: DialogOptions = {
+      data: {
+        id: siteId,
+        escalationType: EscalationType.SITE_REGISTRATION
+      }
+    };
+
+    this.dialog.open(EscalationNoteComponent, { data }).afterClosed()
+      .subscribe((result: { reload: boolean }) => (result?.reload) ? this.getDataset(this.route.snapshot.queryParams) : noop);
   }
 
   public onDelete(record: { [key: string]: number }) {
@@ -232,7 +287,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe((siteRegistrations: SiteRegistrationListViewModel[]) => this.dataSource.data = siteRegistrations);
   }
 
-  private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<OrganizationListViewModel[]> {
+  private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<Organization[]> {
     return this.organizationResource.getOrganizations()
       .pipe(
         tap(() => this.showSearchFilter = true)
@@ -307,7 +362,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     }
   }
 
-  private toSiteRegistrations(organizations: OrganizationListViewModel[]): SiteRegistrationListViewModel[] {
+  private toSiteRegistrations(organizations: Organization[]): SiteRegistrationListViewModel[] {
     const siteRegistrations = organizations.reduce((registrations, ovm) => {
       const { id: organizationId, sites, ...organization } = ovm;
       const registration = sites.map((svm: SiteListViewModel, index: number) => {

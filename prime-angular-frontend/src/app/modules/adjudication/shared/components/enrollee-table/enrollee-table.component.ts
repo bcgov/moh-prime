@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription } from 'rxjs';
 
@@ -14,6 +13,7 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { Admin } from '@auth/shared/models/admin.model';
 
 @Component({
   selector: 'app-enrollee-table',
@@ -26,7 +26,7 @@ export class EnrolleeTableComponent implements OnInit {
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
-  @Output() public reload: EventEmitter<boolean>;
+  @Output() public reload: EventEmitter<number>;
 
   public busy: Subscription;
   public form: FormGroup;
@@ -44,7 +44,7 @@ export class EnrolleeTableComponent implements OnInit {
     this.notify = new EventEmitter<number>();
     this.assign = new EventEmitter<number>();
     this.reassign = new EventEmitter<number>();
-    this.reload = new EventEmitter<boolean>();
+    this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.columns = [
       'prefixes',
@@ -89,8 +89,8 @@ export class EnrolleeTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  public onReload(reload: boolean): void {
-    this.reload.emit(reload);
+  public onReload(enrolleeId: number): void {
+    this.reload.emit(enrolleeId);
   }
 
   public sortData(sort: Sort) {

@@ -11,7 +11,7 @@ import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 
-import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
+import { Organization } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
 
 @Injectable({
@@ -25,14 +25,11 @@ export class OrganizationResource {
     private logger: LoggerService
   ) { }
 
-  public getOrganizations(): Observable<OrganizationListViewModel[]>;
-  public getOrganizations(queryParams: { verbose: boolean }): Observable<OrganizationListViewModel[] | Organization[]>;
-  public getOrganizations(queryParams: { verbose: boolean } = null): Observable<OrganizationListViewModel[] | Organization[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams(queryParams);
-    return this.apiResource.get<OrganizationListViewModel[] | Organization[]>('organizations', params)
+  public getOrganizations(): Observable<Organization[]>{
+    return this.apiResource.get<Organization[] | Organization[]>('organizations')
       .pipe(
-        map((response: ApiHttpResponse<OrganizationListViewModel[] | Organization[]>) => response.result),
-        tap((organizations: OrganizationListViewModel[] | Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        map((response: ApiHttpResponse<Organization[] | Organization[]>) => response.result),
+        tap((organizations: Organization[] | Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizations error has occurred: ', error);

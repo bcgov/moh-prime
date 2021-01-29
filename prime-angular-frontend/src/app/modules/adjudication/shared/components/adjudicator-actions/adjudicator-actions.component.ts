@@ -12,7 +12,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import { exhaustMap } from 'rxjs/operators';
 import { noop } from 'rxjs';
 
@@ -149,7 +149,8 @@ export class AdjudicatorActionsComponent implements OnInit {
   public onEscalate() {
     const data: DialogOptions = {
       data: {
-        enrolleeId: this.enrollee.id,
+        id: this.enrollee.id,
+        escalationType: EscalationType.ENROLLEE
       }
     };
 

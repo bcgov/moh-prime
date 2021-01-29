@@ -1,48 +1,55 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { BehaviorSubject } from 'rxjs';
 
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+
 import { Admin } from '@auth/shared/models/admin.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { DialogOptions } from '../../dialog-options.model';
+
+export class AssignAction {
+  public action: AssignActionEnum;
+  public adjudicatorId?: number;
+  public note?: string;
+}
 
 export enum AssignActionEnum {
   Disclaim = 0,
   Assign = 1
 }
 
-export class AssignEnrolleeAction {
-  public action: AssignActionEnum;
-  public adjudicatorId?: number;
-  public note?: string;
+export enum ClaimType {
+  ENROLLEE = 'enrollee',
+  SITE = 'site'
 }
 
 @Component({
-  selector: 'app-claim-enrollee',
-  templateUrl: './claim-enrollee.component.html',
-  styleUrls: ['./claim-enrollee.component.scss']
+  selector: 'app-claim-note',
+  templateUrl: './claim-note.component.html',
+  styleUrls: ['./claim-note.component.scss']
 })
-export class ClaimEnrolleeComponent implements OnInit {
-  public adjudicators$: BehaviorSubject<Admin[]>;
-  public form: FormGroup;
-  public reassign: boolean;
+export class ClaimNoteComponent implements OnInit {
   public title: string;
+  public type: ClaimType;
+  public reassign: boolean;
+  public form: FormGroup;
+  public adjudicators$: BehaviorSubject<Admin[]>;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
     private adjudicationResource: AdjudicationResource,
-    private dialogRef: MatDialogRef<ClaimEnrolleeComponent>,
+    private dialogRef: MatDialogRef<ConfirmDialogComponent>,
     private fb: FormBuilder,
     private authService: AuthService,
-
   ) {
-    this.adjudicators$ = new BehaviorSubject<Admin[]>([]);
-    this.reassign = data.data.reassign;
     this.title = data.title;
+    this.reassign = data.data.reassign;
+    this.type = data.data.type;
+    this.adjudicators$ = new BehaviorSubject<Admin[]>([]);
   }
 
   public get note(): FormControl {
@@ -50,14 +57,14 @@ export class ClaimEnrolleeComponent implements OnInit {
   }
 
   public onDisclaim(): void {
-    const output = new AssignEnrolleeAction();
+    const output = new AssignAction();
     output.action = AssignActionEnum.Disclaim;
     this.dialogRef.close({ output });
   }
 
   public onClaim(): void {
     this.authService.getAdmin$().subscribe((admin: Admin) => {
-      const output = new AssignEnrolleeAction();
+      const output = new AssignAction();
       output.action = AssignActionEnum.Assign;
       output.adjudicatorId = admin.id;
       this.dialogRef.close({ output });
@@ -66,7 +73,7 @@ export class ClaimEnrolleeComponent implements OnInit {
 
   public onAssign(adminId: number): void {
     if (this.form.valid) {
-      const output = new AssignEnrolleeAction();
+      const output = new AssignAction();
       output.action = AssignActionEnum.Assign;
       output.adjudicatorId = adminId;
       output.note = this.note.value;
@@ -75,12 +82,12 @@ export class ClaimEnrolleeComponent implements OnInit {
     this.note.markAsTouched();
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.getAdjudicators();
     this.createFormInstance();
   }
 
-  private getAdjudicators() {
+  private getAdjudicators(): void {
     this.adjudicationResource.getAdjudicators()
       .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));
   }

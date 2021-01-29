@@ -18,11 +18,6 @@ import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.mo
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
-import {
-  ClaimEnrolleeComponent,
-  AssignEnrolleeAction,
-  AssignActionEnum
-} from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -33,6 +28,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 import { EnrolleeNotification } from '@adjudication/shared/models/enrollee-notification.model';
+import { AssignAction, ClaimNoteComponent, ClaimType, AssignActionEnum } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -108,15 +104,18 @@ export class AdjudicationContainerComponent implements OnInit {
     const data: DialogOptions = {
       title: 'Assign Enrolment',
       component: ManualFlagNoteComponent,
-      data: { reassign: false }
+      data: {
+        reassign: false,
+        type: ClaimType.ENROLLEE
+      }
     };
 
-    this.busy = this.dialog.open(ClaimEnrolleeComponent, { data })
+    this.busy = this.dialog.open(ClaimNoteComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: AssignEnrolleeAction }) => (result) ? of(result.output ?? null) : EMPTY),
-        exhaustMap((action: AssignEnrolleeAction) => this.adjudicationResource.deleteEnrolleeNotifications(enrolleeId).pipe(map(() => action))),
-        exhaustMap((action: AssignEnrolleeAction) =>
+        exhaustMap((result: { output: AssignAction }) => (result) ? of(result.output ?? null) : EMPTY),
+        exhaustMap((action: AssignAction) => this.adjudicationResource.deleteEnrolleeNotifications(enrolleeId).pipe(map(() => action))),
+        exhaustMap((action: AssignAction) =>
           (action.note)
             ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
               .pipe(map((note: EnrolleeNote) => <any>{ note, assigneeId: action.adjudicatorId }))
@@ -129,33 +128,36 @@ export class AdjudicationContainerComponent implements OnInit {
         ),
         exhaustMap((adjudicatorId: number) => this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, adjudicatorId)),
       )
-      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
+      .subscribe(() => this.getDataset(this.route.snapshot.queryParams));
   }
 
   public onReassign(enrolleeId: number) {
     const data: DialogOptions = {
       title: 'Reassign Enrolment',
       component: ManualFlagNoteComponent,
-      data: { reassign: true }
+      data: {
+        reassign: true,
+        type: ClaimType.ENROLLEE
+      }
     };
 
-    this.busy = this.dialog.open(ClaimEnrolleeComponent, { data })
+    this.busy = this.dialog.open(ClaimNoteComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: { output: AssignEnrolleeAction }) => (result) ? of(result.output ?? null) : EMPTY),
-        exhaustMap((action: AssignEnrolleeAction) => this.adjudicationResource.deleteEnrolleeNotifications(enrolleeId).pipe(map(() => action))),
-        exhaustMap((action: AssignEnrolleeAction) =>
+        exhaustMap((result: { output: AssignAction }) => (result) ? of(result.output ?? null) : EMPTY),
+        exhaustMap((action: AssignAction) => this.adjudicationResource.deleteEnrolleeNotifications(enrolleeId).pipe(map(() => action))),
+        exhaustMap((action: AssignAction) =>
           (action.note)
             ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
               .pipe(map((note: EnrolleeNote) => <any>{ note, action: action }))
             : of(null).pipe(map(() => <any>{ action: action }))
         ),
-        exhaustMap((result: { note: EnrolleeNote, action: AssignEnrolleeAction }) =>
+        exhaustMap((result: { note: EnrolleeNote, action: AssignAction }) =>
           (result.note)
             ? this.adjudicationResource.createEnrolleeNotification(enrolleeId, result.note.id, result.action.adjudicatorId).pipe(map(() => result.action))
             : of(noop).pipe(map(() => result.action))
         ),
-        exhaustMap((action: AssignEnrolleeAction) =>
+        exhaustMap((action: AssignAction) =>
           (action.action === AssignActionEnum.Disclaim)
             ? this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId)
             : concat(
@@ -164,7 +166,7 @@ export class AdjudicationContainerComponent implements OnInit {
             )
         )
       )
-      .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
+      .subscribe(() => this.getDataset(this.route.snapshot.queryParams));
   }
 
   public onApprove({ enrolleeId, agreementName }: { enrolleeId: number, agreementName: string }) {

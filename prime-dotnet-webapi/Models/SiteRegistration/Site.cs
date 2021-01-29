@@ -85,17 +85,5 @@ namespace Prime.Models
                 .Select(b => b.Day)
                 .Distinct();
         }
-
-        /// <summary>
-        /// Id for an escalated note on a site
-        /// </summary>
-        [NotMapped]
-        [Computed]
-        public int? EscalatedNoteId
-        {
-            get => SiteRegistrationNotes
-                .Where(an => an.SiteNotification != null)
-                .SingleOrDefault()?.Id;
-        }
     }
 }

@@ -3,33 +3,32 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-escalation-contextual',
-  templateUrl: './escalation-contextual.component.html',
-  styleUrls: ['./escalation-contextual.component.scss']
+  selector: 'app-contextual-enrollee-notification',
+  templateUrl: './contextual-enrollee-notification.component.html',
+  styleUrls: ['./contextual-enrollee-notification.component.scss']
 })
-export class EscalationContextualComponent implements OnInit {
+export class ContextualEnrolleeNotificationComponent implements OnInit {
   @Input() public enrolleeId: number;
-  @Output() public removed: EventEmitter<boolean>;
+  @Output() public removed: EventEmitter<number>;
   public notes: EnrolleeNote[];
 
   constructor(
     private adjudicationResource: AdjudicationResource,
   ) {
-    this.removed = new EventEmitter<boolean>();
+    this.removed = new EventEmitter<number>();
   }
 
   public onRemove(adjudicatorNoteId: number) {
     this.adjudicationResource.deleteEnrolleeNotification(this.enrolleeId, adjudicatorNoteId)
-      .subscribe(() => this.removed.emit(true));
+      .subscribe(() => this.removed.emit(this.enrolleeId));
   }
 
   public ngOnInit(): void {
-    this.getEscalatedNote();
+    this.getEscalatedNotes();
   }
 
-  private getEscalatedNote() {
+  private getEscalatedNotes() {
     this.adjudicationResource.getNotificationsByEnrollee(this.enrolleeId)
       .subscribe(notes => this.notes = notes);
   }
-
 }

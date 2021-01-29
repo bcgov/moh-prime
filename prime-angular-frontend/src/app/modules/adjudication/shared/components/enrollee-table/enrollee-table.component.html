@@ -19,10 +19,10 @@
                           [enrolleeId]="row.id"
                           [assigned]="(row.adjudicatorIdir)"
                           (reload)="onReload($event)"></app-triage>
-              <app-escalation-contextual *ngIf="row.hasNotification"
-                                         class="align-self-end"
-                                         [enrolleeId]="row.id"
-                                         (removed)="onReload($event)"></app-escalation-contextual>
+              <app-contextual-enrollee-notification *ngIf="row.hasNotification"
+                                                    class="align-self-end"
+                                                    [enrolleeId]="row.id"
+                                                    (removed)="onReload($event)"></app-contextual-enrollee-notification>
             </div>
           </td>
         </ng-container>
