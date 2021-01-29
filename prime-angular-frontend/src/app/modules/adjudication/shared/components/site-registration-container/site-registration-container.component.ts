@@ -49,11 +49,11 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
-    private route: ActivatedRoute,
-    private router: Router,
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected organizationResource: OrganizationResource,
+    protected siteResource: SiteResource,
     private authService: AuthService,
-    private organizationResource: OrganizationResource,
-    private siteResource: SiteResource,
     private utilResource: UtilsService,
     private dialog: MatDialog
   ) {

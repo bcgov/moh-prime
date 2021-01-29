@@ -82,11 +82,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public ngOnInit() {
-    this.formState = this.enrolmentFormStateService.regulatoryFormState;
-
     this.createFormInstance();
-    this.patchForm();
-    this.initForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   public ngOnDestroy() {
@@ -94,6 +91,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   protected createFormInstance() {
+    this.formState = this.enrolmentFormStateService.regulatoryFormState;
     this.form = this.formState.form;
   }
 

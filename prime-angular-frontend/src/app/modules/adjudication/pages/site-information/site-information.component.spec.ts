@@ -7,7 +7,7 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { SiteRegistrationComponent } from './site-registration.component';
+import { SiteInformationComponent } from './site-information.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
@@ -15,9 +15,9 @@ import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-co
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
-describe('SiteRegistrationComponent', () => {
-  let component: SiteRegistrationComponent;
-  let fixture: ComponentFixture<SiteRegistrationComponent>;
+describe('SiteInformationComponent', () => {
+  let component: SiteInformationComponent;
+  let fixture: ComponentFixture<SiteInformationComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -46,7 +46,7 @@ describe('SiteRegistrationComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SiteRegistrationComponent);
+    fixture = TestBed.createComponent(SiteInformationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
