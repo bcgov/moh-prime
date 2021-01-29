@@ -12,7 +12,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-import { PhsaEnrollee } from '@phsa/shared/models/phsa-eforms.model';
+import { PhsaEnrollee } from '@phsa/shared/models/phsa-enrollee.model';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { PhsaEformsFormStateService } from '@phsa/shared/services/phsa-eforms-form-state.service';
 

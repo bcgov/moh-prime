@@ -1,14 +1,14 @@
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Address } from './address.model';
-import { EnrolleeProfile } from './enrollee-profile.model';
 
-export interface Enrollee extends EnrolleeProfile {
+export interface Enrollee extends Omit<BcscUser, 'username'> {
   id?: number;
-  hpdid: string;
-  userId: string;
-  physicalAddress: Address;
+  preferredFirstName: string;
+  preferredMiddleName: string;
+  preferredLastName: string;
   mailingAddress?: Address;
   phone: string;
   phoneExtension?: string;
-  email: string;
   smsPhone?: string;
+  gpid: string;
 }

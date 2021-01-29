@@ -9,7 +9,7 @@ import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 
-import { PhsaEnrollee } from '@phsa/shared/models/phsa-eforms.model';
+import { PhsaEnrollee } from '@phsa/shared/models/phsa-enrollee.model';
 import { PartyTypeEnum } from '@phsa/shared/enums/party-type.enum';
 
 @Injectable({

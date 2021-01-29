@@ -2,8 +2,8 @@ import { Address } from '@shared/models/address.model';
 import { User } from './user.model';
 
 export interface BcscUser extends User {
-  hpdid: string;
-  userId: string;
+  hpdid: string; // BCSC GUID
+  userId: string; // Keycloak identifier
   email: string;
   firstName: string;
   lastName: string;
