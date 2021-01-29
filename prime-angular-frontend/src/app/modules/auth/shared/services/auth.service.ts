@@ -5,9 +5,9 @@ import { map, take } from 'rxjs/operators';
 
 import { KeycloakLoginOptions } from 'keycloak-js';
 
-import { LoggerService } from '@core/services/logger.service';
-
 import { ObjectUtils } from '@lib/utils/object-utils.class';
+import { LoggerService } from '@core/services/logger.service';
+import { Address } from '@shared/models/address.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { BrokerProfile } from '@auth/shared/models/broker-profile.model';
@@ -113,10 +113,10 @@ export class AuthService implements IAuthService {
     ObjectUtils.keyMapping(claims, mapping);
 
     // BCSC does not guarantee an address
-    const addressLine = { countryCode, provinceCode, street, city, postal };
-    const physicalAddress = (Object.keys(addressLine).every(key => addressLine[key]))
-      ? addressLine
-      : null;
+    const address = { countryCode, provinceCode, street, city, postal } as Address;
+    const physicalAddress = (Address.isNotEmpty(address))
+      ? address
+      : null; // Explicit indicator that address does not exist
 
     return {
       userId,

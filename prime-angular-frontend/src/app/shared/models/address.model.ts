@@ -25,11 +25,19 @@ export class Address {
 
   /**
    * @description
-   * Checks whether each property of an address is empty.
+   * Check for an empty address.
    */
-  public static isEmpty(address: Address): boolean {
-    return !Object.keys(address)
-      .filter(k => k !== 'id')
-      .every(k => address[k] !== null);
+  public static isEmpty(address: Address, blacklist: string[] = ['id']): boolean {
+    return Object.keys(address)
+      .filter(key => !blacklist.includes(key))
+      .every(k => !address[k]);
+  }
+
+  /**
+   * @description
+   * Checks for a partial address.
+   */
+  public static isNotEmpty(address: Address, blacklist?: string[]): boolean {
+    return !this.isEmpty(address, blacklist);
   }
 }
