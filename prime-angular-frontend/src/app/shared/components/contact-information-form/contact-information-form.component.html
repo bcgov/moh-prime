@@ -44,15 +44,14 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Notification Information</ng-container>
       <ng-container appPageSubheaderSummary>
-        <div #notificationInfoSummaryRef>
-          <ng-content select="[notificationInfoSummary]"></ng-content>
-        </div>
-        <div *ngIf="notificationInfoSummaryRef.children.length == 0">
+        <ng-content *ngIf="hasCustomNotificationInfoSummary else defaultSummary"
+                    select="[notificationInfoSummary]"></ng-content>
+        <ng-template #defaultSummary>
           Provide an email address
           <ng-container *ngIf="showSmsPhone">and phone number (optional) </ng-container>
           that may be used for sending notifications from the PRIME
           system.
-        </div>
+        </ng-template>
       </ng-container>
     </app-page-subheader>
 
