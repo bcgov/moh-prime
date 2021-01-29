@@ -66,13 +66,6 @@ namespace PrimeTests.Utils
             // .RuleFor(es => es.Status, f => new Status { Code = Status.ACTIVE_CODE, Name = "Active Code" })
             .RuleFor(es => es.StatusDate, f => DateTime.Now);
 
-        // The following could be expanded further but currently is just enough to satisfy `PrimeTests.Integration.EnrolleeIntegrationTests.TestCreateBcscEnrollee`
-        // and bypass:
-        // `Newtonsoft.Json.JsonSerializationException : Error getting value from 'Base64QRCode' on 'Prime.Models.Enrollee'.
-        // ---- System.ArgumentNullException : Value cannot be null. (Parameter 'source')`
-        public static Faker<EnrolleeCredential> EnrolleeCredentialFaker = new Faker<EnrolleeCredential>()
-            .RuleFor(ec => ec.Credential, f => new Credential { Base64QRCode = f.Random.String() });
-
         public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
             .RuleFor(e => e.UserId, f => Guid.NewGuid())
             .RuleFor(e => e.FirstName, f => f.Name.FirstName())
@@ -89,8 +82,7 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
             .RuleFor(e => e.IdentityAssuranceLevel, f => 3)
             .RuleFor(e => e.Agreements, f => new List<Agreement>())
-            .RuleFor(e => e.SelfDeclarations, f => new List<SelfDeclaration>())
-            .RuleFor(e => e.EnrolleeCredentials, f => EnrolleeCredentialFaker.Generate(1));
+            .RuleFor(e => e.SelfDeclarations, f => new List<SelfDeclaration>());
 
         public static Faker<Agreement> AgreementFaker = new Faker<Agreement>()
             .RuleFor(x => x.EnrolleeId, f => f.Random.Int(1, 5))
