@@ -126,7 +126,7 @@ namespace Prime.Models
         [NotMapped]
         public string Base64QRCode
         {
-            get => EnrolleeCredentials
+            get => EnrolleeCredentials?
                 .OrderByDescending(s => s.Id)
                 .Select(ec => ec.Credential?.Base64QRCode)
                 .FirstOrDefault();
