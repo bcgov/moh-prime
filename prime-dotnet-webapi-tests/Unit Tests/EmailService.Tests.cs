@@ -7,6 +7,7 @@ using FakeItEasy;
 using Prime;
 using Prime.Models;
 using Prime.Services;
+using Prime.Services.EmailInternal;
 using PrimeTests.Utils;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
@@ -17,41 +18,20 @@ namespace PrimeTests.UnitTests
     {
         public EmailService CreateService(
             IHttpContextAccessor httpContext = null,
-            IRazorConverterService razorConverterService = null,
-            IDocumentService documentService = null,
-            IPdfService pdfService = null,
-            IOrganizationService organizationService = null,
+            IEmailDocumentsService emailDocumentService = null,
+            IEmailRenderingService emailRenderingService = null,
             IChesClient chesClient = null,
-            ISmtpEmailClient smtpEmailClient = null,
-            IDocumentManagerClient documentManagerClient = null,
-            IDocumentAccessTokenService documentAccessTokenService = null,
-            ISiteService siteService = null,
-            IAgreementService agreementService = null,
-            IEmailManagementService emailManagementService = null
+            ISmtpEmailClient smtpEmailClient = null
             )
         {
             return new EmailService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
-                razorConverterService,
-                documentService,
-                pdfService,
-                organizationService,
-                chesClient,
-                smtpEmailClient,
-                documentManagerClient,
-                documentAccessTokenService,
-                siteService,
-                agreementService,
-                emailManagementService
+                emailDocumentService ?? A.Fake<IEmailDocumentsService>(),
+                emailRenderingService ?? A.Fake<IEmailRenderingService>(),
+                chesClient ?? A.Fake<IChesClient>(),
+                smtpEmailClient ?? A.Fake<ISmtpEmailClient>()
             );
         }
     }
 }
-
-//     public interface IEmailService
-//     {
-//         Task SendReminderEmailAsync(Enrollee enrollee);
-
-//         Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, string provisionerName = null);
-//     }
