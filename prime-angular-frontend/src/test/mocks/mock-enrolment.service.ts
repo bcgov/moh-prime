@@ -50,6 +50,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       selfDeclarations: [],
       selfDeclarationDocuments: [],
       identificationDocuments: [],
+      enrolleeHealthAuthorities: [],
       careSettings: [
         {
           id: faker.random.number(),
