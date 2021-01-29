@@ -15,8 +15,8 @@ namespace Prime.Models
         {
             // Initialize collections to prevent null exception on computed properties
             // like CurrentStatus and ExpiryDate
-            Agreements = new List<Agreement>();
             EnrolmentStatuses = new List<EnrolmentStatus>();
+            Agreements = new List<Agreement>();
             Submissions = new List<Submission>();
         }
 
