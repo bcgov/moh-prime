@@ -32,7 +32,12 @@
     </section>
 
     <app-contact-information-form [form]="form"
-                                  [showSmsPhone]="false"></app-contact-information-form>
+                                  [showSmsPhone]="false">
+      <ng-container notificationInfoSummary>
+        Please provide the email address you have provided to your Health Authority
+        to be associated with your eForms enrolment.
+      </ng-container>
+    </app-contact-information-form>
 
   </form>
 
