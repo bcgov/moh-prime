@@ -173,7 +173,7 @@ namespace Prime.Models
         }
 
         /// <summary>
-        /// The date of the Enrollee's most recent applicaiton.
+        /// The date of the Enrollee's most recent application.
         /// </summary>
         [NotMapped]
         [Computed]
