@@ -17,7 +17,6 @@ namespace Prime.Models
             // like CurrentStatus and ExpiryDate
             Agreements = new List<Agreement>();
             EnrolmentStatuses = new List<EnrolmentStatus>();
-            EnrolleeCredentials = new List<EnrolleeCredential>();
             Submissions = new List<Submission>();
         }
 
@@ -127,7 +126,7 @@ namespace Prime.Models
         [NotMapped]
         public string Base64QRCode
         {
-            get => EnrolleeCredentials
+            get => EnrolleeCredentials?
                 .OrderByDescending(s => s.Id)
                 .Select(ec => ec.Credential?.Base64QRCode)
                 .FirstOrDefault();
