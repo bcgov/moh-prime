@@ -16,8 +16,7 @@ import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-te
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
-import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
-import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
+import { SiteInformationComponent } from './pages/site-information/site-information.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { SiteRemoteUsersComponent } from './pages/site-remote-users/site-remote-users.component';
 import { MetabaseReportsComponent } from './pages/metabase-reports/metabase-reports.component';
@@ -27,6 +26,7 @@ import { SiteAdjudicatorDocumentsComponent } from './pages/site-adjudicator-docu
 import { EnrolleeAdjudicatorDocumentsComponent } from './pages/enrollee-adjudicator-documents/enrollee-adjudicator-documents.component';
 import { SiteEventsComponent } from './pages/site-events/site-events.component';
 import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-overview.component';
+import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 
 const routes: Routes = [
   {
@@ -128,13 +128,13 @@ const routes: Routes = [
             children: [
               {
                 path: '',
-                component: SiteRegistrationComponent,
-                data: { title: 'Site Registration' }
+                component: SiteOverviewComponent,
+                data: { title: 'Site Overview' }
               },
               {
-                path: AdjudicationRoutes.ADJUDICATION,
-                component: SiteAdjudicationComponent,
-                data: { title: 'Site Adjudication' }
+                path: AdjudicationRoutes.SITE_INFORMATION,
+                component: SiteInformationComponent,
+                data: { title: 'Site Information' }
               },
               {
                 path: AdjudicationRoutes.ORGANIZATION_INFORMATION,
