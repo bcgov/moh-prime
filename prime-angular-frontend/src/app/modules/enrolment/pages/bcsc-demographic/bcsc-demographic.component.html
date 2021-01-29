@@ -24,65 +24,40 @@
       <app-enrollee-profile [enrollee]="enrollee"
                             [showAddress]="false"></app-enrollee-profile>
 
-      <mat-slide-toggle class="mb-3"
-                        color="primary"
-                        (change)="onPreferredNameChange()"
-                        [checked]="hasPreferredName">
-        I have a preferred name
-      </mat-slide-toggle>
+      <app-toggle-content label="I have a preferred name"
+                          [checked]="hasPreferredName"
+                          (change)="onPreferredNameChange($event)">
+
+        <section>
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
+            <ng-container appPageSubheaderSummary>
+              If you use a name professionally that is different from your legal name, enter it here.
+            </ng-container>
+          </app-page-subheader>
+
+          <div *ngFor="let field of [
+                 { label: 'Preferred First Name', name: 'preferredFirstName'},
+                 { label: 'Preferred Middle Name (Optional)', name: 'preferredMiddleName'},
+                 { label: 'Preferred Last Name', name: 'preferredLastName'}
+               ]"
+               class="row">
+            <div class="col">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       [placeholder]="field.label"
+                       [formControlName]="field.name">
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+
+            </div>
+          </div>
+        </section>
+
+      </app-toggle-content>
 
     </section>
-
-    <ng-container *ngIf="hasPreferredName">
-
-      <section class="mb-3">
-
-        <app-page-subheader>
-          <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
-          <ng-container appPageSubheaderSummary>
-            If you use a name professionally that is different from your legal name, enter it here.
-          </ng-container>
-        </app-page-subheader>
-
-        <div class="row">
-          <div class="col">
-
-            <mat-form-field class="w-100">
-              <input matInput
-                     placeholder="Preferred First Name"
-                     formControlName="preferredFirstName">
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-
-            <mat-form-field class="w-100">
-              <input matInput
-                     placeholder="Preferred Middle Name (Optional)"
-                     formControlName="preferredMiddleName">
-            </mat-form-field>
-
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-
-            <mat-form-field class="w-100">
-              <input matInput
-                     placeholder="Preferred Last Name"
-                     formControlName="preferredLastName">
-              <mat-error>Required</mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-
-      </section>
-
-    </ng-container>
 
     <section class="mb-3">
 
@@ -101,28 +76,40 @@
                             [showPersonal]="false"
                             [showAddressTitle]="false"></app-enrollee-profile>
 
-      <mat-slide-toggle class="mb-3"
-                        color="primary"
-                        [checked]="hasMailingAddress"
-                        (change)="onMailingAddressChange()">
-        I have a preferred address
-      </mat-slide-toggle>
+      <app-toggle-content label="I have a preferred mailing address"
+                          [checked]="hasMailingAddress"
+                          (change)="onMailingAddressChange($event)">
+
+        <section>
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
+          </app-page-subheader>
+
+          <app-address [form]="mailingAddress"
+                       [bcOnly]="true"
+                       [showManualButton]="true"
+                       [showAddressFields]="hasMailingAddress"></app-address>
+        </section>
+
+      </app-toggle-content>
+
+      <app-toggle-content label="I have a preferred physical address"
+                          [checked]="hasPhysicalAddress"
+                          (change)="onPhysicalAddressChange($event)">
+
+        <section>
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Physical Address</ng-container>
+          </app-page-subheader>
+
+          <app-address [form]="physicalAddress"
+                       [showManualButton]="true"
+                       [showAddressFields]="hasPhysicalAddress"></app-address>
+        </section>
+
+      </app-toggle-content>
 
     </section>
-
-    <ng-container *ngIf="hasMailingAddress">
-
-      <section class="mb-3">
-
-        <app-page-subheader>
-          <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
-        </app-page-subheader>
-
-        <app-address [form]="mailingAddress"></app-address>
-
-      </section>
-
-    </ng-container>
 
     <app-contact-information-form [form]="form"></app-contact-information-form>
 
