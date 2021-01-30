@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 using Prime.Models;
+
 namespace Prime
 {
     // Allow for design time creation of the ApiDbContext
