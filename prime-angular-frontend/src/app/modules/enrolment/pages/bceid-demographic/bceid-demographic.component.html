@@ -57,13 +57,13 @@
             <input matInput
                    placeholder="Date of Birth"
                    [max]="maxDateOfBirth"
-                   [matDatepicker]="myDatepicker"
+                   [matDatepicker]="dobPicker"
                    formControlName="dateOfBirth"
-                   (click)="myDatepicker.open()"
+                   (click)="dobPicker.open()"
                    readonly>
             <mat-datepicker-toggle matSuffix
-                                   [for]="myDatepicker"></mat-datepicker-toggle>
-            <mat-datepicker #myDatepicker
+                                   [for]="dobPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dobPicker
                             startView="multi-year"
                             disabled="false"></mat-datepicker>
             <mat-error>Required</mat-error>
