@@ -8,7 +8,6 @@
         novalidate>
 
     <section class="mb-3">
-
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Personal Information</ng-container>
         <ng-container appPageSubheaderSummary>
@@ -16,7 +15,8 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-preferred-name-form [form]="form"></app-preferred-name-form>
+      <app-preferred-name-form [form]="form"
+                               mode="columns"></app-preferred-name-form>
 
       <div class="row">
         <div class="col-sm-6">
@@ -39,11 +39,9 @@
 
         </div>
       </div>
-
     </section>
 
     <section class="mb-3">
-
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Address</ng-container>
         <ng-container appPageSubheaderSummary>
@@ -53,7 +51,6 @@
 
       <app-address-form [form]="mailingAddress"
                         [formControlNames]="addressFormControlNames"></app-address-form>
-
     </section>
 
     <app-contact-information-form [form]="form"></app-contact-information-form>
