@@ -16,7 +16,6 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
-import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
@@ -53,7 +52,6 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
 import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
-import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
 import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
@@ -81,13 +79,12 @@ import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/e
 import { TriageComponent } from '@shared/components/dialogs/content/triage/triage.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 import { ToggleContentComponent } from '@shared/components/toggle-content/toggle-content.component';
+import { BcscProfileComponent } from './components/bcsc-profile/bcsc-profile.component';
 
 @NgModule({
   declarations: [
     CapitalizePipe,
     CertificatePipe,
-    DefaultPipe,
-    EnrolleePipe,
     EnrolmentPipe,
     FirstKeyPipe,
     FormatDatePipe,
@@ -100,6 +97,7 @@ import { ToggleContentComponent } from '@shared/components/toggle-content/toggle
     SafePipe,
     CasePipe,
     AddressPipe,
+    DefaultPipe,
     AddressComponent,
     ConfirmDialogComponent,
     PageComponent,
@@ -119,7 +117,6 @@ import { ToggleContentComponent } from '@shared/components/toggle-content/toggle
     AlertComponent,
     EnrolleeReviewComponent,
     EnrolleeSelfDeclarationsComponent,
-    EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     EnrolleePropertyErrorComponent,
     PrimeEmailComponent,
@@ -150,7 +147,8 @@ import { ToggleContentComponent } from '@shared/components/toggle-content/toggle
     CareSettingPipe,
     JoinPipe,
     TriageComponent,
-    ToggleContentComponent
+    ToggleContentComponent,
+    BcscProfileComponent
   ],
   imports: [
     CommonModule,
@@ -173,9 +171,7 @@ import { ToggleContentComponent } from '@shared/components/toggle-content/toggle
     ReactiveFormsModule,
     CapitalizePipe,
     CasePipe,
-    CertificatePipe,
     DefaultPipe,
-    EnrolleePipe,
     EnrolmentPipe,
     FirstKeyPipe,
     FormatDatePipe,
@@ -205,7 +201,6 @@ import { ToggleContentComponent } from '@shared/components/toggle-content/toggle
     AlertComponent,
     EnrolleeReviewComponent,
     EnrolleeSelfDeclarationsComponent,
-    EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
@@ -227,7 +222,8 @@ import { ToggleContentComponent } from '@shared/components/toggle-content/toggle
     CareSettingPipe,
     JoinPipe,
     TriageComponent,
-    ToggleContentComponent
+    ToggleContentComponent,
+    BcscProfileComponent
   ],
   providers: [
     FullnamePipe,

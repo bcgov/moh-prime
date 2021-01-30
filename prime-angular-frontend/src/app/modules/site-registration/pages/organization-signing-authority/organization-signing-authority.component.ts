@@ -16,6 +16,8 @@ import { IPage } from '@registration/shared/interfaces/page.interface';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Address } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-organization-signing-authority',
@@ -28,10 +30,14 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   public title: string;
   public routeUtils: RouteUtils;
   public organization: Organization;
-  public hasPreferredName: boolean;
-  public hasMailingAddress: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+
+  public hasPreferredName: boolean;
+  public hasMailingAddress: boolean;
+  public hasPhysicalAddress: boolean;
+
+  private optionalAddressLineItems: string[];
 
   constructor(
     private route: ActivatedRoute,
@@ -44,6 +50,8 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+
+    this.optionalAddressLineItems = ['id', 'street2'];
   }
 
   public get preferredFirstName(): FormControl {
@@ -54,10 +62,8 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     return this.form.get('preferredLastName') as FormControl;
   }
 
-  public get physicalAddress() {
-    return (this.organization && this.organization.signingAuthority.physicalAddress)
-      ? this.organization.signingAuthority.physicalAddress
-      : null;
+  public get physicalAddress(): FormGroup {
+    return this.form.get('physicalAddress') as FormGroup;
   }
 
   public get mailingAddress(): FormGroup {
@@ -92,19 +98,20 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     }
   }
 
-  public onPreferredNameChange() {
-    this.hasPreferredName = !this.hasPreferredName;
-
+  public onPreferredNameChange({ checked }: MatSlideToggleChange) {
     if (!this.hasPreferredName) {
       this.form.get('preferredMiddleName').reset();
     }
 
-    this.togglePreferredNameValidators(this.preferredFirstName, this.preferredLastName);
+    this.togglePreferredNameValidators(checked, this.preferredFirstName, this.preferredLastName);
   }
 
-  public onMailingAddressChange() {
-    this.hasMailingAddress = !this.hasMailingAddress;
-    this.toggleMailingAddressValidators(this.mailingAddress, ['street2', 'id']);
+  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
+    this.toggleAddressLineValidators(checked, this.mailingAddress);
+  }
+
+  public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
+    // this.toggleAddressLineValidators(checked, this.physicalAddress);
   }
 
   public onBack() {
@@ -116,11 +123,11 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     if (redirectPath) {
       this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
     } else {
-      if (this.isCompleted) {
-        this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
-      } else {
-        this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_NAME);
-      }
+      const routePath = (this.isCompleted)
+        ? SiteRoutes.ORGANIZATION_REVIEW
+        : SiteRoutes.ORGANIZATION_NAME;
+
+      this.routeUtils.routeRelativeTo(routePath);
     }
   }
 
@@ -148,30 +155,16 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
     this.organization = organization;
 
-    // Show preferred name if it exists
-    this.hasPreferredName = !!(
-      this.form.get('preferredFirstName').value ||
-      this.form.get('preferredMiddleName').value ||
-      this.form.get('preferredLastName').value
-    );
-
-    this.togglePreferredNameValidators(this.preferredFirstName, this.preferredLastName);
-
-    // Show mailing address if it exists
-    this.hasMailingAddress = !!(
-      this.mailingAddress.get('countryCode').value ||
-      this.mailingAddress.get('provinceCode').value ||
-      this.mailingAddress.get('street').value ||
-      this.mailingAddress.get('street2').value ||
-      this.mailingAddress.get('city').value ||
-      this.mailingAddress.get('postal').value
-    );
-
-    this.toggleMailingAddressValidators(this.mailingAddress, ['street2', 'id']);
+    this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
+    this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
+    // this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
+    // this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
+    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
+    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress);
   }
 
-  private togglePreferredNameValidators(preferredFirstName: FormControl, preferredLastName: FormControl) {
-    if (!this.hasPreferredName) {
+  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl) {
+    if (!hasPreferredName) {
       this.formUtilsService.resetAndClearValidators(preferredFirstName);
       this.formUtilsService.resetAndClearValidators(preferredLastName);
     } else {
@@ -180,11 +173,9 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     }
   }
 
-  private toggleMailingAddressValidators(mailingAddress: FormGroup, blacklist: string[] = []) {
-    if (!this.hasMailingAddress) {
-      this.formUtilsService.resetAndClearValidators(mailingAddress);
-    } else {
-      this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
-    }
+  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup): void {
+    (!hasAddressLine)
+      ? this.formUtilsService.resetAndClearValidators(addressLine, this.optionalAddressLineItems)
+      : this.formUtilsService.setValidators(addressLine, [Validators.required], this.optionalAddressLineItems);
   }
 }

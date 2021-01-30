@@ -14,8 +14,8 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-enrollee-profile [enrollee]="enrollee"
-                            [showAddress]="false"></app-enrollee-profile>
+      <app-bcsc-profile [user]="enrollee"
+                        [showAddress]="false"></app-bcsc-profile>
     </section>
 
     <section class="mb-3">
@@ -26,14 +26,14 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-enrollee-profile [enrollee]="enrollee"
-                            [showPersonal]="false"
-                            [showAddressTitle]="false"></app-enrollee-profile>
+      <app-bcsc-profile [user]="enrollee"
+                        [showPersonal]="false"
+                        [showAddressTitle]="false"></app-bcsc-profile>
     </section>
 
     <app-contact-information-form [form]="form"
                                   [showSmsPhone]="false">
-      <ng-container notificationInfoSummary>
+      <ng-container appNotificationInfoSummary>
         Please provide the email address you have provided to your Health Authority
         to be associated with your eForms enrolment.
       </ng-container>

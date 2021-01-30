@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[notificationInfoSummary]'
+  selector: '[appNotificationInfoSummary]'
 })
 export class NotificationInfoSummaryDirective { }

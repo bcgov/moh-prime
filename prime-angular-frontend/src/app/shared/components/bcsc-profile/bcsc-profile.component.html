@@ -4,13 +4,13 @@
     Name
   </div>
   <div class="col-6 text-right mb-3">
-    {{ enrollee | enrollee: 'fullName' | default }}
+    {{ user | fullname | default }}
   </div>
   <div class="col-6 mb-3">
     Date of Birth
   </div>
   <div class="col-6 text-right">
-    {{ enrollee?.dateOfBirth | formatDate | default }}
+    {{ user?.dateOfBirth | formatDate | default }}
   </div>
 </div>
 

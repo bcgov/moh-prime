@@ -39,6 +39,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
    * within the form for use in creation.
    */
   public enrollee: Enrollee;
+
   public hasPreferredName: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
