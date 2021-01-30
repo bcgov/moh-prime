@@ -3,6 +3,10 @@ import { FormGroup } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 
+/**
+ * @description
+ * Debug form errors visually in the template.
+ */
 @Component({
   selector: 'app-form-errors',
   templateUrl: './form-errors.component.html',
