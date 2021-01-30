@@ -9,6 +9,7 @@ using Prime.Models;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Diagnostics;
 
 namespace Prime
 {
@@ -40,8 +41,6 @@ namespace Prime
 
     public class ApiDbContext : DbContext
     {
-        private readonly DateTimeOffset SEEDING_DATE = DateTimeOffset.Now;
-
         private readonly IHttpContextAccessor _context;
 
         public ApiDbContext(
@@ -123,29 +122,22 @@ namespace Prime
         private void ApplyAudits()
         {
             ChangeTracker.DetectChanges();
+            var updated = ChangeTracker.Entries()
+                .Where(x => x is IAuditable
+                    && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
-            var created = ChangeTracker.Entries().Where(x => x.State == EntityState.Added);
-            var modified = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified);
             var currentUser = _context?.HttpContext?.User.GetPrimeUserId() ?? Guid.Empty;
-            var currentDateTime = SEEDING_DATE;
+            var currentTime = DateTimeOffset.Now;
 
-            foreach (var item in created)
+            foreach (var entity in updated)
             {
-                if (item.Entity is IAuditable entity)
-                {
-                    item.CurrentValues[nameof(IAuditable.CreatedUserId)] = currentUser;
-                    item.CurrentValues[nameof(IAuditable.CreatedTimeStamp)] = currentDateTime;
-                    item.CurrentValues[nameof(IAuditable.UpdatedUserId)] = currentUser;
-                    item.CurrentValues[nameof(IAuditable.UpdatedTimeStamp)] = currentDateTime;
-                }
-            }
+                entity.CurrentValues[nameof(IAuditable.UpdatedUserId)] = currentUser;
+                entity.CurrentValues[nameof(IAuditable.UpdatedTimeStamp)] = currentTime;
 
-            foreach (var item in modified)
-            {
-                if (item.Entity is IAuditable entity)
+                if (entity.State == EntityState.Added)
                 {
-                    item.CurrentValues[nameof(IAuditable.UpdatedUserId)] = currentUser;
-                    item.CurrentValues[nameof(IAuditable.UpdatedTimeStamp)] = currentDateTime;
+                    entity.CurrentValues[nameof(IAuditable.CreatedUserId)] = currentUser;
+                    entity.CurrentValues[nameof(IAuditable.CreatedTimeStamp)] = currentTime;
                 }
             }
         }
