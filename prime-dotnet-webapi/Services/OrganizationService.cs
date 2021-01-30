@@ -50,6 +50,7 @@ namespace Prime.Services
         public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId)
         {
             return await _context.Organizations
+                .Where(o => o.SigningAuthorityId == partyId)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
