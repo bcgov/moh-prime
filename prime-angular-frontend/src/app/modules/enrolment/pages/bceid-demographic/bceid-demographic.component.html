@@ -16,40 +16,8 @@
         </ng-container>
       </app-page-subheader>
 
-      <div class="row">
-        <div class="col-sm-6">
+      <app-preferred-name-form [form]="form"></app-preferred-name-form>
 
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="First Name"
-                   formControlName="preferredFirstName">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-        <div class="col-sm-6">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Middle Name (optional)"
-                   formControlName="preferredMiddleName">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Last Name"
-                   formControlName="preferredLastName">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
       <div class="row">
         <div class="col-sm-6">
 
@@ -83,8 +51,8 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-address [form]="mailingAddress"
-                   [formControlNames]="addressFormControlNames"></app-address>
+      <app-address-form [form]="mailingAddress"
+                        [formControlNames]="addressFormControlNames"></app-address-form>
 
     </section>
 

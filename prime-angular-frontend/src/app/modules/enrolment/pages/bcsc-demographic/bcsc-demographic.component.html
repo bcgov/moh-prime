@@ -35,23 +35,7 @@
             </ng-container>
           </app-page-subheader>
 
-          <div *ngFor="let field of [
-                 { label: 'Preferred First Name', name: 'preferredFirstName'},
-                 { label: 'Preferred Middle Name (Optional)', name: 'preferredMiddleName'},
-                 { label: 'Preferred Last Name', name: 'preferredLastName'}
-               ]"
-               class="row">
-            <div class="col">
-
-              <mat-form-field class="w-100">
-                <input matInput
-                       [placeholder]="field.label"
-                       [formControlName]="field.name">
-                <mat-error>Required</mat-error>
-              </mat-form-field>
-
-            </div>
-          </div>
+          <app-preferred-name-form [form]="form"></app-preferred-name-form>
         </section>
 
       </app-toggle-content>
@@ -84,10 +68,10 @@
             <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
           </app-page-subheader>
 
-          <app-address [form]="mailingAddress"
-                       [bcOnly]="true"
-                       [showManualButton]="true"
-                       [showAddressFields]="hasMailingAddress"></app-address>
+          <app-address-form [form]="mailingAddress"
+                            [onlyBc]="true"
+                            [showManualButton]="true"
+                            [showAddressFields]="hasMailingAddress"></app-address-form>
         </section>
 
       </app-toggle-content>
@@ -101,9 +85,9 @@
             <ng-container appPageSubheaderTitle>Physical Address</ng-container>
           </app-page-subheader>
 
-          <app-address [form]="physicalAddress"
-                       [showManualButton]="true"
-                       [showAddressFields]="hasPhysicalAddress"></app-address>
+          <app-address-form [form]="physicalAddress"
+                            [showManualButton]="true"
+                            [showAddressFields]="hasPhysicalAddress"></app-address-form>
         </section>
 
       </app-toggle-content>

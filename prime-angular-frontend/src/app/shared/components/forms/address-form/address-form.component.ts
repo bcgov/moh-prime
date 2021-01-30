@@ -12,11 +12,11 @@ import { Country } from '@shared/enums/country.enum';
 import { Address } from '@shared/models/address.model';
 
 @Component({
-  selector: 'app-address',
-  templateUrl: './address.component.html',
-  styleUrls: ['./address.component.scss']
+  selector: 'app-address-form',
+  templateUrl: './address-form.component.html',
+  styleUrls: ['./address-form.component.scss']
 })
-export class AddressComponent implements OnInit {
+export class AddressFormComponent implements OnInit {
   /**
    * @description
    * Address line form.
@@ -36,7 +36,7 @@ export class AddressComponent implements OnInit {
    * Whether BC addresses can only be selected using
    * autocomplete.
    */
-  @Input() public bcOnly: boolean;
+  @Input() public onlyBc: boolean;
   /**
    * @description
    * Whether to show the manual address.

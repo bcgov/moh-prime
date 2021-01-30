@@ -32,7 +32,7 @@ import { SafePipe } from '@shared/pipes/safe.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { CareSettingPipe } from '@shared/pipes/care-setting.pipe';
 import { JoinPipe } from '@shared/pipes/join.pipe';
-import { AddressComponent } from '@shared/components/forms/address/address.component';
+import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -80,6 +80,7 @@ import { TriageComponent } from '@shared/components/dialogs/content/triage/triag
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 import { ToggleContentComponent } from '@shared/components/toggle-content/toggle-content.component';
 import { BcscProfileComponent } from './components/bcsc-profile/bcsc-profile.component';
+import { PreferredNameFormComponent } from './components/forms/preferred-name-form/preferred-name-form.component';
 
 @NgModule({
   declarations: [
@@ -98,7 +99,7 @@ import { BcscProfileComponent } from './components/bcsc-profile/bcsc-profile.com
     CasePipe,
     AddressPipe,
     DefaultPipe,
-    AddressComponent,
+    AddressFormComponent,
     ConfirmDialogComponent,
     PageComponent,
     ProgressIndicatorComponent,
@@ -148,7 +149,8 @@ import { BcscProfileComponent } from './components/bcsc-profile/bcsc-profile.com
     JoinPipe,
     TriageComponent,
     ToggleContentComponent,
-    BcscProfileComponent
+    BcscProfileComponent,
+    PreferredNameFormComponent
   ],
   imports: [
     CommonModule,
@@ -183,7 +185,7 @@ import { BcscProfileComponent } from './components/bcsc-profile/bcsc-profile.com
     FullnamePipe,
     SafePipe,
     AddressPipe,
-    AddressComponent,
+    AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
     ProgressIndicatorComponent,
@@ -223,7 +225,8 @@ import { BcscProfileComponent } from './components/bcsc-profile/bcsc-profile.com
     JoinPipe,
     TriageComponent,
     ToggleContentComponent,
-    BcscProfileComponent
+    BcscProfileComponent,
+    PreferredNameFormComponent
   ],
   providers: [
     FullnamePipe,
