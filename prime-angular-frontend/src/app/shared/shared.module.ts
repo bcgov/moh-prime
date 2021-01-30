@@ -44,6 +44,7 @@ import { PageSubheader2Component } from '@shared/components/page-subheader2/page
 import { PageSubheader2TitleDirective } from '@shared/components/page-subheader2/page-subheader2-title.directive';
 import { PageSubheader2MoreInfoDirective } from '@shared/components/page-subheader2/page-subheader2-more-info.directive';
 import { PageSubheader2SummaryDirective } from '@shared/components/page-subheader2/page-subheader2-summary.directive';
+import { NotificationInfoSummaryDirective } from '@shared/components/contact-information-form/notification-info-summary.directive';
 import { PageFooterComponent } from '@shared/components/page-footer/page-footer.component';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
@@ -108,6 +109,7 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
     PageSubheader2TitleDirective,
     PageSubheader2SummaryDirective,
     PageSubheader2MoreInfoDirective,
+    NotificationInfoSummaryDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,
@@ -191,6 +193,7 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
     PageSubheader2TitleDirective,
     PageSubheader2SummaryDirective,
     PageSubheader2MoreInfoDirective,
+    NotificationInfoSummaryDirective,
     PageFooterComponent,
     DialogContentDirective,
     FormIconGroupComponent,

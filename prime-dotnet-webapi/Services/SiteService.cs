@@ -67,7 +67,8 @@ namespace Prime.Services
             var site = new Site
             {
                 ProvisionerId = organization.SigningAuthorityId,
-                OrganizationId = organization.Id
+                OrganizationId = organization.Id,
+                Status = SiteStatusType.UnderReview
             };
 
             _context.Sites.Add(site);

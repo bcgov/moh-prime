@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
@@ -32,7 +32,8 @@ export class PhsaComponent implements OnInit {
   }
 
   public loginUsingBCSC() {
-    const redirectRoute = PhsaEformsRoutes.routePath(PhsaEformsRoutes.DEMOGRAPHIC);
+    // Send the user to COLLECTION_NOTICE which determines the direction of routing
+    const redirectRoute = PhsaEformsRoutes.routePath(PhsaEformsRoutes.COLLECTION_NOTICE);
     const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
