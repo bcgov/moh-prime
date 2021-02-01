@@ -264,16 +264,17 @@ objects:
               - containerPort: 5000
               - containerPort: 5001
               - containerPort: 8080
-            # readinessProbe:
-            #   failureThreshold: 3
-            #   httpGet:
-            #     path: /api/healthcheck
-            #     port: 8080
-            #     scheme: "HTTP"
-            #   initialDelaySeconds: 30
-            #   periodSeconds: 30
-            #   successThreshold: 1
-            #   timeoutSeconds: 10
+            readinessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /api/healthcheck
+                port: 8080
+                scheme: "HTTP"
+              initialDelaySeconds: 30
+              periodSeconds: 30
+              successThreshold: 1
+              # timeoutSeconds: 10
+              timeoutSeconds: 30
             volumeMounts:
               # Create directory for storing .NET Web API SSL certificate
               - name: cert-volume
