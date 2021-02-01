@@ -5,6 +5,7 @@ import { AbstractFormStateService } from '@lib/classes/abstract-form-state-servi
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Party } from '@registration/shared/models/party.model';
@@ -21,7 +22,8 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService
+    protected logger: LoggerService,
+    private formUtilsService: FormUtilsService
   ) {
     super(fb, routeStateService, logger);
 
@@ -132,8 +134,9 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
         null,
         [Validators.required, FormControlValidators.email]
       ],
-      mailingAddress: this.buildAddressForm(),
-      physicalAddress: this.buildAddressForm(),
+      validatedAddress: this.formUtilsService.buildAddressForm(),
+      mailingAddress: this.formUtilsService.buildAddressForm(),
+      physicalAddress: this.formUtilsService.buildAddressForm(),
       dateOfBirth: [
         null,
         [Validators.required]
