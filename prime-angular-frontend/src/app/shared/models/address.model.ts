@@ -28,6 +28,10 @@ export class Address {
    * Check for an empty address.
    */
   public static isEmpty(address: Address, blacklist: string[] = ['id']): boolean {
+    if (!address) {
+      return false;
+    }
+
     return Object.keys(address)
       .filter(key => !blacklist.includes(key))
       .every(k => !address[k]);
