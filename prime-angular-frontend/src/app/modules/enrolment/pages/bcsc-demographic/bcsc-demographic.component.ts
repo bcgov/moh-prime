@@ -41,6 +41,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   public enrollee: Enrollee;
 
   public hasPreferredName: boolean;
+  public hasValidatedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
 
@@ -83,12 +84,16 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     return this.form.get('preferredLastName') as FormControl;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
+  public get validatedAddress(): FormGroup {
+    return this.form.get('validatedAddress') as FormGroup;
   }
 
   public get mailingAddress(): FormGroup {
     return this.form.get('mailingAddress') as FormGroup;
+  }
+
+  public get physicalAddress(): FormGroup {
+    return this.form.get('physicalAddress') as FormGroup;
   }
 
   public onPreferredNameChange({ checked }: MatSlideToggleChange) {
@@ -100,7 +105,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onMailingAddressChange({ checked }: MatSlideToggleChange) {
-    this.toggleAddressLineValidators(checked, this.mailingAddress);
+    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
   }
 
   public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
@@ -109,9 +114,21 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   public ngOnInit() {
     this.createFormInstance();
-    this.patchForm().subscribe(() => this.initForm());
-
-    this.getUser$().subscribe((enrollee: Enrollee) => this.enrollee = enrollee);
+    // Ensure that the enrollee user information is loaded prior
+    // to patching and initialization of the form to enforce
+    // proper validation if a BCSC user doesn't have an address
+    this.getUser$()
+      .pipe(
+        map((enrollee: Enrollee) => {
+          this.enrollee = enrollee;
+          this.hasValidatedAddress = Address.isEmpty(enrollee.validatedAddress);
+          if (!this.hasValidatedAddress) {
+            this.setAddressValidator(this.mailingAddress);
+          }
+        }),
+        exhaustMap(() => this.patchForm())
+      )
+      .subscribe(() => this.initForm());
   }
 
   protected createFormInstance() {
@@ -122,10 +139,10 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   protected initForm() {
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
+    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
+    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasValidatedAddress);
     this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
     this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
-    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
-    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress);
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
@@ -165,10 +182,14 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     }
   }
 
-  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup): void {
-    (!hasAddressLine)
+  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
+    (!hasAddressLine && shouldToggle)
       ? this.formUtilsService.resetAndClearValidators(addressLine, this.optionalAddressLineItems)
-      : this.formUtilsService.setValidators(addressLine, [Validators.required], this.optionalAddressLineItems);
+      : this.setAddressValidator(addressLine);
+  }
+
+  private setAddressValidator(addressLine: FormGroup): void {
+    this.formUtilsService.setValidators(addressLine, [Validators.required], this.optionalAddressLineItems);
   }
 
   private getUser$(): Observable<Enrollee> {

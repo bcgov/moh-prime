@@ -34,6 +34,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   public SiteRoutes = SiteRoutes;
 
   public hasPreferredName: boolean;
+  public hasValidatedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
 
@@ -62,12 +63,16 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     return this.form.get('preferredLastName') as FormControl;
   }
 
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
+  public get validatedAddress(): FormGroup {
+    return this.form.get('validatedAddress') as FormGroup;
   }
 
   public get mailingAddress(): FormGroup {
     return this.form.get('mailingAddress') as FormGroup;
+  }
+
+  public get physicalAddress(): FormGroup {
+    return this.form.get('physicalAddress') as FormGroup;
   }
 
   public get phone(): FormControl {
@@ -107,7 +112,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public onMailingAddressChange({ checked }: MatSlideToggleChange) {
-    this.toggleAddressLineValidators(checked, this.mailingAddress);
+    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
   }
 
   public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
@@ -140,6 +145,10 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
   public ngOnInit() {
     this.createFormInstance();
+    // Ensure that the enrollee user information is loaded prior
+    // to patching and initialization of the form to enforce
+    // proper validation if a BCSC user doesn't have an address
+    this.hasValidatedAddress = Address.isNotEmpty(this.validatedAddress.value)
     this.initForm();
   }
 
@@ -157,10 +166,10 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
-    // this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
-    // this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
     this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
-    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress);
+    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasValidatedAddress);
+    this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
+    this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
   }
 
   private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl) {
@@ -173,9 +182,13 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     }
   }
 
-  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup): void {
-    (!hasAddressLine)
+  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
+    (!hasAddressLine && shouldToggle)
       ? this.formUtilsService.resetAndClearValidators(addressLine, this.optionalAddressLineItems)
-      : this.formUtilsService.setValidators(addressLine, [Validators.required], this.optionalAddressLineItems);
+      : this.setAddressValidator(addressLine);
+  }
+
+  private setAddressValidator(addressLine: FormGroup): void {
+    this.formUtilsService.setValidators(addressLine, [Validators.required], this.optionalAddressLineItems);
   }
 }

@@ -6,6 +6,7 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { Address } from '@shared/models/address.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Party } from '@registration/shared/models/party.model';
@@ -36,7 +37,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
    */
   public get json(): Organization {
     const organizationName = this.organizationNameForm.getRawValue();
-    const signingAuthority = this.toPersonJson<Party>(this.signingAuthorityForm.getRawValue(), 'mailingAddress');
+    const signingAuthority = this.formUtilsService.toPersonJson<Party>(this.signingAuthorityForm.getRawValue(), 'mailingAddress');
     const { organizationAgreementGuid } = this.organizationAgreementForm.getRawValue();
 
     return {
@@ -80,8 +81,13 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
       return;
     }
 
+
+    console.log('TEMPORARY TO ALLOW WORK!!!');
+    // TODO add to adapters so backend can send null
+    organization.signingAuthority.validatedAddress = new Address();
+
     this.organizationNameForm.patchValue(organization);
-    this.toPersonFormModel<Party>([this.signingAuthorityForm, organization.signingAuthority]);
+    this.formUtilsService.toPersonFormModel<Party>([this.signingAuthorityForm, organization.signingAuthority]);
   }
 
 

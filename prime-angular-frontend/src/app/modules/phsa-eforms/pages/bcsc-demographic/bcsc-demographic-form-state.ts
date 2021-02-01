@@ -1,4 +1,5 @@
 import { FormBuilder, Validators } from '@angular/forms';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -11,7 +12,8 @@ export interface PhsaBcscDemographicFormModel {
 
 export class BcscDemographicFormState extends AbstractFormState<PhsaBcscDemographicFormModel> {
   public constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private formUtilsService: FormUtilsService
   ) {
     super();
 
@@ -32,6 +34,9 @@ export class BcscDemographicFormState extends AbstractFormState<PhsaBcscDemograp
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
+      validatedAddress: this.formUtilsService.buildAddressForm(),
+      mailingAddress: this.formUtilsService.buildAddressForm(),
+      physicalAddress: this.formUtilsService.buildAddressForm(),
       phone: [
         null,
         [Validators.required, FormControlValidators.phone]

@@ -4,6 +4,7 @@ import { FormBuilder, AbstractControl } from '@angular/forms';
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { PhsaEnrollee } from '@phsa/shared/models/phsa-enrollee.model';
 import { AccessCodeFormState } from '@phsa/pages/access-code/access-code-form-state';
@@ -21,7 +22,8 @@ export class PhsaEformsFormStateService extends AbstractFormStateService<PhsaEnr
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService
+    protected logger: LoggerService,
+    private formUtilsService: FormUtilsService
   ) {
     super(fb, routeStateService, logger);
 
@@ -55,7 +57,7 @@ export class PhsaEformsFormStateService extends AbstractFormStateService<PhsaEnr
    */
   protected buildForms(): void {
     this.accessCodeFormState = new AccessCodeFormState(this.fb);
-    this.demographicFormState = new BcscDemographicFormState(this.fb);
+    this.demographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
     this.availableAccessFormState = new AvailableAccessFormState(this.fb);
   }
 
