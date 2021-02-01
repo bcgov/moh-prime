@@ -174,7 +174,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   private getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
-        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: BcscUser) => {
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, validatedAddress }: BcscUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
@@ -185,7 +185,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
             lastName,
             givenNames,
             dateOfBirth,
-            physicalAddress,
+            validatedAddress,
             phone: null,
             email: null
           } as Enrollee;

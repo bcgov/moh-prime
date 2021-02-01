@@ -19,9 +19,9 @@ export class BcscProfileComponent {
     this.showAddressTitle = true;
   }
 
-  public get physicalAddress() {
-    return (this.user && this.user.physicalAddress)
-      ? this.user.physicalAddress
+  public get validatedAddress() {
+    return (this.user && this.user.validatedAddress)
+      ? this.user.validatedAddress
       : null;
   }
 }

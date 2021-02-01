@@ -114,7 +114,7 @@ export class AuthService implements IAuthService {
 
     // BCSC does not guarantee an address
     const address = { countryCode, provinceCode, street, city, postal } as Address;
-    const physicalAddress = (Address.isNotEmpty(address))
+    const validatedAddress = (Address.isNotEmpty(address))
       ? address
       : null; // Explicit indicator that address does not exist
 
@@ -124,7 +124,7 @@ export class AuthService implements IAuthService {
       lastName,
       givenNames,
       dateOfBirth,
-      physicalAddress,
+      validatedAddress,
       email,
       ...claims
     } as BcscUser;

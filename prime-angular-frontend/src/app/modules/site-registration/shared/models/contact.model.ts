@@ -7,11 +7,11 @@ export class Contact implements Person {
   public email: string;
   public firstName: string;
   public lastName: string;
-  public physicalAddressId?: number;
-  public physicalAddress: Address;
 
   public mailingAddressId?: number;
   public mailingAddress?: Address;
+  public physicalAddressId?: number;
+  public physicalAddress: Address;
   public phone: string;
   public smsPhone?: string;
 

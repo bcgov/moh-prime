@@ -38,8 +38,8 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
-      physicalAddress: this.formUtilsService.buildAddressForm(),
       mailingAddress: this.formUtilsService.buildAddressForm(),
+      physicalAddress: this.formUtilsService.buildAddressForm(),
       phone: [null, [
         Validators.required,
         FormControlValidators.phone

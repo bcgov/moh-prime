@@ -67,7 +67,7 @@ export class BcscDemographicComponent implements OnInit {
   private getUser$(): Observable<PhsaEnrollee> {
     return this.authService.getUser$()
       .pipe(
-        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: BcscUser) => {
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, validatedAddress }: BcscUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
@@ -78,7 +78,7 @@ export class BcscDemographicComponent implements OnInit {
             lastName,
             givenNames,
             dateOfBirth,
-            physicalAddress,
+            validatedAddress,
             phone: null,
             email: null,
             partyTypes: []

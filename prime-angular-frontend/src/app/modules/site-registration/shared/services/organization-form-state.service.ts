@@ -132,8 +132,8 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
         null,
         [Validators.required, FormControlValidators.email]
       ],
-      physicalAddress: this.buildAddressForm(),
       mailingAddress: this.buildAddressForm(),
+      physicalAddress: this.buildAddressForm(),
       dateOfBirth: [
         null,
         [Validators.required]

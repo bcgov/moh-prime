@@ -7,6 +7,7 @@ export interface Enrollee extends Omit<BcscUser, 'username'> {
   preferredMiddleName: string;
   preferredLastName: string;
   mailingAddress?: Address;
+  physicalAddress?: Address;
   phone: string;
   phoneExtension?: string;
   smsPhone?: string;

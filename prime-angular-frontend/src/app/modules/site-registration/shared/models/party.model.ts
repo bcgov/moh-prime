@@ -12,14 +12,16 @@ export class Party implements Person {
   public lastName: string;
   public givenNames: string;
   public dateOfBirth: string;
-  public physicalAddressId?: number;
-  public physicalAddress: Address;
+  public validatedAddressId?: number;
+  public validatedAddress: Address;
 
   public preferredFirstName?: string = null;
   public preferredMiddleName?: string = null;
   public preferredLastName?: string = null;
   public mailingAddressId?: number;
   public mailingAddress?: Address;
+  public physicalAddressId?: number;
+  public physicalAddress: Address;
   public phone: string = null;
   public phoneExtension?: string = null;
   public smsPhone?: string = null;
@@ -35,6 +37,6 @@ export class Party implements Person {
     this.lastName = user.lastName;
     this.givenNames = user.givenNames;
     this.dateOfBirth = user.dateOfBirth;
-    this.physicalAddress = user.physicalAddress;
+    this.validatedAddress = user.validatedAddress;
   }
 }

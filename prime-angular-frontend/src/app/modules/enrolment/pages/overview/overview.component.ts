@@ -127,9 +127,9 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
         firstName,
         lastName,
         dateOfBirth,
-        physicalAddress
+        validatedAddress
       } = this.enrolmentService.enrolment.enrollee;
-      enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, dateOfBirth, physicalAddress };
+      enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, dateOfBirth, validatedAddress };
     }
 
     // Store a local copy of the enrolment for views

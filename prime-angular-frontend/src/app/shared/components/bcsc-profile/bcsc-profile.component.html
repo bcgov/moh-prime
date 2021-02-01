@@ -25,30 +25,30 @@
     Country
   </div>
   <div class="col-6 text-right mb-3">
-    {{ physicalAddress?.countryCode | configCode: 'countries' | default }}
+    {{ validatedAddress?.countryCode | configCode: 'countries' | default }}
   </div>
 
   <div class="col-6 mb-3">
     Province
   </div>
   <div class="col-6 text-right mb-3">
-    {{ physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+    {{ validatedAddress?.provinceCode | configCode: 'provinces' | default }}
   </div>
 
   <div class="col-6 mb-3">
     Street Address
   </div>
   <div class="col-6 text-right mb-3">
-    {{ physicalAddress?.street | default }}
+    {{ validatedAddress?.street | default }}
   </div>
 
-  <ng-container *ngIf="physicalAddress?.street2">
+  <ng-container *ngIf="validatedAddress?.street2">
 
     <div class="col-6 mb-3">
       Street Address 2
     </div>
     <div class="col-6 text-right mb-3">
-      {{ physicalAddress?.street2 | default }}
+      {{ validatedAddress?.street2 | default }}
     </div>
 
   </ng-container>
@@ -57,14 +57,14 @@
     City
   </div>
   <div class="col-6 text-right mb-3">
-    {{ physicalAddress?.city | default }}
+    {{ validatedAddress?.city | default }}
   </div>
 
   <div class="col-6 mb-3">
     Postal Code
   </div>
   <div class="col-6 text-right mb-3">
-    {{ physicalAddress?.postal | postal | default }}
+    {{ validatedAddress?.postal | postal | default }}
   </div>
 
 </div>

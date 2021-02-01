@@ -6,11 +6,11 @@ export interface Person {
   email: string;
   firstName: string;
   lastName: string;
-  physicalAddressId?: number;
-  physicalAddress: Address;
 
   mailingAddressId?: number;
   mailingAddress?: Address;
+  physicalAddressId?: number;
+  physicalAddress: Address;
   phone: string;
   smsPhone?: string;
 
