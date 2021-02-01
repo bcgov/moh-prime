@@ -111,7 +111,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
-    // this.toggleAddressLineValidators(checked, this.physicalAddress);
+    this.toggleAddressLineValidators(checked, this.physicalAddress);
   }
 
   public onBack() {
