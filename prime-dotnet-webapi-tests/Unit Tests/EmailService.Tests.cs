@@ -88,7 +88,7 @@ namespace PrimeTests.UnitTests
         }
         public static IEnumerable<object[]> RenewalScheduleTestCases()
         {
-            foreach (int day in Enumerable.Range(-2, 15))
+            foreach (int day in Enumerable.Range(-2, 18))
             {
                 if (day == -1)
                 {
