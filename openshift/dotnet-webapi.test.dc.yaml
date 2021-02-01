@@ -4,7 +4,7 @@ kind: Template
 metadata:
   name: dotnet-webapi-test-dc
   description: >-
-    Deployment configuration template for PRIME's .NET web API.
+    Deployment configuration template for PRIME's .NET Core web API.
 parameters:
 - name: NAME
   displayName: Name
@@ -188,8 +188,7 @@ objects:
             - dotnet-api-test
           from:
             kind: ImageStreamTag
-            name: "dotnet-core-sdk:3.1"
-            namespace: 9c33a9-tools
+            name: "${NAME}${SUFFIX}:latest"
         type: ImageChange
   status: {}
 
