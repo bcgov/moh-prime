@@ -19,6 +19,7 @@
     </section>
 
     <section class="mb-3">
+      <!-- <ng-container *ngIf="hasPhysicalAddress; else noAddress"> -->
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Address</ng-container>
         <ng-container appPageSubheaderSummary>
@@ -29,6 +30,37 @@
       <app-bcsc-profile [user]="enrollee"
                         [showPersonal]="false"
                         [showAddressTitle]="false"></app-bcsc-profile>
+      <!-- </ng-container> -->
+
+      <!-- <ng-template #noAddress>
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Address</ng-container>
+          <ng-container appPageSubheaderSummary>
+            Provide your mailing address.
+          </ng-container>
+        </app-page-subheader>
+
+        <app-address-form [form]="mailingAddress"
+                          [onlyBc]="true"
+                          [showManualButton]="true"
+                          [showAddressFields]="hasMailingAddress"></app-address-form>
+      </ng-template> -->
+
+      <!-- <app-toggle-content label="Provide your preferred physical address, if you have one"
+                          [checked]="hasPhysicalAddress"
+                          (change)="onPhysicalAddressChange($event)">
+
+        <section>
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Physical Address</ng-container>
+          </app-page-subheader>
+
+          <app-address-form [form]="physicalAddress"
+                            [showManualButton]="true"
+                            [showAddressFields]="hasPhysicalAddress"></app-address-form>
+        </section>
+
+      </app-toggle-content> -->
     </section>
 
     <app-contact-information-form [form]="form"
