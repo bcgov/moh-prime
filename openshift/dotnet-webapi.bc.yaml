@@ -68,39 +68,39 @@ objects:
             value: "http://+:8080"
 
           # .NET database connection environment variables
-          - name: DB_HOST
-            value: "postgresql${SUFFIX}"
-          - name: DB_CONNECTION_STRING
-            value: DB_CONNECTION_STRING "host=$DB_HOST;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"          
+          # - name: DB_HOST
+          #   value: "postgresql${SUFFIX}"
+          # - name: DB_CONNECTION_STRING
+          #   value: DB_CONNECTION_STRING "host=$DB_HOST;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"          
 
           # Keycloak related environment variables
-          - name: JWT_WELL_KNOWN_CONFIG
-            valueFrom:
-              configKeyMapRef:
-                key: jwt_well_known_config
-                name: "keycloak"
+          # - name: JWT_WELL_KNOWN_CONFIG
+          #   valueFrom:
+          #     configKeyMapRef:
+          #       key: jwt_well_known_config
+          #       name: "keycloak"
 
           # PostgreSQL related environment variables
-          - name: POSTGRESQL_USER
-            valueFrom:
-              secretKeyRef:
-                key: postgresql_database_username
-                name: "postgresql-secrets"
-          - name: POSTGRESQL_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: postgresql_database_password
-                name: "postgresql-secrets"
-          - name: POSTGRESQL_ADMIN_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: postgresql_database_admin_password
-                name: "postgresql-secrets"
-          - name: POSTGRESQL_DATABASE
-            valueFrom:
-              configMapKeyRef:
-                key: postgresql_database_name
-                name: "postgresql"     
+          # - name: POSTGRESQL_USER
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: postgresql_database_username
+          #       name: "postgresql-secrets"
+          # - name: POSTGRESQL_PASSWORD
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: postgresql_database_password
+          #       name: "postgresql-secrets"
+          # - name: POSTGRESQL_ADMIN_PASSWORD
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: postgresql_database_admin_password
+          #       name: "postgresql-secrets"
+          # - name: POSTGRESQL_DATABASE
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       key: postgresql_database_name
+          #       name: "postgresql"     
       tags:
         - annotations: null
           from:
