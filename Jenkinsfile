@@ -66,7 +66,7 @@ pipeline {
                     sh "./player.sh deploy postgres-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
                     sh "./player.sh deploy document-manager-ephemeral dev -p SUFFIX=${SUFFIX} -p VANITY_URL=${VANITY_URL}" 
                     // sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
-                    sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./player.sh deploy api tools ${API_ARGS} -p SUFFIX=${SUFFIX}"
                     sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
             }
