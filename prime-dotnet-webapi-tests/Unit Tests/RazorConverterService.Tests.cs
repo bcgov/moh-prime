@@ -232,16 +232,27 @@ namespace PrimeTests.UnitTests
             Assert.NotNull(html);
         }
 
-        [Theory]
-        [MemberData(nameof(DocumentTemplates))]
-        public async void TestRender_Documents(RazorTemplate<File> template)
+        [Fact]
+        public async void TestRender_Document()
         {
             var service = CreateService();
             var model = new File("filename.ext", new byte[] { });
 
-            var html = await service.RenderTemplateToStringAsync(template, model);
+            var html = await service.RenderTemplateToStringAsync(RazorTemplates.Document, model);
 
             Assert.NotNull(html);
+        }
+
+        [Fact]
+        public async void TestRender_ApologyDocument()
+        {
+            var service = CreateService();
+            var model = new File("filename.ext", new byte[] { });
+
+            var html = await service.RenderTemplateToStringAsync(RazorTemplates.ApologyDocument, model);
+
+            Assert.NotNull(html);
+            Assert.Contains(model.Filename, html);
         }
 
         public static IEnumerable<object[]> AgreementTemplates()
@@ -282,12 +293,6 @@ namespace PrimeTests.UnitTests
             yield return new[] { RazorTemplates.Emails.SiteApprovedHibcEmailTemplate };
             yield return new[] { RazorTemplates.Emails.SiteApprovedPharmaNetAdministratorEmailTemplate };
             yield return new[] { RazorTemplates.Emails.SiteApprovedSigningAuthorityEmailTemplate };
-        }
-
-        public static IEnumerable<object[]> DocumentTemplates()
-        {
-            yield return new[] { RazorTemplates.Document };
-            yield return new[] { RazorTemplates.ApologyDocument };
         }
     }
 }
