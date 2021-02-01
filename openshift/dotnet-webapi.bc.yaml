@@ -160,26 +160,26 @@ objects:
           dockerfilePath: openshift.dockerfile
           env:
           # PostgreSQL related environment variables
-          - name: POSTGRESQL_USER
-            valueFrom:
-              secretKeyRef:
-                key: postgresql_database_username
-                name: "postgresql-secrets"
-          - name: POSTGRESQL_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: postgresql_database_password
-                name: "postgresql-secrets"
-          - name: POSTGRESQL_ADMIN_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: postgresql_database_admin_password
-                name: "postgresql-secrets"
-          - name: POSTGRESQL_DATABASE
-            valueFrom:
-              configMapKeyRef:
-                key: postgresql_database_name
-                name: "postgresql"     
+          # - name: POSTGRESQL_USER
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: postgresql_database_username
+          #       name: "postgresql-secrets"
+          # - name: POSTGRESQL_PASSWORD
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: postgresql_database_password
+          #       name: "postgresql-secrets"
+          # - name: POSTGRESQL_ADMIN_PASSWORD
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: postgresql_database_admin_password
+          #       name: "postgresql-secrets"
+          # - name: POSTGRESQL_DATABASE
+          #   valueFrom:
+          #     configMapKeyRef:
+          #       key: postgresql_database_name
+          #       name: "postgresql"     
         type: Docker
       triggers:
         - type: ConfigChange
