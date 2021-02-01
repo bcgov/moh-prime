@@ -8,9 +8,9 @@
         novalidate>
 
     <section class="mb-3">
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Enrollee Information</ng-container>
-        <ng-container appPageSubheaderSummary>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Enrollee Information</ng-container>
+        <ng-container appPageSubheader2Summary>
           This information comes from your BC Services Card. If you use a different name professionally, please
           select "I have a preferred name."
           <small class="font-italic d-block">
@@ -18,7 +18,7 @@
             The name you provide must match your College registration information, if applicable.
           </small>
         </ng-container>
-      </app-page-subheader>
+      </app-page-subheader2>
 
       <app-bcsc-profile [user]="enrollee"
                         [showAddress]="false"></app-bcsc-profile>
@@ -28,12 +28,12 @@
                           (change)="onPreferredNameChange($event)">
 
         <section>
-          <app-page-subheader>
-            <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
-            <ng-container appPageSubheaderSummary>
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Title>Preferred Name</ng-container>
+            <ng-container appPageSubheader2Summary>
               If you use a name professionally that is different from your legal name, enter it here.
             </ng-container>
-          </app-page-subheader>
+          </app-page-subheader2>
 
           <app-preferred-name-form [form]="form"></app-preferred-name-form>
         </section>
@@ -44,8 +44,8 @@
     <section class="mb-3">
       <ng-container *ngIf="hasPhysicalAddress; else noAddress">
         <app-page-subheader2>
-          <ng-container appPageSubheaderTitle>Address</ng-container>
-          <ng-container appPageSubheaderSummary>
+          <ng-container appPageSubheader2Title>Address</ng-container>
+          <ng-container appPageSubheader2Summary>
             The information below comes from your BC Services Card. If you would prefer to receive mail at a
             professional or other address, select "I have a preferred address."
             <small class="font-italic d-block">
@@ -63,9 +63,9 @@
                             (change)="onMailingAddressChange($event)">
 
           <section>
-            <app-page-subheader>
-              <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
-            </app-page-subheader>
+            <app-page-subheader2>
+              <ng-container appPageSubheader2Title>Mailing Address</ng-container>
+            </app-page-subheader2>
 
             <app-address-form [form]="mailingAddress"
                               [onlyBc]="true"
@@ -77,12 +77,12 @@
       </ng-container>
 
       <ng-template #noAddress>
-        <app-page-subheader>
-          <ng-container appPageSubheaderTitle>Address</ng-container>
-          <ng-container appPageSubheaderSummary>
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>Address</ng-container>
+          <ng-container appPageSubheader2Summary>
             Provide your mailing address.
           </ng-container>
-        </app-page-subheader>
+        </app-page-subheader2>
 
         <app-address-form [form]="mailingAddress"
                           [onlyBc]="true"
@@ -95,9 +95,9 @@
                           (change)="onPhysicalAddressChange($event)">
 
         <section>
-          <app-page-subheader>
-            <ng-container appPageSubheaderTitle>Physical Address</ng-container>
-          </app-page-subheader>
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Title>Physical Address</ng-container>
+          </app-page-subheader2>
 
           <app-address-form [form]="physicalAddress"
                             [showManualButton]="true"

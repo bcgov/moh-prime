@@ -67,9 +67,9 @@
                             (change)="onMailingAddressChange($event)">
 
           <section>
-            <app-page-subheader>
-              <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
-            </app-page-subheader>
+            <app-page-subheader2>
+              <ng-container appPageSubheader2Title>Mailing Address</ng-container>
+            </app-page-subheader2>
 
             <app-address-form [form]="mailingAddress"
                               [showManualButton]="true"
@@ -80,12 +80,12 @@
       </ng-container>
 
       <ng-template #noAddress>
-        <app-page-subheader>
-          <ng-container appPageSubheaderTitle>Address</ng-container>
-          <ng-container appPageSubheaderSummary>
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>Address</ng-container>
+          <ng-container appPageSubheader2Summary>
             Provide your mailing address.
           </ng-container>
-        </app-page-subheader>
+        </app-page-subheader2>
 
         <app-address-form [form]="mailingAddress"
                           [onlyBc]="true"
@@ -98,9 +98,9 @@
                           (change)="onPhysicalAddressChange($event)">
 
         <section>
-          <app-page-subheader>
-            <ng-container appPageSubheaderTitle>Physical Address</ng-container>
-          </app-page-subheader>
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Title>Physical Address</ng-container>
+          </app-page-subheader2>
 
           <app-address-form [form]="physicalAddress"
                             [showManualButton]="true"
