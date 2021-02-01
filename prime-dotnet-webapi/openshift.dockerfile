@@ -64,8 +64,8 @@ RUN chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf
 RUN /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version
 # RUN chmod +x entrypoint.sh
 # RUN chmod 777 entrypoint.sh
-RUN chmod +x entrypoint-test.sh
-RUN chmod 777 entrypoint-test.sh
+RUN chmod +x entrypoint.sh
+RUN chmod 777 entrypoint.sh
 # RUN chmod -R 755 /var/run/
 RUN chmod -R 777 /opt/app-root
 RUN chmod -R 777 /opt/app-root/.*
