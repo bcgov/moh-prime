@@ -29,10 +29,6 @@ namespace Prime.HttpClients.Mail
             : this(from, to, new[] { cc }, subject, body, Enumerable.Empty<Pdf>())
         { }
 
-        public Email(string from, IEnumerable<string> to, string subject, string body, IEnumerable<Pdf> attachments)
-            : this(from, to, Enumerable.Empty<string>(), subject, body, attachments)
-        { }
-
         public Email(string from, IEnumerable<string> to, IEnumerable<string> cc, string subject, string body, IEnumerable<Pdf> attachments)
         {
             ValidateEmails(from, to, cc);
