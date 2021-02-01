@@ -43,7 +43,7 @@
 
     <section class="mb-3">
       <ng-container *ngIf="hasPhysicalAddress; else noAddress">
-        <app-page-subheader>
+        <app-page-subheader2>
           <ng-container appPageSubheaderTitle>Address</ng-container>
           <ng-container appPageSubheaderSummary>
             The information below comes from your BC Services Card. If you would prefer to receive mail at a
@@ -52,7 +52,7 @@
               Entering a preferred address in PRIME will not change your BC Services Card address.
             </small>
           </ng-container>
-        </app-page-subheader>
+        </app-page-subheader2>
 
         <app-bcsc-profile [user]="enrollee"
                           [showPersonal]="false"
