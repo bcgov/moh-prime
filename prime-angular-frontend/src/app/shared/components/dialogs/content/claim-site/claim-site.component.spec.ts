@@ -9,6 +9,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('ClaimSiteComponent', () => {
   let component: ClaimSiteComponent;
@@ -39,6 +40,7 @@ describe('ClaimSiteComponent', () => {
           provide: MAT_DIALOG_DATA,
           useValue: {}
         },
+        KeycloakService
       ]
     })
       .compileComponents();

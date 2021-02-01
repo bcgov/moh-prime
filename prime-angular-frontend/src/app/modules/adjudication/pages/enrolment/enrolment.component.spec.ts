@@ -8,6 +8,7 @@ import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('EnrolmentComponent', () => {
   let component: EnrolmentComponent;
@@ -28,7 +29,8 @@ describe('EnrolmentComponent', () => {
           {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
-          }
+          },
+          KeycloakService
         ]
       }
     ).compileComponents();

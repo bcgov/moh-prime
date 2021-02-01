@@ -8,6 +8,8 @@ import { KeycloakService } from 'keycloak-angular';
 import { ContactInformationFormComponent } from './contact-information-form.component';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ContactInformationComponent', () => {
   let component: ContactInformationFormComponent;
@@ -17,6 +19,7 @@ describe('ContactInformationComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
+        HttpClientTestingModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
         EnrolmentModule
@@ -25,6 +28,10 @@ describe('ContactInformationComponent', () => {
         ContactInformationFormComponent
       ],
       providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
         EnrolmentFormStateService,
         KeycloakService
       ]

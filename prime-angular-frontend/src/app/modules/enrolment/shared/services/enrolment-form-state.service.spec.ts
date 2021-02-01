@@ -8,19 +8,26 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 import { EnrolmentFormStateService } from './enrolment-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('EnrolmentFormStateService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       ReactiveFormsModule,
-      RouterTestingModule
+      RouterTestingModule,
+      HttpClientTestingModule
     ],
     providers: [
       KeycloakService,
       {
         provide: AuthService,
         useClass: MockAuthService
-      }
+      },
+      {
+        provide: APP_CONFIG,
+        useValue: APP_DI_CONFIG
+      },
     ]
   }));
 

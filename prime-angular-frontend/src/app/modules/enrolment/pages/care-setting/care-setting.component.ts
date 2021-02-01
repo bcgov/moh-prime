@@ -106,7 +106,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public filterCareSettingTypes(careSetting: FormGroup) {
     // Create a list of filtered care settings
-    if (this.careSettings.length) {
+    if (this.careSettings?.length) {
       // All the currently chosen care settings
       const selectedCareSettingCodes = this.careSettings.value
         .map((cs: CareSetting) => cs.careSettingCode);
@@ -177,7 +177,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
-    } else if (jobs.length) {
+    } else if (jobs?.length) {
       nextRoutePath = EnrolmentRoutes.JOB;
     }
 

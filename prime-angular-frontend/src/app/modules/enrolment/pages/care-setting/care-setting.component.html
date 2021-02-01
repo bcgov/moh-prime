@@ -25,7 +25,7 @@
           <ng-container *ngFor="let careSetting of careSettings.controls; let i = index;"
                         [formGroupName]="i">
 
-            <app-form-icon-group [show]="careSettings.length > 1"
+            <app-form-icon-group [show]="careSettings?.length > 1"
                                  (event)="removeCareSetting(i, careSetting.value.careSettingCode)">
               <app-form-icon-group>
                 <mat-form-field class="w-100">
