@@ -123,21 +123,21 @@ namespace Prime
         {
             ChangeTracker.DetectChanges();
             var updated = ChangeTracker.Entries()
-                .Where(x => x is IAuditable
+                 .Where(x => x.Entity is IAuditable
                     && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
             var currentUser = _context?.HttpContext?.User.GetPrimeUserId() ?? Guid.Empty;
             var currentTime = DateTimeOffset.Now;
 
-            foreach (var entity in updated)
+            foreach (var entry in updated)
             {
-                entity.CurrentValues[nameof(IAuditable.UpdatedUserId)] = currentUser;
-                entity.CurrentValues[nameof(IAuditable.UpdatedTimeStamp)] = currentTime;
+                entry.CurrentValues[nameof(IAuditable.UpdatedUserId)] = currentUser;
+                entry.CurrentValues[nameof(IAuditable.UpdatedTimeStamp)] = currentTime;
 
-                if (entity.State == EntityState.Added)
+                if (entry.State == EntityState.Added)
                 {
-                    entity.CurrentValues[nameof(IAuditable.CreatedUserId)] = currentUser;
-                    entity.CurrentValues[nameof(IAuditable.CreatedTimeStamp)] = currentTime;
+                    entry.CurrentValues[nameof(IAuditable.CreatedUserId)] = currentUser;
+                    entry.CurrentValues[nameof(IAuditable.CreatedTimeStamp)] = currentTime;
                 }
             }
         }
