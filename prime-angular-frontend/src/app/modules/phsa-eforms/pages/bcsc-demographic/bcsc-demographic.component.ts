@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -8,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { UtilsService } from '@core/services/utils.service';
+import { optionalAddressLineItems } from '@shared/models/address.model';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -22,10 +24,12 @@ import { PhsaEformsFormStateService } from '@phsa/shared/services/phsa-eforms-fo
   styleUrls: ['./bcsc-demographic.component.scss']
 })
 export class BcscDemographicComponent implements OnInit {
-
   public enrollee: PhsaEnrollee;
   public form: FormGroup;
   public busy: Subscription;
+  public hasValidatedAddress: boolean;
+  public hasMailingAddress: boolean;
+  public hasPhysicalAddress: boolean;
 
   private routeUtils: RouteUtils;
 
@@ -41,12 +45,32 @@ export class BcscDemographicComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, PhsaEformsRoutes.MODULE_PATH);
   }
 
+  public get validatedAddress(): FormGroup {
+    return this.form.get('validatedAddress') as FormGroup;
+  }
+
+  public get mailingAddress(): FormGroup {
+    return this.form.get('mailingAddress') as FormGroup;
+  }
+
+  public get physicalAddress(): FormGroup {
+    return this.form.get('physicalAddress') as FormGroup;
+  }
+
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       this.routeUtils.routeRelativeTo(PhsaEformsRoutes.AVAILABLE_ACCESS);
     } else {
       this.utilService.scrollToErrorSection();
     }
+  }
+
+  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
+    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
+  }
+
+  public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
+    this.toggleAddressLineValidators(checked, this.physicalAddress);
   }
 
   public ngOnInit(): void {
@@ -62,6 +86,16 @@ export class BcscDemographicComponent implements OnInit {
   protected createFormInstance(): void {
     this.form = this.enrolmentFormStateService.demographicFormState.form;
 
+  }
+
+  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
+    (!hasAddressLine && shouldToggle)
+      ? this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
+      : this.setAddressValidator(addressLine);
+  }
+
+  private setAddressValidator(addressLine: FormGroup): void {
+    this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
   }
 
   private getUser$(): Observable<PhsaEnrollee> {
