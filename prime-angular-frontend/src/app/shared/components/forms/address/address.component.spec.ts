@@ -64,7 +64,7 @@ describe('AddressComponent', () => {
   }));
 
   //TODO fix null address
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });
