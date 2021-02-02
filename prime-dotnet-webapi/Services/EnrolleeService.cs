@@ -99,7 +99,7 @@ namespace Prime.Services
                 opt => opt.AfterMap((src, dest) => dest.HasNewestAgreement = newestAgreementIds.Any(n => n == src.CurrentAgreementId)));
         }
 
-        public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(ClaimsPrincipal user, EnrolleeSearchOptions searchOptions = null)
+        public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
             searchOptions ??= new EnrolleeSearchOptions();
 
@@ -111,10 +111,6 @@ namespace Prime.Services
                     .First(a => a.AgreementType == type)
                     .Id
                 );
-
-            IQueryable<int> currentAdminId = _context.Admins
-                .Where(a => a.UserId == user.GetPrimeUserId())
-                .Select(a => a.Id);
 
             return await _context.Enrollees
                 .AsNoTracking()
@@ -131,7 +127,7 @@ namespace Prime.Services
                 .If(searchOptions.StatusCode.HasValue, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds, currentAdminId })
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();
@@ -892,6 +888,14 @@ namespace Prime.Services
                 return enrollee.CurrentStatus;
             }
             return null;
+        }
+
+        public async Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user)
+        {
+            return await _context.EnrolleeNotes
+                .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.UserId == user.GetPrimeUserId())
+                .Select(en => en.EnrolleeId)
+                .ToListAsync();
         }
     }
 }

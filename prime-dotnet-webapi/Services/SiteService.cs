@@ -11,6 +11,7 @@ using LinqKit;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.HttpClients;
+using System.Security.Claims;
 
 namespace Prime.Services
 {
@@ -677,6 +678,14 @@ namespace Prime.Services
 
             _context.SiteNotifications.RemoveRange(notifications);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user)
+        {
+            return await _context.SiteRegistrationNotes
+                .Where(en => en.SiteNotification != null && en.SiteNotification.Assignee.UserId == user.GetPrimeUserId())
+                .Select(en => en.SiteId)
+                .ToListAsync();
         }
 
 

@@ -30,5 +30,10 @@ namespace Prime.ViewModels
 
         public BusinessLicence BusinessLicence { get; set; }
         public bool HasNotification { get; set; }
+        public SiteListViewModel SetNotification(bool value)
+        {
+            HasNotification = value;
+            return this;
+        }
     }
 }

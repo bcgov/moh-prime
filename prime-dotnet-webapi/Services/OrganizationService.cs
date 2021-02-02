@@ -36,14 +36,10 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync(ClaimsPrincipal user)
+        public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync()
         {
-            IQueryable<int> currentAdminId = _context.Admins
-                .Where(a => a.UserId == user.GetPrimeUserId())
-                .Select(a => a.Id);
-
             return await _context.Organizations
-                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider, new { currentAdminId })
+                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 

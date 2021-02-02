@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Prime.Models;
 using Prime.ViewModels;
-
+using System.Security.Claims;
 namespace Prime.Services
 {
     public interface ISiteService
@@ -41,5 +41,6 @@ namespace Prime.Services
         Task<SiteNotification> GetSiteNotificationAsync(int siteNotificationId);
         Task RemoveNotificationsAsync(int siteId);
         Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId);
+        Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user);
     }
 }

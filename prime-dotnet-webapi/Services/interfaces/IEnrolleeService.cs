@@ -25,7 +25,7 @@ namespace Prime.Services
 
         Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
 
-        Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(ClaimsPrincipal user, EnrolleeSearchOptions searchOptions = null);
+        Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
 
         Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
 
@@ -79,5 +79,6 @@ namespace Prime.Services
         Task<EnrolleeNotification> GetEnrolleeNotificationAsync(int enrolleeNotificationId);
         Task<IEnumerable<EnrolleeNoteViewModel>> GetNotificationsAsync(int enrolleeId, int adminId);
         Task RemoveNotificationsAsync(int enrolleeId);
+        Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user);
     }
 }

@@ -63,7 +63,10 @@ namespace Prime.Controllers
         {
             if (User.HasAdminView())
             {
-                return Ok(ApiResponse.Result(await _enrolleeService.GetEnrolleesAsync(User, searchOptions)));
+                var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
+                var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+                var result = enrollees.Select(e => notifiedIds.Contains(e.Id) ? e.SetNotification(true) : e.SetNotification(false));
+                return Ok(ApiResponse.Result(result));
             }
             else
             {

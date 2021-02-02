@@ -10,7 +10,7 @@ namespace Prime.Services
 {
     public interface IOrganizationService
     {
-        Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync(ClaimsPrincipal user);
+        Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync();
         Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
         Task<Organization> GetOrganizationAsync(int organizationId);
         Task<int> CreateOrganizationAsync(SigningAuthorityChangeModel signingAuthority, ClaimsPrincipal user);

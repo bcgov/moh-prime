@@ -33,6 +33,7 @@ namespace Prime.Controllers
         private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
         private readonly IPdfService _pdfService;
+        private readonly ISiteService _siteService;
 
         public OrganizationsController(
             IMapper mapper,
@@ -41,7 +42,8 @@ namespace Prime.Controllers
             IPartyService partyService,
             IDocumentService documentService,
             IRazorConverterService razorConverterService,
-            IPdfService pdfService)
+            IPdfService pdfService,
+            ISiteService siteService)
         {
             _mapper = mapper;
             _organizationService = organizationService;
@@ -50,6 +52,7 @@ namespace Prime.Controllers
             _razorConverterService = razorConverterService;
             _documentService = documentService;
             _pdfService = pdfService;
+            _siteService = siteService;
         }
 
         // GET: api/Organizations
@@ -66,7 +69,12 @@ namespace Prime.Controllers
 
             if (User.HasAdminView())
             {
-                organizations = await _organizationService.GetOrganizationsAsync(User);
+                var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
+                organizations = await _organizationService.GetOrganizationsAsync();
+                foreach (var organization in organizations)
+                {
+                    organization.Sites = organization.Sites.Select(s => notifiedIds.Contains(s.Id) ? s.SetNotification(true) : s.SetNotification(false));
+                }
             }
             else
             {

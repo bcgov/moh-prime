@@ -65,5 +65,11 @@ namespace Prime.ViewModels
 
         public bool HasNotification { get; set; }
 
+        public EnrolleeListViewModel SetNotification(bool value)
+        {
+            HasNotification = value;
+            return this;
+        }
+
     }
 }

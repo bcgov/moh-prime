@@ -13,14 +13,12 @@ public class AutoMapping : Profile
 {
     public AutoMapping()
     {
-        IQueryable<int> currentAdminId = null;
         CreateMap<Organization, OrganizationListViewModel>()
             .ForMember(dest => dest.HasAcceptedAgreement, opt => opt.MapFrom(src => src.Agreements.Any(a => a.AcceptedDate.HasValue)))
             .ForMember(dest => dest.HasSubmittedSite, opt => opt.MapFrom(src => src.Sites.Any(s => s.SubmittedDate.HasValue)));
         CreateMap<Site, SiteListViewModel>()
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
-            .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count))
-            .ForMember(dest => dest.HasNotification, opt => opt.MapFrom(src => src.SiteRegistrationNotes.Select(an => an.SiteNotification).Select(en => en.AssigneeId).Any(id => currentAdminId != null && currentAdminId.Contains(id))));
+            .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count));
 
         CreateMap<EnrolleeCreateModel, Enrollee>();
 
@@ -30,8 +28,7 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
             .ForMember(dest => dest.HasNewestAgreement, opt => opt.MapFrom(src => newestAgreementIds.Any(n => n == src.CurrentAgreementId)))
             .ForMember(dest => dest.RemoteAccess, opt => opt.MapFrom(src => src.EnrolleeRemoteUsers.Any()))
-            .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)))
-            .ForMember(dest => dest.HasNotification, opt => opt.MapFrom(src => src.AdjudicatorNotes.Select(an => an.EnrolleeNotification).Select(en => en.AssigneeId).Any(id => currentAdminId.Contains(id))));
+            .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
 
         CreateMap<Enrollee, EnrolleeViewModel>()
             .ForMember(dest => dest.CurrentStatusCode, opt => opt.MapFrom(src => src.CurrentStatus.StatusCode))
