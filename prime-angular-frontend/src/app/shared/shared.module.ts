@@ -45,7 +45,7 @@ import { PageSubheader2Component } from '@shared/components/page-subheader2/page
 import { PageSubheader2TitleDirective } from '@shared/components/page-subheader2/page-subheader2-title.directive';
 import { PageSubheader2MoreInfoDirective } from '@shared/components/page-subheader2/page-subheader2-more-info.directive';
 import { PageSubheader2SummaryDirective } from '@shared/components/page-subheader2/page-subheader2-summary.directive';
-import { NotificationInfoSummaryDirective } from '@shared/components/contact-information-form/notification-info-summary.directive';
+import { NotificationInfoSummaryDirective } from '@shared/components/forms/contact-information-form/notification-info-summary.directive';
 import { PageFooterComponent } from '@shared/components/page-footer/page-footer.component';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
@@ -70,11 +70,11 @@ import { DocumentUploadComponent } from '@shared/components/document-upload/docu
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
 import { OverviewSectionComponent } from '@shared/components/overview-section/overview-section.component';
 import { OverviewContainerComponent } from '@shared/components/site/overview-container/overview-container.component';
-import { CollegeCertificationFormComponent } from '@shared/components/college-certification-form/college-certification-form.component';
+import { CollegeCertificationFormComponent } from '@shared/components/forms/college-certification-form/college-certification-form.component';
 import { AddressAutocompleteComponent } from '@shared/components/address-autocomplete/address-autocomplete.component';
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
-import { AccessCodeFormComponent } from '@shared/components/access-code-form/access-code-form.component';
-import { ContactInformationFormComponent } from '@shared/components/contact-information-form/contact-information-form.component';
+import { AccessCodeFormComponent } from '@shared/components/forms/access-code-form/access-code-form.component';
+import { ContactInformationFormComponent } from '@shared/components/forms/contact-information-form/contact-information-form.component';
 import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
 import { TriageComponent } from './components/dialogs/content/triage/triage.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
