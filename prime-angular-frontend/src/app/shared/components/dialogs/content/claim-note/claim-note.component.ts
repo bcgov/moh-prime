@@ -83,16 +83,11 @@ export class ClaimNoteComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.getAdjudicators();
     this.createFormInstance();
+    this.getAdjudicators();
   }
 
-  private getAdjudicators(): void {
-    this.adjudicationResource.getAdjudicators()
-      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));
-  }
-
-  protected createFormInstance() {
+  private createFormInstance(): void {
     this.form = this.fb.group({
       note: [
         {
@@ -102,5 +97,10 @@ export class ClaimNoteComponent implements OnInit {
         [Validators.required]
       ]
     });
+  }
+  
+  private getAdjudicators(): void {
+    this.adjudicationResource.getAdjudicators()
+      .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));
   }
 }
