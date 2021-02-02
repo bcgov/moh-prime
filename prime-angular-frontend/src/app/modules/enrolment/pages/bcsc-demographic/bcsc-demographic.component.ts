@@ -13,7 +13,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { Address } from '@shared/models/address.model';
+import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -45,8 +45,6 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
 
-  private optionalAddressLineItems: string[];
-
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -72,8 +70,6 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       utilService,
       formUtilsService
     );
-
-    this.optionalAddressLineItems = ['id', 'street2'];
   }
 
   public get preferredFirstName(): FormControl {
@@ -115,13 +111,13 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   public ngOnInit() {
     this.createFormInstance();
     // Ensure that the enrollee user information is loaded prior
-    // to patching and initialization of the form to enforce
-    // proper validation if a BCSC user doesn't have an address
+    // to initialization of the form to check for validated address
+    // information to control UI and validation management
     this.getUser$()
       .pipe(
         map((enrollee: Enrollee) => {
           this.enrollee = enrollee;
-          this.hasValidatedAddress = Address.isEmpty(enrollee.validatedAddress);
+          this.hasValidatedAddress = Address.isNotEmpty(enrollee.validatedAddress);
           if (!this.hasValidatedAddress) {
             this.setAddressValidator(this.mailingAddress);
           }
@@ -184,12 +180,12 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
     (!hasAddressLine && shouldToggle)
-      ? this.formUtilsService.resetAndClearValidators(addressLine, this.optionalAddressLineItems)
+      ? this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
       : this.setAddressValidator(addressLine);
   }
 
   private setAddressValidator(addressLine: FormGroup): void {
-    this.formUtilsService.setValidators(addressLine, [Validators.required], this.optionalAddressLineItems);
+    this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
   }
 
   private getUser$(): Observable<Enrollee> {

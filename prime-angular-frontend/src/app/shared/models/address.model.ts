@@ -1,3 +1,9 @@
+/**
+ * @description
+ * List of optional address line items.
+ */
+export const optionalAddressLineItems = ['id', 'street2'];
+
 export class Address {
   id?: number = null;
   street: string = null;
@@ -26,8 +32,11 @@ export class Address {
   /**
    * @description
    * Check for an empty address.
+   *
+   * NOTE: Most usecases don't require `street2`, and therefore it has
+   * been excluded by default as optional.
    */
-  public static isEmpty(address: Address, blacklist: string[] = ['id']): boolean {
+  public static isEmpty(address: Address, blacklist: string[] = optionalAddressLineItems): boolean {
     if (!address) {
       return false;
     }
@@ -42,6 +51,10 @@ export class Address {
    * Checks for a partial address.
    */
   public static isNotEmpty(address: Address, blacklist?: string[]): boolean {
+    if (!address) {
+      return false;
+    }
+
     return !this.isEmpty(address, blacklist);
   }
 }

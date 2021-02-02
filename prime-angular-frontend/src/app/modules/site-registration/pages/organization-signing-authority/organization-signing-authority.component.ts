@@ -17,7 +17,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { Address } from '@shared/models/address.model';
+import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-organization-signing-authority',
@@ -38,8 +38,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
 
-  private optionalAddressLineItems: string[];
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -51,8 +49,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-
-    this.optionalAddressLineItems = ['id', 'street2'];
   }
 
   public get preferredFirstName(): FormControl {
@@ -145,9 +141,9 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
   public ngOnInit() {
     this.createFormInstance();
-    // Ensure that the enrollee user information is loaded prior
-    // to patching and initialization of the form to enforce
-    // proper validation if a BCSC user doesn't have an address
+    // Ensure enrollee validated address information has been
+    // checked before initializing the form to control UI and
+    // validation management
     this.hasValidatedAddress = Address.isNotEmpty(this.validatedAddress.value)
     this.initForm();
   }
@@ -184,11 +180,11 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
   private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
     (!hasAddressLine && shouldToggle)
-      ? this.formUtilsService.resetAndClearValidators(addressLine, this.optionalAddressLineItems)
+      ? this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
       : this.setAddressValidator(addressLine);
   }
 
   private setAddressValidator(addressLine: FormGroup): void {
-    this.formUtilsService.setValidators(addressLine, [Validators.required], this.optionalAddressLineItems);
+    this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
   }
 }
