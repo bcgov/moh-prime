@@ -309,8 +309,8 @@ namespace Prime.Controllers
             }
 
             site = await _siteService.SubmitRegistrationAsync(siteId);
-            await _emailService.SendSiteRegistrationAsync(site);
-            await _emailService.SendRemoteUsersNotificationAsync(site, site.RemoteUsers);
+            await _emailService.SendSiteRegistrationSubmissionAsync(siteId);
+            await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
 
             return Ok(ApiResponse.Result(site));
         }
@@ -429,7 +429,7 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            await _emailService.SendSiteRegistrationAsync(site);
+            await _emailService.SendSiteRegistrationSubmissionAsync(siteId);
 
             // Send an notifying email to the adjudicator
             // if the site is calimed by a adjudicator, is a community pharmacy,
@@ -732,7 +732,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _emailService.SendRemoteUsersNotificationAsync(site, remoteUsers);
+            await _emailService.SendRemoteUserNotificationsAsync(site, remoteUsers);
             return NoContent();
         }
 
