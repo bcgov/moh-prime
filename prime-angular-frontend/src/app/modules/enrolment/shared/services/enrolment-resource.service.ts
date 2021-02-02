@@ -347,9 +347,12 @@ export class EnrolmentResource {
   }
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
-    // Fill in values that could be `null`
     if (!enrollee.mailingAddress) {
       enrollee.mailingAddress = new Address();
+    }
+
+    if (!enrollee.physicalAddress) {
+      enrollee.physicalAddress = new Address();
     }
 
     if (!enrollee.certifications) {
