@@ -1,7 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ContentChildren, Input, OnInit, QueryList } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
+
+import { NotificationInfoSummaryDirective } from './notification-info-summary.directive';
 
 @Component({
   selector: 'app-contact-information-form',
@@ -11,6 +13,9 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 export class ContactInformationFormComponent implements OnInit {
   @Input() public form: FormGroup;
   @Input() public showSmsPhone: boolean;
+
+  @ContentChildren(NotificationInfoSummaryDirective, { descendants: true })
+  public notificationInfoSummaryChildren: QueryList<NotificationInfoSummaryDirective>;
 
   constructor() {
     // Defaults
@@ -31,6 +36,10 @@ export class ContactInformationFormComponent implements OnInit {
 
   public get smsPhone(): FormControl {
     return this.form.get('smsPhone') as FormControl;
+  }
+
+  public get hasCustomNotificationInfoSummary(): boolean {
+    return !!this.notificationInfoSummaryChildren.length;
   }
 
   public ngOnInit(): void { }

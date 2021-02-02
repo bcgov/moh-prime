@@ -388,7 +388,7 @@ namespace Prime.Services
 
             foreach (var enrollee in enrollees)
             {
-                var expiryDays = (DateTime.Now.Date - enrollee.ExpiryDate.Value.Date).TotalDays;
+                var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
                 if (reminderEmailsIntervals.Contains(expiryDays))
                 {
                     await SendRenewalRequiredAsync(enrollee.Email, enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value);

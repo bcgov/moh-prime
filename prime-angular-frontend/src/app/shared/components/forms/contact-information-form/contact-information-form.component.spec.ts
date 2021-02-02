@@ -38,7 +38,7 @@ describe('ContactInformationComponent', () => {
       fixture = TestBed.createComponent(ContactInformationFormComponent);
       component = fixture.componentInstance;
       // Add the bound FormGroup to the component
-      component.form = enrolmentFormStateService.bceidDemographicForm as FormGroup;
+      component.form = enrolmentFormStateService.bceidDemographicFormState.form;
       fixture.detectChanges();
     }
   ));

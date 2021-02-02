@@ -29,6 +29,11 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public colleges: CollegeConfig[];
   public licenses: LicenseConfig[];
+  /**
+   * @description
+   * Indicates the licenceCode is validated by PharmaNet.
+   */
+  public licenceValidatedByPharmaNet: boolean;
   public practices: PracticeConfig[];
   public filteredLicenses: Config<number>[];
   public filteredPractices: Config<number>[];
@@ -66,6 +71,10 @@ export class CollegeCertificationFormComponent implements OnInit {
     return this.form.get('licenseCode') as FormControl;
   }
 
+  public get practitionerId(): FormControl {
+    return this.form.get('practitionerId') as FormControl;
+  }
+
   public get renewalDate(): FormControl {
     return this.form.get('renewalDate') as FormControl;
   }
@@ -97,6 +106,12 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.remove.emit(this.index);
   }
 
+  public onLicenceNumberBlur() {
+    if (!this.condensed && this.licenceValidatedByPharmaNet && /^\d{5}$/.test(this.licenseNumber.value)) {
+      this.practitionerId.patchValue(this.licenseNumber.value);
+    }
+  }
+
   public shouldShowPractices(): boolean {
     // Only display Advanced Practices for certain nursing licences
     return ((+this.collegeCode.value === CollegeLicenceClass.BCCNM) && ([
@@ -120,12 +135,23 @@ export class CollegeCertificationFormComponent implements OnInit {
         this.resetCollegeCertification();
         this.setCollegeCertification(collegeCode);
       });
-  }
 
-  private doesLicenceHavePrefix(licenseCode: number, collegeCode: number): number {
-    return (this.enrolmentService.shouldShowCollegePrefix(licenseCode))
-      ? collegeCode
-      : null;
+    if (!this.condensed) {
+      this.licenseCode.valueChanges
+        .subscribe((licenseCode: number) => {
+          this.licenceValidatedByPharmaNet = this.checkLicenceCodeValidatedByPharmaNet(licenseCode);
+
+          (this.licenceValidatedByPharmaNet)
+            ? this.formUtilsService.setValidators(this.practitionerId, [
+              Validators.required,
+              FormControlValidators.numeric,
+              FormControlValidators.requiredLength(5)
+            ])
+            : this.formUtilsService.resetAndClearValidators(this.practitionerId);
+        });
+    }
+
+    this.licenceValidatedByPharmaNet = this.checkLicenceCodeValidatedByPharmaNet(this.licenseCode.value);
   }
 
   private setCollegeCertification(collegeCode: number): void {
@@ -149,8 +175,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setValidations() {
-    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
+    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
 
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
@@ -158,8 +184,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private resetCollegeCertification() {
-    this.licenseNumber.reset(null);
     this.licenseCode.reset(null);
+    this.licenseNumber.reset(null);
 
     if (!this.condensed) {
       this.renewalDate.reset(null);
@@ -168,8 +194,8 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private removeValidations() {
-    this.formUtilsService.setValidators(this.licenseNumber, []);
     this.formUtilsService.setValidators(this.licenseCode, []);
+    this.formUtilsService.setValidators(this.licenseNumber, []);
 
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, []);
@@ -193,5 +219,11 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private filterPractices(collegeCode: number): PracticeConfig[] {
     return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
+  }
+
+  private checkLicenceCodeValidatedByPharmaNet(licenceCode: number): boolean {
+    return this.licenses
+      .filter(licenseConfig => licenseConfig.code === licenceCode)
+      .some(licenseConfig => licenseConfig.validate);
   }
 }

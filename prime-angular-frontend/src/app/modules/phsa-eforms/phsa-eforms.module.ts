@@ -13,6 +13,7 @@ import { AccessCodeComponent } from './pages/access-code/access-code.component';
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AvailableAccessComponent } from './pages/available-access/available-access.component';
+import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AvailableAccessComponent } from './pages/available-access/available-acc
     BcscDemographicComponent,
     SubmissionConfirmationComponent,
     AvailableAccessComponent,
-    PartyTypePipe
+    CollectionNoticeComponent,
+    PartyTypePipe,
   ],
   imports: [
     SharedModule,
