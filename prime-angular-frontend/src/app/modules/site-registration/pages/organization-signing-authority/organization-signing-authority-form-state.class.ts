@@ -3,12 +3,12 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Enrollee } from '@shared/models/enrollee.model';
 import { Address } from '@shared/models/address.model';
+import { Party } from '@registration/shared/models/party.model';
 
-export interface BcscDemographicFormModel { }
+export interface OrganizationSigningAuthorityFormModel { }
 
-export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
+export class OrganizationSigningAuthorityFormState extends AbstractFormState<Party> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -18,7 +18,7 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
     this.buildForm();
   }
 
-  public get json(): Enrollee {
+  public get json(): Party {
     if (!this.formInstance) {
       return;
     }
@@ -26,25 +26,31 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(enrollee: Enrollee): void {
+  public patchValue(party: Party): void {
     if (!this.formInstance) {
       return;
     }
 
     console.log('TEMPORARY TO ALLOW WORK!!!');
     // TODO add to adapters so backend can send null
-    if (!enrollee.validatedAddress) {
-      enrollee.validatedAddress = new Address();
+    if (!party.validatedAddress) {
+      party.validatedAddress = new Address();
     }
 
-    this.formInstance.patchValue(enrollee);
+    this.formInstance.patchValue(party);
   }
 
+  // TODO BCSC information is also in enrolments and PHSA could have shared form helpers
   public buildForm(): void {
+    // Prevent BCSC information from being changed
     this.formInstance = this.fb.group({
+      id: [0, []],
+      firstName: [{ value: null, disabled: true }, [Validators.required]],
+      lastName: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
+      dateOfBirth: [null, [Validators.required]],
       validatedAddress: this.formUtilsService.buildAddressForm(),
       mailingAddress: this.formUtilsService.buildAddressForm(),
       physicalAddress: this.formUtilsService.buildAddressForm(),
@@ -56,8 +62,9 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
         Validators.required,
         FormControlValidators.phone
       ]],
-      phoneExtension: [null, [FormControlValidators.numeric]],
       smsPhone: [null, [FormControlValidators.phone]],
+      fax: [null, [FormControlValidators.phone]],
+      jobRoleTitle: [null, [Validators.required]]
     });
   }
 }

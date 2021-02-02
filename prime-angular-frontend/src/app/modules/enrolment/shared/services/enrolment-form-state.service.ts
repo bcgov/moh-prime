@@ -227,7 +227,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       });
     }
 
-
     if (enrolment.jobs.length) {
       const jobs = this.jobsForm.get('jobs') as FormArray;
       jobs.clear();

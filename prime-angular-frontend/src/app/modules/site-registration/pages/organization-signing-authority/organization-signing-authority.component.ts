@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Subscription, Observable } from 'rxjs';
 
@@ -10,14 +11,15 @@ import { IFormPage } from '@lib/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { Address, optionalAddressLineItems } from '@shared/models/address.model';
+
+import { OrganizationSigningAuthorityFormState } from './organization-signing-authority-form-state.class';
 
 @Component({
   selector: 'app-organization-signing-authority',
@@ -149,7 +151,8 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   private createFormInstance() {
-    this.form = this.organizationFormStateService.signingAuthorityForm;
+    const formState = this.organizationFormStateService.organizationSigningAuthorityFormState;
+    this.form = formState.form;
   }
 
   private initForm() {

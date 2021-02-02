@@ -375,6 +375,10 @@ export class AdjudicationResource {
       enrollee.mailingAddress = new Address();
     }
 
+    if (!enrollee.physicalAddress) {
+      enrollee.physicalAddress = new Address();
+    }
+
     if (!enrollee.certifications) {
       enrollee.certifications = [];
     }

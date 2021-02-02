@@ -9,14 +9,15 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Address } from '@shared/models/address.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Party } from '@registration/shared/models/party.model';
 import { Organization } from '@registration/shared/models/organization.model';
+import { Party } from '@registration/shared/models/party.model';
+import { OrganizationSigningAuthorityFormState } from '@registration/pages/organization-signing-authority/organization-signing-authority-form-state.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrganizationFormStateService extends AbstractFormStateService<Organization> {
-  public signingAuthorityForm: FormGroup;
+  public organizationSigningAuthorityFormState: OrganizationSigningAuthorityFormState;
   public organizationNameForm: FormGroup;
   public organizationAgreementForm: FormGroup;
 
@@ -37,7 +38,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
    */
   public get json(): Organization {
     const organizationName = this.organizationNameForm.getRawValue();
-    const signingAuthority = this.formUtilsService.toPersonJson<Party>(this.signingAuthorityForm.getRawValue(), 'mailingAddress');
+    const signingAuthority = this.formUtilsService.toPersonJson<Party>(this.organizationSigningAuthorityFormState.json, 'mailingAddress');
     const { organizationAgreementGuid } = this.organizationAgreementForm.getRawValue();
 
     return {
@@ -56,7 +57,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
    */
   public get forms(): AbstractControl[] {
     return [
-      this.signingAuthorityForm,
+      this.organizationSigningAuthorityFormState.form,
       this.organizationNameForm
     ];
   }
@@ -67,7 +68,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
    * to clear previous form data from the service.
    */
   protected buildForms() {
-    this.signingAuthorityForm = this.buildSigningAuthorityForm();
+    this.organizationSigningAuthorityFormState = new OrganizationSigningAuthorityFormState(this.fb, this.formUtilsService);
     this.organizationNameForm = this.buildOrganizationNameForm();
     this.organizationAgreementForm = this.buildOrganizationAgreementForm();
   }
@@ -86,7 +87,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
     organization.signingAuthority.validatedAddress = new Address();
 
     this.organizationNameForm.patchValue(organization);
-    this.formUtilsService.toPersonFormModel<Party>([this.signingAuthorityForm, organization.signingAuthority]);
+    this.formUtilsService.toPersonFormModel<Party>([this.organizationSigningAuthorityFormState.form, organization.signingAuthority]);
   }
 
 
@@ -94,90 +95,20 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
    * Form Builders and Helpers
    */
 
-  // TODO BCSC information is also in enrolments and can have shared form helpers
-  private buildSigningAuthorityForm(): FormGroup {
-    // Prevent BCSC information from being changed
-    return this.fb.group({
-      id: [
-        0,
-        []
-      ],
-      firstName: [
-        { value: null, disabled: true },
-        [Validators.required]
-      ],
-      lastName: [
-        { value: null, disabled: true },
-        [Validators.required]
-      ],
-      preferredFirstName: [
-        null, []
-      ],
-      preferredMiddleName: [
-        null, []
-      ],
-      preferredLastName: [
-        null, []
-      ],
-      jobRoleTitle: [
-        null,
-        [Validators.required]
-      ],
-      phone: [
-        null,
-        [Validators.required, FormControlValidators.phone]
-      ],
-      fax: [
-        null,
-        [FormControlValidators.phone]
-      ],
-      smsPhone: [
-        null,
-        [FormControlValidators.phone]
-      ],
-      email: [
-        null,
-        [Validators.required, FormControlValidators.email]
-      ],
-      validatedAddress: this.formUtilsService.buildAddressForm(),
-      mailingAddress: this.formUtilsService.buildAddressForm(),
-      physicalAddress: this.formUtilsService.buildAddressForm(),
-      dateOfBirth: [
-        null,
-        [Validators.required]
-      ]
-    });
-  }
-
   private buildOrganizationNameForm(): FormGroup {
     return this.fb.group({
       // OrganizationName is the only form that contains
       // the organization ID
-      id: [
-        0,
-        []
-      ],
-      name: [
-        null,
-        [Validators.required]
-      ],
-      registrationId: [
-        { value: null, disabled: true },
-        [Validators.required]
-      ],
-      doingBusinessAs: [
-        null,
-        []
-      ]
+      id: [0, []],
+      name: [null, [Validators.required]],
+      registrationId: [{ value: null, disabled: true }, [Validators.required]],
+      doingBusinessAs: [null, []]
     });
   }
 
   private buildOrganizationAgreementForm(): FormGroup {
     return this.fb.group({
-      organizationAgreementGuid: [
-        '',
-        []
-      ]
+      organizationAgreementGuid: ['', []]
     });
   }
 }
