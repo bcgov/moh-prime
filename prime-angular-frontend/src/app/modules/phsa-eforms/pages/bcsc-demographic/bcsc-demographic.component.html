@@ -36,14 +36,14 @@
         <app-page-subheader>
           <ng-container appPageSubheaderTitle>Address</ng-container>
           <ng-container appPageSubheaderSummary>
-            Provide your mailing address.
+            Provide your physical address.
           </ng-container>
         </app-page-subheader>
 
-        <app-address-form [form]="mailingAddress"
+        <app-address-form [form]="physicalAddress"
                           [onlyBc]="true"
                           [showManualButton]="true"
-                          [showAddressFields]="hasMailingAddress"></app-address-form>
+                          [showAddressFields]="hasPhysicalAddress"></app-address-form>
       </ng-template>
 
       <app-toggle-content label="Provide your preferred physical address, if you have one"
@@ -52,12 +52,12 @@
 
         <section>
           <app-page-subheader>
-            <ng-container appPageSubheaderTitle>Physical Address</ng-container>
+            <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
           </app-page-subheader>
 
-          <app-address-form [form]="physicalAddress"
+          <app-address-form [form]="mailingAddress"
                             [showManualButton]="true"
-                            [showAddressFields]="hasPhysicalAddress"></app-address-form>
+                            [showAddressFields]="hasMailingAddress"></app-address-form>
         </section>
 
       </app-toggle-content>

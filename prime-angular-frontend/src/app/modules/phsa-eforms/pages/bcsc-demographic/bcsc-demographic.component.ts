@@ -65,12 +65,12 @@ export class BcscDemographicComponent implements OnInit {
     }
   }
 
-  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
-    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
-  }
-
   public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
     this.toggleAddressLineValidators(checked, this.physicalAddress);
+  }
+
+  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
+    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
   }
 
   public ngOnInit(): void {
@@ -85,7 +85,7 @@ export class BcscDemographicComponent implements OnInit {
           this.hasValidatedAddress = Address.isNotEmpty(enrollee.validatedAddress);
           if (!this.hasValidatedAddress) {
             this.clearAddressValidator(this.validatedAddress);
-            this.setAddressValidator(this.mailingAddress);
+            this.setAddressValidator(this.physicalAddress);
           }
         })
       )

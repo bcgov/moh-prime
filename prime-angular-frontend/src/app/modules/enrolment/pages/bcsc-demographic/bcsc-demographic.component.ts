@@ -84,12 +84,12 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     return this.form.get('validatedAddress') as FormGroup;
   }
 
-  public get mailingAddress(): FormGroup {
-    return this.form.get('mailingAddress') as FormGroup;
-  }
-
   public get physicalAddress(): FormGroup {
     return this.form.get('physicalAddress') as FormGroup;
+  }
+
+  public get mailingAddress(): FormGroup {
+    return this.form.get('mailingAddress') as FormGroup;
   }
 
   public onPreferredNameChange({ checked }: MatSlideToggleChange) {
@@ -100,12 +100,12 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     this.togglePreferredNameValidators(checked, this.preferredFirstName, this.preferredLastName);
   }
 
-  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
-    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
-  }
-
   public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
     this.toggleAddressLineValidators(checked, this.physicalAddress);
+  }
+
+  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
+    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
   }
 
   public ngOnInit() {
@@ -120,7 +120,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
           this.hasValidatedAddress = Address.isNotEmpty(enrollee.validatedAddress);
           if (!this.hasValidatedAddress) {
             this.clearAddressValidator(this.validatedAddress);
-            this.setAddressValidator(this.mailingAddress);
+            this.setAddressValidator(this.physicalAddress);
           }
         }),
         exhaustMap(() => this.patchForm())
@@ -136,10 +136,10 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   protected initForm() {
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
-    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
-    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasValidatedAddress);
     this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
     this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
+    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
+    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasValidatedAddress);
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {

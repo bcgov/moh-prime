@@ -62,18 +62,18 @@
                           [showPersonal]="false"
                           [showAddressTitle]="false"></app-bcsc-profile>
 
-        <app-toggle-content label="Provide your preferred mailing address, if you have one"
-                            [checked]="hasMailingAddress"
-                            (change)="onMailingAddressChange($event)">
+        <app-toggle-content label="Provide your preferred physical address, if you have one"
+                            [checked]="hasPhysicalAddress"
+                            (change)="onPhysicalAddressChange($event)">
 
           <section>
             <app-page-subheader2>
-              <ng-container appPageSubheader2Title>Mailing Address</ng-container>
+              <ng-container appPageSubheader2Title>Physical Address</ng-container>
             </app-page-subheader2>
 
-            <app-address-form [form]="mailingAddress"
+            <app-address-form [form]="physicalAddress"
                               [showManualButton]="true"
-                              [showAddressFields]="hasMailingAddress"></app-address-form>
+                              [showAddressFields]="hasPhysicalAddress"></app-address-form>
           </section>
 
         </app-toggle-content>
@@ -83,28 +83,28 @@
         <app-page-subheader2>
           <ng-container appPageSubheader2Title>Address</ng-container>
           <ng-container appPageSubheader2Summary>
-            Provide your mailing address.
+            Provide your physical address.
           </ng-container>
         </app-page-subheader2>
 
-        <app-address-form [form]="mailingAddress"
+        <app-address-form [form]="physicalAddress"
                           [onlyBc]="true"
                           [showManualButton]="true"
-                          [showAddressFields]="hasMailingAddress"></app-address-form>
+                          [showAddressFields]="hasPhysicalAddress"></app-address-form>
       </ng-template>
 
-      <app-toggle-content label="Provide your preferred physical address, if you have one"
-                          [checked]="hasPhysicalAddress"
-                          (change)="onPhysicalAddressChange($event)">
+      <app-toggle-content label="Provide your preferred mailing address, if you have one"
+                          [checked]="hasMailingAddress"
+                          (change)="onMailingAddressChange($event)">
 
         <section>
           <app-page-subheader2>
-            <ng-container appPageSubheader2Title>Physical Address</ng-container>
+            <ng-container appPageSubheader2Title>Mailing Address</ng-container>
           </app-page-subheader2>
 
-          <app-address-form [form]="physicalAddress"
+          <app-address-form [form]="mailingAddress"
                             [showManualButton]="true"
-                            [showAddressFields]="hasPhysicalAddress"></app-address-form>
+                            [showAddressFields]="hasMailingAddress"></app-address-form>
         </section>
 
       </app-toggle-content>

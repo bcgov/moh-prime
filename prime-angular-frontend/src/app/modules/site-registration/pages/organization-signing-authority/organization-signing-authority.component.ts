@@ -109,12 +109,12 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     this.togglePreferredNameValidators(checked, this.preferredFirstName, this.preferredLastName);
   }
 
-  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
-    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
-  }
-
   public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
     this.toggleAddressLineValidators(checked, this.physicalAddress);
+  }
+
+  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
+    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
   }
 
   public onBack() {
@@ -149,7 +149,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     this.hasValidatedAddress = Address.isNotEmpty(this.validatedAddress.value)
     if (!this.hasValidatedAddress) {
       this.clearAddressValidator(this.validatedAddress);
-      this.setAddressValidator(this.mailingAddress);
+      this.setAddressValidator(this.physicalAddress);
     }
     this.initForm();
   }
@@ -167,10 +167,10 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
-    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
-    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasValidatedAddress);
     this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
     this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
+    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
+    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasValidatedAddress);
   }
 
   private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl) {
