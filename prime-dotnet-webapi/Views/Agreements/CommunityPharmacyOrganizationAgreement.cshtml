@@ -1,8 +1,5 @@
-@model Tuple<string, DateTimeOffset>;
-
-@{
-  var organizationName = Model.Item1;
-}
+@using Prime.ViewModels.Agreements
+@model OrgAgreementRazorViewModel
 
 @await Html.PartialAsync("~/Views/Partials/_AgreementDate.cshtml")
 
@@ -22,7 +19,7 @@
 </p>
 
 <p>
-  @organizationName (&quot;Organization&quot;)
+  @Model.OrganizationName (&quot;Organization&quot;)
 </p>
 
 <p>
