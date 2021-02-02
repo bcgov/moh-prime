@@ -101,7 +101,7 @@ namespace Prime
         public DbSet<EnrolleeAdjudicationDocument> EnrolleeAdjudicationDocuments { get; set; }
         public DbSet<SiteAdjudicationDocument> SiteAdjudicationDocuments { get; set; }
         public DbSet<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
-        public DbSet<DocumentAccessToken> DocumentAccessToken { get; set; }
+        public DbSet<DocumentAccessToken> DocumentAccessTokens { get; set; }
 
         public DbSet<PreApprovedRegistration> PreApprovedRegistrations { get; set; }
         public DbSet<EnrolleeNotification> EnrolleeNotifications { get; set; }
