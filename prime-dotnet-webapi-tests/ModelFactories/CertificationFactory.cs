@@ -16,6 +16,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Enrollee, f => owner);
             RuleFor(x => x.EnrolleeId, f => owner.Id);
             RuleFor(x => x.LicenseNumber, f => f.Random.AlphaNumeric(5));
+            RuleFor(x => x.PractitionerId, f => f.Random.Number(10000, 99999).ToString());
             RuleFor(x => x.RenewalDate, f => f.Date.Future());
             RuleFor(x => x.College, f => f.PickRandom(CollegeLookup.BigThree));
             RuleFor(x => x.CollegeCode, (f, x) => x.College.Code);
