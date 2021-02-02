@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { UtilsService } from '@core/services/utils.service';
-import { optionalAddressLineItems } from '@shared/models/address.model';
+import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -75,17 +75,30 @@ export class BcscDemographicComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
-
+    // Ensure that the enrollee user information is loaded prior
+    // to initialization of the form to check for validated address
+    // information to control UI and validation management
     this.getUser$()
-      .subscribe((enrollee: PhsaEnrollee) => {
-        this.enrollee = enrollee;
-        this.enrolmentFormStateService.setForm(enrollee);
-      });
+      .pipe(
+        map((enrollee: PhsaEnrollee) => {
+          this.enrollee = enrollee;
+          this.hasValidatedAddress = Address.isNotEmpty(enrollee.validatedAddress);
+          if (!this.hasValidatedAddress) {
+            this.clearAddressValidator(this.validatedAddress);
+            this.setAddressValidator(this.mailingAddress);
+          }
+        })
+      )
+      .subscribe(() => this.initForm());
   }
 
-  protected createFormInstance(): void {
+  private createFormInstance(): void {
     this.form = this.enrolmentFormStateService.demographicFormState.form;
+  }
 
+  private initForm() {
+    // TODO move into patchForm when base registration class is added
+    this.enrolmentFormStateService.setForm(this.enrollee);
   }
 
   private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
