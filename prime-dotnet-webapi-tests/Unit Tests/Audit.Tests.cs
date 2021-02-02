@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Xunit;
 
 using Prime.Models;
@@ -36,6 +37,20 @@ namespace PrimeTests.UnitTests
 
             Assert.Equal(initialCreated, enrollee.CreatedTimeStamp);
             Assert.True(enrollee.UpdatedTimeStamp > initialUpdated);
+        }
+
+        [Fact]
+        public async void TestAudits_ImmutableCreated()
+        {
+            var enrollee = TestDb.HasAnEnrollee();
+            var initialCreated = enrollee.CreatedTimeStamp;
+
+            var retrieved = TestDb.Enrollees.Single();
+            retrieved.CreatedTimeStamp = DateTimeOffset.Now.AddDays(10);
+            await TestDb.SaveChangesAsync();
+
+            retrieved = TestDb.Enrollees.Single();
+            Assert.Equal(initialCreated, retrieved.CreatedTimeStamp);
         }
     }
 }
