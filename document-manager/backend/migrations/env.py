@@ -97,6 +97,7 @@ def include_object(object, name, type_, reflected, compare_to):
     return name != "alembic_version"
 
 
+# Run the migrations
 if context.is_offline_mode():
     run_migrations_offline()
 else:

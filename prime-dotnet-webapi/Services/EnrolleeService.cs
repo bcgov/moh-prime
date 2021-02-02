@@ -100,7 +100,7 @@ namespace Prime.Services
 
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
-            searchOptions = searchOptions ?? new EnrolleeSearchOptions();
+            searchOptions ??= new EnrolleeSearchOptions();
 
             IQueryable<int> newestAgreementIds = _context.AgreementVersions
                 .Select(a => a.AgreementType)
@@ -126,7 +126,7 @@ namespace Prime.Services
                 .If(searchOptions.StatusCode.HasValue, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
                 )
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds = newestAgreementIds })
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
                 .OrderBy(e => e.Id)
                 .ToListAsync();
@@ -208,7 +208,8 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
-            ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
+            // Removed Temporarily
+            // ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
 
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
             UpdateRemoteAccessSites(enrollee, updateModel);
@@ -281,7 +282,8 @@ namespace Prime.Services
                 _context.Remove(item);
             }
 
-            if (newCollection == null) {
+            if (newCollection == null)
+            {
                 return;
             }
 
@@ -303,8 +305,8 @@ namespace Prime.Services
                 _context.Remove(location);
             }
 
-            if (updateEnrollee.RemoteAccessLocations == null || !updateEnrollee.RemoteAccessLocations.Any()) 
-            { 
+            if (updateEnrollee.RemoteAccessLocations == null || !updateEnrollee.RemoteAccessLocations.Any())
+            {
                 return;
             }
 
@@ -515,6 +517,10 @@ namespace Prime.Services
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessSites)
                     .ThenInclude(ras => ras.Site)
+                        .ThenInclude(ras => ras.PhysicalAddress)
+                .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
+                        .ThenInclude(ras => ras.SiteVendors)
                 .Include(r => r.RemoteAccessLocations)
                     .ThenInclude(rul => rul.PhysicalAddress)
                 .Include(e => e.EnrolmentStatuses)
@@ -527,12 +533,19 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.IdentificationDocuments)
                 .Include(e => e.Agreements)
-                .Include(e => e.Credential);
+                .Include(e => e.EnrolleeCredentials)
+                    .ThenInclude(ec => ec.Credential);
         }
 
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
         {
             var entity = await GetBaseEnrolleeQuery()
+                .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
+                        .ThenInclude(site => site.PhysicalAddress)
+                .Include(e => e.RemoteAccessSites)
+                    .ThenInclude(ras => ras.Site)
+                        .ThenInclude(site => site.SiteVendors)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
@@ -702,7 +715,7 @@ namespace Prime.Services
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.Certifications)
-                    .ThenInclude(c => c.College)
+                    .ThenInclude(c => c.License)
                 .SingleOrDefaultAsync(e => e.GPID == gpid);
 
             if (enrollee == null)
@@ -775,6 +788,38 @@ namespace Prime.Services
                .Include(bl => bl.Adjudicator)
                 .OrderByDescending(bl => bl.UploadedDate)
                .ToListAsync();
+        }
+
+        public async Task<EnrolleeAdjudicationDocument> GetEnrolleeAdjudicationDocumentAsync(int documentId)
+        {
+            return await _context.EnrolleeAdjudicationDocuments
+               .SingleOrDefaultAsync(d => d.Id == documentId);
+        }
+
+        public async Task DeleteEnrolleeAdjudicationDocumentAsync(int documentId)
+        {
+            var document = await _context.EnrolleeAdjudicationDocuments
+                .SingleOrDefaultAsync(d => d.Id == documentId);
+            if (document == null)
+            {
+                return;
+            }
+            _context.EnrolleeAdjudicationDocuments.Remove(document);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<EnrolmentStatus> GetEnrolleeCurrentStatus(int enrolleeId)
+        {
+            var enrollee = await _context.Enrollees
+                .Include(e => e.EnrolmentStatuses)
+                        .ThenInclude(es => es.EnrolmentStatusReasons)
+                            .ThenInclude(esr => esr.StatusReason)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            if (enrollee != null)
+            {
+                return enrollee.CurrentStatus;
+            }
+            return null;
         }
     }
 }

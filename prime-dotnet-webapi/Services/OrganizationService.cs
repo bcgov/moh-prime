@@ -42,6 +42,9 @@ namespace Prime.Services
                     .ThenInclude(s => s.Adjudicator)
                 .Include(o => o.Sites)
                     .ThenInclude(s => s.RemoteUsers)
+                .Include(o => o.Sites)
+                    .ThenInclude(s => s.BusinessLicence)
+                        .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .If(partyId != null, q => q.Where(o => o.SigningAuthorityId == partyId))
                 .ToListAsync();
         }
@@ -262,17 +265,12 @@ namespace Prime.Services
 
         public AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode)
         {
-            switch ((CareSettingType)careSettingCode)
+            return ((CareSettingType)careSettingCode) switch
             {
-                case CareSettingType.CommunityPractice:
-                    return AgreementType.CommunityPracticeOrgAgreement;
-
-                case CareSettingType.CommunityPharmacy:
-                    return AgreementType.CommunityPharmacyOrgAgreement;
-
-                default:
-                    throw new InvalidOperationException($"Did not recognize care setting code {careSettingCode} in {nameof(OrgAgreementTypeForSiteSetting)}");
-            }
+                CareSettingType.CommunityPractice => AgreementType.CommunityPracticeOrgAgreement,
+                CareSettingType.CommunityPharmacy => AgreementType.CommunityPharmacyOrgAgreement,
+                _ => throw new InvalidOperationException($"Did not recognize care setting code {careSettingCode} in {nameof(OrgAgreementTypeForSiteSetting)}"),
+            };
         }
 
         private IQueryable<Organization> GetBaseOrganizationQuery()

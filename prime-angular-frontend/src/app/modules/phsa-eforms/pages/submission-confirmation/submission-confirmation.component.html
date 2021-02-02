@@ -1,0 +1,22 @@
+<app-page>
+  <app-page-header>Enrol for access to PHSA eForms</app-page-header>
+  <app-phsa-eforms-progress-indicator [noContent]="true"></app-phsa-eforms-progress-indicator>
+
+  <section class="mb-3">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        You are ready to access your PHSA eForms
+      </ng-container>
+
+      <ng-container #alertContent
+                    class="alert-content">
+        You are ready to access your PHSA eForms. Log into your application using your BC Services Card.mat-chip
+        <a href="https://www.eforms.phsaehealth.ca"
+           target="_blank"
+           rel="noopener noreferrer">www.eforms.phsaehealth.ca</a>
+      </ng-container>
+    </app-alert>
+  </section>
+</app-page>

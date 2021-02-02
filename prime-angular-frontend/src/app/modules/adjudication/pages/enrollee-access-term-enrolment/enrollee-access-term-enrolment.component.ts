@@ -10,6 +10,8 @@ import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrolleeSubmission, EnrolmentSubmission } from '@shared/models/enrollee-submission.model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-enrollee-access-term-enrolment',
@@ -21,12 +23,19 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
   public enrolmentSubmission: EnrolmentSubmission;
   public enrolment: Enrolment;
 
+  private routeUtils: RouteUtils;
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
     private adjudicationResource: AdjudicationResource,
   ) {
     super(route, router);
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
+  }
+
+  public onRoute(routePath: string | (string | number)[]) {
+    this.routeUtils.routeWithin(routePath);
   }
 
   public ngOnInit() {

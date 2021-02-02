@@ -77,7 +77,6 @@ namespace Prime
         public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
 
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
-        public DbSet<Feedback> Feedback { get; set; }
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
         public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
         public DbSet<RemoteAccessLocation> RemoteAccessLocations { get; set; }
@@ -96,6 +95,7 @@ namespace Prime
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
         public DbSet<SelfDeclaration> SelfDeclarations { get; set; }
         public DbSet<Credential> Credentials { get; set; }
+        public DbSet<EnrolleeCredential> EnrolleeCredentials { get; set; }
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
         public DbSet<IdentificationDocument> IdentificationDocuments { get; set; }
@@ -108,14 +108,14 @@ namespace Prime
 
         public override int SaveChanges()
         {
-            this.ApplyAudits();
+            ApplyAudits();
 
             return base.SaveChanges();
         }
 
-        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            this.ApplyAudits();
+            ApplyAudits();
 
             return await base.SaveChangesAsync(cancellationToken);
         }
@@ -206,6 +206,12 @@ namespace Prime
                 .HasOne(an => an.Enrollee)
                 .WithMany(e => e.AdjudicatorNotes)
                 .HasForeignKey(an => an.EnrolleeId);
+
+            modelBuilder.Entity<EnrolleeCredential>()
+                .HasOne(ec => ec.Enrollee)
+                .WithMany(e => e.EnrolleeCredentials)
+                .HasForeignKey(ec => ec.EnrolleeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Agreement>()
                 .HasOne(toa => toa.Enrollee)

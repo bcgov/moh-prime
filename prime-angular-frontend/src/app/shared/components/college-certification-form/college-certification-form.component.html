@@ -40,16 +40,6 @@
         <div class="col-sm-12 pl-5">
 
           <div class="row">
-            <div class="col-4">
-
-              <mat-form-field class="w-100">
-                <input matInput
-                       placeholder="College Number"
-                       [value]="licensePrefix | default"
-                       disabled>
-              </mat-form-field>
-
-            </div>
             <div class="col">
 
               <app-form-icon-group>
@@ -73,7 +63,7 @@
                       the last 5 digits, without the leading “96”.
                     </p>
                     <p *ngSwitchCase="CollegeLicenceClass.CPSBC">
-                      Your college ID number is called the “CPSID number” in your license letter. Provide only the last
+                      Your College ID number is called the “CPSID number” in your license letter. Provide only the last
                       5 digits, without the leading zero.
                     </p>
                     <div *ngSwitchCase="CollegeLicenceClass.CPBC">
@@ -87,13 +77,12 @@
                         </li>
                         <li>
                           <strong>My Registration Card</strong> (downloads registration card containing your
-                          registration
-                          number)
+                          registration number)
                         </li>
                       </ol>
                     </div>
                     <p *ngSwitchDefault>
-                      Enter your College license number
+                      Enter your College licence number
                     </p>
                   </ng-container>
 

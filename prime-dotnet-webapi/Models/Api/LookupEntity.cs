@@ -13,8 +13,6 @@ namespace Prime.Models.Api
         public List<Country> Countries { get; set; }
         public List<Province> Provinces { get; set; }
         public List<StatusReason> StatusReasons { get; set; }
-        public List<PrivilegeGroup> PrivilegeGroups { get; set; }
-        public List<PrivilegeType> PrivilegeTypes { get; set; }
         public List<Vendor> Vendors { get; set; }
         public List<HealthAuthority> HealthAuthorities { get; set; }
         public List<Facility> Facilities { get; set; }

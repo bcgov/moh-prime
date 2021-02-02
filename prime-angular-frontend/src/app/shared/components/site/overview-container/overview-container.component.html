@@ -7,6 +7,14 @@
     <app-enrollee-profile [enrollee]="organization?.signingAuthority"></app-enrollee-profile>
   </app-overview-section>
 
+  <app-overview-section title="Contact Information"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"
+                        (route)="onRoute($event)">
+    <app-party-review [party]="organization?.signingAuthority"
+                      [showName]="false"></app-party-review>
+  </app-overview-section>
+
   <app-overview-section title="Organization Information"
                         [showEditRedirect]="showEditRedirect"
                         [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_NAME]"

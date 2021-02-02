@@ -72,6 +72,7 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
 
   private enrolmentAdapter(enrollee: HttpEnrollee): Enrolment {
     const {
+      id,
       userId,
       firstName,
       lastName,
@@ -92,7 +93,9 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
     } = enrollee;
 
     return {
+      id,
       enrollee: {
+        id,
         userId,
         firstName,
         lastName,

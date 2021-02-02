@@ -31,6 +31,8 @@ import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SafePipe } from '@shared/pipes/safe.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
+import { CareSettingPipe } from '@shared/pipes/care-setting.pipe';
+import { JoinPipe } from '@shared/pipes/join.pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { PageComponent } from '@shared/components/page/page.component';
@@ -61,7 +63,6 @@ import { AccessTermComponent } from '@shared/components/access-term/access-term.
 import { ClaimEnrolleeComponent } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
-import { FeedbackComponent } from '@shared/components/dialogs/content/feedback/feedback.component';
 import { CollectionNoticeContainerComponent } from '@shared/components/collection-notice-container/collection-notice-container.component';
 import { FormErrorsComponent } from '@shared/components/form-errors/form-errors.component';
 import { PartyReviewComponent } from '@shared/components/site/party-review/party-review.component';
@@ -75,8 +76,9 @@ import { ClaimSiteComponent } from '@shared/components/dialogs/content/claim-sit
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
 import { AccessCodeFormComponent } from '@shared/components/access-code-form/access-code-form.component';
 import { ContactInformationFormComponent } from '@shared/components/contact-information-form/contact-information-form.component';
-import { CareSettingAbbrPipe } from './pipes/care-setting-abbr.pipe';
-import { JoinPipe } from './pipes/join.pipe';
+import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
+import { TriageComponent } from './components/dialogs/content/triage/triage.component';
+import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 
 @NgModule({
   declarations: [
@@ -113,6 +115,7 @@ import { JoinPipe } from './pipes/join.pipe';
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
+    EnrolleeSelfDeclarationsComponent,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     EnrolleePropertyErrorComponent,
@@ -126,7 +129,6 @@ import { JoinPipe } from './pipes/join.pipe';
     NoteComponent,
     ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
-    FeedbackComponent,
     ImageComponent,
     CollectionNoticeContainerComponent,
     FormErrorsComponent,
@@ -141,8 +143,10 @@ import { JoinPipe } from './pipes/join.pipe';
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
     ContactInformationFormComponent,
-    CareSettingAbbrPipe,
-    JoinPipe
+    SendEmailComponent,
+    CareSettingPipe,
+    JoinPipe,
+    TriageComponent
   ],
   imports: [
     CommonModule,
@@ -195,6 +199,7 @@ import { JoinPipe } from './pipes/join.pipe';
     FormIconGroupComponent,
     AlertComponent,
     EnrolleeReviewComponent,
+    EnrolleeSelfDeclarationsComponent,
     EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     PrimeEmailComponent,
@@ -214,8 +219,9 @@ import { JoinPipe } from './pipes/join.pipe';
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
     ContactInformationFormComponent,
-    CareSettingAbbrPipe,
-    JoinPipe
+    CareSettingPipe,
+    JoinPipe,
+    TriageComponent
   ],
   providers: [
     FullnamePipe,

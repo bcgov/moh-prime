@@ -1027,8 +1027,12 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
+        "https://healthpractionerregistration-demo.pathfinder.gov.bc.ca/*",
         "https://test.pharmanetenrolment.gov.bc.ca/*",
-        "https://demo.pharmanetenrolment.gov.bc.ca/*"
+        "https://demo.pharmanetenrolment.gov.bc.ca/*",
+        "https://demo.healthpractionerregistration.pathfinder.gov.bc.ca/*",
+        "https://test.healthpractionerregistration.pathfinder.gov.bc.ca/*",
+        "https://healthpractionerregistration-test.pathfinder.gov.bc.ca/*"
       ],
       "webOrigins": [
         "*"
