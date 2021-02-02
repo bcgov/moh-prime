@@ -2,6 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { SharedModule } from '@shared/shared.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { KeycloakService } from 'keycloak-angular';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
@@ -16,9 +17,10 @@ describe('EnrolleeSelfDeclarationsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        SharedModule
       ],
-      declarations: [EnrolleeSelfDeclarationsComponent],
+      declarations: [],
       providers: [
         {
           provide: APP_CONFIG,

@@ -53,8 +53,8 @@ describe('OboSiteFormComponent', () => {
   }));
 
   beforeEach(inject(
-    [EnrolmentFormStateService, ConfigService],
-    (enrolmentFormStateService: EnrolmentFormStateService, configService: ConfigService) => {
+    [EnrolmentFormStateService],
+    (enrolmentFormStateService: EnrolmentFormStateService) => {
       fixture = TestBed.createComponent(OboSiteFormComponent);
       component = fixture.componentInstance;
       // Add the bound FormGroup to the component

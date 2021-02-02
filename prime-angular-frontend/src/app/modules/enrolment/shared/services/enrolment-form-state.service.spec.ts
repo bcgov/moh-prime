@@ -10,6 +10,8 @@ import { EnrolmentFormStateService } from './enrolment-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 describe('EnrolmentFormStateService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -28,6 +30,10 @@ describe('EnrolmentFormStateService', () => {
         provide: APP_CONFIG,
         useValue: APP_DI_CONFIG
       },
+      {
+        provide: ConfigService,
+        useClass: MockConfigService
+      }
     ]
   }));
 

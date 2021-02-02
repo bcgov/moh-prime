@@ -47,10 +47,10 @@ export class MockEnrolmentService implements IEnrolmentService {
       isInsulinPumpProvider: null,
       jobs: [],
       oboSites: [],
+      enrolleeHealthAuthorities: [],
       selfDeclarations: [],
       selfDeclarationDocuments: [],
       identificationDocuments: [],
-      enrolleeHealthAuthorities: [],
       careSettings: [
         {
           id: faker.random.number(),
