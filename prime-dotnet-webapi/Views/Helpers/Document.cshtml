@@ -1,5 +1,5 @@
-@using Prime.Models
-@model Document
+@using Prime.Models.Documents
+@model File
 
 @{
   var fileExt = Model.Filename.Split(".").Last();
@@ -7,4 +7,5 @@
   var imgSrc = $"data:image/{fileExt};base64,{base64}";
 }
 
-<img src="@imgSrc" alt="Document">
+<img src="@imgSrc"
+     alt="Document">
