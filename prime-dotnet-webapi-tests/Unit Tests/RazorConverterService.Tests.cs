@@ -209,27 +209,81 @@ namespace PrimeTests.UnitTests
         public async void TestRender_SiteSummary()
         {
             var service = CreateService();
+
+            const string streetAddress = "221B Baker Street";
+            const string cityAddress = "London";
+            const DayOfWeek businessDay = DayOfWeek.Monday;
+            const string vendorName = "Geeks R Us";
+            const string certificationCollege = "University of Los Angeles";
+            const string signingAuthorityName = "Fred Flintstone";
+            const string pharmanetAdminName = "Barney Rubble";
+            const string privacyOfficerName = "Wilma Flintstone";
+            const string techSupportName = "Betty Rubble";
+
             var model = new SiteRegistrationReviewViewModel
             {
-                SiteAddress = new PhysicalAddress(),
-                BusinessHours = new BusinessHourViewModel[] { },
-                Vendors = new VendorViewModel[] { },
+                SiteAddress = new PhysicalAddress()
+                {
+                    Street = streetAddress,
+                    City = cityAddress
+                },
+                BusinessHours = new BusinessHourViewModel[]
+                {
+                    new BusinessHourViewModel
+                    {
+                        Day = businessDay
+                    }
+                },
+                Vendors = new VendorViewModel[]
+                {
+                    new VendorViewModel
+                    {
+                        Name = vendorName
+                    }
+                },
                 RemoteUsers = new RemoteUserViewModel[]
                 {
                     new RemoteUserViewModel
                     {
-                        Certifications = new CertViewModel[] {}
+                        Certifications = new CertViewModel[]
+                        {
+                            new CertViewModel
+                            {
+                                CollegeName = certificationCollege
+                            }
+                        }
                     }
                 },
-                SigningAuthority = new ContactViewModel(),
-                AdministratorOfPharmaNet = new ContactViewModel(),
-                PrivacyOfficer = new ContactViewModel(),
+                SigningAuthority = new ContactViewModel()
+                {
+                    FullName = signingAuthorityName
+                },
+                AdministratorOfPharmaNet = new ContactViewModel()
+                {
+                    FullName = pharmanetAdminName
+                },
+                PrivacyOfficer = new ContactViewModel()
+                {
+                    FullName = privacyOfficerName
+                },
                 TechnicalSupport = new ContactViewModel()
+                {
+                    FullName = techSupportName
+                }
             };
 
             var html = await service.RenderTemplateToStringAsync(RazorTemplates.SiteRegistrationReview, model);
 
             Assert.NotNull(html);
+            Assert.Contains(streetAddress, html);
+            Assert.Contains(cityAddress, html);
+            Assert.Contains(businessDay.ToString(), html);
+            Assert.Contains(vendorName, html);
+            Assert.Contains(certificationCollege, html);
+            Assert.Contains(signingAuthorityName, html);
+            Assert.Contains(pharmanetAdminName, html);
+            Assert.Contains(privacyOfficerName, html);
+            Assert.Contains(techSupportName, html);
         }
 
         [Fact]
