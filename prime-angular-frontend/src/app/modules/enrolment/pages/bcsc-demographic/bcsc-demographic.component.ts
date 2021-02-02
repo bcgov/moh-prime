@@ -119,6 +119,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
           this.enrollee = enrollee;
           this.hasValidatedAddress = Address.isNotEmpty(enrollee.validatedAddress);
           if (!this.hasValidatedAddress) {
+            this.clearAddressValidator(this.validatedAddress);
             this.setAddressValidator(this.mailingAddress);
           }
         }),
@@ -179,9 +180,17 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   }
 
   private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
-    (!hasAddressLine && shouldToggle)
-      ? this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
+    if (!shouldToggle) {
+      return;
+    }
+
+    (!hasAddressLine)
+      ? this.clearAddressValidator(addressLine)
       : this.setAddressValidator(addressLine);
+  }
+
+  private clearAddressValidator(addressLine: FormGroup): void {
+    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
   }
 
   private setAddressValidator(addressLine: FormGroup): void {

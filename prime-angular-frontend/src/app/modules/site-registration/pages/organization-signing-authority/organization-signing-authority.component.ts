@@ -147,6 +147,10 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     // checked before initializing the form to control UI and
     // validation management
     this.hasValidatedAddress = Address.isNotEmpty(this.validatedAddress.value)
+    if (!this.hasValidatedAddress) {
+      this.clearAddressValidator(this.validatedAddress);
+      this.setAddressValidator(this.mailingAddress);
+    }
     this.initForm();
   }
 
@@ -156,12 +160,10 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   private initForm() {
-    const organization = this.organizationService.organization;
-    this.isCompleted = organization?.completed;
-    this.organizationFormStateService.setForm(organization, true);
+    this.organization = this.organizationService.organization;
+    this.isCompleted = this.organization?.completed;
+    this.organizationFormStateService.setForm(this.organization, true);
     this.form.markAsPristine();
-
-    this.organization = organization;
 
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
@@ -182,9 +184,17 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
-    (!hasAddressLine && shouldToggle)
-      ? this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
+    if (!shouldToggle) {
+      return;
+    }
+
+    (!hasAddressLine)
+      ? this.clearAddressValidator(addressLine)
       : this.setAddressValidator(addressLine);
+  }
+
+  private clearAddressValidator(addressLine: FormGroup): void {
+    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
   }
 
   private setAddressValidator(addressLine: FormGroup): void {

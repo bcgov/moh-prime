@@ -32,23 +32,23 @@ export class BcscDemographicFormState extends AbstractFormState<PhsaBcscDemograp
     throw new Error('Not Implemented');
   }
 
+  // TODO BCSC information form reuse for sharing between enrolment and PHSA
   public buildForm(): void {
     this.formInstance = this.fb.group({
       validatedAddress: this.formUtilsService.buildAddressForm(),
       mailingAddress: this.formUtilsService.buildAddressForm(),
       physicalAddress: this.formUtilsService.buildAddressForm(),
-      phone: [
-        null,
-        [Validators.required, FormControlValidators.phone]
-      ],
-      phoneExtension: [
-        null,
-        [FormControlValidators.numeric]
-      ],
-      email: [
-        null,
-        [Validators.required, FormControlValidators.email]
-      ]
+      phone: [null, [
+        Validators.required,
+        FormControlValidators.phone
+      ]],
+      phoneExtension: [null, [
+        FormControlValidators.numeric
+      ]],
+      email: [null, [
+        Validators.required,
+        FormControlValidators.email
+      ]]
     });
   }
 }

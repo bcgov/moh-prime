@@ -40,7 +40,7 @@ export class OrganizationSigningAuthorityFormState extends AbstractFormState<Par
     this.formInstance.patchValue(party);
   }
 
-  // TODO BCSC information is also in enrolments and PHSA could have shared form helpers
+  // TODO BCSC information form reuse for sharing between enrolment and PHSA
   public buildForm(): void {
     // Prevent BCSC information from being changed
     this.formInstance = this.fb.group({
@@ -51,7 +51,9 @@ export class OrganizationSigningAuthorityFormState extends AbstractFormState<Par
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
       dateOfBirth: [null, [Validators.required]],
-      validatedAddress: this.formUtilsService.buildAddressForm(),
+      validatedAddress: this.formUtilsService.buildAddressForm({
+        areRequired: ['countryCode', 'provinceCode', 'city', 'street', 'postal']
+      }),
       mailingAddress: this.formUtilsService.buildAddressForm(),
       physicalAddress: this.formUtilsService.buildAddressForm(),
       email: [null, [

@@ -89,9 +89,17 @@ export class BcscDemographicComponent implements OnInit {
   }
 
   private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
-    (!hasAddressLine && shouldToggle)
-      ? this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
+    if (!shouldToggle) {
+      return;
+    }
+
+    (!hasAddressLine)
+      ? this.clearAddressValidator(addressLine)
       : this.setAddressValidator(addressLine);
+  }
+
+  private clearAddressValidator(addressLine: FormGroup): void {
+    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
   }
 
   private setAddressValidator(addressLine: FormGroup): void {
