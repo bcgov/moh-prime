@@ -64,10 +64,22 @@ export class EscalationNoteComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.getAdjudicators();
     this.createFormInstance();
+    this.getAdjudicators();
   }
 
+  private createFormInstance() {
+    this.form = this.fb.group({
+      note: [
+        {
+          value: '',
+          disabled: false,
+        },
+        [Validators.required]
+      ]
+    });
+  }
+  
   private getAdjudicators() {
     this.adjudicationResource.getAdjudicators()
       .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));
@@ -92,17 +104,4 @@ export class EscalationNoteComponent implements OnInit {
         exhaustMap(() => this.adjudicationResource.setEnrolleeAdjudicator(this.id, assigneeId))
       ).subscribe(() => this.dialogRef.close({ reload: true }));
   }
-
-  protected createFormInstance() {
-    this.form = this.fb.group({
-      note: [
-        {
-          value: '',
-          disabled: false,
-        },
-        [Validators.required]
-      ]
-    });
-  }
-
 }
