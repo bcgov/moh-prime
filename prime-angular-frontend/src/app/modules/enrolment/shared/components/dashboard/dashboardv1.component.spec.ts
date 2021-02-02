@@ -11,6 +11,7 @@ import { NgxProgressModule } from '@lib/modules/ngx-progress/ngx-progress.module
 import { AuthService } from '@auth/shared/services/auth.service';
 import { HeaderComponent } from '../header/header.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('DashboardComponent', () => {
   let component: DashboardV1Component;
@@ -38,7 +39,8 @@ describe('DashboardComponent', () => {
           {
             provide: AuthService,
             useClass: MockAuthService
-          }
+          },
+          KeycloakService
         ]
       }
     ).compileComponents();
