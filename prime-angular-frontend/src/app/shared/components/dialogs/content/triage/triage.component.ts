@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { EMPTY, noop, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
@@ -15,7 +16,6 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EscalationNoteComponent, EscalationType } from '../escalation-note/escalation-note.component';
-import { MatDialog } from '@angular/material/dialog';
 import { DialogOptions } from '../../dialog-options.model';
 
 @Component({
