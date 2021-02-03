@@ -505,8 +505,8 @@ namespace Prime.Services
         private IQueryable<Enrollee> GetBaseEnrolleeQuery()
         {
             return _context.Enrollees
-                .Include(e => e.PhysicalAddress)
-                .Include(e => e.MailingAddress)
+                .Include(e => e.Addresses)
+                    .ThenInclude(ea => ea.Address)
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
                 .Include(e => e.Jobs)
