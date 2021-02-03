@@ -73,7 +73,7 @@ namespace Prime.Controllers
                 organizations = await _organizationService.GetOrganizationsAsync();
                 foreach (var organization in organizations)
                 {
-                    organization.Sites = organization.Sites.Select(s => notifiedIds.Contains(s.Id) ? s.SetNotification(true) : s.SetNotification(false));
+                    organization.Sites = organization.Sites.Select(s => s.SetNotification(notifiedIds.Contains(s.Id)));
                 }
             }
             else
