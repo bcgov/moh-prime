@@ -80,8 +80,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     return this.form.get('preferredLastName') as FormControl;
   }
 
-  public get validatedAddress(): FormGroup {
-    return this.form.get('validatedAddress') as FormGroup;
+  public get verifiedAddress(): FormGroup {
+    return this.form.get('verifiedAddress') as FormGroup;
   }
 
   public get physicalAddress(): FormGroup {
@@ -117,9 +117,9 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       .pipe(
         map((enrollee: Enrollee) => {
           this.enrollee = enrollee;
-          this.hasValidatedAddress = Address.isNotEmpty(enrollee.validatedAddress);
+          this.hasValidatedAddress = Address.isNotEmpty(enrollee.verifiedAddress);
           if (!this.hasValidatedAddress) {
-            this.clearAddressValidator(this.validatedAddress);
+            this.clearAddressValidator(this.verifiedAddress);
             this.setAddressValidator(this.physicalAddress);
           }
         }),
@@ -200,7 +200,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   private getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
-        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, validatedAddress }: BcscUser) => {
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
@@ -211,7 +211,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
             lastName,
             givenNames,
             dateOfBirth,
-            validatedAddress,
+            verifiedAddress,
             phone: null,
             email: null
           } as Enrollee;

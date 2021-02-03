@@ -61,8 +61,8 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     return this.form.get('preferredLastName') as FormControl;
   }
 
-  public get validatedAddress(): FormGroup {
-    return this.form.get('validatedAddress') as FormGroup;
+  public get verifiedAddress(): FormGroup {
+    return this.form.get('verifiedAddress') as FormGroup;
   }
 
   public get mailingAddress(): FormGroup {
@@ -146,9 +146,9 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     // Ensure enrollee validated address information has been
     // checked before initializing the form to control UI and
     // validation management
-    this.hasValidatedAddress = Address.isNotEmpty(this.validatedAddress.value)
+    this.hasValidatedAddress = Address.isNotEmpty(this.verifiedAddress.value)
     if (!this.hasValidatedAddress) {
-      this.clearAddressValidator(this.validatedAddress);
+      this.clearAddressValidator(this.verifiedAddress);
       this.setAddressValidator(this.physicalAddress);
     }
     this.initForm();

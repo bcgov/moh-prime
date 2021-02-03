@@ -13,7 +13,7 @@ export class Party implements Person {
   public givenNames: string;
   public dateOfBirth: string;
   public validatedAddressId?: number;
-  public validatedAddress: Address;
+  public verifiedAddress: Address;
 
   public preferredFirstName?: string = null;
   public preferredMiddleName?: string = null;
@@ -37,6 +37,6 @@ export class Party implements Person {
     this.lastName = user.lastName;
     this.givenNames = user.givenNames;
     this.dateOfBirth = user.dateOfBirth;
-    this.validatedAddress = user.validatedAddress;
+    this.verifiedAddress = user.verifiedAddress;
   }
 }

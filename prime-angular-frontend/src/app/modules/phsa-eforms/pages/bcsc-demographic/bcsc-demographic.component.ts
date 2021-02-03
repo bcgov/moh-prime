@@ -45,8 +45,8 @@ export class BcscDemographicComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, PhsaEformsRoutes.MODULE_PATH);
   }
 
-  public get validatedAddress(): FormGroup {
-    return this.form.get('validatedAddress') as FormGroup;
+  public get verifiedAddress(): FormGroup {
+    return this.form.get('verifiedAddress') as FormGroup;
   }
 
   public get mailingAddress(): FormGroup {
@@ -82,9 +82,9 @@ export class BcscDemographicComponent implements OnInit {
       .pipe(
         map((enrollee: PhsaEnrollee) => {
           this.enrollee = enrollee;
-          this.hasValidatedAddress = Address.isNotEmpty(enrollee.validatedAddress);
+          this.hasValidatedAddress = Address.isNotEmpty(enrollee.verifiedAddress);
           if (!this.hasValidatedAddress) {
-            this.clearAddressValidator(this.validatedAddress);
+            this.clearAddressValidator(this.verifiedAddress);
             this.setAddressValidator(this.physicalAddress);
           }
         })
@@ -122,7 +122,7 @@ export class BcscDemographicComponent implements OnInit {
   private getUser$(): Observable<PhsaEnrollee> {
     return this.authService.getUser$()
       .pipe(
-        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, validatedAddress }: BcscUser) => {
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
@@ -133,7 +133,7 @@ export class BcscDemographicComponent implements OnInit {
             lastName,
             givenNames,
             dateOfBirth,
-            validatedAddress,
+            verifiedAddress,
             phone: null,
             email: null,
             partyTypes: []

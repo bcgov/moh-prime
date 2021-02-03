@@ -33,8 +33,8 @@ export class OrganizationSigningAuthorityFormState extends AbstractFormState<Par
 
     console.log('TEMPORARY TO ALLOW WORK!!!');
     // TODO add to adapters so backend can send null
-    if (!party.validatedAddress) {
-      party.validatedAddress = new Address();
+    if (!party.verifiedAddress) {
+      party.verifiedAddress = new Address();
     }
 
     this.formInstance.patchValue(party);
@@ -51,7 +51,7 @@ export class OrganizationSigningAuthorityFormState extends AbstractFormState<Par
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
       dateOfBirth: [null, [Validators.required]],
-      validatedAddress: this.formUtilsService.buildAddressForm({
+      verifiedAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['countryCode', 'provinceCode', 'city', 'street', 'postal']
       }),
       mailingAddress: this.formUtilsService.buildAddressForm(),

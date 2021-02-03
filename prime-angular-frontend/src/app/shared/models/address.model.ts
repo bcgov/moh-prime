@@ -1,3 +1,7 @@
+export type AddressType = 'verifiedAddress' | 'physicalAddress' | 'mailingAddress';
+
+export const addressTypes: AddressType[] = ['verifiedAddress', 'mailingAddress', 'physicalAddress'];
+
 /**
  * @description
  * List of optional address line items.
