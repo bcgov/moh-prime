@@ -8,7 +8,7 @@ namespace Prime.Configuration
 {
     public abstract class SeededTable<T> : IEntityTypeConfiguration<T> where T : class
     {
-        public static readonly DateTime SEEDING_DATE = new DateTime(2019, 9, 16);
+        public static readonly DateTime SEEDING_DATE = new DateTimeOffset(new DateTime(2019, 9, 16)).ToOffset(new TimeSpan(-7, 0, 0)).DateTime;
 
         public abstract IEnumerable<T> SeedData { get; }
 
