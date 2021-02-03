@@ -11,7 +11,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { Address } from '@shared/models/address.model';
+import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
@@ -347,13 +347,11 @@ export class EnrolmentResource {
   }
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
-    if (!enrollee.mailingAddress) {
-      enrollee.mailingAddress = new Address();
-    }
-
-    if (!enrollee.physicalAddress) {
-      enrollee.physicalAddress = new Address();
-    }
+    addressTypes.forEach((addressType: AddressType) => {
+      if (!enrollee[addressType]) {
+        enrollee[addressType] = new Address();
+      }
+    });
 
     if (!enrollee.certifications) {
       enrollee.certifications = [];
@@ -395,7 +393,7 @@ export class EnrolmentResource {
       dateOfBirth,
       gpid,
       hpdid,
-      validatedAddress,
+      verifiedAddress,
       mailingAddress,
       physicalAddress,
       email,
@@ -417,7 +415,7 @@ export class EnrolmentResource {
         dateOfBirth,
         gpid,
         hpdid,
-        validatedAddress,
+        verifiedAddress,
         mailingAddress,
         physicalAddress,
         email,
@@ -435,12 +433,14 @@ export class EnrolmentResource {
   }
 
   private enrolmentAdapterRequest(enrolment: Enrolment): HttpEnrollee {
-    if (enrolment.enrollee.mailingAddress.postal) {
-      enrolment.enrollee.mailingAddress.id = enrolment.enrollee.mailingAddress.id ?? 0;
-      enrolment.enrollee.mailingAddress.postal = enrolment.enrollee.mailingAddress.postal.toUpperCase();
-    } else {
-      enrolment.enrollee.mailingAddress = null;
-    }
+    addressTypes.forEach((addressType: AddressType) => {
+      if (enrolment.enrollee[addressType].postal) {
+        enrolment.enrollee[addressType].id = enrolment.enrollee[addressType].id ?? 0;
+        enrolment.enrollee[addressType].postal = enrolment.enrollee[addressType].postal.toUpperCase();
+      } else {
+        enrolment.enrollee[addressType] = null;
+      }
+    });
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
     enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);

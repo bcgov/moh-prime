@@ -33,8 +33,8 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
 
     console.log('TEMPORARY TO ALLOW WORK!!!');
     // TODO add to adapters so backend can send null
-    if (!enrollee.validatedAddress) {
-      enrollee.validatedAddress = new Address();
+    if (!enrollee.verifiedAddress) {
+      enrollee.verifiedAddress = new Address();
     }
 
     this.formInstance.patchValue(enrollee);
@@ -46,7 +46,7 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
-      validatedAddress: this.formUtilsService.buildAddressForm({
+      verifiedAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['countryCode', 'provinceCode', 'city', 'street', 'postal']
       }),
       mailingAddress: this.formUtilsService.buildAddressForm(),

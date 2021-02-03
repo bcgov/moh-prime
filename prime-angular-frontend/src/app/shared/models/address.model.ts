@@ -1,6 +1,6 @@
-export type AddressType = 'validatedAddress' | 'physicalAddress' | 'mailingAddress';
+export type AddressType = 'verifiedAddress' | 'physicalAddress' | 'mailingAddress';
 
-export const addressTypes: AddressType[] = ['validatedAddress', 'mailingAddress', 'physicalAddress'];
+export const addressTypes: AddressType[] = ['verifiedAddress', 'mailingAddress', 'physicalAddress'];
 
 /**
  * @description

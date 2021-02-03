@@ -6,5 +6,5 @@ export interface BcscUser extends User {
   userId: string; // Keycloak identifier
   givenNames: string;
   dateOfBirth: string;
-  validatedAddress: Address;
+  verifiedAddress: Address;
 }
