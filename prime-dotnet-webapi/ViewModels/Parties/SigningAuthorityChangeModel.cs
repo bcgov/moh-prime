@@ -17,6 +17,7 @@ namespace Prime.ViewModels.Parties
         public string JobRoleTitle { get; set; }
         public MailingAddress MailingAddress { get; set; }
         public PhysicalAddress PhysicalAddress { get; set; }
+        public VerifiedAddress VerifiedAddress { get; set; }
 
         /// <summary>
         /// Updates the given Party with values from this SigningAuthorityCreateModel and the User. Also sets SigningAuthority in the Party's PartyEnrolments.
@@ -50,6 +51,7 @@ namespace Prime.ViewModels.Parties
             }
             else
             {
+                PhysicalAddress.Id = party.PhysicalAddress.Id;
                 party.PhysicalAddress.SetValues(PhysicalAddress);
             }
 
@@ -63,6 +65,7 @@ namespace Prime.ViewModels.Parties
             }
             else
             {
+                MailingAddress.Id = party.MailingAddress.Id;
                 party.MailingAddress.SetValues(MailingAddress);
             }
 
@@ -75,7 +78,11 @@ namespace Prime.ViewModels.Parties
                 });
             }
 
-            party.VerifiedAddress.SetValues(user.GetVerifiedAddress());
+            if (user.GetVerifiedAddress() == party.VerifiedAddress)
+            {
+                VerifiedAddress.Id = party.VerifiedAddress.Id;
+                party.VerifiedAddress?.SetValues(VerifiedAddress);
+            }
 
             party.SetPartyTypes(PartyType.SigningAuthority);
 
