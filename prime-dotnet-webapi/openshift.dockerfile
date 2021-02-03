@@ -1,6 +1,7 @@
 # Create build environment
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /app
+ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/app/.dotnet/tools:/root/.dotnet/tools"
 
 # Copy .csproj and restore as distinct layers
 COPY *.csproj ./
