@@ -50,10 +50,32 @@ namespace Prime.Models
 
         public DateTime DateOfBirth { get; set; }
 
-        [Required]
-        public PhysicalAddress PhysicalAddress { get; set; }
+        [JsonIgnore]
+        public ICollection<EnrolleeAddress> Addresses { get; set; }
 
-        public MailingAddress MailingAddress { get; set; }
+        public PhysicalAddress PhysicalAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<PhysicalAddress>()
+                .SingleOrDefault();
+        }
+
+        public MailingAddress MailingAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<MailingAddress>()
+                .SingleOrDefault();
+        }
+
+        public VerifiedAddress VerifiedAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<VerifiedAddress>()
+                .SingleOrDefault();
+        }
 
         public string Email { get; set; }
 

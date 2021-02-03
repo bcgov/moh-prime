@@ -17,7 +17,11 @@ namespace Prime.ViewModels
 
         public string PreferredLastName { get; set; }
 
+        public PhysicalAddress PhysicalAddress { get; set; }
+
         public MailingAddress MailingAddress { get; set; }
+
+        public VerifiedAddress VerifiedAddress { get; set; }
 
         public string Email { get; set; }
 
@@ -39,9 +43,6 @@ namespace Prime.ViewModels
 
         [JsonIgnore]
         public string GivenNames { get; set; }
-
-        [JsonIgnore]
-        public PhysicalAddress PhysicalAddress { get; set; }
 
         // Properties always set by the backend from the JWT token (we cannot trust these properties from the frontend)
         [JsonIgnore]

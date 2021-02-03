@@ -16,7 +16,11 @@ namespace Prime.ViewModels
 
         public string PreferredLastName { get; set; }
 
+        public PhysicalAddress PhysicalAddress { get; set; }
+
         public MailingAddress MailingAddress { get; set; }
+
+        public VerifiedAddress VerifiedAddress { get; set; }
 
         public string Email { get; set; }
 

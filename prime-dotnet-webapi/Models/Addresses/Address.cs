@@ -8,7 +8,8 @@ namespace Prime.Models
     public enum AddressType
     {
         Physical = 1,
-        Mailing = 2
+        Mailing = 2,
+        Verified = 3
     };
 
     [Table("Address")]
@@ -64,5 +65,8 @@ namespace Prime.Models
     { }
 
     public class MailingAddress : Address
+    { }
+
+    public class VerifiedAddress : Address
     { }
 }

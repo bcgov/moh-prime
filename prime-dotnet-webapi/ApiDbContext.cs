@@ -150,7 +150,8 @@ namespace Prime
             modelBuilder.Entity<Address>()
                 .HasDiscriminator<AddressType>("AddressType")
                 .HasValue<PhysicalAddress>(AddressType.Physical)
-                .HasValue<MailingAddress>(AddressType.Mailing);
+                .HasValue<MailingAddress>(AddressType.Mailing)
+                .HasValue<VerifiedAddress>(AddressType.Verified);
             #endregion
 
             #region IAuditable
