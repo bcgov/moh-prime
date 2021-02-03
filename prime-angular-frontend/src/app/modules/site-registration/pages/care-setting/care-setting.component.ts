@@ -85,7 +85,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
         actionText: 'Continue'
       };
       const update$ = this.siteResource.updateSite(payload);
-      const request$ = (payload.siteVendors[0].vendorCode === VendorEnum.CARECONNECT && payload.remoteUsers.length)
+      const request$ = (payload.siteVendors[0].vendorCode === VendorEnum.CARECONNECT && payload.remoteUsers?.length)
         ? this.dialog.open(ConfirmDialogComponent, { data })
           .afterClosed()
           .pipe(
@@ -113,7 +113,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
   public onVendorChange(change: MatRadioChange) {
     this.hasNoVendorError = false;
 
-    if (change.value === VendorEnum.CARECONNECT && this.siteFormStateService.json.remoteUsers.length) {
+    if (change.value === VendorEnum.CARECONNECT && this.siteFormStateService.json.remoteUsers?.length) {
       const data: DialogOptions = {
         icon: 'announcement',
         ...this.vendorChangeDialogOptions,
