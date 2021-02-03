@@ -24,7 +24,7 @@ export class FormUtilsService {
     if (form.valid) {
       return true;
     } else {
-      this.logger.info('FORM_INVALID', this.getFormErrors(form));
+      this.logFormErrors(form);
 
       form.markAllAsTouched();
       return false;
@@ -137,6 +137,16 @@ export class FormUtilsService {
     return (hasError) ? result : null;
   }
 
+  /**
+   * @description
+   * Helper for quickly logging form errors.
+   */
+  public logFormErrors(form: FormGroup | FormArray) {
+    const formErrors = this.getFormErrors(form);
+    if (formErrors) {
+      this.logger.error('FORM_INVALID', formErrors);
+    }
+  }
 
   /**
    * @description
