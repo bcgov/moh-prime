@@ -12,7 +12,7 @@ import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { Address } from '@shared/models/address.model';
+import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
@@ -371,13 +371,11 @@ export class AdjudicationResource {
   // ---
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): HttpEnrollee {
-    if (!enrollee.mailingAddress) {
-      enrollee.mailingAddress = new Address();
-    }
-
-    if (!enrollee.physicalAddress) {
-      enrollee.physicalAddress = new Address();
-    }
+    addressTypes.forEach((addressType: AddressType) => {
+      if (!enrollee[addressType]) {
+        enrollee[addressType] = new Address();
+      }
+    });
 
     if (!enrollee.certifications) {
       enrollee.certifications = [];

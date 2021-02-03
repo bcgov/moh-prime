@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
-import { Address } from '@shared/models/address.model';
+import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 
@@ -51,9 +51,11 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
   }
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
-    if (!enrollee.mailingAddress) {
-      enrollee.mailingAddress = new Address();
-    }
+    addressTypes.forEach((addressType: AddressType) => {
+      if (!enrollee[addressType]) {
+        enrollee[addressType] = new Address();
+      }
+    });
 
     if (!enrollee.certifications) {
       enrollee.certifications = [];

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Address } from '@shared/models/address.model';
+import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { HttpEnrollee, Enrolment } from '@shared/models/enrolment.model';
 import { AbstractComponent } from '@shared/classes/abstract-component';
 import { HttpEnrolleeSubmission, EnrolmentSubmission } from '@shared/models/enrollee-submission.model';
@@ -68,9 +68,11 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
   }
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): Enrolment {
-    if (!enrollee.mailingAddress) {
-      enrollee.mailingAddress = new Address();
-    }
+    addressTypes.forEach((addressType: AddressType) => {
+      if (!enrollee[addressType]) {
+        enrollee[addressType] = new Address();
+      }
+    });
 
     if (!enrollee.certifications) {
       enrollee.certifications = [];
