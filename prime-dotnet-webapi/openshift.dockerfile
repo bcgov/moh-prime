@@ -12,7 +12,7 @@ RUN dotnet publish -c Release -o /app/out/ -p:MicrosoftNETPlatformLibrary=Micros
 
 # Begin database migration setup
 RUN dotnet tool install --global dotnet-ef --version 3.1.1
-RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
+RUN dotnet ef migrations script --idempotent --output /app/out/databaseMigrations.sql
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
