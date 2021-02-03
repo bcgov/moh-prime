@@ -41,7 +41,7 @@ RUN chmod +x entrypoint.sh
 RUN chmod 777 entrypoint.sh
 # RUN chmod -R 777 /var/run/
 RUN chmod -R 777 /app
-RUN chmod -R 777 /app/.*
+# RUN chmod -R 777 /app/.*
 
 EXPOSE 8080 5001 1025
 ENTRYPOINT [ "./entrypoint.sh" ]
