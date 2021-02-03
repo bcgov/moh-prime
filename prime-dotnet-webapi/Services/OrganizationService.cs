@@ -100,9 +100,9 @@ namespace Prime.Services
             _context.Entry(currentOrganization).CurrentValues.SetValues(updatedOrganization);
             _context.Entry(currentOrganization.SigningAuthority).CurrentValues.SetValues(updatedOrganization.SigningAuthority);
 
-            _partyService.UpdatePartyPhysicalAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority);
-
-            _partyService.UpdatePartyMailingAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority);
+            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.PhysicalAddress);
+            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.MailingAddress);
+            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.VerifiedAddress);
 
             // Keep userId the same from BCSC card, do not update
             currentOrganization.SigningAuthority.UserId = userId;

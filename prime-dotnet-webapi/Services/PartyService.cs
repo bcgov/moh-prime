@@ -62,27 +62,45 @@ namespace Prime.Services
             return currentParty.Id;
         }
 
-        public void UpdatePartyPhysicalAddress(Party current, Party updated)
+        public void UpdateAddress<T>(Party dbParty, T newAddress) where T : Address
         {
-            if (current.PhysicalAddress == null)
-            {
-                current.PhysicalAddress = updated.PhysicalAddress;
-            }
-            else
-            {
-                current.PhysicalAddress.SetValues(updated.PhysicalAddress);
-            }
-        }
+            var existingPartyAddress = dbParty.Addresses
+                .Where(ea => ea.Address is T)
+                .SingleOrDefault();
 
-        public void UpdatePartyMailingAddress(Party current, Party updated)
-        {
-            if (current.MailingAddress == null)
+            if (existingPartyAddress == null)
             {
-                current.MailingAddress = updated.MailingAddress;
+                if (newAddress == null)
+                {
+                    // Noop
+                    return;
+                }
+                else
+                {
+                    // New
+                    newAddress.Id = 0;
+                    dbParty.Addresses.Add(new PartyAddress
+                    {
+                        Party = dbParty,
+                        Address = newAddress
+                    });
+                }
             }
             else
             {
-                current.MailingAddress.SetValues(updated.MailingAddress);
+                if (newAddress == null)
+                {
+                    // Remove
+                    _context.Remove(existingPartyAddress.Address);
+                    _context.Remove(existingPartyAddress);
+                    return;
+                }
+                else
+                {
+                    // Update
+                    newAddress.Id = existingPartyAddress.AddressId;
+                    _context.Entry(existingPartyAddress.Address).CurrentValues.SetValues(newAddress);
+                }
             }
         }
 
@@ -115,9 +133,10 @@ namespace Prime.Services
         private IQueryable<Party> GetBasePartyQuery()
         {
             return _context.Parties
-                .Include(p => p.PhysicalAddress)
-                .Include(p => p.MailingAddress)
+                .Include(e => e.Addresses)
+                    .ThenInclude(pa => pa.Address)
                 .Include(p => p.PartyEnrolments);
         }
+
     }
 }
