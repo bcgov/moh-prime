@@ -31,12 +31,6 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
       return;
     }
 
-    console.log('TEMPORARY TO ALLOW WORK!!!');
-    // TODO add to adapters so backend can send null
-    if (!enrollee.verifiedAddress) {
-      enrollee.verifiedAddress = new Address();
-    }
-
     this.formInstance.patchValue(enrollee);
   }
 

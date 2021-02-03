@@ -31,12 +31,6 @@ export class OrganizationSigningAuthorityFormState extends AbstractFormState<Par
       return;
     }
 
-    console.log('TEMPORARY TO ALLOW WORK!!!');
-    // TODO add to adapters so backend can send null
-    if (!party.verifiedAddress) {
-      party.verifiedAddress = new Address();
-    }
-
     this.formInstance.patchValue(party);
   }
 

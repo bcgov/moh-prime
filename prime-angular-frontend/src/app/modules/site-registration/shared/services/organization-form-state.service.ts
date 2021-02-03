@@ -82,10 +82,6 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
       return;
     }
 
-    console.log('TEMPORARY TO ALLOW WORK!!!');
-    // TODO add to adapters so backend can send null
-    organization.signingAuthority.verifiedAddress = new Address();
-
     this.organizationNameForm.patchValue(organization);
     this.formUtilsService.toPersonFormModel<Party>([this.organizationSigningAuthorityFormState.form, organization.signingAuthority]);
   }
