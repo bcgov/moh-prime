@@ -17,11 +17,11 @@ export const defaultDialogOptions: DialogDefaultOptions = {
     actionText: 'Discard Changes',
     cancelText: 'Keep Changes and Continue'
   }),
-  delete: (modelName: string) => {
+  delete: (modelName: string, supplementaryMessage: string = '') => {
     const capitalized = StringUtils.capitalize(modelName);
     return {
       title: `Delete ${capitalized}`,
-      message: `Are you sure you want to delete this ${modelName.toLowerCase()}?`,
+      message: `Are you sure you want to delete this ${modelName.toLowerCase()}? ${supplementaryMessage}`,
       actionType: 'warn',
       actionText: `Delete ${capitalized}`
     };
