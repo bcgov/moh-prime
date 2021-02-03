@@ -843,7 +843,7 @@ namespace Prime.Controllers
 
         // Delete: api/Enrollees/5/notifications
         /// <summary>
-        ///     Delete all notifications on a enrollee
+        /// Delete all notifications on an enrollee
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/notifications", Name = nameof(DeleteEnrolleeNotifications))]

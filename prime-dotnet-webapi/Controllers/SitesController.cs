@@ -997,7 +997,7 @@ namespace Prime.Controllers
 
         // Delete: api/sites/5/notifications
         /// <summary>
-        ///     Delete all notifications on a enrollee
+        /// Delete all notifications on a site
         /// </summary>
         /// <param name="siteId"></param>
         [HttpDelete("{siteId}/notifications", Name = nameof(DeleteSiteNotifications))]
