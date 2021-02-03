@@ -42,12 +42,10 @@ namespace Prime.ViewModels.Parties
 
             if (party.PhysicalAddress == null)
             {
-                party.PhysicalAddress = user.GetVerifiedAddress();
+                party.PhysicalAddress = new PhysicalAddress();
             }
-            else
-            {
-                party.PhysicalAddress.SetValues(user.GetVerifiedAddress());
-            }
+
+            party.PhysicalAddress.SetValues(user.GetVerifiedAddress());
 
             party.SetPartyTypes(PartyTypes.ToArray());
 
