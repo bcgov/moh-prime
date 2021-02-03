@@ -319,7 +319,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
   private deleteOrganization(organizationId: number) {
     if (organizationId) {
       const request$ = this.organizationResource.deleteOrganization(organizationId);
-      this.busy = this.deleteResource<Organization>(this.defaultOptions.delete('organization'), request$)
+      const supplementaryMessage = 'Are you sure you want to delete this organization? Deleting an organization also deletes all the organization\'s sites, including remote user information.';
+      this.busy = this.deleteResource<Organization>(this.defaultOptions.delete('organization', supplementaryMessage), request$)
         .subscribe((organization: Organization) =>
           this.dataSource.data = MatTableDataSourceUtils
             .delete<SiteRegistrationListViewModel>(this.dataSource, 'organizationId', organization.id)

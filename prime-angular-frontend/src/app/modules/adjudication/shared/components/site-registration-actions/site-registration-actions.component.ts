@@ -3,10 +3,6 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { UtilsService } from '@core/services/utils.service';
-
-import { map } from 'rxjs/operators';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
-
 @Component({
   selector: 'app-site-registration-actions',
   templateUrl: './site-registration-actions.component.html',
