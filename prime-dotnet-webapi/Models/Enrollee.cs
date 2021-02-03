@@ -53,30 +53,6 @@ namespace Prime.Models
         [JsonIgnore]
         public ICollection<EnrolleeAddress> Addresses { get; set; }
 
-        public PhysicalAddress PhysicalAddress
-        {
-            get => Addresses?
-                .Select(a => a.Address)
-                .OfType<PhysicalAddress>()
-                .SingleOrDefault();
-        }
-
-        public MailingAddress MailingAddress
-        {
-            get => Addresses?
-                .Select(a => a.Address)
-                .OfType<MailingAddress>()
-                .SingleOrDefault();
-        }
-
-        public VerifiedAddress VerifiedAddress
-        {
-            get => Addresses?
-                .Select(a => a.Address)
-                .OfType<VerifiedAddress>()
-                .SingleOrDefault();
-        }
-
         public string Email { get; set; }
 
         public string SmsPhone { get; set; }
@@ -144,6 +120,33 @@ namespace Prime.Models
         public ICollection<EnrolleeCredential> EnrolleeCredentials { get; set; }
 
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
+
+        [NotMapped]
+        public PhysicalAddress PhysicalAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<PhysicalAddress>()
+                .SingleOrDefault();
+        }
+
+        [NotMapped]
+        public MailingAddress MailingAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<MailingAddress>()
+                .SingleOrDefault();
+        }
+
+        [NotMapped]
+        public VerifiedAddress VerifiedAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<VerifiedAddress>()
+                .SingleOrDefault();
+        }
 
         [NotMapped]
         public string Base64QRCode
