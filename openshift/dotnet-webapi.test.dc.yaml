@@ -89,68 +89,174 @@ objects:
               - name: BACKEND_URL
                 value: "https://${VANITY_URL}/api/v1/"
               - name: DB_HOST
-                value: "postgresql${SUFFIX}"          
+                value: "postgresql${SUFFIX}"
+              
+              # Canada Post AddressComplete API related environment variables
+              - name: ADDRESS_AUTOCOMPLETE_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: address_autocomplete_api_key
+                    name: "canada-post-addresscomplete-secrets"
+              - name: ADDRESS_AUTOCOMPLETE_API_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: address_autocomplete_api_url
+                    name: "canada-post-addresscomplete"
+
+              # CHES (Common Hosted Email Service) related environment variables
+              - name: CHES_API_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: ches_api_url
+                    name: "ches"
+              - name: CHES_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: ches_client_secret
+                    name: "ches-secrets"
+              - name: CHES_ENABLED
+                valueFrom:
+                  configMapKeyRef:
+                    key: ches_enabled
+                    name: "ches"
+              - name: CHES_TOKEN_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: ches_token_url
+                    name: "ches"
+
+              # Document Manager related environment variables
+              - name: DOCUMENT_MANAGER_CLIENT_ID
+                valueFrom:
+                  configMapKeyRef:
+                    key: document_manager_client_id
+                    name: "document-manager"
+              - name: DOCUMENT_MANAGER_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: document_manager_client_secret
+                    name: "document-manager-secrets"
+              - name: DOCUMENT_MANAGER_URL
+                value: "https://${VANITY_URL}/api/docman/"          
 
               # Keycloak related environment variables
-              # - name: JWT_WELL_KNOWN_CONFIG
-              #   valueFrom:
-              #     configMapKeyRef:
-              #       key: jwt_well_known_config
-              #       name: "keycloak"
-              # - name: KEYCLOAK_ADMINISTRATION_CLIENT_SECRET
-              #   valueFrom:
-              #     secretKeyRef:
-              #       key: keycloak_administration_client_secret
-              #       name: "keycloak-secrets"
-              # - name: KEYCLOAK_ADMINISTRATION_URL
-              #   valueFrom:
-              #     configMapKeyRef:
-              #       key: keycloak_administration_url
-              #       name: "keycloak"
-              # - name: KEYCLOAK_TOKEN_URL
-              #   valueFrom:
-              #     configMapKeyRef:
-              #       key: keycloak_token_url
-              #       name: "keycloak"
+              - name: JWT_WELL_KNOWN_CONFIG
+                valueFrom:
+                  configMapKeyRef:
+                    key: jwt_well_known_config
+                    name: "keycloak"
+              - name: KEYCLOAK_ADMINISTRATION_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: keycloak_administration_client_secret
+                    name: "keycloak-secrets"
+              - name: KEYCLOAK_ADMINISTRATION_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: keycloak_administration_url
+                    name: "keycloak"
+              - name: KEYCLOAK_TOKEN_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: keycloak_token_url
+                    name: "keycloak"
 
-              # # Mail server environment variables
-              # - name: MAIL_SERVER_PORT
-              #   valueFrom:
-              #     configMapKeyRef:
-              #       key: mail_server_port
-              #       name: "mail-server"
-              # - name: MAIL_SERVER_URL
-              #   valueFrom:
-              #     configMapKeyRef:
-              #       key: mail_server_url
-              #       name: "mail-server"
+              # Mail server environment variables
+              - name: MAIL_SERVER_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    key: mail_server_port
+                    name: "mail-server"
+              - name: MAIL_SERVER_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: mail_server_url
+                    name: "mail-server"
+
+              # Metabase embedded dashboard environment variables
+              - name: METABASE_DASHBOARD_ID
+                valueFrom:
+                  configMapKeyRef:
+                    key: metabase_dashboard_id
+                    name: "metabase-embedded"
+              - name: METABASE_SECRET_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: metabase_secret_key
+                    name: "metabase-embedded-secrets"
+              - name: METABASE_SITE_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: metabase_site_url
+                    name: "metabase-embedded"
+
+              # Pharmanet API environment variables
+              - name: PHARMANET_API_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: pharmanet_api_password
+                    name: "pharmanet-api-secrets"
+              - name: PHARMANET_API_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: pharmanet_api_url
+                    name: "pharmanet-api"
+              - name: PHARMANET_API_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    key: pharmanet_api_username
+                    name: "pharmanet-api-secrets"
+              - name: PHARMANET_SSL_CERT_FILENAME
+                value: "/opt/app-root/etc/certs/pharmanet-api-cert.pfx"
+              - name: PHARMANET_SSL_CERT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: pharmanet_ssl_cert_password
+                    name: "pharmanet-api-secrets"
 
               # PostgreSQL related environment variables
-              # - name: PGPASSWORD
-              #   valueFrom:
-              #     secretKeyRef:
-              #       key: postgresql_database_admin_password
-              #       name: "postgresql-secrets"
-              # - name: POSTGRESQL_USER
-              #   valueFrom:
-              #     secretKeyRef:
-              #       key: postgresql_database_username
-              #       name: "postgresql-secrets"
-              # - name: POSTGRESQL_PASSWORD
-              #   valueFrom:
-              #     secretKeyRef:
-              #       key: postgresql_database_password
-              #       name: "postgresql-secrets"
-              # - name: POSTGRESQL_ADMIN_PASSWORD
-              #   valueFrom:
-              #     secretKeyRef:
-              #       key: postgresql_database_admin_password
-              #       name: "postgresql-secrets"
-              # - name: POSTGRESQL_DATABASE
-              #   valueFrom:
-              #     configMapKeyRef:
-              #       key: postgresql_database_name
-              #       name: "postgresql"
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: postgresql_database_admin_password
+                    name: "postgresql-secrets"
+              - name: POSTGRESQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    key: postgresql_database_username
+                    name: "postgresql-secrets"
+              - name: POSTGRESQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: postgresql_database_password
+                    name: "postgresql-secrets"
+              - name: POSTGRESQL_ADMIN_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: postgresql_database_admin_password
+                    name: "postgresql-secrets"
+              - name: POSTGRESQL_DATABASE
+                valueFrom:
+                  configMapKeyRef:
+                    key: postgresql_database_name
+                    name: "postgresql"
+              
+              # Verifiable Credential related environment variables
+              - name: VERIFIABLE_CREDENTIAL_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: verifiable_credential_api_key
+                    name: "verifiable-credential-secrets"
+              - name: VERIFIABLE_CREDENTIAL_API_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: verifiable_credential_api_url
+                    name: "verifiable-credential"
+              - name: VERIFIABLE_CREDENTIAL_WEBHOOK_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: verifiable_credential_webhook_key
+                    name: "verifiable-credential-secrets"
 
             image: " "
             name: primeapi
