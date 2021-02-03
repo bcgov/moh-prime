@@ -33,10 +33,27 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (!enrollee.PhysicalAddress.IsInBC
-                || enrollee.MailingAddress?.IsInBC == false)
+            var addresses = new Address[] { enrollee.PhysicalAddress, enrollee.MailingAddress, enrollee.VerifiedAddress }
+                .Where(a => a != null);
+
+            if (addresses.Any(a => !a.IsInBC))
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.Address);
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
+    }
+
+    // Enrollees without a verified addresses from BCSC go to manual
+    public class VerifiedAddressRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.VerifiedAddress == null)
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.NoVerifiedAddress);
                 return Task.FromResult(false);
             }
 

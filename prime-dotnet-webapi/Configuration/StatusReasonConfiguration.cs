@@ -26,6 +26,7 @@ namespace Prime.Configuration
                     new StatusReason { Code = 14, Name = "User authenticated with a method other than BC Services Card", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 15, Name = "User has Requested Remote Access", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 16, Name = "Terms of Access to be determined by an Adjudicator", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 17, Name = "No address from BCSC. Enrollee entered address.", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                 };
             }
         }
