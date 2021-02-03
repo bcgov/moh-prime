@@ -50,12 +50,10 @@ namespace Prime.ViewModels.Parties
 
             if (party.PhysicalAddress == null)
             {
-                party.PhysicalAddress = user.GetPhysicalAddress();
+                party.PhysicalAddress = new PhysicalAddress();
             }
-            else
-            {
-                party.PhysicalAddress.SetValues(user.GetPhysicalAddress());
-            }
+
+            party.PhysicalAddress.SetValues(user.GetVerifiedAddress());
 
             party.SetPartyTypes(PartyType.SigningAuthority);
 
