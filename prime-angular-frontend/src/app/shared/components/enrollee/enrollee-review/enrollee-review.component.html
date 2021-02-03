@@ -1,6 +1,6 @@
 <app-bcsc-profile [user]="enrollee"></app-bcsc-profile>
 
-<section *ngIf="hasPreferredName && (identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR)"
+<section *ngIf="identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR"
          class="mb-4">
   <!-- Note that for BCeID enrollees, the application forces their preferred names to be identical to their non-preferred counterparts,
        so it is pointless to show the preferred names -->
@@ -16,17 +16,23 @@
     </button>
   </app-page-subheader>
 
-  <app-enrollee-property title="Preferred First Name">
-    {{ enrollee?.preferredFirstName | default }}
-  </app-enrollee-property>
+  <ng-container *ngIf="hasPreferredName; else noPreferredName">
+    <app-enrollee-property title="Preferred First Name">
+      {{ enrollee?.preferredFirstName | default }}
+    </app-enrollee-property>
 
-  <app-enrollee-property title="Preferred Middle Name">
-    {{ enrollee?.preferredMiddleName | default }}
-  </app-enrollee-property>
+    <app-enrollee-property title="Preferred Middle Name">
+      {{ enrollee?.preferredMiddleName | default }}
+    </app-enrollee-property>
 
-  <app-enrollee-property title="Preferred Last Name">
-    {{ enrollee?.preferredLastName | default }}
-  </app-enrollee-property>
+    <app-enrollee-property title="Preferred Last Name">
+      {{ enrollee?.preferredLastName | default }}
+    </app-enrollee-property>
+  </ng-container>
+
+  <ng-template #noPreferredName>
+    No preferred name entered.
+  </ng-template>
 
 </section>
 
