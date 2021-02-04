@@ -35,7 +35,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   public formState: BcscDemographicFormState;
   /**
    * @description
-   * Enrollee information from the provider not contained
+   * User information from the provider not contained
    * within the form for use in creation.
    */
   public bcscUser: BcscUser;
@@ -110,8 +110,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   public ngOnInit() {
     this.createFormInstance();
-    // Ensure that the enrollee user information is loaded prior
-    // to initialization of the form to check for verified address
+    // Ensure that the user information is loaded prior to
+    // initialization of the form to check for verified address
     // information to control UI and validation management
     this.authService.getUser$()
       .pipe(

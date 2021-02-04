@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Subscription, Observable } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { IFormPage } from '@lib/classes/abstract-form-page.class';
@@ -12,6 +13,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
@@ -32,7 +35,12 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   public organization: Organization;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
-
+  /**
+   * @description
+   * User information from the provider not contained
+   * within the form for use in creation.
+   */
+  public bcscUser: BcscUser;
   public hasPreferredName: boolean;
   public hasValidatedAddress: boolean;
   public hasMailingAddress: boolean;
@@ -45,7 +53,8 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private formUtilsService: FormUtilsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -140,16 +149,36 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
   public ngOnInit() {
     this.createFormInstance();
-    this.patchForm();
-    // Ensure enrollee validated address information has been
-    // checked before initializing the form to control UI and
-    // validation management
-    this.hasValidatedAddress = Address.isNotEmpty(this.verifiedAddress.value)
-    if (!this.hasValidatedAddress) {
-      this.clearAddressValidator(this.verifiedAddress);
-      this.setAddressValidator(this.physicalAddress);
-    }
-    this.initForm();
+    // Ensure that the user information is loaded prior to
+    // initialization of the form to check for verified address
+    // information to control UI and validation management
+    this.authService.getUser$()
+      .pipe(
+        map((bcscUser: BcscUser) => {
+          this.bcscUser = bcscUser;
+          this.hasValidatedAddress = Address.isNotEmpty(bcscUser.verifiedAddress)
+          if (!this.hasValidatedAddress) {
+            this.clearAddressValidator(this.verifiedAddress);
+            this.setAddressValidator(this.physicalAddress);
+          }
+
+          return bcscUser;
+        }),
+        // Patch the form using the stored organization information
+        map((bcscUser: BcscUser) => {
+          this.patchForm();
+          return bcscUser;
+        }),
+        // BCSC information should always use identity provider
+        // profile information as the source of truth, and
+        // patch the form to have it save changes
+        map((bcscUser: BcscUser) => {
+          if (bcscUser.verifiedAddress) {
+            this.verifiedAddress.patchValue(bcscUser.verifiedAddress);
+          }
+        })
+      )
+      .subscribe(() => this.initForm());
   }
 
   private createFormInstance() {
@@ -164,7 +193,6 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
     // Attempt to patch the form if not already patched
     this.organizationFormStateService.setForm(this.organization, true);
-    // this.form.markAsPristine();
   }
 
   private initForm() {
