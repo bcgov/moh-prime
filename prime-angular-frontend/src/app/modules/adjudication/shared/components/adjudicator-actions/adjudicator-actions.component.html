@@ -80,6 +80,12 @@
       <span>Rerun Rules</span>
     </button>
     <button mat-menu-item
+            [disabled]="!canEdit || enrollee.adjudicatorIdir"
+            (click)="onEscalate()">
+      <mat-icon>error_outline</mat-icon>
+      <span>Enrolment Escalation</span>
+    </button>
+    <button mat-menu-item
             *ngIf="canDelete"
             (click)="onDelete()">
       <mat-icon>delete</mat-icon>
