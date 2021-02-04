@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Subscription, Observable } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { IFormPage } from '@lib/classes/abstract-form-page.class';

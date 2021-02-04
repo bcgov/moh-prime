@@ -81,6 +81,7 @@ import { BcscProfileComponent } from '@shared/components/bcsc-profile/bcsc-profi
 import { PreferredNameFormComponent } from '@shared/components/forms/preferred-name-form/preferred-name-form.component';
 import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
+import { AddressViewComponent } from '@shared/components/address-view/address-view.component';
 
 @NgModule({
   declarations: [
@@ -151,7 +152,8 @@ import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-not
     PreferredNameFormComponent,
     TriageComponent,
     EscalationNoteComponent,
-    ClaimNoteComponent
+    ClaimNoteComponent,
+    AddressViewComponent
   ],
   imports: [
     CommonModule,
@@ -228,7 +230,8 @@ import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-not
     PreferredNameFormComponent,
     TriageComponent,
     EscalationNoteComponent,
-    ClaimNoteComponent
+    ClaimNoteComponent,
+    AddressViewComponent
   ],
   providers: [
     FullnamePipe,

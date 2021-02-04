@@ -1,3 +1,5 @@
+import { AddressLine } from '@lib/types/address-line.type';
+
 export type AddressType = 'verifiedAddress' | 'physicalAddress' | 'mailingAddress';
 
 export const addressTypes: AddressType[] = ['verifiedAddress', 'mailingAddress', 'physicalAddress'];
@@ -6,7 +8,7 @@ export const addressTypes: AddressType[] = ['verifiedAddress', 'mailingAddress',
  * @description
  * List of optional address line items.
  */
-export const optionalAddressLineItems = ['id', 'street2'];
+export const optionalAddressLineItems: ('id' | AddressLine)[] = ['id', 'street2'];
 
 export class Address {
   id?: number = null;
