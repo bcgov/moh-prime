@@ -41,45 +41,53 @@ namespace Prime.ViewModels.Parties
             party.LastName = user.GetLastName();
             party.DateOfBirth = user.GetDateOfBirth().Value;
 
-            if (party.PhysicalAddress == null)
+            if (PhysicalAddress != null)
             {
-                party.Addresses.Add(new PartyAddress
+                if (party.PhysicalAddress == null)
                 {
-                    Party = party,
-                    Address = PhysicalAddress,
-                });
-            }
-            else
-            {
-                PhysicalAddress.Id = party.PhysicalAddress.Id;
-                party.PhysicalAddress.SetValues(PhysicalAddress);
+
+                    party.Addresses.Add(new PartyAddress
+                    {
+                        Party = party,
+                        Address = PhysicalAddress,
+                    });
+
+                }
+                else
+                {
+                    PhysicalAddress.Id = party.PhysicalAddress.Id;
+                    party.PhysicalAddress.SetValues(PhysicalAddress);
+                }
             }
 
-            if (party.MailingAddress == null)
+            if (MailingAddress != null)
             {
-                party.Addresses.Add(new PartyAddress
+                if (party.MailingAddress == null)
                 {
-                    Party = party,
-                    Address = MailingAddress,
-                });
-            }
-            else
-            {
-                MailingAddress.Id = party.MailingAddress.Id;
-                party.MailingAddress.SetValues(MailingAddress);
+                    party.Addresses.Add(new PartyAddress
+                    {
+                        Party = party,
+                        Address = MailingAddress,
+                    });
+                }
+                else
+                {
+                    MailingAddress.Id = party.MailingAddress.Id;
+                    party.MailingAddress.SetValues(MailingAddress);
+                }
             }
 
-            if (party.VerifiedAddress == null)
+            if (VerifiedAddress != null)
             {
-                party.Addresses.Add(new PartyAddress
+                if (party.VerifiedAddress == null)
                 {
-                    Party = party,
-                    Address = new VerifiedAddress(),
-                });
-            }
+                    party.Addresses.Add(new PartyAddress
+                    {
+                        Party = party,
+                        Address = new VerifiedAddress(),
+                    });
+                }
 
-            if (user.GetVerifiedAddress() == party.VerifiedAddress)
-            {
                 VerifiedAddress.Id = party.VerifiedAddress.Id;
                 party.VerifiedAddress?.SetValues(VerifiedAddress);
             }
